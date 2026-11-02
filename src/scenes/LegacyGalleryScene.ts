@@ -11,7 +11,9 @@ import { sceneForRun } from './routing';
 import { AERO, drawGlass, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
 import { preloadPokemon } from '../ui/lazyAssets';
-import { Picker, type PickerRow } from '../ui/partyPanel';
+import { LegacyGallery, hasGalleryLook } from '../ui/legacyGallery';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { Picker, type PickerLike, type PickerRow } from '../ui/partyPanel';
 import { fitHeight } from '../ui/showcase';
 import { pokemonIcon, pokemonVisual, trainerVisual } from '../ui/sprites';
 import { GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from '../ui/theme';
@@ -24,7 +26,7 @@ const MOMENT_LABEL: Record<LegacyRun['moments'][number]['kind'], string> = {
 };
 
 export class LegacyGalleryScene extends Phaser.Scene {
-  private picker: Picker | null = null;
+  private picker: PickerLike | null = null;
   private relive: { root: Phaser.GameObjects.Container; moments: LegacyRun['moments']; index: number; record: LegacyRun } | null = null;
   private motion: MotionLevel = 'full';
   /** Abandon asks twice (the first press arms it). */
@@ -148,6 +150,18 @@ export class LegacyGalleryScene extends Phaser.Scene {
       this.confirmAbandon = false;
       this.showRecord(i - offset);
     };
+    // Screens redesign: a picked look draws the runs the way its mock-up does (not while a revisited timeline needs its extra rows).
+    const styleId = screenStyleOf('legacy', services().session.settings.screenStyles, services().session.profile.stats.runsEnded);
+    if (styleId !== 'original' && hasGalleryLook(styleId) && offset === 0) {
+      this.picker?.close();
+      const items = records.map((r) => {
+        const ace = legacyAce(r);
+        const species = this.content.species.get(ace?.speciesId ?? r.team[0]?.speciesId ?? '');
+        return { title: `${this.trainer(r)} · ${r.outcome === 'victory' ? 'Champion' : 'Fell'}`, sub: `${this.region(r)} · ${r.endedAt.slice(0, 10)} · ${r.epitaph ?? accomplishments(this.content, r).join(' · ')}`, ...(species ? { species } : {}), memorable: legacyScore(this.content, r) >= LEGACY_RUNS.rotation.memorableScore };
+      });
+      this.picker = new LegacyGallery(this, styleId, items, this.motion, { onSelect: (i) => this.showRecord(i), onBack: () => this.scene.start('Hub', { focus: 3 }) }, start ?? 0);
+      return;
+    }
     this.open(rows, records.length ? 'Legacy Gallery' : 'Legacy Gallery: finish a run to see its Trainer here', onSelect, () => this.scene.start('Hub', { focus: 3 }), start);
   }
 
