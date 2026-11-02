@@ -1701,6 +1701,9 @@ export const SettingsSchema = z.object({
   critLetterbox: z.boolean().default(false),
   /** S261 Sound packs: filter chain on the master output (Original keeps the recordings untouched). */
   soundPack: z.enum(['original', 'gba', 'ds', 'orchestral']).default('original'),
+  /** S245 Adaptive screen shake: extra multipliers on top of `shakeIntensity` for move hits and for story/boss moments. */
+  shakeHits: z.number().min(0).max(1).default(1),
+  shakeStory: z.number().min(0).max(1).default(1),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 
