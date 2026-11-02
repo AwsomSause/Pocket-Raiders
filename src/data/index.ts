@@ -87,6 +87,7 @@ import { RaidFileSchema } from '../core/raid/schema';
 import { PROMPTS } from '../core/interaction/prompt';
 import eventsJson from './events.json';
 import eventsW5Json from './eventsW5.json';
+import eventsFacesJson from './eventsFaces.json';
 import eventsStoryJson from './eventsStory.json';
 import eventsGamesJson from './eventsGames.json';
 import eventsHelpersJson from './eventsHelpers.json';
@@ -145,6 +146,8 @@ export interface RawContent {
   eventsW5: unknown;
   /** Story and characters ideas (S110-S131): eventsStory.json, added to `events`. Optional so older test fixtures stay valid. */
   eventsStory?: unknown;
+  /** Famous faces, rivals and cameos (R436-R470): eventsFaces.json, added to `events`. */
+  eventsFaces?: unknown;
   /** Run events F: games, puzzles and mini-games (eventsGames.json), added to `events`. */
   eventsGames?: unknown;
   /** Run events E (docs/ideas/categories/r-e-helpers-and-moral-choices.md): helpers, kindness and moral choices. */
@@ -217,6 +220,7 @@ export const RAW_CONTENT: RawContent = {
   npcStory: npcStoryJson,
   eventsW5: eventsW5Json,
   eventsStory: eventsStoryJson,
+  eventsFaces: eventsFacesJson,
   eventsGames: eventsGamesJson,
   eventsHelpers: eventsHelpersJson,
   eventsWeather: eventsWeatherJson,
@@ -288,7 +292,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
   const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? [])];
-  const storyEvents = ((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []);
+  const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? [])];
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
