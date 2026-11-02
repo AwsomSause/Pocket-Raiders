@@ -228,6 +228,24 @@
       "inverseChart": true
     },
     {
+      "id": "gauntlet",
+      "name": "Gauntlet",
+      "status": "supported",
+      "bonus": 0.35,
+      "blurb": "Back-to-back fights: no healing stops, no free heal at the League gate or between Elite Four battles.",
+      "group": "contract-rest",
+      "gauntlet": true
+    },
+    {
+      "id": "doubles-only",
+      "name": "Doubles Only",
+      "status": "supported",
+      "bonus": 0.2,
+      "blurb": "Every trainer and wild fight that can be a double battle is one (you need two healthy Pokémon).",
+      "group": "doubles",
+      "doublesOnly": true
+    },
+    {
       "id": "level-50-cup",
       "name": "Level 50 Cup",
       "status": "supported",
