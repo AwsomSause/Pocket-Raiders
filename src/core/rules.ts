@@ -55,6 +55,10 @@ export const RunRulesDataSchema = z.object({
       bossRemix: z.boolean().optional(),
       /** Speed Clear (catalog #101): an opt-in bonus for a quick trainer win. No timer, no penalty. */
       quickWin: z.object({ turns: z.number().int().min(1), money: z.number().int().min(1) }).optional(),
+      /** Inverse Battle (S291): the type chart is reversed in every battle of the run. */
+      inverseChart: z.boolean().optional(),
+      /** Level 50 Cup (S290): the party's level cap for the whole run. */
+      levelCap: z.number().int().min(1).optional(),
     }),
   ),
   /** What an unlock that is already owned (a set, a trainer, a title) pays instead (Untitled doc §8.3). */
@@ -210,6 +214,25 @@ export const quickWinBonus = (rules: Pick<RunRules, 'modifierIds'>, turnsTaken: 
     return sum + (q && turnsTaken <= q.turns ? q.money : 0);
   }, 0);
 export const bossRemix = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.bossRemix);
+/** Inverse Battle is on. */
+export const inverseChart = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.inverseChart);
+/** The tightest run-wide level cap a modifier sets (Level 50 Cup), or null. */
+export const modifierLevelCap = (rules: Pick<RunRules, 'modifierIds'>): number | null =>
+  rules.modifierIds.reduce<number | null>((cap, id) => { const c = getModifier(id)?.levelCap; return c === undefined ? cap : cap === null ? c : Math.min(cap, c); }, null);
+const invertedCharts = new WeakMap<object, Content>();
+/** Content as the battle engine should see it: with Inverse Battle the type chart is reversed (2 -> 0.5, 0.5 and 0 -> 2). Cached, pure. */
+export function battleContent(content: Content, rules: Pick<RunRules, 'modifierIds'>): Content {
+  if (!inverseChart(rules)) return content;
+  const cached = invertedCharts.get(content);
+  if (cached) return cached;
+  const typeChart: Content['typeChart'] = {} as Content['typeChart'];
+  for (const [atk, row] of Object.entries(content.typeChart)) {
+    typeChart[atk as keyof typeof typeChart] = Object.fromEntries(Object.entries(row ?? {}).map(([def, v]) => [def, v > 1 ? 0.5 : v < 1 ? 2 : v])) as never;
+  }
+  const out = { ...content, typeChart };
+  invertedCharts.set(content, out);
+  return out;
+}
 export const noHealStops = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noHealStops);
 export const battleMoneyScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.battleMoney);
 export const researchScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.researchScale);
