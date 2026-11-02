@@ -104,11 +104,22 @@ export function speedLines(g: Phaser.GameObjects.Graphics, cx: number, cy: numbe
   return g;
 }
 
-/** Halftone screentone dots over a rectangle. */
-export function screentone(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, color: number, alpha: number, step = 6, r = 1.2): Phaser.GameObjects.Graphics {
-  g.fillStyle(color, alpha);
-  for (let yy = y; yy < y + h; yy += step) for (let xx = x + ((yy / step) % 2 ? step / 2 : 0); xx < x + w; xx += step) g.fillCircle(xx, yy, r);
-  return g;
+/**
+ * Halftone screentone dots over a rectangle, as a tiled texture (drawn once, cheap every frame).
+ * Added to `into`; `mask` optionally clips it.
+ */
+export function tone(ctx: TradeCtx, into: Phaser.GameObjects.Container, x: number, y: number, w: number, h: number, color: number, alpha: number, step = 6, r = 1.2): Phaser.GameObjects.TileSprite {
+  const { scene } = ctx;
+  const key = `trade-tone-${step}-${r}`;
+  if (!scene.textures.exists(key)) {
+    const g = scene.make.graphics({}, false).fillStyle(0xffffff, 1);
+    g.fillCircle(step / 4, step / 4, r).fillCircle(step / 4 + step / 2, step / 4 + step / 2, r);
+    g.generateTexture(key, step, step);
+    g.destroy();
+  }
+  const t = scene.add.tileSprite(x, y, w, h, key).setOrigin(0).setTint(color).setAlpha(alpha);
+  into.add(t);
+  return t;
 }
 
 /** Confetti/foil burst from (x, y) into `into` (skipped when calm). */
