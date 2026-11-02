@@ -8,6 +8,7 @@ import { loanProblem, presetSlotCount } from '../core/bank';
 import { LICENSES, licenseName, type LicenseId } from '../core/license';
 import Phaser from 'phaser';
 import { decodeSeedCode } from '../core/seedCode';
+import { cardGhost, decodeChallengeCard, decodeTeamCode } from '../core/shareCodes';
 import { TYPE_NAMES, type TypeName } from '../core/contentSchema';
 import {
   buildSummary,
@@ -433,6 +434,22 @@ export class RunPrepScene extends Phaser.Scene {
           const trainer = services().session.content.archetypes.has(ghost.parts.archetypeId) ? ghost.parts.archetypeId : this.archetypeId;
           this.scene.restart({ archetypeId: trainer, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: ghost.parts.rules, page: this.page, notice: `Ghost of ${ghost.ghost.from} loaded: race their seed.` } satisfies RunPrepData);
           return;
+        }
+        // A challenge card (CC1.…): seed, trainer and rules, with the score to beat shown at the end (core/shareCodes.ts).
+        if (value.trim().startsWith('CC1.')) {
+          const card = decodeChallengeCard(value);
+          if (!card.ok) return this.refresh({}, { notice: card.reason });
+          services().session.changeProfile((pr) => keepGhost(pr, card.parts.seed, cardGhost(card.score)));
+          this.seed = card.parts.seed;
+          const trainer = services().session.content.archetypes.has(card.parts.archetypeId) ? card.parts.archetypeId : this.archetypeId;
+          this.scene.restart({ archetypeId: trainer, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: card.parts.rules, page: this.page, notice: card.note ?? `Challenge from ${card.score.from}: ${card.score.title}. Beat ${card.score.badges} badges.` } satisfies RunPrepData);
+          return;
+        }
+        // A team code (TM1.…) just shows the team.
+        if (value.trim().startsWith('TM1.')) {
+          const { content } = services().session;
+          const team = decodeTeamCode(value, (id) => content.species.has(id));
+          return this.refresh({}, { notice: team.ok ? `Team: ${team.team.map((m) => `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`).join(', ')}${team.note ? ` (${team.note})` : ''}` : team.reason });
         }
         // A shared seed code (PR1.…) also sets the trainer and the rules.
         if (value.trim().startsWith('PR1.')) {

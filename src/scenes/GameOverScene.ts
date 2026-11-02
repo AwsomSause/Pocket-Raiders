@@ -13,6 +13,7 @@ import { attributeChanges } from '../core/attributes';
 import { topMoments } from '../core/story/record';
 import { buildRecap } from '../core/recap';
 import { encodeSeedCode } from '../core/seedCode';
+import { encodeChallengeCard, encodeTeamCode } from '../core/shareCodes';
 import { boardKey } from '../core/boards';
 import { encodeGhostCode, ghostFor, ghostFromRecord, ghostLines } from '../core/ghost';
 import { getMutator } from '../core/mutators';
@@ -84,6 +85,10 @@ export class GameOverScene extends Phaser.Scene {
           void navigator.clipboard?.writeText(code).catch(() => undefined);
         });
       }
+      // T copies a team code, C a challenge card (this run's rules and result as the score to beat) for a friend (core/shareCodes.ts).
+      const copy = (code: string) => void navigator.clipboard?.writeText(code).catch(() => undefined);
+      this.input.keyboard?.on('keydown-T', () => copy(encodeTeamCode(run.party.map((m) => ({ speciesId: m.speciesId, level: m.level, shiny: !!m.shiny })))));
+      this.input.keyboard?.on('keydown-C', () => copy(encodeChallengeCard({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules }, { from: 'A friend', title: `${archetype} run`, victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted })));
       const runText = this.add.text(
         44,
         84,
@@ -96,7 +101,7 @@ export class GameOverScene extends Phaser.Scene {
           `Money left: ₽${run.money}`,
           `Candies earned: ${run.candies}`,
           ...(byName ? [`Defeated by ${byName}`] : []),
-          `Seed: ${run.seed}${record ? '  (G: copy ghost code)' : ''}`,
+          `Seed: ${run.seed}${record ? '  (G: ghost code)' : ''}  (T: team code, C: challenge card)`,
           `Seed code: ${encodeSeedCode({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules })}`,
           ...(ghost ? ghostLines(ghost, { victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted }, (id) => session.content.species.get(id)?.name ?? id).slice(0, 5) : []),
           ...(run.nuzlocke?.memorial.length ? ['Memorial:', ...memorialLines(session.content, run).slice(0, 6)] : []),

@@ -55,5 +55,5 @@ export const ghostFor = (profile: Pick<Profile, 'legacy'>, seed: string): Ghost 
 export function ghostLines(ghost: Ghost, me: { victory: boolean; badges: number; encounters: number }, speciesName: (id: string) => string): string[] {
   const verdict = (g: boolean, m: boolean) => (m && !g ? 'You beat the ghost!' : g && !m ? `${ghost.from} got further.` : 'A close race.');
   const lead = me.badges > ghost.badges ? 'You got further.' : me.badges < ghost.badges ? `${ghost.from} got further.` : verdict(ghost.victory, me.victory);
-  return [`Ghost of ${ghost.from}: ${ghost.victory ? 'won' : 'lost'}, ${ghost.badges} badges, ${ghost.encounters} encounters`, `You: ${me.victory ? 'won' : 'lost'}, ${me.badges} badges, ${me.encounters} encounters. ${lead}`, `Their team: ${ghost.team.map(speciesName).join(', ')}`, ...ghost.actions.map((a) => `· ${a}`)];
+  return [`Ghost of ${ghost.from}: ${ghost.victory ? 'won' : 'lost'}, ${ghost.badges} badges, ${ghost.encounters} encounters`, `You: ${me.victory ? 'won' : 'lost'}, ${me.badges} badges, ${me.encounters} encounters. ${lead}`, ...(ghost.team.length ? [`Their team: ${ghost.team.map(speciesName).join(', ')}`] : []), ...ghost.actions.map((a) => `· ${a}`)];
 }
