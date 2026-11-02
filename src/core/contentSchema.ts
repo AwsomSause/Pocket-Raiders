@@ -2624,6 +2624,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */
   z.object({ kind: z.literal('relic'), id: z.string(), name: z.string(), effects: z.array(ArchetypeModifierSchema).min(1).max(3) }),
+  /** Run events J: a temporary modifier for the next `battles` battles (of the `until` kind): a type boost, a handicap, weather or Trick Room at the start (`battleStart`). Uses `run.tempEffects`, so it runs out on its own. `label` is what the outcome tells the player. */
+  z.object({ kind: z.literal('tempEffect'), label: z.string().min(1), effects: z.array(ArchetypeModifierSchema).min(1).max(3), battles: z.number().int().min(1).max(5).default(1), until: z.enum(['battle', 'boss', 'wild']).default('battle') }),
   /** Rival feud: settle the open feud (back the first or second rival, stay out, or exploit it). */
   z.object({ kind: z.literal('feud'), choice: z.enum(['first', 'second', 'stay-out', 'exploit']) }),
   /** Grand-Enemy hunt: one more clue (`finish` ends the hunt and gives its title). */
