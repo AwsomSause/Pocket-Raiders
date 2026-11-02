@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 // 12 Trail Finds: the rewards lie on the forest trail with names floating over them; your team trots along below.
 import { fillGradient, drift } from './common';
-import { blurb, dealIn, icon, label, popAway, rarityWord, zone, css } from './kit';
+import { blurb, dealIn, fitBlock, icon, label, popAway, rarityWord, zone, css } from './kit';
 import type { RewardLayout, RewardSkin } from './types';
 
 const layout: RewardLayout = (ctx, hooks) => {
@@ -30,9 +30,9 @@ const layout: RewardLayout = (ctx, hooks) => {
     if (ctx.motion === 'full') scene.tweens.add({ targets: mon, y: mon.y - 5, duration: 300 + i * 40, yoyo: true, repeat: -1 });
   });
   const box = scene.add.graphics();
-  box.fillStyle(0xffffff, 0.95).fillRoundedRect(260, 336, 680, 38, 6).lineStyle(2, 0x2a4a28, 1).strokeRoundedRect(260, 336, 680, 38, 6);
+  box.fillStyle(0xffffff, 0.95).fillRoundedRect(260, 336, 680, 52, 6).lineStyle(2, 0x2a4a28, 1).strokeRoundedRect(260, 336, 680, 52, 6);
   root.add(box);
-  const text = label(scene, root, 272, 345, '', 14, '#14301a', { origin: [0, 0], w: 656 });
+  const text = label(scene, root, 272, 341, '', 14, '#14301a', { origin: [0, 0], extra: { wordWrap: { width: 656 } } });
   const ring = scene.add.graphics();
   items.forEach(({ c }) => c.addAt(ring, 0));
   return {
@@ -41,7 +41,8 @@ const layout: RewardLayout = (ctx, hooks) => {
       const host = items[i]!.c;
       host.addAt(ring, 0);
       ring.clear().lineStyle(4, 0xffe45a, 1).strokeCircle(0, 0, 50);
-      text.setText(`Take the ${views[i]!.name}? ${blurb(views[i]!)}`);
+      text.setFontSize(14).setText(`Take the ${views[i]!.name}? ${blurb(views[i]!)}`);
+      fitBlock(text, 44);
     },
     picked(i) {
       return popAway(ctx, items[i]!.c);
