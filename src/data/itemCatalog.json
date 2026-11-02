@@ -14965,5 +14965,28 @@
     }
    ]
   }
+ },
+ {
+  "id": "safety-net",
+  "name": "Safety Net",
+  "family": "Key items: gadgets",
+  "description": "Once per run, a wipe is undone: the fight restarts with your party healed",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "last-stand-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "safetyNet"
+    }
+   ]
+  }
  }
 ]
