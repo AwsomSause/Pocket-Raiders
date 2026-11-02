@@ -14,7 +14,7 @@ Nuzlocke, Daily Run, Endless, level caps, mentors, retirement, Pawn/Black Market
 | 2 | Heat Levels: stacking opt-in difficulty with reward multiplier, ordered Challenge Gate | S176, S104, S178 | Gap |
 | 3 | Run Modifier Draft (pick 1 of 3 run rules at start; "Gamemode") | S6, S374 | Gap (modifiers exist) |
 | 4 | Bond Levels + Legacy Lines (descendants keep a signature move) | S47, S59, S58 | Gap |
-| 5 | Share Codes + versioned seed format + Challenge Cards | S198, S343, S200 | Gap |
+| 5 | Share Codes + versioned seed format + Challenge Cards | S198, S343, S200 | Built (S343 PR1 seed code already existed) |
 | 6 | Catch Chains, Shiny Charm tiers, Release Rewards | S218, S225, S226 | Gap/Check |
 | 7 | Battle Frontier facilities: Factory, Palace, Pyramid, Arcade | S439-S443, S490 | Gap |
 | 8 | Challenge modes missing: Randomizer, Time Attack, Tag Team, Triple, Hot-seat | S298, S303, S302, S293, S203 | Gap |
