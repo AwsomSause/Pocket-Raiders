@@ -7,8 +7,8 @@ import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
 describe('settings registry', () => {
   it('every setting id is a real settings key, and ids are unique', () => {
     const keys = Object.keys(SettingsSchema.shape);
-    // `pad_<action>` rows edit one entry of the `gamepadMap` setting.
-    for (const d of SETTINGS) expect(keys, d.id).toContain(d.id.startsWith('pad_') ? 'gamepadMap' : d.id);
+    // `pad_<action>` rows edit one entry of the `gamepadMap` setting; `screenStyle.<screen>` rows one entry of `screenStyles`.
+    for (const d of SETTINGS) expect(keys, d.id).toContain(d.id.startsWith('pad_') ? 'gamepadMap' : d.id.startsWith('screenStyle.') ? 'screenStyles' : d.id);
     expect(new Set(SETTINGS.map((d) => d.id)).size).toBe(SETTINGS.length);
   });
 

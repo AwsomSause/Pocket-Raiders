@@ -176,10 +176,15 @@ export interface MenuConfig {
    * Opt-in Aero look: each option sits on a glossy glass pill (optionally
    * tinted per option) and the focused one glows and bounces.
    */
-  glass?: { tints?: (number | undefined)[]; motion?: MotionLevel };
+  glass?: { tints?: (number | undefined)[]; motion?: MotionLevel; paint?: PillPainter };
+  /** Where option i sits inside the menu (default: a grid of `columns`). Lets a screen style fan or ring its options. */
+  place?: (i: number) => { x: number; y: number };
   /** Options slide in when the menu is built (default). Screens that rebuild the same menu after every change pass false. */
   animateIn?: boolean;
 }
+
+/** Draws one option's pill instead of the Aero glass (screen styles, e.g. battle styles). */
+export type PillPainter = (g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, s: { tint: number; on: boolean; disabled: boolean; index: number }) => void;
 
 /**
  * A list (or grid) of options with a ▶ cursor. Works with the keyboard via
@@ -272,6 +277,7 @@ export class Menu {
       const tint = this.config.glass?.tints?.[i] ?? AERO.glass;
       const on = i === focused && !opt.disabled;
       pill.clear();
+      if (this.config.glass?.paint) return this.config.glass.paint(pill, x - 4, y - 8, this.itemWidth - 12, Math.max(size + 14, this.itemHeight - 8), { tint, on, disabled: !!opt.disabled, index: i });
       paintGlass(pill, x - 4, y - 8, this.itemWidth - 12, Math.max(size + 14, this.itemHeight - 8), {
         tint: on ? tint : mixColor(tint, AERO.glass, 0.45),
         rim: on ? AERO.rim : 0x9fb8d0,
@@ -292,6 +298,7 @@ export class Menu {
   }
 
   private position(i: number): { x: number; y: number } {
+    if (this.config.place) return this.config.place(i);
     return { x: (i % this.columns) * this.itemWidth, y: Math.floor(i / this.columns) * this.itemHeight };
   }
 

@@ -14,7 +14,7 @@ test('Essentials Kit battle UI shows plates, names, levels and the EXP strip', a
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
   await page.evaluate(() => {
     const { session } = (window as any).__pkr;
-    session.saveSettings({ ...session.settings, battleUi: 'kit' });
+    session.saveSettings({ ...session.settings, battleUi: 'kit', screenStyles: { battle: 'original' } });
   });
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
     await page.keyboard.press('Enter');

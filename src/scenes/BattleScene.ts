@@ -62,6 +62,8 @@ import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
+import { battleSkinFor, type BattleFrameInfo, type BattleSkin } from '../ui/battleStyles';
+import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { pickWipe, wipeAssetId } from '../ui/battleFx/ruleWipe';
@@ -184,6 +186,9 @@ export class BattleScene extends Phaser.Scene {
   private typing: Phaser.Time.TimerEvent | null = null;
   private moveBadges: Phaser.GameObjects.Container | null = null;
   private commandWindow!: Phaser.GameObjects.Graphics;
+  /** Screens redesign: the battle style for this battle (null = the original look). Presentation only. */
+  private skin: BattleSkin | null = null;
+  private skinId = 'original';
   private playerBox!: InfoBox;
   private enemyBox!: InfoBox;
   private playerSprite: Visual | null = null;
@@ -284,6 +289,9 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.timeScale = speed;
     this.time.timeScale = speed;
     this.role = this.battleRole();
+    // The same battle always gets the same look (salted by the run and how far it has come), so a reload never changes it.
+    this.skinId = screenStyleOf('battle', session.settings.screenStyles, `${run.seed}:${run.log.battlesWon}:${run.log.rewardsTaken.length}`);
+    this.skin = battleSkinFor(this.skinId);
     playMusic(
       this,
       battleTrack({
@@ -408,11 +416,17 @@ export class BattleScene extends Phaser.Scene {
 
     // PokeRogue's message bar along the bottom, with the command window on its right.
     // A glossy glass message bar (Aero), with the command window on its right.
-    const bar = drawGlass(this, 8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16, { radius: 22 });
+    const bar = this.skin
+      ? (this.skin.messageBar(this, 8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16) as Phaser.GameObjects.Graphics)
+      : drawGlass(this, 8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16, { radius: 22 });
     slideIn(this, bar, 0, 60, this.motion);
-    this.commandWindow = drawGlass(this, COMMAND_X, MESSAGE_Y + 14, GAME_WIDTH - COMMAND_X - 16, GAME_HEIGHT - MESSAGE_Y - 28, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 18 }).setVisible(false);
-    this.message = this.add.text(36, MESSAGE_Y + 24, '', textStyle(30, COLORS.textLight, { wordWrap: { width: 520 }, lineSpacing: 6 }));
-    this.moveInfo = this.add.text(COMMAND_X + 30, MESSAGE_Y + 24, '', textStyle(24, COLORS.textLight, { lineSpacing: 8 })).setVisible(false);
+    const cw = [COMMAND_X, MESSAGE_Y + 14, GAME_WIDTH - COMMAND_X - 16, GAME_HEIGHT - MESSAGE_Y - 28] as const;
+    this.commandWindow = (this.skin ? this.skin.commandWindow(this, ...cw) : drawGlass(this, ...cw, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 18 })).setVisible(false);
+    this.message = this.add.text(36, MESSAGE_Y + 24, '', textStyle(30, this.panelText, { wordWrap: { width: 520 }, lineSpacing: 6 }));
+    this.moveInfo = this.add.text(COMMAND_X + 30, MESSAGE_Y + 24, '', textStyle(24, this.panelText, { lineSpacing: 8 })).setVisible(false);
+    this.skin?.frame?.(this, this.frameInfo());
+    // Style overlays (letterbox, scanlines) sit under the run header.
+    if (this.skin?.frame) this.header.setDepth(8);
 
     this.autoRunning = false;
     this.autoCancel = false;
@@ -429,6 +443,32 @@ export class BattleScene extends Phaser.Scene {
     this.input.on('pointerdown', () => this.advance?.());
 
     void this.intro();
+  }
+
+  /** Text colour on the message bar and command window (the battle style's, else light). */
+  private get panelText(): string {
+    return this.skin?.text ?? COLORS.textLight;
+  }
+
+  /** Text colour on menu buttons. */
+  private get btnText(): string {
+    return this.skin?.buttonText ?? COLORS.textLight;
+  }
+
+  /** What a battle style may show around the arena. */
+  private frameInfo(): BattleFrameInfo {
+    const { content, settings } = services().session;
+    const battle = this.run.battle!;
+    const foe = battle.enemyTeam[0];
+    return {
+      player: this.run.party[0] ? this.speciesName(this.run.party[0]) : '',
+      foe: foe ? this.speciesName(foe) : '',
+      trainer: this.trainerTitle(),
+      turn: battle.turn,
+      region: this.run.regionOrder.length > 0 ? currentRegion(content, this.run).name : '',
+      motion: this.motion,
+      reducedFlash: settings.reducedFlash,
+    };
   }
 
   /** How much motion the player allows (the battle animation setting). */
@@ -721,9 +761,10 @@ export class BattleScene extends Phaser.Scene {
   private makeInfoBox(x: number, y: number, isPlayer: boolean): InfoBox {
     const container = this.add.container(x, y);
     const style = services().session.settings.battleUi;
-    const kit = style !== 'aero' && kitTexturesReady(this) ? KIT_LAYOUTS[style][isPlayer ? 'player' : 'foe'] : null;
+    const kit = !this.skin && style !== 'aero' && kitTexturesReady(this) ? KIT_LAYOUTS[style][isPlayer ? 'player' : 'foe'] : null;
     // A glossy glass databox (Aero), cyan-rimmed for you and pink-rimmed for the foe; or the Deluxe Battle Kit's databox art.
     if (kit) container.add(this.add.image(kit.x, kit.y, kit.box).setOrigin(0, 0).setScale(kit.scale));
+    else if (this.skin) container.add(this.skin.databox(this, isPlayer, this.foeRim()));
     else
       container.add(
         isPlayer
@@ -740,8 +781,9 @@ export class BattleScene extends Phaser.Scene {
       plates.lineStyle(2, 0xbfe9ff, 0.55).strokeRoundedRect(left - 10, 8, right - left - 74, 40, 12).strokeRoundedRect(right - 82, 8, 92, 40, 12);
       container.add(plates);
     }
-    const name = this.add.text(left, 14, '', textStyle(26));
-    const level = this.add.text(right, 14, '', textStyle(24)).setOrigin(1, 0);
+    const ink = this.skin?.text;
+    const name = this.add.text(left, 14, '', textStyle(26, ink));
+    const level = this.add.text(right, 14, '', textStyle(24, ink)).setOrigin(1, 0);
     container.add([name, level]);
     const hpX = isPlayer ? 210 : 177;
     let hpBar: GaugeLike;
@@ -762,7 +804,7 @@ export class BattleScene extends Phaser.Scene {
     hpBar.addTo(container);
     const box: InfoBox = { container, isPlayer, name, level, hpBar, statusAt: { x: left, y: isPlayer ? 80 : 80 } };
     if (isPlayer) {
-      box.hpText = this.add.text(right, 76, '', textStyle(24)).setOrigin(1, 0);
+      box.hpText = this.add.text(right, 76, '', textStyle(24, ink)).setOrigin(1, 0);
       container.add(box.hpText);
       if (kit) box.xpBar = new KitBar(this, 123, 104, 'pack.dbk.box.basicExp', 1, 6, 2.7, 'xp');
       else box.xpBar = new Bar(this, 123, 120, 255, 6, 'xp');
@@ -1176,8 +1218,8 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: 170,
       itemHeight: 50,
       fontSize: 24,
-      color: COLORS.textLight,
-      glass: { tints: [0x1f9a52, 0xc8303c], motion: this.motion },
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0xc8303c], motion: this.motion },
       onSelect: (i) => {
         this.commands = [];
         void this.act({ kind: 'deal', accept: i === 0 });
@@ -1248,6 +1290,7 @@ export class BattleScene extends Phaser.Scene {
     const title = this.trainerTitle();
     if (battle.turn === 1 && !battle.needsSwitch) {
       await this.playIntro();
+      await this.skin?.intro?.(this, this.frameInfo());
       const modeLine = modeBattleLine(this.run.rules.modeId, !!battle.trainer && isBossClass(battle.trainer.classId));
       if (modeLine) await this.say(modeLine);
       const art = this.trainerArt();
@@ -1530,8 +1573,8 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: 340,
       itemHeight: 46,
       fontSize: 26,
-      color: COLORS.textLight,
-      glass: { tints: choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), motion: this.motion },
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: choices.map((c) => mixColor(c.tint, 0x000000, 0.3)), motion: this.motion },
       onFocus: aim,
       onSelect: (i) => this.submit(action, choices[i]!.target),
       onBack: () => this.showMoveMenu(),
@@ -1614,8 +1657,8 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: 160,
       itemHeight: 46,
       fontSize: 26,
-      color: COLORS.textLight,
-      glass: { tints: [0x9a2cc8, 0x2c3a58], motion: this.motion },
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: [0x9a2cc8, 0x2c3a58], motion: this.motion },
       onSelect: (i) => {
         if (i === 0) {
           this.setAuto(true);
@@ -1759,8 +1802,8 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: 170,
       itemHeight: 38,
       fontSize: 22,
-      color: COLORS.textLight,
-      glass: { tints: [0x1f9a52, 0x2c6ad8, 0x9a2cc8, 0x2c3a58], motion: this.motion },
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0x2c6ad8, 0x9a2cc8, 0x2c3a58], motion: this.motion },
       onSelect: (n) => {
         if (n === 0) void this.act({ kind: 'switch', partyIndex: i });
         else if (n === 1) this.showPartySummary(i);
@@ -1864,9 +1907,9 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: options.length > 4 ? 114 : 170,
       itemHeight: options.length > 4 ? 36 : 50,
       fontSize: options.length > 4 ? 20 : 30,
-      color: COLORS.textLight,
+      color: this.btnText,
       // Wii-style glossy buttons: Fight red, Bag gold, Pokémon green, transformations neon.
-      glass: { tints: [0xc8303c, 0xc08a10, 0x1f9a52, 0x9a2cc8, 0x2c8ad8, 0x2cb8c8, 0xd8a020], motion: this.motion },
+      glass: { paint: this.skin?.pill, tints: this.skin?.rootTints ?? [0xc8303c, 0xc08a10, 0x1f9a52, 0x9a2cc8, 0x2c8ad8, 0x2cb8c8, 0xd8a020], motion: this.motion },
       onSelect: (i) => {
         if (i === dealAt) this.showDealMenu();
         else if (i === smashAt) this.submit({ kind: 'arena' });
@@ -1920,8 +1963,8 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: 170,
       itemHeight: 50,
       fontSize: 26,
-      color: COLORS.textLight,
-      glass: { tints: cheers.map((c) => c.tint), motion: this.motion },
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: cheers.map((c) => c.tint), motion: this.motion },
       onSelect: (i) => this.submit({ kind: 'cheer', cheer: cheers[i]!.cheer }),
       onBack: () => this.showRootMenu(),
     });
@@ -1949,8 +1992,8 @@ export class BattleScene extends Phaser.Scene {
           return { label: zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : ''), disabled: slot.pp <= 0 || (zMoves !== null && !zMoves[i]) };
         })
       : [{ label: 'Struggle' }];
-    // Moves fill the message bar; the command window shows the focused move's details.
-    this.message.setVisible(false);
+    // Moves fill the message bar (unless a battle style floats them over the arena); the command window shows the focused move's details.
+    this.message.setVisible(!!this.skin?.moveMenu?.floating);
     this.commandWindow.setVisible(true);
     this.menu = new Menu(this, {
       x: 30,
@@ -1960,9 +2003,12 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: 270,
       itemHeight: 50,
       fontSize: 28,
-      color: COLORS.textLight,
+      // A battle style may fan the moves out as cards or ring them around your Pokémon.
+      ...(this.skin?.moveMenu ? { ...this.skin.moveMenu, place: this.skin.moveMenu.place ? (i: number) => this.skin!.moveMenu!.place!(i, options.length) : undefined } : {}),
+      color: this.btnText,
       // Each move sits on a glass pill in its type's colour.
       glass: {
+        paint: this.skin?.pill,
         tints: options.map((_, i) => {
           const slot = mon.moves[i];
           const move = slot ? (zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)) : undefined;
@@ -1991,7 +2037,7 @@ export class BattleScene extends Phaser.Scene {
           bounceIn(this, this.moveBadges, this.motion);
         } else art.forEach((o) => o.destroy());
         this.moveInfo.setText(`${label}${services().session.settings.typeMarkers ? `${move.type.toUpperCase()} ${move.category}  ·  ` : ''}PP  ${slot.pp}/${maxPp(content, slot)}  ·  Power ${power}`).setY(art.length === 2 ? MESSAGE_Y + 64 : MESSAGE_Y + 30);
-        this.moveInfo.setColor(COLORS.textLight);
+        this.moveInfo.setColor(this.panelText);
       },
       onSelect: (i) => {
         const transform = this.transformChoice;
