@@ -182,6 +182,12 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...['dynamax', 'calyrex'].map((n): AssetEntry => ({ id: `fx.dynamax.pattern.${n}`, kind: 'image', category: 'ui', path: `images/packs/dbk/dynamax/patterns/${n}.png`, lazy: true })),
   { id: 'ui.tera.types', kind: 'spritesheet', category: 'ui', path: 'images/packs/dbk/tera/types.png', frameSize: 32, lazy: true },
   { id: 'ui.dynamax.icon', kind: 'image', category: 'ui', path: 'images/packs/dbk/dynamax/icon.png', lazy: true },
+  // The key item that rises at the start of a transformation cinematic (Mega Ring from the Pokémon Memories repo,
+  // the rest are the game's own item pictures), and the two PRSFX Mega Evolution sounds (Pokémon Memories).
+  ...Object.entries({ mega: 'packs/dbk/mega/ring', zmove: 'items/z_ring', dynamax: 'items/dynamax_band', tera: 'items/tera_orb', alpha: 'items/blue_orb', omega: 'items/red_orb' }).map(
+    ([k, path]): AssetEntry => ({ id: `cine.key.${k}`, kind: 'image', category: 'ui', path: `images/${path}.png`, lazy: true }),
+  ),
+  ...[1, 2].map((n): AssetEntry => ({ id: `cine.sfx.mega${n}`, kind: 'audio', category: 'sound', path: `audio/cine/mega_evolution${n}.m4a`, lazy: true })),
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
   { id: 'bgm.menu', kind: 'audio', category: 'music', path: 'audio/bgm/menu.mp3' },

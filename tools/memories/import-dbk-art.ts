@@ -2,12 +2,14 @@
 // the Pokémon Memories repo (AwsomSause/Pokemon-Memories) into the game, with
 // unchanged pixels: one title card per Z-Move (named by our move id), the
 // Z-Power particle, the Tera crystal kit, one Tera pattern per type, the Tera
-// type icons, and the Dynamax patterns and icons.
+// type icons, the Dynamax patterns and icons, the Mega Ring picture, and the
+// two Mega Evolution sounds (converted to .m4a with ffmpeg).
 //
 //   node tools/memories/import-dbk-art.ts "<Pokemon Memories folder>"
 //
 // Afterwards run `npm run assets:manifest`.
 
+import { execFileSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -52,5 +54,13 @@ const dmax = join(root, 'public', 'assets', 'images', 'packs', 'dbk', 'dynamax')
 mkdirSync(join(dmax, 'patterns'), { recursive: true });
 for (const file of readdirSync(join(plugins, 'Dynamax', 'Patterns'))) copyFileSync(join(plugins, 'Dynamax', 'Patterns', file), join(dmax, 'patterns', file.toLowerCase()));
 copyFileSync(join(plugins, 'Dynamax', 'icon_dynamax.png'), join(dmax, 'icon.png'));
+// Mega Evolution: the Mega Ring (the key item that rises in the cinematic) and the two PRSFX sounds.
+copyFileSync(join(game, 'Graphics', 'Items', 'MEGARING.png'), join(root, 'public', 'assets', 'images', 'packs', 'dbk', 'mega', 'ring.png'));
+const cineAudio = join(root, 'public', 'assets', 'audio', 'cine');
+mkdirSync(cineAudio, { recursive: true });
+for (const n of [1, 2]) {
+  const wav = join(game, 'Audio', 'SE', 'Anim', `PRSFX- Mega Evolution${n}.wav`);
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-ac', '1', '-c:a', 'aac', '-b:a', '64k', join(cineAudio, `mega_evolution${n}.m4a`)]);
+}
 console.log(`${copied.length} Z-Move title cards and the particle copied.${missed.length ? ` No move for: ${missed.join(', ')}` : ''}`);
 console.log(JSON.stringify(copied.sort()));
