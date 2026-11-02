@@ -422,13 +422,21 @@ export const overworldAssetIds = {
   props: 'ow.props',
   trainer: (name: string) => `ow.trainer.${name}`,
   follower: (key: string) => `ow.mon.${key}`,
+  /** Event Indicators (Pokemon-Memories, by wrigty12 and Luka S.J.): flairs over people and places. */
+  indicator: (name: OverworldIndicator) => `ow.ind.${name}`,
 };
+
+/** The Event Indicators flairs in images/overworld/indicators (file names kept from the pack). */
+export const OVERWORLD_INDICATORS = ['flair_talk', 'flair_important', 'flair_item', 'flair_pokeball', 'flair_quest', 'flair_question', 'event_question'] as const;
+export type OverworldIndicator = (typeof OVERWORLD_INDICATORS)[number] | 'quest_available_simple_anim';
 
 /** Hub Town: the ground tiles and props cut from the Pokémon-Memories tilesets, trainer walk sheets and Pokémon followers (all lazy). */
 export function overworldEntries(input: NonNullable<CatalogInputs['overworld']>): AssetEntry[] {
   return [
     { id: overworldAssetIds.tiles, kind: 'image', category: 'background', path: 'images/overworld/hubtown_tiles.png', lazy: true },
     { ...atlas(overworldAssetIds.props, 'background', 'images/overworld/hubtown_props'), lazy: true },
+    ...OVERWORLD_INDICATORS.map((n): AssetEntry => ({ id: overworldAssetIds.indicator(n), kind: 'image', category: 'ui', path: `images/overworld/indicators/${n}.png`, lazy: true })),
+    { id: overworldAssetIds.indicator('quest_available_simple_anim'), kind: 'spritesheet', category: 'ui', path: 'images/overworld/indicators/quest_available_simple_anim.png', frameSize: 28, lazy: true },
     ...input.trainers.map((t): AssetEntry => ({ id: overworldAssetIds.trainer(t), kind: 'spritesheet', category: 'trainer', path: `images/overworld/trainers/${t}.png`, frameSize: 64, lazy: true })),
     ...Object.entries(input.followers).map(([k, size]): AssetEntry => ({ id: overworldAssetIds.follower(k), kind: 'spritesheet', category: 'pokemon', path: `images/overworld/followers/${k}.png`, frameSize: size, lazy: true })),
   ];

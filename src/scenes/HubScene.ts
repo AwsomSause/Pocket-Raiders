@@ -46,6 +46,7 @@ import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '..
 import { localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
+import { HubIndicators, indicatorAssets } from '../ui/hubTown/indicators';
 import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
 import { HubTouchPad, wantsTouchPad } from '../ui/hubTown/touchPad';
 import { hubPeriod } from '../core/hubTown/daylight';
@@ -231,6 +232,7 @@ export class HubScene extends Phaser.Scene {
   /** The time of day the town is drawn at, and the phone controls (when shown). */
   period: Period = 'afternoon';
   touchPad: HubTouchPad | null = null;
+  indicators: HubIndicators | null = null;
   private lobbyPokemon: Species[] = [];
 
   constructor() {
@@ -254,7 +256,7 @@ export class HubScene extends Phaser.Scene {
     // Date.now (not new Date()) so tests that pin the clock get the same crowd.
     this.crowdWindow = crowdWindow(new Date(Date.now()));
     this.crowdList = hubCrowd(p, this.crowdWindow);
-    queueAssets(this, [overworldAssetIds.tiles, overworldAssetIds.props, overworldAssetIds.follower(hubPokemon(p).follower), ...keeperArt, ...displayAssets(session.content, this.entries), ...crowdAssets(this.crowdList)]);
+    queueAssets(this, [overworldAssetIds.tiles, overworldAssetIds.props, overworldAssetIds.follower(hubPokemon(p).follower), ...keeperArt, ...displayAssets(session.content, this.entries), ...crowdAssets(this.crowdList), ...indicatorAssets()]);
   }
 
   create(data: { notice?: string; focus?: number } = {}): void {
@@ -298,6 +300,7 @@ export class HubScene extends Phaser.Scene {
     this.lobby = null;
     this.minimap = null;
     this.touchPad = null;
+    this.indicators = null;
     if (session.settings.hubStyle === 'lobby') {
       const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
       this.lobby = new ArenaLobby(this, {
@@ -305,7 +308,7 @@ export class HubScene extends Phaser.Scene {
         busy: () => Boolean(this.picker || this.section || this.dexInfo),
         onTile: (t) => this.openLobbyTile(t, 0),
       });
-    } else this.buildTown(p, motion);
+    } else this.buildTown(p, motion, ready);
 
     this.drawHeader(data, ready);
 
@@ -317,17 +320,18 @@ export class HubScene extends Phaser.Scene {
   }
 
   /** Hub Town: walk as your Pokémon; buildings open the Hub's rooms. */
-  private buildTown(p: Profile, motion: 'full' | 'reduced' | 'off'): void {
+  private buildTown(p: Profile, motion: 'full' | 'reduced' | 'off', ready: number): void {
     const { session } = services();
     this.town = new HubTownView(
       this,
       { onPlace: (pl) => this.openPlace(pl), onGate: (g) => this.askGate(g), busy: () => Boolean(this.picker || this.section || this.dexInfo) },
       { follower: hubPokemon(p).follower, motion },
     );
+    const keeperSprites = new Map<string, Phaser.GameObjects.Sprite>();
     for (const k of HUB_TOWN.keepers) {
       const art = overworldAssetIds.trainer(k.sprite);
       if (!this.textures.exists(art)) continue;
-      this.town.addPerson(k.id, art, k, k.facing, { bob: true });
+      keeperSprites.set(k.id, this.town.addPerson(k.id, art, k, k.facing, { bob: true }));
       const keeper = KEEPERS[k.id];
       this.town.addTalker({ id: k.id, name: keeper?.name ?? k.id, verb: 'Talk', tiles: [k], onTalk: () => this.talkTo(k.id, k.location) });
     }
@@ -336,6 +340,14 @@ export class HubScene extends Phaser.Scene {
     drawAmbience(this.town, this, motion);
     this.crowd = new HubCrowd(this.town, this, session.content, p, this.crowdList, { motion, window: this.crowdWindow, say: (line) => notify(line) });
     const busy = (): boolean => Boolean(this.picker || this.section || this.dexInfo);
+    // Event Indicators: what is worth walking up to right now.
+    const day = localDay(new Date());
+    const sold = boughtToday(p, day);
+    this.indicators = new HubIndicators(this.town, this, {
+      keepers: { merchant: merchantStock(day).some((w) => !sold.includes(w.item)) ? 'flair_item' : null, gatekeeper: 'flair_important', sanctuary_keeper: 'flair_talk' },
+      quests: ready > 0 ? ['arena'] : [],
+      pedestals: Math.min(this.entries.length, HUB_TOWN.pads.length),
+    }, keeperSprites, this.crowd, motion);
     this.minimap = new HubMinimap(this, this.town, { motion, busy });
     // Day and night follow your own clock; the town's sounds follow the time and where you stand.
     this.period = hubPeriod(new Date(Date.now()));
