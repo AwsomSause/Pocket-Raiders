@@ -33,7 +33,7 @@ export const LOBBY_TILES: LobbyTile[] = [
   { id: 'run', label: 'New Run', icon: 'ball.pb', rooms: ['run'], blurb: 'Choose a trainer and a starter, then set off.' },
   { id: 'history', label: 'Events', icon: 'item.calendar', rooms: ['events', 'history', 'fame', 'legacy', 'memories', 'codex', 'tales', 'intel', 'museum', 'seeds', 'mentors', 'nook'], blurb: "This week's event, past runs, the Hall of Fame, the Moment Codex, the Intelligence Board, the Item Museum and the Seed Shelf." },
   { id: 'unlocks', label: 'Unlocks', icon: 'item.golden_mystic_ticket', rooms: ['achievements', 'bank', 'merchant', 'lab', 'attributes', 'mastery', 'research', 'tree', 'prestige', 'network', 'moves', 'wardrobe', 'card'], blurb: 'Achievements, the Bank, the Strange Merchant, the Starter Laboratory, Attributes, Species Mastery, the Research Room and the Wardrobe.' },
-  { id: 'town', label: 'Town', icon: 'item.map', rooms: ['town'], blurb: 'Pocket Town: gardens, shrine, library, capsule machine and more.' },
+  { id: 'town', label: 'Town', icon: 'item.map', rooms: ['hubtown', 'town'], blurb: 'Hub Town: walk the town as your Pokémon. Pocket Town is through its north gate.' },
 ];
 
 const BLURB_Y = 382;
