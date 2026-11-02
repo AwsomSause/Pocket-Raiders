@@ -60,6 +60,8 @@ import { uiTiming } from '../ui/wiiMotion';
 import { addAmbience } from '../ui/battleFx/ambience';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { MAP_SKINS } from '../ui/mapStyles';
 import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
@@ -265,6 +267,10 @@ export class MapScene extends Phaser.Scene {
       }
       this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, regionDim(identity.sky), 0.58).setOrigin(0).setDepth(-55);
     }
+    // Screens redesign (Group B): a picked map look repaints the backdrop, routes and stop tokens (core/presentation/screenStyles.ts).
+    const skinId = screenStyleOf('map', session.settings.screenStyles, `${run.seed}:${stage.index}`);
+    const mapSkin = skinId === 'original' ? null : MAP_SKINS[skinId];
+    if (mapSkin) mapSkin.backdrop(this, this.motion);
     // The stage's types drift over it (leaves, embers, bubbles...), like the battle arena.
     const air = this.add.container(0, 0).setDepth(-50);
     addAmbience(this, air, 0, league || blindMap(run.rules) ? ['dragon'] : theme.types, this.motion);
@@ -393,11 +399,14 @@ export class MapScene extends Phaser.Scene {
         const b = pos(findNode(stage.map, id));
         const walked = stage.visited.includes(n.id) && stage.visited.includes(id);
         const open = n.id === stage.current && choiceIds.has(id);
-        // A dark edge under each path, like a drawn route on a town map.
-        lines.lineStyle(open ? 11 : 9, 0x181818, 0.9);
-        lines.lineBetween(a.x, a.y, b.x, b.y);
-        lines.lineStyle(open ? 5 : 3, walked ? 0xf8c030 : open ? 0xf8f8f8 : 0x5a6f8a, 1);
-        lines.lineBetween(a.x, a.y, b.x, b.y);
+        if (mapSkin) mapSkin.edge(lines, a, b, { open, walked });
+        else {
+          // A dark edge under each path, like a drawn route on a town map.
+          lines.lineStyle(open ? 11 : 9, 0x181818, 0.9);
+          lines.lineBetween(a.x, a.y, b.x, b.y);
+          lines.lineStyle(open ? 5 : 3, walked ? 0xf8c030 : open ? 0xf8f8f8 : 0x5a6f8a, 1);
+          lines.lineBetween(a.x, a.y, b.x, b.y);
+        }
         if (open) openPaths.push([a, b]);
       }
     }
@@ -436,14 +445,17 @@ export class MapScene extends Phaser.Scene {
       const alpha = dim ? 0.35 : visited && !isCurrent ? 0.6 : 1;
       // A pixel token: dark rim, the kind's colour, a lighter top and a darker bottom.
       const g = this.add.graphics();
-      g.fillStyle(0x181818, alpha);
-      g.fillCircle(x, y + 2, r + 3);
-      g.fillStyle(mixColor(style.color, 0x000000, 0.35), alpha);
-      g.fillCircle(x, y, r);
-      g.fillStyle(style.color, alpha);
-      g.fillCircle(x, y - 2, r - 3);
-      g.fillStyle(mixColor(style.color, 0xffffff, 0.35), alpha);
-      g.fillEllipse(x, y - r * 0.45, r * 1.1, r * 0.5);
+      if (mapSkin) mapSkin.token(g, x, y, r, { color: style.color, alpha, boss: isBoss, current: isCurrent, reachable });
+      else {
+        g.fillStyle(0x181818, alpha);
+        g.fillCircle(x, y + 2, r + 3);
+        g.fillStyle(mixColor(style.color, 0x000000, 0.35), alpha);
+        g.fillCircle(x, y, r);
+        g.fillStyle(style.color, alpha);
+        g.fillCircle(x, y - 2, r - 3);
+        g.fillStyle(mixColor(style.color, 0xffffff, 0.35), alpha);
+        g.fillEllipse(x, y - r * 0.45, r * 1.1, r * 0.5);
+      }
       if (n.harder && !fog) {
         g.lineStyle(5, HARDER_COLOR, dim ? 0.4 : 1);
         g.strokeCircle(x, y, r + 6);
