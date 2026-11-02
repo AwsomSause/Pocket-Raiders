@@ -1,0 +1,1 @@
+- Battle/AI slice 2 (S164 charge-up): Celebrate, Hold Hands and Happy Hour (formerly no-ops) bank one power stack (`bankPower` effect, `vol.bank`, `balance.bankPower` +50% per stack, max 3); the user's next damaging move's first hit uses them up. No save change (volatile default). Test `tests/unit/bankPower.test.ts`. Limited: AI never banks; no UI badge for stacks.

@@ -16,8 +16,13 @@ for (const screen of ['title', 'trainer', 'starter', 'briefing'] as const) {
       await page.goto('/?seed=fd1&debug=1');
       await waitFor(page, 'MainMenu');
       await page.evaluate(([s, v]) => ((window as any).__pkr.session.settings.screenStyles = { [s!]: v }), [screen, style]);
-      if (screen === 'title') await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('MainMenu').scene.restart({}); });
+      if (screen === 'title') await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('MainMenu').scene.restart({}));
       await waitFor(page, 'MainMenu');
+      // The Classic title waits on "Press Start" first.
+      if (screen === 'title' && style === 'classic') {
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(400);
+      }
       await page.keyboard.press('Enter');
       await waitFor(page, 'Hub');
       await page.keyboard.press('Enter');

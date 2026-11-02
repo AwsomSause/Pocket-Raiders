@@ -35,6 +35,8 @@ const movesPath = join(dataDir, 'moves.json');
 type Stat = 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'acc' | 'eva';
 type StatChange = { stat: Stat; stages: number; target: 'self' | 'enemy'; chance: number };
 type Effects = {
+  bankPower?: true;
+  noop?: true;
   status?: { id: 'brn' | 'psn' | 'par' | 'slp' | 'frz'; chance: number };
   flinchChance?: number;
   statChanges?: StatChange[];
@@ -114,6 +116,10 @@ const EXTRA_EFFECTS: Record<string, Effects> = {
   'hyper-drill': { breaksProtect: true },
   'hyperspace-hole': { breaksProtect: true },
   'hyperspace-fury': { breaksProtect: true },
+  // S164 charge-up: the do-nothing moves bank power for the next attack.
+  celebrate: { bankPower: true },
+  'hold-hands': { bankPower: true },
+  'happy-hour': { bankPower: true },
 };
 /** Solar Beam and Solar Blade skip charging in sun. */
 const SUN_SKIPS = new Set(['solar-beam', 'solar-blade']);
@@ -408,7 +414,10 @@ for (const row of list) {
 
 for (const move of moves) {
   const extra = EXTRA_EFFECTS[move.id];
-  if (extra && move.supported !== false) Object.assign(move.effects, extra);
+  if (extra && move.supported !== false) {
+    Object.assign(move.effects, extra);
+    if (extra.bankPower) delete move.effects.noop;
+  }
 }
 
 // Contact, punch, bite, pulse and sound flags from PokeAPI's move_flag_map

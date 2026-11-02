@@ -38,6 +38,7 @@ import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
 import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
 import { isClaimed } from '../core/quests';
 import type { RunModifiersData } from './RunModifiersScene';
+import type { RunStartersData } from './RunStartersScene';
 
 export interface RunPrepData {
   archetypeId: string;
@@ -318,6 +319,7 @@ export class RunPrepScene extends Phaser.Scene {
     const page = Math.max(0, Math.min(OVERVIEW, index));
     if (page === this.page) return;
     if (PAGES[page]!.id === 'modifiers') return this.openModifiers();
+    if (PAGES[page]!.id === 'starters') return this.openStarters();
     this.scene.restart({ archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, modCursor: this.modCursor, page, slide: page > this.page ? 1 : -1 } satisfies RunPrepData);
   }
 
@@ -325,6 +327,12 @@ export class RunPrepScene extends Phaser.Scene {
   private openModifiers(): void {
     const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: this.page === PAGES.findIndex((p) => p.id === 'modifiers') ? OVERVIEW : this.page };
     this.scene.start('RunModifiers', { desk, rules: this.rules } satisfies RunModifiersData);
+  }
+
+  /** The Starters page is its own scene; it hands the pool, draft rule and type back on leaving. */
+  private openStarters(): void {
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: PAGES[this.page]!.id === 'starters' ? OVERVIEW : this.page };
+    this.scene.start('RunStarters', { desk, prep: this.prep } satisfies RunStartersData);
   }
 
   private refresh(changes: Partial<RunPrep> = {}, extra: Partial<RunPrepData> = {}): void {

@@ -1,5 +1,5 @@
 // 07 Wii Shop Shelf: tall white channel tiles side by side; the chosen one glows blue; Take sits in a bar below.
-import { dealIn, icon, label, popAway, rarityWord, blurb, zone, css } from './kit';
+import { dealIn, fitBlock, icon, label, popAway, rarityWord, blurb, zone, css } from './kit';
 import { fillGradient } from './common';
 import type { RewardLayout, RewardSkin } from './types';
 
@@ -17,7 +17,7 @@ const layout: RewardLayout = (ctx, hooks) => {
     label(scene, t, 0, -52, v.name, 17, '#16324a', { w: w - 14 });
     label(scene, t, 0, -28, `+ ${rarityWord(v)}`, 12, css(v.rim));
     const d = label(scene, t, -w / 2 + 10, -8, blurb(v), 12, '#4a6078', { origin: [0, 0], extra: { wordWrap: { width: w - 20 } } });
-    d.setCrop(0, 0, w - 20, 100);
+    fitBlock(d, 100);
     root.add(t);
     dealIn(ctx, t, i, 40);
     zone(scene, root, x - w / 2, 110, w, 256, i, hooks).setDepth(20);

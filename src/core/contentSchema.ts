@@ -209,6 +209,8 @@ export const MoveSchema = z.object({
       powerRule: PowerRuleSchema.optional(),
       /** Does nothing at all (Splash, Celebrate). */
       noop: z.literal(true).optional(),
+      /** S164 charge-up: the move banks one stack of power; the user's next damaging move hits harder (balance.bankPower). */
+      bankPower: z.literal(true).optional(),
       /** Status move: puts the user in a state (Focus Energy, Laser Focus, Lock-On, Ingrain, Aqua Ring, Endure). */
       selfState: z.enum(['focusEnergy', 'laserFocus', 'lockOn', 'ingrain', 'aquaRing', 'endure']).optional(),
       /** Rest: sleeps for two turns and heals fully. */
@@ -836,6 +838,8 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('hatchLevelOffset'), value: z.number().int() }),
   /** Experience for Pokémon hatched from Eggs. */
   z.object({ kind: z.literal('hatchedXpMultiplier'), value: z.number().positive() }),
+  /** Accuracy of all your moves (Mental Training Dojo); moves that never miss stay sure. */
+  z.object({ kind: z.literal('accuracyMultiplier'), value: z.number().positive() }),
   /** Accuracy of your status moves. */
   z.object({ kind: z.literal('statusMoveAccuracy'), value: z.number().positive() }),
   /** This many more locked shop entries are for sale early. */
@@ -1909,6 +1913,8 @@ export type WorldBalance = z.infer<typeof WorldBalanceSchema>;
 
 export const BalanceSchema = z.object({
   trainerAi: TrainerAiSchema,
+  /** S164 charge-up: each banked stack adds `perStack` to the next damaging move's power, up to `max` stacks. */
+  bankPower: z.object({ perStack: z.number().min(0), max: z.number().int().min(1) }).default({ perStack: 0.5, max: 3 }),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z
@@ -1923,6 +1929,8 @@ export const BalanceSchema = z.object({
   bossEvolution: z.boolean().default(true),
   /** Rival battle styles (berserker, revenge-striker, last-stand) do something in the fight (Living Rivalry §3). */
   styleTricks: z.boolean().default(true),
+  /** Gym Leader Personalities (S126): a leader's mood of the day nudges the opening order and lead level. */
+  leaderMoods: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,
@@ -2408,7 +2416,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, atLeast: z.number().int() }),
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
-  z.object({ kind: z.literal('item'), id: z.string() }),
+  z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
   z.object({ kind: z.literal('partyType'), type: TypeNameSchema }),
   /** Ideas W4: the run calendar's season (core/clock.ts seasonOf) is one of these. */
   z.object({ kind: z.literal('season'), in: z.array(z.enum(['Spring', 'Summer', 'Autumn', 'Winter'])).min(1) }),
@@ -2546,7 +2554,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** One of these items, picked by the event's roll. */
   z.object({ kind: z.literal('itemFrom'), ids: z.array(z.string()).min(1), count: z.number().int().positive().default(1) }),
   /** A random item from the Bag is lost (never a key item). */
-  z.object({ kind: z.literal('loseItem'), id: z.string().optional() }),
+  z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
   /** A healing spot, shop or fishing spot opens beside this node. */
@@ -2673,6 +2681,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     defect: z.boolean().default(false),
     end: z.enum(['defeated', 'exposed', 'allied']).optional(),
   }),
+  /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
+  z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
   /** Permanent choices (spec §17): records a decision in the run's choice history (the first answer to an id stands). */
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
 ]);

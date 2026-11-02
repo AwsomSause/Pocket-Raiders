@@ -57,6 +57,8 @@ export const RunRulesDataSchema = z.object({
       quickWin: z.object({ turns: z.number().int().min(1), money: z.number().int().min(1) }).optional(),
       /** Inverse Battle (S291): the type chart is reversed in every battle of the run. */
       inverseChart: z.boolean().optional(),
+      gauntlet: z.boolean().optional(),
+      doublesOnly: z.boolean().optional(),
       /** Level 50 Cup (S290): the party's level cap for the whole run. */
       levelCap: z.number().int().min(1).optional(),
     }),
@@ -233,7 +235,11 @@ export function battleContent(content: Content, rules: Pick<RunRules, 'modifierI
   invertedCharts.set(content, out);
   return out;
 }
-export const noHealStops = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noHealStops);
+/** Gauntlet (S294): no healing stops, and no free heal at the League gate or between Elite Four fights. */
+export const gauntlet = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.gauntlet);
+/** Doubles Only (S292): every fight that can be a double battle is one. */
+export const doublesOnly = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.doublesOnly);
+export const noHealStops = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noHealStops || m.gauntlet);
 export const battleMoneyScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.battleMoney);
 export const researchScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.researchScale);
 export const eventChanceScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.eventChance);
