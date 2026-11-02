@@ -12,6 +12,8 @@ import { gameRewardText } from '../core/gameEvents';
 import { attributeChanges } from '../core/attributes';
 import { topMoments } from '../core/story/record';
 import { buildRecap } from '../core/recap';
+import { device } from '../game/deviceTools';
+import { formatMs, parseSplits, updateSplits } from '../core/tools/speedrun';
 import { encodeSeedCode } from '../core/seedCode';
 import { encodeChallengeCard, encodeTeamCode } from '../core/shareCodes';
 import { boardKey } from '../core/boards';
@@ -89,6 +91,14 @@ export class GameOverScene extends Phaser.Scene {
       const copy = (code: string) => void navigator.clipboard?.writeText(code).catch(() => undefined);
       this.input.keyboard?.on('keydown-T', () => copy(encodeTeamCode(run.party.map((m) => ({ speciesId: m.speciesId, level: m.level, shiny: !!m.shiny })))));
       this.input.keyboard?.on('keydown-C', () => copy(encodeChallengeCard({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules }, { from: 'A friend', title: `${archetype} run`, victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted })));
+      // Speedrun timer (off unless switched on in Hub > Tools): close the run's splits and show the final time.
+      let timeLine: string[] = [];
+      const sp = device.speedrunOn() ? parseSplits(device.splits()) : null;
+      if (sp && sp.runId === run.runId) {
+        const done = updateSplits(sp, Date.now(), run.badges.length, true);
+        device.setSplits(JSON.stringify(done));
+        timeLine = [`Run time: ${formatMs(done.finished ?? 0)}`];
+      }
       const runText = this.add.text(
         44,
         84,
@@ -100,6 +110,7 @@ export class GameOverScene extends Phaser.Scene {
           `Rewards taken: ${run.log.rewardsTaken.length}`,
           `Money left: ₽${run.money}`,
           `Candies earned: ${run.candies}`,
+          ...timeLine,
           ...(byName ? [`Defeated by ${byName}`] : []),
           `Seed: ${run.seed}${record ? '  (G: ghost code)' : ''}  (T: team code, C: challenge card)`,
           `Seed code: ${encodeSeedCode({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules })}`,

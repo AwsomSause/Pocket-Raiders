@@ -28,6 +28,10 @@ export const device = {
   setChangelogSeen: (id: string) => write('pkr.changelogSeen', id),
   lastExport: () => read('pkr.lastExport'),
   markExported: (now: string) => write('pkr.lastExport', now),
+  speedrunOn: () => read('pkr.speedrun') === '1',
+  setSpeedrun: (on: boolean) => write('pkr.speedrun', on ? '1' : '0'),
+  splits: () => read('pkr.splits'),
+  setSplits: (json: string) => write('pkr.splits', json),
   lastReminded: () => read('pkr.lastReminded'),
   markReminded: (now: string) => write('pkr.lastReminded', now),
 };
