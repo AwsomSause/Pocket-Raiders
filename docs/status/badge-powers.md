@@ -1,0 +1,1 @@
+- Badge Powers (idea S483): every Gym badge boosts your Pokémon of that Leader's type (+3% damage) and cuts their super-effective damage taken (-3%), up to 4 stacks per type (`balance.badgePower`, `badgeTypesOf`/`typeModifiers` in `core/archetypes.ts`, applied in run.ts `battleContext`). No save change; it reads `run.badges` only.
