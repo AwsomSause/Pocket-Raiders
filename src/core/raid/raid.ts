@@ -124,6 +124,7 @@ export function freshRaidBattle(def: RaidDef, badges = 0): RaidBattle {
     returning: false,
     rewardPercent: 100,
     draftDelta: 0,
+    practice: null,
   };
 }
 
@@ -348,6 +349,8 @@ export interface RaidPreview {
   rewards: string[];
   kind: RaidDef['kind'];
   returning: boolean;
+  /** True for story raids (Grand-Enemy, gang, Legendary), which have no practice fight. */
+  noPractice: boolean;
   approaches: { id: string; label: string; text: string; cost: number; leave: boolean }[];
 }
 

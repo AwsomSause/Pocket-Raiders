@@ -501,6 +501,8 @@ export const RaidBattleSchema = z.object({
   minionUid: z.string().nullable().default(null),
   /** The boss's own uid (a minion swaps into its place on the field); null in fights saved before reinforcements. */
   bossUid: z.string().nullable().default(null),
+  /** S400 Boss Training Mode: a practice fight keeps the party as it was; it is restored when the fight ends and nothing is paid out. */
+  practice: z.object({ party: z.array(PokemonInstanceSchema) }).nullable().default(null),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 

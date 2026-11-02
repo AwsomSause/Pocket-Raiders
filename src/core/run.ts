@@ -1134,7 +1134,7 @@ export function raidPreview(content: Content, current: RunState, sideId: string)
   const scaled = scaledRaid(content, def, badges);
   return {
     id: def.id, name: def.name, tier: def.tier, blurb: [def.blurb, ...notes].join(' '), speciesId, level: raidBadgeLevel(content, current, def, level + (returning ? RETURNING_LEVEL_BONUS : 0)),
-    entryCost: def.entryCost, mechanics: describeMechanics(scaled, { content, badges }), rewards: describeRewards(scaled), kind: def.kind, returning,
+    entryCost: def.entryCost, mechanics: describeMechanics(scaled, { content, badges }), rewards: describeRewards(scaled), kind: def.kind, returning, noPractice: Boolean(def.grand || def.gang || def.legendary),
     approaches: def.approaches.map((a) => ({ id: a.id, label: a.label, text: a.text, cost: a.cost, leave: a.leave })),
   };
 }
@@ -1161,6 +1161,7 @@ export function enterRaid(content: Content, current: RunState, sideId: string, a
   const { node, side } = raidDen(current, sideId);
   if (side.used) throw new Error('This raid has already been fought');
   const def = getRaid(content, side.raidId!);
+  if (approachId === PRACTICE_APPROACH) return practiceRaid(content, current, def, node.id + sideId);
   const approach = pickApproach(def, approachId);
   const cost = def.entryCost + (approach?.cost ?? 0);
   if (current.money < (approach?.leave ? 0 : cost)) throw new Error(`You need ₽${cost} to enter this raid`);
@@ -1176,6 +1177,21 @@ export function enterRaid(content: Content, current: RunState, sideId: string, a
   const { speciesId, level } = raidBoss(content, run, def, node.id + sideId);
   const returning = Boolean(side.returning);
   startRaidBattle(content, run, def, speciesId, level + (returning ? RETURNING_LEVEL_BONUS : 0), { approach, returning });
+  return run;
+}
+
+/** The approach id of a no-stakes fight (S400 Boss Training Mode). */
+export const PRACTICE_APPROACH = 'practice';
+
+/** Practice: the boss at its normal level, no cost, the den stays unused; the party is restored afterwards and no reward is paid. Not for story raids. */
+function practiceRaid(content: Content, current: RunState, def: RaidDef, key: string): RunState {
+  if (def.grand || def.gang || def.legendary) throw new Error('This raid cannot be practiced');
+  const run = structuredClone(current);
+  const party = structuredClone(run.party);
+  const { speciesId, level } = raidBoss(content, run, def, key);
+  startRaidBattle(content, run, def, speciesId, level);
+  run.battle!.raid!.practice = { party };
+  run.raids.entered = current.raids.entered;
   return run;
 }
 
@@ -2241,6 +2257,14 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win' && !run.party.some((m) => m.hp > 0)) {
     // A double KO that the player wins (recoil, Explosion by the foe) must not leave a team that cannot fight again.
     run.party[battle.activeIndex]!.hp = 1;
+  }
+  if (battle.outcome && battle.raid?.practice) {
+    // Training: nothing counts. The party comes back as it was.
+    run.party = battle.raid.practice.party;
+    run.battle = null;
+    run.phase = 'map';
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
   if (battle.outcome === 'win' || battle.outcome === 'caught') {
     const end = finishBattle(content, run);
