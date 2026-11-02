@@ -26,6 +26,8 @@ export interface Skin {
   head: number;
   /** A bright look (pale backdrop): the screens that draw their own text use dark ink on it. */
   light?: boolean;
+  /** Row shape: rounded pill (default), a ruled line (ink), or a slanted bar (shonen). */
+  shape?: 'pill' | 'rule' | 'slant';
 }
 
 const S = (name: string, top: number, bottom: number, accent: number, alt: number, pattern: Pattern, rowFill: number, rowRim: number, head: number, light = false): Skin => ({ name, top, bottom, accent, alt, pattern, rowFill, rowRim, head, ...(light ? { light } : {}) });
@@ -47,13 +49,13 @@ export const SKINS: Record<string, Skin> = {
   'settings.rotom': S('Rotom Assistant', 0x6aa850, 0x2a5a2a, 0xffd84a, 0xffffff, 'dotgrid', 0x2a4a2a, 0xffd84a, 0x3a6a3a),
   'settings.sticker': S('Sticker Cards', 0xffe4f0, 0xffc8e0, 0xff7ab8, 0xffffff, 'dotgrid', 0xfff4fa, 0xff9ccc, 0xffd0e8, true),
   // Hub menus
-  'hubmenus.aero': S('Aero Office', 0x1e6a9c, 0x0c2c4c, 0x9fe8ff, 0xffffff, 'bubbles', 0x174e7c, 0x9fd8f0, 0x2c82bc),
-  'hubmenus.wii': S('Wii Channel', 0x2e6a90, 0x142a40, 0xd0eeff, 0xffffff, 'tiles', 0x214c6c, 0xa8d0e8, 0x4486b0),
+  'hubmenus.aero': S('Aero Office', 0x5cc0ff, 0xe4f6ff, 0xffffff, 0xffffff, 'bubbles', 0xf2faff, 0x8fd0f0, 0xd6efff, true),
+  'hubmenus.wii': S('Wii Channel', 0xf4f8fb, 0xdde6ee, 0xa8d8f0, 0xffffff, 'tiles', 0xffffff, 0xa8d0e8, 0xffffff, true),
   'hubmenus.shonen': S('Shonen Missions', 0x8a3010, 0x1c0e0c, 0xffb43a, 0xffffff, 'speed', 0x4a1c10, 0xff8a3a, 0xc84a18),
-  'hubmenus.sticker': S('Sticker Planner', 0x2a2c68, 0x15163a, 0xff7ab8, 0xffd84a, 'stickers', 0x2a2c64, 0xff7ab8, 0x4a3c9c),
-  'hubmenus.ink': S('Ink Ledger', 0x34291f, 0x120e0a, 0xe8d8b0, 0x8a6a40, 'brush', 0x261d15, 0xb89868, 0x46362a),
+  'hubmenus.sticker': S('Sticker Planner', 0xffe4f0, 0xffc8e0, 0xff7ab8, 0xffffff, 'dotgrid', 0xfff4fa, 0xff9ccc, 0xffd0e8, true),
+  'hubmenus.ink': S('Ink Ledger', 0xf4ead0, 0xe8dab8, 0x8a6a40, 0x2a2018, 'brush', 0xf6ecd0, 0x8a6a40, 0xe8dab8, true),
   'hubmenus.achievements': S('Achievement Cards', 0x4a2a6a, 0x1a1030, 0xffd84a, 0xffe8a0, 'stars', 0x38205a, 0xe8c040, 0x6a3c9a),
-  'hubmenus.album': S('Photo Album', 0x5a4030, 0x1e140e, 0xf2e6c8, 0xd8b888, 'polaroids', 0x3e2c20, 0xd8b888, 0x70503a),
+  'hubmenus.album': S('Photo Album', 0xd8a868, 0xf2d8a8, 0xf2e6c8, 0xffffff, 'polaroids', 0xfff6e4, 0xd8b888, 0xf2d8a8, true),
   // Legacy and memories
   'legacy.museum': S('Museum Gallery', 0x2c4a44, 0x101c1a, 0xe8d8a0, 0xa8c8b8, 'frames', 0x203a34, 0xc8b878, 0x3a6258),
   'legacy.polaroids': S('Sunset Polaroids', 0x9a4a38, 0x2a1230, 0xffd0a0, 0xffffff, 'polaroids', 0x5a2a30, 0xffb078, 0xc0583c),
@@ -82,6 +84,9 @@ export const SKINS: Record<string, Skin> = {
   'expedition.depth': S('Depth Scan', 0x0e3a52, 0x040e18, 0x4ae0ff, 0x1a8aa8, 'depth', 0x0c2c40, 0x2aa0c8, 0x14506e),
   'minigame.wii': S('Wii Channels', 0x2e6a90, 0x142a40, 0xd0eeff, 0xffffff, 'tiles', 0x214c6c, 0xa8d0e8, 0x4486b0),
 };
+
+SKINS['hubmenus.ink']!.shape = 'rule';
+SKINS['hubmenus.shonen']!.shape = 'slant';
 
 /** The look a screen draws with right now, or null for the original. The salt keeps a visit stable. */
 export function skinFor(screen: ScreenId, salt: string | number = ''): Skin | null {
@@ -299,6 +304,16 @@ export function paintSkinHeader(scene: Phaser.Scene, skin: Skin, into: Phaser.Ga
 
 /** A row or message box in the skin's colours. */
 export function paintSkinRow(g: Phaser.GameObjects.Graphics, skin: Skin, w: number, h: number, muted = false): Phaser.GameObjects.Graphics {
+  if (skin.shape === 'rule') {
+    g.fillStyle(skin.rowFill, muted ? 0.3 : 0.6).fillRect(0, 0, w, h).lineStyle(2, skin.rowRim, 1).lineBetween(0, h - 1, w, h - 1);
+    g.fillStyle(0xb02a2a, 1).fillRect(0, 2, 5, h - 4);
+    return g;
+  }
+  if (skin.shape === 'slant') {
+    g.fillStyle(skin.rowFill, muted ? 0.6 : 0.95).fillPoints([new Phaser.Geom.Point(10, 0), new Phaser.Geom.Point(w, 0), new Phaser.Geom.Point(w - 10, h), new Phaser.Geom.Point(0, h)], true);
+    g.lineStyle(2, skin.rowRim, 1).lineBetween(10, 0, 0, h).lineBetween(w, 0, w - 10, h);
+    return g;
+  }
   g.fillStyle(0x000000, 0.25).fillRoundedRect(2, 3, w, h, 12);
   g.fillStyle(skin.rowFill, muted ? 0.6 : 0.95).fillRoundedRect(0, 0, w, h, 12);
   g.fillStyle(0xffffff, 0.07).fillRoundedRect(3, 3, w - 6, h * 0.4, 9);
