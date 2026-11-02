@@ -787,6 +787,14 @@
    "evening": ["fairy", "psychic", "water"],
    "night": ["ghost", "dark", "poison"]
   },
+  "tide": {
+   "length": 3,
+   "wildFactor": 2,
+   "highTypes": ["water", "ice", "flying"],
+   "lowTypes": ["rock", "ground", "steel"],
+   "highHeal": 0.9,
+   "lowBall": 0.9
+  },
   "milestoneDays": [
    7,
    14,

@@ -2,6 +2,7 @@
 // the Bank payout, achievements, trainer unlocks and their passives, the Run
 // History, save upgrades and export/import.
 
+import { tideShopMultiplier } from '../../src/core/clock';
 import { describe, expect, it } from 'vitest';
 import { getArchetype, typeModifiers } from '../../src/core/archetypes';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
@@ -200,7 +201,7 @@ describe('trainer unlocks', () => {
     let run = newRun('gio', 'giovanni');
     expect(shopStock(content, run).map((e) => e.item)).toContain('great-ball'); // normally 2 badges
     const potion = content.shop.find((e) => e.item === 'potion')!;
-    expect(shopPrice(content, run, potion)).toBe(Math.round(potion.price * 1.25));
+    expect(shopPrice(content, run, potion)).toBe(Math.round(potion.price * 1.25 * tideShopMultiplier(content, run, 'healing')));
     const node = run.stage!.map.nodes[0]!;
     node.sides.push({ id: 's', kind: 'shop', used: false });
     run.stage!.current = node.id;

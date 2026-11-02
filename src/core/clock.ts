@@ -41,6 +41,29 @@ export function periodWildWeight(content: Content, run: Pick<RunState, 'clock'>,
   return types.some((t) => liked.includes(t)) ? content.balance.clock.periodWildFactor : 1;
 }
 
+/** Tide Clock (S2): the tide is read from the clock alone (no saved state), so it can never drift or double-apply. */
+export type Tide = 'high' | 'low';
+export const tideOf = (content: Content, run: Pick<RunState, 'clock'>): Tide =>
+  Math.floor(((run.clock.day - 1) * PERIODS.length + run.clock.tick) / content.balance.clock.tide.length) % 2 === 0 ? 'high' : 'low';
+export const tideLabel = (content: Content, run: Pick<RunState, 'clock'>): string => (tideOf(content, run) === 'high' ? 'High tide' : 'Low tide');
+
+/** Wild weight at this tide: high tide draws water, ice and flying Pokémon; low tide rock, ground and steel. */
+export function tideWildWeight(content: Content, run: Pick<RunState, 'clock'>, speciesId: string): number {
+  const t = content.balance.clock.tide;
+  const liked = tideOf(content, run) === 'high' ? t.highTypes : t.lowTypes;
+  const types = content.species.get(speciesId)?.types ?? [];
+  return types.some((x) => liked.includes(x)) ? t.wildFactor : 1;
+}
+
+/** Shop prices at this tide: healing items are cheaper at high tide, Poké Balls at low tide (washed-up stock). */
+export function tideShopMultiplier(content: Content, run: Pick<RunState, 'clock'>, category: string | undefined): number {
+  const t = content.balance.clock.tide;
+  const tide = tideOf(content, run);
+  if (tide === 'high' && (category === 'healing')) return t.highHeal;
+  if (tide === 'low' && category === 'ball') return t.lowBall;
+  return 1;
+}
+
 /** Merchants keep hours: cheaper early in the day, dearer after dark. */
 export const shopHoursMultiplier = (content: Content, run: Pick<RunState, 'clock'>): number => content.balance.clock.shopHours[periodOf(run)];
 

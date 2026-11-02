@@ -11,7 +11,7 @@ import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
 import { crossingHint, obstacleAt, towerClimb, TRAVERSAL } from '../core/traversal';
 import { realSeason, SEASON_SKIN } from '../ui/seasonSkin';
-import { clockLabel, periodOf, PERIOD_LOOK } from '../core/clock';
+import { clockLabel, periodOf, PERIOD_LOOK, tideLabel } from '../core/clock';
 import { modeObjectives, objectivesLine } from '../core/modeObjectives';
 import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
@@ -324,7 +324,7 @@ export class MapScene extends Phaser.Scene {
       .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
     this.add
-      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
+      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
     // Speedrun timer (core/tools/speedrun.ts, off by default; Hub > Tools): splits per badge kept on this device only.
     if (device.speedrunOn()) {
