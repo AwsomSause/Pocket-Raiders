@@ -689,7 +689,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
   // A smart trainer may heal or swap Pokémon on purpose instead of attacking.
   let enemyActed = false;
-  if (!battle.outcome && battle.kind === 'trainer' && battle.ai > 0 && enemyForcedIndex < 0 && enemyChoiceIndex < 0) {
+  if (!battle.outcome && battle.kind === 'trainer' && (battle.ai > 0 || content.balance.trainerAi.allTrainersUseItems) && enemyForcedIndex < 0 && enemyChoiceIndex < 0) {
     enemyActed = trainerAiTurn(ctx, enemy, events);
     if (enemyActed) {
       enemy.mon = currentEnemy(battle);
@@ -3687,6 +3687,7 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
       return true;
     }
   }
+  if (battle.ai <= 0) return false; // S271: ordinary trainers only heal
   if (battle.enemySwitches >= cfg.maxSwitches || enemy.vol.turnsOut < 1 || enemy.vol.trapped || enemy.vol.bound > 0) return false;
   const target = ctx.party[battle.activeIndex]!;
   // Danger switch (Advanced AI "Switch Logic"): leave when the player's best move would KO, for a teammate that takes it well.

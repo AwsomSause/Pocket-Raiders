@@ -1,0 +1,1 @@
+- Battle/AI slice 1 (S271, Kice: "All trainers should use items"): `balance.trainerAi.allTrainersUseItems` (true) lets every trainer, including ai 0, drink one Hyper Potion under 30% HP; only smart trainers (ai > 0) still switch on purpose. No RNG, no save change. Test `tests/unit/trainerItems.test.ts`.
