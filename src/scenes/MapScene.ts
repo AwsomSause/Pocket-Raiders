@@ -1244,7 +1244,9 @@ export class MapScene extends Phaser.Scene {
     const species = content.species.get(pv.speciesId)!;
     const money = session.run!.money;
     // Regional and rival raids offer approaches (one row each); other raids are a single "fight" row.
-    const choices = pv.approaches.length > 0 ? pv.approaches : [{ id: '', label: '', text: '', cost: 0, leave: false }];
+    const choices = pv.approaches.length > 0 ? [...pv.approaches] : [{ id: '', label: '', text: '', cost: 0, leave: false }];
+    // S400 Boss Training Mode: a free practice fight (cost nets out the entry price shown on the other rows).
+    if (!pv.noPractice) choices.push({ id: 'practice', label: 'PRACTICE', text: 'No stakes: no cost, no rewards, nothing lost. Your team is restored afterwards.', cost: -pv.entryCost, leave: false });
     const kindName = { wild: 'Raid', regional: 'Regional Raid', rival: 'Rival Raid', anomaly: 'Anomaly Raid' }[pv.kind];
     // Screens redesign: a picked raid look draws the boss card the way its mock-up does.
     const raidLook = screenStyleOf('raid', session.settings.screenStyles, `${session.run!.seed}:${sideId}`);
