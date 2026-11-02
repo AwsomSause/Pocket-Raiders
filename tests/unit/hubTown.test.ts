@@ -258,6 +258,15 @@ describe('Hub Town part 3: a smaller, tidier town with a minimap and a Hub style
     saves.saveSettings({ ...loaded, hubStyle: 'town' });
     expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('town');
   });
+
+  it('a settings v19 save that walked Hub Town opens the original Arena Lobby (v19 -> v20), keeping its other settings', () => {
+    const storage = new MemoryStorageProvider();
+    const current = new SaveManager(storage, content).loadSettings();
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 19, savedAt: '', data: { ...current, hubStyle: 'town', musicVolume: 0.2 } }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded.hubStyle).toBe('lobby');
+    expect(loaded.musicVolume).toBe(0.2);
+  });
 });
 
 describe('Hub Town part 4: day and night', () => {
