@@ -50,3 +50,21 @@ describe('train effect', () => {
     expect(lead.moves.map((m) => m.id).join()).not.toBe(moves);
   });
 });
+
+describe('batch 3', () => {
+  it('Machine Parts are counted and spent, and accuracy perks multiply', async () => {
+    const { chooseEvent, eventView } = await import('../../src/core/events');
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'tm', archetypeId: 'red' }), 0);
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id;
+    run.stage!.visited = [node.id];
+    node.sides.push({ id: 'test-event', kind: 'event', used: false, eventId: 'tm-workshop' });
+    run.inventory['machine-part'] = 2;
+    expect(eventView(content, run, 'test-event').choices[0]!.locked).toBeTruthy();
+    run.inventory['machine-part'] = 3;
+    const after = chooseEvent(content, run, 'test-event', 0).run;
+    expect(after.inventory['machine-part']).toBeUndefined();
+    const { accuracyPerk } = await import('../../src/core/trainerPerks');
+    expect(accuracyPerk([{ kind: 'accuracyMultiplier', value: 1.2 }, { kind: 'accuracyMultiplier', value: 1.5 }])).toBeCloseTo(1.8);
+  });
+});

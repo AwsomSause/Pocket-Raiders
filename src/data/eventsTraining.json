@@ -1953,6 +1953,148 @@
     }
    ],
    "stop": "dojo"
+  },
+  {
+   "id": "mental-training-dojo",
+   "name": "Mental Training Dojo",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2233",
+    "effect": "glint"
+   },
+   "intro": "A quiet dojo with a single candle. \"Aim is a state of mind,\" the sensei says. \"Sit, breathe, and see the target before you strike.\"",
+   "choices": [
+    {
+     "label": "Sit and breathe",
+     "requires": [],
+     "success": {
+      "text": "Your team's aim sharpens: moves are more accurate for the next 3 battles.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-focus"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spar blindfolded",
+     "requires": [],
+     "chance": 0.5,
+     "success": {
+      "text": "You hit every mark blindfolded. Aim sharpens a lot.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-focus"
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You swing at the candle. It goes out and so does your dignity.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "requires": [],
+     "success": {
+      "text": "The sensei bows. The candle burns on.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "dojo"
+  },
+  {
+   "id": "tm-workshop",
+   "name": "TM Workshop",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2d33",
+    "effect": "spin"
+   },
+   "intro": "A cluttered workshop of soldering irons and half-built discs. \"Bring me three Machine Parts and I'll forge you a TM,\" the engineer says.",
+   "choices": [
+    {
+     "label": "Forge a TM (3 Machine Parts)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Sparks fly. Out comes a fresh TM.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-fire",
+         "tm-water",
+         "tm-grass",
+         "tm-electric",
+         "tm-ice",
+         "tm-psychic",
+         "tm-ground",
+         "tm-fighting"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just chat",
+     "requires": [],
+     "success": {
+      "text": "The engineer shows you a blueprint and sends you off with a tip.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "merchant"
   }
  ]
 }

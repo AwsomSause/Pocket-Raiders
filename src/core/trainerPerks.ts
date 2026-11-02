@@ -439,6 +439,10 @@ export function singleBattleXpPerk(perks: Perks | undefined): number {
   return product(perks, 'singleBattleXpMultiplier');
 }
 
+export function accuracyPerk(perks: Perks | undefined): number {
+  return product(perks, 'accuracyMultiplier');
+}
+
 export function statusMoveAccuracyPerk(perks: Perks | undefined): number {
   return product(perks, 'statusMoveAccuracy');
 }

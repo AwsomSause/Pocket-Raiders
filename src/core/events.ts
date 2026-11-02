@@ -85,7 +85,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return c.side === 'positive' ? v >= c.atLeast : -v >= c.atLeast;
     }
     case 'item':
-      return (run.inventory[c.id] ?? 0) > 0 || (run.passives?.[c.id] ?? 0) > 0;
+      return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'partyType':
@@ -226,7 +226,7 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs ${name} ${c.atLeast}`;
     }
     case 'item':
-      return `Needs a ${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
+      return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
     case 'period':
       return `Only in the ${c.in.map((x) => PERIOD_LABEL[x].toLowerCase()).join(' or ')}`;
     case 'season':
@@ -645,7 +645,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'itemFrom':
       return `one of ${e.ids.map((id) => itemName(content, id)).join(' / ')}`;
     case 'loseItem':
-      return e.id ? `use a ${itemName(content, e.id)}` : 'lose an item';
+      return e.id ? `use ${e.count && e.count > 1 ? `${e.count} × ` : 'a '}${itemName(content, e.id)}` : 'lose an item';
     case 'tradeAway':
       return `trade away ${e.want.label}`;
     case 'heal':
@@ -836,9 +836,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       ids.sort();
       if (ids.length === 0) return '';
       const id = rng.pick(ids);
-      run.inventory[id]! -= 1;
+      const n = Math.min(e.id ? e.count ?? 1 : 1, run.inventory[id]!);
+      run.inventory[id]! -= n;
       if (run.inventory[id] === 0) delete run.inventory[id];
-      return `Lost a ${itemName(content, id)}`;
+      return n > 1 ? `Used ${n} × ${itemName(content, id)}` : `Lost a ${itemName(content, id)}`;
     }
     case 'tradeAway': {
       const fits = tradeCandidates(content, run, e.want);
