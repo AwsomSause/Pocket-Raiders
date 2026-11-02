@@ -65,4 +65,21 @@ describe('Mints', () => {
     mon.nature = 'jolly';
     expect(catalogTargetProblem(content, run, entry, mon)).toMatch(/already/);
   });
+
+  it('Tuning Dust nudges the raised stat and keeps the lowered one', () => {
+    const { mon, apply } = take('spe-tuning-dust');
+    mon.nature = 'adamant';
+    apply();
+    expect(mon.nature).toBe('jolly');
+  });
+
+  it('Tuning Dust on a neutral nature or a cancelling pair lowers the next stat; refuses a no-op', () => {
+    const a = take('def-tuning-dust');
+    a.mon.nature = 'hardy';
+    a.apply();
+    expect(a.mon.nature).toBe('impish');
+    const b = take('atk-tuning-dust');
+    b.mon.nature = 'lonely';
+    expect(catalogTargetProblem(content, b.run, b.entry, b.mon)).toMatch(/already/);
+  });
 });
