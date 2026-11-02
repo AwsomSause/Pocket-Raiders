@@ -19,6 +19,8 @@ export const RaidPhaseSchema = z.object({
   clearPlayerStages: z.boolean().optional(),
   /** Cures the boss's status condition and lowers its own negative stages to 0. */
   cleanse: z.boolean().optional(),
+  /** S392 Raid Shields by Phase: a fresh shield worth this share of the boss's max HP rises when the phase starts. */
+  shield: z.number().min(0.05).max(0.5).optional(),
 });
 export type RaidPhase = z.infer<typeof RaidPhaseSchema>;
 
@@ -96,6 +98,8 @@ export const RaidDefSchema = z.object({
   extraActions: z.object({ belowHp: Fraction, max: z.number().int().min(1).max(3) }).nullable().default(null),
   /** The raid ends when the timer runs out. */
   timerTurns: z.number().int().min(5).max(60).nullable().default(null),
+  /** S396 Boss Enrage Timer: from turn `afterTurn` the boss hits `boostPercent` harder, again every `everyTurns` turns, up to `maxStacks` times. */
+  enrage: z.object({ afterTurn: z.number().int().min(3).max(40), everyTurns: z.number().int().min(2).max(10), boostPercent: z.number().int().min(5).max(50), maxStacks: z.number().int().min(1).max(5) }).nullable().default(null),
   weather: WeatherSchema.nullable().default(null),
   /** wild: the plain den. regional: choose how to prepare. rival: a rival is already fighting it. anomaly: strange rules and a research find. */
   kind: z.enum(['wild', 'regional', 'rival', 'anomaly']).default('wild'),

@@ -304,7 +304,8 @@
             "atk": 1,
             "spe": 1
           },
-          "cleanse": true
+          "cleanse": true,
+          "shield": 0.12
         }
       ],
       "telegraph": {
@@ -336,6 +337,12 @@
           "text": "The sand surges! Rock moves hit harder!"
         },
         "noHealing": true
+      },
+      "enrage": {
+        "afterTurn": 8,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 3
       }
     },
     {
@@ -392,7 +399,13 @@
       "extraMoves": [
         "extreme-speed",
         "hurricane"
-      ]
+      ],
+      "enrage": {
+        "afterTurn": 8,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 3
+      }
     },
     {
       "id": "steel-mind",
@@ -420,7 +433,8 @@
             "atk": 1,
             "def": 1
           },
-          "clearPlayerStages": true
+          "clearPlayerStages": true,
+          "shield": 0.12
         }
       ],
       "telegraph": {
@@ -460,7 +474,13 @@
       },
       "extraMoves": [
         "earth-power"
-      ]
+      ],
+      "enrage": {
+        "afterTurn": 10,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 4
+      }
     },
     {
       "id": "sky-pillar-apex",
@@ -494,7 +514,8 @@
             "atk": 1,
             "spa": 1
           },
-          "clearPlayerStages": true
+          "clearPlayerStages": true,
+          "shield": 0.12
         },
         {
           "atHp": 0.25,
@@ -502,7 +523,8 @@
           "boost": {
             "spe": 2
           },
-          "cleanse": true
+          "cleanse": true,
+          "shield": 0.12
         }
       ],
       "telegraph": {
@@ -551,7 +573,13 @@
       "extraMoves": [
         "hurricane",
         "crunch"
-      ]
+      ],
+      "enrage": {
+        "afterTurn": 12,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 5
+      }
     },
     {
       "id": "garden-guardian",
@@ -737,6 +765,12 @@
       "extraActions": {
         "belowHp": 0.3,
         "max": 2
+      },
+      "enrage": {
+        "afterTurn": 10,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 4
       }
     },
     {
@@ -773,7 +807,8 @@
             "spa": 1,
             "spe": 1
           },
-          "clearPlayerStages": true
+          "clearPlayerStages": true,
+          "shield": 0.12
         },
         {
           "atHp": 0.25,
@@ -782,7 +817,8 @@
             "atk": 1,
             "spa": 1
           },
-          "cleanse": true
+          "cleanse": true,
+          "shield": 0.12
         }
       ],
       "rewards": {
@@ -823,7 +859,13 @@
       "extraMoves": [
         "recover",
         "calm-mind"
-      ]
+      ],
+      "enrage": {
+        "afterTurn": 12,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 5
+      }
     },
     {
       "id": "storm-sovereign-contact",
@@ -905,7 +947,8 @@
             "atk": 1,
             "spa": 1
           },
-          "clearPlayerStages": true
+          "clearPlayerStages": true,
+          "shield": 0.12
         },
         {
           "atHp": 0.25,
@@ -913,7 +956,8 @@
           "boost": {
             "spe": 1
           },
-          "cleanse": true
+          "cleanse": true,
+          "shield": 0.12
         }
       ],
       "telegraph": {
@@ -1076,6 +1120,12 @@
         "draftExtra": 2,
         "joinChance": 0.4,
         "rareEncounters": 1
+      },
+      "enrage": {
+        "afterTurn": 8,
+        "everyTurns": 3,
+        "boostPercent": 10,
+        "maxStacks": 3
       }
     },
     {

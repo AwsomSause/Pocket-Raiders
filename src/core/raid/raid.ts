@@ -186,10 +186,19 @@ export function raidFieldMultiplier(content: Content, battle: BattleState, attac
     if (weak && weak.type === moveType) m *= weak.boost;
   } else {
     if (mods.surge && mods.surge.type === moveType) m *= mods.surge.boost;
+    m *= 1 + enrageStacks(content, battle) * enrageStep(content, battle);
     if (raid.cheerDefense > 0) m *= DEFENSE_CHEER[raid.cheerLevel - 1]!;
   }
   return m;
 }
+
+/** S396: how many enrage steps the boss has reached (stateless: follows the turn number). */
+export function enrageStacks(content: Content, battle: BattleState, turn = battle.turn): number {
+  const e = battle.raid ? getRaid(content, battle.raid.id).enrage : null;
+  if (!e || turn < e.afterTurn) return 0;
+  return Math.min(e.maxStacks, Math.floor((turn - e.afterTurn) / e.everyTurns) + 1);
+}
+const enrageStep = (content: Content, battle: BattleState): number => (battle.raid ? (getRaid(content, battle.raid.id).enrage?.boostPercent ?? 0) / 100 : 0);
 
 /** Cheer strengths (Raid Battles pack: Offense, Defense, Healing). */
 export const OFFENSE_CHEER = [1.3, 1.45, 1.6];
@@ -265,6 +274,12 @@ export function advanceRaid(content: Content, battle: BattleState, boss: Pokemon
   def.phases.forEach((phase, i) => {
     if (raid.phasesDone.includes(i) || share > phase.atHp) return;
     raid.phasesDone.push(i);
+    if (phase.shield) {
+      raid.shieldMax = Math.max(1, Math.ceil(maxHp(content, boss) * phase.shield));
+      raid.shieldHp = raid.shieldMax;
+      raid.charging = false;
+      actions.push({ kind: 'note', tone: 'shield', text: 'The phase change raises a new shield! Break it to keep going.' });
+    }
     actions.push({ kind: 'phase', phase });
   });
   if (def.telegraph) {
@@ -279,6 +294,9 @@ export function advanceRaid(content: Content, battle: BattleState, boss: Pokemon
         actions.push({ kind: 'note', tone: 'warn', text: def.telegraph.text });
       }
     }
+  }
+  if (def.enrage && enrageStacks(content, battle, battle.turn + 1) > enrageStacks(content, battle)) {
+    actions.push({ kind: 'note', tone: 'warn', text: 'The boss grows enraged! Its attacks hit harder.' });
   }
   if (raid.timerLeft !== null) {
     raid.timerLeft -= 1;
@@ -341,6 +359,8 @@ export function describeMechanics(def: RaidDef, scale?: { content: Content; badg
   if (def.telegraph) out.push(`charged attack (${def.telegraph.interruptedBy.map((s) => ({ slp: "sleep", par: "paralysis", frz: "freeze" })[s]).join(', ')} interrupts it)`);
   if (def.extraActions) out.push('bonus attacks');
   if (def.timerTurns) out.push(`${def.timerTurns}-turn timer`);
+  if (def.enrage) out.push(`enrages after turn ${def.enrage.afterTurn}`);
+  if (def.phases.some((p) => p.shield)) out.push('phase shields');
   if (def.weather) out.push(`${def.weather} field`);
   const m = def.modifiers;
   if (m.terrain) out.push(`${m.terrain} terrain`);
