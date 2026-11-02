@@ -206,6 +206,8 @@ describe('trainer unlocks', () => {
     run.stage!.current = node.id;
     run.money = 1000;
     run = visitSide(content, run, 's').run;
+    // A plain Poké Mart (other shop kinds sell other goods and prices; tests/unit/shopTypes.test.ts).
+    run.shop = { ...run.shop!, type: 'mart' };
     run = buyItem(content, run, 'great-ball').run;
     expect(run.money).toBe(1000 - content.shop.find((e) => e.item === 'great-ball')!.price);
   });

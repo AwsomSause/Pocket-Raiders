@@ -459,6 +459,23 @@ export class GameSession {
     return result.message;
   }
 
+  /** Kecleon's Bazaar: haggle over one item (once per visit). */
+  haggleItem(itemId: string): string {
+    const result = Run.haggleItem(this.content, this.requireRun(), itemId);
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
+  }
+
+  /** Buys several of one item at once (the Supply Depot basket). */
+  buyItems(itemId: string, count: number): string {
+    const result = Run.buyItems(this.content, this.requireRun(), itemId, count);
+    interactionLog.add(`Bought ${count} ${itemId}`);
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
+  }
+
   sellItem(itemId: string): string {
     const result = Run.sellItem(this.content, this.requireRun(), itemId);
     this.run = result.run;

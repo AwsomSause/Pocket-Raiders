@@ -4,11 +4,11 @@
 // slices and draw as the Mart until then). This scene keeps the state, input and buying; a buy
 // refreshes the style in place (no screen restart). Selling still uses the list picker.
 
-import { clockLabel, periodOf, shopHoursMultiplier } from '../core/clock';
+import { clockLabel, shopHoursMultiplier } from '../core/clock';
 import Phaser from 'phaser';
 import { itemCount } from '../core/items';
 import { mapItemSummary } from '../core/mapItems';
-import { shopScreenType, SHOP_TYPE_LABELS, type ShopTypeId } from '../core/shopTypes';
+import { currentShopType, haggleChance, pokenetDeal, shopScreenType, SHOP_TYPE_LABELS, type ShopTypeId } from '../core/shopTypes';
 import { uiMotionLevel } from '../core/presentation/uiMotion';
 import { isBlackMarket, sellPrice, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock } from '../core/run';
 import { services } from '../game/services';
@@ -18,7 +18,9 @@ import { Picker, type PickerRow } from '../ui/partyPanel';
 import { itemVisual } from '../ui/sprites';
 import { shopView, type ShopView } from '../ui/shopLook';
 import { shopLayout } from '../ui/shopStyles';
-import type { ShopHandles } from '../ui/shopStyles/types';
+import type { ShopCtx, ShopHandles } from '../ui/shopStyles/types';
+import { choicePrompt, type ChoicePrompt } from '../ui/shopStyles/common';
+import { effectiveAttributes } from '../core/attributes';
 import { textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
@@ -36,7 +38,14 @@ export class ShopScene extends Phaser.Scene {
 
   preload(): void {
     preloadPokemon(this, partySpecies(), { icon: true });
+    // The market shopkeepers (Kecleon; Meowth and Persian).
+    const { session } = services();
+    const keepers = ['kecleon', 'meowth', 'persian'].filter((id) => session.content.species.has(id)).map((id) => session.content.species.get(id)!);
+    if (keepers.length) preloadPokemon(this, keepers, { front: true });
   }
+
+  private prompt: { ui: ChoicePrompt; index: number; actions: (() => void)[] } | null = null;
+  private ctx: ShopCtx | null = null;
 
   /** The shop as data for the styles. */
   private view(): ShopView {
@@ -45,12 +54,16 @@ export class ShopScene extends Phaser.Scene {
     const content = session.content;
     const sale = shopSaleItem(content, run);
     const discount = content.balance.shopSale.discount;
+    const mart = new Set(shopStock(content, { ...run, shop: undefined }).map((e) => e.item));
     return shopView(content, run, {
       stock: shopStock(content, run),
       price: (e) => shopPrice(content, run, e),
       basePrice: (e) => Math.round(shopPrice(content, run, e) / (1 - discount)),
       badgesFor: (e) => shopBadgesNeeded(content, run, e),
       saleItem: sale,
+      deal: currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), sale) : null,
+      haggle: run.shop?.haggle ?? null,
+      mystery: (id) => currentShopType(run) === 'night' && !mart.has(id),
       isBlack: (e) => isBlackMarket(content, run, e),
       canSell: Object.keys(run.inventory).some((id) => run.inventory[id]! > 0 && sellPrice(content, run, id) !== null),
       working: mapItemSummary(content, run),
@@ -69,15 +82,13 @@ export class ShopScene extends Phaser.Scene {
       this.createSell(data.notice);
       return;
     }
-    const node = run.stage?.current ?? null;
-    this.shopType = shopScreenType(
-      { seed: run.seed, regionIndex: run.regionIndex, stageIndex: run.stage?.index ?? 0, nodeId: node, period: periodOf(run), blackMarket: shopStock(content, run).some((e) => isBlackMarket(content, run, e)) },
-      data.type ?? (this.registry.get('shopTypeOverride') as string | undefined),
-    );
+    // The kind of shop was fixed on entering (core visitSide); a debug/test override can change the look.
+    this.shopType = shopScreenType(currentShopType(run), data.type ?? (this.registry.get('shopTypeOverride') as string | undefined));
     const hours = shopHoursMultiplier(content, run);
     let view = this.view();
-    this.handles = shopLayout(this.shopType)(
-      {
+    this.prompt = null;
+    const charisma = effectiveAttributes(content, run).charisma;
+    this.ctx = {
         scene: this,
         content,
         view,
@@ -87,13 +98,14 @@ export class ShopScene extends Phaser.Scene {
         party: run.party,
         motion: uiMotionLevel(session.settings),
         notice: data.notice,
-      },
-      { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i) },
-    );
+        haggle: { charisma, chance: haggleChance(content, charisma) },
+      };
+    this.handles = shopLayout(this.shopType)(this.ctx, { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i) });
     this.setFocus(Math.min(data.focus ?? 0, view.rows.length - (view.canSell ? 0 : 1)));
 
     onInputAction(this, (action) => {
       if (this.picker) return void this.picker.handle(action);
+      if (this.prompt) return this.promptInput(action);
       if (action === 'back') return this.leave();
       if (action === 'confirm') return this.pick(this.focusIndex);
       view = this.view();
@@ -120,6 +132,25 @@ export class ShopScene extends Phaser.Scene {
     }
     if (i !== this.focusIndex) this.setFocus(i);
     const row = view.rows[i]!;
+    // Kecleon's Bazaar: the first pick of a visit asks whether to buy or haggle.
+    const run = session.run!;
+    if (currentShopType(run) === 'bazaar' && !run.shop?.haggle && this.ctx) {
+      const odds = Math.round((this.ctx.haggle?.chance ?? 0) * 100);
+      this.openPrompt(`${row.name}  ·  ₽${row.price}`, [
+        [`Buy it (₽${row.price})`, () => this.buy(i)],
+        [`Haggle (${odds}% chance)`, () => this.haggle(i)],
+        ['Never mind', () => undefined],
+      ]);
+      return;
+    }
+    this.buy(i);
+  }
+
+  private buy(i: number): void {
+    const { session } = services();
+    const view = this.view();
+    const row = view.rows[i];
+    if (!row) return;
     if (row.problem) {
       playSfx(this, 'ui.error', 0.6);
       this.handles?.refresh(view, null, row.problem);
@@ -137,6 +168,50 @@ export class ShopScene extends Phaser.Scene {
     const after = this.view();
     const index = after.rows.findIndex((r) => r.itemId === row.itemId);
     this.handles?.refresh(after, index >= 0 ? index : null, message.replace(/^You bought /, 'Bought '));
+  }
+
+  private haggle(i: number): void {
+    const { session } = services();
+    const row = this.view().rows[i];
+    if (!row) return;
+    let message: string;
+    try {
+      message = session.haggleItem(row.itemId);
+    } catch (e) {
+      playSfx(this, 'ui.error', 0.6);
+      this.handles?.refresh(this.view(), null, (e as Error).message);
+      return;
+    }
+    const won = session.run!.shop?.haggle?.won ?? false;
+    playSfx(this, won ? 'ui.select' : 'ui.error', 0.7);
+    const after = this.view();
+    const index = after.rows.findIndex((r) => r.itemId === row.itemId);
+    if (this.handles?.haggled) this.handles.haggled(after, index, won, message);
+    else this.handles?.refresh(after, null, message);
+  }
+
+  private openPrompt(question: string, options: [string, () => void][]): void {
+    if (!this.ctx) return;
+    const ui = choicePrompt(this.ctx, question, options.map((o) => o[0]), (k) => this.closePrompt(k));
+    this.prompt = { ui, index: 0, actions: options.map((o) => o[1]) };
+    ui.focus(0);
+  }
+
+  private closePrompt(k: number | null): void {
+    const p = this.prompt;
+    if (!p) return;
+    this.prompt = null;
+    p.ui.destroy();
+    if (k !== null) p.actions[k]?.();
+  }
+
+  private promptInput(action: string): void {
+    const p = this.prompt!;
+    if (action === 'back') return this.closePrompt(null);
+    if (action === 'confirm') return this.closePrompt(p.index);
+    if (action === 'up' || action === 'left') p.index = Math.max(0, p.index - 1);
+    if (action === 'down' || action === 'right') p.index = Math.min(p.actions.length - 1, p.index + 1);
+    p.ui.focus(p.index);
   }
 
   private leave(): void {

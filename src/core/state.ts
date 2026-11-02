@@ -1167,6 +1167,8 @@ export const RunStateSchema = z.object({
   perkEffects: z.array(ArchetypeModifierSchema).default([]),
   /** Bank licenses owned when the run began (Scavenger, Fortune, Survival work inside the run). Older runs have none. */
   licenses: z.array(z.string()).optional(),
+  /** The shop being visited (shops redesign): its kind and this visit's haggle. Set on entering, cleared on leaving; older saves have none (Poké Mart). */
+  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional() }).optional(),
   /** Nuzlocke and Hardcore Nuzlocke: areas whose one catch is spent and the fallen (core/nuzlocke.ts). */
   nuzlocke: z.object({
     areas: z.array(z.string()),

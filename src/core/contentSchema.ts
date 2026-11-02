@@ -1923,6 +1923,16 @@ export const BalanceSchema = z.object({
   w1: W1ConfigSchema,
   /** The shop puts one item on sale: it changes every this many stages, and takes this share off the price. */
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
+  /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */
+  shopTypes: z
+    .object({
+      boutique: z.object({ categories: z.array(z.string()), priceFactor: z.number().positive(), earlyRare: z.number().int().min(0) }),
+      bazaar: z.object({ stockSize: z.number().int().positive(), haggleBase: z.number().min(0).max(1), hagglePerCharisma: z.number().min(0), haggleMax: z.number().min(0).max(1), haggleDiscount: z.number().min(0).max(1), hagglePenalty: z.number().min(0) }),
+      depot: z.object({ categories: z.array(z.string()), bulkMin: z.number().int().positive(), bulkDiscount: z.number().min(0).max(1) }),
+      pokenet: z.object({ priceFactor: z.number().positive(), early: z.number().int().min(0), dealDiscount: z.number().min(0).max(1) }),
+      night: z.object({ mystery: z.number().int().min(0), mysteryPrice: z.record(z.string(), z.number().int().positive()) }),
+    })
+    .optional(),
   /** Repeat attribute boosts from items diminish: after this many full-size boosts to one attribute in a run, each is scaled by `factor` (at least 1 point). */
   /** Trainer classes added after the first 17 (5.17) can appear as ordinary trainers. Off keeps old seeds' trainer picks. */
   extraTrainerClasses: z.boolean().default(true),

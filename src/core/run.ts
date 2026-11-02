@@ -68,7 +68,7 @@ import { layEgg, tickEggs } from './eggs';
 import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, spawnRoamers } from './world';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
-import { addItemAttribute, addRunAttribute, attributeText, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
+import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
 import { passivePercent } from './catalog';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
@@ -172,7 +172,8 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { freshClock, periodWildWeight, shopHoursMultiplier, stepClock } from './clock';
+import { freshClock, periodOf, periodWildWeight, shopHoursMultiplier, stepClock } from './clock';
+import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
 import { ultimateRival } from './rivals/ultimate';
 import { applyGrandInfluence, endGrandBattle, grandNotes, startGrandBattle } from './story/grandEnemy';
@@ -1807,6 +1808,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}` };
   }
   run.phase = 'shop';
+  // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
+  const place = `${run.regionIndex}:${stage.index}:${stage.current}`;
+  run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
   // A Bike Voucher is traded for its bike (or money, if the player already has one).
   const voucher = voucherOf(content, run);
   if (voucher) {
@@ -1837,7 +1841,7 @@ export function healParty(content: Content, run: RunState): void {
  * and the Member Card and Wepear Berry put the next locked entries on sale early.
  * Key items you own aren't sold again.
  */
-export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'inventory' | 'rules' | 'perkEffects' | 'licenses' | 'story'>> & MapItemRun): Content['shop'] {
+export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'inventory' | 'rules' | 'perkEffects' | 'licenses' | 'story' | 'seed' | 'shop'>> & MapItemRun): Content['shop'] {
   const noRevive = run.rules ? noRevives(run.rules) : false;
   const owned = (e: Content['shop'][number]) => !!run.inventory && ownsKeepsake(content, run.inventory, e.item);
   const open = (e: Content['shop'][number]) => run.badges.length >= shopBadgesNeeded(content, run, e);
@@ -1856,7 +1860,11 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   const modeStock = (content.balance.modeShops[run.rules?.modeId ?? ''] ?? []).filter((x) => content.items.has(x.item) && !content.shop.some((e) => e.item === x.item));
   const secret = secretTierEntries(content, run.story).filter((x) => !content.shop.some((e) => e.item === x.item) && !modeStock.some((e) => e.item === x.item));
   const stock = [...content.shop, ...bankShopEntries(content, run.licenses).filter((x) => !content.shop.some((e) => e.item === x.item)), ...modeStock, ...secret];
-  return stock.filter((e) => (black || open(e) || early.includes(e)) && !owned(e) && !(noRevive && content.items.get(e.item)?.category === 'revive'));
+  const allowed = (e: Content['shop'][number]) => !owned(e) && !(noRevive && content.items.get(e.item)?.category === 'revive');
+  const selling = stock.filter((e) => (black || open(e) || early.includes(e)) && allowed(e));
+  // Shops redesign: each kind of shop sells its own part of that (core/shopTypes.ts).
+  const locked = stock.filter((e) => !selling.includes(e) && allowed(e)).sort((a, b) => shopBadgesNeeded(content, run, a) - shopBadgesNeeded(content, run, b));
+  return typedStock(content, run, selling, locked) as Content['shop'];
 }
 
 /** Whether an entry is on sale only through the Black Market (your badges haven't opened it). */
@@ -1890,7 +1898,8 @@ export function shopSaleItem(content: Content, run: RunState): string | null {
 export function shopPrice(content: Content, run: RunState, entry: Content['shop'][number]): number {
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
-  return Math.round(entry.price * markup * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story));
+  const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
+  return Math.round(entry.price * markup * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -1922,7 +1931,7 @@ export function sellItem(content: Content, current: RunState, itemId: string): {
 /** Buys one of an item at the shop. */
 export function buyItem(content: Content, current: RunState, itemId: string): { run: RunState; message: string } {
   assertPhase(current, 'shop');
-  const entry = content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId);
+  const entry = content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
   if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
   const item = getItem(content, itemId);
   if (ownsKeepsake(content, current.inventory, itemId)) throw new Error(`You already have the ${item.name}.`);
@@ -1943,10 +1952,48 @@ export function buyItem(content: Content, current: RunState, itemId: string): { 
   return { run, message: `You bought a ${item.name} for ₽${price}.` };
 }
 
+/** Kecleon's Bazaar: haggle once per visit over one item. Works or not by Charisma (fixed per stall and item); a win cuts its price, a loss raises it. */
+export function haggleItem(content: Content, current: RunState, itemId: string): { run: RunState; message: string } {
+  assertPhase(current, 'shop');
+  if (currentShopType(current) !== 'bazaar') throw new Error('Only Kecleon haggles.');
+  if (current.shop?.haggle) throw new Error('You already haggled at this stall.');
+  const item = getItem(content, itemId);
+  if (!shopStock(content, current).some((e) => e.item === itemId)) throw new Error(`The stall doesn't sell the ${item.name}.`);
+  const charisma = effectiveAttributes(content, current).charisma;
+  const won = haggleWins(content, current, itemId, charisma);
+  const run = structuredClone(current);
+  run.shop = { ...run.shop!, haggle: { item: itemId, won } };
+  return { run, message: won ? `Kecleon grins: the ${item.name} is cheaper for you!` : `Kecleon is offended! The ${item.name} costs more now.` };
+}
+
+/** Buys `count` of one item at once (the Supply Depot's basket takes a bulk share off). */
+export function buyItems(content: Content, current: RunState, itemId: string, count: number): { run: RunState; message: string } {
+  assertPhase(current, 'shop');
+  if (!Number.isInteger(count) || count < 1) throw new Error('Buy at least one.');
+  const entry = shopStock(content, current).find((e) => e.item === itemId);
+  if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
+  const item = getItem(content, itemId);
+  if (count > 1 && (ownsKeepsake(content, current.inventory, itemId) || item.effect.kind === 'keyItem' || item.effect.kind === 'megaStone' || item.effect.kind === 'zCrystal')) throw new Error(`You only need one ${item.name}.`);
+  const unit = shopPrice(content, current, entry);
+  const total = bulkTotal(content, current, unit, count);
+  if (current.money < total) throw new Error(`You need ₽${total} for ${count} × ${item.name}.`);
+  // Buy one at a time (attribute items, Point Cards and coupons work as usual), then hand back the bulk saving.
+  let run = current;
+  for (let i = 0; i < count; i++) run = buyItem(content, run, itemId).run;
+  const paid = current.money - run.money;
+  if (paid > total) {
+    run = structuredClone(run);
+    run.money += paid - total;
+  }
+  const spent = current.money - run.money;
+  return { run, message: `You bought ${count} × ${item.name} for ₽${spent}.` };
+}
+
 export function leaveShop(content: Content, current: RunState): RunState {
   assertPhase(current, 'shop');
   const run = structuredClone(current);
   run.phase = 'map';
+  delete run.shop;
   // A Wepear Berry's extra item lasts one shop visit.
   useUses(content, run, 'shops');
   return run;

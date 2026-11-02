@@ -56,6 +56,12 @@ export interface ShopRow {
   /** The price before the sale of the day, when it is on sale. */
   wasPrice: number | null;
   sale: boolean;
+  /** PokéNet's deal of the visit. */
+  deal: boolean;
+  /** Night Market goods no Mart lists. */
+  mystery: boolean;
+  /** Kecleon's haggle over this item this visit: won (cheaper) or lost (dearer). */
+  haggle: 'won' | 'lost' | null;
   early: boolean;
   black: boolean;
   affordable: boolean;
@@ -85,6 +91,10 @@ export function shopView(content: Content, run: RunState, deps: {
   basePrice: (e: Content['shop'][number]) => number;
   badgesFor: (e: Content['shop'][number]) => number;
   saleItem: string | null;
+  deal?: string | null;
+  /** Night Market mystery goods (not in a Mart's stock here). */
+  mystery?: (item: string) => boolean;
+  haggle?: { item: string; won: boolean } | null;
   isBlack: (e: Content['shop'][number]) => boolean;
   canSell: boolean;
   working: string | null;
@@ -107,6 +117,9 @@ export function shopView(content: Content, run: RunState, deps: {
       price,
       wasPrice: sale ? deps.basePrice(entry) : null,
       sale,
+      deal: deps.deal === entry.item,
+      mystery: deps.mystery?.(entry.item) ?? false,
+      haggle: deps.haggle?.item === entry.item ? (deps.haggle.won ? 'won' : 'lost') : null,
       early,
       black,
       affordable: run.money >= price,

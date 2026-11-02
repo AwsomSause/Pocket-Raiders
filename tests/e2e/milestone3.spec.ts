@@ -105,6 +105,13 @@ test('the healing spot and the shop work from the map', async ({ page }) => {
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter'); // Shop
   await waitForScene(page, 'Shop');
+  // The kind of shop is random per stop; this test buys the Poké Mart's first ball, so pin the Mart.
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    session.run.shop.type = 'mart';
+    game.scene.getScene('Shop').scene.restart({});
+  });
+  await page.waitForTimeout(300);
   await page.screenshot({ path: 'test-results/m3-shop.png' });
   const balls = (await run(page)).inventory['poke-ball'] ?? 0;
   const moneyBefore = (await run(page)).money;

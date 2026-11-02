@@ -21,6 +21,8 @@ export interface ShopCtx {
   motion: MotionLevel;
   /** The notice from arriving (voucher trade, etc.), shown once. */
   notice?: string;
+  /** Kecleon's Bazaar: the player's Charisma and the haggle odds (0 to 1). */
+  haggle?: { charisma: number; chance: number };
 }
 
 export interface ShopHooks {
@@ -36,6 +38,8 @@ export interface ShopHandles {
   focus(i: number): void;
   /** Redraws prices/money/owned after a buy, then plays the bought effect on row `bought`. */
   refresh(view: ShopView, bought: number | null, message: string | null): void;
+  /** Kecleon's reaction to a haggle (won or lost) over row i. */
+  haggled?(view: ShopView, i: number, won: boolean, message: string): void;
 }
 
 export type ShopLayout = (ctx: ShopCtx, hooks: ShopHooks) => ShopHandles;
