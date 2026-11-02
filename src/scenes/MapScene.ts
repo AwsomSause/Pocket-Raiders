@@ -62,6 +62,7 @@ import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { MAP_SKINS } from '../ui/mapStyles';
+import { drawNextStop } from '../ui/mapStyles/nextstopCards';
 import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
@@ -270,7 +271,10 @@ export class MapScene extends Phaser.Scene {
     // Screens redesign (Group B): a picked map look repaints the backdrop, routes and stop tokens (core/presentation/screenStyles.ts).
     const skinId = screenStyleOf('map', session.settings.screenStyles, `${run.seed}:${stage.index}`);
     const mapSkin = skinId === 'original' ? null : MAP_SKINS[skinId];
-    if (mapSkin) mapSkin.backdrop(this, this.motion);
+    if (mapSkin) {
+      mapSkin.backdrop(this, this.motion);
+      mapSkin.frame?.(this, this.motion, { title: theme.name, types: theme.types });
+    }
     // The stage's types drift over it (leaves, embers, bubbles...), like the battle arena.
     const air = this.add.container(0, 0).setDepth(-50);
     addAmbience(this, air, 0, league || blindMap(run.rules) ? ['dragon'] : theme.types, this.motion);
@@ -430,6 +434,7 @@ export class MapScene extends Phaser.Scene {
       mapLayer.add(this.add.text(x, 402, 'Trainers', textStyle(14, '#f8a850')).setOrigin(0.5));
     }
 
+    const cardNodes: MapNode[] = [];
     const seenColumn = league ? 99 : visibleColumn(content, run);
     for (const n of stage.map.nodes) {
       const { x, y } = pos(n);
@@ -527,7 +532,9 @@ export class MapScene extends Phaser.Scene {
         mapLayer.add(sg);
         mapLayer.add(this.add.text(sx, sy, s.glyph, textStyle(18, '#ffffff', { stroke: '#181818', strokeThickness: 3 })).setOrigin(0.5).setAlpha(side.used ? 0.4 : 1));
       });
-      if (reachable) {
+      if (mapSkin?.labels && !fog) mapLayer.add(this.add.text(x, y + r * 0.95 + 9, KIND_STYLE[n.kind].label.split(' ')[0]!, textStyle(10, '#33475f')).setOrigin(0.5, 0));
+      if (reachable && mapSkin?.cards) cardNodes.push(n);
+      else if (reachable) {
         this.addOption({ kind: 'node', node: n }, () => this.ringCursor(mapLayer, x, y, r + (isBoss ? 8 : 10)), {
           x: x - scroll - NODE_RADIUS,
           y: y - NODE_RADIUS,
@@ -537,8 +544,39 @@ export class MapScene extends Phaser.Scene {
       }
     }
 
+    if (mapSkin?.cards) {
+      // Next-Stop Cards: the node web gives way to big cards for the choices and a strip of what comes after.
+      mapLayer.setVisible(false);
+      const kindOf = (n: MapNode) => KIND_STYLE[n.kind];
+      const rects = drawNextStop(this, {
+        motion: this.motion,
+        lines: [`Stage ${stage.index + 1}: ${theme.name}`, clockLabel(run), `₽${run.money} · Badges ${run.badges.length}`, `Level cap ${cap}`, `${leader.title} in ${Math.max(0, stage.map.columns - column)} stops`],
+        cards: cardNodes.map((n) => ({
+          title: kindOf(n).label,
+          color: kindOf(n).color,
+          glyph: kindOf(n).glyph,
+          text: this.describe({ kind: 'node', node: n }).replace(/\n/g, '  ·  '),
+          art: (sc, into, w, h) => {
+            const boss = this.bossFor(n);
+            if (boss) {
+              const art = trainerVisual(sc, boss.spriteAssetId, boss.name, 0, h / 2, 1);
+              if (art instanceof Phaser.GameObjects.Sprite) art.setScale(Math.min(1, h / art.height));
+              into.add(art);
+            } else if (n.kind === 'wild' && sc.textures.exists('ball.pb')) into.add(sc.add.image(0, 0, 'ball.pb').setScale(3));
+            else into.add(sc.add.text(0, 0, kindOf(n).glyph, textStyle(44, '#ffffff', { stroke: '#181818', strokeThickness: 5 })).setOrigin(0.5));
+          },
+        })),
+        ahead: [...new Set(stage.map.nodes.filter((m) => m.column > column + 1 || (m.column === column + 1 && !choiceIds.has(m.id))).sort((a, b) => a.column - b.column || a.row - b.row).map((m) => m.id))]
+          .slice(0, 6)
+          .map((id) => findNode(stage.map, id))
+          .map((m) => (foggedAt(stage, seenColumn, m) ? { label: 'Fog', color: FOG_STYLE.color, glyph: '?' } : { label: kindOf(m).label.split(' ')[0]!, color: kindOf(m).color, glyph: kindOf(m).glyph })),
+      });
+      cardNodes.forEach((n, i) => this.addOption({ kind: 'node', node: n }, () => this.boxCursor(rects[i]!.x - 4, rects[i]!.y - 4, rects[i]!.w + 8, rects[i]!.h + 8), rects[i]!));
+    }
+
     // ---------- bottom panel: info, side stops, party, bag ----------
     drawPanel(this, 8, 420, GAME_WIDTH - 16, 116, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true, alpha: 0.94 });
+    mapSkin?.bar?.(this, { clock: clockLabel(run), money: run.money, cap });
     // Layout (spec 3): row one holds the party and eggs on the left and the buttons in whatever width is left;
     // row two is the info line and the notice. Nothing is placed over anything else.
     const slots = run.party.length + run.eggs.length;

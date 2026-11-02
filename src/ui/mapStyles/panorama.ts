@@ -1,6 +1,5 @@
 // 12 Region Panorama: the stage is a wide landscape in coloured biome bands; stops are glowing orbs on a pale route.
-import { GAME_HEIGHT, GAME_WIDTH } from '../theme';
-import { gradient } from './common';
+import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { MapSkin } from './types';
 
 const BANDS: [number, number, number][] = [
@@ -10,18 +9,22 @@ const BANDS: [number, number, number][] = [
 ];
 
 export const panorama: MapSkin = {
+  frame(scene, _motion, { types }) {
+    // Each band is named like a biome on the route.
+    const w = GAME_WIDTH / BANDS.length;
+    const names = [0, 1, 2].map((i) => `${(types[i % Math.max(1, types.length)] ?? 'wild').replace(/^./, (c) => c.toUpperCase())} ${['Fields', 'Wilds', 'Heights'][i]}`);
+    names.forEach((n, i) => scene.add.text(i * w + 14, 80, n, textStyle(15, '#ffffff', { stroke: '#101820', strokeThickness: 4 })).setDepth(-52));
+  },
   backdrop(scene, motion) {
-    gradient(scene, 0x8ccaff, 0x2a4a2a);
     const w = GAME_WIDTH / BANDS.length;
     const g = scene.add.graphics().setDepth(-53);
     BANDS.forEach(([sky, hill, ground], i) => {
-      g.fillStyle(sky, 0.9).fillRect(i * w, 0, w + 1, 250);
-      g.fillStyle(hill, 1).fillEllipse(i * w + w / 2, 290, w * 1.4, 150);
-      g.fillStyle(ground, 1).fillRect(i * w, 300, w + 1, GAME_HEIGHT - 300);
+      g.fillStyle(sky, 0.32).fillRect(i * w, 0, w + 1, GAME_HEIGHT);
+      g.fillStyle(hill, 0.3).fillEllipse(i * w + w / 2, 300, w * 1.3, 140);
+      g.fillStyle(ground, 0.34).fillRect(i * w, 320, w + 1, GAME_HEIGHT - 320);
       g.fillStyle(0xffffff, 0.12).fillRect(i * w, 0, 2, GAME_HEIGHT);
     });
-    g.fillStyle(0x000000, 0.28).fillRect(0, 74, GAME_WIDTH, 346);
-    if (motion === 'full') {
+        if (motion === 'full') {
       const cloud = scene.add.ellipse(120, 110, 150, 34, 0xffffff, 0.35).setDepth(-52);
       scene.tweens.add({ targets: cloud, x: GAME_WIDTH - 80, duration: 30_000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }

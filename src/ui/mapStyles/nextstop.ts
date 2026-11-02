@@ -4,6 +4,7 @@ import { dashed, gradient } from './common';
 import type { MapSkin } from './types';
 
 export const nextstop: MapSkin = {
+  cards: true,
   backdrop(scene) {
     gradient(scene, 0x3a2c22, 0x1a1410);
     const g = scene.add.graphics().setDepth(-53);
