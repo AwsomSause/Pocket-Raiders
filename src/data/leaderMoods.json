@@ -1,0 +1,8 @@
+{
+ "moods": [
+  { "id": "eager", "weight": 3, "order": "ace-first", "levelLead": 0, "note": "{name} is eager today and leads with their best." },
+  { "id": "guarded", "weight": 3, "order": "keep", "levelLead": 2, "note": "{name} looks guarded. The opening Pokémon stands taller." },
+  { "id": "restless", "weight": 2, "order": "swap-lead", "levelLead": 0, "note": "{name} is restless and changes the opening order." },
+  { "id": "calm", "weight": 4, "order": "keep", "levelLead": 0, "note": "{name} is calm and sticks to the usual plan." }
+ ]
+}
