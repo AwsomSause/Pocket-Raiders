@@ -166,7 +166,7 @@ import { createPartyLife, partyLifeCamp, partyLifeTurn, partyLifeVictory } from 
 import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
-import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp } from './mutators';
+import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
@@ -433,6 +433,11 @@ export function chooseStarter(content: Content, current: RunState, choiceIndex: 
   }
   run.log.starterUid = run.party[0]!.uid;
   enterStage(content, run, 0);
+  if (getMode(run.rules.modeId)?.startDraft) {
+    run.pending.push({ kind: 'mutator', choices: startRuleOffer(run.seed) });
+    run.afterDecisions = 'map';
+    run.phase = 'decision';
+  }
   recordChanges(content, current, run, 'level');
   return run;
 }
