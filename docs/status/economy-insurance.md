@@ -1,0 +1,1 @@
+- Economy/items/risk slice 2, Insurance Relic (S388): rare key item `insurance-relic` (perk `insurance`). A lost run reclaims its best rare+ held item into the profile Vault even below bank tier 5 (`vaultDeposit(..., insured)`), if the Vault has room. No save change. Test in `tests/unit/bank.test.ts`.

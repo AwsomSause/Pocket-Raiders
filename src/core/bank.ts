@@ -130,8 +130,9 @@ export function vaultCandidate(content: Content, run: Pick<RunState, 'inventory'
 }
 
 /** Tier 5: keeps the run's best held item in the Vault while there is room (mutates `profile`). Returns the item kept. */
-export function vaultDeposit(content: Content, profile: Profile, run: Pick<RunState, 'inventory'>): string | null {
-  if (bankTier(profile) < 5 || profile.vault.length >= content.balance.bank.vault.slots) return null;
+/** `insured` (Insurance Relic, S388): a lost run reclaims its best held item even below tier 5. */
+export function vaultDeposit(content: Content, profile: Profile, run: Pick<RunState, 'inventory'>, insured = false): string | null {
+  if ((bankTier(profile) < 5 && !insured) || profile.vault.length >= content.balance.bank.vault.slots) return null;
   const id = vaultCandidate(content, run);
   if (!id) return null;
   profile.vault.push(id);
