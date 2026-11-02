@@ -27,3 +27,6 @@ Kice asked for every look to match its mock-up layout, not only the backdrop. Th
 
 ## Update: Pokédex and loading layouts
 Pokédex set list: `src/ui/dexBrowser.ts` (aero, wii, sticker grid plus detail card; ds detail-left; ink scroll list). Loading: `src/ui/loadingLooks.ts` draws each of the nine loading looks as its own composition (logo, bar, tip, spinning ball, card shuffle, boot terminal, region preview). Loading looks were checked for no console errors and reaching the title; their visuals could not be screenshotted mid-load in the test (assets are cached on a restart), so compare them by eye on a cold load.
+
+## Update: Settings layouts and backdrop fix
+Settings category pages now draw each look's frame (`src/ui/settingsLooks.ts`): side tabs (aero, wii, shoujo, ink, rotom) or top tabs (notebook, sticker), the look's row pills (thin rules when a page has too many rows for pills), bright palettes with dark ink for the light looks, and the 設定 heading for ink. The rotom look has no Rotom sprite and the sticker look keeps one column of rows (not a card grid): known limits. Also fixed: the global dim backdrop in `main.ts` was painting over skinned backdrops on Settings, Expedition and Minigame; scenes that paint their own look are now skipped (`hasSkinBackdrop`).
