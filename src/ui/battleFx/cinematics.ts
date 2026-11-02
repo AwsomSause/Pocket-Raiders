@@ -19,7 +19,7 @@ import { loadAssets } from '../lazyAssets';
 import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { Beat } from './spectacle';
-import { CINE_ASSETS, CINE_MS, CINE_SOUNDS, SWAP_AT, type CineKind } from './cineLook';
+import { CINE_ASSETS, CINE_MS, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
 import { FORM_LOOK_ASSETS } from './formLook';
 import shards from './primegaShards.json';
 
@@ -87,9 +87,10 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   };
   const tw = (config: Phaser.Types.Tweens.TweenBuilderConfig) =>
     scene.tweens.add({ ...config, duration: (config.duration as number) / o.speed, delay: ((config.delay as number) ?? 0) / o.speed, hold: ((config.hold as number) ?? 0) / o.speed });
+  /** Plays an Essentials animation sound by slug, or a cinematic sound by its asset id ('cine.sfx.…'). */
   const sound = (slug: string, volume = 0.8) => {
     const { session } = services();
-    const key = animAssetIds.sound(slug);
+    const key = slug.startsWith('cine.') ? slug : animAssetIds.sound(slug);
     if (session.settings.muted || !scene.cache.audio.exists(key)) return;
     try {
       scene.sound.play(key, { volume: session.settings.sfxVolume * volume });
@@ -123,6 +124,24 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: target, x: target.x + 3 * (o.shake ?? o.intensity), duration: 40, delay, yoyo: true, repeat: times });
   };
 
+  /** The trainer's key item rises below the Pokémon and flares (full motion only; skipped if its picture isn't loaded). */
+  const keyItem = () => {
+    const key = keyItemFor(o.kind, o.crystal);
+    if (!key || !has(key)) return;
+    const y = o.y + 96;
+    if (has('cine.dbk.mega.shine')) {
+      const halo = add(scene.add.image(o.x, y - 30, 'cine.dbk.mega.shine').setTint(o.tint).setBlendMode('ADD').setDepth(depth + 7).setAlpha(0).setScale(0.25));
+      tw({ targets: halo, alpha: 0.9, scale: 0.45, duration: 260, delay: 140, yoyo: true, hold: 160 });
+    }
+    const item = add(scene.add.image(o.x, y, key).setDepth(depth + 8).setAlpha(0));
+    item.setScale(56 / Math.max(item.width, item.height));
+    tw({ targets: item, y: y - 30, alpha: 1, duration: 300, ease: 'Back.easeOut' });
+    at(300, () => item.active && item.setTintFill(0xffffff));
+    at(380, () => item.active && item.clearTint());
+    tw({ targets: item, alpha: 0, y: y - 44, duration: 220, delay: 640 });
+  };
+
+  if (!reduced && o.kind !== 'evolve' && o.kind !== 'dynamaxEnd') keyItem();
   if (reduced) {
     // Reduced motion: a soft glow and the symbol, no flying pieces or shaking.
     if (has('cine.dbk.mega.shine')) {
@@ -154,7 +173,9 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     bars();
     const dim = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x0a0618, 0).setDepth(depth));
     tw({ targets: dim, fillAlpha: 0.55, duration: 300 });
-    sound('ess-harden', 1);
+    // The PRSFX Mega Evolution sounds (Pokémon Memories) when they're loaded, else the Essentials stand-ins.
+    const megaSfx = scene.cache.audio.exists('cine.sfx.mega1');
+    sound(megaSfx ? 'cine.sfx.mega1' : 'ess-harden', 1);
     // The Pokémon glows white while the crystal builds around it.
     at(250, () => o.sprite instanceof Phaser.GameObjects.Sprite && o.sprite.active && o.sprite.setTintFill(0xffffff));
     if (has('cine.dbk.mega.orb_1')) {
@@ -187,8 +208,10 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       tw({ targets: p, alpha: 1, scale: S, duration: 140, delay: 300 + i * 28, ease: 'Back.easeOut' });
       return { p, c, dx: dx!, dy: dy!, i };
     });
-    at(400, () => sound('ess-twine', 0.7));
-    at(700, () => sound('ess-refresh', 0.8));
+    if (!megaSfx) {
+      at(400, () => sound('ess-twine', 0.7));
+      at(700, () => sound('ess-refresh', 0.8));
+    }
     for (const s of pieces) {
       tw({ targets: s.c, alpha: 1, duration: 300, delay: 950 });
       // Each shard flickers once, at its own fixed moment.
@@ -197,7 +220,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     }
     at(SWAP_AT.mega, () => {
       swap();
-      sound('ess-shell-smash', 1);
+      sound(megaSfx ? 'cine.sfx.mega2' : 'ess-shell-smash', 1);
       whiteFlash(0.85);
       if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(260 / o.speed, 0.01 * (o.shake ?? o.intensity));
       for (const s of pieces) {

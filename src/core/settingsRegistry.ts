@@ -76,7 +76,8 @@ const ANIM_SWITCHES: [Key, string, string][] = [
   ['interactionAnimations', 'Interaction animations', 'Catching, items, party changes and rewards.'],
   ['hyperAnimations', 'Hyper/Overdrive animations', 'The big presentation for rare story moments.'],
   ['rivalAnimations', 'Rival animations', 'Rival introductions, send-outs and poses.'],
-  ['evolutionAnimations', 'Evolution animations', 'The evolution and Mega Evolution scenes.'],
+  ['evolutionAnimations', 'Evolution animations', 'The scene when a Pokémon evolves.'],
+  ['transformAnimations', 'Mega/Z/Dynamax/Tera cutscenes', 'The Mega Evolution, Primal, Z-Move, Dynamax and Terastallization scenes.'],
   ['battleScreenEffects', 'Battle screen effects', 'Full-screen flashes, tints and impacts in battle.'],
   ['menuAnimations', 'Menu animations', 'The gliding cursor, button bounces and screen transitions.'],
 ];

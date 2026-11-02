@@ -1642,6 +1642,8 @@ export const SettingsSchema = z.object({
   hyperAnimations: z.boolean().default(true),
   rivalAnimations: z.boolean().default(true),
   evolutionAnimations: z.boolean().default(true),
+  /** The Mega Evolution, Primal, Z-Move, Dynamax and Terastallization cutscenes (settings v18). */
+  transformAnimations: z.boolean().default(true),
   battleScreenEffects: z.boolean().default(true),
   /** Menu motion (spec §24): the gliding cursor, button bounces and screen/popup transitions. */
   menuAnimations: z.boolean().default(true),

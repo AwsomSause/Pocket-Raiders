@@ -115,3 +115,5 @@ Dataset: `src/data/moveTargets.json` (which moves hit both foes, everyone, the p
 | `images/packs/dbk/tera/types.png` | same | `…/Graphics/Plugins/Terastallization/tera_types.png` (unchanged) | same | Tera Type jewel on the Tera badge | 2026-11-02 |
 | `images/packs/dbk/dynamax/patterns/{dynamax,calyrex}.png` | same | `…/Graphics/Plugins/Dynamax/Patterns/<name>.png` (unchanged) | Deluxe Battle Kit Dynamax add-on (Lucidious89) | Pattern a Dynamaxed Pokémon wears | 2026-11-02 |
 | `images/packs/dbk/dynamax/icon.png` | same | `…/Graphics/Plugins/Dynamax/icon_dynamax.png` (unchanged) | same | Dynamax badge icon | 2026-11-02 |
+| `images/packs/dbk/mega/ring.png` | AwsomSause/Pokemon-Memories (GitHub) | `Pokemon Memories/Graphics/Items/MEGARING.png` (unchanged) | Pokémon Essentials item icons (Nintendo/Game Freak material) | The Mega Ring that rises at the start of the Mega Evolution cinematic | 2026-11-02 |
+| `audio/cine/mega_evolution{1,2}.m4a` | same | `Pokemon Memories/Audio/SE/Anim/PRSFX- Mega Evolution1.wav`, `PRSFX- Mega Evolution2.wav` (mono AAC 64 kbps) | PRSFX sound set for Pokémon Essentials | Mega Evolution charge and burst sounds | 2026-11-02 |

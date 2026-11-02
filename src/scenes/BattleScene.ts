@@ -53,7 +53,8 @@ import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
 import { bagRow, partyRows, Picker } from '../ui/partyPanel';
-import { animationStrength, animSettingsFrom } from '../core/accessibility';
+import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
+import { transformAnimId } from '../core/presentation/transformAnims';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
@@ -472,6 +473,21 @@ export class BattleScene extends Phaser.Scene {
       motion: this.motion,
       reducedFlash: settings.reducedFlash,
     };
+  }
+
+  /**
+   * How a transformation cutscene plays, from the animation registry (core/presentation/transformAnims.ts):
+   * its own switch (Mega/Z/Dynamax/Tera cutscenes, or Evolution animations), reduced motion, speed and strength.
+   * Off just swaps the form. Presentation only.
+   */
+  private cineFeel(kind: CineKind): { motion: MotionLevel; speed: number; intensity: number; shake: number } {
+    const s = services().session.settings;
+    const plan = resolveAnim(transformAnimId(kind), animSettingsFrom(s));
+    if (!plan?.play) return { motion: 'off', speed: 1, intensity: 0, shake: 0 };
+    // The scene's clock already runs at the battle speed; the animation speed setting stretches or shortens it.
+    const speed = 1 / animationTimeScale(s);
+    if (plan.reduced) return { motion: 'reduced', speed, intensity: 0, shake: 0 };
+    return { motion: 'full', speed, intensity: plan.flash, shake: plan.shake };
   }
 
   /** How much motion the player allows (the battle animation setting). */
@@ -2362,10 +2378,7 @@ export class BattleScene extends Phaser.Scene {
             y: PLAYER_POS.y - 100,
             sprite,
             tint: 0x9fe8ff,
-            motion: this.motion,
-            speed: 1,
-            intensity: capFlash(services().session.settings.effectIntensity, services().session.settings.reducedFlash),
-            shake: capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash),
+            ...this.cineFeel('evolve'),
             onSwap: () => this.showSprite('player', { ...shownMon, speciesId: evo.to }),
           }),
         );
@@ -2562,10 +2575,7 @@ export class BattleScene extends Phaser.Scene {
               y: at.y - 80,
               sprite: sprite ?? null,
               tint: 0x9fe8ff,
-              motion: this.motion,
-              speed: 1,
-              intensity: capFlash(services().session.settings.effectIntensity, services().session.settings.reducedFlash),
-            shake: capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash),
+              ...this.cineFeel('evolve'),
               onSwap: () => {
                 mon!.speciesId = e.to;
                 mon!.hp = e.hpAfter;
@@ -2642,11 +2652,7 @@ export class BattleScene extends Phaser.Scene {
                 crystal: e.kind === 'primal' ? (e.to.includes('kyogre') ? 'alpha' : 'omega') : 'mega',
                 title: zMove?.name,
                 titleId: zMove?.id,
-                motion: this.motion,
-                // The scene's clock already runs at the battle speed.
-                speed: 1,
-                intensity: capFlash(services().session.settings.effectIntensity, services().session.settings.reducedFlash),
-            shake: capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash),
+                ...this.cineFeel(cine),
                 onSwap: swapForm,
               }),
             );
