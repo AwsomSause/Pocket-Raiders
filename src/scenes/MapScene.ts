@@ -38,6 +38,7 @@ import { blindMap } from '../core/rules';
 import { arenaFor, getTheme } from '../core/themes';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
+import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
 import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy } from '../ui/audio';
 import { notify } from '../ui/overlays';
 import { mapTrack } from '../core/presentation/battleMusic';
@@ -1238,6 +1239,13 @@ export class MapScene extends Phaser.Scene {
   private openService(sideId: string): void {
     const { session } = services();
     const view = session.serviceView(sideId);
+    // Trade Posts have their own anime-styled screen (trade stops redesign).
+    const run = session.run!;
+    if (view.service.id === 'trade' && view.options.length > 0 && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0))) {
+      this.busy = true;
+      this.scene.start('Trade', { source: 'service', sideId, back: { scene: 'Map' } });
+      return;
+    }
     const rows = view.options;
     if (rows.length === 0) return playSfx(this, 'ui.error', 0.5);
     const picker: Picker = new Picker(this, {

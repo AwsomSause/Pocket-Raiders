@@ -36,6 +36,7 @@ import { RewardScene } from './scenes/RewardScene';
 import { RunPrepScene } from './scenes/RunPrepScene';
 import { ShopScene } from './scenes/ShopScene';
 import { EventScene } from './scenes/EventScene';
+import { TradeScene } from './scenes/TradeScene';
 import { StarterSelectScene } from './scenes/StarterSelectScene';
 import { TrainerSelectScene } from './scenes/TrainerSelectScene';
 import { GAME_HEIGHT, GAME_WIDTH } from './ui/theme';
@@ -101,7 +102,7 @@ function start(): void {
     backgroundColor: '#1d1a24',
     pixelArt: true,
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
+    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
     callbacks: {
       preBoot: (g) => g.registry.set('session', session),
       postBoot: (g) => {

@@ -10,6 +10,7 @@ import type { PlazaSectionId } from '../core/plaza/flow';
 import { currentRegion } from '../core/regions';
 import { PLAZA_OW_SHEETS, plazaSeason, plazaSheetId, plazaStyleOf, type PlazaStyleId } from '../core/presentation/plazaStyles';
 import { services } from '../game/services';
+import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
 import { playMusicLazy, playSfx } from '../ui/audio';
 import { AERO, drawGlass, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
@@ -254,6 +255,15 @@ export class PlazaScene extends Phaser.Scene {
 
   private openSection(d: DistrictView, section: PlazaSectionId, notice?: string): void {
     const { session } = services();
+    // Specialist traders have their own anime-styled screen (trade stops redesign).
+    const run = session.run!;
+    if (section === 'traders' && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, this.sideId, run.log.counters.tradesMade ?? 0))) {
+      this.picker?.close();
+      this.picker = null;
+      this.busy = true;
+      this.scene.start('Trade', { source: 'plaza', sideId: this.sideId, back: { scene: 'Plaza', focus: this.focus } });
+      return;
+    }
     const view = session.plazaSection(this.sideId, section);
     const notes = [...(notice ? [`» ${notice}`] : []), ...view.notes];
     const rows = view.options;

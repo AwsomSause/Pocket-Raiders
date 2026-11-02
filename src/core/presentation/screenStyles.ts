@@ -26,6 +26,7 @@ export const SCREEN_STYLES = {
   minigame: { label: 'Minigames', styles: { wii: 'Wii Channels' } },
   hubmenus: { label: 'Hub menus', styles: { aero: 'Aero Office', wii: 'Wii Channel', shonen: 'Shonen Missions', sticker: 'Sticker Planner', ink: 'Ink Ledger', achievements: 'Achievement Cards', album: 'Photo Album' } },
   legacy: { label: 'Legacy and memories', styles: { museum: 'Museum Gallery', polaroids: 'Sunset Polaroids', manga: 'Manga Volumes', timeline: 'Timeline Branches', cards: 'Legacy Cards', previously: 'Previously On', bloom: 'Bond Memory Bloom', aero: 'Aero Gallery', ink: 'Ink Chronicle', wii: 'Wii Photo Channel', hall: 'Hall of Legends' } },
+  trade: { label: 'Trade Stops', styles: { manga: 'Manga Page', versus: 'Shonen Versus', novel: 'Visual Novel', eyecatch: 'Anime Eyecatch', episode: 'Episode Title Card', cutin: 'Cut-In Strips', shoujo: 'Shoujo Sparkle', chibi: 'Chibi Sticker Swap', cable: 'Link Cable Sky', cards: 'Trading Card Duel', sunset: 'Sunset Farewell', ink: 'Ink Impact Frame' } },
   loading: { label: 'Loading screen', styles: { aero: 'Aero Splash', ball: 'Spinning Ball', terminal: 'Boot Terminal', wiihealth: 'Wii Health Screen', ds: 'DS Boot', ink: 'Ink Brush', shuffle: 'Card Shuffle', sparkle: 'Sparkle Load', region: 'Region Preview' } },
 } as const satisfies Record<string, { label: string; styles: Record<string, string> }>;
 
@@ -44,6 +45,8 @@ export const ORIGINAL = 'original';
 export const SCREEN_STYLES_READY: { readonly [S in ScreenId]: readonly ScreenStyleId<S>[] } = {
   battle: [], map: [], reward: [], party: [], title: [], trainer: [], starter: [], briefing: [], bag: [], evolve: [], runend: [],
   dex: [], settings: [], camp: [], raid: [], totem: [], expedition: [], minigame: [], hubmenus: [], legacy: [], loading: [],
+  // Trade stops redesign (core/presentation/tradeStyles.ts keeps this list).
+  trade: ['manga', 'versus', 'novel', 'eyecatch'],
 };
 
 /** FNV-1a, so the random pick is stable for the same salt and never touches gameplay RNG. */
