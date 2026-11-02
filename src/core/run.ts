@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { applyLeaderMood, leaderMood } from './story/leaderMood';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
@@ -1589,6 +1590,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const c = run.log.counters;
       if (((c.gymLeadersDefeated ?? 0) + (c.eliteFourDefeated ?? 0) + (c.championsDefeated ?? 0) + 1) % 3 === 0) plan = { ...plan, members: plan.members.map((m) => ({ ...m, level: m.level + bossLevels })) };
     }
+    // Gym Leader Personalities (S126): the leader's mood of the day shapes the opening (own hash, no roll moves).
+    if (node.kind === 'gym' && content.balance.leaderMoods) plan = applyLeaderMood(plan, leaderMood(run.seed, stage.leaderId, `${run.regionIndex}:${stage.index}`));
     // The Rival Who Wins Without You (left-out 5.5): a rival that took over a Gym, reached the finals or became
     // Champion stands in for that boss once (the badge and rewards stay the boss's).
     const takeover = node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? takeoverRival(run, node.kind) : null;

@@ -1927,6 +1927,8 @@ export const BalanceSchema = z.object({
   bossEvolution: z.boolean().default(true),
   /** Rival battle styles (berserker, revenge-striker, last-stand) do something in the fight (Living Rivalry §3). */
   styleTricks: z.boolean().default(true),
+  /** Gym Leader Personalities (S126): a leader's mood of the day nudges the opening order and lead level. */
+  leaderMoods: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,
