@@ -95,6 +95,8 @@ import eventsWeatherJson from './eventsWeather.json';
 import eventsRKJson from './eventsRK.json';
 import eventsMysteriesJson from './eventsMysteries.json';
 import eventsTrainingJson from './eventsTraining.json';
+// Any file dropped in src/data/events/ is picked up here by itself (no registry edit, so event PRs don't conflict).
+const eventsExtraFiles = Object.values(import.meta.glob<unknown>('./events/*.json', { eager: true, import: 'default' }));
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
 
@@ -160,6 +162,8 @@ export interface RawContent {
   eventsMysteries?: unknown;
   /** Run events G: training, growth and mastery (eventsTraining.json), added to `events`. */
   eventsTraining?: unknown;
+  /** Auto-discovered event files (src/data/events/*.json), each `{ events: [...] }`, added to `events`. */
+  eventsExtra?: unknown[];
 }
 
 /**
@@ -227,6 +231,7 @@ export const RAW_CONTENT: RawContent = {
   eventsRK: eventsRKJson,
   eventsMysteries: eventsMysteriesJson,
   eventsTraining: eventsTrainingJson,
+  eventsExtra: eventsExtraFiles,
 };
 
 function parse<T>(schema: z.ZodType<T>, value: unknown, label: string, problems: string[]): T | null {
@@ -294,6 +299,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? [])];
+  for (const file of (raw.eventsExtra ?? []) as { events?: unknown[] }[]) gamesEvents.push(...(file.events ?? []));
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);
