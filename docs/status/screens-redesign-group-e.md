@@ -21,3 +21,6 @@ Built from Kice's picks (2026-11-02). One shared module, `src/ui/screenSkins.ts`
 
 ## Tests
 `tests/unit/screenSkins.test.ts` (every ready look has a skin, pin/original/rotation); `tests/e2e/screenSkinsE.spec.ts` (pins looks, opens Settings, Legacy, Hub rooms, no console errors).
+
+## Update: Legacy gallery layouts (PR 2)
+Kice asked for every look to match its mock-up layout, not only the backdrop. The Legacy Gallery run list now draws each look's own layout (`src/ui/legacyGallery.ts`): museum frames, tilted polaroids, manga panels (2x2), timeline nodes on a line, binder cards, "Previously on" trio, bond bloom (one big bubble plus a dot row), aero shelf, ink list with the 伝説 heading, Wii photo grid (5x2), hall of legends duo. Arrows move the focus, Enter or a click opens the run's record, Esc goes back. With a revisited timeline in play the original list is used (it needs its Continue/Abandon rows). The Memories pages still use the skinned list. Still to do the same way: Pokédex, hub menus, Settings, loading, expedition, minigame, raid and totem.

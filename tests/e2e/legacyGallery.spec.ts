@@ -38,6 +38,7 @@ test('the Legacy Rotation, the Legacy Gallery with Relive the Moment, and the Ri
   await page.evaluate((legacyRuns) => {
     const s = (window as any).__pkr.session;
     s.changeProfile((p: any) => ({ ...p, legacyRuns }));
+    s.settings.screenStyles = { ...s.settings.screenStyles, legacy: 'original' }; // this spec checks the original list
     (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
   }, records);
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
