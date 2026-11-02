@@ -84,6 +84,8 @@ describe('story foundation: random streams', () => {
   const NO_W1 = { resonance: { minParty: 3, bonus: 1 }, bleed: { maxStacks: 1, perStack: 0, moves: ['none'] }, curse: { bonus: 1, followUpTypes: ['ghost'] }, hazardBurst: { fraction: 0 }, luck: { meterBonus: 0, meterCap: 1, chainBonus: 0, chainCap: 1, alphaChance: 0, alphaLevels: 0, alphaMoney: 1 }, bench: { minFriendship: 255 }, play: { combo: { bonus: 1 }, aim: { moves: ['none'], accuracy: { miss: 1, ok: 1, good: 1, perfect: 1 } }, shout: { damage: { miss: 1, ok: 1, good: 1, perfect: 1 } }, throw: { catch: { miss: 1, ok: 1, good: 1, perfect: 1 }, weakenedBelow: 0 }, deal: { below: 0, money: 1, classes: [] }, mindRead: { types: ['none'] }, grudge: { boost: {} }, spectator: { chance: 0, boost: {}, names: ['x'] }, arena: { every: 99, fraction: 0, interact: 0, types: {} } }, underdog: { levels: 99, xpBonus: 1 } };
   const noHyper = buildContent({
     ...structuredClone(RAW_CONTENT),
+    // Run events B (trainer battles) came later too.
+    eventsRB: { events: [] },
     eventsHelpers: { events: [] },
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.
     // The nemesis system (left-out plan 1.3) came later too.

@@ -1,0 +1,890 @@
+{
+ "events": [
+  {
+   "id": "hot-dog-duelists",
+   "name": "Hot Dog Duelists",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2418",
+    "effect": "none"
+   },
+   "intro": "Two vendors share one hot dog stand and one grudge. \"Beat us both and the feast is on the house!\"",
+   "choices": [
+    {
+     "label": "Take on both vendors",
+     "success": {
+      "text": "\"Order up!\" The first vendor sends out their team.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Hot Dog Duelists",
+       "classId": "worker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "fresh-water",
+          "soda-pop",
+          "lemonade",
+          "moomoo-milk",
+          "lava-cookie",
+          "old-gateau",
+          "casteliacone",
+          "sweet-heart"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just buy a hot dog",
+     "success": {
+      "text": "It is a very good hot dog.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -30
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "umbrella-squad",
+   "name": "Umbrella Squad",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#1c2630",
+    "effect": "rain"
+   },
+   "intro": "A line of trainers in matching yellow raincoats blocks the road. \"No sun, no wind, just rain. Care to dance?\"",
+   "choices": [
+    {
+     "label": "Battle in the rain",
+     "success": {
+      "text": "The sky opens up the moment the first ball is thrown.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Umbrella Squad",
+       "classId": "fisherman",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 450
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "weather": "rain"
+      }
+     }
+    },
+    {
+     "label": "Decline politely",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "night-shift-guards",
+   "name": "Night Shift Guards",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#10101c",
+    "effect": "none"
+   },
+   "intro": "Torch beams sweep the road. \"Night shift. Nobody passes without a duel.\" Their Pokémon see well in the dark.",
+   "choices": [
+    {
+     "label": "Duel the guards",
+     "success": {
+      "text": "The beams snap to you and the guards advance.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Night Shift Guards",
+       "classId": "veteran",
+       "size": 3,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for dawn",
+     "success": {
+      "text": "You camp a while until the guards clock off.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-leader-spar",
+   "name": "Retired Gym Leader Spar",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A retired Gym Leader dusts off an old badge case. \"No prize money. But I will teach you everything I still know.\"",
+   "choices": [
+    {
+     "label": "Spar with the veteran",
+     "success": {
+      "text": "\"Show me what you have learned.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Retired Gym Leader",
+       "bossId": "brock",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 2,
+         "who": "party"
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Politely refuse",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "double-date-doubles",
+   "name": "Double Date Doubles",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2b1f2b",
+    "effect": "hearts"
+   },
+   "intro": "A stranger waves you over. \"Our dinner partners cancelled! Be our doubles team? You can borrow my Pokémon.\"",
+   "choices": [
+    {
+     "label": "Team up and fight",
+     "success": {
+      "text": "Two couples, two Pokémon each, one very awkward dinner.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Double Date Pair",
+       "classId": "ace-trainer",
+       "ally": "pikachu",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "fresh-water",
+          "soda-pop",
+          "lemonade",
+          "moomoo-milk",
+          "lava-cookie",
+          "old-gateau",
+          "casteliacone",
+          "sweet-heart"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Dinner for one",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rookie-hazing",
+   "name": "Rookie Hazing",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "none"
+   },
+   "intro": "A gang of Youngsters surrounds you, each holding a Pokéball. \"Welcome to the road, rookie! Let us show you how it works.\"",
+   "choices": [
+    {
+     "label": "Take them all on",
+     "success": {
+      "text": "Six tiny teams in a row. They may be small, but there are a lot of them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Youngster Gang",
+       "classId": "youngster",
+       "size": 6,
+       "types": [],
+       "levelBonus": -4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 350
+        },
+        {
+         "kind": "levels",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Run for it",
+     "success": {
+      "text": "You duck between two of them and sprint away.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "speed-dating-trainers",
+   "name": "Speed-Dating Trainers",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2b1f2b",
+    "effect": "hearts"
+   },
+   "intro": "A bell rings. \"Three minutes per table, one Pokémon each. Impress them!\"",
+   "choices": [
+    {
+     "label": "Go around the tables",
+     "success": {
+      "text": "The first table, the first match, the first bell.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Speed-Date Trainers",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay at the bar",
+     "success": {
+      "text": "You sip lemonade and watch everyone else flirt in lightning rounds.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "relay-battle",
+   "name": "Relay Battle",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "Three trainers stand in a line, each with a baton. \"A relay! Beat each of us in turn. You may catch your breath between legs.\"",
+   "choices": [
+    {
+     "label": "Run the relay",
+     "success": {
+      "text": "The first runner steps up.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Relay Team",
+       "classId": "black-belt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "pearl",
+          "star-piece",
+          "stardust",
+          "comet-shard",
+          "relic-gold",
+          "rare-bone",
+          "big-mushroom"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ],
+       "chainHeal": 0.1
+      }
+     }
+    },
+    {
+     "label": "Cheer from the sidelines",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "boss-rush-mini",
+   "name": "Boss Rush Mini",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#241420",
+    "effect": "rattle"
+   },
+   "intro": "The grass shakes. Three weak but furious wild bosses crowd the path, one after another.",
+   "choices": [
+    {
+     "label": "Fight all three",
+     "success": {
+      "text": "The first one steps out, snarling.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "chain": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "pearl",
+          "star-piece",
+          "stardust",
+          "comet-shard",
+          "relic-gold",
+          "rare-bone",
+          "big-mushroom"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Slip away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "collectors-test",
+   "name": "Collector's Test",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c2630",
+    "effect": "none"
+   },
+   "intro": "A collector squints at your team. \"I only battle people who own a Water-type. If you do, the prize is bigger.\"",
+   "choices": [
+    {
+     "label": "Show your Water-type and battle",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "\"Aha! Exactly what I wanted to see.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Collector",
+       "classId": "psychic",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1000
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "pearl",
+          "star-piece",
+          "stardust",
+          "comet-shard",
+          "relic-gold",
+          "rare-bone",
+          "big-mushroom"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Battle anyway",
+     "success": {
+      "text": "\"No Water-type? Fine. Smaller prize.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Collector",
+       "classId": "psychic",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gamblers-gauntlet",
+   "name": "The Gambler's Gauntlet",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2418",
+    "effect": "none"
+   },
+   "intro": "A card sharp slaps the table. \"Bet on yourself! The bigger the stake, the bigger the payout.\"",
+   "choices": [
+    {
+     "label": "Bet $200 on yourself",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "\"Easy money,\" the sharp grins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Card Sharp",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bet $600 on yourself",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "The sharp whistles. \"A real gambler!\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Card Sharp",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 2200
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Keep your money",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "school-yard-skirmish",
+   "name": "School Yard Skirmish",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "none"
+   },
+   "intro": "The bell rings and the school yard swarms with kids holding Pokéballs. \"Battle! Battle! Battle!\"",
+   "choices": [
+    {
+     "label": "Battle the whole class",
+     "success": {
+      "text": "A wave of kid trainers, tiny levels, big enthusiasm.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "School Kids",
+       "classId": "youngster",
+       "size": 6,
+       "types": [],
+       "levelBonus": -5,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "levels",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Give the kids some candy",
+     "success": {
+      "text": "They cheer and scatter. You feel good.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": -50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rivals-friend",
+   "name": "Rival's Friend",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "none"
+   },
+   "intro": "A stranger steps in front of you. \"My friend says you are the one to beat. I want to see for myself.\"",
+   "choices": [
+    {
+     "label": "Accept the challenge",
+     "success": {
+      "text": "\"Do not hold back.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival's Friend",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

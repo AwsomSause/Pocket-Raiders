@@ -53,6 +53,7 @@
     "data:npc-movesets": "node tools/build-npc-movesets.ts",
     "data:npc-events": "node tools/build-npc-events.ts",
     "data:world-events": "node tools/build-world-events.ts",
+    "data:rb-events": "node tools/build-rb-events.ts",
     "data:w10-events": "node tools/build-w10-events.ts",
     "data:rk-events": "node tools/build-rk-events.ts",
     "data:w4-events": "node tools/build-w4-events.ts",
