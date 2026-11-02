@@ -85,15 +85,15 @@ export class LegacyGallery {
     const { scene, look, items } = this;
     const add = <T extends Phaser.GameObjects.GameObject>(o: T): T => (this.layer.add(o), o);
     const skin = SKINS[`legacy.${this.styleId}`]!;
-    const dark = this.styleId === 'ink';
-    const ink = dark ? '#2a2018' : '#ffffff';
+    const lt = skin.light === true;
+    const ink = lt ? '#2a3448' : '#ffffff';
     // Heading and back hint
-    const headStyle = textStyle(look.layout === 'duo' ? 38 : look.layout === 'list' ? 72 : 28, look.layout === 'nodes' ? '#5fd0ff' : look.layout === 'duo' ? '#fff6c0' : '#ffffff', look.layout === 'duo' ? { stroke: '#7a2a10', strokeThickness: 6 } : {});
+    const headStyle = textStyle(look.layout === 'duo' ? 38 : look.layout === 'list' ? 72 : 28, look.layout === 'nodes' ? '#5fd0ff' : look.layout === 'duo' ? '#fff6c0' : lt ? '#12385a' : '#ffffff', look.layout === 'duo' ? { stroke: '#7a2a10', strokeThickness: 6 } : {});
     const head = add(scene.add.text(look.layout === 'list' ? 50 : 36, look.layout === 'list' ? 50 : 22, look.heading, headStyle));
     if (look.layout === 'duo') head.setAngle(-3).setPosition(70, 36);
     if (look.layout === 'list') head.setColor('#1a1410');
-    add(scene.add.text(look.layout === 'list' ? 56 : look.layout === 'duo' ? 500 : 36, look.layout === 'list' ? 150 : look.layout === 'duo' ? 64 : 56, `${look.kicker}  ·  ${items.length} run${items.length === 1 ? '' : 's'}`, textStyle(14, dark ? '#a02a20' : '#d8ecff')));
-    add(scene.add.text(W - 24, 18, 'Enter open  ·  Esc back', textStyle(14, dark ? '#4a3a28' : '#cfe4f4')).setOrigin(1, 0));
+    add(scene.add.text(look.layout === 'list' ? 56 : look.layout === 'duo' ? 500 : 36, look.layout === 'list' ? 150 : look.layout === 'duo' ? 64 : 56, `${look.kicker}  ·  ${items.length} run${items.length === 1 ? '' : 's'}`, textStyle(14, this.styleId === 'ink' ? '#a02a20' : lt ? '#3a5a78' : '#d8ecff')));
+    add(scene.add.text(W - 24, 18, 'Enter open  ·  Esc back', textStyle(14, lt ? '#4a5a78' : '#cfe4f4')).setOrigin(1, 0));
     if (items.length === 0) {
       add(scene.add.text(W / 2, H / 2, 'Finish a run to see its Trainer here', textStyle(24, ink)).setOrigin(0.5));
       return;
@@ -122,10 +122,10 @@ export class LegacyGallery {
     if (look.layout === 'bloom') {
       const it = items[this.index]!;
       const g = add(scene.add.graphics());
-      g.fillStyle(0xffffff, 0.85).fillCircle(W / 2, 220, 120).lineStyle(4, 0xff9cd0, 1).strokeCircle(W / 2, 220, 120);
+      g.fillStyle(0xffffff, 0.95).fillCircle(W / 2, 220, 120).lineStyle(4, 0xff9cd0, 1).strokeCircle(W / 2, 220, 120);
       sprite(it, W / 2, 220, 5);
-      add(fitLine(scene.add.text(W / 2, 360, `♥ ${it.title} ♥`, textStyle(22, '#ffe8f4')).setOrigin(0.5), 800));
-      add(fitLine(scene.add.text(W / 2, 392, it.sub, textStyle(15, '#ffd0e8')).setOrigin(0.5), 800));
+      add(fitLine(scene.add.text(W / 2, 360, `♥ ${it.title} ♥`, textStyle(22, '#a02a60')).setOrigin(0.5), 800));
+      add(fitLine(scene.add.text(W / 2, 392, it.sub, textStyle(15, '#c04a80')).setOrigin(0.5), 800));
       visible.forEach((v, k) => {
         const x = W / 2 - ((visible.length - 1) * 56) / 2 + k * 56;
         const on = first + k === this.index;
@@ -208,8 +208,8 @@ export class LegacyGallery {
     const cur = items[this.index]!;
     const strip = add(scene.add.graphics());
     strip.fillStyle(skin.rowFill, 0.95).fillRoundedRect(36, H - 80, W - 72, 52, 12).lineStyle(2, skin.rowRim, 1).strokeRoundedRect(36, H - 80, W - 72, 52, 12);
-    add(fitLine(scene.add.text(52, H - 72, `${cur.title}`, textStyle(17, '#ffffff')), W - 104));
-    add(fitLine(scene.add.text(52, H - 50, cur.sub, textStyle(14, '#d8ecff')), W - 104));
+    add(fitLine(scene.add.text(52, H - 72, `${cur.title}`, textStyle(17, ink)), W - 104));
+    add(fitLine(scene.add.text(52, H - 50, cur.sub, textStyle(14, lt ? '#3a5a78' : '#d8ecff')), W - 104));
     this.pointer(visible, first, (k) => {
       const r = rect(k);
       return { x: r.x, y: r.y, w: r.w, h: r.h };

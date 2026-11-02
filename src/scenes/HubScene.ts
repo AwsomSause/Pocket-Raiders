@@ -31,8 +31,10 @@ import type { Profile, RunRecord } from '../core/state';
 import { services } from '../game/services';
 import { playMusic, playSfx, playMusicLazy } from '../ui/audio';
 import { onInputAction, type InputAction } from '../ui/input';
-import { Picker, type PickerRow } from '../ui/partyPanel';
+import { Picker, type PickerLike, type PickerRow } from '../ui/partyPanel';
 import { DexInfo } from '../ui/dexInfo';
+import { DexBrowser, hasDexLook } from '../ui/dexBrowser';
+import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dexState } from '../core/presentation/dexInfo';
 import { itemVisual, pokemonIcon, trainerVisual } from '../ui/sprites';
 import { loadAssets, preloadPokemon, queueAssets } from '../ui/lazyAssets';
@@ -201,7 +203,7 @@ let rotationVisits = 0;
 let lastRotation: string[] = [];
 
 export class HubScene extends Phaser.Scene {
-  private picker: Picker | null = null;
+  private picker: PickerLike | null = null;
   private dexInfo: DexInfo | null = null;
   private dexTab: 'all' | 'seen' | 'owned' | 'mastered' = 'all';
   /** The page of a place with several rooms, while it is open; room pages open on top of it. */
@@ -242,7 +244,8 @@ export class HubScene extends Phaser.Scene {
     if (!data.notice) data = { ...data, notice: hubArrivalNotice()?.text };
     this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => {
       e.preventDefault();
-      if (this.archiveOpen) this.resortArchive(e.shiftKey ? -1 : 1, false);
+      if (this.picker instanceof DexBrowser) this.picker.tab();
+      else if (this.archiveOpen) this.resortArchive(e.shiftKey ? -1 : 1, false);
     });
     this.input.keyboard?.on('keydown-R', () => {
       if (this.archiveOpen) this.resortArchive(0, true);
@@ -857,6 +860,29 @@ export class HubScene extends Phaser.Scene {
         },
       };
     })];
+    // Screens redesign: a picked Pokédex look draws the set the way its mock-up does.
+    const look = screenStyleOf('dex', session.settings.screenStyles, session.profile.stats.runsEnded);
+    if (look !== 'original' && hasDexLook(look)) {
+      this.closePicker();
+      const cycle = (): void => {
+        const order = ['all', 'seen', 'owned', 'mastered'] as const;
+        this.dexTab = order[(order.indexOf(this.dexTab) + 1) % order.length]!;
+        this.openDexSet(set);
+      };
+      this.picker = new DexBrowser(this, look, set.name, shown, session.content, session.profile, `${tab.toUpperCase()} ${shown.length}/${set.members.length}`, session.settings.battleAnimations, {
+        onSelect: (id) => {
+          this.dexInfo = new DexInfo(this, session.content, session.profile, id, () => {
+            this.dexInfo = null;
+          });
+        },
+        onTab: cycle,
+        onBack: () => {
+          this.closePicker();
+          this.openResearch();
+        },
+      });
+      return;
+    }
     this.closePicker();
     this.openPicker({
       title: set.name,
