@@ -85,6 +85,7 @@ describe('story foundation: random streams', () => {
   const noHyper = buildContent({
     ...structuredClone(RAW_CONTENT),
     eventsHelpers: { events: [] },
+    eventsMerchants: { events: [] }, // run events A came later too
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.
     // The nemesis system (left-out plan 1.3) came later too.
     story: { ...structuredClone(RAW_CONTENT.story as object), definitions: [], nemesis: { ...(RAW_CONTENT.story as { nemesis: object }).nemesis, enabled: false } },
