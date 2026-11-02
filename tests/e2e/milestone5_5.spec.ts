@@ -21,6 +21,31 @@ async function prepRow(page: Page, row: number) {
   expect(await prepFocus(page)).toBe(row);
 }
 
+
+/** On the Starters page (its own scene), picks one entry of a tab ('pool' or 'draft') by id, then goes back to the desk. */
+async function startersPick(page: Page, picks: [tab: 'pool' | 'draft', id: string][]) {
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(2));
+  await waitForScene(page, 'RunStarters');
+  for (const [tab, id] of picks) {
+    await page.evaluate((t) => (window as any).__pkr.game.scene.getScene('RunStarters').setTab(t), tab);
+    await page.waitForTimeout(400);
+    const found = await page.evaluate((want) => {
+      const s = (window as any).__pkr.game.scene.getScene('RunStarters');
+      const i = s.entries.findIndex((e: any) => e.id === want);
+      if (i >= 0) {
+        s.index = i;
+        s.build();
+      }
+      return i;
+    }, id);
+    expect(found, id).toBeGreaterThanOrEqual(0);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(400);
+  }
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'RunPrep');
+}
+
 /** Opens a Preparation Desk page (0 Run Setup, 1 Trainer, 2 Starters, 3 Modifiers, 4 Overview) and waits for it. */
 async function prepPage(page: Page, n: number) {
   await page.evaluate((i) => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(i), n);
@@ -99,15 +124,7 @@ test('buy a license, unlock a pool, prepare a Type Focus run, save a preset, and
   await waitForScene(page, 'TrainerSelect');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'RunPrep');
-  await prepPage(page, 2); // Starters
-  await prepRow(page, 0);
-  await page.keyboard.press('ArrowRight'); // Classic → Johto
-  await waitForScene(page, 'RunPrep');
-  await prepRow(page, 1);
-  for (let i = 0; i < 3; i++) {
-    await page.keyboard.press('ArrowRight'); // Standard → Balanced → Blind → Type Focus
-    await page.waitForTimeout(250);
-  }
+  await startersPick(page, [['pool', 'johto'], ['draft', 'type-focus']]); // the Starters page
   const prep = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').prep);
   expect(prep.poolId).toBe('johto');
   expect(prep.draftRuleId).toBe('type-focus');
@@ -154,12 +171,7 @@ test('the Blind Draft hides the starters until one is chosen', async ({ page }) 
   page.on('pageerror', (e) => errors.push(e.message));
   await toPrepDesk(page, '/?seed=e2e-blind&debug=1');
   await page.screenshot({ path: 'test-results/m55-prep-default.png' });
-  await prepPage(page, 2); // Starters
-  await prepRow(page, 1);
-  await page.keyboard.press('ArrowRight');
-  await waitForScene(page, 'RunPrep');
-  await page.keyboard.press('ArrowRight'); // Standard → Balanced → Blind
-  await waitForScene(page, 'RunPrep');
+  await startersPick(page, [['draft', 'blind']]); // the Starters page
   await prepPage(page, 4); // Overview
   await prepRow(page, 0);
   await page.keyboard.press('Enter');
