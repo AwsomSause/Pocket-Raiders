@@ -18,21 +18,27 @@ describe('screen styles', () => {
     expect(screenStyleOf('battle', { battle: ORIGINAL }, 1, READY)).toBe(ORIGINAL);
   });
 
-  it('a pinned built style wins; an unbuilt or unknown one falls back to random', () => {
+  it('a pinned built style wins; an unbuilt or unknown one falls back to the original', () => {
     expect(screenStyleOf('battle', { battle: 'cyber' }, 7, READY)).toBe('cyber');
-    expect(READY).toContain(screenStyleOf('battle', { battle: 'arcade' }, 7, READY));
-    expect(READY).toContain(screenStyleOf('battle', { battle: 'nonsense' }, 7, READY));
+    expect(screenStyleOf('battle', { battle: 'arcade' }, 7, READY)).toBe(ORIGINAL);
+  });
+
+  it('an unset screen keeps the original look', () => {
+    expect(screenStyleOf('battle', undefined, 1, READY)).toBe(ORIGINAL);
+    expect(screenChoice('battle', {}, READY)).toBe(ORIGINAL);
   });
 
   it('random is stable for one salt and rotates across salts', () => {
-    expect(screenStyleOf('battle', undefined, 'seed:3', READY)).toBe(screenStyleOf('battle', undefined, 'seed:3', READY));
-    const seen = new Set(Array.from({ length: 60 }, (_, i) => screenStyleOf('battle', undefined, `seed:${i}`, READY)));
+    const rnd = { battle: RANDOM };
+    expect(screenStyleOf('battle', rnd, 'seed:3', READY)).toBe(screenStyleOf('battle', rnd, 'seed:3', READY));
+    const seen = new Set(Array.from({ length: 60 }, (_, i) => screenStyleOf('battle', rnd, `seed:${i}`, READY)));
     expect([...seen].sort()).toEqual([...READY].sort());
   });
 
   it('Settings cycles Random -> each built style -> Original -> Random', () => {
     let saved: Record<string, string> = {};
     const seen: string[] = [];
+    saved = { battle: RANDOM };
     for (let i = 0; i < READY.length + 2; i++) {
       seen.push(screenChoice('battle', saved, READY));
       saved = { battle: nextScreenChoice('battle', saved, READY) };

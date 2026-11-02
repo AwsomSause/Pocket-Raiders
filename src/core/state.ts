@@ -1680,12 +1680,12 @@ export const SettingsSchema = z.object({
   skipSeenDialogue: z.boolean().default(false),
   /** Run events redesign: how map-event screens are drawn (core/presentation/eventStyles.ts). */
   eventStyle: z.enum(EVENT_STYLE_IDS).default('diorama'),
-  /** Screens redesign: per screen, 'random' (rotate built looks), 'original', or a pinned style id (core/presentation/screenStyles.ts). */
+  /** Screens redesign: per screen, 'original' (the default), 'random' (rotate built looks), or a pinned style id (core/presentation/screenStyles.ts). */
   screenStyles: z.record(z.string(), z.string()).default({}),
   /** Plaza styles (Kice 2026-11-02): how the Trainer Plaza is drawn (core/presentation/plazaStyles.ts). */
   plazaStyle: z.enum(PLAZA_STYLE_IDS).default('aero'),
   /** Hub Town part 3 (Kice 2026-11-02): walk the Hub Town overworld, or use the Arena Lobby tile menu. */
-  hubStyle: z.enum(['town', 'lobby']).default('town'),
+  hubStyle: z.enum(['town', 'lobby']).default('lobby'),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

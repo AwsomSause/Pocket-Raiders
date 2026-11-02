@@ -1,6 +1,6 @@
 // Screen styles (screens redesign, Kice 2026-11-02): every redesigned screen has several looks Kice
 // picked from the mock-ups in /mnt/project-files/redesign/<screen>/. By default a screen rotates
-// between its built looks at random; Settings can pin one, or keep the original look.
+// between its built looks at random; Settings can pin one. The default is the original look.
 // Presentation only: a style never changes an outcome, and the random pick never uses gameplay RNG.
 // Dependency-free so the settings schema can import it.
 
@@ -76,16 +76,17 @@ function hash(text: string): number {
  * number), so the same visit always gets the same look and a reload never changes it.
  */
 export function screenStyleOf<S extends ScreenId>(screen: S, saved: Readonly<Record<string, string>> | undefined, salt: string | number, ready: readonly ScreenStyleId<S>[] = SCREEN_STYLES_READY[screen]): ScreenStyleId<S> | typeof ORIGINAL {
-  const choice = saved?.[screen] ?? RANDOM;
+  const choice = saved?.[screen] ?? ORIGINAL;
   if (choice === ORIGINAL || ready.length === 0) return ORIGINAL;
   if ((ready as readonly string[]).includes(choice)) return choice as ScreenStyleId<S>;
+  if (choice !== RANDOM) return ORIGINAL;
   return ready[hash(`${screen}:${salt}`) % ready.length]!;
 }
 
-/** The saved choice as Settings shows it ('random' when unset or no longer built). */
+/** The saved choice as Settings shows it ('original' when unset or no longer built). */
 export function screenChoice(screen: ScreenId, saved: Readonly<Record<string, string>> | undefined, ready: readonly string[] = SCREEN_STYLES_READY[screen]): string {
-  const choice = saved?.[screen] ?? RANDOM;
-  return choice === ORIGINAL || ready.includes(choice) ? choice : RANDOM;
+  const choice = saved?.[screen] ?? ORIGINAL;
+  return choice === RANDOM || choice === ORIGINAL || ready.includes(choice) ? choice : ORIGINAL;
 }
 
 /** Settings cycle: Random -> each built style -> Original -> Random. */

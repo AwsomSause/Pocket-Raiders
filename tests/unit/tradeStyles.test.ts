@@ -42,7 +42,7 @@ describe('trade stop styles setting', () => {
   });
 
   it('Settings cycles Random, every built style, Original, then Random again', () => {
-    let saved: Record<string, string> = {};
+    let saved: Record<string, string> = { trade: 'random' };
     const seen: string[] = [];
     for (let i = 0; i < TRADE_STYLES_READY.length + 2; i++) {
       seen.push(screenChoice('trade', saved));
@@ -53,13 +53,15 @@ describe('trade stop styles setting', () => {
   });
 
   it('random is stable for one visit, varies across stops and only draws built styles; a pinned style or Original wins', () => {
-    expect(pickTradeStyle({}, tradeSalt('s', 'a', 0))).toBe(pickTradeStyle({}, tradeSalt('s', 'a', 0)));
-    const picks = new Set(Array.from({ length: 300 }, (_, i) => pickTradeStyle(undefined, tradeSalt('seed', `side-${i}`, 0))));
+    const R = { trade: 'random' };
+    expect(pickTradeStyle(R, tradeSalt('s', 'a', 0))).toBe(pickTradeStyle(R, tradeSalt('s', 'a', 0)));
+    const picks = new Set(Array.from({ length: 300 }, (_, i) => pickTradeStyle(R, tradeSalt('seed', `side-${i}`, 0))));
     for (const p of picks) expect(TRADE_STYLES_READY).toContain(p);
     expect(picks.size).toBe(TRADE_STYLES_READY.length);
     expect(pickTradeStyle({ trade: TRADE_STYLES_READY[1]! }, 'x')).toBe(TRADE_STYLES_READY[1]);
     expect(useTradeScreen({ trade: 'original' }, 'x')).toBe(false);
-    expect(useTradeScreen({}, 'x')).toBe(true);
+    expect(useTradeScreen(R, 'x')).toBe(true);
+    expect(useTradeScreen({}, 'x')).toBe(false);
   });
 });
 
