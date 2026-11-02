@@ -2679,6 +2679,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     defect: z.boolean().default(false),
     end: z.enum(['defeated', 'exposed', 'allied']).optional(),
   }),
+  /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
+  z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
   /** Permanent choices (spec §17): records a decision in the run's choice history (the first answer to an id stands). */
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
 ]);

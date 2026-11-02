@@ -28,3 +28,25 @@ describe('training events', () => {
     });
   }
 });
+
+describe('train effect', () => {
+  it('changes the lead as the events promise', async () => {
+    const { applyEffect } = await import('../../src/core/events');
+    const { Rng, hashSeed } = await import('../../src/core/rng');
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'train', archetypeId: 'red' }), 0);
+    const lead = run.party[0]!;
+    const rng = new Rng(hashSeed('t'));
+    const before = lead.nature;
+    applyEffect(content, run, { kind: 'train', what: 'natureReroll' }, rng);
+    expect(lead.nature).not.toBe(before);
+    applyEffect(content, run, { kind: 'train', what: 'natureNudge', stat: 'spe' }, rng);
+    expect(lead.nature).toBeDefined();
+    const total = () => Object.values(lead.vitamins).reduce((a, b) => a + (b ?? 0), 0);
+    const v = total();
+    applyEffect(content, run, { kind: 'train', what: 'weakestStat' }, rng);
+    expect(total()).toBe(v + 1);
+    const moves = lead.moves.map((m) => m.id).join();
+    applyEffect(content, run, { kind: 'train', what: 'learnMove' }, rng);
+    expect(lead.moves.map((m) => m.id).join()).not.toBe(moves);
+  });
+});

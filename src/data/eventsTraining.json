@@ -1656,6 +1656,303 @@
      }
     }
    ]
+  },
+  {
+   "id": "moveset-rehearsal",
+   "name": "Moveset Rehearsal",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a33",
+    "effect": "glint"
+   },
+   "intro": "A coach runs a rehearsal room with mirrors and a scoreboard of moves. \"Same Pokémon, new tricks. Pick a lesson and your lead swaps one move for another it can learn.\"",
+   "choices": [
+    {
+     "label": "Rehearse a new move",
+     "requires": [],
+     "success": {
+      "text": "Hours of repetition later, the lead has a new move in place of its weakest one.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the old routine",
+     "requires": [],
+     "success": {
+      "text": "You stick with what works. The coach nods.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "cross-training-camp",
+   "name": "Cross-Training Camp",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#33292a",
+    "effect": "shake"
+   },
+   "intro": "A camp where Fighting, Psychic and Dark trainers swap drills. \"Learn something outside your type,\" the organiser says.",
+   "choices": [
+    {
+     "label": "Fighting drills",
+     "requires": [],
+     "success": {
+      "text": "Punching and kicking practice. The lead learns a Fighting move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove",
+        "type": "fighting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Psychic exercises",
+     "requires": [],
+     "success": {
+      "text": "Spoon-bending and focus work. The lead learns a Psychic move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove",
+        "type": "psychic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dark alley lessons",
+     "requires": [],
+     "success": {
+      "text": "Sneaky tricks nobody admits to teaching. The lead learns a Dark move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove",
+        "type": "dark"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch",
+     "requires": [],
+     "success": {
+      "text": "You watch and take notes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "nature-counselor",
+   "name": "Nature Counselor",
+   "group": "Training and growth",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "intro": "A soft-spoken counselor sits with a tea set. \"Natures are not fixed,\" she says. \"Tell me who your lead wants to be.\"",
+   "choices": [
+    {
+     "label": "Let it be a surprise",
+     "requires": [],
+     "success": {
+      "text": "A long chat, a few tears, and a brand new outlook.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "natureReroll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hit harder",
+     "requires": [],
+     "success": {
+      "text": "The lead rediscovers its fighting spirit.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "natureNudge",
+        "stat": "atk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Faster",
+     "requires": [],
+     "success": {
+      "text": "The lead decides to stop overthinking and move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "natureNudge",
+        "stat": "spe"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No change",
+     "requires": [],
+     "success": {
+      "text": "\"Good. You know them well.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "ability-capsule-booth",
+   "name": "Ability Capsule Booth",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a33",
+    "effect": "glint"
+   },
+   "intro": "A shiny booth with a blinking sign: \"ABILITY SWAPS, ₽500!\" The attendant holds up a glowing capsule.",
+   "choices": [
+    {
+     "label": "Swap the lead's ability (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Pop! The capsule fizzes and the lead's ability changes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "train",
+        "what": "abilitySwap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Window shop",
+     "requires": [],
+     "success": {
+      "text": "Shiny capsules, shinier price tags.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "merchant"
+  },
+  {
+   "id": "hyper-training-gym",
+   "name": "Hyper Training Gym",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#331e1e",
+    "effect": "shake"
+   },
+   "intro": "A gym with a banner: \"TURN YOUR WEAKEST STAT INTO A STRENGTH.\" The trainer cracks their knuckles. \"₽400 and we start now.\"",
+   "choices": [
+    {
+     "label": "Train the lead's weakest stat (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "Brutal reps on exactly the stat the lead was worst at. It pays off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "train",
+        "what": "weakestStat"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "requires": [],
+     "success": {
+      "text": "The trainer shrugs.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "dojo"
   }
  ]
 }

@@ -49,6 +49,7 @@ import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
+import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
@@ -683,6 +684,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'you get an Egg';
     case 'eggMove':
       return 'your lead learns an egg move';
+    case 'train':
+      return trainEffectText(e);
     case 'betterDraft':
       return `better next reward${e.extra ? ` (+${e.extra} choice)` : ''}`;
     case 'gymPreview':
@@ -924,6 +927,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const made = layEgg(content, run, speciesId, { level, left: e.left, unit: e.unit, source: 'Event', origin: e.origin, tier: e.tier, shinyMultiplier: runAttributeEffects(content, run).shinyChance * e.shinyMultiplier }, rng);
       return `You got ${made.kind === 'mystery' ? 'a Mystery' : made.tier === 'ordinary' ? 'an' : `a ${eggTier(made.tier).name}`} Egg! ${eggStatus(made)}.`;
     }
+    case 'train':
+      return applyTrainEffect(content, run, e, rng);
     case 'eggMove': {
       const lead = run.party.find((m) => m.hp > 0);
       if (!lead) return '';
