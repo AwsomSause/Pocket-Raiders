@@ -87,6 +87,7 @@ describe('story foundation: random streams', () => {
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
     eventsHelpers: { events: [] },
+    eventsMerchants: { events: [] }, // run events A came later too
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.
     // Run events G (training and growth events) came later too.
     eventsTraining: { events: [] },
