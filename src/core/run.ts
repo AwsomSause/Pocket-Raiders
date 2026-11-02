@@ -169,7 +169,7 @@ import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -603,7 +603,7 @@ function enterLeague(content: Content, run: RunState): void {
   };
   startStageEffects(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
-  healParty(content, run);
+  if (!gauntlet(run.rules)) healParty(content, run);
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
@@ -1569,7 +1569,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Wild Pokémon sometimes come in pairs (a second, ordinary one from this stage's pool, rolled by its own generator).
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
-    if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && pairRng.chance(doublesCfg.wildChance)) {
+    if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && (doublesOnly(run.rules) || pairRng.chance(doublesCfg.wildChance))) {
       const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
@@ -1771,7 +1771,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Bosses known for double battles (Tate & Liza) always fight two at a time.
     if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
     else if (node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && stageNumber >= doublesCfg.fromStage && canBeDoubles(run.party, team)) {
-      if (new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
+      if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
@@ -2688,7 +2688,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const mon of run.party) if (mon.hp > 0) mon.hp = Math.min(maxHp(content, mon), mon.hp + Math.ceil(maxHp(content, mon) * share));
   }
   // The Elite Four heal your party after each battle.
-  if (won && classId === ELITE_FOUR_CLASS) healParty(content, run);
+  if (won && classId === ELITE_FOUR_CLASS && !gauntlet(run.rules)) healParty(content, run);
   let regionCleared: string | null = null;
   // The final boss rises again: its first defeat starts a second phase (a remixed team) instead of ending the run.
   const finale = !!won && classId === CHAMPION_CLASS && isFinalBoss(content, run) && run.story.flags[FINALE_FLAG] === undefined;

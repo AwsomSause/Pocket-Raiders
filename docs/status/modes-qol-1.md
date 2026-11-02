@@ -3,3 +3,4 @@
   **Level 50 Cup** (S290): `modifierLevelCap` lowers `runLevelCap` to 50 for the whole run (party levels; enemies follow the usual curve).
   **Low Resource** (S297): prize money x0.5 and enemies +2 levels.
   Save: no bump (rules are stored as modifier ids). Tests `tests/unit/modifiersS2.test.ts`. Already existed: Nuzlocke, Monotype, Solo, Boss Rush, Draft/Random draft, Empty Bag. Next: Doubles Only (S292), Gauntlet (S294), Pacifist (S300), Time Attack, Randomizer, Tag Team, Triple.
+  Slice 2: **Gauntlet** (S294, `gauntlet` in `core/rules.ts`): no healing stops (shares the No Rest group), no free heal at the League gate (`enterLeague`) or after Elite Four wins. **Doubles Only** (S292, `doublesOnly`): trainer and wild fights always roll doubles when `canBeDoubles` / two healthy Pokémon allow it (bosses and special battles keep their own rules). Pacifist, Time Attack, Randomizer, Tag Team and Triple still to build.
