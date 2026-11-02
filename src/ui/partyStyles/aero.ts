@@ -1,10 +1,13 @@
 // 01 Aero Glass: deep glass window with bright aqua rims and slowly rising bubbles.
 import { windowFace } from './common';
 import type { PartySkin } from './types';
+import { bubbleOverview, bodyFrames } from './overviews';
 import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from './kit';
 
 export const aero: PartySkin = {
   shape: 'round',
+  frame: bodyFrames.aero,
+  overview: bubbleOverview,
   palette: { row: 0x0a3a5a, rowAlpha: 0.7, rowFocus: 0x2a8ac8, rowRim: 0x7ff3ff, focusRim: 0xffffff, tab: 0x0a3a5a, tabActive: 0x2a8ac8, pane: 0x062a44, paneRim: 0x7ff3ff },
   roster(ctx) {
     const { scene, into, mons, sel } = ctx;

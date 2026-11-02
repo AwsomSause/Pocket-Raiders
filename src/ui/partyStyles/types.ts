@@ -71,6 +71,8 @@ export interface PartySkin {
   roster?(ctx: RosterCtx): void;
   /** The Overview tab laid out like the mock-up; the other six tabs keep the shared layout. */
   overview?(ctx: OverviewCtx): void;
+  /** Paints behind the other six tabs (Stats...Traits) so they take the look's shape. */
+  frame?(scene: Phaser.Scene, g: Phaser.GameObjects.Graphics, w: number, h: number): void;
   palette: PartyPalette;
   shape: 'round' | 'square' | 'slant' | 'pill';
   /** How the seven tabs of the summary are dressed (the page itself is the same on every look). */

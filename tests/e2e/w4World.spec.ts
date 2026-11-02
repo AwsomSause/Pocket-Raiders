@@ -52,6 +52,7 @@ test('obstacles on the map, the legend, crossing on the way to a node, and a ski
   await page.screenshot({ path: 'test-results/w4-map-obstacle.png' });
 
   // L opens the legend over the map; L again closes it.
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false); // L is ignored while the map is busy
   await page.keyboard.press('l');
   await page.waitForTimeout(200);
   expect(await named(page, 'Map', 'map-legend')).toBe(1);

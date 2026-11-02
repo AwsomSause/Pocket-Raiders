@@ -1,0 +1,1 @@
+- Presentation slice 4 (idea S252): Settings > Display **Map day and night** (off by default): the branching map gets the local time-of-day light (reuses the Hub Town `HUB_LIGHT` tints: morning, evening, night) as an overlay behind the nodes (`MapScene`, depth -46). Settings v25; test in `tests/unit/soundPack.test.ts`.

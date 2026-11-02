@@ -123,7 +123,7 @@ export function buildShowcase(scene: Phaser.Scene, style: ScreenStyleId<'runend'
   switch (style) {
     case 'aero': {
       txt(W / 2, 46, win ? 'HALL OF FAME' : 'RUN OVER', 44, '#ffffff', { stroke: '#2a78c8', strokeThickness: 6 });
-      txt(W / 2, 84, `${line}${win ? ' · Champion!' : ''}`, 16, '#134a7a');
+      txt(W / 2, 92, `${line}${win ? ' · Champion!' : ''}`, 16, '#134a7a');
       c.species.forEach((m, i) => {
         const x = 40 + i * 150;
         plate(x, 112, 136, 196, 0xffffff, 0.45, 0xffffff, 18);
@@ -210,7 +210,7 @@ export function buildShowcase(scene: Phaser.Scene, style: ScreenStyleId<'runend'
       }
       const t = txt(90, 44, win ? 'CHAMPION!!' : 'NEXT TIME!!', 48, '#ffffff', { stroke: '#101010', strokeThickness: 8 }, [0, 0]);
       t.setAngle(-4);
-      txt(96, 100, line, 14, '#101010', { backgroundColor: '#ffffff' }, [0, 0]);
+      txt(96, 114, line, 14, '#101010', { backgroundColor: '#ffffff' }, [0, 0]);
       c.species.forEach((m, i) => mon(i, 100 + i * 150, 330, 4));
       plate(150, 392, 660, 54, 0xffffff, 0.95, 0xe83a5a, 27);
       c.stats.forEach(([l, v], i) => {
@@ -244,7 +244,7 @@ export function buildShowcase(scene: Phaser.Scene, style: ScreenStyleId<'runend'
     }
     case 'ink': {
       txt(40, 20, win ? 'VICTORY' : 'DEFEAT', 64, '#101010', {}, [0, 0]);
-      txt(44, 94, win ? 'WIN' : 'DEFEAT', 13, '#c0282a', {}, [0, 0]);
+      txt(44, 102, win ? 'WIN' : 'DEFEAT', 13, '#c0282a', {}, [0, 0]);
       g().fillStyle(0x101010, 1).fillPoints([new Phaser.Geom.Point(280, 70), new Phaser.Geom.Point(900, 50), new Phaser.Geom.Point(880, 360), new Phaser.Geom.Point(290, 330)], true);
       c.species.forEach((m, i) => mon(i, 340 + i * 90, 260 - (i % 2) * 30, 3.6, 0xffffff));
       g().lineStyle(2, 0x101010, 1).lineBetween(280, 420, 900, 420);

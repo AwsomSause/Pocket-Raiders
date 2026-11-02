@@ -17,7 +17,8 @@ test('Tools room pages open and close; offline files are served', async ({ page,
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
   await page.waitForTimeout(400);
 
-  for (let item = 0; item < 6; item++) {
+  // The list also holds the bracket (a text prompt) and the save check (a file picker): those two have no page to open.
+  for (const item of [0, 1, 2, 3, 4, 7, 8]) {
     await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
     await page.waitForTimeout(250);
     expect(await hub(page, '!!hub.picker'), 'tools list open').toBe(true);

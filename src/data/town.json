@@ -2840,6 +2840,22 @@
      "view": "fans"
     },
     {
+     "id": "hall-guild",
+     "name": "Guild Hall Board",
+     "desc": "Hire a helper with credits. Their supplies ride in your pack next run.",
+     "kind": "buy",
+     "rows": [
+      "S364"
+     ],
+     "set": "boon",
+     "goods": [
+      {"id": "guild-medic", "label": "Medic", "desc": "4 Super Potions and a Revive.", "set": "boon", "cost": {"credits": 60}, "reward": {"items": {"super-potion": 4, "revive": 1}}},
+      {"id": "guild-cook", "label": "Cook", "desc": "2 Hyper Potions and 2 Full Heals.", "set": "boon", "cost": {"credits": 55}, "reward": {"items": {"hyper-potion": 2, "full-heal": 2}}},
+      {"id": "guild-porter", "label": "Porter", "desc": "3 Ethers and a Full Restore.", "set": "boon", "cost": {"credits": 70}, "reward": {"items": {"ether": 3, "full-restore": 1}}},
+      {"id": "guild-treasurer", "label": "Treasurer", "desc": "₽500 starting money.", "set": "boon", "cost": {"credits": 45}, "reward": {"money": 500}}
+     ]
+    },
+    {
      "id": "hall-roster",
      "name": "Townsfolk roster",
      "desc": "Townsfolk who move in as you earn achievements.",

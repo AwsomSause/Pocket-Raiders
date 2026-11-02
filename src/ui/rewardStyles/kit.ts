@@ -16,6 +16,14 @@ export function label(scene: Phaser.Scene, into: Phaser.GameObjects.Container, x
   return t;
 }
 
+/** Shrinks a wrapped text until it fits `maxH` tall (down to 8 px), then cuts it with an ellipsis, so a card never clips its own words. */
+export function fitBlock(t: Phaser.GameObjects.Text, maxH: number): void {
+  let size = parseInt(String(t.style.fontSize), 10) || 12;
+  while (t.height > maxH && size > 8) t.setFontSize(--size);
+  const full = t.text;
+  for (let n = full.length; t.height > maxH && n > 4; ) t.setText(`${full.slice(0, (n -= 4)).trimEnd()}…`);
+}
+
 export function icon(scene: Phaser.Scene, into: Phaser.GameObjects.Container, v: RewardView, x: number, y: number, scale: number): Phaser.GameObjects.GameObject {
   const i = itemVisual(scene, v.iconId, x, y, scale);
   into.add(i);
