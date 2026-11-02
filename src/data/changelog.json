@@ -1,4 +1,13 @@
 [
+  { "id": "2026-11-02", "title": "Beta 0.4: The Big Glow-Up", "notes": [
+    "The Hub is now a walkable Hub Town with day and night, a minimap and a living crowd. Settings > Hub style brings back the Arena Lobby.",
+    "Six shop kinds (Mart, Boutique, Bazaar, Depot, PokeNet, Night Market), each with its own stock and perk.",
+    "Run events in 12 story styles, 60 set-piece events, 72 NPC events and 122 live calendar events.",
+    "12 anime Trade Stop looks, four Trainer Plaza looks and ten battle styles.",
+    "Pokemon Memories cutscenes: Z-Moves, Tera, Dynamax, Mega Evolution, animated bosses and VS screens.",
+    "New looks for nearly every screen: title, map, rewards, party, bag, Pokedex, settings and more.",
+    "Care and bonds, Nuzlocke modes, Weekly Gauntlet, camp crafting and Nemesis rival upgrades."
+  ] },
   { "id": "2026-11-01", "title": "Tools and community", "notes": [
     "New Tools room in the Hub: what's new, content status, your stats, the seed board, mod packs and a bug report.",
     "Performance preset (Low, Medium, High) in Settings.",
