@@ -1204,6 +1204,617 @@
         "slowFactor": 2,
         "noTimerOption": true
       }
+    },
+    {
+      "id": "maze-runner",
+      "name": "Maze Runner",
+      "category": "puzzle",
+      "blurb": "Find the door in the fog.",
+      "instructions": "Walk tile by tile through the fog. Pits cost 3 steps. Reach the door before you run out of steps.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "size": 5,
+            "steps": 18,
+            "traps": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "size": 6,
+            "steps": 20,
+            "traps": 6
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "size": 7,
+            "steps": 22,
+            "traps": 10
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "Steps left when you reach the door (plus the shortest path).",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.5,
+        "gold": 0.7
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "lock-picking",
+      "name": "Lock Picking",
+      "category": "timing",
+      "blurb": "Tap when the pick lines up.",
+      "instructions": "The pick sweeps back and forth. Tap PICK while it sits on the filled zone. Each miss costs a try.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "pins": 3,
+            "zone": 4,
+            "lives": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "pins": 4,
+            "zone": 3,
+            "lives": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "pins": 5,
+            "zone": 2,
+            "lives": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per pin opened.",
+      "medals": {
+        "bronze": 0.5,
+        "silver": 0.75,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 500
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": true
+      }
+    },
+    {
+      "id": "sky-race",
+      "name": "Sky Race",
+      "category": "skill",
+      "blurb": "Fly through the rings.",
+      "instructions": "Tap a lane to fly there. Rings score, rocks cost HP. The race ends at the finish or at 0 HP.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "length": 16,
+            "hp": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "length": 20,
+            "hp": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "length": 24,
+            "hp": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per ring.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.65,
+        "gold": 0.9
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 700
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": true
+      }
+    },
+    {
+      "id": "safari-steps",
+      "name": "Safari Zone",
+      "category": "resource",
+      "blurb": "Few steps, few balls.",
+      "instructions": "Throw bait to calm a Pokémon, then throw a Safari Ball. Every action costs a step. Catch the goal number before the steps or balls run out.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "steps": 16,
+            "balls": 8,
+            "goal": 2
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "steps": 14,
+            "balls": 7,
+            "goal": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "steps": 14,
+            "balls": 6,
+            "goal": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per catch (up to the goal).",
+      "medals": {
+        "bronze": 0.5,
+        "silver": 0.66,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "sliding-puzzle",
+      "name": "Sliding Tiles",
+      "category": "puzzle",
+      "blurb": "Put the tiles in order.",
+      "instructions": "Slide tiles next to the gap until 1 to 8 are in order. You have a limited number of moves.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "scramble": 14,
+            "moves": 40
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "scramble": 22,
+            "moves": 40
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "scramble": 30,
+            "moves": 40
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per tile in its place.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.65,
+        "gold": 0.9
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "berry-blending",
+      "name": "Berry Blending",
+      "category": "resource",
+      "blurb": "Mix flavours for the order.",
+      "instructions": "Add berries to match the wanted flavours. Too much counts against you as much as too little.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "demand": 4,
+            "picks": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "demand": 5,
+            "picks": 4
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "demand": 6,
+            "picks": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "Wanted flavour points minus your overshoot and shortfall.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.65,
+        "gold": 0.9
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "camp-cooking",
+      "name": "Camp Cooking",
+      "category": "resource",
+      "blurb": "Cook for the camp.",
+      "instructions": "Add ingredients so the pot matches the order. Serve when it looks right.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "demand": 4,
+            "picks": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "demand": 5,
+            "picks": 4
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "demand": 6,
+            "picks": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "Order points minus your overshoot and shortfall.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.65,
+        "gold": 0.9
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
     }
   ]
 }
