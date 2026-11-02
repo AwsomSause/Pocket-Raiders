@@ -284,3 +284,17 @@ describe('Hall Records (S466)', () => {
     expect(rows.find((r) => r.label === 'Shiniest team')?.value).toBe('1 shiny');
   });
 });
+
+describe('Weather Station (S362)', () => {
+  it('each bought tier is handed to the next run as camp stuff and widens the forecast', async () => {
+    const { stationTier } = await import('../../src/core/world');
+    let p = rich();
+    expect(townStartGrants(content, p).stuff['weather-station']).toBeUndefined();
+    p = ok(p, 'rooftop-station', { choice: 'station-1' }).profile;
+    p = ok(p, 'rooftop-station', { choice: 'station-2' }).profile;
+    expect(townStartGrants(content, p).stuff['weather-station']).toBe(2);
+    expect(act(p, 'rooftop-station', { choice: 'station-2' }).ok).toBe(false);
+    expect(stationTier({ camp: { stuff: { 'weather-station': 9 } } } as never)).toBe(3);
+    expect(stationTier({} as never)).toBe(0);
+  });
+});

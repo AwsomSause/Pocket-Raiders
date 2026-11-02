@@ -633,6 +633,8 @@ export function townStartGrants(content: Content, p: Profile): TownGrants {
     for (const [k, n] of Object.entries(r.stuff ?? {})) out.stuff[k] = (out.stuff[k] ?? 0) + n;
   };
   for (const id of (t.equipped.case ?? '').split(',').filter(Boolean)) add(TOWN.badgePerks[badgeType(content, id)]);
+  const tier = (t.sets.station ?? []).filter((id) => /^station-[123]$/.test(id)).length;
+  if (tier > 0) out.stuff['weather-station'] = tier;
   const b = pedestalBonus(p, t);
   out.money += b.money;
   for (const [k, n] of Object.entries(b.items ?? {})) out.items[k] = (out.items[k] ?? 0) + n;

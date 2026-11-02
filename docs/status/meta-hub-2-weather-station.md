@@ -1,0 +1,1 @@
+- Meta/Hub slice 2: Weather Station (S362) on the Rooftop: 3 credit-bought tiers (`station` set, permanent); each tier widens the run map's front forecast by 1 column (`stationTier` in `core/world.ts`, handed over as camp stuff `weather-station` by `townStartGrants`). No save change.
