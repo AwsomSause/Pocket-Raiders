@@ -48,3 +48,13 @@ describe('S245 per-effect shake settings', () => {
     expect([again.shakeHits, again.shakeStory]).toEqual([0.5, 0]);
   });
 });
+
+describe('settings v19 -> v20 (original designs first)', () => {
+  it('an old settings save opens the Hub as the Arena Lobby', () => {
+    const storage = new MemoryStorageProvider();
+    const current = new SaveManager(storage, content).loadSettings();
+    const { hubStyle: _h, ...old } = current;
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 19, savedAt: '', data: old }));
+    expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('lobby');
+  });
+});
