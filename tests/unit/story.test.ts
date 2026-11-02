@@ -58,10 +58,10 @@ describe('story foundation: random streams', () => {
   // the story layer has changed a gameplay roll. Re-pinned after M8.75 item
   // effects slices 2 to 3b-3b (held, map, shop, money, map-movement, map-stop and draft items in drafts, bosses
   // holding items) M8.75 part C3 (every Pokémon has an ability) and the C2c move batch, which change
-  // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool, and for five Hisuian fossils.
+  // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts.
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': 'ad3d03ae18efc710',
-    'STORY2/0': '3c6a3466f0f22b6e',
+    'STORY1/0': '6526be2ff64f3ab8',
+    'STORY2/0': 'c514b1c4c32df7b4',
     'STORY4/0': '723fa1f26d1cf54d',
     'STORY5/0': '46e9cc623a94d750',
     'STORY6/0': 'c7062ed148176f46',

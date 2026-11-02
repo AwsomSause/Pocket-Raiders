@@ -11,7 +11,7 @@
 // is a free re-roll of the draft (director, answer 5).
 // Battle, map and event items are "pending" and never offered until built.
 
-import { natureEffectText, natureName } from './natures';
+import { natureEffectText, natureName, nudgeNature } from './natures';
 import { runPerks } from './archetypes';
 import { itemSlotLimit } from './trainerPerks';
 import { addRunAttribute, attributeText, runAttributeEffects } from './attributes';
@@ -85,6 +85,8 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
     }
     case 'nature':
       return mon.nature === effect.nature ? `That Pokémon is already ${natureName(effect.nature)}.` : null;
+    case 'natureNudge':
+      return nudgeNature(mon.nature, effect.stat) === (mon.nature ?? 'hardy') ? 'That Pokémon is already tuned that way.' : null;
     case 'ppUp':
       return mon.moves.some((m) => (m.ppUps ?? 0) < MAX_PP_UPS) ? null : "That Pokémon's moves already have the most PP they can.";
     case 'care':
@@ -235,6 +237,13 @@ export function applyCatalog(
       applyChanges(effect.changes);
       const blocks = passivePercent(content, run, 'feedCharisma');
       if (blocks > 0 && entry.family.startsWith('Berries')) applyChanges({ charisma: blocks });
+      break;
+    }
+    case 'natureNudge': {
+      const mon = target!;
+      mon.nature = nudgeNature(mon.nature, effect.stat);
+      messages.push(`${name(mon)} became ${natureName(mon.nature)} (${natureEffectText(mon.nature)}).`);
+      mon.hp = Math.min(mon.hp, maxHp(content, mon));
       break;
     }
     case 'nature': {
