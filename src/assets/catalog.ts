@@ -87,6 +87,12 @@ export const Z_TITLE_MOVES = [
 ] as const;
 export const zTitleAssetId = (moveId: string): string => `cine.ztitle.${moveId}`;
 
+/** Types with their own Tera pattern (images/packs/dbk/tera/patterns/<type>.png); others (Normal) use `default`. */
+export const TERA_PATTERN_TYPES = [
+  'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel',
+  'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy', 'stellar',
+] as const;
+
 export const FIXED_ASSETS: AssetEntry[] = [
   { id: 'bg.battle', kind: 'image', category: 'background', path: 'images/arenas/grass_bg.png' },
   // Raid arenas from the Raid Battles pack (resized to the game's 320×180).
@@ -164,9 +170,18 @@ export const FIXED_ASSETS: AssetEntry[] = [
     (name): AssetEntry => ({ id: `cine.dbk.${name.replace('/', '.')}`, kind: 'image', category: 'ui', path: `images/packs/dbk/${name}.png`, lazy: true }),
   ),
   // Z-Move title cards and the Z-Power particle (Deluxe Battle Kit Z-Power, via the Pokémon Memories repo;
-  // tools/memories/import-z-art.ts). A title loads when its Z-Move's cinematic starts.
+  // tools/memories/import-dbk-art.ts). A title loads when its Z-Move's cinematic starts.
   { id: 'cine.dbk.zpower.particle', kind: 'image', category: 'ui', path: 'images/packs/dbk/zpower/particle.png', lazy: true },
   ...Z_TITLE_MOVES.map((id): AssetEntry => ({ id: zTitleAssetId(id), kind: 'image', category: 'ui', path: `images/packs/dbk/zpower/titles/${id}.png`, lazy: true })),
+  // Terastallization and Dynamax (Deluxe Battle Kit add-ons via the Pokémon Memories repo): the Tera crystal kit
+  // for its cinematic, the patterns a Tera'd or Dynamaxed Pokémon wears (ui/battleFx/formLook.ts) and the badges' icons.
+  ...['crystal_1', 'crystal_2', 'crystal_3', 'crystal_4', 'icon', 'pulse', 'shine'].map(
+    (n): AssetEntry => ({ id: `cine.dbk.tera.${n}`, kind: 'image', category: 'ui', path: `images/packs/dbk/tera/${n}.png`, lazy: true }),
+  ),
+  ...[...TERA_PATTERN_TYPES, 'default'].map((t): AssetEntry => ({ id: `fx.tera.pattern.${t}`, kind: 'image', category: 'ui', path: `images/packs/dbk/tera/patterns/${t}.png`, lazy: true })),
+  ...['dynamax', 'calyrex'].map((n): AssetEntry => ({ id: `fx.dynamax.pattern.${n}`, kind: 'image', category: 'ui', path: `images/packs/dbk/dynamax/patterns/${n}.png`, lazy: true })),
+  { id: 'ui.tera.types', kind: 'spritesheet', category: 'ui', path: 'images/packs/dbk/tera/types.png', frameSize: 32, lazy: true },
+  { id: 'ui.dynamax.icon', kind: 'image', category: 'ui', path: 'images/packs/dbk/dynamax/icon.png', lazy: true },
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
   { id: 'bgm.menu', kind: 'audio', category: 'music', path: 'audio/bgm/menu.mp3' },
