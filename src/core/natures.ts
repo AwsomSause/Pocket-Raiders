@@ -40,3 +40,14 @@ export function natureEffectText(nature: NatureId): string {
   const label = (s: BattleStat) => ({ atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' })[s];
   return up === down ? 'no change' : `+${label(up)}, −${label(down)}`;
 }
+
+const NUDGE_ORDER: BattleStat[] = ['atk', 'def', 'spa', 'spd', 'spe'];
+const NATURE_BY_PAIR = new Map(NATURE_IDS.map((id) => [NATURES[id].join('/'), id] as const));
+
+/** Tuning Dust: the raised stat becomes `stat`. The lowered stat stays; if that would cancel itself (or the nature was neutral) the next stat in order is lowered. */
+export function nudgeNature(nature: NatureId | undefined, stat: BattleStat): NatureId {
+  const [up, down] = nature ? NATURES[nature] : ['atk', 'atk'] as const;
+  let low: BattleStat = up === down || down === stat ? NUDGE_ORDER[(NUDGE_ORDER.indexOf(stat) + 1) % NUDGE_ORDER.length]! : down;
+  if (low === stat) low = NUDGE_ORDER[(NUDGE_ORDER.indexOf(stat) + 1) % NUDGE_ORDER.length]!;
+  return NATURE_BY_PAIR.get(`${stat}/${low}`)!;
+}

@@ -195,3 +195,58 @@ describe('full runs in the new modes', () => {
     }
   }, 120000);
 });
+
+import { tideOf, tideShopMultiplier, tideWildWeight } from '../../src/core/clock';
+describe('Tide Clock (S2)', () => {
+  it('turns every 3 parts of the day, from the clock alone', () => {
+    const run = start('standard');
+    const seen: string[] = [];
+    for (let t = 0; t < 12; t++) {
+      run.clock = { day: 1 + Math.floor(t / 4), tick: t % 4, celebrated: [] };
+      seen.push(tideOf(content, run));
+    }
+    expect(seen).toEqual(['high', 'high', 'high', 'low', 'low', 'low', 'high', 'high', 'high', 'low', 'low', 'low']);
+  });
+  it('high tide favours water Pokémon and cheaper healing, low tide rock and cheaper balls', () => {
+    const run = start('standard');
+    run.clock = { day: 1, tick: 0, celebrated: [] };
+    expect(tideWildWeight(content, run, 'squirtle')).toBe(content.balance.clock.tide.wildFactor);
+    expect(tideWildWeight(content, run, 'charmander')).toBe(1);
+    expect(tideShopMultiplier(content, run, 'healing')).toBeLessThan(1);
+    expect(tideShopMultiplier(content, run, 'ball')).toBe(1);
+    run.clock = { day: 1, tick: 3, celebrated: [] };
+    expect(tideWildWeight(content, run, 'geodude')).toBe(content.balance.clock.tide.wildFactor);
+    expect(tideShopMultiplier(content, run, 'ball')).toBeLessThan(1);
+  });
+});
+
+describe('Multi-Region Run (S11)', () => {
+  it('chains 3 regions, each with a champion at the border', () => {
+    const run = start('multi-region', 'mr-1');
+    expect(run.campaignId).toBe('multi-region');
+    expect(run.regionOrder).toHaveLength(3);
+    expect(run.rules.progressionEligible).toBe(true);
+  });
+});
+
+import { placeDungeon } from '../../src/core/traversal';
+describe('Landmark Dungeons (S9)', () => {
+  it('a named dungeon with chained trainer rooms is placed on the third stage, once per seed and region', () => {
+    const run = start('standard', 'dg-1');
+    run.stage!.index = 2;
+    placeDungeon(content, run);
+    const sides = run.stage!.map.nodes.flatMap((n) => n.sides).filter((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon');
+    expect(sides).toHaveLength(1);
+    const ev = content.events.get(sides[0]!.eventId!)!;
+    const battle = ev.choices[0]!.success?.battle;
+    expect(battle?.chain).toBeGreaterThanOrEqual(3);
+    const other = start('standard', 'dg-1');
+    other.stage!.index = 0;
+    placeDungeon(content, other);
+    expect(other.stage!.map.nodes.flatMap((n) => n.sides).some((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon')).toBe(false);
+  });
+  it('four dungeons exist and are never drawn as ordinary events', () => {
+    const all = [...content.events.values()].filter((e) => e.stop === 'dungeon');
+    expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dungeon-victory-hall']);
+  });
+});

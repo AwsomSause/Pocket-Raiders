@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 // Anime extra 08 Visual Novel: your trainer stands on the left, the five rewards are a menu of choice bars, and a dialogue box speaks.
 import { fillGradient } from './common';
-import { blurb, icon, label, popAway, rarityWord, zone, dealIn } from './kit';
+import { blurb, fitBlock, icon, label, popAway, rarityWord, zone, dealIn } from './kit';
 import type { RewardLayout, RewardSkin } from './types';
 
 const layout: RewardLayout = (ctx, hooks) => {
@@ -38,8 +38,8 @@ const layout: RewardLayout = (ctx, hooks) => {
       bars.forEach(({ bg }, k) => {
         bg.clear().fillStyle(0xffffff, 0.95).fillRoundedRect(0, 0, 560, 40, 14).lineStyle(k === i ? 4 : 2, k === i ? 0xe04890 : 0xf0b0d0, 1).strokeRoundedRect(0, 0, 560, 40, 14);
       });
-      text.setText(`${ctx.lead?.name ?? 'Your lead'}: "${views[i]!.name}... ${blurb(views[i]!)}"`);
-      text.setCrop(0, 0, 880, 36);
+      text.setFontSize(15).setText(`${ctx.lead?.name ?? 'Your lead'}: "${views[i]!.name}... ${blurb(views[i]!)}"`);
+      fitBlock(text, 44);
     },
     picked(i) {
       return popAway(ctx, bars[i]!.c);

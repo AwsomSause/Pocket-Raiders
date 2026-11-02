@@ -284,3 +284,44 @@ describe('Hall Records (S466)', () => {
     expect(rows.find((r) => r.label === 'Shiniest team')?.value).toBe('1 shiny');
   });
 });
+
+describe('Weather Station (S362)', () => {
+  it('each bought tier is handed to the next run as camp stuff and widens the forecast', async () => {
+    const { stationTier } = await import('../../src/core/world');
+    let p = rich();
+    expect(townStartGrants(content, p).stuff['weather-station']).toBeUndefined();
+    p = ok(p, 'rooftop-station', { choice: 'station-1' }).profile;
+    p = ok(p, 'rooftop-station', { choice: 'station-2' }).profile;
+    expect(townStartGrants(content, p).stuff['weather-station']).toBe(2);
+    expect(act(p, 'rooftop-station', { choice: 'station-2' }).ok).toBe(false);
+    expect(stationTier({ camp: { stuff: { 'weather-station': 9 } } } as never)).toBe(3);
+    expect(stationTier({} as never)).toBe(0);
+  });
+});
+
+describe('Fan Club (S358)', () => {
+  it('followers come from the history and each reached tier adds starting money', async () => {
+    const { fanClub } = await import('../../src/core/town');
+    const p = rich();
+    expect(fanClub(p).fans).toBe(0);
+    const base = townStartGrants(content, p).money;
+    const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = Array.from({ length: 2 }, () => run) as never; // 2 runs, 2 wins = 26 fans
+    expect(fanClub(p).fans).toBe(26);
+    expect(townStartGrants(content, p).money).toBe(base + TOWN.fanClub[0]!.money);
+  });
+});
+
+describe('Guild Hall Board (S364)', () => {
+  it('a hired helper costs credits and their supplies wait as the next run boon', () => {
+    let p = rich();
+    const before = p.bankCredits;
+    const money = townStartGrants(content, p).money;
+    p = ok(p, 'hall-guild', { choice: 'guild-medic' }).profile;
+    p = ok(p, 'hall-guild', { choice: 'guild-treasurer' }).profile;
+    expect(p.bankCredits).toBe(before - 105);
+    const g = townStartGrants(content, p);
+    expect(g.items['super-potion']).toBe(4);
+    expect(g.money).toBe(money + 500);
+  });
+});

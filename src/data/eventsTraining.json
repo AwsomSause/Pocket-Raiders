@@ -1,0 +1,2100 @@
+{
+ "events": [
+  {
+   "id": "drill-sergeant-kangaskhan",
+   "name": "Drill Sergeant Kangaskhan",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "shake",
+    "pokemon": "kangaskhan"
+   },
+   "intro": "A Kangaskhan in a whistle and a tiny cap marches your team into a field. \"Pick a stat! Everything else, EYES FRONT!\" Her baby salutes from the pouch.",
+   "choices": [
+    {
+     "label": "Strength drills (Attack)",
+     "requires": [],
+     "success": {
+      "text": "The sergeant barks, you sweat, and it works. Strength drills drills leave your Pokémon sharper, and sorer.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "relic",
+        "id": "drill-power",
+        "name": "Drill Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "drill-sergeant",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guard drills (Defense)",
+     "requires": [],
+     "success": {
+      "text": "The sergeant barks, you sweat, and it works. Guard drills drills leave your Pokémon sharper, and sorer.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "relic",
+        "id": "drill-guard",
+        "name": "Drill Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "drill-sergeant",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Footwork drills (Speed)",
+     "requires": [],
+     "success": {
+      "text": "The sergeant barks, you sweat, and it works. Footwork drills drills leave your Pokémon sharper, and sorer.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "relic",
+        "id": "drill-footwork",
+        "name": "Drill Footwork",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "drill-sergeant",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Salute and walk on",
+     "requires": [],
+     "success": {
+      "text": "She salutes back. \"Smart recruits know when to rest!\"",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "event"
+  },
+  {
+   "id": "weight-room-roulette",
+   "name": "Weight Room Roulette",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2b2b33",
+    "effect": "shake",
+    "pokemon": "machamp"
+   },
+   "intro": "A basement gym with a spinning rack of plates. \"Pick your weight and spin the wheel,\" the owner grins. \"Heavier gets you bigger. Usually.\"",
+   "choices": [
+    {
+     "label": "Light plates",
+     "requires": [],
+     "success": {
+      "text": "Easy reps. Nobody is hurt and you feel a little stronger.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Medium plates (Strength 20)",
+     "requires": [],
+     "success": {
+      "text": "Solid set. Your lead hits a new rep record.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 3
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "The bar slips. A bruised pride and a bruised paw.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Heavy plates (50% risk)",
+     "requires": [],
+     "success": {
+      "text": "The whole gym cheers. A huge lift builds real power.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 5
+       },
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "relic",
+        "id": "weight-room-gains",
+        "name": "Weight Room Gains",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.04
+         }
+        ]
+       }
+      ]
+     },
+     "chance": 0.5,
+     "failure": {
+      "text": "The bar drops on your lead's foot. Ouch.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.35
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip leg day",
+     "requires": [],
+     "success": {
+      "text": "You pass. The owner looks hurt.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "speed-lane-treadmill",
+   "name": "Speed Lane Treadmill",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#1d2a3a",
+    "effect": "glint",
+    "pokemon": "ninjask"
+   },
+   "intro": "A glass-walled treadmill lane with a countdown clock. \"Beat the clock and keep your pace,\" says the attendant. The belt is already humming.",
+   "choices": [
+    {
+     "label": "Run the lane (timing)",
+     "requires": [],
+     "success": {
+      "text": "You hit the beat and the belt screams. Personal best!",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 4
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "failure": {
+      "text": "You miss the beat and stumble off the belt. Still, some pace gained.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jog it easy",
+     "requires": [],
+     "success": {
+      "text": "A relaxed pace. Good for the lungs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "requires": [],
+     "success": {
+      "text": "The clock ticks on without you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-montage-1",
+   "name": "Mentor Montage",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#33271d",
+    "effect": "glint"
+   },
+   "intro": "A grizzled veteran waves you over. \"Three drills. Don't blink, it's a montage.\" A drum beat starts from nowhere.",
+   "choices": [
+    {
+     "label": "Start the first drill",
+     "requires": [],
+     "success": {
+      "text": "Dodging logs in a river. Your team learns to read the water.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-montage-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the montage",
+     "requires": [],
+     "success": {
+      "text": "\"No montage, no glory,\" the veteran mutters.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "event"
+  },
+  {
+   "id": "mentor-montage-2",
+   "name": "Mentor Montage: Step 2",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#33271d",
+    "effect": "glint"
+   },
+   "intro": "Step two: punch a hanging sack in time to the drum. The veteran nods slowly.",
+   "choices": [
+    {
+     "label": "Hammer the sack",
+     "requires": [],
+     "success": {
+      "text": "Every hit lands on the beat.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-montage-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Focus on form",
+     "requires": [],
+     "success": {
+      "text": "Slow, clean, precise.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-montage-3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "mentor-montage-3",
+   "name": "Mentor Montage: Finale",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#33271d",
+    "effect": "sparkle"
+   },
+   "intro": "Step three: a sunset run up the final hill. The veteran waits at the top with a thermos and a small proud smile.",
+   "choices": [
+    {
+     "label": "Run to the top",
+     "requires": [],
+     "success": {
+      "text": "Cheers from nowhere. The lead gains real experience, and the veteran admits you've got it.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A veteran put the team through a three-step training montage.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk it with the team",
+     "requires": [],
+     "success": {
+      "text": "A slow climb together. Nobody is left behind.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "egg-moves-library",
+   "name": "Egg Moves Library",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "sparkle"
+   },
+   "intro": "A cosy library of hatching scrolls. \"Rare techniques only the youngest Pokémon know,\" the librarian whispers. \"Three hundred for a lesson.\"",
+   "choices": [
+    {
+     "label": "Pay for a lesson (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The librarian opens a scroll. Your lead learns a rare move.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "eggMove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Browse for free",
+     "requires": [],
+     "success": {
+      "text": "You read a while. Mostly dust and good advice.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "library"
+  },
+  {
+   "id": "sprint-intervals",
+   "name": "Sprint Intervals",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#1e2a33",
+    "effect": "float",
+    "pokemon": "rapidash"
+   },
+   "intro": "A coach with a stopwatch lines your team up. \"Intervals! Go fast now, pay later.\"",
+   "choices": [
+    {
+     "label": "Sprint hard",
+     "requires": [],
+     "success": {
+      "text": "Your team flies. Defense will suffer for the next 3 fights, but nothing is faster.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-sprint"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jog it off",
+     "requires": [],
+     "success": {
+      "text": "A light jog. Good for the legs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "veterans-notebook",
+   "name": "Veteran's Notebook",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "intro": "A battered notebook sits on a bench, margins full of arrows and \"WEAK TO SURF!!\" underlined twice. A name is scrawled inside: a gym leader's.",
+   "choices": [
+    {
+     "label": "Read the gym pages",
+     "requires": [],
+     "success": {
+      "text": "The old veteran's notes lay out the gym leader's whole team.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the boss tips",
+     "requires": [],
+     "success": {
+      "text": "Messy notes on how bosses telegraph their big moves. You steal a few tricks.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-chalkboard"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it for its owner",
+     "requires": [],
+     "success": {
+      "text": "You leave it where it was. Someone will be glad.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "battle-replay-theater",
+   "name": "Battle Replay Theater",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e1e33",
+    "effect": "flicker"
+   },
+   "intro": "A tiny cinema plays slow-motion clips of fights like yours. \"Free for trainers,\" says the usher. \"Learn from your mistakes.\"",
+   "choices": [
+    {
+     "label": "Watch your last fight",
+     "requires": [],
+     "success": {
+      "text": "You catch every mistake. Your lead picks up a trickle of experience.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take notes with the whole team",
+     "requires": [],
+     "success": {
+      "text": "Everyone watches together. Slower, but everyone learns.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the show",
+     "requires": [],
+     "success": {
+      "text": "You head out. Popcorn is overpriced anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "tactical-chalkboard",
+   "name": "Tactical Chalkboard",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#222d22",
+    "effect": "glint"
+   },
+   "intro": "A chalkboard outside a clubhouse, covered in X's and O's. \"Analyse the next fight,\" says the coach. \"Know the enemy's lead.\"",
+   "choices": [
+    {
+     "label": "Analyse the trainers ahead",
+     "requires": [],
+     "success": {
+      "text": "Chalk arrows point at each trainer's team ahead of you. You will see what's coming.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-chalkboard"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Study the wild routes",
+     "requires": [],
+     "success": {
+      "text": "Notes on the local wildlife. The map suggests what waits in the grass.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wipe it clean",
+     "requires": [],
+     "success": {
+      "text": "Some lessons have to be learned the hard way.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "swim-class",
+   "name": "Swim Class",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#1e3a4a",
+    "effect": "rain",
+    "pokemon": "wartortle"
+   },
+   "intro": "A lifeguard whistles from a pool deck. \"Free swim class! Water types train best, everybody else floats.\"",
+   "choices": [
+    {
+     "label": "Train your Water types",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Strokes, dives and a buoyancy game. Water Pokémon beam.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-swim"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the beginners' lane",
+     "requires": [],
+     "success": {
+      "text": "Everyone floats happily. Nobody trains much, nobody sinks.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the class",
+     "requires": [],
+     "success": {
+      "text": "The lifeguard shrugs. Pools are for people who like pools.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "obstacle-dojo",
+   "name": "Obstacle Dojo",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2233",
+    "effect": "shake"
+   },
+   "intro": "A dojo full of swinging bags, narrow beams and spinning poles. \"Pass the whole course without a scratch,\" the master says, \"and the Focus Sash is yours.\"",
+   "choices": [
+    {
+     "label": "Run the course (Speed 25)",
+     "requires": [],
+     "success": {
+      "text": "Not a scratch! The master hands over a Focus Sash.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "focus-sash",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 2
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "A swinging bag clips your lead. Better luck next time.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk it slowly",
+     "requires": [],
+     "success": {
+      "text": "Slow and safe. No sash, but you learn the course.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "requires": [],
+     "success": {
+      "text": "The master bows. The course waits.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "dojo"
+  },
+  {
+   "id": "trainers-pep-talk",
+   "name": "Trainer's Pep Talk",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#33332a",
+    "effect": "sparkle"
+   },
+   "intro": "A cheerful trainer in a tracksuit waves a clipboard. \"You've got this! Hands in, everybody!\"",
+   "choices": [
+    {
+     "label": "Hands in!",
+     "requires": [],
+     "success": {
+      "text": "A huddle and a loud cheer. Your team's Attack is raised for the next fight.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-pep"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pep talk the lead only",
+     "requires": [],
+     "success": {
+      "text": "One-on-one reassurance. The lead feels invincible.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-pep"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave politely",
+     "requires": [],
+     "success": {
+      "text": "They give a thumbs up and jog on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "team-photo-day",
+   "name": "Team Photo Day",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#332a2a",
+    "effect": "sparkle"
+   },
+   "intro": "A photographer sets up a backdrop in the square. \"Team photo! Everybody squeeze in! Say Pokéball!\"",
+   "choices": [
+    {
+     "label": "Pose with everyone",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "Flash! A great shot of the whole team grinning. Unity gets a lasting lift.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "team-unity",
+        "name": "Team Unity",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.3
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "hp",
+          "value": 1.03
+         }
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "The team posed for a photo, everyone grinning.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Candid shot",
+     "requires": [],
+     "success": {
+      "text": "A funny, blurry photo. Everyone laughs.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not photogenic",
+     "requires": [],
+     "success": {
+      "text": "You skip it. The photographer sighs.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "event"
+  },
+  {
+   "id": "weak-spot-remedy",
+   "name": "Weak Spot Remedy",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#222a33",
+    "effect": "glint"
+   },
+   "intro": "A sports therapist inspects your team with a clipboard. \"Everyone has a weak spot. Which one hurts the most?\"",
+   "choices": [
+    {
+     "label": "Fire",
+     "requires": [],
+     "success": {
+      "text": "A coach drills your team against fire-type moves until it stings less. A temporary fire resist for 3 fights.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-resist-fire"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water",
+     "requires": [],
+     "success": {
+      "text": "A coach drills your team against water-type moves until it stings less. A temporary water resist for 3 fights.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-resist-water"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Electric",
+     "requires": [],
+     "success": {
+      "text": "A coach drills your team against electric-type moves until it stings less. A temporary electric resist for 3 fights.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-resist-electric"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ice",
+     "requires": [],
+     "success": {
+      "text": "A coach drills your team against ice-type moves until it stings less. A temporary ice resist for 3 fights.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-resist-ice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rain-run",
+   "name": "Rain Run",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e2a3a",
+    "effect": "rain",
+    "pokemon": "politoed"
+   },
+   "intro": "A summer storm rolls over the training track. A coach in a raincoat grins. \"Perfect! Nobody trains in dry weather anyway.\"",
+   "choices": [
+    {
+     "label": "Train in the rain",
+     "requires": [],
+     "success": {
+      "text": "Puddles, wind and a cheering coach. Water stats rise for the next 3 fights, under a drizzle.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-rain-run"
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait under the shelter",
+     "requires": [],
+     "success": {
+      "text": "You wait it out and share a snack.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sandpit-digging",
+   "name": "Sandpit Digging",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a321e",
+    "effect": "spin",
+    "pokemon": "sandslash"
+   },
+   "intro": "A huge sandpit with a sign: \"Dig for TMs!\" A sweaty digger leans on a shovel. \"Buried a few Ground-type ones. Maybe.\"",
+   "choices": [
+    {
+     "label": "Dig with care (timing)",
+     "requires": [],
+     "success": {
+      "text": "Your shovel hits something hard. A Ground TM!",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     },
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "failure": {
+      "text": "Just sand and a bent shovel.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig fast (Strength 25)",
+     "requires": [],
+     "success": {
+      "text": "Sand flies. A Ground TM comes out!",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "Just sand and sore paws.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "requires": [],
+     "success": {
+      "text": "The digger returns to the pit.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "combo-practice",
+   "name": "Combo Practice",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a1e33",
+    "effect": "glint"
+   },
+   "intro": "Two trainers drill the same two-move combo again and again. \"It only works the first time,\" one says, \"so make it count.\"",
+   "choices": [
+    {
+     "label": "Link two moves",
+     "requires": [],
+     "success": {
+      "text": "A move chain clicks. Your first attack in the next 3 fights hits harder.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-combo"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Practise the timing (timing)",
+     "requires": [],
+     "success": {
+      "text": "Perfect timing! The combo gets even sharper.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-combo"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "failure": {
+      "text": "Out of sync. Your Pokémon trips over its own feet.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.06
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch only",
+     "requires": [],
+     "success": {
+      "text": "You watch, take notes and wave goodbye.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "crowd-support-training",
+   "name": "Crowd Support Training",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#33222a",
+    "effect": "sparkle"
+   },
+   "intro": "A small crowd of fans fills a stand around a training ring. \"Defense! Defense!\" they chant. \"Hold the line!\"",
+   "choices": [
+    {
+     "label": "Train to the chant",
+     "requires": [],
+     "success": {
+      "text": "The crowd roars and the team stands tall. Defense rises for the next 2 fights.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-crowd"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave to the fans",
+     "requires": [],
+     "success": {
+      "text": "You wave. They love it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip out the back",
+     "requires": [],
+     "success": {
+      "text": "You leave quietly.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "heavy-armor-fitting",
+   "name": "Heavy Armor Fitting",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2d33",
+    "effect": "glint",
+    "pokemon": "steelix"
+   },
+   "intro": "A blacksmith bangs on a plate of steel. \"Heavy armour! Fits Pokémon too. Slows you down, but nothing gets through it.\"",
+   "choices": [
+    {
+     "label": "Get fitted (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "A snug plate of steel. Defense up for the rest of the run, but Speed goes down.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "relic",
+        "id": "heavy-armor",
+        "name": "Heavy Armour",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.12
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.92
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try it on and decline",
+     "requires": [],
+     "success": {
+      "text": "Too heavy for your team. The smith nods.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "requires": [],
+     "success": {
+      "text": "The hammering fades behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stretching-break",
+   "name": "Stretching Break",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "intro": "A cheerful instructor leads a stretch break on the grass. \"Reach for the sky! Loosen those muscles!\"",
+   "choices": [
+    {
+     "label": "Stretch with the team",
+     "requires": [],
+     "success": {
+      "text": "Cracks, sighs and a long happy yawn. Status gone, and a little extra speed for the next fight.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-stretch"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just rest",
+     "requires": [],
+     "success": {
+      "text": "A short nap in the sun.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking",
+     "requires": [],
+     "success": {
+      "text": "No time for stretching.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "endurance-hike",
+   "name": "Endurance Hike",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a3a22",
+    "effect": "float"
+   },
+   "intro": "A trail guide hands out walking sticks. \"Six hours up and down! You earn a lot of experience, you lose a lot of breath.\"",
+   "choices": [
+    {
+     "label": "Bring the lead",
+     "requires": [],
+     "success": {
+      "text": "A long climb. The lead is exhausted and much stronger.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "damage",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring the whole team",
+     "requires": [],
+     "success": {
+      "text": "Everyone pitches in. Smaller gains, shared fatigue.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the short trail",
+     "requires": [],
+     "success": {
+      "text": "A pleasant stroll. A little fresh air.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moveset-rehearsal",
+   "name": "Moveset Rehearsal",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2a33",
+    "effect": "glint"
+   },
+   "intro": "A coach runs a rehearsal room with mirrors and a scoreboard of moves. \"Same Pokémon, new tricks. Pick a lesson and your lead swaps one move for another it can learn.\"",
+   "choices": [
+    {
+     "label": "Rehearse a new move",
+     "requires": [],
+     "success": {
+      "text": "Hours of repetition later, the lead has a new move in place of its weakest one.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the old routine",
+     "requires": [],
+     "success": {
+      "text": "You stick with what works. The coach nods.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "cross-training-camp",
+   "name": "Cross-Training Camp",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#33292a",
+    "effect": "shake"
+   },
+   "intro": "A camp where Fighting, Psychic and Dark trainers swap drills. \"Learn something outside your type,\" the organiser says.",
+   "choices": [
+    {
+     "label": "Fighting drills",
+     "requires": [],
+     "success": {
+      "text": "Punching and kicking practice. The lead learns a Fighting move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove",
+        "type": "fighting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Psychic exercises",
+     "requires": [],
+     "success": {
+      "text": "Spoon-bending and focus work. The lead learns a Psychic move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove",
+        "type": "psychic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dark alley lessons",
+     "requires": [],
+     "success": {
+      "text": "Sneaky tricks nobody admits to teaching. The lead learns a Dark move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "learnMove",
+        "type": "dark"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch",
+     "requires": [],
+     "success": {
+      "text": "You watch and take notes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "nature-counselor",
+   "name": "Nature Counselor",
+   "group": "Training and growth",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "intro": "A soft-spoken counselor sits with a tea set. \"Natures are not fixed,\" she says. \"Tell me who your lead wants to be.\"",
+   "choices": [
+    {
+     "label": "Let it be a surprise",
+     "requires": [],
+     "success": {
+      "text": "A long chat, a few tears, and a brand new outlook.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "natureReroll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hit harder",
+     "requires": [],
+     "success": {
+      "text": "The lead rediscovers its fighting spirit.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "natureNudge",
+        "stat": "atk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Faster",
+     "requires": [],
+     "success": {
+      "text": "The lead decides to stop overthinking and move.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "natureNudge",
+        "stat": "spe"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No change",
+     "requires": [],
+     "success": {
+      "text": "\"Good. You know them well.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "ability-capsule-booth",
+   "name": "Ability Capsule Booth",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a33",
+    "effect": "glint"
+   },
+   "intro": "A shiny booth with a blinking sign: \"ABILITY SWAPS, ₽500!\" The attendant holds up a glowing capsule.",
+   "choices": [
+    {
+     "label": "Swap the lead's ability (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Pop! The capsule fizzes and the lead's ability changes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "train",
+        "what": "abilitySwap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Window shop",
+     "requires": [],
+     "success": {
+      "text": "Shiny capsules, shinier price tags.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "merchant"
+  },
+  {
+   "id": "hyper-training-gym",
+   "name": "Hyper Training Gym",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#331e1e",
+    "effect": "shake"
+   },
+   "intro": "A gym with a banner: \"TURN YOUR WEAKEST STAT INTO A STRENGTH.\" The trainer cracks their knuckles. \"₽400 and we start now.\"",
+   "choices": [
+    {
+     "label": "Train the lead's weakest stat (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "Brutal reps on exactly the stat the lead was worst at. It pays off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "train",
+        "what": "weakestStat"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "requires": [],
+     "success": {
+      "text": "The trainer shrugs.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "dojo"
+  },
+  {
+   "id": "mental-training-dojo",
+   "name": "Mental Training Dojo",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2233",
+    "effect": "glint"
+   },
+   "intro": "A quiet dojo with a single candle. \"Aim is a state of mind,\" the sensei says. \"Sit, breathe, and see the target before you strike.\"",
+   "choices": [
+    {
+     "label": "Sit and breathe",
+     "requires": [],
+     "success": {
+      "text": "Your team's aim sharpens: moves are more accurate for the next 3 battles.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-focus"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spar blindfolded",
+     "requires": [],
+     "chance": 0.5,
+     "success": {
+      "text": "You hit every mark blindfolded. Aim sharpens a lot.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-focus"
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You swing at the candle. It goes out and so does your dignity.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "requires": [],
+     "success": {
+      "text": "The sensei bows. The candle burns on.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "dojo"
+  },
+  {
+   "id": "tm-workshop",
+   "name": "TM Workshop",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2d33",
+    "effect": "spin"
+   },
+   "intro": "A cluttered workshop of soldering irons and half-built discs. \"Bring me three Machine Parts and I'll forge you a TM,\" the engineer says.",
+   "choices": [
+    {
+     "label": "Forge a TM (3 Machine Parts)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "machine-part",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "Sparks fly. Out comes a fresh TM.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "machine-part",
+        "count": 3
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-fire",
+         "tm-water",
+         "tm-grass",
+         "tm-electric",
+         "tm-ice",
+         "tm-psychic",
+         "tm-ground",
+         "tm-fighting"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just chat",
+     "requires": [],
+     "success": {
+      "text": "The engineer shows you a blueprint and sends you off with a tip.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "merchant"
+  }
+ ]
+}

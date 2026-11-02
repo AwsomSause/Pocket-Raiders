@@ -121,6 +121,15 @@ export function hallRecords(p: Profile): HallRecord[] {
   ];
 }
 
+/** Fan Club (S358): followers come from the run history; the tiers are in town.json `fanClub`. */
+export function fanClub(p: Profile): { fans: number; tiers: { label: string; need: number; money: number; reached: boolean }[]; money: number } {
+  const wins = p.runHistory.filter((r) => r.victory).length;
+  const shiny = p.runHistory.reduce((n, r) => n + r.party.filter((m) => m.shiny).length, 0);
+  const fans = p.runHistory.length * 3 + wins * 10 + shiny * 5 + Object.keys(p.achievements ?? {}).length;
+  const tiers = TOWN.fanClub.map((t) => ({ label: t.label, need: t.fans, money: t.money, reached: fans >= t.fans }));
+  return { fans, tiers, money: tiers.filter((t) => t.reached).reduce((n, t) => n + t.money, 0) };
+}
+
 export type LedgerFilter = 'all' | 'wins' | 'losses';
 export type LedgerSort = 'newest' | 'oldest' | 'regions' | 'encounters';
 export const LEDGER_FILTERS: LedgerFilter[] = ['all', 'wins', 'losses'];

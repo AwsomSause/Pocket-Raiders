@@ -12,8 +12,9 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { applyLeaderMood, leaderMood } from './story/leaderMood';
 import { markAssisted } from './tools/assisted';
-import { crossObstacle, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
+import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
@@ -168,12 +169,12 @@ import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { freshClock, periodOf, periodWildWeight, shopHoursMultiplier, stepClock } from './clock';
+import { freshClock, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
 import { ultimateRival } from './rivals/ultimate';
@@ -559,6 +560,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   spawnRoamers(content, run);
   placeObstacles(content, run);
   placeLandmark(content, run);
+  placeDungeon(content, run);
   placeWeekStops(content, run);
   wandererStageStart(run);
   placeRaidDens(content, run);
@@ -602,7 +604,7 @@ function enterLeague(content: Content, run: RunState): void {
   };
   startStageEffects(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
-  healParty(content, run);
+  if (!gauntlet(run.rules)) healParty(content, run);
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
@@ -1133,7 +1135,7 @@ export function raidPreview(content: Content, current: RunState, sideId: string)
   const scaled = scaledRaid(content, def, badges);
   return {
     id: def.id, name: def.name, tier: def.tier, blurb: [def.blurb, ...notes].join(' '), speciesId, level: raidBadgeLevel(content, current, def, level + (returning ? RETURNING_LEVEL_BONUS : 0)),
-    entryCost: def.entryCost, mechanics: describeMechanics(scaled, { content, badges }), rewards: describeRewards(scaled), kind: def.kind, returning,
+    entryCost: def.entryCost, mechanics: describeMechanics(scaled, { content, badges }), rewards: describeRewards(scaled), kind: def.kind, returning, noPractice: Boolean(def.grand || def.gang || def.legendary),
     approaches: def.approaches.map((a) => ({ id: a.id, label: a.label, text: a.text, cost: a.cost, leave: a.leave })),
   };
 }
@@ -1160,6 +1162,7 @@ export function enterRaid(content: Content, current: RunState, sideId: string, a
   const { node, side } = raidDen(current, sideId);
   if (side.used) throw new Error('This raid has already been fought');
   const def = getRaid(content, side.raidId!);
+  if (approachId === PRACTICE_APPROACH) return practiceRaid(content, current, def, node.id + sideId);
   const approach = pickApproach(def, approachId);
   const cost = def.entryCost + (approach?.cost ?? 0);
   if (current.money < (approach?.leave ? 0 : cost)) throw new Error(`You need ₽${cost} to enter this raid`);
@@ -1175,6 +1178,21 @@ export function enterRaid(content: Content, current: RunState, sideId: string, a
   const { speciesId, level } = raidBoss(content, run, def, node.id + sideId);
   const returning = Boolean(side.returning);
   startRaidBattle(content, run, def, speciesId, level + (returning ? RETURNING_LEVEL_BONUS : 0), { approach, returning });
+  return run;
+}
+
+/** The approach id of a no-stakes fight (S400 Boss Training Mode). */
+export const PRACTICE_APPROACH = 'practice';
+
+/** Practice: the boss at its normal level, no cost, the den stays unused; the party is restored afterwards and no reward is paid. Not for story raids. */
+function practiceRaid(content: Content, current: RunState, def: RaidDef, key: string): RunState {
+  if (def.grand || def.gang || def.legendary) throw new Error('This raid cannot be practiced');
+  const run = structuredClone(current);
+  const party = structuredClone(run.party);
+  const { speciesId, level } = raidBoss(content, run, def, key);
+  startRaidBattle(content, run, def, speciesId, level);
+  run.battle!.raid!.practice = { party };
+  run.raids.entered = current.raids.entered;
   return run;
 }
 
@@ -1495,7 +1513,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -1552,8 +1570,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Wild Pokémon sometimes come in pairs (a second, ordinary one from this stage's pool, rolled by its own generator).
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
-    if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && pairRng.chance(doublesCfg.wildChance)) {
-      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id));
+    if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && (doublesOnly(run.rules) || pairRng.chance(doublesCfg.wildChance))) {
+      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
       if (partner.shiny) countShiny(run, partner.speciesId);
@@ -1589,6 +1607,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const c = run.log.counters;
       if (((c.gymLeadersDefeated ?? 0) + (c.eliteFourDefeated ?? 0) + (c.championsDefeated ?? 0) + 1) % 3 === 0) plan = { ...plan, members: plan.members.map((m) => ({ ...m, level: m.level + bossLevels })) };
     }
+    // Gym Leader Personalities (S126): the leader's mood of the day shapes the opening (own hash, no roll moves).
+    if (node.kind === 'gym' && content.balance.leaderMoods) plan = applyLeaderMood(plan, leaderMood(run.seed, stage.leaderId, `${run.regionIndex}:${stage.index}`));
     // The Rival Who Wins Without You (left-out 5.5): a rival that took over a Gym, reached the finals or became
     // Champion stands in for that boss once (the badge and rewards stay the boss's).
     const takeover = node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? takeoverRival(run, node.kind) : null;
@@ -1752,7 +1772,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Bosses known for double battles (Tate & Liza) always fight two at a time.
     if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
     else if (node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && stageNumber >= doublesCfg.fromStage && canBeDoubles(run.party, team)) {
-      if (new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
+      if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
@@ -1927,7 +1947,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story));
+  return Math.round(entry.price * markup * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -2238,6 +2258,14 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win' && !run.party.some((m) => m.hp > 0)) {
     // A double KO that the player wins (recoil, Explosion by the foe) must not leave a team that cannot fight again.
     run.party[battle.activeIndex]!.hp = 1;
+  }
+  if (battle.outcome && battle.raid?.practice) {
+    // Training: nothing counts. The party comes back as it was.
+    run.party = battle.raid.practice.party;
+    run.battle = null;
+    run.phase = 'map';
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
   if (battle.outcome === 'win' || battle.outcome === 'caught') {
     const end = finishBattle(content, run);
@@ -2661,7 +2689,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const mon of run.party) if (mon.hp > 0) mon.hp = Math.min(maxHp(content, mon), mon.hp + Math.ceil(maxHp(content, mon) * share));
   }
   // The Elite Four heal your party after each battle.
-  if (won && classId === ELITE_FOUR_CLASS) healParty(content, run);
+  if (won && classId === ELITE_FOUR_CLASS && !gauntlet(run.rules)) healParty(content, run);
   let regionCleared: string | null = null;
   // The final boss rises again: its first defeat starts a second phase (a remixed team) instead of ending the run.
   const finale = !!won && classId === CHAMPION_CLASS && isFinalBoss(content, run) && run.story.flags[FINALE_FLAG] === undefined;

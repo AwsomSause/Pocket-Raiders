@@ -219,6 +219,18 @@
         "kind": "flag",
         "key": "wx-charged",
         "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Electric moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "electric",
+          "value": 1.2
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -788,12 +800,18 @@
     {
      "label": "Slide along carefully",
      "success": {
-      "text": "You skate across without trouble.",
+      "text": "You skate across, but the ice leaves the whole field upside down: the slowest move first in your next fight.",
       "effects": [
        {
-        "kind": "front",
-        "weather": "snow",
-        "columns": 2
+        "kind": "tempEffect",
+        "label": "Your next fight starts in Trick Room",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "field": "trickRoom",
+          "turns": 5
+         }
+        ]
        }
       ]
      }
@@ -810,6 +828,17 @@
        {
         "kind": "research",
         "amount": 10
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Your next fight starts in Trick Room",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "field": "trickRoom",
+          "turns": 5
+         }
+        ]
        }
       ]
      },
@@ -827,6 +856,17 @@
       "effects": [
        {
         "kind": "express"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Your next fight starts in Trick Room",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "field": "trickRoom",
+          "turns": 5
+         }
+        ]
        }
       ]
      },
@@ -935,6 +975,22 @@
        },
        {
         "kind": "loseItem"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Electric moves hit harder, but healing items sputter, next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "electric",
+          "value": 1.25
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 0.5
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -969,6 +1025,17 @@
        {
         "kind": "research",
         "amount": 10
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Healing items sputter in your next fight",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.5
+         }
+        ],
+        "battles": 1
        }
       ]
      }
@@ -1004,6 +1071,18 @@
         "kind": "friendship",
         "amount": 2,
         "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Grass moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "grass",
+          "value": 1.2
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -1022,6 +1101,18 @@
        {
         "kind": "damage",
         "share": 0.08
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Sneezing slows your team in your next fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.9
+         }
+        ],
+        "battles": 1
        }
       ]
      }
@@ -1073,6 +1164,30 @@
        {
         "kind": "research",
         "amount": 10
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Poison moves hit harder; Steel and Bug Pokémon cough and weaken, next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "poison",
+          "value": 1.2
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "steel",
+          "value": 0.9
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "bug",
+          "value": 0.9
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -1095,6 +1210,30 @@
        {
         "kind": "status",
         "status": "poison"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Poison moves hit harder; Steel and Bug Pokémon cough and weaken, next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "poison",
+          "value": 1.2
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "steel",
+          "value": 0.9
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "bug",
+          "value": 0.9
+         }
+        ],
+        "battles": 1
        }
       ]
      }
@@ -1103,7 +1242,32 @@
      "label": "Hold your breath and run",
      "success": {
       "text": "You run out of the smog.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Poison moves hit harder; Steel and Bug Pokémon cough and weaken, next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "poison",
+          "value": 1.2
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "steel",
+          "value": 0.9
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "bug",
+          "value": 0.9
+         }
+        ],
+        "battles": 1
+       }
+      ]
      },
      "check": "speed",
      "failure": {
@@ -1285,6 +1449,23 @@
         "kind": "friendship",
         "amount": 3,
         "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Ice and Psychic moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ice",
+          "value": 1.15
+         },
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "psychic",
+          "value": 1.15
+         }
+        ],
+        "battles": 1
        }
       ]
      }
@@ -1302,6 +1483,23 @@
        {
         "kind": "research",
         "amount": 20
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Ice and Psychic moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ice",
+          "value": 1.15
+         },
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "psychic",
+          "value": 1.15
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -1321,6 +1519,23 @@
         "kind": "levels",
         "amount": 1,
         "who": "lead"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Ice and Psychic moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ice",
+          "value": 1.15
+         },
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "psychic",
+          "value": 1.15
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -1362,7 +1577,20 @@
      "label": "Brace and ride it out",
      "success": {
       "text": "You stay on your feet.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Ground moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ground",
+          "value": 1.2
+         }
+        ],
+        "battles": 1
+       }
+      ]
      }
     },
     {
@@ -1374,6 +1602,18 @@
         "kind": "levels",
         "amount": 1,
         "who": "lead"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Ground moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ground",
+          "value": 1.3
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -1734,6 +1974,18 @@
          "big-pearl",
          "heart-scale"
         ]
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Water moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "water",
+          "value": 1.2
+         }
+        ],
+        "battles": 1
        }
       ]
      },
@@ -1773,6 +2025,18 @@
        {
         "kind": "heal",
         "share": 0.25
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Water moves hit harder in your next fight",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
        }
       ]
      }
@@ -2197,6 +2461,17 @@
         "kind": "friendship",
         "amount": 3,
         "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Drifting petals blur the field: foes miss more in your next fight",
+        "effects": [
+         {
+          "kind": "evasionMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1
        }
       ]
      }
@@ -2225,6 +2500,17 @@
        {
         "kind": "research",
         "amount": 10
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Drifting petals blur the field: foes miss more in your next fight",
+        "effects": [
+         {
+          "kind": "evasionMultiplier",
+          "value": 1.15
+         }
+        ],
+        "battles": 1
        }
       ]
      },

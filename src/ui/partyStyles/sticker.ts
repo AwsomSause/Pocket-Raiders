@@ -1,10 +1,13 @@
 // Sticker Team: a deep purple sticker-book page with confetti; each row is a thick-outlined die-cut sticker.
 import { windowFace, dots } from './common';
 import type { PartySkin } from './types';
+import { cardOverview, bodyFrames } from './overviews';
 import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from './kit';
 
 export const sticker: PartySkin = {
   shape: 'pill',
+  frame: bodyFrames.sticker,
+  overview: cardOverview({ card: 0xffe8f2, rim: 0xff80b0, paper: 0xffffff, ink: '#4a2a3a', label: '#ffd0e4' }),
   tabs: { shape: 'pill', gap: 10 },
   palette: { row: 0x5a2a8a, rowAlpha: 0.95, rowFocus: 0xc83a9a, rowRim: 0xffffff, focusRim: 0xfff060, tab: 0x4a2478, tabActive: 0xc83a9a, pane: 0x32184e, paneRim: 0xffffff },
   roster(ctx) {

@@ -9,3 +9,14 @@
 - Reward: each look dresses the party strip and the Party / Bag buttons (`RewardSkin.strip`).
 - Party: each look dresses the seven tabs of the summary (`PartySkin.tabs`: gap, shape, underline, capitals).
 - Still not done: the summary pages themselves (Overview, Stats...) keep one layout on every look; mock-up pack art beyond what the earlier PR used (portrait frames, ball trays) is not added.
+
+## Follow-up 2: Overview pages (2026-11-02)
+
+- Six party looks lay out the Overview tab like their mock-up (`PartySkin.overview`, `src/ui/partyStyles/overviews.ts`): trading card (Card Binder, Sticker Book), stage portrait (Spotlight, Mii Plaza) and manga panels (Manga Roster, Shonen Power). Aero Glass and Enhanced Classic keep the shared Overview.
+- The other six tabs (Stats, Moves, Items, Bond, History, Traits) keep one layout on every look; extra mock-up pack art (DS summary art, ball trays) is still not added.
+
+## Follow-up 3: all tabs per look (2026-11-02)
+
+- Aero Glass (bubble portrait) and Enhanced Classic (ruled memo) now have their own Overview, so all eight party looks do.
+- The other six tabs (Stats, Moves, Items, Bond, History, Traits) take each look's shape through `PartySkin.frame` (glass sheet, Essentials panel, card edge, manga screentone, spotlight beam, shonen speed lines, sticker border); the facts and controls on them are the shared ones.
+- Still not done: extra mock-up pack art (Essentials DS summary art, ball trays). The Essentials summary art isn't in `public/assets/images/packs/` yet, and adding pack files changes the pack-file count the content gate checks, so it needs its own provenance change.

@@ -1,0 +1,1 @@
+- Meta/Hub slice 3: Fan Club (S358) in the Town Hall: followers = 3 per run + 10 per win + 5 per shiny + 1 per achievement (`fanClub` in `core/town/views.ts`); 4 tiers in `town.json` `fanClub` each add starting money to every run via `townStartGrants`. Derived from history, so no save change.

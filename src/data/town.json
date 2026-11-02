@@ -1758,6 +1758,20 @@
      "view": "forecast"
     },
     {
+     "id": "rooftop-station",
+     "name": "Weather Station",
+     "desc": "Upgrade the station: each tier shows run weather fronts one more column ahead, from every run on.",
+     "kind": "buy",
+     "rows": [
+      "S362"
+     ],
+     "set": "station",
+     "goods": [
+      {"id": "station-1", "label": "Barometer (tier 1)", "desc": "Fronts show 1 column sooner.", "set": "station", "cost": {"credits": 40}, "rarity": "common"},
+      {"id": "station-2", "label": "Radar dish (tier 2)", "desc": "Fronts show 2 columns sooner.", "set": "station", "cost": {"credits": 90}, "rarity": "rare"},
+      {"id": "station-3", "label": "Satellite link (tier 3)", "desc": "Fronts show 3 columns sooner.", "set": "station", "cost": {"credits": 160}, "rarity": "epic"}
+     ]},
+    {
      "id": "rooftop-charm",
      "name": "Choose a lucky charm",
      "desc": "One charm per run.",
@@ -2814,6 +2828,32 @@
       "S102"
      ],
      "view": "records"
+    },
+    {
+     "id": "hall-fans",
+     "name": "Fan Club",
+     "desc": "Followers grow with every run, win and achievement. Each tier adds starting money to every run.",
+     "kind": "view",
+     "rows": [
+      "S358"
+     ],
+     "view": "fans"
+    },
+    {
+     "id": "hall-guild",
+     "name": "Guild Hall Board",
+     "desc": "Hire a helper with credits. Their supplies ride in your pack next run.",
+     "kind": "buy",
+     "rows": [
+      "S364"
+     ],
+     "set": "boon",
+     "goods": [
+      {"id": "guild-medic", "label": "Medic", "desc": "4 Super Potions and a Revive.", "set": "boon", "cost": {"credits": 60}, "reward": {"items": {"super-potion": 4, "revive": 1}}},
+      {"id": "guild-cook", "label": "Cook", "desc": "2 Hyper Potions and 2 Full Heals.", "set": "boon", "cost": {"credits": 55}, "reward": {"items": {"hyper-potion": 2, "full-heal": 2}}},
+      {"id": "guild-porter", "label": "Porter", "desc": "3 Ethers and a Full Restore.", "set": "boon", "cost": {"credits": 70}, "reward": {"items": {"ether": 3, "full-restore": 1}}},
+      {"id": "guild-treasurer", "label": "Treasurer", "desc": "₽500 starting money.", "set": "boon", "cost": {"credits": 45}, "reward": {"money": 500}}
+     ]
     },
     {
      "id": "hall-roster",
@@ -4212,6 +4252,12 @@
   },
   "say": "Mush. Edible, technically."
  },
+ "fanClub": [
+  { "fans": 20, "money": 100, "label": "Hometown fans" },
+  { "fans": 60, "money": 250, "label": "Regional fan club" },
+  { "fans": 150, "money": 500, "label": "National following" },
+  { "fans": 400, "money": 1000, "label": "Worldwide stardom" }
+ ],
  "caps": {
   "notes": 30,
   "graffiti": 24,

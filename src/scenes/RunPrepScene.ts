@@ -37,6 +37,8 @@ import { decodeGhostCode, keepGhost } from '../core/ghost';
 import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
 import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
 import { isClaimed } from '../core/quests';
+import type { RunModifiersData } from './RunModifiersScene';
+import type { RunStartersData } from './RunStartersScene';
 
 export interface RunPrepData {
   archetypeId: string;
@@ -70,7 +72,7 @@ const PAGES: PageDef[] = [
   { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'heat', 'campaign', 'weeks', 'seed'] },
   { id: 'trainer', title: 'Trainer', blurb: 'Who you are and what you bring: preparation, directive, license, loan, Vault, mentor.', tint: 0x2fa080, rows: ['trainer', 'token', 'directive', 'license', 'loan', 'vault', 'mentor'] },
   { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: ['pool', 'draft', 'type'] },
-  { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier', 'deathBlock'] },
+  { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier'] },
   { id: 'overview', title: 'Overview', blurb: 'Check everything, keep a preset, then roll the starters.', tint: 0xd04a5a, rows: ['start', 'save', 'load'] },
 ];
 const OVERVIEW = PAGES.length - 1;
@@ -94,7 +96,7 @@ const ROW_HELP: Record<Row, string> = {
   difficulty: 'Raises enemy levels and the rewards for beating them.',
   heat: 'Heat Level: stacking opt-in difficulty. Each level adds enemy levels and a reward bonus on top of the difficulty. ←/→ change it.',
   weeks: 'Weeks ON (the default): this week\'s event and any holiday event apply to this run: their rules, roamers and map stops, and the run counts toward their goals. Weeks OFF: none of that this run. Events you already finished and their rewards are kept either way. The choice is fixed for the whole run.',
-  modifier: '←/→ browse the modifiers, Enter turns one on or off. Each one changes a rule and the rewards.',
+  modifier: 'Opens the Modifiers page: every special rule and challenge in a browsable list, with Death-Block. Each one changes a rule and the rewards.',
   deathBlock: 'Once, at the start of a run, a wipe sends you back to a checkpoint instead of ending it. On for your first three runs.',
   seed: 'A fixed seed makes the run play out the same way again. Paste a shared seed code (PR1.…) to copy its trainer and rules too.',
   save: 'Keeps this whole setup in a preset slot to load later.',
@@ -176,7 +178,7 @@ export class RunPrepScene extends Phaser.Scene {
       difficulty: `Difficulty: ${getDifficulty(this.rules.difficultyId)?.name}`,
       heat: `Heat: ${heatOf(this.rules)}`,
       weeks: `Weeks: ${this.rules.weeks === false ? 'OFF' : 'ON (default)'}`,
-      modifier: `◂ ${RUN_RULES.modifiers[this.modCursor]?.name} ▸ ${this.rules.modifierIds.includes(RUN_RULES.modifiers[this.modCursor]!.id) ? 'ON' : 'off'}`,
+      modifier: `Modifiers: ${this.rules.modifierIds.length} on${this.rules.deathBlock ? ' + Death-Block' : ''}  ▶`,
       deathBlock: `Death-Block: ${this.rules.deathBlock ? 'on' : 'off'}`,
       seed: `Seed: ${this.seed ?? 'random'}`,
       save: 'Save as preset…',
@@ -316,7 +318,21 @@ export class RunPrepScene extends Phaser.Scene {
   goPage(index: number): void {
     const page = Math.max(0, Math.min(OVERVIEW, index));
     if (page === this.page) return;
+    if (PAGES[page]!.id === 'modifiers') return this.openModifiers();
+    if (PAGES[page]!.id === 'starters') return this.openStarters();
     this.scene.restart({ archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, modCursor: this.modCursor, page, slide: page > this.page ? 1 : -1 } satisfies RunPrepData);
+  }
+
+  /** The Modifiers page is its own scene (scrolling list); it hands the choices back on leaving. */
+  private openModifiers(): void {
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: this.page === PAGES.findIndex((p) => p.id === 'modifiers') ? OVERVIEW : this.page };
+    this.scene.start('RunModifiers', { desk, rules: this.rules } satisfies RunModifiersData);
+  }
+
+  /** The Starters page is its own scene; it hands the pool, draft rule and type back on leaving. */
+  private openStarters(): void {
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: PAGES[this.page]!.id === 'starters' ? OVERVIEW : this.page };
+    this.scene.start('RunStarters', { desk, prep: this.prep } satisfies RunStartersData);
   }
 
   private refresh(changes: Partial<RunPrep> = {}, extra: Partial<RunPrepData> = {}): void {
@@ -393,11 +409,6 @@ export class RunPrepScene extends Phaser.Scene {
         const ids = RUN_RULES.difficulties.map((d) => d.id);
         return this.refresh({}, { rules: { ...this.rules, difficultyId: next(ids, this.rules.difficultyId) } });
       }
-      case 'modifier': {
-        // ←/→ choose a modifier; Enter turns it on or off.
-        this.modCursor = (this.modCursor + step + RUN_RULES.modifiers.length) % RUN_RULES.modifiers.length;
-        return this.refresh();
-      }
       case 'heat': {
         const max = RUN_RULES.heat.max + 1;
         return this.refresh({}, { rules: { ...this.rules, heat: (heatOf(this.rules) + (step < 0 ? max - 1 : 1)) % max } });
@@ -415,13 +426,8 @@ export class RunPrepScene extends Phaser.Scene {
     switch (row) {
       case 'start':
         return this.start();
-      case 'modifier': {
-        const m = RUN_RULES.modifiers[this.modCursor]!;
-        const on = this.rules.modifierIds.includes(m.id);
-        // Turning one on switches off any modifier of the same kind.
-        const others = this.rules.modifierIds.filter((id) => id !== m.id && getModifier(id)!.group !== m.group);
-        return this.refresh({}, { rules: { ...this.rules, modifierIds: on ? others.filter((id) => id !== m.id) : [...others, m.id] } });
-      }
+      case 'modifier':
+        return this.openModifiers();
       case 'seed': {
         const value = window.prompt('Seed for this run (leave empty for a random one):', this.seed ?? '');
         if (value === null) return;

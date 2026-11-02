@@ -29,7 +29,7 @@ export function playScript(stage: Stage, name: string, script: ScriptAnim): Play
   const { scene, field } = stage;
   const settings = services().session.settings;
   const flash = capFlash(settings.effectIntensity, settings.reducedFlash);
-  const shakeAmt = capFlash(settings.shakeIntensity, settings.reducedFlash);
+  const shakeAmt = capFlash(settings.shakeIntensity, settings.reducedFlash) * settings.shakeHits;
   const strength = Math.max(0.25, flash);
   const user = stage.user;
   const target = stage.target;

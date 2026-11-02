@@ -11,7 +11,7 @@ import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
 import { crossingHint, obstacleAt, towerClimb, TRAVERSAL } from '../core/traversal';
 import { realSeason, SEASON_SKIN } from '../ui/seasonSkin';
-import { clockLabel, periodOf, PERIOD_LOOK } from '../core/clock';
+import { clockLabel, periodOf, PERIOD_LOOK, tideLabel } from '../core/clock';
 import { modeObjectives, objectivesLine } from '../core/modeObjectives';
 import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
@@ -66,6 +66,7 @@ import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { MAP_SKINS } from '../ui/mapStyles';
 import { drawNextStop } from '../ui/mapStyles/nextstopCards';
+import { HUB_LIGHT, hubPeriod } from '../core/hubTown/daylight';
 import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
@@ -324,7 +325,7 @@ export class MapScene extends Phaser.Scene {
       .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
     this.add
-      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
+      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
     // Speedrun timer (core/tools/speedrun.ts, off by default; Hub > Tools): splits per badge kept on this device only.
     if (device.speedrunOn()) {
@@ -345,6 +346,11 @@ export class MapScene extends Phaser.Scene {
     const skin = SEASON_SKIN[realSeason(new Date())];
     this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, skin.tint, 0.08).setOrigin(0).setDepth(-48).setName(`season-${skin.name}`);
     if (!league) addAmbience(this, this.add.container(0, 0).setDepth(-47), 0, [skin.ambience], this.motion);
+    // S252: the light of the local time of day over the backdrop (presentation only, off by default).
+    if (session.settings.mapDayNight) {
+      const light = HUB_LIGHT[hubPeriod(new Date())];
+      if (light.alpha > 0) this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, light.tint, light.alpha * 0.8).setOrigin(0).setDepth(-46).setName('map-daylight');
+    }
     // Weather forecast: a front ahead, or the one you are in, and fog.
     const fc = league ? null : forecast(content, run);
     if (fc) {
@@ -1244,7 +1250,9 @@ export class MapScene extends Phaser.Scene {
     const species = content.species.get(pv.speciesId)!;
     const money = session.run!.money;
     // Regional and rival raids offer approaches (one row each); other raids are a single "fight" row.
-    const choices = pv.approaches.length > 0 ? pv.approaches : [{ id: '', label: '', text: '', cost: 0, leave: false }];
+    const choices = pv.approaches.length > 0 ? [...pv.approaches] : [{ id: '', label: '', text: '', cost: 0, leave: false }];
+    // S400 Boss Training Mode: a free practice fight (cost nets out the entry price shown on the other rows).
+    if (!pv.noPractice) choices.push({ id: 'practice', label: 'PRACTICE', text: 'No stakes: no cost, no rewards, nothing lost. Your team is restored afterwards.', cost: -pv.entryCost, leave: false });
     const kindName = { wild: 'Raid', regional: 'Regional Raid', rival: 'Rival Raid', anomaly: 'Anomaly Raid' }[pv.kind];
     // Screens redesign: a picked raid look draws the boss card the way its mock-up does.
     const raidLook = screenStyleOf('raid', session.settings.screenStyles, `${session.run!.seed}:${sideId}`);

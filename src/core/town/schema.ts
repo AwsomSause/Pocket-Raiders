@@ -130,6 +130,8 @@ export const TownDataSchema = z.object({
   mush: RewardSchema,
   roster: z.array(z.object({ id: z.string(), name: z.string(), role: z.string(), achievements: Count, line: z.string() })),
   pools: z.object({ cries: z.array(z.string()).min(4), memory: z.array(z.string()).min(4) }),
+  /** Fan Club (S358): followers from your history unlock tiers; each tier adds starting money to every run. */
+  fanClub: z.array(z.object({ fans: Count, money: Count, label: z.string() })),
   caps: z.object({ notes: Count, graffiti: Count, photos: Count, pins: Count, wishes: Count, boonItems: Count }),
 });
 export type TownData = z.infer<typeof TownDataSchema>;

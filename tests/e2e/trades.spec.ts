@@ -26,7 +26,7 @@ async function prepare(page: Page, kind: 'service' | 'plaza', style: string, n: 
     ({ kind, style, n }) => {
       const pkr = (window as any).__pkr;
       const run = pkr.session.run;
-      pkr.session.settings.screenStyles = style === 'random' ? {} : { trade: style };
+      pkr.session.settings.screenStyles = { trade: style };
       const tpl = (window as any).__tpl ?? ((window as any).__tpl = JSON.parse(JSON.stringify(run.party[0])));
       run.party = ['squirtle', 'eevee', 'onix'].map((sp: string) => ({ ...JSON.parse(JSON.stringify(tpl)), uid: `${tpl.uid}-${sp}-${n}`, speciesId: sp, level: 14 }));
       run.plaza.used = {};
@@ -91,6 +91,7 @@ test('the Plaza traders open the Trade Stop screen and come back to the Plaza', 
   await waitForScene(page, 'Trade');
   await page.waitForTimeout(600);
   expect(STYLES).toContain(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').drawnStyle));
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 30_000 }).toBe('choose'); // Esc is ignored while the style loads
   await page.keyboard.press('Escape');
   await waitForScene(page, 'Plaza');
   expect(errors).toEqual([]);

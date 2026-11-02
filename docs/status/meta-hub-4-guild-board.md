@@ -1,0 +1,1 @@
+- Meta/Hub slice 4: Guild Hall Board (S364) in the Town Hall: hire a Medic, Cook, Porter or Treasurer with credits; their supplies/money wait as the next run's boon (town.json `hall-guild`, existing `buy` + boon path). No save change.
