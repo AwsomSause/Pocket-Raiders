@@ -10,7 +10,7 @@
 // --missing-only tops up from a second pack (the Pokémon Memories repo has the
 // Z-Move animations the UIE pack lacks): only moves that still borrow another
 // move's animation (source "type", no pack file) are imported; sheets that
-// already exist and the status slots are left alone, and the note is added to
+// already exist and filled status/field slots are left alone (empty ones are filled), and the note is added to
 // `packSource`. Each imported move keeps its "type" source (its PokeRogue stand-by
 // is still borrowed, and it keeps the signature family) but gets a big attack's hit feel.
 //
@@ -77,6 +77,15 @@ const COMMON: Record<string, string> = {
   'weather.sun': 'Common:Sun',
   'weather.sand': 'Common:Sandstorm',
   'weather.hail': 'Common:Hail',
+  // Only in some packs (the Pokémon Memories repo has them all): filled with --missing-only when still empty.
+  protect: 'Common:Protect',
+  bind: 'Common:Bind',
+  seed: 'Common:LeechSeed',
+  'weather.snow': 'Common:Snow',
+  'terrain.electric': 'Common:ElectricTerrain',
+  'terrain.grassy': 'Common:GrassyTerrain',
+  'terrain.misty': 'Common:MistyTerrain',
+  'terrain.psychic': 'Common:PsychicTerrain',
 };
 
 const num = (v: number | boolean | null | undefined, d = 0) => (typeof v === 'number' ? v : v === true ? 1 : d);
@@ -193,9 +202,9 @@ for (const id of moveIds) {
 }
 let common = 0;
 if (!missingOnly) data.commonPack = {};
-for (const [slot, essName] of Object.entries(missingOnly ? {} : COMMON)) {
+for (const [slot, essName] of Object.entries(COMMON)) {
   const a = byName.get(essName);
-  if (!a) continue;
+  if (!a || data.commonPack[slot]) continue;
   const name = `ess-${animSlug(essName.replace('Common:', 'common-'))}`;
   write(name, a);
   data.commonPack[slot] = name;

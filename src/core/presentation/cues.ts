@@ -180,6 +180,10 @@ export function planCues(
       case 'weather':
         if (full) cues.push({ kind: 'commonAnim', side: 'player', ...commonChoice(anims, `weather.${e.weather}`) });
         break;
+      case 'terrain':
+        // Electric / Grassy / Misty / Psychic Terrain spreading over the field (Pokémon Memories pack).
+        if (full && commonChoice(anims, `terrain.${e.terrain}`).anim) cues.push({ kind: 'commonAnim', side: 'player', ...commonChoice(anims, `terrain.${e.terrain}`) });
+        break;
       case 'weatherDamage':
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'damage', motion: full });
         break;

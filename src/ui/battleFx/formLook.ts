@@ -24,9 +24,16 @@ export const PATTERN_ALPHA = 150 / 255;
 /** Pattern drift in pixels per second (DBK moves it 1 px every 0.1 s). */
 export const PATTERN_DRIFT = 10;
 
+/** The pattern a status condition lays over the sprite (DBK status patterns); sleep has none. */
+const STATUS_PATTERN: Record<string, string> = { brn: 'burn', frz: 'frozen', par: 'paralysis', psn: 'poison' };
+export const statusPatternKey = (status: string | null | undefined): string | null => (status && STATUS_PATTERN[status] ? `fx.status.pattern.${STATUS_PATTERN[status]}` : null);
+/** A status pattern pulses between these opacities (DBK: 16 to 128 of 255, one step every 0.05 s), so one full pulse takes this long. */
+export const STATUS_PULSE = { min: 16 / 255, max: 128 / 255, periodMs: 2 * 112 * 50 };
+
 /** Loaded when a battle starts, with the cinematics. */
 export const FORM_LOOK_ASSETS = [
   ...TERA_PATTERN_TYPES.map(teraPatternKey), 'fx.tera.pattern.default',
   'fx.dynamax.pattern.dynamax', 'fx.dynamax.pattern.calyrex',
   'ui.tera.types', 'ui.dynamax.icon',
+  ...Object.values(STATUS_PATTERN).map((n) => `fx.status.pattern.${n}`),
 ];

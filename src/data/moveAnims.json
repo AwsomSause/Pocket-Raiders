@@ -11199,6 +11199,82 @@
         "ess-prsfx-twinkle-tackle2",
         "ess-prsfx-twinkle-tackle3"
       ]
+    },
+    "ess-common-protect": {
+      "graphics": [
+        "ess-pras-protect"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-protect"
+      ]
+    },
+    "ess-common-bind": {
+      "graphics": [
+        "ess-pras-wrapping"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-wrap"
+      ]
+    },
+    "ess-common-leechseed": {
+      "graphics": [
+        "ess-pras-absorption2"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-leech-seed3"
+      ]
+    },
+    "ess-common-snow": {
+      "graphics": [
+        "ess-016-ice01"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-ice8",
+        "ess-prsfx-hail"
+      ]
+    },
+    "ess-common-electricterrain": {
+      "graphics": [
+        "ess-pras-electric"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-electric-terrain",
+        "ess-prsfx-electric-terrain2"
+      ]
+    },
+    "ess-common-grassyterrain": {
+      "graphics": [
+        "ess-pras-grass"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-grassy-terrain"
+      ]
+    },
+    "ess-common-mistyterrain": {
+      "graphics": [
+        "ess-pras-orbs"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-misty-terrain"
+      ]
+    },
+    "ess-common-psychicterrain": {
+      "graphics": [
+        "ess-pras-mirror-coat"
+      ],
+      "backgrounds": [],
+      "sounds": [
+        "ess-prsfx-psychic-terrain1",
+        "ess-prsfx-psychic-terrain2",
+        "ess-prsfx-psychic-terrain3"
+      ]
     }
   },
   "moves": {
@@ -19426,7 +19502,15 @@
     "weather.rain": "ess-common-rain",
     "weather.sun": "ess-common-sun",
     "weather.sand": "ess-common-sandstorm",
-    "weather.hail": "ess-common-hail"
+    "weather.hail": "ess-common-hail",
+    "protect": "ess-common-protect",
+    "bind": "ess-common-bind",
+    "seed": "ess-common-leechseed",
+    "weather.snow": "ess-common-snow",
+    "terrain.electric": "ess-common-electricterrain",
+    "terrain.grassy": "ess-common-grassyterrain",
+    "terrain.misty": "ess-common-mistyterrain",
+    "terrain.psychic": "ess-common-psychicterrain"
   },
-  "packSource": "Pokémon Essentials 21.1 animations (Data/PkmnAnimations.rxdata, Graphics/Animations, Audio/SE/Anim) from the director's \"Pokemon Essentials 21.1 UIE.rar\"; the same file ships in \"Pokemon-Essentials-21-With-Unofficial-EBDX-main.zip\"; Z-Moves and Snowscape from the Pokémon Memories repo (AwsomSause/Pokemon-Memories, same Essentials format)"
+  "packSource": "Pokémon Essentials 21.1 animations (Data/PkmnAnimations.rxdata, Graphics/Animations, Audio/SE/Anim) from the director's \"Pokemon Essentials 21.1 UIE.rar\"; the same file ships in \"Pokemon-Essentials-21-With-Unofficial-EBDX-main.zip\"; Z-Moves and Snowscape from the Pokémon Memories repo (AwsomSause/Pokemon-Memories, same Essentials format); Protect, Bind, Leech Seed, Snow and the four terrain animations from AwsomSause/Pokemon-Memories"
 }

@@ -90,8 +90,8 @@ import { environmentStory } from '../core/presentation/environmentStory';
 import { crisisLevel } from '../core/story/crisis';
 import { moveRank } from '../core/moveMastery';
 import { chargeUp, cinematic, prefetchCinematics, type CineKind } from '../ui/battleFx/cinematics';
-import { dynamaxPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
-import { wearPattern } from '../ui/battleFx/formPattern';
+import { dynamaxPatternKey, STATUS_PULSE, statusPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
+import { dropPattern, wearPattern, wornPattern } from '../ui/battleFx/formPattern';
 import { loadAssets } from '../ui/lazyAssets';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
@@ -874,6 +874,21 @@ export class BattleScene extends Phaser.Scene {
     wearPattern(this, visual, key, this.motion, () => (visual as Phaser.GameObjects.Sprite).clearTint());
   }
 
+  /**
+   * A burned, frozen, paralysed or poisoned Pokémon wears that status's pulsing pattern (Deluxe Battle Kit,
+   * via Pokémon Memories); it comes off when the status is cured. Tera and Dynamax patterns take precedence.
+   * Presentation only.
+   */
+  private syncStatusPattern(side: 'player' | 'enemy', mon: PokemonInstance): void {
+    const visual = side === 'player' ? this.playerSprite : this.enemySprite;
+    if (!visual || mon.dynamaxed || mon.shadow || this.run.battle?.transform.teraTypes[mon.uid]) return;
+    const want = this.motion === 'off' ? null : statusPatternKey(mon.status?.id);
+    const worn = wornPattern(visual);
+    if (worn === want || (worn && !worn.startsWith('fx.status.'))) return;
+    if (want) wearPattern(this, visual, want, this.motion, () => undefined, { pulse: STATUS_PULSE });
+    else dropPattern(visual);
+  }
+
   private makeInfoBox(x: number, y: number, isPlayer: boolean): InfoBox {
     const container = this.add.container(x, y);
     const style = services().session.settings.battleUi;
@@ -1007,6 +1022,7 @@ export class BattleScene extends Phaser.Scene {
 
   private refreshInfoBox(box: InfoBox, mon: PokemonInstance, animate: boolean): Promise<void> {
     const content = services().session.content;
+    if (box === this.playerBox || box === this.enemyBox) this.syncStatusPattern(box.isPlayer ? 'player' : 'enemy', mon);
     const max = calcStats(content, mon).hp;
     if (!box.container.visible) slideIn(this, box.container, box.isPlayer ? 420 : -420, 0, this.motion);
     box.container.setVisible(true);
