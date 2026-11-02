@@ -1,4 +1,4 @@
-// The lines on the title screen's Continue card (pure; drawn by `ui/loadCard.ts`).
+// The lines on the share card (pure).
 
 import { getArchetype } from '../archetypes';
 import type { Content } from '../contentSchema';

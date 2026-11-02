@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MIN_READABLE_CANVAS, canvasWidth, showRotateHint, showTouchPad } from '../../src/core/presentation/touchLayout';
+import { MIN_READABLE_CANVAS, canvasWidth, showRotateHint, showTouchPad, padMode } from '../../src/core/presentation/touchLayout';
 
 describe('mobile fallback (catalog #125)', () => {
   it('shows the pad on touch devices and narrow windows only', () => {
@@ -14,5 +14,10 @@ describe('mobile fallback (catalog #125)', () => {
   it('a landscape phone with the pad keeps a readable canvas', () => {
     expect(canvasWidth({ width: 844, height: 390, coarse: true }, 110)).toBeGreaterThanOrEqual(MIN_READABLE_CANVAS);
     expect(canvasWidth({ width: 1280, height: 720, coarse: false }, 0)).toBe(1280);
+  });
+  it('floats the pad over a landscape phone and reserves a strip in portrait', () => {
+    expect(padMode({ width: 844, height: 390, coarse: true })).toBe('side');
+    expect(padMode({ width: 390, height: 844, coarse: true })).toBe('bottom');
+    expect(padMode({ width: 1280, height: 720, coarse: false })).toBe('off');
   });
 });

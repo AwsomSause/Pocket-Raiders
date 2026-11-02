@@ -12,6 +12,15 @@ export function showTouchPad(v: Viewport): boolean {
   return v.coarse || v.width < 700;
 }
 
+/**
+ * Where the pad goes. `side`: a landscape touch screen keeps the full-height canvas and floats the pad over
+ * its two corners (the letterbox bars on wide phones). `bottom`: portrait or narrow windows reserve a strip.
+ */
+export function padMode(v: Viewport): 'off' | 'side' | 'bottom' {
+  if (!showTouchPad(v)) return 'off';
+  return v.coarse && v.width > v.height && v.height <= 600 ? 'side' : 'bottom';
+}
+
 /** Portrait phones get a hint: the 16:9 game is much larger when the phone is turned. */
 export function showRotateHint(v: Viewport): boolean {
   return v.width < 600 && v.height > v.width;
