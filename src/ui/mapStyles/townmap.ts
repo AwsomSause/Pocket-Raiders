@@ -4,6 +4,12 @@ import { gradient, scenery } from './common';
 import type { MapSkin } from './types';
 
 export const townmap: MapSkin = {
+  frame(scene) {
+    // The Pokégear-style bordered map window.
+    const g = scene.add.graphics().setDepth(-52);
+    g.lineStyle(8, 0x1a2a78, 1).strokeRoundedRect(10, 78, GAME_WIDTH - 20, 338, 10);
+    g.lineStyle(2, 0xffffff, 0.9).strokeRoundedRect(14, 82, GAME_WIDTH - 28, 330, 8);
+  },
   backdrop(scene) {
     gradient(scene, 0x2f86e0, 0x1c5ca8);
     const g = scene.add.graphics().setDepth(-53);

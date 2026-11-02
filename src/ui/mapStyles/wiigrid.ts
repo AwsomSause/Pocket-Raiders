@@ -4,6 +4,13 @@ import { gradient } from './common';
 import type { MapSkin } from './types';
 
 export const wiigrid: MapSkin = {
+  labels: true,
+  bar(scene) {
+    // The Wii menu's pale bar along the bottom: the clock in the middle, round Party and Bag buttons at the corners.
+    const g = scene.add.graphics();
+    g.fillStyle(0x6a7c94, 1).fillRoundedRect(8, 420, GAME_WIDTH - 16, 116, 14).lineStyle(2, 0xdde6f0, 1).strokeRoundedRect(8, 420, GAME_WIDTH - 16, 116, 14);
+    g.fillStyle(0xffffff, 0.18).fillRoundedRect(14, 424, GAME_WIDTH - 28, 26, 10);
+  },
   backdrop(scene) {
     gradient(scene, 0xf4f8fc, 0xd2dde8);
     const g = scene.add.graphics().setDepth(-53);
