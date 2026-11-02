@@ -97,6 +97,7 @@ export const SETTINGS: SettingDef[] = [
     next: (s) => ({ ...s, screenStyles: { ...s.screenStyles, [screen]: nextScreenChoice(screen, s.screenStyles) } }),
   })),
   { id: 'plazaStyle', label: 'Plaza style', description: 'How the Trainer Plaza looks: Aero Bubbles, Regional Looks, Diorama Island or Social Square.', category: 'display', applies: 'now', show: (s) => PLAZA_STYLE_LABELS[plazaStyleOf(s.plazaStyle)], next: (s) => ({ ...s, plazaStyle: nextPlazaStyle(plazaStyleOf(s.plazaStyle)) }) },
+  { id: 'hubStyle', label: 'Hub style', description: 'Walk around Hub Town, or pick places from the Arena Lobby menu.', category: 'display', applies: 'now', show: (s) => (s.hubStyle === 'lobby' ? 'Arena Lobby' : 'Hub Town'), next: (s) => ({ ...s, hubStyle: s.hubStyle === 'lobby' ? 'town' : 'lobby' }) },
   { id: 'battleUi', label: 'Battle UI style', description: 'Aero Glass, Essentials Kit, or Kit with a long foe box.', category: 'display', applies: 'nextBattle', show: (s) => ({ aero: 'Aero Glass', kit: 'Essentials Kit', kitLong: 'Essentials Kit (long foe)' })[s.battleUi], next: (s) => ({ ...s, battleUi: ({ aero: 'kit', kit: 'kitLong', kitLong: 'aero' } as const)[s.battleUi] }) },
   { id: 'spriteAnimations', label: 'Sprite animations', description: 'Off keeps menu icons and idle Pokémon still.', category: 'display', applies: 'now', ...toggle('spriteAnimations') },
   { id: 'damageNumbers', label: 'Damage numbers', description: 'Floating numbers over the Pokémon that was hit.', category: 'display', applies: 'now', ...toggle('damageNumbers') },

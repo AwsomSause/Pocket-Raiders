@@ -1,4 +1,4 @@
-// Hub Town ambience (spec §9): glints that twinkle on the lake, ponds and canal, and petals drifting by the cherry
+// Hub Town ambience (spec §9): glints that twinkle on the pond, and petals drifting by the cherry
 // trees. Presentation only, from a view RNG; full motion only (reduced and off keep the water still).
 
 import Phaser from 'phaser';
@@ -25,7 +25,7 @@ export function drawAmbience(town: HubTownView, scene: Phaser.Scene, motion: str
       }
     }
     // Petals: a few drift down-wind across the sanctuary and the plaza, then start again.
-    const zones = ['sanctuary', 'plaza', 'flowers'].map((z) => HUB_TOWN.zones[z]).filter((z): z is [number, number, number, number] => Boolean(z));
+    const zones = ['sanctuary', 'plaza', 'lawn'].map((z) => HUB_TOWN.zones[z]).filter((z): z is [number, number, number, number] => Boolean(z));
     for (const [zx, zy, zw, zh] of zones) {
       for (let i = 0; i < 6; i++) {
         const x = (zx + roll() * zw) * T;

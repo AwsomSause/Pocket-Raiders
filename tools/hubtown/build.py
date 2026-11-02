@@ -107,17 +107,24 @@ for _ in range(3):
 ring = {t for t in ring if ((t[0] - 1, t[1]) in ring or (t[0] + 1, t[1]) in ring) and ((t[0], t[1] - 1) in ring or (t[0], t[1] + 1) in ring)}
 path_mask |= ring
 
+building_tiles = set()   # building footprints (for the minimap)
+taken = set()   # every tile under a placed picture (trees keep off them)
 places = []
 props = []      # (frame, px, py, depth)
 solid = set()
 
 def place(n, x, y):
-    px, py = round(x * T), round(y * T)
+    """Place a stamp by the top-left TILE of its solid picture: whole tiles only, centred in its tile span, so every
+    building and prop lines up with the ground grid (Kice 2026-11-02)."""
     im = stamp_img(n); a = im.split()[3].point(lambda v: 255 if v > 200 else 0)
     bb = a.getbbox() or (0, 0, im.width, im.height)
+    wt = -(-(bb[2] - bb[0]) // T); ht = -(-(bb[3] - bb[1]) // T)
+    px = int(round(x)) * T + ((wt * T - (bb[2] - bb[0])) // 4) * 2 - bb[0]
+    py = (int(round(y)) + ht) * T - bb[3]
     props.append((n, px, py, py + bb[3]))
     fp = footprint(n, px, py)
     solid.update(fp)
+    taken.update(rect_set(int(round(x)), int(round(y)), wt, ht))
     return px, py, im.width, im.height, fp
 
 def door_for(fp, px, w, frac):
@@ -129,6 +136,7 @@ def door_for(fp, px, w, frac):
 
 for (lid, name, n, x, y, frac, rooms, blurb) in L.locations:
     px, py, w, h, fp = place(n, x, y)
+    building_tiles.update(fp)
     dx, dy = door_for(fp, px, w, frac)
     # carve a stub path from the door down to the nearest road; a stub that would cross a fence (or never meets a
     # road) becomes a short doorstep instead, so no path runs into a fence
@@ -161,9 +169,11 @@ for n, x, y in L.objects: place(n, x, y)
 # trees: keep off roads, doors and the gateways
 blockers = set(path_mask)
 for p in places: blockers |= {(p['stand']['x'] + d, p['stand']['y'] + e) for d in (-1, 0, 1) for e in (0, 1)}
-for b in [[52, 72, 9, 12], [20, 0, 10, 8]]: blockers |= rect_set(*b)
+for p in places:
+    if p['kind'] == 'gate': blockers |= rect_set(p['door']['x'] - 4, p['door']['y'] - 4, 9, 6)
+blockers |= taken
 for n, x, y in L.trees:
-    if rect_set(int(x), int(y) + 2, 3, 2) & blockers: continue
+    if rect_set(int(x), int(y), 3, 3) & blockers: continue
     place(n, x, y)
 
 # fences
@@ -311,6 +321,17 @@ for f in sorted(os.listdir(fdir)):
     if f.endswith('.png'): followers[f[:-4]] = Image.open(os.path.join(fdir, f)).width // 4
 json.dump({'trainers': trainers, 'followers': followers}, open(os.path.join(ROOT, 'src/data/overworld.json'), 'w'), separators=(',', ':'))
 
+# ---------- minimap: one character per tile ----------
+# '.' grass, '=' road, 'o' plaza stone, '~' water, '#' building, 'T' trees, fences and other solid things
+def mini(x, y):
+    if (x, y) in water_tiles: return '~'
+    if (x, y) in building_tiles: return '#'
+    if (x, y) in solid: return 'T'
+    if x0 <= x < x0 + w0 and y0 <= y < y0 + h0: return 'o'
+    if (x, y) in path_mask: return '='
+    return '.'
+minimap = [''.join(mini(x, y) for x in range(W)) for y in range(H)]
+
 # ---------- map json ----------
 props.sort(key=lambda p: (p[3], p[1]))
 for k in L.keepers: k['sprite'] = safe(k['sprite'])
@@ -321,7 +342,8 @@ out = {
     'solid': sorted([x, y] for x, y in solid if 0 <= x < W and 0 <= y < H),
     'water': [list(r) for r in L.water],
     'places': places, 'spawn': next(({'x': p['stand']['x'], 'y': p['stand']['y'], 'facing': 'up'} for p in places if p['id'] == 'prep'), L.spawn), 'keepers': L.keepers, 'zones': L.zones,
-    'pads': [[50, 35], [61, 35], [48, 41], [65, 41], [50, 47], [61, 47]],
+    'pads': L.pads, 'districts': L.districts,
+    'minimap': minimap,
 }
 json.dump(out, open(os.path.join(ROOT, 'src/data/hubTown.json'), 'w'), separators=(',', ':'))
 print(f'tiles {len(uniq)}  props {len(frames)} frames / {len(props)} placed  solid {len(solid)}  places {len(places)}  trainers {len(trainers)}  followers {len(followers)}')
