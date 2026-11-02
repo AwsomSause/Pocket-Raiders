@@ -3,6 +3,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, textStyle } from './theme';
 import { trainerVisual } from './sprites';
+import { loadAssets } from './lazyAssets';
 
 export interface BriefingInfo {
   rows: [string, string][];
@@ -71,13 +72,21 @@ export const BRIEFING_LOOKS: Record<string, BriefingDraw> = {
   },
   missionmap: (s, i, calm) => {
     rect(s, 24, 24, 560, 492, 0x2a78c8, 1, 0xffffff, 12, 4);
-    const g = s.add.graphics();
-    g.fillStyle(0xd8c070, 1).fillEllipse(330, 280, 400, 300).fillStyle(0xb0883a, 1).fillEllipse(280, 300, 160, 130).fillStyle(0x4a9a4a, 1).fillEllipse(380, 250, 120, 80);
+    const g = s.add.graphics().setDepth(0.2);
+    const mapId = 'pack.memories.townmap.region0';
+    void loadAssets(s, [mapId]).then(() => {
+      if (!s.scene.isActive() || !s.textures.exists(mapId)) return;
+      const img = s.add.image(24 + 280, 24 + 246, mapId).setDepth(0.05);
+      img.setScale(Math.max(560 / img.width, 492 / img.height));
+      const m = s.add.graphics().setVisible(false);
+      m.fillRect(24, 24, 560, 492);
+      img.setMask(m.createGeometryMask());
+    });
     const pts = i.regions.map((_, k) => ({ x: 70 + (440 * k) / Math.max(1, i.regions.length - 1), y: 440 - Math.sin(k * 0.9) * 110 - k * 14 }));
     g.lineStyle(4, 0xe05a4a, 1);
     pts.forEach((p, k) => k > 0 && g.lineBetween(pts[k - 1]!.x, pts[k - 1]!.y, p.x, p.y));
     pts.forEach((p, k) => {
-      const d = s.add.circle(p.x, p.y, k === 0 ? 10 : 6, k === 0 ? 0xffd23a : 0xe05a4a).setStrokeStyle(2, 0xffffff);
+      const d = s.add.circle(p.x, p.y, k === 0 ? 10 : 6, k === 0 ? 0xffd23a : 0xe05a4a).setStrokeStyle(2, 0xffffff).setDepth(0.2);
       if (k === 0) bob(s, d, calm, 4);
     });
     rect(s, 604, 24, 332, 492, 0xfaf3e0, 1, 0xb8a070, 10, 3);

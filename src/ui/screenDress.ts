@@ -6,6 +6,7 @@ import type { ScreenId } from '../core/presentation/screenStyles';
 import { DRESSES, type Dress, type Pattern } from '../core/presentation/screenDressData';
 import type { MotionLevel } from './aero';
 import { GAME_HEIGHT, GAME_WIDTH } from './theme';
+import { loadAssets } from './lazyAssets';
 
 function lerp(a: number, b: number, t: number): number {
   const c = Phaser.Display.Color.Interpolate.ColorWithColor(Phaser.Display.Color.ValueToColor(a), Phaser.Display.Color.ValueToColor(b), 100, Math.round(t * 100));
@@ -24,8 +25,20 @@ export function dressScreen(scene: Phaser.Scene, screen: ScreenId, style: string
     bg.fillRect(0, (i * GAME_HEIGHT) / bands, GAME_WIDTH, GAME_HEIGHT / bands + 1);
   }
   box.add(bg);
+  // Pack art over the gradient (loaded lazily; the gradient shows until it arrives or if it fails).
+  if (d.bg) {
+    const id = d.bg === 'townmap' ? 'pack.memories.townmap.region0' : `pack.memories.eventbg.${d.bg}`;
+    void loadAssets(scene, [id]).then(() => {
+      if (!scene.scene.isActive() || !scene.textures.exists(id) || !box.scene) return;
+      const img = scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, id);
+      img.setScale(Math.max(GAME_WIDTH / img.width, GAME_HEIGHT / img.height) * (d.bg === 'townmap' ? 1.15 : 1));
+      img.setAlpha(d.bg === 'townmap' ? 0.9 : 1);
+      box.addAt(img, 1);
+      if (motion === 'full' && d.bg === 'townmap') scene.tweens.add({ targets: img, x: GAME_WIDTH / 2 - 40, y: GAME_HEIGHT / 2 + 18, duration: 16000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    });
+  }
   const live = motion === 'full';
-  for (const p of [d.pattern, d.alt]) if (p) box.add(pattern(scene, p, d, live));
+  if (d.bg !== 'townmap') for (const p of [d.pattern, d.alt]) if (p) box.add(pattern(scene, p, d, live));
   // Dark edge so panels and text stay readable on every look.
   const vignette = scene.add.graphics();
   for (let i = 0; i < 8; i++) {
