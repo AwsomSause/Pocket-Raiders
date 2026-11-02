@@ -1484,9 +1484,9 @@
           "id": "easy",
           "label": "Easy",
           "params": {
-            "steps": 16,
-            "balls": 8,
-            "goal": 2
+            "steps": 15,
+            "balls": 7,
+            "goal": 3
           }
         },
         {
