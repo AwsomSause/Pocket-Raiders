@@ -9684,6 +9684,86 @@
   }
  },
  {
+  "id": "hisui-ember-fossil",
+  "name": "Hisuian Ember Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Growlithe joins your party",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "root-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "growlithe-hisui"
+  }
+ },
+ {
+  "id": "hisui-spark-fossil",
+  "name": "Hisuian Spark Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Voltorb joins your party",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "claw-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "voltorb-hisui"
+  }
+ },
+ {
+  "id": "hisui-tide-fossil",
+  "name": "Hisuian Tide Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Qwilfish joins your party",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "cover-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "qwilfish-hisui"
+  }
+ },
+ {
+  "id": "hisui-talon-fossil",
+  "name": "Hisuian Talon Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Sneasel joins your party",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "skull-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "sneasel-hisui"
+  }
+ },
+ {
+  "id": "hisui-veil-fossil",
+  "name": "Hisuian Veil Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Zorua joins your party",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "dome-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "zorua-hisui"
+  }
+ },
+ {
   "id": "flame-mail",
   "name": "Flame Mail",
   "family": "Mail",

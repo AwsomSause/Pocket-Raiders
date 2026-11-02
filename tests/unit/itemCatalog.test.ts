@@ -113,6 +113,15 @@ describe('catalog effects', () => {
     if (decision.kind === 'caught') expect(decision.mon.speciesId).toBe('omanyte');
   });
 
+  it('Hisuian fossils revive the Hisuian forms', () => {
+    const want: Record<string, string> = { 'hisui-ember-fossil': 'growlithe-hisui', 'hisui-spark-fossil': 'voltorb-hisui', 'hisui-tide-fossil': 'qwilfish-hisui', 'hisui-talon-fossil': 'sneasel-hisui', 'hisui-veil-fossil': 'zorua-hisui' };
+    for (const [id, species] of Object.entries(want)) {
+      const decision = pick(offering(newRun(), id), id).run.pending[0]!;
+      expect(decision.kind).toBe('caught');
+      if (decision.kind === 'caught') expect(decision.mon.speciesId).toBe(species);
+    }
+  });
+
   it('Max Revive can only go to a fainted Pokémon', () => {
     const run = newRun();
     const reward = content.rewards.get(catalogRewardId('max-revive'))!;
