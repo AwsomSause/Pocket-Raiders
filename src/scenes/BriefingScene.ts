@@ -21,6 +21,7 @@ import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { sceneForRun } from './routing';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
+import { BRIEFING_LOOKS } from '../ui/briefingLooks';
 
 export class BriefingScene extends Phaser.Scene {
   private menu!: Menu;
@@ -43,8 +44,11 @@ export class BriefingScene extends Phaser.Scene {
 
     const look = screenStyleOf('briefing', session.settings.screenStyles, run.seed);
     if (look !== 'original') dressScreen(this, 'briefing', look, session.settings.battleAnimations);
-    this.add.text(GAME_WIDTH / 2, 30, 'Campaign briefing', textStyle(40, COLORS.textLight)).setOrigin(0.5);
-    slideIn(this, drawPanel(this, 24, 64, GAME_WIDTH - 48, 370, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true }), 0, 18, session.settings.battleAnimations);
+    const draw = look === 'original' ? undefined : BRIEFING_LOOKS[look];
+    if (!draw) {
+      this.add.text(GAME_WIDTH / 2, 30, 'Campaign briefing', textStyle(40, COLORS.textLight)).setOrigin(0.5);
+      slideIn(this, drawPanel(this, 24, 64, GAME_WIDTH - 48, 370, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true }), 0, 18, session.settings.battleAnimations);
+    }
 
     // The lines are collected first, then laid out in the largest font that fits the panel.
     const rows: [string, string][] = [];
@@ -77,20 +81,22 @@ export class BriefingScene extends Phaser.Scene {
     if (remembered) line('Someone remembers', `“${remembered}”`);
     line('Seed', `${run.seed}   (the same seed replays the same run)`);
 
-    this.layoutRows(rows);
+    let menuAt: { x: number; y: number; columns: number; itemWidth: number; color: string } | undefined;
+    if (draw) menuAt = draw(this, { rows, regions, trainer: archetype.name, trainerSprite: archetype.spriteAssetId, seed: run.seed }, session.settings.battleAnimations !== 'full');
+    else this.layoutRows(rows);
 
-    this.status = this.add.text(GAME_WIDTH / 2, 444, '', textStyle(16, '#f0e0a0')).setOrigin(0.5, 0);
+    this.status = this.add.text(menuAt ? menuAt.x : GAME_WIDTH / 2, menuAt ? menuAt.y - 22 : 444, '', textStyle(16, menuAt ? menuAt.color : '#f0e0a0')).setOrigin(menuAt ? 0 : 0.5, 0);
     this.menu = new Menu(this, {
-      x: GAME_WIDTH / 2 - 200,
-      y: 476,
-      columns: 2,
-      itemWidth: 240,
+      x: menuAt?.x ?? GAME_WIDTH / 2 - 200,
+      y: menuAt?.y ?? 476,
+      columns: menuAt?.columns ?? 2,
+      itemWidth: menuAt?.itemWidth ?? 240,
       options: [{ label: 'Begin the run' }, { label: 'Copy seed' }],
       fontSize: 24,
-      color: COLORS.textLight,
+      color: menuAt?.color ?? COLORS.textLight,
       onSelect: (i) => (i === 0 ? this.scene.start(sceneForRun(session.run!)) : this.copySeed(run.seed)),
     });
-    this.add.text(16, GAME_HEIGHT - 22, '←/→ choose  ·  Enter select', textStyle(14, '#8a7f96'));
+    this.add.text(16, GAME_HEIGHT - 22, '←/→ choose  ·  Enter select', textStyle(14, '#8a7f96')).setDepth(20);
     onInputAction(this, (a) => this.menu.handle(a));
   }
 

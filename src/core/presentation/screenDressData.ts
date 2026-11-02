@@ -9,6 +9,7 @@ export const DRESSES: Record<string, Dress> = {
   'title.ds': { top: 0x8fd4ff, bottom: 0x3a8fe0, pattern: 'stripes', accent: 0xffffff },
   'title.anime': { top: 0x0b1030, bottom: 0x2a1b5a, pattern: 'stars', accent: 0x66ffcc, alt: 'rays' },
   'title.manga': { top: 0xffffff, bottom: 0xeeeeee, pattern: 'rays', accent: 0x111111, alt: 'dots' },
+  'title.carousel': { top: 0xf8f9fb, bottom: 0xe2e6eb, pattern: 'checker', accent: 0xd8505a },
   'title.flyover': { top: 0x2a6fb0, bottom: 0x1d4f86, pattern: 'map', accent: 0xe0c070 },
   'trainer.aero': { top: 0xa8e0ff, bottom: 0x5fb4f0, pattern: 'bubbles', accent: 0xffffff },
   'trainer.fighter': { top: 0xc8202c, bottom: 0x1c3fb0, pattern: 'stripes', accent: 0xffd23a },
