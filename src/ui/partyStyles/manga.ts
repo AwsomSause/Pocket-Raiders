@@ -5,6 +5,7 @@ import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from
 
 export const manga: PartySkin = {
   shape: 'slant',
+  tabs: { shape: 'slant', gap: 4, upper: true },
   palette: { row: 0x1a1a1a, rowAlpha: 0.95, rowFocus: 0x3a3a3a, rowRim: 0xe8e8e8, focusRim: 0xffffff, tab: 0x161616, tabActive: 0x484848, pane: 0x111111, paneRim: 0xf0f0f0 },
   roster(ctx) {
     const { scene, into, mons, sel } = ctx;

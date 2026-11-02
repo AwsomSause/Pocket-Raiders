@@ -50,6 +50,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const orbit: RewardSkin = {
+  strip: { tint: 0x0a1030, rim: 0x6a90e0, ink: '#e8f0ff', hp: '#9fe8c8', lead: '#f0c028', btnTint: 0x16204a, btnRim: 0x9fb4e8, btnInk: '#e8f0ff', radius: 20 },
   layout,
   title: () => 'Loot!',
   backdrop(scene, motion) {

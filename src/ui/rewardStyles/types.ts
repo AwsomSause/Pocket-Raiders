@@ -56,7 +56,22 @@ export interface RewardLayoutHandle {
 }
 export type RewardLayout = (ctx: RewardLayoutCtx, hooks: RewardLayoutHooks) => RewardLayoutHandle;
 
+/** How a look dresses the party strip under the cards and its Party / Bag buttons (paint only). */
+export interface RewardStrip {
+  tint: number;
+  rim: number;
+  ink: string;
+  hp: string;
+  lead: string;
+  btnTint: number;
+  btnRim: number;
+  btnInk: string;
+  radius: number;
+}
+
 export interface RewardSkin {
+  /** The party strip and its buttons; missing = the Aero glass look. */
+  strip?: RewardStrip;
   /** The whole look: where every reward sits and how it is drawn. Without it the scene's own cards are drawn with `card`. */
   layout?: RewardLayout;
   /** Light card faces: the scene uses dark text on them. */

@@ -5,6 +5,7 @@ import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from
 
 export const classic: PartySkin = {
   shape: 'square',
+  tabs: { shape: 'square', gap: 0 },
   palette: { row: 0x1c2c58, rowAlpha: 0.95, rowFocus: 0x3a58a8, rowRim: 0xa8c0f0, focusRim: 0xfff2b0, tab: 0x1c2c58, tabActive: 0x3a58a8, pane: 0x101c3c, paneRim: 0xa8c0f0 },
   roster(ctx) {
     const { scene, into, mons, sel } = ctx;

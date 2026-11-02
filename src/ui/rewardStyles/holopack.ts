@@ -62,6 +62,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const holopack: RewardSkin = {
+  strip: { tint: 0x1a1040, rim: 0xc8a0ff, ink: '#f4f1ff', hp: '#9fe8c8', lead: '#f0c028', btnTint: 0x2a1a60, btnRim: 0xe0c0ff, btnInk: '#f4f1ff', radius: 12 },
   title: () => 'PACK OPENED!',
   layout,
   backdrop(scene, motion) {

@@ -163,15 +163,16 @@ export class RewardScene extends Phaser.Scene {
     });
 
     // Party strip, with buttons to manage the party and use items.
-    drawGlass(this, 40, 380, GAME_WIDTH - 80, 112, { tint: AERO.glassLow, rim: AERO.sky, glow: false });
+    const strip = skin?.strip;
+    drawGlass(this, 40, 380, GAME_WIDTH - 80, 112, { tint: strip?.tint ?? AERO.glassLow, rim: strip?.rim ?? AERO.sky, glow: false, ...(strip ? { radius: strip.radius, alpha: 0.95 } : {}) });
     run.party.forEach((mon, i) => {
       const species = content.species.get(mon.speciesId)!;
       const x = 80 + i * 92;
       pokemonIcon(this, species, x, 412, 1.5);
-      this.add.text(x, 440, `Lv${mon.level}`, textStyle(16, COLORS.textLight)).setOrigin(0.5, 0);
-      this.add.text(x, 458, mon.hp <= 0 ? 'FNT' : `${mon.hp} HP`, textStyle(16, mon.hp <= 0 ? '#f08080' : '#a0e0a0')).setOrigin(0.5, 0);
-      if (i === 0) this.add.text(x, 384, 'LEAD', textStyle(12, '#f0c028')).setOrigin(0.5, 0);
-      if (skin?.teamNames) this.add.text(x, 476, species.name, textStyle(12, '#e8f6ff')).setOrigin(0.5, 0);
+      this.add.text(x, 440, `Lv${mon.level}`, textStyle(16, strip?.ink ?? COLORS.textLight)).setOrigin(0.5, 0);
+      this.add.text(x, 458, mon.hp <= 0 ? 'FNT' : `${mon.hp} HP`, textStyle(16, mon.hp <= 0 ? '#f08080' : (strip?.hp ?? '#a0e0a0'))).setOrigin(0.5, 0);
+      if (i === 0) this.add.text(x, 384, 'LEAD', textStyle(12, strip?.lead ?? '#f0c028')).setOrigin(0.5, 0);
+      if (skin?.teamNames) this.add.text(x, 476, species.name, textStyle(12, strip?.ink ?? '#e8f6ff')).setOrigin(0.5, 0);
     });
     // Party and Bag under the party strip; the draft items' buttons at the top right, beside the title.
     const rerolls = draftItemUses(content, run, 'reroll');
@@ -184,8 +185,8 @@ export class RewardScene extends Phaser.Scene {
     if (locks > 0) buttons.push({ label: `Lock ×${locks}`, x: 0, y: 12, w: 100, h: 44, size: 18, act: () => this.startMode('lock', 'Choose the card to keep in the next draft too (Lock Capsule).') });
     buttons.slice(2).forEach((b, n, extra) => (b.x = GAME_WIDTH - 40 - (extra.length - n) * 112 + 12));
     buttons.forEach((b, n) => {
-      drawGlass(this, b.x, b.y, b.w, b.h, { radius: 16 });
-      this.add.text(b.x + b.w / 2, b.y + b.h / 2, b.label, textStyle(b.size)).setOrigin(0.5);
+      drawGlass(this, b.x, b.y, b.w, b.h, strip ? { tint: strip.btnTint, rim: strip.btnRim, radius: Math.min(strip.radius + 4, b.h / 2) } : { radius: 16 });
+      this.add.text(b.x + b.w / 2, b.y + b.h / 2, b.label, textStyle(b.size, strip?.btnInk)).setOrigin(0.5);
       this.cursors.push(this.highlight(b.x, b.y, b.w, b.h));
       this.clickZone(b.x, b.y, b.w, b.h, draft.length + n);
     });

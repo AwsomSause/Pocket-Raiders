@@ -61,6 +61,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const gifts: RewardSkin = {
+  strip: { tint: 0x7a1020, rim: 0xffd860, ink: '#fff4d8', hp: '#c0f0b0', lead: '#ffe070', btnTint: 0x1f6a3a, btnRim: 0xffd860, btnInk: '#fff4d8', radius: 14 },
   title: () => 'Pick a present!',
   layout,
   backdrop(scene, motion) {

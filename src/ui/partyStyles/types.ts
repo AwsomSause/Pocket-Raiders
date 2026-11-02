@@ -55,6 +55,8 @@ export interface PartySkin {
   roster?(ctx: RosterCtx): void;
   palette: PartyPalette;
   shape: 'round' | 'square' | 'slant' | 'pill';
+  /** How the seven tabs of the summary are dressed (the page itself is the same on every look). */
+  tabs?: { gap?: number; shape?: 'round' | 'square' | 'slant' | 'pill'; underline?: boolean; upper?: boolean };
   /** Non-focused rows fade (the spotlight look). */
   dimRows?: boolean;
   /** The whole window: backdrop, header band and message band, added to `root` (which already has the dark shade). */

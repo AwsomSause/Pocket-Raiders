@@ -295,29 +295,34 @@ export class MapScene extends Phaser.Scene {
     }
 
     // ---------- header ----------
-    drawPanel(this, 8, 6, GAME_WIDTH - 16, 64, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true, alpha: 0.92 });
+    const chrome = mapSkin?.chrome;
+    const hInk = chrome?.header.ink ?? COLORS.textLight;
+    const hSub = chrome?.header.sub ?? '#d8d0e0';
+    const bInk = chrome?.bottom.ink ?? COLORS.textLight;
+    if (chrome) drawGlass(this, 8, 6, GAME_WIDTH - 16, 64, { tint: chrome.header.fill, rim: chrome.header.border, alpha: chrome.header.alpha, glow: false, radius: chrome.button.radius > 12 ? 18 : 8 });
+    else drawPanel(this, 8, 6, GAME_WIDTH - 16, 64, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true, alpha: 0.92 });
     const column = currentColumn(stage);
-    headerBar(this, identity.accent, this.motion, 8, 6, GAME_WIDTH - 16, 64); // UIE pause-menu strip in the region's colour
+    if (!chrome) headerBar(this, identity.accent, this.motion, 8, 6, GAME_WIDTH - 16, 64); // UIE pause-menu strip in the region's colour
     // The region's accent stripe under the header (catalog 62).
     this.add.rectangle(20, 67, GAME_WIDTH - 40, 3, identity.accent, 0.9).setOrigin(0).setName('region-accent');
     if (league) {
-      this.add.text(24, 12, `${region.name} Pokémon League`, textStyle(28, COLORS.textLight));
-      this.add.text(26, 44, `Elite Four, then ${leader.title}  ·  Healed after every battle`, textStyle(16, '#d8d0e0'));
+      this.add.text(24, 12, `${region.name} Pokémon League`, textStyle(28, hInk));
+      this.add.text(26, 44, `Elite Four, then ${leader.title}  ·  Healed after every battle`, textStyle(16, hSub));
     } else {
       const blind = blindMap(run.rules);
-      this.add.text(24, 12, `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, COLORS.textLight));
+      this.add.text(24, 12, `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
       let bx = 26;
       for (const type of blind ? [] : theme.types) {
         const b = badge(this, bx, 44, type, TYPE_COLORS[type] ?? 0x808080, 14);
         bx += b.width + 6;
       }
-      this.add.text(bx + 8, 44, leader.title, textStyle(16, '#d8d0e0'));
+      this.add.text(bx + 8, 44, leader.title, textStyle(16, hSub));
     }
     this.add
-      .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, COLORS.textLight))
+      .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
     this.add
-      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, '#d8d0e0'))
+      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
     // Mentors: who trains you, how far the bond has come and where you stand against the fellow apprentice.
     const mentorLine = league ? null : mentorHudLine(run);
@@ -576,7 +581,8 @@ export class MapScene extends Phaser.Scene {
     }
 
     // ---------- bottom panel: info, side stops, party, bag ----------
-    drawPanel(this, 8, 420, GAME_WIDTH - 16, 116, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true, alpha: 0.94 });
+    if (chrome) drawGlass(this, 8, 420, GAME_WIDTH - 16, 116, { tint: chrome.bottom.fill, rim: chrome.bottom.border, alpha: chrome.bottom.alpha, glow: false, radius: chrome.button.radius > 12 ? 18 : 8 });
+    else drawPanel(this, 8, 420, GAME_WIDTH - 16, 116, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true, alpha: 0.94 });
     mapSkin?.bar?.(this, { clock: clockLabel(run), money: run.money, cap });
     // Layout (spec 3): row one holds the party and eggs on the left and the buttons in whatever width is left;
     // row two is the info line and the notice. Nothing is placed over anything else.
@@ -586,7 +592,7 @@ export class MapScene extends Phaser.Scene {
       const species = content.species.get(mon.speciesId)!;
       const x = 40 + i * step;
       pokemonIcon(this, species, x, 444, 1);
-      this.add.text(x, 458, mon.hp <= 0 ? 'FNT' : `Lv${mon.level}`, textStyle(13, mon.hp <= 0 ? '#f08080' : COLORS.textLight)).setOrigin(0.5, 0);
+      this.add.text(x, 458, mon.hp <= 0 ? 'FNT' : `Lv${mon.level}`, textStyle(13, mon.hp <= 0 ? '#f08080' : bInk)).setOrigin(0.5, 0);
     });
     // Eggs ride along after the party, rocking gently; the soonest-to-hatch one wobbles hardest.
     run.eggs.forEach((egg, i) => {
@@ -598,7 +604,7 @@ export class MapScene extends Phaser.Scene {
       }
       this.add.text(x, 458, `${egg.left}${egg.unit === 'battle' ? 'B' : 'S'}`, textStyle(13, '#fff2b0')).setOrigin(0.5, 0);
     });
-    this.info = this.add.text(24, 480, '', textStyle(17, COLORS.textLight, { wordWrap: { width: 580 } }));
+    this.info = this.add.text(24, 480, '', textStyle(17, bInk, { wordWrap: { width: 580 } }));
 
     const buttons: { option: Option; label: string; color: number }[] = [];
     const currentNode = stage.current ? findNode(stage.map, stage.current) : null;
@@ -620,8 +626,8 @@ export class MapScene extends Phaser.Scene {
     buttons.forEach((b, i) => {
       const bxPos = GAME_WIDTH - 24 - (cols - (i % cols)) * (bw + 8) + 8;
       const byPos = 428 + (oneRow ? 0 : Math.floor(i / cols) * (bh + 4));
-      drawGlass(this, bxPos, byPos, bw, bh, { tint: b.color === COLORS.panel ? AERO.glass : mixColor(b.color, 0x000000, 0.25), rim: b.color === COLORS.panel ? AERO.rim : mixColor(b.color, 0xffffff, 0.45), radius: oneRow ? 16 : 9, alpha: 0.95 });
-      const label = this.add.text(bxPos + bw / 2, byPos + bh / 2, b.label, textStyle(oneRow && b.label.length <= 6 && bw >= 92 ? 22 : 16, '#ffffff')).setOrigin(0.5);
+      drawGlass(this, bxPos, byPos, bw, bh, { tint: b.color === COLORS.panel ? (chrome?.button.tint ?? AERO.glass) : mixColor(b.color, 0x000000, 0.25), rim: b.color === COLORS.panel ? (chrome?.button.rim ?? AERO.rim) : mixColor(b.color, 0xffffff, 0.45), radius: chrome ? (oneRow ? chrome.button.radius : Math.min(chrome.button.radius, 11)) : oneRow ? 16 : 9, alpha: chrome?.button.alpha ?? 0.95 });
+      const label = this.add.text(bxPos + bw / 2, byPos + bh / 2, b.label, textStyle(oneRow && b.label.length <= 6 && bw >= 92 ? 22 : 16, b.color === COLORS.panel ? (chrome?.button.ink ?? '#ffffff') : '#ffffff')).setOrigin(0.5);
       fitLine(label, bw - 12);
       this.addOption(b.option, () => this.boxCursor(bxPos, byPos, bw, bh), { x: bxPos, y: byPos, w: bw, h: bh });
     });
@@ -630,7 +636,7 @@ export class MapScene extends Phaser.Scene {
     const riding = run.moveMode ? mapActions(content, run).find((a) => a.on) : undefined;
     const working = [riding ? `Riding the ${content.catalog.get(riding.itemId)!.name}` : '', mapItemSummary(content, run)].filter(Boolean).join(' · ');
     this.notice = this.add
-      .text(GAME_WIDTH - 24, 482, data.notice ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
+      .text(GAME_WIDTH - 24, 482, data.notice ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
       .setOrigin(1, 0);
     fitBlock(this.notice, 300, 48);
     this.focus(Math.min(data.focus ?? 0, this.options.length - 1), false);

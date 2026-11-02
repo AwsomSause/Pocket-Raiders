@@ -5,6 +5,7 @@ import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from
 
 export const sticker: PartySkin = {
   shape: 'pill',
+  tabs: { shape: 'pill', gap: 10 },
   palette: { row: 0x5a2a8a, rowAlpha: 0.95, rowFocus: 0xc83a9a, rowRim: 0xffffff, focusRim: 0xfff060, tab: 0x4a2478, tabActive: 0xc83a9a, pane: 0x32184e, paneRim: 0xffffff },
   roster(ctx) {
     const { scene, into, mons, sel } = ctx;

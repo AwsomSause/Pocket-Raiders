@@ -50,6 +50,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const trail: RewardSkin = {
+  strip: { tint: 0x5a3a1a, rim: 0xe8d098, ink: '#fff0d0', hp: '#c0f0b0', lead: '#ffe070', btnTint: 0x8a5a2a, btnRim: 0xe8d098, btnInk: '#fff0d0', radius: 8 },
   layout,
   title: () => 'Trail Finds',
   backdrop(scene, motion) {

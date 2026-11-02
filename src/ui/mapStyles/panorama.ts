@@ -9,6 +9,7 @@ const BANDS: [number, number, number][] = [
 ];
 
 export const panorama: MapSkin = {
+  chrome: { header: { fill: 0x101820, border: 0xffffff, alpha: 0.6, ink: '#ffffff', sub: '#d8e8f8' }, bottom: { fill: 0x101820, border: 0xffffff, alpha: 0.66, ink: '#ffffff', sub: '#ffe9a0' }, button: { tint: 0x101820, rim: 0xffffff, ink: '#ffffff', radius: 14, alpha: 0.8 } },
   frame(scene, _motion, { types }) {
     // Each band is named like a biome on the route.
     const w = GAME_WIDTH / BANDS.length;
