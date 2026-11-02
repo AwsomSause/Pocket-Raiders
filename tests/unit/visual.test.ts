@@ -34,7 +34,7 @@ describe('visual slice 1 (Aero battle)', () => {
 
   it('ships every pack file it catalogs', () => {
     const pack = FIXED_ASSETS.filter((a) => a.id.startsWith('pack.'));
-    expect(pack.length).toBe(98);
+    expect(pack.length).toBeGreaterThanOrEqual(98); // a floor, not an exact count: many threads add pack files
     for (const a of pack) expect(existsSync(`public/assets/${a.path}`), a.path).toBe(true);
   });
 
