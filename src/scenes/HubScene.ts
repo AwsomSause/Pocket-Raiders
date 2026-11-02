@@ -46,6 +46,10 @@ import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '..
 import { localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
+import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
+import { HubTouchPad, wantsTouchPad } from '../ui/hubTown/touchPad';
+import { hubPeriod } from '../core/hubTown/daylight';
+import type { Period } from '../core/clock';
 import { ArenaLobby, lobbyMons, type LobbyTile } from '../ui/arenaLobby/lobby';
 import { LegacyDisplay, displayAssets, displayLines } from '../ui/hubTown/legacyDisplay';
 import { drawTownGrowth } from '../ui/hubTown/townGrowth';
@@ -224,6 +228,9 @@ export class HubScene extends Phaser.Scene {
   private lobby: ArenaLobby | null = null;
   /** Hub Town's minimap (M) and district banner. */
   minimap: HubMinimap | null = null;
+  /** The time of day the town is drawn at, and the phone controls (when shown). */
+  period: Period = 'afternoon';
+  touchPad: HubTouchPad | null = null;
   private lobbyPokemon: Species[] = [];
 
   constructor() {
@@ -290,6 +297,7 @@ export class HubScene extends Phaser.Scene {
     this.crowd = null;
     this.lobby = null;
     this.minimap = null;
+    this.touchPad = null;
     if (session.settings.hubStyle === 'lobby') {
       const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
       this.lobby = new ArenaLobby(this, {
@@ -327,7 +335,13 @@ export class HubScene extends Phaser.Scene {
     drawTownGrowth(this.town, this, p, motion);
     drawAmbience(this.town, this, motion);
     this.crowd = new HubCrowd(this.town, this, session.content, p, this.crowdList, { motion, window: this.crowdWindow, say: (line) => notify(line) });
-    this.minimap = new HubMinimap(this, this.town, { motion, busy: () => Boolean(this.picker || this.section || this.dexInfo) });
+    const busy = (): boolean => Boolean(this.picker || this.section || this.dexInfo);
+    this.minimap = new HubMinimap(this, this.town, { motion, busy });
+    // Day and night follow your own clock; the town's sounds follow the time and where you stand.
+    this.period = hubPeriod(new Date(Date.now()));
+    drawDaylight(this.town, this, this.period, motion);
+    startTownSound(this.town, this, this.period);
+    this.touchPad = wantsTouchPad(this) ? new HubTouchPad(this, this.town, { busy, menu: () => this.openPause(), map: () => this.minimap?.cycle() }) : null;
   }
 
   /** The screen layer over the town or lobby: logo, currencies, the card line, the help line, the rival note. */
