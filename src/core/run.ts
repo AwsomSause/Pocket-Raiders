@@ -161,7 +161,8 @@ import { bondEvolves, bondLessons, bondVictory, enemyCombo, playerCombo, revealM
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
 import { createStoryState, emit } from './story/record';
-import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift } from './care';
+import { chainGivesTalent, chainShiny, extendChain, shinyCharmTiers } from './catchChain';
+import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift, careOf } from './care';
 import { createPartyLife, partyLifeCamp, partyLifeTurn, partyLifeVictory } from './partyLife';
 import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
@@ -234,6 +235,8 @@ export interface NewRunOptions {
   candyPerks?: string[];
   /** The account's unlocked trainers; map events that recruit one of them stop appearing (itemCounters `owned:<id>`). */
   ownedTrainers?: readonly string[];
+  /** Species caught across all runs (the dex): sets the Shiny Charm tier (core/catchChain). */
+  dexCaught?: number;
   /** The profile's bonds with mentors (core/mentors): lasting trust, graduations and the fellow apprentices who return. */
   mentorBonds?: Profile['mentorBonds'];
   /** Ideas W5: what NPCs remember (core/npcMemory.ts); it seeds the run's `remembers-*` flags. */
@@ -285,7 +288,9 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     materials: {},
     plaza: freshPlaza(),
     badges: [],
-    ...(opts.ownedTrainers?.length ? { itemCounters: Object.fromEntries(opts.ownedTrainers.map((id) => [`owned:${id}`, 1])) } : {}),
+    ...(opts.ownedTrainers?.length || shinyCharmTiers(content, opts.dexCaught ?? 0) > 0
+      ? { itemCounters: { ...Object.fromEntries((opts.ownedTrainers ?? []).map((id) => [`owned:${id}`, 1])), ...(shinyCharmTiers(content, opts.dexCaught ?? 0) > 0 ? { shinyCharm: shinyCharmTiers(content, opts.dexCaught ?? 0) } : {}) } }
+      : {}),
     campaignId: campaign.id,
     regionOrder,
     regionIndex: 0,
@@ -1513,6 +1518,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       : back
       ? newMon(content, run, back.member.speciesId, back.member.level, 'e', content.balance.difficulty.maxLevel)
       : newMon(content, run, speciesId, opened.level, 'e', !legendary && run.encountersCompleted < content.balance.opening.encounters ? content.balance.opening.maxLevel : content.balance.difficulty.maxLevel);
+    if (!back && !mrBack && !legendary && !enemy.shiny && chainShiny(content, run, enemy.speciesId, node.id, runAttributeEffects(content, run).shinyChance)) enemy.shiny = true;
     if (back) enemy.moves = back.member.moves!.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
     if (mrBack) enemy.moves = mrBack.moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
     const luck = back || mrBack || legendary ? null : wildLuck(content, run, enemy.speciesId, node.id, plan.shiny, content.balance.shinyChance);
@@ -2492,6 +2498,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     const seals = perksOf(activePerks(content, run), 'sealCase').reduce((sum, p) => sum + p.perk.luck * p.copies, 0);
     if (seals > 0) addRunAttribute(content, run, 'luck', seals);
     discover(run, caught.speciesId, true);
+    // Catch Chains (S218): the same species again and again; a long chain marks the catch with a talent.
+    const links = extendChain(run, caught.speciesId);
+    if (chainGivesTalent(content, links)) {
+      const care = careOf(caught);
+      const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+      care.talent ??= stats[[...caught.uid].reduce((n, c) => n + c.charCodeAt(0), 0) % stats.length]!;
+    }
     caughtPending.push({ kind: 'caught', mon: caught });
   }
   // King N's Voice of Pokémon: a wild Pokémon you defeated may ask to join, no ball needed.

@@ -2179,6 +2179,10 @@ export const BalanceSchema = z.object({
   startingItems: z.record(z.string(), z.number().int().positive()),
   /** Chance that a wild Pokémon is shiny (director decision D8: 1/2000). */
   shinyChance: z.number().min(0).max(1),
+  /** Shiny Charm tiers (S225): species caught across all runs (the dex) lift the shiny chance of every run. */
+  shinyCharm: z.object({ tiers: z.array(z.object({ dex: z.number().int().positive(), multiplier: z.number().min(1), label: z.string() })) }),
+  /** Catch Chains (S218): catching the same species back to back lifts its shiny odds by `shinyPerLink` x the chain (max `maxLinks`), and a chain of `talentAt` gives the catch a talent. */
+  catchChain: z.object({ shinyPerLink: z.number().min(0), maxLinks: z.number().int().positive(), talentAt: z.number().int().positive() }),
   /** Team size = baseSize + extraPerStage × stage number (from 0) + a random 0..randomExtra, capped at maxSize. */
   trainerTeam: z.object({
     baseSize: z.number().int().min(1),

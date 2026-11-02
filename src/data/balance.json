@@ -86,6 +86,19 @@
   "potion": 2
  },
  "shinyChance": 0.0005,
+ "shinyCharm": {
+  "tiers": [
+   { "dex": 25, "multiplier": 1.25, "label": "Bronze" },
+   { "dex": 100, "multiplier": 1.5, "label": "Silver" },
+   { "dex": 250, "multiplier": 2, "label": "Gold" },
+   { "dex": 500, "multiplier": 3, "label": "Platinum" }
+  ]
+ },
+ "catchChain": {
+  "shinyPerLink": 2,
+  "maxLinks": 10,
+  "talentAt": 5
+ },
  "trainerTeam": {
   "baseSize": 2,
   "extraPerStage": 1,
