@@ -24,6 +24,7 @@ import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { revealPop } from '../ui/wiiMotion';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { DARK_INK, LIGHT_INK, REWARD_SKINS } from '../ui/rewardStyles';
+import type { RewardLayoutHandle } from '../ui/rewardStyles/types';
 
 export class RewardScene extends Phaser.Scene {
   /** False for the first 220 ms of game time, while a held key could still pick a card (tests wait for it). */
@@ -39,6 +40,7 @@ export class RewardScene extends Phaser.Scene {
   private picker: PickerLike | null = null;
   private notice: Phaser.GameObjects.Text | null = null;
   private chosen = false;
+  private layoutHandle: RewardLayoutHandle | null = null;
 
   constructor() {
     super('Reward');
@@ -74,7 +76,40 @@ export class RewardScene extends Phaser.Scene {
     // Dowsing Machine and Bloom Mail add choices; the cards shrink to fit.
     const cardW = Math.min(172, Math.floor((GAME_WIDTH - 52 - gap * (draft.length - 1)) / draft.length));
     const startX = (GAME_WIDTH - (cardW * draft.length + gap * (draft.length - 1))) / 2;
-    draft.forEach((rewardId, i) => {
+    this.layoutHandle = null;
+    if (skin?.layout) {
+      const views = draft.map((rewardId) => {
+        const reward = content.rewards.get(rewardId)!;
+        const cmp = compareReward(content, run, reward);
+        const why = rewardSynergy(content, run, reward);
+        return {
+          name: reward.name,
+          rarity: reward.rarity,
+          rim: COLORS.rarity[reward.rarity] ?? 0x808080,
+          iconId: reward.iconAssetId,
+          desc: reward.description,
+          notes: [cmp ? `Now ${cmp.now} → After ${cmp.after} (${cmp.label})` : '', why ?? '', (run.draftCarry ?? []).includes(rewardId) ? 'Locked: in the next draft too' : ''].filter(Boolean),
+          reroll: isRerollReward(content, run, reward),
+        };
+      });
+      const pic = (m: { speciesId: string }) => {
+        const sp = content.species.get(m.speciesId)!;
+        return { name: sp.name, draw: (x: number, y: number, sc: number) => pokemonIcon(this, sp, x, y, sc) };
+      };
+      this.layoutHandle = skin.layout(
+        { scene: this, views, motion: this.motion, status: `Encounter ${run.encountersCompleted} cleared  ·  ₽${run.money}  ·  Candies ${run.candies}`, encounter: run.encountersCompleted, lead: run.party[0] ? pic(run.party[0]) : null, team: run.party.map(pic) },
+        {
+          focus: (n) => !this.picker && this.focus(n),
+          pick: (n) => {
+            if (this.picker || this.chosen) return;
+            this.focus(n);
+            this.activate(n);
+          },
+        },
+      );
+      draft.forEach(() => this.cursors.push(this.add.graphics().setVisible(false)));
+    }
+    if (!skin?.layout) draft.forEach((rewardId, i) => {
       const reward = content.rewards.get(rewardId)!;
       const x = startX + i * (cardW + gap);
       const y = this.cardY;
@@ -86,7 +121,7 @@ export class RewardScene extends Phaser.Scene {
       glow.fillRoundedRect(-cardW / 2 - 8, -143, cardW + 16, 286, 24);
       const spec = { w: cardW, rim: rarityColor, index: i, motion: this.motion };
       const face = this.add.graphics();
-      if (skin) skin.card(face, spec);
+      if (skin?.card) skin.card(face, spec);
       else paintGlass(face, -cardW / 2, -135, cardW, 270, { rim: rarityColor, radius: 18 });
       card.add([glow, face]);
       this.cursors.push(glow);
@@ -214,6 +249,7 @@ export class RewardScene extends Phaser.Scene {
     if (sound && i !== this.index) playSfx(this, 'ui.cursor', 0.5);
     this.index = i;
     this.cursors.forEach((c, n) => c.setVisible(n === i));
+    this.layoutHandle?.focus(i);
     // The focused card lifts a little; the others settle back.
     this.cards.forEach((card, n) => {
       const lift = n === i ? -10 : 0;
@@ -294,7 +330,10 @@ export class RewardScene extends Phaser.Scene {
     playSfxLazy(this, 'me.item_get', 0.8);
     // The chosen card flies up into the bag with a burst; the result shows on a glass plate.
     const card = this.cards[draftIndex];
-    if (card && this.motion !== 'off') {
+    if (this.layoutHandle) {
+      this.layoutHandle.picked(draftIndex);
+      if (this.motion !== 'off') void burstReveal(this, GAME_WIDTH / 2, 200, 0x9fe8ff, this.motion, 45);
+    } else if (card && this.motion !== 'off') {
       card.setDepth(40);
       void burstReveal(this, card.x, card.y, 0x9fe8ff, this.motion, 45);
       this.tweens.add({ targets: card, y: card.y - 60, scale: 0.4, alpha: 0, duration: 420, ease: 'Back.easeIn' });
