@@ -1,0 +1,36 @@
+import { describe, expect, it } from 'vitest';
+import { crushSample, SOUND_PACKS, SOUND_PACK_ORDER } from '../../src/core/presentation/soundPack';
+import { SaveManager } from '../../src/save/saveManager';
+import { MemoryStorageProvider } from '../../src/save/storage';
+import { content } from './helpers';
+
+describe('S261 sound packs', () => {
+  it('Original has no filters; every other pack has some and a label', () => {
+    expect(SOUND_PACKS.original.stages).toEqual([]);
+    for (const id of SOUND_PACK_ORDER.slice(1)) {
+      expect(SOUND_PACKS[id].stages.length).toBeGreaterThan(0);
+      expect(SOUND_PACKS[id].label.length).toBeGreaterThan(0);
+    }
+    expect(SOUND_PACK_ORDER.length).toBe(Object.keys(SOUND_PACKS).length);
+  });
+
+  it('bit-crush rounds to the nearest step and clamps', () => {
+    expect(crushSample(0.5, 2)).toBe(0.5);
+    expect(crushSample(0.4, 2)).toBe(0.5);
+    expect(crushSample(3, 6)).toBe(1);
+    expect(crushSample(-3, 6)).toBe(-1);
+    expect(crushSample(0, 6)).toBe(0);
+  });
+
+  it('old settings (v22) load as Original and a chosen pack survives a reload', () => {
+    const storage = new MemoryStorageProvider();
+    const current = new SaveManager(storage, content).loadSettings();
+    expect(current.soundPack).toBe('original');
+    const { soundPack: _s, ...old } = current;
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 22, savedAt: '', data: old }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded.soundPack).toBe('original');
+    new SaveManager(storage, content).saveSettings({ ...loaded, soundPack: 'gba' });
+    expect(new SaveManager(storage, content).loadSettings().soundPack).toBe('gba');
+  });
+});
