@@ -4,8 +4,7 @@ import type { Content } from '../../src/core/contentSchema';
 export const content: Content = buildContent();
 
 import { levelScale, type LevelScale } from '../../src/core/encounters';
-import { nextChoices } from '../../src/core/map';
-import { chooseNode, chooseReward } from '../../src/core/run';
+import { chooseNode, chooseReward, mapChoices } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 
 /** The difficulty curve at a point of the full campaign (region, stage and column count from 0, 0, 1). */
@@ -16,7 +15,7 @@ export function scaleAt(stageIndex: number, column: number, regionIndex = 0, c: 
 /** On the map, walks into the first normal (not harder) next node; otherwise returns the run unchanged. */
 export function toBattle(run: RunState, c: Content = content): RunState {
   if (run.phase !== 'map') return run;
-  const choices = nextChoices(run.stage!);
+  const choices = mapChoices(c, run);
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
   // Scripted fights in tests expect one foe: an SOS call is marked as already used (tests/unit/sos.test.ts covers calls).
