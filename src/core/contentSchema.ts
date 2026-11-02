@@ -1414,6 +1414,7 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('squirt'), percent: z.number().positive() }),
   /** VS Recorder: losing a trainer battle replays it from the start, once per run. */
   z.object({ perk: z.literal('vsRecorder') }),
+  z.object({ perk: z.literal('safetyNet') }),
   /** GB Sounds: the battle music plays in the Game Boy style. */
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */

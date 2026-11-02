@@ -744,10 +744,20 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   return run;
 }
 
-/** VS Recorder: keeps the run as a trainer battle begins, for one replay after a loss (mutates `run`). */
+/** VS Recorder: a trainer battle can replay once per run. */
+function vsRecorderReady(content: Content, run: RunState): boolean {
+  return run.battle?.kind === 'trainer' && hasPerk(content, run, 'vsRecorder') && (run.itemCounters?.['vs-recorder-used'] ?? 0) === 0;
+}
+
+/** Safety Net (S382): one wipe per run is undone; the fight replays with a healed party. */
+function safetyNetReady(content: Content, run: RunState): boolean {
+  return hasPerk(content, run, 'safetyNet') && (run.itemCounters?.['safety-net-used'] ?? 0) === 0;
+}
+
+/** VS Recorder / Safety Net: keeps the run as a trainer battle begins, for one replay after a loss (mutates `run`). */
 function recordBattleStart(content: Content, run: RunState): void {
   delete run.recorder;
-  if (run.battle?.kind !== 'trainer' || !hasPerk(content, run, 'vsRecorder') || (run.itemCounters?.['vs-recorder-used'] ?? 0) > 0) return;
+  if (!run.battle || !(vsRecorderReady(content, run) || safetyNetReady(content, run))) return;
   const { checkpoint: _c, recorder: _r, ...rest } = run;
   run.recorder = structuredClone(rest) as Record<string, unknown>;
 }
@@ -2257,9 +2267,17 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     const enemy = currentEnemy(battle);
     run.log.defeatedBy = { speciesId: enemy.speciesId, level: enemy.level, trainer: battle.trainer?.name ?? null };
     // VS Recorder: the trainer battle replays from the start, once per run.
-    if (battle.kind === 'trainer' && run.recorder) {
+    if (battle.kind === 'trainer' && run.recorder && vsRecorderReady(content, run)) {
       const replay = structuredClone(run.recorder) as unknown as RunState;
       replay.itemCounters = { ...replay.itemCounters, 'vs-recorder-used': 1 };
+      return { run: replay, events, end: null, defeated: false, cues, drama, wiped: true };
+    }
+    // Safety Net: the wipe is undone once per run (a real wipe ends the run, Adventure keeps its own checkpoints).
+    if (run.recorder && safetyNetReady(content, run)) {
+      const replay = structuredClone(run.recorder) as unknown as RunState;
+      replay.itemCounters = { ...replay.itemCounters, 'safety-net-used': 1 };
+      healParty(content, replay);
+      recordBattleStart(content, replay);
       return { run: replay, events, end: null, defeated: false, cues, drama, wiped: true };
     }
     // Adventure and Death-Block: a wipe sends you back to the checkpoint instead of ending the run.
