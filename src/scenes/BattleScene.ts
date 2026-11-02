@@ -4,7 +4,7 @@
 
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern } from '../core/presentation/uiPrefs';
 import { fitLine } from '../ui/fitText';
-import { HazardFloor, bossCinematic, critFreeze, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
+import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -2710,6 +2710,7 @@ export class BattleScene extends Phaser.Scene {
         case 'weatherDamage':
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
+          if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
           mon!.hp = e.hpAfter;
           if (e.type !== 'drain' && e.type !== 'heal') {
