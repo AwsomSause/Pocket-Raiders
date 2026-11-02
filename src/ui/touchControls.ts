@@ -12,12 +12,18 @@ const BUTTONS: { label: string; code: string; keyCode: number; grid: string }[] 
   { label: '▶', code: 'ArrowRight', keyCode: 39, grid: '2 / 3' },
   { label: 'OK', code: 'Enter', keyCode: 13, grid: '1 / 5' },
   { label: 'Back', code: 'Escape', keyCode: 27, grid: '2 / 5' },
+  { label: 'Map', code: 'KeyM', keyCode: 77, grid: '3 / 5' },
 ];
 
-const viewport = (): Viewport => ({ width: window.innerWidth, height: window.innerHeight, coarse: window.matchMedia?.('(pointer: coarse)').matches ?? false });
+const viewport = (): Viewport => ({ width: window.innerWidth, height: window.innerHeight, coarse: (window.matchMedia?.('(pointer: coarse)').matches ?? false) || new URLSearchParams(location.search).get('touch') === '1' });
+
+function send(type: 'keydown' | 'keyup', code: string, keyCode: number): void {
+  window.dispatchEvent(new KeyboardEvent(type, { code, key: code, keyCode, which: keyCode, bubbles: true } as KeyboardEventInit));
+}
 
 function press(code: string, keyCode: number): void {
-  for (const type of ['keydown', 'keyup']) window.dispatchEvent(new KeyboardEvent(type, { code, key: code, keyCode, which: keyCode, bubbles: true } as KeyboardEventInit));
+  send('keydown', code, keyCode);
+  send('keyup', code, keyCode);
 }
 
 /** One-handed layout (Settings > Controls): bunches the pad's two clusters to one edge. */
@@ -38,13 +44,18 @@ export function installTouchControls(): void {
     #touch-pad button:active{filter:brightness(1.25)}
     body.touch-pad-side #touch-pad{background:transparent;pointer-events:none;align-items:flex-end;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
     body.touch-pad-side #touch-pad .dpad,body.touch-pad-side #touch-pad .acts{pointer-events:auto}
-    body.touch-pad-side #touch-pad button{opacity:.62;box-shadow:0 2px 8px rgba(0,0,0,.45)}
+    body.touch-pad-side #touch-pad button{opacity:.55;box-shadow:0 2px 8px rgba(0,0,0,.45)}
     body.touch-pad-side.pad-min #touch-pad .dpad,body.touch-pad-side.pad-min #touch-pad .acts button:first-child{display:none}
     body.touch-pad-side.pad-min #touch-pad .acts{margin-left:auto;grid-template-rows:repeat(1,44px)}
     body.touch-pad-side #touch-pad .acts{grid-template-columns:repeat(1,84px);grid-template-rows:repeat(2,44px)}
     body.touch-pad-side #touch-pad .dpad{margin-left:56px;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,44px)}
     body.touch-pad-side #touch-pad button{min-width:44px;min-height:44px}
     #touch-toggle{position:fixed;left:calc(10px + env(safe-area-inset-left));bottom:calc(10px + env(safe-area-inset-bottom));width:44px;height:44px;display:none;z-index:6;border:0;border-radius:12px;background:rgba(47,127,216,.7);color:#fff;font:600 20px system-ui,sans-serif;touch-action:none;-webkit-tap-highlight-color:transparent}
+    #touch-pad .hub-only{display:none}
+    body.in-hub #touch-pad .hub-only{display:block}
+    body.touch-pad-side #touch-pad .acts{grid-template-rows:none;grid-auto-rows:44px}
+    body.touch-pad-side #touch-pad{transition:opacity .4s}
+    body.touch-pad-side.pad-idle #touch-pad{opacity:.45}
     #touch-fs{position:fixed;top:calc(6px + env(safe-area-inset-top));right:calc(6px + env(safe-area-inset-right));width:44px;height:44px;display:none;z-index:6;border:0;border-radius:12px;background:rgba(20,16,30,.6);color:#fff;font:600 20px system-ui,sans-serif;opacity:.7;touch-action:none;-webkit-tap-highlight-color:transparent}
     #rotate-hint{position:fixed;top:calc(6px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:none;background:rgba(20,16,30,.9);color:#fff;font:14px system-ui,sans-serif;padding:6px 12px;border-radius:12px;z-index:5;max-width:80vw;text-align:center}
     body.touch-pad-bottom #game{align-items:flex-start!important;height:calc(100vh - 120px - env(safe-area-inset-bottom));height:calc(100dvh - 120px - env(safe-area-inset-bottom))}`;
@@ -60,12 +71,31 @@ export function installTouchControls(): void {
     el.type = 'button';
     el.textContent = b.label;
     el.setAttribute('aria-label', b.label);
-    const isAct = b.code === 'Enter' || b.code === 'Escape';
+    const isAct = b.code !== 'ArrowUp' && b.code !== 'ArrowDown' && b.code !== 'ArrowLeft' && b.code !== 'ArrowRight';
     if (!isAct) el.style.gridArea = b.grid;
-    el.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      press(b.code, b.keyCode);
-    });
+    if (b.code === 'KeyM') el.classList.add('hub-only');
+    if (isAct) {
+      el.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        press(b.code, b.keyCode);
+      });
+    } else {
+      // Arrows are held keys (the Hub walks while one is down); released on lift, cancel or leaving the button.
+      let down = false;
+      const release = (): void => {
+        if (!down) return;
+        down = false;
+        send('keyup', b.code, b.keyCode);
+      };
+      el.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        try { el.setPointerCapture?.(e.pointerId); } catch { /* synthetic event */ }
+        if (down) return;
+        down = true;
+        send('keydown', b.code, b.keyCode);
+      });
+      for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(ev, release);
+    }
     (isAct ? acts : dpad).appendChild(el);
   }
   pad.append(dpad, acts);
@@ -89,7 +119,7 @@ export function installTouchControls(): void {
   tog.textContent = '🎮';
   tog.setAttribute('aria-label', 'Show or hide the on-screen pad');
   const stored = (): boolean => {
-    try { return localStorage.getItem('pkr.padMin') !== '0'; } catch { return true; }
+    try { return localStorage.getItem('pkr.padMin') === '1'; } catch { return false; }
   };
   document.body.classList.toggle('pad-min', stored());
   tog.addEventListener('pointerdown', (e) => {
@@ -109,6 +139,14 @@ export function installTouchControls(): void {
     fs.style.display = mode !== 'off' && !!document.documentElement.requestFullscreen ? 'block' : 'none';
     hint.style.display = showRotateHint(v) ? 'block' : 'none';
   };
+  let idle: ReturnType<typeof setTimeout> | undefined;
+  const wake = (): void => {
+    document.body.classList.remove('pad-idle');
+    clearTimeout(idle);
+    idle = setTimeout(() => document.body.classList.add('pad-idle'), 3000);
+  };
+  window.addEventListener('pointerdown', wake, true);
+  wake();
   window.addEventListener('resize', update);
   window.addEventListener('orientationchange', update);
   update();

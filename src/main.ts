@@ -59,6 +59,7 @@ import { enterTransition } from './ui/transitions';
 import { installErrorLog, packStore, registerOffline, watchForUpdates } from './game/deviceTools';
 import { loadStoredPacks } from './core/tools/modPacks';
 import './style.css';
+import { installPortraitRotate } from './ui/portraitRotate';
 
 function showFatalError(message: string): void {
   const el = document.getElementById('fatal-error');
@@ -117,6 +118,9 @@ function start(): void {
         applySoundPack(g, session.settings.soundPack);
         setUiMotion(uiMotionFrom(session.settings));
         installPointerFx(g, () => session.settings, () => regionIdentity(session.run ? session.run.regionOrder[session.run.regionIndex] : undefined).sky);
+        installPortraitRotate(g);
+        // The on-screen pad shows a Map button only in Hub Town.
+        window.setInterval(() => document.body.classList.toggle('in-hub', g.scene.isActive('Hub')), 400);
         installGamepad(() => session.settings);
         installOverlays(g, () => session.settings);
         setTouchLayout(session.settings.oneHanded);

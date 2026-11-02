@@ -209,11 +209,15 @@ export class GameOverScene extends Phaser.Scene {
       }
       this.scene.start('Hub');
     };
+    // One row along the bottom (a column of three ran off the screen).
+    const endOptions = [{ label: 'Back to the Hub' }, ...(run ? [{ label: 'Retry this seed' }] : []), ...(won ? [{ label: 'Roll the credits' }] : [])];
     const menu = new Menu(this, {
-      x: GAME_WIDTH / 2 - 120,
-      y: 486,
-      options: [{ label: 'Back to the Hub' }, ...(run ? [{ label: 'Retry this seed' }] : []), ...(won ? [{ label: 'Roll the credits' }] : [])],
-      itemHeight: 25,
+      x: Math.round((GAME_WIDTH - endOptions.length * 260) / 2),
+      y: 490,
+      options: endOptions,
+      columns: endOptions.length,
+      itemWidth: 260,
+      itemHeight: 34,
       fontSize: 22,
       color: COLORS.textLight,
       onSelect: (i) => choose(i),
