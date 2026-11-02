@@ -158,6 +158,12 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'dodge-tap', kind: 'tap', label: 'Dodge!', hint: 'Press the moment the mark appears to dodge the snow.', windowsMs: W(200, 340, 560), expireMs: 1100 },
   { id: 'balloon-drag', kind: 'drag', label: 'Steer the balloon', hint: 'Drag the balloon along the wind to the landing mark.', from: [20, 70], to: [75, 35], windowsPx: W(7, 14, 24), maxMs: 4500 },
   { id: 'dive-hold', kind: 'hold', label: 'Hold your breath', hint: 'Hold, and let go when the ring is full to surface in time.', targetMs: 1500, windowsMs: W(100, 200, 360) },
+  // Run events F: games and puzzles (eventsGames.json).
+  { id: 'whack-tap', kind: 'tap', label: 'Whack!', hint: 'Press the moment the Diglett pops up.', windowsMs: W(180, 300, 480), expireMs: 900 },
+  { id: 'hurdle-rhythm', kind: 'rhythm', label: 'Jump!', hint: 'Press on each beat to clear the hurdles.', beatsMs: [500, 900, 1300, 1700, 2100, 2500], windowsMs: W(90, 170, 300) },
+  { id: 'gauge-hold', kind: 'hold', label: 'Set the level', hint: 'Hold, and let go when the ring is full to set the level.', targetMs: 1300, windowsMs: W(90, 170, 300) },
+  { id: 'pitch-hold', kind: 'hold', label: 'Find the pitch', hint: 'Hold, and let go when the ring is full to hit the note.', targetMs: 900, windowsMs: W(80, 160, 280) },
+  { id: 'tilt-drag', kind: 'drag', label: 'Tilt!', hint: 'Drag along the path to the goal.', from: [15, 75], to: [80, 30], windowsPx: W(7, 14, 24), maxMs: 4500 },
   { id: 'pull-hold', kind: 'hold', label: 'Pull together', hint: 'Hold, and let go as the ring fills to pull them free.', targetMs: 1100, windowsMs: W(90, 180, 320) },
 ];
 

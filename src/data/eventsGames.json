@@ -1,0 +1,3012 @@
+{
+ "events": [
+  {
+   "id": "rf-shell-game",
+   "name": "Shell Game",
+   "group": "Games and Puzzles",
+   "stop": "casino",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.gambler"
+    ],
+    "tint": "#2a2a10",
+    "effect": "spin"
+   },
+   "intro": "\"Follow the Poké Ball, friend! Guess right and your money doubles.\"",
+   "choices": [
+    {
+     "label": "Bet ₽300 on the middle shell",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "chance": 0.34,
+     "success": {
+      "text": "Under the middle shell! Double your money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "Empty. The dealer grins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch closely (Intelligence)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "check": "intelligence",
+     "success": {
+      "text": "You never lost sight of the ball. Double your money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "You blinked. The ball is gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-whack-diglett",
+   "name": "Whack-a-Diglett",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "diglett",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "A fairground mallet and a lot of holes. \"Tap before they hide! Points pay cash.\"",
+   "choices": [
+    {
+     "label": "Grab the mallet",
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Whack! A perfect round. The stall pays out.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 450
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "They hide faster than you swing. A small prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-pachinko",
+   "name": "Pachinko Arcade",
+   "group": "Games and Puzzles",
+   "stop": "casino",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "spin"
+   },
+   "intro": "Rows of pins and a hundred tiny pockets. \"Drop a ball. Pockets have prizes.\"",
+   "choices": [
+    {
+     "label": "Drop a ball (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "check": "luck",
+     "success": {
+      "text": "The ball drops into the top pocket! Prize tray full.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "star-piece"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It bounces out. Nothing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drop a Poké Ball by hand",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You aim it straight into the glowing pocket.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     },
+     "failure": {
+      "text": "It rattles off the pins. A token prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-claw-machine",
+   "name": "Claw Machine",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#102a3a",
+    "effect": "glint"
+   },
+   "intro": "A glass box of Poké Dolls and shiny prizes. The claw hovers, waiting.",
+   "choices": [
+    {
+     "label": "Play (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The claw closes on a rare prize and holds!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "big-pearl",
+         "comet-shard",
+         "star-piece",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     },
+     "failure": {
+      "text": "It drops the prize halfway. You win a Poké Doll.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-doll",
+        "count": 1
+       },
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-hot-potato",
+   "name": "Hot Potato Duel",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "voltorb",
+    "tint": "#3a1a1a",
+    "effect": "flicker"
+   },
+   "intro": "\"Hold the Voltorb when it hits zero and it blows. Pass it fast!\"",
+   "choices": [
+    {
+     "label": "Pass it back instantly",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Perfect timing! He is left holding the bag. He pays up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     },
+     "failure": {
+      "text": "Boom! Static everywhere.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Electric-type absorb it",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type happily eats the charge. The man is stunned and pays.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-map-sudoku",
+   "name": "Treasure Map Sudoku",
+   "group": "Games and Puzzles",
+   "stop": "treasure",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "A torn map made of nine squares, each marked with symbols. Every row and column must hold each symbol once.",
+   "choices": [
+    {
+     "label": "Solve the map (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Click. The last symbol fits and the map points to a chest.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "relic-gold"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "The squares will not fit. You tear the corner.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-rune-tiles",
+   "name": "Rune Tiles",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "glint"
+   },
+   "intro": "A sealed stone door with sliding rune tiles and one empty space.",
+   "choices": [
+    {
+     "label": "Slide the tiles (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The runes line up and the door grinds open on a small vault.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive",
+         "max-elixir"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The tiles jam. A dart trap nicks you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-whistle-echo",
+   "name": "Whistle Echo Quiz",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "tint": "#203a2a",
+    "effect": "float"
+   },
+   "intro": "\"Copy my melody exactly and the prize is yours,\" he says, and whistles four notes.",
+   "choices": [
+    {
+     "label": "Whistle it back",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Note for note. He claps and hands over a prize.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "super-potion",
+         "revive",
+         "max-potion"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Off-key. He laughs and gives you a small thank-you.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-weather-bet",
+   "name": "Weather Forecast Bet",
+   "group": "Games and Puzzles",
+   "stop": "casino",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#2a3a4a",
+    "effect": "rain"
+   },
+   "intro": "\"Will the next node be rainy or clear? ₽200 says you cannot tell.\"",
+   "choices": [
+    {
+     "label": "Bet on rain (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "Not a cloud turned back. You win.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     },
+     "failure": {
+      "text": "Bright sun. He collects.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the sky (Intelligence)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "check": "intelligence",
+     "success": {
+      "text": "Your read of the clouds was dead right.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     },
+     "failure": {
+      "text": "The wind changed on you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-odd-one-out",
+   "name": "Odd One Out",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "Six Pokémon silhouettes on a board. \"One is an imposter. Which?\"",
+   "choices": [
+    {
+     "label": "Study the board (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The imposter had a tiny wrong ear. He pays and you learn something.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You guess wrong. He tips his hat.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-silhouette-1",
+   "name": "Silhouette Quiz",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#101820",
+    "effect": "fog"
+   },
+   "intro": "\"Who's that Pokémon?\" A dark shape on a screen. Get three in a row for a bonus.",
+   "choices": [
+    {
+     "label": "Answer (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Correct! The next silhouette appears.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-silhouette-2"
+       },
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     },
+     "failure": {
+      "text": "Wrong. The screen goes dark.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-silhouette-2",
+   "name": "Silhouette Quiz: Second Shape",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#101820",
+    "effect": "fog"
+   },
+   "intro": "A bigger shadow. \"Streak of one. Keep going.\"",
+   "choices": [
+    {
+     "label": "Answer (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Correct again!",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-silhouette-3"
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "Wrong. The streak ends, but you keep your winnings.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-silhouette-3",
+   "name": "Silhouette Quiz: Final Shape",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#101820",
+    "effect": "sparkle"
+   },
+   "intro": "\"Last one for the streak bonus.\" A familiar outline, almost.",
+   "choices": [
+    {
+     "label": "Answer (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Three in a row! The streak bonus is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 700
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "So close. A consolation prize.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-move-trivia-1",
+   "name": "Move Trivia",
+   "group": "Games and Puzzles",
+   "stop": "library",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "\"Match each move to its type, three right in a row for a TM. Question one: Surf is what type?\"",
+   "choices": [
+    {
+     "label": "\"Water\"",
+     "success": {
+      "text": "Right. Question two waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ice\"",
+     "success": {
+      "text": "Wrong. She smiles and hands you a coin.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-move-trivia-2",
+   "name": "Move Trivia: Question Two",
+   "group": "Games and Puzzles",
+   "stop": "library",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "\"Question two: Shadow Ball is what type?\"",
+   "choices": [
+    {
+     "label": "\"Ghost\"",
+     "success": {
+      "text": "Right again. Question three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Dark\"",
+     "success": {
+      "text": "Wrong. She gives a sympathetic nod.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-move-trivia-3",
+   "name": "Move Trivia: Final Question",
+   "group": "Games and Puzzles",
+   "stop": "library",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "\"Last question: Earthquake is what type?\"",
+   "choices": [
+    {
+     "label": "\"Ground\"",
+     "success": {
+      "text": "Three in a row! A TM from the shelf is yours.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-normal",
+         "tm-fighting",
+         "tm-flying",
+         "tm-poison",
+         "tm-ground",
+         "tm-rock",
+         "tm-bug",
+         "tm-ghost",
+         "tm-steel",
+         "tm-fire",
+         "tm-water",
+         "tm-grass",
+         "tm-electric",
+         "tm-psychic",
+         "tm-ice",
+         "tm-dragon",
+         "tm-dark"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rock\"",
+     "success": {
+      "text": "Close, but no TM. She gives a Super Potion.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-berry-taste",
+   "name": "Berry Taste Test",
+   "group": "Games and Puzzles",
+   "stop": "berry",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#3a1a2a",
+    "effect": "sparkle"
+   },
+   "intro": "Five berries on a tray. \"Spicy, dry, sweet, bitter, sour. Pick the one that matches the clue.\"",
+   "choices": [
+    {
+     "label": "Taste carefully (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "You nail the flavor. She lets you keep a handful.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Bitter! You pull a face.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-speed-typing",
+   "name": "Speed Typing Terminal",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#0a2a1a",
+    "effect": "flicker"
+   },
+   "intro": "An old terminal blinks: \"TYPE THE LINE BEFORE THE TIMER ENDS.\"",
+   "choices": [
+    {
+     "label": "Type fast",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "ACCESS GRANTED. The terminal coughs up credits.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "TIMEOUT. The screen shocks your fingers.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.04
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-hurdles",
+   "name": "Pokéathlon Hurdles",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "float"
+   },
+   "intro": "A short track with six hurdles. \"Tap the rhythm and clear them all!\"",
+   "choices": [
+    {
+     "label": "Run the hurdles",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Clean run! The crowd cheers.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You clip a hurdle. Still a decent run.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-tide-gauge",
+   "name": "Tide Gauge",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#102a3a",
+    "effect": "rain"
+   },
+   "intro": "A lock gate and a dial. The water must be exactly level before the gate opens.",
+   "choices": [
+    {
+     "label": "Set the level",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The gate swings open on a stash left by the tide.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "heart-scale",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too high. Water sloshes over you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.04
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-gear-box",
+   "name": "Gear Box Puzzle",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "rattle"
+   },
+   "intro": "A drawbridge is stuck. A box of mismatched gears sits beside the crank.",
+   "choices": [
+    {
+     "label": "Align the gears (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The gears mesh and the bridge lowers. A grateful engineer pays you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "iron",
+         "x-attack"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The gears jam. You pry them out and lose time.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-mirror-beam",
+   "name": "Lighthouse Mirror Puzzle",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "glint"
+   },
+   "intro": "A dark lighthouse and three loose mirrors. \"Beam the light to the shore and the keeper will reward you.\"",
+   "choices": [
+    {
+     "label": "Angle the mirrors",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The beam crosses the bay. A ship signals back with thanks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "big-pearl",
+         "pearl-string",
+         "nugget"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The beam hits the cliff. The keeper shrugs kindly.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-type-rps",
+   "name": "Rock Paper Scissors Trainer",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "\"Fire, Water or Grass? I always pick Grass! Beat me with your Pokémon's type!\"",
+   "choices": [
+    {
+     "label": "Send out your Fire-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Fire beats Grass! He pays out.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try your luck",
+     "chance": 0.33,
+     "success": {
+      "text": "You throw Fire by luck. It works!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     },
+     "failure": {
+      "text": "You throw Water. He grins and wins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-mole-hunt",
+   "name": "Mole Hunt",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "diglett",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "Three burrows. One holds a prize, the others a very annoyed Diglett.",
+   "choices": [
+    {
+     "label": "Pick a burrow",
+     "chance": 0.34,
+     "success": {
+      "text": "A shiny prize!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "star-piece",
+         "rare-bone"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Diglett bites your sleeve.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.04
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Ground-type sniff it out",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type digs straight to the prize.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "star-piece",
+         "rare-bone"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-tilt-maze",
+   "name": "Tilt Maze",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "electrode",
+    "tint": "#2a1a3a",
+    "effect": "spin"
+   },
+   "intro": "An Electrode sits at the start of a wooden maze. Tilt the board and roll it to the goal.",
+   "choices": [
+    {
+     "label": "Tilt the board",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Straight into the goal. The Electrode glows happily.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 450
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It rolls into a hole and sulks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-berry-bobbing",
+   "name": "Bobbing for Berries",
+   "group": "Games and Puzzles",
+   "stop": "berry",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "rain"
+   },
+   "intro": "A big tub of water with berries bobbing in it. Hands behind your back!",
+   "choices": [
+    {
+     "label": "Dunk your head in",
+     "chance": 0.6,
+     "success": {
+      "text": "Got one! A handful of berries for the effort.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "Just water up your nose.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-crossword-cave",
+   "name": "Crossword Cave",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c2a",
+    "effect": "glint"
+   },
+   "intro": "Carved clues line the cave walls, each with empty squares. \"Eight letters: a long-dead guardian.\"",
+   "choices": [
+    {
+     "label": "Solve the carvings (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The last letters light up and a hidden room opens.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-crossword-room"
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The carvings stay dark.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-crossword-room",
+   "name": "Crossword Cave: The Hidden Room",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "A hidden room behind the wall, full of long-forgotten things.",
+   "choices": [
+    {
+     "label": "Take a relic",
+     "success": {
+      "text": "You pocket a relic.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "relic-gold",
+         "relic-silver",
+         "relic-copper",
+         "rare-bone",
+         "big-nugget"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the sealed case",
+     "success": {
+      "text": "Inside: a TM and a note of thanks from someone long gone.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-normal",
+         "tm-ground",
+         "tm-rock",
+         "tm-psychic"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-sonar-cave",
+   "name": "Echo Cave Sonar Puzzle",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "pokemon": "zubat",
+    "tint": "#10101a",
+    "effect": "fog"
+   },
+   "intro": "Pitch black. Pings echo off the walls. Follow them to the gap.",
+   "choices": [
+    {
+     "label": "Follow the pings",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You find the gap and slip through into a shortcut.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     },
+     "failure": {
+      "text": "You bump into a wall. A bat flaps away.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.03
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-weighted-scales",
+   "name": "Weighted Scales",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "glint"
+   },
+   "intro": "Four identical gems and a balance scale. \"One is real. Weigh them in only two tries.\"",
+   "choices": [
+    {
+     "label": "Weigh the gems (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The heavy one is the real one. He lets you keep it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "big-pearl",
+         "comet-shard",
+         "star-piece",
+         "big-nugget"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You pick a fake. He keeps the real one.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-lantern-riddle",
+   "name": "Lantern Riddle",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a1a10",
+    "effect": "flicker"
+   },
+   "intro": "Three doors lit by three lanterns. \"The truth is behind the door whose lantern does not lie.\"",
+   "choices": [
+    {
+     "label": "Reason it out (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Behind the right door waits a small cache.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "max-potion",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "Behind the wrong door: a Gastly prank.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the middle door",
+     "chance": 0.34,
+     "success": {
+      "text": "Lucky! A cache.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "max-potion",
+         "rare-candy"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Gastly prank.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bingo-1",
+   "name": "Treasure Hunt Bingo",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a10",
+    "effect": "sparkle"
+   },
+   "intro": "\"Tick off events on this bingo card as you travel. Fill it for a prize.\" He hands you a card and tickles one square.",
+   "choices": [
+    {
+     "label": "Take the card",
+     "success": {
+      "text": "One square ticked. The card goes in your pocket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-bingo-2"
+       },
+       {
+        "kind": "flag",
+        "key": "rf-bingo",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bingo-2",
+   "name": "Treasure Hunt Bingo: Second Square",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a10",
+    "effect": "sparkle"
+   },
+   "intro": "You have ticked three squares so far. Another stand marks one more.",
+   "choices": [
+    {
+     "label": "Tick a square",
+     "success": {
+      "text": "Four squares. One more for a line.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-bingo-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bingo-3",
+   "name": "Treasure Hunt Bingo: Bingo!",
+   "group": "Games and Puzzles",
+   "stop": "treasure",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "The last square! \"Bingo!\" the organizer yells.",
+   "choices": [
+    {
+     "label": "Claim your prize",
+     "success": {
+      "text": "A line! A treasure bundle for the winner.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-barrel-roll",
+   "name": "Barrel Roll Race",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#2a1a10",
+    "effect": "spin"
+   },
+   "intro": "A barrel race down a steep slope. Your Pokémon pushes yours to the finish.",
+   "choices": [
+    {
+     "label": "Steer the barrel",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "First across the line! Prize money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 450
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The barrel veers into a puddle. Last place.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-disco-floor",
+   "name": "Disco Floor Puzzle",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "intro": "A glowing disco floor. Step only on the tiles that light up on the beat.",
+   "choices": [
+    {
+     "label": "Hit the beat",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Every step lands. The floor lights up and your party dances along.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "money",
+        "amount": 250
+       }
+      ]
+     },
+     "failure": {
+      "text": "You step on a dead tile. Everyone laughs, you included.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-painting-alignment",
+   "name": "Painting Alignment",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "boss.npc_painter"
+    ],
+    "tint": "#2a1c10",
+    "effect": "glint"
+   },
+   "intro": "Four paintings hang crooked on the wall. Rotate them right to reveal the hidden stash.",
+   "choices": [
+    {
+     "label": "Rotate the paintings (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The frames click into place and the wall slides open.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "max-revive",
+         "star-piece",
+         "pearl-string",
+         "big-nugget"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The wall stays shut. The painter apologizes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-sandcastle",
+   "name": "Sandcastle Contest",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "sandygast",
+    "tint": "#3a3010",
+    "effect": "float"
+   },
+   "intro": "Build the tallest sandcastle. The judge is a Sandygast, and it takes this very seriously.",
+   "choices": [
+    {
+     "label": "Build carefully",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Tallest tower on the beach! The Sandygast crowns you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water",
+         "soft-sand",
+         "big-pearl"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The tower tumbles. The Sandygast pats it flat anyway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-balloon-pop",
+   "name": "Balloon Pop Challenge",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a3a4a",
+    "effect": "float"
+   },
+   "intro": "\"Pop only the matching colors!\" A rack of bobbing balloons.",
+   "choices": [
+    {
+     "label": "Pop them",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Clean sweep. A prize tray.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 350
+       },
+       {
+        "kind": "item",
+        "id": "poke-doll",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You pop a wrong one. Everyone groans.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-balancing-act",
+   "name": "Balancing Act",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1a3a",
+    "effect": "float"
+   },
+   "intro": "A tightrope and a stack of party Pokémon. \"Hold steady and we all win!\"",
+   "choices": [
+    {
+     "label": "Hold steady",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The whole team stands like a tower. The crowd roars.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "The stack wobbles and falls into a haystack. Everyone laughs.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-cupid-arrow",
+   "name": "Cupid's Arrow Game",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a1a2a",
+    "effect": "hearts"
+   },
+   "intro": "A carnival stall: aim hearts at pairs of cut-out Pokémon. \"Hit a pair, and your party gets closer!\"",
+   "choices": [
+    {
+     "label": "Aim",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "A perfect pair! Your party gets a little closer.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A miss. Your party giggles anyway.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-rhythm-raid",
+   "name": "Rhythm Raid",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "intro": "A street rapper hands you the mic. \"Tap along and the beat will carry you into battle.\"",
+   "choices": [
+    {
+     "label": "Tap along",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The beat locks in. Your party feels fired up for the next battles.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-wild-grace"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the beat but get applause.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-pinball",
+   "name": "Pinball Pokémon Center",
+   "group": "Games and Puzzles",
+   "stop": "heal",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "voltorb",
+    "tint": "#2a1a3a",
+    "effect": "spin"
+   },
+   "intro": "A giant pinball table in the corner of a Pokémon Center. Bounce the Voltorb for score bonuses.",
+   "choices": [
+    {
+     "label": "Play (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "High score! Free healing on the house.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "Tilt! The machine buzzes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-haunted-jenga",
+   "name": "Haunted Jenga",
+   "group": "Games and Puzzles",
+   "stop": "haunted",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "shuppet",
+    "tint": "#1c1c2a",
+    "effect": "fog"
+   },
+   "intro": "A wobbly tower of blocks. Ghosts nudge it every time you reach.",
+   "choices": [
+    {
+     "label": "Pull a block",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The tower holds! The ghosts applaud and leave a gift.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "ghost-gem",
+         "wide-lens"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     },
+     "failure": {
+      "text": "Crash! The tower falls on your foot.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Ghost-type steady it",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ],
+     "success": {
+      "text": "Your Ghost-type convinces the ghosts to leave the tower alone.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "ghost-gem",
+         "wide-lens"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-slide-whistle-safe",
+   "name": "Slide Whistle Safe",
+   "group": "Games and Puzzles",
+   "stop": "treasure",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.burglar"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "intro": "A safe that opens only to the right pitch. A slide whistle dangles from the handle.",
+   "choices": [
+    {
+     "label": "Find the pitch",
+     "prompt": {
+      "id": "pitch-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Click! The safe opens.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "big-nugget",
+         "star-piece",
+         "comet-shard"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Wrong pitch. The alarm rings and a guard rushes in.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-fossil-puzzle",
+   "name": "Fossil Puzzle",
+   "group": "Games and Puzzles",
+   "stop": "fossil",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "glint"
+   },
+   "intro": "A heap of bones. \"Assemble the skeleton and the Fossil Lab will revive it for you.\"",
+   "choices": [
+    {
+     "label": "Assemble the skeleton (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "A full skeleton! The lab hands you the matching fossil.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "root-fossil",
+         "claw-fossil",
+         "skull-fossil",
+         "armor-fossil",
+         "cover-fossil",
+         "plume-fossil"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 12
+       }
+      ]
+     },
+     "failure": {
+      "text": "A few bones left over, none of them fit.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-star-chart",
+   "name": "Star Chart",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#10102a",
+    "effect": "glint"
+   },
+   "intro": "A planetarium dome with a star chart. Match the constellations to open it.",
+   "choices": [
+    {
+     "label": "Match them (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The dome opens under a star-filled sky. A map of the road ahead.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The chart stays dark.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-crane-operator",
+   "name": "Crane Operator",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a1a",
+    "effect": "rattle"
+   },
+   "intro": "A harbor crane and a ship waiting for cargo. Speed or accuracy, you decide.",
+   "choices": [
+    {
+     "label": "Load the ship",
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Every crate lands in place. Dock pay for you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 550
+       }
+      ]
+     },
+     "failure": {
+      "text": "A crate swings loose. The foreman is not impressed.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-smell-test",
+   "name": "Smell Test",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "fog"
+   },
+   "intro": "Blindfolded and sniffing a row of jars. \"Which item is in this one?\"",
+   "choices": [
+    {
+     "label": "Sniff the jars (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Spot on! A potent herb wafts up from the winner's jar.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "energy-root",
+         "revival-herb",
+         "heal-powder"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You can only smell your own socks.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let your Poison-type help",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "poison"
+      }
+     ],
+     "success": {
+      "text": "Your Poison-type sniffs it out at once.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "energy-root",
+         "revival-herb",
+         "heal-powder"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-jigsaw-legend",
+   "name": "Jigsaw Legend",
+   "group": "Games and Puzzles",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1c2a",
+    "effect": "glint"
+   },
+   "intro": "A thousand pieces that make a portrait of a legendary Pokémon.",
+   "choices": [
+    {
+     "label": "Assemble it (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The portrait completes. A hint about what waits ahead.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "A few pieces missing. You can still see a silhouette.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bumper-cars",
+   "name": "Bumper Cars",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#2a1a1a",
+    "effect": "shake"
+   },
+   "intro": "A rink of bumper cars. Knock your rivals off the floor!",
+   "choices": [
+    {
+     "label": "Drive!",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Everyone bounces out! Winner of the rink.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You spin out. A rival clips you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.03
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-tug-of-war",
+   "name": "Tug of War",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "pokemon": "machamp",
+    "tint": "#3a1a1a",
+    "effect": "shake"
+   },
+   "intro": "Your team on one end of the rope, a group of Machamp on the other.",
+   "choices": [
+    {
+     "label": "Pull together",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The Machamp skid into the mud. The crowd goes wild.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The rope burns through your hands. A fair fight.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-carnival-plush",
+   "name": "Carnival Ring Toss",
+   "group": "Games and Puzzles",
+   "stop": "contest",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a2030",
+    "effect": "sparkle"
+   },
+   "intro": "A plush Pokémon on a stand. Ring it and your party gets a lucky charm.",
+   "choices": [
+    {
+     "label": "Throw the ring",
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Ringer! A plush that gives your party a little spring in their step.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-doll",
+        "count": 1
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ring bounces off. A sticker for trying.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
