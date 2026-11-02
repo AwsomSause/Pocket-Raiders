@@ -16,6 +16,8 @@ import { trainerVisual, type Visual } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, TYPE_COLORS, textStyle } from '../ui/theme';
 import { badge, paintWindow } from '../ui/widgets';
 import { WiiCursor } from '../ui/wiiMotion';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { dressScreen } from '../ui/screenDress';
 
 const COLS = 4;
 const ROWS = 3;
@@ -61,7 +63,9 @@ export class TrainerSelectScene extends Phaser.Scene {
     this.sortReverse = session.settings.trainerSortReverse;
     this.applySort();
 
-    new ArenaBackdrop(this, { dim: 0.55 });
+    const look = screenStyleOf('trainer', session.settings.screenStyles, p.stats.runsEnded);
+    if (look === 'original') new ArenaBackdrop(this, { dim: 0.55 });
+    else dressScreen(this, 'trainer', look, session.settings.battleAnimations);
 
     this.page = 0;
     this.buildPage();

@@ -19,6 +19,8 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { sceneForRun } from './routing';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { dressScreen } from '../ui/screenDress';
 
 export class BriefingScene extends Phaser.Scene {
   private menu!: Menu;
@@ -39,6 +41,8 @@ export class BriefingScene extends Phaser.Scene {
     const token = run.prep.tokenId ? content.prepTokens.get(run.prep.tokenId) : undefined;
     const lead = run.party[0]!;
 
+    const look = screenStyleOf('briefing', session.settings.screenStyles, run.seed);
+    if (look !== 'original') dressScreen(this, 'briefing', look, session.settings.battleAnimations);
     this.add.text(GAME_WIDTH / 2, 30, 'Campaign briefing', textStyle(40, COLORS.textLight)).setOrigin(0.5);
     slideIn(this, drawPanel(this, 24, 64, GAME_WIDTH - 48, 370, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true }), 0, 18, session.settings.battleAnimations);
 

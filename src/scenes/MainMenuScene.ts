@@ -13,6 +13,8 @@ import { loadAssets, queueAssets } from '../ui/lazyAssets';
 import { continueCard } from '../ui/loadCard';
 import { pokemonAssetIds } from '../assets/catalog';
 import { sceneForRun } from './routing';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { dressScreen } from '../ui/screenDress';
 
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
@@ -31,12 +33,16 @@ export class MainMenuScene extends Phaser.Scene {
     playMusic(this, 'bgm.menu');
 
     // A battlefield that cycles through the arenas, with a Pokémon on show.
-    new ArenaBackdrop(this, { platformAt: { x: 740, y: 330 }, only: session.profile.menuArena });
-    const shade = this.add.graphics().setDepth(-20);
-    for (let i = 0; i < 20; i++) {
-      shade.fillStyle(0x0e0b12, 0.6 * (1 - i / 20));
-      shade.fillRect(i * 24, 0, 24, GAME_HEIGHT);
-    }
+    // A built screen style (Settings > Display) paints its own backdrop; 'original' keeps the arenas.
+    const look = screenStyleOf('title', session.settings.screenStyles, session.profile.stats.runsEnded);
+    if (look === 'original') {
+      new ArenaBackdrop(this, { platformAt: { x: 740, y: 330 }, only: session.profile.menuArena });
+      const shade = this.add.graphics().setDepth(-20);
+      for (let i = 0; i < 20; i++) {
+        shade.fillStyle(0x0e0b12, 0.6 * (1 - i / 20));
+        shade.fillRect(i * 24, 0, 24, GAME_HEIGHT);
+      }
+    } else dressScreen(this, 'title', look, session.settings.battleAnimations);
     // With a saved run, the UIE Load card shows it (trainer, stage, party) where the random Pokémon would stand.
     // Continue picks the slot saved most recently (this one, unless another slot has a newer run).
     const latest = session.latestRunSlot();

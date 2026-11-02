@@ -11,6 +11,8 @@ import { COLORS, GAME_WIDTH, TYPE_COLORS, textStyle } from '../ui/theme';
 import { badge, focusFrame } from '../ui/widgets';
 import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { preloadPokemon } from '../ui/lazyAssets';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { dressScreen } from '../ui/screenDress';
 
 export class StarterSelectScene extends Phaser.Scene {
   private index = 0;
@@ -33,6 +35,8 @@ export class StarterSelectScene extends Phaser.Scene {
     const archetype = content.archetypes.get(run.archetypeId)!;
     this.index = 0;
     this.cursors = [];
+    const look = screenStyleOf('starter', session.settings.screenStyles, run.seed);
+    if (look !== 'original') dressScreen(this, 'starter', look, session.settings.battleAnimations);
 
     this.add.text(GAME_WIDTH / 2, 36, 'Choose your starter', textStyle(44, COLORS.textLight)).setOrigin(0.5);
     const pool = content.starterPools.get(run.prep.poolId);
