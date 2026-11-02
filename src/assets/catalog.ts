@@ -227,6 +227,7 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ),
   ...[...TERA_PATTERN_TYPES, 'default'].map((t): AssetEntry => ({ id: `fx.tera.pattern.${t}`, kind: 'image', category: 'ui', path: `images/packs/dbk/tera/patterns/${t}.png`, lazy: true })),
   ...['dynamax', 'calyrex'].map((n): AssetEntry => ({ id: `fx.dynamax.pattern.${n}`, kind: 'image', category: 'ui', path: `images/packs/dbk/dynamax/patterns/${n}.png`, lazy: true })),
+  ...['burn', 'frozen', 'paralysis', 'poison'].map((n): AssetEntry => ({ id: `fx.status.pattern.${n}`, kind: 'image', category: 'ui', path: `images/packs/dbk/status/${n}.png`, lazy: true })),
   { id: 'ui.tera.types', kind: 'spritesheet', category: 'ui', path: 'images/packs/dbk/tera/types.png', frameSize: 32, lazy: true },
   { id: 'ui.dynamax.icon', kind: 'image', category: 'ui', path: 'images/packs/dbk/dynamax/icon.png', lazy: true },
   // The key item that rises at the start of a transformation cinematic (Mega Ring from the Pokémon Memories repo,

@@ -69,7 +69,7 @@ describe('move presentation data', () => {
     const plain = Object.values(data.moves).find((look) => !look.pack)!;
     expect(animChoice(plain)).toEqual({ anim: plain.anim });
     expect(commonChoice(data, 'status.brn')).toEqual({ anim: data.commonPack['status.brn'], alt: 'common-burn' });
-    expect(commonChoice(data, 'bind')).toEqual({ anim: 'common-bind' });
+    expect(commonChoice(data, 'bind')).toEqual({ anim: data.commonPack.bind, alt: 'common-bind' });
     expect(commonChoice(data, 'nothing')).toEqual({ anim: '' });
   });
 

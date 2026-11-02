@@ -54,6 +54,10 @@ const dmax = join(root, 'public', 'assets', 'images', 'packs', 'dbk', 'dynamax')
 mkdirSync(join(dmax, 'patterns'), { recursive: true });
 for (const file of readdirSync(join(plugins, 'Dynamax', 'Patterns'))) copyFileSync(join(plugins, 'Dynamax', 'Patterns', file), join(dmax, 'patterns', file.toLowerCase()));
 copyFileSync(join(plugins, 'Dynamax', 'icon_dynamax.png'), join(dmax, 'icon.png'));
+// Status patterns: the burn, freeze, paralysis and poison overlays a Pokémon wears while it has that status.
+const statusOut = join(root, 'public', 'assets', 'images', 'packs', 'dbk', 'status');
+mkdirSync(statusOut, { recursive: true });
+for (const n of ['BURN', 'FROZEN', 'PARALYSIS', 'POISON']) copyFileSync(join(plugins, 'Deluxe Battle Kit', 'Status patterns', `${n}.png`), join(statusOut, `${n.toLowerCase()}.png`));
 // Mega Evolution: the Mega Ring (the key item that rises in the cinematic) and the two PRSFX sounds.
 copyFileSync(join(game, 'Graphics', 'Items', 'MEGARING.png'), join(root, 'public', 'assets', 'images', 'packs', 'dbk', 'mega', 'ring.png'));
 const cineAudio = join(root, 'public', 'assets', 'audio', 'cine');
