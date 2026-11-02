@@ -2502,7 +2502,7 @@ export class BattleScene extends Phaser.Scene {
     if (result.narrativeDefeat) {
       // The story loss: a heavy shake (skipped when battle animations are off), then the rival's words.
       if (this.motion !== 'off') {
-        this.cameras.main.shake(500, 0.008 * capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash));
+        this.cameras.main.shake(500, 0.008 * services().session.settings.shakeStory * capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash));
         await new Promise<void>((done) => this.time.delayedCall(600, () => done()));
       }
       await this.say(result.narrativeDefeat.defeatLine);
@@ -2972,7 +2972,7 @@ export class BattleScene extends Phaser.Scene {
     try {
       const color = Phaser.Display.Color.HexStringToColor(cue.color).color;
       if (cue.sound) playSfx(this, cue.sound);
-      if (cue.shake && motion) this.cameras.main.shake(220, 0.006 * services().session.settings.shakeIntensity);
+      if (cue.shake && motion) this.cameras.main.shake(220, 0.006 * services().session.settings.shakeIntensity * services().session.settings.shakeHits);
       const band = this.add.rectangle(GAME_WIDTH / 2, 132, GAME_WIDTH, 54, color, 0.85).setDepth(50).setAlpha(0);
       const title = this.add.text(GAME_WIDTH / 2, 132, cue.title, textStyle(30, '#ffffff', { stroke: '#202030', strokeThickness: 4 })).setOrigin(0.5).setDepth(51).setAlpha(0);
       // A bouncy pop-in (no movement when motion is reduced).
