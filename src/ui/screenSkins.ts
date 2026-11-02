@@ -39,13 +39,13 @@ export const SKINS: Record<string, Skin> = {
   'dex.wii': S('Wii Channel Dex', 0xf4f8fb, 0xdde6ee, 0xa8d8f0, 0xffffff, 'tiles', 0xffffff, 0xa8d0e8, 0xffffff, true),
   'dex.ink': S('Ink Scroll', 0xf2e8cc, 0xe6d8b4, 0x8a6a40, 0x2a2018, 'brush', 0xf6ecd0, 0x8a6a40, 0xe6d8b4, true),
   // Settings
-  'settings.aero': S('Aero Control Panel', 0x1c6aa8, 0x0a2a4c, 0x8fe0ff, 0xffffff, 'bubbles', 0x174f80, 0x8fd0f0, 0x2c82c0),
-  'settings.wii': S('Wii System Settings', 0x34688a, 0x16283c, 0xd8f0ff, 0xffffff, 'tiles', 0x234a68, 0xa8d0e8, 0x4a88b0),
-  'settings.shoujo': S('Shoujo Options', 0x7a2a5a, 0x2a1030, 0xffb0d8, 0xffe8f4, 'sparkles', 0x5a2048, 0xff9ccc, 0xa83c80),
-  'settings.ink': S('Ink Scroll', 0x362c22, 0x12100c, 0xe8d8b0, 0x8a6a40, 'brush', 0x261e16, 0xb89868, 0x483826),
-  'settings.notebook': S('Notebook Tabs', 0x3a3a52, 0x181826, 0xf2e6a8, 0x78a8e8, 'ruled', 0x2a2a40, 0xc8c090, 0x4a4a68),
-  'settings.rotom': S('Rotom Assistant', 0x6a2418, 0x20100c, 0xff9a3a, 0xffd84a, 'circuit', 0x4a1c14, 0xff8a3a, 0x8a3020),
-  'settings.sticker': S('Sticker Cards', 0x2e2a68, 0x15143a, 0xffd84a, 0x5fd0ff, 'stickers', 0x2a2862, 0x5fd0ff, 0x4a3ea0),
+  'settings.aero': S('Aero Control Panel', 0x5cc0ff, 0xe4f6ff, 0xffffff, 0xffffff, 'bubbles', 0xf2faff, 0x8fd0f0, 0xd6efff, true),
+  'settings.wii': S('Wii System Settings', 0xf4f8fb, 0xdde6ee, 0xa8d8f0, 0xffffff, 'tiles', 0xffffff, 0xa8d0e8, 0xffffff, true),
+  'settings.shoujo': S('Shoujo Options', 0xffc0dc, 0xffe8f2, 0xff9ccc, 0xffffff, 'sparkles', 0xffffff, 0xff9ccc, 0xffd0e8, true),
+  'settings.ink': S('Ink Scroll', 0xf4ead0, 0xe8dab8, 0x8a6a40, 0x2a2018, 'brush', 0xf6ecd0, 0x8a6a40, 0xe8dab8, true),
+  'settings.notebook': S('Notebook Tabs', 0xece2cc, 0xdcd0b4, 0xc8c0a8, 0x78a8e8, 'ruled', 0xffffff, 0xc8c090, 0xece2cc, true),
+  'settings.rotom': S('Rotom Assistant', 0x6aa850, 0x2a5a2a, 0xffd84a, 0xffffff, 'dotgrid', 0x2a4a2a, 0xffd84a, 0x3a6a3a),
+  'settings.sticker': S('Sticker Cards', 0xffe4f0, 0xffc8e0, 0xff7ab8, 0xffffff, 'dotgrid', 0xfff4fa, 0xff9ccc, 0xffd0e8, true),
   // Hub menus
   'hubmenus.aero': S('Aero Office', 0x1e6a9c, 0x0c2c4c, 0x9fe8ff, 0xffffff, 'bubbles', 0x174e7c, 0x9fd8f0, 0x2c82bc),
   'hubmenus.wii': S('Wii Channel', 0x2e6a90, 0x142a40, 0xd0eeff, 0xffffff, 'tiles', 0x214c6c, 0xa8d0e8, 0x4486b0),
@@ -264,9 +264,17 @@ function decor(scene: Phaser.Scene, g: Phaser.GameObjects.Graphics, skin: Skin):
   void scene;
 }
 
+/** Scenes that painted their own full-screen look: the global scenery in main.ts leaves them alone. */
+const SKINNED = new WeakSet<Phaser.Scene>();
+export const hasSkinBackdrop = (scene: Phaser.Scene): boolean => SKINNED.has(scene);
+
 /** A full-screen themed backdrop at the back (depth -100 unless `into` is given). Ambient drift only with full motion. */
 export function paintSkinBackdrop(scene: Phaser.Scene, skin: Skin, motion: MotionLevel, into?: Phaser.GameObjects.Container): Phaser.GameObjects.Container {
   const root = into ?? scene.add.container(0, 0).setDepth(-100);
+  if (!into) {
+    SKINNED.add(scene);
+    scene.events.once('shutdown', () => SKINNED.delete(scene));
+  }
   const base = scene.add.graphics();
   base.fillGradientStyle(skin.top, skin.top, skin.bottom, skin.bottom, 1, 1, 1, 1).fillRect(0, 0, W, H);
   root.add(base);

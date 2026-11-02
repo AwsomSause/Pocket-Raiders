@@ -1,5 +1,6 @@
 // Entry point: validates game data, opens the save system and starts Phaser.
 
+import { hasSkinBackdrop } from './ui/screenSkins';
 import { ruleWipe, wipeAssetId, type WipeMask } from './ui/battleFx/ruleWipe';
 import { loadAssets } from './ui/lazyAssets';
 import { installTouchControls, setTouchLayout } from './ui/touchControls';
@@ -138,7 +139,9 @@ function start(): void {
               if (noteSceneEnter(scene.scene.key) && scene.scene.key !== 'Battle') pageEnter(scene);
               installUiJuice(scene);
             }
-            if (aeroScenery.has(scene.scene.key)) {
+            if (hasSkinBackdrop(scene)) {
+              // A redesigned look painted its own full-screen backdrop (ui/screenSkins.ts).
+            } else if (aeroScenery.has(scene.scene.key)) {
               // Each region tints the sky its own way (catalog 62).
               const run = session.run;
               aeroBackdrop(scene, session.settings.battleAnimations, regionIdentity(run ? run.regionOrder[run.regionIndex] : undefined).sky);

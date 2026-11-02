@@ -17,6 +17,8 @@ import { holdToConfirm } from '../ui/pointerFx';
 import { framedScreenshot, runShareCard } from '../ui/shareCard';
 import { UI_THEMES, themeIsLight, FONT_SCALE } from '../core/presentation/uiPrefs';
 import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
+import { drawSettingsTabs, hasSettingsLook, SETTINGS_LOOKS, type SettingsLook } from '../ui/settingsLooks';
+import { screenStyleOf } from '../core/presentation/screenStyles';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { Picker } from '../ui/partyPanel';
 import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
@@ -39,6 +41,8 @@ export class SettingsScene extends Phaser.Scene {
   private notice = '';
   /** The redesigned look when one is picked (replaces the Options art). */
   private skinned: ReturnType<typeof skinFor> = null;
+  /** The picked look's tabs, row pills and colours (null for the original). */
+  private look: SettingsLook | null = null;
   private menu?: Menu;
   private picker: Picker | null = null;
   private topics: SummaryTopic[] | null = null;
@@ -60,6 +64,8 @@ export class SettingsScene extends Phaser.Scene {
     this.query = '';
     this.notice = '';
     this.skinned = skinFor('settings');
+    const sid = screenStyleOf('settings', services().session.settings.screenStyles, services().session.profile.stats.runsEnded);
+    this.look = sid !== 'original' && hasSettingsLook(sid) ? SETTINGS_LOOKS[sid]! : null;
     if (this.skinned) paintSkinBackdrop(this, this.skinned, services().session.settings.battleAnimations);
     else if (this.textures.exists('ui.optionsbg')) {
       this.add.image(0, 0, 'ui.optionsbg').setOrigin(0).setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setAlpha(0.94).setName('options-bg');
@@ -260,21 +266,35 @@ export class SettingsScene extends Phaser.Scene {
     // and sub-pages put theirs beside it, so the two never print over each other.
     const art = !this.skinned && this.textures.exists('ui.optionsbg');
     const heading = art ? (this.page === 'home' ? '' : title.replace(/^Settings · /, '')) : title;
-    if (heading) ui.add(fitLine(this.add.text(art ? 150 : 48, 22, heading, textStyle(34)), 760 - (art ? 102 : 0)));
+    const isCategory = SETTING_CATEGORIES.some((c) => c.id === this.page);
+    const look = this.look && isCategory ? this.look : null;
+    const headInk = this.look?.ink && this.skinned?.light ? this.look.ink : COLORS.textLight;
+    if (heading) ui.add(fitLine(this.add.text(art ? 150 : 48, 22, heading, textStyle(34, headInk)), 760 - (art ? 102 : 0)));
+    if (this.look?.kanji && this.page === 'home') ui.add(this.add.text(48, 70, this.look.kanji, textStyle(64, this.look.ink)));
     if (this.page === 'search') ui.add(this.add.text(48, 70, `Find: ${this.query}▍`, textStyle(24, '#ffb745')));
     if (this.page === 'search' && this.query && rows.length === 1) ui.add(this.add.text(48, 110, 'No setting matches.', textStyle(20, COLORS.textMuted)));
     const top = this.page === 'search' ? 108 : 78;
-    ui.add(drawPanel(this, 40, top - 8, 560, 400 - (top - 78), { alpha: 0.95 }));
+    let area = { x: 60, y: top, w: 520 };
+    if (look) {
+      const cat = this.page as SettingCategory;
+      area = drawSettingsTabs(this, ui, look, cat, (id) => this.go(id as Page));
+      if (look.card) {
+        const gc = this.add.graphics();
+        gc.fillStyle(look.card.fill, 1).fillRoundedRect(36, 106, 570, 380, 14).lineStyle(2, look.card.rim, 1).strokeRoundedRect(36, 106, 570, 380, 14);
+        ui.add(gc);
+      }
+    } else ui.add(drawPanel(this, 40, top - 8, 560, 400 - (top - 78), { alpha: 0.95 }));
     const rowH = Math.min(40, Math.floor((380 - (top - 78)) / Math.max(rows.length, 1)));
-    this.hintText = this.add.text(48, 474, '', textStyle(18, COLORS.textLight, { wordWrap: { width: 800 } }));
+    this.hintText = this.add.text(48, 474, '', textStyle(18, this.look && this.skinned?.light ? this.look.ink : COLORS.textLight, { wordWrap: { width: 800 } }));
     ui.add(this.hintText);
     ui.add(this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 12, this.page === 'search' ? 'Type to search  ·  Up/Down  ·  Enter: change  ·  Esc: back' : 'Arrows: move  ·  Enter: change  ·  Esc: back', textStyle(14, COLORS.textMuted)).setOrigin(1, 1));
     if (this.notice) ui.add(this.add.text(48, 508, this.notice, textStyle(16, COLORS.good)));
     this.menu = new Menu(this, {
-      x: 60,
-      y: top,
+      x: area.x,
+      y: look ? area.y + (look.tabs === 'top' ? 8 : 0) : top,
       options: rows.map((r) => r.option),
-      itemWidth: 520,
+      ...(look ? { color: look.ink, glass: { motion: services().session.settings.battleAnimations, paint: rowH >= 30 ? look.painter : look.thin } } : this.look && this.skinned?.light ? { color: this.look.ink } : {}),
+      itemWidth: area.w,
       itemHeight: rowH,
       fontSize: rowH >= 36 ? 24 : rowH >= 30 ? 20 : 17,
       onSelect: (i) => rows[i]!.action(),
