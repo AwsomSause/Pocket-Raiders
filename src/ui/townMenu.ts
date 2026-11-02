@@ -4,7 +4,7 @@
 import type Phaser from 'phaser';
 import { contractBoard, contractDone } from '../core/contracts';
 import { promptById } from '../core/interaction/prompt';
-import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
+import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
 import { services } from '../game/services';
 import { pokemonAssetIds } from '../assets/catalog';
 import { playCry, playMusicLazy } from './audio';
@@ -336,6 +336,10 @@ function view(host: TownHost, a: TownAction, done: (m: string) => void, again: (
       ], again);
     }
     case 'records': return show(host, 'Hall Records', hallRecords(p).map((r) => ({ label: r.label, desc: r.seed ? `${r.value} · seed ${r.seed}` : r.value })), again);
+    case 'fans': {
+      const f = fanClub(p);
+      return show(host, `Fan Club · ${f.fans} followers · +₽${f.money} each run`, f.tiers.map((t) => ({ label: `${t.label} (${t.need} fans)`, desc: `${t.reached ? 'Reached' : 'Locked'} · +₽${t.money} starting money` })), again);
+    }
     case 'ledger': return openLedger(host, 'all', 'newest', again);
     case 'roster': return show(host, 'Townsfolk', rosterOpen(p).map((n) => ({ label: n.open ? `${n.name} · ${n.role}` : '???', desc: n.open ? `"${n.line}"` : `Moves in at ${n.need} achievements` })), again);
     case 'track': {

@@ -2830,6 +2830,16 @@
      "view": "records"
     },
     {
+     "id": "hall-fans",
+     "name": "Fan Club",
+     "desc": "Followers grow with every run, win and achievement. Each tier adds starting money to every run.",
+     "kind": "view",
+     "rows": [
+      "S358"
+     ],
+     "view": "fans"
+    },
+    {
      "id": "hall-roster",
      "name": "Townsfolk roster",
      "desc": "Townsfolk who move in as you earn achievements.",
@@ -4226,6 +4236,12 @@
   },
   "say": "Mush. Edible, technically."
  },
+ "fanClub": [
+  { "fans": 20, "money": 100, "label": "Hometown fans" },
+  { "fans": 60, "money": 250, "label": "Regional fan club" },
+  { "fans": 150, "money": 500, "label": "National following" },
+  { "fans": 400, "money": 1000, "label": "Worldwide stardom" }
+ ],
  "caps": {
   "notes": 30,
   "graffiti": 24,

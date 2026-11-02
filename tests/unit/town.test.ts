@@ -298,3 +298,16 @@ describe('Weather Station (S362)', () => {
     expect(stationTier({} as never)).toBe(0);
   });
 });
+
+describe('Fan Club (S358)', () => {
+  it('followers come from the history and each reached tier adds starting money', async () => {
+    const { fanClub } = await import('../../src/core/town');
+    const p = rich();
+    expect(fanClub(p).fans).toBe(0);
+    const base = townStartGrants(content, p).money;
+    const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = Array.from({ length: 2 }, () => run) as never; // 2 runs, 2 wins = 26 fans
+    expect(fanClub(p).fans).toBe(26);
+    expect(townStartGrants(content, p).money).toBe(base + TOWN.fanClub[0]!.money);
+  });
+});
