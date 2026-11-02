@@ -73,6 +73,17 @@ test('walk Hub Town, use the gate, inspect the Legacy Display and buy from the S
   // The crowd: trainers and Pokémon are out and about.
   expect(await hub(page, 'hub.crowd.walkers.length')).toBeGreaterThan(10);
 
+  // Event Indicators: the keepers, the signs and the filled pedestals wear their flairs; wanderers show one when close.
+  expect(await hub(page, "['keeper:gatekeeper', 'keeper:merchant', 'place:board', 'pad:0', 'pad:1'].every((k) => hub.indicators.shown.has(k))")).toBe(true);
+  expect(await hub(page, "hub.indicators.shown.has('pad:2')")).toBe(false);
+  const w = await hub(page, '({ ...hub.crowd.walkers[0].at, id: hub.crowd.walkers[0].w.id })');
+  await hub(page, `hub.town.moveTo({ x: ${w.x}, y: ${w.y + 1 < 47 ? w.y + 1 : w.y - 1}, facing: 'up' })`);
+  await expect.poll(() => hub(page, `hub.indicators.shown.get('crowd:${w.id}').visible`), { timeout: 3_000 }).toBe(true);
+  const m = await hub(page, "hub.town.grid.map.keepers.find((k) => k.id === 'merchant')");
+  await hub(page, `hub.town.moveTo({ x: ${m.x}, y: ${m.y + 2}, facing: 'up' })`);
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: 'test-results/hubtown-indicators.png' });
+
   // The Departure Gate asks first; "not yet" (Esc) steps you back into town.
   const gate = await hub(page, "(() => { const g = hub.town.grid.map.places.find((p) => p.id === 'gate'); return g.door; })()");
   await hub(page, `hub.town.moveTo({ x: ${gate.x}, y: ${gate.y - 1}, facing: 'down' })`);
