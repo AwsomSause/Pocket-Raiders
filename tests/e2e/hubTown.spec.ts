@@ -29,6 +29,7 @@ test('walk Hub Town, use the gate, inspect the Legacy Display and buy from the S
   await page.evaluate((legacyRuns) => {
     const s = (window as any).__pkr.session;
     s.changeProfile((p: any) => ({ ...p, legacyRuns, bankCredits: 3000 }));
+    s.saveSettings({ ...s.settings, hubStyle: 'town' });
     (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
   }, [record('past-1'), record('past-2', { archetypeId: 'blue', outcome: 'victory' })]);
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
@@ -134,7 +135,11 @@ for (const size of [{ w: 1024, h: 600 }, { w: 390, h: 844 }]) {
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto('/?debug=1');
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
-    await page.evaluate(() => void (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub'));
+    await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.saveSettings({ ...s.settings, hubStyle: 'town' });
+    (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
+  });
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
     await page.waitForTimeout(800);
     expect(await hub(page, "!!hub.children.getByName('hubtown-player')")).toBe(true);
@@ -169,7 +174,14 @@ test('Settings > Hub style switches to the Arena Lobby tile menu and back', asyn
   await page.screenshot({ path: 'test-results/arena-lobby-unlocks.png' });
   await page.keyboard.press('Escape');
   await page.waitForTimeout(250);
-  // Back to Hub Town.
+  // The Town tile walks you into Hub Town without changing the setting; Esc > Arena Lobby goes back.
+  await hub(page, "hub.enter('hubtown')");
+  await expect.poll(() => hub(page, "!!hub.town && !hub.lobby && !!hub.children.getByName('hubtown-player')"), { timeout: 10_000 }).toBe(true);
+  expect(await page.evaluate(() => (window as any).__pkr.session.settings.hubStyle)).toBe('lobby');
+  await page.screenshot({ path: 'test-results/arena-lobby-town-visit.png' });
+  await hub(page, "hub.enter('lobby')");
+  await expect.poll(() => hub(page, '!!hub.lobby && !hub.town'), { timeout: 10_000 }).toBe(true);
+  // Choosing Hub Town in Settings makes it the Hub.
   await page.evaluate(() => {
     const s = (window as any).__pkr.session;
     s.saveSettings({ ...s.settings, hubStyle: 'town' });
@@ -187,12 +199,16 @@ test('Hub Town at night: the town is tinted, lamps glow, and the on-screen pad w
   await page.goto('/?debug=1&touch=1');
   await page.clock.resume();
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
-  await page.evaluate(() => void (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub'));
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.saveSettings({ ...s.settings, hubStyle: 'town' });
+    (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
+  });
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
   await page.waitForTimeout(800);
   expect(await hub(page, 'hub.period')).toBe('night');
   expect(await hub(page, "!!hub.children.getByName('hubtown-daylight')")).toBe(true);
-  expect(await hub(page, "hub.children.getByName('hubtown-touchpad').visible")).toBe(true);
+  await expect(page.locator('#touch-pad')).toBeVisible();
   await page.screenshot({ path: 'test-results/hubtown-night.png' });
 
   // Hold the on-screen arrow toward a free road tile and the Pokémon walks; let go and it stops.
@@ -203,16 +219,14 @@ test('Hub Town at night: the town is tinted, lamps glow, and the on-screen pad w
     return null;
   })()`);
   await hub(page, `hub.town.moveTo({ x: ${free.x}, y: ${free.y}, facing: 'right' })`);
-  await hub(page, "hub.children.getByName('hubtown-touchpad').getByName('hubtown-touch-right').emit('pointerdown')");
+  await page.locator('#touch-pad button[aria-label="▶"]').dispatchEvent('pointerdown');
   await page.waitForTimeout(500);
-  await hub(page, "hub.children.getByName('hubtown-touchpad').getByName('hubtown-touch-right').emit('pointerup')");
+  await page.locator('#touch-pad button[aria-label="▶"]').dispatchEvent('pointerup');
   await page.waitForTimeout(300);
   expect(await hub(page, 'hub.town.tile().x')).toBeGreaterThan(free.x);
-  expect(await hub(page, 'hub.town.touchDir')).toBe(null);
 
-  // Menu opens the Esc menu, and the pad hides under it.
-  await hub(page, "hub.children.getByName('hubtown-touchpad').getByName('hubtown-touch-menu').emit('pointerdown')");
+  // Back opens the Esc menu.
+  await page.locator('#touch-pad button[aria-label="Back"]').dispatchEvent('pointerdown');
   await expect.poll(() => hub(page, '!!hub.section'), { timeout: 5_000 }).toBe(true);
-  await expect.poll(() => hub(page, "hub.children.getByName('hubtown-touchpad').visible")).toBe(false);
   expect(errors).toEqual([]);
 });

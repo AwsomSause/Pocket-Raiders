@@ -1,6 +1,6 @@
 // 02 Holo Card Pack: five foil trading cards fanned out like a hand; the focused one lifts to the front.
 import { fillGradient } from './common';
-import { blurb, css, dealIn, icon, label, popAway, rarityWord, zone } from './kit';
+import { blurb, css, dealIn, fitBlock, icon, label, popAway, rarityWord, zone } from './kit';
 import type { RewardLayout, RewardSkin } from './types';
 
 const FOIL = [0xff6b9a, 0xffb86b, 0xfff06b, 0x6bff9a, 0x6bd0ff, 0xa06bff];
@@ -24,7 +24,7 @@ const layout: RewardLayout = (ctx, hooks) => {
     icon(scene, c, v, 0, -CH / 2 + 78, 3);
     label(scene, c, 0, -CH / 2 + 132, rarityWord(v), 12, css(v.rim), { extra: { stroke: '#1a1630', strokeThickness: 2 } });
     const d = label(scene, c, -CW / 2 + 12, -CH / 2 + 150, blurb(v), 12, '#2a2440', { origin: [0, 0], extra: { wordWrap: { width: CW - 24 } } });
-    d.setCrop(0, 0, CW - 24, CH - 158);
+    fitBlock(d, CH - 160);
     root.add(c);
     return c;
   });

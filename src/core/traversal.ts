@@ -206,6 +206,24 @@ export function placeLandmark(content: Content, run: RunState): void {
   node.sides.push({ id: `landmark-${node.id}`, kind: 'event', used: false, eventId: def.id });
 }
 
+/** Landmark Dungeons (S9): named places (Pokémon Tower, Power Plant...) with 3-4 chained trainer rooms and loot. */
+export const DUNGEON_STOP = 'dungeon';
+
+/** One dungeon per region, on its third stage, once per run (an event the run has seen never returns). Mutates `run`. */
+export function placeDungeon(content: Content, run: RunState): void {
+  const stage = run.stage;
+  if (!stage || stage.kind !== 'stage' || stage.index !== 2) return;
+  const open = [...content.events.values()]
+    .filter((e) => e.stop === DUNGEON_STOP && !run.itemCounters?.[`event-seen:${e.id}`] && e.requires.every((c) => conditionMet(content, run, c)))
+    .sort((a, b) => a.id.localeCompare(b.id));
+  if (open.length === 0) return;
+  const def = new Rng(hashSeed(`${run.seed}::dungeon::${run.regionIndex}`)).pick(open);
+  const column = Math.max(1, Math.floor(stage.map.columns / 2) - 1);
+  const node = stage.map.nodes.filter((n) => n.column === column).sort((a, b) => a.row - b.row)[0];
+  if (!node) return;
+  node.sides.push({ id: `dungeon-${node.id}`, kind: 'event', used: false, eventId: def.id });
+}
+
 // ---------- live-event map rules (ideas W4 for W9: E170, E182, E183) ----------
 
 /** The tower climb rule on this run, or null (the map draws rising and has checkpoints). */

@@ -39,6 +39,7 @@ test('the Legacy Rotation, the Legacy Gallery with Relive the Moment, and the Ri
     const s = (window as any).__pkr.session;
     s.changeProfile((p: any) => ({ ...p, legacyRuns }));
     s.settings.screenStyles = { ...s.settings.screenStyles, legacy: 'original' }; // this spec checks the original list
+    s.settings.hubStyle = 'town'; // the Legacy Display on the stage belongs to Hub Town
     (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
   }, records);
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');

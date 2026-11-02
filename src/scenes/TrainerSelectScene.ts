@@ -45,6 +45,7 @@ export class TrainerSelectScene extends Phaser.Scene {
   private tooltip!: Phaser.GameObjects.Container;
   private notice!: Phaser.GameObjects.Text;
   private sortText!: Phaser.GameObjects.Text;
+  private hint!: Phaser.GameObjects.Text;
   private sortKey: TrainerSortKey = 'default';
   private sortReverse = false;
 
@@ -74,7 +75,7 @@ export class TrainerSelectScene extends Phaser.Scene {
     this.profileLayer = this.add.container(0, 0);
     this.tooltip = this.add.container(0, 0).setDepth(40).setVisible(false);
     this.notice = this.add.text(16 + LEFT_W / 2, GAME_HEIGHT - 50, '', textStyle(16, COLORS.bad, { align: 'center', wordWrap: { width: LEFT_W - 24 } })).setOrigin(0.5, 1).setDepth(5);
-    this.add.text(L.profile === 'strip' ? 16 : GRID_X, GAME_HEIGHT - 4, 'Arrows choose  ·  Enter confirm  ·  Tab sort  ·  R flip  ·  Esc back', textStyle(14, COLORS.textMuted)).setOrigin(0, 1);
+    this.hint = this.add.text(L.profile === 'strip' ? 16 : GRID_X, GAME_HEIGHT - 4, 'Arrows choose  ·  Enter confirm  ·  Tab sort  ·  R flip  ·  Esc back', textStyle(13, COLORS.textMuted)).setOrigin(0, 1);
     this.pageText = this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 14, '', textStyle(14, COLORS.textMuted)).setOrigin(1, 1);
     this.sortText = this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 14, '', textStyle(14, COLORS.gold)).setOrigin(1, 1).setInteractive({ useHandCursor: true });
     this.sortText.on('pointerdown', () => this.cycleSort(1));
@@ -141,6 +142,14 @@ export class TrainerSelectScene extends Phaser.Scene {
     return { x: GRID_X + (i % COLS) * (CELL_W + GAP), y: GRID_Y + Math.floor(i / COLS) * (CELL_H + GAP) };
   }
 
+  /** The key hint wraps (upwards) so it never runs under the sort and page labels or off the right edge. */
+  private fitHint(): void {
+    // A narrow grid column leaves no room beside the sort label: the hint moves to the free left corner instead.
+    if (this.sortText.x - this.sortText.width - this.hint.x - 16 < 300) this.hint.setX(16);
+    const room = this.sortText.x - this.sortText.width - this.hint.x - 16;
+    this.hint.setWordWrapWidth(Math.max(120, Math.min(room, GAME_WIDTH - this.hint.x - 8)), true);
+  }
+
   private pageCount(): number {
     return Math.max(1, Math.ceil(this.slots.length / PAGE));
   }
@@ -148,6 +157,7 @@ export class TrainerSelectScene extends Phaser.Scene {
   private updatePageText(): void {
     this.pageText.setText(this.pageCount() > 1 ? `Page ${this.page + 1}/${this.pageCount()}` : '');
     this.sortText.setX(this.pageText.x - this.pageText.width - 12);
+    this.fitHint();
   }
 
   /** Builds the cells of the current page (replacing the previous page's). */

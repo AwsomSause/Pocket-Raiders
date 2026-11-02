@@ -131,6 +131,8 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   // The claim leaves the Arena page open: Esc back to town, where you still face the Run Prep Center.
   await page.keyboard.press('Escape');
   await page.waitForTimeout(400);
+  // The Arena Lobby keeps focus on the Arena tile after the Esc: move it back to Start a run.
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Hub').lobby?.focus('run', false));
   await page.keyboard.press('Enter'); // Start a run
   await waitForScene(page, 'TrainerSelect');
   // Brock's slot depends on where Trainer Evolutions sit, so look it up instead of counting.

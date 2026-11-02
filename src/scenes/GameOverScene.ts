@@ -19,6 +19,7 @@ import { encodeChallengeCard, encodeTeamCode } from '../core/shareCodes';
 import { boardKey } from '../core/boards';
 import { encodeGhostCode, ghostFor, ghostFromRecord, ghostLines } from '../core/ghost';
 import { getMutator } from '../core/mutators';
+import { rankLines } from '../core/runRank';
 import { memorialLines } from '../core/nuzlocke';
 import { campaignCounts, getMode } from '../core/rules';
 import Phaser from 'phaser';
@@ -157,6 +158,7 @@ export class GameOverScene extends Phaser.Scene {
       const end = timelineOutcome(session.content, run);
       lines.push(`${TIMELINE.title}: ${end.name}`, `   ${end.text}`, `Revisited timeline (attempt ${run.timeline.attempt}): kept apart from your profile. The original run is untouched.`);
     }
+    if (run) lines.push(...rankLines(run), '');
     if (summary) {
       const p = summary.payout;
       lines.push(`+${p.total} Bank Credits`, `   savings ${p.savings} · stipend ${p.stipend} · achievements ${p.achievements}`);
@@ -207,11 +209,15 @@ export class GameOverScene extends Phaser.Scene {
       }
       this.scene.start('Hub');
     };
+    // One row along the bottom (a column of three ran off the screen).
+    const endOptions = [{ label: 'Back to the Hub' }, ...(run ? [{ label: 'Retry this seed' }] : []), ...(won ? [{ label: 'Roll the credits' }] : [])];
     const menu = new Menu(this, {
-      x: GAME_WIDTH / 2 - 120,
-      y: 486,
-      options: [{ label: 'Back to the Hub' }, ...(run ? [{ label: 'Retry this seed' }] : []), ...(won ? [{ label: 'Roll the credits' }] : [])],
-      itemHeight: 25,
+      x: Math.round((GAME_WIDTH - endOptions.length * 260) / 2),
+      y: 490,
+      options: endOptions,
+      columns: endOptions.length,
+      itemWidth: 260,
+      itemHeight: 34,
       fontSize: 22,
       color: COLORS.textLight,
       onSelect: (i) => choose(i),

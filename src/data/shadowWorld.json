@@ -399,6 +399,19 @@
    ],
    "battles": 1,
    "until": "battle"
+  },
+  {
+   "id": "blessing-focus",
+   "name": "Mental Focus",
+   "text": "All your moves are 20% more accurate for the next 3 battles.",
+   "effects": [
+    {
+     "kind": "accuracyMultiplier",
+     "value": 1.2
+    }
+   ],
+   "battles": 3,
+   "until": "battle"
   }
  ],
  "auras": [

@@ -9,7 +9,7 @@ import { GRADES, type Grade } from '../interaction/prompt';
 import { hashSeed, Rng } from '../rng';
 import type { Profile } from '../state';
 import { TOWN, freshTown, type Reward, type TownAction, type TownBuilding, type TownOption, type TownProfile } from './schema';
-import { bestMove, curseKnown, lastTeam, memorialList, miniBattle, ownedSet, pedestalBonus, pets as petList, primaryType, relicList, trophies as trophyList } from './views';
+import { bestMove, curseKnown, fanClub, lastTeam, memorialList, miniBattle, ownedSet, pedestalBonus, pets as petList, primaryType, relicList, trophies as trophyList } from './views';
 import { familyId } from '../mastery';
 
 export * from './schema';
@@ -635,6 +635,7 @@ export function townStartGrants(content: Content, p: Profile): TownGrants {
   for (const id of (t.equipped.case ?? '').split(',').filter(Boolean)) add(TOWN.badgePerks[badgeType(content, id)]);
   const tier = (t.sets.station ?? []).filter((id) => /^station-[123]$/.test(id)).length;
   if (tier > 0) out.stuff['weather-station'] = tier;
+  out.money += fanClub(p).money;
   const b = pedestalBonus(p, t);
   out.money += b.money;
   for (const [k, n] of Object.entries(b.items ?? {})) out.items[k] = (out.items[k] ?? 0) + n;

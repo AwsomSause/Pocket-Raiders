@@ -1,0 +1,1 @@
+- Multi-Region Run (idea S11; run map and world thread): new mode `multi-region` and campaign `multi-region` (3 regions, 5 stages each, a Champion at every region border, no Grand Region; 70% account rewards). Data only (`balance.json` campaigns, `runRules.json` modes). No save change. Test `tests/unit/challengeModes.test.ts`.

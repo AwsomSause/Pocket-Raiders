@@ -6,6 +6,7 @@
 import { getMutator } from '../core/mutators';
 import { fixedDamageLabel } from '../ui/battleText';
 import Phaser from 'phaser';
+import { fitBlock } from '../ui/fitText';
 import { EGG_TIERS, eggTier } from '../core/eggs';
 import { catchSummary } from '../core/catchSummary';
 import { masteryPreview } from '../core/mastery';
@@ -468,9 +469,14 @@ export class DecisionScene extends Phaser.Scene {
     let compareIdx = 0;
     const drawSummary = (): void => {
       const other = run.party[compareIdx];
-      const lines = [...catchSummary(content, caught, other, extras), masteryPreview(content, profile, run, caught)];
+      let lines = [...catchSummary(content, caught, other, extras), masteryPreview(content, profile, run, caught)];
+      // The full detail runs under the menu on a small screen: use the compact lines when it would not fit.
+      if (!extras.compact) {
+        summaryText.setText(lines.join('\n'));
+        if (summaryText.height > 232) lines = [...catchSummary(content, caught, other, { ...extras, compact: true }), masteryPreview(content, profile, run, caught)];
+      }
       const hint = run.party.length > 1 ? `(Left/Right: compare with ${other ? getSpecies(content, other.speciesId).name : 'nobody'})` : '';
-      summaryText.setText([...lines, hint, blocked ? `${blocked}.` : full ? `Your party is full (${partyMax}).` : `Party: ${run.party.length}/${partyMax}`].join('\n'));
+      fitBlock(summaryText, 560, 245, [...lines, hint, blocked ? `${blocked}.` : full ? `Your party is full (${partyMax}).` : `Party: ${run.party.length}/${partyMax}`].join('\n'));
     };
     drawSummary();
     this.compareStep = (d: number): void => {

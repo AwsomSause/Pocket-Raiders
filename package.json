@@ -58,6 +58,7 @@
     "data:rk-events": "node tools/build-rk-events.ts",
     "data:merchant-events": "node tools/build-merchant-events.ts",
     "data:w4-events": "node tools/build-w4-events.ts",
+    "data:villain-events": "node tools/build-villain-events.ts",
     "data:trainer-unlocks": "node tools/build-trainer-unlocks.ts",
     "data:legendary-events": "node tools/build-legendary-events.ts",
     "data:game-events": "node tools/build-game-events.ts",

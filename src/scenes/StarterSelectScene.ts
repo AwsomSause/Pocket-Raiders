@@ -3,6 +3,7 @@
 // A built screen style (Settings > Display) changes the card layout; see ui/starterLayouts.ts.
 
 import Phaser from 'phaser';
+import { fitBlock } from '../ui/fitText';
 import { createPokemon, getSpecies } from '../core/pokemon';
 import { services } from '../game/services';
 import { onInputAction } from '../ui/input';
@@ -70,7 +71,8 @@ export class StarterSelectScene extends Phaser.Scene {
     });
     this.focus(0);
 
-    this.add.text(GAME_WIDTH / 2, 516, '←/→ choose  ·  Enter confirm  ·  Esc menu (run is saved)', textStyle(18, look === 'original' ? '#a69cb4' : L.head)).setOrigin(0.5).setDepth(5);
+    // Keyboard hints are only for keyboards (on a touch screen they sat on top of the cards).
+    if (!this.sys.game.device.input.touch) this.add.text(GAME_WIDTH / 2, 516, '←/→ choose  ·  Enter confirm  ·  Esc menu (run is saved)', textStyle(18, look === 'original' ? '#a69cb4' : L.head)).setOrigin(0.5).setDepth(5);
 
     onInputAction(this, (action) => {
       if (action === 'left') this.focus((this.index + 2) % 3);
@@ -148,7 +150,10 @@ export class StarterSelectScene extends Phaser.Scene {
       else {
         const b = species.baseStats;
         box.add(this.add.text(lx + 18, ty + 80, `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}\nSpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, textStyle(17, L.muted)));
-        box.add(this.add.text(lx + 18, ty + 136, `Lv ${preview.level} moves:\n${moves}`, textStyle(17, L.ink, { wordWrap: { width: g.w - 36 } })));
+        const mv = this.add.text(lx + 18, ty + 136, `Lv ${preview.level} moves:\n${moves}`, textStyle(17, L.ink, { wordWrap: { width: g.w - 36 } }));
+        box.add(mv);
+        // Keep the moves inside the card (and clear of the help line below it).
+        fitBlock(mv, g.w - 36, Math.max(36, ly + g.h - 14 - (ty + 136)));
       }
     }
     const hit = this.add.zone(0, 0, g.w, g.h).setInteractive({ useHandCursor: true });

@@ -48,7 +48,6 @@ import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
 import { HubIndicators, indicatorAssets } from '../ui/hubTown/indicators';
 import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
-import { HubTouchPad, wantsTouchPad } from '../ui/hubTown/touchPad';
 import { hubPeriod } from '../core/hubTown/daylight';
 import type { Period } from '../core/clock';
 import { ArenaLobby, lobbyMons, type LobbyTile } from '../ui/arenaLobby/lobby';
@@ -68,7 +67,7 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
@@ -105,6 +104,8 @@ const ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'back', label: 'Back to title', blurb: '' },
   { room: 'merchant', label: 'Strange Merchant', blurb: 'Odd wares for your next run, a new stock each day, one of each (Bank Credits).' },
   { room: 'hubmon', label: 'Walking Pokémon', blurb: 'Choose the Pokémon you walk Hub Town as. Your party and runs never change.' },
+  { room: 'hubtown', label: 'Hub Town', blurb: 'Walk the town as your Pokémon: every room is a building (Settings > Hub style makes it the Hub).' },
+  { room: 'lobby', label: 'Arena Lobby', blurb: 'Back to the Arena Lobby menu.' },
 ];
 
 const RANK_COLOR: Record<MasteryRank, string> = {
@@ -197,6 +198,12 @@ const ROOM_ICON: Partial<Record<Room, string>> = {
 /** The pause menu (Esc in town): the old Settings tile's rooms plus the Pokémon you walk as. */
 const PAUSE_ROOMS: Room[] = ['options', 'hubmon', 'save', 'tools', 'back'];
 
+/** Walking Hub Town from the Arena Lobby's Town tile (Hub style still Arena Lobby): lasts until you go back to the lobby. */
+let townVisit = false;
+const lobbyHub = (): boolean => services().session.settings.hubStyle === 'lobby' && !townVisit;
+/** The pause menu's rooms: a visit from the Arena Lobby also offers the way back to it. */
+const pauseRooms = (): Room[] => (services().session.settings.hubStyle === 'lobby' ? ['lobby', ...PAUSE_ROOMS] : PAUSE_ROOMS);
+
 /** What the keepers say before they open their place (Hub Town spec §5). */
 const KEEPERS: Record<string, { name: string; line: (p: Profile) => string }> = {
   merchant: { name: 'Strange Merchant', line: () => 'Heh. New wares every day, one of each. Have a look...' },
@@ -231,7 +238,6 @@ export class HubScene extends Phaser.Scene {
   minimap: HubMinimap | null = null;
   /** The time of day the town is drawn at, and the phone controls (when shown). */
   period: Period = 'afternoon';
-  touchPad: HubTouchPad | null = null;
   indicators: HubIndicators | null = null;
   private lobbyPokemon: Species[] = [];
 
@@ -247,7 +253,7 @@ export class HubScene extends Phaser.Scene {
     this.entries = legacyRotation(session.content, p.legacyRuns, { seed: `${p.stats.runsEnded}:${rotationVisits++}`, current, cooldown: lastRotation });
     lastRotation = this.entries.filter((e) => !e.current).map((e) => e.runId);
     queueAssets(this, ['ui.trainercard', 'ui.dex.seen', 'ui.dex.caught', 'ui.save.bg']);
-    if (session.settings.hubStyle === 'lobby') {
+    if (lobbyHub()) {
       this.lobbyPokemon = lobbyMons(session.content, (id) => services().assets.has(id));
       preloadPokemon(this, this.lobbyPokemon, { front: true });
       return;
@@ -299,9 +305,8 @@ export class HubScene extends Phaser.Scene {
     this.crowd = null;
     this.lobby = null;
     this.minimap = null;
-    this.touchPad = null;
     this.indicators = null;
-    if (session.settings.hubStyle === 'lobby') {
+    if (lobbyHub()) {
       const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
       this.lobby = new ArenaLobby(this, {
         content: session.content, profile: p, motion, ready, mons: this.lobbyPokemon, entries: this.entries, current, seed: `${p.profileId}:${rotationVisits}`,
@@ -353,7 +358,6 @@ export class HubScene extends Phaser.Scene {
     this.period = hubPeriod(new Date(Date.now()));
     drawDaylight(this.town, this, this.period, motion);
     startTownSound(this.town, this, this.period);
-    this.touchPad = wantsTouchPad(this) ? new HubTouchPad(this, this.town, { busy, menu: () => this.openPause(), map: () => this.minimap?.cycle() }) : null;
   }
 
   /** The screen layer over the town or lobby: logo, currencies, the card line, the help line, the rival note. */
@@ -407,7 +411,7 @@ export class HubScene extends Phaser.Scene {
       if (tile.rooms.length > 1) this.openLobbyTile(tile, tile.rooms.indexOf(room));
       return;
     }
-    if (PAUSE_ROOMS.includes(room)) this.openPause(PAUSE_ROOMS.indexOf(room));
+    if (pauseRooms().includes(room)) this.openPause(pauseRooms().indexOf(room));
     else {
       const pl = HUB_TOWN.places.find((x) => x.rooms.includes(room));
       if (pl && pl.rooms.length > 1) this.openSection({ name: pl.name, rooms: pl.rooms as Room[] }, pl.rooms.indexOf(room));
@@ -492,7 +496,7 @@ export class HubScene extends Phaser.Scene {
 
   /** Esc in town: settings, the Pokémon you walk as, save data, tools, and the way back to the title screen. */
   private openPause(focus = 0): void {
-    this.place = { name: 'Menu', rooms: PAUSE_ROOMS };
+    this.place = { name: 'Menu', rooms: pauseRooms() };
     this.openSection(this.place, focus);
   }
 
@@ -803,6 +807,14 @@ export class HubScene extends Phaser.Scene {
         break;
       case 'hubmon':
         this.openHubMon();
+        break;
+      case 'hubtown':
+        townVisit = true;
+        this.scene.restart({});
+        break;
+      case 'lobby':
+        townVisit = false;
+        this.scene.restart({});
         break;
     }
   }

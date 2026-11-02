@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { typeEffectiveness } from '../../src/core/battle/damage';
 import { runLevelCap } from '../../src/core/regions';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { battleContent, battleMoneyScale, makeRules, modifierLevelCap, rulesProblem, STANDARD_CHOICE } from '../../src/core/rules';
+import { battleContent, battleMoneyScale, doublesOnly, gauntlet, noHealStops, makeRules, modifierLevelCap, rulesProblem, STANDARD_CHOICE } from '../../src/core/rules';
 import { content } from './helpers';
 
 const withMods = (modifierIds: string[]) => ({ ...STANDARD_CHOICE, modifierIds });
@@ -38,5 +38,19 @@ describe('Level 50 Cup and Low Resource', () => {
   });
   it('the three new modifiers can be picked and combine', () => {
     expect(rulesProblem(withMods(['inverse-battle', 'level-50-cup', 'low-resource']))).toBeNull();
+  });
+});
+
+describe('Gauntlet and Doubles Only', () => {
+  it('Gauntlet closes healing stops and cannot stack with No Rest', () => {
+    expect(noHealStops(makeRules(withMods(['gauntlet'])))).toBe(true);
+    expect(gauntlet(makeRules(withMods(['gauntlet'])))).toBe(true);
+    expect(gauntlet(makeRules(STANDARD_CHOICE))).toBe(false);
+    expect(rulesProblem(withMods(['gauntlet', 'no-heal-stops']))).not.toBeNull();
+  });
+  it('Doubles Only is a flag that combines with the other new modifiers', () => {
+    expect(doublesOnly(makeRules(withMods(['doubles-only'])))).toBe(true);
+    expect(doublesOnly(makeRules(STANDARD_CHOICE))).toBe(false);
+    expect(rulesProblem(withMods(['doubles-only', 'gauntlet', 'inverse-battle']))).toBeNull();
   });
 });

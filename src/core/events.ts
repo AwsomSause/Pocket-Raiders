@@ -49,6 +49,7 @@ import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
+import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
@@ -84,7 +85,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return c.side === 'positive' ? v >= c.atLeast : -v >= c.atLeast;
     }
     case 'item':
-      return (run.inventory[c.id] ?? 0) > 0 || (run.passives?.[c.id] ?? 0) > 0;
+      return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'partyType':
@@ -225,7 +226,7 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs ${name} ${c.atLeast}`;
     }
     case 'item':
-      return `Needs a ${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
+      return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
     case 'period':
       return `Only in the ${c.in.map((x) => PERIOD_LABEL[x].toLowerCase()).join(' or ')}`;
     case 'season':
@@ -644,7 +645,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'itemFrom':
       return `one of ${e.ids.map((id) => itemName(content, id)).join(' / ')}`;
     case 'loseItem':
-      return e.id ? `use a ${itemName(content, e.id)}` : 'lose an item';
+      return e.id ? `use ${e.count && e.count > 1 ? `${e.count} × ` : 'a '}${itemName(content, e.id)}` : 'lose an item';
     case 'tradeAway':
       return `trade away ${e.want.label}`;
     case 'heal':
@@ -683,6 +684,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'you get an Egg';
     case 'eggMove':
       return 'your lead learns an egg move';
+    case 'train':
+      return trainEffectText(e);
     case 'betterDraft':
       return `better next reward${e.extra ? ` (+${e.extra} choice)` : ''}`;
     case 'gymPreview':
@@ -833,9 +836,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       ids.sort();
       if (ids.length === 0) return '';
       const id = rng.pick(ids);
-      run.inventory[id]! -= 1;
+      const n = Math.min(e.id ? e.count ?? 1 : 1, run.inventory[id]!);
+      run.inventory[id]! -= n;
       if (run.inventory[id] === 0) delete run.inventory[id];
-      return `Lost a ${itemName(content, id)}`;
+      return n > 1 ? `Used ${n} × ${itemName(content, id)}` : `Lost a ${itemName(content, id)}`;
     }
     case 'tradeAway': {
       const fits = tradeCandidates(content, run, e.want);
@@ -924,6 +928,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const made = layEgg(content, run, speciesId, { level, left: e.left, unit: e.unit, source: 'Event', origin: e.origin, tier: e.tier, shinyMultiplier: runAttributeEffects(content, run).shinyChance * e.shinyMultiplier }, rng);
       return `You got ${made.kind === 'mystery' ? 'a Mystery' : made.tier === 'ordinary' ? 'an' : `a ${eggTier(made.tier).name}`} Egg! ${eggStatus(made)}.`;
     }
+    case 'train':
+      return applyTrainEffect(content, run, e, rng);
     case 'eggMove': {
       const lead = run.party.find((m) => m.hp > 0);
       if (!lead) return '';
@@ -1162,6 +1168,8 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.name, leaderId: null });
+    if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
+    if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
     if (b.ally && content.species.has(b.ally) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
       const ally = newMon(content, run, b.ally, Math.max(1, base), 'p');
@@ -1196,6 +1204,7 @@ export function continueEventChain(content: Content, run: RunState): void {
     return continueAfterDecisions(content, run);
   }
   const rng = new Rng(hashSeed(`${run.seed}::event-chain::${stageKey(run)}::${ref.sideId}::${ref.step}`));
+  if (battle.kind === 'trainer' && battle.chainHeal) for (const mon of run.party) if (mon.hp > 0) mon.hp = Math.min(maxHp(content, mon), mon.hp + Math.ceil(maxHp(content, mon) * battle.chainHeal));
   startEventBattle(content, run, node, battle, rng, ref);
 }
 
