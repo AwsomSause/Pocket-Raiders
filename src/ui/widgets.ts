@@ -204,6 +204,11 @@ export type PillPainter = (g: Phaser.GameObjects.Graphics, x: number, y: number,
  * A list (or grid) of options with a ▶ cursor. Works with the keyboard via
  * `handle(action)` and with the mouse by clicking/hovering an option.
  */
+/** True on touch-first devices (finger, not mouse). */
+function isCoarsePointer(): boolean {
+  return typeof window !== 'undefined' && (window.matchMedia?.('(pointer: coarse)').matches ?? false);
+}
+
 export class Menu {
   readonly container: Phaser.GameObjects.Container;
   index = 0;
@@ -259,6 +264,11 @@ export class Menu {
       this.baseY.push(at.y);
       // A long label stops at the item's edge (and at the next column) instead of running over its neighbour.
       fitLine(text, this.itemWidth - 40);
+      // Touch screens: the whole row is the tap target, not just the words (small phones shrink the canvas).
+      if (isCoarsePointer()) {
+        const left = at.x - (align === 'center' ? 0.5 : align === 'right' ? 1 : 0) * text.width;
+        text.setInteractive(new Phaser.Geom.Rectangle(x - 4 - left, (text.height - this.itemHeight) / 2, this.itemWidth - 12, Math.max(this.itemHeight, text.height)), Phaser.Geom.Rectangle.Contains);
+      }
       text.on('pointerover', () => {
         if (!opt.disabled && this.enabled) this.focus(i, false);
       });
