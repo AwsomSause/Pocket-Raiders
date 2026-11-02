@@ -23,6 +23,9 @@ import { emotionOf } from '../core/story/emotions';
 import type { PokemonInstance, RunState } from '../core/state';
 import type { Content } from '../core/contentSchema';
 import { services } from '../game/services';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { PARTY_SKINS, paintFace } from './partyStyles';
+import type { PartySkin } from './partyStyles/types';
 import { AERO, categoryIcon, drawGlass, typeLabel, type MotionLevel } from './aero';
 import { BOND_BARS } from './bondLook';
 import { playSfx } from './audio';
@@ -85,6 +88,7 @@ class PokemonScreen implements PickerLike {
   private readonly dyn: Phaser.GameObjects.Container;
   private readonly footer: Phaser.GameObjects.Text;
   private readonly motion: MotionLevel;
+  private readonly skin: PartySkin | null;
   private mode: Mode = 'list';
   private sel: number;
   private tab = 0;
@@ -140,8 +144,14 @@ class PokemonScreen implements PickerLike {
     this.root = scene.add.container(0, 0).setDepth(DEPTH);
     const shade = scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive();
     this.root.add(shade);
-    this.root.add(drawGlass(scene, 24, 16, GAME_WIDTH - 48, GAME_HEIGHT - 32, { radius: 26 }));
-    this.root.add(drawGlass(scene, 36, 24, GAME_WIDTH - 72, 46, { tint: AERO.sky, rim: AERO.rim, glow: false, radius: 20 }));
+    // Screens redesign (Group B): a picked party look repaints the window, rows and tabs (core/presentation/screenStyles.ts).
+    const skinId = screenStyleOf('party', session.settings.screenStyles, `${session.run!.seed}:${session.run!.encountersCompleted}`);
+    this.skin = skinId === 'original' ? null : PARTY_SKINS[skinId];
+    if (this.skin) this.skin.chrome(scene, this.root, this.motion);
+    else {
+      this.root.add(drawGlass(scene, 24, 16, GAME_WIDTH - 48, GAME_HEIGHT - 32, { radius: 26 }));
+      this.root.add(drawGlass(scene, 36, 24, GAME_WIDTH - 72, 46, { tint: AERO.sky, rim: AERO.rim, glow: false, radius: 20 }));
+    }
     const cap = runLevelCap(session.content, session.run!);
     this.root.add(scene.add.text(48, 47, pick ? `${pick.title}  ·  cap ${cap}` : `Pokémon  ·  Level cap ${cap}`, textStyle(30, COLORS.textLight)).setOrigin(0, 0.5).setName('pokemon-title'));
     const back = scene.add.text(GAME_WIDTH - 48, 47, '◀ Back', textStyle(22, COLORS.gold)).setOrigin(1, 0.5).setName('picker-back').setInteractive({ useHandCursor: true });
@@ -150,7 +160,7 @@ class PokemonScreen implements PickerLike {
     back.on('pointerdown', () => this.handle('back'));
     this.root.add(back);
     this.root.add(scene.add.text(GAME_WIDTH - 150, 47, this.pick ? 'Enter choose  ·  Esc back' : 'Enter actions  ·  Esc back', textStyle(16, COLORS.textMuted)).setOrigin(1, 0.5));
-    this.root.add(drawGlass(scene, 36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 16 }));
+    if (!this.skin) this.root.add(drawGlass(scene, 36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 16 }));
     this.footer = scene.add.text(52, GAME_HEIGHT - 48, '', textStyle(16, COLORS.textLight, { wordWrap: { width: GAME_WIDTH - 104 }, maxLines: 2 })).setOrigin(0, 0.5);
     this.root.add(this.footer);
     this.dyn = scene.add.container(0, 0);
@@ -538,8 +548,8 @@ class PokemonScreen implements PickerLike {
 
   private panel(box: Phaser.GameObjects.Container, x: number, y: number, w: number, h: number, alpha = 0.55): void {
     const g = this.host.scene.add.graphics();
-    g.fillStyle(0x061528, alpha).fillRoundedRect(x, y, w, h, 12);
-    g.lineStyle(1, AERO.rim, 0.5).strokeRoundedRect(x, y, w, h, 12);
+    g.fillStyle(this.skin?.palette.pane ?? 0x061528, alpha).fillRoundedRect(x, y, w, h, this.skin?.shape === 'square' ? 3 : 12);
+    g.lineStyle(1, this.skin?.palette.paneRim ?? AERO.rim, 0.5).strokeRoundedRect(x, y, w, h, this.skin?.shape === 'square' ? 3 : 12);
     box.add(g);
   }
 
@@ -553,9 +563,13 @@ class PokemonScreen implements PickerLike {
       const row = scene.add.container(LEFT_X, y).setName(`party-row-${i}`);
       const focused = i === this.sel;
       const g = scene.add.graphics();
-      g.fillStyle(focused ? 0x2a6a9a : 0x0a2038, focused ? 0.85 : 0.6).fillRoundedRect(0, 0, LEFT_W, rowH, 12);
-      g.lineStyle(focused ? 2 : 1, focused ? 0xfff2b0 : AERO.rim, focused ? 0.95 : 0.5).strokeRoundedRect(0, 0, LEFT_W, rowH, 12);
+      if (this.skin) paintFace(g, this.skin, 0, 0, LEFT_W, rowH, 'row', focused);
+      else {
+        g.fillStyle(focused ? 0x2a6a9a : 0x0a2038, focused ? 0.85 : 0.6).fillRoundedRect(0, 0, LEFT_W, rowH, 12);
+        g.lineStyle(focused ? 2 : 1, focused ? 0xfff2b0 : AERO.rim, focused ? 0.95 : 0.5).strokeRoundedRect(0, 0, LEFT_W, rowH, 12);
+      }
       row.add(g);
+      if (this.skin?.dimRows && !focused) row.setAlpha(0.5);
       const species = lookSpecies(this.content, mon);
       const doodle = pokemonIcon(scene, species, 26, rowH / 2, 1.1);
       row.add(doodle);
@@ -620,8 +634,11 @@ class PokemonScreen implements PickerLike {
       const x = RIGHT_X + i * w;
       const active = i === this.tab;
       const g = scene.add.graphics();
-      g.fillStyle(active ? 0x2a6a9a : 0x0a2038, active ? 0.9 : 0.55).fillRoundedRect(x + 2, TAB_Y, w - 4, 28, 10);
-      g.lineStyle(active ? 2 : 1, active ? 0xfff2b0 : AERO.rim, active ? 0.95 : 0.4).strokeRoundedRect(x + 2, TAB_Y, w - 4, 28, 10);
+      if (this.skin) paintFace(g, this.skin, x + 2, TAB_Y, w - 4, 28, 'tab', active);
+      else {
+        g.fillStyle(active ? 0x2a6a9a : 0x0a2038, active ? 0.9 : 0.55).fillRoundedRect(x + 2, TAB_Y, w - 4, 28, 10);
+        g.lineStyle(active ? 2 : 1, active ? 0xfff2b0 : AERO.rim, active ? 0.95 : 0.4).strokeRoundedRect(x + 2, TAB_Y, w - 4, 28, 10);
+      }
       const t = scene.add.text(x + w / 2, TAB_Y + 14, name, textStyle(14, active ? '#ffffff' : '#9fc8e8')).setOrigin(0.5).setName(`tab-${name}`);
       const zone = scene.add.zone(x + 2, TAB_Y, w - 4, 28).setOrigin(0).setInteractive({ useHandCursor: true });
       zone.on('pointerdown', () => {

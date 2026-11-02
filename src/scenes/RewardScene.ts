@@ -15,13 +15,15 @@ import { openBagMenu, type FieldMenuHost } from '../ui/fieldMenus';
 import { openPokemonMenu } from '../ui/pokemonMenu';
 import { partyRows, Picker, type PickerLike } from '../ui/partyPanel';
 import { itemVisual, pokemonIcon } from '../ui/sprites';
-import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
+import { COLORS, GAME_HEIGHT, GAME_WIDTH, mixColor, textStyle } from '../ui/theme';
 import { focusFrame } from '../ui/widgets';
 import { AERO, drawGlass, paintGlass, type MotionLevel } from '../ui/aero';
 import { burstReveal } from '../ui/battleFx/spectacle';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { revealPop } from '../ui/wiiMotion';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { DARK_INK, LIGHT_INK, REWARD_SKINS } from '../ui/rewardStyles';
 
 export class RewardScene extends Phaser.Scene {
   /** False for the first 220 ms of game time, while a held key could still pick a card (tests wait for it). */
@@ -58,9 +60,14 @@ export class RewardScene extends Phaser.Scene {
     this.chosen = false;
     this.cards = [];
 
-    this.add.text(GAME_WIDTH / 2, 30, 'Choose one reward', textStyle(44, COLORS.textLight)).setOrigin(0.5);
+    // Screens redesign (Group B): a picked reward look repaints the backdrop and cards (core/presentation/screenStyles.ts).
+    const skinId = screenStyleOf('reward', session.settings.screenStyles, `${run.seed}:${run.encountersCompleted}`);
+    const skin = skinId === 'original' ? null : REWARD_SKINS[skinId];
+    const ink = skin?.light ? LIGHT_INK : DARK_INK;
+    if (skin) skin.backdrop(this, this.motion);
+    this.add.text(GAME_WIDTH / 2, 30, skin?.title ? skin.title(run.encountersCompleted) : 'Choose one reward', textStyle(skin?.title ? 38 : 44, skin ? ink.title : COLORS.textLight)).setOrigin(0.5);
     this.add
-      .text(GAME_WIDTH / 2, 66, `Encounter ${run.encountersCompleted} cleared  ·  ₽${run.money}  ·  Candies ${run.candies}`, textStyle(20, '#a69cb4'))
+      .text(GAME_WIDTH / 2, 66, `Encounter ${run.encountersCompleted} cleared  ·  ₽${run.money}  ·  Candies ${run.candies}`, textStyle(20, ink.sub))
       .setOrigin(0.5);
 
     const gap = 12;
@@ -77,27 +84,31 @@ export class RewardScene extends Phaser.Scene {
       const glow = this.add.graphics().setVisible(false);
       glow.fillStyle(rarityColor, 0.28);
       glow.fillRoundedRect(-cardW / 2 - 8, -143, cardW + 16, 286, 24);
-      card.add([glow, paintGlass(this.add.graphics(), -cardW / 2, -135, cardW, 270, { rim: rarityColor, radius: 18 })]);
+      const spec = { w: cardW, rim: rarityColor, index: i, motion: this.motion };
+      const face = this.add.graphics();
+      if (skin) skin.card(face, spec);
+      else paintGlass(face, -cardW / 2, -135, cardW, 270, { rim: rarityColor, radius: 18 });
+      card.add([glow, face]);
       this.cursors.push(glow);
       // Reward presentation (spec §24): the item pops out of its card with a little wobble.
       const icon = itemVisual(this, reward.iconAssetId, 0, -89, 2.5) as Phaser.GameObjects.Image;
       card.add(icon);
       revealPop(this, icon, 120 + i * 70);
       const wrapW = cardW - 16;
-      const nameText = this.add.text(0, -51, reward.name, textStyle(24, COLORS.text, { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0);
+      const nameText = this.add.text(0, -51, reward.name, textStyle(24, skin ? ink.name : COLORS.text, { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0);
       card.add(fitBlock(nameText, wrapW, 34));
-      card.add(this.add.text(0, -17, reward.rarity.toUpperCase(), textStyle(16, Phaser.Display.Color.IntegerToColor(rarityColor).rgba)).setOrigin(0.5, 0));
+      card.add(this.add.text(0, -17, reward.rarity.toUpperCase(), textStyle(16, Phaser.Display.Color.IntegerToColor(skin?.light ? mixColor(rarityColor, 0x000000, 0.45) : rarityColor).rgba)).setOrigin(0.5, 0));
       // A team or player item already at its max: picking it re-rolls the draft for free.
       const reroll = isRerollReward(content, run, reward);
-      const desc = this.add.text(-cardW / 2 + 12, 9, reroll ? 'You already have the most of this. Pick it for a free re-roll!' : reward.description, textStyle(17, reroll ? '#f0e0a0' : '#cfe0f0', { wordWrap: { width: cardW - 24 } }));
+      const desc = this.add.text(-cardW / 2 + 12, 9, reroll ? 'You already have the most of this. Pick it for a free re-roll!' : reward.description, textStyle(17, reroll ? ink.keep : ink.desc, { wordWrap: { width: cardW - 24 } }));
       // The notes under the description stack upwards from the card's bottom edge, each at most two lines;
       // the description gets whatever room is left, so no two blocks ever overlap.
       const notes: Phaser.GameObjects.Text[] = [];
       const cmp = compareReward(content, run, reward);
-      if (cmp) notes.push(this.add.text(0, 0, `Now ${cmp.now}  →  After ${cmp.after}\n${cmp.label}`, textStyle(13, '#ffe9a8', { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0));
+      if (cmp) notes.push(this.add.text(0, 0, `Now ${cmp.now}  →  After ${cmp.after}\n${cmp.label}`, textStyle(13, ink.cmp, { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0));
       const why = rewardSynergy(content, run, reward);
-      if (why) notes.push(this.add.text(0, 0, why, textStyle(13, '#9fe8c8', { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0));
-      if ((run.draftCarry ?? []).includes(rewardId)) notes.push(this.add.text(0, 0, 'Locked: in the next draft too', textStyle(14, '#f0e0a0', { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0));
+      if (why) notes.push(this.add.text(0, 0, why, textStyle(13, ink.why, { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0));
+      if ((run.draftCarry ?? []).includes(rewardId)) notes.push(this.add.text(0, 0, 'Locked: in the next draft too', textStyle(14, ink.keep, { align: 'center', wordWrap: { width: wrapW } })).setOrigin(0.5, 0));
       let bottom = 128;
       for (const n of notes.reverse()) {
         fitBlock(n, wrapW, 36);
@@ -106,6 +117,7 @@ export class RewardScene extends Phaser.Scene {
         card.add(n);
       }
       card.add(fitBlock(desc, cardW - 24, Math.max(36, bottom - 9)));
+      skin?.decorate?.(this, card, icon, spec);
       this.cards.push(card);
       // Cards deal in one after another with a bounce.
       if (this.motion !== 'off') {
@@ -124,6 +136,7 @@ export class RewardScene extends Phaser.Scene {
       this.add.text(x, 440, `Lv${mon.level}`, textStyle(16, COLORS.textLight)).setOrigin(0.5, 0);
       this.add.text(x, 458, mon.hp <= 0 ? 'FNT' : `${mon.hp} HP`, textStyle(16, mon.hp <= 0 ? '#f08080' : '#a0e0a0')).setOrigin(0.5, 0);
       if (i === 0) this.add.text(x, 384, 'LEAD', textStyle(12, '#f0c028')).setOrigin(0.5, 0);
+      if (skin?.teamNames) this.add.text(x, 476, species.name, textStyle(12, '#e8f6ff')).setOrigin(0.5, 0);
     });
     // Party and Bag under the party strip; the draft items' buttons at the top right, beside the title.
     const rerolls = draftItemUses(content, run, 'reroll');
@@ -143,8 +156,8 @@ export class RewardScene extends Phaser.Scene {
     });
     this.buttons = buttons;
 
-    this.notice = this.add.text(GAME_WIDTH / 2, 508, data.notice ?? '', textStyle(18, '#f0e0a0')).setOrigin(0.5);
-    this.add.text(GAME_WIDTH / 2, 528, '←/→ ↑/↓ move  ·  Enter choose', textStyle(14, '#a69cb4')).setOrigin(0.5);
+    this.notice = this.add.text(GAME_WIDTH / 2, 508, data.notice ?? '', textStyle(18, skin?.light ? ink.keep : '#f0e0a0')).setOrigin(0.5);
+    this.add.text(GAME_WIDTH / 2, 528, '←/→ ↑/↓ move  ·  Enter choose', textStyle(14, ink.hint)).setOrigin(0.5);
     this.focus(data.focus ?? 0, false);
 
     // A key pressed through the battle's last message must not pick a card the moment the screen opens.
