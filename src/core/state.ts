@@ -1692,6 +1692,10 @@ export const SettingsSchema = z.object({
   lastSeenUpdate: z.string().default(''),
   tutorialOffered: z.boolean().default(false),
   tutorialDone: z.array(z.string()).default([]),
+  /** S259 Retro CRT filter: scanlines and a curved-glass vignette over the game (off by default). */
+  crtFilter: z.enum(['off', 'light', 'full']).default('off'),
+  /** S260 Cinematic letterbox: black bars slide in for a moment on a critical hit (off by default). */
+  critLetterbox: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 
