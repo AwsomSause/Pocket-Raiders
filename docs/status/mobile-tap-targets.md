@@ -1,0 +1,1 @@
+- Mobile tap targets: on touch screens each Menu row's whole cell (item width × height) is tappable, not just the label text (`ui/widgets.ts`). No save change.
