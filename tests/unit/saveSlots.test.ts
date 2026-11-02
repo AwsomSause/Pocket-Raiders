@@ -43,6 +43,20 @@ describe('three save slots', () => {
     expect(session.continueRun().seed).toBe('two');
   });
 
+  it('copySlot puts the slot in use into the first empty slot, byte for byte, and refuses when none is empty', () => {
+    const storage = new MemoryStorageProvider();
+    const session = new GameSession(content, storage);
+    startRun(session, 'copy-me');
+    const result = session.copySlot();
+    expect(result).toEqual({ ok: true, to: 2 });
+    expect(storage.get('pkr.s2.run')).toBe(storage.get('pkr.run'));
+    expect(storage.get('pkr.s2.profile')).toBe(storage.get('pkr.profile'));
+    expect(session.slot).toBe(1);
+    expect(session.copySlot()).toEqual({ ok: true, to: 3 });
+    const full = session.copySlot();
+    expect(full.ok).toBe(false);
+  });
+
   it('the settings are shared by every slot', () => {
     const storage = new MemoryStorageProvider();
     const session = new GameSession(content, storage);

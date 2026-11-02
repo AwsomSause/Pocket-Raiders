@@ -199,8 +199,8 @@ export class TrainerSelectScene extends Phaser.Scene {
   }
 
   /** Scales a trainer picture so it fits a height (boss portraits come in many sizes). */
-  private fitSprite(v: Visual, maxH: number): Visual {
-    if (v instanceof Phaser.GameObjects.Sprite) v.setScale(Math.min(L.spriteMax, maxH / v.height));
+  private fitSprite(v: Visual, maxH: number, cap = L.spriteMax): Visual {
+    if (v instanceof Phaser.GameObjects.Sprite) v.setScale(Math.min(cap, maxH / v.height));
     return v;
   }
 
@@ -251,25 +251,28 @@ export class TrainerSelectScene extends Phaser.Scene {
     }
     const a = slot.archetype;
     const open = slot.status === 'unlocked';
-    add(this.add.text(36, 30, open ? a.name : '???', textStyle(40)));
-    add(this.add.text(38, 76, open ? a.title : statusLine(slot.status), textStyle(16, COLORS.gold)));
+    const hero = L.hero;
+    add(this.add.text(36, 30, open ? a.name : '???', textStyle(hero?.nameSize ?? 40)));
+    add(this.add.text(38, hero ? 30 + hero.nameSize + 6 : 76, open ? a.title : statusLine(slot.status), textStyle(16, COLORS.gold)));
     if (open) {
       const byId = (id: string) => services().session.content.archetypes.get(id);
-      add(this.add.text(38, 96, `${trainerGame(a, byId)}  ·  ${trainerRegion(a, byId)}`, textStyle(13, COLORS.textMuted)));
+      add(this.add.text(38, hero ? 30 + hero.nameSize + 28 : 96, `${trainerGame(a, byId)}  ·  ${trainerRegion(a, byId)}`, textStyle(13, COLORS.textMuted)));
     }
 
     // The trainer on a spotlight.
     const glow = add(this.add.graphics());
     glow.fillStyle(0x4a3f5c, 1);
-    glow.fillEllipse(cx, 232, 170, 28);
+    const sx = hero?.x ?? cx;
+    const sy = hero ? hero.y - 4 : 232;
+    glow.fillEllipse(sx, sy, hero ? hero.h * 0.8 : 170, hero ? 40 : 28);
     glow.fillStyle(0x5c4f70, 1);
-    glow.fillEllipse(cx, 232, 120, 18);
+    glow.fillEllipse(sx, sy, hero ? hero.h * 0.55 : 120, hero ? 26 : 18);
     // A Trainer Evolution stands in a pulsing golden aura.
     if (open && a.evolvedFrom) {
-      const aura = add(this.add.ellipse(cx, 170, 150, 190, 0xf8d030, 0.16));
+      const aura = add(this.add.ellipse(sx, hero ? sy - hero.h / 2 : 170, hero ? hero.h * 0.5 : 150, hero ? hero.h : 190, 0xf8d030, 0.16));
       if (this.motion === 'full') this.tweens.add({ targets: aura, scaleX: 1.12, scaleY: 1.06, alpha: 0.3, duration: 1100, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
-    const sprite = this.fitSprite(trainerVisual(this, a.spriteAssetId, a.name, cx, 236, 2), 140);
+    const sprite = this.fitSprite(trainerVisual(this, a.spriteAssetId, a.name, sx, hero ? hero.y : 236, 2), hero ? hero.h : 140, hero?.max);
     if (!open && sprite instanceof Phaser.GameObjects.Sprite) sprite.setTintFill(0x141118);
     add(sprite);
     if (open) {
@@ -279,7 +282,8 @@ export class TrainerSelectScene extends Phaser.Scene {
 
     // Everything below the picture goes in one layer that shrinks to fit the panel
     // when a trainer has a lot to say (long pros/cons, record, unlock text).
-    const TOP = 258;
+    const TOP = L.lowerTop ?? 258;
+    const TW = L.textW ?? LEFT_W - 44;
     const lower = add(this.add.container(0, 0));
     const addLow = <T extends Phaser.GameObjects.GameObject>(o: T): T => (lower.add(o), o);
     let y = TOP;
@@ -287,7 +291,7 @@ export class TrainerSelectScene extends Phaser.Scene {
       addLow(this.add.text(36, y, label, textStyle(20, color)));
       y += 22;
       for (const line of lines) {
-        const t = addLow(this.add.text(44, y, line, textStyle(16, COLORS.textLight, { wordWrap: { width: LEFT_W - 52 } })));
+        const t = addLow(this.add.text(44, y, line, textStyle(16, COLORS.textLight, { wordWrap: { width: TW - 8 } })));
         y += t.height + 2;
       }
       y += 6;
@@ -304,9 +308,9 @@ export class TrainerSelectScene extends Phaser.Scene {
         }
         y += 30;
       }
-      const summary = addLow(this.add.text(36, y, a.description, textStyle(16, COLORS.textMuted, { wordWrap: { width: LEFT_W - 44 } })));
+      const summary = addLow(this.add.text(36, y, a.description, textStyle(16, COLORS.textMuted, { wordWrap: { width: TW } })));
       y += summary.height + 6;
-      const story = addLow(this.add.text(36, y, backstoryFor(services().session.content, a), textStyle(14, COLORS.textMuted, { wordWrap: { width: LEFT_W - 44 }, fontStyle: 'italic' })));
+      const story = addLow(this.add.text(36, y, backstoryFor(services().session.content, a), textStyle(14, COLORS.textMuted, { wordWrap: { width: TW }, fontStyle: 'italic' })));
       y += story.height + 12;
       // This trainer's record from past runs.
       const runs = services().session.profile.runHistory.filter((r) => r.archetypeId === a.id);
@@ -316,7 +320,7 @@ export class TrainerSelectScene extends Phaser.Scene {
       addLow(this.add.text(44, y + 24, runs.length === 0 ? 'No runs yet' : `${runs.length} run${runs.length === 1 ? '' : 's'}  ·  ${wins} won  ·  best ${best} region${best === 1 ? '' : 's'}`, textStyle(16)));
     } else {
       const how = slot.status === 'comingLater' ? `${a.name} arrives in a later update.` : `How to unlock: ${a.unlockText}${a.unlockCost ? `, then ${a.unlockCost} Bank Credits in the Trainer Archive` : ''}.`;
-      addLow(this.add.text(36, y, how, textStyle(20, COLORS.textLight, { wordWrap: { width: LEFT_W - 44 } })));
+      addLow(this.add.text(36, y, how, textStyle(20, COLORS.textLight, { wordWrap: { width: TW } })));
     }
     const bottom = lower.getBounds().bottom;
     const room = GAME_HEIGHT - 32 - TOP;
