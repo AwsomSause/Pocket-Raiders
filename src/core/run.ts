@@ -14,7 +14,7 @@
 
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
 import { markAssisted } from './tools/assisted';
-import { crossObstacle, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
+import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
@@ -560,6 +560,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   spawnRoamers(content, run);
   placeObstacles(content, run);
   placeLandmark(content, run);
+  placeDungeon(content, run);
   placeWeekStops(content, run);
   wandererStageStart(run);
   placeRaidDens(content, run);

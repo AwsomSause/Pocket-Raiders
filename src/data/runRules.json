@@ -355,6 +355,16 @@
       "rewardScale": 0.5
     },
     {
+      "id": "multi-region",
+      "name": "Multi-Region Run",
+      "status": "supported",
+      "progressionEligible": true,
+      "checkpoints": false,
+      "blurb": "A mid-length run that chains 3 regions, each ending in its Champion at the border. Seventy percent of the usual account rewards.",
+      "campaignId": "multi-region",
+      "rewardScale": 0.7
+    },
+    {
       "id": "research-expedition",
       "name": "Research Expedition",
       "status": "supported",

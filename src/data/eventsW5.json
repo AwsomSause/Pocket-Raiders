@@ -5696,6 +5696,290 @@
      }
     }
    ]
+  },
+  {
+   "id": "dungeon-pokemon-tower",
+   "name": "Pokémon Tower",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "shake"
+   },
+   "intro": "A tall grave-tower, lit by thin candles. Voices drift from the stairwell. Three floors, each with a trainer who will not let you pass. The loot at the top is worth it.",
+   "choices": [
+    {
+     "label": "Enter (3 rooms)",
+     "success": {
+      "text": "The first room is dark. Something moves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Pokémon Tower",
+       "size": 3,
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 2
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "reaper-cloth",
+          "spooky-plate"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look around the entrance",
+     "success": {
+      "text": "You find a little loot lying near the door.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-power-plant",
+   "name": "The Abandoned Power Plant",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "electric"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2810",
+    "effect": "shake"
+   },
+   "intro": "A power plant gone quiet, humming anyway. Generators light the corridors in sparks. Three halls, three guards.",
+   "choices": [
+    {
+     "label": "Enter (3 rooms)",
+     "success": {
+      "text": "The first room is dark. Something moves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Abandoned Power Plant",
+       "size": 3,
+       "types": [
+        "electric"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 2
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "magnet",
+          "electric-gem",
+          "zap-plate"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look around the entrance",
+     "success": {
+      "text": "You find a little loot lying near the door.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-seafoam-depths",
+   "name": "The Seafoam Depths",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ice",
+    "water"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "shake"
+   },
+   "intro": "Caves of ice and surf. The floor slides, the tide pulls, and cold-loving trainers wait on each ledge. Three chambers.",
+   "choices": [
+    {
+     "label": "Enter (3 rooms)",
+     "success": {
+      "text": "The first room is dark. Something moves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Seafoam Depths",
+       "size": 3,
+       "types": [
+        "ice",
+        "water"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 2
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nevermeltice",
+          "mystic-water",
+          "icicle-plate"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look around the entrance",
+     "success": {
+      "text": "You find a little loot lying near the door.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-victory-hall",
+   "name": "The Victory Hall",
+   "group": "Landmark Dungeons",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fighting",
+    "rock"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c10",
+    "effect": "shake"
+   },
+   "intro": "A long stone hall where challengers have trained for years. Three proving rooms, each harder than the last. The prize is a strong item.",
+   "choices": [
+    {
+     "label": "Enter (3 rooms)",
+     "success": {
+      "text": "The first room is dark. Something moves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Victory Hall",
+       "size": 3,
+       "types": [
+        "fighting",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 2
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "black-belt",
+          "hard-stone",
+          "fist-plate"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look around the entrance",
+     "success": {
+      "text": "You find a little loot lying near the door.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }
