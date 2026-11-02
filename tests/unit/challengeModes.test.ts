@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, itemProblem, switchProblem } from '../../src/core/battle/engine';
-import { MUTATORS, applyMutator, mutatorDue, mutatorOffer, mutatorMoney } from '../../src/core/mutators';
+import { MUTATORS, applyMutator, mutatorDue, mutatorOffer, mutatorMoney, startRuleOffer } from '../../src/core/mutators';
 import { buryFallen, claimArea, isHardcore, nuzlockeCatchProblem, nuzlockeLevel } from '../../src/core/nuzlocke';
 import { runLevelCap } from '../../src/core/regions';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -100,6 +100,28 @@ describe('Modifier Run', () => {
     expect(run.rules.rewardMultiplier).toBeCloseTo(mult + 0.3, 5);
     expect(mutatorMoney(run)).toBeCloseTo(0.7, 5);
     expect(() => applyMutator(run, 'nope')).toThrow();
+  });
+});
+
+describe('Rule Draft (S6)', () => {
+  it('offers 3 seeded run-wide rules once the starter is chosen, then lets the run go on', () => {
+    const run = start('rule-draft', 'rd-1');
+    expect(run.phase).toBe('decision');
+    const d = run.pending[0]!;
+    expect(d.kind).toBe('mutator');
+    if (d.kind !== 'mutator') return;
+    expect(d.choices).toEqual(startRuleOffer('rd-1'));
+    expect(new Set(d.choices).size).toBe(3);
+    const kinds = d.choices.map((id) => MUTATORS.startRules.find((m) => m.id === id)!.kind);
+    expect(kinds).toContain('blessing');
+    expect(kinds).toContain('curse');
+    const lv = run.rules.enemyLevelBonus;
+    const m = applyMutator(run, d.choices[0]!);
+    expect(run.mutators).toEqual([m.id]);
+    expect(run.rules.enemyLevelBonus).toBe(lv + (m.enemyLevel ?? 0));
+  });
+  it('other modes get no draft', () => {
+    expect(start('standard').pending).toHaveLength(0);
   });
 });
 

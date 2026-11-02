@@ -14,5 +14,15 @@
     { "id": "shy-wilds", "name": "Shy Wilds", "kind": "curse", "blurb": "Poké Balls work 30% worse. End rewards +5%.", "catch": 0.7, "rewardBonus": 0.05 },
     { "id": "hard-hitters", "name": "Hard Hitters", "kind": "curse", "blurb": "Enemies are 3 levels higher. End rewards +20%.", "enemyLevel": 3, "rewardBonus": 0.2 },
     { "id": "poverty", "name": "Poverty", "kind": "curse", "blurb": "Prize money -50%. End rewards +15%.", "money": 0.5, "rewardBonus": 0.15 }
+  ],
+  "startRules": [
+    { "id": "glass-cannon", "name": "Glass Cannon", "kind": "curse", "blurb": "Enemies are 3 levels higher, EXP +25%. End rewards +15%.", "enemyLevel": 3, "xp": 1.25, "rewardBonus": 0.15 },
+    { "id": "marathon", "name": "Marathon", "kind": "blessing", "blurb": "EXP +35%, prize money -15%. A long road pays in levels.", "xp": 1.35, "money": 0.85 },
+    { "id": "frugal", "name": "Frugal", "kind": "curse", "blurb": "Prize money -40%, Poké Balls work 25% better. End rewards +10%.", "money": 0.6, "catch": 1.25, "rewardBonus": 0.1 },
+    { "id": "gold-rush", "name": "Gold Rush", "kind": "blessing", "blurb": "Prize money +60%, enemies 1 level higher.", "money": 1.6, "enemyLevel": 1 },
+    { "id": "gentle-start", "name": "Gentle Start", "kind": "blessing", "blurb": "Enemies are 2 levels lower.", "enemyLevel": -2 },
+    { "id": "collector", "name": "Collector", "kind": "blessing", "blurb": "Poké Balls work 40% better, EXP -10%.", "catch": 1.4, "xp": 0.9 },
+    { "id": "iron-will", "name": "Iron Will", "kind": "curse", "blurb": "Enemies are 2 levels higher, EXP -15%. End rewards +20%.", "enemyLevel": 2, "xp": 0.85, "rewardBonus": 0.2 },
+    { "id": "scholar", "name": "Scholar", "kind": "blessing", "blurb": "EXP +20%, Poké Balls work 15% better.", "xp": 1.2, "catch": 1.15 }
   ]
 }

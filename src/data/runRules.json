@@ -360,6 +360,16 @@
       "blurb": "Every 5 battles you pick 1 of 3 blessings or curses. They stack all run long. Curses raise your end rewards."
     },
     {
+      "id": "rule-draft",
+      "name": "Rule Draft",
+      "status": "supported",
+      "progressionEligible": true,
+      "checkpoints": false,
+      "startDraft": true,
+      "rewardBonus": 0.05,
+      "blurb": "Choose your starter, then pick 1 of 3 run-wide rules (Glass Cannon, Marathon, Frugal...). The rule lasts the whole run."
+    },
+    {
       "id": "weekly",
       "name": "Weekly Gauntlet",
       "status": "supported",

@@ -18,10 +18,10 @@ const MutatorSchema = z.object({
   rewardBonus: z.number().min(0).optional(),
 });
 export type Mutator = z.infer<typeof MutatorSchema>;
-const DataSchema = z.object({ note: z.string(), every: z.number().int().min(1), choices: z.number().int().min(2), mutators: z.array(MutatorSchema).min(3) });
+const DataSchema = z.object({ note: z.string(), every: z.number().int().min(1), choices: z.number().int().min(2), mutators: z.array(MutatorSchema).min(3), startRules: z.array(MutatorSchema).min(3) });
 export const MUTATORS = DataSchema.parse(data);
 
-export const getMutator = (id: string): Mutator | undefined => MUTATORS.mutators.find((m) => m.id === id);
+export const getMutator = (id: string): Mutator | undefined => [...MUTATORS.mutators, ...MUTATORS.startRules].find((m) => m.id === id);
 const picked = (run: Pick<RunState, 'mutators'>): Mutator[] => (run.mutators ?? []).flatMap((id) => getMutator(id) ?? []);
 const product = (run: Pick<RunState, 'mutators'>, key: 'money' | 'xp' | 'catch'): number => picked(run).reduce((n, m) => n * (m[key] ?? 1), 1);
 export const mutatorMoney = (run: Pick<RunState, 'mutators'>): number => product(run, 'money');
@@ -40,6 +40,16 @@ export function mutatorOffer(run: Pick<RunState, 'seed' | 'mutators'>, n: number
   const curse = rng.pick(pool.filter((m) => m.kind === 'curse'));
   const rest = rng.shuffle(pool.filter((m) => m !== blessing && m !== curse)).slice(0, MUTATORS.choices - 2);
   return rng.shuffle([blessing, curse, ...rest]).map((m) => m.id);
+}
+
+/** Rule Draft (S6): the 3 run-wide rules offered at the start of a run. Seeded, never gameplay RNG; one blessing and one curse at least. */
+export function startRuleOffer(seed: string): string[] {
+  const rng = new Rng(hashSeed(`${seed}::startrule`));
+  const pool = MUTATORS.startRules;
+  const blessing = rng.pick(pool.filter((m) => m.kind === 'blessing'));
+  const curse = rng.pick(pool.filter((m) => m.kind === 'curse'));
+  const rest = rng.pick(pool.filter((m) => m !== blessing && m !== curse));
+  return rng.shuffle([blessing, curse, rest]).map((m) => m.id);
 }
 
 /** Takes the pick: remembers it and applies its level and reward changes to the run's rules (mutates `run`). */
