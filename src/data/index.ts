@@ -91,6 +91,7 @@ import eventsFacesJson from './eventsFaces.json';
 import eventsStoryJson from './eventsStory.json';
 import eventsGamesJson from './eventsGames.json';
 import eventsHelpersJson from './eventsHelpers.json';
+import eventsRBJson from './eventsRB.json';
 import eventsWeatherJson from './eventsWeather.json';
 import eventsRKJson from './eventsRK.json';
 import eventsMysteriesJson from './eventsMysteries.json';
@@ -153,6 +154,8 @@ export interface RawContent {
   eventsGames?: unknown;
   /** Run events E (docs/ideas/categories/r-e-helpers-and-moral-choices.md): helpers, kindness and moral choices. */
   eventsHelpers?: unknown;
+  /** Run events B: trainer battles and challenges (eventsRB.json). */
+  eventsRB?: unknown;
   /** Run events J (eventsWeather.json): weather, terrain and hazards, added to `events`. */
   eventsWeather?: unknown;
   /** Run events K (R506-R560) map events (eventsRK.json), added to `events`. */
@@ -226,6 +229,7 @@ export const RAW_CONTENT: RawContent = {
   eventsFaces: eventsFacesJson,
   eventsGames: eventsGamesJson,
   eventsHelpers: eventsHelpersJson,
+  eventsRB: eventsRBJson,
   eventsWeather: eventsWeatherJson,
   eventsRK: eventsRKJson,
   eventsMysteries: eventsMysteriesJson,

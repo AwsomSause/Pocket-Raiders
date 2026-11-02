@@ -2729,6 +2729,11 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
+    /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */
+    weather: WeatherSchema.optional(),
+    terrain: TerrainSchema.optional(),
+    /** Run events B: share of max HP your party recovers between the fights of a `chain` (Relay Battle). */
+    chainHeal: z.number().min(0).max(1).optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
 ]);

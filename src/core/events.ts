@@ -1168,6 +1168,8 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.name, leaderId: null });
+    if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
+    if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
     if (b.ally && content.species.has(b.ally) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
       const ally = newMon(content, run, b.ally, Math.max(1, base), 'p');
@@ -1202,6 +1204,7 @@ export function continueEventChain(content: Content, run: RunState): void {
     return continueAfterDecisions(content, run);
   }
   const rng = new Rng(hashSeed(`${run.seed}::event-chain::${stageKey(run)}::${ref.sideId}::${ref.step}`));
+  if (battle.kind === 'trainer' && battle.chainHeal) for (const mon of run.party) if (mon.hp > 0) mon.hp = Math.min(maxHp(content, mon), mon.hp + Math.ceil(maxHp(content, mon) * battle.chainHeal));
   startEventBattle(content, run, node, battle, rng, ref);
 }
 
