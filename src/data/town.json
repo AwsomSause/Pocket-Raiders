@@ -2805,6 +2805,17 @@
      "view": "ledger"
     },
     {
+     "id": "hall-records",
+     "name": "Hall Records",
+     "desc": "Your best run in each category: furthest, longest, richest, most badges, strongest team.",
+     "kind": "view",
+     "rows": [
+      "S466",
+      "S102"
+     ],
+     "view": "records"
+    },
+    {
      "id": "hall-roster",
      "name": "Townsfolk roster",
      "desc": "Townsfolk who move in as you earn achievements.",
