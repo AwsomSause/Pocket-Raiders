@@ -2,6 +2,7 @@
   "note": "Untitled doc §13–16 (Phase E). Difficulty presets, optional modifiers, Death-Block and game modes. A modifier or mode with status \"planned\" is listed but cannot be picked.",
   "ruleVersion": 1,
   "multiplierCap": 2.0,
+  "heat": { "max": 10, "enemyLevelPerHeat": 1, "bonusPerHeat": 0.1 },
   "difficulties": [
     {
       "id": "story",

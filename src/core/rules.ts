@@ -16,6 +16,8 @@ export const RunRulesDataSchema = z.object({
   note: z.string(),
   ruleVersion: z.number().int().min(1),
   multiplierCap: z.number().min(1),
+  /** Heat Levels (idea S176): opt-in stacking difficulty on top of the difficulty preset. */
+  heat: z.object({ max: z.number().int().min(1), enemyLevelPerHeat: z.number().int().min(0), bonusPerHeat: z.number().min(0) }).default({ max: 10, enemyLevelPerHeat: 1, bonusPerHeat: 0.1 }),
   difficulties: z.array(z.object({ id: z.string(), name: z.string(), blurb: z.string(), multiplier: z.number().min(0), enemyLevelBonus: z.number().int() })).min(1),
   deathBlock: z.object({ battles: z.number().int().min(1), multiplier: z.number().min(0), rule: z.string() }),
   modifiers: z.array(
@@ -80,6 +82,8 @@ export interface RulesChoice {
   noRewards?: boolean;
   /** Weeks: false turns off the weekly and holiday event editions for this run (missing means on). */
   weeks?: boolean;
+  /** Heat Level 0 to `RUN_RULES.heat.max` (missing means 0). */
+  heat?: number;
 }
 export const STANDARD_CHOICE: RulesChoice = { modeId: 'standard', difficultyId: 'standard', modifierIds: [], deathBlock: false };
 
@@ -110,12 +114,15 @@ export function rulesProblem(choice: RulesChoice): string | null {
  * The reward multiplier: difficulty × (1 + the modifiers' bonuses), capped, then Death-Block's cut.
  * Adventure earns no account rewards, so its multiplier is 0 for them (it is 1 for in-run rewards, which are not multiplied).
  */
+/** The Heat Level of a choice, clamped to the allowed range. */
+export const heatOf = (choice: Pick<RulesChoice, 'heat'>): number => Math.max(0, Math.min(RUN_RULES.heat.max, Math.floor(choice.heat ?? 0)));
+
 export function rewardMultiplier(choice: RulesChoice): number {
   const mode = getMode(choice.modeId);
   if (!mode?.progressionEligible || choice.noRewards) return 0;
   const difficulty = getDifficulty(choice.difficultyId)?.multiplier ?? 1;
   const bonus = choice.modifierIds.reduce((sum, id) => sum + (getModifier(id)?.bonus ?? 0), 0) + (mode.rewardBonus ?? 0);
-  const capped = Math.min(RUN_RULES.multiplierCap, difficulty * (1 + bonus));
+  const capped = Math.min(RUN_RULES.multiplierCap, difficulty * (1 + bonus + heatOf(choice) * RUN_RULES.heat.bonusPerHeat));
   const scaled = capped * (mode.rewardScale ?? 1);
   const total = choice.deathBlock ? scaled * RUN_RULES.deathBlock.multiplier : scaled;
   return Math.round(total * 100) / 100;
@@ -138,7 +145,8 @@ export function makeRules(choice: RulesChoice): RunRules {
     weeks: choice.weeks !== false,
     progressionEligible: getMode(choice.modeId)!.progressionEligible && !choice.noRewards,
     rewardMultiplier: rewardMultiplier(choice),
-    enemyLevelBonus: getDifficulty(choice.difficultyId)!.enemyLevelBonus + choice.modifierIds.reduce((n, id) => n + (getModifier(id)?.enemyLevel ?? 0), 0),
+    heat: heatOf(choice),
+    enemyLevelBonus: getDifficulty(choice.difficultyId)!.enemyLevelBonus + heatOf(choice) * RUN_RULES.heat.enemyLevelPerHeat + choice.modifierIds.reduce((n, id) => n + (getModifier(id)?.enemyLevel ?? 0), 0),
     lockType: null,
     lockGeneration: null,
     regionId: getMode(choice.modeId)?.campaignId === 'regional-circuit' ? choice.regionId ?? null : null,
@@ -177,6 +185,7 @@ export function rulesLines(choice: RulesChoice): string[] {
   for (const id of getMode(choice.modeId)?.bundles ?? []) lines.push(`Mode rule: ${getModifier(id)?.name ?? id} - ${getModifier(id)?.blurb ?? ''}`);
   for (const id of choice.modifierIds) lines.push(`Modifier: ${getModifier(id)?.name ?? id} - ${getModifier(id)?.blurb ?? ''}`);
   lines.push(choice.weeks === false ? 'Weeks off: no weekly or holiday event rules, roamers or stops this run.' : 'Weeks on: this week\'s and any holiday event can apply to this run.');
+  if (heatOf(choice) > 0) lines.push(`Heat ${heatOf(choice)}: enemies +${heatOf(choice) * RUN_RULES.heat.enemyLevelPerHeat} levels, rewards +${Math.round(heatOf(choice) * RUN_RULES.heat.bonusPerHeat * 100)}%.`);
   if (choice.deathBlock) lines.push(`Death-Block on: ${RUN_RULES.deathBlock.rule}`);
   lines.push(mode?.progressionEligible ? `Reward multiplier: x${rewardMultiplier(choice).toFixed(2)}` : 'No Bank Credits, Research Points, candies, unlocks or achievements in this mode.');
   return lines;

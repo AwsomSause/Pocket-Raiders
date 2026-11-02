@@ -26,3 +26,5 @@ Nuzlocke, Daily Run, Endless, level caps, mentors, retirement, Pawn/Black Market
 | 14 | Everything else approved in S (see review file), grouped by its section heading | rest of S | Backlog |
 
 Rules for every slice: one PR per slice, notes in `docs/status/<slice>.md`, no `public/assets/manifest.json`, provenance row for any new asset, save bump needs a migration test. Mobile support is another thread's work.
+
+Category files (one build thread each): `docs/ideas/categories/README.md`.

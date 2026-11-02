@@ -34,7 +34,7 @@ import { dailySetup } from '../core/daily';
 import { boardLines } from '../core/boards';
 import { decodeGhostCode, keepGhost } from '../core/ghost';
 import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
-import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
+import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
 import { isClaimed } from '../core/quests';
 
 export interface RunPrepData {
@@ -54,7 +54,7 @@ export interface RunPrepData {
   slide?: 1 | -1;
 }
 
-type Row = 'start' | 'trainer' | 'campaign' | 'pool' | 'draft' | 'type' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'weeks' | 'modifier' | 'deathBlock' | 'seed' | 'save' | 'load';
+type Row = 'start' | 'trainer' | 'campaign' | 'pool' | 'draft' | 'type' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'heat' | 'weeks' | 'modifier' | 'deathBlock' | 'seed' | 'save' | 'load';
 
 interface PageDef {
   id: string;
@@ -66,7 +66,7 @@ interface PageDef {
 
 /** The five pages of the Preparation Desk (spec §13). It opens on the Overview, where Enter rolls the starters. */
 const PAGES: PageDef[] = [
-  { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'campaign', 'weeks', 'seed'] },
+  { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'heat', 'campaign', 'weeks', 'seed'] },
   { id: 'trainer', title: 'Trainer', blurb: 'Who you are and what you bring: preparation, directive, license, loan, Vault, mentor.', tint: 0x2fa080, rows: ['trainer', 'token', 'directive', 'license', 'loan', 'vault', 'mentor'] },
   { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: ['pool', 'draft', 'type'] },
   { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier', 'deathBlock'] },
@@ -91,6 +91,7 @@ const ROW_HELP: Record<Row, string> = {
   mode: 'The kind of run: Standard, Adventure, Endless, Daily Run and more. Some modes pay no account rewards.',
   region: 'Regional Circuit only: the region you run. "By seed" lets the seed pick.',
   difficulty: 'Raises enemy levels and the rewards for beating them.',
+  heat: 'Heat Level: stacking opt-in difficulty. Each level adds enemy levels and a reward bonus on top of the difficulty. ←/→ change it.',
   weeks: 'Weeks ON (the default): this week\'s event and any holiday event apply to this run: their rules, roamers and map stops, and the run counts toward their goals. Weeks OFF: none of that this run. Events you already finished and their rewards are kept either way. The choice is fixed for the whole run.',
   modifier: '←/→ browse the modifiers, Enter turns one on or off. Each one changes a rule and the rewards.',
   deathBlock: 'Once, at the start of a run, a wipe sends you back to a checkpoint instead of ending it. On for your first three runs.',
@@ -172,6 +173,7 @@ export class RunPrepScene extends Phaser.Scene {
       mode: `Mode: ${getMode(this.rules.modeId)?.name}`,
       region: `Circuit region: ${this.rules.regionId ? content.regions.get(this.rules.regionId)?.name ?? this.rules.regionId : 'by seed'}`,
       difficulty: `Difficulty: ${getDifficulty(this.rules.difficultyId)?.name}`,
+      heat: `Heat: ${heatOf(this.rules)}`,
       weeks: `Weeks: ${this.rules.weeks === false ? 'OFF' : 'ON (default)'}`,
       modifier: `◂ ${RUN_RULES.modifiers[this.modCursor]?.name} ▸ ${this.rules.modifierIds.includes(RUN_RULES.modifiers[this.modCursor]!.id) ? 'ON' : 'off'}`,
       deathBlock: `Death-Block: ${this.rules.deathBlock ? 'on' : 'off'}`,
@@ -394,6 +396,10 @@ export class RunPrepScene extends Phaser.Scene {
         // ←/→ choose a modifier; Enter turns it on or off.
         this.modCursor = (this.modCursor + step + RUN_RULES.modifiers.length) % RUN_RULES.modifiers.length;
         return this.refresh();
+      }
+      case 'heat': {
+        const max = RUN_RULES.heat.max + 1;
+        return this.refresh({}, { rules: { ...this.rules, heat: (heatOf(this.rules) + (step < 0 ? max - 1 : 1)) % max } });
       }
       case 'weeks':
         return this.refresh({}, { rules: { ...this.rules, weeks: this.rules.weeks === false } });

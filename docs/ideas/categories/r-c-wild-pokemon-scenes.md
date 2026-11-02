@@ -1,0 +1,77 @@
+# Run events C: Wild Pokémon scenes
+
+All 70 approved ("YES TO ALL", no individual comments).
+
+Source: `docs/ideas/review-2026-11-02.md`. Build as event data through the existing events pipeline (`src/data/events.json`, `eventsW5.json`, content gate). Check each idea against existing events first.
+
+## Ideas
+- R111 Sunbathing Sandslash Colony: sneak past for free items or wake them for an easy catch.
+- R112 Pond Choir: Pokémon chorus; join in for a team-wide Sp. Def buff.
+- R113 Butterfree Migration Detour: guide a flock; reward a Silver Powder.
+- R114 Mudslide Rescue: save wild Pokémon trapped in mud; one joins you.
+- R115 Cave Echo Mystery: a sound repeats your own moves; copy yields a TM.
+- R116 Frozen Statue Garden: thaw statues one by one; some are real Pokémon.
+- R117 Moonlit Pond Dance: Clefairy circle; join to evolve a Moon-linked mon.
+- R118 Honey Tree Hunt: lure Combee, risk Beedrill swarm.
+- R119 Aipom Pickpocket Troop: they steal an item; chase one to get it back.
+- R120 Magikarp Splash Contest: win by tossing the biggest splash.
+- R121 Mystic Spring: drink from it; random buff or random status.
+- R122 Sandstorm Burrow: wait it out or push on with chip damage.
+- R123 Fireflies at Dusk: Volbeat/Illumise show a path to a hidden ledge.
+- R124 Rival Pack Territory: two wild packs fighting; choose a side.
+- R125 Ditto Impostor: a Ditto copies a team member; capture or befriend.
+- R126 Hatching Hot Spring: eggs warmed by a spring; take one for the cost of a berry.
+- R127 Abandoned Nest: eggs unguarded; take one and risk parent's wrath.
+- R128 Shed Skin Garden: Ekans/Arbok shed items; collect 1 free Cleanse Tag.
+- R129 Slumbering Hollow Chorus: lullaby puts your team asleep unless countered.
+- R130 Drifting Island of Wingull: ride gulls across a gap for a shortcut.
+- R131 Rust Choir: Skarmory scrap yard; cheap metal items.
+- R132 Zigzagoon Treasure Hunters: chase a Zigzagoon who found a key item.
+- R133 Lapras Ferry: ride for a free map hop at the cost of a berry.
+- R134 Ember Pool: Slugma bathing; Fire types gain boost.
+- R135 Plant Whisperer Grove: Bellsprout choir; heal if you stay quiet.
+- R136 Rampaging Rhyhorn: dodge or tank; the right type sends it sleeping.
+- R137 Ghostly Fog Bank: Pokémon appear only if you throw a Spirit item.
+- R138 Feral Furfrou Salon: groom a wild Furfrou for trim-specific reward.
+- R139 Hot Air Balloon Hatch: ride up a level; flying-type needed.
+- R140 Scarecrow Cornfield: Scarecrow is a Ghost; fight or befriend.
+- R141 Starlit Cave Loomians: lights lead to a hidden stash.
+- R142 Boulder Boxing Ring: Rock types spar; challenge the champ for a Muscle Band.
+- R143 Tadpole Parade: Poliwag march; guide them for a Water Stone.
+- R144 Dewdrop Meadow: Oddish bathe; collect dew items.
+- R145 Bonsly Stand-Off: a lone Bonsly blocks a bridge, refuses to move until you play with it.
+- R146 Wailmer Whale Song: sing along; if the chord is right, a legendary rumor appears.
+- R147 Chimecho Wind Rest: free heal under wind chimes.
+- R148 Paras Mushroom Patch: pick mushrooms; some are fine, some are Toxic.
+- R149 Pikachu Static Storm: electric field, free Cell Battery if you hold it.
+- R150 Smeargle Gallery: let one paint your party; random type tint buff.
+- R151 Mimikyu Ruined Stage: fight a stage-ghost for a costume.
+- R152 Dream Meadow Snooze: a free sleep Rest that also hatches eggs faster.
+- R153 Bibarel Dam Builder: fix the dam; gain Rock/Water synergy.
+- R154 Pokémon Parade Float: join a procession; random party Pokémon pick a spot, rewards by stat.
+- R155 Kecleon Disguise Bazaar: Kecleon stall; the wares are illusions until bought.
+- R156 Drowzee Dream Sale: pay a berry to enter someone's dream mini-scene.
+- R157 Cave Spider Silk Net: climb a silk web; Bug types skip the fall.
+- R158 Mareep Wool Shearing: shear for a Wool item, Mareep bolts if you rush.
+- R159 Wild Gym Leader Pokémon: a feral ace tests you; reward a badge shard.
+- R160 Starfall Beach: Staryu glittering; pick one star as a trinket.
+- R161 Cursola Reef Grudge: a spirit coral asks for your Water type to guard it.
+- R162 Magma Bubble Pools: Magcargo and Torkoal; steam-pool heal at burn risk.
+- R163 Swarm of Sneasel Thieves: they steal then flee; rewards the one you stop.
+- R164 Gulpin Gulp Contest: they swallow item; bounty returns it later.
+- R165 Nidoran Family Picnic: share food for a friendship boost.
+- R166 Sudowoodo Gate: the tree-mon blocks a path; Water types make it move.
+- R167 Treehouse of Ledyba: climb for a lookout reveal of 3 map nodes.
+- R168 Taillow Dive Display: dodge dive-bombs for an item or get pecked.
+- R169 Hoothoot Clock Tower: ring the bell at midnight to get a prophecy buff.
+- R170 Geodude Rock Candy: crack open a geode for a random gem.
+- R171 Slowpoke Wellside: wait for a tail to drop; a long timer reward.
+- R172 Trubbish Dump Diving: dig through trash; gold or rot.
+- R173 Tangela Maze: entangled vines; solve the path or burn it.
+- R174 Wynaut Hide and Seek: find baby Wynaut hidden in the map UI.
+- R175 Alolan Sunset Cove: Wishiwashi school; scare them off for a Water-type boost.
+- R176 Snorunt Snowdrift: build a snowman for a Never-Melt Ice.
+- R177 Beldum Magnet Rain: Beldum fall from sky; one claims you.
+- R178 Torchic Chick Brood: a Combusken parent glares; reward if you back off.
+- R179 Gastly Gas Leak: ventilate the room or fight a swarm.
+- R180 Lucky Charm Chansey: she gifts an Eviolite once per run.
