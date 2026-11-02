@@ -1,6 +1,6 @@
 // 01 Manga Page: a black-and-white screentone page. Slanted panels hold the trader (with a speech balloon),
 // your Pokémon and theirs; the options sit in the bottom panel. The trade is a full-bleed splash page.
-import { body, burst, display, enter, grayscale, H, jp, label, mon, momentLine, row, screentone, speedLines, trainer, W } from './common';
+import { body, burst, display, enter, grayscale, H, jp, label, mon, momentLine, row, speedLines, tone, trainer, W } from './common';
 import type { TradeStyle } from './types';
 
 const INK = 0x101010;
@@ -30,11 +30,11 @@ export const manga: TradeStyle = {
     const g = scene.add.graphics();
     // Panel 1 (trader, slanted right edge), panel 2 (yours, speed lines), panel 3 (theirs, tone).
     g.fillStyle(PAPER, 1).fillPoints([{ x: 18, y: 18 }, { x: 410, y: 18 }, { x: 362, y: 330 }, { x: 18, y: 330 }], true);
-    screentone(g, 18, 200, 360, 130, INK, 0.25, 6, 1);
     g.fillStyle(0xffffff, 1).fillPoints([{ x: 426, y: 18 }, { x: 664, y: 18 }, { x: 664, y: 330 }, { x: 378, y: 330 }], true);
     g.fillStyle(0xffffff, 1).fillRect(676, 18, 266, 312);
-    screentone(g, 676, 18, 266, 312, INK, 0.18, 7, 1.3);
     L.add(g);
+    tone(ctx, L, 18, 200, 360, 130, INK, 0.3, 6, 1).setMask(scene.make.graphics({}, false).fillPoints([{ x: 18, y: 18 }, { x: 410, y: 18 }, { x: 362, y: 330 }, { x: 18, y: 330 }], true).createGeometryMask());
+    tone(ctx, L, 676, 18, 266, 312, INK, 0.22, 8, 1.4);
     const lines = speedLines(scene.add.graphics(), 520, 175, INK, 0.28, 48, 60, 3);
     lines.setMask(scene.make.graphics({}, false).fillPoints([{ x: 426, y: 18 }, { x: 664, y: 18 }, { x: 664, y: 330 }, { x: 378, y: 330 }], true).createGeometryMask());
     L.add(lines);

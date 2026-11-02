@@ -57,7 +57,7 @@ export const SCREEN_STYLES_READY: { readonly [S in ScreenId]: readonly ScreenSty
   legacy: ['museum', 'polaroids', 'manga', 'timeline', 'cards', 'previously', 'bloom', 'aero', 'ink', 'wii', 'hall'],
   loading: ['aero', 'ball', 'terminal', 'wiihealth', 'ds', 'ink', 'shuffle', 'sparkle', 'region'],
   // Trade stops redesign (core/presentation/tradeStyles.ts keeps this list).
-  trade: ['manga', 'versus', 'novel', 'eyecatch'],
+  trade: ['manga', 'versus', 'novel', 'eyecatch', 'episode', 'cutin', 'shoujo', 'chibi', 'cable', 'cards', 'sunset', 'ink'],
 };
 
 /** FNV-1a, so the random pick is stable for the same salt and never touches gameplay RNG. */

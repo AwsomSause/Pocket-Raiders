@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 // Trade Stops redesign: every built style draws the Trade Post, trades, plays its moment and returns to the map;
 // the Plaza's specialist traders open the same screen and return to the Plaza. No console errors.
 
-const STYLES = ['manga', 'versus', 'novel', 'eyecatch'];
+const STYLES = (process.env.TRADE_STYLES ?? 'manga,versus,novel,eyecatch,episode,cutin,shoujo,chibi,cable,cards,sunset,ink').split(',');
 
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 
@@ -43,7 +43,7 @@ async function prepare(page: Page, kind: 'service' | 'plaza', style: string, n: 
 }
 
 test('every Trade Stop style trades at the Trade Post and returns to the map', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(400_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -61,7 +61,7 @@ test('every Trade Stop style trades at the Trade Post and returns to the map', a
     expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').drawnStyle)).toBe(style);
     const before = await page.evaluate(() => (window as any).__pkr.session.run.party.map((m: any) => m.speciesId).join(','));
     await page.keyboard.press('Enter');
-    await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 10_000 }).toBe('done');
+    await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 10_000 }).toBe('done').catch((e) => { throw new Error(`${style}: ${errors.join(' | ')} ${e}`); });
     await page.screenshot({ path: `test-results/trade-${style}.png` });
     expect(await page.evaluate(() => (window as any).__pkr.session.run.party.map((m: any) => m.speciesId).join(','))).not.toBe(before);
     await page.keyboard.press('Enter');
