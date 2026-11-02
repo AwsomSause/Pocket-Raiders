@@ -1,4 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// screenSkins imports Phaser, which needs a browser window; the skin tables never touch it.
+vi.mock('phaser', () => ({ default: {} }));
 import { SCREEN_STYLES_READY } from '../../src/core/presentation/screenStyles';
 import { SKINS, skinForSettings } from '../../src/ui/screenSkins';
 
