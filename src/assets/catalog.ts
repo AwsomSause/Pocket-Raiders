@@ -108,6 +108,27 @@ export const bossAnimId = (assetId: string): string | null => ((BOSS_ANIMATED as
 /** The throwing back sprite for a trainer picture, if there is one. */
 export const bossBackId = (assetId: string): string | null => ((BOSS_BACKS as readonly string[]).includes(bossName(assetId)) ? `boss.back.${bossName(assetId)}` : null);
 
+/** VS screen styles (Pokémon Memories repo, Graphics/Transitions; tools/memories/import-vs-screens.ts). */
+export type VsStyle = 'hgss' | 'bw' | 'e4' | 'champion';
+/** Which bosses have their own VS card, by style (their still picture's name). */
+export const VS_CARDS: Record<VsStyle, readonly string[]> = {
+  hgss: ['aaron', 'blaine', 'brock', 'bruno', 'bugsy', 'byron', 'chuck', 'clair', 'crasherwake', 'dawn', 'erika', 'ethan', 'falkner', 'fantina', 'flint', 'gardenia', 'giovanni-rocketboss', 'janine', 'jasmine', 'karen', 'koga', 'lance', 'ltsurge', 'lucas', 'lyra', 'maylene', 'misty', 'morty', 'palmer', 'pryce', 'sabrina-lgpe', 'silver', 'thorton', 'volkner', 'whitney'],
+  bw: ['alder', 'benga', 'bianca-pwt', 'caitlin', 'cheren', 'chili', 'cilan', 'clay', 'colress', 'cress', 'drayden', 'elesa-gen5bw2', 'grimsley-gen7', 'hilbert', 'hilda', 'hugh', 'marlon', 'n', 'nate', 'rosa', 'roxie-masters', 'skyla'],
+  e4: ['cynthia-gen7', 'cynthia-masters', 'cynthia-masters4'],
+  champion: ['iris-gen5bw2', 'leaf-gen3', 'red'],
+};
+/** Bosses whose VS card comes with its own bar (HGSS Kanto leaders); the rest use the style's shared bar. */
+export const VS_BARS = ['blaine', 'brock', 'erika', 'giovanni-rocketboss', 'koga', 'ltsurge', 'misty', 'sabrina-lgpe'] as const;
+/** The VS style and card for a boss picture ("boss.brock"), or null to use the regular boss intro. */
+export function vsCardFor(assetId: string): { style: VsStyle; card: string; bar: string } | null {
+  const name = assetId.startsWith('boss.') ? assetId.slice('boss.'.length) : '';
+  const style = (Object.keys(VS_CARDS) as VsStyle[]).find((s) => VS_CARDS[s].includes(name));
+  if (!style) return null;
+  return { style, card: `vs.card.${name}`, bar: (VS_BARS as readonly string[]).includes(name) ? `vs.bar.${name}` : `vs.shared.${style === 'hgss' ? 'hgss_bar' : 'bw_bar'}` };
+}
+/** The shared VS art every style draws from. */
+export const VS_SHARED = ['hgss_bar', 'hgss_vs1', 'hgss_vs2', 'bw_bar', 'bw_vs', 'flash', 'champion_bg', 'champion_beam', 'champion_bar', 'champion_shine1', 'champion_shine2', 'e4_bar'] as const;
+
 export const TERA_PATTERN_TYPES = [
   'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel',
   'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy', 'stellar',
@@ -212,6 +233,10 @@ export const FIXED_ASSETS: AssetEntry[] = [
   // Animated boss sprites and the throwing back sprites (Pokémon Memories repo), loaded when a battle needs them.
   ...BOSS_ANIMATED.map((n): AssetEntry => ({ ...atlas(`boss.anim.${n}`, 'trainer', `images/bosses/anim/${n}`), lazy: true })),
   ...BOSS_BACKS.map((n): AssetEntry => ({ ...atlas(`boss.back.${n}`, 'trainer', `images/bosses/back/${n}`), lazy: true })),
+  // VS screens (Pokémon Memories repo): one card per boss that has one, the HGSS Kanto leaders' own bars, the shared art.
+  ...Object.values(VS_CARDS).flat().map((n): AssetEntry => ({ id: `vs.card.${n}`, kind: 'image', category: 'trainer', path: `images/packs/memories/vs/cards/${n}.png`, lazy: true })),
+  ...VS_BARS.map((n): AssetEntry => ({ id: `vs.bar.${n}`, kind: 'image', category: 'ui', path: `images/packs/memories/vs/bars/${n}.png`, lazy: true })),
+  ...VS_SHARED.map((n): AssetEntry => ({ id: `vs.shared.${n}`, kind: 'image', category: 'ui', path: `images/packs/memories/vs/shared/${n}.png`, lazy: true })),
   ...[1, 2].map((n): AssetEntry => ({ id: `cine.sfx.mega${n}`, kind: 'audio', category: 'sound', path: `audio/cine/mega_evolution${n}.m4a`, lazy: true })),
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),

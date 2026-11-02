@@ -41,7 +41,8 @@ import { arenaFor, getTheme } from '../core/themes';
 import { shinyCatchBurst, targetReticle } from '../ui/battleFx/arenaLife';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
-import { bossAnimId, bossBackId, uieArenaId } from '../assets/catalog';
+import { bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
+import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
@@ -263,7 +264,9 @@ export class BattleScene extends Phaser.Scene {
     if (run?.battle) {
       const foeArt = this.trainerArt();
       const mine = this.playerArt();
-      queueAssets(this, [foeArt ? bossAnimId(foeArt.assetId) : null, mine ? bossBackId(mine) : null].filter((id): id is string => !!id));
+      const vs = foeArt && this.boss() ? vsCardFor(foeArt.assetId) : null;
+      const vsArt = vs ? [vs.card, vs.bar, ...VS_SHARED.map((n) => `vs.shared.${n}`)] : [];
+      queueAssets(this, [foeArt ? bossAnimId(foeArt.assetId) : null, mine ? bossBackId(mine) : null, ...vsArt].filter((id): id is string => !!id));
     }
     // Lazy music: the GB Sounds loop if owned, and the victory fanfare this battle would end with.
     if (run?.battle) {
@@ -1446,7 +1449,11 @@ export class BattleScene extends Phaser.Scene {
     const art = this.trainerArt();
     const darkArena = ['ghost', 'dark', 'rock', 'poison'].includes(this.arenaTypes[0] ?? '');
     const kind: IntroKind = !battle.trainer ? (darkArena ? 'wild-dark' : 'wild') : this.boss() ? 'boss' : battle.rivalId || battle.rival ? 'rival' : 'trainer';
-    await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined));
+    // A boss with its own VS card (Pokémon Memories) gets that VS screen when its art has loaded.
+    const vs = kind === 'boss' && art ? vsCardFor(art.assetId) : null;
+    const st = services().session.settings;
+    if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)));
+    else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined));
     // Bosses and rivals get a title card: who they are and what they specialise in.
     const boss = this.boss();
     const title = this.trainerTitle();
