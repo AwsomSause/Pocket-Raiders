@@ -88,6 +88,7 @@ import { PROMPTS } from '../core/interaction/prompt';
 import eventsJson from './events.json';
 import eventsW5Json from './eventsW5.json';
 import eventsStoryJson from './eventsStory.json';
+import eventsGamesJson from './eventsGames.json';
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
 
@@ -139,6 +140,8 @@ export interface RawContent {
   eventsW5: unknown;
   /** Story and characters ideas (S110-S131): eventsStory.json, added to `events`. Optional so older test fixtures stay valid. */
   eventsStory?: unknown;
+  /** Run events F: games, puzzles and mini-games (eventsGames.json), added to `events`. */
+  eventsGames?: unknown;
 }
 
 /**
@@ -199,6 +202,7 @@ export const RAW_CONTENT: RawContent = {
   npcStory: npcStoryJson,
   eventsW5: eventsW5Json,
   eventsStory: eventsStoryJson,
+  eventsGames: eventsGamesJson,
 };
 
 function parse<T>(schema: z.ZodType<T>, value: unknown, label: string, problems: string[]): T | null {
@@ -265,7 +269,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
   const w5Events = ((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []);
   const storyEvents = ((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []);
-  const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents] }, 'events.json', problems);
+  const gamesEvents = ((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []);
+  const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);
   const raids = baseRaids && legend ? { ...baseRaids, raids: [...baseRaids.raids, ...legend.raids] } : null;
