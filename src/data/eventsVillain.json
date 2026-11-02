@@ -1,0 +1,2155 @@
+{
+ "events": [
+  {
+   "id": "vt-rocket-bake-sale",
+   "name": "Rocket Bake Sale",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1414",
+    "effect": "sparkle"
+   },
+   "intro": "A cheerful stall sells cookies \"for sick Pokémon\". The cashier's collar says R, and the cash box has no charity sticker.",
+   "choices": [
+    {
+     "label": "Donate ₽300 anyway",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "They hand over a cookie and a fake smile. The cookie is delicious.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-gateau",
+         "lava-cookie"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report the stall",
+     "success": {
+      "text": "The authorities swoop in. A grateful official tips you off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake them down",
+     "success": {
+      "text": "\"Prepare for trouble!\" The cash box is worth fighting for.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bake Sale Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-aqua-leak-patrol",
+   "name": "Aqua Leak Patrol",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1a2a",
+    "effect": "rain"
+   },
+   "intro": "A cracked pipe sprays sea water across the path. Two Team Aqua grunts argue over whose fault it is.",
+   "choices": [
+    {
+     "label": "Seal the leak (Strength)",
+     "check": "strength",
+     "success": {
+      "text": "You wrestle the valve shut. The grunts, soaked, wave you off.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The pipe bursts in your face. Cold, but not hurt.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the two grunts",
+     "success": {
+      "text": "\"You will not stop the flood!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aqua Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "poke-ball",
+          "great-ball",
+          "ultra-ball"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let your Water-type absorb it",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type drinks the spray happily. The pipe drains, the grunts flee.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-magma-quarry-strike",
+   "name": "Magma Quarry Strike",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "fire",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1008",
+    "effect": "fire"
+   },
+   "intro": "Team Magma is strip-mining the hillside. Rare ore glints in the cut, behind two guards and a drill rig.",
+   "choices": [
+    {
+     "label": "Fight for the ore",
+     "success": {
+      "text": "\"This is OUR mountain now!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Magma Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "hard-stone",
+          "metal-coat",
+          "star-piece"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "star-piece"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sneak to the cut (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You slip along the spoil heap and pocket ore before they notice.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "star-piece",
+         "nugget"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A guard spots you!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Magma Grunt",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave them to it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-galactic-toll-booth",
+   "name": "Galactic Toll Booth",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c34",
+    "effect": "none"
+   },
+   "intro": "A makeshift booth bars the road. A Galactic grunt taps a sign: \"Road tax for a new universe. ₽400.\"",
+   "choices": [
+    {
+     "label": "Pay the toll",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "The barrier lifts. \"Thank you for supporting the future.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pass the grunt (Charisma)",
+     "check": "charisma",
+     "success": {
+      "text": "You talk about how important you are. He waves you through, confused.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"No pass, no payment? Battle!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Galactic Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Battle the grunt",
+     "success": {
+      "text": "He sighs, then sends out a Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Galactic Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-plasma-rally",
+   "name": "Plasma Rally Interrupt",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a34",
+    "effect": "sparkle"
+   },
+   "intro": "A Plasma speaker is mid-speech on the plaza steps: \"Pokémon deserve freedom!\" The crowd turns to look at you and your team.",
+   "choices": [
+    {
+     "label": "Speak up for trainers",
+     "check": "charisma",
+     "success": {
+      "text": "You say that bonds are a choice, and the crowd cheers. Plasma slinks away.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "vt-plasma-rep",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You stumble over your words and the crowd boos.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "vt-plasma-rep",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheer the speaker on",
+     "success": {
+      "text": "Plasma are delighted. A grunt slips you a pamphlet and a coin.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "vt-plasma-rep",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Heckle from the back",
+     "success": {
+      "text": "Security in white and teal moves in.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-flare-salon-spy",
+   "name": "Flare Salon Spy",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1c24",
+    "effect": "sparkle"
+   },
+   "intro": "The stylist is humming a little too casually as she asks about your route and your team. A red lipstick is shaped like a Team Flare logo.",
+   "choices": [
+    {
+     "label": "Confront her",
+     "success": {
+      "text": "\"Oh, you caught me!\" She grins and snaps her fingers.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Flare Stylist",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "shiny-stone",
+          "fairy-feather",
+          "star-piece"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Turn her (Charisma)",
+     "check": "charisma",
+     "success": {
+      "text": "She trades her information for a better offer. \"I never saw you.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 25
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "shiny-stone",
+         "dawn-stone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "vt-flare-informant",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "She smiles, takes your tip, and leaves without a word.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed her false details",
+     "success": {
+      "text": "She writes it all down. Somewhere, a Flare scout wastes a day.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-yell-cheer-chorus",
+   "name": "Yell Cheer Chorus",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c34",
+    "effect": "sparkle"
+   },
+   "intro": "A knot of Team Yell fans fills the road. \"We won't move unless you sing along!\"",
+   "choices": [
+    {
+     "label": "Sing a chorus (rhythm)",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You nail the beat. The fans cheer and wash your team with fresh energy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss a few notes. They let you through, politely.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push through",
+     "success": {
+      "text": "The fans turn into a wall of noise and Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Yell Fan",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-radio-hijack",
+   "name": "Rocket Radio Hijack",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c24",
+    "effect": "flicker"
+   },
+   "intro": "Every radio nearby buzzes with the same jammed signal. A Team Rocket transmitter hums on a pole.",
+   "choices": [
+    {
+     "label": "Fix it with an Electric-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "A jolt resets the receiver. The broadcast clears and a grateful operator tips you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rewire it yourself (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "You cross the right two wires. The signal returns.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 25
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "Sparks fly. The radio is toast.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smash the transmitter",
+     "success": {
+      "text": "Rocket grunts rush out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "poke-ball",
+          "great-ball",
+          "ultra-ball"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-cargo-truck",
+   "name": "Stolen Cargo Truck",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "fog"
+   },
+   "intro": "A truck marked with a big R barrels past. Crates tumble out of the back and roll down the road.",
+   "choices": [
+    {
+     "label": "Chase it down (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You vault the tailgate and haul back the cargo.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "poke-ball",
+         "great-ball",
+         "ultra-ball"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     },
+     "failure": {
+      "text": "It outruns you. You grab a few crates by the roadside.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "poke-ball",
+         "great-ball",
+         "ultra-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sort the roadside crates",
+     "success": {
+      "text": "A handful of crates is all that is left. Loot!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "revive",
+         "great-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out the driver",
+     "success": {
+      "text": "The driver pulls over, furious.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Truck Driver",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-aqua-submarine-dock",
+   "name": "Aqua Submarine Dock",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1a2a",
+    "effect": "rain"
+   },
+   "intro": "A hatch in the sea wall opens onto a hidden dock. A Team Aqua submarine sits at the pier with one guard on watch.",
+   "choices": [
+    {
+     "label": "Sneak aboard (stealth)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You tiptoe across the hull when the guard turns away. Inside, a locker full of loot.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water",
+         "big-pearl",
+         "pearl"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A klaxon blares!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aqua Grunt",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Fight the guard",
+     "success": {
+      "text": "\"Intruder!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aqua Guard",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "mystic-water",
+          "pearl"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Photograph it from afar",
+     "success": {
+      "text": "You get the evidence. The authorities pay for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-magma-seismograph",
+   "name": "Magma Seismograph Tamper",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ground",
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1810",
+    "effect": "shake"
+   },
+   "intro": "The village seismograph blares a quake alarm, but the ground is perfectly still. A Team Magma grunt leans on the cable box.",
+   "choices": [
+    {
+     "label": "Fix the sensor (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The alarm stops. The villagers thank you with supplies.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "super-potion",
+         "hyper-potion"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You only make it louder. The grunt snickers and runs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the grunt",
+     "success": {
+      "text": "\"Everybody evacuate! Hahaha!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Magma Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-galactic-orders",
+   "name": "Cyrus's Orders",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#14142c",
+    "effect": "none"
+   },
+   "intro": "A folded note lies on a bench, signed with a stern C. It lays out the next Galactic operation, step by step.",
+   "choices": [
+    {
+     "label": "Spoil the plan",
+     "success": {
+      "text": "You tip off the right people. The operation collapses, and your rival hears about it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       },
+       {
+        "kind": "flag",
+        "key": "vt-rival-edge",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy and use it",
+     "success": {
+      "text": "You take their route. It saves you a day.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return it",
+     "success": {
+      "text": "You leave it where it lay. A grunt is relieved, and tips you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-plasma-blank-duel",
+   "name": "Blank Soldier Duel",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#10202c",
+    "effect": "none"
+   },
+   "intro": "A silent Plasma soldier steps from the trees. \"N asks only one thing. Do your Pokémon fight for you, or with you?\"",
+   "choices": [
+    {
+     "label": "Answer with empathy",
+     "check": "love",
+     "success": {
+      "text": "You kneel to your Pokémon and speak. The soldier nods, and lets you pass with a gift.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "ether",
+         "full-restore",
+         "revive"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your answer comes out stiff. He turns away.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Answer by force",
+     "success": {
+      "text": "\"Then show me.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Soldier",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-flare-fashion-heist",
+   "name": "Flare Fashion Heist",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#34161c",
+    "effect": "sparkle"
+   },
+   "intro": "Two Flare members dash off with your best accessory! A third waits at the corner, twirling a scarf.",
+   "choices": [
+    {
+     "label": "Win it back",
+     "success": {
+      "text": "\"Fashion is a battlefield!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Flare Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "silk-scarf",
+          "shiny-stone"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Chase them (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You tackle the thief at the next corner and snatch it back.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "They are gone. You buy a replacement trinket.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-skull-dance-break",
+   "name": "Skull Dance Break",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#241c34",
+    "effect": "sparkle"
+   },
+   "intro": "A boombox thumps and Team Skull grunts form a circle. \"Dance-off, yo! Win, and we bounce!\"",
+   "choices": [
+    {
+     "label": "Join the dance-off (rhythm)",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You nail every beat. The crew dissolves, laughing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You trip over your own feet. They keep the beat and the cash.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle instead",
+     "success": {
+      "text": "\"Not into dancing? Fine, battle!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Skull Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-disguise-gig",
+   "name": "Rocket Disguise Gig",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#241418",
+    "effect": "none"
+   },
+   "intro": "A spare grunt uniform hangs on a hook by the hideout gate. The guards do not look closely at faces.",
+   "choices": [
+    {
+     "label": "Wear the uniform",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "vt-disguise-used",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You nod, grunt, and stroll inside. The loot room is open.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet",
+         "poke-ball",
+         "great-ball",
+         "ultra-ball"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "vt-disguise-used",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sabotage the gate",
+     "success": {
+      "text": "You snip the alarm wire as you pass. Nobody notices.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-double-agent",
+   "name": "Double Agent",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "A villain you have fought before waits at the roadside, hat low. \"I'm done with them. Let me tag along for a while.\"",
+   "choices": [
+    {
+     "label": "Accept the help",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "A short-term ally joins you for the next stretch.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "vt-double-agent",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a tip and say goodbye",
+     "success": {
+      "text": "They give you useful information.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 30
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn them in",
+     "success": {
+      "text": "\"A trap?! You'll regret it!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Double Agent",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-ransom-note",
+   "name": "Villain Ransom Note",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "A note pinned to a tree: \"We have your item. ₽700, or come and get it.\" One of your bag's pockets is open.",
+   "choices": [
+    {
+     "label": "Pay the ransom",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      },
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "You hand over cash. The item comes back with a smirk.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go and get it",
+     "success": {
+      "text": "The kidnappers are not happy to see you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Item Thief",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Forget it",
+     "success": {
+      "text": "It was probably not that valuable.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-meteorite-fakeout",
+   "name": "Meteorite Fakeout",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#241c24",
+    "effect": "fire"
+   },
+   "intro": "Treasure hunters swarm a \"meteor\" glowing in the hillside. It is flat painted rock. The crooks wait for someone to dig.",
+   "choices": [
+    {
+     "label": "Dig anyway",
+     "success": {
+      "text": "\"The fakeout worked!\" The crooks pounce.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Crook",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "star-piece",
+          "comet-shard",
+          "moon-stone"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warn the hunters",
+     "check": "charisma",
+     "success": {
+      "text": "They thank you with a share of what they did find.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "They do not listen.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Tail the crooks",
+     "success": {
+      "text": "You follow them to their stash and lift a few things.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "nugget"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-vent-crawl",
+   "name": "Hideout Vent Crawl",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c20",
+    "effect": "fog"
+   },
+   "intro": "Three vents lead off in three directions. You can hear voices, humming machinery, and the clink of coins.",
+   "choices": [
+    {
+     "label": "Left vent: the voices",
+     "success": {
+      "text": "You drop into a guard room.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout Guard",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "hyper-potion",
+          "full-heal"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Middle vent: the machinery",
+     "success": {
+      "text": "A generator room. You pocket spare parts.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 25
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "magnet"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right vent: the coins",
+     "chance": 0.6,
+     "success": {
+      "text": "A cash room. You take what you can carry.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 900
+       }
+      ]
+     },
+     "failure": {
+      "text": "An alarm! You scramble back out the vent.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-laser-maze",
+   "name": "Laser Maze",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a0c14",
+    "effect": "flicker"
+   },
+   "intro": "Red beams cross the corridor ahead. A vault door glows at the far end.",
+   "choices": [
+    {
+     "label": "Psychic phases through",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "success": {
+      "text": "Your Psychic-type guides the team through the beams. The vault opens.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 700
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dodge the beams (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You wriggle between beams, right to the vault.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 700
+       }
+      ]
+     },
+     "failure": {
+      "text": "An alarm trips! Grunts rush the corridor.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-camera-swap",
+   "name": "Security Camera Swap",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2024",
+    "effect": "flicker"
+   },
+   "intro": "A wall of monitors flickers in the guard room. A tape deck sits under the desk, labeled \"LOOP\".",
+   "choices": [
+    {
+     "label": "Loop the feed (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Guards watch an empty corridor. You walk right past.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "poke-ball",
+         "great-ball",
+         "ultra-ball"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The loop cuts out! Guards arrive.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout Guard",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Smash the monitors",
+     "success": {
+      "text": "Alarms ring.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout Guard",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-password-lock",
+   "name": "Password Lock",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2418",
+    "effect": "none"
+   },
+   "intro": "A keypad glows on a steel door. Three notes are taped nearby: \"Where we began.\" \"First letter, last letter.\" \"Count the badges.\"",
+   "choices": [
+    {
+     "label": "Work out the code (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Click. The door swings open on a stash.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hyper-potion",
+         "revive"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     },
+     "failure": {
+      "text": "Wrong! The alarm brings guards.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout Guard",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Guess",
+     "chance": 0.25,
+     "success": {
+      "text": "A lucky guess! The stash is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     },
+     "failure": {
+      "text": "Wrong! The alarm brings guards.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout Guard",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-boss-phone-call",
+   "name": "Boss Phone Call",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1418",
+    "effect": "flicker"
+   },
+   "intro": "A public phone rings by itself. A rasping voice: \"I've been watching you. Choose your words carefully.\"",
+   "choices": [
+    {
+     "label": "Defy them",
+     "success": {
+      "text": "\"We'll see.\" The line goes dead. They will remember this.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vt-boss-defied",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Plead for mercy",
+     "success": {
+      "text": "They laugh and promise not to go easy anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vt-boss-defied",
+        "amount": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hang up",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-disguised-merchant",
+   "name": "Friendly Seller",
+   "group": "Villain Teams",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A friendly seller beams as you approach. Their prices are a little too good. Their boots are standard-issue.",
+   "choices": [
+    {
+     "label": "Buy a deal (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "The goods are fine. A grunt winks as you leave.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "poke-ball",
+         "great-ball",
+         "ultra-ball",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Unmask them",
+     "success": {
+      "text": "\"Oh no. The jig is up!\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Seller Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "poke-ball",
+          "great-ball",
+          "ultra-ball"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-gadget-sabotage",
+   "name": "Gadget Sabotage",
+   "group": "Villain Teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "flicker"
+   },
+   "intro": "A small villain drone buzzes behind you, blinking a camera light. It has been following for a while.",
+   "choices": [
+    {
+     "label": "Destroy it",
+     "success": {
+      "text": "Your Pokémon smashes it. A circuit board falls out.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "magnet",
+         "metal-coat"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dodge it (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You lose it in the trees.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     },
+     "failure": {
+      "text": "It follows you and snaps a photo.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.03
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
