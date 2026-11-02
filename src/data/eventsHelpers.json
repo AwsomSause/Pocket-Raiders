@@ -1,0 +1,3408 @@
+{
+ "events": [
+  {
+   "id": "lost-umbrella",
+   "name": "Lost Umbrella",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A rain-soaked umbrella with a name tag sits on a bench. A woman is huddled under a shop awning across the road.",
+   "choices": [
+    {
+     "label": "Return it",
+     "success": {
+      "text": "\"Oh, thank you!\" She presses a lucky coin into your hand. \"Rain brings luck to those who share shelter.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "h-rain-luck",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use it yourself",
+     "success": {
+      "text": "You stay dry. Somewhere, a stranger sighs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "shopkeepers-delivery",
+   "name": "Shop Keeper's Delivery",
+   "group": "Helpers, gifts and kindness",
+   "stop": "merchant",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "effect": "none"
+   },
+   "intro": "An old shop keeper can't lift his heavy bag. \"Deliver it to the next town, and I'll pay by how far you carry it.\"",
+   "choices": [
+    {
+     "label": "Carry it (₽ grows with the stage)",
+     "success": {
+      "text": "You haul the bag a long way. He pays more than he promised.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "h-delivery",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon to carry it",
+     "success": {
+      "text": "Your strongest friend does the heavy lifting.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You wave and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranded-cyclist",
+   "name": "Stranded Cyclist",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_biker"
+    ],
+    "effect": "none"
+   },
+   "intro": "A cyclist stares at a bent wheel. \"Can you help? I'll lend you my bike for a bit.\"",
+   "choices": [
+    {
+     "label": "Repair the bike (Intelligence check)",
+     "check": "intelligence",
+     "failure": {
+      "text": "You make it worse. He thanks you anyway and walks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "success": {
+      "text": "You straighten the frame. He lends you his bike: the road ahead flies by.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give him a Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "He patches himself up and grins. The bike's yours for a stretch.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wish him luck",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sick-trainer-rain",
+   "name": "Sick Trainer in the Rain",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A trainer shivers under a tree, feverish. \"I just need to rest...\"",
+   "choices": [
+    {
+     "label": "Share a Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "The trainer recovers and falls in beside you for a few stages.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay and keep watch",
+     "success": {
+      "text": "You wait out the rain together. They'll remember it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "h-sick-trainer",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You can't save everyone.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "blind-date-wingman",
+   "name": "Blind Date Wingman",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_youngcouple"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "Two nervous trainers sit at opposite tables, both glancing your way. \"Please, help us talk!\"",
+   "choices": [
+    {
+     "label": "Break the ice (Charisma check)",
+     "check": "charisma",
+     "failure": {
+      "text": "Awkward silence. They leave separately.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": -1
+       }
+      ]
+     },
+     "success": {
+      "text": "They laugh together! A grateful perk comes your way.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charm-coin",
+         "honey",
+         "star-piece",
+         "sitrus-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell each what the other likes",
+     "success": {
+      "text": "A little fib, a big smile. They owe you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "honey",
+         "lucky-charm"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it",
+     "success": {
+      "text": "Love finds a way.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "missing-cat-poster",
+   "name": "Missing Cat Poster",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "effect": "none"
+   },
+   "intro": "A poster: \"Lost: Meowth, answers to Coins.\" A reward is promised.",
+   "choices": [
+    {
+     "label": "Look around the alleys",
+     "chance": 0.7,
+     "failure": {
+      "text": "No sign of it. You tear off a tab of the poster for luck.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     },
+     "success": {
+      "text": "A Meowth is curled in a crate. You carry it home. The owner gives you a coin charm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charm-coin",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask your Pokémon to sniff it out",
+     "success": {
+      "text": "Your lead tracks it down quickly. The owner is delighted.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charm-coin",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore the poster",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "library-overdue-fine",
+   "name": "Library Overdue Fine",
+   "group": "Helpers, gifts and kindness",
+   "stop": "library",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "effect": "none"
+   },
+   "intro": "The library desk clerk taps a due date. \"That book is a year overdue. ₽200, or you can read it back tonight.\"",
+   "choices": [
+    {
+     "label": "Pay the fine (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "\"Thank you.\" She gives you a bookmark with a tip.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the book aloud for the kids",
+     "success": {
+      "text": "Story hour is a hit. The fine is forgiven.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sneak out the side door (Speed check)",
+     "check": "speed",
+     "failure": {
+      "text": "A librarian catches you. ₽400 fine!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     },
+     "requires": [],
+     "success": {
+      "text": "You slip away. Nobody noticed.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "neighbors-garden",
+   "name": "Neighbor's Garden Weeding",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "none"
+   },
+   "intro": "A neighbor's garden is overrun with weeds. \"Grass types would make quick work of this...\"",
+   "choices": [
+    {
+     "label": "Weed it with your party",
+     "success": {
+      "text": "Hard work, but the garden blooms. Your Grass types grow stronger.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Plant seedlings together",
+     "success": {
+      "text": "You plant a berry bush.",
+      "effects": [
+       {
+        "kind": "seedling",
+        "berry": "oran-berry"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move along",
+     "success": {
+      "text": "The garden stays wild.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "charity-marathon",
+   "name": "Charity Marathon Sponsor",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "effect": "none"
+   },
+   "intro": "A runner shakes a donation tin. \"Every ₽ goes to the Pokémon shelter!\"",
+   "choices": [
+    {
+     "label": "Donate ₽200",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "\"Good Karma!\" The crowd cheers. You feel lighter.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 3
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Donate ₽500",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Your name goes on the banner. Your team feels sturdier too.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 8
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run a lap yourself",
+     "success": {
+      "text": "You jog beside them. They tip you a Potion.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dog-walker",
+   "name": "Dog Walker (Growlithe)",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "effect": "none",
+    "pokemon": "growlithe"
+   },
+   "intro": "A woman begs: \"Walk my Growlithe for a few stages? It needs the exercise. I'll pay when you come back!\"",
+   "choices": [
+    {
+     "label": "Walk it",
+     "success": {
+      "text": "A Growlithe trots alongside you. It adores the road.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 3
+       },
+       {
+        "kind": "flag",
+        "key": "h-dog-walk",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "She finds someone else.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dog-walker-pays",
+   "name": "Growlithe's Owner Pays Up",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "h-dog-walk",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "The woman waves from afar, Growlithe bounding to her. \"Here's your payment, with a tip!\"",
+   "choices": [
+    {
+     "label": "Accept",
+     "success": {
+      "text": "She hands you cash and a treat.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "field-trip-chaperone",
+   "name": "Field Trip Chaperone",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "effect": "none"
+   },
+   "intro": "A teacher asks you to guard a class of kids crossing the route. \"Wild Pokémon sometimes appear.\"",
+   "choices": [
+    {
+     "label": "Escort them (Strength check)",
+     "check": "strength",
+     "failure": {
+      "text": "A scuffle! Everyone is safe, but your team takes bruises.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     },
+     "success": {
+      "text": "All the kids make it. Your team shares what it learned.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "h-chaperone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach them about your Pokémon",
+     "success": {
+      "text": "The kids are enchanted. They draw your team.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "The teacher finds another volunteer.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "street-magician",
+   "name": "Street Magician Volunteer",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_juggler"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "\"Need a volunteer!\" The magician beckons you. The crowd claps.",
+   "choices": [
+    {
+     "label": "Join the trick",
+     "success": {
+      "text": "A dove! A coin! An item from your sleeve?",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "great-ball",
+         "sitrus-berry",
+         "star-piece",
+         "honey"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spot how it's done (Intelligence check)",
+     "check": "intelligence",
+     "failure": {
+      "text": "You blurt it out. The crowd boos him!",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     },
+     "success": {
+      "text": "You catch the palm trick. The magician gives you a nod and a prize.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "Someone else gets the card.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "midnight-lullaby",
+   "name": "Midnight Lullaby",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "float"
+   },
+   "intro": "A baby Pokémon cries in the night, and its parent is too tired to soothe it.",
+   "choices": [
+    {
+     "label": "Sing a lullaby (Charisma check)",
+     "check": "charisma",
+     "failure": {
+      "text": "Off-key. The baby wails louder, but the parent laughs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": -1
+       }
+      ]
+     },
+     "success": {
+      "text": "It sleeps. The parent thanks you with a charm against drowsiness: a Clarity Blessing.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon sing",
+     "success": {
+      "text": "A soothing melody drifts. The baby sleeps like a stone.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "The crying fades behind you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "elders-last-wish-1",
+   "name": "Elder's Last Wish (1)",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "effect": "none"
+   },
+   "intro": "A frail elder presses a letter into your hand. \"Three things before I rest. First: deliver this to the old mill.\"",
+   "choices": [
+    {
+     "label": "Accept the quest",
+     "success": {
+      "text": "\"Thank you.\" He tells you where to look. The mill is on your way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "h-elder",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "You took on an elder's last wish.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "He sighs and turns away.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "elders-last-wish-2",
+   "name": "Elder's Last Wish (2)",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "h-elder",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "effect": "none"
+   },
+   "intro": "At the mill, an old friend reads the letter with tears in her eyes. \"Tell him the star was real. Now, bring him a bowl of berries from the east grove.\"",
+   "choices": [
+    {
+     "label": "Fetch the berries",
+     "success": {
+      "text": "You pick the sweetest. The trip leaves you tired, but the elder's friend gives you a keepsake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "h-elder",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "elders-last-wish-3",
+   "name": "Elder's Last Wish (3)",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "h-elder",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "The elder sits by the window, smiling. \"One last thing: be kind to your Pokémon. They'll remember everything.\" He presses a worn charm into your hand.",
+   "choices": [
+    {
+     "label": "Promise him",
+     "success": {
+      "text": "He closes his eyes, content. His charm hums in your pocket.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-charm",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 8
+       },
+       {
+        "kind": "moment",
+        "text": "An elder's last wish was fulfilled.",
+        "importance": 75
+       },
+       {
+        "kind": "flag",
+        "key": "h-elder",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with him a while",
+     "success": {
+      "text": "You stay until dawn. Your team heals; his story stays with you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 6
+       },
+       {
+        "kind": "item",
+        "id": "old-charm",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sat with an elder until dawn.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "h-elder",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "legend-autograph",
+   "name": "Local Legend Autograph",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A famous trainer is signing autographs in the square. The line is long.",
+   "choices": [
+    {
+     "label": "Get a Poké Ball signed",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "\"Good luck out there, kid.\" The ball glows with their blessing.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the crowd line up",
+     "success": {
+      "text": "The legend notices you and signs your team's sleeve.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You skip the line.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "flooded-basement",
+   "name": "Flooded Basement Rescue",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "rain"
+   },
+   "intro": "Water pours into a cellar. Small Pokémon are crying from the dark.",
+   "choices": [
+    {
+     "label": "Wade in and save them (Strength check)",
+     "check": "strength",
+     "failure": {
+      "text": "The current is strong. You save most, and lose a few Potions.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     },
+     "success": {
+      "text": "You carry them out, one by one. One stays with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "types": [
+         "water"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pump out the water",
+     "success": {
+      "text": "A slow job, but everyone's safe. You get paid.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call for help and leave",
+     "success": {
+      "text": "Help arrives. You feel uneasy.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pie-contest-judge",
+   "name": "Berry Pie Contest Judge",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "Four pies sit on the judge's table: Oran, Sitrus, Razz, and Pecha. Taste them all.",
+   "choices": [
+    {
+     "label": "Pick the Oran pie",
+     "success": {
+      "text": "Humble but solid. It tastes like home.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the Sitrus pie",
+     "success": {
+      "text": "Rich and juicy. Your team feels refreshed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the Razz pie",
+     "success": {
+      "text": "Sweet and spicy! A burst of energy.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "razz-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the Pecha pie",
+     "success": {
+      "text": "Soft and fruity. A little cure for what ails you.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-ring",
+   "name": "Lost Ring",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A ring glimmers in the grass. Four people nearby each claim it's theirs.",
+   "choices": [
+    {
+     "label": "Question the sailor",
+     "success": {
+      "text": "He's too eager. A liar.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Question the lady",
+     "success": {
+      "text": "The ring has her initials! You return it. She tips you well.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Question the gentleman",
+     "success": {
+      "text": "He knows the ring's engraving only after you read it aloud. A liar.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Question the child",
+     "success": {
+      "text": "Too small for the ring. Not hers.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mailman-shortcut",
+   "name": "Mailman Shortcut",
+   "group": "Helpers, gifts and kindness",
+   "stop": "merchant",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "effect": "none"
+   },
+   "intro": "A mailman is overwhelmed. \"Can you take these letters down the road? I tip well!\"",
+   "choices": [
+    {
+     "label": "Deliver the letters",
+     "success": {
+      "text": "You deliver every one. Tips add up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 450
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read one first (peek)",
+     "success": {
+      "text": "You peek. Guilt. Then you deliver it anyway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "Not your business.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "quiet-hermit",
+   "name": "Quiet Hermit",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_hiker"
+    ],
+    "effect": "none"
+   },
+   "intro": "A hermit lives in a hollow tree. He's hungry. \"Bring food, and I'll tell you my story.\"",
+   "choices": [
+    {
+     "label": "Give a berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "He eats and talks: a tale of a hundred battles. He shares a move tip.",
+      "effects": [
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "A hermit shared his story and a move tip.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cook him a meal (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Warm food, warm stories. He teaches your lead a trick.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave him be",
+     "success": {
+      "text": "You respect his solitude.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "broken-vending-pokeball",
+   "name": "Broken Vending Poké Ball",
+   "group": "Helpers, gifts and kindness",
+   "stop": "merchant",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A vending machine blinks \"ERROR\" and spits out free Poké Balls in short bursts.",
+   "choices": [
+    {
+     "label": "Fix the machine (Intelligence check)",
+     "check": "intelligence",
+     "failure": {
+      "text": "It coughs once and goes dark.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 1
+       }
+      ]
+     },
+     "success": {
+      "text": "It whirs! Free Poké Balls.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 4
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake it (Strength check)",
+     "check": "strength",
+     "failure": {
+      "text": "Nothing. A bruised hand.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     },
+     "success": {
+      "text": "A bunch of balls tumble out!",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "taxi-fare",
+   "name": "Taxi Driver's Fare",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cueball"
+    ],
+    "effect": "none"
+   },
+   "intro": "A taxi driver is stuck with a flat. \"Drive my car across the map and I'll make it worth your while!\"",
+   "choices": [
+    {
+     "label": "Drive (Speed check)",
+     "check": "speed",
+     "failure": {
+      "text": "You clip a fence, but you still get there.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     },
+     "success": {
+      "text": "Vroom! You zip ahead.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the driver to ride along",
+     "success": {
+      "text": "He keeps you honest. A smooth ride and a tip.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You walk.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "orchard-harvest",
+   "name": "Orchard Harvest Day",
+   "group": "Helpers, gifts and kindness",
+   "stop": "berry",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "effect": "none"
+   },
+   "intro": "It's harvest day at the orchard. Hands are needed.",
+   "choices": [
+    {
+     "label": "Pick fruit",
+     "success": {
+      "text": "Sticky and satisfying. You take home a basket.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb the tall trees",
+     "success": {
+      "text": "You reach the best fruit.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "figy-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Eat as you go",
+     "success": {
+      "text": "Delicious. The farmer chuckles.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "soup-kitchen",
+   "name": "Soup Kitchen Volunteer",
+   "group": "Helpers, gifts and kindness",
+   "stop": "heal",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A soup kitchen runs out of hands. A steaming pot waits.",
+   "choices": [
+    {
+     "label": "Cook a pot",
+     "success": {
+      "text": "The whole line eats. You eat too. Your team recovers a bit.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.35
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Serve the line",
+     "success": {
+      "text": "So many grateful faces.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the shift",
+     "success": {
+      "text": "You continue on your way.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "graveyard-tidy",
+   "name": "Overgrown Graveyard Tidy",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog"
+   },
+   "intro": "A graveyard is overgrown. Whispers drift on the breeze.",
+   "choices": [
+    {
+     "label": "Tidy the stones",
+     "success": {
+      "text": "You clear weeds and wipe moss. A pale shape nods in thanks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "h-graveyard",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You tidied a graveyard; something watched.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers",
+     "success": {
+      "text": "A single flower is enough.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "h-graveyard",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hurry past",
+     "success": {
+      "text": "The whispers follow you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "graveyard-ghost-helps",
+   "name": "The Ghost Remembers",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "h-graveyard",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "fog"
+   },
+   "intro": "A pale light leads you off the path, away from danger. A ghost hovers in front of you and bows.",
+   "choices": [
+    {
+     "label": "Follow the light",
+     "success": {
+      "text": "The ghost guides you to a hidden stash.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dusk-stone",
+        "count": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "zoo-keeper-aid",
+   "name": "Zoo Keeper's Aid",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_tamer"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A little zoo of rescued Pokémon needs a hand. \"Spend an afternoon with them?\"",
+   "choices": [
+    {
+     "label": "Tour the zoo",
+     "success": {
+      "text": "Every cage has a story. One rescue wants to come with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "types": [
+         "normal"
+        ],
+        "levelBonus": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed the animals",
+     "success": {
+      "text": "They crowd around you. You leave with affection and a snack.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Donate ₽250",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "\"Every bit helps!\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "beach-cleanup",
+   "name": "Beach Cleanup",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_m"
+    ],
+    "effect": "none"
+   },
+   "intro": "The beach is littered. A few Trubbish rummage for snacks in the pile.",
+   "choices": [
+    {
+     "label": "Clean up with the Trubbish",
+     "success": {
+      "text": "Together you sort the trash. You keep a bag of recyclables worth selling.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 350
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just pick up what you can",
+     "success": {
+      "text": "A small effort. A small reward.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You walk the shore.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "birthday-party-crash",
+   "name": "Birthday Party Crash",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A kid's birthday party! \"We need a battle show!\" the parents plead.",
+   "choices": [
+    {
+     "label": "Put on a show (Charisma check)",
+     "check": "charisma",
+     "failure": {
+      "text": "The show flops, but the kids still give you cake.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "success": {
+      "text": "The kids love it. You get cake and a gift.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the kids pet your Pokémon",
+     "success": {
+      "text": "Squeals of joy. Your team basks in it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Excuse yourself",
+     "success": {
+      "text": "The party goes on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "childs-drawing",
+   "name": "Child's Drawing",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "effect": "none"
+   },
+   "intro": "A child shows you a crayon map: a big X beside a tree. \"My treasure! I'll share.\"",
+   "choices": [
+    {
+     "label": "Follow the map",
+     "chance": 0.8,
+     "failure": {
+      "text": "Just a tin of marbles. The kid beams.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     },
+     "success": {
+      "text": "Under the tree: a buried tin box.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "hyper-potion",
+         "honey",
+         "revive"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hang the drawing on a wall",
+     "success": {
+      "text": "The child glows with pride.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "The child waves goodbye.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pay-it-forward",
+   "name": "Pay It Forward",
+   "group": "Helpers, gifts and kindness",
+   "stop": "shop",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "At the counter, a stranger already paid for you. \"Pass it on!\" the note says.",
+   "choices": [
+    {
+     "label": "Accept the kindness",
+     "success": {
+      "text": "Warm. You vow to do the same.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "h-forward",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Add ₽100 to the pot",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You top it off for the next person.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "h-forward",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pay-it-forward-pass",
+   "name": "Passing It On",
+   "group": "Helpers, gifts and kindness",
+   "stop": "shop",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "h-forward",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A weary traveller counts coins at a stall. You step up and cover the tab.",
+   "choices": [
+    {
+     "label": "Pay for them (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "\"Pay it forward!\" They smile; luck seems to find you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 6
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-wild-grace"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just smile",
+     "success": {
+      "text": "A warm nod.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "kind-rival-visit",
+   "name": "Kind Rival Visit",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.hop"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "Your rival is waiting by the road, not to battle, but to hand you a gift. \"Good luck out there.\"",
+   "choices": [
+    {
+     "label": "Accept the gift",
+     "success": {
+      "text": "A small bundle of supplies.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share a drink together",
+     "success": {
+      "text": "You swap stories. Your bond grows.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "Your rival came by with a gift, not a fight.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "grandmas-recipe",
+   "name": "Grandma's Recipe",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A grandmother shares a family stew recipe. \"It heals everything, dear.\"",
+   "choices": [
+    {
+     "label": "Learn the recipe",
+     "success": {
+      "text": "You jot it down. Your Pokémon will thank you at every campfire.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "h-recipe",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her cook",
+     "success": {
+      "text": "A cozy hour. The stew restores your team.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.8
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "h-recipe",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "marooned-sailor",
+   "name": "Marooned Sailor",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A sailor is stranded on a rock by the shore. \"A boat! A boat!\"",
+   "choices": [
+    {
+     "label": "Row out and rescue him",
+     "requires": [],
+     "success": {
+      "text": "He's grateful. \"Take this old chart. It leads somewhere... strange.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-sea-map",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a rope (Strength check)",
+     "check": "strength",
+     "failure": {
+      "text": "The rope slips. He swims. He still tips you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     },
+     "success": {
+      "text": "He's hauled in. A sea map is his thanks.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-sea-map",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave and move on",
+     "success": {
+      "text": "He shouts after you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "barefoot-monk",
+   "name": "Barefoot Monk",
+   "group": "Helpers, gifts and kindness",
+   "stop": "shrine",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "effect": "none"
+   },
+   "intro": "A monk limps at the foot of a hill. \"I must reach the shrine. Can you carry me?\"",
+   "choices": [
+    {
+     "label": "Carry him up",
+     "success": {
+      "text": "A steep climb. At the shrine, he blesses you.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Pokémon carry him",
+     "success": {
+      "text": "Your lead trudges up. He blesses it.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer water and move on",
+     "success": {
+      "text": "He thanks you quietly.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rain-dance-ritual",
+   "name": "Rain Dance Ritual",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A village is parched. Elders dance and sing, but the sky stays clear. \"Help us summon rain.\"",
+   "choices": [
+    {
+     "label": "Join the dance",
+     "success": {
+      "text": "Thunder rolls. Rain! Crops are saved.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "h-raindance",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water type's moves",
+     "success": {
+      "text": "Your Pokémon's moves coax clouds to gather.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wish them luck",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "library-gift",
+   "name": "Library Gift",
+   "group": "Helpers, gifts and kindness",
+   "stop": "library",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "effect": "none"
+   },
+   "intro": "The librarian asks, \"Share a Pokémon fact the shelves do not have yet?\"",
+   "choices": [
+    {
+     "label": "Share a fact (Intelligence check)",
+     "check": "intelligence",
+     "failure": {
+      "text": "She already has that one, but thanks you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     },
+     "success": {
+      "text": "She writes it down and issues you a member's card.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "member-card",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Donate a Poké Ball",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "A fine addition to the exhibit. She thanks you with a card.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "data-card",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Browse quietly",
+     "success": {
+      "text": "You leave with new ideas.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-hospice",
+   "name": "Pokémon Hospice",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A quiet shelter cares for elderly Pokémon. A caretaker invites you to stay the night.",
+   "choices": [
+    {
+     "label": "Spend the night listening",
+     "success": {
+      "text": "Old Pokémon tell stories. In the morning, the caretaker gives you a Soothe Bell.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.7
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "You spent a night at a Pokémon hospice.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Donate ₽300",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "\"This will help many.\" They give you a small token.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Visit briefly",
+     "success": {
+      "text": "A short visit, a long thought.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "soap-box-derby",
+   "name": "Soap Box Derby",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "effect": "none"
+   },
+   "intro": "Kids are racing soap box carts down the hill. \"Build one and race me!\" a kid challenges.",
+   "choices": [
+    {
+     "label": "Build a cart (Intelligence check)",
+     "check": "intelligence",
+     "failure": {
+      "text": "Wheels fall off, but you all laugh.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "success": {
+      "text": "Your cart rolls fast! You win. The kid is thrilled.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the kid win",
+     "success": {
+      "text": "He whoops with joy. \"You're the best!\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch",
+     "success": {
+      "text": "A good race.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "trainers-therapy",
+   "name": "Trainer's Therapy",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "effect": "none"
+   },
+   "intro": "A burnt-out trainer sits alone. \"I do not know why I keep going.\"",
+   "choices": [
+    {
+     "label": "Listen",
+     "success": {
+      "text": "You listen for an hour. They gift you a charm.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "lucky-charm",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You listened to a burnt-out trainer.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share your own story",
+     "success": {
+      "text": "They smile for the first time. \"Thanks.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "charm-coin",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer a battle instead",
+     "success": {
+      "text": "Nope. They aren't ready.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "last-cookie",
+   "name": "The Last Cookie",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "One last cookie sits on a plate. Your Pokémon eye it hopefully.",
+   "choices": [
+    {
+     "label": "Share it with the team",
+     "success": {
+      "text": "Everyone gets a crumb. Morale rises a little.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Eat it yourself",
+     "success": {
+      "text": "Delicious. Your Pokémon pout.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to the smallest Pokémon",
+     "success": {
+      "text": "It beams. The others pretend not to mind.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
