@@ -328,6 +328,12 @@ function traderSpecies(run: RunState, t: PlazaData['traders'][number]): string {
   return rngFor(run, `tr:${t.id}`).pick(t.give.species);
 }
 
+/** What a Plaza trader gives for one party member (the same species and level `usePlaza` hands over). Read-only. */
+export function traderGift(content: Content, run: RunState, traderId: string, level: number): { speciesId: string; level: number } {
+  const t = PLAZA.traders.find((x) => x.id === traderId)!;
+  return { speciesId: traderSpecies(run, t), level: Math.max(1, Math.min(runLevelCap(content, run), level + t.give.levelBonus)) };
+}
+
 // ---------- the board, rumours ----------
 
 function postsHere(run: RunState): PlazaData['posts'] {
