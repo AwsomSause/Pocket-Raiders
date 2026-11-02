@@ -15,7 +15,7 @@ Built from Kice's picks (2026-11-02). One shared module, `src/ui/screenSkins.ts`
 ## Known limits
 - A look restyles the backdrop, header band, row and message-box colours and ambient drift; the list layouts are the existing ones (mock-up layouts such as the museum frames or timeline branches are drawn as backdrop art, not new layouts). Row text colours are unchanged, so every backdrop is kept dark enough to read.
 - Ambient drift plays only with full motion; reduced/off draws it still.
-- Not built: raid (maxden, shonen, tera) and totem (ink). Those screens are battle-scene formats owned by the Battle group; they can reuse `SKINS` once that group exposes a backdrop hook.
+- Raid and totem: built later, see the update below.
 - Hub Town overworld, Plaza, shops and trade stops are other threads.
 - Loading screens must not slow loading: the backdrop is drawn from graphics only, no assets.
 
@@ -30,3 +30,7 @@ Pokédex set list: `src/ui/dexBrowser.ts` (aero, wii, sticker grid plus detail c
 
 ## Update: Settings layouts and backdrop fix
 Settings category pages now draw each look's frame (`src/ui/settingsLooks.ts`): side tabs (aero, wii, shoujo, ink, rotom) or top tabs (notebook, sticker), the look's row pills (thin rules when a page has too many rows for pills), bright palettes with dark ink for the light looks, and the 設定 heading for ink. The rotom look has no Rotom sprite and the sticker look keeps one column of rows (not a card grid): known limits. Also fixed: the global dim backdrop in `main.ts` was painting over skinned backdrops on Settings, Expedition and Minigame; scenes that paint their own look are now skipped (`hasSkinBackdrop`).
+
+
+## Update: Raid and totem boss cards
+`src/ui/stopLooks.ts` draws the raid stop (maxden, shonen, tera) and totem stop (ink) as full boss cards, used by `MapScene.openRaid/openTotem` via `screenStyleOf('raid'|'totem', ...)` salted by run seed and stop id. Look only: approaches become the card's buttons, outcomes unchanged. Close to the mock-ups, not pixel-exact. Test: `tests/e2e/stopLooks.spec.ts`.

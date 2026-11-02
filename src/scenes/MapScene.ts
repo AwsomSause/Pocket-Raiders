@@ -32,6 +32,7 @@ import { expeditionPreview } from '../core/expedition/flow';
 import { minigamePreview } from '../core/minigame/flow';
 import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
 import { anomalyLine, stageAnomaly } from '../core/story/anomaly';
+import { StopCard, type StopLook } from '../ui/stopLooks';
 import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
 import { bossInfo, currentRegion, getCampaign, runLevelCap } from '../core/regions';
 import { blindMap } from '../core/rules';
@@ -1157,6 +1158,32 @@ export class MapScene extends Phaser.Scene {
     const content = session.content;
     const pv = totemPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
+    // Screens redesign: the Ink Ruler look draws the totem card like its mock-up.
+    if (screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`) === 'ink') {
+      const leave = (): void => {
+        this.picker?.close();
+        this.picker = null;
+      };
+      this.picker = new StopCard(this, 'ink', {
+        kicker: 'TOTEM',
+        title: `${pv.name} · ${pv.tier}`,
+        species,
+        level: pv.level,
+        info: [`Aura: ${pv.aura}${pv.environment ? ` ${pv.environment}` : ''}`, pv.ally ? `Ally calls: ${pv.ally}` : 'No allies.', `Rewards: ${pv.rewards.join(' · ')}`],
+        options: [{ label: 'Face the Totem', detail: `${pv.blurb} Losing never ends your run.`, problem: null }],
+      }, session.settings.battleAnimations, {
+        onSelect: () => {
+          leave();
+          this.busy = true;
+          playSfx(this, 'ui.select');
+          const run = session.enterTotem(sideId);
+          this.cameras.main.fadeOut(250);
+          this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+        },
+        onBack: leave,
+      });
+      return;
+    }
     const picker: Picker = new Picker(this, {
       glass: true,
       title: `Totem - ${pv.name}`,
@@ -1203,6 +1230,37 @@ export class MapScene extends Phaser.Scene {
     // Regional and rival raids offer approaches (one row each); other raids are a single "fight" row.
     const choices = pv.approaches.length > 0 ? pv.approaches : [{ id: '', label: '', text: '', cost: 0, leave: false }];
     const kindName = { wild: 'Raid', regional: 'Regional Raid', rival: 'Rival Raid', anomaly: 'Anomaly Raid' }[pv.kind];
+    // Screens redesign: a picked raid look draws the boss card the way its mock-up does.
+    const raidLook = screenStyleOf('raid', session.settings.screenStyles, `${session.run!.seed}:${sideId}`);
+    if (raidLook !== 'original') {
+      const leave = (): void => {
+        this.picker?.close();
+        this.picker = null;
+      };
+      this.picker = new StopCard(this, (raidLook === 'maxden' ? 'maxden' : raidLook === 'shonen' ? 'shonen' : 'tera') as StopLook, {
+        kicker: `${kindName.toUpperCase()} · TIER ${pv.tier}`,
+        title: `${pv.name}${pv.returning ? ' (it came back!)' : ''}`,
+        species,
+        level: pv.level,
+        info: [`Mechanics: ${pv.mechanics.join(' · ')}`, `Rewards: ${pv.rewards.join(' · ')}`, 'Losing never ends your run.'],
+        options: choices.map((a) => {
+          const cost = pv.entryCost + a.cost;
+          return { label: a.label ? `${a.label} · ${a.leave ? 'free' : `₽${cost}`}` : `JOIN RAID · ₽${cost}`, detail: a.text || pv.blurb, problem: !a.leave && money < cost ? `You need ₽${cost} to enter.` : null };
+        }),
+      }, session.settings.battleAnimations, {
+        onSelect: (i) => {
+          const choice = choices[i]!;
+          leave();
+          this.busy = true;
+          playSfx(this, 'ui.select');
+          const run = session.enterRaid(sideId, choice.id || undefined);
+          this.cameras.main.fadeOut(250);
+          this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+        },
+        onBack: leave,
+      }, );
+      return;
+    }
     const picker: Picker = new Picker(this, {
       glass: true,
       title: `${kindName} - Tier ${pv.tier}: ${pv.name}${pv.returning ? ' (it came back!)' : ''}`,

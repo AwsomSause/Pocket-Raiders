@@ -53,7 +53,7 @@ export const SCREEN_STYLES_READY: { readonly [S in ScreenId]: readonly ScreenSty
   briefing: ['aero', 'missionmap', 'storybook', 'trailer', 'wii', 'letter', 'boarding'], bag: ['aero', 'classic', 'manga', 'shonen', 'sticker', 'shoujo', 'wiishop', 'episode', 'ink', 'grid'], evolve: ['aero', 'classic', 'shonen', 'ink', 'episode', 'dna', 'eyecatch'], runend: ['aero', 'classic', 'finale', 'manga', 'sunset', 'cards', 'anime', 'credits', 'wii', 'ink', 'mvp'],
   dex: ['aero', 'ds', 'sticker', 'wii', 'ink'],
   settings: ['aero', 'wii', 'shoujo', 'ink', 'notebook', 'rotom', 'sticker'],
-  camp: ['wii', 'novel', 'scrapbook', 'fieldbase', 'ink', 'cards'], raid: [], totem: [],
+  camp: ['wii', 'novel', 'scrapbook', 'fieldbase', 'ink', 'cards'], raid: ['maxden', 'shonen', 'tera'], totem: ['ink'],
   expedition: ['aero', 'manga', 'depth'],
   minigame: ['wii'],
   hubmenus: ['aero', 'wii', 'shonen', 'sticker', 'ink', 'achievements', 'album'],
