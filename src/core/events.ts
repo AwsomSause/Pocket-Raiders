@@ -703,6 +703,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'see the battles ahead on this stage';
     case 'scout':
       return `the map shows ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
+    case 'foresight':
+      return `the forecast reaches ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
     case 'addEvent':
     case 'addEventFrom':
       return 'a new place opens here';
@@ -1001,6 +1003,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'scout':
       scoutAhead(content, run, e.columns);
+      return effectWords(content, e);
+    case 'foresight':
+      run.stage!.foresight = (run.stage!.foresight ?? 0) + e.columns;
       return effectWords(content, e);
     case 'campBond':
       partyLifeBond(run, e.chemistry, e.calm, e.settle);

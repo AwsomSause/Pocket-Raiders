@@ -2635,6 +2635,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('count'), counter: z.enum(['eventClues', 'eventBossesWon', 'eventFinalesWon']), amount: z.number().int().positive().default(1) }),
   /** Exploration: the map shows this many more columns ahead for the rest of the stage (fog of war). */
   z.object({ kind: z.literal('scout'), columns: z.number().int().min(1).max(20) }),
+  /** Weather Prophet (S124): the weather forecast reaches this many more columns ahead for the rest of the stage. */
+  z.object({ kind: z.literal('foresight'), columns: z.number().int().min(1).max(12) }),
   /** Exploration: another event stop opens beside this node (a next room of a landmark, a follow-up scene). */
   z.object({ kind: z.literal('addEvent'), eventId: z.string().min(1) }),
   /** Exploration: like addEvent, but the next room is one of these, picked by the event's roll (a Mystery Dungeon floor). */

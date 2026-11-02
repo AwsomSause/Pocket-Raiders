@@ -114,7 +114,7 @@ export function forecast(content: Content, run: RunState): { front: Front; start
   for (const front of stageFronts(content, run)) {
     if (front.to < here + 1) continue;
     const startsIn = Math.max(0, front.from - (here + 1));
-    if (startsIn <= w.frontForecast && (!best || startsIn < best.startsIn)) best = { front, startsIn };
+    if (startsIn <= w.frontForecast + (stage.foresight ?? 0) && (!best || startsIn < best.startsIn)) best = { front, startsIn };
   }
   return best;
 }

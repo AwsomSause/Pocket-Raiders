@@ -1,0 +1,67 @@
+{
+ "events": [
+  {
+   "id": "weather-prophet",
+   "name": "The Weather Prophet",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": { "cast": ["trainer.worker_m"], "tint": "#1e2b3a", "effect": "none" },
+   "intro": "An old traveler squints at the sky, then at you. \"Fronts, storms, sun that bites. I know what the road will hold. Fifty coins and I will tell you.\"",
+   "choices": [
+    {
+     "label": "Pay for the forecast (₽50)",
+     "requires": [{ "kind": "money", "atLeast": 50 }],
+     "success": {
+      "text": "He taps the dirt and draws the weather in lines. You can see further ahead now.",
+      "effects": [{ "kind": "money", "amount": -50 }, { "kind": "foresight", "columns": 6 }]
+     }
+    },
+    {
+     "label": "Chat for free",
+     "success": {
+      "text": "\"Wind from the west,\" he says. A small hint, nothing more.",
+      "effects": [{ "kind": "foresight", "columns": 1 }]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": { "text": "He shrugs and goes back to watching the clouds.", "effects": [] }
+    }
+   ]
+  },
+  {
+   "id": "oral-history-rumor",
+   "name": "A Rumor at the Fire",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": { "cast": ["trainer.hiker"], "tint": "#3a2a18", "effect": "none" },
+   "intro": "Travelers share stories round a small fire. One lowers their voice: \"Everyone says there is a place off the main road. Nobody has the same map twice.\"",
+   "choices": [
+    {
+     "label": "Ask where it is",
+     "success": {
+      "text": "They sketch the road ahead in the ash. Hidden stops show on your map.",
+      "effects": [
+       { "kind": "scout", "columns": 5 }
+      ]
+     }
+    },
+    {
+     "label": "Listen and share a story of your own",
+     "success": {
+      "text": "Stories trade for stories. You leave with a lighter step.",
+      "effects": [{ "kind": "attribute", "key": "charisma", "amount": 2 }]
+     }
+    },
+    {
+     "label": "Not interested",
+     "success": { "text": "Rumors rarely pay. You move on.", "effects": [] }
+    }
+   ]
+  }
+ ]
+}
