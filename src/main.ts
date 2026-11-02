@@ -47,6 +47,7 @@ import { drawBackdrop } from './ui/widgets';
 import { aeroBackdrop } from './ui/aero';
 import { ArenaBackdrop } from './ui/showcase';
 import { applyDisplaySettings } from './ui/display';
+import { applySoundPack } from './ui/soundPack';
 import { applyUiSkin } from './ui/uiSkin';
 import { installPointerFx } from './ui/pointerFx';
 import { installGamepad } from './ui/gamepad';
@@ -112,6 +113,7 @@ function start(): void {
         // Screen readers get a name for the game area (the game itself is drawn on the canvas).
         applyUiSkin(session.settings);
         applyDisplaySettings(g, session.settings);
+        applySoundPack(g, session.settings.soundPack);
         setUiMotion(uiMotionFrom(session.settings));
         installPointerFx(g, () => session.settings, () => regionIdentity(session.run ? session.run.regionOrder[session.run.regionIndex] : undefined).sky);
         installGamepad(() => session.settings);
@@ -122,6 +124,7 @@ function start(): void {
           applyUiSkin(session.settings);
           setTouchLayout(session.settings.oneHanded);
           applyDisplaySettings(g, session.settings);
+        applySoundPack(g, session.settings.soundPack);
           setUiMotion(uiMotionFrom(session.settings));
         });
         g.canvas.setAttribute('role', 'application');
