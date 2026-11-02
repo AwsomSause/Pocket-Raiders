@@ -23,6 +23,6 @@ export const TITLE_LAYOUTS: Record<string, TitleLayout> = {
   ds: { logo: { x: 60, y: 20, size: 34, origin: 0 }, menu: { x: 584, y: 60, columns: 1, itemWidth: 340, itemHeight: 84, fontSize: 28, color: '#1a2a40' }, panel: { x: 44, y: 14, w: 480, h: 510, style: 'ds' }, mon: { x: 284, y: 410, size: 300 } },
   anime: { logo: { x: 48, y: 18, size: 60, origin: 0 }, menu: { x: 700, y: 330, columns: 1, itemWidth: 230, itemHeight: 34, fontSize: 22, color: '#ffffff' }, mon: { x: 600, y: 330, size: 380 } },
   manga: { logo: { x: 40, y: 22, size: 48, origin: 0 }, menu: { x: 60, y: 250, columns: 1, itemWidth: 300, itemHeight: 46, fontSize: 28, color: '#111111' }, mon: { x: 720, y: 460, size: 360 }, captionAt: { x: 62, y: 214, color: '#111111' }, caption: (n) => `VOL. ${n + 1} — THE BADLANDS` },
-  carousel: { logo: { x: 40, y: 12, size: 36, origin: 0 }, menu: { x: 40, y: 462, columns: 5, itemWidth: 176, itemHeight: 40, fontSize: 20, color: '#33404c' }, mon: { x: -200, y: -200, size: 10 }, carousel: true },
+  carousel: { logo: { x: 40, y: 12, size: 36, origin: 0 }, menu: { x: 24, y: 466, columns: 6, itemWidth: 156, itemHeight: 40, fontSize: 15, color: '#33404c' }, mon: { x: -200, y: -200, size: 10 }, carousel: true },
   flyover: { logo: { x: 40, y: 20, size: 48, origin: 0 }, menu: { x: 60, y: 210, columns: 1, itemWidth: 300, itemHeight: 38, fontSize: 24, color: '#ffffff' }, mon: { x: -200, y: -200, size: 10 }, captionAt: { x: 62, y: 500, color: '#cfe6ff' }, caption: () => 'Next region: Trial Archipelago · 10 regions to the League' },
 };

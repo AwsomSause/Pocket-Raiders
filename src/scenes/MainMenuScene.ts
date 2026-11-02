@@ -21,6 +21,7 @@ import { slotCard } from '../core/presentation/slotLines';
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
   private pressWait = false;
+  private copyNote: Phaser.GameObjects.Text | null = null;
 
   constructor() {
     super('MainMenu');
@@ -76,7 +77,7 @@ export class MainMenuScene extends Phaser.Scene {
         this.tweens.add({ targets: icon, x: GAME_WIDTH - 60, duration: 260, ease: 'Back.easeOut', yoyo: true, hold: 900, onComplete: () => icon.destroy() });
       });
     });
-    dailyChest(this, lay ? 900 : 420, lay ? 440 : 460, new Date().toISOString().slice(0, 10));
+    dailyChest(this, lay ? (lay.carousel ? 910 : 900) : 420, lay ? (lay.carousel ? 410 : 440) : 460, new Date().toISOString().slice(0, 10));
     if (!lay) this.add.text(64, 158, 'Raid. Collect. Rise.', textStyle(16, COLORS.textMuted));
     if (!lay) drawPanel(this, 48, 186, 400, 300, { alpha: 0.95 });
     else if (lay.panel) this.drawLookPanel(lay.panel);
@@ -95,10 +96,24 @@ export class MainMenuScene extends Phaser.Scene {
     options.push({ option: { label: 'New Run', disabled: damaged }, action: () => this.newRun() });
     options.push({ option: { label: 'Save Slots' }, action: () => this.scene.start('SaveSlots') });
     options.push({ option: { label: 'Settings' }, action: () => this.scene.start('Settings', { from: 'MainMenu' }) });
+    // Save Carousel look: Copy puts this slot into the first empty one.
+    if (lay?.carousel) {
+      options.push({
+        option: { label: 'Copy slot' },
+        action: () => {
+          const r = services().session.copySlot();
+          this.copyNote?.setText(r.ok ? `Slot ${services().session.slot} copied to slot ${r.to}.` : r.reason);
+          if (r.ok) this.time.delayedCall(900, () => this.scene.restart({}));
+        },
+      });
+    }
 
     const rowH = Math.min(46, Math.floor(272 / options.length));
     if (lay?.tiles) this.drawTiles(lay, options.length);
-    if (lay?.carousel) this.drawCarousel();
+    if (lay?.carousel) {
+      this.drawCarousel();
+      this.copyNote = this.add.text(GAME_WIDTH / 2, 420, '', textStyle(16, '#8a5a00')).setOrigin(0.5);
+    }
     this.menu = new Menu(this, {
       x: lay?.menu.x ?? 78,
       y: lay?.menu.y ?? 206,

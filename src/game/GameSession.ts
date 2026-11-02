@@ -132,6 +132,15 @@ export class GameSession {
     this.changed();
   }
 
+  /** Copies the slot in use into the first empty slot (it is not switched to). Returns the slot it went to. */
+  copySlot(): { ok: true; to: SlotNumber } | { ok: false; reason: string } {
+    const empty = this.slotPeeks().find((p) => p.run.status === 'none' && p.profile.status === 'none');
+    if (!empty) return { ok: false, reason: 'No empty slot: delete one in Save Slots first.' };
+    const to = empty.slot as SlotNumber;
+    const result = this.saves.copyTo(new SaveManager(this.storage, this.content, undefined, to));
+    return result.ok ? { ok: true, to } : result;
+  }
+
   /** Empties a slot (a copy is kept). Deleting the slot in use leaves a fresh, empty profile in its place. */
   deleteSlot(slot: SlotNumber): { ok: true } | { ok: false; reason: string } {
     const result = new SaveManager(this.storage, this.content, undefined, slot).deleteSlot();

@@ -436,6 +436,22 @@ export class SaveManager {
     return { slot: this.slot, profile: this.read('profile', ProfileSchema), run: this.loadRun(), savedAt: this.lastSavedAt() };
   }
 
+  /** Copies every record of this slot into another (empty) slot as it is stored; nothing is changed in this slot. */
+  copyTo(dest: SaveManager): SaveResult {
+    try {
+      const names: RecordName[] = ['profile', 'run', 'meta', 'timeline'];
+      for (const name of names) {
+        const raw = this.storage.get(this.key(name));
+        if (raw !== null) dest.storage.set(dest.key(name), raw);
+      }
+      const replay = this.storage.get(this.replayKey);
+      if (replay !== null) dest.storage.set(dest.replayKey, replay);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, reason: err instanceof Error ? err.message : String(err) };
+    }
+  }
+
   /** Empties this slot. A copy of every record is kept under `pkr[.sN].deleted.<record>` (one copy; the next delete replaces it). */
   deleteSlot(): SaveResult {
     try {
