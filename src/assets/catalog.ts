@@ -158,6 +158,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...['field', 'field_eve', 'field_night', 'forest', 'forest_eve', 'forest_night', 'city', 'city_eve', 'city_night', 'rocky', 'rocky_eve', 'rocky_night', 'water', 'water_eve', 'water_night', 'sand', 'sand_night', 'snow_eve', 'snow_night', 'mountain', 'grotto', 'cave', 'ruins', 'indoor'].map(
     (name): AssetEntry => ({ id: `pack.memories.eventbg.${name}`, kind: 'image', category: 'background', path: `images/packs/memories/eventbg/${name}.png`, lazy: true }),
   ),
+  // Front door looks: the Town Map pictures (Pokemon Memories Graphics/UI/Town Map) for the flyover title and the mission map.
+  ...['region0', 'region1'].map((name): AssetEntry => ({ id: `pack.memories.townmap.${name}`, kind: 'image', category: 'background', path: `images/packs/memories/townmap/${name}.png`, lazy: true })),
   // Plaza styles: the baked Trainer Plaza tile map and the crowd's walk sheets (Pokemon Memories; tools/build-plaza-map.py).
   { id: 'pack.memories.plaza.map', kind: 'image', category: 'background', path: 'images/packs/memories/plaza/map.png', lazy: true },
   ...['burst', 'shine', 'particle', 'pulse'].map(
