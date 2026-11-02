@@ -219,3 +219,12 @@ describe('Tide Clock (S2)', () => {
     expect(tideShopMultiplier(content, run, 'ball')).toBeLessThan(1);
   });
 });
+
+describe('Multi-Region Run (S11)', () => {
+  it('chains 3 regions, each with a champion at the border', () => {
+    const run = start('multi-region', 'mr-1');
+    expect(run.campaignId).toBe('multi-region');
+    expect(run.regionOrder).toHaveLength(3);
+    expect(run.rules.progressionEligible).toBe(true);
+  });
+});
