@@ -30,17 +30,39 @@ function fitRows(s: Phaser.Scene, rows: [string, string][], x: number, y: number
     const box = s.add.container(0, 0);
     let cy = y;
     const gap = size >= 16 ? 8 : 5;
+    // The label column is as wide as its longest label, so a value never runs into it.
+    let lw = labelW;
+    for (const [l] of rows) {
+      const probe = s.add.text(0, 0, l, textStyle(size, label));
+      lw = Math.max(lw, probe.width + 14);
+      probe.destroy();
+    }
     for (const [l, t] of rows) {
       box.add(s.add.text(x, cy, l, textStyle(size, label)));
-      const tx = s.add.text(x + labelW, cy, t, textStyle(size, ink, { wordWrap: { width: w - labelW } }));
+      const tx = s.add.text(x + lw, cy, t, textStyle(size, ink, { wordWrap: { width: w - lw } }));
       box.add(tx);
       cy += Math.max(tx.height, size + 4) + gap;
     }
-    if (cy - gap - y <= h || size === 12) {
-      if (cy - gap - y > h) {
-        const k = h / (cy - gap - y);
-        box.setScale(k).setPosition(x * (1 - k), y * (1 - k));
+    if (cy - gap - y <= h) return;
+    if (size === 12) {
+      // Too much for the panel even at small size: keep a readable size and show as many rows as fit, then a count.
+      box.destroy(true);
+      const keep = s.add.container(0, 0);
+      let ry = y;
+      let shown = 0;
+      for (const [l, t] of rows) {
+        const lab = s.add.text(x, ry, l, textStyle(15, label));
+        const tx = s.add.text(x + labelW, ry, t, textStyle(15, ink, { wordWrap: { width: w - labelW } }));
+        if (ry + Math.max(tx.height, 19) > y + h - 22 && shown < rows.length) {
+          lab.destroy();
+          tx.destroy();
+          break;
+        }
+        keep.add([lab, tx]);
+        ry += Math.max(tx.height, 19) + 5;
+        shown++;
       }
+      if (shown < rows.length) keep.add(s.add.text(x, ry, `+${rows.length - shown} more`, textStyle(14, label)));
       return;
     }
     box.destroy(true);
