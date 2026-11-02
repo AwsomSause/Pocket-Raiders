@@ -3,6 +3,7 @@
 import { dailyChest } from '../ui/overlays';
 import { pokemonIcon } from '../ui/sprites';
 import Phaser from 'phaser';
+import { shouldWelcome } from './TutorialScene';
 import { services } from '../game/services';
 import { playMusic, stopMusic } from '../ui/audio';
 import { onInputAction } from '../ui/input';
@@ -29,6 +30,11 @@ export class MainMenuScene extends Phaser.Scene {
   create(data?: { focus?: number }): void {
     const { session } = services();
     session.closeRun();
+    // First visit to this version: patch notes, then the optional tutorial (skipped in automated browsers so tests reach the menu; ?welcome=1 forces it).
+    if (shouldWelcome(session.settings)) {
+      this.scene.start('Welcome', { phase: 'log', returnTo: 'MainMenu' });
+      return;
+    }
     playMusic(this, 'bgm.menu');
 
     // A battlefield that cycles through the arenas, with a Pokémon on show.

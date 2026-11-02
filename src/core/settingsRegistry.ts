@@ -175,4 +175,5 @@ export function changeSetting(s: Settings, id: string): Settings {
 }
 
 /** Every setting back to `defaults` (the audio, display and animation choices alike). */
-export const resetSettings = (defaults: Settings): Settings => ({ ...defaults });
+/** Back to the starting values; what the player has already read (patch notes, tutorial) is kept. */
+export const resetSettings = (defaults: Settings, current?: Settings): Settings => ({ ...defaults, ...(current ? { lastSeenUpdate: current.lastSeenUpdate, tutorialOffered: current.tutorialOffered, tutorialDone: current.tutorialDone } : {}) });
