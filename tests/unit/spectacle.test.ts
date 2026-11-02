@@ -119,7 +119,8 @@ describe('Last Stand and Revenge Moment', () => {
 
 describe('boss phases', () => {
   it('a boss ace crossing its HP line plays one phase (boost + banner), once', () => {
-    const f = fight({ c: content, ai: 0, foes: [mon('onix', 60, ['tackle'], 'foe1')] });
+    const noItems = { ...content, balance: { ...content.balance, trainerAi: { ...content.balance.trainerAi, allTrainersUseItems: false } } };
+    const f = fight({ c: noItems, ai: 0, foes: [mon('onix', 60, ['tackle'], 'foe1')] });
     f.foes[0]!.hp = Math.floor(maxHp(content, f.foes[0]!) * 0.3);
     const ev = f.turn({ kind: 'idle' });
     expect(ev.some((e) => e.type === 'raid' && e.tone === 'phase')).toBe(true);

@@ -1810,6 +1810,8 @@ export const TrainerAiSchema = z.object({
   healFraction: z.number().positive().max(1),
   /** Potions a smart trainer may use in one battle. */
   maxItems: z.number().int().min(0),
+  /** S271: every trainer (not only smart ones) drinks a potion when low; only smart trainers swap on purpose. */
+  allTrainersUseItems: z.boolean().default(false),
   /** Times a smart trainer may swap its Pokémon out on purpose in one battle. */
   maxSwitches: z.number().int().min(0),
   /** It swaps when its best move is worth less than this share of the best a teammate has. */

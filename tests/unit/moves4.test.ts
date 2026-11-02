@@ -156,7 +156,7 @@ describe('stage 6 smart trainers', () => {
     expect(r.battle.enemySwitches).toBe(1);
     expect(r.battle.enemyTeam[r.battle.enemyIndex]!.uid).toBe('e2');
   });
-  it('an ordinary trainer never does either', () => {
+  it('an ordinary trainer heals (S271) but never switches', () => {
     const player = createPokemon(content, 'rattata', 50, 'p');
     player.moves = [{ id: 'splash', pp: 40 }];
     const a = createPokemon(content, 'snorlax', 50, 'e1');
@@ -167,6 +167,7 @@ describe('stage 6 smart trainers', () => {
     const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('m6o')), captureRng: new Rng(hashSeed('m6oc')), catchMultiplier: 1 };
     resolveTurn(ctx, { kind: 'move', index: 0 });
     resolveTurn(ctx, { kind: 'move', index: 0 });
-    expect(battle.enemyItemsUsed + battle.enemySwitches).toBe(0);
+    expect(battle.enemySwitches).toBe(0); // S271: ordinary trainers heal but never switch
+    expect(battle.enemyItemsUsed).toBe(1);
   });
 });
