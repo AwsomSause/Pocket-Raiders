@@ -87,13 +87,27 @@ export interface TypeModifiers {
   weaknessTaken: Partial<Record<TypeName, number>>;
 }
 
-export function typeModifiers(archetype: Archetype): TypeModifiers {
+export function typeModifiers(archetype: Archetype, badgeTypes: readonly TypeName[] = [], badgePower?: { damagePerBadge: number; weaknessCutPerBadge: number; maxStacks: number }): TypeModifiers {
   const out: TypeModifiers = { damageDealt: {}, weaknessTaken: {} };
   for (const mod of archetype.modifiers) {
     if (mod.kind === 'typeDamageMultiplier') out.damageDealt[mod.type] = (out.damageDealt[mod.type] ?? 1) * mod.value;
     if (mod.kind === 'weaknessDamageTakenMultiplier') out.weaknessTaken[mod.type] = (out.weaknessTaken[mod.type] ?? 1) * mod.value;
   }
+  // Badge Powers: every badge won from a Leader of a type adds a small boost for your Pokémon of that type (stacks capped).
+  if (badgePower) {
+    const stacks: Partial<Record<TypeName, number>> = {};
+    for (const t of badgeTypes) stacks[t] = Math.min(badgePower.maxStacks, (stacks[t] ?? 0) + 1);
+    for (const [t, n] of Object.entries(stacks) as [TypeName, number][]) {
+      out.damageDealt[t] = (out.damageDealt[t] ?? 1) * (1 + badgePower.damagePerBadge * n);
+      out.weaknessTaken[t] = (out.weaknessTaken[t] ?? 1) * Math.max(0.5, 1 - badgePower.weaknessCutPerBadge * n);
+    }
+  }
   return out;
+}
+
+/** Types of the Gym Leaders whose badges the run holds (one entry per badge per Leader type). */
+export function badgeTypesOf(content: Content, badges: readonly string[]): TypeName[] {
+  return badges.flatMap((id) => content.bosses.get(id)?.types ?? []) as TypeName[];
 }
 
 /** The trainer's modifier list: battle code reads perks through the helpers in trainerPerks.ts. */

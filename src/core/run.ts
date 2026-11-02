@@ -20,7 +20,7 @@ import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscoun
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
 import { wildCatchMultiplier } from './wildBehavior';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
-import { captureMultiplier, getArchetype, runArchetype, runPerks, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
+import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
 import { createBattle, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
@@ -2087,7 +2087,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     speciesCaught: run.log.speciesCaught,
     catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run),
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
-    typeModifiers: typeModifiers(archetype),
+    typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: archetype.modifiers,
     starterUid: run.log.starterUid,
     attributes,
