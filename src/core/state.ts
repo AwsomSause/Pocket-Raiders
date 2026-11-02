@@ -1680,6 +1680,8 @@ export const SettingsSchema = z.object({
   screenStyles: z.record(z.string(), z.string()).default({}),
   /** Plaza styles (Kice 2026-11-02): how the Trainer Plaza is drawn (core/presentation/plazaStyles.ts). */
   plazaStyle: z.enum(PLAZA_STYLE_IDS).default('aero'),
+  /** Hub Town part 3 (Kice 2026-11-02): walk the Hub Town overworld, or use the Arena Lobby tile menu. */
+  hubStyle: z.enum(['town', 'lobby']).default('town'),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

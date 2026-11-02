@@ -2,7 +2,7 @@
 // the Strange Merchant, and the v17 profile migration.
 import { describe, expect, it } from 'vitest';
 import { HUB_TOWN, OVERWORLD } from '../../src/core/hubTown/schema';
-import { WalkGrid, ahead, chooseHubPokemon, facingOf, followerKey, gateAt, hubPokemon, hubPokemonChoices, mostUsedSpecies, placeAhead, placeById, trainerSheet } from '../../src/core/hubTown/world';
+import { WalkGrid, ahead, chooseHubPokemon, districtAt, facingOf, followerKey, gateAt, hubPokemon, hubPokemonChoices, mostUsedSpecies, placeAhead, placeById, trainerSheet } from '../../src/core/hubTown/world';
 import { crowdSize, crowdSpecies, crowdWindow, hubCrowd } from '../../src/core/hubTown/roster';
 import { chatterFor, chatterLines } from '../../src/core/hubTown/chatter';
 import { HUB_MERCHANT, boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../../src/core/hubTown/merchant';
@@ -217,5 +217,44 @@ describe('what the townspeople say', () => {
     const before = JSON.stringify(runs);
     chatterLines(content, runs);
     expect(JSON.stringify(runs)).toBe(before);
+  });
+});
+
+describe('Hub Town part 3: a smaller, tidier town with a minimap and a Hub style setting', () => {
+  const [W, H] = HUB_TOWN.size;
+
+  it('is the smaller 64 x 48 town, with a minimap row for every tile row', () => {
+    expect([W, H]).toEqual([64, 48]);
+    expect(HUB_TOWN.minimap).toHaveLength(H);
+    for (const row of HUB_TOWN.minimap) expect(row).toHaveLength(W);
+    // Every building's door is drawn as part of a building on the minimap.
+    for (const pl of HUB_TOWN.places.filter((p) => p.kind === 'building')) expect(HUB_TOWN.minimap[pl.door.y]![pl.door.x]).toBe('#');
+  });
+
+  it('puts every building, gate and keeper inside a named district', () => {
+    for (const pl of HUB_TOWN.places) expect(districtAt(pl.stand), pl.id).not.toBeNull();
+    for (const k of HUB_TOWN.keepers) expect(districtAt(k), k.id).not.toBeNull();
+    expect(districtAt(HUB_TOWN.spawn)?.id).toBe('south');
+  });
+
+  it('finds the plaza first where districts touch, and nothing off the map', () => {
+    const [px, py, pw, ph] = HUB_TOWN.districts.find((d) => d.id === 'plaza')!.rect;
+    expect(districtAt({ x: px + Math.floor(pw / 2), y: py + Math.floor(ph / 2) })?.id).toBe('plaza');
+    expect(districtAt({ x: -1, y: -1 })).toBeNull();
+    expect(districtAt({ x: W + 5, y: 0 })).toBeNull();
+  });
+
+  it('old settings saves open the Hub as Hub Town (settings v18 -> v19), and Arena Lobby survives a reload', () => {
+    const storage = new MemoryStorageProvider();
+    const current = new SaveManager(storage, content).loadSettings();
+    expect(current.hubStyle).toBe('town');
+    const { hubStyle: _h, ...old } = current;
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 18, savedAt: '', data: old }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded.hubStyle).toBe('town');
+    expect(loaded.plazaStyle).toBe(current.plazaStyle);
+    const saves = new SaveManager(storage, content);
+    saves.saveSettings({ ...loaded, hubStyle: 'lobby' });
+    expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('lobby');
   });
 });

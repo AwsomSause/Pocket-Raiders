@@ -13,8 +13,8 @@ export const CROWD_WINDOW_MINUTES = 30;
 /** Pokémon you see in town before you have met any (common partners). */
 const STARTER_CROWD = ['pikachu', 'eevee', 'bulbasaur', 'charmander', 'squirtle', 'pidgey', 'rattata', 'meowth', 'psyduck', 'growlithe', 'jigglypuff', 'togepi', 'marill', 'skitty', 'buneary', 'lillipup'];
 /** Zones each kind prefers (the plaza is busiest). */
-const TRAINER_ZONES = ['plaza', 'plaza', 'north', 'west', 'east', 'south', 'south', 'lake', 'meadow', 'orchard', 'flowers'];
-const MON_ZONES = ['plaza', 'meadow', 'grove', 'flowers', 'sanctuary', 'sanctuary', 'orchard', 'lake', 'cove', 'west', 'east', 'south'];
+const TRAINER_ZONES = ['plaza', 'plaza', 'plaza', 'north', 'north', 'west', 'east', 'south', 'south', 'lawn', 'meadow'];
+const MON_ZONES = ['plaza', 'plaza', 'sanctuary', 'sanctuary', 'sanctuary', 'lawn', 'meadow', 'meadow', 'west', 'east', 'north', 'south'];
 
 export interface Wanderer {
   id: string;

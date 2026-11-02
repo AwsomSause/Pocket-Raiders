@@ -49,11 +49,11 @@ const SMALL_TALK = [
   'The fountain in the plaza never runs dry. Nobody knows why.',
   'Face a door and press Z. Every building here has something for you.',
   'The Run Prep Center is where every journey starts. Then out through the south gate!',
-  'The Starter Sanctuary is east, past the canal. The starters there are waiting.',
-  'I come here to watch the Pokémon play by the lake.',
+  'The Starter Sanctuary is in Pokémon Park, east of the plaza. The starters there are waiting.',
+  'I come here to watch the Pokémon play by the pond in the south-west.',
   'The Pocket Town gate is at the top of the north road.',
   'Hold Shift to run. Not in the flower beds, please.',
-  'The orchard keeper knows a story about everyone who passes through.',
+  'Lost? Press M for the town map. Every district has its own colour.',
 ];
 
 function hash(text: string): number {

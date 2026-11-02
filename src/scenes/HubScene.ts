@@ -45,6 +45,8 @@ import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../c
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
 import { localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
+import { HubMinimap } from '../ui/hubTown/minimap';
+import { ArenaLobby, lobbyMons, type LobbyTile } from '../ui/arenaLobby/lobby';
 import { LegacyDisplay, displayAssets, displayLines } from '../ui/hubTown/legacyDisplay';
 import { drawTownGrowth } from '../ui/hubTown/townGrowth';
 import { HubCrowd, crowdAssets } from '../ui/hubTown/crowd';
@@ -195,7 +197,6 @@ const KEEPERS: Record<string, { name: string; line: (p: Profile) => string }> = 
   merchant: { name: 'Strange Merchant', line: () => 'Heh. New wares every day, one of each. Have a look...' },
   gatekeeper: { name: 'Gatekeeper Sonia', line: (p) => (p.stats.runsEnded ? `${p.stats.runsEnded} runs have set off through this gate. Step into the arch when you're ready.` : "The Departure Gate is right behind me. Step into the arch when you're ready.") },
   sanctuary_keeper: { name: 'Sanctuary Keeper', line: () => 'The starters here are waiting for a partner. Come and see the sets.' },
-  orchard_keeper: { name: 'Orchard Keeper', line: () => 'Every Trainer who passes through leaves a story. I remember them all.' },
 };
 
 /** Hub visits this session, and the past runs the last Legacy Display showed (they cool down next time). */
@@ -219,6 +220,11 @@ export class HubScene extends Phaser.Scene {
   private crowdList: Wanderer[] = [];
   private crowdWindow = '';
   private crowd: HubCrowd | null = null;
+  /** The Arena Lobby (Settings > Hub style), drawn instead of the town when chosen. */
+  private lobby: ArenaLobby | null = null;
+  /** Hub Town's minimap (M) and district banner. */
+  minimap: HubMinimap | null = null;
+  private lobbyPokemon: Species[] = [];
 
   constructor() {
     super('Hub');
@@ -231,12 +237,17 @@ export class HubScene extends Phaser.Scene {
     const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
     this.entries = legacyRotation(session.content, p.legacyRuns, { seed: `${p.stats.runsEnded}:${rotationVisits++}`, current, cooldown: lastRotation });
     lastRotation = this.entries.filter((e) => !e.current).map((e) => e.runId);
+    queueAssets(this, ['ui.trainercard', 'ui.dex.seen', 'ui.dex.caught', 'ui.save.bg']);
+    if (session.settings.hubStyle === 'lobby') {
+      this.lobbyPokemon = lobbyMons(session.content, (id) => services().assets.has(id));
+      preloadPokemon(this, this.lobbyPokemon, { front: true });
+      return;
+    }
     const keeperArt = HUB_TOWN.keepers.map((k) => overworldAssetIds.trainer(k.sprite));
     // Date.now (not new Date()) so tests that pin the clock get the same crowd.
     this.crowdWindow = crowdWindow(new Date(Date.now()));
     this.crowdList = hubCrowd(p, this.crowdWindow);
     queueAssets(this, [overworldAssetIds.tiles, overworldAssetIds.props, overworldAssetIds.follower(hubPokemon(p).follower), ...keeperArt, ...displayAssets(session.content, this.entries), ...crowdAssets(this.crowdList)]);
-    queueAssets(this, ['ui.trainercard', 'ui.dex.seen', 'ui.dex.caught', 'ui.save.bg']);
   }
 
   create(data: { notice?: string; focus?: number } = {}): void {
@@ -273,8 +284,33 @@ export class HubScene extends Phaser.Scene {
     playMusicLazy(this, 'bgm.hub');
     const p = session.profile;
     const motion = session.settings.battleAnimations;
+    const ready = [...session.content.archetypes.values()].filter((a) => trainerStatus(p, a) === 'claimable').length;
+    this.town = null;
+    this.rotation = null;
+    this.crowd = null;
+    this.lobby = null;
+    this.minimap = null;
+    if (session.settings.hubStyle === 'lobby') {
+      const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
+      this.lobby = new ArenaLobby(this, {
+        content: session.content, profile: p, motion, ready, mons: this.lobbyPokemon, entries: this.entries, current, seed: `${p.profileId}:${rotationVisits}`,
+        busy: () => Boolean(this.picker || this.section || this.dexInfo),
+        onTile: (t) => this.openLobbyTile(t, 0),
+      });
+    } else this.buildTown(p, motion);
 
-    // Hub Town: walk as your Pokémon; buildings open the Hub's rooms.
+    this.drawHeader(data, ready);
+
+    // Reopened for a room (after buying or changing something): open that room's place page again.
+    if (data.focus !== undefined) this.reopen(ROOMS[Math.min(data.focus, ROOMS.length - 1)]!.room);
+    else this.lobby?.focus('run', false);
+
+    onInputAction(this, (a) => this.handle(a));
+  }
+
+  /** Hub Town: walk as your Pokémon; buildings open the Hub's rooms. */
+  private buildTown(p: Profile, motion: 'full' | 'reduced' | 'off'): void {
+    const { session } = services();
     this.town = new HubTownView(
       this,
       { onPlace: (pl) => this.openPlace(pl), onGate: (g) => this.askGate(g), busy: () => Boolean(this.picker || this.section || this.dexInfo) },
@@ -291,7 +327,14 @@ export class HubScene extends Phaser.Scene {
     drawTownGrowth(this.town, this, p, motion);
     drawAmbience(this.town, this, motion);
     this.crowd = new HubCrowd(this.town, this, session.content, p, this.crowdList, { motion, window: this.crowdWindow, say: (line) => notify(line) });
+    this.minimap = new HubMinimap(this, this.town, { motion, busy: () => Boolean(this.picker || this.section || this.dexInfo) });
+  }
 
+  /** The screen layer over the town or lobby: logo, currencies, the card line, the help line, the rival note. */
+  private drawHeader(data: { notice?: string }, ready: number): void {
+    const { session } = services();
+    const p = session.profile;
+    const motion = session.settings.battleAnimations;
     // The screen layer: logo, currencies and the card line stay put over the town.
     const top = this.add.graphics();
     for (let i = 0; i < 12; i++) top.fillStyle(0x0e0b12, 0.45 * (1 - i / 12)).fillRect(0, i * 8, GAME_WIDTH, 8);
@@ -305,9 +348,8 @@ export class HubScene extends Phaser.Scene {
       .text(GAME_WIDTH - 16, 62, `${p.activeTitle ? `${p.activeTitle}  ·  ` : ''}Achievements ${earned}/${session.content.achievements.size}  ·  Runs ${p.stats.runsEnded}`, textStyle(16, COLORS.textMuted))
       .setOrigin(1, 0);
     this.drawCardFrame(card, getFrame(p.cardFrame));
-    const ready = [...session.content.archetypes.values()].filter((a) => trainerStatus(p, a) === 'claimable').length;
-    this.add
-      .text(16, GAME_HEIGHT - 12, `Arrows walk · Shift runs · Z talks and enters · Esc menu${ready ? `  ·  ${ready} trainer${ready === 1 ? '' : 's'} ready at the Arena` : ''}`, textStyle(14, COLORS.textLight, { stroke: '#10203a', strokeThickness: 4 }))
+    if (!this.lobby) this.add
+      .text(16, GAME_HEIGHT - 12, `Arrows walk · Shift runs · Z talks and enters · M map · Esc menu${ready ? `  ·  ${ready} trainer${ready === 1 ? '' : 's'} ready at the Arena` : ''}`, textStyle(14, COLORS.textLight, { stroke: '#10203a', strokeThickness: 4 }))
       .setOrigin(0, 1)
       .setName('hubtown-help');
 
@@ -329,18 +371,28 @@ export class HubScene extends Phaser.Scene {
         .setOrigin(0.5, 0);
       this.tweens.add({ targets: notice, alpha: 0, delay: 5000, duration: 800 });
     }
+  }
 
-    // Reopened for a room (after buying or changing something): open that room's place page again.
-    if (data.focus !== undefined) {
-      const room = ROOMS[Math.min(data.focus, ROOMS.length - 1)]!.room;
-      if (PAUSE_ROOMS.includes(room)) this.openPause(PAUSE_ROOMS.indexOf(room));
-      else {
-        const pl = HUB_TOWN.places.find((x) => x.rooms.includes(room));
-        if (pl && pl.rooms.length > 1) this.openSection({ name: pl.name, rooms: pl.rooms as Room[] }, pl.rooms.indexOf(room));
-      }
+  /** Open a room's page again after the scene restarted for it. */
+  private reopen(room: Room): void {
+    if (this.lobby) {
+      const tile = this.lobby.tileFor(room);
+      this.lobby.focus(tile.id, false);
+      if (tile.rooms.length > 1) this.openLobbyTile(tile, tile.rooms.indexOf(room));
+      return;
     }
+    if (PAUSE_ROOMS.includes(room)) this.openPause(PAUSE_ROOMS.indexOf(room));
+    else {
+      const pl = HUB_TOWN.places.find((x) => x.rooms.includes(room));
+      if (pl && pl.rooms.length > 1) this.openSection({ name: pl.name, rooms: pl.rooms as Room[] }, pl.rooms.indexOf(room));
+    }
+  }
 
-    onInputAction(this, (a) => this.handle(a));
+  /** An Arena Lobby tile: one room opens straight away, several open the tile's page. */
+  private openLobbyTile(t: LobbyTile, focus: number): void {
+    const rooms = t.rooms as Room[];
+    if (rooms.length === 1) this.enter(rooms[0]!);
+    else this.openSection({ name: t.label, rooms }, focus);
   }
 
   /** Open a place by id as if you walked up to it (touch shortcuts and tests). */
@@ -467,6 +519,11 @@ export class HubScene extends Phaser.Scene {
     }
     if (this.section) {
       this.section.handle(a);
+      return;
+    }
+    if (this.lobby) {
+      if (a === 'back') this.scene.start('MainMenu');
+      else this.lobby.handle(a);
       return;
     }
     // Held keys walk on their own (the town reads them every frame); a tap still takes one step or turns.

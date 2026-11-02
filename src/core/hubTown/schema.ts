@@ -47,6 +47,10 @@ export const HubTownSchema = z.object({
   zones: z.record(z.string(), z.tuple([Int, Int, Int, Int])),
   /** The Legacy Display's six pedestals around the fountain (tiles), first = the current run's Trainer. */
   pads: z.array(z.tuple([Int, Int])).length(6),
+  /** The town's named districts (location banner, minimap): north, west, east, south and the plaza. */
+  districts: z.array(z.object({ id: z.string(), name: z.string(), blurb: z.string(), rect: z.tuple([Int, Int, Int, Int]), color: z.string() })).min(1),
+  /** One row of characters per tile row for the minimap: . grass, = road, o plaza, ~ water, # building, T trees and fences. */
+  minimap: z.array(z.string().regex(/^[.=o~#T]+$/)),
 });
 export type HubTownData = z.infer<typeof HubTownSchema>;
 
