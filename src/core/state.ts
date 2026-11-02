@@ -1706,6 +1706,8 @@ export const SettingsSchema = z.object({
   /** S245 Adaptive screen shake: extra multipliers on top of `shakeIntensity` for move hits and for story/boss moments. */
   shakeHits: z.number().min(0).max(1).default(1),
   shakeStory: z.number().min(0).max(1).default(1),
+  /** S252 Day-night palette shift: the branching map takes the light of the local time of day (off by default). */
+  mapDayNight: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

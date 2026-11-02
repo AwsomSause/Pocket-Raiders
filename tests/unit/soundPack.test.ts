@@ -48,3 +48,16 @@ describe('S245 per-effect shake settings', () => {
     expect([again.shakeHits, again.shakeStory]).toEqual([0.5, 0]);
   });
 });
+
+describe('S252 map day-night setting', () => {
+  it('old settings (v24) load with it off and a chosen value survives a reload', () => {
+    const storage = new MemoryStorageProvider();
+    const current = new SaveManager(storage, content).loadSettings();
+    const { mapDayNight: _m, ...old } = current;
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 24, savedAt: '', data: old }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded.mapDayNight).toBe(false);
+    new SaveManager(storage, content).saveSettings({ ...loaded, mapDayNight: true });
+    expect(new SaveManager(storage, content).loadSettings().mapDayNight).toBe(true);
+  });
+});
