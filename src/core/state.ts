@@ -157,6 +157,8 @@ export const VolatileSchema = z.object({
   abilityOverride: z.string().nullable().default(null),
   /** Focus Energy: critical hits are two stages likelier. */
   focusEnergy: z.boolean().default(false),
+  /** S164 charge-up stacks waiting for the next damaging move. */
+  bank: z.number().int().min(0).default(0),
   /** Laser Focus: the next attack is a critical hit. */
   laserFocus: z.boolean().default(false),
   /** Lock-On / Mind Reader: the next attack can't miss. */
@@ -297,6 +299,7 @@ export const freshVolatile = (): Volatile => ({
   typeShift: null,
   abilityOverride: null,
   focusEnergy: false,
+  bank: 0,
   laserFocus: false,
   sureHit: false,
   regen: null,

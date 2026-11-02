@@ -9614,7 +9614,7 @@
   "target": "self",
   "flags": [],
   "effects": {
-   "noop": true
+   "bankPower": true
   }
  },
  {
@@ -12102,7 +12102,7 @@
   "target": "self",
   "flags": [],
   "effects": {
-   "noop": true
+   "bankPower": true
   }
  },
  {
@@ -12352,7 +12352,7 @@
   "target": "self",
   "flags": [],
   "effects": {
-   "noop": true
+   "bankPower": true
   }
  },
  {
