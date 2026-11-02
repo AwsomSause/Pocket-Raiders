@@ -16,6 +16,7 @@ import { sceneForRun } from './routing';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 import { TITLE_LAYOUTS } from '../ui/titleLayouts';
+import { slotCard } from '../core/presentation/slotLines';
 
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
@@ -57,7 +58,7 @@ export class MainMenuScene extends Phaser.Scene {
       const sp = Phaser.Utils.Array.GetRandom(species);
       if (sp) void loadAssets(this, [pokemonAssetIds(sp.assets).front]).then(() => this.scene.isActive() && mon.show(sp));
     };
-    if (!card) {
+    if (!card && !lay?.carousel) {
       pick();
       this.time.addEvent({ delay: 6500, loop: true, callback: pick });
     }
@@ -97,6 +98,7 @@ export class MainMenuScene extends Phaser.Scene {
 
     const rowH = Math.min(46, Math.floor(272 / options.length));
     if (lay?.tiles) this.drawTiles(lay, options.length);
+    if (lay?.carousel) this.drawCarousel();
     this.menu = new Menu(this, {
       x: lay?.menu.x ?? 78,
       y: lay?.menu.y ?? 206,
@@ -153,6 +155,37 @@ export class MainMenuScene extends Phaser.Scene {
     const g = this.add.graphics().setDepth(-10);
     g.fillStyle(0xffffff, 0.9).fillRoundedRect(p.x, p.y, p.w, p.h, 14);
     g.lineStyle(4, 0x2a5cb0, 1).strokeRoundedRect(p.x, p.y, p.w, p.h, 14);
+  }
+
+  /** Save Carousel look: the three slots as cards, the focused one raised; a click switches slot. */
+  private drawCarousel(): void {
+    const { session } = services();
+    const cards = session.slotPeeks().map((p) => slotCard(session.content, p));
+    const w = 280, h = 300, gap = 28;
+    const x0 = (GAME_WIDTH - (w * 3 + gap * 2)) / 2;
+    cards.forEach((card, i) => {
+      const active = card.slot === session.slot;
+      const x = x0 + i * (w + gap), y = active ? 96 : 120;
+      const g = this.add.graphics().setDepth(-5);
+      g.fillStyle(0x000000, 0.12).fillRoundedRect(x + 4, y + 8, w, h, 18);
+      g.fillStyle(active ? 0xffffff : 0xf0f3f7, active ? 0.95 : 0.7).fillRoundedRect(x, y, w, h, 18);
+      g.lineStyle(active ? 4 : 2, active ? 0xd8505a : 0xc9d3de, 1).strokeRoundedRect(x, y, w, h, 18);
+      this.add.text(x + 16, y + 12, card.title, textStyle(22, '#33404c')).setDepth(-4);
+      this.add.text(x + 16, y + 48, card.lines.join('\n') || 'Empty slot', textStyle(14, '#5a6672', { wordWrap: { width: w - 32 }, lineSpacing: 2 })).setDepth(-4);
+      const ids = card.party.slice(0, 6);
+      const species = ids.flatMap((id) => session.content.species.get(id) ?? []);
+      void loadAssets(this, species.map((sp) => pokemonAssetIds(sp.assets).icon)).then(() => {
+        if (!this.scene.isActive()) return;
+        species.forEach((sp, k) => (pokemonIcon(this, sp, x + 40 + (k % 3) * 56, y + h - 76 + Math.floor(k / 3) * 44, 1.4) as Phaser.GameObjects.Image).setDepth(-3));
+      });
+      const hit = this.add.zone(x, y, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
+      hit.on('pointerdown', () => {
+        if (!active) {
+          session.switchSlot(card.slot as 1 | 2 | 3);
+          this.scene.restart({});
+        }
+      });
+    });
   }
 
   /** One glass tile per menu option (the Wii channel grid). */

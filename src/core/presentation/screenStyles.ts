@@ -47,7 +47,7 @@ export const SCREEN_STYLES_READY: { readonly [S in ScreenId]: readonly ScreenSty
   map: ['townmap', 'starchart', 'wiigrid', 'nextstop', 'panorama'],
   reward: ['aero', 'holopack', 'gifts', 'ds', 'wiishop', 'orbit', 'reels', 'trail', 'episode', 'novel', 'cutin'],
   party: ['aero', 'classic', 'mii', 'binder', 'manga', 'spotlight', 'shonen', 'sticker'],
-  title: ['classic', 'wii', 'ds', 'anime', 'manga', 'flyover'],
+  title: ['classic', 'wii', 'ds', 'anime', 'carousel', 'manga', 'flyover'],
   trainer: ['aero', 'fighter', 'mii', 'card', 'manga', 'gallery', 'storybook'],
   starter: ['aero', 'wii', 'meadow', 'pack', 'egg', 'manga', 'wizard', 'spotlight', 'triangle'],
   briefing: ['aero', 'missionmap', 'storybook', 'trailer', 'wii', 'letter', 'boarding'], bag: [], evolve: [], runend: [],

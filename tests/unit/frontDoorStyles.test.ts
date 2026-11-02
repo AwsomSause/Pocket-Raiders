@@ -13,3 +13,16 @@ describe('front door screen styles', () => {
     });
   }
 });
+
+import { TITLE_LAYOUTS } from '../../src/ui/titleLayouts';
+import { TRAINER_LAYOUTS } from '../../src/ui/trainerLayouts';
+import { STARTER_LAYOUTS } from '../../src/ui/starterLayouts';
+
+describe('front door layouts', () => {
+  const sets = { title: TITLE_LAYOUTS, trainer: TRAINER_LAYOUTS, starter: STARTER_LAYOUTS } as const;
+  for (const [screen, layouts] of Object.entries(sets)) {
+    it(`${screen}: every ready style has a layout`, () => {
+      for (const id of SCREEN_STYLES_READY[screen as 'title']) expect(layouts[id], `${screen}.${id}`).toBeDefined();
+    });
+  }
+});
