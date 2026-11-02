@@ -89,6 +89,7 @@ import eventsJson from './events.json';
 import eventsW5Json from './eventsW5.json';
 import eventsStoryJson from './eventsStory.json';
 import eventsGamesJson from './eventsGames.json';
+import eventsHelpersJson from './eventsHelpers.json';
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
 
@@ -142,6 +143,8 @@ export interface RawContent {
   eventsStory?: unknown;
   /** Run events F: games, puzzles and mini-games (eventsGames.json), added to `events`. */
   eventsGames?: unknown;
+  /** Run events E (docs/ideas/categories/r-e-helpers-and-moral-choices.md): helpers, kindness and moral choices. */
+  eventsHelpers?: unknown;
 }
 
 /**
@@ -203,6 +206,7 @@ export const RAW_CONTENT: RawContent = {
   eventsW5: eventsW5Json,
   eventsStory: eventsStoryJson,
   eventsGames: eventsGamesJson,
+  eventsHelpers: eventsHelpersJson,
 };
 
 function parse<T>(schema: z.ZodType<T>, value: unknown, label: string, problems: string[]): T | null {
@@ -267,7 +271,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const shadowWorld = parse(ShadowWorldFileSchema, raw.shadowWorld, 'shadowWorld.json', problems);
   const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
-  const w5Events = ((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []);
+  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? [])];
   const storyEvents = ((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []);
   const gamesEvents = ((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []);
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
