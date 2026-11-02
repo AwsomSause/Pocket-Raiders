@@ -7,6 +7,8 @@ import { localStats } from '../core/tools/localStats';
 import { buildBugReport, bugReportHeadline } from '../core/tools/bugReport';
 import { boardCode, mergedBoard } from '../core/tools/seedBoard';
 import { installPack, removePack } from '../core/tools/modPacks';
+import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
+import { inspectSave, reportLines } from '../save/saveInspector';
 import { backupDue } from '../core/tools/backup';
 import { packSeeds } from '../core/configPack';
 import { loadStoredPacks } from '../core/tools/modPacks';
@@ -52,10 +54,12 @@ export function openTools(host: ToolsHost): void {
     { label: 'My stats', sub: 'Numbers worked out on this device from your own runs. Nothing is sent anywhere.', go: () => openStats(host) },
     { label: 'Seed board', sub: 'Curated seeds, plus seeds from your mod packs. Put one on the shelf (Enter).', go: () => openSeedBoard(host) },
     { label: 'Mod packs', sub: 'Add JSON packs of extra trainer lines and seeds. Packs are checked, never run as code.', go: () => openPacks(host) },
+    { label: 'Tournament bracket', sub: 'Type friends\' names; get a seeded single-elimination bracket. Works offline.', go: () => openBracket(host) },
+    { label: 'Check a save file', sub: 'Pick a save record or exported save: shows its version, the upgrade steps and any damage. Changes nothing.', go: () => openSaveCheck(host) },
     { label: 'Report a bug', sub: 'Bundles the version, seed and recent errors into a file you can send.', go: () => openBugReport(host) },
     { label: 'Back up my save', sub: due ? 'You have not saved a copy in a while. Enter to download one.' : 'Download a copy of your profile and settings.', go: () => backup(host) },
   ];
-  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 6 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
+  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 8 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
 }
 
 export function openChangelog(host: ToolsHost): void {
@@ -128,6 +132,31 @@ function openPacks(host: ToolsHost): void {
       removePack(packStore, loaded.packs[n - 1]!.id);
       host.restart('Pack removed. Restart the game to drop its lines.');
     }
+  });
+}
+
+function openBracket(host: ToolsHost): void {
+  const text = window.prompt('Names, separated by commas (2 to 32):', '');
+  if (text === null) return openTools(host);
+  const seed = window.prompt('Seed for the draw (anything; same names + seed = same bracket):', String(Date.now() % 100000)) ?? '';
+  const result = makeBracket(parseNames(text), seed);
+  if (!result.ok) return host.restart(result.reason);
+  const lines = bracketLines(result.rounds);
+  page(host, `Bracket  ·  ${result.names.length} players`, [...lines.map((l) => row(l, '')), row('Copy as text', 'For pasting into a chat.', 'Copy')], (n) => {
+    if (n === lines.length) { void navigator.clipboard?.writeText(lines.join('\n')).catch(() => undefined); host.restart('Bracket copied.'); }
+  });
+}
+
+function openSaveCheck(host: ToolsHost): void {
+  pickTextFile((text) => {
+    // An exported save holds records inside it; a plain record is checked as is.
+    let parts: { name: string; raw: string }[] = [{ name: 'File', raw: text }];
+    try {
+      const file = JSON.parse(text) as { kind?: string; profile?: unknown; settings?: unknown };
+      if (file.kind === 'export') parts = [file.profile ? { name: 'Profile', raw: JSON.stringify(file.profile) } : null, file.settings ? { name: 'Settings', raw: JSON.stringify(file.settings) } : null].filter((x): x is { name: string; raw: string } => !!x);
+    } catch { /* inspectSave reports it */ }
+    const rows = parts.flatMap((p) => reportLines(inspectSave(p.raw)).map((l, i) => row(i === 0 ? `${p.name}: ${l}` : l, '', '', l.startsWith('!') ? COLORS.gold : COLORS.textLight)));
+    page(host, 'Save check', rows.length ? rows : [row('Nothing to check', 'That file has no save records.')]);
   });
 }
 
