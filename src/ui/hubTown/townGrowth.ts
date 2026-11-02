@@ -11,9 +11,9 @@ import type { HubTownView } from './townView';
 
 const T = HUB_TOWN.tile;
 /** The plaza square (tiles), from tools/hubtown/layout.py. */
-const PLAZA = { x: 45, y: 33, w: 24, h: 16 };
+const PLAZA = { x: 24, y: 16, w: 16, h: 11 };
 /** The grand fountain's spout (px). */
-const SPOUT = { x: 55.6 * T, y: 37.2 * T };
+const SPOUT = { x: 32 * T, y: 19 * T };
 
 /** Draws the earned props into the town. Returns how many were drawn. */
 export function drawTownGrowth(town: HubTownView, scene: Phaser.Scene, profile: Profile, motion: string): number {
@@ -52,13 +52,13 @@ export function drawTownGrowth(town: HubTownView, scene: Phaser.Scene, profile: 
           for (const x of [left + 3 * T, right - 4 * T]) scene.add.image(x, bottom - 4 * T, overworldAssetIds.props, 'banner').setOrigin(0, 0).setDepth(10 + bottom);
           break;
         case 'trophy':
-          // Two more statues in front of the Achievement Hall.
-          for (const x of [33 * T, 40 * T]) scene.add.image(x, 15.4 * T, overworldAssetIds.props, 'statue').setOrigin(0, 0).setDepth(10 + 20 * T);
+          // Two more statues either side of the Achievement Hall.
+          for (const x of [3 * T, 13 * T]) scene.add.image(x, 8 * T, overworldAssetIds.props, 'statue').setOrigin(0, 0).setDepth(10 + 13 * T);
           break;
         case 'fountain': {
           // The fountain sprays: little arcs of water drops.
           for (let i = 0; i < 10; i++) {
-            const drop = scene.add.circle(SPOUT.x, SPOUT.y, 3, 0xcfefff, 0.9).setDepth(10 + 46 * T);
+            const drop = scene.add.circle(SPOUT.x, SPOUT.y, 3, 0xcfefff, 0.9).setDepth(10 + 22 * T);
             if (!live) {
               drop.setPosition(SPOUT.x + (i - 5) * 6, SPOUT.y - 18 + Math.abs(i - 5) * 3);
               continue;

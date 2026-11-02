@@ -80,6 +80,13 @@ export function placeById(id: string, map: HubTownData = HUB_TOWN): HubPlace | n
   return map.places.find((p) => p.id === id) ?? null;
 }
 
+export type HubDistrict = HubTownData['districts'][number];
+
+/** The district a tile is in (the first listed wins where they overlap, so the plaza comes first), or null on the edges. */
+export function districtAt(t: Tile, map: HubTownData = HUB_TOWN): HubDistrict | null {
+  return map.districts.find(({ rect: [x, y, w, h] }) => t.x >= x && t.y >= y && t.x < x + w && t.y < y + h) ?? null;
+}
+
 /** Four-way facing from a key or a step; diagonals keep the horizontal part (the town is four-directional). */
 export function facingOf(dx: number, dy: number): Facing | null {
   if (dx < 0) return 'left';

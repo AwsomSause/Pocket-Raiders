@@ -35,14 +35,40 @@ test('walk Hub Town, use the gate, inspect the Legacy Display and buy from the S
   await page.waitForTimeout(800);
   await page.screenshot({ path: 'test-results/hubtown-spawn.png' });
 
-  // Walking: hold Down on the north road (outside every crowd zone, so nobody is in the way) and the Pokémon moves.
-  await hub(page, "hub.town.moveTo({ x: 56, y: 26, facing: 'down' })");
+  // Walking: hold Down on a road with free tiles below (nobody in the way right now) and the Pokémon moves.
+  const free = await hub(page, `(() => {
+    const g = hub.town.grid;
+    for (let y = 13; y < 40; y++) for (let x = 3; x < 61; x++)
+      if (g.map.minimap[y][x] === '=' && [0, 1, 2, 3].every((d) => g.canEnter(x, y + d, 'player'))) return { x, y };
+    return null;
+  })()`);
+  expect(free).not.toBeNull();
+  await hub(page, `hub.town.moveTo({ x: ${free.x}, y: ${free.y}, facing: 'down' })`);
   const y0 = await hub(page, 'hub.town.tile().y');
   await page.keyboard.down('ArrowDown');
   await page.waitForTimeout(700);
   await page.keyboard.up('ArrowDown');
   await page.waitForTimeout(400);
   expect(await hub(page, 'hub.town.tile().y')).toBeGreaterThan(y0);
+
+  // The minimap: small in the corner, M makes it large (names and the district key), M again hides it.
+  expect(await hub(page, "hub.children.getByName('hubtown-minimap').visible")).toBe(true);
+  await page.keyboard.press('m');
+  expect(await hub(page, 'hub.minimap.current')).toBe('large');
+  expect(await hub(page, "hub.children.getByName('hubtown-minimap-large').visible")).toBe(true);
+  await page.screenshot({ path: 'test-results/hubtown-map.png' });
+  await page.keyboard.press('m');
+  expect(await hub(page, "hub.children.getByName('hubtown-minimap-large').visible")).toBe(false);
+  await page.keyboard.press('m');
+  expect(await hub(page, 'hub.minimap.current')).toBe('small');
+
+  // Walking into another district shows its name on a sign.
+  const plaza = await hub(page, "hub.town.grid.map.districts.find((d) => d.id === 'plaza').rect");
+  await hub(page, `hub.town.moveTo({ x: ${plaza[0] + 1}, y: ${plaza[1] + plaza[3] - 1}, facing: 'down' })`);
+  await page.waitForTimeout(100);
+  await hub(page, "hub.town.moveTo({ x: hub.town.grid.map.spawn.x, y: hub.town.grid.map.spawn.y, facing: 'up' })");
+  await expect.poll(() => hub(page, "hub.children.getByName('hubtown-district').visible"), { timeout: 3_000 }).toBe(true);
+  await page.screenshot({ path: 'test-results/hubtown-district.png' });
 
   // The crowd: trainers and Pokémon are out and about.
   expect(await hub(page, 'hub.crowd.walkers.length')).toBeGreaterThan(10);
@@ -105,3 +131,39 @@ for (const size of [{ w: 1024, h: 600 }, { w: 390, h: 844 }]) {
     expect(errors).toEqual([]);
   });
 }
+
+test('Settings > Hub style switches to the Arena Lobby tile menu and back', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/?debug=1');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.saveSettings({ ...s.settings, hubStyle: 'lobby' });
+    (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
+  });
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
+  await page.waitForTimeout(800);
+  // No town: the tiles and their cursor instead, starting on New Run.
+  expect(await hub(page, '!!hub.lobby && !hub.town')).toBe(true);
+  expect(await hub(page, "!!hub.children.getByName('hub-cursor')")).toBe(true);
+  await page.screenshot({ path: 'test-results/arena-lobby.png' });
+  // Right twice reaches Unlocks; Enter opens its page with the same rooms the town's buildings open.
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => hub(page, 'hub.place?.name'), { timeout: 5_000 }).toBe('Unlocks');
+  expect(await hub(page, 'hub.place.rooms.includes("merchant")')).toBe(true);
+  await page.screenshot({ path: 'test-results/arena-lobby-unlocks.png' });
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+  // Back to Hub Town.
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.saveSettings({ ...s.settings, hubStyle: 'town' });
+    (window as any).__pkr.game.scene.getScene('Hub').scene.restart();
+  });
+  await expect.poll(() => hub(page, "!!hub.town && !hub.lobby && !!hub.children.getByName('hubtown-player')"), { timeout: 10_000 }).toBe(true);
+  expect(errors).toEqual([]);
+});

@@ -14,8 +14,8 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 
 const T = HUB_TOWN.tile;
 const DIR_ROW: Record<Facing, number> = { down: 0, left: 1, right: 2, up: 3 };
-const WALK_MS = 210;
-const RUN_MS = 115;
+const WALK_MS = 140;
+const RUN_MS = 75;
 /** Depths: ground layers, then everything that stands in the world by its feet, then the prompt. */
 const DEPTH_WORLD = 10;
 const DEPTH_PROMPT = 900_000;
@@ -273,7 +273,7 @@ export class HubTownView {
     this.grid.claim('player', next, from);
     this.moving = true;
     const key = overworldAssetIds.follower(this.opts.follower);
-    if (this.opts.motion !== 'off') this.player.anims.play({ key: `${key}#${dir}`, frameRate: run ? 11 : 7 }, true);
+    if (this.opts.motion !== 'off') this.player.anims.play({ key: `${key}#${dir}`, frameRate: run ? 14 : 10 }, true);
     this.scene.tweens.add({
       targets: this.player,
       x: next.x * T + T / 2,
