@@ -24,18 +24,20 @@ export interface Skin {
   rowFill: number;
   rowRim: number;
   head: number;
+  /** A bright look (pale backdrop): the screens that draw their own text use dark ink on it. */
+  light?: boolean;
 }
 
-const S = (name: string, top: number, bottom: number, accent: number, alt: number, pattern: Pattern, rowFill: number, rowRim: number, head: number): Skin => ({ name, top, bottom, accent, alt, pattern, rowFill, rowRim, head });
+const S = (name: string, top: number, bottom: number, accent: number, alt: number, pattern: Pattern, rowFill: number, rowRim: number, head: number, light = false): Skin => ({ name, top, bottom, accent, alt, pattern, rowFill, rowRim, head, ...(light ? { light } : {}) });
 
 /** Every built look, keyed `<screen>.<style>`. Backdrops stay dark enough for the game's light text. */
 export const SKINS: Record<string, Skin> = {
   // Pokédex and Codex
-  'dex.aero': S('Aero Encyclopedia', 0x1c5f9a, 0x0b2b52, 0x9fe0ff, 0xffffff, 'bubbles', 0x15497a, 0x9fd8f0, 0x2a78b8),
+  'dex.aero': S('Aero Encyclopedia', 0x6cc8ff, 0xe4f6ff, 0xffffff, 0xffffff, 'bubbles', 0xf2faff, 0x8fd0f0, 0xd6efff, true),
   'dex.ds': S('DS Pokédex', 0x7a1620, 0x1a1830, 0xff5a4a, 0xf2f2f2, 'dotgrid', 0x24223c, 0xc84a44, 0xa81e28),
-  'dex.sticker': S('Sticker Album', 0x2a2c6a, 0x161838, 0xffd84a, 0xff7ab8, 'stickers', 0x2b2d66, 0xffd84a, 0x4a3a9a),
-  'dex.wii': S('Wii Channel Dex', 0x2c6a8e, 0x142c44, 0xbfeaff, 0xffffff, 'tiles', 0x1f4c6c, 0x9fd0e8, 0x3b86ae),
-  'dex.ink': S('Ink Scroll', 0x3a3026, 0x14100c, 0xe8d8b0, 0x8a6a40, 'brush', 0x2a221a, 0xb89868, 0x4a3a28),
+  'dex.sticker': S('Sticker Album', 0xffe4f0, 0xffc8e0, 0xff7ab8, 0xffffff, 'dotgrid', 0xfff4fa, 0xff9ccc, 0xffd0e8, true),
+  'dex.wii': S('Wii Channel Dex', 0xf4f8fb, 0xdde6ee, 0xa8d8f0, 0xffffff, 'tiles', 0xffffff, 0xa8d0e8, 0xffffff, true),
+  'dex.ink': S('Ink Scroll', 0xf2e8cc, 0xe6d8b4, 0x8a6a40, 0x2a2018, 'brush', 0xf6ecd0, 0x8a6a40, 0xe6d8b4, true),
   // Settings
   'settings.aero': S('Aero Control Panel', 0x1c6aa8, 0x0a2a4c, 0x8fe0ff, 0xffffff, 'bubbles', 0x174f80, 0x8fd0f0, 0x2c82c0),
   'settings.wii': S('Wii System Settings', 0x34688a, 0x16283c, 0xd8f0ff, 0xffffff, 'tiles', 0x234a68, 0xa8d0e8, 0x4a88b0),
@@ -59,10 +61,10 @@ export const SKINS: Record<string, Skin> = {
   'legacy.timeline': S('Timeline Branches', 0x1c3a5a, 0x0a1424, 0x5fd0ff, 0xffd84a, 'branches', 0x142e4a, 0x5fa8d8, 0x2c5a88),
   'legacy.cards': S('Legacy Cards', 0x3a2a6a, 0x140e2c, 0xc8a0ff, 0xffd84a, 'diamonds', 0x2c2056, 0xa888e8, 0x5a3c9a),
   'legacy.previously': S('Previously On', 0x1e3c40, 0x0a1618, 0xa8e8d8, 0xffd84a, 'scan', 0x163034, 0x78c8b8, 0x2c5c62),
-  'legacy.bloom': S('Bond Memory Bloom', 0x6a2a58, 0x22102a, 0xffb8e0, 0xffe0a0, 'petals', 0x4a1e44, 0xff9cd0, 0x9a3c80),
-  'legacy.aero': S('Aero Gallery', 0x1c68a0, 0x0a2c50, 0x9fe8ff, 0xffffff, 'bubbles', 0x165080, 0x9fd8f0, 0x2c84c0),
-  'legacy.ink': S('Ink Chronicle', 0x30281e, 0x100c08, 0xe8d8b0, 0x8a6a40, 'brush', 0x241c14, 0xb89868, 0x44342a),
-  'legacy.wii': S('Wii Photo Channel', 0x2c6a8c, 0x142a40, 0xd8f0ff, 0xffffff, 'tiles', 0x204c68, 0xa8d0e8, 0x4286ae),
+  'legacy.bloom': S('Bond Memory Bloom', 0xffd0e6, 0xffeaf4, 0xff9cd0, 0xffffff, 'bubbles', 0xffffff, 0xff9cd0, 0xffe4f0, true),
+  'legacy.aero': S('Aero Gallery', 0x78ccff, 0xd8f2ff, 0xffffff, 0xffffff, 'bubbles', 0xf2faff, 0x8fd0f0, 0xd6efff, true),
+  'legacy.ink': S('Ink Chronicle', 0xf4ead0, 0xe8dab8, 0x8a6a40, 0x2a2018, 'brush', 0xf6ecd0, 0x8a6a40, 0xe8dab8, true),
+  'legacy.wii': S('Wii Photo Channel', 0xf4f8fb, 0xdde6ee, 0xa8d8f0, 0xffffff, 'tiles', 0xffffff, 0xa8d0e8, 0xffffff, true),
   'legacy.hall': S('Hall of Legends', 0x5a4616, 0x1c1408, 0xffe27a, 0xffffff, 'columns', 0x3e300e, 0xe8c040, 0x806418),
   // Loading
   'loading.aero': S('Aero Splash', 0x1c6aa8, 0x0a2a4c, 0x9fe8ff, 0xffffff, 'bubbles', 0x174f80, 0x8fd0f0, 0x2c82c0),
@@ -93,7 +95,15 @@ export function skinFor(screen: ScreenId, salt: string | number = ''): Skin | nu
     return null; // services not ready yet: the original look
   }
   const id = screenStyleOf(screen, saved, visits);
-  return id === 'original' ? null : SKINS[`${screen}.${id}`] ?? null;
+  const skin = id === 'original' ? null : SKINS[`${screen}.${id}`] ?? null;
+  return skin ? forLightText(skin) : null;
+}
+
+/** Screens that print light text over their rows get a dark glass row and header on a bright look (the backdrop stays bright). */
+function forLightText(skin: Skin): Skin {
+  if (!skin.light) return skin;
+  const dim = (c: number, t: number): number => ((Math.round(((c >> 16) & 255) * t) << 16) | (Math.round(((c >> 8) & 255) * t) << 8) | Math.round((c & 255) * t));
+  return { ...skin, rowFill: dim(skin.rowRim, 0.35), head: dim(skin.rowRim, 0.5) };
 }
 
 /** Same as skinFor but reads the settings handed in (the loading screen runs before services exist). */
