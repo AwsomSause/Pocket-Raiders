@@ -63000,6 +63000,5624 @@
      }
     }
    ]
+  },
+  {
+   "id": "r111-sandslash-colony",
+   "name": "Sunbathing Sandslash Colony",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sandslash",
+    "tint": "#3a3018",
+    "effect": "glint"
+   },
+   "intro": "A colony of Sandslash lies on warm rocks, spines flat, eyes shut. Small things glint in the dust around them.",
+   "choices": [
+    {
+     "label": "Sneak past quietly",
+     "check": "speed",
+     "success": {
+      "text": "You tiptoe through and pocket a few things they left lying about.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand",
+         "hard-stone",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A spine twitches. One of them wakes up, grumpy.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandslash",
+        "sandshrew"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wake one up on purpose",
+     "success": {
+      "text": "One rolls over and blinks at you. It is sleepy and easy to catch.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandslash",
+        "sandshrew"
+       ],
+       "types": [],
+       "levelBonus": -2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave them to it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r112-pond-choir",
+   "name": "Pond Choir",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "politoed",
+    "tint": "#102838",
+    "effect": "sparkle"
+   },
+   "intro": "Frogs, ducks and Poliwag fill a pond with a round of song. It rolls over the water, warm and slow.",
+   "choices": [
+    {
+     "label": "Join in the chorus",
+     "check": "charisma",
+     "success": {
+      "text": "Your whole team sings along. Everyone steps out calmer than they went in.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You are off-key. The pond goes quiet and a little embarrassed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen from the bank",
+     "success": {
+      "text": "A quiet moment by the water.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r113-butterfree-migration",
+   "name": "Butterfree Migration Detour",
+   "group": "Wild Scenes",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "bug",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "butterfree",
+    "tint": "#2a2a3a",
+    "effect": "float"
+   },
+   "intro": "A great flock of Butterfree drifts across the road, lost in the wind. The path itself is blocked by wings.",
+   "choices": [
+    {
+     "label": "Guide the flock",
+     "check": "charisma",
+     "success": {
+      "text": "Your team herds them over the ridge. They shower the road with glittering powder.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silverpowder",
+         "brightpowder"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "They scatter in every direction. You get a handful of powder anyway.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silverpowder",
+         "brightpowder"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Flying-type leads the way",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It shows them the way. A pale powder rains down in thanks.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silverpowder",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait it out",
+     "success": {
+      "text": "You sit for a while until the sky clears.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r116-frozen-statue-garden",
+   "name": "Frozen Statue Garden",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "A garden of ice statues, each in a different pose. Some of them are breathing.",
+   "choices": [
+    {
+     "label": "Thaw them with a Fire-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "One by one the statues thaw. The living ones shake themselves off and hurry over to thank you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "ice",
+         "water",
+         "normal"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chip them out by hand",
+     "check": "intelligence",
+     "success": {
+      "text": "Slow, careful work. You free one that was really there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "ice"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You crack the wrong one, and it was alive.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "ice"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nevermeltice",
+          "ice-stone"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Admire and go",
+     "success": {
+      "text": "The statues stand quietly in the snow.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r117-moonlit-pond-dance",
+   "name": "Moonlit Pond Dance",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "clefable",
+    "tint": "#1c1c3a",
+    "effect": "sparkle"
+   },
+   "intro": "Clefairy hold hands in a ring under the moon, dancing around a pool of silver light. They gesture for you to join.",
+   "choices": [
+    {
+     "label": "Join the dance",
+     "check": "charisma",
+     "success": {
+      "text": "Your Pokémon dance until dawn. A Moon Stone glows in the grass afterwards.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You trip over your own feet. They laugh, kindly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Fairy-type dances in your place",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fairy"
+      }
+     ],
+     "success": {
+      "text": "It twirls with the ring. When the moon sets, it has a new glow.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the trees",
+     "success": {
+      "text": "A moment of pure moonlight.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r118-honey-tree-hunt",
+   "name": "Honey Tree Hunt",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "combee",
+    "tint": "#3a3010",
+    "effect": "float"
+   },
+   "intro": "A smear of honey on a trunk draws a cloud of Combee. A big, sweet hive hangs high in the branches.",
+   "choices": [
+    {
+     "label": "Lure the Combee with sweets",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "The Combee swarm around you, happy. One follows you out.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "combee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "honey",
+         "berry-juice"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Beedrill drone buzzes in. The hive was its.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "beedrill",
+        "vespiquen"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "honey",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Smash the hive down",
+     "success": {
+      "text": "The hive splits and a furious swarm pours out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [
+        "beedrill",
+        "combee",
+        "vespiquen"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "honey",
+          "berry-juice"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave the hive",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r119-aipom-troop",
+   "name": "Aipom Pickpocket Troop",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "aipom",
+    "tint": "#2a2218",
+    "effect": "shake"
+   },
+   "intro": "A troop of Aipom drops from the branches. Your bag is suddenly a little lighter.",
+   "choices": [
+    {
+     "label": "Chase the one with your item",
+     "check": "speed",
+     "success": {
+      "text": "You run it down, and it hands your item back with a shrug. It has something extra, too.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "They all vanish into the trees. Something is missing.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Flying-type after it",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It brings back your item and a fine trophy.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go",
+     "success": {
+      "text": "They keep the item. You keep your temper.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r120-magikarp-splash",
+   "name": "Magikarp Splash Contest",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#143040",
+    "effect": "rain"
+   },
+   "intro": "A pond full of Magikarp is holding a contest to see who can make the biggest splash. You are asked to judge.",
+   "choices": [
+    {
+     "label": "Cheer the biggest splasher",
+     "check": "luck",
+     "success": {
+      "text": "The winner pops up, delighted, and nudges a prize your way.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "fresh-water"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "The wrong one wins and the pond sulks.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Water-type makes the biggest splash",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "It launches the largest splash of the day. The pond roars.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "big-pearl",
+         "water-stone"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r121-mystic-spring",
+   "name": "Mystic Spring",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#102a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A small spring bubbles in a mossy bowl, cold and clear. The water has a faint sheen that is not quite natural.",
+   "choices": [
+    {
+     "label": "Everyone drinks",
+     "chance": 0.6,
+     "success": {
+      "text": "The water tastes of mint and lightning. Everyone stands a little straighter.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     },
+     "failure": {
+      "text": "Something in the water disagrees with the team.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bottle some for later",
+     "success": {
+      "text": "A bottle of spring water goes into the bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fresh-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do not risk it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r122-sandstorm-burrow",
+   "name": "Sandstorm Burrow",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dugtrio",
+    "tint": "#3a3018",
+    "effect": "fog"
+   },
+   "intro": "A sandstorm closes in. A wide burrow yawns in a dune, deep enough to wait it out.",
+   "choices": [
+    {
+     "label": "Wait it out in the burrow",
+     "success": {
+      "text": "You hunker down until the storm blows over. The burrow smells of old berries.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push on through the storm",
+     "success": {
+      "text": "You grit your teeth and make it through, scraped and sandy.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig the burrow wider with a Ground-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "It digs the burrow wide enough for everyone, and strikes a fossil.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-amber",
+         "helix-fossil",
+         "dome-fossil"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r123-fireflies-dusk",
+   "name": "Fireflies at Dusk",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "volbeat",
+    "tint": "#1c2a14",
+    "effect": "glint"
+   },
+   "intro": "Volbeat and Illumise weave glowing patterns above the grass. The lights point somewhere, over and over.",
+   "choices": [
+    {
+     "label": "Follow the lights",
+     "check": "intelligence",
+     "success": {
+      "text": "They lead you up to a ledge no map shows. A little cache sits under a root.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 4
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the pattern in the dark but find a quiet spot.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy the dance",
+     "success": {
+      "text": "The fireflies pause, then flock round your team and wave a little glow over them.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Enjoy the show",
+     "success": {
+      "text": "Everyone watches in silence.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r124-rival-pack-territory",
+   "name": "Rival Pack Territory",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "normal",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mightyena",
+    "tint": "#2a1c14",
+    "effect": "rattle"
+   },
+   "intro": "Two wild packs stand nose to nose across a clearing, hackles up. They both turn to look at you.",
+   "choices": [
+    {
+     "label": "Back the big pack",
+     "success": {
+      "text": "The bigger pack bounds over, delighted. The other snarls and charges.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mightyena",
+        "poochyena",
+        "houndoom"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back the little pack",
+     "success": {
+      "text": "The underdogs surge forward. The big pack sizes you up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "lillipup",
+        "herdier",
+        "growlithe"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "lillipup",
+          "poochyena",
+          "growlithe"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Calm them both",
+     "check": "charisma",
+     "success": {
+      "text": "You stand between them until both packs lose interest.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Both packs snap at you before backing off.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r126-hatching-hot-spring",
+   "name": "Hatching Hot Spring",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "fire",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slugma",
+    "tint": "#2a1c14",
+    "effect": "fog"
+   },
+   "intro": "Eggs sit in a steaming shallow, warmed by the spring. A Slugma watches over them without much interest.",
+   "choices": [
+    {
+     "label": "Take one for a berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You leave a berry in its place and carry an egg off.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 2,
+        "unit": "battle"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Soak the team instead",
+     "success": {
+      "text": "A quiet soak. Everyone is lighter for it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the eggs alone",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r128-shed-skin-garden",
+   "name": "Shed Skin Garden",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arbok",
+    "tint": "#241a2a",
+    "effect": "glint"
+   },
+   "intro": "Ekans and Arbok have shed skins all through a garden. Odd little trinkets are caught in them.",
+   "choices": [
+    {
+     "label": "Sift the skins",
+     "success": {
+      "text": "You find a Cleanse Tag, snagged in a skin.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cleanse-tag",
+        "count": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Collect them all",
+     "chance": 0.6,
+     "success": {
+      "text": "A bag of skins and trinkets. Not much, but not nothing.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "cleanse-tag",
+         "smoke-ball",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "An Arbok was still wearing one. It is not amused.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r129-slumbering-hollow-chorus",
+   "name": "Slumbering Hollow Chorus",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "normal",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jigglypuff",
+    "tint": "#2a1c3a",
+    "effect": "float"
+   },
+   "intro": "A hollow fills with a slow lullaby from a ring of Jigglypuff and Chingling. Your eyelids are getting heavy.",
+   "choices": [
+    {
+     "label": "Plug your ears and keep walking",
+     "check": "intelligence",
+     "success": {
+      "text": "You stumble through. Nobody falls asleep, and the singing fades.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The tune gets through. The team naps for a while.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "sleep"
+       },
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Counter with a Dark-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "dark"
+      }
+     ],
+     "success": {
+      "text": "It hums over the lullaby. The singers blink and go quiet, impressed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fall asleep on purpose",
+     "success": {
+      "text": "You sleep soundly. The team wakes rested.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 0.6
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r130-drifting-wingull-island",
+   "name": "Drifting Island of Wingull",
+   "group": "Wild Scenes",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "flying",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wingull",
+    "tint": "#143040",
+    "effect": "float"
+   },
+   "intro": "A chain of gulls hovers over a gap in the road, wings spread. They look like a bridge, almost.",
+   "choices": [
+    {
+     "label": "Ride the gulls across",
+     "check": "speed",
+     "success": {
+      "text": "They carry the party over in a single swoop. A shortcut!",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "The gulls drop you halfway. You scramble the rest.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Flying-type leads the flock",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It takes the head of the chain and carries everyone safely over.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go the long way",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r131-rust-choir",
+   "name": "Rust Choir",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "steel",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "skarmory",
+    "tint": "#2a2a30",
+    "effect": "rattle"
+   },
+   "intro": "A scrap yard where Skarmory ring old metal like bells. Everything here is for the taking, if you can stand the noise.",
+   "choices": [
+    {
+     "label": "Pick through the metal",
+     "chance": 0.7,
+     "success": {
+      "text": "Cheap, sharp-edged finds.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "iron-ball",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Skarmory dives for its scrap. You drop most of it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing along with the clanging",
+     "check": "charisma",
+     "success": {
+      "text": "The choir takes you in. They share their best piece.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your voice cracks. They go quiet and nod.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on, ears ringing",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r132-zigzagoon-hunters",
+   "name": "Zigzagoon Treasure Hunters",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zigzagoon",
+    "tint": "#2a2218",
+    "effect": "shake"
+   },
+   "intro": "A Zigzagoon zips past with something shiny in its mouth. Its friends are close behind, looking guilty.",
+   "choices": [
+    {
+     "label": "Give chase",
+     "check": "speed",
+     "success": {
+      "text": "You corner it. It drops its find, a real treasure, and trots away with a hopeful look.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece",
+         "relic-gold"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "It zigs, you zag, it is gone.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade it a berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It happily swaps the shiny for a berry.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r133-lapras-ferry",
+   "name": "Lapras Ferry",
+   "group": "Wild Scenes",
+   "stop": "detour",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "water",
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#102838",
+    "effect": "rain"
+   },
+   "intro": "A Lapras waits at the shore, singing softly. It looks at your berry pouch, then at the water.",
+   "choices": [
+    {
+     "label": "Ride across for a berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "A smooth, quiet crossing.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ride across for a song",
+     "check": "charisma",
+     "success": {
+      "text": "You hum back. It carries you for free.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your song is not what it wanted. It sinks away.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk around the lake",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r134-ember-pool",
+   "name": "Ember Pool",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slugma",
+    "tint": "#3a1c0c",
+    "effect": "fire"
+   },
+   "intro": "Slugma bathe in a glowing pool of warm stone and slow lava. Heat rolls off it in waves.",
+   "choices": [
+    {
+     "label": "Let your Fire-types bathe",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "The Fire-types come out glowing. They are in fine form.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm yourselves by the edge",
+     "success": {
+      "text": "A pleasant glow for everybody.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Poke the pool",
+     "success": {
+      "text": "A Slugma takes offence.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "slugma",
+        "magcargo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal",
+          "fire-stone"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r135-plant-whisperer-grove",
+   "name": "Plant Whisperer Grove",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "weepinbell",
+    "tint": "#142a14",
+    "effect": "sparkle"
+   },
+   "intro": "Bellsprout sway in a perfect line, rustling a gentle chord. The air is thick with green.",
+   "choices": [
+    {
+     "label": "Stay silent, and listen",
+     "check": "intelligence",
+     "success": {
+      "text": "The grove hums over you. Wounds close and tired legs ease.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.8
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A stray cough breaks the spell. They go still.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk to them",
+     "success": {
+      "text": "You make conversation. They are offended, mildly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r136-rampaging-rhyhorn",
+   "name": "Rampaging Rhyhorn",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#3a2a1c",
+    "effect": "rattle"
+   },
+   "intro": "The ground shakes. A Rhyhorn is charging down the road, head lowered, eyes blazing.",
+   "choices": [
+    {
+     "label": "Dodge aside",
+     "check": "speed",
+     "success": {
+      "text": "You roll out of the way at the last moment. It crashes into a rock and sits there, dazed.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "It clips the party on the way past.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it head on",
+     "success": {
+      "text": "You brace. The Rhyhorn slams in!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhyhorn",
+        "rhydon"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "hard-stone",
+          "everstone"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 25
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Put it to sleep with a Grass-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "success": {
+      "text": "A lullaby of sweet pollen and the Rhyhorn tumbles to a gentle halt, snoring.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand",
+         "hard-stone"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r137-ghostly-fog-bank",
+   "name": "Ghostly Fog Bank",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#1c1428",
+    "effect": "fog"
+   },
+   "intro": "A fog bank rolls over the road. Shapes drift in it. They seem to want something from beyond the veil.",
+   "choices": [
+    {
+     "label": "Throw a Spell Tag into the fog",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "spell-tag"
+      }
+     ],
+     "success": {
+      "text": "A Pokémon forms from the mist, grateful for the offering.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "spell-tag"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "reaper-cloth",
+          "ghost-gem"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Call into the fog",
+     "success": {
+      "text": "Something calls back, softly. Nothing shows itself.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold your breath and go through",
+     "chance": 0.7,
+     "success": {
+      "text": "You hurry through the chill. It follows a while.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     },
+     "failure": {
+      "text": "Cold fingers snatch at the bag.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r138-feral-furfrou-salon",
+   "name": "Feral Furfrou Salon",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "furfrou",
+    "tint": "#2a2030",
+    "effect": "sparkle"
+   },
+   "intro": "A wild Furfrou with a wildly overgrown coat. It is watching your Pokémon with enormous eyes and holding out a comb.",
+   "choices": [
+    {
+     "label": "Groom it neatly",
+     "check": "charisma",
+     "success": {
+      "text": "It prances. A tidy trim, and a gift from a pleased Furfrou.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "pink-scarf",
+         "shiny-stone"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "A crooked cut! It stalks off in a huff.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a wild style",
+     "success": {
+      "text": "A magnificent mess. It adores it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sweet-heart",
+         "lava-cookie"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not a groomer",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r139-hot-air-balloon-hatch",
+   "name": "Hot Air Balloon Hatch",
+   "group": "Wild Scenes",
+   "stop": "detour",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "drifblim",
+    "tint": "#3a2a14",
+    "effect": "float"
+   },
+   "intro": "An old balloon sits half-inflated beside a hatch in the sky-road. A Pokémon with wings would be needed to lift it.",
+   "choices": [
+    {
+     "label": "A Flying-type pulls it up",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It beats its wings and the balloon rises through the clouds. You see far, and skip ahead.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "scout",
+        "columns": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Light the burner yourself",
+     "check": "intelligence",
+     "success": {
+      "text": "A hot, bumpy ascent. A short hop ahead.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     },
+     "failure": {
+      "text": "The burner sputters out. You walk away with singed eyebrows.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the balloon",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r140-scarecrow-cornfield",
+   "name": "Scarecrow Cornfield",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "phantump",
+    "tint": "#2a2410",
+    "effect": "shake"
+   },
+   "intro": "A tall scarecrow in the middle of the cornfield turns its head to look at you. It is not stuffed with straw. It is a Ghost.",
+   "choices": [
+    {
+     "label": "Fight it",
+     "success": {
+      "text": "The scarecrow topples off its post with a cackle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "ghost",
+        "grass"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "miracle-seed"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Befriend it",
+     "check": "charisma",
+     "success": {
+      "text": "You leave it a snack. It follows at a distance, then closer.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phantump",
+         "pumpkaboo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "loseItem"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It stares at you a long time, then folds into the corn.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tip your hat and walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r141-starlit-cave-loomians",
+   "name": "Starlit Cave Loomians",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "rock",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "minccino",
+    "tint": "#14182a",
+    "effect": "glint"
+   },
+   "intro": "Glowing little shapes bob through a cave like stars. They lead the eye deep into the dark.",
+   "choices": [
+    {
+     "label": "Follow the lights",
+     "check": "luck",
+     "success": {
+      "text": "They lead you to a chamber of glittering stone. A small stash sits at its heart.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The lights vanish. You find your way out again, a little shaken.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out softly",
+     "success": {
+      "text": "A few tiny shapes approach and nuzzle the party.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of the cave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r142-boulder-boxing-ring",
+   "name": "Boulder Boxing Ring",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "rock",
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "machoke",
+    "tint": "#2a2218",
+    "effect": "rattle"
+   },
+   "intro": "Rock-types spar in a ring made of boulders. The reigning champ points at you, then at the mat.",
+   "choices": [
+    {
+     "label": "Challenge the champ",
+     "success": {
+      "text": "The champ cracks its knuckles and steps up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "rock",
+        "fighting"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "muscle-band",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 30
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Spar with a junior",
+     "check": "strength",
+     "success": {
+      "text": "A friendly bout. Everyone learns something.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You are outmatched, but it is all in good fun.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the ropes",
+     "success": {
+      "text": "A good show.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r143-tadpole-parade",
+   "name": "Tadpole Parade",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwag",
+    "tint": "#142a38",
+    "effect": "float"
+   },
+   "intro": "A line of Poliwag marches down the bank in neat rows, spiral bellies spinning. One of them has wandered into a ditch.",
+   "choices": [
+    {
+     "label": "Guide the parade home",
+     "check": "charisma",
+     "success": {
+      "text": "They reach the pond safely. The leader brings you a glittering stone in thanks.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "They scatter, but a few remember to thank you.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the lost one",
+     "success": {
+      "text": "You lift it out of the ditch and carry it to the line.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them be",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r144-dewdrop-meadow",
+   "name": "Dewdrop Meadow",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass",
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "oddish",
+    "tint": "#1c2a20",
+    "effect": "sparkle"
+   },
+   "intro": "Oddish bathe in the morning dew, leaves glistening. The grass is heavy with it.",
+   "choices": [
+    {
+     "label": "Collect the dew",
+     "chance": 0.5,
+     "success": {
+      "text": "A few drops of pure dew, bottled.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fresh-water",
+         "soul-dew",
+         "tidal-bell"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The dew is just water, but nice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fresh-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bathe with them",
+     "success": {
+      "text": "The Oddish sing happily. Everyone is refreshed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r145-bonsly-standoff",
+   "name": "Bonsly Stand-Off",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bonsly",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A lone Bonsly stands in the middle of a narrow bridge. It will not move. It will not say why.",
+   "choices": [
+    {
+     "label": "Play with it",
+     "success": {
+      "text": "You toss a stone back and forth. It laughs, delighted, and scurries aside.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it off the bridge",
+     "success": {
+      "text": "It squeaks the whole way. It is surprisingly heavy.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.04
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it",
+     "success": {
+      "text": "That did not go over well.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bonsly",
+        "sudowoodo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r146-wailmer-whale-song",
+   "name": "Wailmer Whale Song",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#0c2038",
+    "effect": "rain"
+   },
+   "intro": "Far out on the water a Wailmer pod sings a low, rolling song. A chord is missing, and they seem to be waiting for someone to supply it.",
+   "choices": [
+    {
+     "label": "Sing the missing note",
+     "check": "charisma",
+     "success": {
+      "text": "The chord rings out across the sea. The pod answers, and a deeper voice joins from far below. Rumour says something ancient stirs out there.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 40
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "wailmer-song",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A flat note. The pod goes quiet.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Water-type lead the song",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "It finds the chord on the first try. The sea answers.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 40
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "wailmer-song",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just listen",
+     "success": {
+      "text": "You drift on the music for a while.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r148-paras-mushroom-patch",
+   "name": "Paras Mushroom Patch",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "parasect",
+    "tint": "#2a2018",
+    "effect": "sparkle"
+   },
+   "intro": "A damp patch of mushrooms with a Paras tending each cluster. Some are fine. Some are not.",
+   "choices": [
+    {
+     "label": "Pick carefully",
+     "check": "intelligence",
+     "success": {
+      "text": "Good mushrooms only. You know your fungi.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tinymushroom",
+         "big-mushroom",
+         "balmmushroom"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "One of them was not what it looked like.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the biggest",
+     "chance": 0.5,
+     "success": {
+      "text": "A great fat mushroom, and it is a good one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-mushroom",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Toxic! The team feels it quickly.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the patch",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r149-pikachu-static-storm",
+   "name": "Pikachu Static Storm",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu",
+    "tint": "#3a3a10",
+    "effect": "flicker"
+   },
+   "intro": "A field full of Pikachu crackles with static. Sparks leap from tail to tail, and your hair stands on end.",
+   "choices": [
+    {
+     "label": "Hold up a Cell Battery",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "cell-battery"
+      }
+     ],
+     "success": {
+      "text": "The field charges it to the brim and gives back an extra.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cell-battery",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Charge through the storm",
+     "success": {
+      "text": "Zapped, but everyone comes out buzzing.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait it out",
+     "success": {
+      "text": "The storm passes. The Pikachu settle, content.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r150-smeargle-gallery",
+   "name": "Smeargle Gallery",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "smeargle",
+    "tint": "#2a2030",
+    "effect": "sparkle"
+   },
+   "intro": "A Smeargle has set up an open-air gallery of tail-painted rocks. It eyes your party like a row of blank canvases.",
+   "choices": [
+    {
+     "label": "Let it paint your party",
+     "check": "charisma",
+     "success": {
+      "text": "A splash of colour for each. They look wonderful, and feel it.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "It paints a moustache on the lead. You are all quietly proud.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a painting",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "A fine small canvas for your pack.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "heart-scale",
+         "pink-scarf"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Admire the gallery",
+     "success": {
+      "text": "A pleasant walk among the paintings.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r151-mimikyu-ruined-stage",
+   "name": "Mimikyu Ruined Stage",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#241830",
+    "effect": "flicker"
+   },
+   "intro": "A theatre stage lies in ruins, curtains in rags. A lone figure in a patched costume takes a bow to an empty house.",
+   "choices": [
+    {
+     "label": "Applaud, then fight it",
+     "success": {
+      "text": "The figure leaps down from the stage, delighted to have an audience.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mimikyu"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "reaper-cloth",
+          "fairy-feather"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 25
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take a seat and watch",
+     "check": "charisma",
+     "success": {
+      "text": "A short, strange, wonderful performance. It leaves you a keepsake at the end.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "fairy-feather"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It senses you are not paying attention and the show stops.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r152-dream-meadow-snooze",
+   "name": "Dream Meadow Snooze",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "psychic",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "munna",
+    "tint": "#20203a",
+    "effect": "float"
+   },
+   "intro": "A meadow where every Pokémon is happily asleep. The grass is soft, and the air smells of cake.",
+   "choices": [
+    {
+     "label": "Everyone naps",
+     "success": {
+      "text": "A deep, rich sleep. Eggs in your bag grow warm and restless.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 0.7
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 2,
+        "unit": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a quick nap",
+     "success": {
+      "text": "A short sleep. Better than nothing.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay on your feet",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r153-bibarel-dam",
+   "name": "Bibarel Dam Builder",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bibarel",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A Bibarel is heaving a log up against a leaking dam, and the whole village of burrows behind it is about to flood.",
+   "choices": [
+    {
+     "label": "Help fix the dam",
+     "check": "strength",
+     "success": {
+      "text": "Rock, mud and timber. The dam holds. The Bibarel press a gift on you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "mystic-water",
+         "damp-rock"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "The log rolls on you. The dam holds anyway.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Rock or Water type shores it up",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Perfect fit. The pond rises behind a sound dam, and the Bibarel treat everyone to their pantry.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "mystic-water"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not your dam",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r154-pokemon-parade-float",
+   "name": "Pokémon Parade Float",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "normal",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pachirisu",
+    "tint": "#3a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A procession of wild Pokémon marches past with a flower-strewn float and a spot for each of your team.",
+   "choices": [
+    {
+     "label": "Join the parade",
+     "check": "charisma",
+     "success": {
+      "text": "Each Pokémon takes a spot and shines. The crowd cheers whoever stands out most.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     },
+     "failure": {
+      "text": "Someone steps on the wrong float. The crowd laughs, but warmly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch the float go by",
+     "success": {
+      "text": "A cheerful sight.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r155-kecleon-bazaar",
+   "name": "Kecleon Disguise Bazaar",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kecleon",
+    "tint": "#1c3a2a",
+    "effect": "flicker"
+   },
+   "intro": "A market stall run by a Kecleon. The wares shimmer, strangely. You are not sure any of them are what they look like.",
+   "choices": [
+    {
+     "label": "Buy a stall item",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "chance": 0.6,
+     "success": {
+      "text": "The disguise slips off. You got something real.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     },
+     "failure": {
+      "text": "The wares were illusions. Your money is gone and so is the stall.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "See through the illusions",
+     "check": "intelligence",
+     "success": {
+      "text": "You spot a real item behind the shimmer and take it with a wink.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball",
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "The stall shimmers and is gone.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r156-drowzee-dream-sale",
+   "name": "Drowzee Dream Sale",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "drowzee",
+    "tint": "#241c3a",
+    "effect": "float"
+   },
+   "intro": "A Drowzee holds a hat out for berries. In exchange it offers a ticket into someone else's dream.",
+   "choices": [
+    {
+     "label": "Pay a berry for a dream",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You tumble into a strange, kind dream and wake up with a little more insight.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 35
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle for a free sample",
+     "check": "charisma",
+     "success": {
+      "text": "A short peek into a pleasant dream.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "It eats the berry you offered and wanders off, yawning.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r157-cave-spider-silk",
+   "name": "Cave Spider Silk Net",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ariados",
+    "tint": "#242424",
+    "effect": "net"
+   },
+   "intro": "A huge web of silk spans a chasm. The far side is lined with little treasures. The web is sticky and the drop is a long one.",
+   "choices": [
+    {
+     "label": "Climb across",
+     "check": "strength",
+     "success": {
+      "text": "Hand over hand, you make it across and gather what you can.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     },
+     "failure": {
+      "text": "You slip. The web catches you, and the spiders do not like it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Bug-type goes first",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "It strides across the web like a bridge and carries the haul back.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go around",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r158-mareep-shearing",
+   "name": "Mareep Wool Shearing",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A flock of Mareep stand in a pen of crackling wool, patient and plump. A pair of shears hangs on the fence.",
+   "choices": [
+    {
+     "label": "Shear them gently",
+     "check": "charisma",
+     "success": {
+      "text": "A great pile of soft, static-charged wool, and some pleased Mareep.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soothe-bell",
+         "pink-scarf",
+         "cell-battery"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You rush it. The Mareep bolt, zapping as they go.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.06
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shear in a hurry",
+     "chance": 0.5,
+     "success": {
+      "text": "A big, ragged haul.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soothe-bell",
+         "pink-scarf"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "The flock panics and discharges all at once.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pet them and leave",
+     "success": {
+      "text": "Soft, and warm.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r159-wild-gym-leader-pokemon",
+   "name": "Wild Gym Leader Pokémon",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fighting",
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "machamp",
+    "tint": "#3a1c1c",
+    "effect": "rattle"
+   },
+   "intro": "A feral ace stands alone in a clearing, as if it belonged to a Gym Leader once. It looks at you the way a leader looks at a challenger.",
+   "choices": [
+    {
+     "label": "Accept the challenge",
+     "success": {
+      "text": "The ace crouches. Its stance is perfect.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "fighting",
+        "normal"
+       ],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 1
+        },
+        {
+         "kind": "gymPreview"
+        },
+        {
+         "kind": "research",
+         "amount": 35
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Study it from afar",
+     "success": {
+      "text": "You watch how it moves. A great deal can be learned.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away slowly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r160-starfall-beach",
+   "name": "Starfall Beach",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "starmie",
+    "tint": "#14243a",
+    "effect": "glint"
+   },
+   "intro": "The tide has left a beach strewn with glittering Staryu. They twinkle in the sand like fallen stars.",
+   "choices": [
+    {
+     "label": "Pick one star",
+     "check": "luck",
+     "success": {
+      "text": "A single, perfect star, still warm. A keepsake.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "stardust",
+         "comet-shard"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was just a shell, and a pretty one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "heart-scale",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return them to the sea",
+     "success": {
+      "text": "You carry them down to the water one by one. The tide takes them, and the sea gives something back.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "stardust"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk the beach",
+     "success": {
+      "text": "A peaceful stroll.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r161-cursola-reef-grudge",
+   "name": "Cursola Reef Grudge",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cursola",
+    "tint": "#1c2038",
+    "effect": "fog"
+   },
+   "intro": "A spirit coral on a reef holds a grudge against the sea. It asks, with a cold whisper, that a Water-type stay behind to guard it.",
+   "choices": [
+    {
+     "label": "Leave a Water-type to guard it",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "A Water-type stays. The reef warms. You are given a gift for it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "reaper-cloth",
+         "ghost-gem",
+         "water-gem"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the coral spirit",
+     "success": {
+      "text": "The reef glows and the spirit rises.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "cursola",
+        "corsola"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "reaper-cloth"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Refuse politely",
+     "success": {
+      "text": "The whisper trails off behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r162-magma-bubble-pools",
+   "name": "Magma Bubble Pools",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "fire",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "torkoal",
+    "tint": "#3a1808",
+    "effect": "fire"
+   },
+   "intro": "Magcargo and Torkoal loll in pools of bubbling stone. The steam looks restorative. It also looks hot.",
+   "choices": [
+    {
+     "label": "Soak in the steam pool",
+     "chance": 0.65,
+     "success": {
+      "text": "Warm and dizzying. Everyone comes out in better shape.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A bubble pops too close. The team is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fire-types only",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "The Fire-types soak safely and the whole party comes out restored.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your distance",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r163-sneasel-thieves",
+   "name": "Swarm of Sneasel Thieves",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "dark",
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sneasel",
+    "tint": "#1c2430",
+    "effect": "rattle"
+   },
+   "intro": "Sneasel drop from the cliff, snatch at your bag and race away across the snow.",
+   "choices": [
+    {
+     "label": "Stop the ringleader",
+     "check": "speed",
+     "success": {
+      "text": "You catch the biggest one. The rest scatter and drop their loot, which you collect.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "They get away with a good part of the bag.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the pack",
+     "success": {
+      "text": "You turn to face them. Claws out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [
+        "sneasel",
+        "weavile"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 25
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let them run",
+     "success": {
+      "text": "You lose a few things. Better than losing your temper.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r164-gulpin-gulp-contest",
+   "name": "Gulpin Gulp Contest",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gulpin",
+    "tint": "#243020",
+    "effect": "shake"
+   },
+   "intro": "Gulpin are gathered for a swallowing contest. One of them has gulped something that does not belong to it.",
+   "choices": [
+    {
+     "label": "Hand over an item to be gulped",
+     "chance": 0.6,
+     "success": {
+      "text": "It gulps your item down, burps, and promises to return it, with interest.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-sludge",
+        "count": 1
+       },
+       {
+        "kind": "loseItem"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was a bad bet. The item does not come back.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Win the contest",
+     "check": "luck",
+     "success": {
+      "text": "You judge the contest with a stern eye. The champion gives up the lost item.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "The loser sulks and spits out nothing.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r165-nidoran-picnic",
+   "name": "Nidoran Family Picnic",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "nidoran-m",
+    "tint": "#2a2030",
+    "effect": "hearts"
+   },
+   "intro": "A family of Nidoran have laid out a picnic. A small one waves you over and offers a share of the berries.",
+   "choices": [
+    {
+     "label": "Share your food",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You swap berries all round. Everyone is full and happy.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join for a bite",
+     "success": {
+      "text": "A fine, easy lunch.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to their picnic",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r166-sudowoodo-gate",
+   "name": "Sudowoodo Gate",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sudowoodo",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A tree stands where no tree should, right in the narrow pass. It is not a tree. It does not want to move.",
+   "choices": [
+    {
+     "label": "Splash it with a Water-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "The tree flails, scowls and stomps off. The pass is open.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it",
+     "success": {
+      "text": "It stops pretending.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sudowoodo",
+        "bonsly"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Squeeze past",
+     "check": "speed",
+     "success": {
+      "text": "You scrape by. It does not notice.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.06
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get stuck, then stuck some more.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r167-ledyba-treehouse",
+   "name": "Treehouse of Ledyba",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "bug",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ledian",
+    "tint": "#2a3a18",
+    "effect": "float"
+   },
+   "intro": "The Ledyba have built a small treehouse and strung a rope ladder. They flit about, urging you up.",
+   "choices": [
+    {
+     "label": "Climb for the lookout",
+     "check": "strength",
+     "success": {
+      "text": "From the top you see for miles. Three nodes ahead are laid out before you.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You slip, but a Ledyba catches your sleeve.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.04
+       },
+       {
+        "kind": "scout",
+        "columns": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Flying-type up",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It scouts the whole stage and drops back with a report.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 4
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay on the ground",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r168-taillow-dive-display",
+   "name": "Taillow Dive Display",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "flying",
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "taillow",
+    "tint": "#243448",
+    "effect": "float"
+   },
+   "intro": "Taillow wheel and dive-bomb a clearing in a show of pride. Each dive drops a shiny thing, or a very sharp beak.",
+   "choices": [
+    {
+     "label": "Dodge the dives",
+     "check": "speed",
+     "success": {
+      "text": "You dodge every dive. The Taillow are impressed and drop their prizes.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak",
+         "pretty-wing",
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "One catches you on the way past.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from cover",
+     "success": {
+      "text": "A spectacular show.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dive back with a Flying-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It joins in. The Taillow nod and give it a gift.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak",
+         "pretty-wing"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r169-hoothoot-clock-tower",
+   "name": "Hoothoot Clock Tower",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "flying",
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#14182a",
+    "effect": "glint"
+   },
+   "intro": "A clock tower stands in a field, a Hoothoot on every ledge. A great bell hangs in it, and the hands are almost at twelve.",
+   "choices": [
+    {
+     "label": "Ring the bell at midnight",
+     "requires": [
+      {
+       "kind": "period",
+       "in": [
+        "night"
+       ]
+      }
+     ],
+     "success": {
+      "text": "The bell tolls. The Hoothoot all turn their heads together, and a prophecy settles over the party.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-wild-grace"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ring it anyway",
+     "success": {
+      "text": "The bell rings a bit off. The owls blink, unmoved.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch the owls",
+     "success": {
+      "text": "They turn their heads in unison. Eerie, and calming.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r170-geodude-rock-candy",
+   "name": "Geodude Rock Candy",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "geodude",
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A Geodude offers you a fist-sized geode and mimes cracking it open. It is quivering with anticipation.",
+   "choices": [
+    {
+     "label": "Crack it open",
+     "chance": 0.7,
+     "success": {
+      "text": "The geode splits. A gem sparkles inside.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "normal-gem",
+         "fighting-gem",
+         "flying-gem",
+         "poison-gem",
+         "ground-gem",
+         "rock-gem",
+         "bug-gem",
+         "ghost-gem",
+         "steel-gem",
+         "fire-gem",
+         "water-gem",
+         "grass-gem",
+         "electric-gem",
+         "psychic-gem",
+         "ice-gem",
+         "dragon-gem",
+         "dark-gem",
+         "fairy-gem"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "Just plain rock. The Geodude shrugs and offers another.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hard-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Crack it with a Rock-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "A clean split. The gem inside is flawless.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "normal-gem",
+         "fighting-gem",
+         "flying-gem",
+         "poison-gem",
+         "ground-gem",
+         "rock-gem",
+         "bug-gem",
+         "ghost-gem",
+         "steel-gem",
+         "fire-gem",
+         "water-gem",
+         "grass-gem",
+         "electric-gem",
+         "psychic-gem",
+         "ice-gem",
+         "dragon-gem",
+         "dark-gem",
+         "fairy-gem"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r171-slowpoke-wellside",
+   "name": "Slowpoke Wellside",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#2a2038",
+    "effect": "float"
+   },
+   "intro": "A Slowpoke sits at an old well, tail in the water, waiting for something to bite. It has been there a long, long time.",
+   "choices": [
+    {
+     "label": "Wait with it",
+     "check": "intelligence",
+     "success": {
+      "text": "Hours pass. At last the tail drops, and you collect your reward for the patience.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "pearl",
+         "big-pearl"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       }
+      ]
+     },
+     "failure": {
+      "text": "You nod off. When you wake it has bitten your bag instead.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tug the tail",
+     "chance": 0.5,
+     "success": {
+      "text": "It takes a very long time to notice. When it does, a tail drops free.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-pearl",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Nothing yet. It looks at you, unbothered.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its well",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r172-trubbish-dump-diving",
+   "name": "Trubbish Dump Diving",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "garbodor",
+    "tint": "#24281c",
+    "effect": "rattle"
+   },
+   "intro": "A mountainous trash heap with a Trubbish on every ridge. Treasure or rot, hard to say from here.",
+   "choices": [
+    {
+     "label": "Dig through it",
+     "chance": 0.55,
+     "success": {
+      "text": "Gold in the garbage!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Just rot, and a bad smell on everyone.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Poison-type in",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "poison"
+      }
+     ],
+     "success": {
+      "text": "It digs like it was born to. A real find.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "black-sludge",
+         "poison-barb"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold your nose and go",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r173-tangela-maze",
+   "name": "Tangela Maze",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tangela",
+    "tint": "#142a1c",
+    "effect": "net"
+   },
+   "intro": "A maze of living vines, with a Tangela rustling at every corner. The path through is not clear.",
+   "choices": [
+    {
+     "label": "Solve the maze",
+     "check": "intelligence",
+     "success": {
+      "text": "You find your way through and a Tangela rewards you with its best berries.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     },
+     "failure": {
+      "text": "Dead ends all around. You come out the way you came.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.04
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn a path with a Fire-type",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "The vines curl and part. A clear road.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hack straight through",
+     "success": {
+      "text": "The vines fight back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tangela",
+        "tangrowth"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r174-wynaut-hide-and-seek",
+   "name": "Wynaut Hide and Seek",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wynaut",
+    "tint": "#1c2438",
+    "effect": "hearts"
+   },
+   "intro": "Giggling, from somewhere nearby. A baby Wynaut is hiding on this stage, and it wants to be found.",
+   "choices": [
+    {
+     "label": "Look for it",
+     "check": "luck",
+     "success": {
+      "text": "You find the little one curled in a hollow. It tumbles into your arms.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wynaut"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "You search all over. Only giggling comes back.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the giggles",
+     "success": {
+      "text": "A trail of giggles leads you out of the thicket and up the road.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r175-alolan-sunset-cove",
+   "name": "Alolan Sunset Cove",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wishiwashi",
+    "tint": "#3a2a20",
+    "effect": "glint"
+   },
+   "intro": "The sunset over a cove lights a school of Wishiwashi, a hundred little fish in a shining cloud. They are huge when they stick together.",
+   "choices": [
+    {
+     "label": "Scare them apart",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "They scatter, tiny and surprised. A boost of sea air fills the party.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the school",
+     "success": {
+      "text": "The fish form up into a gleaming giant!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wishiwashi"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "water-gem",
+          "mystic-water",
+          "pearl"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 25
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the sunset",
+     "success": {
+      "text": "Gold and pink on the water. Quiet.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r176-snorunt-snowdrift",
+   "name": "Snorunt Snowdrift",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snorunt",
+    "tint": "#1c2c3a",
+    "effect": "snow"
+   },
+   "intro": "A drift of fresh snow, with Snorunt peeking out from every pocket. One of them has started a snowman and keeps looking your way.",
+   "choices": [
+    {
+     "label": "Help build the snowman",
+     "check": "charisma",
+     "success": {
+      "text": "A great snowman, with an ice crystal buried at its heart. It is yours to keep.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It collapses in a flurry. Everyone laughs.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Roll a snowball fight",
+     "success": {
+      "text": "A rowdy battle, with no losers.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them in the drift",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r177-beldum-magnet-rain",
+   "name": "Beldum Magnet Rain",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "steel",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "beldum",
+    "tint": "#20243a",
+    "effect": "rattle"
+   },
+   "intro": "The sky rains little steel Beldum, clanging down on the road like hail. One lands, wobbles, and stares at you.",
+   "choices": [
+    {
+     "label": "Hold out a hand",
+     "check": "charisma",
+     "success": {
+      "text": "It floats over and clamps onto your pack. It has chosen you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "beldum"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A hail of magnets. Everything metal in your bag sticks to it.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold up a Magnet",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "magnet"
+      }
+     ],
+     "success": {
+      "text": "They all swarm to the Magnet. One decides to stay.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "beldum"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "loseItem",
+        "id": "magnet"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take cover",
+     "success": {
+      "text": "You shelter until the rain stops.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r178-torchic-brood",
+   "name": "Torchic Chick Brood",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "fire",
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "combusken",
+    "tint": "#3a1c10",
+    "effect": "fire"
+   },
+   "intro": "A Combusken glares at you from a nest of warm ash and Torchic chicks. It will not move, and neither will its claws.",
+   "choices": [
+    {
+     "label": "Back off slowly",
+     "success": {
+      "text": "The Combusken relaxes. A chick rolls over to you with a little ember in its beak.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal",
+         "fire-stone",
+         "oran-berry"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the parent",
+     "success": {
+      "text": "It leaps at you, claws blazing!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "combusken",
+        "blaziken"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal",
+          "fire-stone"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Try to take a chick",
+     "success": {
+      "text": "The parent is not pleased.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "combusken",
+        "blaziken"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "egg",
+         "species": [],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 2,
+         "unit": "battle"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "r179-gastly-gas-leak",
+   "name": "Gastly Gas Leak",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ghost",
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#241830",
+    "effect": "fog"
+   },
+   "intro": "A cabin fills with a thick purple gas. A hundred Gastly flicker in it, grinning.",
+   "choices": [
+    {
+     "label": "Ventilate the room",
+     "check": "strength",
+     "success": {
+      "text": "You throw the windows open and fan the gas out. The Gastly drift away, giggling.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "The gas gets in your lungs.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the swarm",
+     "success": {
+      "text": "The swarm closes in!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [
+        "gastly",
+        "haunter"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag",
+          "black-sludge"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back out",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r180-lucky-charm-chansey",
+   "name": "Lucky Charm Chansey",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chansey",
+    "tint": "#3a2030",
+    "effect": "hearts"
+   },
+   "intro": "A Chansey waits by the road with an egg-shaped bundle. It looks at you the way a nurse looks at a patient.",
+   "choices": [
+    {
+     "label": "Accept her gift",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "chansey-charm",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "She presses an Eviolite into your hands and pats your cheek. Once per run is all she can give.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "eviolite",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chansey-charm",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a healing",
+     "success": {
+      "text": "She heals the team, no questions asked.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave and move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }
