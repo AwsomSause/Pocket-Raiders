@@ -95,6 +95,32 @@ export function townStats(content: Content, p: Profile): Stats {
   return { runs: runs.length, wins, winRate: runs.length > 0 ? Math.round((wins / runs.length) * 100) : 0, bestStreak: best, favouriteType: top(types), favouriteSpecies: top(species), badges: badgesOwned(p).length, achievements: Object.keys(p.achievements ?? {}).length, townVisits: townOf(p).counts.visits ?? 0 };
 }
 
+export interface HallRecord { label: string; value: string; seed: string | null }
+/** Hall Records (S466): the best run per category from the profile's run history. Ties go to the newest run. */
+export function hallRecords(p: Profile): HallRecord[] {
+  const runs = p.runHistory;
+  type R = (typeof runs)[number];
+  const best = (label: string, score: (r: R) => number, show: (r: R) => string): HallRecord => {
+    let top: R | null = null;
+    let topScore = 0;
+    for (const r of runs) { const v = score(r); if (v > topScore || (v === topScore && v > 0 && top && r.endedAt >= top.endedAt)) { top = r; topScore = v; } }
+    return top ? { label, value: show(top), seed: top.seed } : { label, value: 'No record yet', seed: null };
+  };
+  const topLevel = (r: R): number => Math.max(0, ...r.party.map((m) => m.level));
+  const shinies = (r: R): number => r.party.filter((m) => m.shiny).length;
+  return [
+    best('Furthest run', (r) => r.regionsCleared * 1000 + r.badges, (r) => `${r.regionsCleared}/${r.regions} regions, ${r.badges} badges`),
+    best('Longest run', (r) => r.encounters, (r) => `${r.encounters} encounters`),
+    best('Most badges', (r) => r.badges, (r) => `${r.badges} badges`),
+    best('Richest run', (r) => r.bankCredits, (r) => `${r.bankCredits} credits banked`),
+    best('Most Research Points', (r) => r.researchPoints, (r) => `${r.researchPoints} RP`),
+    best('Most achievements', (r) => r.achievements.length, (r) => `${r.achievements.length} achievements`),
+    best('Strongest Pokémon', topLevel, (r) => `Level ${topLevel(r)}`),
+    best('Shiniest team', shinies, (r) => `${shinies(r)} shiny`),
+    best('Quickest win', (r) => (r.victory ? 100000 - r.encounters : 0), (r) => `Won in ${r.encounters} encounters`),
+  ];
+}
+
 export type LedgerFilter = 'all' | 'wins' | 'losses';
 export type LedgerSort = 'newest' | 'oldest' | 'regions' | 'encounters';
 export const LEDGER_FILTERS: LedgerFilter[] = ['all', 'wins', 'losses'];

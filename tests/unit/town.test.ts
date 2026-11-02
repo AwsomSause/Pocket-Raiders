@@ -270,3 +270,17 @@ function require_q(p: Profile, a: NonNullable<ReturnType<typeof getTownAction>>)
   const rng = new Rng(hashSeed(`town::quiz::${a.id}::${localDay(DAY)}::${(townOf(p).daily[a.id] ?? '').startsWith(localDay(DAY)) ? Number(townOf(p).daily[a.id]!.split(':')[1]) : 0}`));
   return TOWN.quizzes.library![rng.int(0, TOWN.quizzes.library!.length - 1)]!.q;
 }
+
+describe('Hall Records (S466)', () => {
+  it('has no records for an empty history and picks the best run per category', async () => {
+    const { hallRecords } = await import('../../src/core/town');
+    const base = { regionsCleared: 1, regions: 3, badges: 2, encounters: 10, victory: false, party: [{ speciesId: 'pikachu', level: 20, shiny: false }], bankCredits: 5, researchPoints: 1, achievements: [], seed: 'a', endedAt: '2026-01-01' };
+    const empty = hallRecords({ runHistory: [] } as never);
+    expect(empty.every((r) => r.seed === null)).toBe(true);
+    const rows = hallRecords({ runHistory: [base, { ...base, seed: 'b', endedAt: '2026-01-02', badges: 5, victory: true, encounters: 8, party: [{ speciesId: 'mew', level: 90, shiny: true }] }] } as never);
+    expect(rows.find((r) => r.label === 'Most badges')?.seed).toBe('b');
+    expect(rows.find((r) => r.label === 'Longest run')?.seed).toBe('a');
+    expect(rows.find((r) => r.label === 'Quickest win')?.seed).toBe('b');
+    expect(rows.find((r) => r.label === 'Shiniest team')?.value).toBe('1 shiny');
+  });
+});
