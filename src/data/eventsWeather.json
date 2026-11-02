@@ -1,0 +1,2581 @@
+{
+ "events": [
+  {
+   "id": "wx-hailstorm",
+   "name": "Sudden Hailstorm",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "snow"
+   },
+   "intro": "Hail hammers the trail without warning. Stones of ice bounce off your packs.",
+   "choices": [
+    {
+     "label": "Shelter under a rock shelf",
+     "success": {
+      "text": "You wait it out. Nobody is hurt, but the storm lingers ahead.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "hail",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on through it",
+     "success": {
+      "text": "Cold and bruised, but you gain ground.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "The hail wins. You turn back bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Ice-type revels in it",
+     "success": {
+      "text": "Your Ice-type plays in the storm and the team follows its lead.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ice"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-heat-wave-trek",
+   "name": "Heat Wave Trek",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a2a10",
+    "effect": "fire"
+   },
+   "intro": "The air shimmers. The trail ahead is a long, shadeless climb.",
+   "choices": [
+    {
+     "label": "March through the heat",
+     "success": {
+      "text": "Everyone sweats and slogs on.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.18
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Water-type shades and cools the team",
+     "success": {
+      "text": "Your Water-type soaks the party in a gentle mist. The heat barely touches you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Rest at midday (₽150 for water)",
+     "success": {
+      "text": "You buy water and wait for evening.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-thunderstorm-crossing",
+   "name": "Thunderstorm Crossing",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a3a",
+    "effect": "rain"
+   },
+   "intro": "Lightning splits the sky over an open field. You count the seconds between strikes.",
+   "choices": [
+    {
+     "label": "Run between the strikes",
+     "success": {
+      "text": "You dash across between flashes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "A bolt lands too close. Everyone is singed.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "status",
+        "status": "paralysis"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait it out",
+     "success": {
+      "text": "You crouch and wait. The storm passes slowly.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Electric-type takes the bolts",
+     "success": {
+      "text": "Your Electric-type catches the lightning and glows with energy.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "wx-charged",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-mudslide-pass",
+   "name": "Mudslide Pass",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a18",
+    "effect": "shake"
+   },
+   "intro": "The slope has slid across the pass. A wall of mud fills the path.",
+   "choices": [
+    {
+     "label": "Climb over the slide",
+     "success": {
+      "text": "You scramble across the mud, filthy but past it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "You slip and slide back down. The detour costs you the way.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find a way around (lose time)",
+     "success": {
+      "text": "You take the long way and meet nobody.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Your Flying-type scouts a path",
+     "success": {
+      "text": "Your Flying-type finds a ridge route over the slide.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-fog-bank",
+   "name": "Fog Bank Navigation",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a44",
+    "effect": "fog"
+   },
+   "intro": "Thick fog swallows the road. Three paths vanish into grey.",
+   "choices": [
+    {
+     "label": "Take the left path",
+     "success": {
+      "text": "The left path turns up a hidden cache.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "oran-berry",
+         "great-ball"
+        ]
+       }
+      ]
+     },
+     "chance": 0.5,
+     "failure": {
+      "text": "The path loops back on itself.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the right path",
+     "success": {
+      "text": "The right path leads to a quiet clearing.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     },
+     "chance": 0.5,
+     "failure": {
+      "text": "You step into a ditch.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the fog to lift",
+     "success": {
+      "text": "You wait. The fog thins and you see the whole road.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-rising-tide",
+   "name": "Rising Tide",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#103a4a",
+    "effect": "rain"
+   },
+   "intro": "The sea is racing in over the flats. The high ground is a long way off.",
+   "choices": [
+    {
+     "label": "Race for the high ground",
+     "success": {
+      "text": "You splash up the slope just in time.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "The water catches you. Soaked and tired, you reach dry ground.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Water-type carries the team",
+     "success": {
+      "text": "Your Water-type swims you all to the high ground.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Your Flying-type lifts the smallest one",
+     "success": {
+      "text": "Flying-types ferry your team over the rising water.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-quicksand-flats",
+   "name": "Quicksand Flats",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3018",
+    "effect": "shake"
+   },
+   "intro": "The sand gives way under your feet. The more you struggle, the deeper you sink.",
+   "choices": [
+    {
+     "label": "Struggle free",
+     "success": {
+      "text": "You haul yourselves out, exhausted.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Flying-type pulls you out",
+     "success": {
+      "text": "Your Flying-type lifts the team clear of the sand.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Stay calm and spread your weight",
+     "success": {
+      "text": "You inch out, slowly.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "You panic and sink further.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-avalanche-warning",
+   "name": "Avalanche Warning",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "snow"
+   },
+   "intro": "You hear a deep crack from the peak. Snow is about to come down.",
+   "choices": [
+    {
+     "label": "Shout to set it off early",
+     "success": {
+      "text": "The snow slides away from the trail.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "The slide catches the edge of your party.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.18
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dodge it",
+     "success": {
+      "text": "You jump clear in time.",
+      "effects": []
+     },
+     "check": "speed",
+     "failure": {
+      "text": "You are buried briefly.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig in and wait",
+     "success": {
+      "text": "The snow passes. You dig out cold but fine.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "front",
+        "weather": "snow",
+        "columns": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-volcanic-ash",
+   "name": "Volcanic Ash Fall",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "fog"
+   },
+   "intro": "Grey ash drifts down from a far volcano. Your eyes sting.",
+   "choices": [
+    {
+     "label": "Cover up and walk on",
+     "success": {
+      "text": "Coughing, you push through.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Fire-type walks it off",
+     "success": {
+      "text": "Your Fire-type ignores the ash and guides the way.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ]
+    },
+    {
+     "label": "Gather the warm ash (₽0)",
+     "success": {
+      "text": "You scoop up volcanic glass for the shops.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "stardust",
+         "fire-stone"
+        ]
+       }
+      ]
+     },
+     "chance": 0.5,
+     "failure": {
+      "text": "Mostly just dust.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-windstorm-gap",
+   "name": "Windstorm Gap",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a44",
+    "effect": "float"
+   },
+   "intro": "A howling gale pours through a narrow gap in the cliffs.",
+   "choices": [
+    {
+     "label": "Push through, heads down",
+     "success": {
+      "text": "The wind shoves you back, but you make it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "You are blown back off the trail.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.18
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry the lightest team members",
+     "success": {
+      "text": "You shield the light ones and cross slowly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "A gust snatches one of them away for a moment.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fly the gap with a Flying-type",
+     "success": {
+      "text": "Your Flying-type rides the wind straight through.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-black-ice-road",
+   "name": "Black Ice Road",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2a3a",
+    "effect": "snow"
+   },
+   "intro": "The road is slick with black ice. Even the walkers feel it.",
+   "choices": [
+    {
+     "label": "Slide along carefully",
+     "success": {
+      "text": "You skate across without trouble.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "snow",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Salt the road (₽200)",
+     "success": {
+      "text": "You salt a safe lane and move on.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ]
+    },
+    {
+     "label": "Race across",
+     "success": {
+      "text": "You win the slide.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "You fall hard.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-rainbow-after-rain",
+   "name": "Rainbow After Rain",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "fairy",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "sparkle"
+   },
+   "intro": "A rainbow arches over the washed road. Everyone feels lighter.",
+   "choices": [
+    {
+     "label": "Rest under the rainbow",
+     "success": {
+      "text": "A free rest in the clean air.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A rainbow after the rain",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chase the rainbow's end",
+     "success": {
+      "text": "You find a small gift at the end.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "nugget",
+         "lum-berry",
+         "sitrus-berry"
+        ]
+       }
+      ]
+     },
+     "chance": 0.4,
+     "failure": {
+      "text": "Only puddles.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-solar-flare",
+   "name": "Solar Flare",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "electric",
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a10",
+    "effect": "glint"
+   },
+   "intro": "The sun spits a bright flare. Your gear crackles and flickers.",
+   "choices": [
+    {
+     "label": "Use the surge",
+     "success": {
+      "text": "Electric Pokémon feel charged, but one item sparks out.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "loseItem"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ]
+    },
+    {
+     "label": "Shelter and wait",
+     "success": {
+      "text": "You wait in the shade.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "sun",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rush on",
+     "success": {
+      "text": "The flare scorches a pack.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-pollen-season",
+   "name": "Pollen Season",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a18",
+    "effect": "sparkle"
+   },
+   "intro": "Clouds of pollen drift over the trail. Sneezing everywhere.",
+   "choices": [
+    {
+     "label": "Your Grass-type welcomes the bloom",
+     "success": {
+      "text": "Your Grass-type thrives and shares the energy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ]
+    },
+    {
+     "label": "Push through, sneezing",
+     "success": {
+      "text": "Allergies hit.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the flowers",
+     "success": {
+      "text": "You gather petals and berries.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-smog-alert",
+   "name": "Smog Alert",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a2a",
+    "effect": "fog"
+   },
+   "intro": "Yellow smog settles over the road from a nearby plant.",
+   "choices": [
+    {
+     "label": "Your Poison-type breathes easy",
+     "success": {
+      "text": "Your Poison-type walks tall in the haze.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "poison"
+      }
+     ]
+    },
+    {
+     "label": "Cover your faces",
+     "success": {
+      "text": "You cover up and hurry.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold your breath and run",
+     "success": {
+      "text": "You run out of the smog.",
+      "effects": []
+     },
+     "check": "speed",
+     "failure": {
+      "text": "You inhale a lungful.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-sinkhole",
+   "name": "Sinkhole",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "shake"
+   },
+   "intro": "The ground opens beneath you. You fall into a cave below.",
+   "choices": [
+    {
+     "label": "Look around the cave",
+     "success": {
+      "text": "A hidden cave full of loot.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "max-ether"
+        ]
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb out fast",
+     "success": {
+      "text": "You climb right back up.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Fight what lives here",
+     "success": {
+      "text": "A wild Pokémon guards the cave.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "ground",
+        "rock"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-pearl",
+          "star-piece"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-meteorological-station",
+   "name": "Meteorological Station",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2a3a",
+    "effect": "glint"
+   },
+   "intro": "A small station crackles with instruments. The operator waves you in.",
+   "choices": [
+    {
+     "label": "Ask for the forecast",
+     "success": {
+      "text": "The operator maps the next stretch.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a rain front",
+     "success": {
+      "text": "You request a rain forecast. It comes.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a barometer (₽300)",
+     "success": {
+      "text": "A neat gadget that helps on the road.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "scout",
+        "columns": 5
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-aurora-night",
+   "name": "Aurora Night",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2a4a",
+    "effect": "sparkle"
+   },
+   "intro": "Green and violet lights ripple across the night sky.",
+   "choices": [
+    {
+     "label": "Rest under the aurora",
+     "success": {
+      "text": "A deeply restful night.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Meditate with your Psychic-type",
+     "success": {
+      "text": "Your Psychic-type draws power from the sky.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ]
+    },
+    {
+     "label": "Play in the snow with your Ice-type",
+     "success": {
+      "text": "Your Ice-type glows.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ice"
+      }
+     ]
+    }
+   ],
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night",
+      "evening"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-earthquake-tremor",
+   "name": "Earthquake Tremor",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a18",
+    "effect": "shake"
+   },
+   "intro": "The earth rumbles and the trees sway. A shock runs through the ground.",
+   "choices": [
+    {
+     "label": "Brace and ride it out",
+     "success": {
+      "text": "You stay on your feet.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Channel the quake with a Ground-type",
+     "success": {
+      "text": "Your Ground-type feels the shake and stomps in time.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ]
+    },
+    {
+     "label": "Search the cracks",
+     "success": {
+      "text": "The quake split open a ledge with loot.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "hard-stone",
+         "soft-sand",
+         "nugget"
+        ]
+       }
+      ]
+     },
+     "chance": 0.5,
+     "failure": {
+      "text": "The cracks swallow your pack's contents.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-fallen-bridge",
+   "name": "Fallen Bridge",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1e",
+    "effect": "rattle"
+   },
+   "intro": "The bridge is out and the river runs fast below.",
+   "choices": [
+    {
+     "label": "Pay a ferryman (₽250)",
+     "success": {
+      "text": "He rows you across.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ]
+    },
+    {
+     "label": "Find an alternate path",
+     "success": {
+      "text": "The detour is long but quiet.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fly or swim across",
+     "success": {
+      "text": "Your Pokémon carry you over.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Swim with a Water-type",
+     "success": {
+      "text": "Your Water-type tows the team across.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-overgrown-trail",
+   "name": "Overgrown Trail",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a3a18",
+    "effect": "rattle"
+   },
+   "intro": "Vines have swallowed the old trail.",
+   "choices": [
+    {
+     "label": "Cut through the vines",
+     "success": {
+      "text": "You hack through and find a cache.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "leaf-stone",
+         "miracle-seed"
+        ]
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Grass-type parts them",
+     "success": {
+      "text": "Your Grass-type opens the way and shares the loot.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leaf-stone",
+         "miracle-seed",
+         "sitrus-berry"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-salt-flats-mirage",
+   "name": "Salt Flats Mirage",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a4a44",
+    "effect": "glint"
+   },
+   "intro": "Shimmering water and a distant town appear, both too good to be true.",
+   "choices": [
+    {
+     "label": "Walk toward the vision",
+     "success": {
+      "text": "It is real! A trader's camp.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "great-ball",
+         "potion",
+         "super-potion"
+        ]
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     },
+     "chance": 0.4,
+     "failure": {
+      "text": "Only salt and heat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it",
+     "success": {
+      "text": "You keep going.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Your Psychic-type sees the truth",
+     "success": {
+      "text": "Your Psychic-type separates real from mirage.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-sunken-road",
+   "name": "Sunken Road",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a3a3a",
+    "effect": "rain"
+   },
+   "intro": "The road is flooded knee deep. Slow going.",
+   "choices": [
+    {
+     "label": "Wade across",
+     "success": {
+      "text": "Everyone is soaked and slow.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Water-type leads on",
+     "success": {
+      "text": "Your Water-type swims ahead and cuts the current.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Wait for the water to drain",
+     "success": {
+      "text": "The water recedes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-bioluminescent-bay",
+   "name": "Bioluminescent Bay",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#103a4a",
+    "effect": "sparkle"
+   },
+   "intro": "The water glows blue-green with tiny lights.",
+   "choices": [
+    {
+     "label": "Wade in with your Water-type",
+     "success": {
+      "text": "Your Water-type is energized and spots items below.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "heart-scale"
+        ]
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Look for glowing items",
+     "success": {
+      "text": "Glints reveal things in the shallows.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "heart-scale",
+         "stardust"
+        ]
+       }
+      ]
+     },
+     "chance": 0.5,
+     "failure": {
+      "text": "Just glowing algae.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Rest on the shore",
+     "success": {
+      "text": "A soothing rest.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-dust-devil",
+   "name": "Dust Devil",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "flying",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a28",
+    "effect": "spin"
+   },
+   "intro": "A whirling dust devil sweeps across the camp.",
+   "choices": [
+    {
+     "label": "Hold your packs",
+     "success": {
+      "text": "You grab what you can.",
+      "effects": []
+     },
+     "check": "strength",
+     "failure": {
+      "text": "Your items scatter and one is gone.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it pass",
+     "success": {
+      "text": "Items get shuffled around. You find something you didn't have.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "oran-berry",
+         "great-ball",
+         "antidote"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-ancient-lava-tube",
+   "name": "Ancient Lava Tube",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a2010",
+    "effect": "fire"
+   },
+   "intro": "A cooled lava tube winds into the hillside.",
+   "choices": [
+    {
+     "label": "Crawl through",
+     "success": {
+      "text": "A tight crawl, but a fiery find at the end.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "charcoal",
+         "magmarizer",
+         "flame-orb"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your Fire-type ahead",
+     "success": {
+      "text": "Your Fire-type clears the heat and returns with a gem.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "charcoal"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-tropical-squall",
+   "name": "Tropical Squall",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a3a4a",
+    "effect": "rain"
+   },
+   "intro": "A squall rolls through the beach. Balloons from a party fly across the sky.",
+   "choices": [
+    {
+     "label": "Catch a balloon",
+     "success": {
+      "text": "You jump and grab a prize.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "great-ball",
+         "ultra-ball",
+         "rare-candy",
+         "potion"
+        ]
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "They float away.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Take cover",
+     "success": {
+      "text": "The squall passes.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-swampy-mist",
+   "name": "Swampy Mist",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "poison",
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a2a",
+    "effect": "fog"
+   },
+   "intro": "A pale mist hangs over the swamp. Shapes move in it.",
+   "choices": [
+    {
+     "label": "Look into the mist",
+     "success": {
+      "text": "A creature steps out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "poison",
+        "ghost"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "pecha-berry",
+          "spell-tag",
+          "poison-barb"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Tiptoe past",
+     "success": {
+      "text": "You slip by unnoticed.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Calm it with your Ghost-type",
+     "success": {
+      "text": "Your Ghost-type befriends the mist.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-floating-ice-floes",
+   "name": "Floating Ice Floes",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a4a5a",
+    "effect": "snow"
+   },
+   "intro": "Ice floes drift across a freezing channel. A shiny object glints on the far one.",
+   "choices": [
+    {
+     "label": "Hop across the floes",
+     "success": {
+      "text": "You make it to the far floe and grab the prize.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nevermeltice",
+         "icy-rock",
+         "icy-rock",
+         "water-stone",
+         "nugget"
+        ]
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "You fall in the freezing water.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back",
+     "success": {
+      "text": "Too risky.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-heatwave-oasis",
+   "name": "Heatwave Oasis",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a4a18",
+    "effect": "sparkle"
+   },
+   "intro": "A merchant runs an oasis in the scorched flats: water, shade and a very high price.",
+   "choices": [
+    {
+     "label": "Pay for water and shade (₽400)",
+     "success": {
+      "text": "A strong rest in the shade.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "heal",
+        "share": 0.8
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ]
+    },
+    {
+     "label": "Haggle (Charisma)",
+     "success": {
+      "text": "She halves the price.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "heal",
+        "share": 0.8
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "check": "charisma",
+     "failure": {
+      "text": "She won't budge.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You press on thirsty.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-blossom-storm",
+   "name": "Blossom Storm",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A storm of pink petals swirls through the orchard. You can barely see.",
+   "choices": [
+    {
+     "label": "Enjoy the petals",
+     "success": {
+      "text": "Beautiful. The team relaxes.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Gather petals",
+     "success": {
+      "text": "You collect petals.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pecha-berry",
+         "aspear-berry",
+         "oran-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push through",
+     "success": {
+      "text": "The petals are in your eyes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "You lose your way a bit.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-eclipse-totality",
+   "name": "Eclipse Totality",
+   "group": "Weather & Hazards",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [
+    "dark",
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0a0a1a",
+    "effect": "flicker"
+   },
+   "intro": "The sun vanishes behind the moon. In the false night, strange shapes stir.",
+   "choices": [
+    {
+     "label": "Face the shadows",
+     "success": {
+      "text": "A Shadow-themed creature attacks.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "dark",
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "blackglasses",
+          "spell-tag",
+          "dusk-stone"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hide until it passes",
+     "success": {
+      "text": "The sun returns.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Embrace the dark with your Dark-type",
+     "success": {
+      "text": "Your Dark-type steps forward, eyes bright.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "dark"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wx-sandstorm-camp",
+   "name": "Sandstorm Camp",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a20",
+    "effect": "fog"
+   },
+   "intro": "Nomads huddle in a camp as a sandstorm howls. They signal you in to trade.",
+   "choices": [
+    {
+     "label": "Trade (₽200)",
+     "success": {
+      "text": "They sell you a rare find.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand",
+         "hard-stone",
+         "nugget",
+         "sun-stone"
+        ]
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ]
+    },
+    {
+     "label": "Share your supplies",
+     "success": {
+      "text": "They give you something in return.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "ether",
+         "max-ether",
+         "super-potion"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait out the storm",
+     "success": {
+      "text": "A sandstorm front lingers.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "sand",
+        "columns": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-rainy-day-market",
+   "name": "Rainy Day Market",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "rain"
+   },
+   "intro": "Rain drives everyone into an indoor market. Stalls glitter with rainy-day deals.",
+   "choices": [
+    {
+     "label": "Buy a bargain (₽100)",
+     "success": {
+      "text": "A rain discount!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "great-ball",
+         "super-potion",
+         "antidote",
+         "repel"
+        ]
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ]
+    },
+    {
+     "label": "Browse the stalls",
+     "success": {
+      "text": "You find a good deal on something you needed.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait out the rain",
+     "success": {
+      "text": "A rain front hangs over the road.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-mountain-pass-toll",
+   "name": "Mountain Pass Toll",
+   "group": "Weather & Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a30",
+    "effect": "rattle"
+   },
+   "intro": "A tollkeeper blocks the narrow pass. \"No coin? Then do me a favour.\"",
+   "choices": [
+    {
+     "label": "Pay the toll (₽300)",
+     "success": {
+      "text": "He waves you through.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ]
+    },
+    {
+     "label": "Do a favour",
+     "success": {
+      "text": "He asks you to clear the rockfall.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "oran-berry",
+         "hard-stone"
+        ]
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "You get stuck under a rock.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sneak past",
+     "success": {
+      "text": "You try to slip by.",
+      "effects": []
+     },
+     "chance": 0.35,
+     "failure": {
+      "text": "He catches you. Bruised, you turn back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
