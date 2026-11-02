@@ -234,7 +234,7 @@ export class Picker implements PickerLike {
     this.more = scene.add.text(GAME_WIDTH - 52, dock ? DOCK.footerY : GAME_HEIGHT - 48, '', textStyle(16, COLORS.gold)).setOrigin(1, 0.5);
     this.root.add(this.more);
     if (config.rows.length === 0) {
-      this.root.add(scene.add.text(GAME_WIDTH / 2, (this.top + this.bottom) / 2, 'Nothing here yet', textStyle(32, COLORS.textMuted)).setOrigin(0.5));
+      this.root.add(scene.add.text(GAME_WIDTH / 2, (this.top + this.bottom) / 2, 'Nothing here yet', textStyle(32, skin?.light ? '#3a4a5a' : COLORS.textMuted)).setOrigin(0.5));
       this.footer.setText(config.onBack ? 'Press Esc to go back.' : '');
     }
     const first = config.rows.findIndex((r) => !r.problem);
