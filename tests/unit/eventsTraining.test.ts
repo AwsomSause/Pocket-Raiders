@@ -68,3 +68,12 @@ describe('batch 3', () => {
     expect(accuracyPerk([{ kind: 'accuracyMultiplier', value: 1.2 }, { kind: 'accuracyMultiplier', value: 1.5 }])).toBeCloseTo(1.8);
   });
 });
+
+describe('mutator offer late in a run', () => {
+  it('still offers a blessing and a curse when every blessing was already taken', async () => {
+    const { MUTATORS, mutatorOffer } = await import('../../src/core/mutators');
+    const taken = MUTATORS.mutators.filter((m) => m.kind === 'blessing').map((m) => m.id);
+    const offer = mutatorOffer({ seed: 'late', mutators: taken }, 5);
+    expect(offer.length).toBe(MUTATORS.choices);
+  });
+});
