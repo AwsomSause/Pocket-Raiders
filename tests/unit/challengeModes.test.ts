@@ -228,3 +228,25 @@ describe('Multi-Region Run (S11)', () => {
     expect(run.rules.progressionEligible).toBe(true);
   });
 });
+
+import { placeDungeon } from '../../src/core/traversal';
+describe('Landmark Dungeons (S9)', () => {
+  it('a named dungeon with chained trainer rooms is placed on the third stage, once per seed and region', () => {
+    const run = start('standard', 'dg-1');
+    run.stage!.index = 2;
+    placeDungeon(content, run);
+    const sides = run.stage!.map.nodes.flatMap((n) => n.sides).filter((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon');
+    expect(sides).toHaveLength(1);
+    const ev = content.events.get(sides[0]!.eventId!)!;
+    const battle = ev.choices[0]!.success?.battle;
+    expect(battle?.chain).toBeGreaterThanOrEqual(3);
+    const other = start('standard', 'dg-1');
+    other.stage!.index = 0;
+    placeDungeon(content, other);
+    expect(other.stage!.map.nodes.flatMap((n) => n.sides).some((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon')).toBe(false);
+  });
+  it('four dungeons exist and are never drawn as ordinary events', () => {
+    const all = [...content.events.values()].filter((e) => e.stop === 'dungeon');
+    expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dungeon-victory-hall']);
+  });
+});
