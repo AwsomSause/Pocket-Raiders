@@ -18,6 +18,8 @@ import { itemVisual, pokemonIcon } from './sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, STATUS_LABELS, textStyle } from './theme';
 import { Bar, drawPanel, focusFrame, paintWindow } from './widgets';
 import { AERO, drawGlass, ensureRowFrames, paintGlass } from './aero';
+import { paintSkinBackdrop, paintSkinHeader, paintSkinRow, skinFor } from './screenSkins';
+import type { ScreenId } from '../core/presentation/screenStyles';
 import { glideIn, iconHop, justRedrawn, uiTiming } from './wiiMotion';
 import { clampTexts, fitBlock, fitLine } from './fitText';
 
@@ -58,6 +60,8 @@ export interface PickerConfig {
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
   /** Battle: draw the list only inside the bottom bar (no full-screen panel), so the arena, sprites and HP boxes stay visible. */
   dock?: boolean;
+  /** Screens redesign: the screen this list belongs to; it draws in that screen's picked look (original look when none). */
+  screen?: ScreenId;
 }
 
 const LIST_TOP = 82;
@@ -99,11 +103,15 @@ export class Picker implements PickerLike {
     this.bottom = dock ? DOCK.bottom : LIST_BOTTOM;
     if (!dock) this.root.add(scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive());
     const glass = config.glass === true || dock;
-    const backdrop = config.backdrop && scene.textures.exists(config.backdrop) ? config.backdrop : null;
+    const skin = !dock && config.screen ? skinFor(config.screen) : null;
+    const backdrop = !skin && config.backdrop && scene.textures.exists(config.backdrop) ? config.backdrop : null;
     if (dock) {
       // An opaque dock across the bar: the arena above it stays in view.
       this.root.add(scene.add.graphics().fillStyle(0x061528, 1).fillRoundedRect(8, DOCK.panelTop, GAME_WIDTH - 16, GAME_HEIGHT - DOCK.panelTop - 6, 18));
       this.root.add(drawGlass(scene, 8, DOCK.panelTop, GAME_WIDTH - 16, GAME_HEIGHT - DOCK.panelTop - 6, { tint: AERO.glassLow, rim: AERO.sky, radius: 18 }));
+    } else if (skin) {
+      paintSkinBackdrop(scene, skin, services().session.settings.battleAnimations, this.root);
+      paintSkinHeader(scene, skin, this.root);
     } else if (backdrop) {
       this.root.add(scene.add.image(0, 0, backdrop).setOrigin(0).setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setName('picker-backdrop'));
     } else if (glass) {
@@ -162,7 +170,9 @@ export class Picker implements PickerLike {
       const x = x0 + (i % config.columns) * (colW + (dock ? 8 : 16));
       const y = this.top + Math.floor(i / config.columns) * (config.rowHeight + gap);
       const box = scene.add.container(x, y);
-      const bg = glass
+      const bg = skin
+        ? paintSkinRow(scene.add.graphics(), skin, colW, config.rowHeight, Boolean(row.problem))
+        : glass
         ? paintGlass(scene.add.graphics(), 0, 0, colW, config.rowHeight, { rim: row.problem ? 0x5a6a80 : 0x9fd8f0, alpha: row.problem ? 0.55 : 0.9, glow: false, radius: 14 })
         : paintWindow(scene.add.graphics(), 0, 0, colW, config.rowHeight, {
             thin: true,
@@ -189,7 +199,9 @@ export class Picker implements PickerLike {
 
     // The message box along the bottom, like the games' text window.
     if (!dock) this.root.add(
-      glass
+      skin
+        ? paintSkinRow(scene.add.graphics(), skin, GAME_WIDTH - 72, 52).setPosition(36, GAME_HEIGHT - 74)
+        : glass
         ? drawGlass(scene, 36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 16 })
         : paintWindow(scene.add.graphics(), 36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, { thin: true, fill: 0x18141d, border: COLORS.borderMuted }),
     );

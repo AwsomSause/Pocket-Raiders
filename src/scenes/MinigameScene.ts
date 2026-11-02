@@ -5,6 +5,7 @@
 import Phaser from 'phaser';
 import { getMinigame, minigameView } from '../core/minigame/flow';
 import { services } from '../game/services';
+import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
 import { aeroBackdrop, bounceIn, floatIdle } from '../ui/aero';
 import { onInputAction } from '../ui/input';
 import { playSfx } from '../ui/audio';
@@ -35,7 +36,9 @@ export class MinigameScene extends Phaser.Scene {
     }
     this.slow = data?.slow ?? false;
     this.paused = data?.paused ?? false;
-    aeroBackdrop(this, motion, 0x58c0e8);
+    const skin = skinFor('minigame', `${run.seed}:${run.minigame.id}`);
+    if (skin) paintSkinBackdrop(this, skin, motion);
+    else aeroBackdrop(this, motion, 0x58c0e8);
     const def = getMinigame(session.content, run.minigame.id);
     const view = minigameView(session.content, run);
     const outcome = run.minigame.outcome;

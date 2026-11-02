@@ -81,7 +81,7 @@ export class LegacyGalleryScene extends Phaser.Scene {
 
   private open(rows: PickerRow[], title: string, onSelect: (i: number) => void, onBack: () => void, start?: number): void {
     this.picker?.close();
-    this.picker = new Picker(this, { glass: true, title, columns: 1, rowHeight: 96, rows, onSelect, onBack, ...(start !== undefined ? { start } : {}) });
+    this.picker = new Picker(this, { screen: 'legacy', glass: true, title, columns: 1, rowHeight: 96, rows, onSelect, onBack, ...(start !== undefined ? { start } : {}) });
   }
 
   /** Continue or abandon a revisited timeline (M13), when one is in play. Returns the actions by row. */

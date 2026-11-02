@@ -1,6 +1,7 @@
 // The Mega-Expedition screen: the route (a few layers of stops, the next ones lit), the party's health, the loot
 // held so far, and the choices of the moment (next stop, a recruit, a rest option, or extracting). Rules: core/expedition.
 
+import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
 import Phaser from 'phaser';
 import { availableNodes, getExpedition, nodeLabel } from '../core/expedition/flow';
 import { stageRules } from '../core/legendary/legendary';
@@ -65,6 +66,8 @@ export class ExpeditionScene extends Phaser.Scene {
     }
     const exp = run.expedition;
     const def = getExpedition(session.content, exp.id);
+    const skin = skinFor('expedition', `${run.seed}:${exp.id}`);
+    if (skin) paintSkinBackdrop(this, skin, session.settings.battleAnimations);
     const music = legendMusic(session.content, def);
     const song = music?.route ?? expeditionTrack(def.tier);
     if (music) {

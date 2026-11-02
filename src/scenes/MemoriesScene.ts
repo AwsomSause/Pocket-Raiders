@@ -71,7 +71,7 @@ export class MemoriesScene extends Phaser.Scene {
   private open(rows: PickerRow[], title: string, onSelect: (i: number) => void, onBack: () => void, start?: number): void {
     this.picker?.close();
     this.back = onBack;
-    this.picker = new Picker(this, { glass: true, title, columns: 1, rowHeight: 76, rows, onSelect, onBack, ...(start !== undefined ? { start } : {}) });
+    this.picker = new Picker(this, { screen: 'legacy', glass: true, title, columns: 1, rowHeight: 76, rows, onSelect, onBack, ...(start !== undefined ? { start } : {}) });
   }
 
   private row(hint: string, title: string, sub: string, icons: string[] = [], tint = '#ffffff'): PickerRow {

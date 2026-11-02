@@ -16,6 +16,7 @@ import { PAD_ACTIONS, PAD_ACTION_LABEL, remapPad } from '../core/presentation/ui
 import { holdToConfirm } from '../ui/pointerFx';
 import { framedScreenshot, runShareCard } from '../ui/shareCard';
 import { UI_THEMES, themeIsLight, FONT_SCALE } from '../core/presentation/uiPrefs';
+import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { Picker } from '../ui/partyPanel';
 import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
@@ -36,6 +37,8 @@ export class SettingsScene extends Phaser.Scene {
   private from: 'MainMenu' | 'Hub' = 'MainMenu';
   private query = '';
   private notice = '';
+  /** The redesigned look when one is picked (replaces the Options art). */
+  private skinned: ReturnType<typeof skinFor> = null;
   private menu?: Menu;
   private picker: Picker | null = null;
   private topics: SummaryTopic[] | null = null;
@@ -56,7 +59,9 @@ export class SettingsScene extends Phaser.Scene {
     this.entering = true;
     this.query = '';
     this.notice = '';
-    if (this.textures.exists('ui.optionsbg')) {
+    this.skinned = skinFor('settings');
+    if (this.skinned) paintSkinBackdrop(this, this.skinned, services().session.settings.battleAnimations);
+    else if (this.textures.exists('ui.optionsbg')) {
       this.add.image(0, 0, 'ui.optionsbg').setOrigin(0).setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setAlpha(0.94).setName('options-bg');
     } else drawBackdrop(this);
     onInputAction(this, (a) => {
@@ -153,6 +158,7 @@ export class SettingsScene extends Phaser.Scene {
   /** A topic's entries in a scrolling list; the focused entry's full text shows below. */
   private openTopic(topic: SummaryTopic): void {
     const picker: Picker = new Picker(this, {
+      screen: 'settings',
       glass: true,
       title: topic.label,
       columns: 1,
@@ -252,7 +258,7 @@ export class SettingsScene extends Phaser.Scene {
     const title = this.page === 'home' ? 'Settings' : this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Search settings' : this.page === 'confirmReset' ? 'Reset to defaults?' : `Settings · ${cat}`;
     // The UIE Options backdrop already has the word "Options" in its corner: the home page leaves the title to the art,
     // and sub-pages put theirs beside it, so the two never print over each other.
-    const art = this.textures.exists('ui.optionsbg');
+    const art = !this.skinned && this.textures.exists('ui.optionsbg');
     const heading = art ? (this.page === 'home' ? '' : title.replace(/^Settings · /, '')) : title;
     if (heading) ui.add(fitLine(this.add.text(art ? 150 : 48, 22, heading, textStyle(34)), 760 - (art ? 102 : 0)));
     if (this.page === 'search') ui.add(this.add.text(48, 70, `Find: ${this.query}▍`, textStyle(24, '#ffb745')));
