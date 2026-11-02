@@ -25,7 +25,7 @@ import type { Content } from '../core/contentSchema';
 import { services } from '../game/services';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { PARTY_SKINS, paintFace } from './partyStyles';
-import type { PartySkin } from './partyStyles/types';
+import type { PartySkin, RosterMon } from './partyStyles/types';
 import { AERO, categoryIcon, drawGlass, typeLabel, type MotionLevel } from './aero';
 import { BOND_BARS } from './bondLook';
 import { playSfx } from './audio';
@@ -89,6 +89,9 @@ class PokemonScreen implements PickerLike {
   private readonly footer: Phaser.GameObjects.Text;
   private readonly motion: MotionLevel;
   private readonly skin: PartySkin | null;
+  /** The picked look's party page (roster) is showing; Enter opens the full summary. */
+  private roster = false;
+  private rosterDrawn = false;
   private mode: Mode = 'list';
   private sel: number;
   private tab = 0;
@@ -152,6 +155,7 @@ class PokemonScreen implements PickerLike {
       this.root.add(drawGlass(scene, 24, 16, GAME_WIDTH - 48, GAME_HEIGHT - 32, { radius: 26 }));
       this.root.add(drawGlass(scene, 36, 24, GAME_WIDTH - 72, 46, { tint: AERO.sky, rim: AERO.rim, glow: false, radius: 20 }));
     }
+    this.roster = !!this.skin?.roster;
     const cap = runLevelCap(session.content, session.run!);
     this.root.add(scene.add.text(48, 47, pick ? `${pick.title}  ·  cap ${cap}` : `Pokémon  ·  Level cap ${cap}`, textStyle(30, COLORS.textLight)).setOrigin(0, 0.5).setName('pokemon-title'));
     const back = scene.add.text(GAME_WIDTH - 48, 47, '◀ Back', textStyle(22, COLORS.gold)).setOrigin(1, 0.5).setName('picker-back').setInteractive({ useHandCursor: true });
@@ -205,6 +209,7 @@ class PokemonScreen implements PickerLike {
       this.flash = 'Pinned. Drag the card anywhere; ✕ closes it.';
       this.render();
     } else if (e.code === 'KeyM' && !this.pick) {
+      this.roster = false;
       this.mode = 'menu';
       this.menuIdx = 0;
       this.render();
@@ -246,6 +251,20 @@ class PokemonScreen implements PickerLike {
     }
     this.flash = '';
     const n = this.party.length;
+    if (this.roster && !this.pick) {
+      if (action === 'up' || action === 'left') this.sel = (this.sel + n - 1) % n;
+      else if (action === 'down' || action === 'right') this.sel = (this.sel + 1) % n;
+      else if (action === 'confirm') this.roster = false;
+      else if (action === 'back') return this.leave();
+      playSfx(this.host.scene, 'ui.cursor', 0.5);
+      return this.render();
+    }
+    if (this.roster && this.pick && (action === 'up' || action === 'down' || action === 'left' || action === 'right' || action === 'back')) {
+      if (action === 'back') return this.leave();
+      this.sel = (this.sel + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
+      playSfx(this.host.scene, 'ui.cursor', 0.5);
+      return this.render();
+    }
     if (this.mode === 'menu') {
       const opts = this.menuOptions();
       if (action === 'up') this.menuIdx = (this.menuIdx - 1 + opts.length) % opts.length;
@@ -303,6 +322,7 @@ class PokemonScreen implements PickerLike {
       playSfx(this.host.scene, 'ui.select');
     } else if (action === 'back') {
       if (this.mode === 'detail') this.mode = 'list';
+      else if (this.skin?.roster && !this.pick) this.roster = true;
       else return this.leave();
     }
     this.render();
@@ -475,6 +495,34 @@ class PokemonScreen implements PickerLike {
     if (this.closed) return;
     const { scene } = this.host;
     this.dyn.removeAll(true);
+    if (this.roster && this.skin?.roster) {
+      const first = !this.rosterDrawn;
+      this.rosterDrawn = true;
+      const into = scene.add.container(0, 0);
+      this.dyn.add(into);
+      this.skin.roster({
+        scene,
+        into,
+        mons: this.party.map((m, i) => this.rosterMon(m, i)),
+        sel: this.sel,
+        motion: this.motion,
+        first,
+        line: this.footerText(),
+        select: (i) => {
+          this.sel = i;
+          this.render();
+        },
+        open: (i) => {
+          this.sel = i;
+          if (this.pick) return this.handle('confirm');
+          this.roster = false;
+          this.render();
+        },
+      });
+      this.footer.setText(this.footerText());
+      this.footer.setColor(this.flash ? '#ffe08a' : COLORS.textLight);
+      return;
+    }
     this.drawList(scene);
     this.drawTabs(scene);
     const body = scene.add.container(RIGHT_X, BODY_Y);
@@ -507,7 +555,29 @@ class PokemonScreen implements PickerLike {
     this.footer.setColor(this.flash ? '#ffe08a' : COLORS.textLight);
   }
 
+  private rosterMon(mon: PokemonInstance, index: number): RosterMon {
+    const info = summaryInfo(this.content, this.run, mon);
+    const r = readiness(this.content, mon);
+    return {
+      index,
+      name: info.name,
+      level: mon.level,
+      hp: mon.hp,
+      maxHp: this.maxHp(mon),
+      state: r.state,
+      tag: index === 0 ? 'LEAD' : mon.hp <= 0 ? 'FNT' : mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '',
+      species: lookSpecies(this.content, mon),
+      shiny: !!mon.shiny,
+      types: info.types,
+      ability: info.ability?.name ?? '-',
+      nature: info.nature?.split(' (')[0] ?? '-',
+      stats: info.stats.map((s) => ({ label: s.label, value: s.value })),
+      moves: info.moves.map((m) => ({ name: m.name, type: m.type, pp: m.pp, power: m.power })),
+    };
+  }
+
   private footerText(): string {
+    if (this.roster && !this.tap) return this.pick ? this.pick.problemFor(this.sel) ?? `Enter: choose ${this.nameOf(this.mon)}.  Arrows move.` : `${this.nameOf(this.mon)}: Enter opens the summary.  Arrows move · Esc back.`;
     if (this.tap) return `Tap Enter! ${this.tap.count}/${CARE.tap.goal} (Esc to stop)`;
     if (this.flash) return this.flash;
     if (this.pick && this.mode === 'list') return this.pick.problemFor(this.sel) ?? `Enter: choose ${this.nameOf(this.mon)}.  Up/down Pokémon · left/right tab.`;

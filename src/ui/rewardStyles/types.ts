@@ -22,14 +22,50 @@ export interface CardSpec {
   motion: MotionLevel;
 }
 
+/** What a reward card says (the same words on every look). */
+export interface RewardView {
+  name: string;
+  rarity: string;
+  rim: number;
+  iconId: string;
+  desc: string;
+  /** Compare / synergy / locked lines, if any. */
+  notes: string[];
+  reroll: boolean;
+}
+export interface RewardLayoutCtx {
+  scene: Phaser.Scene;
+  views: RewardView[];
+  motion: MotionLevel;
+  /** "Encounter 3 cleared · ₽1240 · Candies 2". */
+  status: string;
+  encounter: number;
+  /** The lead Pokémon's species name and a function that draws its picture (icon or sprite). */
+  lead: { name: string; draw: (x: number, y: number, scale: number) => Phaser.GameObjects.GameObject } | null;
+  /** The party's pictures for looks that show the team. */
+  team: { name: string; draw: (x: number, y: number, scale: number) => Phaser.GameObjects.GameObject }[];
+}
+export interface RewardLayoutHooks {
+  focus(i: number): void;
+  pick(i: number): void;
+}
+export interface RewardLayoutHandle {
+  focus(i: number): void;
+  /** Plays the pick; returns the milliseconds before the result plate. */
+  picked(i: number): number;
+}
+export type RewardLayout = (ctx: RewardLayoutCtx, hooks: RewardLayoutHooks) => RewardLayoutHandle;
+
 export interface RewardSkin {
+  /** The whole look: where every reward sits and how it is drawn. Without it the scene's own cards are drawn with `card`. */
+  layout?: RewardLayout;
   /** Light card faces: the scene uses dark text on them. */
   light?: boolean;
   /** The heading ("Choose one reward"); `n` is the encounter number. */
   title?: (n: number) => string;
   backdrop(scene: Phaser.Scene, motion: MotionLevel): void;
   /** The card face, painted into g with the card centred at (0, 0): x -w/2..w/2, y -135..135. */
-  card(g: Phaser.GameObjects.Graphics, c: CardSpec): void;
+  card?(g: Phaser.GameObjects.Graphics, c: CardSpec): void;
   /** Called once the card's contents exist. `icon` is the item picture. Extra animation or ornaments go here. */
   decorate?(scene: Phaser.Scene, card: Phaser.GameObjects.Container, icon: Phaser.GameObjects.GameObject, c: CardSpec): void;
   /** Bigger names and HP under the party strip icons (the whole team on the trail). */
