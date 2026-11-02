@@ -1,0 +1,1856 @@
+{
+ "events": [
+  {
+   "id": "face-rival-shopping",
+   "name": "Rival Shopping Trip",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "Your rival is staring at a shelf of potions, counting coins. They see you, scowl, then pretend they were not.",
+   "choices": [
+    {
+     "label": "Buy them a Super Potion (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "They snatch the bag. \"I did NOT ask for this.\" They are carrying it carefully, though.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You bought your rival a Super Potion. They pretended not to care.",
+        "importance": 50
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race them to the last Great Ball",
+     "success": {
+      "text": "You win by a fingertip. They mutter about a rematch.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-grudge",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it",
+     "success": {
+      "text": "They breathe out when you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-coffee",
+   "name": "Champion's Coffee Break",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "none"
+   },
+   "intro": "A woman in a long black coat sits at a cafe table with two cups. \"The second is for whoever turns up. Sit.\"",
+   "choices": [
+    {
+     "label": "Sit and listen",
+     "success": {
+      "text": "She taps the table and describes the next gym leader's team like she has fought it a hundred times.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about her own run",
+     "success": {
+      "text": "She laughs for the first time. \"I lost nine times to a boy with a Pikachu.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the coffee to go",
+     "success": {
+      "text": "You walk on warm and a little wiser.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-leader-fan-club",
+   "name": "Gym Leader Fan Club",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m",
+     "boss.elesa-gen5bw2"
+    ],
+    "tint": "#2e1e3a",
+    "effect": "sparkle"
+   },
+   "intro": "A crowd with homemade banners waits outside the gym. One fan grabs your sleeve: \"Want to know everything about our leader?\"",
+   "choices": [
+    {
+     "label": "Join the chant",
+     "success": {
+      "text": "They love you instantly and whisper the leader's favourite type.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a map of the area",
+     "success": {
+      "text": "They hand you a fan-drawn map with all the good spots circled.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the fan merch (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A badge, a scarf and a very good tip.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-e4-practice",
+   "name": "Elite Four Practice Match",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A member of the Elite Four is warming up on an empty court. \"Practice only. Lose and nothing is lost. Win and I will pretend I let you.\"",
+   "choices": [
+    {
+     "label": "Take the practice match",
+     "success": {
+      "text": "They bow and send out the first Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "shadow": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 2,
+         "who": "party"
+        },
+        {
+         "kind": "research",
+         "amount": 60
+        }
+       ],
+       "classId": "veteran",
+       "name": "Elite Four Member",
+       "apprentice": true
+      }
+     }
+    },
+    {
+     "label": "Watch a few rounds",
+     "success": {
+      "text": "You pick up a lot just by watching.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 35
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-idol-backstage",
+   "name": "Idol Concert Backstage",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.iono"
+    ],
+    "tint": "#3a1e3a",
+    "effect": "sparkle"
+   },
+   "intro": "A guard waves you through by mistake. A pop star is stretching backstage, and spots your Pokémon: \"Oh! Can I meet them?\"",
+   "choices": [
+    {
+     "label": "Let them meet your team",
+     "success": {
+      "text": "She squeals, signs everyone's hat, and slips a charm into your hand.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a duet",
+     "check": "charisma",
+     "success": {
+      "text": "Your Pokémon cry along. It is awful and wonderful.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You sang a duet backstage with a pop star.",
+        "importance": 50
+       }
+      ]
+     },
+     "failure": {
+      "text": "The note you hit makes security look up. They walk you out.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Slip out before security",
+     "success": {
+      "text": "The guard never knows.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-nurse-reunion",
+   "name": "Nurse Joy Reunion",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a2e2e",
+    "effect": "hearts"
+   },
+   "intro": "A nurse waves from a clinic door. \"It is you! I remember your team. Come in, come in. Same treatment, on the house.\"",
+   "choices": [
+    {
+     "label": "Accept the full treatment",
+     "success": {
+      "text": "Warm towels, soft light, a lullaby. Everyone wakes up whole.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just say hello",
+     "success": {
+      "text": "She presses a Full Heal into your hand anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "full-heal",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-jenny-checkpoint",
+   "name": "Officer Jenny Checkpoint",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e2a3a",
+    "effect": "none"
+   },
+   "intro": "A police officer flags you down at a road barrier. \"Routine check. Anything to declare?\"",
+   "choices": [
+    {
+     "label": "Open your bag for inspection",
+     "success": {
+      "text": "She finds nothing odd and thanks you for your cooperation.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip past while she is distracted",
+     "chance": 0.45,
+     "success": {
+      "text": "You are through before anyone looks up.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"Hold it right there.\" A fine, and a lecture.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to help with the barrier (Strength)",
+     "requires": [
+      {
+       "kind": "attribute",
+       "key": "strength",
+       "atLeast": 20
+      }
+     ],
+     "success": {
+      "text": "You heave the barrier aside. She salutes.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-captain-cameo",
+   "name": "Team Captain's Cameo",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.red-masters"
+    ],
+    "tint": "#1e1e2e",
+    "effect": "none"
+   },
+   "intro": "A quiet trainer in a red cap stands on the path. They say nothing. They just tilt the brim, and a ball opens.",
+   "choices": [
+    {
+     "label": "Accept the test",
+     "success": {
+      "text": "No words. The fight is the whole conversation.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "shadow": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "choice-band",
+          "life-orb",
+          "leftovers",
+          "rare-candy"
+         ],
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 80
+        }
+       ],
+       "bossId": "red",
+       "name": "Legendary Captain"
+      }
+     }
+    },
+    {
+     "label": "Bow and walk on",
+     "success": {
+      "text": "The cap tilts again. Respect.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-hiker-story",
+   "name": "Hiker Veteran Story",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2e2a1e",
+    "effect": "none"
+   },
+   "intro": "A weathered hiker sits on a rock, cleaning a compass. \"Thirty years of caves. Want to hear which ones lie?\"",
+   "choices": [
+    {
+     "label": "Listen to every story",
+     "success": {
+      "text": "Three hours later you have a hand-drawn cave map and a sore back.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 5
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade him a snack",
+     "success": {
+      "text": "He grins and shares a shortcut.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nod and move along",
+     "success": {
+      "text": "He waves you off with his compass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-ranger-escort",
+   "name": "Pokémon Ranger Escort",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#1e2e22",
+    "effect": "none"
+   },
+   "intro": "A ranger in a green vest falls in beside you. \"Mind if I walk with you a stretch? The paths are not safe lately.\"",
+   "choices": [
+    {
+     "label": "Accept the escort",
+     "success": {
+      "text": "They walk beside you for a while, calling out hazards and sharing rations.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 2
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask them to scout ahead",
+     "success": {
+      "text": "They sprint off and return with a full report.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk alone",
+     "success": {
+      "text": "They nod. \"Stay safe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-fisherman-legend",
+   "name": "Fisherman's Legend",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#1e2e3a",
+    "effect": "rain"
+   },
+   "intro": "An old fisherman reels in nothing and smiles. \"Once upon a tide I hooked something that hooked me back. Care to hear it?\"",
+   "choices": [
+    {
+     "label": "Hear the whole story",
+     "success": {
+      "text": "He points to a spot on the water that shimmers a little too much.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "fish"
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a spare rod",
+     "success": {
+      "text": "He hands one over. \"Be patient, kid.\"",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "fish"
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "The legend can wait.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-ace-scouting",
+   "name": "Ace Trainer Scouting",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "An ace trainer watches you battle from a distance and walks up. \"I scout talent for a living. Take this one on loan, on me.\"",
+   "choices": [
+    {
+     "label": "Accept the loan",
+     "success": {
+      "text": "A rental joins your team. Do not lose it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [],
+        "types": [
+         "fighting",
+         "psychic",
+         "steel"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for tips instead",
+     "success": {
+      "text": "She runs through your weak spots in ten minutes flat.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 40
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline politely",
+     "success": {
+      "text": "\"Your loss. Mine, actually.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-breeders-convention",
+   "name": "Breeder's Convention",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "tint": "#2e3a1e",
+    "effect": "none"
+   },
+   "intro": "Rows of folding tables, all covered in egg cartons. A banner reads: BREEDERS UNITE.",
+   "choices": [
+    {
+     "label": "Swap tips and stories",
+     "success": {
+      "text": "A breeder trades you an egg and a hatching trick.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Enter the cuddle contest",
+     "check": "love",
+     "success": {
+      "text": "Your Pokémon charm the judges.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon sulk. The judges are polite about it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Buy a pamphlet (₽80)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "Dense, useful, slightly sticky.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       },
+       {
+        "kind": "eggMove"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-doctor-checkup",
+   "name": "Pokémon Doctor Check-Up",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2e3a3a",
+    "effect": "none"
+   },
+   "intro": "A doctor with a stethoscope and a clipboard stops you. \"Free check-up. Takes two minutes. I promise.\"",
+   "choices": [
+    {
+     "label": "Full check-up",
+     "success": {
+      "text": "Every Pokémon is weighed, listened to and poked. The doctor scribbles furiously and hands you a report.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "research",
+        "amount": 35
+       },
+       {
+        "kind": "moment",
+        "text": "A doctor gave your team a full check-up and wrote it all down.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just the lead",
+     "success": {
+      "text": "Quick and tidy. A clean bill of health.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-leader-day-off",
+   "name": "Gym Leader Day Off",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.elesa-gen5bw2"
+    ],
+    "tint": "#3a2e1e",
+    "effect": "none"
+   },
+   "intro": "A gym leader in plain clothes sits at a cafe, nibbling a pastry. \"No badge. No pressure. Want a casual battle?\"",
+   "choices": [
+    {
+     "label": "Casual battle",
+     "success": {
+      "text": "They grin. \"Do not tell my staff.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "shadow": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 50
+        },
+        {
+         "kind": "item",
+         "id": "super-potion",
+         "count": 2
+        }
+       ],
+       "classId": "psychic",
+       "name": "Gym Leader (off duty)",
+       "apprentice": true
+      }
+     }
+    },
+    {
+     "label": "Share the pastry",
+     "success": {
+      "text": "You talk shop for an hour. A great afternoon.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-villain-pep",
+   "name": "Villain Boss Pep Talk",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2a1e1e",
+    "effect": "none"
+   },
+   "intro": "A villain boss steps out of the shadows with a lukewarm smile. \"You are clever. Wasted on the good guys, honestly. Let me help you.\"",
+   "choices": [
+    {
+     "label": "Accept the backhanded compliment",
+     "success": {
+      "text": "He mutters something kind and cruel. You feel stronger and a little dirty.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "villain-praise",
+        "name": "Villain's Praise",
+        "effects": [
+         {
+          "kind": "critChanceBonus",
+          "value": 0.04
+         }
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse it",
+     "success": {
+      "text": "He laughs. \"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mock his speech",
+     "success": {
+      "text": "He storms off, forgetting his wallet.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-coach-whistle",
+   "name": "Coach's Whistle",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2e2e1e",
+    "effect": "none"
+   },
+   "intro": "A coach blows a whistle. \"Ten laps! No — decide NOW: Speed, power, or nerves?\"",
+   "choices": [
+    {
+     "label": "Speed drill",
+     "check": "speed",
+     "success": {
+      "text": "Your team blazes past the cones.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 2
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Slow start. The coach shakes their head.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Power drill",
+     "check": "strength",
+     "success": {
+      "text": "Everyone heaves a tire across the field.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 2
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A strained back. Not fatal.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Rest",
+     "success": {
+      "text": "The coach blows the whistle for nap time.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-announcer",
+   "name": "Tournament Announcer",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a2e3a",
+    "effect": "none"
+   },
+   "intro": "A microphone on a stick pokes into your face. \"Ladies and gentlemen — give a name to our next challenger!\"",
+   "choices": [
+    {
+     "label": "Give a dramatic intro",
+     "success": {
+      "text": "The crowd roars. Your next fights feel lighter.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "announcer-hype",
+        "name": "Announcer's Hype",
+        "effects": [
+         {
+          "kind": "critChanceMultiplier",
+          "value": 1.2
+         }
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave and walk on",
+     "success": {
+      "text": "Polite applause.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-mascot-costume",
+   "name": "Mascot Costume Event",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#3a3a1e",
+    "effect": "sparkle"
+   },
+   "intro": "A giant foam Pokémon head sits on a bench. \"Our mascot called in sick. Could you...?\"",
+   "choices": [
+    {
+     "label": "Put on the costume",
+     "success": {
+      "text": "Nobody challenges a giant mascot. You skip ahead through crowds of cheering kids.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand out flyers instead",
+     "success": {
+      "text": "A kind of fame. You are paid in snacks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "The mascot slumps sadly.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-journalist",
+   "name": "Journalist Interview",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#2e2e3a",
+    "effect": "none"
+   },
+   "intro": "A reporter with a notepad leaps out. \"Three questions! It will help your team's reputation. Probably.\"",
+   "choices": [
+    {
+     "label": "Be modest",
+     "success": {
+      "text": "\"A humble trainer.\" Shopkeepers will remember.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "press-modest",
+        "name": "Press: Humble",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Boast loudly",
+     "success": {
+      "text": "Headline: \"SO CONFIDENT\". Prices rise.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "press-boast",
+        "name": "Press: Boaster",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dodge the questions",
+     "success": {
+      "text": "You leave with the reporter mid-sentence.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-aspiring-rival",
+   "name": "Aspiring Rival's Challenge",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A kid in a hand-me-down cap copies your pose. \"I want to be just like you! Battle me so I can learn!\"",
+   "choices": [
+    {
+     "label": "Teach them",
+     "success": {
+      "text": "The kid listens to everything you say.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "shadow": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "attribute",
+         "key": "love",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 35
+        },
+        {
+         "kind": "flag",
+         "key": "has-fan",
+         "amount": 1
+        }
+       ],
+       "classId": "youngster",
+       "name": "Junior Copycat",
+       "apprentice": true
+      }
+     }
+    },
+    {
+     "label": "Give them advice instead",
+     "success": {
+      "text": "The kid scribbles it down on their hand.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-professor-pet",
+   "name": "Professor's Pet Project",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#2e3a2e",
+    "effect": "none"
+   },
+   "intro": "A professor presses a ball into your hands. \"A prototype. Unusual abilities. Do not ask how. Take it for the road?\"",
+   "choices": [
+    {
+     "label": "Take the prototype",
+     "success": {
+      "text": "It hums in the ball. Something odd about it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "porygon",
+         "rotom",
+         "ditto"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for data instead",
+     "success": {
+      "text": "She hands you a notebook of field notes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 60
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-echo",
+   "name": "Legendary Trainer Echo",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "epic",
+   "minStage": 6,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.red-masters"
+    ],
+    "tint": "#10101e",
+    "effect": "fog"
+   },
+   "intro": "The air bends. A silhouette in a red cap appears at the edge of the road, outlined in cold light. It lifts one ball. It is waiting.",
+   "choices": [
+    {
+     "label": "Accept the spar",
+     "success": {
+      "text": "The silhouette grins. The sky goes quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "size": 4,
+       "types": [],
+       "levelBonus": 3,
+       "shadow": 0,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-candy",
+          "life-orb",
+          "choice-band",
+          "leftovers"
+         ],
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 100
+        },
+        {
+         "kind": "moment",
+         "text": "A spectral champion sparred with your team and faded at dawn.",
+         "importance": 80
+        }
+       ],
+       "bossId": "red",
+       "name": "Spectral Champion",
+       "apprentice": true
+      }
+     }
+    },
+    {
+     "label": "Salute and leave",
+     "success": {
+      "text": "It salutes back and fades.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-badge-collector",
+   "name": "Gym Badge Collector",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e2e1e",
+    "effect": "none"
+   },
+   "intro": "A collector with a glass-cased vest taps a tiny silver badge. \"Every gym has a hidden requirement, you know. Care to learn them?\"",
+   "choices": [
+    {
+     "label": "Hear the secret",
+     "success": {
+      "text": "He lists every quirk of the next gym in a whisper.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade a trinket",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "star-piece"
+      }
+     ],
+     "success": {
+      "text": "You swap a star piece for his pin. He is thrilled.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "star-piece"
+       },
+       {
+        "kind": "research",
+        "amount": 60
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Admire the case",
+     "success": {
+      "text": "You nod. He nods.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-e4-chef",
+   "name": "Elite Four Chef",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "sparkle"
+   },
+   "intro": "The Elite Four's dragon trainer is wearing an apron. \"I cook before every league day. Sit down. Eat.\"",
+   "choices": [
+    {
+     "label": "Eat the full course",
+     "success": {
+      "text": "Spicy, sweet, strange. You feel unstoppable.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help in the kitchen",
+     "success": {
+      "text": "You chop onions and they teach you a trick.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a doggy bag",
+     "success": {
+      "text": "You walk away fed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-rival-honors",
+   "name": "Rival Honors Day",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#3a3a2e",
+    "effect": "none"
+   },
+   "intro": "A ceremony for the region's young talent. Your rival sits on the judges' panel with arms crossed, looking weirdly nervous.",
+   "choices": [
+    {
+     "label": "Give your best demonstration",
+     "success": {
+      "text": "They squint, scribble, then give you a perfect score. It is the closest thing to a compliment.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 50
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your rival judged you at an honors day.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bow to the rival's judging",
+     "success": {
+      "text": "They blink. \"...Fine. Good.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-respect",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tease the judge",
+     "success": {
+      "text": "Laughter. Your rival turns red.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-grudge",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-chef-throwdown",
+   "name": "Celebrity Chef Throwdown",
+   "group": "Famous Faces",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "tint": "#3a1e1e",
+    "effect": "fire"
+   },
+   "intro": "A celebrity chef slams a knife into a cutting board. \"A cook-off! Taste decides. Choose your dish.\"",
+   "choices": [
+    {
+     "label": "Spicy curry",
+     "check": "luck",
+     "success": {
+      "text": "The chef coughs, weeps, and awards you first place.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too hot. They reach for water and score you low.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sweet berry pie",
+     "check": "intelligence",
+     "success": {
+      "text": "A hush. A spoon. A tear.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The crust is soggy.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Be the taste tester",
+     "success": {
+      "text": "You eat everything and give very honest notes.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
