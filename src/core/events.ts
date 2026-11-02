@@ -732,6 +732,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return '';
     case 'relic':
       return `the ${e.name}`;
+    case 'tempEffect':
+      return e.label;
     case 'feud':
       return 'a feud is settled';
     case 'hunt':
@@ -960,6 +962,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'moment':
       emit(content, run, 'storyMoment', { actors: [], data: { def: 'rival-living', suppressed: false }, importance: e.importance, text: e.text });
       return '';
+    case 'tempEffect':
+      run.perkEffects = [...(run.perkEffects ?? []), ...e.effects];
+      run.tempEffects.push({ effects: e.effects, battles: e.battles, until: e.until });
+      return effectWords(content, e);
     case 'relic': {
       if (run.story.flags[`relic:${e.id}`]) return '';
       run.story.flags[`relic:${e.id}`] = true;

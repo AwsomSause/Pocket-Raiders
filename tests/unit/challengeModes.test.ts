@@ -195,3 +195,27 @@ describe('full runs in the new modes', () => {
     }
   }, 120000);
 });
+
+import { tideOf, tideShopMultiplier, tideWildWeight } from '../../src/core/clock';
+describe('Tide Clock (S2)', () => {
+  it('turns every 3 parts of the day, from the clock alone', () => {
+    const run = start('standard');
+    const seen: string[] = [];
+    for (let t = 0; t < 12; t++) {
+      run.clock = { day: 1 + Math.floor(t / 4), tick: t % 4, celebrated: [] };
+      seen.push(tideOf(content, run));
+    }
+    expect(seen).toEqual(['high', 'high', 'high', 'low', 'low', 'low', 'high', 'high', 'high', 'low', 'low', 'low']);
+  });
+  it('high tide favours water Pokémon and cheaper healing, low tide rock and cheaper balls', () => {
+    const run = start('standard');
+    run.clock = { day: 1, tick: 0, celebrated: [] };
+    expect(tideWildWeight(content, run, 'squirtle')).toBe(content.balance.clock.tide.wildFactor);
+    expect(tideWildWeight(content, run, 'charmander')).toBe(1);
+    expect(tideShopMultiplier(content, run, 'healing')).toBeLessThan(1);
+    expect(tideShopMultiplier(content, run, 'ball')).toBe(1);
+    run.clock = { day: 1, tick: 3, celebrated: [] };
+    expect(tideWildWeight(content, run, 'geodude')).toBe(content.balance.clock.tide.wildFactor);
+    expect(tideShopMultiplier(content, run, 'ball')).toBeLessThan(1);
+  });
+});

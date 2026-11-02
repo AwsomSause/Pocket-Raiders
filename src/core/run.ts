@@ -161,7 +161,8 @@ import { bondEvolves, bondLessons, bondVictory, enemyCombo, playerCombo, revealM
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
 import { createStoryState, emit } from './story/record';
-import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift } from './care';
+import { chainGivesTalent, chainShiny, extendChain, shinyCharmTiers } from './catchChain';
+import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift, careOf } from './care';
 import { createPartyLife, partyLifeCamp, partyLifeTurn, partyLifeVictory } from './partyLife';
 import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
@@ -172,7 +173,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { freshClock, periodOf, periodWildWeight, shopHoursMultiplier, stepClock } from './clock';
+import { freshClock, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
 import { ultimateRival } from './rivals/ultimate';
@@ -234,6 +235,8 @@ export interface NewRunOptions {
   candyPerks?: string[];
   /** The account's unlocked trainers; map events that recruit one of them stop appearing (itemCounters `owned:<id>`). */
   ownedTrainers?: readonly string[];
+  /** Species caught across all runs (the dex): sets the Shiny Charm tier (core/catchChain). */
+  dexCaught?: number;
   /** The profile's bonds with mentors (core/mentors): lasting trust, graduations and the fellow apprentices who return. */
   mentorBonds?: Profile['mentorBonds'];
   /** Ideas W5: what NPCs remember (core/npcMemory.ts); it seeds the run's `remembers-*` flags. */
@@ -285,7 +288,9 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     materials: {},
     plaza: freshPlaza(),
     badges: [],
-    ...(opts.ownedTrainers?.length ? { itemCounters: Object.fromEntries(opts.ownedTrainers.map((id) => [`owned:${id}`, 1])) } : {}),
+    ...(opts.ownedTrainers?.length || shinyCharmTiers(content, opts.dexCaught ?? 0) > 0
+      ? { itemCounters: { ...Object.fromEntries((opts.ownedTrainers ?? []).map((id) => [`owned:${id}`, 1])), ...(shinyCharmTiers(content, opts.dexCaught ?? 0) > 0 ? { shinyCharm: shinyCharmTiers(content, opts.dexCaught ?? 0) } : {}) } }
+      : {}),
     campaignId: campaign.id,
     regionOrder,
     regionIndex: 0,
@@ -1490,7 +1495,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -1513,6 +1518,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       : back
       ? newMon(content, run, back.member.speciesId, back.member.level, 'e', content.balance.difficulty.maxLevel)
       : newMon(content, run, speciesId, opened.level, 'e', !legendary && run.encountersCompleted < content.balance.opening.encounters ? content.balance.opening.maxLevel : content.balance.difficulty.maxLevel);
+    if (!back && !mrBack && !legendary && !enemy.shiny && chainShiny(content, run, enemy.speciesId, node.id, runAttributeEffects(content, run).shinyChance)) enemy.shiny = true;
     if (back) enemy.moves = back.member.moves!.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
     if (mrBack) enemy.moves = mrBack.moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
     const luck = back || mrBack || legendary ? null : wildLuck(content, run, enemy.speciesId, node.id, plan.shiny, content.balance.shinyChance);
@@ -1547,7 +1553,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
     if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && pairRng.chance(doublesCfg.wildChance)) {
-      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id));
+      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
       if (partner.shiny) countShiny(run, partner.speciesId);
@@ -1921,7 +1927,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story));
+  return Math.round(entry.price * markup * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -2492,6 +2498,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     const seals = perksOf(activePerks(content, run), 'sealCase').reduce((sum, p) => sum + p.perk.luck * p.copies, 0);
     if (seals > 0) addRunAttribute(content, run, 'luck', seals);
     discover(run, caught.speciesId, true);
+    // Catch Chains (S218): the same species again and again; a long chain marks the catch with a talent.
+    const links = extendChain(run, caught.speciesId);
+    if (chainGivesTalent(content, links)) {
+      const care = careOf(caught);
+      const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+      care.talent ??= stats[[...caught.uid].reduce((n, c) => n + c.charCodeAt(0), 0) % stats.length]!;
+    }
     caughtPending.push({ kind: 'caught', mon: caught });
   }
   // King N's Voice of Pokémon: a wild Pokémon you defeated may ask to join, no ball needed.

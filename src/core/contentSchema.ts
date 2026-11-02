@@ -1417,6 +1417,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   /** VS Recorder: losing a trainer battle replays it from the start, once per run. */
   z.object({ perk: z.literal('vsRecorder') }),
   z.object({ perk: z.literal('safetyNet') }),
+  /** Insurance Relic (S388): a lost run keeps its best rare held item in the Vault. */
+  z.object({ perk: z.literal('insurance') }),
   /** GB Sounds: the battle music plays in the Game Boy style. */
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */
@@ -1468,6 +1470,8 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('ppUp'), ups: z.number().int().min(1).max(3) }),
   /** Changes one Pokémon's nature (Mints). */
   z.object({ kind: z.literal('nature'), nature: z.enum(NATURE_IDS) }),
+  /** Tuning Dust: nudges a nature one step so the named stat is the raised one (the lowered stat stays). */
+  z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Care for one Pokémon: heal HP, revive, cure status, restore one move's PP; friendship and attribute side effects. */
   z.object({
     kind: z.literal('care'),
@@ -2172,7 +2176,7 @@ export const BalanceSchema = z.object({
   /** Exploration (core/world.ts): fog of war, weather fronts, roaming Legendaries and checkpoint camps. */
   world: WorldBalanceSchema,
   /** The day counter and day/night cycle (core/clock.ts): four times of day, a step of the map takes `ticksPerStep` of them. */
-  clock: z.object({ ticksPerStep: z.number().int().min(0).max(4), milestoneDays: z.array(z.number().int().min(2)).min(1), /** Days in a season of the run's calendar; each new season is a festival day. */ seasonLength: z.number().int().min(2), /** Real-world dates (month-day) the camp celebrates; the host passes today's date into the run. */ specialDates: z.array(z.object({ id: z.string(), label: z.string(), on: z.string().regex(/^\d\d-\d\d$/) })), /** Types that turn up more in the wild at each time of day. */ periodTypes: z.object({ morning: z.array(TypeNameSchema), afternoon: z.array(TypeNameSchema), evening: z.array(TypeNameSchema), night: z.array(TypeNameSchema) }), periodWildFactor: z.number().min(1), /** Merchants' prices by the hour (1 = normal). */ shopHours: z.object({ morning: z.number().positive(), afternoon: z.number().positive(), evening: z.number().positive(), night: z.number().positive() }) }),
+  clock: z.object({ ticksPerStep: z.number().int().min(0).max(4), milestoneDays: z.array(z.number().int().min(2)).min(1), /** Days in a season of the run's calendar; each new season is a festival day. */ seasonLength: z.number().int().min(2), /** Real-world dates (month-day) the camp celebrates; the host passes today's date into the run. */ specialDates: z.array(z.object({ id: z.string(), label: z.string(), on: z.string().regex(/^\d\d-\d\d$/) })), /** Types that turn up more in the wild at each time of day. */ periodTypes: z.object({ morning: z.array(TypeNameSchema), afternoon: z.array(TypeNameSchema), evening: z.array(TypeNameSchema), night: z.array(TypeNameSchema) }), periodWildFactor: z.number().min(1), /** Merchants' prices by the hour (1 = normal). */ shopHours: z.object({ morning: z.number().positive(), afternoon: z.number().positive(), evening: z.number().positive(), night: z.number().positive() }) , /** Tide Clock (S2, core/clock.ts): the tide turns every `length` parts of the day, so it drifts against day and night. */ tide: z.object({ length: z.number().int().min(1), wildFactor: z.number().min(1), highTypes: z.array(TypeNameSchema), lowTypes: z.array(TypeNameSchema), highHeal: z.number().positive(), lowBall: z.number().positive() })}),
   attributeGrowth: z.array(
     z.object({
       attribute: AttributeKeySchema,
@@ -2185,6 +2189,10 @@ export const BalanceSchema = z.object({
   startingItems: z.record(z.string(), z.number().int().positive()),
   /** Chance that a wild Pokémon is shiny (director decision D8: 1/2000). */
   shinyChance: z.number().min(0).max(1),
+  /** Shiny Charm tiers (S225): species caught across all runs (the dex) lift the shiny chance of every run. */
+  shinyCharm: z.object({ tiers: z.array(z.object({ dex: z.number().int().positive(), multiplier: z.number().min(1), label: z.string() })) }),
+  /** Catch Chains (S218): catching the same species back to back lifts its shiny odds by `shinyPerLink` x the chain (max `maxLinks`), and a chain of `talentAt` gives the catch a talent. */
+  catchChain: z.object({ shinyPerLink: z.number().min(0), maxLinks: z.number().int().positive(), talentAt: z.number().int().positive() }),
   /** Team size = baseSize + extraPerStage × stage number (from 0) + a random 0..randomExtra, capped at maxSize. */
   trainerTeam: z.object({
     baseSize: z.number().int().min(1),
@@ -2624,6 +2632,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */
   z.object({ kind: z.literal('relic'), id: z.string(), name: z.string(), effects: z.array(ArchetypeModifierSchema).min(1).max(3) }),
+  /** Run events J: a temporary modifier for the next `battles` battles (of the `until` kind): a type boost, a handicap, weather or Trick Room at the start (`battleStart`). Uses `run.tempEffects`, so it runs out on its own. `label` is what the outcome tells the player. */
+  z.object({ kind: z.literal('tempEffect'), label: z.string().min(1), effects: z.array(ArchetypeModifierSchema).min(1).max(3), battles: z.number().int().min(1).max(5).default(1), until: z.enum(['battle', 'boss', 'wild']).default('battle') }),
   /** Rival feud: settle the open feud (back the first or second rival, stay out, or exploit it). */
   z.object({ kind: z.literal('feud'), choice: z.enum(['first', 'second', 'stay-out', 'exploit']) }),
   /** Grand-Enemy hunt: one more clue (`finish` ends the hunt and gives its title). */

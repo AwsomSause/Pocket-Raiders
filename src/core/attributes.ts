@@ -5,6 +5,7 @@
 // percentage, so 100 Strength doubles physical damage); the numbers live in
 // balance.json.
 
+import { shinyCharmMultiplier } from './catchChain';
 import { getArchetype, runPerks } from './archetypes';
 import { friendshipPerk, startingAttributes } from './trainerPerks';
 import { ATTRIBUTE_KEYS, METER_ATTRIBUTES, type AttributeKey, type Content, type Rarity } from './contentSchema';
@@ -129,7 +130,9 @@ export function attributeEffects(content: Content, a: Attributes): AttributeEffe
 }
 
 export function runAttributeEffects(content: Content, run: RunState): AttributeEffects {
-  const effects = attributeEffects(content, effectiveAttributes(content, run));
+  const base = attributeEffects(content, effectiveAttributes(content, run));
+  const charm = shinyCharmMultiplier(content, run);
+  const effects = charm === 1 ? base : { ...base, shinyChance: base.shinyChance * charm };
   const perks = runPerks(content, run);
   if (!perks) return effects;
   const shiny = perks.reduce((v, m) => (m.kind === 'shinyChanceMultiplier' ? v * m.value : v), 1);

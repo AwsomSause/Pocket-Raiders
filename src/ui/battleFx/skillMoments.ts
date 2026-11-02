@@ -7,6 +7,7 @@ import { TYPE_NAMES, type Content } from '../../core/contentSchema';
 import { typeEffectiveness } from '../../core/battle/damage';
 import type { SideEffects } from '../../core/state';
 import type { MotionLevel } from '../aero';
+import { letterboxPlan } from '../../core/presentation/crtFilter';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 
 const TYPES = TYPE_NAMES;
@@ -60,6 +61,17 @@ export function runScan(scene: Phaser.Scene, content: Content, foeName: string, 
     root.add(skip);
     scene.input.keyboard?.once('keydown-ESC', () => root.active && done(false));
   });
+}
+
+/** S260: black cinema bars slide in over the top and bottom for a moment, then out. Never blocks the battle. */
+export function critLetterbox(scene: Phaser.Scene, enabled: boolean, motion: MotionLevel): void {
+  const plan = letterboxPlan(enabled, motion);
+  if (!plan) return;
+  const h = Math.round(GAME_HEIGHT * plan.barShare);
+  const top = scene.add.rectangle(GAME_WIDTH / 2, -h / 2, GAME_WIDTH, h, 0x000000).setDepth(1400);
+  const bottom = scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT + h / 2, GAME_WIDTH, h, 0x000000).setDepth(1400);
+  scene.tweens.add({ targets: top, y: h / 2, duration: plan.slideMs, yoyo: true, hold: plan.holdMs, ease: 'Sine.easeOut', onComplete: () => top.destroy() });
+  scene.tweens.add({ targets: bottom, y: GAME_HEIGHT - h / 2, duration: plan.slideMs, yoyo: true, hold: plan.holdMs, ease: 'Sine.easeOut', onComplete: () => bottom.destroy() });
 }
 
 /** Crit freeze-frame: the action holds for a moment and the player picks the camera angle (auto-picks Wide). */

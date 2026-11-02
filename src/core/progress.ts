@@ -25,6 +25,7 @@ import { awardGameEvents, type GameEventPayout } from './gameEvents';
 import { awardModeRewards, type ModeRewardPaid } from './modeRewards';
 import { recordMoveMastery } from './moveMastery';
 import { relationshipCounters } from './relationships';
+import { hasPerk } from './mapItems';
 import { claimBankMilestones, claimRegionAccounts, loanDue, vaultDeposit } from './bank';
 import { runStamps } from './recap';
 import { settleMentor } from './mentors';
@@ -348,7 +349,7 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
   claimBankMilestones(content, profile, now);
   if (counts) {
     claimRegionAccounts(content, profile, run.regionsCleared, now);
-    vaultDeposit(content, profile, run);
+    vaultDeposit(content, profile, run, !run.victory && hasPerk(content, run, 'insurance'));
   }
   const achievementCredits = achievements.reduce((sum, a) => sum + a.reward.bankCredits, 0);
   const payout: Payout = { ...base, achievements: achievementCredits, total: profile.bankCredits - creditsBefore };

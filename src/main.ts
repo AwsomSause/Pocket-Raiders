@@ -36,6 +36,7 @@ import { MapScene } from './scenes/MapScene';
 import { PlazaScene } from './scenes/PlazaScene';
 import { RewardScene } from './scenes/RewardScene';
 import { RunPrepScene } from './scenes/RunPrepScene';
+import { RunModifiersScene } from './scenes/RunModifiersScene';
 import { ShopScene } from './scenes/ShopScene';
 import { EventScene } from './scenes/EventScene';
 import { TradeScene } from './scenes/TradeScene';
@@ -46,6 +47,7 @@ import { drawBackdrop } from './ui/widgets';
 import { aeroBackdrop } from './ui/aero';
 import { ArenaBackdrop } from './ui/showcase';
 import { applyDisplaySettings } from './ui/display';
+import { applySoundPack } from './ui/soundPack';
 import { applyUiSkin } from './ui/uiSkin';
 import { installPointerFx } from './ui/pointerFx';
 import { installGamepad } from './ui/gamepad';
@@ -104,13 +106,14 @@ function start(): void {
     backgroundColor: '#1d1a24',
     pixelArt: true,
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
+    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, RunModifiersScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
     callbacks: {
       preBoot: (g) => g.registry.set('session', session),
       postBoot: (g) => {
         // Screen readers get a name for the game area (the game itself is drawn on the canvas).
         applyUiSkin(session.settings);
         applyDisplaySettings(g, session.settings);
+        applySoundPack(g, session.settings.soundPack);
         setUiMotion(uiMotionFrom(session.settings));
         installPointerFx(g, () => session.settings, () => regionIdentity(session.run ? session.run.regionOrder[session.run.regionIndex] : undefined).sky);
         installGamepad(() => session.settings);
@@ -121,6 +124,7 @@ function start(): void {
           applyUiSkin(session.settings);
           setTouchLayout(session.settings.oneHanded);
           applyDisplaySettings(g, session.settings);
+        applySoundPack(g, session.settings.soundPack);
           setUiMotion(uiMotionFrom(session.settings));
         });
         g.canvas.setAttribute('role', 'application');
@@ -129,7 +133,7 @@ function start(): void {
         // slowly changing battlefield behind them (the battle and map draw their own).
         const ownScenery = new Set(['Boot', 'Battle', 'Map', 'Hub', 'Town', 'MainMenu', 'TrainerSelect']);
         // Gameplay screens in the Aero look (M10) get the glossy sky-and-bubbles backdrop instead.
-        const aeroScenery = new Set(['SaveSlots', 'Reward', 'Shop', 'Event', 'Decision', 'Briefing', 'Expedition', 'Minigame', 'StarterSelect', 'RunPrep', 'GameOver', 'HallOfFame', 'LegacyGallery', 'Memories', 'Credits']);
+        const aeroScenery = new Set(['SaveSlots', 'Reward', 'Shop', 'Event', 'Decision', 'Briefing', 'Expedition', 'Minigame', 'StarterSelect', 'RunPrep', 'RunModifiers', 'GameOver', 'HallOfFame', 'LegacyGallery', 'Memories', 'Credits']);
         for (const scene of g.scene.getScenes(false)) {
           scene.events.on(Phaser.Scenes.Events.CREATE, () => {
             if (scene.scene.key !== 'Boot') {

@@ -765,6 +765,25 @@ class PokemonScreen implements PickerLike {
     const mon = this.mon;
     const info = summaryInfo(this.content, this.run, mon);
     const r = readiness(this.content, mon);
+    if (this.skin?.overview) {
+      const xp = xpProgress(this.content, mon);
+      const hf = healFirst(this.content, this.run);
+      const status = mon.hp <= 0 ? 'Fainted' : mon.status ? STATUS_LABELS[mon.status.id]?.label ?? mon.status.id : 'No status condition';
+      const bv = bondView(this.content, this.run, mon);
+      this.skin.overview({
+        scene,
+        into: box,
+        mon: this.rosterMon(mon, this.sel),
+        exp: { frac: xp ? xp.fraction : 1, text: xp ? xp.text : 'Level limit' },
+        ready: { state: r.state, label: r.label },
+        status: `${status}. ${r.notes.join(' ')}${hf && hf.uid === mon.uid ? ' Heal this one first.' : ''}`.trim(),
+        held: heldBuild(this.content, mon).summary,
+        mood: moodWord(mon.care?.mood ?? 0),
+        bond: `${bv.mood.text}  ${'♥'.repeat(bv.hearts)}${'♡'.repeat(5 - bv.hearts)}`,
+        evolution: growthInfo(this.content, services().session.profile, mon).evolutions.slice(0, 2).join(', '),
+      });
+      return;
+    }
     const species = lookSpecies(this.content, mon);
     const icon = pokemonIcon(scene, species, 52, 52, 2.4);
     box.add(icon);

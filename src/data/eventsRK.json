@@ -1,0 +1,4686 @@
+{
+ "events": [
+  {
+   "id": "rk-streak-1",
+   "name": "Lucky Streak Chain",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a10",
+    "effect": "glint"
+   },
+   "intro": "A little stall chalks up a streak board: three wins in a row and you pick any prize. The first game is a coin toss.",
+   "choices": [
+    {
+     "label": "Call heads",
+     "chance": 0.5,
+     "success": {
+      "text": "Heads! One win on the board.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-streak-2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Tails. The board is wiped clean, but the keeper tosses you a consolation berry.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call tails",
+     "chance": 0.5,
+     "success": {
+      "text": "Tails! One win on the board.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-streak-2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Heads. The board is wiped clean, but the keeper tosses you a consolation berry.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-streak-2",
+   "name": "Lucky Streak Chain: Two",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a10",
+    "effect": "glint"
+   },
+   "intro": "Second game: pick a cup. One of three hides the marble.",
+   "choices": [
+    {
+     "label": "The left cup",
+     "chance": 0.45,
+     "success": {
+      "text": "The marble! Two wins in a row.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-streak-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Empty. The streak ends here.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle cup",
+     "chance": 0.45,
+     "success": {
+      "text": "The marble! Two wins in a row.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-streak-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Empty. The streak ends here.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the cash and stop",
+     "success": {
+      "text": "The keeper pays out the two-win bonus.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-streak-3",
+   "name": "Lucky Streak Chain: Three",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a14",
+    "effect": "sparkle"
+   },
+   "intro": "Last game: a die roll. Beat a four to claim the prize shelf!",
+   "choices": [
+    {
+     "label": "Roll the die",
+     "chance": 0.5,
+     "success": {
+      "text": "A six! The whole shelf is yours to pick from.",
+      "effects": [
+       {
+        "kind": "betterDraft",
+        "extra": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "A one. So close. You still get a prize from the lower shelf.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-heal",
+         "revive"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quit while ahead",
+     "success": {
+      "text": "The keeper pays out a streak bonus.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-curse-lottery",
+   "name": "The Curse Lottery",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1028",
+    "effect": "fog"
+   },
+   "intro": "A hooded clerk spins a drum of tickets. \"Every curse comes with its blessing. You only get to pick the ticket.\"",
+   "choices": [
+    {
+     "label": "Draw a ticket",
+     "chance": 0.5,
+     "success": {
+      "text": "The ticket reads: Heavy Hands. Hits land harder on you, but you learn faster.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-curse-slow",
+        "name": "Slow Curse, Quick Study",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.2
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ticket reads: Thin Purse. Prices bite, but your wins pay more.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-curse-thin",
+        "name": "Thin Purse, Heavy Prizes",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.15
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.3
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Draw two tickets (pay 300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Both tickets burn up. Their blessing stays: something kinder watches over the team.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-curse-twin",
+        "name": "Twin Ticket Charm",
+        "effects": [
+         {
+          "kind": "postBattleHeal",
+          "percent": 5
+         },
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past the booth",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-pact-booth",
+   "name": "The Pact Booth",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1414",
+    "effect": "glint"
+   },
+   "intro": "A clerk in a red coat pushes a contract across the counter. \"Harder fights, richer pay. Sign here. Initial there.\"",
+   "choices": [
+    {
+     "label": "Sign the Lesser Pact (foes +2 levels, money +40%)",
+     "success": {
+      "text": "The ink dries. The road ahead feels meaner, and so does your wallet.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-pact-lesser",
+        "name": "Lesser Pact",
+        "effects": [
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.4
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign the Greater Pact (foes +4 levels, money +80%, XP +20%)",
+     "success": {
+      "text": "The clerk smiles for the first time.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-pact-greater",
+        "name": "Greater Pact",
+        "effects": [
+         {
+          "kind": "enemyLevelOffset",
+          "value": 4
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.8
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.2
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse to sign",
+     "success": {
+      "text": "You fold the contract and hand it back.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-rule-board",
+   "name": "The Rule Board",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#14202a",
+    "effect": "none"
+   },
+   "intro": "A notice board lists house rules for the rest of the run. Pin up one of them and it counts for you, too.",
+   "choices": [
+    {
+     "label": "Rule: no battle items (money +30%)",
+     "success": {
+      "text": "You tack the rule up. Your pockets feel heavier already.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-rule-nobattleitems",
+        "name": "No Battle Items",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-battle-items"
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.3
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rule: no revives (XP +25%)",
+     "success": {
+      "text": "Fainted is fainted. The lessons stick.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-rule-norevives",
+        "name": "No Revives",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-revives"
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.25
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rule: double money, foes +2 levels",
+     "success": {
+      "text": "Rich and in danger.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-rule-richandrisky",
+        "name": "Rich and Risky",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 2
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the board bare",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-lucky-number",
+   "name": "Lucky Number",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a18",
+    "effect": "sparkle"
+   },
+   "intro": "A fortune stand asks you to pick a number from one to three. \"Hit the right one and the road rewards you, all run long.\"",
+   "choices": [
+    {
+     "label": "Number 1",
+     "chance": 0.34,
+     "success": {
+      "text": "One it is! Luck follows you from here.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-lucky-one",
+        "name": "Lucky Number",
+        "effects": [
+         {
+          "kind": "shinyChanceMultiplier",
+          "value": 1.5
+         },
+         {
+          "kind": "rareItemWeight",
+          "value": 1.2
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not your number. Here is a small prize for playing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Number 2",
+     "chance": 0.34,
+     "success": {
+      "text": "Two it is! Luck follows you from here.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-lucky-two",
+        "name": "Lucky Number",
+        "effects": [
+         {
+          "kind": "shinyChanceMultiplier",
+          "value": 1.5
+         },
+         {
+          "kind": "rareItemWeight",
+          "value": 1.2
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not your number. Here is a small prize for playing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Number 3",
+     "chance": 0.34,
+     "success": {
+      "text": "Three it is! Luck follows you from here.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-lucky-three",
+        "name": "Lucky Number",
+        "effects": [
+         {
+          "kind": "shinyChanceMultiplier",
+          "value": 1.5
+         },
+         {
+          "kind": "rareItemWeight",
+          "value": 1.2
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not your number. Here is a small prize for playing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-risk-dial",
+   "name": "The Risk Dial",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1414",
+    "effect": "shake"
+   },
+   "intro": "A brass dial on a post, marked from Calm to Chaos. Whatever you set it to, a challenger turns up to match it.",
+   "choices": [
+    {
+     "label": "Calm: a mild challenger",
+     "success": {
+      "text": "A trainer strolls up, easy as you like.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dial Challenger",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Spicy: a strong challenger",
+     "success": {
+      "text": "The dial clicks. A tougher trainer steps out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dial Challenger",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Chaos: the dial snaps off",
+     "success": {
+      "text": "Bells ring. An ace trainer tears down the road at you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Chaos Challenger",
+       "size": 4,
+       "types": [],
+       "levelBonus": 6,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "betterDraft",
+         "extra": 1
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-fate-cards",
+   "name": "Fate Cards",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1e1a2e",
+    "effect": "glint"
+   },
+   "intro": "A dealer fans three cards face down. \"Each one gives, and each one takes. Pick one.\"",
+   "choices": [
+    {
+     "label": "The Sun: heal everyone, lose some gold",
+     "success": {
+      "text": "Warm light. The team is fresh, the purse is lighter.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Tower: a rare find, a rough fall",
+     "success": {
+      "text": "Rubble and treasure. The lead takes a knock, but you find something good.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom",
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Star: a new friend, a stranger's debt",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "Someone follows you from the table. The dealer takes a cut.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "money",
+        "amount": -250
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-mood-swing",
+   "name": "Mood Swing",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2a",
+    "effect": "float"
+   },
+   "intro": "A strange breeze rolls over the team. Everyone's mood tips, for better or worse.",
+   "choices": [
+    {
+     "label": "Ride it out together",
+     "chance": 0.6,
+     "success": {
+      "text": "Laughing fits all round. The team bonds.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Sulking all round. A few of them need cheering up.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -4,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheer them up with snacks",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "old-gateau"
+      }
+     ],
+     "success": {
+      "text": "Snacks fix every mood.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a breather",
+     "success": {
+      "text": "You wait it out in the shade.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-shadow-boon",
+   "name": "The Shadow Boon",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "rare",
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#10101c",
+    "effect": "fog"
+   },
+   "intro": "Your own shadow offers a loan. \"I will lend you strength now. You pay it back later.\"",
+   "choices": [
+    {
+     "label": "Borrow health: heal everyone, take more damage later",
+     "success": {
+      "text": "The wounds close. Somewhere ahead, a bill is waiting.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "relic",
+        "id": "rk-shadow-loan",
+        "name": "Shadow Loan",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 1.08
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Borrow strength: hit harder, heal less",
+     "success": {
+      "text": "Your team feels stronger than it ought to.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-shadow-might",
+        "name": "Shadow Might",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "postBattleHeal",
+          "percent": 0.01
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "Your shadow shrugs and falls in behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-echo-item",
+   "name": "The Echo Item",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#14242a",
+    "effect": "glint"
+   },
+   "intro": "A small echo-stone repeats whatever you hold up to it. \"Show me something from your bag.\"",
+   "choices": [
+    {
+     "label": "Show a Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "A second Potion drops out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show a Revive",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "revive"
+      }
+     ],
+     "success": {
+      "text": "A second Revive rolls out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show a Rare Candy",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rare-candy"
+      }
+     ],
+     "success": {
+      "text": "A second Rare Candy clinks down.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show nothing",
+     "success": {
+      "text": "The echo repeats \"nothing\" a few times and goes quiet.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-crowd-poll",
+   "name": "The Crowd Poll",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a2a",
+    "effect": "none"
+   },
+   "intro": "A crowd is gathered around a stream camera. \"Chat votes! Whatever wins helps your next few fights.\"",
+   "choices": [
+    {
+     "label": "Let the crowd decide",
+     "chance": 0.5,
+     "success": {
+      "text": "\"Hearth!\" the crowd roars. A warm shield settles around the team.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"Bloom!\" the crowd chants. The team heals after fights for a while.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-bloom"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a catching boost",
+     "success": {
+      "text": "The crowd cheers for the wild ones.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-wild-grace"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for calm minds",
+     "success": {
+      "text": "A clear head for the next fights.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-chaos-dial",
+   "name": "The Chaos Dial",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a102a",
+    "effect": "shake"
+   },
+   "intro": "Three doors with no labels. A sign: \"All choices here are random. Probably.\"",
+   "choices": [
+    {
+     "label": "Door one",
+     "chance": 0.5,
+     "success": {
+      "text": "A shower of gold coins!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     },
+     "failure": {
+      "text": "A bucket of cold water. Everyone is fine, just damp.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Door two",
+     "chance": 0.5,
+     "success": {
+      "text": "A big sack of items tips out.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-heal",
+         "revive"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Nothing but dust and a rude note.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Door three",
+     "chance": 0.5,
+     "success": {
+      "text": "A cheering crowd lifts the lead a level!",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A friendly Pokémon pulls a prank on you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-hidden-quest",
+   "name": "A Nobody With a Secret",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c1c",
+    "effect": "none"
+   },
+   "intro": "A quiet person on the roadside waves you over. \"You look like you can keep a secret. I need something found.\"",
+   "choices": [
+    {
+     "label": "Take the secret quest",
+     "success": {
+      "text": "\"Remember me when you pass a stranger's grave, a lake and a lantern. I will find you again.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-secret-quest",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took a secret quest from a nobody.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say no thanks",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-hidden-quest-payoff",
+   "name": "The Nobody Returns",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rk-secret-quest",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c1c",
+    "effect": "glint"
+   },
+   "intro": "The quiet person from the roadside is waiting at the next crossing, grinning. \"You kept your eyes open. Here is what I promised.\"",
+   "choices": [
+    {
+     "label": "Collect the reward",
+     "success": {
+      "text": "The nobody turns out to be a collector of rare things. They give you one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive",
+         "star-piece",
+         "nugget"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "flag",
+        "key": "rk-secret-quest",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-sealed-letter",
+   "name": "The Sealed Letter",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A courier presses a sealed letter into your hand. \"Do not open it yet. Wait until the road gets hard.\"",
+   "choices": [
+    {
+     "label": "Keep it sealed",
+     "success": {
+      "text": "You tuck the letter away and feel strangely lucky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-sealed-letter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open it right now",
+     "success": {
+      "text": "The letter holds a coupon for a small gift.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-sealed-letter-open",
+   "name": "The Letter, Opened",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rk-sealed-letter",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "The road has gotten hard. You break the wax seal at last. Inside, a note: \"I knew you would need this. Behind the old signpost.\"",
+   "choices": [
+    {
+     "label": "Dig behind the signpost",
+     "success": {
+      "text": "A chest of gifts, exactly as promised.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "max-potion",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rk-sealed-letter",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-mirror-reversal",
+   "name": "The Reversing Mirror",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "glint"
+   },
+   "intro": "A tall mirror shows the last thing that happened to you, back to front. Step through and it flips your fortunes the same way.",
+   "choices": [
+    {
+     "label": "Trade health for gold",
+     "success": {
+      "text": "Your reflection hands you a purse and takes a bruise.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "money",
+        "amount": 450
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade gold for health",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Your reflection takes the coins and hands you a clean bill of health.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't look",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-rest-day",
+   "name": "A Perfect Rest Day",
+   "group": "Run-Wide Modifiers",
+   "stop": "rest",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#18281c",
+    "effect": "float"
+   },
+   "intro": "A meadow with nothing in it but soft grass and a warm sun. Nothing is scheduled, and no one will find you.",
+   "choices": [
+    {
+     "label": "Spend the whole day resting",
+     "success": {
+      "text": "Everyone naps, eats and plays. A new day dawns.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest a little, then go",
+     "success": {
+      "text": "A short breather.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-birthday",
+   "name": "It's Your Birthday!",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "milestone"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "Everyone you have met lines the road with streamers. Somebody wheels out a cake. \"Happy birthday, trainer!\"",
+   "choices": [
+    {
+     "label": "Blow out the candles",
+     "success": {
+      "text": "Make a wish. The gifts pile up.",
+      "effects": [
+       {
+        "kind": "celebrate"
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share the cake with the team",
+     "success": {
+      "text": "The cake is gone in seconds, and so are the worries.",
+      "effects": [
+       {
+        "kind": "celebrate"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-holiday-surprise",
+   "name": "The Seasonal Visitor",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "A traveller in clothes for the weather hands out presents. \"It's that time of year again!\"",
+   "choices": [
+    {
+     "label": "Spring: an egg for you",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Spring"
+       ]
+      }
+     ],
+     "success": {
+      "text": "A neat pastel egg.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Summer: a cool-box of treats",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Summer"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Ice-cold drinks for everyone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soda-pop",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "lemonade",
+        "count": 2
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Autumn: a basket of berries",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Autumn"
+       ]
+      }
+     ],
+     "success": {
+      "text": "The harvest is in.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Winter: warm gifts",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Winter"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Scarf, stone, and a hot meal.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "old-gateau",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-free-pick-altar",
+   "name": "The Free Pick Altar",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2014",
+    "effect": "glint"
+   },
+   "intro": "Three relics glow on a stone altar. \"Take one. The others will vanish.\"",
+   "choices": [
+    {
+     "label": "The Red Relic: hit harder",
+     "success": {
+      "text": "Warmth in your fists. The other two relics fade.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-altar-red",
+        "name": "Red Relic",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.08
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Blue Relic: heal after fights",
+     "success": {
+      "text": "A cool calm settles over the team. The other two relics fade.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-altar-blue",
+        "name": "Blue Relic",
+        "effects": [
+         {
+          "kind": "postBattleHeal",
+          "percent": 6
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Gold Relic: richer rewards",
+     "success": {
+      "text": "The weight of wealth. The other two relics fade.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-altar-gold",
+        "name": "Gold Relic",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "rareItemWeight",
+          "value": 1.15
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-altar-swaps",
+   "name": "The Altar of Swaps",
+   "group": "Run-Wide Modifiers",
+   "stop": "trade",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c2a",
+    "effect": "float"
+   },
+   "intro": "A stone altar hums. \"Leave one of yours. Take one of mine. We keep it fair.\"",
+   "choices": [
+    {
+     "label": "Swap your weakest for a stranger",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "The altar takes one and gives you another of its own.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "your weakest Pokémon"
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-draft-pool",
+   "name": "The Draft Pool",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#142a2a",
+    "effect": "sparkle"
+   },
+   "intro": "Five Pokémon wait behind a rope, all looking for a trainer. You can take just one.",
+   "choices": [
+    {
+     "label": "The cheerful one",
+     "success": {
+      "text": "It tumbles into the party.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "normal",
+         "fairy"
+        ],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The fierce one",
+     "success": {
+      "text": "It stares you down, then joins.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "fighting",
+         "dark",
+         "fire"
+        ],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The calm one",
+     "success": {
+      "text": "It follows you quietly.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "water",
+         "grass",
+         "psychic"
+        ],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The odd one",
+     "success": {
+      "text": "It nods once. A good sign.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "ghost",
+         "dragon",
+         "steel"
+        ],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-reroll-shrine",
+   "name": "The Reroll Shrine",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2a",
+    "effect": "glint"
+   },
+   "intro": "A small stone shrine with three coin slots. \"Toss in a coin and the road ahead is dealt again.\"",
+   "choices": [
+    {
+     "label": "Toss a coin (200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The road ahead rearranges itself. A new door opens beside you.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rk-door-wood",
+         "rk-door-iron",
+         "rk-floor-1",
+         "rk-floor-3"
+        ]
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Toss three coins (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The road ahead is wholly new. Also, you can see where the hidden stops are.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rk-door-silver",
+         "rk-door-gold",
+         "rk-floor-4"
+        ]
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "money",
+        "amount": -500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your coins",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-skip-token",
+   "name": "The Skip Token Stand",
+   "group": "Run-Wide Modifiers",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A kid sells paper passes. \"Skip the next node! Rides you right on past.\"",
+   "choices": [
+    {
+     "label": "Buy a pass (300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The kid punches your pass and waves you through.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle (Charisma)",
+     "check": "charisma",
+     "success": {
+      "text": "The kid sighs and gives you a discount.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     },
+     "failure": {
+      "text": "The kid does not budge, and you do not buy.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-redo-ticket",
+   "name": "The Redo Ticket Booth",
+   "group": "Run-Wide Modifiers",
+   "stop": "merchant",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "intro": "A bored clerk sells pink tickets. \"Lose a fight? Show this at the door and fight it again.\"",
+   "choices": [
+    {
+     "label": "Buy a Redo Ticket (600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You tuck the ticket away. The next time a Pokémon falls, it just might get back up.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-redo-ticket",
+        "name": "Redo Ticket",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.3
+         }
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -600
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pass",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-probability-mage",
+   "name": "The Probability Mage",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "rare",
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#241a3a",
+    "effect": "glint"
+   },
+   "intro": "A mage looks at you with half-closed eyes. \"I will tell you what the dice want. I will not change them.\"",
+   "choices": [
+    {
+     "label": "See what waits in the wild",
+     "success": {
+      "text": "Green fog clears. Wild Pokémon show up on your map.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-mage-wild",
+        "name": "Mage's Sight: Wild",
+        "effects": [
+         {
+          "kind": "preview",
+          "what": "wild"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "See the trainers ahead",
+     "success": {
+      "text": "Shapes of the trainers ahead sharpen.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-mage-trainers",
+        "name": "Mage's Sight: Trainers",
+        "effects": [
+         {
+          "kind": "preview",
+          "what": "trainers"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "See the Gym team",
+     "success": {
+      "text": "The Gym Leader's team stands in a line before you.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-team-banner",
+   "name": "The Team Banner Station",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#14283a",
+    "effect": "float"
+   },
+   "intro": "A seamstress hangs team banners from a line. \"Pick a banner. It carries a little luck with it.\"",
+   "choices": [
+    {
+     "label": "Crimson banner: +6% damage",
+     "success": {
+      "text": "It snaps proudly in the wind.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-banner-crimson",
+        "name": "Crimson Banner",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.06
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Azure banner: heal 5% after fights",
+     "success": {
+      "text": "It smells of rain and clean cloth.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-banner-azure",
+        "name": "Azure Banner",
+        "effects": [
+         {
+          "kind": "postBattleHeal",
+          "percent": 5
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Gilded banner: +12% money",
+     "success": {
+      "text": "It glints like coin.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-banner-gilded",
+        "name": "Gilded Banner",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.12
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Verdant banner: +10% friendship gain",
+     "success": {
+      "text": "The team seems closer already.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-banner-verdant",
+        "name": "Verdant Banner",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-anniversary-archive",
+   "name": "The Anniversary Archive",
+   "group": "Run-Wide Modifiers",
+   "stop": "library",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "glint"
+   },
+   "intro": "A hidden archive opens only for runs that have come this far. Shelves of photos and trinkets from all your journeys.",
+   "choices": [
+    {
+     "label": "Read the journal",
+     "success": {
+      "text": "A line about you is written on every page. You feel seen.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Opened the Anniversary Archive.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a keepsake",
+     "success": {
+      "text": "A little souvenir to carry on.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a note for next time",
+     "success": {
+      "text": "You pin a note to the wall. The archive hums.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-archive-note",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-coin-vault",
+   "name": "The Lucky Coin Vault",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "A round vault door with a coin slot. \"What goes in turns into research that outlasts your run.\"",
+   "choices": [
+    {
+     "label": "Deposit 200",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The coins clink away. A voucher pops out.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "research",
+        "amount": 12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deposit 600",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "A big clunk. The vault rewards you well.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "research",
+        "amount": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deposit 1500",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The vault door glows gold.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "research",
+        "amount": 130
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your coins",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-legacy-pedestal",
+   "name": "The Legacy Pedestal",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "sparkle"
+   },
+   "intro": "A stone pedestal waits with room for one item. The runs before you left things here, and so can you.",
+   "choices": [
+    {
+     "label": "Recover a keepsake from an earlier run",
+     "requires": [
+      {
+       "kind": "keepsake"
+      }
+     ],
+     "success": {
+      "text": "You lift a keepsake off the pedestal.",
+      "effects": [
+       {
+        "kind": "recoverKeepsake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Rare Candy as a gift to the future",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rare-candy"
+      }
+     ],
+     "success": {
+      "text": "The pedestal accepts it. Your name is carved beneath.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "rare-candy"
+       },
+       {
+        "kind": "research",
+        "amount": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Nugget as a gift to the future",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "nugget"
+      }
+     ],
+     "success": {
+      "text": "The pedestal accepts it.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "nugget"
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-hall-of-records",
+   "name": "The Hall of Records",
+   "group": "Run-Wide Modifiers",
+   "stop": "library",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#20203a",
+    "effect": "none"
+   },
+   "intro": "Glass cases line the walls: your best runs, wins and wild moments. A plaque offers a challenge.",
+   "choices": [
+    {
+     "label": "Study the records",
+     "success": {
+      "text": "You pick up a few tips from your past runs.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the plaque's challenge: no healing stops",
+     "success": {
+      "text": "You accept. The plaque glows.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-records-challenge",
+        "name": "Record Challenge",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-heal-stops"
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.3
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Admire and go",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-memory-lane",
+   "name": "Memory Lane",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "float"
+   },
+   "intro": "A path of lanterns, each holding a scene from a long way back. Nothing here changes, but it is lovely to see.",
+   "choices": [
+    {
+     "label": "Walk the whole lane",
+     "success": {
+      "text": "You watch the old days pass in light. The team hums along.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Walked Memory Lane.",
+        "importance": 60
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick one lantern",
+     "success": {
+      "text": "A single warm scene. A little bit of peace.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Picked a lantern on Memory Lane.",
+        "importance": 50
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-pocket-closet",
+   "name": "The Pocket Dimension Closet",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1a2230",
+    "effect": "float"
+   },
+   "intro": "A wardrobe that is bigger on the inside. \"Store anything. Come back for it later and I will keep it safe.\"",
+   "choices": [
+    {
+     "label": "Store a Rare Candy",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rare-candy"
+      }
+     ],
+     "success": {
+      "text": "The door shuts. You mark the spot on your map.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "rare-candy"
+       },
+       {
+        "kind": "flag",
+        "key": "rk-closet-candy",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Store a Max Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "max-potion"
+      }
+     ],
+     "success": {
+      "text": "The door shuts. You mark the spot on your map.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "max-potion"
+       },
+       {
+        "kind": "flag",
+        "key": "rk-closet-potion",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Store a Revive",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "revive"
+      }
+     ],
+     "success": {
+      "text": "The door shuts. You mark the spot on your map.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "revive"
+       },
+       {
+        "kind": "flag",
+        "key": "rk-closet-revive",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a peek only",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-pocket-closet-return",
+   "name": "The Closet, Again",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rk-closet-candy",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2230",
+    "effect": "float"
+   },
+   "intro": "The same wardrobe stands at this crossroad. It opens with a creak, and the Rare Candy inside seems to have grown.",
+   "choices": [
+    {
+     "label": "Take it out",
+     "success": {
+      "text": "Two Rare Candies where there was one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rk-closet-candy",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-pocket-closet-return-2",
+   "name": "The Closet, Again",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rk-closet-potion",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2230",
+    "effect": "float"
+   },
+   "intro": "The same wardrobe stands at this crossroad. It opens with a creak.",
+   "choices": [
+    {
+     "label": "Take it out",
+     "success": {
+      "text": "Three Max Potions where there was one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "max-potion",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rk-closet-potion",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-pocket-closet-return-3",
+   "name": "The Closet, Again",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rk-closet-revive",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2230",
+    "effect": "float"
+   },
+   "intro": "The same wardrobe stands at this crossroad. It opens with a creak.",
+   "choices": [
+    {
+     "label": "Take it out",
+     "success": {
+      "text": "Two Revives where there was one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rk-closet-revive",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-bounty-hunter",
+   "name": "The Bounty Hunter",
+   "group": "Run-Wide Modifiers",
+   "stop": "ambush",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#241414",
+    "effect": "shake"
+   },
+   "intro": "A hard-eyed hunter leans out of a doorway. \"I hunt the strongest one in any team. Sign my contract and I fight you for the pay.\"",
+   "choices": [
+    {
+     "label": "Accept the contract",
+     "success": {
+      "text": "\"Good. Let's see how strong your best really is.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bounty Hunter",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1200
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-candy",
+          "max-revive",
+          "star-piece",
+          "nugget"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pay them off (400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "They tip their hat and walk away.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip away",
+     "chance": 0.6,
+     "success": {
+      "text": "You duck down an alley. They don't follow.",
+      "effects": []
+     },
+     "failure": {
+      "text": "They were faster than they looked.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bounty Hunter",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-third-wheel",
+   "name": "The Third Wheel",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c24",
+    "effect": "float"
+   },
+   "intro": "A mystery NPC in a long coat falls in step with you, saying nothing. They seem to be waiting for something.",
+   "choices": [
+    {
+     "label": "Let them tag along",
+     "success": {
+      "text": "They hum, whistle, and chat with the Pokémon. After a few nodes, they'll pay you back.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rk-third-wheel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask them to leave",
+     "success": {
+      "text": "They tip a hat and take a different road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-crossroads-four",
+   "name": "The Crossroads of Four",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2820",
+    "effect": "glint"
+   },
+   "intro": "Four doors: wood, iron, silver, gold. A sign says each leads to a richer, riskier event than the last.",
+   "choices": [
+    {
+     "label": "The wood door",
+     "success": {
+      "text": "Creak. A common sort of scene is behind it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-door-wood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The iron door",
+     "success": {
+      "text": "Clang. Something uncommon waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-door-iron"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The silver door",
+     "success": {
+      "text": "A hush. Something rare waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-door-silver"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The gold door",
+     "success": {
+      "text": "Light spills out. Something epic waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-door-gold"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-door-wood",
+   "name": "Behind the Wood Door",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2820",
+    "effect": "none"
+   },
+   "intro": "A snug pantry stocked for a long trip.",
+   "choices": [
+    {
+     "label": "Help yourself",
+     "success": {
+      "text": "Plenty to go around.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-heal",
+         "revive"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-door-iron",
+   "name": "Behind the Iron Door",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#20242a",
+    "effect": "shake"
+   },
+   "intro": "A sparring hall with one lone fighter in the middle.",
+   "choices": [
+    {
+     "label": "Spar",
+     "success": {
+      "text": "The fighter bows and begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Iron Door Guard",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-door-silver",
+   "name": "Behind the Silver Door",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A glittering gallery with a single glass case.",
+   "choices": [
+    {
+     "label": "Open the case",
+     "success": {
+      "text": "Inside is a silver star and a card of thanks.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-door-gold",
+   "name": "Behind the Gold Door",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3010",
+    "effect": "sparkle"
+   },
+   "intro": "A throne room with a throne no one sits on, and a crown on a cushion.",
+   "choices": [
+    {
+     "label": "Take the crown's reward",
+     "success": {
+      "text": "Gold pours out. The throne gives a gift to anyone brave enough to enter.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 2
+       },
+       {
+        "kind": "betterDraft",
+        "extra": 2
+       },
+       {
+        "kind": "money",
+        "amount": 900
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-sunk-cost",
+   "name": "The Sunk Cost Choice",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#24201c",
+    "effect": "none"
+   },
+   "intro": "A half-built wooden bridge across a gorge. A builder shrugs. \"We're in too deep. Keep paying, or take a refund and go around.\"",
+   "choices": [
+    {
+     "label": "Keep paying (300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "chance": 0.55,
+     "success": {
+      "text": "The bridge is done! A fine toll and a fine view.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     },
+     "failure": {
+      "text": "The bridge collapses. The builder is very sorry.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the refund and go around",
+     "success": {
+      "text": "The builder pays up, a little guilty.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-perfect-day",
+   "name": "A Perfect Day",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a2a",
+    "effect": "sparkle"
+   },
+   "intro": "The sun is warm, the breeze is soft, and everyone on this road is smiling at you. Nothing here can go wrong.",
+   "choices": [
+    {
+     "label": "Rest in the sun",
+     "success": {
+      "text": "Warm light on every back.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave to the crowd",
+     "success": {
+      "text": "The crowd tosses you gifts.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-heal",
+         "revive"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dance in the street",
+     "success": {
+      "text": "A talented dancer gives the lead a hand. It comes away stronger.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-terrible-day",
+   "name": "A Terrible Day",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a24",
+    "effect": "rain"
+   },
+   "intro": "Dark clouds, a flat tire on a cart, and a stuck bag. Nothing here can go right. But storms leave more behind than they take.",
+   "choices": [
+    {
+     "label": "Weather it",
+     "success": {
+      "text": "Everything goes wrong. When the clouds clear, there is a heap of lost goods in the mud.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "betterDraft",
+        "extra": 2
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 900
+       }
+      ]
+     }
+    },
+    {
+     "label": "Duck into shelter",
+     "success": {
+      "text": "You wait it out in a cave. A little bit of treasure.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-twin-nodes",
+   "name": "Twin Nodes",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c202a",
+    "effect": "float"
+   },
+   "intro": "Two scenes unfold side by side at the same crossroad. You can walk through one, or squeeze through both at a price.",
+   "choices": [
+    {
+     "label": "Take the left scene",
+     "success": {
+      "text": "You step left.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-twin-left"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the right scene",
+     "success": {
+      "text": "You step right.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-twin-right"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do both (a rough pace: -15% health)",
+     "success": {
+      "text": "You hurry through each in turn.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-twin-left"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-twin-right"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-twin-left",
+   "name": "Twin Nodes: Left",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c202a",
+    "effect": "none"
+   },
+   "intro": "A tidy camp. A cook waves.",
+   "choices": [
+    {
+     "label": "Share a meal",
+     "success": {
+      "text": "A hearty meal for everyone.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-twin-right",
+   "name": "Twin Nodes: Right",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c202a",
+    "effect": "none"
+   },
+   "intro": "A dusty market stall. A trader waves.",
+   "choices": [
+    {
+     "label": "Browse",
+     "success": {
+      "text": "A few handy things.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-heal",
+         "revive"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-counting-sheep",
+   "name": "Counting Sheep",
+   "group": "Run-Wide Modifiers",
+   "stop": "rest",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#20202a",
+    "effect": "float"
+   },
+   "intro": "A grassy hill. Nothing is happening. Nothing at all. A sleepy Pokémon counts something under its breath.",
+   "choices": [
+    {
+     "label": "Count along",
+     "success": {
+      "text": "One. Two. Three. You nod off. Something stirs in the back of your mind, a counter that doesn't stop.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-sheep-counter",
+        "name": "Counting Sheep",
+        "effects": [
+         {
+          "kind": "eventCounter",
+          "id": "sheep",
+          "on": "nodeEnter",
+          "amount": 1,
+          "max": 7
+         },
+         {
+          "kind": "counterDamage",
+          "counter": "sheep",
+          "atLeast": 7,
+          "base": 1.2,
+          "perPoint": 0
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nap instead",
+     "success": {
+      "text": "You sleep soundly.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-reverse-fountain",
+   "name": "The Reverse Wishing Fountain",
+   "group": "Run-Wide Modifiers",
+   "stop": "well",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#142a3a",
+    "effect": "sparkle"
+   },
+   "intro": "The fountain is full of coins and a sign: \"Take a coin instead of leaving one.\" What could go wrong?",
+   "choices": [
+    {
+     "label": "Take a coin",
+     "chance": 0.7,
+     "success": {
+      "text": "A shiny coin. You feel luckier. Slightly.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "A cold current pulls the coin from your hand. A tiny curse follows.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a fistful",
+     "chance": 0.35,
+     "success": {
+      "text": "A fistful of coins, and a fountain spirit rolls its eyes at you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 700
+       }
+      ]
+     },
+     "failure": {
+      "text": "The fountain spits you out. Everyone is soaked, and the coins are gone.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "money",
+        "amount": -250
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a coin as usual",
+     "success": {
+      "text": "You toss a coin and make a wish.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-interview",
+   "name": "The Interview",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#20242a",
+    "effect": "none"
+   },
+   "intro": "A hiring manager with a clipboard. \"What are you best at? Be honest. Your answer decides how you travel from here on.\"",
+   "choices": [
+    {
+     "label": "\"I take big swings.\"",
+     "success": {
+      "text": "Written down: Bold. You lean into it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "rk-interview-bold",
+        "name": "Trait: Bold",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.05
+         },
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 1.05
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I keep everyone safe.\"",
+     "success": {
+      "text": "Written down: Careful. You lean into it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "rk-interview-careful",
+        "name": "Trait: Careful",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 0.92
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 0.95
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I always find a deal.\"",
+     "success": {
+      "text": "Written down: Shrewd. You lean into it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "rk-interview-shrewd",
+        "name": "Trait: Shrewd",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.92
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.05
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I get lucky a lot.\"",
+     "success": {
+      "text": "Written down: Lucky. You lean into it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "rk-interview-lucky",
+        "name": "Trait: Lucky",
+        "effects": [
+         {
+          "kind": "critChanceBonus",
+          "value": 0.04
+         },
+         {
+          "kind": "rareItemWeight",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-census",
+   "name": "The Pokémon Census",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#20282a",
+    "effect": "none"
+   },
+   "intro": "A clerk with a clipboard counts the Pokémon on the road. \"Report your team and get paid by how varied it is.\"",
+   "choices": [
+    {
+     "label": "Report a duo or more",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "\"Two, at least. Here is a little.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report a squad of four",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 4
+      }
+     ],
+     "success": {
+      "text": "\"A fine variety!\" The clerk is delighted.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 450
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report a full team of six",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 6
+      }
+     ],
+     "success": {
+      "text": "\"The best census I have ever seen!\" You get the top bonus.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1000
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline to be counted",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-daily-puzzle",
+   "name": "Challenge of the Day",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a2a",
+    "effect": "glint"
+   },
+   "intro": "A board in the square posts today's puzzle. Solve it and the town hands out the prize.",
+   "choices": [
+    {
+     "label": "Try the timing puzzle",
+     "prompt": {
+      "id": "climb-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Perfect! The prize hatch pops open.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss the rhythm. The town pays you a pity prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try the sliding puzzle (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "Click! Today's record is yours.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     },
+     "failure": {
+      "text": "The tiles jam. Maybe tomorrow.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-elevator",
+   "name": "The Elevator Floors",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "none"
+   },
+   "intro": "A glass elevator with four buttons. Each floor is a different scene. The doors ding.",
+   "choices": [
+    {
+     "label": "Floor 1: the lobby",
+     "success": {
+      "text": "Doors open on a cozy lobby.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-floor-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Floor 2: the arcade",
+     "success": {
+      "text": "Doors open on flashing lights.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-floor-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Floor 3: the clinic",
+     "success": {
+      "text": "Doors open on clean white tile.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-floor-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Floor 4: the roof",
+     "success": {
+      "text": "Doors open on open sky.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-floor-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-floor-1",
+   "name": "Elevator: The Lobby",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "none"
+   },
+   "intro": "A tidy lobby with a free snack table.",
+   "choices": [
+    {
+     "label": "Grab a snack",
+     "success": {
+      "text": "Delicious.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-floor-2",
+   "name": "Elevator: The Arcade",
+   "group": "Run-Wide Modifiers",
+   "stop": "casino",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c3a",
+    "effect": "glint"
+   },
+   "intro": "A tiny arcade full of lights.",
+   "choices": [
+    {
+     "label": "Play a round",
+     "chance": 0.5,
+     "success": {
+      "text": "Top score!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       }
+      ]
+     },
+     "failure": {
+      "text": "Game over. A few coins lighter.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Window shop",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-floor-3",
+   "name": "Elevator: The Clinic",
+   "group": "Run-Wide Modifiers",
+   "stop": "heal",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a2a",
+    "effect": "sparkle"
+   },
+   "intro": "A tiny clinic. The nurse smiles.",
+   "choices": [
+    {
+     "label": "Get checked up",
+     "success": {
+      "text": "Everyone is healed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-floor-4",
+   "name": "Elevator: The Roof",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#14243a",
+    "effect": "float"
+   },
+   "intro": "A rooftop with a great view of the road ahead.",
+   "choices": [
+    {
+     "label": "Look out",
+     "success": {
+      "text": "You see far.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 4
+       },
+       {
+        "kind": "riftPreview"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-treasure-trap",
+   "name": "Treasure vs Trap",
+   "group": "Run-Wide Modifiers",
+   "stop": "treasure",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "Two chests in a dim cellar. A hooded NPC leans on the wall. \"One is a treasure. One is a trap. I could give you a hint…\"",
+   "choices": [
+    {
+     "label": "Ask the NPC for a hint (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The NPC points. Inside: a fine treasure!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "The NPC was lying. It was the trap.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open the left chest",
+     "chance": 0.5,
+     "success": {
+      "text": "A treasure!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 250
+       }
+      ]
+     },
+     "failure": {
+      "text": "A trap! Gas, darts, bad language.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open the right chest",
+     "chance": 0.5,
+     "success": {
+      "text": "A treasure!",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 250
+       }
+      ]
+     },
+     "failure": {
+      "text": "A trap! Gas, darts, bad language.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them both",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-strangers-dice",
+   "name": "The Stranger's Dice",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#24142a",
+    "effect": "glint"
+   },
+   "intro": "A stranger shakes a pair of old bone dice. \"Roll them and I'll tell you what the shops will charge from now on.\"",
+   "choices": [
+    {
+     "label": "Roll the dice",
+     "chance": 0.5,
+     "success": {
+      "text": "Snake eyes? No, double sixes! Shops owe you a discount.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-dice-discount",
+        "name": "Lucky Dice: Discount",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.88
+         }
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Bad roll. Shopkeepers will remember it.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-dice-markup",
+        "name": "Lucky Dice: Markup",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't roll",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-shifting-map",
+   "name": "The Shifting Map",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#241e2a",
+    "effect": "shake"
+   },
+   "intro": "The map in your hand curls at the corners. Ahead, the stops slide around like pieces on a board.",
+   "choices": [
+    {
+     "label": "Let it shift",
+     "success": {
+      "text": "The next few nodes swap places. Keep your eyes open.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-shifting-map",
+        "name": "Shifting Map",
+        "effects": [
+         {
+          "kind": "stopShuffle",
+          "every": 3
+         }
+        ]
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fold the map away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-mastery-echo",
+   "name": "The Mastery Echo",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c14",
+    "effect": "glint"
+   },
+   "intro": "A dojo gong rings with a deep, long echo. \"Your next battle will teach double.\"",
+   "choices": [
+    {
+     "label": "Ring it again",
+     "success": {
+      "text": "The echo settles into the team. Their next battle is a hard lesson, well learned.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen quietly",
+     "success": {
+      "text": "You catch just a few words of the echo.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-final-curtain",
+   "name": "The Final Curtain",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a0f14",
+    "effect": "glint"
+   },
+   "intro": "A small theatre is putting on a play about a certain Gym Leader. The actor in the leader's cape gets every detail right.",
+   "choices": [
+    {
+     "label": "Watch the whole play",
+     "success": {
+      "text": "Every move is on stage. You come away knowing the team.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit up front and take notes",
+     "success": {
+      "text": "You see more than most, and even catch a few weak points.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "riftPreview"
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the show",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

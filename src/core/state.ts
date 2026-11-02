@@ -1695,6 +1695,12 @@ export const SettingsSchema = z.object({
   lastSeenUpdate: z.string().default(''),
   tutorialOffered: z.boolean().default(false),
   tutorialDone: z.array(z.string()).default([]),
+  /** S259 Retro CRT filter: scanlines and a curved-glass vignette over the game (off by default). */
+  crtFilter: z.enum(['off', 'light', 'full']).default('off'),
+  /** S260 Cinematic letterbox: black bars slide in for a moment on a critical hit (off by default). */
+  critLetterbox: z.boolean().default(false),
+  /** S261 Sound packs: filter chain on the master output (Original keeps the recordings untouched). */
+  soundPack: z.enum(['original', 'gba', 'ds', 'orchestral']).default('original'),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

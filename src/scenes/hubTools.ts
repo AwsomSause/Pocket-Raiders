@@ -9,6 +9,7 @@ import { boardCode, mergedBoard } from '../core/tools/seedBoard';
 import { installPack, removePack } from '../core/tools/modPacks';
 import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
 import { inspectSave, reportLines } from '../save/saveInspector';
+import { categoryLabel, parseSplits, splitLines } from '../core/tools/speedrun';
 import { backupDue } from '../core/tools/backup';
 import { packSeeds } from '../core/configPack';
 import { loadStoredPacks } from '../core/tools/modPacks';
@@ -56,10 +57,11 @@ export function openTools(host: ToolsHost): void {
     { label: 'Mod packs', sub: 'Add JSON packs of extra trainer lines and seeds. Packs are checked, never run as code.', go: () => openPacks(host) },
     { label: 'Tournament bracket', sub: 'Type friends\' names; get a seeded single-elimination bracket. Works offline.', go: () => openBracket(host) },
     { label: 'Check a save file', sub: 'Pick a save record or exported save: shows its version, the upgrade steps and any damage. Changes nothing.', go: () => openSaveCheck(host) },
+    { label: 'Speedrun timer', sub: `Shows run time and badge splits on the map. Now ${device.speedrunOn() ? 'on' : 'off'}; Enter to switch, then see the last run's splits.`, go: () => openSpeedrun(host) },
     { label: 'Report a bug', sub: 'Bundles the version, seed and recent errors into a file you can send.', go: () => openBugReport(host) },
     { label: 'Back up my save', sub: due ? 'You have not saved a copy in a while. Enter to download one.' : 'Download a copy of your profile and settings.', go: () => backup(host) },
   ];
-  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 8 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
+  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 9 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
 }
 
 export function openChangelog(host: ToolsHost): void {
@@ -158,6 +160,15 @@ function openSaveCheck(host: ToolsHost): void {
     const rows = parts.flatMap((p) => reportLines(inspectSave(p.raw)).map((l, i) => row(i === 0 ? `${p.name}: ${l}` : l, '', '', l.startsWith('!') ? COLORS.gold : COLORS.textLight)));
     page(host, 'Save check', rows.length ? rows : [row('Nothing to check', 'That file has no save records.')]);
   });
+}
+
+function openSpeedrun(host: ToolsHost): void {
+  const { session } = services();
+  const on = device.speedrunOn();
+  const sp = parseSplits(device.splits());
+  const rules = session.run?.rules;
+  const rows = [row(`Timer is ${on ? 'on' : 'off'}`, 'Enter switches it. Times stay on this device, never in your save.', on ? 'Turn off' : 'Turn on'), ...(rules ? [row(`Category: ${categoryLabel(rules)}`, 'Only compare times in the same category.')] : []), ...(sp ? splitLines(sp, Date.now()).map((l) => row(l, '')) : [row('No splits yet', 'Turn the timer on and start a run.')])];
+  page(host, 'Speedrun timer', rows, (n) => { if (n === 0) { device.setSpeedrun(!on); host.restart(`Speedrun timer ${on ? 'off' : 'on'}.`); } });
 }
 
 function openBugReport(host: ToolsHost): void {

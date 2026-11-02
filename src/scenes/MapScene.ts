@@ -11,7 +11,7 @@ import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
 import { crossingHint, obstacleAt, towerClimb, TRAVERSAL } from '../core/traversal';
 import { realSeason, SEASON_SKIN } from '../ui/seasonSkin';
-import { clockLabel, periodOf, PERIOD_LOOK } from '../core/clock';
+import { clockLabel, periodOf, PERIOD_LOOK, tideLabel } from '../core/clock';
 import { modeObjectives, objectivesLine } from '../core/modeObjectives';
 import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
@@ -39,6 +39,8 @@ import { blindMap } from '../core/rules';
 import { arenaFor, getTheme } from '../core/themes';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
+import { device } from '../game/deviceTools';
+import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
 import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy } from '../ui/audio';
 import { notify } from '../ui/overlays';
@@ -322,8 +324,16 @@ export class MapScene extends Phaser.Scene {
       .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
     this.add
-      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
+      .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
+    // Speedrun timer (core/tools/speedrun.ts, off by default; Hub > Tools): splits per badge kept on this device only.
+    if (device.speedrunOn()) {
+      const now = Date.now();
+      const old = parseSplits(device.splits());
+      const sp = updateSplits(old && old.runId === run.runId ? old : newSplits(run.runId, now), now, run.badges.length, false);
+      device.setSplits(JSON.stringify(sp));
+      this.add.text(GAME_WIDTH - 24, 68, `Run time ${formatMs(now - sp.startedAt)}${sp.splits.length ? `  ·  last split ${formatMs(sp.splits[sp.splits.length - 1]!.ms)}` : ''}`, textStyle(13, hSub)).setOrigin(1, 0).setName('speedrun-hud');
+    }
     // Mentors: who trains you, how far the bond has come and where you stand against the fellow apprentice.
     const mentorLine = league ? null : mentorHudLine(run);
     if (mentorLine) this.add.text(24, 68, mentorLine, textStyle(13, '#d8c8f0', { stroke: '#2a1a4a', strokeThickness: 3 })).setName('mentor-hud');
