@@ -48,7 +48,14 @@ export const SCREEN_STYLES_READY: { readonly [S in ScreenId]: readonly ScreenSty
   trainer: ['aero', 'fighter', 'mii', 'card', 'manga', 'gallery', 'storybook'],
   starter: ['aero', 'wii', 'meadow', 'pack', 'egg', 'manga', 'wizard', 'spotlight', 'triangle'],
   briefing: ['aero', 'missionmap', 'storybook', 'trailer', 'wii', 'letter', 'boarding'], bag: [], evolve: [], runend: [],
-  dex: [], settings: [], camp: [], raid: [], totem: [], expedition: [], minigame: [], hubmenus: [], legacy: [], loading: [],
+  dex: ['aero', 'ds', 'sticker', 'wii', 'ink'],
+  settings: ['aero', 'wii', 'shoujo', 'ink', 'notebook', 'rotom', 'sticker'],
+  camp: [], raid: [], totem: [],
+  expedition: ['aero', 'manga', 'depth'],
+  minigame: ['wii'],
+  hubmenus: ['aero', 'wii', 'shonen', 'sticker', 'ink', 'achievements', 'album'],
+  legacy: ['museum', 'polaroids', 'manga', 'timeline', 'cards', 'previously', 'bloom', 'aero', 'ink', 'wii', 'hall'],
+  loading: ['aero', 'ball', 'terminal', 'wiihealth', 'ds', 'ink', 'shuffle', 'sparkle', 'region'],
   // Trade stops redesign (core/presentation/tradeStyles.ts keeps this list).
   trade: ['manga', 'versus', 'novel', 'eyecatch'],
 };

@@ -434,6 +434,7 @@ export class HubScene extends Phaser.Scene {
       };
     });
     this.section = new Picker(this, {
+      screen: 'hubmenus',
       title: place.name,
       rows,
       columns: 2,
@@ -623,7 +624,11 @@ export class HubScene extends Phaser.Scene {
 
   // ---------- rooms ----------
 
+  /** Which redesigned screen the open room belongs to (Pokédex-style rooms vs the other hub menus). */
+  private roomScreen: 'dex' | 'hubmenus' = 'hubmenus';
+
   private enter(room: Room): void {
+    this.roomScreen = ['research', 'codex', 'mastery', 'museum'].includes(room) ? 'dex' : 'hubmenus';
     switch (room) {
       case 'run':
         this.scene.start('TrainerSelect');
@@ -717,7 +722,7 @@ export class HubScene extends Phaser.Scene {
   }
 
   private openPicker(config: ConstructorParameters<typeof Picker>[1]): void {
-    this.picker = new Picker(this, config);
+    this.picker = new Picker(this, { screen: this.roomScreen, ...config });
   }
 
   private closePicker(): void {

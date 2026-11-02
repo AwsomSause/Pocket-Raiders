@@ -14,6 +14,8 @@ import { ebdxAnims, moveAnims } from '../data/presentation';
 import { AssetRegistry, setServices } from '../game/services';
 import type { GameSession } from '../game/GameSession';
 import { queueAsset } from '../ui/lazyAssets';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { loadingFlourish, paintSkinBackdrop, SKINS } from '../ui/screenSkins';
 import { loadingTip } from '../core/presentation/uiPrefs';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
@@ -71,7 +73,17 @@ export class BootScene extends Phaser.Scene {
   }
 
   private loadAssets(assets: AssetRegistry): void {
-    const bar = this.add.rectangle(GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2, 0, 16, COLORS.hpGreen).setOrigin(0, 0.5);
+    // Screens redesign: the loading look (stable per visit: the tip counter), drawn before anything else.
+    const session = this.registry.get('session') as GameSession;
+    const visit = this.tipVisit();
+    const styleId = screenStyleOf('loading', session.settings.screenStyles, visit);
+    const skin = styleId === 'original' ? null : SKINS[`loading.${styleId}`] ?? null;
+    if (skin) {
+      const motion = session.settings.battleAnimations;
+      paintSkinBackdrop(this, skin, motion);
+      loadingFlourish(this, styleId, skin, motion);
+    }
+    const bar = this.add.rectangle(GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2, 0, 16, skin?.accent ?? COLORS.hpGreen).setOrigin(0, 0.5);
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 404, 20).setStrokeStyle(2, 0xffffff);
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'Loading…', textStyle(28, COLORS.textLight)).setOrigin(0.5);
     this.loadingExtras();
@@ -95,6 +107,15 @@ export class BootScene extends Phaser.Scene {
     });
     this.load.once('complete', () => this.scene.start('MainMenu'));
     this.load.start();
+  }
+
+  /** The loading-screen visit number (the stored tip counter; read here, bumped in loadingExtras). */
+  private tipVisit(): number {
+    try {
+      return Number(localStorage.getItem('pkr.tipCounter') ?? '0') + 1;
+    } catch {
+      return 1;
+    }
   }
 
   /** A tip (F196) and a tiny catch-the-Magikarp game (I481) while assets load. Presentation only; no gameplay RNG. */
