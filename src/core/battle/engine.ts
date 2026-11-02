@@ -3172,6 +3172,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'orichalcum-pulse' && physical && weather === 'sun') attackBoost *= 4 / 3;
       if (userAbility === 'hadron-engine' && !physical && ctx.battle.terrain?.id === 'electric') attackBoost *= 4 / 3;
       if (sheerForce) powerMult *= 1.3;
+      if (hit === 0 && user.vol.bank > 0) {
+        powerMult *= 1 + content.balance.bankPower.perStack * user.vol.bank;
+        user.vol.bank = 0;
+      }
       // Rivalry: stronger against the same gender, weaker against the opposite one.
       if (userAbility === 'rivalry') powerMult *= sameGender(content, user.mon, target.mon) ? 1.25 : oppositeGender(content, user.mon, target.mon) ? 0.75 : 1;
       if (userAbility === 'analytic' && !movedFirst) powerMult *= 1.3;
@@ -4337,6 +4341,12 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   const fx = move.effects;
   let didSomething = false;
   const stat5 = ['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva'] as const;
+  if (fx.bankPower) {
+    if (user.vol.bank >= content.balance.bankPower.max) return void events.push({ type: 'fail', side: user.side });
+    user.vol.bank += 1;
+    events.push({ type: 'selfState', side: user.side, state: 'banked' });
+    return;
+  }
   if (fx.noop || (fx.oppositeGender && !oppositeGender(content, user.mon, target.mon))) {
     events.push({ type: 'fail', side: user.side });
     return;

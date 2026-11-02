@@ -209,6 +209,8 @@ export const MoveSchema = z.object({
       powerRule: PowerRuleSchema.optional(),
       /** Does nothing at all (Splash, Celebrate). */
       noop: z.literal(true).optional(),
+      /** S164 charge-up: the move banks one stack of power; the user's next damaging move hits harder (balance.bankPower). */
+      bankPower: z.literal(true).optional(),
       /** Status move: puts the user in a state (Focus Energy, Laser Focus, Lock-On, Ingrain, Aqua Ring, Endure). */
       selfState: z.enum(['focusEnergy', 'laserFocus', 'lockOn', 'ingrain', 'aquaRing', 'endure']).optional(),
       /** Rest: sleeps for two turns and heals fully. */
@@ -1905,6 +1907,8 @@ export type WorldBalance = z.infer<typeof WorldBalanceSchema>;
 
 export const BalanceSchema = z.object({
   trainerAi: TrainerAiSchema,
+  /** S164 charge-up: each banked stack adds `perStack` to the next damaging move's power, up to `max` stacks. */
+  bankPower: z.object({ perStack: z.number().min(0), max: z.number().int().min(1) }).default({ perStack: 0.5, max: 3 }),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z
