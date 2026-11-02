@@ -1,0 +1,3174 @@
+{
+ "events": [
+  {
+   "id": "mr-whispering-door",
+   "name": "The Whispering Door",
+   "group": "Mysteries & Ruins",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1a2e",
+    "effect": "fog"
+   },
+   "intro": "A door standing alone in the grass whispers a riddle: \"What walks on four legs at dawn and is never counted?\" Only the right answer opens it.",
+   "choices": [
+    {
+     "label": "Answer: \"a shadow\"",
+     "check": "intelligence",
+     "success": {
+      "text": "The latch clicks. Behind the door lies a small hoard.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-bone",
+         "star-piece",
+         "nugget",
+         "heart-scale",
+         "max-ether",
+         "pp-up"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     },
+     "failure": {
+      "text": "The door laughs softly and stays shut. A chill follows you down the road.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Answer: \"a Pokémon\"",
+     "chance": 0.5,
+     "success": {
+      "text": "\"Close enough,\" the door sighs, and swings open on a gift.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "ether",
+         "revive",
+         "rare-candy"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"Wrong.\" A cold gust blows your pockets empty of one thing.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing and listen",
+     "success": {
+      "text": "You listen until the whispering turns into a lullaby. Your team rests easy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-moss-obelisk",
+   "name": "Moss-Covered Obelisk",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "grass"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2a1e",
+    "effect": "glint"
+   },
+   "intro": "Runes run down a mossy obelisk. Some glow faintly. They look like a warning of something that waits at the end of the road.",
+   "choices": [
+    {
+     "label": "Read the runes",
+     "check": "intelligence",
+     "success": {
+      "text": "The runes describe the ground ahead. The hidden stops on this stage make sense now.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "moment",
+        "text": "Read the runes of a moss-covered obelisk.",
+        "importance": 45
+       }
+      ]
+     },
+     "failure": {
+      "text": "The glyphs swim and you leave with a headache.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy the runes into your notes",
+     "success": {
+      "text": "You sketch them carefully. The Research Lab will love this.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "Some warnings are best left unread.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-echoing-well",
+   "name": "The Echoing Well",
+   "group": "Mysteries & Ruins",
+   "stop": "well",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2430",
+    "effect": "sparkle"
+   },
+   "intro": "A stone well that echoes back more than you shout. A sign reads: \"Toss a coin and hear what is coming.\"",
+   "choices": [
+    {
+     "label": "Toss a coin (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The coin falls for a long time. The well names the road ahead, one stop at a time.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Toss a Heart Scale",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "heart-scale"
+      }
+     ],
+     "success": {
+      "text": "The well gurgles happily and shows you everything it knows.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "heart-scale"
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout down the well",
+     "success": {
+      "text": "Your own voice answers: \"Careful.\" You take it to heart.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-clockwork-crypt",
+   "name": "The Clockwork Crypt",
+   "group": "Mysteries & Ruins",
+   "stop": "tower",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "steel",
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "spin"
+   },
+   "intro": "Gears turn behind every wall of this crypt. A door opens only on the beat of the ticking.",
+   "choices": [
+    {
+     "label": "Time your step with the ticking",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The doors open one after another, exactly on the beat. The vault pays out.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "max-ether",
+         "pp-up",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       }
+      ]
+     },
+     "failure": {
+      "text": "A gear snaps shut on your sleeve. You back away, scratched.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jam the gears",
+     "check": "strength",
+     "success": {
+      "text": "The mechanism grinds to a halt and the crypt gives up a prize.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "nugget",
+         "rare-bone"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The gears bite back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "The ticking follows you for a while.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-abandoned-observatory",
+   "name": "The Abandoned Observatory",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#10142a",
+    "effect": "sparkle"
+   },
+   "intro": "A dome with a cracked lens. If you clean it, the sky might show you what is coming across the whole map.",
+   "choices": [
+    {
+     "label": "Clean the lens and look",
+     "success": {
+      "text": "The stars line up with the roads below. You can see further ahead.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the brass fittings",
+     "success": {
+      "text": "Heavy, shiny, and worth a lot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sleep under the dome",
+     "success": {
+      "text": "You wake rested, the constellations still behind your eyes.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-memory-fog",
+   "name": "The Memory Fog",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#26262c",
+    "effect": "fog"
+   },
+   "intro": "A thick fog rolls in. Your pockets feel lighter, and for a moment you cannot remember what was in them.",
+   "choices": [
+    {
+     "label": "Walk through the fog",
+     "success": {
+      "text": "You come out the other side with an uneasy feeling that something was left behind.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "memory-fog",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait it out",
+     "chance": 0.6,
+     "success": {
+      "text": "The fog lifts and everything is where it was. You even find an extra.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "ether",
+         "max-ether"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The fog thickens and swallows an item before it clears.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "memory-fog",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-memory-fog-clears",
+   "name": "The Fog Gives It Back",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "memory-fog",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#26262c",
+    "effect": "sparkle"
+   },
+   "intro": "You suddenly recall exactly what you lost, in order. The memory comes with a little pile of things on the roadside.",
+   "choices": [
+    {
+     "label": "Gather what the fog returned",
+     "success": {
+      "text": "Everything comes back to you, one object at a time.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "max-potion",
+         "revive",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "ether",
+         "pp-up",
+         "star-piece"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "mr-prophecy-wall",
+   "name": "The Painted Prophecy Wall",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1e1e",
+    "effect": "glint"
+   },
+   "intro": "A mural shows a tall figure with a team at its side. The paint is fresh, and you know that face.",
+   "choices": [
+    {
+     "label": "Study the mural",
+     "success": {
+      "text": "The painted team is the gym leader waiting on this stage. You know what you are walking into.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "moment",
+        "text": "Saw the gym leader painted on a prophecy wall.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy it for the lab",
+     "success": {
+      "text": "You sketch the whole team for the Research Lab.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 35
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vanished-village",
+   "name": "The Vanished Village",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#222228",
+    "effect": "fog"
+   },
+   "intro": "A whole village stands empty. Tables set, doors open, and not a soul in sight. Something happened here.",
+   "choices": [
+    {
+     "label": "Search the houses",
+     "success": {
+      "text": "Notes, a locked chest, a half-finished letter. Whoever lived here left in a hurry.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-bone",
+         "star-piece",
+         "nugget",
+         "heart-scale",
+         "max-ether",
+         "pp-up"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "village-clue",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the notice board",
+     "check": "intelligence",
+     "success": {
+      "text": "The board explains it all: they moved on together before the storm. Their gifts were left for travellers.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "moment",
+        "text": "Learned what happened to the Vanished Village.",
+        "importance": 50
+       }
+      ]
+     },
+     "failure": {
+      "text": "The writing is too faded to read.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Sit in the empty square",
+     "success": {
+      "text": "The quiet is almost kind. Your team stays close.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-unwritten-library",
+   "name": "The Library of Unwritten Books",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#201c2a",
+    "effect": "sparkle"
+   },
+   "intro": "Rows of blank books. A plaque reads: \"Write your own tale and the shelves will answer.\"",
+   "choices": [
+    {
+     "label": "Write a tale of adventure",
+     "success": {
+      "text": "The pages fill with your words, then rewrite themselves into something stranger.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "x-attack",
+         "nugget"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write a tale of friendship",
+     "success": {
+      "text": "The ink turns warm. Your team crowds around to read it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write a tale of mystery",
+     "success": {
+      "text": "The last line writes itself and the book clicks shut.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 30
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the pages blank",
+     "success": {
+      "text": "The shelves nod, as if that was a story too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-spirit-guide",
+   "name": "The Wandering Spirit Guide",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1e30",
+    "effect": "float"
+   },
+   "intro": "A pale lantern floats beside the road. A friendly ghost beckons you to follow it, off the path.",
+   "choices": [
+    {
+     "label": "Follow the spirit",
+     "success": {
+      "text": "The ghost leads you off the path and points at the ground.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mr-spirit-cache"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank it and move on",
+     "success": {
+      "text": "The ghost bows and fades.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-spirit-cache",
+   "name": "The Spirit's Hiding Spot",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1e30",
+    "effect": "glint"
+   },
+   "intro": "Under a flat stone, wrapped in cloth, is something the ghost wanted someone to find.",
+   "choices": [
+    {
+     "label": "Dig it up",
+     "success": {
+      "text": "The ghost smiles, and then is gone for good.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-bone",
+         "star-piece",
+         "nugget",
+         "heart-scale",
+         "max-ether",
+         "pp-up"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "reaper-cloth",
+         "soul-dew"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "mr-portal-shard-a",
+   "name": "A Shard of the North",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2438",
+    "effect": "glint"
+   },
+   "intro": "Half-buried near a frozen pond, a cold shard of dull glass hums when you touch it. It looks like one piece of something much bigger.",
+   "choices": [
+    {
+     "label": "Take the shard",
+     "success": {
+      "text": "The shard is warm and heavy. It wants to be near others like it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "portal-shard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-portal-shard-b",
+   "name": "A Shard of the Marsh",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2438",
+    "effect": "glint"
+   },
+   "intro": "Half-buried near a boggy hollow, a damp shard of dull glass hums when you touch it. It looks like one piece of something much bigger.",
+   "choices": [
+    {
+     "label": "Take the shard",
+     "success": {
+      "text": "The shard is warm and heavy. It wants to be near others like it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "portal-shard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-portal-shard-c",
+   "name": "A Shard of the Ridge",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2438",
+    "effect": "glint"
+   },
+   "intro": "Half-buried near a high cliff, a windy shard of dull glass hums when you touch it. It looks like one piece of something much bigger.",
+   "choices": [
+    {
+     "label": "Take the shard",
+     "success": {
+      "text": "The shard is warm and heavy. It wants to be near others like it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "portal-shard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-shattered-portal",
+   "name": "The Shattered Portal",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "portal-shard",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2438",
+    "effect": "spin"
+   },
+   "intro": "Your three shards rise from your bag and lock together. A doorway of light opens in the air.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "The gate throws you forward, and sets down a gift on the other side.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive",
+         "nugget"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Study the portal",
+     "success": {
+      "text": "You map every seam of it for the Research Lab.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 60
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "mr-ancient-arena",
+   "name": "The Ancient Arena Ruins",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "sparkle"
+   },
+   "intro": "A spectral crowd fills the stands of a ruined arena. They want a show.",
+   "choices": [
+    {
+     "label": "Put on a show",
+     "check": "charisma",
+     "success": {
+      "text": "The ghosts roar. Coins and cheers rain down.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The crowd boos and a ghostly tomato flies in.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge the champion's ghost",
+     "success": {
+      "text": "A spectral fighter steps out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "veteran",
+       "name": "Arena Spectre",
+       "size": 3,
+       "types": [
+        "ghost",
+        "fighting"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-bone",
+          "star-piece",
+          "nugget",
+          "heart-scale",
+          "max-ether",
+          "pp-up"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch from the stands",
+     "success": {
+      "text": "You enjoy the quiet.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-dragon-skeleton",
+   "name": "The Dragon Skeleton Gallery",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "dragon"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1818",
+    "effect": "shake"
+   },
+   "intro": "A gallery of bones, each one the size of a house. Touching one makes the air hum with a distant roar.",
+   "choices": [
+    {
+     "label": "Touch the great skull",
+     "success": {
+      "text": "A roar echoes in your head, and your team stands taller.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "dragon-roar",
+        "name": "Dragon's Roar",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.05
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Touch the tail bone",
+     "success": {
+      "text": "A rush of fire. Your team feels quick.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "dragon-roar-tail",
+        "name": "Dragon's Tail",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.05
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a fang",
+     "success": {
+      "text": "A fang, yellowed and hard as stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dragon-fang",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-frozen-time-garden",
+   "name": "The Frozen Time Garden",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ice",
+    "grass"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2a30",
+    "effect": "snow"
+   },
+   "intro": "A garden frozen in a single moment. A leaf hangs in the air mid-fall. Nothing here has ever spoiled.",
+   "choices": [
+    {
+     "label": "Plant a seedling in the frozen soil",
+     "success": {
+      "text": "The seed does not grow here, but it will not die either. You take it with you.",
+      "effects": [
+       {
+        "kind": "seedling",
+        "berry": "sitrus-berry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the preserved berries",
+     "success": {
+      "text": "Still perfectly fresh, and they will stay that way.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry",
+         "oran-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry",
+         "oran-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit still for a moment",
+     "success": {
+      "text": "Time slows around you. Your team rests.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vault-key-a",
+   "name": "A Rusted Key",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A rusted key lies at a muddy riverbank, tagged with a faded symbol of a vault.",
+   "choices": [
+    {
+     "label": "Pocket the key",
+     "success": {
+      "text": "A key to something sealed. You hope you will find the door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vault-key-b",
+   "name": "A Bronze Key",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A bronze key lies at the roots of a dead tree, tagged with a faded symbol of a vault.",
+   "choices": [
+    {
+     "label": "Pocket the key",
+     "success": {
+      "text": "A key to something sealed. You hope you will find the door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-vault-key-c",
+   "name": "A Silver Key",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A silver key lies at a collapsed signpost, tagged with a faded symbol of a vault.",
+   "choices": [
+    {
+     "label": "Pocket the key",
+     "success": {
+      "text": "A key to something sealed. You hope you will find the door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-key",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-sealed-vault",
+   "name": "The Sealed Vault Door",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "vault-key",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A round door, three keyholes. Your three keys fit exactly.",
+   "choices": [
+    {
+     "label": "Open the vault",
+     "success": {
+      "text": "The door rolls aside on silent hinges, and the vault is not empty.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive",
+         "nugget"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "rare-bone",
+         "max-ether"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": 800
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "mr-totem-whisper",
+   "name": "The Totem's Whisper",
+   "group": "Mysteries & Ruins",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1e1e",
+    "effect": "glint"
+   },
+   "intro": "A small Totem shrine hums. If you kneel, it promises to whisper what is coming.",
+   "choices": [
+    {
+     "label": "Kneel and listen",
+     "success": {
+      "text": "The Totem whispers the name of the gym leader ahead. Good fortune follows.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "blessing",
+        "id": "blessing-wild-grace"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave an offering (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The Totem hums warmly, and your team seems stronger.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-starfall-seeker",
+   "name": "The Starfall Seeker",
+   "group": "Mysteries & Ruins",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#10142a",
+    "effect": "sparkle"
+   },
+   "intro": "A stargazer with a telescope says the sky has picked a lucky stop for you. She will say which, if you listen.",
+   "choices": [
+    {
+     "label": "Listen to her prediction",
+     "success": {
+      "text": "\"Hidden stops will show themselves today.\"",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy her chart (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "She hands over a hand-drawn chart of the road.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave her off",
+     "success": {
+      "text": "\"Luck is luck,\" she says, shrugging.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-graveyard-choir",
+   "name": "The Hidden Graveyard Choir",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1e30",
+    "effect": "float"
+   },
+   "intro": "Ghosts sing in a forgotten graveyard. The song is lovely and a little sad. They hold a place for you.",
+   "choices": [
+    {
+     "label": "Join the choir",
+     "success": {
+      "text": "You hum along. A cold, kind blessing settles over your team.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-hearth"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing a Ghost-type lullaby",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ],
+     "success": {
+      "text": "Your Ghost-type knows the tune. The choir lifts it high and thanks you.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "choir-gift",
+        "name": "Choir's Gift",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ghost",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen from the gate",
+     "success": {
+      "text": "You leave a flower and walk on.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-underwater-ruins",
+   "name": "The Underwater Ruins",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#12283a",
+    "effect": "rain"
+   },
+   "intro": "Ruined pillars show under the clear water. Something glints on the bottom.",
+   "choices": [
+    {
+     "label": "Send a Water-type to dive",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type swims straight to the treasure room.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-bone",
+         "star-piece",
+         "nugget",
+         "heart-scale",
+         "max-ether",
+         "pp-up"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "nugget"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dive yourself",
+     "check": "strength",
+     "success": {
+      "text": "You grab something and surface gasping.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "heart-scale"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The pull of the current is too strong.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Admire the view",
+     "success": {
+      "text": "The pillars glow at dusk. Quiet.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-cursed-idol",
+   "name": "The Cursed Idol",
+   "group": "Mysteries & Ruins",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2010",
+    "effect": "shake"
+   },
+   "intro": "A small golden idol on a pedestal. The air around it is wrong.",
+   "choices": [
+    {
+     "label": "Take the idol",
+     "success": {
+      "text": "Gold coins spill out of your bag, but your Pokémon will not look at the idol.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1500
+       },
+       {
+        "kind": "relic",
+        "id": "idol-curse",
+        "name": "Idol's Curse",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 0.8
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cursed-idol",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You step back. The idol seems to watch you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-idol-return",
+   "name": "Return the Idol",
+   "group": "Mysteries & Ruins",
+   "stop": "shrine",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cursed-idol",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2010",
+    "effect": "sparkle"
+   },
+   "intro": "The idol is heavy in your bag. A small shrine on the road has a pedestal the exact size of it.",
+   "choices": [
+    {
+     "label": "Return it to the shrine",
+     "success": {
+      "text": "A weight lifts. A warm light settles over your team.",
+      "effects": [
+       {
+        "kind": "blessing",
+        "id": "blessing-clarity"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Returned the Cursed Idol to its shrine.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it",
+     "success": {
+      "text": "You walk on, richer and a little colder.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "mr-rift-whisper",
+   "name": "The Rift Whisper",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#201028",
+    "effect": "spin"
+   },
+   "intro": "A crack in the air speaks in a voice bigger than the sky. A legend offers a bargain.",
+   "choices": [
+    {
+     "label": "Accept the bargain",
+     "success": {
+      "text": "Power comes, and a price with it.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rift-bargain",
+        "name": "Rift Bargain",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.08
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 0.95
+         }
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Struck a bargain with a legendary voice in a rift.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for knowledge instead",
+     "success": {
+      "text": "The voice sighs. \"Then listen.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 60
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "The rift closes with a small sigh.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-eclipse",
+   "name": "The Eclipse",
+   "group": "Mysteries & Ruins",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "dark"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#0e0e1a",
+    "effect": "flicker"
+   },
+   "intro": "The sun slips behind the moon in the middle of the day. Shadows go sharp.",
+   "choices": [
+    {
+     "label": "Walk under the eclipse",
+     "success": {
+      "text": "The darkness feels like an ally. Dark-type moves hit harder.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "eclipse-boon",
+        "name": "Eclipse Boon",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "dark",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter and wait",
+     "success": {
+      "text": "You wait out the darkness together.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.35
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-mirage-merchant",
+   "name": "The Mirage Merchant",
+   "group": "Mysteries & Ruins",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A merchant shimmers at the edge of the road. \"Pay up front,\" she says. \"I tend to vanish.\"",
+   "choices": [
+    {
+     "label": "Pay ₽400 up front",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "chance": 0.6,
+     "success": {
+      "text": "She hands over a fine, real bundle before the heat haze takes her.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "max-ether",
+         "pp-up"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You hand over the coins. She smiles, and she is gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle",
+     "check": "charisma",
+     "success": {
+      "text": "She grins. \"Half now, half never!\" Half price, still a real deal.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "max-ether"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "She frowns and fades from view.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "The mirage thins and is gone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-rival-echoes",
+   "name": "The Echo Chamber of Rivals",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2030",
+    "effect": "float"
+   },
+   "intro": "A round chamber that plays back what your rivals have said to you. Some of it is kinder than you remember.",
+   "choices": [
+    {
+     "label": "Listen to every echo",
+     "success": {
+      "text": "Hearing them gives you a new view of the rivalry.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Heard the echoes of my rivals' words.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shout back",
+     "success": {
+      "text": "You say what you never said to their faces. Feels good.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-a",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "float"
+   },
+   "intro": "A torn page drifts across the road, covered in old handwriting. It is part of a longer story.",
+   "choices": [
+    {
+     "label": "Pocket the page",
+     "success": {
+      "text": "You tuck it away carefully.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it blow away",
+     "success": {
+      "text": "It flutters off into the grass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-b",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "float"
+   },
+   "intro": "A torn page drifts across the road, covered in old handwriting. It is part of a longer story.",
+   "choices": [
+    {
+     "label": "Pocket the page",
+     "success": {
+      "text": "You tuck it away carefully.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it blow away",
+     "success": {
+      "text": "It flutters off into the grass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-c",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "float"
+   },
+   "intro": "A torn page drifts across the road, covered in old handwriting. It is part of a longer story.",
+   "choices": [
+    {
+     "label": "Pocket the page",
+     "success": {
+      "text": "You tuck it away carefully.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it blow away",
+     "success": {
+      "text": "It flutters off into the grass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-archive",
+   "name": "The Story Collector",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "torn-page",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#201c2a",
+    "effect": "sparkle"
+   },
+   "intro": "A scholar spots the pages in your hand and gasps. \"Those belong together!\"",
+   "choices": [
+    {
+     "label": "Hand over the pages",
+     "success": {
+      "text": "She reads them aloud. A whole forgotten tale fills the room, and she pays you in coin and research.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 60
+       },
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "moment",
+        "text": "Pieced together a lost story from torn pages.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the pages",
+     "success": {
+      "text": "Some stories are yours alone.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "mr-archivist-dilemma",
+   "name": "The Archivist's Dilemma",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#201c2a",
+    "effect": "glint"
+   },
+   "intro": "An archivist holds two scrolls. \"I can only keep one in the great archive. Which history should be remembered?\"",
+   "choices": [
+    {
+     "label": "The history of the great trainers",
+     "success": {
+      "text": "She files it carefully. Your team feels the weight of legend.",
+      "effects": [
+       {
+        "kind": "choice",
+        "id": "archivist-keep",
+        "pick": "trainers",
+        "text": "Chose the history of the great trainers over the old Pokémon.",
+        "weight": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The history of the wild Pokémon",
+     "success": {
+      "text": "She files it carefully. Your team seems relaxed.",
+      "effects": [
+       {
+        "kind": "choice",
+        "id": "archivist-keep",
+        "pick": "wild",
+        "text": "Chose the history of the wild Pokémon over the great trainers.",
+        "weight": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both, as best you can",
+     "success": {
+      "text": "She sighs, and tries. Both scrolls are a little worn from it.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-door-without-wall",
+   "name": "The Door Without a Wall",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1a2e",
+    "effect": "float"
+   },
+   "intro": "A door stands in the middle of the field with no wall around it. Walk around it, and there is nothing. Walk through it...",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "The world folds. You emerge further down the road.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk around it",
+     "success": {
+      "text": "You see only grass. The door is gone when you glance back.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-final-page",
+   "name": "The Final Page",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1818",
+    "effect": "glint"
+   },
+   "intro": "The last page of a great book, left open. Reading it will decide how the rest of your run feels.",
+   "choices": [
+    {
+     "label": "Read the page of valour",
+     "success": {
+      "text": "Your team feels bold, and the foes grow bolder.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "final-page-valour",
+        "name": "Page of Valour",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.08
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the page of care",
+     "success": {
+      "text": "Your team feels cherished and a little less fierce.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "final-page-care",
+        "name": "Page of Care",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.3
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 0.95
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the page of fortune",
+     "success": {
+      "text": "Your pockets feel heavier, and your bag lighter.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "final-page-fortune",
+        "name": "Page of Fortune",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.2
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 0.9
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Close the book",
+     "success": {
+      "text": "Some endings are better unread.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-hall-champions",
+   "name": "The Hall of Past Champions",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "intro": "A hall of statues, each a past champion. The caretaker coughs: \"They tend to move for a donation.\"",
+   "choices": [
+    {
+     "label": "Bribe the statues (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "Two statues stride out to fight beside you against a rival who just walked in.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "classId": "veteran",
+       "name": "Rude Intruder",
+       "size": 3,
+       "levelBonus": 1,
+       "ally": "golem",
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "friendship",
+         "amount": 2,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Study their stances",
+     "success": {
+      "text": "You learn a lot by looking.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-ancient-gym-a",
+   "name": "Ancient Gym Remains: Ember Wing",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "fire"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A crumbling wing of an ancient gym, still guarded by its fire-type keeper. A forgotten badge lies under the dust.",
+   "choices": [
+    {
+     "label": "Challenge the keeper",
+     "success": {
+      "text": "The keeper wakes and raises a team.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "veteran",
+       "name": "Ember Wing Keeper",
+       "size": 2,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "forgotten-badge",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave quietly",
+     "success": {
+      "text": "The gym sleeps on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-ancient-gym-b",
+   "name": "Ancient Gym Remains: Tide Wing",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A crumbling wing of an ancient gym, still guarded by its water-type keeper. A forgotten badge lies under the dust.",
+   "choices": [
+    {
+     "label": "Challenge the keeper",
+     "success": {
+      "text": "The keeper wakes and raises a team.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "veteran",
+       "name": "Tide Wing Keeper",
+       "size": 2,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "forgotten-badge",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave quietly",
+     "success": {
+      "text": "The gym sleeps on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-ancient-gym-c",
+   "name": "Ancient Gym Remains: Leaf Wing",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "grass"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A crumbling wing of an ancient gym, still guarded by its grass-type keeper. A forgotten badge lies under the dust.",
+   "choices": [
+    {
+     "label": "Challenge the keeper",
+     "success": {
+      "text": "The keeper wakes and raises a team.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "veteran",
+       "name": "Leaf Wing Keeper",
+       "size": 2,
+       "types": [
+        "grass"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "forgotten-badge",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave quietly",
+     "success": {
+      "text": "The gym sleeps on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-ancient-gym-vault",
+   "name": "The Forgotten Badges",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "forgotten-badge",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "Three forgotten badges glow in your bag. A hidden door in the old gym opens for them.",
+   "choices": [
+    {
+     "label": "Open the old champion's cache",
+     "success": {
+      "text": "A cache of old prizes, kept for whoever could earn the three.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-revive",
+         "nugget"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gathered three forgotten gym badges.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "mr-poltergeist-poker",
+   "name": "Poltergeist Poker",
+   "group": "Mysteries & Ruins",
+   "stop": "casino",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1e30",
+    "effect": "flicker"
+   },
+   "intro": "Ghosts deal cards from a mouldy deck. They play for items.",
+   "choices": [
+    {
+     "label": "Play a hand",
+     "chance": 0.5,
+     "success": {
+      "text": "Your hand beats the table. The ghosts pay up with ghostly good grace.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "reaper-cloth",
+         "soul-dew",
+         "star-piece"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A card floats out of your sleeve and a ghost sweeps the pot.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch a hand",
+     "success": {
+      "text": "You pick up a few tricks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-rewind-gate",
+   "name": "The Rewind Gate",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1a2e",
+    "effect": "spin"
+   },
+   "intro": "A gate with a single clock face. Pay, and it turns back time on one choice.",
+   "choices": [
+    {
+     "label": "Pay ₽500 to rewind",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The hands spin back. You see the next reward more clearly this time.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "betterDraft",
+        "extra": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch it tick",
+     "success": {
+      "text": "The hands turn and turn.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-cartographer",
+   "name": "The Cartographer's Studio",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2618",
+    "effect": "glint"
+   },
+   "intro": "A studio full of maps, many half-painted. The cartographer offers to fill yours in.",
+   "choices": [
+    {
+     "label": "Paint the unexplored nodes (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Her brush finds every hidden corner of the map.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade stories for a sketch",
+     "success": {
+      "text": "A small sketch of the road ahead.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-spectral-duelist",
+   "name": "The Spectral Duelist",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1e30",
+    "effect": "float"
+   },
+   "intro": "A ghostly trainer bows. \"I fight only the moves you have used before.\"",
+   "choices": [
+    {
+     "label": "Duel",
+     "success": {
+      "text": "The duelist's team mirrors yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "hex-maniac",
+       "name": "Spectral Duelist",
+       "size": 3,
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-bone",
+          "star-piece",
+          "nugget",
+          "heart-scale",
+          "max-ether",
+          "pp-up"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 30
+        },
+        {
+         "kind": "friendship",
+         "amount": 2,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bow and decline",
+     "success": {
+      "text": "The duelist returns the bow and vanishes.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-mind-palace",
+   "name": "The Mind Palace",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#201c2a",
+    "effect": "sparkle"
+   },
+   "intro": "A room of memories. You can relive one, and take its lesson with you.",
+   "choices": [
+    {
+     "label": "Relive your first victory",
+     "success": {
+      "text": "The thrill returns.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Relive a quiet moment",
+     "success": {
+      "text": "The calm returns.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Relive a hard lesson",
+     "success": {
+      "text": "The sting returns, and so does the wisdom.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-sleeping-titan",
+   "name": "The Sleeping Titan's Dream",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1e1a14",
+    "effect": "shake"
+   },
+   "intro": "A mountain breathes. Inside it, something vast is dreaming. You can step into the dream.",
+   "choices": [
+    {
+     "label": "Step into the dream",
+     "success": {
+      "text": "The titan stirs, and the dream takes shape.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "rock",
+        "ground"
+       ],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-candy",
+          "max-revive",
+          "nugget"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 40
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it sleep",
+     "success": {
+      "text": "You tiptoe away. Your team seems proud of you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
