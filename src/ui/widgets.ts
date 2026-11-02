@@ -179,6 +179,20 @@ export interface MenuConfig {
   glass?: { tints?: (number | undefined)[]; motion?: MotionLevel; paint?: PillPainter };
   /** Where option i sits inside the menu (default: a grid of `columns`). Lets a screen style fan or ring its options. */
   place?: (i: number) => { x: number; y: number };
+  /** Label alignment inside its option (default left, after the pointer). */
+  align?: 'left' | 'center' | 'right';
+  /** Tilts option i by this many degrees (a fanned hand of cards). Needs `glass`. */
+  angle?: (i: number) => number;
+  /** The focused option rises by this many pixels (a lifted card). */
+  lift?: number;
+  /** The focused label's colour (when the focused button changes colour, e.g. white on yellow). */
+  focusColor?: string;
+  /** Centre each label on its pill's height (multi-line labels too). */
+  middle?: boolean;
+  /** Put each label in its pill's top-left corner, this many pixels in (card faces: name on top, details below). */
+  inset?: number;
+  /** 'none' hides the pointer and the glowing frame (the style's own buttons show focus). */
+  cursor?: 'default' | 'none';
   /** Options slide in when the menu is built (default). Screens that rebuild the same menu after every change pass false. */
   animateIn?: boolean;
 }
@@ -204,7 +218,10 @@ export class Menu {
   /** The Wii-style glowing frame that glides between options (spec §24). */
   private readonly wii: WiiCursor;
   private readonly baseX: number[] = [];
+  private readonly baseY: number[] = [];
   private fresh = true;
+  /** Set once the pills have their resting places (lifting moves them from there). */
+  private liftReady = false;
 
   constructor(private readonly scene: Phaser.Scene, private readonly config: MenuConfig) {
     this.columns = config.columns ?? 1;
@@ -223,13 +240,23 @@ export class Menu {
     this.wii.g.setData('noJuice', true).setName('wii-cursor');
     config.options.forEach((opt, i) => {
       const { x, y } = this.position(i);
-      this.baseX.push(x + 28);
+      const align = config.align ?? 'left';
+      const tx = config.inset != null ? x - 4 + config.inset : align === 'center' ? x - 4 + (this.itemWidth - 12) / 2 : align === 'right' ? x + this.itemWidth - 30 : x + 28;
       const text = scene.add
-        .text(x + 28, y, opt.detail ? `${opt.label}\n${opt.detail}` : opt.label, textStyle(size, config.color ?? COLORS.text, { lineSpacing: -4 }))
+        .text(tx, y, opt.detail ? `${opt.label}\n${opt.detail}` : opt.label, textStyle(size, config.color ?? COLORS.text, { lineSpacing: -4, align }))
+        .setOrigin(align === 'center' ? 0.5 : align === 'right' ? 1 : 0, 0)
+        .setAngle(config.angle?.(i) ?? 0)
+        .setData('menuLabel', true)
         .setAlpha(opt.disabled ? 0.4 : 1)
         .setInteractive({ useHandCursor: !opt.disabled })
         .setData('noJuice', true);
       if (opt.tip) text.setData('tooltip', opt.tip);
+      const pillH = Math.max(size + 14, this.itemHeight - 8);
+      const ty = config.inset != null ? y - 8 + config.inset : config.middle ? y - 8 + (pillH - text.height) / 2 : y;
+      const at = this.tilted(i, tx, ty);
+      text.setPosition(at.x, at.y);
+      this.baseX.push(at.x);
+      this.baseY.push(at.y);
       // A long label stops at the item's edge (and at the next column) instead of running over its neighbour.
       fitLine(text, this.itemWidth - 40);
       text.on('pointerover', () => {
@@ -256,17 +283,42 @@ export class Menu {
     }
     this.cursor.setData('noJuice', true);
     this.container.add(this.cursor);
+    if (config.cursor === 'none') {
+      this.cursor.setVisible(false).setAlpha(0);
+      this.wii.g.setVisible(false).setAlpha(0);
+    }
     const first = config.options.findIndex((o) => !o.disabled);
     this.focus(first >= 0 ? first : 0, false);
     this.wii.moveTo(...this.frameBox(this.index), true);
-    if (config.animateIn !== false && !justRedrawn()) this.wii.show();
+    if (config.animateIn !== false && !justRedrawn() && config.cursor !== 'none') this.wii.show();
     // Focus changes in the same frame the menu is built (a screen restoring its place) jump, not glide.
     scene.time.delayedCall(0, () => (this.fresh = false));
+  }
+
+  /** How many options the menu holds. */
+  optionCount(): number {
+    return this.config.options.length;
   }
 
   /** Top-left of option i inside the menu's container (for icons drawn on top). */
   slot(i: number): { x: number; y: number } {
     return this.position(i);
+  }
+
+  /** The centre of option i's pill (tilted options turn around it). */
+  private pillCentre(i: number): { x: number; y: number } {
+    const { x, y } = this.position(i);
+    const size = this.config.fontSize ?? 28;
+    return { x: x - 4 + (this.itemWidth - 12) / 2, y: y - 8 + Math.max(size + 14, this.itemHeight - 8) / 2 };
+  }
+
+  /** A point inside option i, turned with the option when it is tilted. */
+  private tilted(i: number, px: number, py: number): { x: number; y: number } {
+    const a = this.config.angle?.(i) ?? 0;
+    if (!a) return { x: px, y: py };
+    const c = this.pillCentre(i);
+    const r = Phaser.Math.DegToRad(a);
+    return { x: c.x + (px - c.x) * Math.cos(r) - (py - c.y) * Math.sin(r), y: c.y + (px - c.x) * Math.sin(r) + (py - c.y) * Math.cos(r) };
   }
 
   private paintPills(focused: number): void {
@@ -277,7 +329,18 @@ export class Menu {
       const tint = this.config.glass?.tints?.[i] ?? AERO.glass;
       const on = i === focused && !opt.disabled;
       pill.clear();
-      if (this.config.glass?.paint) return this.config.glass.paint(pill, x - 4, y - 8, this.itemWidth - 12, Math.max(size + 14, this.itemHeight - 8), { tint, on, disabled: !!opt.disabled, index: i });
+      const w = this.itemWidth - 12;
+      const h = Math.max(size + 14, this.itemHeight - 8);
+      if (this.config.angle) {
+        // Drawn around its centre so the whole pill can turn.
+        const c = this.pillCentre(i);
+        pill.setPosition(c.x, pill.y === 0 && !this.liftReady ? c.y : pill.y).setAngle(this.config.angle(i));
+        if (!this.liftReady) pill.setData('baseY', c.y);
+        const paint = this.config.glass?.paint;
+        if (paint) return paint(pill, -w / 2, -h / 2, w, h, { tint, on, disabled: !!opt.disabled, index: i });
+        return paintGlass(pill, -w / 2, -h / 2, w, h, { tint: on ? tint : mixColor(tint, AERO.glass, 0.45), rim: on ? AERO.rim : 0x9fb8d0, alpha: opt.disabled ? 0.45 : on ? 1 : 0.7, glow: on, radius: 20 });
+      }
+      if (this.config.glass?.paint) return this.config.glass.paint(pill, x - 4, y - 8, w, h, { tint, on, disabled: !!opt.disabled, index: i });
       paintGlass(pill, x - 4, y - 8, this.itemWidth - 12, Math.max(size + 14, this.itemHeight - 8), {
         tint: on ? tint : mixColor(tint, AERO.glass, 0.45),
         rim: on ? AERO.rim : 0x9fb8d0,
@@ -323,8 +386,13 @@ export class Menu {
       if (lean.bounce && label.alpha > 0.99 && !this.fresh) this.scene.tweens.add({ targets: label, x: targetX, duration: lean.ms, ease: 'Back.easeOut' });
       else label.setX(targetX);
     }
+    if (this.config.focusColor) {
+      for (const n of new Set([prev, i])) this.labels[n]?.setColor(n === i ? this.config.focusColor : (this.config.color ?? COLORS.text));
+    }
     if (this.config.glass) {
       this.paintPills(i);
+      this.liftReady = true;
+      if (this.config.lift) this.applyLift(i);
       const label = this.labels[i];
       if (label && this.config.glass.motion === 'full') {
         label.setScale(1);
@@ -332,6 +400,25 @@ export class Menu {
       }
     }
     this.config.onFocus?.(i);
+  }
+
+  /** The focused option rises; the others settle back. */
+  private applyLift(focused: number): void {
+    const lift = this.config.lift ?? 0;
+    const tm = uiTiming('hover');
+    this.labels.forEach((label, n) => {
+      const pill = this.pills[n];
+      const up = n === focused ? lift : 0;
+      const ly = (this.baseY[n] ?? 0) - up;
+      const py = (this.config.angle ? (pill?.getData('baseY') as number) : 0) - up;
+      if (tm.ms && !this.fresh) {
+        this.scene.tweens.add({ targets: label, y: ly, duration: tm.ms, ease: 'Back.easeOut' });
+        if (pill) this.scene.tweens.add({ targets: pill, y: py, duration: tm.ms, ease: 'Back.easeOut' });
+      } else {
+        label.setY(ly);
+        pill?.setY(py);
+      }
+    });
   }
 
   confirm(): void {
@@ -384,7 +471,7 @@ export class Menu {
     const was = this.container.visible;
     this.container.setVisible(visible);
     this.enabled = visible;
-    if (visible && !was) {
+    if (visible && !was && this.config.cursor !== 'none') {
       this.wii.show();
       popIn(this.scene, this.cursor as Phaser.GameObjects.Image, 0, 'hover');
     }
@@ -431,6 +518,8 @@ export class Bar {
     private readonly width: number,
     height: number,
     private readonly kind: 'hp' | 'xp',
+    /** A style's own HP gauge colours: track, rim, and the fill (light, mid, dark) while above 20%. */
+    private readonly look?: { track: number; rim: number; fill: readonly [number, number, number] },
   ) {
     // The gauge is taller than the old strip so the rounded ends and the highlight read.
     this.h = kind === 'hp' ? Math.max(height, 10) : height;
@@ -497,13 +586,13 @@ export class Bar {
     const { x, y, width, h } = this;
     const top = y - h / 2;
     g.clear();
-    g.fillStyle(0xf0f0e8, 1).fillRoundedRect(x - 2, top - 2, width + 4, h + 4, h / 2 + 2);
+    g.fillStyle(this.look?.rim ?? 0xf0f0e8, 1).fillRoundedRect(x - 2, top - 2, width + 4, h + 4, h / 2 + 2);
     g.fillStyle(0x303838, 1).fillRoundedRect(x - 1, top - 1, width + 2, h + 2, h / 2 + 1);
-    g.fillStyle(0x182020, 1).fillRoundedRect(x, top, width, h, h / 2);
+    g.fillStyle(this.look?.track ?? 0x182020, 1).fillRoundedRect(x, top, width, h, h / 2);
     const fillW = this.width * this.ratio;
     if (this.ghost.w > fillW + 0.5) g.fillStyle(0xf8e0c0, 1).fillRoundedRect(x, top, this.ghost.w, h, Math.min(h / 2, this.ghost.w / 2));
     if (fillW < 1) return;
-    const shades = this.ratio > 0.5 ? HP_GAUGE.high : this.ratio > 0.2 ? HP_GAUGE.medium : HP_GAUGE.low;
+    const shades = this.look && this.ratio > 0.2 ? this.look.fill : this.ratio > 0.5 ? HP_GAUGE.high : this.ratio > 0.2 ? HP_GAUGE.medium : HP_GAUGE.low;
     const r = Math.min(h / 2, fillW / 2);
     g.fillStyle(shades[2], 1).fillRoundedRect(x, top, fillW, h, r);
     g.fillStyle(shades[1], 1).fillRoundedRect(x, top, fillW, h - 2, r);

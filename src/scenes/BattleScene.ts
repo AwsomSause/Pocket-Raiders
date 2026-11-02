@@ -63,7 +63,7 @@ import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
-import { battleSkinFor, type BattleFrameInfo, type BattleSkin } from '../ui/battleStyles';
+import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
@@ -159,6 +159,11 @@ interface InfoBox {
   formIcon?: Phaser.GameObjects.Image;
   /** A soft red glow behind the box while HP is low. */
   danger?: Phaser.GameObjects.Graphics;
+  /** A battle style's layout for this box (screens redesign); absent for the original look. */
+  spec?: BoxSpec;
+  typesText?: Phaser.GameObjects.Text;
+  teamRow?: Phaser.GameObjects.Container;
+  portrait?: { species: string; obj: Phaser.GameObjects.GameObject };
 }
 
 const sleep = (scene: Phaser.Scene, ms: number) => new Promise<void>((resolve) => scene.time.delayedCall(ms, resolve));
@@ -193,6 +198,7 @@ export class BattleScene extends Phaser.Scene {
   /** Screens redesign: the battle style for this battle (null = the original look). Presentation only. */
   private skin: BattleSkin | null = null;
   private skinId = 'original';
+  private skinHud: BattleHud | null = null;
   private playerBox!: InfoBox;
   private enemyBox!: InfoBox;
   private playerSprite: Visual | null = null;
@@ -378,6 +384,8 @@ export class BattleScene extends Phaser.Scene {
     this.applyMood(run.battle?.weather?.id ?? null);
     this.arenaLight = new ArenaLight(this, this.field, this.field.length, this.motion);
     this.arenaPhase = 0;
+    // A battle style's floor, tint or whole backdrop, under the Pokémon.
+    this.skin?.backdrop?.(this, this.field, this.frameInfo());
     addContactShadows(this, this.field, () => this.shadowTargets());
     this.fieldBase = this.field.length;
     addVignette(this);
@@ -415,8 +423,8 @@ export class BattleScene extends Phaser.Scene {
         },
       };
     } else {
-      this.enemyBox = this.makeInfoBox(0, 30, false);
-      this.playerBox = this.makeInfoBox(GAME_WIDTH - 390, MESSAGE_Y - 132, true);
+      this.enemyBox = this.skin ? this.makeSkinBox(this.skin.layout.foe, false) : this.makeInfoBox(0, 30, false);
+      this.playerBox = this.skin ? this.makeSkinBox(this.skin.layout.player, true) : this.makeInfoBox(GAME_WIDTH - 390, MESSAGE_Y - 132, true);
     }
     this.header = this.add.text(GAME_WIDTH - 16, 10, '', textStyle(20, COLORS.textLight, { stroke: '#181818', strokeThickness: 4 })).setOrigin(1, 0);
     // Raid and Totem status sits under the enemy's box, away from the boss sprite.
@@ -426,15 +434,20 @@ export class BattleScene extends Phaser.Scene {
 
     // PokeRogue's message bar along the bottom, with the command window on its right.
     // A glossy glass message bar (Aero), with the command window on its right.
-    const bar = this.skin
-      ? (this.skin.messageBar(this, 8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16) as Phaser.GameObjects.Graphics)
-      : drawGlass(this, 8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16, { radius: 22 });
-    slideIn(this, bar, 0, 60, this.motion);
-    const cw = [COMMAND_X, MESSAGE_Y + 14, GAME_WIDTH - COMMAND_X - 16, GAME_HEIGHT - MESSAGE_Y - 28] as const;
-    this.commandWindow = (this.skin ? this.skin.commandWindow(this, ...cw) : drawGlass(this, ...cw, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 18 })).setVisible(false);
-    this.message = this.add.text(36, MESSAGE_Y + 24, '', textStyle(30, this.panelText, { wordWrap: { width: 520 }, lineSpacing: 6 }));
-    this.moveInfo = this.add.text(COMMAND_X + 30, MESSAGE_Y + 24, '', textStyle(24, this.panelText, { lineSpacing: 8 })).setVisible(false);
-    this.skin?.frame?.(this, this.frameInfo());
+    const L = this.skin?.layout;
+    const barRect: Rect | null = L ? L.bar : [8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16];
+    if (barRect) {
+      const bar = this.skin?.messageBar ? (this.skin.messageBar(this, barRect) as Phaser.GameObjects.Graphics) : drawGlass(this, barRect[0], barRect[1], barRect[2], barRect[3], { radius: 22 });
+      slideIn(this, bar, 0, 60, this.motion);
+    }
+    const cw: Rect | null = L ? L.command : [COMMAND_X, MESSAGE_Y + 14, GAME_WIDTH - COMMAND_X - 16, GAME_HEIGHT - MESSAGE_Y - 28];
+    this.commandWindow = (cw && this.skin?.commandWindow ? this.skin.commandWindow(this, cw) : cw && !this.skin ? drawGlass(this, cw[0], cw[1], cw[2], cw[3], { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 18 }) : this.add.graphics()).setVisible(false);
+    const msg = L?.message ?? { x: 36, y: MESSAGE_Y + 24, w: 520, size: 30 };
+    this.message = this.add.text(msg.align === 'center' ? msg.x + msg.w / 2 : msg.x, msg.y, '', this.skinText(msg.size, this.panelText, { wordWrap: { width: msg.w }, lineSpacing: 6, align: msg.align ?? 'left' })).setOrigin(msg.align === 'center' ? 0.5 : 0, 0);
+    const info = L?.moveInfo ?? { x: COMMAND_X + 30, y: MESSAGE_Y + 24 };
+    this.moveInfo = this.add.text(info.x, info.y, '', this.skinText(L ? Math.min(20, msg.size) : 24, this.panelText, { lineSpacing: 8 })).setVisible(false);
+    this.skinHud = this.skin?.frame?.(this, this.frameInfo()) ?? null;
+    if (L?.header) this.header.setPosition(L.header.x, L.header.y);
     // Style overlays (letterbox, scanlines) sit under the run header.
     if (this.skin?.frame) this.header.setDepth(8);
 
@@ -442,7 +455,7 @@ export class BattleScene extends Phaser.Scene {
     this.autoCancel = false;
     this.infoOpen = false;
     this.infoPanel = null;
-    this.tabs = new BattleTabs(this, { motion: this.motion, onPage: (p) => this.gotoPage(p), onAuto: () => this.toggleAuto(), onInfo: () => this.toggleInfo() }, COMMAND_X + 8, MESSAGE_Y + 1);
+    this.tabs = new BattleTabs(this, { motion: this.motion, onPage: (p) => this.gotoPage(p), onAuto: () => this.toggleAuto(), onInfo: () => this.toggleInfo() }, this.tabsAt.x, this.tabsAt.y);
     this.tabs.show(false);
     this.note = this.add.text(12, 6, '', textStyle(18, COLORS.textLight, { stroke: '#181818', strokeThickness: 4, wordWrap: { width: 560 } })).setOrigin(0, 0).setDepth(130).setAlpha(0);
     this.input.keyboard?.on('keydown-Q', () => this.gotoPage(this.tabs.neighbour(-1)));
@@ -465,19 +478,57 @@ export class BattleScene extends Phaser.Scene {
     return this.skin?.buttonText ?? COLORS.textLight;
   }
 
+  /** Where the page tabs sit (the battle style's place, else over the command window). */
+  private get tabsAt(): { x: number; y: number } {
+    return this.skin?.layout.tabs ?? { x: COMMAND_X + 8, y: MESSAGE_Y + 1 };
+  }
+
+  /** A text style in the battle style's font (the pixel font when it has none). */
+  private skinText(size: number, color: string | undefined, extra: Phaser.Types.GameObjects.Text.TextStyle = {}): Phaser.Types.GameObjects.Text.TextStyle {
+    const base = textStyle(size, color, extra);
+    return this.skin?.font ? { ...base, fontFamily: this.skin.font, fontSize: `${size}px`, shadow: undefined } : base;
+  }
+
+  /** A battle style's menu settings for Menu (position, grid, placement, tilt). */
+  private specOf(layout: MenuLayout, n: number, moves = 0): MenuSpec {
+    return typeof layout === 'function' ? layout(n, moves) : layout;
+  }
+
+  private menuSpec(layout: MenuLayout, n: number, moves = 0) {
+    const spec = this.specOf(layout, n, moves);
+    return {
+      focusColor: spec.focusColor,
+      x: spec.x,
+      y: spec.y,
+      columns: spec.columns,
+      itemWidth: spec.itemWidth,
+      itemHeight: spec.itemHeight,
+      fontSize: spec.fontSize,
+      align: spec.align,
+      middle: true,
+      inset: spec.inset,
+      lift: spec.lift,
+      cursor: spec.bare ? ('none' as const) : ('default' as const),
+      place: spec.place ? (i: number) => spec.place!(i, n) : undefined,
+      angle: spec.angle ? (i: number) => spec.angle!(i, n) : undefined,
+    };
+  }
+
   /** What a battle style may show around the arena. */
   private frameInfo(): BattleFrameInfo {
     const { content, settings } = services().session;
     const battle = this.run.battle!;
-    const foe = battle.enemyTeam[0];
+    const foe = currentEnemy(battle);
+    const mine = this.run.party[battle.activeIndex];
     return {
-      player: this.run.party[0] ? this.speciesName(this.run.party[0]) : '',
+      player: mine ? this.speciesName(mine) : '',
       foe: foe ? this.speciesName(foe) : '',
       trainer: this.trainerTitle(),
       turn: battle.turn,
       region: this.run.regionOrder.length > 0 ? currentRegion(content, this.run).name : '',
       motion: this.motion,
       reducedFlash: settings.reducedFlash,
+      party: this.run.party.map((m) => ({ speciesId: m.speciesId, fainted: m.hp <= 0 })),
     };
   }
 
@@ -749,6 +800,7 @@ export class BattleScene extends Phaser.Scene {
       const at = this.spotXY('player');
       this.playerSprite = pokemonVisual(this, species, 'back', at.x, at.y, (PIXEL_SCALE + 1) * grow * (this.duo ? DUO_SCALE.player : 1), mon.shiny);
       this.field.add(this.playerSprite);
+      this.skin?.sprite?.(this.playerSprite);
       this.prefetchMoves(mon);
       this.liven(this.playerSprite, cry);
       return this.playerSprite;
@@ -758,6 +810,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemySprite = pokemonVisual(this, species, 'front', at.x, at.y, PIXEL_SCALE * grow * (this.duo ? DUO_SCALE.enemy : 1), mon.shiny);
     // The foe stands behind the player's Pokémon.
     this.field.addAt(this.enemySprite, this.fieldBase);
+    this.skin?.sprite?.(this.enemySprite);
     // A boss's last Pokémon turns the arena light a warning red.
     const b = this.run.battle;
     if (b && this.boss() && b.enemyTeam.length > 1 && b.enemyIndex >= b.enemyTeam.length - 1) this.arenaLight?.set(Math.max(this.arenaPhase, 1), 0xff5030);
@@ -824,7 +877,7 @@ export class BattleScene extends Phaser.Scene {
     const kit = !this.skin && style !== 'aero' && kitTexturesReady(this) ? KIT_LAYOUTS[style][isPlayer ? 'player' : 'foe'] : null;
     // A glossy glass databox (Aero), cyan-rimmed for you and pink-rimmed for the foe; or the Deluxe Battle Kit's databox art.
     if (kit) container.add(this.add.image(kit.x, kit.y, kit.box).setOrigin(0, 0).setScale(kit.scale));
-    else if (this.skin) container.add(this.skin.databox(this, isPlayer, this.foeRim()));
+    else if (this.skin) container.add(this.skin.databox(this, isPlayer, isPlayer ? [16, 2, 366, 128] : [6, 4, 360, 100]));
     else
       container.add(
         isPlayer
@@ -877,16 +930,92 @@ export class BattleScene extends Phaser.Scene {
     return box;
   }
 
+  /** A databox laid out by the battle style (its mock-up's shape and parts). */
+  private makeSkinBox(spec: BoxSpec, isPlayer: boolean): InfoBox {
+    const skin = this.skin!;
+    const container = this.add.container(spec.x, spec.y);
+    container.add(skin.databox(this, isPlayer, spec.panel));
+    const ink = skin.text;
+    const name = this.add.text(spec.name[0], spec.name[1], '', this.skinText(spec.name[2] ?? 22, ink));
+    const lv = spec.level === 'inline' ? null : spec.level;
+    const level = this.add.text(lv ? lv[0] : 0, lv ? lv[1] : 0, '', this.skinText(lv?.[2] ?? 20, ink)).setOrigin(1, 0).setVisible(!!lv);
+    container.add([name, level]);
+    const [hx, hy, hw, hh] = spec.hp;
+    if (spec.hpTag) {
+      const tag = this.add.graphics();
+      tag.fillStyle(0x303838, 1).fillRoundedRect(hx - 40, hy - 9, 34, 18, 9);
+      tag.lineStyle(1, 0xf0f0e8, 0.9).strokeRoundedRect(hx - 40, hy - 9, 34, 18, 9);
+      container.add([tag, this.add.text(hx - 23, hy, 'HP', textStyle(13, '#f8a030', { shadow: undefined })).setOrigin(0.5)]);
+    }
+    const hpBar = new Bar(this, hx, hy, hw, hh ?? 10, 'hp', spec.hpLook);
+    hpBar.addTo(container);
+    const box: InfoBox = { container, isPlayer, name, level, hpBar, statusAt: { x: spec.status[0], y: spec.status[1] }, spec };
+    if (spec.hpText) {
+      const t = spec.hpText.at;
+      box.hpText = this.add.text(t[0], t[1], '', this.skinText(t[2] ?? 18, ink)).setOrigin(spec.hpText.align === 'left' ? 0 : 1, 0);
+      container.add(box.hpText);
+    }
+    if (spec.xp && isPlayer) {
+      box.xpBar = new Bar(this, spec.xp[0], spec.xp[1], spec.xp[2], 4, 'xp');
+      box.xpBar.addTo(container);
+    }
+    if (spec.types) {
+      box.typesText = this.add.text(spec.types[0], spec.types[1], '', this.skinText(spec.types[2] ?? 14, ink));
+      container.add(box.typesText);
+    }
+    if (spec.team && !isPlayer) {
+      box.teamRow = this.add.container(spec.team[0], spec.team[1]);
+      container.add(box.teamRow);
+    }
+    container.setVisible(false);
+    return box;
+  }
+
+  /** A style box's extras: types, the trainer's ball row, the portrait. */
+  private refreshSkinParts(box: InfoBox, mon: PokemonInstance): void {
+    const spec = box.spec!;
+    const content = services().session.content;
+    const species = getSpecies(content, mon.speciesId);
+    const up = (t: string) => t.toUpperCase();
+    if (box.typesText) {
+      const tera = this.run.battle?.transform.teraTypes[mon.uid];
+      box.typesText.setText((tera ? [tera] : species.types).map(up).join(' · '));
+    }
+    if (box.teamRow) {
+      box.teamRow.removeAll(true);
+      const team = this.run.battle?.trainer ? this.run.battle.enemyTeam : [];
+      const size = spec.team![2] ?? 30;
+      team.forEach((m, i) => {
+        const key = m.hp > 0 ? 'pack.memories.battle.ball' : 'pack.memories.battle.ballFaint';
+        const icon = this.textures.exists(key)
+          ? this.add.image(i * (size + 4), 0, key).setOrigin(0).setDisplaySize(size, size)
+          : this.add.text(i * (size + 4), 0, m.hp > 0 ? '●' : '○', textStyle(size * 0.7, '#f8f8f8', { stroke: '#181818', strokeThickness: 4 }));
+        box.teamRow!.add(icon);
+      });
+    }
+    if (spec.portrait && box.portrait?.species !== mon.speciesId) {
+      box.portrait?.obj.destroy();
+      const [px, py, ps] = spec.portrait;
+      const obj = pokemonIcon(this, species, px, py, ps ?? 1);
+      box.container.add(obj);
+      box.portrait = { species: mon.speciesId, obj };
+    }
+  }
+
   private refreshInfoBox(box: InfoBox, mon: PokemonInstance, animate: boolean): Promise<void> {
     const content = services().session.content;
     const max = calcStats(content, mon).hp;
     if (!box.container.visible) slideIn(this, box.container, box.isPlayer ? 420 : -420, 0, this.motion);
     box.container.setVisible(true);
-    box.name.setText(`${this.speciesName(mon)}${genderSign(content, mon)}${mon.shiny ? ' ★' : ''}`);
+    const spec = box.spec;
+    const shown = `${this.speciesName(mon)}${genderSign(content, mon)}${mon.shiny ? ' ★' : ''}`;
+    box.name.setText(spec ? `${spec.namePrefix ?? ''}${spec.upper ? shown.toUpperCase() : shown}${spec.level === 'inline' ? ` · Lv${mon.level}` : ''}` : shown);
     box.level.setText(`Lv${mon.level}`);
     // A long name stops short of the level and the form symbol instead of running under them.
-    fitLine(box.name, box.level.x - box.level.width - box.name.x - 40);
-    box.hpText?.setText(`${Math.max(0, mon.hp)}/${max}`);
+    if (!spec || spec.level !== 'inline') fitLine(box.name, box.level.x - box.level.width - box.name.x - (spec ? 12 : 40));
+    const pct = Math.ceil((Math.max(0, mon.hp) / max) * 100);
+    box.hpText?.setText(spec?.hpText ? `${spec.hpText.prefix ?? ''}${spec.hpText.pct ? `${pct}%` : `${Math.max(0, mon.hp)}/${max}`}` : `${Math.max(0, mon.hp)}/${max}`);
+    if (spec) this.refreshSkinParts(box, mon);
     box.statusBadge?.destroy();
     box.statusBadge = undefined;
     if (mon.status) {
@@ -931,7 +1060,7 @@ export class BattleScene extends Phaser.Scene {
       const hi = xpForLevel(species.growthRate, mon.level + 1, highLevelXp);
       void box.xpBar.set(mon.level >= maxLevel ? 1 : (mon.xp - lo) / Math.max(1, hi - lo), animate);
     }
-    if (box.teamText) {
+    if (box.teamText && !spec) {
       const battle = this.run.battle;
       if (battle?.trainer) {
         box.teamText.setText(battle.enemyTeam.map((m) => (m.hp > 0 ? '●' : '○')).join(' '));
@@ -952,7 +1081,10 @@ export class BattleScene extends Phaser.Scene {
     const isPlayer = box.isPlayer;
     const g = this.add.graphics();
     g.fillStyle(0xff3048, 0.35);
-    g.fillRoundedRect(isPlayer ? 8 : -2, -6, isPlayer ? 382 : 376, isPlayer ? 144 : 116, 26);
+    if (box.spec) {
+      const [px, py, pw, ph] = box.spec.panel;
+      g.fillRoundedRect(px - 8, py - 8, pw + 16, ph + 16, 16);
+    } else g.fillRoundedRect(isPlayer ? 8 : -2, -6, isPlayer ? 382 : 376, isPlayer ? 144 : 116, 26);
     box.container.addAt(g, 0);
     box.danger = g;
     if (this.motion === 'full') this.tweens.add({ targets: g, alpha: 0.25, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -1029,6 +1161,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** The normal header, plus a raid status line (shield, phase count, charged attack, timer). */
   private updateHeader(): void {
+    if (this.skinHud?.update && this.run.battle) this.skinHud.update(this.frameInfo());
     this.updateHeaderBase();
     this.status.setText('');
     this.updateSpectacleHud();
@@ -1652,7 +1785,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** Shows the tab strip for the page being viewed (null: the main choice menu). */
   private showTabs(page: BattlePage | null, where: TabsPlace = 'bar'): void {
-    this.tabs.place(where, COMMAND_X + 8, MESSAGE_Y + 1);
+    this.tabs.place(where, this.tabsAt.x, this.tabsAt.y);
     this.tabs.setPage(page);
     this.tabs.setAuto(this.autoOn && !autoBattleProblem(this.run), Boolean(autoBattleProblem(this.run)));
     this.tabs.show(true);
@@ -1961,6 +2094,11 @@ export class BattleScene extends Phaser.Scene {
     const hotbar = services().session.settings.hotbar.filter((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id) && content.items.get(id)!.target !== 'party' && content.items.get(id)!.target !== 'fainted' && itemProblem(this.battleCtx(), id) === null).slice(0, 4);
     const hotbarAt = options.length;
     for (const id of hotbar) options.push({ label: `Quick: ${content.items.get(id)!.name}` });
+    // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
+    const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
+    const k = combined.length;
+    if (k > 0) options.splice(0, 1, ...combined);
+    if (this.skin && this.specOf(this.skin.layout.root, options.length, k).upper) for (const o of options) o.label = o.label.toUpperCase();
     this.commandWindow.setVisible(true);
     this.menu = new Menu(this, {
       x: COMMAND_X + 24,
@@ -1970,10 +2108,20 @@ export class BattleScene extends Phaser.Scene {
       itemWidth: options.length > 4 ? 114 : 170,
       itemHeight: options.length > 4 ? 36 : 50,
       fontSize: options.length > 4 ? 20 : 30,
+      ...(this.skin ? this.menuSpec(this.skin.layout.root, options.length, k) : {}),
       color: this.btnText,
       // Wii-style glossy buttons: Fight red, Bag gold, Pokémon green, transformations neon.
-      glass: { paint: this.skin?.pill, tints: this.skin?.rootTints ?? [0xc8303c, 0xc08a10, 0x1f9a52, 0x9a2cc8, 0x2c8ad8, 0x2cb8c8, 0xd8a020], motion: this.motion },
-      onSelect: (i) => {
+      glass: { paint: this.skin?.pill, tints: k > 0 ? [...combined.map((m) => m.tint), ...(this.skin!.rootTints ?? []).slice(1)] : this.skin?.rootTints ?? [0xc8303c, 0xc08a10, 0x1f9a52, 0x9a2cc8, 0x2c8ad8, 0x2cb8c8, 0xd8a020], motion: this.motion },
+      onSelect: (pick) => {
+        if (pick < k) {
+          this.showMoveMenu();
+          if (this.menu && this.menu.optionCount() === k) {
+            this.menu.focus(pick, false);
+            this.menu.confirm();
+          }
+          return;
+        }
+        const i = k > 0 ? pick - k + 1 : pick;
         if (i === dealAt) this.showDealMenu();
         else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
@@ -2033,6 +2181,18 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
+  /** The moves as root-menu tiles for a combined style; none while a Z-Move is chosen or no move has PP (Fight then leads to Struggle). */
+  private combinedMoves(): { label: string; detail?: string; disabled: boolean; tint: number }[] {
+    const content = services().session.content;
+    const mon = this.activeMon();
+    if (this.transformChoice?.kind === 'zmove' || !mon.moves.some((m) => m.pp > 0)) return [];
+    return mon.moves.map((slot) => {
+      const move = content.moves.get(slot.id)!;
+      const styled = this.skin?.moveText?.({ name: move.name, type: move.type, category: move.category, power: String(move.power ?? fixedDamageLabel(move.effects.fixedDamage)), accuracy: move.accuracy === null || move.accuracy === undefined ? '-' : String(move.accuracy), pp: slot.pp, maxPp: maxPp(content, slot) });
+      return { label: styled?.label ?? move.name, detail: styled?.detail, disabled: slot.pp <= 0, tint: TYPE_COLORS[move.type] ?? 0x8a96a0 };
+    });
+  }
+
   private showMoveMenu(): void {
     const content = services().session.content;
     const mon = this.activeMon();
@@ -2052,11 +2212,16 @@ export class BattleScene extends Phaser.Scene {
     const options = anyPp
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
-          return { label: zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : ''), disabled: slot.pp <= 0 || (zMoves !== null && !zMoves[i]) };
+          const name = zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const disabled = slot.pp <= 0 || (zMoves !== null && !zMoves[i]);
+          const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
+          // A battle style may label its buttons its own way (PP, power, type).
+          const styled = this.skin?.moveText?.({ name, type: move.type, category: move.category, power: String(move.power ?? fixedDamageLabel(move.effects.fixedDamage)), accuracy: move.accuracy === null || move.accuracy === undefined ? '-' : String(move.accuracy), pp: slot.pp, maxPp: maxPp(content, slot) });
+          return { label: styled?.label ?? name, detail: styled?.detail, disabled };
         })
       : [{ label: 'Struggle' }];
-    // Moves fill the message bar (unless a battle style floats them over the arena); the command window shows the focused move's details.
-    this.message.setVisible(!!this.skin?.moveMenu?.floating);
+    // Moves fill the message bar; the command window shows the focused move's details.
+    this.message.setVisible(false);
     this.commandWindow.setVisible(true);
     this.menu = new Menu(this, {
       x: 30,
@@ -2067,7 +2232,7 @@ export class BattleScene extends Phaser.Scene {
       itemHeight: 50,
       fontSize: 28,
       // A battle style may fan the moves out as cards or ring them around your Pokémon.
-      ...(this.skin?.moveMenu ? { ...this.skin.moveMenu, place: this.skin.moveMenu.place ? (i: number) => this.skin!.moveMenu!.place!(i, options.length) : undefined } : {}),
+      ...(this.skin ? this.menuSpec(this.skin.layout.moves, options.length) : {}),
       color: this.btnText,
       // Each move sits on a glass pill in its type's colour.
       glass: {
@@ -2085,7 +2250,7 @@ export class BattleScene extends Phaser.Scene {
         this.moveBadges = null;
         const slot = mon.moves[i];
         if (!anyPp || !slot) {
-          this.moveInfo.setText('Your Pokémon has no PP left').setY(MESSAGE_Y + 30);
+          this.moveInfo.setText('Your Pokémon has no PP left').setY(this.skin ? this.skin.layout.moveInfo.y : MESSAGE_Y + 30);
           return;
         }
         const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
@@ -2095,11 +2260,17 @@ export class BattleScene extends Phaser.Scene {
         const cat = categoryIcon(this, 120, 0, move.category, 1.5);
         const art = [type, cat].filter((o): o is Phaser.GameObjects.Image => o !== null);
         const label = art.length === 2 ? '' : `${move.type.toUpperCase()}  ·  ${move.category}\n`;
+        const at = this.skin?.layout.moveInfo;
+        this.moveInfo.setText(`${label}${services().session.settings.typeMarkers ? `${move.type.toUpperCase()} ${move.category}  ·  ` : ''}PP  ${slot.pp}/${maxPp(content, slot)}  ·  Power ${power}`);
+        if (at?.inline) this.moveInfo.setY(at.y);
+        else this.moveInfo.setY(at ? (art.length === 2 ? at.y + 40 : at.y + 6) : art.length === 2 ? MESSAGE_Y + 64 : MESSAGE_Y + 30);
         if (art.length === 2) {
-          this.moveBadges = this.add.container(COMMAND_X + 28, MESSAGE_Y + 40, [...art, ...this.moveExtras(move)]);
+          // Inline: the badges follow the words on the same line.
+          const bx = at ? (at.inline ? at.x + this.moveInfo.width + 16 : at.x - 2) : COMMAND_X + 28;
+          const by = at ? (at.inline ? at.y + 10 : at.y + 16) : MESSAGE_Y + 40;
+          this.moveBadges = this.add.container(bx, by, [...art, ...this.moveExtras(move)]);
           bounceIn(this, this.moveBadges, this.motion);
         } else art.forEach((o) => o.destroy());
-        this.moveInfo.setText(`${label}${services().session.settings.typeMarkers ? `${move.type.toUpperCase()} ${move.category}  ·  ` : ''}PP  ${slot.pp}/${maxPp(content, slot)}  ·  Power ${power}`).setY(art.length === 2 ? MESSAGE_Y + 64 : MESSAGE_Y + 30);
         this.moveInfo.setColor(this.panelText);
       },
       onSelect: (i) => {
