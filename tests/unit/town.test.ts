@@ -311,3 +311,17 @@ describe('Fan Club (S358)', () => {
     expect(townStartGrants(content, p).money).toBe(base + TOWN.fanClub[0]!.money);
   });
 });
+
+describe('Guild Hall Board (S364)', () => {
+  it('a hired helper costs credits and their supplies wait as the next run boon', () => {
+    let p = rich();
+    const before = p.bankCredits;
+    const money = townStartGrants(content, p).money;
+    p = ok(p, 'hall-guild', { choice: 'guild-medic' }).profile;
+    p = ok(p, 'hall-guild', { choice: 'guild-treasurer' }).profile;
+    expect(p.bankCredits).toBe(before - 105);
+    const g = townStartGrants(content, p);
+    expect(g.items['super-potion']).toBe(4);
+    expect(g.money).toBe(money + 500);
+  });
+});
