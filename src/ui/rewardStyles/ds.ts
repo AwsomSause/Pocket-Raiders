@@ -63,6 +63,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const ds: RewardSkin = {
+  strip: { tint: 0xe8e8ec, rim: 0x50607a, ink: '#222a3a', hp: '#0f6a46', lead: '#b04000', btnTint: 0xffffff, btnRim: 0x50607a, btnInk: '#222a3a', radius: 4 },
   light: true,
   layout,
   backdrop(scene) {

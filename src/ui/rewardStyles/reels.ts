@@ -57,6 +57,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const reels: RewardSkin = {
+  strip: { tint: 0x141414, rim: 0xe0c060, ink: '#f4ecd0', hp: '#a0e0a0', lead: '#f0c028', btnTint: 0x2a2a2a, btnRim: 0xe0c060, btnInk: '#f4ecd0', radius: 3 },
   layout,
   title: () => 'JACKPOT ROW  ★  pick a reel to claim',
   backdrop(scene) {

@@ -26,7 +26,7 @@ export function face(g: Phaser.GameObjects.Graphics, skin: PartySkin, x: number,
   const lw = focused ? 3 : 1.5;
   g.fillStyle(fill, alpha);
   g.lineStyle(lw, rim, focused ? 1 : 0.7);
-  if (skin.shape === 'slant' && kind === 'row') {
+  if (skin.shape === 'slant') {
     const k = 12;
     const pts = [new Phaser.Geom.Point(x + k, y), new Phaser.Geom.Point(x + w, y), new Phaser.Geom.Point(x + w - k, y + h), new Phaser.Geom.Point(x, y + h)];
     g.fillPoints(pts, true).strokePoints(pts, true);

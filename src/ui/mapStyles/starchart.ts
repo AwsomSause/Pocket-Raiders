@@ -4,6 +4,7 @@ import { gradient, scenery } from './common';
 import type { MapSkin } from './types';
 
 export const starchart: MapSkin = {
+  chrome: { header: { fill: 0x0a0f30, border: 0x7a90d0, alpha: 0.78, ink: '#e8f0ff', sub: '#9fb4e8' }, bottom: { fill: 0x0a0f30, border: 0x7a90d0, alpha: 0.82, ink: '#e8f0ff', sub: '#ffe9a0' }, button: { tint: 0x16123a, rim: 0x9fb4e8, ink: '#e8f0ff', radius: 18, alpha: 0.9 } },
   backdrop(scene, motion) {
     gradient(scene, 0x050a24, 0x16123a);
     const rnd = scenery(11);

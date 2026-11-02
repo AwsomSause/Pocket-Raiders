@@ -4,6 +4,7 @@ import { gradient } from './common';
 import type { MapSkin } from './types';
 
 export const wiigrid: MapSkin = {
+  chrome: { header: { fill: 0xeef3f9, border: 0xb8c6d6, alpha: 0.96, ink: '#33475f', sub: '#5a6f88' }, bottom: { fill: 0x6a7c94, border: 0xdde6f0, alpha: 1, ink: '#ffffff', sub: '#ffffff' }, button: { tint: 0xffffff, rim: 0x9fb6cc, ink: '#33475f', radius: 20, alpha: 0.96 } },
   labels: true,
   bar(scene) {
     // The Wii menu's pale bar along the bottom: the clock in the middle, round Party and Bag buttons at the corners.

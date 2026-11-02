@@ -6,6 +6,7 @@ import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from
 
 export const spotlight: PartySkin = {
   shape: 'pill',
+  tabs: { underline: true, gap: 6 },
   dimRows: true,
   palette: { row: 0x14141c, rowAlpha: 0.7, rowFocus: 0x40407a, rowRim: 0x5a5a7a, focusRim: 0xfff2b0, tab: 0x14141c, tabActive: 0x40407a, pane: 0x0c0c14, paneRim: 0x6a6a8a },
   roster(ctx) {

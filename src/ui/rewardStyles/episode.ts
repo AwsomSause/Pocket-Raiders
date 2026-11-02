@@ -49,6 +49,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const episode: RewardSkin = {
+  strip: { tint: 0x10142a, rim: 0xff6a50, ink: '#ffffff', hp: '#9fe8c8', lead: '#ffd020', btnTint: 0x2a1a3a, btnRim: 0xff9a80, btnInk: '#ffffff', radius: 6 },
   layout,
   title: () => 'Choose one reward',
   backdrop(scene) {

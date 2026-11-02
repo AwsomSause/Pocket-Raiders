@@ -4,6 +4,7 @@ import { dashed, gradient } from './common';
 import type { MapSkin } from './types';
 
 export const nextstop: MapSkin = {
+  chrome: { header: { fill: 0x2a1c10, border: 0xffe070, alpha: 0.94, ink: '#fff0c0', sub: '#e0c890' }, bottom: { fill: 0x2a1c10, border: 0xffe070, alpha: 0.94, ink: '#fff0c0', sub: '#ffe070' }, button: { tint: 0xf6ecd8, rim: 0x2a1c10, ink: '#3a2a18', radius: 8, alpha: 1 } },
   cards: true,
   backdrop(scene) {
     gradient(scene, 0x3a2c22, 0x1a1410);

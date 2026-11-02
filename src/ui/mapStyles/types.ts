@@ -8,7 +8,16 @@ export interface Pt {
   y: number;
 }
 
+/** How a look dresses the header strip, the bottom panel and its buttons (paint only). */
+export interface MapChrome {
+  header: { fill: number; border: number; alpha: number; ink: string; sub: string };
+  bottom: { fill: number; border: number; alpha: number; ink: string; sub: string };
+  button: { tint: number; rim: number; ink: string; radius: number; alpha: number };
+}
+
 export interface MapSkin {
+  /** Header, bottom panel and button colours; missing = the Aero glass look. */
+  chrome?: MapChrome;
   /** Draws a frame or title over the scenery (the Town Map border, the panorama's biome names...). */
   frame?(scene: Phaser.Scene, motion: MotionLevel, ctx: { title: string; types: string[] }): void;
   /** Paints over the bottom panel's background, before its buttons are added (the Wii menu's light bar). */

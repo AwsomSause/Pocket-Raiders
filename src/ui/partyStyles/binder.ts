@@ -6,6 +6,7 @@ import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from
 
 export const binder: PartySkin = {
   shape: 'round',
+  tabs: { shape: 'square', gap: 3, upper: true },
   palette: { row: 0x3a1c1c, rowAlpha: 0.92, rowFocus: 0x7a3030, rowRim: 0xc8a050, focusRim: 0xffe080, tab: 0x3a1c1c, tabActive: 0x7a3030, pane: 0x2a1212, paneRim: 0xc8a050 },
   roster(ctx) {
     const { scene, into, mons, sel } = ctx;

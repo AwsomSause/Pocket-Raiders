@@ -48,6 +48,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const novel: RewardSkin = {
+  strip: { tint: 0xfff6fa, rim: 0xe8a0c0, ink: '#4a2a3a', hp: '#0f6a46', lead: '#b04070', btnTint: 0xffe8f2, btnRim: 0xe090b8, btnInk: '#4a2a3a', radius: 18 },
   light: true,
   layout,
   title: () => 'Choose one reward',

@@ -4,6 +4,7 @@ import { gradient, scenery } from './common';
 import type { MapSkin } from './types';
 
 export const townmap: MapSkin = {
+  chrome: { header: { fill: 0x1a2a78, border: 0xffffff, alpha: 0.96, ink: '#ffffff', sub: '#bcd0ff' }, bottom: { fill: 0x1a2a78, border: 0xffffff, alpha: 0.96, ink: '#ffffff', sub: '#ffe9a0' }, button: { tint: 0x2f60c0, rim: 0xffffff, ink: '#ffffff', radius: 5, alpha: 1 } },
   frame(scene) {
     // The Pokégear-style bordered map window.
     const g = scene.add.graphics().setDepth(-52);

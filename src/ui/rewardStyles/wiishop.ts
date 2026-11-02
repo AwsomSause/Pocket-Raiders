@@ -51,6 +51,7 @@ const layout: RewardLayout = (ctx, hooks) => {
 };
 
 export const wiishop: RewardSkin = {
+  strip: { tint: 0xffffff, rim: 0xb8c6d6, ink: '#33475f', hp: '#0f6a46', lead: '#b07000', btnTint: 0xf0f6fc, btnRim: 0x2aa8f0, btnInk: '#33475f', radius: 24 },
   light: true,
   title: () => 'Reward Channel',
   layout,

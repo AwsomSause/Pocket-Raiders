@@ -704,12 +704,16 @@ class PokemonScreen implements PickerLike {
       const x = RIGHT_X + i * w;
       const active = i === this.tab;
       const g = scene.add.graphics();
-      if (this.skin) paintFace(g, this.skin, x + 2, TAB_Y, w - 4, 28, 'tab', active);
+      const look = this.skin?.tabs;
+      const gap = look?.gap ?? 0;
+      if (this.skin && look?.underline) {
+        g.fillStyle(this.skin.palette.focusRim, active ? 1 : 0.35).fillRect(x + 2 + gap / 2, TAB_Y + (active ? 24 : 26), w - 4 - gap, active ? 4 : 2);
+      } else if (this.skin) paintFace(g, look?.shape ? { ...this.skin, shape: look.shape } : this.skin, x + 2 + gap / 2, TAB_Y, w - 4 - gap, 28, 'tab', active);
       else {
         g.fillStyle(active ? 0x2a6a9a : 0x0a2038, active ? 0.9 : 0.55).fillRoundedRect(x + 2, TAB_Y, w - 4, 28, 10);
         g.lineStyle(active ? 2 : 1, active ? 0xfff2b0 : AERO.rim, active ? 0.95 : 0.4).strokeRoundedRect(x + 2, TAB_Y, w - 4, 28, 10);
       }
-      const t = scene.add.text(x + w / 2, TAB_Y + 14, name, textStyle(14, active ? '#ffffff' : '#9fc8e8')).setOrigin(0.5).setName(`tab-${name}`);
+      const t = scene.add.text(x + w / 2, TAB_Y + 14, look?.upper ? name.toUpperCase() : name, textStyle(14, active ? '#ffffff' : '#9fc8e8')).setOrigin(0.5).setName(`tab-${name}`);
       const zone = scene.add.zone(x + 2, TAB_Y, w - 4, 28).setOrigin(0).setInteractive({ useHandCursor: true });
       zone.on('pointerdown', () => {
         if (this.closed) return;

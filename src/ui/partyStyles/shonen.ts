@@ -7,6 +7,7 @@ import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from
 
 export const shonen: PartySkin = {
   shape: 'slant',
+  tabs: { shape: 'slant', gap: 2, upper: true },
   palette: { row: 0x2a1408, rowAlpha: 0.95, rowFocus: 0xc85a10, rowRim: 0xf0a030, focusRim: 0xfff060, tab: 0x2a1408, tabActive: 0xc85a10, pane: 0x1c0e06, paneRim: 0xf0a030 },
   roster(ctx) {
     const { scene, into, mons, sel } = ctx;
