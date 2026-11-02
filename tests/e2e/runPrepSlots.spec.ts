@@ -28,7 +28,17 @@ test('the Preparation Desk has five pages and a Weeks toggle that sticks for the
   await waitForScene(page, 'RunPrep');
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(4); // opens on the Overview
 
-  for (const [key, want] of [['KeyQ', 3], ['KeyQ', 2], ['KeyQ', 1], ['KeyQ', 0], ['KeyE', 1]] as const) {
+  // Q from the Overview opens the Modifiers page, its own scrolling scene; Esc comes back to the Overview.
+  await page.keyboard.press('KeyQ');
+  await waitForScene(page, 'RunModifiers');
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'RunPrep');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(4);
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(2));
+  await expect.poll(async () => (await prep(page)).page).toBe(2);
+  await page.waitForTimeout(400);
+
+  for (const [key, want] of [['KeyQ', 1], ['KeyQ', 0], ['KeyE', 1]] as const) {
     await page.keyboard.press(key);
     await expect.poll(async () => (await prep(page)).page).toBe(want);
     await page.waitForTimeout(350);
