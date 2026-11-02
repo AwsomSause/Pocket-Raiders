@@ -2,11 +2,12 @@
 import { GAME_HEIGHT } from '../theme';
 import { windowFace } from './common';
 import type { PartySkin } from './types';
-import { stageOverview } from './overviews';
+import { stageOverview, bodyFrames } from './overviews';
 import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from './kit';
 
 export const spotlight: PartySkin = {
   shape: 'pill',
+  frame: bodyFrames.spotlight,
   overview: stageOverview({ disc: 0x2a2a3a, beam: 0xfff0c0, ink: '#d0e4f4', label: '#ffd070' }),
   tabs: { underline: true, gap: 6 },
   dimRows: true,
