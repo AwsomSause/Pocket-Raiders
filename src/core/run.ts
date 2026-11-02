@@ -1878,6 +1878,12 @@ function ownsKeepsake(content: Content, inventory: Record<string, number>, itemI
   return (kind === 'keyItem' || kind === 'megaStone' || kind === 'zCrystal') && itemCount(inventory, itemId) > 0;
 }
 
+/** True for items you only ever need one of (key items, Mega Stones, Z-Crystals): the basket holds one at most. */
+export function oneOnly(content: Content, itemId: string): boolean {
+  const kind = content.items.get(itemId)?.effect.kind;
+  return kind === 'keyItem' || kind === 'megaStone' || kind === 'zCrystal';
+}
+
 /** Badges needed before the shop sells an entry, after the trainer's shopUnlockOffset. */
 export function shopBadgesNeeded(content: Content, run: Pick<RunState, 'archetypeId'>, entry: Content['shop'][number]): number {
   return Math.max(0, entry.minBadges - shopUnlockOffset(runArchetype(content, run)));
@@ -1973,7 +1979,7 @@ export function buyItems(content: Content, current: RunState, itemId: string, co
   const entry = shopStock(content, current).find((e) => e.item === itemId);
   if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
   const item = getItem(content, itemId);
-  if (count > 1 && (ownsKeepsake(content, current.inventory, itemId) || item.effect.kind === 'keyItem' || item.effect.kind === 'megaStone' || item.effect.kind === 'zCrystal')) throw new Error(`You only need one ${item.name}.`);
+  if (count > 1 && oneOnly(content, itemId)) throw new Error(`You only need one ${item.name}.`);
   const unit = shopPrice(content, current, entry);
   const total = bulkTotal(content, current, unit, count);
   if (current.money < total) throw new Error(`You need ₽${total} for ${count} × ${item.name}.`);

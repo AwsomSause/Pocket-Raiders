@@ -40,6 +40,20 @@ export interface ShopHandles {
   refresh(view: ShopView, bought: number | null, message: string | null): void;
   /** Kecleon's reaction to a haggle (won or lost) over row i. */
   haggled?(view: ShopView, i: number, won: boolean, message: string): void;
+  /** Supply Depot: redraws the basket; `rang` plays the register and receipt after a checkout. */
+  basket?(lines: readonly BasketLine[], message: string | null, rang: boolean): void;
+}
+
+/** One line in the Supply Depot basket (nothing is bought until checkout). */
+export interface BasketLine {
+  itemId: string;
+  name: string;
+  iconAssetId: string;
+  count: number;
+  /** What the line costs at checkout, after the bulk discount. */
+  total: number;
+  /** What the bulk discount takes off this line. */
+  saving: number;
 }
 
 export type ShopLayout = (ctx: ShopCtx, hooks: ShopHooks) => ShopHandles;

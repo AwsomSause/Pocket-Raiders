@@ -8,9 +8,9 @@ import { clockLabel, shopHoursMultiplier } from '../core/clock';
 import Phaser from 'phaser';
 import { itemCount } from '../core/items';
 import { mapItemSummary } from '../core/mapItems';
-import { currentShopType, haggleChance, pokenetDeal, shopScreenType, SHOP_TYPE_LABELS, type ShopTypeId } from '../core/shopTypes';
+import { bulkTotal, currentShopType, haggleChance, pokenetDeal, shopScreenType, SHOP_TYPE_LABELS, type ShopTypeId } from '../core/shopTypes';
 import { uiMotionLevel } from '../core/presentation/uiMotion';
-import { isBlackMarket, sellPrice, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock } from '../core/run';
+import { isBlackMarket, oneOnly, sellPrice, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock } from '../core/run';
 import { services } from '../game/services';
 import { playSfx, playMusicLazy } from '../ui/audio';
 import { onInputAction } from '../ui/input';
@@ -18,7 +18,7 @@ import { Picker, type PickerRow } from '../ui/partyPanel';
 import { itemVisual } from '../ui/sprites';
 import { shopView, type ShopView } from '../ui/shopLook';
 import { shopLayout } from '../ui/shopStyles';
-import type { ShopCtx, ShopHandles } from '../ui/shopStyles/types';
+import type { BasketLine, ShopCtx, ShopHandles } from '../ui/shopStyles/types';
 import { choicePrompt, type ChoicePrompt } from '../ui/shopStyles/common';
 import { effectiveAttributes } from '../core/attributes';
 import { textStyle } from '../ui/theme';
@@ -44,6 +44,8 @@ export class ShopScene extends Phaser.Scene {
     if (keepers.length) preloadPokemon(this, keepers, { front: true });
   }
 
+  /** Supply Depot basket: item id → how many (nothing is bought until checkout). */
+  private basket = new Map<string, number>();
   private prompt: { ui: ChoicePrompt; index: number; actions: (() => void)[] } | null = null;
   private ctx: ShopCtx | null = null;
 
@@ -77,6 +79,7 @@ export class ShopScene extends Phaser.Scene {
     playMusicLazy(this, 'bgm.shop');
     this.picker = null;
     this.handles = null;
+    this.basket = new Map();
 
     if (data.sell) {
       this.createSell(data.notice);
@@ -126,6 +129,12 @@ export class ShopScene extends Phaser.Scene {
   private pick(i: number): void {
     const { session } = services();
     const view = this.view();
+    if (this.shopType === 'depot') {
+      const checkout = view.rows.length + (view.canSell ? 1 : 0);
+      if (i === checkout) return this.checkout();
+      if (i === checkout + 1) return this.emptyBasket('Basket emptied.');
+      if (i < view.rows.length) return this.addToBasket(i);
+    }
     if (i >= view.rows.length) {
       if (view.canSell) this.scene.restart({ sell: true });
       return;
@@ -168,6 +177,83 @@ export class ShopScene extends Phaser.Scene {
     const after = this.view();
     const index = after.rows.findIndex((r) => r.itemId === row.itemId);
     this.handles?.refresh(after, index >= 0 ? index : null, message.replace(/^You bought /, 'Bought '));
+  }
+
+  /** The basket as lines with their checkout prices (bulk discount per item). */
+  private basketLines(view: ShopView = this.view()): BasketLine[] {
+    const { session } = services();
+    const run = session.run!;
+    const lines: BasketLine[] = [];
+    for (const [itemId, count] of this.basket) {
+      const row = view.rows.find((r) => r.itemId === itemId);
+      if (!row || count < 1) continue;
+      const total = bulkTotal(session.content, run, row.price, count);
+      lines.push({ itemId, name: row.name, iconAssetId: row.iconAssetId, count, total, saving: row.price * count - total });
+    }
+    return lines;
+  }
+
+  private addToBasket(i: number): void {
+    const { session } = services();
+    const view = this.view();
+    const row = view.rows[i];
+    if (!row) return;
+    if (i !== this.focusIndex) this.setFocus(i);
+    const have = this.basket.get(row.itemId) ?? 0;
+    let problem = row.problem;
+    if (!problem && have >= 1 && oneOnly(session.content, row.itemId)) problem = `You only need one ${row.name}.`;
+    if (!problem) {
+      this.basket.set(row.itemId, have + 1);
+      const total = this.basketLines(view).reduce((n, l) => n + l.total, 0);
+      if (total > view.money) {
+        this.basket.set(row.itemId, have);
+        if (have === 0) this.basket.delete(row.itemId);
+        problem = `Your basket would cost ₽${total}; you have ₽${view.money}.`;
+      }
+    }
+    if (problem) {
+      playSfx(this, 'ui.error', 0.6);
+      this.handles?.basket?.(this.basketLines(view), problem, false);
+      return;
+    }
+    playSfx(this, 'ui.select', 0.6);
+    this.handles?.basket?.(this.basketLines(view), `${row.name} ×${have + 1} in the basket.`, false);
+  }
+
+  private emptyBasket(message: string): void {
+    this.basket.clear();
+    this.handles?.basket?.([], message, false);
+  }
+
+  /** Rings up the basket: each line is one bulk buy (5 or more of an item gets the Depot discount). */
+  private checkout(): void {
+    const { session } = services();
+    const lines = this.basketLines();
+    if (lines.length === 0) {
+      playSfx(this, 'ui.error', 0.6);
+      this.handles?.basket?.([], 'The basket is empty. Pick goods off the shelves first.', false);
+      return;
+    }
+    const before = session.run!.money;
+    let problem: string | null = null;
+    let count = 0;
+    for (const line of lines) {
+      try {
+        session.buyItems(line.itemId, line.count);
+        count += line.count;
+        this.basket.delete(line.itemId);
+      } catch (e) {
+        problem = (e as Error).message;
+        break;
+      }
+    }
+    const spent = before - session.run!.money;
+    const after = this.view();
+    this.handles?.refresh(after, null, null);
+    if (count > 0) playSfx(this, 'ui.buy', 0.9);
+    else playSfx(this, 'ui.error', 0.6);
+    const message = count > 0 ? `Rang up ${count} item${count === 1 ? '' : 's'} for ₽${spent}.${problem ? ` ${problem}` : ''}` : problem;
+    this.handles?.basket?.(this.basketLines(after), message, count > 0);
   }
 
   private haggle(i: number): void {
@@ -216,6 +302,8 @@ export class ShopScene extends Phaser.Scene {
 
   private leave(): void {
     const { session } = services();
+    // At the Depot, Back first puts the basket back on the shelves.
+    if (this.basket.size > 0) return this.emptyBasket('Basket emptied. Press Back again to leave.');
     session.leaveShop();
     this.scene.start(sceneForRun(session.run!), { notice: 'Thanks for shopping!' });
   }

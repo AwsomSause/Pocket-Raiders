@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createPokemon } from '../../src/core/pokemon';
 import { haggleChance, SHOP_TYPE_IDS, SHOP_TYPES_READY, shopScreenType, shopTypeAt, type ShopPlace } from '../../src/core/shopTypes';
-import { buyItem, buyItems, chooseStarter, createRun, haggleItem, isBlackMarket, leaveShop, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock, visitSide } from '../../src/core/run';
+import { buyItem, buyItems, oneOnly, chooseStarter, createRun, haggleItem, isBlackMarket, leaveShop, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock, visitSide } from '../../src/core/run';
 import { shopView } from '../../src/ui/shopLook';
 import { content } from './helpers';
 
@@ -21,10 +21,12 @@ describe('shop types (shops redesign)', () => {
     expect(shopTypeAt(place({ period: 'evening' }))).not.toBe('night');
   });
 
-  it('an unbuilt type draws as the Poké Mart; an override only wins when built', () => {
+  it('every type has its own screen; a bad override falls back to the real type', () => {
+    expect([...SHOP_TYPES_READY]).toEqual([...SHOP_TYPE_IDS]);
     for (let i = 0; i < 50; i++) expect(SHOP_TYPES_READY).toContain(shopScreenType(shopTypeAt(place({ nodeId: i }))));
     expect(shopScreenType('mart', 'boutique')).toBe('boutique');
     expect(shopScreenType('mart', 'nonsense')).toBe('mart');
+    expect(shopScreenType('depot', 'nonsense')).toBe('depot');
   });
 });
 
@@ -112,6 +114,10 @@ describe('each shop kind sells its own goods, with its own perk', () => {
     expect(r.money - buyItems(content, r, 'poke-ball', 2).run.money).toBe(unit * 2);
     const m = as('mart');
     expect(m.money - buyItems(content, m, 'poke-ball', bt.depot.bulkMin).run.money).toBe(shopPrice(content, m, ball) * bt.depot.bulkMin);
+    // The basket holds one at most of a key item, Mega Stone or Z-Crystal.
+    const key = [...content.items.values()].find((i) => i.effect.kind === 'keyItem')!;
+    expect(oneOnly(content, key.id)).toBe(true);
+    expect(oneOnly(content, 'poke-ball')).toBe(false);
   });
 
   it('Bazaar: a few of the Mart goods; one haggle per visit, fixed per stall and item', () => {

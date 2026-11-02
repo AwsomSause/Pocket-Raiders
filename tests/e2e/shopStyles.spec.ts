@@ -15,9 +15,7 @@ async function mapReady(page: Page) {
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
 }
 
-for (const type of ['mart', 'boutique', 'bazaar', 'night']) test(`shop type ${type}: draws, buys in place and opens Sell`, async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', (e) => errors.push(e.message));
+async function openShop(page: Page, type: string) {
   await page.goto('/?seed=e2e-m7&debug=1');
   await waitForScene(page, 'MainMenu');
   await page.keyboard.press('Enter'); await waitForScene(page, 'Hub');
@@ -37,6 +35,12 @@ for (const type of ['mart', 'boutique', 'bazaar', 'night']) test(`shop type ${ty
   await page.evaluate((t) => { (window as any).__pkr.session.visitSide('e2e-shop'); (window as any).__pkr.session.run.shop.type = t; (window as any).__pkr.game.scene.getScene('Map').scene.start('Shop', { type: t }); }, type);
   await waitForScene(page, 'Shop'); await page.waitForTimeout(900);
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').shopType)).toBe(type);
+}
+
+for (const type of ['mart', 'boutique', 'bazaar', 'night', 'pokenet']) test(`shop type ${type}: draws, buys in place and opens Sell`, async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openShop(page, type);
   await page.screenshot({ path: `test-results/shop-${type}-1.png` });
   // The market looks lay goods in one row (Down goes on to the curtain or Sell), so stay on the row there.
   for (const k of type === 'bazaar' || type === 'night' ? ['ArrowRight', 'ArrowRight'] : ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight']) await page.keyboard.press(k);
@@ -61,9 +65,45 @@ for (const type of ['mart', 'boutique', 'bazaar', 'night']) test(`shop type ${ty
   await page.waitForTimeout(400);
   await page.screenshot({ path: `test-results/shop-${type}-3.png` });
   for (let i = 0; i < 12; i++) await page.keyboard.press('ArrowDown');
+  // PokéNet's last card row may end before Sell's column; Right runs on to Sell, the last card.
+  if (type === 'pokenet') for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(600);
   await page.screenshot({ path: `test-results/shop-${type}-4.png` });
   // The last stop going down is Sell; confirming opens the sell list.
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data?.sell ?? false)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('Supply Depot: goods go in the basket, Checkout pays once with the bulk discount', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await openShop(page, 'depot');
+  await page.screenshot({ path: 'test-results/shop-depot-1.png' });
+  const first = await page.evaluate(() => { const r = (window as any).__pkr.session.run; return { money: r.money, item: (window as any).__pkr.game.scene.getScene('Shop').view().rows[0] }; });
+  const owned = (await run(page)).inventory[first.item.itemId] ?? 0;
+  // Five of the first good: nothing is paid yet.
+  for (let i = 0; i < 5; i++) await page.keyboard.press('Enter');
+  await page.waitForTimeout(500);
+  expect((await run(page)).money).toBe(first.money);
+  await page.screenshot({ path: 'test-results/shop-depot-basket.png' });
+  // Right along the shelf ends on Checkout.
+  for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Enter');
+  await expect.poll(async () => (await run(page)).inventory[first.item.itemId] ?? 0).toBe(owned + 5);
+  const bulk = await page.evaluate(() => (window as any).__pkr.session.content.balance.shopTypes.depot);
+  expect((await run(page)).money).toBe(first.money - Math.round(first.item.price * 5 * (1 - bulk.bulkDiscount)));
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: 'test-results/shop-depot-checkout.png' });
+  // Back with a full basket only empties it; the second Back leaves.
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  expect(await scene(page)).toBe('Shop');
+  // Up from Checkout is Sell.
+  for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowUp');
   await page.keyboard.press('Enter');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data?.sell ?? false)).toBe(true);
   expect(errors).toEqual([]);

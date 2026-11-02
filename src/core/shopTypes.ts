@@ -18,8 +18,8 @@ export const SHOP_TYPE_LABELS: Record<ShopTypeId, string> = {
   night: 'Night Market',
 };
 
-/** The types with a built screen; the rest draw as the Poké Mart until their slice lands. */
-export const SHOP_TYPES_READY: readonly ShopTypeId[] = ['mart', 'boutique', 'bazaar', 'night'];
+/** The types with a built screen (all six since shops redesign slice 3). */
+export const SHOP_TYPES_READY: readonly ShopTypeId[] = SHOP_TYPE_IDS;
 
 /** How often each daytime type turns up (Night Market is decided by the clock, not by weight). */
 export const SHOP_TYPE_WEIGHTS: Record<Exclude<ShopTypeId, 'night'>, number> = { mart: 40, boutique: 15, bazaar: 15, depot: 15, pokenet: 15 };

@@ -127,13 +127,13 @@ export function mat(ctx: ShopCtx, hooks: ShopHooks, area: { x: number; y: number
     sparkle = [];
     current = i;
     const g = goods[i];
+    if (!g) return;
     const row = Math.floor(i / area.columns);
     if (row < top) top = row;
     if (row >= top + area.rows) top = row - area.rows + 1;
     const y = -top * area.rowH;
     if (motion === 'off') layer.y = y;
     else scene.tweens.add({ targets: layer, y, duration: 180, ease: 'Cubic.easeOut' });
-    if (!g) return;
     if (motion === 'off') g.icon.setY(g.baseY - 14).setScale(g.scale * 1.25);
     else {
       scene.tweens.add({ targets: g.icon, y: g.baseY - 18, scale: g.scale * 1.3, duration: 200, ease: 'Back.easeOut' });
