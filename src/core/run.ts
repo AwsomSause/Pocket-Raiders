@@ -527,7 +527,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   noteJournal(content, run);
   run.usedThemes.push(theme.id);
   run.usedLeaders.push(leader.id);
-  run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, extraFronts: [], roamers: [], convoy: null };
+  run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
   startStageEffects(run);
   hatchEggs(content, run);
   simulateRivalWorld(content, run);
@@ -585,6 +585,7 @@ function enterLeague(content: Content, run: RunState): void {
     current: null,
     visited: [],
     scoutedTo: 0,
+    foresight: 0,
     convoy: null,
     extraFronts: [],
     roamers: [],

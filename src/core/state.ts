@@ -843,6 +843,8 @@ export const StageStateSchema = z.object({
   visited: z.array(z.string()),
   /** Fog of war: the map shows every column up to this one (scouting); 0 = only what you can see. */
   scoutedTo: z.number().int().min(0).default(0),
+  /** Weather Prophet (S124): extra columns the weather forecast reaches this stage (an event's `foresight` effect). */
+  foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */
   extraFronts: z.array(z.object({ weather: WeatherSchema, from: z.number().int().min(1), to: z.number().int().min(1) })).default([]),
   /** Roaming Legendaries on this map: where each is now and whether it is still roaming. */

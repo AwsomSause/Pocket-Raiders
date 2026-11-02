@@ -107,6 +107,18 @@ describe('weather fronts', () => {
     expect(frontAt(content, run, run.stage!.map.nodes.find((n) => n.column === 3)!)?.weather).toBe(mine.weather);
   });
 
+  it('a Weather Prophet widens the forecast horizon (S124)', () => {
+    const run = newRun();
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)?.column ?? 0;
+    run.stage!.extraFronts = [{ weather: 'hail', from: here + 7, to: here + 8 }];
+    const far = forecast(content, run)?.front;
+    expect(far?.weather === 'hail' && far.from === here + 7).toBe(false);
+    run.stage!.foresight = 6;
+    const fc = forecast(content, run);
+    expect(fc?.front.from).toBeLessThanOrEqual(here + 7);
+    expect(fc).not.toBeNull();
+  });
+
   it('a Weather Vane brings a chosen front in', () => {
     const run = atEvent(newRun(), 'weather-vane');
     const after = chooseEvent(content, run, 'test-event', 0).run;
