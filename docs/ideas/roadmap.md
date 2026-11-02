@@ -21,7 +21,7 @@ Nuzlocke, Daily Run, Endless, level caps, mentors, retirement, Pawn/Black Market
 | 9 | Hisuian fossils and Fossil Lab upgrades, Museum | S51, S93 | Check |
 | 10 | Move/combos: Combo Moves, Combo Ability Pairs, Move Fusion, Charge-Up | S26, S167, S155, S164 | Gap |
 | 11 | Presentation skins: Frutiger Aero, DS, Wii Channel, Cyber-Maximalist, CRT filter, sound packs | S246-S249, S259, S261 | Gap |
-| 12 | Content pack loader + mod hooks + feature flags | S194, S325, S332, S344 | Gap |
+| 12 | Content pack loader + mod hooks + feature flags | S194, S325, S332, S344 | Partly (config packs exist; Save Inspector S330/S331 built, `docs/status/save-inspector.md`) |
 | 13 | Run events R1-R560, built by section as event-data batches (existing `events.json` pipeline): A Merchants 1-50, B Trainer battles 51-110, C Wild scenes 111-180, D Villains 181-235, E Helpers/moral 236-285, F Games/puzzles 286-345, G Training 346-385, H Mysteries 386-435, I Cameos 436-470, J Weather/hazards 471-505, K Run-wide modifiers 506-560 | R1-R560 | Gap (per-event check needed) |
 | 14 | Everything else approved in S (see review file), grouped by its section heading | rest of S | Backlog |
 
