@@ -78,6 +78,8 @@ export class HubTownView {
   private readonly onAdded: (go: Phaser.GameObjects.GameObject) => void;
   /** Ignore a held key until it is released (after a page closes, so you don't walk off at once). */
   private holdLock = false;
+  /** The on-screen arrow being held (phones and tablets), walked like a held key. */
+  touchDir: Facing | null = null;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -244,6 +246,7 @@ export class HubTownView {
   }
 
   private heldDirection(): Facing | null {
+    if (this.touchDir) return this.touchDir;
     const k = this.keys;
     if (!k) return null;
     const dx = (k.left.isDown || k.a.isDown ? -1 : 0) + (k.right.isDown || k.d.isDown ? 1 : 0);

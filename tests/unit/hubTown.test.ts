@@ -5,6 +5,7 @@ import { HUB_TOWN, OVERWORLD } from '../../src/core/hubTown/schema';
 import { WalkGrid, ahead, chooseHubPokemon, districtAt, facingOf, followerKey, gateAt, hubPokemon, hubPokemonChoices, mostUsedSpecies, placeAhead, placeById, trainerSheet } from '../../src/core/hubTown/world';
 import { crowdSize, crowdSpecies, crowdWindow, hubCrowd } from '../../src/core/hubTown/roster';
 import { chatterFor, chatterLines } from '../../src/core/hubTown/chatter';
+import { HUB_LIGHT, hubPeriod } from '../../src/core/hubTown/daylight';
 import { HUB_MERCHANT, boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../../src/core/hubTown/merchant';
 import { createProfile } from '../../src/core/profile';
 import { MemoryStorageProvider } from '../../src/save/storage';
@@ -256,5 +257,20 @@ describe('Hub Town part 3: a smaller, tidier town with a minimap and a Hub style
     const saves = new SaveManager(storage, content);
     saves.saveSettings({ ...loaded, hubStyle: 'lobby' });
     expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('lobby');
+  });
+});
+
+describe('Hub Town part 4: day and night', () => {
+  it('follows the local clock: morning 5-11, afternoon 11-17, evening 17-20, night otherwise', () => {
+    const at = (h: number) => hubPeriod(new Date(2026, 10, 2, h, 30));
+    expect([4, 5, 10, 11, 16, 17, 19, 20, 23, 0].map(at)).toEqual(['night', 'morning', 'morning', 'afternoon', 'afternoon', 'evening', 'evening', 'night', 'night', 'night']);
+  });
+
+  it('leaves the afternoon untinted and lights the lamps only after dark', () => {
+    expect(HUB_LIGHT.afternoon.alpha).toBe(0);
+    expect(Object.entries(HUB_LIGHT).filter(([, l]) => l.lamps).map(([p]) => p).sort()).toEqual(['evening', 'night']);
+    for (const l of Object.values(HUB_LIGHT)) expect(l.alpha).toBeLessThan(0.7);
+    // There are street lamps to light.
+    expect(HUB_TOWN.props.filter(([n]) => n.startsWith('lamp')).length).toBeGreaterThan(4);
   });
 });

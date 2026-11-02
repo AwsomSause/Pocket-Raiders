@@ -144,6 +144,41 @@ export function startAmbient(scene: Phaser.Scene, period: 'morning' | 'afternoon
   }
 }
 
+/** A splashing-water loop (band-passed noise) for a fountain; returns a setter for how close you are (0 silent, 1 beside it).
+ * Synthesised, stops with the scene, respects mute and the sound-effects volume. Null when audio is off or unavailable. */
+export function startFountain(scene: Phaser.Scene): ((near: number) => void) | null {
+  const { session } = services();
+  const ctx = (scene.sound as unknown as { context?: AudioContext }).context;
+  if (!ctx || session.settings.muted || session.settings.sfxVolume <= 0) return null;
+  try {
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    noise.loop = true;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.frequency.value = 1400;
+    band.Q.value = 0.7;
+    const gain = ctx.createGain();
+    gain.gain.value = 0;
+    noise.connect(band).connect(gain).connect(ctx.destination);
+    noise.start();
+    scene.events.once('shutdown', () => {
+      try {
+        noise.stop();
+        gain.disconnect();
+      } catch {
+        // already stopped
+      }
+    });
+    return (near) => gain.gain.setTargetAtTime(0.07 * session.settings.sfxVolume * Math.max(0, Math.min(1, near)), ctx.currentTime, 0.25);
+  } catch {
+    return null;
+  }
+}
+
 function captionJingle(id: string): void {
   const text = jingleCaption(id);
   if (text) showCaption(text);
