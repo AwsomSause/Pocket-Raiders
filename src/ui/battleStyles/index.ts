@@ -6,13 +6,13 @@ import { classic } from './classic';
 import { cinematic } from './cinematic';
 import { cyber } from './cyber';
 import { ink } from './ink';
-import { ring } from './ring';
+import { ringSkin as ring } from './ring';
 import { shonen } from './shonen';
 import { stadium } from './stadium';
 import type { BattleSkin } from './types';
 import { wii } from './wii';
 
-export type { BattleFrameInfo, BattleSkin } from './types';
+export type { BattleFrameInfo, BattleHud, BattleLayout, BattleSkin, BoxSpec, MenuLayout, MenuSpec, MoveView, Rect } from './types';
 
 export const BATTLE_SKINS: Partial<Record<ScreenStyleId<'battle'>, BattleSkin>> = { wii, classic, cyber, arcade, cards, ring, stadium, cinematic, shonen, ink };
 

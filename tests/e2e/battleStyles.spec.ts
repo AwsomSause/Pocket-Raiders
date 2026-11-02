@@ -30,12 +30,13 @@ for (const style of SCREEN_STYLES_READY.battle) {
     await page.waitForTimeout(700);
     expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').skinId)).toBe(style);
     await page.screenshot({ path: `test-results/visual/battle-style-${style}.png` });
+    const turn = () => page.evaluate(() => (window as any).__pkr.session.run?.battle?.turn ?? 99);
+    const before = await turn();
+    // Combined styles (Wii) use the focused move straight from the first screen.
     await page.keyboard.press('Enter');
     await page.waitForTimeout(600);
     await page.screenshot({ path: `test-results/visual/battle-style-${style}-moves.png` });
-    const turn = () => page.evaluate(() => (window as any).__pkr.session.run?.battle?.turn ?? 99);
-    const before = await turn();
-    await page.keyboard.press('Enter');
+    if (await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').menu))) await page.keyboard.press('Enter');
     await confirmUntil(page, async () => (await turn()) > before || (await scene(page)) !== 'Battle', 30_000);
     expect(errors).toEqual([]);
   });

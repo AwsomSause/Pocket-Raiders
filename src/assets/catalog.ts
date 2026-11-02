@@ -162,6 +162,10 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...['region0', 'region1'].map((name): AssetEntry => ({ id: `pack.memories.townmap.${name}`, kind: 'image', category: 'background', path: `images/packs/memories/townmap/${name}.png`, lazy: true })),
   // Plaza styles: the baked Trainer Plaza tile map and the crowd's walk sheets (Pokemon Memories; tools/build-plaza-map.py).
   { id: 'pack.memories.plaza.map', kind: 'image', category: 'background', path: 'images/packs/memories/plaza/map.png', lazy: true },
+  // Battle styles: the Enhanced Classic look's Essentials databoxes, command bar and party balls (Pokemon Memories; ui/battleStyles/classic.ts).
+  ...([['databox', 'databox_normal'], ['databoxFoe', 'databox_normal_foe'], ['command', 'overlay_command'], ['ball', 'icon_ball'], ['ballFaint', 'icon_ball_faint']] as const).map(
+    ([id, file]): AssetEntry => ({ id: `pack.memories.battle.${id}`, kind: 'image', category: 'ui', path: `images/packs/memories/battle/${file}.png` }),
+  ),
   ...['burst', 'shine', 'particle', 'pulse'].map(
     (name): AssetEntry => ({ id: `pack.dbk.${name}`, kind: 'image', category: 'ui', path: `images/packs/dbk/${name}.png` }),
   ),

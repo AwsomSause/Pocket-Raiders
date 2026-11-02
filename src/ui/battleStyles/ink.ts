@@ -1,64 +1,69 @@
-// Anime extra 03 Ink Duel: rice-paper panels, rough brush outlines, a red seal, and a brush-stroke opening.
-import type Phaser from 'phaser';
+// Anime extra 03 Ink Duel: rice paper, a 勝負 ("match") seal, the fighters as white ink silhouettes on
+// one black brush stroke (colour returns when a move flashes them), and a ruled list of moves.
+import Phaser from 'phaser';
 import { GAME_WIDTH } from '../theme';
-import { wait } from './common';
+import { menuOf, wait } from './common';
 import type { BattleSkin } from './types';
 
-const PAPER = 0xf3ecdc;
-const SUMI = 0x1c1814;
-const SEAL = 0xc8302a;
+const PAPER = 0xf2ead8;
+const SUMI = 0x111111;
+const SEAL = 0xc02020;
+const P = (x: number, y: number) => new Phaser.Geom.Point(x, y);
+const CJK = '"Yu Mincho", "Hiragino Mincho ProN", "Noto Serif CJK JP", "IPAMincho", "MS Mincho", serif';
 
-/** A rough brush outline: a few offset strokes that wobble (deterministic). */
-function brush(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, weight = 3): void {
-  for (let pass = 0; pass < 2; pass++) {
-    g.lineStyle(weight - pass, SUMI, pass ? 0.45 : 0.9);
-    const j = (i: number) => Math.sin(i * 12.9898 + pass * 4.1) * 1.6;
-    g.beginPath();
-    g.moveTo(x + j(1), y + j(2));
-    g.lineTo(x + w + j(3), y + j(4));
-    g.lineTo(x + w + j(5), y + h + j(6));
-    g.lineTo(x + j(7), y + h + j(8));
-    g.closePath();
-    g.strokePath();
-  }
-}
-
-function paper(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
-  g.fillStyle(0x000000, 0.18).fillRect(x + 3, y + 4, w, h);
-  g.fillStyle(PAPER, 0.97).fillRect(x, y, w, h);
-  brush(g, x, y, w, h);
-}
+/** A ruled list down the left, under the seal. */
+const list = (size: number) => (n: number) => {
+  const step = n <= 4 ? 34 : Math.max(26, 280 / n);
+  return menuOf(size, 240, step - 2, (i) => [40, 160 + i * step], { bare: true, focusColor: '#c02020' });
+};
 
 export const ink: BattleSkin = {
-  text: '#1c1814',
-  buttonText: '#1c1814',
-  databox: (scene, isPlayer) => {
+  text: '#111111',
+  buttonText: '#111111',
+  layout: {
+    foe: { x: 620, y: 12, panel: [0, 0, 300, 40], name: [0, 2, 18], level: [300, 2, 16], hp: [0, 30, 300, 6], status: [0, 40] },
+    player: { x: 340, y: 434, panel: [0, 0, 300, 62], name: [0, 2, 18], level: [300, 2, 16], hp: [0, 30, 300, 6], hpText: { at: [300, 38, 16] }, xp: [0, 58, 300], status: [0, 66] },
+    bar: null,
+    message: { x: 40, y: 450, w: 270, size: 17 },
+    command: null,
+    tabs: { x: 40, y: 124 },
+    moveInfo: { x: 40, y: 450 },
+    root: list(18),
+    moves: list(18),
+    header: { x: 940, y: 58 },
+  },
+  databox: (scene, _isPlayer, [x, y, w, h]) => {
+    // A brush rule under the name, like a scroll label.
     const g = scene.add.graphics();
-    const [x, y, w, h] = isPlayer ? [16, 2, 366, 128] : [6, 4, 360, 100];
-    paper(g, x, y, w, h);
-    g.fillStyle(SEAL, 0.9).fillRect(x + w - 26, y + h - 26, 16, 16);
+    g.fillStyle(SUMI, 0.9).fillRect(x, y + 22, w, 2);
+    g.fillStyle(SEAL, 1).fillRect(x + w - 10, y + h - 10, 10, 10);
     return g;
   },
-  messageBar: (scene, x, y, w, h) => {
-    const g = scene.add.graphics();
-    paper(g, x, y, w, h);
-    return g;
-  },
-  commandWindow: (scene, x, y, w, h) => scene.add.graphics().fillStyle(0xe8dfca, 1).fillRect(x, y, w, h),
   pill: (g, x, y, w, h, s) => {
-    if (s.on) {
-      // A thick brush swipe under the focused option, with a red seal.
-      g.fillStyle(SUMI, 0.85).fillRect(x + 4, y + h - 7, w - 18, 5);
-      g.fillStyle(SUMI, 0.5).fillRect(x + 10, y + h - 3, w - 40, 2);
-      g.fillStyle(SEAL, 1).fillRect(x + w - 12, y + 6, 10, 10);
-    } else if (!s.disabled) g.fillStyle(SUMI, 0.15).fillRect(x + 4, y + h - 4, w - 30, 2);
+    g.fillStyle(SUMI, s.disabled ? 0.3 : 1).fillRect(x, y + h - 4, w, 4);
+    if (s.on) g.fillStyle(SEAL, 1).fillRect(x, y, 8, h - 4);
+  },
+  moveText: (m) => ({ label: `${m.name}  ·  ${m.pp}` }),
+  backdrop: (scene, field) => {
+    const g = scene.add.graphics();
+    g.fillStyle(PAPER, 1).fillRect(0, 0, 960, 540);
+    // One black brush stroke behind the fighters.
+    g.fillStyle(SUMI, 1).fillPoints([P(300, 110), P(424, 60), P(920, 89), P(870, 420), P(337, 391)], true);
+    field.add(g);
+  },
+  sprite: (visual) => {
+    const v = visual as Phaser.GameObjects.Sprite;
+    if (typeof v.setTintFill === 'function') v.setTintFill(0xffffff);
+  },
+  frame: (scene) => {
+    scene.add.text(40, 22, '勝負', { fontFamily: CJK, fontSize: '80px', color: '#111111' });
   },
   intro: async (scene, info) => {
     if (info.motion === 'off') return;
     const W = GAME_WIDTH;
-    const stroke = scene.add.graphics().setDepth(150);
-    const words = scene.add.text(W / 2, 220, `${info.player}  —  ${info.trainer ?? info.foe}`, { fontFamily: 'serif', fontSize: '34px', color: '#f3ecdc', fontStyle: 'italic' }).setOrigin(0.5).setDepth(151).setAlpha(0);
-    const seal = scene.add.rectangle(W / 2 + words.width / 2 + 40, 220, 34, 34, SEAL).setDepth(151).setScale(0);
+    const stroke = scene.add.graphics().setDepth(160);
+    const words = scene.add.text(W / 2, 220, `${info.player}  —  ${info.trainer ?? info.foe}`, { fontFamily: 'serif', fontSize: '34px', color: '#f2ead8', fontStyle: 'italic' }).setOrigin(0.5).setDepth(161).setAlpha(0);
+    const seal = scene.add.rectangle(W / 2 + words.width / 2 + 40, 220, 34, 34, SEAL).setDepth(161).setScale(0);
     const sweep = { t: 0 };
     scene.tweens.add({
       targets: sweep,
@@ -68,7 +73,7 @@ export const ink: BattleSkin = {
       onUpdate: () => {
         stroke.clear();
         const w = W * sweep.t;
-        for (let i = 0; i < 6; i++) stroke.fillStyle(SUMI, 0.75 - i * 0.08).fillRect(0, 180 + i * 12 + Math.sin(i * 3) * 4, w * (1 - i * 0.04), 14);
+        for (let i = 0; i < 6; i++) stroke.fillStyle(SUMI, 0.8 - i * 0.08).fillRect(0, 180 + i * 12 + Math.sin(i * 3) * 4, w * (1 - i * 0.04), 14);
       },
     });
     scene.tweens.add({ targets: words, alpha: 1, duration: 300, delay: 300 });
