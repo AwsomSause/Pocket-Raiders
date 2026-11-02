@@ -58,6 +58,7 @@ import { enterTransition } from './ui/transitions';
 import { installErrorLog, packStore, registerOffline, watchForUpdates } from './game/deviceTools';
 import { loadStoredPacks } from './core/tools/modPacks';
 import './style.css';
+import { installPortraitRotate } from './ui/portraitRotate';
 
 function showFatalError(message: string): void {
   const el = document.getElementById('fatal-error');
@@ -105,7 +106,7 @@ function start(): void {
     height: GAME_HEIGHT,
     backgroundColor: '#1d1a24',
     pixelArt: true,
-    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.NO_CENTER },
     scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, RunModifiersScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
     callbacks: {
       preBoot: (g) => g.registry.set('session', session),
@@ -116,6 +117,9 @@ function start(): void {
         applySoundPack(g, session.settings.soundPack);
         setUiMotion(uiMotionFrom(session.settings));
         installPointerFx(g, () => session.settings, () => regionIdentity(session.run ? session.run.regionOrder[session.run.regionIndex] : undefined).sky);
+        installPortraitRotate(g);
+        // The on-screen pad shows a Map button only in Hub Town.
+        window.setInterval(() => document.body.classList.toggle('in-hub', g.scene.isActive('Hub')), 400);
         installGamepad(() => session.settings);
         installOverlays(g, () => session.settings);
         setTouchLayout(session.settings.oneHanded);

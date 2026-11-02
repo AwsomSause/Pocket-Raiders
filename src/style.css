@@ -104,3 +104,18 @@ body {
   pointer-events: none;
   white-space: pre;
 }
+
+/* Portrait phones: the game is turned 90° (ui/portraitRotate.ts) and the pad keeps the bottom strip. */
+html body.rot-portrait #game {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: calc(100vh - var(--pad, 120px));
+  width: calc(100dvh - var(--pad, 120px) - env(safe-area-inset-bottom));
+  height: var(--vw, 100vw);
+  transform-origin: 0 0;
+  transform: translateX(var(--vw, 100vw)) rotate(90deg);
+}
+html body.rot-portrait #rotate-hint {
+  display: none !important;
+}
