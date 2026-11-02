@@ -1415,6 +1415,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   /** VS Recorder: losing a trainer battle replays it from the start, once per run. */
   z.object({ perk: z.literal('vsRecorder') }),
   z.object({ perk: z.literal('safetyNet') }),
+  /** Insurance Relic (S388): a lost run keeps its best rare held item in the Vault. */
+  z.object({ perk: z.literal('insurance') }),
   /** GB Sounds: the battle music plays in the Game Boy style. */
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */

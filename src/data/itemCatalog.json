@@ -14988,5 +14988,28 @@
     }
    ]
   }
+ },
+ {
+  "id": "insurance-relic",
+  "name": "Insurance Relic",
+  "family": "Key items: gadgets",
+  "description": "If the run is lost, your best rare held item is reclaimed into the Vault",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "last-stand-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "insurance"
+    }
+   ]
+  }
  }
 ]

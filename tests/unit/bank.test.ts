@@ -92,6 +92,13 @@ describe('Regional Accounts, Vault and loans', () => {
     expect(vaultTake(p, 'focus-sash')).toBe(true);
     expect(vaultTake(p, 'nothing')).toBe(false);
   });
+  it('the Insurance Relic reclaims the best held item of a lost run even below tier 5', () => {
+    const run = { inventory: { 'poke-ball': 5, 'focus-sash': 1 } };
+    const p = rich({ bankTier: 1 });
+    expect(vaultDeposit(content, p, run, true)).toBe('focus-sash');
+    expect(p.vault).toEqual(['focus-sash']);
+    expect(content.catalog.get('insurance-relic')?.effect?.kind).toBe('perk');
+  });
   it('an unpaid loan costs credits, a repaid one nothing', () => {
     const l = content.balance.bank.loan;
     const prep = { loan: true } as never;
