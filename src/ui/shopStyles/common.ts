@@ -28,7 +28,11 @@ export function categories(rows: readonly ShopRow[]): string[] {
 
 /** The tag a row wears on every style: SALE, EARLY or BLACK MARKET (or none). */
 export function rowTag(row: ShopRow): { text: string; color: number } | null {
+  if (row.haggle === 'won') return { text: 'HAGGLED', color: 0x2a9a4a };
+  if (row.haggle === 'lost') return { text: 'OFFENDED', color: 0xc04030 };
   if (row.black) return { text: 'BLACK MARKET', color: 0x9a40c0 };
+  if (row.mystery) return { text: 'MYSTERY', color: 0x7a40c0 };
+  if (row.deal) return { text: 'DEAL', color: 0xff3ad8 };
   if (row.early) return { text: 'EARLY', color: 0xe09a20 };
   if (row.sale) return { text: 'SALE', color: 0xe03a4a };
   return null;
@@ -124,4 +128,46 @@ export function iconFit(obj: Phaser.GameObjects.GameObject, px: number): number 
   const img = obj as Phaser.GameObjects.Image;
   const size = Math.max(img.width || 0, img.height || 0);
   return size > 0 ? Math.max(1, Math.round((px / size) * 2) / 2) : 2;
+}
+
+export interface ChoicePrompt {
+  focus(i: number): void;
+  destroy(): void;
+}
+
+/** A small glass prompt with a question and option pills (Buy / Haggle / Never mind), centred on screen. */
+export function choicePrompt(ctx: ShopCtx, question: string, options: string[], onPick: (i: number) => void): ChoicePrompt {
+  const { scene, motion } = ctx;
+  const W = scene.scale.width;
+  const H = scene.scale.height;
+  const box = scene.add.container(W / 2, H / 2).setDepth(50).setName('shop-prompt');
+  const shade = scene.add.rectangle(-W / 2, -H / 2, W, H, 0x000000, 0.35).setOrigin(0).setInteractive();
+  const w = 420;
+  const h = 70 + options.length * 48;
+  const g = scene.add.graphics();
+  g.fillStyle(0xffffff, 0.96).fillRoundedRect(-w / 2, -h / 2, w, h, 20).lineStyle(3, 0x7fc6f0, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, 20);
+  const q = scene.add.text(0, -h / 2 + 28, question, textStyle(16, '#2a3a4a', { align: 'center', wordWrap: { width: w - 40 } })).setOrigin(0.5);
+  box.add([shade, g, q]);
+  const pills = options.map((label, i) => {
+    const y = -h / 2 + 76 + i * 48;
+    const pg = scene.add.graphics();
+    const t = scene.add.text(0, y, label, textStyle(16, '#2a3a4a')).setOrigin(0.5).setName('shop-prompt-option');
+    const zone = scene.add.zone(-150, y - 18, 300, 36).setOrigin(0).setInteractive({ useHandCursor: true });
+    zone.on('pointerdown', () => onPick(i));
+    box.add([pg, t, zone]);
+    return { pg, t, y };
+  });
+  if (motion !== 'off') {
+    box.setScale(0.85).setAlpha(0);
+    scene.tweens.add({ targets: box, scale: 1, alpha: 1, duration: motion === 'full' ? 200 : 80, ease: 'Back.easeOut' });
+  }
+  return {
+    focus(i) {
+      pills.forEach((p, k) => {
+        const on = k === i;
+        p.pg.clear().fillStyle(on ? 0xe2f4ff : 0xf4f8fb, 1).fillRoundedRect(-150, p.y - 18, 300, 36, 18).lineStyle(2, on ? 0x34a6e6 : 0xc9dbe8, 1).strokeRoundedRect(-150, p.y - 18, 300, 36, 18);
+      });
+    },
+    destroy: () => box.destroy(),
+  };
 }

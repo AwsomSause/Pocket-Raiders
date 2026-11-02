@@ -15,7 +15,7 @@ async function mapReady(page: Page) {
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
 }
 
-for (const type of ['mart', 'boutique']) test(`shop type ${type}: draws, buys in place and opens Sell`, async ({ page }) => {
+for (const type of ['mart', 'boutique', 'bazaar', 'night']) test(`shop type ${type}: draws, buys in place and opens Sell`, async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=e2e-m7&debug=1');
@@ -34,15 +34,26 @@ for (const type of ['mart', 'boutique']) test(`shop type ${type}: draws, buys in
     game.scene.getScene('Map').scene.restart({ notice: 'test' });
   });
   await mapReady(page);
-  await page.evaluate((t) => { (window as any).__pkr.session.visitSide('e2e-shop'); (window as any).__pkr.game.scene.getScene('Map').scene.start('Shop', { type: t }); }, type);
+  await page.evaluate((t) => { (window as any).__pkr.session.visitSide('e2e-shop'); (window as any).__pkr.session.run.shop.type = t; (window as any).__pkr.game.scene.getScene('Map').scene.start('Shop', { type: t }); }, type);
   await waitForScene(page, 'Shop'); await page.waitForTimeout(900);
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').shopType)).toBe(type);
   await page.screenshot({ path: `test-results/shop-${type}-1.png` });
-  for (const k of ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight']) await page.keyboard.press(k);
+  // The market looks lay goods in one row (Down goes on to the curtain or Sell), so stay on the row there.
+  for (const k of type === 'bazaar' || type === 'night' ? ['ArrowRight', 'ArrowRight'] : ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight']) await page.keyboard.press(k);
   await page.waitForTimeout(600);
   await page.screenshot({ path: `test-results/shop-${type}-2.png` });
   const before = await page.evaluate(() => (window as any).__pkr.session.run.money);
   const created = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data);
+  if (type === 'bazaar') {
+    // The first pick asks Buy / Haggle; haggling once fixes this visit's haggle, then picks buy straight away.
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('ArrowDown');
+    await page.screenshot({ path: `test-results/shop-${type}-prompt.png` });
+    await page.keyboard.press('Enter');
+    await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.shop.haggle?.item ?? null)).not.toBeNull();
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: `test-results/shop-${type}-haggled.png` });
+  }
   await page.keyboard.press('Enter');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.money)).toBeLessThan(before);
   // Bought in place: the scene was not restarted with new data.

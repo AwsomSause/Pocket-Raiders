@@ -178,6 +178,7 @@ test('shop items: a Coupon halves a price and the Member Card sells an item earl
     run.stage.current = node.id;
     run.money = 5000;
     session.visitSide('e2e-shop');
+    session.run.shop.type = 'mart'; // this test is about the Poké Mart's stock
     for (const s of game.scene.getScenes(true)) s.scene.stop();
     game.scene.start('Shop', { type: 'mart' });
   });

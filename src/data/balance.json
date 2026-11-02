@@ -609,6 +609,13 @@
   "everyStages": 3,
   "discount": 0.2
  },
+ "shopTypes": {
+  "boutique": { "categories": ["charm", "attribute", "evolution", "transformation"], "priceFactor": 1.1, "earlyRare": 3 },
+  "bazaar": { "stockSize": 8, "haggleBase": 0.35, "hagglePerCharisma": 0.005, "haggleMax": 0.8, "haggleDiscount": 0.3, "hagglePenalty": 0.15 },
+  "depot": { "categories": ["ball", "healing", "revive", "pp"], "bulkMin": 5, "bulkDiscount": 0.1 },
+  "pokenet": { "priceFactor": 1.05, "early": 1, "dealDiscount": 0.2 },
+  "night": { "mystery": 2, "mysteryPrice": { "rare": 1800, "epic": 3600 } }
+ },
  "trainerAi": {
   "healBelow": 0.3,
   "healFraction": 0.5,
