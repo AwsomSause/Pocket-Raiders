@@ -15,7 +15,7 @@ import { AssetRegistry, setServices } from '../game/services';
 import type { GameSession } from '../game/GameSession';
 import { queueAsset } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
-import { loadingFlourish, paintSkinBackdrop, SKINS } from '../ui/screenSkins';
+import { buildLoading, LOADING_LOOKS, type LoadingLook } from '../ui/loadingLooks';
 import { loadingTip } from '../core/presentation/uiPrefs';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
@@ -77,19 +77,18 @@ export class BootScene extends Phaser.Scene {
     const session = this.registry.get('session') as GameSession;
     const visit = this.tipVisit();
     const styleId = screenStyleOf('loading', session.settings.screenStyles, visit);
-    const skin = styleId === 'original' ? null : SKINS[`loading.${styleId}`] ?? null;
-    if (skin) {
-      const motion = session.settings.battleAnimations;
-      paintSkinBackdrop(this, skin, motion);
-      loadingFlourish(this, styleId, skin, motion);
+    const look = (LOADING_LOOKS as readonly string[]).includes(styleId) ? (styleId as LoadingLook) : null;
+    const view = look ? buildLoading(this, look, session.settings.battleAnimations, loadingTip(visit), 'your next adventure') : null;
+    let bar: Phaser.GameObjects.Rectangle | null = null;
+    if (!view) {
+      bar = this.add.rectangle(GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2, 0, 16, COLORS.hpGreen).setOrigin(0, 0.5);
+      this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 404, 20).setStrokeStyle(2, 0xffffff);
+      this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'Loading…', textStyle(28, COLORS.textLight)).setOrigin(0.5);
     }
-    const bar = this.add.rectangle(GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2, 0, 16, skin?.accent ?? COLORS.hpGreen).setOrigin(0, 0.5);
-    this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 404, 20).setStrokeStyle(2, 0xffffff);
-    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'Loading…', textStyle(28, COLORS.textLight)).setOrigin(0.5);
-    this.loadingExtras();
+    this.loadingExtras(Boolean(view));
 
     const tracker = new PreloadTracker();
-    const packText = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 24, '', textStyle(13, COLORS.textMuted)).setOrigin(0.5);
+    const packText = view?.pack ?? this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 24, '', textStyle(13, COLORS.textMuted)).setOrigin(0.5);
     for (const entry of assets.entries()) {
       if (entry.lazy) continue;
       if (entry.kind === 'font') continue; // handled by loadFont
@@ -100,7 +99,7 @@ export class BootScene extends Phaser.Scene {
       tracker.complete(key);
       packText.setText(tracker.line());
     });
-    this.load.on('progress', (p: number) => (bar.width = 400 * p));
+    this.load.on('progress', (p: number) => (view ? view.progress(p) : bar && (bar.width = 400 * p)));
     this.load.on('loaderror', (file: Phaser.Loader.File) => {
       console.warn(`Failed to load asset ${file.key} (${String(file.url)})`);
       assets.markFailed(file.key);
@@ -119,7 +118,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   /** A tip (F196) and a tiny catch-the-Magikarp game (I481) while assets load. Presentation only; no gameplay RNG. */
-  private loadingExtras(): void {
+  private loadingExtras(skinned = false): void {
     let n = 0;
     try {
       n = Number(localStorage.getItem('pkr.tipCounter') ?? '0') + 1;
@@ -127,6 +126,7 @@ export class BootScene extends Phaser.Scene {
     } catch {
       /* storage unavailable: always the first tip */
     }
+    if (skinned) return; // a redesigned loading look carries its own tip and layout
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 56, `Tip: ${loadingTip(n)}`, textStyle(16, COLORS.textMuted, { align: 'center', wordWrap: { width: 700 } })).setOrigin(0.5, 0);
     let caught = 0;
     const score = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 28, 'Tap the Magikarp while you wait!', textStyle(16, COLORS.textMuted)).setOrigin(0.5);
