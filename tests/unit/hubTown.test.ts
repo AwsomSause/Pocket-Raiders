@@ -245,18 +245,18 @@ describe('Hub Town part 3: a smaller, tidier town with a minimap and a Hub style
     expect(districtAt({ x: W + 5, y: 0 })).toBeNull();
   });
 
-  it('old settings saves open the Hub as Hub Town (settings v18 -> v19), and Arena Lobby survives a reload', () => {
+  it('old settings saves open the Hub as the Arena Lobby (settings v18 -> v20), and Hub Town survives a reload', () => {
     const storage = new MemoryStorageProvider();
     const current = new SaveManager(storage, content).loadSettings();
-    expect(current.hubStyle).toBe('town');
+    expect(current.hubStyle).toBe('lobby');
     const { hubStyle: _h, ...old } = current;
     storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 18, savedAt: '', data: old }));
     const loaded = new SaveManager(storage, content).loadSettings();
-    expect(loaded.hubStyle).toBe('town');
+    expect(loaded.hubStyle).toBe('lobby');
     expect(loaded.plazaStyle).toBe(current.plazaStyle);
     const saves = new SaveManager(storage, content);
-    saves.saveSettings({ ...loaded, hubStyle: 'lobby' });
-    expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('lobby');
+    saves.saveSettings({ ...loaded, hubStyle: 'town' });
+    expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('town');
   });
 });
 

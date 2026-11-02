@@ -26,8 +26,9 @@ describe('group E screen skins', () => {
   it('pins, keeps Original, and rotates with the salt', () => {
     expect(skinForSettings('settings', { settings: 'rotom' }, 1)?.name).toBe('Rotom Assistant');
     expect(skinForSettings('settings', { settings: 'original' }, 1)).toBeNull();
-    expect(skinForSettings('legacy', undefined, 4)).toBe(skinForSettings('legacy', undefined, 4));
-    const seen = new Set(Array.from({ length: 80 }, (_, i) => skinForSettings('legacy', undefined, i)?.name));
+    expect(skinForSettings('legacy', { legacy: 'random' }, 4)).toBe(skinForSettings('legacy', { legacy: 'random' }, 4));
+    expect(skinForSettings('legacy', undefined, 4)).toBeNull();
+    const seen = new Set(Array.from({ length: 80 }, (_, i) => skinForSettings('legacy', { legacy: 'random' }, i)?.name));
     expect(seen.size).toBe(SCREEN_STYLES_READY.legacy.length);
   });
 });
