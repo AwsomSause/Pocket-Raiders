@@ -86,6 +86,8 @@ describe('story foundation: random streams', () => {
     ...structuredClone(RAW_CONTENT),
     eventsHelpers: { events: [] },
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.
+    // Run events G (training and growth events) came later too.
+    eventsTraining: { events: [] },
     // The nemesis system (left-out plan 1.3) came later too.
     story: { ...structuredClone(RAW_CONTENT.story as object), definitions: [], nemesis: { ...(RAW_CONTENT.story as { nemesis: object }).nemesis, enabled: false } },
     // The custom regions (left-out plan 1.7) change the region order an old seed draws; the party-strength correction (1.6) came later too.

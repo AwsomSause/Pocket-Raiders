@@ -35,7 +35,9 @@ export const mutatorDue = (every: number | undefined, encountersCompleted: numbe
 export function mutatorOffer(run: Pick<RunState, 'seed' | 'mutators'>, n: number): string[] {
   const rng = new Rng(hashSeed(`${run.seed}::mutator::${n}`));
   const free = MUTATORS.mutators.filter((m) => !(run.mutators ?? []).includes(m.id));
-  const pool = free.length >= MUTATORS.choices ? free : MUTATORS.mutators;
+  // Late in a long run every blessing (or curse) may be taken already: then the offer draws from all of them again.
+  const enough = free.length >= MUTATORS.choices && free.some((m) => m.kind === 'blessing') && free.some((m) => m.kind === 'curse');
+  const pool = enough ? free : MUTATORS.mutators;
   const blessing = rng.pick(pool.filter((m) => m.kind === 'blessing'));
   const curse = rng.pick(pool.filter((m) => m.kind === 'curse'));
   const rest = rng.shuffle(pool.filter((m) => m !== blessing && m !== curse)).slice(0, MUTATORS.choices - 2);
