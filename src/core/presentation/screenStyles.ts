@@ -43,7 +43,7 @@ export const ORIGINAL = 'original';
  * original look and has no Settings entry. Each build PR adds its ids here.
  */
 export const SCREEN_STYLES_READY: { readonly [S in ScreenId]: readonly ScreenStyleId<S>[] } = {
-  battle: [], map: [], reward: [], party: [], title: [], trainer: [], starter: [], briefing: [], bag: [], evolve: [], runend: [],
+  battle: ['wii', 'classic', 'cyber', 'arcade', 'cards', 'ring', 'stadium', 'cinematic', 'shonen', 'ink'], map: [], reward: [], party: [], title: [], trainer: [], starter: [], briefing: [], bag: [], evolve: [], runend: [],
   dex: [], settings: [], camp: [], raid: [], totem: [], expedition: [], minigame: [], hubmenus: [], legacy: [], loading: [],
   // Trade stops redesign (core/presentation/tradeStyles.ts keeps this list).
   trade: ['manga', 'versus', 'novel', 'eyecatch'],
