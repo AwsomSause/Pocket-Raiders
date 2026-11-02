@@ -39,6 +39,12 @@ export function installTouchControls(): void {
     body.touch-pad-side #touch-pad{background:transparent;pointer-events:none;align-items:flex-end;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
     body.touch-pad-side #touch-pad .dpad,body.touch-pad-side #touch-pad .acts{pointer-events:auto}
     body.touch-pad-side #touch-pad button{opacity:.62;box-shadow:0 2px 8px rgba(0,0,0,.45)}
+    body.touch-pad-side.pad-min #touch-pad .dpad,body.touch-pad-side.pad-min #touch-pad .acts button:first-child{display:none}
+    body.touch-pad-side.pad-min #touch-pad .acts{margin-left:auto;grid-template-rows:repeat(1,44px)}
+    body.touch-pad-side #touch-pad .acts{grid-template-columns:repeat(1,84px);grid-template-rows:repeat(2,44px)}
+    body.touch-pad-side #touch-pad .dpad{margin-left:56px;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,44px)}
+    body.touch-pad-side #touch-pad button{min-width:44px;min-height:44px}
+    #touch-toggle{position:fixed;left:calc(10px + env(safe-area-inset-left));bottom:calc(10px + env(safe-area-inset-bottom));width:44px;height:44px;display:none;z-index:6;border:0;border-radius:12px;background:rgba(47,127,216,.7);color:#fff;font:600 20px system-ui,sans-serif;touch-action:none;-webkit-tap-highlight-color:transparent}
     #touch-fs{position:fixed;top:calc(6px + env(safe-area-inset-top));right:calc(6px + env(safe-area-inset-right));width:44px;height:44px;display:none;z-index:6;border:0;border-radius:12px;background:rgba(20,16,30,.6);color:#fff;font:600 20px system-ui,sans-serif;opacity:.7;touch-action:none;-webkit-tap-highlight-color:transparent}
     #rotate-hint{position:fixed;top:calc(6px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:none;background:rgba(20,16,30,.9);color:#fff;font:14px system-ui,sans-serif;padding:6px 12px;border-radius:12px;z-index:5;max-width:80vw;text-align:center}
     body.touch-pad-bottom #game{align-items:flex-start!important;height:calc(100vh - 120px - env(safe-area-inset-bottom));height:calc(100dvh - 120px - env(safe-area-inset-bottom))}`;
@@ -77,7 +83,21 @@ export function installTouchControls(): void {
     if (document.fullscreenElement) void document.exitFullscreen?.();
     else void root.requestFullscreen?.().then(() => (screen.orientation as unknown as { lock?: (o: string) => Promise<void> }).lock?.('landscape')).catch(() => undefined);
   });
-  document.body.append(pad, hint, fs);
+  const tog = document.createElement('button');
+  tog.id = 'touch-toggle';
+  tog.type = 'button';
+  tog.textContent = '🎮';
+  tog.setAttribute('aria-label', 'Show or hide the on-screen pad');
+  const stored = (): boolean => {
+    try { return localStorage.getItem('pkr.padMin') !== '0'; } catch { return true; }
+  };
+  document.body.classList.toggle('pad-min', stored());
+  tog.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    const min = document.body.classList.toggle('pad-min');
+    try { localStorage.setItem('pkr.padMin', min ? '1' : '0'); } catch { /* private window */ }
+  });
+  document.body.append(pad, hint, fs, tog);
   const update = () => {
     const v = viewport();
     const mode = padMode(v);
@@ -85,6 +105,7 @@ export function installTouchControls(): void {
     document.body.classList.toggle('touch-pad-on', mode !== 'off');
     document.body.classList.toggle('touch-pad-side', mode === 'side');
     document.body.classList.toggle('touch-pad-bottom', mode === 'bottom');
+    tog.style.display = mode === 'side' ? 'block' : 'none';
     fs.style.display = mode !== 'off' && !!document.documentElement.requestFullscreen ? 'block' : 'none';
     hint.style.display = showRotateHint(v) ? 'block' : 'none';
   };

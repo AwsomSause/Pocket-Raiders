@@ -1,0 +1,1 @@
+- Mobile pad toggle: on landscape phones the on-screen pad starts collapsed to a Back button plus a 🎮 handle (tap it for the full pad; remembered), because the full pad covered menus at 640×360 (`ui/touchControls.ts`). Swept title, trainer and settings looks at 640×360: layouts fit.
