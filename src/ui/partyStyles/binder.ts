@@ -2,10 +2,12 @@
 import { GAME_HEIGHT } from '../theme';
 import { windowFace } from './common';
 import type { PartySkin } from './types';
+import { cardOverview } from './overviews';
 import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from './kit';
 
 export const binder: PartySkin = {
   shape: 'round',
+  overview: cardOverview({ card: 0, rim: 0xf0d060, paper: 0xfff8e0, ink: '#2a1c10', label: '#f0d890' }),
   tabs: { shape: 'square', gap: 3, upper: true },
   palette: { row: 0x3a1c1c, rowAlpha: 0.92, rowFocus: 0x7a3030, rowRim: 0xc8a050, focusRim: 0xffe080, tab: 0x3a1c1c, tabActive: 0x7a3030, pane: 0x2a1212, paneRim: 0xc8a050 },
   roster(ctx) {

@@ -1,10 +1,12 @@
 // 10 Manga Roster: a black page with white ink frames, screentone dots and slanted character panels.
 import { windowFace, dots } from './common';
 import type { PartySkin } from './types';
+import { panelOverview } from './overviews';
 import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from './kit';
 
 export const manga: PartySkin = {
   shape: 'slant',
+  overview: panelOverview({ panel: 0xf4f4f0, rim: 0x111111, ink: '#111111', label: '#555555', gauge: 0x111111 }),
   tabs: { shape: 'slant', gap: 4, upper: true },
   palette: { row: 0x1a1a1a, rowAlpha: 0.95, rowFocus: 0x3a3a3a, rowRim: 0xe8e8e8, focusRim: 0xffffff, tab: 0x161616, tabActive: 0x484848, pane: 0x111111, paneRim: 0xf0f0f0 },
   roster(ctx) {

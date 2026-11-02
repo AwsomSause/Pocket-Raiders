@@ -2,10 +2,12 @@
 import { GAME_HEIGHT, GAME_WIDTH } from '../theme';
 import { windowFace } from './common';
 import type { PartySkin } from './types';
+import { stageOverview } from './overviews';
 import { bar, frac, hit, icon, moves, pop, sprite, stats, text, typeColor } from './kit';
 
 export const mii: PartySkin = {
   shape: 'pill',
+  overview: stageOverview({ disc: 0x5aa040, beam: 0xffffff, ink: '#e8f6ff', label: '#bfe9ff' }),
   tabs: { shape: 'pill', gap: 8 },
   palette: { row: 0x24543a, rowAlpha: 0.85, rowFocus: 0x3a9a58, rowRim: 0xc8f0a8, focusRim: 0xffffff, tab: 0x24543a, tabActive: 0x3a9a58, pane: 0x123a28, paneRim: 0xc8f0a8 },
   roster(ctx) {

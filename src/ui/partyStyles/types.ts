@@ -34,6 +34,22 @@ export interface RosterMon {
   moves: { name: string; type: string; pp: string; power: string }[];
 }
 
+/** What a look's own Overview page needs (the facts of the Overview tab). */
+export interface OverviewCtx {
+  scene: Phaser.Scene;
+  /** Draw into this container: 922 wide, 334 tall. */
+  into: Phaser.GameObjects.Container;
+  mon: RosterMon;
+  exp: { frac: number; text: string };
+  ready: { state: 'ready' | 'caution' | 'down'; label: string };
+  /** The status line and the readiness notes. */
+  status: string;
+  held: string;
+  mood: string;
+  bond: string;
+  evolution: string;
+}
+
 /** What a roster page needs: the party, who is selected, and how to select or open one. */
 export interface RosterCtx {
   scene: Phaser.Scene;
@@ -53,6 +69,8 @@ export interface RosterCtx {
 export interface PartySkin {
   /** The party page, drawn like the mock-up; Enter or a second click opens the full summary (all seven tabs) in this look. */
   roster?(ctx: RosterCtx): void;
+  /** The Overview tab laid out like the mock-up; the other six tabs keep the shared layout. */
+  overview?(ctx: OverviewCtx): void;
   palette: PartyPalette;
   shape: 'round' | 'square' | 'slant' | 'pill';
   /** How the seven tabs of the summary are dressed (the page itself is the same on every look). */
