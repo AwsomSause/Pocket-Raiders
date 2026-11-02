@@ -16,18 +16,19 @@ import { trainerVisual, type Visual } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, TYPE_COLORS, textStyle } from '../ui/theme';
 import { badge, paintWindow } from '../ui/widgets';
 import { WiiCursor } from '../ui/wiiMotion';
+import { TRAINER_LAYOUTS, type TrainerLayout } from '../ui/trainerLayouts';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 
-const COLS = 4;
-const ROWS = 3;
-const GRID_X = 356;
-const GRID_Y = 18;
-const CELL_W = 140;
-const CELL_H = 156;
-const GAP = 8;
-const LEFT_W = 324;
-const PAGE = COLS * ROWS;
+const ORIGINAL_LAYOUT: TrainerLayout = { cols: 4, rows: 3, gridX: 356, gridY: 18, cellW: 140, cellH: 156, gap: 8, profile: 'side', leftW: 324, cellFill: [0x2f2838], lockedFill: 0x1f1b25, cellBorder: COLORS.borderMuted, panelFill: 0x2f2838, panelBorder: COLORS.borderMuted, light: false, spriteMax: 2, names: true };
+// The look's geometry; set once per visit in create() (one scene instance at a time).
+let L: TrainerLayout = ORIGINAL_LAYOUT;
+let COLS = 4, GRID_X = 356, GRID_Y = 18, CELL_W = 140, CELL_H = 156, GAP = 8, LEFT_W = 324, PAGE = 12;
+function applyLayout(next: TrainerLayout): void {
+  L = next;
+  ({ cols: COLS, gridX: GRID_X, gridY: GRID_Y, cellW: CELL_W, cellH: CELL_H, gap: GAP, leftW: LEFT_W } = next);
+  PAGE = next.cols * next.rows;
+}
 
 type Slot = { archetype: Archetype; status: TrainerStatus } | null;
 
@@ -64,6 +65,7 @@ export class TrainerSelectScene extends Phaser.Scene {
     this.applySort();
 
     const look = screenStyleOf('trainer', session.settings.screenStyles, p.stats.runsEnded);
+    applyLayout(look === 'original' ? ORIGINAL_LAYOUT : TRAINER_LAYOUTS[look] ?? ORIGINAL_LAYOUT);
     if (look === 'original') new ArenaBackdrop(this, { dim: 0.55 });
     else dressScreen(this, 'trainer', look, session.settings.battleAnimations);
 
@@ -72,7 +74,7 @@ export class TrainerSelectScene extends Phaser.Scene {
     this.profileLayer = this.add.container(0, 0);
     this.tooltip = this.add.container(0, 0).setDepth(40).setVisible(false);
     this.notice = this.add.text(16 + LEFT_W / 2, GAME_HEIGHT - 50, '', textStyle(16, COLORS.bad, { align: 'center', wordWrap: { width: LEFT_W - 24 } })).setOrigin(0.5, 1).setDepth(5);
-    this.add.text(GRID_X, GAME_HEIGHT - 14, 'Arrows choose  ·  Enter confirm  ·  Tab sort  ·  R flip  ·  Esc back', textStyle(14, COLORS.textMuted)).setOrigin(0, 1);
+    this.add.text(L.profile === 'strip' ? 16 : GRID_X, GAME_HEIGHT - 4, 'Arrows choose  ·  Enter confirm  ·  Tab sort  ·  R flip  ·  Esc back', textStyle(14, COLORS.textMuted)).setOrigin(0, 1);
     this.pageText = this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 14, '', textStyle(14, COLORS.textMuted)).setOrigin(1, 1);
     this.sortText = this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 14, '', textStyle(14, COLORS.gold)).setOrigin(1, 1).setInteractive({ useHandCursor: true });
     this.sortText.on('pointerdown', () => this.cycleSort(1));
@@ -160,7 +162,7 @@ export class TrainerSelectScene extends Phaser.Scene {
     const { x, y } = this.cellPos(i);
     const cell = this.add.container(x, y);
     const open = slot?.status === 'unlocked';
-    cell.add(paintWindow(this.add.graphics(), 0, 0, CELL_W, CELL_H, { thin: true, fill: open ? 0x2f2838 : 0x1f1b25, border: open ? COLORS.borderMuted : 0x3f3848, alpha: 0.94 }));
+    cell.add(paintWindow(this.add.graphics(), 0, 0, CELL_W, CELL_H, { thin: true, fill: open ? L.cellFill[globalIndex % L.cellFill.length]! : L.lockedFill, border: open ? L.cellBorder : 0x3f3848, alpha: 0.94 }));
     // A soft spotlight under the trainer's feet.
     const glow = this.add.graphics();
     glow.fillStyle(open ? 0x4a3f5c : 0x2a2431, 1);
@@ -170,7 +172,7 @@ export class TrainerSelectScene extends Phaser.Scene {
       const sprite = this.fitSprite(trainerVisual(this, slot.archetype.spriteAssetId, slot.archetype.name, CELL_W / 2, CELL_H - 26, 1), CELL_H - 44);
       if (!open && sprite instanceof Phaser.GameObjects.Sprite) sprite.setTintFill(0x141118);
       cell.add(sprite);
-      if (open) cell.add(this.add.text(CELL_W / 2, 8, slot.archetype.name, textStyle(18)).setOrigin(0.5, 0));
+      if (open && L.names) cell.add(this.add.text(CELL_W / 2, 8, slot.archetype.name, textStyle(18, L.light ? '#1a1a22' : undefined)).setOrigin(0.5, 0));
       // A Trainer Evolution gets a bobbing gold tag.
       if (open && slot.archetype.evolvedFrom) {
         const tag = this.add.text(CELL_W - 8, 38, '★ EVOLVED', textStyle(12, COLORS.gold)).setOrigin(1, 0);
@@ -198,7 +200,7 @@ export class TrainerSelectScene extends Phaser.Scene {
 
   /** Scales a trainer picture so it fits a height (boss portraits come in many sizes). */
   private fitSprite(v: Visual, maxH: number): Visual {
-    if (v instanceof Phaser.GameObjects.Sprite) v.setScale(Math.min(2, maxH / v.height));
+    if (v instanceof Phaser.GameObjects.Sprite) v.setScale(Math.min(L.spriteMax, maxH / v.height));
     return v;
   }
 
@@ -234,9 +236,13 @@ export class TrainerSelectScene extends Phaser.Scene {
 
   private drawProfile(slot: Slot): void {
     this.profileLayer.removeAll(true);
-    const L = this.profileLayer;
-    const add = <T extends Phaser.GameObjects.GameObject>(o: T): T => (L.add(o), o);
-    add(paintWindow(this.add.graphics(), 16, 18, LEFT_W, GAME_HEIGHT - 36, { alpha: 0.95 }));
+    const PL = this.profileLayer;
+    const add = <T extends Phaser.GameObjects.GameObject>(o: T): T => (PL.add(o), o);
+    if (L.profile === 'strip') {
+      this.drawStrip(slot);
+      return;
+    }
+    add(paintWindow(this.add.graphics(), 16, 18, LEFT_W, GAME_HEIGHT - 36, { alpha: 0.95, fill: L.panelFill, border: L.panelBorder }));
     const cx = 16 + LEFT_W / 2;
     if (!slot) {
       add(this.add.text(cx, 40, '???', textStyle(40)).setOrigin(0.5, 0));
@@ -317,6 +323,39 @@ export class TrainerSelectScene extends Phaser.Scene {
     if (bottom > GAME_HEIGHT - 32 && bottom > TOP) {
       const k = Math.max(0.6, room / (bottom - TOP));
       lower.setScale(k).setPosition(36 * (1 - k), TOP * (1 - k));
+    }
+    if (L.light) this.darken(PL);
+  }
+
+  /** Light looks: recolour pale profile text dark so it reads on the light panel. */
+  private darken(layer: Phaser.GameObjects.Container): void {
+    for (const o of layer.list) {
+      if (o instanceof Phaser.GameObjects.Container) this.darken(o);
+      else if (o instanceof Phaser.GameObjects.Text) o.setColor(String(o.style.color).toLowerCase() === COLORS.gold.toLowerCase() ? '#8a5a00' : '#1a1a22');
+    }
+  }
+
+  /** A wide strip along the bottom for the looks with a big grid (Mii, manga, gallery). */
+  private drawStrip(slot: Slot): void {
+    const layer = this.profileLayer;
+    const s = L.strip!;
+    layer.add(paintWindow(this.add.graphics(), s.x, s.y, s.w, s.h, { alpha: 0.95, fill: L.panelFill, border: L.panelBorder, thin: true }));
+    const dark = !L.light;
+    const ink = dark ? '#ffffff' : '#1a1a22';
+    if (!slot) {
+      layer.add(this.add.text(s.x + 16, s.y + 14, 'More trainers are on the way in later updates.', textStyle(20, ink)));
+      return;
+    }
+    const a = slot.archetype;
+    const open = slot.status === 'unlocked';
+    layer.add(this.add.text(s.x + 16, s.y + 8, open ? a.name : '???', textStyle(30, ink)));
+    layer.add(this.add.text(s.x + 16, s.y + 46, open ? a.title : statusLine(slot.status), textStyle(15, dark ? COLORS.gold : '#8a5a00')));
+    if (open) {
+      layer.add(this.add.text(s.x + 300, s.y + 8, ['Pros', ...a.pros.map((x) => `+ ${x}`)].join('\n'), textStyle(15, dark ? COLORS.good : '#1a6a2a', { wordWrap: { width: 300 } })));
+      layer.add(this.add.text(s.x + 620, s.y + 8, ['Cons', ...a.cons.map((x) => `− ${x}`)].join('\n'), textStyle(15, dark ? COLORS.bad : '#a02020', { wordWrap: { width: 290 } })));
+      layer.add(this.add.text(s.x + 16, s.y + 70, trainerRegion(a, (id) => services().session.content.archetypes.get(id)), textStyle(13, dark ? COLORS.textMuted : '#4a4a58')));
+    } else {
+      layer.add(this.add.text(s.x + 300, s.y + 8, slot.status === 'comingLater' ? `${a.name} arrives in a later update.` : `How to unlock: ${a.unlockText}`, textStyle(16, ink, { wordWrap: { width: 600 } })));
     }
   }
 
