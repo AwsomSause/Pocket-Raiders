@@ -55,3 +55,20 @@ describe('screen styles', () => {
     expect(new SaveManager(storage, content).loadSettings().screenStyles).toEqual({});
   });
 });
+
+describe('group D skins (bag, camp, run end, evolution)', () => {
+  it('every ready style has a skin or look', async () => {
+    const { BAG_SKINS, CAMP_SKINS, RUNEND_SKINS } = await import('../../src/ui/dSkins');
+    const { EVOLVE_STYLE_IDS } = await import('../../src/ui/battleFx/evolveStyles');
+    for (const id of SCREEN_STYLES_READY.bag) expect(BAG_SKINS[id]).toBeDefined();
+    for (const id of SCREEN_STYLES_READY.camp) expect(CAMP_SKINS[id]).toBeDefined();
+    for (const id of SCREEN_STYLES_READY.runend) expect(RUNEND_SKINS[id]).toBeDefined();
+    expect([...EVOLVE_STYLE_IDS].sort()).toEqual([...SCREEN_STYLES_READY.evolve].sort());
+  });
+  it('every picked style of these screens is built', () => {
+    expect(SCREEN_STYLES_READY.bag).toHaveLength(10);
+    expect(SCREEN_STYLES_READY.camp).toHaveLength(6);
+    expect(SCREEN_STYLES_READY.runend).toHaveLength(11);
+    expect(SCREEN_STYLES_READY.evolve).toHaveLength(7);
+  });
+});

@@ -30,6 +30,9 @@ import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
 import { pokemonIcon } from '../ui/sprites';
 import { whatIf } from '../core/presentation/whatIf';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { paintBackdrop, RUNEND_SKINS } from '../ui/dSkins';
+import { buildShowcase } from '../ui/runEndLooks';
 
 export class GameOverScene extends Phaser.Scene {
   constructor() {
@@ -37,7 +40,7 @@ export class GameOverScene extends Phaser.Scene {
   }
 
   preload(): void {
-    preloadPokemon(this, partySpecies(), { icon: true });
+    preloadPokemon(this, partySpecies(), { icon: true, front: true });
   }
 
   create(): void {
@@ -45,11 +48,25 @@ export class GameOverScene extends Phaser.Scene {
     const { session } = services();
     const run = session.run;
     const won = run?.victory ?? false;
-    const title = this.add.text(GAME_WIDTH / 2, 38, won ? 'You conquered every region!' : 'Your run has ended', textStyle(won ? 40 : 44, won ? '#f0d060' : COLORS.textLight)).setOrigin(0.5);
+    // Run-end look (screens redesign): a backdrop, a frame colour and title style; the numbers and flow are unchanged.
+    const look = run ? screenStyleOf('runend', session.settings.screenStyles, `${run.seed}:${run.encountersCompleted}:${won}`) : 'original';
+    const skin = look === 'original' ? null : RUNEND_SKINS[look];
+    if (skin) {
+      const back = this.add.container(0, 0).setDepth(-50);
+      paintBackdrop(this, back, skin, session.settings.battleAnimations !== 'full');
+      if (!won) back.add(this.add.rectangle(0, 0, GAME_WIDTH, 600, 0x000000, 0.25).setOrigin(0));
+    }
+    const titleText = won ? 'You conquered every region!' : 'Your run has ended';
+    const title = this.add.text(GAME_WIDTH / 2, 38, titleText, textStyle(won ? 40 : 44, skin ? skin.title : won ? '#f0d060' : COLORS.textLight, skin ? { stroke: skin.stroke, strokeThickness: 6 } : {})).setOrigin(0.5);
+    if (skin?.mark) this.add.text(GAME_WIDTH / 2, 66, skin.mark, textStyle(18, skin.title, { stroke: skin.stroke, strokeThickness: 4 })).setOrigin(0.5).setName('runend-mark');
     this.lineup(partySpecies(), title.width, won, session.settings.battleAnimations);
     // Left: the run. Right: what it earned for the permanent profile.
     slideIn(this, drawPanel(this, 24, 72, 440, 286), -30, 0, services().session.settings.battleAnimations);
     slideIn(this, drawPanel(this, 480, 72, GAME_WIDTH - 504, 286, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true }), 30, 0, services().session.settings.battleAnimations);
+    if (skin) {
+      const frame = this.add.graphics().lineStyle(3, skin.rim, 0.9);
+      frame.strokeRoundedRect(24, 72, 440, 286, 18).strokeRoundedRect(480, 72, GAME_WIDTH - 504, 286, 18);
+    }
     const recap = run ? buildRecap(session.content, run) : null;
     const recapLines = recap ? [recap.ending, ...(recap.legend ? [`Legend: ${recap.legend}`] : []), ...(recap.stamps.length ? [`Stamps: ${recap.stamps.join(' · ')}`] : []), ...recap.rivals.slice(0, 1), ...(recap.tip ? [recap.tip] : [])] : [];
     if (run) {
@@ -159,6 +176,21 @@ export class GameOverScene extends Phaser.Scene {
     const reflection = run && !won ? whatIf(session.content, run) : null;
     if (reflection) lines.unshift(reflection, '');
     this.add.text(500, 84, lines.join('\n'), textStyle(18, COLORS.textLight, { lineSpacing: 3, wordWrap: { width: GAME_WIDTH - 540 } }));
+    const choose = (i: number): void => {
+      if (won && i === (run ? 2 : 1)) {
+        this.scene.start('Credits');
+        return;
+      }
+      if (i === 1 && run) {
+        // Same seed, trainer, preparation and rules. Daily seeds pay their account rewards once, so a retry pays nothing.
+        const { note: _note, ...prep } = run.prep;
+        const rules = { modeId: run.rules.modeId, difficultyId: run.rules.difficultyId, modifierIds: run.rules.modifierIds, deathBlock: run.rules.deathBlock, ...(getMode(run.rules.modeId)?.dailySeed || boardKey(run.seed) ? { noRewards: true } : {}) };
+        session.newRun(run.archetypeId, run.seed, undefined, prep, rules);
+        this.scene.start('StarterSelect');
+        return;
+      }
+      this.scene.start('Hub');
+    };
     const menu = new Menu(this, {
       x: GAME_WIDTH / 2 - 120,
       y: 486,
@@ -166,22 +198,35 @@ export class GameOverScene extends Phaser.Scene {
       itemHeight: 25,
       fontSize: 22,
       color: COLORS.textLight,
-      onSelect: (i) => {
-        if (won && i === (run ? 2 : 1)) {
-          this.scene.start('Credits');
-          return;
-        }
-        if (i === 1 && run) {
-          // Same seed, trainer, preparation and rules. Daily seeds pay their account rewards once, so a retry pays nothing.
-          const { note: _note, ...prep } = run.prep;
-          const rules = { modeId: run.rules.modeId, difficultyId: run.rules.difficultyId, modifierIds: run.rules.modifierIds, deathBlock: run.rules.deathBlock, ...(getMode(run.rules.modeId)?.dailySeed || boardKey(run.seed) ? { noRewards: true } : {}) };
-          session.newRun(run.archetypeId, run.seed, undefined, prep, rules);
-          this.scene.start('StarterSelect');
-          return;
-        }
-        this.scene.start('Hub');
-      },
+      onSelect: (i) => choose(i),
     });
+    if (run && look !== 'original') {
+      // The mock-up layout of this look, over the detail panels; Details (or Tab) swaps to the full text.
+      const names = [{ label: 'Back to the Hub' }, ...(run ? [{ label: 'Retry this seed' }] : []), ...(won ? [{ label: 'Roll the credits' }] : [])].map((o) => o.label);
+      const show = buildShowcase(this, look, {
+        species: run.party.slice(0, 6).map((m) => ({ sp: session.content.species.get(m.speciesId)!, level: m.level, shiny: m.shiny })).filter((m) => m.sp),
+        trainerSprite: session.content.archetypes.get(run.archetypeId)?.spriteAssetId,
+        won,
+        trainer: session.content.archetypes.get(run.archetypeId)?.name ?? run.archetypeId,
+        runNo: `Day ${run.clock.day}`,
+        stats: [['Regions', `${run.regionsCleared.length} / ${run.regionOrder.length}`], ['Encounters', `${run.encountersCompleted}`], ['Badges', `${run.badges.length}`], ['Day', `${run.clock.day}`], ['Candies', `${run.candies}`], ['Money', `₽${run.money}`]],
+        buttons: names,
+        choose,
+        details: () => toggle(),
+        calm: session.settings.battleAnimations !== 'full',
+      });
+      let shown = true;
+      const toggle = (): void => {
+        shown = !shown;
+        show.setVisible(shown);
+        if (!shown) {
+          const back = this.add.text(GAME_WIDTH - 20, 20, '◂ Showcase  (Tab)', textStyle(16, COLORS.gold)).setOrigin(1, 0).setDepth(600).setInteractive({ useHandCursor: true });
+          back.on('pointerdown', () => { back.destroy(); if (!shown) toggle(); });
+          this.data.set('showBack', back);
+        } else (this.data.get('showBack') as Phaser.GameObjects.Text | undefined)?.destroy();
+      };
+      this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => { e.preventDefault(); toggle(); });
+    }
     if (won && session.settings.battleAnimations === 'full') this.confetti();
     // Ignore keys mashed through the battle's last message so the summary
     // isn't skipped the moment it appears.

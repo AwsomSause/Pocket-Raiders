@@ -9,6 +9,8 @@ import { Picker, type PickerRow } from './partyPanel';
 import type { FieldMenuHost } from './fieldMenus';
 import { runInteractionPrompt } from './interactionPrompt';
 import { textStyle } from './theme';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { CAMP_SKINS } from './dSkins';
 
 const GROUPS = [['gadgets', 'Gadgets'], ['kitchen', 'Kitchen'], ['workshop', 'Workshop'], ['market', 'Market'], ['camp', 'Camp']] as const;
 const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
@@ -32,8 +34,11 @@ function textRow(c: Choice): PickerRow {
 }
 
 function choose(host: FieldMenuHost, title: string, items: Choice[], onPick: (i: number) => void, onBack: () => void, tabs?: ConstructorParameters<typeof Picker>[1]['tabs']): void {
+  const { session, } = services();
+  const look = screenStyleOf('camp', session.settings.screenStyles, `${session.run!.seed}:${session.run!.encountersCompleted}`);
   const picker: Picker = new Picker(host.scene, {
     glass: true,
+    skin: look === 'original' ? undefined : CAMP_SKINS[look],
     title,
     columns: 1,
     rowHeight: 64,

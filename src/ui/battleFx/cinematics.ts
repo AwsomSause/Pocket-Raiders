@@ -16,6 +16,8 @@ import { animAssetIds, zTitleAssetId } from '../../assets/catalog';
 import { services } from '../../game/services';
 import type { MotionLevel } from '../aero';
 import { loadAssets } from '../lazyAssets';
+import { screenStyleOf } from '../../core/presentation/screenStyles';
+import { evolveLook } from './evolveStyles';
 import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { Beat } from './spectacle';
@@ -353,6 +355,10 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     // A light dim: the field sits under it, so the glowing Pokémon must still read through.
     const dim = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x06101e, 0).setDepth(depth - 1));
     tw({ targets: dim, fillAlpha: 0.3, duration: 300 });
+    // The redesigned evolution looks (screens redesign): a frame, pattern and caption around the Pokémon, picked per evolution.
+    const { session } = services();
+    const look = screenStyleOf('evolve', session.settings.screenStyles, `${session.run?.seed ?? ''}:${session.run?.encountersCompleted ?? 0}:${Math.round(o.x)}`);
+    if (look !== 'original') evolveLook(scene, look, o, depth - 1, add, tw);
     const s = o.sprite;
     const sx = s && 'scaleX' in s ? s.scaleX : 1;
     at(200, () => s instanceof Phaser.GameObjects.Sprite && s.active && s.setTintFill(0xffffff));

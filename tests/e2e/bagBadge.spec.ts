@@ -19,6 +19,7 @@ test('the Bag menu shows the UIE bag picture', async ({ page }) => {
     await page.waitForTimeout(250);
   }
   await page.waitForTimeout(800);
+  await page.evaluate(() => ((window as any).__pkr.session.settings.screenStyles = { bag: 'original' })); // this spec checks the original plate
   const open = () =>
     page.evaluate(() => {
       const m = (window as any).__pkr.game.scene.getScene('Map');
