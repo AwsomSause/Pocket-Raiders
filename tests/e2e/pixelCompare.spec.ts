@@ -31,6 +31,7 @@ test('Hub and Trainer Select match their baseline pictures', async ({ page }) =>
   });
   await page.goto('/?seed=pixel&debug=1');
   await expect.poll(() => active(page), { timeout: 20_000 }).toBe('MainMenu');
+  await page.evaluate(() => void ((window as any).__pkr.session.settings.hubStyle = 'town')); // the baseline picture is Hub Town
   await open(page, 'Hub');
   await expect(page).toHaveScreenshot('hub.png', { maxDiffPixelRatio: 0.03 });
   await open(page, 'TrainerSelect');

@@ -53,6 +53,7 @@ test('buy a license, unlock a pool, prepare a Type Focus run, save a preset, and
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=e2e-m55&debug=1');
   await waitForScene(page, 'MainMenu');
+  await page.evaluate(() => void ((window as any).__pkr.session.settings.hubStyle = 'town')); // this flow walks the town's Bank and Sanctuary
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Hub');
   await page.evaluate(() => {

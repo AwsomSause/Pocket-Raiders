@@ -91,6 +91,7 @@ test('the Plaza traders open the Trade Stop screen and come back to the Plaza', 
   await waitForScene(page, 'Trade');
   await page.waitForTimeout(600);
   expect(STYLES).toContain(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').drawnStyle));
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 30_000 }).toBe('choose'); // Esc is ignored while the style loads
   await page.keyboard.press('Escape');
   await waitForScene(page, 'Plaza');
   expect(errors).toEqual([]);
