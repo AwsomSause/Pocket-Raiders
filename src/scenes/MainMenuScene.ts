@@ -9,8 +9,7 @@ import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from '../ui/theme';
 import { drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { ArenaBackdrop, drawLogo, ShowcaseMon } from '../ui/showcase';
-import { loadAssets, queueAssets } from '../ui/lazyAssets';
-import { continueCard } from '../ui/loadCard';
+import { loadAssets } from '../ui/lazyAssets';
 import { pokemonAssetIds } from '../assets/catalog';
 import { sceneForRun } from './routing';
 import { screenStyleOf } from '../core/presentation/screenStyles';
@@ -25,10 +24,6 @@ export class MainMenuScene extends Phaser.Scene {
 
   constructor() {
     super('MainMenu');
-  }
-
-  preload(): void {
-    queueAssets(this, ['ui.load.card']);
   }
 
   create(data?: { focus?: number }): void {
@@ -48,18 +43,15 @@ export class MainMenuScene extends Phaser.Scene {
       }
     } else dressScreen(this, 'title', look, session.settings.battleAnimations);
     const lay = look === 'original' ? undefined : TITLE_LAYOUTS[look];
-    // With a saved run, the UIE Load card shows it (trainer, stage, party) where the random Pokémon would stand.
     // Continue picks the slot saved most recently (this one, unless another slot has a newer run).
     const latest = session.latestRunSlot();
-    const latestPeek = latest ? session.slotPeeks().find((p) => p.slot === latest) : undefined;
-    const card = latestPeek?.run.status === 'ok' ? continueCard(this, session.content, latestPeek.run.data, 470, 130) : null;
     const species = [...session.content.species.values()].filter((sp) => !sp.id.includes('-'));
     const mon = new ShowcaseMon(this, lay?.mon.x ?? 740, lay?.mon.y ?? 336, PIXEL_SCALE, lay?.mon.size ?? 230);
     const pick = () => {
       const sp = Phaser.Utils.Array.GetRandom(species);
       if (sp) void loadAssets(this, [pokemonAssetIds(sp.assets).front]).then(() => this.scene.isActive() && mon.show(sp));
     };
-    if (!card && !lay?.carousel) {
+    if (!lay?.carousel) {
       pick();
       this.time.addEvent({ delay: 6500, loop: true, callback: pick });
     }
