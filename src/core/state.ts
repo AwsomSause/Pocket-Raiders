@@ -1688,6 +1688,10 @@ export const SettingsSchema = z.object({
   plazaStyle: z.enum(PLAZA_STYLE_IDS).default('aero'),
   /** Hub Town part 3 (Kice 2026-11-02): walk the Hub Town overworld, or use the Arena Lobby tile menu. */
   hubStyle: z.enum(['town', 'lobby']).default('lobby'),
+  /** Tutorial and update log (core/tutorial.ts): the last patch-notes id shown, whether the optional tutorial was offered, and the professors finished. */
+  lastSeenUpdate: z.string().default(''),
+  tutorialOffered: z.boolean().default(false),
+  tutorialDone: z.array(z.string()).default([]),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

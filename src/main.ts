@@ -22,6 +22,7 @@ import { ExpeditionScene } from './scenes/ExpeditionScene';
 import { MinigameScene } from './scenes/MinigameScene';
 import { DecisionScene } from './scenes/DecisionScene';
 import { CreditsScene } from './scenes/CreditsScene';
+import { TutorialScene, WelcomeScene } from './scenes/TutorialScene';
 import { GameOverScene } from './scenes/GameOverScene';
 import { HallOfFameScene } from './scenes/HallOfFameScene';
 import { LegacyGalleryScene } from './scenes/LegacyGalleryScene';
@@ -103,7 +104,7 @@ function start(): void {
     backgroundColor: '#1d1a24',
     pixelArt: true,
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
+    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
     callbacks: {
       preBoot: (g) => g.registry.set('session', session),
       postBoot: (g) => {
