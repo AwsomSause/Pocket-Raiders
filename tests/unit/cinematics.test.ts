@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { animAssetIds, Z_TITLE_MOVES, zTitleAssetId } from '../../src/assets/catalog';
 import { CINE_ASSETS, CINE_MS, CINE_SOUNDS, SWAP_AT } from '../../src/ui/battleFx/cineLook';
+import { dynamaxPatternKey, FORM_LOOK_ASSETS, TERA_ICON_ROW, TERA_PATTERN_TYPES, teraPatternKey } from '../../src/ui/battleFx/formLook';
 import shards from '../../src/ui/battleFx/primegaShards.json';
 
 const assets = join(import.meta.dirname, '..', '..', 'public', 'assets');
@@ -76,5 +77,40 @@ describe('Z-Moves from the Pokémon Memories pack', () => {
       expect(entry!.lazy, id).toBe(true);
       expect(existsSync(join(assets, entry!.path)), entry!.path).toBe(true);
     }
+  });
+});
+
+describe('Tera and Dynamax looks from the Pokémon Memories pack', () => {
+  it('every type has a Tera pattern and an icon row; unknown types fall back to the default pattern', () => {
+    for (const t of TERA_PATTERN_TYPES) {
+      const entry = byId.get(teraPatternKey(t));
+      expect(entry, t).toBeDefined();
+      expect(existsSync(join(assets, entry!.path)), t).toBe(true);
+      expect(TERA_ICON_ROW[t], t).toBeGreaterThanOrEqual(0);
+      expect(TERA_ICON_ROW[t], t).toBeLessThan(20);
+    }
+    expect(teraPatternKey('normal')).toBe('fx.tera.pattern.default');
+    expect(Object.keys(TERA_ICON_ROW).length).toBe(19);
+    expect(new Set(Object.values(TERA_ICON_ROW)).size).toBe(Object.keys(TERA_ICON_ROW).length);
+  });
+
+  it('Calyrex riders wear their own Dynamax pattern, everyone else the red one', () => {
+    expect(dynamaxPatternKey('calyrex-shadow')).toBe('fx.dynamax.pattern.calyrex');
+    expect(dynamaxPatternKey('charizard')).toBe('fx.dynamax.pattern.dynamax');
+  });
+
+  it('every pattern and icon is in the manifest, loaded on demand, and on disk', () => {
+    for (const id of FORM_LOOK_ASSETS) {
+      const entry = byId.get(id);
+      expect(entry, id).toBeDefined();
+      expect(entry!.lazy, id).toBe(true);
+      expect(existsSync(join(assets, entry!.path)), entry!.path).toBe(true);
+    }
+  });
+
+  it('the Tera and Dynamax scenes show the new form after the crystal / the ball lands', () => {
+    expect(SWAP_AT.tera).toBeGreaterThan(1000);
+    expect(SWAP_AT.dynamax).toBeGreaterThan(1500);
+    expect(SWAP_AT.gigantamax).toBe(SWAP_AT.dynamax);
   });
 });

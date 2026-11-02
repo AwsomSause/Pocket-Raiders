@@ -1,9 +1,10 @@
 // Transformation cinematics (Visual Bible: "spectacle via presentation cues"):
 // Mega Evolution and Primal Reversion shatter a crystal over the Pokémon
 // (EBDX "Primega Shatter", its crystal art cut by tools/essentials/cut-primega.py),
-// Dynamax and Gigantamax open a red Max storm (Raid Battles' Max transition
-// art), a Z-Move calls down Z-Power (Raid Battles' Ultra art) and Terastal
-// crystallises (its Tera art), with Deluxe Battle Kit orbs and glows.
+// Dynamax and Gigantamax recall the Pokémon into a giant ball that slams down
+// (Deluxe Battle Kit's scene, on Raid Battles' Max art), a Z-Move calls down
+// Z-Power (Raid Battles' Ultra art, DBK title cards) and Terastal grows and
+// shatters DBK's Tera crystal, with Deluxe Battle Kit orbs and glows.
 //
 // The battle has already decided everything: `onSwap` is where the scene
 // shows the new form, and it runs exactly once (at the climax, at once when
@@ -19,6 +20,7 @@ import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { Beat } from './spectacle';
 import { CINE_ASSETS, CINE_MS, CINE_SOUNDS, SWAP_AT, type CineKind } from './cineLook';
+import { FORM_LOOK_ASSETS } from './formLook';
 import shards from './primegaShards.json';
 
 export type { CineKind } from './cineLook';
@@ -53,7 +55,7 @@ export interface CineOptions {
 export function prefetchCinematics(scene: Phaser.Scene): void {
   const { assets, session } = services();
   if (session.settings.battleAnimations === 'off') return;
-  void loadAssets(scene, [...CINE_ASSETS, ...CINE_SOUNDS.map(animAssetIds.sound)].filter((id) => assets.has(id))).catch(() => undefined);
+  void loadAssets(scene, [...CINE_ASSETS, ...FORM_LOOK_ASSETS, ...CINE_SOUNDS.map(animAssetIds.sound)].filter((id) => assets.has(id))).catch(() => undefined);
 }
 
 export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
@@ -114,6 +116,13 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   /** Fades every layer out over the last 300 ms. */
   const fadeAll = () => at(Math.max(0, total * o.speed - 300), () => tw({ targets: objs.filter((x) => (x as Phaser.GameObjects.Image).active), alpha: 0, duration: 300 }));
 
+  /** The old sprite (before the swap): turned white, red or hidden by the scenes below. */
+  const oldSprite = o.sprite instanceof Phaser.GameObjects.Sprite ? o.sprite : null;
+  const jiggle = (target: Phaser.GameObjects.GameObject & { x: number }, delay: number, times = 3) => {
+    if ((o.shake ?? o.intensity) <= 0) return;
+    tw({ targets: target, x: target.x + 3 * (o.shake ?? o.intensity), duration: 40, delay, yoyo: true, repeat: times });
+  };
+
   if (reduced) {
     // Reduced motion: a soft glow and the symbol, no flying pieces or shaking.
     if (has('cine.dbk.mega.shine')) {
@@ -123,8 +132,10 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     at(SWAP_AT[o.kind] === CINE_MS[o.kind] ? 600 : 250, swap);
   } else if (o.kind === 'mega' || o.kind === 'primal') {
     mega();
-  } else if (o.kind === 'dynamax' || o.kind === 'gigantamax' || o.kind === 'tera') {
-    storm();
+  } else if (o.kind === 'tera') {
+    teraCrystal();
+  } else if (o.kind === 'dynamax' || o.kind === 'gigantamax') {
+    giantBall();
   } else if (o.kind === 'evolve') {
     evolve();
   } else if (o.kind === 'dynamaxEnd') {
@@ -207,36 +218,107 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     fadeAll();
   }
 
-  function storm(): void {
-    const tera = o.kind === 'tera';
-    const base = tera ? 'cine.raid.tera' : 'cine.raid.max';
-    if (has(`${base}.bg`)) cover(`${base}.bg`, tera ? 0.7 : 0.8);
-    for (const [k, dir, size] of [['spiral', 1, 1.1], ['spiral2', -1, 1.4]] as const) {
-      const key = `${base}.${k}`;
-      if (!has(key)) continue;
-      const sp = add(scene.add.image(o.x, o.y, key).setBlendMode('ADD').setDepth(depth + 1).setScale(0.2).setAlpha(0.9));
-      tw({ targets: sp, scale: size * 0.6, angle: dir * 300, duration: CINE_MS[o.kind] - 300, ease: 'Sine.easeInOut' });
+  // Deluxe Battle Kit's Terastallization scene: the stage takes the Tera Type's
+  // colour, the Pokémon turns white, the Tera jewel flashes, crystal grows
+  // round it in three stages and shakes, a white flash reveals the Tera form,
+  // the crystal shatters and a rainbow pulse rings out.
+  function teraCrystal(): void {
+    bars();
+    if (has('cine.raid.tera.bg')) cover('cine.raid.tera.bg', 0.75).setTint(o.tint);
+    at(200, () => oldSprite?.active && oldSprite.setTintFill(0xffffff));
+    if (has('cine.dbk.tera.icon')) {
+      const icon = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'cine.dbk.tera.icon').setDepth(depth + 5).setScale(1.4).setAlpha(0));
+      tw({ targets: icon, scale: 0.6, alpha: 1, duration: 320, delay: 150, ease: 'Back.easeOut' });
+      tw({ targets: icon, scale: 1.3, alpha: 0, duration: 300, delay: 650 });
     }
-    if (has(`${base}.icon`)) {
-      const icon = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, `${base}.icon`).setDepth(depth + 5).setScale(1.6).setAlpha(0));
-      tw({ targets: icon, scale: 0.7, alpha: 1, duration: 360, delay: 200, ease: 'Back.easeOut' });
-      tw({ targets: icon, alpha: 0, scale: 1.1, duration: 260, delay: SWAP_AT[o.kind] });
-    }
-    // Energy rising around the Pokémon.
-    for (let i = 0; i < 8; i++) {
-      const dx = ((i % 4) - 1.5) * 50;
-      const mote = add(scene.add.image(o.x + dx, o.y + 70, has('pack.dbk.particle') ? 'pack.dbk.particle' : '__WHITE').setTint(o.tint).setBlendMode('ADD').setDepth(depth + 2).setScale(0.7).setAlpha(0));
-      tw({ targets: mote, y: o.y - 110, alpha: { from: 1, to: 0 }, duration: 600, delay: 150 + i * 80, ease: 'Sine.easeOut' });
-    }
-    sound(tera ? 'ess-refresh' : 'ess-flash2', 0.8);
-    at(SWAP_AT[o.kind], () => {
+    // The crystal: three stages over the Pokémon (512×384 pictures centred on it).
+    const crystals: Phaser.GameObjects.Image[] = [];
+    [1, 2, 3].forEach((n, i) => {
+      const key = `cine.dbk.tera.crystal_${n}`;
+      if (!has(key)) return;
+      const c = add(scene.add.image(o.x, o.y, key).setDepth(depth + 3 + i).setScale(1.1).setAlpha(0));
+      crystals.push(c);
+      tw({ targets: c, alpha: 1, duration: 150, delay: 500 + i * 160 });
+      at(500 + i * 160, () => sound('ess-harden', 0.7));
+    });
+    at(1000, () => crystals.forEach((c) => jiggle(c, 0, 4)));
+    sound('ess-refresh', 0.8);
+    at(SWAP_AT.tera, () => {
       swap();
-      sound(tera ? 'ess-shell-smash' : 'ess-explosion', 0.9);
+      whiteFlash(0.8);
+      sound('ess-shell-smash', 0.9);
+      crystals.forEach((c) => c.setVisible(false));
+      // The crystal breaks: shards fly out on fixed paths.
+      if (has('cine.dbk.tera.crystal_4')) {
+        for (let i = 0; i < 10; i++) {
+          const a = (i / 10) * Math.PI * 2 + 0.3;
+          const shard = add(scene.add.image(o.x, o.y, 'cine.dbk.tera.crystal_4').setDepth(depth + 6).setScale(0.35).setAngle(i * 36));
+          tw({ targets: shard, x: o.x + Math.cos(a) * 220, y: o.y + Math.sin(a) * 160, angle: i * 36 + 180, scale: 0.1, alpha: 0, duration: 650, ease: 'Cubic.easeOut' });
+        }
+      }
+      if (has('cine.dbk.tera.shine')) {
+        const shine = add(scene.add.image(o.x, o.y, 'cine.dbk.tera.shine').setBlendMode('ADD').setDepth(depth + 2).setScale(0.6));
+        tw({ targets: shine, scale: 1.4, alpha: 0, duration: 800, ease: 'Quad.easeOut' });
+      }
+      if (has('cine.dbk.tera.pulse')) {
+        const ring = add(scene.add.image(o.x, o.y, 'cine.dbk.tera.pulse').setTint(o.tint).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3));
+        tw({ targets: ring, scale: 3, alpha: 0, duration: 700, ease: 'Quad.easeOut' });
+      }
+      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(260 / o.speed, 0.01 * (o.shake ?? o.intensity));
+    });
+    fadeAll();
+  }
+
+  // Deluxe Battle Kit's Dynamax scene: the Pokémon is called back into its
+  // ball, the ball swells with red Max energy, flies up, slams down onto the
+  // field and bursts open on the giant Pokémon.
+  function giantBall(): void {
+    bars();
+    if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.8);
+    for (const [k, dir, size] of [['spiral', 1, 1.1], ['spiral2', -1, 1.4]] as const) {
+      const key = `cine.raid.max.${k}`;
+      if (!has(key)) continue;
+      const sp = add(scene.add.image(o.x, o.y, key).setBlendMode('ADD').setDepth(depth + 1).setScale(0.2).setAlpha(0.8));
+      tw({ targets: sp, scale: size * 0.6, angle: dir * 360, duration: CINE_MS[o.kind] - 300, ease: 'Sine.easeInOut' });
+    }
+    // Recalled: the Pokémon turns red and shrinks into the ball.
+    if (oldSprite?.active) {
+      oldSprite.setTintFill(0xff3060);
+      tw({ targets: oldSprite, scale: 0, alpha: 0.4, duration: 320, ease: 'Cubic.easeIn' });
+    }
+    sound('ess-flash2', 0.7);
+    const ball = has('pack.ebdx.tr.ball')
+      ? add(scene.add.image(o.x, o.y, 'pack.ebdx.tr.ball').setDepth(depth + 4).setScale(0.05).setAlpha(0))
+      : add(scene.add.circle(o.x, o.y, 120, 0xff3060).setDepth(depth + 4).setScale(0.05).setAlpha(0));
+    tw({ targets: ball, alpha: 1, duration: 120, delay: 300 });
+    // It swells with Max energy…
+    tw({ targets: ball, scale: 0.9, duration: 550, delay: 350, ease: 'Back.easeOut' });
+    at(450, () => (ball as Phaser.GameObjects.Image).setTint?.(0xff6080));
+    const glow = has('pack.dbk.burst') ? add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 3).setScale(0.2).setAlpha(0)) : null;
+    if (glow) tw({ targets: glow, scale: 1.2, alpha: 0.9, duration: 500, delay: 400, yoyo: true, hold: 200 });
+    // …rises off the top of the screen…
+    tw({ targets: [ball, ...(glow ? [glow] : [])], y: -200, duration: 360, delay: 950, ease: 'Back.easeIn' });
+    // …and slams down onto the field.
+    at(1350, () => {
+      ball.setPosition(o.x, -200).setScale(1.4);
+      tw({ targets: ball, y: o.y + 40, duration: 220, ease: 'Quad.easeIn' });
+    });
+    at(1580, () => {
+      sound('ess-explosion', 0.9);
+      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(380 / o.speed, 0.016 * (o.shake ?? o.intensity));
+      jiggle(ball as Phaser.GameObjects.Image, 0, 3);
+    });
+    at(SWAP_AT[o.kind], () => {
+      ball.setVisible(false);
+      swap();
       whiteFlash(0.7);
-      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(320 / o.speed, 0.012 * (o.shake ?? o.intensity));
       if (has('pack.dbk.burst')) {
-        const b = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(o.tint).setBlendMode('ADD').setDepth(depth + 3).setScale(0.3));
-        tw({ targets: b, scale: 1.8, alpha: 0, duration: 600, ease: 'Cubic.easeOut' });
+        const b = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 3).setScale(0.4));
+        tw({ targets: b, scale: 2.2, alpha: 0, duration: 650, ease: 'Cubic.easeOut' });
+      }
+      if (has('cine.raid.max.icon')) {
+        const icon = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'cine.raid.max.icon').setDepth(depth + 5).setScale(1.2).setAlpha(0));
+        tw({ targets: icon, scale: 0.7, alpha: 1, duration: 260, ease: 'Back.easeOut' });
       }
     });
     fadeAll();

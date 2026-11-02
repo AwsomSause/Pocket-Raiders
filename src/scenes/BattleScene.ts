@@ -86,6 +86,9 @@ import { environmentStory } from '../core/presentation/environmentStory';
 import { crisisLevel } from '../core/story/crisis';
 import { moveRank } from '../core/moveMastery';
 import { chargeUp, cinematic, prefetchCinematics, type CineKind } from '../ui/battleFx/cinematics';
+import { dynamaxPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
+import { wearPattern } from '../ui/battleFx/formPattern';
+import { loadAssets } from '../ui/lazyAssets';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
@@ -703,9 +706,22 @@ export class BattleScene extends Phaser.Scene {
     );
   }
 
+  /** The Deluxe Battle Kit icon (Tera Type jewel, Dynamax mark) at a badge's left end, once its art has loaded. */
+  private badgeIcon(holder: Phaser.GameObjects.Container, key: string, frame?: number): void {
+    const place = () => {
+      if (!holder.active || !this.textures.exists(key)) return;
+      const icon = this.add.image(-holder.width / 2 - 2, 0, key, frame).setDisplaySize(22, 22);
+      holder.add(icon);
+    };
+    if (this.textures.exists(key)) place();
+    else if (services().assets.has(key)) void loadAssets(this, [key]).then(place).catch(() => undefined);
+  }
+
   /**
-   * A Terastallized Pokémon is drawn tinted with its Tera Type's colour, and a
-   * Dynamaxed one larger with a red glow (stand-ins until the M9.5 effects).
+   * A Terastallized Pokémon wears its Tera Type's crystal pattern and a
+   * Dynamaxed one the red Dynamax energy (Deluxe Battle Kit art, `formPattern`).
+   * The old type-coloured tint stays as the stand-in until the pattern is on
+   * (and on the Canvas renderer, where there is none).
    */
   private applyTeraTint(side: 'player' | 'enemy', mon: PokemonInstance): void {
     const type = this.run.battle?.transform.teraTypes[mon.uid];
@@ -716,6 +732,8 @@ export class BattleScene extends Phaser.Scene {
     const value = Phaser.Display.Color.GetColor(tint.r, tint.g, tint.b);
     const parts = 'list' in visual ? (visual as Phaser.GameObjects.Container).list : [visual];
     for (const part of parts) (part as Partial<Phaser.GameObjects.Sprite>).setTint?.(value);
+    const key = mon.dynamaxed ? dynamaxPatternKey(mon.speciesId) : teraPatternKey(type!);
+    wearPattern(this, visual, key, this.motion, () => (visual as Phaser.GameObjects.Sprite).clearTint());
   }
 
   private makeInfoBox(x: number, y: number, isPlayer: boolean): InfoBox {
@@ -799,9 +817,11 @@ export class BattleScene extends Phaser.Scene {
     const tera = this.run.battle?.transform.teraTypes[mon.uid];
     if (tera) {
       box.teraBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0), box.statusAt.y, `Tera ${tera}`, TYPE_COLORS[tera] ?? 0xffffff, 16);
+      this.badgeIcon(box.teraBadge, 'ui.tera.types', TERA_ICON_ROW[tera]);
       box.container.add(box.teraBadge);
     } else if (mon.dynamaxed) {
       box.teraBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0), box.statusAt.y, 'Dynamax', 0xff3060, 16);
+      this.badgeIcon(box.teraBadge, 'ui.dynamax.icon');
       box.container.add(box.teraBadge);
     }
     this.dangerGlow(box, mon.hp / max);
