@@ -26,7 +26,7 @@ async function prepare(page: Page, kind: 'service' | 'plaza', style: string, n: 
     ({ kind, style, n }) => {
       const pkr = (window as any).__pkr;
       const run = pkr.session.run;
-      pkr.session.settings.screenStyles = style === 'random' ? {} : { trade: style };
+      pkr.session.settings.screenStyles = { trade: style };
       const tpl = (window as any).__tpl ?? ((window as any).__tpl = JSON.parse(JSON.stringify(run.party[0])));
       run.party = ['squirtle', 'eevee', 'onix'].map((sp: string) => ({ ...JSON.parse(JSON.stringify(tpl)), uid: `${tpl.uid}-${sp}-${n}`, speciesId: sp, level: 14 }));
       run.plaza.used = {};
