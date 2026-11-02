@@ -1758,6 +1758,20 @@
      "view": "forecast"
     },
     {
+     "id": "rooftop-station",
+     "name": "Weather Station",
+     "desc": "Upgrade the station: each tier shows run weather fronts one more column ahead, from every run on.",
+     "kind": "buy",
+     "rows": [
+      "S362"
+     ],
+     "set": "station",
+     "goods": [
+      {"id": "station-1", "label": "Barometer (tier 1)", "desc": "Fronts show 1 column sooner.", "set": "station", "cost": {"credits": 40}, "rarity": "common"},
+      {"id": "station-2", "label": "Radar dish (tier 2)", "desc": "Fronts show 2 columns sooner.", "set": "station", "cost": {"credits": 90}, "rarity": "rare"},
+      {"id": "station-3", "label": "Satellite link (tier 3)", "desc": "Fronts show 3 columns sooner.", "set": "station", "cost": {"credits": 160}, "rarity": "epic"}
+     ]},
+    {
      "id": "rooftop-charm",
      "name": "Choose a lucky charm",
      "desc": "One charm per run.",

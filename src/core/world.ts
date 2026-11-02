@@ -104,6 +104,9 @@ export function frontAt(content: Content, run: RunState, node: MapNode): Front |
   return stageFronts(content, run).find((f) => inFront(f, node)) ?? null;
 }
 
+/** Weather Station (S362): town tier 0-3, handed over as camp stuff at run start. Each tier widens the forecast by one column. */
+export const stationTier = (run: RunState): number => Math.min(3, run.camp?.stuff['weather-station'] ?? 0);
+
 /** The next front within the forecast: how many columns away it starts (0 = you are in it). */
 export function forecast(content: Content, run: RunState): { front: Front; startsIn: number } | null {
   const stage = run.stage;
@@ -114,7 +117,7 @@ export function forecast(content: Content, run: RunState): { front: Front; start
   for (const front of stageFronts(content, run)) {
     if (front.to < here + 1) continue;
     const startsIn = Math.max(0, front.from - (here + 1));
-    if (startsIn <= w.frontForecast + (stage.foresight ?? 0) && (!best || startsIn < best.startsIn)) best = { front, startsIn };
+    if (startsIn <= w.frontForecast + (stage.foresight ?? 0) + stationTier(run) && (!best || startsIn < best.startsIn)) best = { front, startsIn };
   }
   return best;
 }
