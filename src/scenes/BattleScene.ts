@@ -41,7 +41,7 @@ import { arenaFor, getTheme } from '../core/themes';
 import { shinyCatchBurst, targetReticle } from '../ui/battleFx/arenaLife';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
-import { uieArenaId } from '../assets/catalog';
+import { bossAnimId, bossBackId, uieArenaId } from '../assets/catalog';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
@@ -58,7 +58,7 @@ import { transformAnimId } from '../core/presentation/transformAnims';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
-import { itemVisual, pokemonIcon, pokemonVisual, trainerVisual, type Visual } from '../ui/sprites';
+import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
@@ -259,6 +259,12 @@ export class BattleScene extends Phaser.Scene {
     const enemyForms = (run?.battle?.enemyTeam ?? []).flatMap((m) => [...stoneForms(content, m.speciesId, false), ...stoneForms(content, m.speciesId, true)].map((o) => o.formId));
     preloadPokemon(this, formsOf(partyForms), { back: true, shiny: true, cry: true });
     preloadPokemon(this, formsOf(enemyForms), { front: true, shiny: true, cry: true });
+    // The opposing trainer's animated sprite and the player's throwing pose (Pokémon Memories), when they have one.
+    if (run?.battle) {
+      const foeArt = this.trainerArt();
+      const mine = this.playerArt();
+      queueAssets(this, [foeArt ? bossAnimId(foeArt.assetId) : null, mine ? bossBackId(mine) : null].filter((id): id is string => !!id));
+    }
     // Lazy music: the GB Sounds loop if owned, and the victory fanfare this battle would end with.
     if (run?.battle) {
       const gb = itemCount(run.inventory, 'gb-sounds') > 0 ? ['bgm.battle_gb'] : [];
@@ -671,6 +677,26 @@ export class BattleScene extends Phaser.Scene {
     if (boss) return boss.title;
     const cls = services().session.content.trainers.get(trainer.classId);
     return cls ? `${cls.name} ${trainer.name}` : trainer.name;
+  }
+
+  /** The player's own trainer picture (the chosen trainer), for the throwing pose. */
+  private playerArt(): string | null {
+    return services().session.content.archetypes.get(this.run.archetypeId)?.spriteAssetId ?? null;
+  }
+
+  /**
+   * The player's trainer throws out the first Pokémon (Gen 4/5 back sprite, Pokémon Memories), then slides away.
+   * Presentation only: skipped when motion is off or the trainer has no back sprite.
+   */
+  private async throwPose(): Promise<void> {
+    const art = this.playerArt();
+    if (!art || this.motion === 'off') return;
+    const back = trainerBackVisual(this, art, PLAYER_POS.x - 90, MESSAGE_Y + 4, 260);
+    if (!back) return;
+    back.setDepth(5);
+    await new Promise<void>((done) => this.time.delayedCall(this.motion === 'full' ? 520 : 200, done));
+    await tween(this, { targets: back, x: -200, alpha: 0, duration: 320, ease: 'Quad.easeIn' });
+    back.destroy();
   }
 
   /** The opposing trainer's sprite asset and a fallback label. */
@@ -1378,6 +1404,7 @@ export class BattleScene extends Phaser.Scene {
         const second = this.duo.other.player.mon;
         await this.say(`Go! ${this.speciesName(this.shown.player)}${second ? ` and ${this.speciesName(second)}` : ''}!`);
       } else {
+        await this.throwPose();
         this.showSprite('player', this.shown.player);
         await this.refreshInfoBox(this.playerBox, this.shown.player, false);
         await this.say(`Go! ${this.speciesName(this.shown.player)}!`);

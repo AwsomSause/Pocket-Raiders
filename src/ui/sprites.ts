@@ -5,7 +5,7 @@
 
 import { spritesAnimate } from './display';
 import Phaser from 'phaser';
-import { pokemonAssetIds } from '../assets/catalog';
+import { bossAnimId, bossBackId, pokemonAssetIds } from '../assets/catalog';
 import type { Species } from '../core/contentSchema';
 import { services } from '../game/services';
 import { loadAssets } from './lazyAssets';
@@ -82,7 +82,33 @@ export function pokemonVisual(scene: Phaser.Scene, species: Species, side: 'fron
 }
 
 export function trainerVisual(scene: Phaser.Scene, assetId: string, name: string, x: number, y: number, scale = 2): Visual {
+  // A boss with an animated sprite (Pokémon Memories) plays its pose once when that sprite is loaded.
+  const anim = bossAnimId(assetId);
+  if (anim) {
+    const sprite = posedSprite(scene, anim, x, y, scale * 80);
+    if (sprite) return sprite;
+  }
   return atlasSprite(scene, assetId, x, y, scale) ?? placeholder(scene, x, y, 70 * scale, COLORS.panelDark, `${name}\n(art missing)`);
+}
+
+/**
+ * A trainer strip that plays once and holds its last frame (the DS games' intro pose), drawn `height` pixels tall. Still (first frame) when sprite animations are off. Null until it's loaded.
+ */
+function posedSprite(scene: Phaser.Scene, key: string, x: number, y: number, height: number, frameRate = 12): Phaser.GameObjects.Sprite | null {
+  if (!services().assets.has(key) || !scene.textures.exists(key) || scene.textures.get(key).frameTotal <= 1) return null;
+  const names = scene.textures.get(key).getFrameNames().sort();
+  const sprite = scene.add.sprite(x, y, key, names[0]).setOrigin(0.5, 1);
+  sprite.setScale(height / Math.max(1, sprite.height));
+  const animKey = `${key}.once`;
+  if (!scene.anims.exists(animKey)) scene.anims.create({ key: animKey, frames: names.map((frame) => ({ key, frame })), frameRate, repeat: 0 });
+  if (spritesAnimate()) sprite.play(animKey);
+  return sprite;
+}
+
+/** The player's throwing pose (Gen 4/5 back sprite) for a trainer picture, or null when there is none or it isn't loaded. */
+export function trainerBackVisual(scene: Phaser.Scene, assetId: string, x: number, y: number, height: number): Phaser.GameObjects.Sprite | null {
+  const key = bossBackId(assetId);
+  return key ? posedSprite(scene, key, x, y, height, 10) : null;
 }
 
 export function itemVisual(scene: Phaser.Scene, assetId: string, x: number, y: number, scale = 2): Phaser.GameObjects.GameObject {

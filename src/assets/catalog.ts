@@ -88,6 +88,26 @@ export const Z_TITLE_MOVES = [
 export const zTitleAssetId = (moveId: string): string => `cine.ztitle.${moveId}`;
 
 /** Types with their own Tera pattern (images/packs/dbk/tera/patterns/<type>.png); others (Normal) use `default`. */
+/**
+ * Bosses with an animated sprite (Pokémon Memories repo, Graphics/Trainers; tools/memories/import-trainer-anims.ts),
+ * by their still picture's name: "boss.brock" also has "boss.anim.brock".
+ */
+export const BOSS_ANIMATED = [
+  'aaron', 'alder', 'benga', 'blaine', 'brock', 'bruno', 'bugsy', 'byron', 'caitlin', 'cheren', 'cheryl', 'chili', 'chuck', 'cilan', 'clair', 'clay',
+  'colress', 'crasherwake', 'cress', 'drayden', 'emmet', 'erika', 'falkner', 'fantina', 'flannery', 'flint', 'gardenia', 'hilbert', 'hilda', 'hugh',
+  'ingo', 'janine', 'jasmine', 'juan', 'karen', 'koga', 'lance', 'ltsurge', 'marley', 'marlon', 'maylene', 'misty', 'morty', 'n', 'nate', 'norman',
+  'palmer', 'pryce', 'red', 'riley', 'rosa', 'silver', 'skyla', 'thorton', 'volkner', 'wattson', 'whitney',
+] as const;
+/** Trainers with a Gen 4 / Gen 5 throwing back sprite (same source): "boss.back.lucas". */
+export const BOSS_BACKS = [
+  'barry', 'cheren', 'cheryl', 'chili', 'cilan', 'cress', 'ethan', 'hilbert', 'hilda', 'hugh', 'juniper', 'lance', 'lucas', 'lyra', 'marley', 'nate', 'riley', 'rosa', 'silver',
+] as const;
+const bossName = (assetId: string) => (assetId.startsWith('boss.') ? assetId.slice('boss.'.length) : '');
+/** The animated version of a boss picture, if there is one. */
+export const bossAnimId = (assetId: string): string | null => ((BOSS_ANIMATED as readonly string[]).includes(bossName(assetId)) ? `boss.anim.${bossName(assetId)}` : null);
+/** The throwing back sprite for a trainer picture, if there is one. */
+export const bossBackId = (assetId: string): string | null => ((BOSS_BACKS as readonly string[]).includes(bossName(assetId)) ? `boss.back.${bossName(assetId)}` : null);
+
 export const TERA_PATTERN_TYPES = [
   'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel',
   'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy', 'stellar',
@@ -187,6 +207,9 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...Object.entries({ mega: 'packs/dbk/mega/ring', zmove: 'items/z_ring', dynamax: 'items/dynamax_band', tera: 'items/tera_orb', alpha: 'items/blue_orb', omega: 'items/red_orb' }).map(
     ([k, path]): AssetEntry => ({ id: `cine.key.${k}`, kind: 'image', category: 'ui', path: `images/${path}.png`, lazy: true }),
   ),
+  // Animated boss sprites and the throwing back sprites (Pokémon Memories repo), loaded when a battle needs them.
+  ...BOSS_ANIMATED.map((n): AssetEntry => ({ ...atlas(`boss.anim.${n}`, 'trainer', `images/bosses/anim/${n}`), lazy: true })),
+  ...BOSS_BACKS.map((n): AssetEntry => ({ ...atlas(`boss.back.${n}`, 'trainer', `images/bosses/back/${n}`), lazy: true })),
   ...[1, 2].map((n): AssetEntry => ({ id: `cine.sfx.mega${n}`, kind: 'audio', category: 'sound', path: `audio/cine/mega_evolution${n}.m4a`, lazy: true })),
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
