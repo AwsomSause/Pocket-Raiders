@@ -1,6 +1,8 @@
 // Party and Bag menus used outside battle (reward screen, map, shop): change
 // the lead Pokémon, or use an item on a party member.
 
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { BAG_SKINS } from './dSkins';
 import type Phaser from 'phaser';
 import { itemEvolutionTargets } from '../core/evolution';
 import type { Content } from '../core/contentSchema';
@@ -257,14 +259,17 @@ export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
     if (!item.usableOutside) return bagEntryText(e);
     return run.party.some((mon) => itemUseProblem(content, item, mon, regionId) === null) ? null : `${bagEntryText(e)} No Pokémon needs it right now.`;
   };
+  const bagLook = screenStyleOf('bag', session.settings.screenStyles, `${run.seed}:${run.encountersCompleted}`);
+  const bagSkin = bagLook === 'original' ? undefined : BAG_SKINS[bagLook];
   const picker: Picker = new Picker(host.scene, {
     glass: true,
+    skin: bagSkin,
     title: 'Bag',
     badge: 'ui.bag.main',
     backdrop: 'ui.bag.bg',
-    titleInArt: true,
-    columns: 1,
-    rowHeight: 64,
+    titleInArt: bagLook === 'original',
+    columns: bagSkin?.layout?.columns ?? 1,
+    rowHeight: bagSkin?.layout?.rowHeight ?? 64,
     tabs: {
       labels: pockets.map((p) => (p === 'map' ? 'Map' : POCKET_NAMES[p])),
       index,
@@ -273,7 +278,7 @@ export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
         openBagMenu(host, i);
       },
     },
-    rows: shown.map((r) => bagEntryRow(content, run, r, problemFor(r))),
+    rows: shown.map((r) => bagEntryRow(content, run, r, problemFor(r), bagSkin?.layout?.cell === true)),
     onSelect: (i) => {
       const r = shown[i]!;
       if (r.map?.action) {
@@ -304,8 +309,19 @@ export function openBagMenu(host: FieldMenuHost, pocketIndex = 0): void {
 }
 
 /** One Bag row: icon, name, rarity, count, and who holds it or what it does. */
-function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: string | null): PickerRow {
+function bagEntryRow(content: Content, run: RunState, r: BagRowData, problem: string | null, cell = false): PickerRow {
   const e = r.entry;
+  if (cell && e) {
+    // An icon cell (sticker, shop shelf, inventory grid looks): the item big on top, name and count below.
+    return {
+      problem,
+      hint: bagEntryText(e),
+      draw: (scene, box, w, h) => {
+        if (e.iconAssetId) box.add(itemVisual(scene, e.iconAssetId, w / 2, h / 2 - 12, 3));
+        box.add(scene.add.text(w / 2, h - 22, `${e.name}  ×${e.quantity}`, textStyle(18)).setOrigin(0.5));
+      },
+    };
+  }
   if (!e) {
     const m = r.map!;
     return {

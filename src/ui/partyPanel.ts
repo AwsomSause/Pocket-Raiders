@@ -22,6 +22,7 @@ import { paintSkinBackdrop, paintSkinHeader, paintSkinRow, skinFor } from './scr
 import type { ScreenId } from '../core/presentation/screenStyles';
 import { glideIn, iconHop, justRedrawn, uiTiming } from './wiiMotion';
 import { clampTexts, fitBlock, fitLine } from './fitText';
+import { paintBackdrop, type Skin as DSkin } from './dSkins';
 
 const DEPTH = 100;
 
@@ -62,6 +63,8 @@ export interface PickerConfig {
   dock?: boolean;
   /** Screens redesign: the screen this list belongs to; it draws in that screen's picked look (original look when none). */
   screen?: ScreenId;
+  /** A redesigned look (screens redesign): the backdrop, frame and row colours. Leave out for the original look. */
+  skin?: DSkin;
 }
 
 const LIST_TOP = 82;
@@ -109,6 +112,11 @@ export class Picker implements PickerLike {
       // An opaque dock across the bar: the arena above it stays in view.
       this.root.add(scene.add.graphics().fillStyle(0x061528, 1).fillRoundedRect(8, DOCK.panelTop, GAME_WIDTH - 16, GAME_HEIGHT - DOCK.panelTop - 6, 18));
       this.root.add(drawGlass(scene, 8, DOCK.panelTop, GAME_WIDTH - 16, GAME_HEIGHT - DOCK.panelTop - 6, { tint: AERO.glassLow, rim: AERO.sky, radius: 18 }));
+    } else if (config.skin) {
+      const k = config.skin;
+      paintBackdrop(scene, this.root, k, services().session.settings.battleAnimations !== 'full');
+      if (k.panelAlpha > 0) this.root.add(scene.add.graphics().fillStyle(k.panel, k.panelAlpha).fillRoundedRect(24, 16, GAME_WIDTH - 48, GAME_HEIGHT - 32, k.radius + 8).lineStyle(3, k.rim, 0.9).strokeRoundedRect(24, 16, GAME_WIDTH - 48, GAME_HEIGHT - 32, k.radius + 8));
+      this.root.add(scene.add.graphics().fillStyle(k.rim, 0.22).fillRoundedRect(36, 24, GAME_WIDTH - 72, 46, k.radius).lineStyle(2, k.rim, 0.8).strokeRoundedRect(36, 24, GAME_WIDTH - 72, 46, k.radius));
     } else if (skin) {
       paintSkinBackdrop(scene, skin, services().session.settings.battleAnimations, this.root);
       paintSkinHeader(scene, skin, this.root);
@@ -125,11 +133,13 @@ export class Picker implements PickerLike {
       band.fillStyle(COLORS.accent, 1).fillRect(36, 68, GAME_WIDTH - 72, 2);
       this.root.add(band);
     }
-    const title = !dock && !(backdrop && config.titleInArt) ? scene.add.text(48, 47, config.title, textStyle(30, COLORS.textLight)).setOrigin(0, 0.5) : null;
+    const title = !dock && !(backdrop && !config.skin && config.titleInArt)
+      ? scene.add.text(48, 47, `${config.skin?.mark ? `${config.skin.mark} ` : ''}${config.title}`, textStyle(30, config.skin?.title ?? COLORS.textLight, config.skin ? { stroke: config.skin.stroke, strokeThickness: 5 } : {})).setOrigin(0, 0.5)
+      : null;
     if (title) this.root.add(title);
     const backHint = config.onBack ? `  ·  Esc ${config.backLabel ?? 'back'}` : '';
     const hintRight = config.onBack ? GAME_WIDTH - 150 : GAME_WIDTH - 48;
-    const hint = scene.add.text(hintRight, 47, `Enter choose${backHint}`, textStyle(16, COLORS.textMuted)).setOrigin(1, 0.5).setVisible(!dock);
+    const hint = scene.add.text(hintRight, 47, `Enter choose${backHint}`, textStyle(16, config.skin?.rowSub ?? COLORS.textMuted)).setOrigin(1, 0.5).setVisible(!dock);
     this.root.add(hint);
     // The title and the key hint share the header: a long title is shortened, never run into the hint.
     if (title) {
@@ -160,8 +170,11 @@ export class Picker implements PickerLike {
 
     if (config.tabs) this.drawTabs(config.tabs);
     const gap = dock ? DOCK.gap : 10;
-    const x0 = dock ? DOCK.x : 48;
-    const colW = dock ? (GAME_WIDTH - 2 * DOCK.x - (config.columns - 1) * 8) / config.columns : config.columns === 2 ? (GAME_WIDTH - 112) / 2 : GAME_WIDTH - 96;
+    const lay = config.skin?.layout;
+    const x0 = dock ? DOCK.x : lay?.listX ?? 48;
+    const span = lay?.listW ?? GAME_WIDTH - 96;
+    const colW = dock ? (GAME_WIDTH - 2 * DOCK.x - (config.columns - 1) * 8) / config.columns : (span - (config.columns - 1) * 16) / config.columns;
+    if (config.skin && lay?.art) this.drawArt(scene, config.skin, lay);
     this.list = scene.add.container(0, 0);
     this.root.add(this.list);
     const maskShape = scene.make.graphics({}, false).fillRect(0, this.top - 6, GAME_WIDTH, this.bottom - this.top + 12);
@@ -170,7 +183,10 @@ export class Picker implements PickerLike {
       const x = x0 + (i % config.columns) * (colW + (dock ? 8 : 16));
       const y = this.top + Math.floor(i / config.columns) * (config.rowHeight + gap);
       const box = scene.add.container(x, y);
-      const bg = skin
+      const skinRow = config.skin;
+      const bg = skinRow
+        ? scene.add.graphics().fillStyle(skinRow.rowFill, row.problem ? 0.5 : skinRow.rowAlpha ?? 0.94).fillRoundedRect(0, 0, colW, config.rowHeight, skinRow.radius).lineStyle(2, row.problem ? 0x5a6a80 : skinRow.rim, row.problem ? 0.5 : 0.85).strokeRoundedRect(0, 0, colW, config.rowHeight, skinRow.radius)
+        : skin
         ? paintSkinRow(scene.add.graphics(), skin, colW, config.rowHeight, Boolean(row.problem))
         : glass
         ? paintGlass(scene.add.graphics(), 0, 0, colW, config.rowHeight, { rim: row.problem ? 0x5a6a80 : 0x9fd8f0, alpha: row.problem ? 0.55 : 0.9, glow: false, radius: 14 })
@@ -181,6 +197,10 @@ export class Picker implements PickerLike {
           });
       box.add(bg);
       row.draw(scene, box, colW, config.rowHeight);
+      if (skinRow?.rowText) {
+        // Light looks: the row's own white text becomes dark ink, its muted text a softer tone.
+        for (const o of box.list) if (o instanceof Phaser.GameObjects.Text) o.setColor(o.style.fontSize && parseInt(String(o.style.fontSize), 10) >= 18 ? skinRow.rowText : skinRow.rowSub ?? skinRow.rowText).setStroke('#000000', 0).setShadow(0, 0, '#000000', 0);
+      }
       clampTexts(box, colW, config.rowHeight);
       const hl = focusFrame(scene, 0, 0, colW, config.rowHeight);
       box.add(hl);
@@ -199,7 +219,9 @@ export class Picker implements PickerLike {
 
     // The message box along the bottom, like the games' text window.
     if (!dock) this.root.add(
-      skin
+      config.skin
+        ? scene.add.graphics().fillStyle(config.skin.rowFill, 0.95).fillRoundedRect(36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, config.skin.radius).lineStyle(2, config.skin.rim, 0.8).strokeRoundedRect(36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, config.skin.radius)
+        : skin
         ? paintSkinRow(scene.add.graphics(), skin, GAME_WIDTH - 72, 52).setPosition(36, GAME_HEIGHT - 74)
         : glass
         ? drawGlass(scene, 36, GAME_HEIGHT - 74, GAME_WIDTH - 72, 52, { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 16 })
@@ -234,7 +256,7 @@ export class Picker implements PickerLike {
     this.scrollTo(i);
     const row = this.config.rows[i]!;
     fitBlock(this.footer, FOOTER_W, 40, row.problem ?? row.hint ?? '');
-    this.footer.setColor(row.problem ? '#f0a0a0' : COLORS.textLight);
+    this.footer.setColor(row.problem ? (this.config.skin?.rowText ? '#c03030' : '#f0a0a0') : this.config.skin?.rowText ?? COLORS.textLight);
   }
 
   /** Scrolls the list so row i is on screen; rows out of view can't be clicked. */
@@ -276,11 +298,11 @@ export class Picker implements PickerLike {
         if (n) this.focus((this.index + cols) % n);
         break;
       case 'left':
-        if (cols > 1 && n) this.focus((this.index - 1 + n) % n);
+        if (cols > 1 && n && !(this.config.tabs && this.index % cols === 0)) this.focus((this.index - 1 + n) % n);
         else if (this.config.tabs) this.switchTab(-1);
         break;
       case 'right':
-        if (cols > 1 && n) this.focus((this.index + 1) % n);
+        if (cols > 1 && n && !(this.config.tabs && (this.index % cols === cols - 1 || this.index === n - 1))) this.focus((this.index + 1) % n);
         else if (this.config.tabs) this.switchTab(1);
         break;
       case 'confirm':
@@ -293,6 +315,26 @@ export class Picker implements PickerLike {
         }
         break;
     }
+  }
+
+  /** The picture beside the list: the big bag, or a large word (Bag looks). */
+  private drawArt(scene: Phaser.Scene, skin: DSkin, lay: NonNullable<DSkin['layout']>): void {
+    const calm = services().session.settings.battleAnimations !== 'full';
+    if (lay.art === 'text') {
+      const t = scene.add.text(52, 150, lay.artText ?? '', textStyle(lay.artText && lay.artText.length <= 3 ? 110 : 34, skin.title, { stroke: skin.stroke, strokeThickness: 6, lineSpacing: 6 }));
+      this.root.add(t);
+      return;
+    }
+    const id = 'ui.bag.main';
+    const put = (): void => {
+      if (this.closed) return;
+      const w = Math.min(300, lay.listX - 80);
+      const img = scene.add.image(48 + w / 2 + 10, 290, id).setDisplaySize(w, w).setName('picker-art');
+      this.root.add(img);
+      if (!calm) scene.tweens.add({ targets: img, y: 280, angle: 2, duration: 1400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    };
+    if (scene.textures.exists(id)) put();
+    else void loadAssets(scene, [id]).then(() => scene.scene.isActive() && put());
   }
 
   private switchTab(step: number): void {
@@ -311,8 +353,13 @@ export class Picker implements PickerLike {
     tabs.labels.forEach((label, i) => {
       const x = left + i * (w + gap);
       const on = i === tabs.index;
-      this.root.add(paintGlass(this.scene.add.graphics(), x, LIST_TOP, w, TAB_H, { rim: on ? 0xffe08a : 0x6a8aa8, alpha: on ? 0.95 : 0.5, glow: false, radius: 12 }));
-      const text = this.scene.add.text(x + w / 2, LIST_TOP + TAB_H / 2, label, textStyle(size, on ? COLORS.gold : COLORS.textLight, { wordWrap: { width: w - 8 } })).setOrigin(0.5).setName(`picker-tab-${i}`);
+      const k = this.config.skin;
+      this.root.add(
+        k
+          ? this.scene.add.graphics().fillStyle(on ? (k.rowText ? 0x3a8ad8 : k.rim) : k.rowFill, on ? (k.rowText ? 0.95 : 0.45) : 0.85).fillRoundedRect(x, LIST_TOP, w, TAB_H, k.radius).lineStyle(2, k.rim, on ? 1 : 0.5).strokeRoundedRect(x, LIST_TOP, w, TAB_H, k.radius)
+          : paintGlass(this.scene.add.graphics(), x, LIST_TOP, w, TAB_H, { rim: on ? 0xffe08a : 0x6a8aa8, alpha: on ? 0.95 : 0.5, glow: false, radius: 12 }),
+      );
+      const text = this.scene.add.text(x + w / 2, LIST_TOP + TAB_H / 2, label, textStyle(size, k?.rowText ? (on ? '#ffffff' : k.rowText) : on ? COLORS.gold : COLORS.textLight, { wordWrap: { width: w - 8 } })).setOrigin(0.5).setName(`picker-tab-${i}`);
       this.root.add(text);
       const zone = this.scene.add.zone(x, LIST_TOP, w, TAB_H).setOrigin(0).setInteractive({ useHandCursor: true });
       zone.on('pointerdown', () => !on && !this.closed && tabs.onChange(i));
