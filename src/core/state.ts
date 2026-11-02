@@ -995,6 +995,8 @@ export const RunRulesSchema = z.object({
   progressionEligible: z.boolean(),
   /** The published reward multiplier, fixed at the start. */
   rewardMultiplier: z.number().min(0),
+  /** Heat Level chosen at the start (0 = none). Already counted in rewardMultiplier and enemyLevelBonus. */
+  heat: z.number().int().min(0).default(0),
   /** Added to every enemy's level. */
   enemyLevelBonus: z.number().int(),
   /** Monotype: the type everything must share (set when the starter is chosen). */

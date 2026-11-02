@@ -184,7 +184,7 @@ export class GameOverScene extends Phaser.Scene {
       if (i === 1 && run) {
         // Same seed, trainer, preparation and rules. Daily seeds pay their account rewards once, so a retry pays nothing.
         const { note: _note, ...prep } = run.prep;
-        const rules = { modeId: run.rules.modeId, difficultyId: run.rules.difficultyId, modifierIds: run.rules.modifierIds, deathBlock: run.rules.deathBlock, ...(getMode(run.rules.modeId)?.dailySeed || boardKey(run.seed) ? { noRewards: true } : {}) };
+        const rules = { modeId: run.rules.modeId, difficultyId: run.rules.difficultyId, modifierIds: run.rules.modifierIds, deathBlock: run.rules.deathBlock, heat: run.rules.heat, ...(getMode(run.rules.modeId)?.dailySeed || boardKey(run.seed) ? { noRewards: true } : {}) };
         session.newRun(run.archetypeId, run.seed, undefined, prep, rules);
         this.scene.start('StarterSelect');
         return;
