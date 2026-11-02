@@ -167,7 +167,7 @@ import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -2094,7 +2094,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     run.battle!.hypeLoaded = true;
   }
   return {
-    content,
+    content: battleContent(content, run.rules),
     battle: run.battle!,
     party: run.party,
     inventory: run.inventory,

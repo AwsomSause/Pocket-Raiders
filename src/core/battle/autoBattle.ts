@@ -10,7 +10,7 @@ import { NATURES } from '../natures';
 import { calcStats, getSpecies } from '../pokemon';
 import { cheerProblem } from '../raid/raid';
 import { doublesSwitchProblem, indexAt, monAt, stagesAt, volAt, type Spot } from './doubles';
-import { noBattleItems } from '../rules';
+import { battleContent, noBattleItems } from '../rules';
 import { currentEnemy, freshStages, type PokemonInstance, type RunState } from '../state';
 import { emotionOf } from '../story/emotions';
 import { mentorPathOf, mentorshipOf } from '../story/mentorship';
@@ -209,7 +209,7 @@ export interface AutoPick {
 }
 
 function context(run: RunState, content: Content) {
-  return { content, battle: run.battle!, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(content, run), noBattleItems: noBattleItems(run.rules) };
+  return { content: battleContent(content, run.rules), battle: run.battle!, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(content, run), noBattleItems: noBattleItems(run.rules) };
 }
 
 const nameOf = (content: Content, mon: PokemonInstance) => getSpecies(content, mon.speciesId).name;

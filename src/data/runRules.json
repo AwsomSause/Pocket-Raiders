@@ -219,6 +219,34 @@
       "group": "party"
     },
     {
+      "id": "inverse-battle",
+      "name": "Inverse Battle",
+      "status": "supported",
+      "bonus": 0.15,
+      "blurb": "The type chart is reversed: super effective hits are resisted, resisted hits and immunities become super effective.",
+      "group": "type-chart",
+      "inverseChart": true
+    },
+    {
+      "id": "level-50-cup",
+      "name": "Level 50 Cup",
+      "status": "supported",
+      "bonus": 0.1,
+      "blurb": "Your Pokémon never go above level 50 for the whole run.",
+      "group": "level-cap",
+      "levelCap": 50
+    },
+    {
+      "id": "low-resource",
+      "name": "Low Resource",
+      "status": "supported",
+      "bonus": 0.25,
+      "blurb": "Half the prize money, but enemies are 2 levels higher: double stakes for every fight.",
+      "group": "economy-stakes",
+      "battleMoney": 0.5,
+      "enemyLevel": 2
+    },
+    {
       "id": "quick-route",
       "name": "Quick Route (old practice option)",
       "status": "planned",
