@@ -6,7 +6,7 @@ import { createProfile } from '../../src/core/profile';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { applyStartGrants, startGrants } from '../../src/core/legacy';
 import { ProfileSchema, type Profile } from '../../src/core/state';
-import { applyReward, basementCode, collections, dummyHit, getTownAction, jukeboxTracks, ledger, localDay, mailToday, optionsOf, recordTownRun, spendTownStart, statueTarget, TOWN, townAction, townOf, townProblem, townStartGrants, todaysQuests, townStats, townWeather, visitBuilding, KINDS } from '../../src/core/town';
+import { recordTownRun as recordRun, applyReward, basementCode, collections, dummyHit, getTownAction, jukeboxTracks, ledger, localDay, mailToday, optionsOf, recordTownRun, spendTownStart, statueTarget, TOWN, townAction, townOf, townProblem, townStartGrants, todaysQuests, townStats, townWeather, visitBuilding, KINDS } from '../../src/core/town';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { content } from './helpers';
 
@@ -339,5 +339,22 @@ describe('Relic Vault (S464)', () => {
     expect(townStartGrants(content, p).relics).toEqual([ids[0], ids[1]]);
     p = ok(p, 'vault-store', { choice: ids[0]! }).profile;
     expect(townStartGrants(content, p).relics).toEqual([ids[1]]);
+  });
+});
+
+describe('Sponsor Deals (S359)', () => {
+  it('a signed sponsor pays at run end only when its goal was met', () => {
+    let p = rich();
+    p = ok(p, 'hall-sponsor', { choice: 'sponsor-gear' }).profile;
+    expect(act(p, 'hall-sponsor', { choice: 'sponsor-trail' }).ok).toBe(false); // one per run
+    const g = townStartGrants(content, p);
+    expect(g.stuff['sponsor-gear']).toBe(1);
+    const run = { runId: 'r', seed: 's', victory: false, regionIndex: 0, inventory: {}, camp: { relics: [], stuff: { 'sponsor-gear': 1 } } };
+    const miss = structuredClone(p);
+    recordRun(content, miss, { ...run, badges: ['a', 'b'] });
+    expect(miss.bankCredits).toBe(p.bankCredits);
+    const hit = structuredClone(p);
+    recordRun(content, hit, { ...run, badges: ['a', 'b', 'c', 'd'] });
+    expect(hit.bankCredits).toBe(p.bankCredits + 70);
   });
 });

@@ -131,6 +131,8 @@ export const TownDataSchema = z.object({
   roster: z.array(z.object({ id: z.string(), name: z.string(), role: z.string(), achievements: Count, line: z.string() })),
   pools: z.object({ cries: z.array(z.string()).min(4), memory: z.array(z.string()).min(4) }),
   /** Fan Club (S358): followers from your history unlock tiers; each tier adds starting money to every run. */
+  /** Sponsor Deals (S359): signed before a run; the credits are paid at run end when the goal was met. */
+  sponsors: z.array(z.object({ id: z.string(), goal: z.object({ victory: z.boolean().optional(), regions: Count.optional(), badges: Count.optional() }), credits: Count })),
   fanClub: z.array(z.object({ fans: Count, money: Count, label: z.string() })),
   caps: z.object({ notes: Count, graffiti: Count, photos: Count, pins: Count, wishes: Count, boonItems: Count, vault: Count }),
 });
