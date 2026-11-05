@@ -439,6 +439,16 @@
       "blurb": "Choose your starter, then pick 1 of 3 run-wide rules (Glass Cannon, Marathon, Frugal...). The rule lasts the whole run."
     },
     {
+      "id": "time-pressure",
+      "name": "Time Pressure",
+      "status": "supported",
+      "progressionEligible": true,
+      "checkpoints": false,
+      "rewardBonus": 0.3,
+      "timePressure": { "daysPerRegion": 14, "perDay": 0.01 },
+      "blurb": "A run clock in game days: end rewards start +30%, and melt 1% for every day past 14 days per region. Resting costs days. Steps and rests cost time, battles do not."
+    },
+    {
       "id": "weekly",
       "name": "Weekly Gauntlet",
       "status": "supported",
