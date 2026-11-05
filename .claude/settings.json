@@ -2,7 +2,17 @@
   "permissions": {
     "deny": [
       "Read(./src/data/learnables.json)",
-      "Read(./package-lock.json)"
+      "Read(./src/data/bossTeams.json)",
+      "Read(./src/data/species.json)",
+      "Read(./src/data/events.json)",
+      "Read(./src/data/customSpecies.json)",
+      "Read(./src/data/legendaryEvents.json)",
+      "Read(./src/data/ebdxAnims.json)",
+      "Read(./src/data/moveAnims.json)",
+      "Read(./public/assets/**)",
+      "Read(./package-lock.json)",
+      "Read(./docs/quality/playtest/**)",
+      "Read(./docs/press-kit/**)"
     ]
   }
 }

@@ -9,7 +9,7 @@ Update this file when you add, move or delete a folder or a key file.
 | Path | What it is |
 |---|---|
 | `CLAUDE.md` | Router and short development directive. Start here. |
-| `STATUS.md` | One-page current state: done, next, save versions, biggest gaps. |
+| `STATUS.md` | Short current state: save versions and what is next (about 2 KB). Old Done list: `docs/archive/status-done-2026-10-30.md`; slice notes: `docs/status/INDEX.md` (grep it). |
 | `README.md` | How to run the game, URL flags (`?seed=`, `?campaign=dev`, `?debug=1`), F2 debug panel. |
 | `GAME_DESIGN.md` | Game rules and director decisions D1–D16, §1–§14 (360 lines). |
 | `IMPLEMENTATION_PLAN.md` | Architecture, folder plan, every milestone's scope (341 lines). |
@@ -21,7 +21,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `.github/workflows/ci.yml` | CI: typecheck, unit, build, `report:check`, Playwright. |
 | `.claude/rules/` | Short rules; path-scoped ones auto-load when you touch matching files. |
 | `.claude/agents/` | Project subagents. `explore.md`: cheap read-only search on Haiku. |
-| `.claude/settings.json` | Blocks reading `learnables.json` (one 1 MB line) and `package-lock.json`. |
+| `.claude/settings.json` | Blocks Read of the big generated data (learnables, species, bossTeams, events, anims…), `public/assets/**`, playtest logs, press-kit and `package-lock.json`. Grep or `node -e` them instead. |
 | `.ignore` | Makes folder-wide ripgrep/Grep skip generated data, assets and the lockfile (~19,000 files to ~190). Exact-path searches still work. |
 
 ## `src/` — the game
