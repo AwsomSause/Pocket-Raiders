@@ -1486,6 +1486,18 @@
      "limit": "none",
      "dynamic": "museum",
      "options": []
+    },
+    {
+     "id": "vault-store",
+     "name": "Relic Vault",
+     "desc": "Lock away up to two uncursed relics. They join every run from then on. Pick a stored relic to take it out.",
+     "kind": "pick",
+     "rows": [
+      "S464"
+     ],
+     "limit": "none",
+     "dynamic": "vault",
+     "options": []
     }
    ]
   },
@@ -4259,6 +4271,7 @@
   { "fans": 400, "money": 1000, "label": "Worldwide stardom" }
  ],
  "caps": {
+  "vault": 2,
   "notes": 30,
   "graffiti": 24,
   "photos": 12,

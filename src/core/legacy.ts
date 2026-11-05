@@ -6,6 +6,7 @@ import { z } from 'zod';
 import legacyJson from '../data/legacy.json';
 import type { Content, Region } from './contentSchema';
 import { freshCamp } from './camp/schema';
+import { grantRelic } from './camp';
 import { layEgg } from './eggs';
 import { hashSeed, Rng } from './rng';
 import { addItem } from './items';
@@ -163,6 +164,7 @@ export function applyStartGrants(content: Content, run: RunState, p: Profile): v
     for (const [id, n] of Object.entries(g.stuff)) camp.stuff[id] = (camp.stuff[id] ?? 0) + n;
   }
   const tg = townStartGrants(content, p);
+  for (const id of tg.relics) if (!(run.camp?.relics ?? []).some((r) => r.id === id)) grantRelic(run, id, false);
   for (const line of tg.notes) run.journal.push(line);
   tg.eggs.forEach((species, i) => { if (content.species.has(species)) layEgg(content, run, species, { level: 5, left: 3, unit: 'stage', source: 'Daycare', origin: 'Adopted Baby' }, new Rng(hashSeed(`${run.seed}::daycare-egg::${i}`))); });
 }

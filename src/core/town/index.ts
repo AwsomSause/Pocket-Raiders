@@ -153,6 +153,7 @@ export function optionsOf(content: Content, p: Profile, a: TownAction, now: Date
     case 'history': return p.runHistory.slice(0, 8).map((r, i) => from(r.runId, `Run ${p.runHistory.length - i}: ${r.victory ? 'Champion' : r.defeatedBy ? `lost to ${content.species.get(r.defeatedBy.speciesId)?.name ?? r.defeatedBy.speciesId}` : 'ended'}`, `${r.regionsCleared}/${r.regions} regions · ${r.badges} badges`));
     case 'trophies': return trophyList(p).map((tr) => from(tr.id, tr.name, `${tr.kind} · shine ${t.counts[`polish:${tr.id}`] ?? 0}`));
     case 'relics': return relicList(p).map((r) => from(r.key, r.name, r.cursed ? 'Cursed relic' : `Tier ${r.tier}`));
+    case 'vault': return relicList(p).filter((r) => !r.cursed).map((r) => from(r.key, r.name, `${(t.sets.vault ?? []).includes(r.key) ? 'In the vault · ' : ''}Tier ${r.tier}`));
     case 'museum': return relicList(p).map((r) => { const on = (t.sets.pedestal ?? []).includes(r.key); return from(r.key, r.name, `${on ? 'On a pedestal · ' : ''}Tier ${r.tier}${r.cursed ? ' · cursed' : ''}`); });
     case 'pets': return petList(content, p).map((x) => from(x.speciesId, x.name, `Bond ${t.counts[`pet:${x.speciesId}`] ?? 0}/${TOWN.pets.bondAt}`));
     case 'memorial': return memorialList(content, p).map((m) => from(String(m.index), `${m.name} Lv${m.level}${m.ace ? ' ★' : ''}`, `${m.cause} · ${t.counts[`flower:${m.index}`] ?? 0} flowers`));
@@ -233,10 +234,20 @@ function runPick(c: Ctx): string {
     c.t.sets.relics = (c.t.sets.relics ?? []).filter((k) => k !== o.id);
     (c.t.sets.offered ??= []).push(o.id);
     c.t.sets.pedestal = (c.t.sets.pedestal ?? []).filter((k) => k !== o.id);
+    c.t.sets.vault = (c.t.sets.vault ?? []).filter((k) => k !== o.id);
     c.t.counts.offerings = (c.t.counts.offerings ?? 0) + 1;
     const bless = rel.cursed ? ' The curse leaves it with a sigh; Shrine Water joins your pack.' : '';
     if (rel.cursed) c.t.boon.stuff['shrine-water'] = (c.t.boon.stuff['shrine-water'] ?? 0) + 1;
     return `${rel.name} rests on the altar.${bless} You earned an offering. ${reward(c, { xp: 1 })}`;
+  }
+  if (id === 'vault-store') {
+    const rel = relicList(c.p).find((x) => x.key === o.id);
+    if (!rel || rel.cursed) return fail('Only a relic with no curse can be stored.');
+    const held = c.t.sets.vault ?? [];
+    if (held.includes(o.id)) { c.t.sets.vault = held.filter((k) => k !== o.id); return `${rel.name} leaves the vault.`; }
+    if (held.length >= TOWN.caps.vault) fail(`The vault holds ${TOWN.caps.vault} relics. Take one out first.`);
+    c.t.sets.vault = [...held, o.id];
+    return `${rel.name} is locked in the vault. It goes with you on every run.`;
   }
   if (id === 'museum-pedestal') {
     const on = c.t.sets.pedestal ?? [];
@@ -620,12 +631,12 @@ export function visitBuilding(profile: Profile, buildingId: string): Profile {
 
 // ---------- run start and run end ----------
 
-export interface TownGrants { eggs: string[]; money: number; items: Record<string, number>; stuff: Record<string, number>; notes: string[] }
+export interface TownGrants { relics: string[]; eggs: string[]; money: number; items: Record<string, number>; stuff: Record<string, number>; notes: string[] }
 
 /** What the town hands a new run: the waiting boon, the wishes, the badge case perks and the museum pedestals. */
 export function townStartGrants(content: Content, p: Profile): TownGrants {
   const t = townOf(p);
-  const out: TownGrants = { eggs: [...t.boon.eggs], money: t.boon.money, items: { ...t.boon.items }, stuff: { ...t.boon.stuff }, notes: [...t.boon.notes, ...t.wishes] };
+  const out: TownGrants = { relics: relicList(p).filter((r) => !r.cursed && (t.sets.vault ?? []).includes(r.key)).map((r) => r.id), eggs: [...t.boon.eggs], money: t.boon.money, items: { ...t.boon.items }, stuff: { ...t.boon.stuff }, notes: [...t.boon.notes, ...t.wishes] };
   const add = (r: Reward | undefined): void => {
     if (!r) return;
     out.money += r.money ?? 0;
