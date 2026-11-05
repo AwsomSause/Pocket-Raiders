@@ -1999,7 +1999,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);

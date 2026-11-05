@@ -51,3 +51,20 @@ describe('phase shields', () => {
     expect(battle.raid!.shieldHp).toBe(battle.raid!.shieldMax);
   });
 });
+
+describe('weak spots (S397)', () => {
+  it('the exposed zone swaps and boosts the matching hits only', async () => {
+    const { exposedWeakSpot, raidFieldMultiplier } = await import('../../src/core/raid/raid');
+    const { def, battle } = setup('steel-mind');
+    const ws = def.modifiers.weakSpots!;
+    battle.turn = 0;
+    expect(exposedWeakSpot(content, battle)!.zone).toBe('body');
+    expect(raidFieldMultiplier(content, battle, 'player', 'normal', true)).toBeCloseTo(ws.boost);
+    expect(raidFieldMultiplier(content, battle, 'player', 'normal', false)).toBe(1);
+    battle.turn = ws.everyTurns;
+    expect(exposedWeakSpot(content, battle)!.zone).toBe('core');
+    expect(raidFieldMultiplier(content, battle, 'player', 'normal', false)).toBeCloseTo(ws.boost);
+    expect(raidFieldMultiplier(content, battle, 'enemy', 'normal', true)).toBe(1);
+    expect(exposedWeakSpot(content, setup('sleeping-snorlax').battle)).toBeNull();
+  });
+});
