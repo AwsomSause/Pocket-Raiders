@@ -49,13 +49,15 @@ test('the Wardrobe, the Research Directive and a Challenge Contract', async ({ p
   await waitForScene(page, 'TrainerSelect');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'RunPrep');
-  // Research Directive is on the Trainer page (trainer, Preparation, then Research Directive): pick the first type with →.
+  // Research Directive is on the Trainer page (its own scene): pick Normal there.
   await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(1));
-  await page.waitForTimeout(500);
-  for (let i = 0; i < 2; i++) await page.keyboard.press('ArrowDown');
-  await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(400);
-  expect(await texts(page, 'RunPrep')).toContain('Research Directive: Normal');
+  await waitForScene(page, 'RunChoices');
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunChoices').choose('directive', 'normal'));
+  await page.waitForTimeout(300);
+  await page.keyboard.press('Escape'); // options → rows
+  await page.keyboard.press('Escape'); // back to the desk
+  await waitForScene(page, 'RunPrep');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').prep.directive)).toBe('normal');
   await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(4)); // the full summary is on the Overview
   await page.waitForTimeout(500);
   const prep = await texts(page, 'RunPrep');

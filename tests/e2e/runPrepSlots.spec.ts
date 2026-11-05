@@ -34,29 +34,24 @@ test('the Preparation Desk has five pages and a Weeks toggle that sticks for the
   await page.keyboard.press('Escape');
   await waitForScene(page, 'RunPrep');
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(4);
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(2));
-  await expect.poll(async () => (await prep(page)).page).toBe(2);
-  await page.waitForTimeout(400);
-
-  for (const [key, want] of [['KeyQ', 1], ['KeyQ', 0], ['KeyE', 1]] as const) {
-    await page.keyboard.press(key);
-    await expect.poll(async () => (await prep(page)).page).toBe(want);
-    await page.waitForTimeout(350);
+  // The Starters and Modifiers tabs are their own scenes; each hands the desk back on Escape.
+  for (const [i, key] of [[2, 'RunStarters'], [3, 'RunModifiers']] as const) {
+    await page.evaluate((n) => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(n), i);
+    await waitForScene(page, key);
+    await page.keyboard.press('Escape');
+    await waitForScene(page, 'RunPrep');
   }
+  // Run Setup is its own scene too: turn Weeks off there.
   await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(0));
-  await expect.poll(async () => (await prep(page)).page).toBe(0);
-  await page.waitForTimeout(400);
-  const labels = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').menu.config.options.map((o: any) => o.label));
-  expect(labels).toContain('Weeks: ON (default)');
-  const weeksRow = labels.indexOf('Weeks: ON (default)');
-  for (let i = 0; i < 10 && (await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').focusIndex)) !== weeksRow; i++) await page.keyboard.press('ArrowDown'); // skips the disabled region row
-  await page.keyboard.press('ArrowRight'); // turn Weeks off
-  await page.waitForTimeout(500);
-  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').rules.weeks)).toBe(false);
+  await waitForScene(page, 'RunChoices');
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunChoices').choose('weeks', 'off'));
+  await page.waitForTimeout(300);
   await page.screenshot({ path: 'test-results/prep-weeks-off.png' });
-
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(4));
-  await page.waitForTimeout(500);
+  await page.keyboard.press('Escape'); // options → rows
+  await page.keyboard.press('Escape'); // back to the desk
+  await waitForScene(page, 'RunPrep');
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').rules.weeks)).toBe(false);
+  await page.waitForTimeout(300);
   await page.keyboard.press('Enter'); // Roll starters
   await waitForScene(page, 'StarterSelect');
   const rules = await page.evaluate(() => ({ weeks: (window as any).__pkr.session.run.rules.weeks, events: (window as any).__pkr.session.run.gameEvents }));

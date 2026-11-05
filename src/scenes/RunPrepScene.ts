@@ -37,6 +37,7 @@ import { isClaimed } from '../core/quests';
 import type { RunModifiersData } from './RunModifiersScene';
 import type { RunStartersData } from './RunStartersScene';
 import type { RunSeedData } from './RunSeedScene';
+import type { ChoicesGroup, RunChoicesData } from './RunChoicesScene';
 
 export interface RunPrepData {
   archetypeId: string;
@@ -71,7 +72,7 @@ const PAGES: PageDef[] = [
   { id: 'trainer', title: 'Trainer', blurb: 'Who you are and what you bring: preparation, directive, license, loan, Vault, mentor.', tint: 0x2fa080, rows: ['trainer', 'token', 'directive', 'license', 'loan', 'vault', 'mentor'] },
   { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: ['pool', 'draft', 'type'] },
   { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier'] },
-  { id: 'overview', title: 'Overview', blurb: 'Check everything, keep a preset, then roll the starters.', tint: 0xd04a5a, rows: ['start', 'save', 'load'] },
+  { id: 'overview', title: 'Overview', blurb: 'Check everything, keep a preset, then roll the starters.', tint: 0xd04a5a, rows: ['start', 'seed', 'save', 'load'] },
 ];
 const OVERVIEW = PAGES.length - 1;
 
@@ -318,6 +319,7 @@ export class RunPrepScene extends Phaser.Scene {
     if (page === this.page) return;
     if (PAGES[page]!.id === 'modifiers') return this.openModifiers();
     if (PAGES[page]!.id === 'starters') return this.openStarters();
+    if (PAGES[page]!.id === 'config' || PAGES[page]!.id === 'trainer') return this.openChoices(PAGES[page]!.id as ChoicesGroup);
     this.scene.restart({ archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, modCursor: this.modCursor, page, slide: page > this.page ? 1 : -1 } satisfies RunPrepData);
   }
 
@@ -337,6 +339,12 @@ export class RunPrepScene extends Phaser.Scene {
   private openSeed(): void {
     const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: this.rules, page: this.page };
     this.scene.start('RunSeed', { desk } satisfies RunSeedData);
+  }
+
+  /** Run Setup and Trainer are their own scene: rows on the left, every option on the right. */
+  private openChoices(group: ChoicesGroup): void {
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: group === PAGES[this.page]!.id ? OVERVIEW : this.page };
+    this.scene.start('RunChoices', { desk, group, state: { archetypeId: this.archetypeId, prep: this.prep, rules: this.rules } } satisfies RunChoicesData);
   }
 
   private refresh(changes: Partial<RunPrep> = {}, extra: Partial<RunPrepData> = {}): void {
