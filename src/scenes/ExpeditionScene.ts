@@ -25,6 +25,8 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { sceneForRun } from './routing';
+import { screenStyleOf } from '../core/presentation/screenStyles';
+import { drawExpeditionLook, type ExpeditionLayout, type ExpeditionLook } from '../ui/expeditionLooks';
 
 const GLYPH: Record<string, { glyph: string; color: number }> = {
   wild: { glyph: 'W', color: 0x58a858 }, trainer: { glyph: 'T', color: 0xc85858 }, elite: { glyph: 'E', color: 0xa040c0 }, rest: { glyph: '+', color: 0xe06890 },
@@ -67,6 +69,8 @@ export class ExpeditionScene extends Phaser.Scene {
     const exp = run.expedition;
     const def = getExpedition(session.content, exp.id);
     const skin = skinFor('expedition', `${run.seed}:${exp.id}`);
+    const lookId = screenStyleOf('expedition', session.settings.screenStyles, `${run.seed}:${exp.id}`);
+    const look: ExpeditionLook | null = skin && (lookId === 'aero' || lookId === 'manga' || lookId === 'depth') ? lookId : null;
     if (skin) paintSkinBackdrop(this, skin, session.settings.battleAnimations);
     const music = legendMusic(session.content, def);
     const song = music?.route ?? expeditionTrack(def.tier);
@@ -78,7 +82,7 @@ export class ExpeditionScene extends Phaser.Scene {
       this.events.once('shutdown', () => stopProceduralAudio());
     }
     void loadAssets(this, [song]).then(() => { if (this.scene.isActive()) playMusic(this, song); });
-    if (this.textures.exists('ui.raid.adv_header')) this.add.image(GAME_WIDTH / 2, 22, 'ui.raid.adv_header').setDisplaySize(GAME_WIDTH * 0.7, 56).setAlpha(0.5);
+    if (!look && this.textures.exists('ui.raid.adv_header')) this.add.image(GAME_WIDTH / 2, 22, 'ui.raid.adv_header').setDisplaySize(GAME_WIDTH * 0.7, 56).setAlpha(0.5);
     const legend = def.legendary;
     if (legend) {
       // A Legendary stage has its own colour wash and accent line.
@@ -102,31 +106,37 @@ export class ExpeditionScene extends Phaser.Scene {
       if (opening || finaleNext) titleCard(this, finaleNext ? cards.finale.title : cards.intro.title, finaleNext ? cards.finale.sub : cards.intro.sub, kit.accent, motion);
       this.add.text(GAME_WIDTH / 2, 8, `LEGENDARY EVENT  ·  ${legend.epithet}`, textStyle(12, legend.visual.accent)).setOrigin(0.5, 0);
     }
+    const loot = exp.loot;
+    const items = Object.entries(loot.items).map(([id, n]) => `${n} ${id.replace(/-/g, ' ')}`);
+    const lootLine = `Loot: ₽${loot.money}${items.length ? `, ${items.join(', ')}` : ''}  ·  Mega Energy ${loot.energy}/${def.megaCost}  ·  Research ${loot.research}/${def.researchGoal}`;
+    let layout: ExpeditionLayout | null = null;
+    if (look) {
+      layout = drawExpeditionLook(this, look, { exp, name: def.name, tier: def.tier, loot: lootLine, party: this.partyLine(run), prompt: '' });
+    } else {
     this.add.text(GAME_WIDTH / 2, 22, legend ? def.name : `${def.name}  ·  Tier ${def.tier}`, textStyle(32, COLORS.textLight)).setOrigin(0.5);
     const route = drawPanel(this, 16, 48, GAME_WIDTH - 32, 200, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true });
     slideIn(this, route, 0, -16, session.settings.battleAnimations);
     this.drawRoute(exp);
     this.add.text(24, 256, this.partyLine(run), textStyle(15, COLORS.textLight, { wordWrap: { width: GAME_WIDTH - 48 } }));
-    const loot = exp.loot;
-    const items = Object.entries(loot.items).map(([id, n]) => `${n} ${id.replace(/-/g, ' ')}`);
-    this.add.text(24, 282, `Loot: ₽${loot.money}${items.length ? `, ${items.join(', ')}` : ''}  ·  Mega Energy ${loot.energy}/${def.megaCost}  ·  Research ${loot.research}/${def.researchGoal}`, textStyle(15, '#f0e0a0', { wordWrap: { width: GAME_WIDTH - 48 } }));
+    this.add.text(24, 282, lootLine, textStyle(15, '#f0e0a0', { wordWrap: { width: GAME_WIDTH - 48 } }));
     this.add.text(24, 306, exp.log.slice(-2).join('  ·  '), textStyle(14, '#a8d0a8', { wordWrap: { width: GAME_WIDTH - 48 } }));
     if (legend) {
       const layer = exp.current ? exp.nodes.find((n) => n.id === exp.current)!.layer + 1 : 0;
       this.add.text(GAME_WIDTH - 24, 258, stageRules(def, layer).join('  ·  '), textStyle(12, legend.visual.accent, { wordWrap: { width: 420 }, align: 'right' })).setOrigin(1, 0);
     }
+    }
 
     const options: { label: string; detail?: string; act: () => void }[] = [];
     if (exp.choice) {
-      this.add.text(GAME_WIDTH / 2, 338, exp.choice.title, textStyle(20, '#ffd0a0')).setOrigin(0.5);
+      this.promptText(layout, exp.choice.title);
       exp.choice.options.forEach((o, i) => options.push({ label: o.label, detail: o.detail, act: () => session.resolveExpeditionChoice(i) }));
     } else {
-      this.add.text(GAME_WIDTH / 2, 338, 'Choose your next stop', textStyle(20, '#ffd0a0')).setOrigin(0.5);
+      this.promptText(layout, 'Choose your next stop');
       for (const n of availableNodes(exp)) options.push({ label: nodeLabel(n.kind), detail: `stop ${n.layer + 1}`, act: () => session.chooseExpeditionNode(n.id) });
       options.push({ label: 'Extract now', detail: 'keep the loot, skip the finale', act: () => session.extractExpedition() });
     }
     this.menu = new Menu(this, {
-      x: 40, y: 366, columns: 2, itemWidth: 440, itemHeight: 46, fontSize: 20, color: COLORS.textLight,
+      x: layout?.menu.x ?? 40, y: layout?.menu.y ?? 366, columns: layout?.menu.columns ?? 2, itemWidth: layout?.menu.itemWidth ?? 440, itemHeight: layout?.menu.itemHeight ?? 46, fontSize: layout ? 15 : 20, color: layout?.ink ?? COLORS.textLight,
       options: options.map((o) => ({ label: o.label, detail: o.detail })),
       onSelect: (i) => {
         playSfx(this, 'ui.select');
@@ -141,6 +151,11 @@ export class ExpeditionScene extends Phaser.Scene {
     });
     this.add.text(16, GAME_HEIGHT - 22, '←/→/↑/↓ choose  ·  Enter select', textStyle(14, '#8a7f96'));
     onInputAction(this, (a) => this.menu.handle(a));
+  }
+
+  private promptText(layout: ExpeditionLayout | null, text: string): void {
+    if (!layout) this.add.text(GAME_WIDTH / 2, 338, text, textStyle(20, '#ffd0a0')).setOrigin(0.5);
+    else this.add.text(layout.promptAt.x, layout.promptAt.y, text, textStyle(18, layout.promptColor)).setOrigin(layout.promptAt.originX, 0.5);
   }
 
   private partyLine(run: RunState): string {
