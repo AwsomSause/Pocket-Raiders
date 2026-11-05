@@ -5,6 +5,10 @@
 
 import Phaser from 'phaser';
 import type { ScreenStyleId } from '../core/presentation/screenStyles';
+import { services } from '../game/services';
+import { lookSpecies } from '../core/pokemon';
+import { loadAssets } from './lazyAssets';
+import { pokemonVisual } from './sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
 
 export type Pattern = 'none' | 'halftone' | 'speed' | 'bubbles' | 'sparkle' | 'grid' | 'ink' | 'stickers' | 'shelf' | 'scan' | 'petals' | 'letterbox' | 'helix' | 'cards' | 'tape' | 'credits';
@@ -33,7 +37,7 @@ export interface Skin {
   /** Rows are drawn with no fill, only a rim (ink, sticker). */
   rowAlpha?: number;
   /** Where the list sits and what fills the rest (the Bag looks): left art, or icon cells. */
-  layout?: { listX: number; listW: number; art?: 'bag' | 'text'; artText?: string; cell?: boolean; columns?: 1 | 2 | 3; rowHeight?: number };
+  layout?: { listX: number; listW: number; art?: 'bag' | 'text'; artText?: string; /** A camp scene behind the list: a location picture, the party's sprites and a fire. */ stage?: { bg: string; party: 'front' | 'silhouette'; fire: boolean; side: 'left' | 'bottom' }; cell?: boolean; columns?: 1 | 2 | 3; rowHeight?: number };
 }
 
 const hex = (c: number): string => `#${c.toString(16).padStart(6, '0')}`;
@@ -55,6 +59,32 @@ export function paintBackdrop(scene: Phaser.Scene, root: Phaser.GameObjects.Cont
   g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
   root.add(g);
   paintPattern(scene, root, skin.pattern, skin.patternColor, skin.patternAlpha, calm, { x: 0, y: 0, w: GAME_WIDTH, h: GAME_HEIGHT });
+  if (skin.layout?.stage) paintStage(scene, root, skin.layout.stage, calm);
+}
+
+/** A camp scene: the location picture, the party's real sprites (or black silhouettes) and a fire. */
+function paintStage(scene: Phaser.Scene, root: Phaser.GameObjects.Container, st: NonNullable<NonNullable<Skin['layout']>['stage']>, calm: boolean): void {
+  const { session } = services();
+  const bg = st.bg;
+  const putBg = (): void => {
+    if (root.active && bg) root.addAt(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, bg).setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setName('camp-stage-bg'), 1);
+  };
+  if (bg) {
+    if (scene.textures.exists(bg)) putBg();
+    else void loadAssets(scene, [bg]).then(() => scene.scene.isActive() && putBg()).catch(() => undefined);
+  }
+  (session.run?.party ?? []).slice(0, 4).forEach((m, i) => {
+    const v = pokemonVisual(scene, lookSpecies(session.content, m), 'front', 110 + i * 105, 400 - (i % 2) * 14, 1, m.shiny) as Phaser.GameObjects.Sprite;
+    fitVisual(v, i === 0 ? 150 : 100);
+    if (st.party === 'silhouette') tintVisual(v, 0x000000);
+    root.add(v);
+    if (!calm) scene.tweens.add({ targets: v, y: v.y - 4, duration: 800 + i * 120, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: i * 140 });
+  });
+  if (st.fire) {
+    const glow = scene.add.circle(440, 410, 26, 0xff9a3a, 0.9);
+    root.add(glow);
+    if (!calm) scene.tweens.add({ targets: glow, scale: 1.25, alpha: 0.6, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+  }
 }
 
 export interface Area { x: number; y: number; w: number; h: number }
@@ -199,12 +229,12 @@ export const BAG_SKINS: Record<ScreenStyleId<'bag'>, Skin> = {
 
 // ---- Camp (6 looks) -------------------------------------------------------------------------------
 export const CAMP_SKINS: Record<ScreenStyleId<'camp'>, Skin> = {
-  wii: { bg: [0xf2f6fc, 0xcfe0f4], pattern: 'shelf', patternColor: 0x9ab8dc, patternAlpha: 0.7, rim: 0x5aa8e8, panel: 0x16365e, panelAlpha: 0.9, rowFill: 0x1c4272, radius: 22, title: '#ffffff', stroke: '#2a5a9a' },
-  novel: { bg: [0x2a1a40, 0x0e0820], pattern: 'sparkle', patternColor: 0xffd8f0, patternAlpha: 0.6, rim: 0xffd8f0, panel: 0x0a0618, panelAlpha: 0.85, rowFill: 0x1a1030, radius: 8, title: '#ffe9f6', stroke: '#20104a', mark: '…' },
-  scrapbook: { bg: [0xd8b88a, 0xb8946a], pattern: 'tape', patternColor: 0xf6e6a0, patternAlpha: 0.85, rim: 0xf6e6a0, panel: 0x3a2a1a, panelAlpha: 0.88, rowFill: 0x4a3622, radius: 6, title: '#fff0d0', stroke: '#4a3018' },
-  fieldbase: { bg: [0x3a4a30, 0x1a2418], pattern: 'grid', patternColor: 0xb8d890, patternAlpha: 0.14, rim: 0xd8e8a0, panel: 0x141e12, panelAlpha: 0.88, rowFill: 0x22301c, radius: 4, title: '#e8f4c0', stroke: '#101a0e', mark: 'BASE' },
-  ink: { bg: [0xe4dcc8, 0xb8ae98], pattern: 'ink', patternColor: 0x1a1a1a, patternAlpha: 0.55, rim: 0xc0282a, panel: 0x141210, panelAlpha: 0.9, rowFill: 0x1c1a16, radius: 2, title: '#f4ecdc', stroke: '#000000', mark: 'CAMP' },
-  cards: { bg: [0x1c5a3a, 0x0a2a1a], pattern: 'cards', patternColor: 0xf0e8d0, patternAlpha: 0.9, rim: 0xf0d060, panel: 0x0a2418, panelAlpha: 0.85, rowFill: 0x143a28, radius: 12, title: '#f8ecc0', stroke: '#0a2a18' },
+  wii: { bg: [0xf2f6fc, 0xcfe0f4], pattern: 'shelf', patternColor: 0x9ab8dc, patternAlpha: 0.7, rim: 0x5aa8e8, panel: 0x16365e, panelAlpha: 0, rowFill: 0xffffff, rowAlpha: 0.95, radius: 22, title: '#3a4a60', stroke: '#ffffff', rowText: '#3a4a60', rowSub: '#8a9ab0', layout: { listX: 48, listW: 864, cell: true, columns: 3, rowHeight: 116 } },
+  novel: { bg: [0x2a1a40, 0x0e0820], pattern: 'sparkle', patternColor: 0xffd8f0, patternAlpha: 0.6, rim: 0xffd8f0, panel: 0x0a0618, panelAlpha: 0, rowFill: 0x1a1030, radius: 8, title: '#ffe9f6', stroke: '#20104a', layout: { listX: 540, listW: 372, stage: { bg: 'pack.memories.eventbg.field', party: 'front', fire: false, side: 'left' } } },
+  scrapbook: { bg: [0xd8b88a, 0xb8946a], pattern: 'tape', patternColor: 0xf6e6a0, patternAlpha: 0.85, rim: 0xf6e6a0, panel: 0x3a2a1a, panelAlpha: 0.88, rowFill: 0x4a3622, radius: 6, title: '#fff0d0', stroke: '#4a3018', layout: { listX: 48, listW: 864, cell: true, columns: 3, rowHeight: 116 } },
+  fieldbase: { bg: [0x3a4a30, 0x1a2418], pattern: 'grid', patternColor: 0xb8d890, patternAlpha: 0.14, rim: 0xd8e8a0, panel: 0x141e12, panelAlpha: 0.88, rowFill: 0x22301c, radius: 4, title: '#e8f4c0', stroke: '#101a0e', layout: { listX: 48, listW: 864, cell: true, columns: 3, rowHeight: 116 } },
+  ink: { bg: [0xe4dcc8, 0xb8ae98], pattern: 'ink', patternColor: 0x1a1a1a, patternAlpha: 0.55, rim: 0xc0282a, panel: 0x141210, panelAlpha: 0, rowFill: 0x1c1a16, radius: 2, title: '#f4ecdc', stroke: '#000000', layout: { listX: 540, listW: 372, stage: { bg: '', party: 'silhouette', fire: true, side: 'left' } } },
+  cards: { bg: [0x1c5a3a, 0x0a2a1a], pattern: 'cards', patternColor: 0xf0e8d0, patternAlpha: 0.9, rim: 0xf0d060, panel: 0x0a2418, panelAlpha: 0.85, rowFill: 0x143a28, radius: 12, title: '#f8ecc0', stroke: '#0a2a18', layout: { listX: 48, listW: 864, cell: true, columns: 3, rowHeight: 116 } },
 };
 
 // ---- Run end (11 looks): background and panel colours; title wording stays the scene's ----------
@@ -221,3 +251,25 @@ export const RUNEND_SKINS: Record<ScreenStyleId<'runend'>, Skin> = {
   ink: { bg: [0xc8c0b0, 0x7c7468], pattern: 'ink', patternColor: 0x101010, patternAlpha: 0.25, rim: 0xc0282a, panel: 0x141210, panelAlpha: 0.9, rowFill: 0x1c1a16, radius: 2, title: '#f4ecdc', stroke: '#000000', mark: 'DEFEAT' },
   mvp: { bg: [0x4a1a70, 0x16082e], pattern: 'sparkle', patternColor: 0xffe08a, patternAlpha: 0.8, rim: 0xffe08a, panel: 0x1a0a30, panelAlpha: 0.8, rowFill: 0x2a1448, radius: 20, title: '#ffe9a8', stroke: '#3a1a5a', mark: '★' },
 };
+
+/** Fits a sprite (or its loading placeholder) to a height; re-fits when the real art arrives. */
+export function fitVisual(v: Phaser.GameObjects.Container | Phaser.GameObjects.Sprite | Phaser.GameObjects.Image, maxH: number): void {
+  const apply = (): void => {
+    const inner = v instanceof Phaser.GameObjects.Container ? ((v.list.find((o) => 'height' in o && (o as Phaser.GameObjects.Image).height > 0 && 'setScale' in o) as Phaser.GameObjects.Image | undefined) ?? null) : v;
+    if (!inner || !inner.height) return;
+    v.setScale(maxH / inner.height);
+    if (inner !== v) inner.setScale(1);
+  };
+  apply();
+  v.once('art-ready', apply);
+}
+
+/** Tints a sprite, or the sprite inside a loading placeholder (also once the art arrives). */
+export function tintVisual(v: Phaser.GameObjects.GameObject, tint: number): void {
+  const paint = (o: Phaser.GameObjects.GameObject): void => {
+    if (o instanceof Phaser.GameObjects.Container) o.list.forEach(paint);
+    else if ('setTint' in o) (o as Phaser.GameObjects.Sprite).setTint(tint);
+  };
+  paint(v);
+  v.once('art-ready', () => paint(v));
+}
