@@ -5158,6 +5158,13 @@ function applyTurnHeal(ctx: BattleContext, c: Combatant, events: BattleEvent[]):
 }
 const enemyHealingBlockedFor = (ctx: BattleContext, c: Combatant) => c.side === 'enemy' && enemyHealingBlocked(ctx.perks);
 
+/** S168: share of sandstorm/hail chip damage a Pokémon shrugs off from the weather it has endured before. */
+export function weatherCut(content: Content, mon: PokemonInstance, weather: Weather): number {
+  const cfg = content.balance.weatherTolerance;
+  const levels = Math.min(cfg.maxLevels, Math.floor((mon.weatherEndured?.[weather] ?? 0) / cfg.turnsPerLevel));
+  return Math.min(1, levels * cfg.cutPerLevel);
+}
+
 function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEvent[], tick = true): void {
   const weather = ctx.battle.weather;
   if (!weather) return;
@@ -5194,7 +5201,9 @@ function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEven
       const ability = abilityIn(ctx, c);
       if (ability && WEATHER_DAMAGE_IMMUNE[ability]?.includes(weather.id)) continue;
       if (Held.hooksOf(ctx, c.mon, c.side).some(({ hook }) => hook.hook === 'weatherImmune' && hook.weathers.includes(weather.id))) continue;
-      const { lost, lastStand } = takeHp(ctx, c, Math.max(1, Math.floor(calcStats(ctx.content, c.mon).hp / 16)));
+      const chip = Math.max(1, Math.floor((calcStats(ctx.content, c.mon).hp / 16) * (1 - weatherCut(ctx.content, c.mon, weather.id))));
+      c.mon.weatherEndured = { ...c.mon.weatherEndured, [weather.id]: (c.mon.weatherEndured?.[weather.id] ?? 0) + 1 };
+      const { lost, lastStand } = takeHp(ctx, c, chip);
       events.push({ type: 'weatherDamage', side: c.side, weather: weather.id, amount: lost, hpAfter: c.mon.hp });
       if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
     }
