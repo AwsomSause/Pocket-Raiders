@@ -4,7 +4,7 @@
 import type Phaser from 'phaser';
 import { contractBoard, contractDone } from '../core/contracts';
 import { promptById } from '../core/interaction/prompt';
-import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
+import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
 import { services } from '../game/services';
 import { pokemonAssetIds } from '../assets/catalog';
 import { playCry, playMusicLazy } from './audio';
@@ -121,7 +121,7 @@ function runAction(host: TownHost, b: TownBuilding, a: TownAction, done: (msg: s
     }
     case 'buy': {
       const t = townOf(p);
-      return choose(host, `${a.name} · ${p.bankCredits} credits`, a.goods.map((g) => ({ label: `${g.label}${g.rarity !== 'common' ? ` (${g.rarity})` : ''}`, desc: `${(t.sets[g.set] ?? []).includes(g.id) && g.set !== 'boon' ? 'Owned' : costText(g.cost)} ${g.desc}` })), (i) => call(a, { choice: a.goods[i]!.id }, done), again);
+      return choose(host, `${a.name} · ${p.bankCredits} credits`, a.goods.map((g) => ({ label: `${g.label}${g.rarity !== 'common' ? ` (${g.rarity})` : ''}`, desc: `${(t.sets[g.set] ?? []).includes(g.id) && g.set !== 'boon' ? 'Owned' : costText(g.cost?.credits ? { ...g.cost, credits: townPrice(p, g.cost.credits) } : g.cost)} ${g.desc}` })), (i) => call(a, { choice: a.goods[i]!.id }, done), again);
     }
     case 'equip': {
       const owned = ownedSet(p, a.set!);

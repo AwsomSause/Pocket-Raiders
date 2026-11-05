@@ -358,3 +358,20 @@ describe('Sponsor Deals (S359)', () => {
     expect(hit.bankCredits).toBe(p.bankCredits + 70);
   });
 });
+
+describe('Town Economy (S347)', () => {
+  it('Fan Club tiers cut credit prices in the town shops', async () => {
+    const { townDiscount, townPrice } = await import('../../src/core/town');
+    const p = rich();
+    expect(townDiscount(p)).toBe(0);
+    expect(townPrice(p, 60)).toBe(60);
+    const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = Array.from({ length: 2 }, () => run) as never; // 26 fans = tier 1
+    expect(townDiscount(p)).toBeCloseTo(0.05);
+    expect(townPrice(p, 60)).toBe(57);
+    const before = p.bankCredits;
+    const q = ok(p, 'hall-guild', { choice: 'guild-medic' }).profile;
+    expect(q.bankCredits).toBe(before - 57);
+    expect(townPrice(p, 0)).toBe(0);
+  });
+});

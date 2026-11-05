@@ -1,0 +1,1 @@
+- Meta/Hub slice 7: Town Economy (S347): each Fan Club tier reached takes 5% off every credit price in the town's buy shops (up to 20%; `town.json` `economy.discountPerTier`, `townPrice`/`townDiscount` in `core/town/views.ts`, applied in `runBuy` and the shop list). Derived from history, no save change. Limited: prices do not change with other deeds yet (no market swings).
