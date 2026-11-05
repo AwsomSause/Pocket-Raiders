@@ -81,7 +81,7 @@ import { genderOf, oppositeGender, sameGender } from '../gender';
 import * as Held from './held';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
-import { absorbHit, advanceRaid, chargedDamage, cheerProblem, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, reinforcementDue, takeExtraAction } from '../raid/raid';
+import { absorbHit, advanceRaid, chargedDamage, cheerProblem, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
@@ -879,6 +879,14 @@ function raidEndOfTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, 
       events.push({ type: 'raid', tone: 'warn', text: 'Time is up! The raid boss slips away...' });
     } else {
       applyBossPhase(ctx, enemy, a.phase, events);
+    }
+  }
+  // S391: a Support Pokémon on the field mends itself a little each turn.
+  if (!timeout && !battle.outcome && battle.raid) {
+    const mend = Math.min(supportHeal(content, battle, player.mon), maxHp(content, player.mon) - player.mon.hp);
+    if (mend > 0) {
+      player.mon.hp += mend;
+      events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
     }
   }
   // The named rival's strike (no dice): a rival that lands the final blow takes half the prize.
@@ -1991,7 +1999,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
