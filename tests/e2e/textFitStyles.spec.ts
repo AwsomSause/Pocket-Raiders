@@ -22,6 +22,7 @@ const TARGETS: Record<string, [string, unknown][]> = {
   legacy: [['LegacyGallery', undefined], ['Memories', undefined]],
   hubmenus: [['Hub', undefined]],
   map: [['Map', undefined]],
+  welcome: [['Welcome', { phase: 'log', replay: true }], ['Welcome', { phase: 'offer', replay: true }], ['Tutorial', undefined]],
 };
 
 for (const size of SIZES) {
@@ -33,7 +34,7 @@ for (const size of SIZES) {
     await page.goto('/?seed=textfit&debug=1');
     await expect.poll(() => active(page), { timeout: 30_000 }).toBe('MainMenu');
     const found: string[] = [];
-    const RUNLESS = ['title', 'trainer', 'starter', 'legacy', 'hubmenus', 'settings'];
+    const RUNLESS = ['welcome', 'title', 'trainer', 'starter', 'legacy', 'hubmenus', 'settings'];
     const sweepScreens = async (runless: boolean) => {
     for (const [screen, targets] of Object.entries(TARGETS)) {
       if ((ONLY && !ONLY.includes(screen)) || RUNLESS.includes(screen) !== runless) continue;

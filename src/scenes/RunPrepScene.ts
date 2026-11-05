@@ -7,8 +7,6 @@ import { notify } from '../ui/overlays';
 import { loanProblem, presetSlotCount } from '../core/bank';
 import { LICENSES, licenseName, type LicenseId } from '../core/license';
 import Phaser from 'phaser';
-import { decodeSeedCode } from '../core/seedCode';
-import { cardGhost, decodeChallengeCard, decodeTeamCode } from '../core/shareCodes';
 import { TYPE_NAMES, type TypeName } from '../core/contentSchema';
 import {
   buildSummary,
@@ -33,12 +31,12 @@ import { Menu } from '../ui/widgets';
 import { AERO, drawGlass, glassPanel as drawPanel, type MotionLevel } from '../ui/aero';
 import { dailySetup } from '../core/daily';
 import { boardLines } from '../core/boards';
-import { decodeGhostCode, keepGhost } from '../core/ghost';
 import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
 import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
 import { isClaimed } from '../core/quests';
 import type { RunModifiersData } from './RunModifiersScene';
 import type { RunStartersData } from './RunStartersScene';
+import type { RunSeedData } from './RunSeedScene';
 
 export interface RunPrepData {
   archetypeId: string;
@@ -335,6 +333,12 @@ export class RunPrepScene extends Phaser.Scene {
     this.scene.start('RunStarters', { desk, prep: this.prep } satisfies RunStartersData);
   }
 
+  /** The seed and share codes have their own page (a real text box that works by touch). */
+  private openSeed(): void {
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: this.rules, page: this.page };
+    this.scene.start('RunSeed', { desk } satisfies RunSeedData);
+  }
+
   private refresh(changes: Partial<RunPrep> = {}, extra: Partial<RunPrepData> = {}): void {
     this.scene.restart({ archetypeId: this.archetypeId, prep: { ...this.prep, ...changes }, seed: this.seed, focus: this.focusIndex, rules: this.rules, modCursor: this.modCursor, page: this.page, ...extra } satisfies RunPrepData);
   }
@@ -428,47 +432,8 @@ export class RunPrepScene extends Phaser.Scene {
         return this.start();
       case 'modifier':
         return this.openModifiers();
-      case 'seed': {
-        const value = window.prompt('Seed for this run (leave empty for a random one):', this.seed ?? '');
-        if (value === null) return;
-        // A friend's ghost code (GH1.…): their seed code plus what they did, shown against your run at the end.
-        if (value.trim().startsWith('GH1.')) {
-          const ghost = decodeGhostCode(value);
-          if (!ghost.ok) return this.refresh({}, { notice: ghost.reason });
-          services().session.changeProfile((pr) => keepGhost(pr, ghost.parts.seed, ghost.ghost));
-          this.seed = ghost.parts.seed;
-          const trainer = services().session.content.archetypes.has(ghost.parts.archetypeId) ? ghost.parts.archetypeId : this.archetypeId;
-          this.scene.restart({ archetypeId: trainer, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: ghost.parts.rules, page: this.page, notice: `Ghost of ${ghost.ghost.from} loaded: race their seed.` } satisfies RunPrepData);
-          return;
-        }
-        // A challenge card (CC1.…): seed, trainer and rules, with the score to beat shown at the end (core/shareCodes.ts).
-        if (value.trim().startsWith('CC1.')) {
-          const card = decodeChallengeCard(value);
-          if (!card.ok) return this.refresh({}, { notice: card.reason });
-          services().session.changeProfile((pr) => keepGhost(pr, card.parts.seed, cardGhost(card.score)));
-          this.seed = card.parts.seed;
-          const trainer = services().session.content.archetypes.has(card.parts.archetypeId) ? card.parts.archetypeId : this.archetypeId;
-          this.scene.restart({ archetypeId: trainer, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: card.parts.rules, page: this.page, notice: card.note ?? `Challenge from ${card.score.from}: ${card.score.title}. Beat ${card.score.badges} badges.` } satisfies RunPrepData);
-          return;
-        }
-        // A team code (TM1.…) just shows the team.
-        if (value.trim().startsWith('TM1.')) {
-          const { content } = services().session;
-          const team = decodeTeamCode(value, (id) => content.species.has(id));
-          return this.refresh({}, { notice: team.ok ? `Team: ${team.team.map((m) => `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`).join(', ')}${team.note ? ` (${team.note})` : ''}` : team.reason });
-        }
-        // A shared seed code (PR1.…) also sets the trainer and the rules.
-        if (value.trim().startsWith('PR1.')) {
-          const code = decodeSeedCode(value);
-          if (!code.ok) return this.refresh({}, { notice: code.reason });
-          this.seed = code.parts.seed;
-          const trainer = services().session.content.archetypes.has(code.parts.archetypeId) ? code.parts.archetypeId : this.archetypeId;
-          this.scene.restart({ archetypeId: trainer, prep: this.prep, seed: this.seed, focus: this.focusIndex, rules: code.parts.rules, page: this.page, notice: code.note ?? 'Seed code loaded: seed, trainer and rules set.' } satisfies RunPrepData);
-          return;
-        }
-        this.seed = value.trim() || null;
-        return this.refresh();
-      }
+      case 'seed':
+        return this.openSeed();
       case 'save':
         return this.openPresets('save');
       case 'load':

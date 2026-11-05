@@ -202,6 +202,7 @@ export type BattleEvent =
   | { type: 'refused'; side: Side; uid: string; moveId: string }
   | { type: 'initiative'; side: Side; uid: string; from: string; to: string }
   | { type: 'teamwork'; side: Side; uid: string; partner: string; name: string; stats: string[] }
+  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number }
   | { type: 'combo'; side: Side; from: string; to: string; stat: 'atk' | 'spa' }
   | { type: 'newMove'; side: Side; uid: string; moveId: string; replaced: string | null }
   | { type: 'turningPoint'; side: Side; uid: string; emotion: string }
@@ -2000,7 +2001,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3278,7 +3279,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
-    if (fx.leaveOne || target.vol.endure) damage = Math.min(damage, target.mon.hp - 1);
+    if (fx.leaveOne || target.vol.endure || (ctx.battle.pacifist && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;

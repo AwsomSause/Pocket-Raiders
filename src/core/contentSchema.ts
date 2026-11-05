@@ -1967,6 +1967,8 @@ export const BalanceSchema = z.object({
   /** Penny Pincher: a won run that spent at most this much in shops. */
   frugalRunMaxSpent: z.number().int().min(0).default(300),
   /** Badge Powers (idea S483): each Gym badge boosts your Pokémon of the Leader's types and cuts their super-effective damage taken. */
+  /** Elite Four Rematches (S127): after this many battles won per region cleared so far, the Elite Four field remixed teams. */
+  eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   attributeItemFalloff: z.object({ afterBoosts: z.number().int().min(0), factor: z.number().min(0).max(1) }).default({ afterBoosts: 2, factor: 0.5 }),
   partyMax: z.number().int().positive(),
@@ -2027,6 +2029,8 @@ export const BalanceSchema = z.object({
     silverBattles: z.number().int().min(1),
     goldBattles: z.number().int().min(1),
     rankResearch: z.object({ bronze: z.number().int().min(0), silver: z.number().int().min(0), gold: z.number().int().min(0), master: z.number().int().min(0) }),
+    /** Run events G: each Mastery Shard counts as this many battles toward its species' goals when the run ends. */
+    shardBattles: z.number().int().min(1).default(5),
   }),
   /** Battle transformations (M8.5): which bosses may use them. */
   transformations: z.object({
@@ -2686,7 +2690,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     end: z.enum(['defeated', 'exposed', 'allied']).optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
-  z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
+  z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
   /** Permanent choices (spec §17): records a decision in the run's choice history (the first answer to an id stands). */
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
 ]);
@@ -2724,6 +2728,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     ally: z.string().optional(),
     /** Evil Teams: a member of the run's team at this rank (their Pokémon, name and battle rule; core/evil). */
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
+    /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
+    mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
     apprentice: z.boolean().optional(),
     name: z.string(),

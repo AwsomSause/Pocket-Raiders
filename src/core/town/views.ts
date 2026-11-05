@@ -130,6 +130,13 @@ export function fanClub(p: Profile): { fans: number; tiers: { label: string; nee
   return { fans, tiers, money: tiers.filter((t) => t.reached).reduce((n, t) => n + t.money, 0) };
 }
 
+/** Town Economy (S347): the town's share off credit prices, earned by your deeds (Fan Club tiers). 0 to 0.2. */
+export const townDiscount = (p: Profile): number => fanClub(p).tiers.filter((t) => t.reached).length * TOWN.economy.discountPerTier;
+/** A credit price after the town's discount (never below 1 credit when it was not free). */
+export function townPrice(p: Profile, credits: number): number {
+  return credits <= 0 ? credits : Math.max(1, Math.round(credits * (1 - townDiscount(p))));
+}
+
 export type LedgerFilter = 'all' | 'wins' | 'losses';
 export type LedgerSort = 'newest' | 'oldest' | 'regions' | 'encounters';
 export const LEDGER_FILTERS: LedgerFilter[] = ['all', 'wins', 'losses'];

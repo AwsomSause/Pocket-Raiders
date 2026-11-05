@@ -336,7 +336,11 @@
           "boost": 1.25,
           "text": "The sand surges! Rock moves hit harder!"
         },
-        "noHealing": true
+        "noHealing": true,
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
+        }
       },
       "enrage": {
         "afterTurn": 8,
@@ -394,6 +398,10 @@
           "type": "dragon",
           "boost": 1.2,
           "text": "Draconic energy surges!"
+        },
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
         }
       },
       "extraMoves": [
@@ -470,7 +478,11 @@
           "everyTurns": 3,
           "boost": 1.5
         },
-        "noHealing": true
+        "noHealing": true,
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
+        }
       },
       "extraMoves": [
         "earth-power"
@@ -568,6 +580,10 @@
           ],
           "everyTurns": 4,
           "boost": 1.5
+        },
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
         }
       },
       "extraMoves": [
@@ -771,6 +787,12 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 4
+      },
+      "modifiers": {
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
+        }
       }
     },
     {
@@ -854,6 +876,10 @@
           ],
           "everyTurns": 3,
           "boost": 1.5
+        },
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
         }
       },
       "extraMoves": [
@@ -1050,6 +1076,12 @@
         ],
         "draftExtra": 1,
         "joinChance": 0.4
+      },
+      "modifiers": {
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
+        }
       }
     },
     {
@@ -1107,6 +1139,10 @@
           "type": "water",
           "boost": 1.2,
           "text": "The storm surges! Water moves hit harder!"
+        },
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
         }
       },
       "rewards": {

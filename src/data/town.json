@@ -1486,6 +1486,18 @@
      "limit": "none",
      "dynamic": "museum",
      "options": []
+    },
+    {
+     "id": "vault-store",
+     "name": "Relic Vault",
+     "desc": "Lock away up to two uncursed relics. They join every run from then on. Pick a stored relic to take it out.",
+     "kind": "pick",
+     "rows": [
+      "S464"
+     ],
+     "limit": "none",
+     "dynamic": "vault",
+     "options": []
     }
    ]
   },
@@ -2853,6 +2865,21 @@
       {"id": "guild-cook", "label": "Cook", "desc": "2 Hyper Potions and 2 Full Heals.", "set": "boon", "cost": {"credits": 55}, "reward": {"items": {"hyper-potion": 2, "full-heal": 2}}},
       {"id": "guild-porter", "label": "Porter", "desc": "3 Ethers and a Full Restore.", "set": "boon", "cost": {"credits": 70}, "reward": {"items": {"ether": 3, "full-restore": 1}}},
       {"id": "guild-treasurer", "label": "Treasurer", "desc": "₽500 starting money.", "set": "boon", "cost": {"credits": 45}, "reward": {"money": 500}}
+     ]
+    },
+    {
+     "id": "hall-sponsor",
+     "name": "Sponsor Deals",
+     "desc": "Sign one sponsor before a run. Meet their goal and they pay credits when the run ends; miss it and nothing is lost.",
+     "kind": "pick",
+     "rows": [
+      "S359"
+     ],
+     "limit": "run",
+     "options": [
+      {"id": "sponsor-trail", "label": "Trail Co.", "desc": "Clear 1 region: 40 credits.", "say": "Trail Co. will watch your progress.", "once": false, "reward": {"stuff": {"sponsor-trail": 1}}},
+      {"id": "sponsor-gear", "label": "Gym Gear", "desc": "Earn 4 badges: 70 credits.", "say": "Gym Gear counts your badges.", "once": false, "reward": {"stuff": {"sponsor-gear": 1}}},
+      {"id": "sponsor-drinks", "label": "Champion Drinks", "desc": "Win the run: 130 credits.", "say": "Champion Drinks bets on a win.", "once": false, "reward": {"stuff": {"sponsor-drinks": 1}}}
      ]
     },
     {
@@ -4252,6 +4279,12 @@
   },
   "say": "Mush. Edible, technically."
  },
+ "sponsors": [
+  { "id": "sponsor-trail", "goal": { "regions": 1 }, "credits": 40 },
+  { "id": "sponsor-gear", "goal": { "badges": 4 }, "credits": 70 },
+  { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 }
+ ],
+ "economy": { "discountPerTier": 0.05 },
  "fanClub": [
   { "fans": 20, "money": 100, "label": "Hometown fans" },
   { "fans": 60, "money": 250, "label": "Regional fan club" },
@@ -4259,6 +4292,7 @@
   { "fans": 400, "money": 1000, "label": "Worldwide stardom" }
  ],
  "caps": {
+  "vault": 2,
   "notes": 30,
   "graffiti": 24,
   "photos": 12,

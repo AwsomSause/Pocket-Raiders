@@ -737,6 +737,8 @@ export const BattleStateSchema = z.object({
   critStreak: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Nuzlocke: this wild Pokémon is not the area's first encounter, so it can't be caught (core/nuzlocke.ts). */
   nuzlockeNoCatch: z.boolean().optional(),
+  /** Pacifist run: damage never knocks out this wild Pokémon (core/rules.ts). */
+  pacifist: z.boolean().optional(),
   /** A fight on an expedition route: afterwards the run goes back to the expedition, not the map or a draft. */
   expedition: z.boolean().optional(),
   /** A double battle (core/battle/doubles.ts): the second Pokémon on each side. */
@@ -1694,7 +1696,7 @@ export const SettingsSchema = z.object({
   /** Plaza styles (Kice 2026-11-02): how the Trainer Plaza is drawn (core/presentation/plazaStyles.ts). */
   plazaStyle: z.enum(PLAZA_STYLE_IDS).default('aero'),
   /** Hub Town part 3 (Kice 2026-11-02): walk the Hub Town overworld, or use the Arena Lobby tile menu. */
-  hubStyle: z.enum(['town', 'lobby']).default('lobby'),
+  hubStyle: z.enum(['town', 'lobby']).default('town'),
   /** Tutorial and update log (core/tutorial.ts): the last patch-notes id shown, whether the optional tutorial was offered, and the professors finished. */
   lastSeenUpdate: z.string().default(''),
   tutorialOffered: z.boolean().default(false),
@@ -1710,6 +1712,12 @@ export const SettingsSchema = z.object({
   shakeStory: z.number().min(0).max(1).default(1),
   /** S252 Day-night palette shift: the branching map takes the light of the local time of day (off by default). */
   mapDayNight: z.boolean().default(false),
+  /** S257 Cutscene skip with recap: skipping a cutscene shows a one-line text summary of it (off by default). */
+  skipRecap: z.boolean().default(false),
+  /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
+  livelyTeam: z.boolean().default(false),
+  /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
+  victoryPoses: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

@@ -13,6 +13,7 @@
 // next region, or wins the run after the last one.
 
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
+import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
@@ -158,7 +159,7 @@ import { styleTrick } from './rivals/tricks';
 import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, recordNarrativeDefeat } from './rivals/narrativeDefeat';
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
-import { bondEvolves, bondLessons, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
+import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
 import { createStoryState, emit } from './story/record';
@@ -743,6 +744,11 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (mode === 'machBike' && node.kind === 'wild') {
     run.afterDecisions = 'reward';
     continueAfterDecisions(content, run);
+    return run;
+  }
+  // A Nap Pod (run events G): the party sleeps through the next wild stop: no battle and no reward.
+  if (node.kind === 'wild' && (run.itemCounters?.['nap'] ?? 0) > 0) {
+    run.itemCounters = { ...run.itemCounters, nap: 0 };
     return run;
   }
   // A Repel keeps a wild Pokémon away: no battle and no reward, but the level counts.
@@ -1588,7 +1594,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         case 'elite': {
           const memberId = stage.eliteFour[node.column - 1];
           if (!memberId) throw new Error(`No Elite Four member for column ${node.column}`);
-          return planEliteFour(content, archetype, memberId, run.regionIndex, scale, r, bossRemix(run.rules));
+          return planEliteFour(content, archetype, memberId, run.regionIndex, scale, r, bossRemix(run.rules) || eliteRematchDue(content, run));
         }
         case 'champion':
           return planChampion(content, archetype, stage.leaderId, run.regionIndex, scale, r, bossRemix(run.rules) || run.story.flags[FINALE_FLAG] === 'pending', isFinalBoss(content, run));
@@ -2198,6 +2204,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (wasForced && action.kind === 'switch' && outgoing) {
     const combo = playerCombo(content, run, outgoing, run.party[action.partyIndex]!.uid);
     if (combo) engineEvents.push(combo);
+    else if (content.balance.careEffects) {
+      const lvl = bondLevelHandover(content, run, outgoing, run.party[action.partyIndex]!.uid);
+      if (lvl) engineEvents.push(lvl);
+    }
   }
   // Teamwork pairs (Plusle + Minun ...): a pair member sent in beside its partner gets a boost.
   if (action.kind === 'switch' && content.balance.careEffects) {

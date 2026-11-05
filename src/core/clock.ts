@@ -5,6 +5,7 @@
 // scenery read the clock but never change it.
 
 import type { Content } from './contentSchema';
+import { getMode } from './rules';
 import type { RunState } from './state';
 
 export const PERIODS = ['morning', 'afternoon', 'evening', 'night'] as const;
@@ -67,15 +68,35 @@ export function tideShopMultiplier(content: Content, run: Pick<RunState, 'clock'
 /** Merchants keep hours: cheaper early in the day, dearer after dark. */
 export const shopHoursMultiplier = (content: Content, run: Pick<RunState, 'clock'>): number => content.balance.clock.shopHours[periodOf(run)];
 
+/**
+ * Time Pressure (S20): in that mode the reward bonus melts for every game day past the pace. Reads the day counter
+ * only (never a real clock), and each day is charged once (`tp-day`). The melt never goes below the mode's own bonus.
+ */
+export function timePressureTick(run: RunState): void {
+  const tp = getMode(run.rules.modeId)?.timePressure;
+  if (!tp || !run.rules.progressionEligible) return;
+  const pace = tp.daysPerRegion * (run.regionIndex + 1);
+  const charged = run.itemCounters?.['tp-day'] ?? 0;
+  const from = Math.max(charged, pace);
+  if (run.clock.day <= from) return;
+  const bonus = getMode(run.rules.modeId)?.rewardBonus ?? 0;
+  const lostSoFar = (run.itemCounters?.['tp-lost'] ?? 0) / 1000;
+  const lose = Math.min((run.clock.day - from) * tp.perDay, Math.max(0, bonus - lostSoFar));
+  run.rules = { ...run.rules, rewardMultiplier: Math.round((run.rules.rewardMultiplier - lose) * 1000) / 1000 };
+  run.itemCounters = { ...run.itemCounters, 'tp-day': run.clock.day, 'tp-lost': Math.round((lostSoFar + lose) * 1000) };
+}
+
 /** One step on the map (mutates `run`). */
 export function stepClock(content: Content, run: RunState): void {
   advanceClock(run, content.balance.clock.ticksPerStep);
+  timePressureTick(run);
 }
 
 /** Sleep until the next morning: a new day begins (mutates `run`). Resting in the morning also takes a day. */
 export function restUntilMorning(run: RunState): void {
   run.clock.day += 1;
   run.clock.tick = 0;
+  timePressureTick(run);
 }
 
 export const SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter'] as const;

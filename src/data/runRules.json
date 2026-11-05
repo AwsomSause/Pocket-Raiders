@@ -2,7 +2,11 @@
   "note": "Untitled doc §13–16 (Phase E). Difficulty presets, optional modifiers, Death-Block and game modes. A modifier or mode with status \"planned\" is listed but cannot be picked.",
   "ruleVersion": 1,
   "multiplierCap": 2.0,
-  "heat": { "max": 10, "enemyLevelPerHeat": 1, "bonusPerHeat": 0.1 },
+  "heat": {
+    "max": 10,
+    "enemyLevelPerHeat": 1,
+    "bonusPerHeat": 0.1
+  },
   "difficulties": [
     {
       "id": "story",
@@ -246,6 +250,15 @@
       "doublesOnly": true
     },
     {
+      "id": "pacifist",
+      "name": "Pacifist",
+      "status": "supported",
+      "bonus": 0.3,
+      "blurb": "Wild Pokémon can't be knocked out: win by catching them or running away. Trainer fights are normal.",
+      "group": "pacifist",
+      "pacifist": true
+    },
+    {
       "id": "level-50-cup",
       "name": "Level 50 Cup",
       "status": "supported",
@@ -424,6 +437,16 @@
       "startDraft": true,
       "rewardBonus": 0.05,
       "blurb": "Choose your starter, then pick 1 of 3 run-wide rules (Glass Cannon, Marathon, Frugal...). The rule lasts the whole run."
+    },
+    {
+      "id": "time-pressure",
+      "name": "Time Pressure",
+      "status": "supported",
+      "progressionEligible": true,
+      "checkpoints": false,
+      "rewardBonus": 0.3,
+      "timePressure": { "daysPerRegion": 14, "perDay": 0.01 },
+      "blurb": "A run clock in game days: end rewards start +30%, and melt 1% for every day past 14 days per region. Resting costs days. Steps and rests cost time, battles do not."
     },
     {
       "id": "weekly",

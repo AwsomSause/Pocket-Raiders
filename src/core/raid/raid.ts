@@ -172,11 +172,18 @@ export function rotatingWeakness(content: Content, battle: BattleState, turn = b
   return { type: rot.types[Math.floor(turn / rot.everyTurns) % rot.types.length]!, boost: rot.boost };
 }
 
+/** S397: the zone of the boss that is exposed now ('body' takes physical hits harder, 'core' special), or null. Stateless: follows the turn number. */
+export function exposedWeakSpot(content: Content, battle: BattleState, turn = battle.turn): { zone: 'body' | 'core'; boost: number } | null {
+  const ws = battle.raid ? getRaid(content, battle.raid.id).modifiers.weakSpots : undefined;
+  if (!ws) return null;
+  return { zone: Math.floor(turn / ws.everyTurns) % 2 === 0 ? 'body' : 'core', boost: ws.boost };
+}
+
 /**
  * Damage multiplier from raid field rules and cheers for one hit: your Offense cheer and the rotating weakness
  * on your hits; the elemental surge and your Defense cheer on the boss's hits.
  */
-export function raidFieldMultiplier(content: Content, battle: BattleState, attacker: 'player' | 'enemy', moveType: TypeName): number {
+export function raidFieldMultiplier(content: Content, battle: BattleState, attacker: 'player' | 'enemy', moveType: TypeName, physical?: boolean): number {
   const raid = battle.raid;
   if (!raid) return 1;
   const mods = getRaid(content, raid.id).modifiers;
@@ -185,6 +192,8 @@ export function raidFieldMultiplier(content: Content, battle: BattleState, attac
     if (raid.cheerOffense > 0) m *= OFFENSE_CHEER[raid.cheerLevel - 1]!;
     const weak = rotatingWeakness(content, battle);
     if (weak && weak.type === moveType) m *= weak.boost;
+    const spot = physical === undefined ? null : exposedWeakSpot(content, battle);
+    if (spot && (spot.zone === 'body') === physical) m *= spot.boost;
   } else {
     if (mods.surge && mods.surge.type === moveType) m *= mods.surge.boost;
     m *= 1 + enrageStacks(content, battle) * enrageStep(content, battle);
@@ -298,6 +307,10 @@ export function advanceRaid(content: Content, battle: BattleState, boss: Pokemon
     const next = rotatingWeakness(content, battle, battle.turn + 1)!;
     if (next.type !== rotatingWeakness(content, battle)!.type) actions.push({ kind: 'note', tone: 'info', text: `The boss is now weak to ${next.type}-type moves!` });
   }
+  if (def.modifiers.weakSpots) {
+    const next = exposedWeakSpot(content, battle, battle.turn + 1)!;
+    if (next.zone !== exposedWeakSpot(content, battle)!.zone) actions.push({ kind: 'note', tone: 'info', text: next.zone === 'body' ? "The boss's body is exposed! Physical moves hit harder." : "The boss's core is exposed! Special moves hit harder." });
+  }
   const share = boss.hp / maxHp(content, boss);
   def.phases.forEach((phase, i) => {
     if (raid.phasesDone.includes(i) || share > phase.atHp) return;
@@ -398,6 +411,7 @@ export function describeMechanics(def: RaidDef, scale?: { content: Content; badg
   if (m.surge) out.push(`${m.surge.type} surge`);
   if (m.noHealing) out.push('no healing');
   if (m.rotatingWeakness) out.push('rotating weakness');
+  if (m.weakSpots) out.push('weak spots (body / core)');
   if (def.extraMoves.length > 0) out.push(`${4 + def.extraMoves.length} moves`);
   if (def.summons.length > 0) out.push(`${def.summons.length} reinforcement${def.summons.length > 1 ? 's' : ''}`);
   return out;

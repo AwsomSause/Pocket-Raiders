@@ -59,6 +59,8 @@ export const RunRulesDataSchema = z.object({
       inverseChart: z.boolean().optional(),
       gauntlet: z.boolean().optional(),
       doublesOnly: z.boolean().optional(),
+      /** Pacifist (S300): wild Pokémon can't be knocked out; win by catching or running. */
+      pacifist: z.boolean().optional(),
       /** Level 50 Cup (S290): the party's level cap for the whole run. */
       levelCap: z.number().int().min(1).optional(),
     }),
@@ -73,7 +75,7 @@ export const RunRulesDataSchema = z.object({
     once: z.object({ pool: z.string().optional(), trainer: z.string().optional(), title: z.string().optional(), bankCredits: z.number().int().optional(), text: z.string() }),
     repeat: z.object({ bankCredits: z.number().int().optional(), candies: z.number().int().optional(), text: z.string() }),
   })),
-  modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), blurb: z.string() })).min(1),
+  modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), /** Time Pressure (S20): the mode's reward bonus melts by `perDay` for every in-game day past `daysPerRegion` x regions entered (core/clock.ts timePressureTick). */ timePressure: z.object({ daysPerRegion: z.number().int().min(1), perDay: z.number().positive() }).optional(), blurb: z.string() })).min(1),
 });
 export const RUN_RULES = RunRulesDataSchema.parse(rulesJson);
 
@@ -239,6 +241,8 @@ export function battleContent(content: Content, rules: Pick<RunRules, 'modifierI
 export const gauntlet = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.gauntlet);
 /** Doubles Only (S292): every fight that can be a double battle is one. */
 export const doublesOnly = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.doublesOnly);
+/** Pacifist (S300): wild Pokémon are never knocked out by damage. */
+export const pacifist = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.pacifist);
 export const noHealStops = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noHealStops || m.gauntlet);
 export const battleMoneyScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.battleMoney);
 export const researchScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.researchScale);

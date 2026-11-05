@@ -1,0 +1,1 @@
+- Economy/items/risk slice 3, Exp. Charm (S432, first of the Charms): rare run-long item `exp-charm`, wild battles give +25% EXP (encounter mod `exp`, same as White Flute). Reuses the Lucky Egg icon. Coin and Catch charms already existed (`charm-coin`, `catching-charm`); Oval Charm (eggs) not built. No save change. Test `tests/unit/expCharm.test.ts`.

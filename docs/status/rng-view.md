@@ -1,0 +1,1 @@
+- Social/tech slice 5 (S333 RNG Stream Visualizer): `core/tools/rngView.ts` `peekStreams` lists a run's named streams with their state and next 3 values, read on a copy so no real roll moves. Hub > Tools & Community > "RNG streams (debug)". Tests `tests/unit/rngView.test.ts`. No save change. Limited: no history of past rolls.

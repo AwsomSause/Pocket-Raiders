@@ -1815,6 +1815,359 @@
         "slowFactor": 1,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "battle-factory",
+      "name": "Battle Factory",
+      "category": "skill",
+      "blurb": "Rent a team and win rounds.",
+      "instructions": "Rent three Pokémon, then win rounds against rental teams. Between rounds you may swap a rental. Fights are played out by the battle engine.",
+      "unlockRequirements": {
+        "badges": 1,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "level": 20,
+            "rounds": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "level": 25,
+            "rounds": 4
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "level": 30,
+            "rounds": 5
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "1 point per round won.",
+      "medals": {
+        "bronze": 0.34,
+        "silver": 0.6,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 120,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 200,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 320,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "One try per stop; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "battle-palace",
+      "name": "Battle Palace",
+      "category": "skill",
+      "blurb": "Set the lineup; they fight on their own.",
+      "instructions": "Pick the lineup order from five Pokémon. In the Palace your Pokémon choose their own moves. Win rounds in a row.",
+      "unlockRequirements": {
+        "badges": 1,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "level": 20,
+            "rounds": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "level": 25,
+            "rounds": 4
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "level": 30,
+            "rounds": 5
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "1 point per round won.",
+      "medals": {
+        "bronze": 0.34,
+        "silver": 0.6,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 120,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 200,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 320,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "One try per stop; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "battle-arcade",
+      "name": "Battle Arcade",
+      "category": "skill",
+      "blurb": "Spin the wheel, then fight.",
+      "instructions": "A wheel sets a modifier for the next fight (levels up or down). You may spin again a few times. Fight, and win rounds.",
+      "unlockRequirements": {
+        "badges": 1,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "level": 20,
+            "rounds": 3,
+            "spins": 2
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "level": 25,
+            "rounds": 4,
+            "spins": 2
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "level": 30,
+            "rounds": 5,
+            "spins": 1
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "1 point per round won.",
+      "medals": {
+        "bronze": 0.34,
+        "silver": 0.6,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 120,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 200,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 320,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "One try per stop; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "battle-pyramid",
+      "name": "Battle Pyramid",
+      "category": "skill",
+      "blurb": "Climb dark floors.",
+      "instructions": "Feel through a dark floor to the stairs. Hidden trainers fight you when you step on them: a win scores extra, a loss ends the climb.",
+      "unlockRequirements": {
+        "badges": 1,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "level": 20,
+            "floors": 2,
+            "steps": 14,
+            "foes": 1
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "level": 25,
+            "floors": 3,
+            "steps": 14,
+            "foes": 2
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "level": 30,
+            "floors": 3,
+            "steps": 12,
+            "foes": 2
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "2 points per floor, 1 per trainer beaten.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.8
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 120,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 200,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 320,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "One try per stop; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
     }
   ]
 }

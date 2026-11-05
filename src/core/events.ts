@@ -1150,7 +1150,8 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     const rivalTeam = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
     const evil = evilBattle(content, run, b);
     const fellow = b.apprentice ? run.mentor?.fellow ?? null : null;
-    const team = fellow ? Array.from({ length: b.size }, (_, i) => {
+    const mirrorLead = b.mirror ? run.party[activeIndex] : undefined;
+    const team = mirrorLead ? [newMon(content, run, mirrorLead.speciesId, Math.min(cap, Math.max(1, mirrorLead.level + b.levelBonus)), 'e')] : fellow ? Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + apprenticeLevelBonus(fellow) + (i === b.size - 1 ? 1 : 0)));
       const type = fellow.types[i % Math.max(1, fellow.types.length)];
       return newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, [], type ? [type] : [], rng), level, rng), level, 'e');

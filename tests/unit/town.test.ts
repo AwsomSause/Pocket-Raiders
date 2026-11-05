@@ -6,7 +6,7 @@ import { createProfile } from '../../src/core/profile';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { applyStartGrants, startGrants } from '../../src/core/legacy';
 import { ProfileSchema, type Profile } from '../../src/core/state';
-import { applyReward, basementCode, collections, dummyHit, getTownAction, jukeboxTracks, ledger, localDay, mailToday, optionsOf, recordTownRun, spendTownStart, statueTarget, TOWN, townAction, townOf, townProblem, townStartGrants, todaysQuests, townStats, townWeather, visitBuilding, KINDS } from '../../src/core/town';
+import { recordTownRun as recordRun, applyReward, basementCode, collections, dummyHit, getTownAction, jukeboxTracks, ledger, localDay, mailToday, optionsOf, recordTownRun, spendTownStart, statueTarget, TOWN, townAction, townOf, townProblem, townStartGrants, todaysQuests, townStats, townWeather, visitBuilding, KINDS } from '../../src/core/town';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { content } from './helpers';
 
@@ -323,5 +323,55 @@ describe('Guild Hall Board (S364)', () => {
     const g = townStartGrants(content, p);
     expect(g.items['super-potion']).toBe(4);
     expect(g.money).toBe(money + 500);
+  });
+});
+
+describe('Relic Vault (S464)', () => {
+  it('stores up to two uncursed relics, which join every later run', () => {
+    let p = rich();
+    const t = townOf(p);
+    const ids = (CAMP.relics.slice(0, 4)).map((r) => r.id);
+    t.sets.relics = ids;
+    p = { ...p, town: t } as Profile;
+    p = ok(p, 'vault-store', { choice: ids[0]! }).profile;
+    p = ok(p, 'vault-store', { choice: ids[1]! }).profile;
+    expect(act(p, 'vault-store', { choice: ids[2]! }).ok).toBe(false);
+    expect(townStartGrants(content, p).relics).toEqual([ids[0], ids[1]]);
+    p = ok(p, 'vault-store', { choice: ids[0]! }).profile;
+    expect(townStartGrants(content, p).relics).toEqual([ids[1]]);
+  });
+});
+
+describe('Sponsor Deals (S359)', () => {
+  it('a signed sponsor pays at run end only when its goal was met', () => {
+    let p = rich();
+    p = ok(p, 'hall-sponsor', { choice: 'sponsor-gear' }).profile;
+    expect(act(p, 'hall-sponsor', { choice: 'sponsor-trail' }).ok).toBe(false); // one per run
+    const g = townStartGrants(content, p);
+    expect(g.stuff['sponsor-gear']).toBe(1);
+    const run = { runId: 'r', seed: 's', victory: false, regionIndex: 0, inventory: {}, camp: { relics: [], stuff: { 'sponsor-gear': 1 } } };
+    const miss = structuredClone(p);
+    recordRun(content, miss, { ...run, badges: ['a', 'b'] });
+    expect(miss.bankCredits).toBe(p.bankCredits);
+    const hit = structuredClone(p);
+    recordRun(content, hit, { ...run, badges: ['a', 'b', 'c', 'd'] });
+    expect(hit.bankCredits).toBe(p.bankCredits + 70);
+  });
+});
+
+describe('Town Economy (S347)', () => {
+  it('Fan Club tiers cut credit prices in the town shops', async () => {
+    const { townDiscount, townPrice } = await import('../../src/core/town');
+    const p = rich();
+    expect(townDiscount(p)).toBe(0);
+    expect(townPrice(p, 60)).toBe(60);
+    const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = Array.from({ length: 2 }, () => run) as never; // 26 fans = tier 1
+    expect(townDiscount(p)).toBeCloseTo(0.05);
+    expect(townPrice(p, 60)).toBe(57);
+    const before = p.bankCredits;
+    const q = ok(p, 'hall-guild', { choice: 'guild-medic' }).profile;
+    expect(q.bankCredits).toBe(before - 57);
+    expect(townPrice(p, 0)).toBe(0);
   });
 });

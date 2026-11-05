@@ -24,6 +24,8 @@ export const BOND_RULES = {
   reveal: { minTrust: 70, minSynchronization: 60, hpShare: 0.5 },
   /** Bond evolution: a devoted Pokémon evolves by friendship once friendship reaches this share of the usual threshold. */
   evolve: { minFriendshipShare: 0.6 },
+  /** Bond Levels (ideas S47): wins fought side by side raise a pair's level; a higher level makes the hand-over after a faint stronger (+1 stage per level, max 2). */
+  pairLevels: { wins: [3, 8, 15], maxStages: 2 },
   /** Bond lessons: a devoted Pokémon with a free move slot learns a move it was ready for after a win. */
   lesson: { maxPerBattle: 1 },
 } as const;

@@ -48,6 +48,7 @@
   "bronzeBattles": 5,
   "silverBattles": 20,
   "goldBattles": 50,
+  "shardBattles": 5,
   "rankResearch": {
    "bronze": 25,
    "silver": 50,

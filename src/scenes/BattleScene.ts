@@ -2,7 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
-import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern } from '../core/presentation/uiPrefs';
+import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitLine } from '../ui/fitText';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
@@ -96,7 +96,9 @@ import { loadAssets } from '../ui/lazyAssets';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
-import { bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
+import { victoryPoseFor } from '../core/presentation/victoryPose';
+import { introRecap } from '../core/presentation/skipRecap';
+import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
 import type { Move, TypeName } from '../core/contentSchema';
@@ -1601,8 +1603,10 @@ export class BattleScene extends Phaser.Scene {
     // A boss with its own VS card (Pokémon Memories) gets that VS screen when its art has loaded.
     const vs = kind === 'boss' && art ? vsCardFor(art.assetId) : null;
     const st = services().session.settings;
-    if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)));
-    else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined));
+    const foeName = this.boss()?.title ?? this.trainerTitle() ?? (battle.trainer ? 'The trainer' : this.speciesName(battle.enemyTeam[0]!));
+    const recap = introRecap(kind, foeName);
+    if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)), recap);
+    else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined), recap);
     // Bosses and rivals get a title card: who they are and what they specialise in.
     const boss = this.boss();
     const title = this.trainerTitle();
@@ -1640,10 +1644,11 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Waits for a presentation beat; confirm/back skips it. */
-  private async playBeat(b: Beat): Promise<void> {
+  private async playBeat(b: Beat, recap?: string): Promise<void> {
     let over = false;
     this.time.delayedCall(150, () => {
-      if (!over) this.advance = b.skip;
+      // S257: when the player skips and Skip recap is on, a text line says what the cutscene showed.
+      if (!over) this.advance = recap && services().session.settings.skipRecap ? () => { b.skip(); interactionLog.add(recap); showRecapBanner(this, recap); } : b.skip;
     });
     await b.done;
     over = true;
@@ -2533,7 +2538,12 @@ export class BattleScene extends Phaser.Scene {
       stopProceduralAudio();
       playMusic(this, victoryTrack({ trainer: Boolean(trainer), boss: Boolean(bossWin), role: this.role }));
     }
-    if (end.outcome === 'win' && this.playerSprite) void hop(this, this.playerSprite, this.motion);
+    if (end.outcome === 'win' && this.playerSprite) {
+      if (services().session.settings.victoryPoses) {
+        const sp = getSpecies(content, this.activeMon().speciesId);
+        void victoryPose(this, this.playerSprite, victoryPoseFor(sp.types, sp.weight), this.motion);
+      } else void hop(this, this.playerSprite, this.motion);
+    }
     // The rival's victory and defeat poses (6.5); pure decoration after the battle is decided.
     if (this.role === 'rival' && end.outcome === 'win') void this.fx.flourish('enemy', 'rival.lose', ENEMY_POS);
     if (end.outcome === 'win' && trainer) {

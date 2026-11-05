@@ -5,6 +5,7 @@
 import { typeEffectiveness } from '../battle/damage';
 import { TYPE_NAMES, type Content } from '../contentSchema';
 import { Rng, type RngState } from '../rng';
+import { FRONTIER_GAMES } from './frontier';
 import { MINIGAMES_2 } from './games2';
 
 export interface Cell {
@@ -846,6 +847,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   'treasure-hunt': hunt as never,
   'reaction-challenge': reaction as never,
   ...MINIGAMES_2,
+  ...FRONTIER_GAMES,
 };
 
 export function gameModule(id: string): MinigameModule<BaseState> {
