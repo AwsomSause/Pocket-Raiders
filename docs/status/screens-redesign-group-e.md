@@ -34,3 +34,7 @@ Settings category pages now draw each look's frame (`src/ui/settingsLooks.ts`): 
 
 ## Update: Raid and totem boss cards
 `src/ui/stopLooks.ts` draws the raid stop (maxden, shonen, tera) and totem stop (ink) as full boss cards, used by `MapScene.openRaid/openTotem` via `screenStyleOf('raid'|'totem', ...)` salted by run seed and stop id. Look only: approaches become the card's buttons, outcomes unchanged. Close to the mock-ups, not pixel-exact. Test: `tests/e2e/stopLooks.spec.ts`.
+
+
+## Update: Expedition layouts
+`src/ui/expeditionLooks.ts` draws the route screen per look: Aero Layers (glass bubbles on a bright sky, glass loot bar), Manga Dungeon (black panel, speech bubble, LOOT/PARTY caption boxes on speed lines), Depth Scan (neon layer rows with CLEARED / YOU ARE HERE / UNKNOWN / BOSS and a loot cache box). The aero and manga backdrops were made bright to match. Limits: no hero or boss sprite in the manga and depth looks, choices still use the shared menu rows. Test: `tests/e2e/expeditionLooks.spec.ts`.
