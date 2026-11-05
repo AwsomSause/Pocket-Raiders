@@ -2883,6 +2883,19 @@
      ]
     },
     {
+     "id": "hall-harbor",
+     "name": "Harbor Boat Trips",
+     "desc": "Buy a boat ticket. On your next run the first stage map is sure to have an expedition gate (a bonus map to sail to).",
+     "kind": "buy",
+     "rows": [
+      "S366"
+     ],
+     "set": "boon",
+     "goods": [
+      {"id": "harbor-ticket", "label": "Boat ticket", "desc": "One guaranteed expedition gate next run.", "set": "boon", "cost": {"credits": 80}, "reward": {"stuff": {"harbor-ticket": 1}}}
+     ]
+    },
+    {
      "id": "hall-roster",
      "name": "Townsfolk roster",
      "desc": "Townsfolk who move in as you earn achievements.",

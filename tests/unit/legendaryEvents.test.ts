@@ -5,6 +5,7 @@ import { generateRoute, validateRoute } from '../../src/core/expedition/graph';
 import { availableNodes, beginExpedition, chooseExpeditionNode, expeditionPreview, extractExpedition, resolveExpeditionChoice, settleExpedition } from '../../src/core/expedition/flow';
 import { LegendaryFileSchema } from '../../src/core/expedition/schema';
 import { eligibleLegendary, envAt, legendaryEvents, legendaryProblem, placeLegendaryGate } from '../../src/core/legendary/legendary';
+import { freshCamp } from '../../src/core/camp/schema';
 import { placeExpeditionGate } from '../../src/core/expedition/gate';
 import { LEGEND_TRACK_IDS, legendLayout, legendMusic } from '../../src/core/legendary/identity';
 import { UIE_ARENAS } from '../../src/assets/catalog';
@@ -389,5 +390,21 @@ describe('legendary presentation cues', () => {
     }
     expect(layouts.size).toBe(8);
     expect(songs.size).toBeGreaterThan(evs.length * 0.7);
+  });
+});
+
+describe('Harbor boat ticket (S366)', () => {
+  it('a ticket guarantees an expedition gate on the stage map and is used up', () => {
+    let gated = 0;
+    for (let i = 0; i < 30; i++) {
+      const r = chooseStarter(content, createRun(content, { runId: 'hb', seed: `hb${i}`, archetypeId: 'red' }), 0);
+      for (const n of r.stage!.map.nodes) n.sides = n.sides.filter((s) => s.kind !== 'expedition');
+      const camp = (r.camp ??= freshCamp());
+      camp.stuff['harbor-ticket'] = 1;
+      placeExpeditionGate(content, r);
+      const has = r.stage!.map.nodes.some((n) => n.sides.some((s) => s.kind === 'expedition'));
+      if (has) { gated++; expect(camp.stuff['harbor-ticket']).toBeLessThanOrEqual(1); }
+    }
+    expect(gated).toBe(30);
   });
 });

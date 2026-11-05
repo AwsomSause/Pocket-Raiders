@@ -10,7 +10,10 @@ export function placeExpeditionGate(content: Content, run: RunState): void {
   const stage = run.stage;
   if (!stage || stage.kind !== 'stage') return;
   const rng = new Rng(hashSeed(`${run.seed}::expedition-gate::${run.regionIndex}:${stage.index}`));
-  if (!rng.chance(content.expeditions.denChance + focusDenBonus(run, 'exploration'))) return;
+  // Harbor ticket (S366): a boat trip bought in town guarantees a gate on this stage's map and is used up when it is placed.
+  const natural = rng.chance(content.expeditions.denChance + focusDenBonus(run, 'exploration'));
+  const ticket = run.camp?.stuff['harbor-ticket'] ?? 0;
+  if (!natural && ticket <= 0) return;
   const tiers = content.expeditions.tierByRegion;
   const tier = tiers[Math.min(run.regionIndex, tiers.length - 1)]!;
   const pool = content.expeditions.expeditions.filter((e) => !e.legendary && !run.expeditions.completed.includes(e.id) && (e.tier === tier || run.expeditions.unlocked.includes(e.id)));
@@ -18,5 +21,6 @@ export function placeExpeditionGate(content: Content, run: RunState): void {
   if (pool.length === 0 || candidates.length === 0) return;
   const node = rng.pick(candidates);
   node.sides.push({ id: `expedition-${stage.index}`, kind: 'expedition', expeditionId: rng.pick(pool).id, used: false });
+  if (!natural && run.camp) run.camp.stuff['harbor-ticket'] = ticket - 1;
 }
 

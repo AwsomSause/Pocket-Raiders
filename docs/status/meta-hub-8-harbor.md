@@ -1,0 +1,1 @@
+- Meta/Hub slice 8: Harbor Boat Trips (S366) in the Town Hall: buy a boat ticket (80 credits, next-run boon `harbor-ticket` camp stuff); `placeExpeditionGate` then guarantees an expedition gate on a stage map and uses the ticket up. No save change. Limited: Airship (S367) not built.
