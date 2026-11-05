@@ -250,3 +250,35 @@ describe('Landmark Dungeons (S9)', () => {
     expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dungeon-victory-hall']);
   });
 });
+
+import { restUntilMorning, stepClock, timePressureTick } from '../../src/core/clock';
+describe('Time Pressure (S20)', () => {
+  it('the reward bonus melts per game day past the pace, once per day, never below the mode bonus', () => {
+    const run = start('time-pressure', 'tp-1');
+    const base = run.rules.rewardMultiplier;
+    run.clock.day = 14;
+    timePressureTick(run);
+    expect(run.rules.rewardMultiplier).toBe(base);
+    run.clock.day = 19;
+    timePressureTick(run);
+    expect(run.rules.rewardMultiplier).toBeCloseTo(base - 0.05, 5);
+    timePressureTick(run);
+    expect(run.rules.rewardMultiplier).toBeCloseTo(base - 0.05, 5);
+    run.clock.day = 500;
+    timePressureTick(run);
+    expect(run.rules.rewardMultiplier).toBeCloseTo(base - 0.3, 5);
+  });
+  it('rests and steps charge days; other modes are untouched', () => {
+    const run = start('time-pressure', 'tp-2');
+    run.clock.day = 14;
+    const base = run.rules.rewardMultiplier;
+    restUntilMorning(run);
+    expect(run.rules.rewardMultiplier).toBeCloseTo(base - 0.01, 5);
+    stepClock(content, run);
+    const std = start('standard', 'tp-3');
+    std.clock.day = 99;
+    const before = std.rules.rewardMultiplier;
+    timePressureTick(std);
+    expect(std.rules.rewardMultiplier).toBe(before);
+  });
+});
