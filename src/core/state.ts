@@ -505,6 +505,9 @@ export const RaidBattleSchema = z.object({
   bossUid: z.string().nullable().default(null),
   /** S400 Boss Training Mode: a practice fight keeps the party as it was; it is restored when the fight ends and nothing is paid out. */
   practice: z.object({ party: z.array(PokemonInstanceSchema) }).nullable().default(null),
+  /** S404 Raid Medals: damage dealt to the boss and HP mended by Supports, by Pokémon uid. */
+  damageBy: z.record(z.string(), z.number().int().min(0)).default({}),
+  healedBy: z.record(z.string(), z.number().int().min(0)).default({}),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 
