@@ -1714,6 +1714,8 @@ export const SettingsSchema = z.object({
   skipRecap: z.boolean().default(false),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
+  /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
+  victoryPoses: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

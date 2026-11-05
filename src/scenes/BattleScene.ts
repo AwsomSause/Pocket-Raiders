@@ -96,8 +96,9 @@ import { loadAssets } from '../ui/lazyAssets';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
+import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
-import { showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
+import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
 import type { Move, TypeName } from '../core/contentSchema';
@@ -2537,7 +2538,12 @@ export class BattleScene extends Phaser.Scene {
       stopProceduralAudio();
       playMusic(this, victoryTrack({ trainer: Boolean(trainer), boss: Boolean(bossWin), role: this.role }));
     }
-    if (end.outcome === 'win' && this.playerSprite) void hop(this, this.playerSprite, this.motion);
+    if (end.outcome === 'win' && this.playerSprite) {
+      if (services().session.settings.victoryPoses) {
+        const sp = getSpecies(content, this.activeMon().speciesId);
+        void victoryPose(this, this.playerSprite, victoryPoseFor(sp.types, sp.weight), this.motion);
+      } else void hop(this, this.playerSprite, this.motion);
+    }
     // The rival's victory and defeat poses (6.5); pure decoration after the battle is decided.
     if (this.role === 'rival' && end.outcome === 'win') void this.fx.flourish('enemy', 'rival.lose', ENEMY_POS);
     if (end.outcome === 'win' && trainer) {
