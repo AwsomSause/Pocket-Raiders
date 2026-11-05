@@ -28,7 +28,7 @@ import type { BoostStat, Content, ItemEffect, Move, PowerRule, Semi, SideMove, S
 import { catchProbability, resolveCatchRoll } from '../capture';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
-import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
+import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
 import type { StoryTriggerKind } from '../story/schema';
@@ -3017,7 +3017,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   // Thunder never misses in rain (half the time in sun); Blizzard never misses in snow or hail.
   const sure = limitBreakDamage > 0 || (fx.sureIn !== undefined && (fx.sureIn === weather || (fx.sureIn === 'snow' && weather === 'hail')));
   const baseAccuracy = sure ? null : fx.sureIn === 'rain' && weather === 'sun' ? 50 : move.accuracy;
-  const perkAccuracy = user.side === 'player' && move.category === 'status' ? statusMoveAccuracyPerk(ctx.perks) : 1;
+  const perkAccuracy = user.side === 'player' ? (move.category === 'status' ? statusMoveAccuracyPerk(ctx.perks) : 1) * accuracyPerk(ctx.perks) : 1;
   const itemAccuracy = targetsEnemy ? Held.accuracyMultiplier(ctx, user, target, !movedFirst, move) : 1;
   let accuracy: number;
   if (itemAccuracy === null) {

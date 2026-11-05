@@ -48,7 +48,6 @@ import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
 import { HubIndicators, indicatorAssets } from '../ui/hubTown/indicators';
 import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
-import { HubTouchPad, wantsTouchPad } from '../ui/hubTown/touchPad';
 import { hubPeriod } from '../core/hubTown/daylight';
 import type { Period } from '../core/clock';
 import { ArenaLobby, lobbyMons, type LobbyTile } from '../ui/arenaLobby/lobby';
@@ -239,7 +238,6 @@ export class HubScene extends Phaser.Scene {
   minimap: HubMinimap | null = null;
   /** The time of day the town is drawn at, and the phone controls (when shown). */
   period: Period = 'afternoon';
-  touchPad: HubTouchPad | null = null;
   indicators: HubIndicators | null = null;
   private lobbyPokemon: Species[] = [];
 
@@ -307,7 +305,6 @@ export class HubScene extends Phaser.Scene {
     this.crowd = null;
     this.lobby = null;
     this.minimap = null;
-    this.touchPad = null;
     this.indicators = null;
     if (lobbyHub()) {
       const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
@@ -361,7 +358,6 @@ export class HubScene extends Phaser.Scene {
     this.period = hubPeriod(new Date(Date.now()));
     drawDaylight(this.town, this, this.period, motion);
     startTownSound(this.town, this, this.period);
-    this.touchPad = wantsTouchPad(this) ? new HubTouchPad(this, this.town, { busy, menu: () => this.openPause(), map: () => this.minimap?.cycle() }) : null;
   }
 
   /** The screen layer over the town or lobby: logo, currencies, the card line, the help line, the rival note. */

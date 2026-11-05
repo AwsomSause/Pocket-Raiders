@@ -503,6 +503,8 @@ export const RaidBattleSchema = z.object({
   minionUid: z.string().nullable().default(null),
   /** The boss's own uid (a minion swaps into its place on the field); null in fights saved before reinforcements. */
   bossUid: z.string().nullable().default(null),
+  /** S400 Boss Training Mode: a practice fight keeps the party as it was; it is restored when the fight ends and nothing is paid out. */
+  practice: z.object({ party: z.array(PokemonInstanceSchema) }).nullable().default(null),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 
@@ -1703,6 +1705,11 @@ export const SettingsSchema = z.object({
   critLetterbox: z.boolean().default(false),
   /** S261 Sound packs: filter chain on the master output (Original keeps the recordings untouched). */
   soundPack: z.enum(['original', 'gba', 'ds', 'orchestral']).default('original'),
+  /** S245 Adaptive screen shake: extra multipliers on top of `shakeIntensity` for move hits and for story/boss moments. */
+  shakeHits: z.number().min(0).max(1).default(1),
+  shakeStory: z.number().min(0).max(1).default(1),
+  /** S252 Day-night palette shift: the branching map takes the light of the local time of day (off by default). */
+  mapDayNight: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

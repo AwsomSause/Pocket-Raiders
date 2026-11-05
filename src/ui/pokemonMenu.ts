@@ -525,6 +525,11 @@ class PokemonScreen implements PickerLike {
     }
     this.drawList(scene);
     this.drawTabs(scene);
+    if (this.skin?.frame && !(this.tabName === 'Overview' && this.skin.overview)) {
+      const fg = scene.add.graphics().setPosition(RIGHT_X, BODY_Y);
+      this.skin.frame(scene, fg, RIGHT_W, BODY_H);
+      this.dyn.add(fg);
+    }
     const body = scene.add.container(RIGHT_X, BODY_Y);
     this.dyn.add(body);
     switch (this.tabName) {

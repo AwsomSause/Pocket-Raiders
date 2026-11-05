@@ -233,6 +233,7 @@ export function dailyChest(scene: Phaser.Scene, x: number, y: number, today: str
   const ready = chestReady(opened, today);
   const chest = scene.add.text(x, y, ready ? '🎁' : '📦', { fontSize: '34px' }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setName('daily-chest');
   const hint = scene.add.text(x, y + 30, ready ? 'Daily chest: tap to shake' : 'Come back tomorrow', textStyle(13, COLORS.textMuted)).setOrigin(0.5);
+  hint.setX(Math.max(hint.width / 2 + 8, Math.min(GAME_WIDTH - hint.width / 2 - 8, x)));
   let shakes = 0;
   chest.on('pointerdown', () => {
     if (!chestReady(opened, today)) return notify('The chest is empty until tomorrow.');

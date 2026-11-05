@@ -1,0 +1,5491 @@
+{
+ "events": [
+  {
+   "id": "honest-hawker",
+   "name": "The Honest Hawker",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A hawker waves a single potion in the air. \"One item, exact shop price, no tricks! Say thanks and I throw in a berry.\"",
+   "choices": [
+    {
+     "label": "Buy a Hyper Potion (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "\"Thank you!\" you say. He beams and tosses a berry on top.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "hyper-potion",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a Great Ball set (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Fair price, polite words, a free berry.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say thanks and walk on",
+     "success": {
+      "text": "\"Always a pleasure!\" He presses a berry into your hand anyway.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-barge",
+   "name": "The Barter Barge",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A flat barge piled with crates drifts by the dock. \"No coins here. Hand me two items, I hand you one better.\"",
+   "choices": [
+    {
+     "label": "Swap a Potion and a berry for a hold item",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      },
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "The deckhand weighs your offer and nods. The deal is struck.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap a Poké Ball and a Potion for a strong item",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      },
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "Two small items go in the basket. A better one comes out.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "poke-ball"
+       },
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap a Potion and a Poké Ball (Charisma)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      },
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "check": "charisma",
+     "success": {
+      "text": "You talk the trade up a tier. The deckhand grumbles but pays.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "loseItem",
+        "id": "poke-ball"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "He only pays a plain item for the pair.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "loseItem",
+        "id": "poke-ball"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the barge",
+     "success": {
+      "text": "The barge drifts on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mismatched-socks",
+   "name": "The Mismatched Socks Sale",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A stall of footwear, every pair odd. \"Speed boots! Left one is a size nine, right one a size six. Still fast!\"",
+   "choices": [
+    {
+     "label": "Buy the pair (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "One boot does not quite fit, but you feel quicker. Three X Speed charges come with them.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "x-speed",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy just one boot (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A single boot. It helps a little, once.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "item",
+        "id": "x-speed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the sale",
+     "success": {
+      "text": "You leave. The seller sighs and shuffles his boots.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "coupon-clipper",
+   "name": "The Coupon Clipper",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A woman with a binder full of coupons beams at you. \"Thirty percent off! Next shop only. Do not lose it.\"",
+   "choices": [
+    {
+     "label": "Take the 30% coupon (₽80)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "You pocket the coupon. It will work at the next shop you visit.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       },
+       {
+        "kind": "item",
+        "id": "coupon-3",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her sort her coupons (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "She is delighted and hands you a coupon for free.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "coupon-3",
+        "count": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You mix up the piles. She takes your help as a joke and gives you a smaller coupon.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "coupon-1",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "subscription-box",
+   "name": "The Subscription Box",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A courier thrusts a clipboard at you. \"Pay once, and a surprise item arrives after each of your next three battles!\"",
+   "choices": [
+    {
+     "label": "Subscribe (₽450)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 450
+      }
+     ],
+     "success": {
+      "text": "The courier stamps your card. Deliveries start soon.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -450
+       },
+       {
+        "kind": "flag",
+        "key": "sub-box",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a trial box (₽120)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 120
+      }
+     ],
+     "success": {
+      "text": "One small parcel now, nothing after.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -120
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline politely",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "subscription-box-delivery",
+   "name": "A Parcel for You",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sub-box",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The courier is back with a neat box. \"Your subscription! Surprise!\"",
+   "choices": [
+    {
+     "label": "Open the box",
+     "success": {
+      "text": "Something nice, wrapped carefully. The courier waves goodbye.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw",
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sub-box",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "layaway-lady",
+   "name": "The Layaway Lady",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A shopkeeper with a ledger taps a locked case. \"Half now, the rest is ours. It will be with you in a couple of towns.\"",
+   "choices": [
+    {
+     "label": "Put a rare item on layaway (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "She writes your name in the ledger. \"Two more stops, dear.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "flag",
+        "key": "layaway",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put a lesser item on layaway (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "A smaller deal, a smaller wait.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "flag",
+        "key": "layaway-small",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "layaway-pickup",
+   "name": "Your Layaway Is Ready",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "layaway",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The Layaway Lady waves at you across the street. \"It has arrived, dear!\"",
+   "choices": [
+    {
+     "label": "Collect your item",
+     "success": {
+      "text": "She hands over a sealed case. It was worth the wait.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "layaway",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "layaway-pickup-small",
+   "name": "Your Layaway Is Ready (Small)",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "layaway-small",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The Layaway Lady flags you down with a paper bag. \"The small one is here!\"",
+   "choices": [
+    {
+     "label": "Collect your item",
+     "success": {
+      "text": "A tidy package with a handwritten receipt.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "layaway-small",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rental-counter",
+   "name": "The Rental Counter",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A counter with a \"Hold Items for Rent\" sign. \"Five battles, then it comes back to me. Do not scratch it.\"",
+   "choices": [
+    {
+     "label": "Rent a Life Orb (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You hand over the fee. The orb hums in your pocket.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "item",
+        "id": "life-orb",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rental-due",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rent a Choice Scarf (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The scarf fits. Speed is yours for a short while.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "item",
+        "id": "choice-scarf",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rental-due",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not renting",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rental-return",
+   "name": "The Rental Is Due",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rental-due",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The Rental Counter clerk jogs up, out of breath. \"Time is up! I need that item back.\"",
+   "choices": [
+    {
+     "label": "Hand back a Life Orb",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "life-orb"
+      }
+     ],
+     "success": {
+      "text": "He checks it for scratches and nods.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "life-orb"
+       },
+       {
+        "kind": "flag",
+        "key": "rental-due",
+        "amount": -5
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand back a Choice Scarf",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "choice-scarf"
+      }
+     ],
+     "success": {
+      "text": "He smooths the fabric and thanks you.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "choice-scarf"
+       },
+       {
+        "kind": "flag",
+        "key": "rental-due",
+        "amount": -5
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Claim you lost it",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "He sighs and bills you for the item.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "flag",
+        "key": "rental-due",
+        "amount": -5
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run",
+     "success": {
+      "text": "You bolt. He shouts something about a fee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rental-due",
+        "amount": -5
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "price-match-guy",
+   "name": "The Price Match Guy",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A man shows you a worn notebook. \"Cheapest price I ever saw. Bring me a deal and I will match it for one item.\"",
+   "choices": [
+    {
+     "label": "Match a Hyper Potion (₽180)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 180
+      }
+     ],
+     "success": {
+      "text": "He matches it. A fair deal, written in his notebook.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -180
+       },
+       {
+        "kind": "item",
+        "id": "hyper-potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Match a Revive (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "\"Never saw it cheaper.\" He hands over a Revive.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Match an Ultra Ball set (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "Three Ultra Balls for a price he swears is the lowest in town.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bulk-buyer",
+   "name": "The Bulk Buyer",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A buyer in a hard hat holds a calculator. \"I sell nothing. I pay double for stacks of identical things.\"",
+   "choices": [
+    {
+     "label": "Sell a Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "He counts it twice, then pays double.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "money",
+        "amount": 120
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell a Super Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "super-potion"
+      }
+     ],
+     "success": {
+      "text": "A tidy item. The buyer pays a strong price.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "super-potion"
+       },
+       {
+        "kind": "money",
+        "amount": 260
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell a Poké Ball",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "He weighs the ball and nods.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "poke-ball"
+       },
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your stock",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wholesale-warehouse",
+   "name": "The Wholesale Warehouse",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A warehouse with stacked pallets. \"Five of anything, steep discount. No singles.\"",
+   "choices": [
+    {
+     "label": "Five Potions (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A pallet of potions, heavy and cheap.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Five Super Potions (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "A strong stack for a small price.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Five Poké Balls (₽350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "A crate of balls for the road.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "clearance-rack",
+   "name": "The Clearance Rack of Doom",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a1a1a",
+    "effect": "none"
+   },
+   "intro": "A crooked rack, a hand-painted \"90% OFF\" sign. \"One of these is cursed. Which one? Nobody knows.\"",
+   "choices": [
+    {
+     "label": "Grab an item (₽60)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 60
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "Cheap. You feel a little odd afterward.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -60
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was the cursed one. Your Pokémon shudder.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -60
+       },
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grab three items (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "A bagful of bargains and a bad feeling.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Cursed. The whole bag smells of old socks and bad luck.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the rack",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "auction-popup",
+   "name": "The Auction Pop-up",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A pop-up auction: an NPC in a suit, a smug rival, and a Rocket grunt in sunglasses. The lot is a sealed crate.",
+   "choices": [
+    {
+     "label": "Bid ₽300",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "chance": 0.45,
+     "success": {
+      "text": "You outbid the suit. The grunt scowls, the rival laughs.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The suit raises. You lose the lot and keep your coins.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Bid ₽700",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "Everyone drops out. The crate is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The rival bids ₽900. You walk away poorer in pride only.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Bid ₽1200",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "chance": 0.9,
+     "success": {
+      "text": "Silence. Then the gavel. The crate holds treasure.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The grunt snatches the lot and runs. You lose nothing.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Watch and leave",
+     "success": {
+      "text": "You enjoy the shouting and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "silent-auction",
+   "name": "The Silent Auction",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A quiet room with slips of paper and a locked case. \"Write your bid. Closest to the hidden value wins.\"",
+   "choices": [
+    {
+     "label": "Low bid (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "check": "intelligence",
+     "success": {
+      "text": "Your slip is the closest. The item is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Someone guessed closer. The slip is returned.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Mid bid (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "check": "luck",
+     "success": {
+      "text": "Right on target. The clerk hands over the case.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too high. You lose the money on a rare mistake.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "High bid (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "Almost exact. A grand prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Way over. The winner pays less. You gain nothing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do not bid",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "raffle-seller",
+   "name": "The Raffle Seller",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A kid with a drum of paper tickets. \"Win a tier-three item! The more tickets, the better your odds.\"",
+   "choices": [
+    {
+     "label": "One ticket (₽50)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "chance": 0.15,
+     "success": {
+      "text": "Your number comes up! A shiny prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A lucky stranger wins. You get nothing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Five tickets (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "chance": 0.4,
+     "success": {
+      "text": "Your number comes up! A shiny prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not today. The kid offers you a consolation berry.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fifteen tickets (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "A whole fistful, and one of them wins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "So many tickets, so little luck. A berry for the effort.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No tickets",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pawn-sharks",
+   "name": "The Pawn Sharks",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a1a2a",
+    "effect": "none"
+   },
+   "intro": "Two men in sharp suits lean on a counter. \"Sell it now. Buy it back later. We mark it up. It is only business.\"",
+   "choices": [
+    {
+     "label": "Pawn Leftovers (₽500 now)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "leftovers"
+      }
+     ],
+     "success": {
+      "text": "They take the item and hand you cash. \"Come see us again.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "leftovers"
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "pawned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pawn a berry (₽200 now)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "A small pawn. They smile too widely.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "pawned-small",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pawn-sharks-buyback",
+   "name": "The Pawn Sharks Again",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pawned",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The same two men corner you outside a shop. \"Want your item back? It will cost more now.\"",
+   "choices": [
+    {
+     "label": "Buy it back (₽800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "They hand it over without a smile.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pawned",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them keep it",
+     "success": {
+      "text": "\"Business is business.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pawned",
+        "amount": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pawn-sharks-buyback-small",
+   "name": "The Pawn Sharks Again (Berry)",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pawned-small",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The pawn sharks tip their hats. \"That berry, friend. Still want it?\"",
+   "choices": [
+    {
+     "label": "Buy it back (₽350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "A slightly bruised berry returns to your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pawned-small",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them keep it",
+     "success": {
+      "text": "They shrug and move on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pawned-small",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "street-tailor",
+   "name": "The Street Tailor",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A tailor with a mouthful of pins and a measuring tape. \"Let me swap your outfit. A small perk comes with the new look.\"",
+   "choices": [
+    {
+     "label": "Sharp suit (Charisma +1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "You look the part. People listen.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": -80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trail gear (Strength +1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "Sturdy boots and a tough coat.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": -80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Scholar robe (Intelligence +1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "A neat cut and deep pockets.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": -80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your clothes",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "charm-tinkerer",
+   "name": "The Charm Tinkerer",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A tinkerer hunches over a desk of bells and beads. \"Two charms in, one blended charm out. Weaker, but it hums.\"",
+   "choices": [
+    {
+     "label": "Blend two charms",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "lucky-charm"
+      },
+      {
+       "kind": "item",
+       "id": "charm-coin"
+      }
+     ],
+     "success": {
+      "text": "Gears whir. A single faint charm comes out.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "lucky-charm"
+       },
+       {
+        "kind": "loseItem",
+        "id": "charm-coin"
+       },
+       {
+        "kind": "item",
+        "id": "old-charm",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Blend Lucky + Catching",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "lucky-charm"
+      },
+      {
+       "kind": "item",
+       "id": "catching-charm"
+      }
+     ],
+     "success": {
+      "text": "A soft glow and a smaller catch bonus.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "lucky-charm"
+       },
+       {
+        "kind": "loseItem",
+        "id": "catching-charm"
+       },
+       {
+        "kind": "relic",
+        "id": "blended-charm",
+        "name": "Blended Charm",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.03
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-meat-cart",
+   "name": "The Mystery Meat Cart",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A cart with a hot plate and a handwritten menu. \"Cheap, hearty, and probably meat.\"",
+   "choices": [
+    {
+     "label": "Buy a skewer (₽40)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 40
+      }
+     ],
+     "chance": 0.85,
+     "success": {
+      "text": "Your team wolfs it down and feels sturdier.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -40
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The skewer was off. Your team wolfs it anyway and pays for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -40
+       },
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a feast (₽120)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 120
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "A feast fit for a party. Everyone feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -120
+       },
+       {
+        "kind": "heal",
+        "share": 0.6
+       }
+      ]
+     },
+     "failure": {
+      "text": "The feast was off. Your team is miserable.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -120
+       },
+       {
+        "kind": "status",
+        "status": "poison"
+       },
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ball-pitchman",
+   "name": "The Poké Ball Pitchman",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A pitchman bangs a table. \"The Mega-Gripper! The Sure-Snatch 3000! The Whisper Ball! Call now and get a second free!\"",
+   "choices": [
+    {
+     "label": "The Mega-Gripper (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A stout ball with a firm hinge. You get a second for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "net-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Sure-Snatch 3000 (₽450)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 450
+      }
+     ],
+     "success": {
+      "text": "Loud paint and a flashy sticker. It works, mostly.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -450
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "quick-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Whisper Ball (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "A pale ball that makes no sound. Three come in the box.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "dusk-ball",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "timer-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pass",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vending-machine",
+   "name": "The Vending Machine",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "stop": "event",
+   "scene": {
+    "cast": [],
+    "tint": "#2b2a1e",
+    "effect": "glint"
+   },
+   "intro": "A glowing vending machine hums by the road. Something rattles inside.",
+   "choices": [
+    {
+     "label": "Insert coins (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Clunk. A drink rolls out.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Insert a lot of coins (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Clunk-clunk. A hearty haul drops.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw",
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake it for a free one",
+     "chance": 0.5,
+     "success": {
+      "text": "Something big drops out. The machine shivers.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "An angry Rotom bursts out of the machine and zaps your team.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "status",
+        "status": "paralysis"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "capsule-gacha",
+   "name": "The Capsule Gacha",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "stop": "event",
+   "scene": {
+    "cast": [],
+    "tint": "#2b2a1e",
+    "effect": "glint"
+   },
+   "intro": "A toy machine with a crank. \"Each spin: a random cosmetic or a tiny perk.\"",
+   "choices": [
+    {
+     "label": "Spin once (₽60)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 60
+      }
+     ],
+     "success": {
+      "text": "A capsule pops open: a tiny charm!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -60
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion",
+         "charm-coin"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spin five times (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "Five capsules, a pile of trinkets and a nice surprise.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "flea-fossil",
+   "name": "The Flea Market Fossil",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A hobbyist guards a gray lump on a rickety table. \"Real fossil! Or a rock. The reveal costs money.\"",
+   "choices": [
+    {
+     "label": "Pay to crack it open (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "chance": 0.4,
+     "success": {
+      "text": "It is a fossil, and a good one.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-amber",
+         "helix-fossil",
+         "dome-fossil"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Just a rock. The hobbyist shrugs.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay a lot for the best tools (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "chance": 0.7,
+     "success": {
+      "text": "A perfect fossil and a Revive tucked inside.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-amber",
+         "helix-fossil",
+         "dome-fossil"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A rock and a story about a rock.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your coins",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bait-bargain",
+   "name": "The Bait Shop Bargain",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A bait shop owner winks. \"Lures that raise your odds of rare finds. Good for three stops.\"",
+   "choices": [
+    {
+     "label": "One lure (₽180)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 180
+      }
+     ],
+     "success": {
+      "text": "A lure for the road. Rare finds feel closer.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -180
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-lure",
+         "water-lure",
+         "grass-lure",
+         "electric-lure",
+         "rock-lure",
+         "bug-lure"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Three lures (₽450)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 450
+      }
+     ],
+     "success": {
+      "text": "A tackle box of lures.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -450
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-lure",
+         "water-lure",
+         "grass-lure",
+         "electric-lure",
+         "rock-lure",
+         "bug-lure"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-lure",
+         "water-lure",
+         "grass-lure",
+         "electric-lure",
+         "rock-lure",
+         "bug-lure"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-lure",
+         "water-lure",
+         "grass-lure",
+         "electric-lure",
+         "rock-lure",
+         "bug-lure"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "repel-reseller",
+   "name": "The Repel Reseller",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A shifty man peels open a coat of spray bottles. \"Expired Repels. Half effect, dirt cheap.\"",
+   "choices": [
+    {
+     "label": "Buy a Repel (₽120)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 120
+      }
+     ],
+     "success": {
+      "text": "It smells a bit off, but it works.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -120
+       },
+       {
+        "kind": "item",
+        "id": "repel",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy three Repels (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A discount bundle, all expired.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "repel",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "scalper-alley",
+   "name": "Scalper Alley",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#201a28",
+    "effect": "none"
+   },
+   "intro": "A scalper holds a tier-three item high. \"Triple price. Take it or leave it. Or haggle, if you can.\"",
+   "choices": [
+    {
+     "label": "Pay triple (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "You pay the premium. It stings and it works.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle (Charisma)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "check": "charisma",
+     "success": {
+      "text": "You haggle him down to a decent price.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "He laughs and raises the price. You walk away.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Turn him in",
+     "success": {
+      "text": "You flag a patrol. A reward comes through the post.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "estate-sale",
+   "name": "The Estate Sale",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A house full of items, a sign reading \"Everything must go\". A relative stands in the doorway with crossed arms.",
+   "choices": [
+    {
+     "label": "Take two items",
+     "chance": 0.7,
+     "success": {
+      "text": "You pick two. The relative glares at your back.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The relative drags you out. You leave with one item.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take one item and thank her",
+     "success": {
+      "text": "She softens and lets you take a keepsake as well.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "heart-scale",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave respectfully",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-champ-garage",
+   "name": "The Retired Champion's Garage Sale",
+   "group": "Merchants & Deals",
+   "rarity": "epic",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A retired champion sits among old trophies. \"Three signature items for sale. I will not need them where I am going.\"",
+   "choices": [
+    {
+     "label": "Buy the signature scarf (₽700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "A scarf that has seen many finals.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "choice-scarf",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the signature belt (₽700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "The champion's belt, still creased from use.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "expert-belt",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the signature sash (₽700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "A sash that survived a hundred hits.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "focus-sash",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chat about old battles",
+     "success": {
+      "text": "A long story, a small gift.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gift-wrap-station",
+   "name": "The Gift Wrap Station",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A booth with ribbons and tape. \"Wrap an item and hand it to the next person you meet. They will remember.\"",
+   "choices": [
+    {
+     "label": "Wrap a berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "A tidy bow. It will find its recipient.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "gift-wrap",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wrap a Potion",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "A cheerful ribbon on a plain Potion.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "flag",
+        "key": "gift-wrap",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gift-wrap-receiver",
+   "name": "The Gift Returned",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gift-wrap",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A stranger waves you down, holding your wrapped gift. \"A friend sent this ahead. They said you would pass by.\"",
+   "choices": [
+    {
+     "label": "Take the bonus",
+     "success": {
+      "text": "The stranger grins. \"A gift for a gift!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gift-wrap",
+        "amount": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw",
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "delivery-rider",
+   "name": "The Delivery Rider",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A rider in a helmet hands you a package. \"Carry this three stops. Do not open it. Payment on delivery.\"",
+   "choices": [
+    {
+     "label": "Accept the parcel",
+     "success": {
+      "text": "You tuck the parcel carefully into your Bag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "delivery-rider-drop",
+   "name": "The Parcel Is Due",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "parcel",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A familiar rider waits at a crossing. \"Did you bring it?\"",
+   "choices": [
+    {
+     "label": "Deliver it unopened",
+     "success": {
+      "text": "\"Perfect.\" Payment and a thank-you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 700
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Peek inside first",
+     "success": {
+      "text": "You peek. The rider glares. Inside: a decent item. You keep it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-smoothie",
+   "name": "The Pawn Berry Smoothie",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A smoothie bar run out of a cart. \"Blend three berries into a temporary buff drink.\"",
+   "choices": [
+    {
+     "label": "Blend 3 Oran berries",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "A rich blue drink. Your lead feels strong.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "item",
+        "id": "x-attack",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "x-speed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Blend 3 Sitrus berries",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "sitrus-berry"
+      }
+     ],
+     "success": {
+      "text": "A wild purple drink. Your team feels sharp.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "sitrus-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "sitrus-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "sitrus-berry"
+       },
+       {
+        "kind": "item",
+        "id": "x-speed",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "dire-hit",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just drink one",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 30
+      }
+     ],
+     "success": {
+      "text": "Fresh and cold.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "money",
+        "amount": -30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mart-truck",
+   "name": "The Mobile Poké Mart Truck",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A truck pulls over for one node only. Its stock is random, the driver says, and tomorrow it will be gone.",
+   "choices": [
+    {
+     "label": "Buy a random bundle (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The driver tosses in whatever is on the shelf.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a big random bundle (₽700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "A full crate rattles out.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Browse only",
+     "success": {
+      "text": "You browse. The driver tips his cap.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "black-friday",
+   "name": "The Black Friday Stampede",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A crowd stampedes a shop opening. \"First pick goes to whoever pushes the hardest!\"",
+   "choices": [
+    {
+     "label": "Fight through the swarm",
+     "success": {
+      "text": "The crowd turns and a shopper swarm swings at you. Fight for first pick!",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Shopper Swarm",
+       "classId": "worker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-candy",
+          "max-potion",
+          "life-orb",
+          "choice-band",
+          "choice-scarf",
+          "choice-specs",
+          "focus-sash",
+          "leftovers",
+          "eviolite"
+         ]
+        },
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for the crowd to thin (Luck)",
+     "check": "luck",
+     "success": {
+      "text": "The crowd drifts off. You pick the leftovers.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Nothing is left but a bent shelf.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "counterfeit-cop",
+   "name": "The Counterfeit Charm Cop",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A cop eyes a charm vendor. \"That charm is a fake. I need a witness. Or you could buy a fake cheap.\"",
+   "choices": [
+    {
+     "label": "Report the seller",
+     "success": {
+      "text": "The cop thanks you and slips you a reward.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the fake cheap (₽60)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 60
+      }
+     ],
+     "chance": 0.6,
+     "success": {
+      "text": "A fake charm. It does something odd, anyway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -60
+       },
+       {
+        "kind": "item",
+        "id": "old-charm",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Totally fake. The seller laughs and the cop watches.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -60
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "magnet-salesman",
+   "name": "The Magnet Salesman",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A salesman stands among floating Magnemite. \"Gadgets that pull coins toward you. Slightly magnetic, slightly cursed.\"",
+   "choices": [
+    {
+     "label": "Buy the Coin Magnet (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "A gadget hums. Coins feel drawn to your pocket.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "relic",
+        "id": "coin-magnet",
+        "name": "Coin Magnet",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the Big Magnet (₽800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "A stronger gadget, noisy and heavy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "relic",
+        "id": "big-magnet",
+        "name": "Big Magnet",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.2
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "smugglers-crate",
+   "name": "The Smuggler's Crate",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1020",
+    "effect": "none"
+   },
+   "intro": "A smuggler pats a stenciled crate. \"Unopened. Contents may include a banned item. No refunds.\"",
+   "choices": [
+    {
+     "label": "Buy the crate (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "chance": 0.6,
+     "success": {
+      "text": "The crate holds a haul of gear. A patrol passes you without looking.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Banned goods. A patrol confiscates the crate and fines you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn him in",
+     "success": {
+      "text": "The patrol thanks you with a reward.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rebate-booth",
+   "name": "The Rebate Booth",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A booth with a hand-drawn \"REBATE\" sign. \"Refund of twenty percent of your last purchase.\"",
+   "choices": [
+    {
+     "label": "Claim a rebate",
+     "success": {
+      "text": "The clerk counts out some coins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a bigger one (Charisma)",
+     "check": "charisma",
+     "success": {
+      "text": "The clerk sighs and counts out more.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 350
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"Rebate denied.\" You are shown out.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Skip",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bank-teller",
+   "name": "The Bank Teller",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A teller behind brass bars. \"Deposit now. At the next bank stop, you will get ten percent back.\"",
+   "choices": [
+    {
+     "label": "Deposit ₽500",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The teller stamps your slip. \"See you later.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "deposit-500",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deposit ₽1000",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "A heavier slip, a bigger smile.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "flag",
+        "key": "deposit-1000",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No deposit",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bank-teller-return",
+   "name": "The Teller Returns",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "deposit-500",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The same teller waves from an open window. \"Your deposit has matured.\"",
+   "choices": [
+    {
+     "label": "Withdraw it",
+     "success": {
+      "text": "You get your money back, with interest.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 550
+       },
+       {
+        "kind": "flag",
+        "key": "deposit-500",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "bank-teller-return-big",
+   "name": "The Teller Returns (Big)",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "deposit-1000",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The teller waves a thick envelope. \"Interest at last.\"",
+   "choices": [
+    {
+     "label": "Withdraw it",
+     "success": {
+      "text": "A thick envelope of cash.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1100
+       },
+       {
+        "kind": "flag",
+        "key": "deposit-1000",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "currency-exchanger",
+   "name": "The Currency Exchanger",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A counter with two glass jars. \"Money to Battle Points, or back again. Rates posted on the wall.\"",
+   "choices": [
+    {
+     "label": "Money to research points (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "Four hundred coins turn into research notes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Research points to money",
+     "success": {
+      "text": "Notes turn into coins.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "No exchange",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mismatched-mart",
+   "name": "The Mismatched Mart",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "stop": "shop",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A mart stocking only one type's items today. A wall calendar tracks the rotation.",
+   "choices": [
+    {
+     "label": "Fire day (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "Today it is all fire: lures and charcoal.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "fire-lure",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water day (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "Today it is all water: lures and mystic water.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "water-lure",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grass day (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "Today it is all grass: lures and seeds.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "grass-lure",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "second-chances",
+   "name": "The Seller of Second Chances",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1830",
+    "effect": "none"
+   },
+   "intro": "A pale seller shakes a velvet bag. \"Regret something? For a fee I let you undo your last choice. Once.\"",
+   "choices": [
+    {
+     "label": "Pay to undo (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The seller whispers. The memory shifts.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay a smaller fee (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "A fainter shift. You feel lighter.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "No regrets",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "quiet-antiquarian",
+   "name": "The Quiet Antiquarian",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "An old man arranges small relics on a cloth. He speaks softly of kings and storms.",
+   "choices": [
+    {
+     "label": "Listen to his lore",
+     "success": {
+      "text": "A quiet story, and a small relic pressed into your hand.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "item",
+        "id": "relic-copper",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a relic (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A handsome piece of the past.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "relic-silver",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank him and go",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "itinerant-tutor",
+   "name": "The Itinerant Moves Tutor",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A traveling tutor teaches one move per visit. His price is odd: a berry, a coin, or a secret.",
+   "choices": [
+    {
+     "label": "Pay with a berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "He taps a TM from his pack and nods.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-fire",
+         "tm-water",
+         "tm-grass",
+         "tm-electric"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay with a coin (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A coin for a lesson. He is fine with that.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-normal",
+         "tm-fighting",
+         "tm-flying",
+         "tm-ground"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay with a secret (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "You whisper a secret. He smiles and teaches a rare lesson.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-psychic",
+         "tm-ghost",
+         "tm-dragon",
+         "tm-dark"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your secret is dull. He teaches a plain lesson.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tm-normal",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gym-merch-stall",
+   "name": "The Retired Gym Merch Stall",
+   "group": "Merchants & Deals",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A stall of type-themed badge pins from retired gym leaders. \"Each pin carries a tiny type boost.\"",
+   "choices": [
+    {
+     "label": "Fire pin (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "A bright red pin.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water pin (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "A blue pin that never dries.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grass pin (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "A green pin with a tiny leaf.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look and leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sock-puppet-salesman",
+   "name": "The Sock Puppet Salesman",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#1c1c2a",
+    "effect": "none"
+   },
+   "intro": "A salesman wearing a floppy hat sells you an item. Something is off about his shadow. It looks very much like a Mimikyu.",
+   "choices": [
+    {
+     "label": "Buy his item (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You buy it. It works. His shadow looks pleased.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out the disguise (Intelligence)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "check": "intelligence",
+     "success": {
+      "text": "\"Mimikyu!\" you shout. The disguise flops and the salesman springs at you.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sock Puppet Salesman",
+       "classId": "worker",
+       "size": 2,
+       "types": [
+        "ghost",
+        "fairy"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rare-candy",
+          "max-potion",
+          "life-orb",
+          "choice-band",
+          "choice-scarf",
+          "choice-specs",
+          "focus-sash",
+          "leftovers",
+          "eviolite"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 250
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You miss it. The seller sells you a plain item and slips away.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "trade-wind-caravan",
+   "name": "The Trade Wind Caravan",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A caravan of three merchants parks by the road. \"You may trade with only one of us. Choose carefully.\"",
+   "choices": [
+    {
+     "label": "Trade with the spice merchant",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "She trades a bundle of berries for a coin.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "rawst-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade with the arms merchant",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "He swaps a hold item for a coin.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade with the rare merchant",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "He asks a lot, and gives a lot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave and move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stolen-goods-stall",
+   "name": "The Stolen Goods Stall",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1020",
+    "effect": "none"
+   },
+   "intro": "A stall of questionable bargains. \"Cheap, cheap! Do not ask where it came from.\"",
+   "choices": [
+    {
+     "label": "Buy a bargain (₽120)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 120
+      }
+     ],
+     "success": {
+      "text": "You pocket something nice. It might be hot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -120
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "stolen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the best item (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "A strong item at a thief's price.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "stolen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report the stall",
+     "success": {
+      "text": "The patrol thanks you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stolen-goods-reclaim",
+   "name": "The Rocket Grunt Wants It Back",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stolen",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A Rocket grunt steps in front of you. \"That item you bought. It was ours. Hand it over.\"",
+   "choices": [
+    {
+     "label": "Hand it over",
+     "success": {
+      "text": "He takes it and leaves. Fair enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stolen",
+        "amount": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight for it",
+     "success": {
+      "text": "\"No way,\" you say. He throws a ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stolen",
+        "amount": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 250
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "scope-lens",
+          "wide-lens",
+          "muscle-band",
+          "wise-glasses",
+          "expert-belt",
+          "quick-claw"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "apothecary-experiment",
+   "name": "The Apothecary Experiment",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A lab-coated apothecary offers a bubbling vial. \"Test-drink a random potion. I pay you for the data.\"",
+   "choices": [
+    {
+     "label": "Drink a random potion",
+     "chance": 0.6,
+     "success": {
+      "text": "It fizzes and works. You are paid and refreshed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "It burns your tongue. You are still paid for the data.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "money",
+        "amount": 120
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drink the premium vial",
+     "chance": 0.4,
+     "success": {
+      "text": "A deep green glow and a stronger buff.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "money",
+        "amount": 350
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The vial was bad. A coin for your trouble.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "final-sale-banner",
+   "name": "The Final Sale Banner",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A banner reads \"EVERYTHING ₽1\". The stall owner clears his throat. \"First, you will sit through a short skit.\"",
+   "choices": [
+    {
+     "label": "Sit through the skit",
+     "success": {
+      "text": "The skit takes forever, but the shelves empty into your arms for a coin.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "max-potion",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "focus-sash",
+         "leftovers",
+         "eviolite"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "guard-spec",
+         "potion",
+         "super-potion"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the skit (Charisma)",
+     "check": "charisma",
+     "success": {
+      "text": "You charm your way past the skit.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "He sulks and refuses to sell.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
