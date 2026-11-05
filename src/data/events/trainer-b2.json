@@ -1,0 +1,764 @@
+{
+ "events": [
+  {
+   "id": "trainer-on-a-bike",
+   "name": "Trainer on a Bike",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#232a2a",
+    "effect": "none"
+   },
+   "intro": "A trainer revs a bike beside you. \"Race me to that signpost. Win and I give you the first move in our battle.\"",
+   "choices": [
+    {
+     "label": "Race!",
+     "check": "speed",
+     "success": {
+      "text": "You cross the line first. \"Fine, you move first.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Won the race: you strike first",
+        "effects": [
+         {
+          "kind": "firstStrike"
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bike Racer",
+       "classId": "biker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "They are across the line before you blink. \"Now we fight.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bike Racer",
+       "classId": "biker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip the race, just battle",
+     "success": {
+      "text": "\"No warm-up? Fine.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bike Racer",
+       "classId": "biker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wave and walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "held-item-gauntlet",
+   "name": "Held-Item Gauntlet",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2518",
+    "effect": "none"
+   },
+   "intro": "Every trainer on this road carries a berry or a trinket for their Pokémon. \"Beat us and keep what we were holding.\"",
+   "choices": [
+    {
+     "label": "Take the gauntlet",
+     "success": {
+      "text": "The first trainer grins and sends out a Pokémon with a berry in its paw.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Gauntlet Trainers",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "fresh-water",
+          "soda-pop",
+          "lemonade",
+          "moomoo-milk",
+          "lava-cookie",
+          "old-gateau",
+          "casteliacone",
+          "sweet-heart"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ranked-ladder-1",
+   "name": "Ranked Ladder: Bronze Match",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A bulletin board lists a ranked ladder. \"Climb it. Every win unlocks a tougher opponent further down the road.\"",
+   "choices": [
+    {
+     "label": "Take a Bronze match",
+     "success": {
+      "text": "The Bronze ranked trainer salutes.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bronze Ranked Trainer",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "flag",
+         "key": "ladder",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ignore the board",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ranked-ladder-2",
+   "name": "Ranked Ladder: Silver Match",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ladder",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#232830",
+    "effect": "none"
+   },
+   "intro": "The board has a new entry with your name on it. \"Silver tier. Win again and you are close to the top.\"",
+   "choices": [
+    {
+     "label": "Take a Silver match",
+     "success": {
+      "text": "A Silver-ranked trainer steps up.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Silver Ranked Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "flag",
+         "key": "ladder",
+         "amount": 1
+        },
+        {
+         "kind": "levels",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not yet",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ranked-ladder-3",
+   "name": "Ranked Ladder: Gold Match",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "epic",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ladder",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2e2a14",
+    "effect": "none"
+   },
+   "intro": "Top of the ladder. The crowd hushes. \"Gold tier: the best of the best.\"",
+   "choices": [
+    {
+     "label": "Take the Gold match",
+     "success": {
+      "text": "The Gold-ranked champion adjusts their cap.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gold Ranked Champion",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1800
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ladder",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay at Silver",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "slippery-slope-duel",
+   "name": "Slippery Slope Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "tint": "#1c2a34",
+    "effect": "none"
+   },
+   "intro": "A frozen slope with a skater waiting at the top. \"On ice nobody stays in order. Care for a duel?\"",
+   "choices": [
+    {
+     "label": "Duel on the ice",
+     "success": {
+      "text": "You slide into position as hail starts to fall.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The ice scrambles the speed order",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "weather": "hail",
+          "field": "trickRoom",
+          "turns": 5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ice Skater",
+       "classId": "snow-worker",
+       "size": 3,
+       "types": [
+        "ice"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 550
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the long way around",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "duel-on-the-train",
+   "name": "Duel on the Train",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222630",
+    "effect": "rattle"
+   },
+   "intro": "The train lurches. A conductor blocks the aisle. \"Tickets, or a duel. Motion blur makes every hit a gamble.\"",
+   "choices": [
+    {
+     "label": "Duel in the carriage",
+     "success": {
+      "text": "Everything blurs as the train races on.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Motion blur: your Pokémon are harder to hit",
+        "effects": [
+         {
+          "kind": "evasionMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Train Conductor",
+       "classId": "worker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 650
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Find your seat",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "midnight-cafe-duel",
+   "name": "Midnight Cafe Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1a28",
+    "effect": "none"
+   },
+   "intro": "A cafe stays open past midnight. The waiter sets down three teas. \"Pick one, and duel me. The tea helps. Probably.\"",
+   "choices": [
+    {
+     "label": "Sharp green tea (more crits)",
+     "success": {
+      "text": "The waiter rolls up their sleeves.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Sharp tea: sharper hits",
+        "effects": [
+         {
+          "kind": "critChanceBonus",
+          "value": 0.15
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Cafe Waiter",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "heal",
+         "share": 0.25
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Calm chamomile (more evasive)",
+     "success": {
+      "text": "The waiter rolls up their sleeves.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Calm tea: steadier on their feet",
+        "effects": [
+         {
+          "kind": "evasionMultiplier",
+          "value": 1.2
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Cafe Waiter",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "heal",
+         "share": 0.25
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bright citrus (surer aim)",
+     "success": {
+      "text": "The waiter rolls up their sleeves.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Citrus tea: moves land more often",
+        "effects": [
+         {
+          "kind": "accuracyMultiplier",
+          "value": 1.2
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Cafe Waiter",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "heal",
+         "share": 0.25
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just pay for the tea",
+     "success": {
+      "text": "A lovely cup of tea, and nobody gets hurt.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "money",
+        "amount": -40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lifeguard-test",
+   "name": "Lifeguard Test",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#16303a",
+    "effect": "none"
+   },
+   "intro": "A whistle blows on the beach. \"A swimmer is in trouble! Rescue first, then prove you can hold your own.\"",
+   "choices": [
+    {
+     "label": "Swim out and rescue them (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You haul them back. The head lifeguard nods and sends out a Water-type.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Head Lifeguard",
+       "classId": "swimmer",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 650
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The current wins this round. The lifeguard does the rescue and challenges you for the effort.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Head Lifeguard",
+       "classId": "swimmer",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay on the sand",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
