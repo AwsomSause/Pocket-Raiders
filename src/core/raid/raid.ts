@@ -125,6 +125,8 @@ export function freshRaidBattle(def: RaidDef, badges = 0): RaidBattle {
     rewardPercent: 100,
     draftDelta: 0,
     practice: null,
+    damageBy: {},
+    healedBy: {},
   };
 }
 
@@ -463,7 +465,7 @@ function placeGrandEnemy(content: Content, run: RunState, rng: Rng): void {
 /** A Pokémon-specific raid memory earned by what it did (Overdrive §3 "Raid memories"). */
 export interface RaidMemory {
   uid: string;
-  key: 'lead' | 'breaker' | 'tank' | 'finisher' | 'survivor';
+  key: 'lead' | 'breaker' | 'tank' | 'finisher' | 'survivor' | 'striker' | 'medic';
   title: string;
   text: (name: string, boss: string) => string;
 }
@@ -480,6 +482,12 @@ export function raidMemories(battle: BattleState, finisherUid: string | undefine
   if (raid.breaker) out.push({ uid: raid.breaker, key: 'breaker', title: 'The One Who Broke Its Guard', text: (n, b) => `${n} broke ${b}'s guard.` });
   if (raid.tank) out.push({ uid: raid.tank, key: 'tank', title: 'It Took the Hit for Everyone', text: (n, b) => `${n} took ${b}'s charged attack for the whole team.` });
   if (raid.survivor) out.push({ uid: raid.survivor, key: 'survivor', title: 'The One That Survived', text: (n, b) => `${n} survived ${b}'s signature attack.` });
+  // S404 medals: the most damage dealt, and the most HP mended by a Support.
+  const top = (rec: Record<string, number>): string | null => Object.entries(rec).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+  const striker = top(raid.damageBy);
+  if (striker) out.push({ uid: striker, key: 'striker', title: 'Hit the Hardest', text: (n, b) => `${n} dealt the most damage to ${b}.` });
+  const medic = top(raid.healedBy);
+  if (medic) out.push({ uid: medic, key: 'medic', title: 'Kept the Team Going', text: (n) => `${n} mended the team through the whole fight.` });
   if (finisherUid) out.push({ uid: finisherUid, key: 'finisher', title: 'The Final Blow Belonged to...', text: (n, b) => `${n} landed the final blow on ${b}.` });
   return out;
 }
