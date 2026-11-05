@@ -10,6 +10,7 @@ import { installPack, removePack } from '../core/tools/modPacks';
 import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
 import { inspectSave, reportLines } from '../save/saveInspector';
 import { categoryLabel, parseSplits, splitLines } from '../core/tools/speedrun';
+import { peekStreams } from '../core/tools/rngView';
 import { backupDue } from '../core/tools/backup';
 import { packSeeds } from '../core/configPack';
 import { loadStoredPacks } from '../core/tools/modPacks';
@@ -58,10 +59,11 @@ export function openTools(host: ToolsHost): void {
     { label: 'Tournament bracket', sub: 'Type friends\' names; get a seeded single-elimination bracket. Works offline.', go: () => openBracket(host) },
     { label: 'Check a save file', sub: 'Pick a save record or exported save: shows its version, the upgrade steps and any damage. Changes nothing.', go: () => openSaveCheck(host) },
     { label: 'Speedrun timer', sub: `Shows run time and badge splits on the map. Now ${device.speedrunOn() ? 'on' : 'off'}; Enter to switch, then see the last run's splits.`, go: () => openSpeedrun(host) },
+    { label: 'RNG streams (debug)', sub: 'Shows the current run\'s random streams and what each will roll next. Looking changes nothing.', go: () => openRngView(host) },
     { label: 'Report a bug', sub: 'Bundles the version, seed and recent errors into a file you can send.', go: () => openBugReport(host) },
     { label: 'Back up my save', sub: due ? 'You have not saved a copy in a while. Enter to download one.' : 'Download a copy of your profile and settings.', go: () => backup(host) },
   ];
-  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 9 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
+  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 10 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
 }
 
 export function openChangelog(host: ToolsHost): void {
@@ -169,6 +171,12 @@ function openSpeedrun(host: ToolsHost): void {
   const rules = session.run?.rules;
   const rows = [row(`Timer is ${on ? 'on' : 'off'}`, 'Enter switches it. Times stay on this device, never in your save.', on ? 'Turn off' : 'Turn on'), ...(rules ? [row(`Category: ${categoryLabel(rules)}`, 'Only compare times in the same category.')] : []), ...(sp ? splitLines(sp, Date.now()).map((l) => row(l, '')) : [row('No splits yet', 'Turn the timer on and start a run.')])];
   page(host, 'Speedrun timer', rows, (n) => { if (n === 0) { device.setSpeedrun(!on); host.restart(`Speedrun timer ${on ? 'off' : 'on'}.`); } });
+}
+
+function openRngView(host: ToolsHost): void {
+  const run = services().session.run;
+  const rows = run ? peekStreams(run.rng, 3).map((v) => row(v.name, `state ${v.state}`, v.next.join('  '))) : [row('No run in progress', 'Start a run to see its streams.')];
+  page(host, 'RNG streams', rows);
 }
 
 function openBugReport(host: ToolsHost): void {
