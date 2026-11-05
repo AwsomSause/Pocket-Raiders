@@ -1,0 +1,839 @@
+{
+ "events": [
+  {
+   "id": "world-meteor-shower",
+   "name": "Meteor Shower",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#10143a",
+    "effect": "glint"
+   },
+   "intro": "The night sky streaks white. Something lands softly in the grass nearby, still warm and humming with stardust.",
+   "choices": [
+    {
+     "label": "Follow the glow",
+     "success": {
+      "text": "A dazed Pokémon sits in a small crater, dusted with stardust, and decides to come with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "types": [
+         "psychic",
+         "rock"
+        ],
+        "levelBonus": 2,
+        "shinyMultiplier": 4
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Collect the stardust",
+     "success": {
+      "text": "You fill a pouch with the glittering dust.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "star-piece",
+         "comet-shard"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-eclipse",
+   "name": "Eclipse",
+   "group": "World Events",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "dark",
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#08060f",
+    "effect": "shake"
+   },
+   "intro": "The sun goes dark at midday. The air chills, and the trail ahead vanishes into shadow.",
+   "choices": [
+    {
+     "label": "Walk on in the dark",
+     "success": {
+      "text": "Shadows lean in around your team. Dark and Ghost moves hit harder for a while.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Eclipse",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "dark",
+          "value": 1.3
+         },
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ghost",
+          "value": 1.3
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make camp until it passes",
+     "success": {
+      "text": "You wait it out. The team rests and the sky clears.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-disaster-quake",
+   "name": "Earthquake",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a18",
+    "effect": "shake"
+   },
+   "intro": "The ground heaves. Rocks tumble down the slope and the trail cracks open ahead.",
+   "choices": [
+    {
+     "label": "Run for open ground",
+     "success": {
+      "text": "You get clear, bruised but quick.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter and dig out the cracks",
+     "success": {
+      "text": "Behind the rubble you find buried loot.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "everstone",
+         "iron-ball"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Ground-type holds the earth",
+     "success": {
+      "text": "Your Ground-type calms the tremor and the way opens.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "world-disaster-flood",
+   "name": "Flash Flood",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#12304a",
+    "effect": "snow"
+   },
+   "intro": "Rain upstream swells the river without warning. Brown water races across the path.",
+   "choices": [
+    {
+     "label": "Wait on high ground",
+     "success": {
+      "text": "The water falls by evening. A front of rain follows you.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ford it",
+     "success": {
+      "text": "You wade through, soaked and cold.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Water-type swims the team across",
+     "success": {
+      "text": "Your Water-type ferries everyone over safely.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "world-disaster-blizzard",
+   "name": "Blizzard Front",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "snow"
+   },
+   "intro": "A wall of white rolls down the pass. Visibility drops to a few steps.",
+   "choices": [
+    {
+     "label": "Dig in and wait",
+     "success": {
+      "text": "The storm passes slowly.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "hail",
+        "columns": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push through",
+     "success": {
+      "text": "You cut through but freeze.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.18
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-hidden-grotto",
+   "name": "Hidden Grotto",
+   "group": "World Events",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#102838",
+    "effect": "glint"
+   },
+   "intro": "A low crack behind a waterfall opens into a glowing grotto. A faint breeze blows from its far end.",
+   "choices": [
+    {
+     "label": "Follow the tunnel",
+     "success": {
+      "text": "The grotto leads out far ahead of where you started.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest by the pool",
+     "success": {
+      "text": "The still water soothes the team.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-festival",
+   "name": "Festival Stop",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "fairy",
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2038",
+    "effect": "glint"
+   },
+   "intro": "Lanterns, stalls and a stage. A small festival has sprung up on the road. Music and food everywhere.",
+   "choices": [
+    {
+     "label": "Join the dancing",
+     "success": {
+      "text": "Your team has the time of its life.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Eat at the stalls",
+     "success": {
+      "text": "A hearty meal for the whole team.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try the games",
+     "success": {
+      "text": "A ring toss, a prize wheel.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "great-ball",
+         "revive"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-ranger-mission",
+   "name": "Ranger Mission",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "normal",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c3a20",
+    "effect": "glint"
+   },
+   "intro": "A park ranger hails you. A wild Pokémon is tangled in a snare up the trail, and she needs a steady hand.",
+   "choices": [
+    {
+     "label": "Free it gently",
+     "success": {
+      "text": "The Pokémon is free. The ranger writes your name down and hands over her thanks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help with a net and a berry",
+     "success": {
+      "text": "It nuzzles you before running into the trees.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "pecha-berry",
+         "lum-berry"
+        ],
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-cave-in",
+   "name": "Cave-In",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A cave collapses ahead and seals a chamber. Something metallic glints between the stones.",
+   "choices": [
+    {
+     "label": "Send a Rock or Fighting Pokémon to tunnel",
+     "success": {
+      "text": "Your Pokémon clears the stones and drags out a chest.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "black-belt",
+         "rare-candy",
+         "leftovers"
+        ],
+        "count": 2
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ]
+    },
+    {
+     "label": "Dig by hand",
+     "success": {
+      "text": "You find a little, and lose some skin.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "great-ball",
+         "star-piece"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-egg-delivery",
+   "name": "Mysterious Egg Delivery",
+   "group": "World Events",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3020",
+    "effect": "glint"
+   },
+   "intro": "A tired courier presses a warm Egg into your arms. 'Please keep it safe. I have to run.'",
+   "choices": [
+    {
+     "label": "Take the Egg",
+     "success": {
+      "text": "You carry it along. It hums in your pack.",
+      "effects": [
+       {
+        "kind": "egg",
+        "stages": 3,
+        "shiny": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-lighthouse-beacon",
+   "name": "Lighthouse Beacon",
+   "group": "World Events",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water",
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#16283a",
+    "effect": "glint"
+   },
+   "intro": "An old lighthouse stands dark on the cliff. Its lamp could still be lit.",
+   "choices": [
+    {
+     "label": "Light the beacon",
+     "success": {
+      "text": "The beam sweeps the road. You can see far ahead, and your team feels guided.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Beacon light",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.2
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb for the view",
+     "success": {
+      "text": "You see the road ahead from the top.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-weather-tower",
+   "name": "Weather Control Tower",
+   "group": "World Events",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3050",
+    "effect": "shake"
+   },
+   "intro": "A humming tower of coils and dishes. A panel lets you pick tomorrow's weather, for a price.",
+   "choices": [
+    {
+     "label": "Call the rain",
+     "success": {
+      "text": "Clouds gather.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the sun",
+     "success": {
+      "text": "The sky clears and warms.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "sun",
+        "columns": 3
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the sandstorm",
+     "success": {
+      "text": "Dust rolls in.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "sand",
+        "columns": 3
+       },
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-legend-rumor",
+   "name": "Rumor of a Legend",
+   "group": "World Events",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "psychic",
+    "dragon"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1a3a",
+    "effect": "glint"
+   },
+   "intro": "An old traveller leans close and whispers of a legendary Pokémon seen on the mountain. Nobody believes him.",
+   "choices": [
+    {
+     "label": "Buy his story",
+     "success": {
+      "text": "His map is crude, but it hints where to look.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "scout",
+        "columns": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen for free",
+     "success": {
+      "text": "You keep the story in mind.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
