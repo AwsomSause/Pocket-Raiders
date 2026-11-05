@@ -31,15 +31,15 @@ test('the Preparation Desk offers a mentor and the run starts with one', async (
   await page.keyboard.press('Enter');
   await waitForScene(page, 'RunPrep');
   await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(1)); // the Trainer page holds the Mentor row
-  await waitForScene(page, 'RunPrep');
-  const row = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').menu.config.options.findIndex((o: any) => o.label.startsWith('Mentor:')) as number);
-  expect(row).toBeGreaterThan(0);
-  await prepRow(page, row);
-  await page.keyboard.press('ArrowRight');
+  await waitForScene(page, 'RunChoices');
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunChoices').choose('mentor', 'ravi-ironhand'));
   await page.waitForTimeout(250);
+  await page.screenshot({ path: 'test-results/mentor-prep.png' });
+  await page.keyboard.press('Escape'); // options → rows
+  await page.keyboard.press('Escape'); // back to the desk
+  await waitForScene(page, 'RunPrep');
   const prep = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').prep);
   expect(prep.mentorId).toBe('ravi-ironhand');
-  await page.screenshot({ path: 'test-results/mentor-prep.png' });
   // Roll starters (Overview page), take the first one, and the run carries the mentorship.
   await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(4));
   await waitForScene(page, 'RunPrep');

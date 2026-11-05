@@ -39,6 +39,7 @@ import { RunPrepScene } from './scenes/RunPrepScene';
 import { RunModifiersScene } from './scenes/RunModifiersScene';
 import { RunStartersScene } from './scenes/RunStartersScene';
 import { RunSeedScene } from './scenes/RunSeedScene';
+import { RunChoicesScene } from './scenes/RunChoicesScene';
 import { ShopScene } from './scenes/ShopScene';
 import { EventScene } from './scenes/EventScene';
 import { TradeScene } from './scenes/TradeScene';
@@ -109,7 +110,7 @@ function start(): void {
     backgroundColor: '#1d1a24',
     pixelArt: true,
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, RunModifiersScene, RunStartersScene, RunSeedScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
+    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, RunModifiersScene, RunStartersScene, RunSeedScene, RunChoicesScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene],
     callbacks: {
       preBoot: (g) => g.registry.set('session', session),
       postBoot: (g) => {
@@ -139,7 +140,7 @@ function start(): void {
         // slowly changing battlefield behind them (the battle and map draw their own).
         const ownScenery = new Set(['Boot', 'Battle', 'Map', 'Hub', 'Town', 'MainMenu', 'TrainerSelect']);
         // Gameplay screens in the Aero look (M10) get the glossy sky-and-bubbles backdrop instead.
-        const aeroScenery = new Set(['SaveSlots', 'Reward', 'Shop', 'Event', 'Decision', 'Briefing', 'Expedition', 'Minigame', 'StarterSelect', 'RunPrep', 'RunModifiers', 'RunStarters', 'RunSeed', 'GameOver', 'HallOfFame', 'LegacyGallery', 'Memories', 'Credits']);
+        const aeroScenery = new Set(['SaveSlots', 'Reward', 'Shop', 'Event', 'Decision', 'Briefing', 'Expedition', 'Minigame', 'StarterSelect', 'RunPrep', 'RunModifiers', 'RunStarters', 'RunSeed', 'RunChoices', 'GameOver', 'HallOfFame', 'LegacyGallery', 'Memories', 'Credits']);
         for (const scene of g.scene.getScenes(false)) {
           scene.events.on(Phaser.Scenes.Events.CREATE, () => {
             if (scene.scene.key !== 'Boot') {
