@@ -44,8 +44,12 @@ abstract class PagedScene extends Phaser.Scene {
     this.ui.add(drawPanel(this, 40, 20, GAME_WIDTH - 80, 500, { alpha: 0.95 }));
     this.ui.add(this.add.text(64, 38, title, textStyle(30, COLORS.text)));
     if (sub) this.ui.add(this.add.text(64, 82, sub, textStyle(18, COLORS.textMuted)));
-    this.ui.add(this.add.text(64, 118, body, textStyle(20, COLORS.text, { wordWrap: { width: GAME_WIDTH - 130 }, lineSpacing: 6 })));
-    this.menu = new Menu(this, { x: 64, y: 524 - options.length * 38, options: options.map((o) => o.option), itemWidth: 420, itemHeight: 38, fontSize: 22, onSelect: (i) => options[i]!.action(), ...(onBack ? { onBack } : {}) });
+    // The menu ends 10 px inside the panel's bottom edge; the body shrinks (down to 14 px) so it never runs under it.
+    const menuY = 510 - options.length * 38;
+    const text = this.add.text(64, 118, body, textStyle(20, COLORS.text, { wordWrap: { width: GAME_WIDTH - 130 }, lineSpacing: 6 }));
+    for (let size = 20; text.height > menuY - 126 && size > 14; ) text.setFontSize(--size);
+    this.ui.add(text);
+    this.menu = new Menu(this, { x: 64, y: menuY, options: options.map((o) => o.option), itemWidth: 420, itemHeight: 38, fontSize: 22, onSelect: (i) => options[i]!.action(), ...(onBack ? { onBack } : {}) });
     this.menu.focus(focus, false);
     this.handlers = { left };
   }
@@ -142,7 +146,7 @@ export class TutorialScene extends PagedScene {
     options.push({ option: { label: 'Leave the tutorial', detail: undefined }, action: () => leave(this, this.h) });
     const body = TUTORIAL_CATEGORIES.map((c, i) => `${i + 1}. ${c.professor}: ${c.blurb}`).join('\n');
     this.show('Meet the Professors', finished ? 'All nine lessons finished!' : `${done.length} of ${TUTORIAL_CATEGORIES.length} lessons finished. Pick any, in any order.`, '', options, focus, () => leave(this, this.h));
-    this.menu?.container.setY(110);
+    this.menu?.container.setY(118);
     // The blurbs sit to the right of the list.
     this.ui.add(this.add.text(500, 118, body, textStyle(16, COLORS.textMuted, { wordWrap: { width: 410 }, lineSpacing: 10 })));
   }

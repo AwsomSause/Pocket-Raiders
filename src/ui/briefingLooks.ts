@@ -26,7 +26,7 @@ const find = (rows: [string, string][], label: string) => rows.find((r) => r[0] 
 
 /** Label/text rows in the biggest font that fits the box (shrunk as a last resort). */
 function fitRows(s: Phaser.Scene, rows: [string, string][], x: number, y: number, w: number, h: number, ink: string, label: string, labelW = 130): void {
-  for (const size of [18, 16, 15, 14, 13, 12]) {
+  for (const size of [18, 16, 15, 14]) {
     const box = s.add.container(0, 0);
     let cy = y;
     const gap = size >= 16 ? 8 : 5;
@@ -44,22 +44,24 @@ function fitRows(s: Phaser.Scene, rows: [string, string][], x: number, y: number
       cy += Math.max(tx.height, size + 4) + gap;
     }
     if (cy - gap - y <= h) return;
-    if (size === 12) {
-      // Too much for the panel even at small size: keep a readable size and show as many rows as fit, then a count.
+    if (size === 14) {
+      // Too much for the panel even at 14: keep that readable size and show as many rows as fit, then a count (no tiny type).
       box.destroy(true);
+      lw = Math.min(lw, Math.round(w * 0.42));
       const keep = s.add.container(0, 0);
       let ry = y;
       let shown = 0;
       for (const [l, t] of rows) {
-        const lab = s.add.text(x, ry, l, textStyle(15, label));
-        const tx = s.add.text(x + labelW, ry, t, textStyle(15, ink, { wordWrap: { width: w - labelW } }));
-        if (ry + Math.max(tx.height, 19) > y + h - 22 && shown < rows.length) {
+        const lab = s.add.text(x, ry, l, textStyle(14, label, { wordWrap: { width: lw - 8 } }));
+        const tx = s.add.text(x + lw, ry, t, textStyle(14, ink, { wordWrap: { width: w - lw } }));
+        const rh = Math.max(tx.height, lab.height, 18);
+        if (ry + rh > y + h - 22 && shown < rows.length) {
           lab.destroy();
           tx.destroy();
           break;
         }
         keep.add([lab, tx]);
-        ry += Math.max(tx.height, 19) + 5;
+        ry += rh + 5;
         shown++;
       }
       if (shown < rows.length) keep.add(s.add.text(x, ry, `+${rows.length - shown} more`, textStyle(14, label)));
@@ -113,7 +115,7 @@ export const BRIEFING_LOOKS: Record<string, BriefingDraw> = {
     });
     rect(s, 604, 24, 332, 492, 0xfaf3e0, 1, 0xb8a070, 10, 3);
     s.add.text(624, 36, 'Mission', textStyle(26, '#3a2a10'));
-    fitRows(s, i.rows, 624, 74, 296, 384, '#3a2a10', '#a02020', 84);
+    fitRows(s, i.rows, 624, 74, 296, 340, '#3a2a10', '#a02020', 84);
     return { x: 616, y: 436, columns: 1, itemWidth: 300, color: '#a02020' };
   },
   storybook: (s, i) => {
