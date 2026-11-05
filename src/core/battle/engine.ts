@@ -3277,7 +3277,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
-    if (fx.leaveOne || target.vol.endure) damage = Math.min(damage, target.mon.hp - 1);
+    if (fx.leaveOne || target.vol.endure || (ctx.battle.pacifist && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;

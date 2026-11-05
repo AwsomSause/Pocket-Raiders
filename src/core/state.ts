@@ -737,6 +737,8 @@ export const BattleStateSchema = z.object({
   critStreak: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Nuzlocke: this wild Pokémon is not the area's first encounter, so it can't be caught (core/nuzlocke.ts). */
   nuzlockeNoCatch: z.boolean().optional(),
+  /** Pacifist run: damage never knocks out this wild Pokémon (core/rules.ts). */
+  pacifist: z.boolean().optional(),
   /** A fight on an expedition route: afterwards the run goes back to the expedition, not the map or a draft. */
   expedition: z.boolean().optional(),
   /** A double battle (core/battle/doubles.ts): the second Pokémon on each side. */
