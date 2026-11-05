@@ -1187,6 +1187,8 @@ export const RunStateSchema = z.object({
     areas: z.array(z.string()),
     memorial: z.array(z.object({ uid: z.string(), speciesId: z.string(), level: z.number().int(), shiny: z.boolean(), ace: z.boolean(), area: z.string(), cause: z.string() })),
   }).optional(),
+  /** Time Attack: speed points earned and fast trainer wins so far (core/rules.ts `timeAttackPoints`). */
+  timeAttack: z.object({ points: z.number().int().min(0), fast: z.number().int().min(0) }).optional(),
   /** Modifier Run: the blessings and curses picked so far (they stack). */
   mutators: z.array(z.string()).optional(),
   /** Effects of the last temporary signature choice per mechanic, so the next choice can replace them. */
