@@ -10,3 +10,8 @@ New trainer-battle fields (event data): `weather`, `terrain` (forced for the who
 ## Still to build (need engine rules)
 R55-R62, R64, R67-R69, R73-R97, R99, R101, R103+ (reversed order, handicap, hidden team, no-switching, no-attack wins, shared HP bar, turn limits, mini-games...).
 Limited in batch 1: R54 gives party levels instead of a literal "XP share"; R65 has no extra twist; R100 is two waves of kids.
+
+## Batch 2 (9 events, `tools/events/trainerB2.ts` -> `src/data/events/trainer-b2.json`, `npm run data:rb2-events`)
+R55 Trainer on a Bike (win the race, strike first), R68 Held-Item Gauntlet, R80 Ranked Ladder (3 rungs by flag), R86 Slippery Slope Duel (hail + Trick Room), R87 Duel on the Train (evasion up), R101 Midnight Cafe Duel (pick a tea), R103 Lifeguard Test. Uses `tempEffect` (run events J).
+Limited: R86's shuffling speed order is Trick Room for 5 turns; R87's motion blur helps only your side.
+Still needs new modifier kinds: reversed party order, handicap start, no switching, turn limit, hidden foe team, no attack moves.
