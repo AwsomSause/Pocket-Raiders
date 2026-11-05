@@ -1,0 +1,1 @@
+- Modes slice 5 (S303 Time Attack, `time-attack` modifier): every trainer win in 8 turns or fewer adds (9 - turns) x 10 points to the run score (`run.timeAttack`, optional field, no save bump); shown in the Game Over score breakdown and counted in the rank. Tests `tests/unit/timeAttack.test.ts`.

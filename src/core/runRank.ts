@@ -16,7 +16,7 @@ export const RANKS = [
 
 export type Rank = (typeof RANKS)[number];
 
-type ScoreRun = Pick<RunState, 'victory' | 'regionsCleared' | 'badges' | 'encountersCompleted'> & { rules?: Pick<RunState['rules'], 'rewardMultiplier'> };
+type ScoreRun = Pick<RunState, 'victory' | 'regionsCleared' | 'badges' | 'encountersCompleted'> & { timeAttack?: RunState['timeAttack'] } & { rules?: Pick<RunState['rules'], 'rewardMultiplier'> };
 
 export interface ScorePart {
   label: string;
@@ -38,7 +38,8 @@ export function scoreBreakdown(run: ScoreRun): ScoreBreakdown {
     { label: `${run.badges.length} badge${run.badges.length === 1 ? '' : 's'} (100 each)`, points: run.badges.length * 100 },
     { label: `${run.encountersCompleted} encounters (5 each)`, points: run.encountersCompleted * 5 },
   ];
-  const base = runScore(run);
+  if (run.timeAttack?.points) parts.push({ label: `Time Attack: ${run.timeAttack.fast} fast win${run.timeAttack.fast === 1 ? '' : 's'}`, points: run.timeAttack.points });
+  const base = runScore(run) + (run.timeAttack?.points ?? 0);
   const multiplier = Math.max(0, run.rules?.rewardMultiplier ?? 1);
   return { parts, base, multiplier, total: Math.round(base * multiplier) };
 }

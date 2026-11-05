@@ -169,7 +169,7 @@ import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -2489,6 +2489,10 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.outcome === 'caught') moneyGained = Math.floor(moneyGained * catchMoneyPerk(perks));
   moneyGained = Math.floor(moneyGained * battleMoneyScale(run.rules) * mutatorMoney(run) * (battle.autoUsed ? content.balance.difficulty.autoBattleXp : 1));
   if (battle.kind === 'trainer') moneyGained += quickWinBonus(run.rules, battle.turn - 1);
+  if (battle.kind === 'trainer' && battle.outcome === 'win') {
+    const pts = timeAttackPoints(run.rules, battle.turn - 1);
+    if (pts > 0) run.timeAttack = { points: (run.timeAttack?.points ?? 0) + pts, fast: (run.timeAttack?.fast ?? 0) + 1 };
+  }
   if (battle.alpha) moneyGained = Math.floor(moneyGained * content.balance.w1.luck.alphaMoney);
   if (battle.deal) moneyGained = Math.floor(moneyGained * content.balance.w1.play.deal.money);
   run.money += moneyGained;
