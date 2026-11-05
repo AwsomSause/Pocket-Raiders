@@ -158,7 +158,7 @@ import { styleTrick } from './rivals/tricks';
 import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, recordNarrativeDefeat } from './rivals/narrativeDefeat';
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
-import { bondEvolves, bondLessons, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
+import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
 import { createStoryState, emit } from './story/record';
@@ -2203,6 +2203,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (wasForced && action.kind === 'switch' && outgoing) {
     const combo = playerCombo(content, run, outgoing, run.party[action.partyIndex]!.uid);
     if (combo) engineEvents.push(combo);
+    else if (content.balance.careEffects) {
+      const lvl = bondLevelHandover(content, run, outgoing, run.party[action.partyIndex]!.uid);
+      if (lvl) engineEvents.push(lvl);
+    }
   }
   // Teamwork pairs (Plusle + Minun ...): a pair member sent in beside its partner gets a boost.
   if (action.kind === 'switch' && content.balance.careEffects) {

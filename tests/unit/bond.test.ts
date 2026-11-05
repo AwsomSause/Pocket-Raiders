@@ -3,7 +3,7 @@
 // Pokémon Recognition and the Emotional Turning Point.
 
 import { describe, expect, it } from 'vitest';
-import { adjustBond, bondMood, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
+import { adjustBond, bondLevelHandover, bondMood, bondVictory, pairBondLevel, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
 import { trackFeelings } from '../../src/core/bond/feelings';
 import { createBattle, type BattleEvent } from '../../src/core/battle/engine';
 import { openingDrama, planDrama } from '../../src/core/drama';
@@ -236,5 +236,34 @@ describe('Emotional Turning Point', () => {
     foe.battle!.ai = 0.9;
     const tp: BattleEvent = { type: 'turningPoint', side: 'enemy', uid: 'e1', emotion: 'bravery' };
     expect(planDrama(content, foe, structuredClone(foe.battle!), [tp], 'high').some((l) => l.cue?.event === 'emotionalTurningPoint')).toBe(true);
+  });
+});
+
+describe('Bond Levels', () => {
+  function pair() {
+    const run = battleRun();
+    const a = run.party[0]!;
+    const b = createPokemon(content, 'rattata', 10, 'p2');
+    run.party.push(b);
+    return { run, a, b };
+  }
+  it('shared wins raise the pair level at 3, 8 and 15', () => {
+    const { run, a, b } = pair();
+    expect(pairBondLevel(run, a.uid, b.uid)).toBe(0);
+    for (let i = 0; i < 15; i += 1) {
+      bondVictory(run, [a.uid, b.uid]);
+      if (i === 1) expect(pairBondLevel(run, a.uid, b.uid)).toBe(0);
+      if (i === 2) expect(pairBondLevel(run, b.uid, a.uid)).toBe(1);
+      if (i === 7) expect(pairBondLevel(run, a.uid, b.uid)).toBe(2);
+    }
+    expect(pairBondLevel(run, a.uid, b.uid)).toBe(3);
+  });
+  it('a leveled pair hands over with a boost sized by level, once; strangers get none', () => {
+    const { run, a, b } = pair();
+    expect(bondLevelHandover(content, run, a.uid, b.uid)).toBeNull();
+    for (let i = 0; i < 8; i += 1) bondVictory(run, [a.uid, b.uid]);
+    expect(bondLevelHandover(content, run, a.uid, b.uid)).toMatchObject({ type: 'bondLevel', level: 2 });
+    expect(run.battle!.playerStages.atk + run.battle!.playerStages.spa).toBe(2);
+    expect(bondLevelHandover(content, run, a.uid, b.uid)).toBeNull();
   });
 });
