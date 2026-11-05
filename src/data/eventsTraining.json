@@ -2095,6 +2095,333 @@
     }
    ],
    "stop": "merchant"
+  },
+  {
+   "id": "evolution-tutor",
+   "name": "Evolution Tutor",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3322",
+    "effect": "sparkle"
+   },
+   "intro": "A retired professor with a stack of evolution charts waves you over. \"Tell me who you are carrying and I will tell you what they need to change.\"",
+   "choices": [
+    {
+     "label": "Ask about your party",
+     "requires": [],
+     "success": {
+      "text": "She flips through her charts and reads out the answer.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "evolutionHint"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just say thank you",
+     "requires": [],
+     "success": {
+      "text": "\"Come back when you are curious,\" she smiles.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "tutor"
+  },
+  {
+   "id": "nap-pod-corner",
+   "name": "Nap Pod Corner",
+   "group": "Training and growth",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a3a",
+    "effect": "float"
+   },
+   "intro": "A row of padded nap pods sits beside the road with a sign: \"40 minutes can save a day.\" The lead is already yawning.",
+   "choices": [
+    {
+     "label": "Take a nap",
+     "requires": [],
+     "success": {
+      "text": "You sleep deeply. The lead feels much better, but you will sleep through the next wild stop.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "train",
+        "what": "nap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "requires": [],
+     "success": {
+      "text": "The pods glow behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "rest"
+  },
+  {
+   "id": "shadow-boxing",
+   "name": "Shadow Boxing",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#1e1e28",
+    "effect": "flicker"
+   },
+   "intro": "A mirrored dojo wall ripples. Your lead's shadow steps out and takes a stance. \"Beat yourself,\" the sensei says.",
+   "choices": [
+    {
+     "label": "Fight the shadow",
+     "requires": [],
+     "success": {
+      "text": "Your lead's shadow steps forward, a little weaker than the real thing.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Lead's Shadow",
+       "classId": "black-belt",
+       "mirror": true,
+       "size": 1,
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 1,
+         "who": "lead"
+        },
+        {
+         "kind": "attribute",
+         "key": "strength",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your lead beat its own shadow in a mirrored dojo.",
+         "importance": 40
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bow and leave",
+     "requires": [],
+     "success": {
+      "text": "The shadow bows back and fades.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "dojo"
+  },
+  {
+   "id": "mastery-quiz",
+   "name": "Mastery Quiz",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#33292a",
+    "effect": "glint"
+   },
+   "intro": "A quiz host with a buzzer waves a clipboard. \"Species questions! Get it right and your lead earns a Mastery Shard toward its goals.\"",
+   "choices": [
+    {
+     "label": "Answer the type question (Intelligence)",
+     "requires": [],
+     "success": {
+      "text": "Correct! A Mastery Shard drops into your hand.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "\"Close!\" The buzzer sounds, no shard this time.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Answer the habitat question (Intelligence)",
+     "requires": [],
+     "success": {
+      "text": "Correct! A Mastery Shard for your lead.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "Wrong. The host consoles you with a snack.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Phone a friend",
+     "requires": [],
+     "success": {
+      "text": "Your friend knows the answer. A Mastery Shard, but it costs a favour.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       },
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "requires": [],
+     "success": {
+      "text": "The buzzer goes off behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "stop": "library"
+  },
+  {
+   "id": "graduation-ceremony",
+   "name": "Graduation Ceremony",
+   "group": "Training and growth",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#2a2d33",
+    "effect": "sparkle"
+   },
+   "intro": "A small stage with a banner: \"GRADUATION\". A proud examiner holds two Mastery Shards. \"Pass the final assessment and they are yours.\"",
+   "choices": [
+    {
+     "label": "Take the final assessment (Intelligence)",
+     "requires": [],
+     "success": {
+      "text": "Top marks! The examiner presents two Mastery Shards and a round of applause.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       },
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       },
+       {
+        "kind": "moment",
+        "text": "The lead graduated from a species assessment.",
+        "importance": 50
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "You come up short. The examiner awards one shard for effort.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the crowd",
+     "requires": [],
+     "success": {
+      "text": "You cheer for someone else's graduate.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "event"
   }
  ]
 }

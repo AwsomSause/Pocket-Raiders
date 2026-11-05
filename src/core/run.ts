@@ -745,6 +745,11 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
     continueAfterDecisions(content, run);
     return run;
   }
+  // A Nap Pod (run events G): the party sleeps through the next wild stop: no battle and no reward.
+  if (node.kind === 'wild' && (run.itemCounters?.['nap'] ?? 0) > 0) {
+    run.itemCounters = { ...run.itemCounters, nap: 0 };
+    return run;
+  }
   // A Repel keeps a wild Pokémon away: no battle and no reward, but the level counts.
   if (node.kind === 'wild' && repelActive(content, run)) {
     useRepel(content, run);
