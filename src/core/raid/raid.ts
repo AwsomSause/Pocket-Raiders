@@ -201,6 +201,33 @@ export function enrageStacks(content: Content, battle: BattleState, turn = battl
 }
 const enrageStep = (content: Content, battle: BattleState): number => (battle.raid ? (getRaid(content, battle.raid.id).enrage?.boostPercent ?? 0) / 100 : 0);
 
+export type RaidRole = 'striker' | 'tank' | 'support';
+
+/** S391: a Pokémon's raid role from its base stats. Tank when its bulk (HP, Def, Sp. Def) tops its attack, Striker when it hits clearly harder than it is bulky, else Support. */
+export function raidRole(content: Content, mon: PokemonInstance): RaidRole {
+  const s = content.species.get(mon.speciesId)?.baseStats;
+  if (!s) return 'support';
+  const off = Math.max(s.atk, s.spa);
+  const bulk = (s.hp + s.def + s.spd) / 3;
+  if (bulk >= off + 5) return 'tank';
+  return off > bulk + 15 ? 'striker' : 'support';
+}
+
+/** Role bonus for one hit in a raid: your Strikers hit harder, your Tanks take less. */
+export function raidRoleMultiplier(content: Content, battle: BattleState, user: { side: 'player' | 'enemy'; mon: PokemonInstance }, target: { side: 'player' | 'enemy'; mon: PokemonInstance }): number {
+  if (!battle.raid) return 1;
+  const r = content.raids.roles;
+  if (user.side === 'player' && raidRole(content, user.mon) === 'striker') return r.strikerDamage;
+  if (target.side === 'player' && raidRole(content, target.mon) === 'tank') return r.tankDamageTaken;
+  return 1;
+}
+
+/** HP a Support Pokémon on the field restores at the end of a turn (0 when it isn't one, or the raid restricts healing). */
+export function supportHeal(content: Content, battle: BattleState, mon: PokemonInstance): number {
+  if (!battle.raid || mon.hp <= 0 || raidRole(content, mon) !== 'support' || getRaid(content, battle.raid.id).modifiers.noHealing) return 0;
+  return Math.max(1, Math.floor(maxHp(content, mon) * content.raids.roles.supportHeal));
+}
+
 /** Cheer strengths (Raid Battles pack: Offense, Defense, Healing). */
 export const OFFENSE_CHEER = [1.3, 1.45, 1.6];
 export const DEFENSE_CHEER = [0.7, 0.6, 0.5];
@@ -362,6 +389,7 @@ export function describeMechanics(def: RaidDef, scale?: { content: Content; badg
   if (def.telegraph) out.push(`charged attack (${def.telegraph.interruptedBy.map((s) => ({ slp: "sleep", par: "paralysis", frz: "freeze" })[s]).join(', ')} interrupts it)`);
   if (def.extraActions) out.push('bonus attacks');
   if (def.timerTurns) out.push(`${def.timerTurns}-turn timer`);
+  out.push('roles: Striker hits harder, Tank takes less, Support heals');
   if (def.enrage) out.push(`enrages after turn ${def.enrage.afterTurn}`);
   if (def.phases.some((p) => p.shield)) out.push('phase shields');
   if (def.weather) out.push(`${def.weather} field`);

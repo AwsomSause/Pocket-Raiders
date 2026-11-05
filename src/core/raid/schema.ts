@@ -206,6 +206,12 @@ export const RaidFileSchema = z.object({
   failureHealFraction: z.number().min(0.1).max(1),
   /** Raid tiers open from the very first run. A higher tier opens for later runs once a raid one tier below it is won (in any run). */
   openTiers: z.number().int().min(1).max(6).default(3),
+  /** S391 Raid Roles: a Pokémon fights as a Striker, Tank or Support by its base stats. */
+  roles: z.object({
+    strikerDamage: z.number().min(1).max(1.5).default(1.1),
+    tankDamageTaken: z.number().min(0.5).max(1).default(0.9),
+    supportHeal: z.number().min(0).max(0.25).default(0.0625),
+  }).default({ strikerDamage: 1.1, tankDamageTaken: 0.9, supportHeal: 0.0625 }),
   raids: z.array(RaidDefSchema).min(1),
 });
 export type RaidFile = z.infer<typeof RaidFileSchema>;
