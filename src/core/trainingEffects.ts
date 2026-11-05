@@ -18,6 +18,9 @@ export function trainEffectText(e: TrainEffect): string {
     case 'natureNudge': return `the lead's Nature favours ${e.stat ?? 'a stat'}`;
     case 'abilitySwap': return "the lead's ability changes";
     case 'weakestStat': return "the lead's weakest stat is trained";
+    case 'evolutionHint': return 'you learn how a party member evolves';
+    case 'masteryShard': return "a Mastery Shard for the lead's species";
+    case 'nap': return 'you sleep through the next wild stop';
     case 'learnMove': return e.type ? `the lead learns a ${e.type}-type move` : 'the lead swaps in a new move';
   }
 }
@@ -58,6 +61,26 @@ export function applyTrainEffect(content: Content, run: RunState, e: TrainEffect
       lead.vitamins[stat] = (lead.vitamins[stat] ?? 0) + 1;
       return `${name}'s ${stat} is trained up!`;
     }
+    case 'evolutionHint': {
+      const who = run.party.find((m) => (content.species.get(m.speciesId)?.evolutions.length ?? 0) > 0);
+      const sp = who && content.species.get(who.speciesId);
+      if (!who || !sp) return 'Nothing in your party has a further evolution.';
+      const way = (ev: (typeof sp.evolutions)[number]) => {
+        const to = content.species.get(ev.to)?.name ?? ev.to;
+        const how = ev.item ? `with ${content.catalog.get(ev.item)?.name ?? ev.item}` : `at level ${ev.level}`;
+        const extra = [ev.condition === 'atkGtDef' ? 'when Attack beats Defense' : ev.condition === 'atkLtDef' ? 'when Defense beats Attack' : ev.condition === 'atkEqDef' ? 'when Attack equals Defense' : '', ev.gender ? `(${ev.gender} only)` : '', ev.region ? `in ${ev.region}` : ''].filter(Boolean);
+        return `${to} ${how}${extra.length ? ` ${extra.join(' ')}` : ''}`;
+      };
+      return `${sp.name} evolves into ${sp.evolutions.map(way).join(', or ')}.`;
+    }
+    case 'masteryShard': {
+      const key = `shard:${lead.speciesId}`;
+      run.itemCounters = { ...run.itemCounters, [key]: (run.itemCounters?.[key] ?? 0) + 1 };
+      return `A Mastery Shard for ${name} (+${content.balance.mastery.shardBattles} battles toward its goals when the run ends)`;
+    }
+    case 'nap':
+      run.itemCounters = { ...run.itemCounters, nap: 1 };
+      return 'You sleep through the next wild stop.';
     case 'learnMove': {
       const ids = new Set([...usableLearnset(content, species).map((x) => x.move), ...(content.learnables.get(species.id) ?? [])]);
       const known = new Set(lead.moves.map((m) => m.id));

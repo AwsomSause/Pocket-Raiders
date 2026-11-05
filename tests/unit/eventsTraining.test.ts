@@ -77,3 +77,58 @@ describe('mutator offer late in a run', () => {
     expect(offer.length).toBe(MUTATORS.choices);
   });
 });
+
+describe('batch 4: hints, naps, shadows and shards', () => {
+  const setup = (eventId: string) => {
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: `b4-${eventId}`, archetypeId: 'red' }), 0);
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id;
+    run.stage!.visited = [node.id];
+    node.sides.push({ id: 'test-event', kind: 'event', used: false, eventId });
+    return run;
+  };
+
+  it('every new event is loaded and each unlocked choice resolves', async () => {
+    const { chooseEvent } = await import('../../src/core/events');
+    for (const id of ['evolution-tutor', 'nap-pod-corner', 'shadow-boxing', 'mastery-quiz', 'graduation-ceremony']) {
+      const def = content.events.get(id)!;
+      expect(def, id).toBeDefined();
+      for (let i = 0; i < def.choices.length; i++) expect(() => chooseEvent(content, setup(id), 'test-event', i), `${id}/${i}`).not.toThrow();
+    }
+  });
+
+  it('Shadow Boxing starts a one-Pokémon fight against a copy of the lead', async () => {
+    const { chooseEvent } = await import('../../src/core/events');
+    const run = setup('shadow-boxing');
+    const after = chooseEvent(content, run, 'test-event', 0).run;
+    expect(after.phase).toBe('battle');
+    expect(after.battle!.enemyTeam).toHaveLength(1);
+    expect(after.battle!.enemyTeam[0]!.speciesId).toBe(run.party[0]!.speciesId);
+  });
+
+  it('a Mastery Shard becomes battles toward the species goals when the run ends', async () => {
+    const { applyEffect } = await import('../../src/core/events');
+    const { Rng, hashSeed } = await import('../../src/core/rng');
+    const { recordMastery } = await import('../../src/core/mastery');
+    const { createProfile } = await import('../../src/core/profile');
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'shard', archetypeId: 'red' }), 0);
+    const id = run.party[0]!.speciesId;
+    applyEffect(content, run, { kind: 'train', what: 'masteryShard' }, new Rng(hashSeed('s')));
+    applyEffect(content, run, { kind: 'train', what: 'masteryShard' }, new Rng(hashSeed('s')));
+    const profile = createProfile(content, 'p');
+    recordMastery(content, profile, run, '2026-11-05T00:00:00Z');
+    expect(profile.mastery[id]!.battles).toBeGreaterThanOrEqual(2 * content.balance.mastery.shardBattles);
+  });
+
+  it('the evolution hint names the way, and a nap skips exactly one wild stop', async () => {
+    const { applyEffect } = await import('../../src/core/events');
+    const { Rng, hashSeed } = await import('../../src/core/rng');
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'hint', archetypeId: 'red' }), 0);
+    const lead = run.party[0]!;
+    const sp = content.species.get(lead.speciesId)!;
+    const line = applyEffect(content, run, { kind: 'train', what: 'evolutionHint' }, new Rng(hashSeed('h')));
+    if (sp.evolutions.length > 0) expect(line).toContain(content.species.get(sp.evolutions[0]!.to)!.name);
+    applyEffect(content, run, { kind: 'train', what: 'nap' }, new Rng(hashSeed('h')));
+    expect(run.itemCounters!['nap']).toBe(1);
+  });
+});

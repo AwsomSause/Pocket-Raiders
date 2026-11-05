@@ -302,6 +302,12 @@ export function recordMastery(content: Content, profile: Profile, run: RunState,
       if (regionCleared && inParty.has(h.uid)) r.regions += 1;
     }
   }
+  // Mastery Shards from run events (event G): each counts as a few battles with that species.
+  for (const [key, n] of Object.entries(run.itemCounters ?? {})) {
+    if (!key.startsWith('shard:') || n <= 0) continue;
+    const r = rec(key.slice(6));
+    if (r) r.battles += n * content.balance.mastery.shardBattles;
+  }
   const ups: MasteryRankUp[] = [];
   const pay = content.balance.mastery.rankResearch;
   for (const id of [...touched].sort()) {
