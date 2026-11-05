@@ -64,6 +64,36 @@ export function updateBondsTurn(run: RunState, events: readonly BattleEvent[]): 
 /** A won battle: the Pokémon that fought grow closer. */
 export function bondVictory(run: RunState, fought: readonly string[]): void {
   for (const uid of fought) if (run.story.histories[uid]) adjustBond(bondOf(run, uid), { trust: 2, synchronization: 2, respect: 1, strain: -4 });
+  // Bond Levels: every pair that fought this battle together earns a shared win.
+  const together = [...new Set(fought)].filter((uid) => run.party.some((m) => m.uid === uid)).sort();
+  for (let i = 0; i < together.length; i += 1) for (let j = i + 1; j < together.length; j += 1) {
+    const key = pairWinsKey(together[i]!, together[j]!);
+    run.itemCounters = { ...run.itemCounters, [key]: (run.itemCounters?.[key] ?? 0) + 1 };
+  }
+}
+
+// ---------- Bond Levels: pairs that win together hand over better ----------
+
+const pairWinsKey = (a: string, b: string) => `bondwins:${[a, b].sort().join('+')}`;
+
+/** 0 (strangers) to 3: how many of the win thresholds this pair has reached. */
+export function pairBondLevel(run: RunState, a: string, b: string): number {
+  const wins = run.itemCounters?.[pairWinsKey(a, b)] ?? 0;
+  return BOND_RULES.pairLevels.wins.filter((w) => wins >= w).length;
+}
+
+/** After a faint, a partner you have won with comes in with a stronger attacking stat (once per pair per battle). Level 1 +1, level 2+ +2. */
+export function bondLevelHandover(content: Content, run: RunState, fainted: string, incoming: string): BattleEvent | null {
+  const battle = run.battle!;
+  const mon = run.party.find((m) => m.uid === incoming);
+  const level = pairBondLevel(run, fainted, incoming);
+  const key = `bl:${[fainted, incoming].sort().join('+')}`;
+  if (!mon || level < 1 || battle.drama.combos.includes(key)) return null;
+  const stat = comboStat(content, mon);
+  if (!stat) return null;
+  battle.drama.combos.push(key);
+  battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + Math.min(BOND_RULES.pairLevels.maxStages, level));
+  return { type: 'bondLevel', side: 'player', from: fainted, to: incoming, stat, level };
 }
 
 // ---------- Refusal and Initiative: a Pokémon acting on its own, before the turn ----------
