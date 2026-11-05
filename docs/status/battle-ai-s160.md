@@ -1,0 +1,1 @@
+- Battle/AI slice 4 (S160 crit scaling tiers): critical-hit chance (stage, Super Luck, Focus Energy, perks) above `balance.critScaling.softCap` (0.5) counts only `excessFactor` (0.5) of the way, so a +3 stage crit is 75%, not 100% (`scaleCrit` in `battle/damage.ts`). Always-crit moves and Laser Focus are unchanged. No save change. Test `tests/unit/critScaling.test.ts`.

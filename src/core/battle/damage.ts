@@ -44,6 +44,12 @@ export function critChance(ruleset: Ruleset, critStage: number): number {
   return ruleset.critChanceByStage[index]!;
 }
 
+/** S160 crit scaling: chance above `softCap` counts only `excessFactor` of the way, so stacked sources give diminishing returns (never above 1). */
+export function scaleCrit(chance: number, softCap: number, excessFactor: number): number {
+  if (chance <= softCap) return Math.max(0, chance);
+  return Math.min(1, softCap + (chance - softCap) * excessFactor);
+}
+
 export interface DamageInput {
   level: number;
   power: number;
