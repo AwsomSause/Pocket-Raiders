@@ -1,0 +1,220 @@
+# Status notes index
+
+One line per note (first 110 characters). Grep this file (`grep -i word docs/status/INDEX.md`); never read it whole. Open a note only when its line matches your task. Add a line here when you add a note.
+
+- `aai-batch3.md`: Advanced AI batch 3 (`core/battle/aai.ts`, `trainerAi.aai.*`): held-item reads (Air Balloon, resist berries, s
+- `aai-prediction.md`: Advanced AI switch guessing (`aai.prediction`, `aaiPredictsSwitch` in `core/battle/aai.ts`): a trainer with a
+- `anim-abilities-m14.md`: Ability animation round 2 (M14 gaps, 6.1, 6.2, 6.7): ability banners now use the reference video's look (scree
+- `anim-registry.md`: Animation framework + ability animations (M14 6.7, 6.1, 6.2): `core/presentation/animRegistry.ts` is the one p
+- `animation-audit-m15-m16.md`: Status: audit and plan only. No animation code yet. Build starts when the central animation registry (M14, "Bu
+- `animations-m15-m16.md`: Built on the central animation registry (`core/presentation/animRegistry.ts`). Registry data and id mapping: `
+- `arena-life.md`: Left-out 6.2 arena life (`ui/battleFx/arenaLife.ts`): contact shadows under every Pokémon that shrink and fade
+- `badge-powers.md`: Badge Powers (idea S483): every Gym badge boosts your Pokémon of that Leader's type (+3% damage) and cuts thei
+- `badge-scaling.md`: Rental teams + badge-scaled raids (spec 30, 31): rental expeditions lend one of 15 curated teams (`rentalTeams
+- `bank-draft-modifiers.md`: Draft modifiers and prep tokens (left-out 1.4, slice 3): four new Run-Prep draft rules (Expanded Research and
+- `bank-research-achievements.md`: Trainer Research and Relationship achievements (left-out 1.4, slice 4): Trainer Archive hints reveal backgroun
+- `battle-ai-s164.md`: Battle/AI slice 2 (S164 charge-up): Celebrate, Hold Hands and Happy Hour (formerly no-ops) bank one power stac
+- `battle-ai-s168.md`: Battle/AI slice 3 (S168 weather tolerance): sandstorm/hail chip damage is cut by `balance.weatherTolerance.cut
+- `battle-ai-s271.md`: Battle/AI slice 1 (S271, Kice: "All trainers should use items"): `balance.trainerAi.allTrainersUseItems` (true
+- `battle-drama-spectacle.md`: Battle Drama spectacle (APPROVED §7; `core/battle/spectacle.ts`, tuning `balance.json` `spectacle`, off-switch
+- `battle-frontier.md`: Ideas S439 to S443: four facilities added as minigame stops (`src/core/minigame/frontier.ts`, data in `minigam
+- `battle-pages-auto-battle.md`: Saves: run 28 (optional `battle.autoUsed`, no-op migration), settings 10 (`autoBattle`, `autoExplain`). Balanc
+- `battle-recap.md`: Left-out 2.5 (part, catalog 14): after a gym, Elite Four, champion, boss or rival win, the battle ends with up
+- `battlebacks-uie.md`: Left-out 3.2 battlebacks (slice 1): 36 UIE battlebacks imported as lazy arenas (`images/arenas/uie/`, `tools/i
+- `bond-levels.md`: Bond Levels (ideas S47): two Pokémon that win battles side by side earn shared wins (run `itemCounters` `bondw
+- `bracket-and-save-check.md`: Social/tech slice 3 (S210 Tournament Brackets): `core/tools/bracket.ts` makes a seeded single-elimination brac
+- `camp-day-night.md`: Camp + day/night (spec §22, §28): a run clock (`core/clock.ts`, `run.clock`: day, four times of day, celebrate
+- `care-bonds-2.md`: Care follow-up (W2): Favourite and Ace now have effects (no trade/swap; memorial ace + team mood), map followe
+- `care-bonds-3.md`: Care follow-up 2 (W2): teamwork pairs, mastery stars (`MoveSlot.uses/star`, optional fields, no save bump), se
+- `care-bonds-4.md`: Care last batch (W2): catch-day party, praise/scold (nature relaxes to Docile), Pokédex tabs (All/Seen/Owned/M
+- `care-bonds.md`: Care & party life (W2, ideas ledger): `core/care/` + `data/care.json`, optional `care` record on each Pokémon
+- `catalog-leftovers-forms.md`: Left-out 2.5 (part 2, catalog 34/79, 78, 82, 84, 110): form hints are Research Room notes (`forms:<family>:<ge
+- `catch-chains-shiny-charm.md`: Catch Chains (S218) + Shiny Charm tiers (S225), roadmap slice 6 (`core/catchChain.ts`, numbers in `balance.jso
+- `challenge-modes.md`: Challenge modes and seeds (W8, ideas F77/F82/F84/F78/F79/M107-M109/F106-F107/F14): new modes in `runRules.json
+- `default-original-designs.md`: Kice: every menu or visual with selectable looks now starts on its original, pre-rework design. Redesigned loo
+- `dex-completion-rewards.md`: Dex Completion Rewards (S239; `core/dexRewards.ts`, `balance.json` `dexRewards`): species caught across all ru
+- `doubles-limits.md`: Left-out 5.10 Doubles limits: in a double battle either of your Pokémon can Mega/Tera/Z/Dynamax (one of each m
+- `drama-flavor.md`: Left-out 2.1 (rest): Battle Drama lines now pick by bond, rival arc and your trainer's favoured type (`drama.j
+- `drama-gaps.md`: Left-out 2.1 (part): Battle Drama gets 6 new dialogue categories (status on your trainer's Pokémon, status it
+- `e2e-fix-levels.md`: Main's e2e went red after #331 (levels to 500, custom regions): the last region's champion team made the dev-c
+- `e2e-reliability-2.md`: E2E reliability pass 2: every red main run failed a different spec because the 2 CI workers share one software
+- `e2e-reliability.md`: E2E reliability: the milestone10 trainer VS intro and gym ACE tests poll for the VS art, challenge line, title
+- `ebdx-scripted-anims-1.md`: EBDX writes its 442 move animations as Ruby scripts. We can't run Ruby, so each one is re-timed by hand into a
+- `economy-exp-charm.md`: Economy/items/risk slice 3, Exp. Charm (S432, first of the Charms): rare run-long item `exp-charm`, wild battl
+- `economy-insurance.md`: Economy/items/risk slice 2, Insurance Relic (S388): rare key item `insurance-relic` (perk `insurance`). A lost
+- `economy-safety-net.md`: Economy/items/risk slice 1, Safety Net (S382): new epic key item `safety-net` (perk `safetyNet`, icon reuses L
+- `eggs-and-berries.md`: Eggs and Berries (spec §26, §27): **Eggs** have four tiers (Ordinary, Unusual, Rare, Exceptional; `data/eggs.j
+- `emergent-events-exploration.md`: Emergent events and exploration (APPROVED.md §4-6, except the rival items): **fog of war** (the map shows `bal
+- `encounter-director.md`: Encounter Director + Combat Threat Rating (left-out plan 1.2, Balancing Phases 4–10): `core/encounterDirector.
+- `events-rk.md`: Data: `tools/events/rk.ts` -> `npm run data:rk-events` -> `src/data/eventsRK.json` (merged into `events` in `s
+- `events-training-growth.md`: Run events G, training, growth and mastery (batch 1, `docs/ideas/categories/r-g-training-growth-and-mastery.md
+- `events.md`: Events and map stops framework (plan M8.75, approved rows; API for other threads). **Found already built:** ev
+- `evil-teams-choices.md`: **Evil Teams** (`core/evil/`, `src/data/evilTeams.json`, run save v32): 10 teams (Rocket, Aqua, Magma, Galacti
+- `false-protagonist.md`: False Protagonist timeline replays (M13, `core/timeline/`, `data/timeline.json`, design `docs/plans/false-prot
+- `frontier-minigames.md`: Seven new games in the existing minigame framework (`src/core/minigame/games2.ts`, data in `src/data/minigames
+- `glass-screens.md`: Glass screens (left-out 6.1): Expedition, Minigame, Starter Select and Run Prep now use the Aero glass panels
+- `heat-levels.md`: Heat Levels (idea S176): Run Setup row `Heat` 0-10 on the Preparation Desk. Each level adds +1 enemy level and
+- `hisuian-fossils.md`: Hisuian fossils (ideas S51, Kice comment): 5 epic fossil items (`hisui-ember/spark/tide/talon/veil-fossil`) re
+- `hub-pages.md`: Hub pages: a Hub tile with several rooms (Settings, Trainers, Events, Unlocks) now opens its own full page (a
+- `hub-sprite-size.md`: Bug: the Hub stage Pokémon (and trainer pair) drew huge/blurry. The Pokémon art loads late, so a placeholder w
+- `hub-town.md`: Hub Town, part 1 (Hub Town spec 2026-11-01, phases 2 and 3): the Hub is now a walkable Pokémon town (112×84 ti
+- `ideas-w0-foundations.md`: Ideas W0 foundations (plan `ideas-implementation-plan.md` §4/§9): (1) `docs/plans/ideas-coverage.md` lists all
+- `ideas-w1-battle.md`: Ideas W1 battle play (Kice 2026-11-01; rows in `docs/plans/ideas-coverage.md`): **Type Resonance** (3+ party m
+- `ideas-w1-play.md`: What the player can do now:
+- `item-distribution-major-1.md`: Major Update §1 slice 1, smart item distribution and rarity audit (`core/itemDistribution.ts`, `balance.itemDi
+- `landmark-dungeons.md`: Landmark Dungeons (idea S9; run map and world thread): four named once-per-run places on a region's third stag
+- `left-out-final-leftovers.md`: **Retired-team battle (2.3):** event "The Team That Fell Short" (`retired-team`, stage 4+). The team is the ne
+- `left-out-wave3-leftovers.md`: Built (all deterministic, covered by unit tests):
+- `legacy-hub.md`: Legacy & Live hub systems (left-out 1.5, `core/legacy.ts`, `data/legacy.json`, `ui/hubProps.ts`): Research Tre
+- `legacy-runs.md`: Legacy runs, Legacy Rotation, Legacy Gallery and Rival Hall of Fame (M9 + M18, Kice's "Expanded Systems" §1, §
+- `legendary-world-events.md`: Legendary world events (spec §19; no save version bump): a Legendary gate (✦, "Legendary" button) can appear o
+- `levels-and-regions.md`: Levels to 500 and custom regions (left-out 1.6b + 1.7, `docs/plans/levels-and-regions-plan.md`): `balance.diff
+- `living-rival.md`: Built on rival progression (#379). No save bump: every new field is optional (`battle.finaleAssist`) or a stor
+- `memories-leftovers.md`: Pokémon Memories leftovers (audit C1/C2): Protect, Bind, Leech Seed, Snow and the four terrains now play their
+- `memories-mega-polish.md`: Pokémon Memories slice 3, Mega polish and the cutscene switch: the trainer's key item now rises and flares und
+- `memories-tera-dynamax.md`: Pokémon Memories slice 2, Tera and Dynamax (Deluxe Battle Kit add-ons via the Memories repo; `tools/memories/i
+- `memories-trainer-sprites.md`: Pokémon Memories slice 4, animated trainers: 57 bosses (Kanto to Unova gym leaders, Elite Four, Alder, Frontie
+- `memories-vs-screens.md`: Pokémon Memories slice 5, VS screens: 63 bosses now open their battle with their own VS screen, rebuilt from t
+- `memories-z-moves.md`: Pokémon Memories slice 1, Z-Moves (audit `/mnt/project-files/plans/pokemon-memories-audit.md`): the 28 Z-Moves
+- `memories.md`: Run Journal, Hall of Memories and the persistent world (APPROVED.md §3, §7 Battle Replay, §8; `core/memories/`
+- `mentor-gaps.md`: Mentor follow-up 3 (spec §15 gaps): (1) each mentor's third lesson teaches a move (`teachMove`; the first heal
+- `mentor-map-hud.md`: Mentor follow-up 2 (spec §15): the map HUD shows one line under the stage title while you train under a mentor
+- `mentor-rivalry-battle.md`: Mentor follow-up 1 (spec §15 apprentice rivalry): the fellow apprentice now fights you. The "Fellow Apprentice
+- `mentors.md`: Mentors and apprentices (spec §15): 12 mentors (`src/data/mentors.json`, `core/mentors/index.ts`), one per cat
+- `meta-hub-1-hall-records.md`: Meta/Hub slice 1 (category `docs/ideas/categories/s-meta-hub.md`): Hall Records (S466, S102) in the Town Hall:
+- `meta-hub-2-weather-station.md`: Meta/Hub slice 2: Weather Station (S362) on the Rooftop: 3 credit-bought tiers (`station` set, permanent); eac
+- `meta-hub-3-fan-club.md`: Meta/Hub slice 3: Fan Club (S358) in the Town Hall: followers = 3 per run + 10 per win + 5 per shiny + 1 per a
+- `meta-hub-4-guild-board.md`: Meta/Hub slice 4: Guild Hall Board (S364) in the Town Hall: hire a Medic, Cook, Porter or Treasurer with credi
+- `meta-hub-5-relic-vault.md`: Meta/Hub slice 5: Relic Vault (S464) at the Relic Museum: store up to 2 uncursed relics (`town.json` caps.vaul
+- `meta-hub-6-sponsor-deals.md`: Meta/Hub slice 6: Sponsor Deals (S359) in the Town Hall: sign one of 3 sponsors per run (`town.json` `hall-spo
+- `meta-hub-7-town-economy.md`: Meta/Hub slice 7: Town Economy (S347): each Fan Club tier reached takes 5% off every credit price in the town'
+- `meta-hub-8-harbor.md`: Meta/Hub slice 8: Harbor Boat Trips (S366) in the Town Hall: buy a boat ticket (80 credits, next-run boon `har
+- `mobile-overhaul.md`: Mobile overhaul (iPhone landscape feedback): the canvas was centred twice (Phaser margins plus the flex parent
+- `mobile-pad-toggle.md`: Mobile pad toggle: on landscape phones the on-screen pad starts collapsed to a Back button plus a 🎮 handle (ta
+- `mobile-pass.md`: Mobile pass: removed the title screen's Continue photo card (polaroid + beige panel that overlapped the Save C
+- `mobile-sweep.md`: Screenshot sweep of the screens reachable without a run. The touch pad now sits in the black side margins
+- `mobile-tap-targets.md`: Mobile tap targets: on touch screens each Menu row's whole cell (item width × height) is tappable, not just th
+- `modes-qol-1.md`: Modes slice 1 (category `s-modes-quests-qol`): three run modifiers in `runRules.json`, pickable on the briefin
+- `modes-qol-2.md`: Modes slice 3 (S318 Rank Tiers, S319 Score Multiplier Breakdown; `core/runRank.ts`): Game Over opens with "Ran
+- `modes-qol-3-pacifist.md`: Modes slice 4 (S300 Pacifist, `pacifist` modifier, `core/rules.ts`): wild Pokémon can't be knocked out by dama
+- `modes-qol-4-time-attack.md`: Modes slice 5 (S303 Time Attack, `time-attack` modifier): every trainer win in 8 turns or fewer adds (9 - turn
+- `moment-codex.md`: Hyper moment codex (left-out 5.19, Hyper §7; `core/story/codex.ts`, profile v13 adds `momentCodex`): every sto
+- `multi-region-run.md`: Multi-Region Run (idea S11; run map and world thread): new mode `multi-region` and campaign `multi-region` (3
+- `narrative-defeat.md`: Narrative rival defeats (M12, spec §3; `core/rivals/narrativeDefeat.ts`, `data/narrativeDefeats.json`): a riva
+- `overdrive-behaviors.md`: Overdrive behaviors (spec 8): three new moments decided by the battle engine on the "hyper" stream (`core/batt
+- `pack-music-followup.md`: 
+- `party-life.md`: Party personality & chemistry (APPROVED.md §1, §9, §10). Code `src/core/partyLife/` (rules, state), data `src/
+- `perk-rereads-2.md`: Left-out 2.8 (second batch of perk re-reads): Ginter now puts the 2 nearest locked shop entries for rare or ep
+- `perk-rereads.md`: Left-out 2.8 (first perk re-reads): Raihan's weather boost now covers sandstorm and hail (`weatherDamageMultip
+- `pixel-compare.md`: Pixel compare (left-out 6.5, part): `tests/e2e/pixelCompare.spec.ts` compares Hub and Trainer Select at 960×54
+- `playstyle-titles.md`: Left-out 2.5 (part, catalog 155): at run end the way the run was played can earn one of 9 playstyle titles (Co
+- `plaza-styles.md`: Plaza styles (Kice 2026-11-02, mock-ups 7, 9, 10 and 12 in project files `redesign/plaza/`): the Trainer Plaza
+- `pokemon-screen.md`: Pokémon screen (Kice's major-update spec §5, §6): Party and Summary are one glass screen (`ui/pokemonMenu.ts`,
+- `polish-leftovers.md`: Healing stop FX, layered map backdrop and summary Growth/Story pages (left-out 6.4), plus the visual final rep
+- `polish-release-gate.md`: Polish + release gate (left-out 6.3, 3.1 part, 3.3): settings v8 splits **Flashes** (`effectIntensity`) from *
+- `prep-slots-weeks.md`: Spec §13/§14/§20 (Run Prep, save slots, Weeks): the Preparation Desk is five pages (Run Setup, Trainer, Starte
+- `presentation-crt-letterbox.md`: Presentation slice 1 (ideas S259, S260; `docs/ideas/categories/s-presentation.md`): Settings > Display gets **
+- `presentation-expressions.md`: Presentation slice 8 (idea S254): Settings > Animations **Trainer expressions** (off by default, next battle).
+- `presentation-idle-loops.md`: Presentation slice 6 (idea S255): Settings > Animations **Lively team screen** (off by default): party icons h
+- `presentation-map-daynight.md`: Presentation slice 4 (idea S252): Settings > Display **Map day and night** (off by default): the branching map
+- `presentation-shake.md`: Presentation slice 3 (idea S245): Settings > Animations gets **Shake: move hits** and **Shake: story moments**
+- `presentation-skip-recap.md`: Presentation slice 5 (idea S257): Settings > Animations **Skip recap** (off by default). Skipping a battle int
+- `presentation-sound-packs.md`: Presentation slice 2 (idea S261): Settings > Audio gets **Sound pack** (Original default, GBA, DS, Orchestral)
+- `presentation-victory-poses.md`: Presentation slice 7 (idea S250): Settings > Animations **Victory poses** (off by default). The winner strikes
+- `raid-cheer-levels.md`: Raid cheer levels: cheers grow with raids won (0 = Lv.1, 1 to 2 = Lv.2, 3+ = Lv.3). Offense x1.3/1.45/1.6, Def
+- `raid-counter-cheer.md`: Raid Counter cheer ("Turn the tables!"): a fourth cheer in raid fights that reverses every stat change on both
+- `raid-medals.md`: Raids & bosses slice 5 (`s-raids-bosses`): **S404 Raid Medals**. A raid now records damage dealt to the boss a
+- `raid-memories.md`: Left-out 5.8 Raid memories: a won raid records "First to Face the Beast" (lead), "The One Who Broke Its Guard"
+- `raid-named-rival.md`: Named rival in rival raids: the "help" and "race" approaches now bring a real rival from `run.story.rivals` (a
+- `raid-practice.md`: Raids & bosses slice 2 (`s-raids-bosses`): **S400 Boss Training Mode**. Every ordinary den offers a PRACTICE r
+- `raid-roles.md`: Raids & bosses slice 3 (`s-raids-bosses`): **S391 Raid Roles**. In a raid each of your Pokémon fights as a Tan
+- `raid-types.md`: Left-out 5.9 Raid types: raids have a `kind` (wild, regional, rival, anomaly). Regional and rival dens ask how
+- `raid-weak-spots.md`: Raids & bosses slice 4 (`s-raids-bosses`): **S397 Boss Weak Spots**. Raid field rule `modifiers.weakSpots` (8
+- `raids-pressure.md`: Raids & bosses slice 1 (category `s-raids-bosses`): **S392 Raid Shields by Phase** (phase field `shield`: a ne
+- `reticle-shiny-catch.md`: Left-out 6.2 rest: doubles target picker draws a pulsing reticle (ring and corner brackets) on the highlighted
+- `reward-who-can-use.md`: Reward cards say who can use an evolution item or Mega Stone (left-out 6.4, part): `rewardSynergy` names the o
+- `rival-depth.md`: Rival depth (Kice major-update spec §9, §10, §11, §21, §29; `core/rivals/major.ts`, `monRivals.ts`, `sacrifice
+- `rival-gift-swap.md`: Left-out 2.2 (part): a rival whose rivalry ended as friends (state ally) can now give or trade a Pokémon: even
+- `rival-promotion.md`: The Rival Who Wins Without You (left-out 5.5, Rivalry Engine §8/§15; `core/rivals/promotion.ts`): a contender
+- `rival-sim-report.md`: Rival simulation report (left-out 5.7, Rivalry Engine phase 13; `core/rivals/simReport.ts`, `npm run report:ri
+- `rival-style-tricks.md`: Left-out 2.2 (battle-style hooks, part): three rival battle styles now do something in the fight, once per Pok
+- `rival-world-recognition.md`: Rival progression & world recognition (Expanded Systems M11 + M19: §5, §8.3-8.5; no save bump, all new fields
+- `rivalry-kinds.md`: Pokémon rivalry kinds (left-out 5.4, Techno §1; `core/story/rivalryKinds.ts`): a rivalry record now has a tone
+- `rivalry-moments.md`: More rivalry moments (left-out 5.3, Hyper §3): The Rivalry Has Only Grown Stronger! (a rival you have beaten a
+- `rng-view.md`: Social/tech slice 5 (S333 RNG Stream Visualizer): `core/tools/rngView.ts` `peekStreams` lists a run's named st
+- `rule-draft.md`: Rule Draft game mode (idea S6, "Gamemode"; thread "run map and world"): new mode `rule-draft` (`startDraft` in
+- `run-events-a-merchants.md`: Run events A, Merchants, deals and swaps (`docs/ideas/categories/r-a-merchants-deals-and-swaps.md`): 48 of the
+- `run-events-b.md`: Category: `docs/ideas/categories/r-b-trainer-battles-and-challenges.md` (R51-R103, all approved).
+- `run-events-c-wild-scenes.md`: Run events C, wild Pokémon scenes (R111-R180, `docs/ideas/categories/r-c-wild-pokemon-scenes.md`): 65 new map
+- `run-events-e-helpers.md`: Run events E, helpers and moral choices (category `docs/ideas/categories/r-e-helpers-and-moral-choices.md`): 4
+- `run-events-f-games.md`: Run events F (games, puzzles, mini-games; `docs/ideas/categories/r-f-games-puzzles-minigames.md`): 53 new map
+- `run-events-famous-faces.md`: 27 new map events in `src/data/eventsFaces.json` (group "Famous Faces"), merged into `events` in `src/data/ind
+- `run-events-h-mysteries.md`: Run events H, mysteries, ruins and legends (R386-R435, `docs/ideas/categories/r-h-mysteries-ruins-legends.md`)
+- `run-events-j-weather.md`: Run events J, weather/terrain/hazards (R471-R505, category file `docs/ideas/categories/r-j-weather-terrain-and
+- `run-events-redesign.md`: Run events redesign, slice 1 (Kice 2026-11-02; mock-ups in project files `run-events/mockups/`): Settings > Di
+- `run-prep-pages.md`: Run Prep pages: the Modifiers tab of the Preparation Desk is now its own scene (`RunModifiersScene`): category
+- `run-prep-seed-page.md`: Run Prep Seed & Codes page: the Seed row opens its own scene (`RunSeedScene`) with a real HTML text box over t
+- `run-prep-starters-page.md`: Run Prep Starters page: the Starters tab is its own scene (`RunStartersScene`) with tabs Starter pool / Draft
+- `save-inspector.md`: Social/tech slice 2 (S330 Save Inspector, S331 Migration Preview): `src/save/saveInspector.ts` `inspectSave(ra
+- `screens-redesign-front-door.md`: Screens redesign group C (front door): title (classic, wii, ds, anime, manga, flyover), trainer select (aero,
+- `screens-redesign-group-b.md`: Screens redesign Group B (run flow): the route map, reward pick and Pokémon (party) screen each rotate between
+- `screens-redesign-group-d-camp.md`: Group D follow-up (Camp): the Camp looks follow their mock-ups more closely: icon cells (Wii, scrapbook, field
+- `screens-redesign-group-d.md`: Screens redesign Group D (run moments, Kice's picks 2026-11-02): **Bag** 10 looks (aero, classic, manga, shone
+- `screens-redesign-group-e.md`: Built from Kice's picks (2026-11-02). One shared module, `src/ui/screenSkins.ts`, paints the look; scenes keep
+- `screens-redesign.md`: Kice picked looks for 21 screens from the mock-ups in /mnt/project-files/redesign/ (build plan: /mnt/project-f
+- `settings-animation-keys.md`: Settings v9 (spec 6.6, M17 slice 1): animation keys `abilityAnimations`, `battleTextAnimations`, `interactionA
+- `settings-unified.md`: Unified Settings (spec section 7 + 6.6, M17): one registry `core/settingsRegistry.ts` (id, label, description,
+- `shadow-blissful.md`: Shadow and Blissful (APPROVED.md §12-14; `core/shadow.ts`, `core/shadowWorld/*`, `data/shadowWorld.json`; run
+- `shops-redesign.md`: Shops redesign, slice 1 (Kice 2026-11-02; mock-ups in project files `redesign/shops/`): Kice picked six looks
+- `social-profile.md`: Social/tech slice 6 (S214 Achievements Showcase, S215 Photo Contest, S217 Trade Boards): `core/social.ts`, sto
+- `social-share-codes.md`: Social/tech slice 1 (S198 Share Codes, S200 Challenge Cards; S199 Ghost Teams already existed as GH1 ghost cod
+- `speedrun-timer.md`: Social/tech slice 4 (S211 Speedrun Timer): `core/tools/speedrun.ts`. Off by default; Hub > Tools & Community >
+- `story-elite-four-rematch.md`: Story & rivals S127 Elite Four Rematches: once you have won 25+ battles per region (`balance.eliteRematch`), t
+- `story-gym-leader-moods.md`: Story & rivals S126 Gym Leader Personalities: each gym leader has a mood on the day you face them (`core/story
+- `story-weather-prophet-rumors.md`: Story & rivals S124 Weather Prophet + S130 Oral History Rumors: two new events in `src/data/eventsStory.json`
+- `sweep-a-candies-live-achievements.md`: Second sweep slice A (left-out 5.1, 5.2, 5.20, 5.22): Candy Shop in Hub > Bank (5 once-only perks bought with
+- `sweep-b-settings-catch.md`: New settings (defaults keep old saves valid, no version bump): catch details (full/compact), battle speed, dia
+- `sweep-c-attribute-economy.md`: Built: repeat attribute boosts from items diminish (`balance.attributeItemFalloff`: first 2 full, then half, m
+- `sweep-c-starter-lab.md`: Built: categories Challenge Sets and Special Specimens; two challenge pools (Underdogs, One of a Kind: no-evol
+- `sweep-c-trainer-classes.md`: Built: 10 new ordinary trainer classes (Lass, Camper, Picnicker, Swimmer, Breeder, Battle Girl, Ranger, Ace Tr
+- `sweep-d-daily-run.md`: Built: `core/daily.ts`. A Daily Run now ignores the player's own pool, draft rule, token, loan, Vault item, di
+- `sweep-d-later-modes.md`: Built: three new modes in `runRules.json`, picked in Run Prep like the other modes.
+- `sweep-d-spooky-mode.md`: Built: five Spooky Mode-only map events (three clue stops, the Hexed Keeper boss, the Hollow Mirror finale; `m
+- `sweep-e-leftovers.md`: **Hidden achievements** Penny Pincher (won run, spent at most `balance.frugalRunMaxSpent` in shops), No Turnin
+- `team-chemistry-effects.md`: Left-out 2.3 (part, Techno §6.8): Team Chemistry labels now do something. The lead's opening lift follows the
+- `text-fit-run-sweep.md`: Sweep 5 (run-state screens): `tests/e2e/textFitRun.spec.ts` (gated by `TEXTFIT_ALL=1`, `TEXTFIT_ONLY=shops|exp
+- `text-fit-sweep.md`: Text-fit sweep (thread "Fix cut-off and covered UI text"): `tests/e2e/textFit.spec.ts` visits the menus and a
+- `tide-clock.md`: Tide Clock (idea S2; run map and world thread): a high/low tide turns every `balance.clock.tide.length` (3) pa
+- `time-pressure.md`: Time Pressure mode (idea S20; run map and world thread): new mode `time-pressure` (`timePressure` in `runRules
+- `trade-stops-redesign.md`: Trade Stops redesign, slice 1 (Kice 2026-11-02 picked all 12 mock-ups in project files `redesign/trade-stops/`
+- `trainer-plaza-rework.md`: Trainer Plaza rework (spec §18; `scenes/PlazaScene.ts`, `core/plaza/layout.ts`, data `src/data/plazaLife.json`
+- `trainer-plaza.md`: Trainer Plaza (APPROVED.md §11; `core/plaza/`, data `src/data/plaza.json`): every stage map gets a plaza stop
+- `trainer-tiers-intro.md`: Trainer tiers intro line (follow-up to `trainer-tiers.md`): when an ordinary trainer acts on what it remembers
+- `trainer-tiers.md`: Trainer tiers (M10 §2; `core/trainerTiers.ts`, data `src/data/trainerTiers.json`, no save version change): ord
+- `transitions-perf-2.md`: Left-out 3.1 rest: a missed move makes the target slip sideways and back (`case 'miss'` in `BattleScene`; redu
+- `transitions-perf.md`: Left-out 3.1 transitions and perf pass (`ui/battleFx/transitions.ts`): "LEVEL UP! Lv N" banner with a burst ov
+- `tuning-dust.md`: Nature Tuning (ideas S45): five uncommon Tuning Dust items (`<stat>-tuning-dust`, effect `natureNudge`, `nudge
+- `tutorial-update-log.md`: Tutorial and update log (settings v21): every player, new or returning, sees the Beta 0.4 patch notes once (`W
+- `ui-text-fit.md`: **Node text (§2).** Map nodes no longer show Pokémon levels: the wild preview beside a node has no "Lv", the i
+- `ultimate-rival.md`: Ultimate Rival presentation (left-out 5.6, Rivalry Engine §7, §14; `core/rivals/ultimate.ts`): battles against
+- `unified-bag-major-4-7.md`: Major Update §4 + §7, unified Bag (`core/bag.ts`, `ui/fieldMenus.ts` `openBagMenu`): the map's Items menu is g
+- `villain-run-events.md`: Villain team and heist run events (R181-R235, category D; `tools/events/villain.ts`, `npm run data:villain-eve
+- `visual-style-guide.md`: Visual style guide (left-out 6.5, part): `docs/quality/VISUAL_STYLE_GUIDE.md` (palettes, layers, motion curves
+- `w10.md`: Ideas W10 (set-piece events, quests and misc; plan `ideas-implementation-plan.md` W10, rows in `docs/plans/ide
+- `w11-skins.md`: W11 follow-up (settings v13): real interface skins, not only colours (`core/presentation/skins.ts` data, `ui/s
+- `w11.md`: W11 UI, accessibility, presentation (ideas plan W11; settings v12, no run/profile change). Built: five interfa
+- `w12.md`: Ideas W12 tech and community tools (F206-F225 except Sandbox F217 and Level editor F218, which Kice dropped):
+- `w13-fixes-and-additions.md`: W13 Fixes and additions (Kice 2026-11-01), one PR. Saves: none bumped (removed spectacle fields are ignored wh
+- `w3.md`: W3 Items, camp and crafting (ideas rows I189-I239, F131-F155): new **Camp** button on the map opens a five-tab
+- `w4.md`: Ideas W4 Map, world & run structure (plan `ideas-implementation-plan.md` W4; 65 ledger rows DONE, F74 dropped
+- `w5.md`: Ideas W5 (NPCs, shops and story; plan `ideas-implementation-plan.md` W5, rows in `docs/plans/ideas-coverage.md
+- `w6.md`: W6 Rivals, legacy and ghosts (37 rows, `docs/plans/ideas-coverage.md` W6 section): no save bump (all new field
+- `w7.md`: W7 Hub and meta progression (ideas rows I240-I290, F29, F96-F130, plus I214 left over from W3; rows in `docs/p
+- `w9-live-events.md`: W9 Live events (ideas plan; ledger rows E1-E234, `tools/game-events-w9.ts`, `npm run data:game-events` rewrite
+- `wii-motion.md`: Wii-style menu motion (spec §24; `core/presentation/uiMotion.ts`, `ui/wiiMotion.ts`): one set of short timings
+- `world-events.md`: World events batch (ideas S134 Meteor Showers, S137 Eclipse, S138 Legendary Sightings (rumor), S140 Disaster N
+- `zip-z6f-bag.md`: Zip coverage Z6f: the Bag menu header carries the UIE bag picture (`Picker` `badge` option, `ui/partyPanel.ts`
+- `zip-z6g-load-save.md`: Zip coverage Z6g: with a saved run, the title screen shows the UIE Load photo card (trainer, region and stage,
+- `zip-z6h-party.md`: Zip coverage Z6h: party rows show the UIE status badge (SLP PSN BRN PAR FRZ FNT) and held-item mark (`ui/party
+- `zip-z6i-dex.md`: Z6i: Research Room dex sets open a member list (icon, number, name, caught/seen mark); Enter opens a species p
+- `zip-z6j-bag-layout.md`: Z6j: the Bag menu sits on the pack's Bag backdrop (orange grid, BAG plate, dark list area); the Picker skips i

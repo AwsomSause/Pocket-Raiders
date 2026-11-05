@@ -18,3 +18,22 @@ public/assets/
 docs/*.png
 package-lock.json
 docs/quality/
+# More generated/bulk data (added 2026-11-05 to cut search output)
+src/data/events*.json
+src/data/legendaryEvents.json
+src/data/ebdxAnims.json
+src/data/trainerQuests.json
+src/data/trainerUnlocks.json
+src/data/archetypes.json
+src/data/itemCatalog.json
+src/data/gameEvents.json
+src/data/runPrep.json
+src/data/availability.json
+src/data/story.json
+src/data/town.json
+src/data/evilTeams.json
+docs/press-kit/
+docs/qa/
+docs/status/anim-reference/
+*.whl
+*.jsonl

@@ -11,6 +11,12 @@ Everything loaded early is re-sent on every turn for the rest of the session. Ke
 - Big source files (`engine.ts`, `run.ts`, `contentSchema.ts`, `BattleScene.ts`, `HubScene.ts`): `grep -n` the function name, read its window. Never read them whole.
 - Don't re-read a file you just wrote or edited; the edit tool already confirmed it.
 
+## Reading budget (token rules)
+- Reads of the biggest generated data are blocked in `.claude/settings.json`; use `grep -n` or `node -e` for one entry. Don't try to work around the block.
+- Never read `docs/status/INDEX.md`, `docs/archive/status-done-*.md` or `CHECKLIST.md` whole: grep them.
+- Reply short: result first, no recap of the diff, no re-quoting files. Final PR text: what changed, test results, risks, in under 15 lines.
+- If `npm run check` fails, read only the failing test's block (`| grep -A15 FAIL`), not the whole log.
+
 ## Commands
 - `npm run check` and Playwright already print short output. Trim other noisy output: `| tail -40`, `| grep -E "FAIL|Error|✗"`, `git log --oneline -15`, `git diff --stat` before a full diff.
 - Run one test file while iterating (`npx vitest run tests/unit/save.test.ts`, `npx playwright test tests/e2e/milestone8.spec.ts`); run the full `npm run check` once at the end.
