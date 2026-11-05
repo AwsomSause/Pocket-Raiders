@@ -1,0 +1,1 @@
+- Fix main unit tests: Time Attack now sorted into the Battle modifier category, modifier count test is 26, screenStyles test mocks Phaser.
