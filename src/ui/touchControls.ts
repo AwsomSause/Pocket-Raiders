@@ -42,14 +42,14 @@ export function installTouchControls(): void {
     #touch-pad .acts{grid-template-columns:repeat(1,96px);grid-template-rows:repeat(2,48px)}
     #touch-pad button{font:600 18px system-ui,sans-serif;color:#fff;background:linear-gradient(#6fb7ff,#2f7fd8);border:0;border-radius:14px;min-width:48px;min-height:48px;touch-action:none;-webkit-tap-highlight-color:transparent}
     #touch-pad button:active{filter:brightness(1.25)}
-    body.touch-pad-side #touch-pad{background:transparent;pointer-events:none;align-items:flex-end;padding-left:calc(6px + env(safe-area-inset-left));padding-right:calc(6px + env(safe-area-inset-right));padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+    body.touch-pad-side #touch-pad{background:transparent;pointer-events:none;align-items:flex-end;padding-left:calc(2px + env(safe-area-inset-left));padding-right:calc(2px + env(safe-area-inset-right));padding-bottom:calc(10px + env(safe-area-inset-bottom))}
     body.touch-pad-side #touch-pad .dpad,body.touch-pad-side #touch-pad .acts{pointer-events:auto}
     body.touch-pad-side #touch-pad button{opacity:.55;box-shadow:0 2px 8px rgba(0,0,0,.45)}
     body.touch-pad-side.pad-min #touch-pad .dpad,body.touch-pad-side.pad-min #touch-pad .acts button:first-child{display:none}
     body.touch-pad-side.pad-min #touch-pad .acts{margin-left:auto;grid-template-rows:repeat(1,44px)}
-    body.touch-pad-side #touch-pad .acts{grid-template-columns:repeat(1,56px);grid-template-rows:repeat(2,42px)}
-    body.touch-pad-side #touch-pad .dpad{margin-left:0;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(2,42px)}
-    body.touch-pad-side #touch-pad button{min-width:42px;min-height:42px}
+    body.touch-pad-side #touch-pad .acts{grid-template-columns:repeat(1,52px);grid-template-rows:repeat(2,42px)}
+    body.touch-pad-side #touch-pad .dpad{margin-left:0;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(2,42px)}
+    body.touch-pad-side #touch-pad button{min-width:40px;min-height:42px;padding:0}body.touch-pad-side #touch-pad .acts button{font-size:15px}
     #touch-toggle{position:fixed;left:calc(10px + env(safe-area-inset-left));top:calc(6px + env(safe-area-inset-top));width:44px;height:44px;display:none;z-index:6;border:0;border-radius:12px;background:rgba(47,127,216,.7);color:#fff;font:600 20px system-ui,sans-serif;touch-action:none;-webkit-tap-highlight-color:transparent}
     #touch-pad .hub-only{display:none}
     body.in-hub #touch-pad .hub-only{display:block}
