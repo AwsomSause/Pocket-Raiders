@@ -36,7 +36,7 @@ export function exhibitionFor(content: Content, run: Pick<RunState, 'seed' | 'st
 }
 
 /** A real battle on the engine: both teams are played by the AI, three against three, with its own random stream. */
-function fight(content: Content, seed: string, key: string, a: ExhibitionTeam, b: ExhibitionTeam): { winner: 0 | 1; lines: string[] } {
+export function fight(content: Content, seed: string, key: string, a: ExhibitionTeam, b: ExhibitionTeam): { winner: 0 | 1; lines: string[] } {
   const build = (team: ExhibitionTeam, tag: string): PokemonInstance[] =>
     team.fighters.map((f, i) => {
       const mon = createPokemon(content, f.speciesId, f.level, `ex-${tag}${i}`);
