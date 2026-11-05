@@ -6,7 +6,7 @@
 // Pure: no RNG.
 
 import type { Content } from './contentSchema';
-import { getMode } from './rules';
+import { getMode, pacifist } from './rules';
 import { getSpecies } from './pokemon';
 import type { RunRules, RunState } from './state';
 import { spendInsurance } from './npcShop';
@@ -26,8 +26,10 @@ export const areaKey = (run: Pick<RunState, 'regionIndex' | 'stage'>): string =>
  */
 export function claimArea(run: RunState): void {
   const battle = run.battle;
-  if (!battle || !nuzlockeLevel(run.rules)) return;
+  if (!battle) return;
   if (battle.monRival || battle.totem || battle.raid) return;
+  if (pacifist(run.rules) && battle.kind === 'wild') battle.pacifist = true;
+  if (!nuzlockeLevel(run.rules)) return;
   const nz = (run.nuzlocke ??= { areas: [], memorial: [] });
   const key = areaKey(run);
   if (nz.areas.includes(key)) battle.nuzlockeNoCatch = true;
