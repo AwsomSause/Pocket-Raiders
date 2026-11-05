@@ -9,7 +9,7 @@ import { GRADES, type Grade } from '../interaction/prompt';
 import { hashSeed, Rng } from '../rng';
 import type { Profile } from '../state';
 import { TOWN, freshTown, type Reward, type TownAction, type TownBuilding, type TownOption, type TownProfile } from './schema';
-import { bestMove, curseKnown, fanClub, lastTeam, memorialList, miniBattle, ownedSet, pedestalBonus, pets as petList, primaryType, relicList, trophies as trophyList } from './views';
+import { bestMove, curseKnown, fanClub, townPrice, lastTeam, memorialList, miniBattle, ownedSet, pedestalBonus, pets as petList, primaryType, relicList, trophies as trophyList } from './views';
 import { familyId } from '../mastery';
 
 export * from './schema';
@@ -349,9 +349,10 @@ function runBuy(c: Ctx): string {
   const np = needsProblem(c.p, g.needs);
   if (np) fail(np);
   if (g.set !== 'boon' && (c.t.sets[g.set] ?? []).includes(g.id)) fail('You already own that.');
-  const cp = costProblem(c.p, g.cost);
+  const cost = g.cost && g.cost.credits ? { ...g.cost, credits: townPrice(c.p, g.cost.credits) } : g.cost;
+  const cp = costProblem(c.p, cost);
   if (cp) fail(cp);
-  pay(c.p, c.t, g.cost);
+  pay(c.p, c.t, cost);
   if (g.set === 'boon') return `Done. ${reward(c, { ...g.reward, say: `${g.label} will be in your pack next run.` })}`;
   (c.t.sets[g.set] ??= []).push(g.id);
   return `Bought ${g.label}.`;

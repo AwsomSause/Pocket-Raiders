@@ -4284,6 +4284,7 @@
   { "id": "sponsor-gear", "goal": { "badges": 4 }, "credits": 70 },
   { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 }
  ],
+ "economy": { "discountPerTier": 0.05 },
  "fanClub": [
   { "fans": 20, "money": 100, "label": "Hometown fans" },
   { "fans": 60, "money": 250, "label": "Regional fan club" },

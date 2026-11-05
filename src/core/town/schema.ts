@@ -133,6 +133,8 @@ export const TownDataSchema = z.object({
   /** Fan Club (S358): followers from your history unlock tiers; each tier adds starting money to every run. */
   /** Sponsor Deals (S359): signed before a run; the credits are paid at run end when the goal was met. */
   sponsors: z.array(z.object({ id: z.string(), goal: z.object({ victory: z.boolean().optional(), regions: Count.optional(), badges: Count.optional() }), credits: Count })),
+  /** Town Economy (S347): a share off every credit price in the town's shops per Fan Club tier reached. */
+  economy: z.object({ discountPerTier: z.number().min(0).max(0.25) }),
   fanClub: z.array(z.object({ fans: Count, money: Count, label: z.string() })),
   caps: z.object({ notes: Count, graffiti: Count, photos: Count, pins: Count, wishes: Count, boonItems: Count, vault: Count }),
 });
