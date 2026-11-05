@@ -2868,6 +2868,21 @@
      ]
     },
     {
+     "id": "hall-sponsor",
+     "name": "Sponsor Deals",
+     "desc": "Sign one sponsor before a run. Meet their goal and they pay credits when the run ends; miss it and nothing is lost.",
+     "kind": "pick",
+     "rows": [
+      "S359"
+     ],
+     "limit": "run",
+     "options": [
+      {"id": "sponsor-trail", "label": "Trail Co.", "desc": "Clear 1 region: 40 credits.", "say": "Trail Co. will watch your progress.", "once": false, "reward": {"stuff": {"sponsor-trail": 1}}},
+      {"id": "sponsor-gear", "label": "Gym Gear", "desc": "Earn 4 badges: 70 credits.", "say": "Gym Gear counts your badges.", "once": false, "reward": {"stuff": {"sponsor-gear": 1}}},
+      {"id": "sponsor-drinks", "label": "Champion Drinks", "desc": "Win the run: 130 credits.", "say": "Champion Drinks bets on a win.", "once": false, "reward": {"stuff": {"sponsor-drinks": 1}}}
+     ]
+    },
+    {
      "id": "hall-roster",
      "name": "Townsfolk roster",
      "desc": "Townsfolk who move in as you earn achievements.",
@@ -4264,6 +4279,11 @@
   },
   "say": "Mush. Edible, technically."
  },
+ "sponsors": [
+  { "id": "sponsor-trail", "goal": { "regions": 1 }, "credits": 40 },
+  { "id": "sponsor-gear", "goal": { "badges": 4 }, "credits": 70 },
+  { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 }
+ ],
  "fanClub": [
   { "fans": 20, "money": 100, "label": "Hometown fans" },
   { "fans": 60, "money": 250, "label": "Regional fan club" },

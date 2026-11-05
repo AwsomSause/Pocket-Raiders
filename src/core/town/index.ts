@@ -673,7 +673,7 @@ export function spendTownStart(profile: Profile): Profile {
 }
 
 /** At the end of a run: the town reacts (weather, relics seen, items left behind, track points). Mutates `profile`. */
-export function recordTownRun(content: Content, profile: Profile, run: { runId: string; seed: string; victory: boolean; regionIndex?: number; inventory: Record<string, number>; camp?: { relics: { id: string; cursed: boolean }[] }; nuzlocke?: { memorial: { speciesId: string; level: number; ace: boolean; cause: string }[] }; party?: { speciesId: string; level: number; hp: number; care?: { ace?: boolean } }[] }): void {
+export function recordTownRun(content: Content, profile: Profile, run: { runId: string; seed: string; victory: boolean; regionIndex?: number; inventory: Record<string, number>; camp?: { relics: { id: string; cursed: boolean }[]; stuff?: Record<string, number> }; badges?: string[]; nuzlocke?: { memorial: { speciesId: string; level: number; ace: boolean; cause: string }[] }; party?: { speciesId: string; level: number; hp: number; care?: { ace?: boolean } }[] }): void {
   const t = townOf(profile);
   profile.town = t;
   t.last = { victory: run.victory, cleared: run.regionIndex ?? 0, runId: run.runId };
@@ -684,6 +684,13 @@ export function recordTownRun(content: Content, profile: Profile, run: { runId: 
     const key = r.cursed || curseKnown(t, r.id) ? `${r.id}!` : r.id;
     const have = new Set([...(t.sets.relics ?? []), ...(t.sets.offered ?? [])]);
     if (!have.has(key) && !have.has(r.id) && !have.has(`${r.id}!`)) (t.sets.relics ??= []).push(key);
+  }
+  // Sponsor Deals (S359): a signed sponsor pays credits when its goal was met.
+  for (const sp of TOWN.sponsors) {
+    if ((run.camp?.stuff?.[sp.id] ?? 0) < 1) continue;
+    const g = sp.goal;
+    const met = (g.victory ? run.victory : true) && (g.regions === undefined || (run.regionIndex ?? 0) + (run.victory ? 1 : 0) >= g.regions) && (g.badges === undefined || (run.badges?.length ?? 0) >= g.badges);
+    if (met) { profile.bankCredits += sp.credits; profile.lifetimeBankCredits += sp.credits; }
   }
   // Memorial Wall: Nuzlocke losses, and aces that fell in any run.
   const stone = (sp: string, lvl: number, ace: boolean, cause: string): string => `${sp}|${lvl}|${ace ? 1 : 0}|${cause}`;
