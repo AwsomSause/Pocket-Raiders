@@ -1913,6 +1913,8 @@ export type WorldBalance = z.infer<typeof WorldBalanceSchema>;
 
 export const BalanceSchema = z.object({
   trainerAi: TrainerAiSchema,
+  /** S168: every `turnsPerLevel` chip turns endured in a weather cut that weather's chip damage by `cutPerLevel`, up to `maxLevels` levels. */
+  weatherTolerance: z.object({ turnsPerLevel: z.number().int().min(1), cutPerLevel: z.number().min(0).max(1), maxLevels: z.number().int().min(0) }).default({ turnsPerLevel: 12, cutPerLevel: 0.15, maxLevels: 4 }),
   /** S164 charge-up: each banked stack adds `perStack` to the next damaging move's power, up to `max` stacks. */
   bankPower: z.object({ perStack: z.number().min(0), max: z.number().int().min(1) }).default({ perStack: 0.5, max: 3 }),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
