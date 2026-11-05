@@ -1712,6 +1712,8 @@ export const SettingsSchema = z.object({
   mapDayNight: z.boolean().default(false),
   /** S257 Cutscene skip with recap: skipping a cutscene shows a one-line text summary of it (off by default). */
   skipRecap: z.boolean().default(false),
+  /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
+  livelyTeam: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 
