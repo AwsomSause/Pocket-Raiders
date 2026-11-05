@@ -135,8 +135,8 @@ describe('Death-Block and Adventure', () => {
 describe('the 10 other modifiers', () => {
   it('every modifier is supported and the unsupported list is empty', () => {
     expect(RUN_RULES.modifiers.filter((m) => m.status !== 'supported').map((m) => m.id)).toEqual(['quick-route']); // retired: Quick Route is a mode now
-    // 10 challenge modifiers, 3 Challenge Contracts (Empty Bag, No Rest, No Evolution), Solo Run and the retired Quick Route.
-    expect(RUN_RULES.modifiers).toHaveLength(24);
+    // 10 challenge modifiers, 3 Challenge Contracts (Empty Bag, No Rest, No Evolution), Solo Run and the retired Quick Route, and Pacifist.
+    expect(RUN_RULES.modifiers).toHaveLength(25);
   });
 
   it('Limited Party caps the party at 4', () => {
