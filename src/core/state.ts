@@ -1720,6 +1720,8 @@ export const SettingsSchema = z.object({
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
   victoryPoses: z.boolean().default(false),
+  /** S254 Trainer portrait expressions: a portrait of the foe trainer reacts to the fight (off by default). */
+  trainerExpressions: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

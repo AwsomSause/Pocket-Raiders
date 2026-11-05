@@ -96,6 +96,8 @@ import { loadAssets } from '../ui/lazyAssets';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
+import { portraitChip, type PortraitChip } from '../ui/battleFx/portrait';
+import { expressionFor } from '../core/presentation/expressions';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
 import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
@@ -220,6 +222,8 @@ export class BattleScene extends Phaser.Scene {
   /** Raid / Totem status line (shield, phases, ally calls). */
   private status!: Phaser.GameObjects.Text;
   private fx!: BattleFx;
+  /** S254: the foe trainer's portrait chip (Settings > Trainer expressions). */
+  private portrait: PortraitChip | undefined;
   private advance: (() => void) | null = null;
   private busy = false;
   /** The transformation the player chose to do with their next move (null = off). */
@@ -1643,6 +1647,22 @@ export class BattleScene extends Phaser.Scene {
     return isUltimateBattle(this.run) ? ROLE_RIMS.ultimate : battle.rivalId || battle.rival ? ROLE_RIMS.rival : ROLE_RIMS.trainer;
   }
 
+  /** S254: the foe trainer's portrait reacts to an event. Presentation only; any failure is ignored. */
+  private reactPortrait(e: RunEvent): void {
+    try {
+      const st = services().session.settings;
+      const art = this.trainerArt();
+      if (!st.trainerExpressions || !art || st.disableAllAnimations) return;
+      this.portrait ??= portraitChip(this, art.assetId, art.label, this.motion);
+      const foe = this.shown.enemy;
+      const share = e.type === 'damage' && e.side === 'enemy' && foe ? e.hpAfter / Math.max(1, maxHp(services().session.content, foe)) : undefined;
+      const expr = expressionFor({ type: e.type, side: 'side' in e ? e.side : undefined, crit: e.type === 'damage' ? e.crit : undefined, effectiveness: e.type === 'damage' ? e.effectiveness : undefined }, share);
+      if (expr) this.portrait.set(expr);
+    } catch {
+      // A portrait failure never matters to the fight.
+    }
+  }
+
   /** Waits for a presentation beat; confirm/back skips it. */
   private async playBeat(b: Beat, recap?: string): Promise<void> {
     let over = false;
@@ -1683,7 +1703,10 @@ export class BattleScene extends Phaser.Scene {
     setAmbience(this, lm?.ambience ?? ambienceFor(types?.[0]));
     if (battle.trainer && (isBossClass(battle.trainer.classId) || battle.trainer.classId === 'rival')) playMotif(this, battle.trainer.leaderId ?? battle.trainer.classId);
     this.refreshMusicState();
-    this.events.once('shutdown', () => stopProceduralAudio());
+    this.events.once('shutdown', () => {
+      stopProceduralAudio();
+      this.portrait = undefined;
+    });
   }
 
   private refreshMusicState(): void {
@@ -2687,6 +2710,7 @@ export class BattleScene extends Phaser.Scene {
         this.lastMoveType = content.moves.get(e.moveId)?.type ?? 'normal';
       }
       await this.fx.play(cues[index] ?? []);
+      this.reactPortrait(e);
       const side = 'side' in e ? e.side : null;
       const box = side === 'enemy' ? this.enemyBox : this.playerBox;
       const sprite = side === 'enemy' ? this.enemySprite : this.playerSprite;
