@@ -1913,6 +1913,8 @@ export type WorldBalance = z.infer<typeof WorldBalanceSchema>;
 
 export const BalanceSchema = z.object({
   trainerAi: TrainerAiSchema,
+  /** S160: stacked critical-hit sources count `excessFactor` of the way past `softCap` (1 = off). */
+  critScaling: z.object({ softCap: z.number().min(0).max(1), excessFactor: z.number().min(0).max(1) }).default({ softCap: 0.5, excessFactor: 0.5 }),
   /** S168: every `turnsPerLevel` chip turns endured in a weather cut that weather's chip damage by `cutPerLevel`, up to `maxLevels` levels. */
   weatherTolerance: z.object({ turnsPerLevel: z.number().int().min(1), cutPerLevel: z.number().min(0).max(1), maxLevels: z.number().int().min(0) }).default({ turnsPerLevel: 12, cutPerLevel: 0.15, maxLevels: 4 }),
   /** S164 charge-up: each banked stack adds `perStack` to the next damaging move's power, up to `max` stacks. */
