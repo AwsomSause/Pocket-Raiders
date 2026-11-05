@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { dexCaughtCount } from '../core/dexRewards';
 import { changeFriendship } from '../core/friendship';
 import { spendTownStart, townAction, visitBuilding, type TownArgs, type TownResult } from '../core/town';
 import type { Grade } from '../core/interaction/prompt';
@@ -239,7 +240,7 @@ export class GameSession {
   newRun(archetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
     // A saved preset can name a loan or Vault item the profile no longer has.
     if (prep) prep = { ...prep, loan: prep.loan && !loanProblem(this.content, this.profile), vaultItem: prep.vaultItem && this.profile.vault.includes(prep.vaultItem) ? prep.vaultItem : null, mentorId: availableMentors(this.profile).some((m) => m.id === prep!.mentorId) ? prep.mentorId : null };
-    const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: Object.values(this.profile.mastery).filter((m) => m.caught > 0).length, mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory };
+    const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory };
     this.run = Run.createRun(this.content, { ...opts, runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
     const grants = startGrants(this.content, this.profile, archetypeId);
     applyStartGrants(this.content, this.run, this.profile);

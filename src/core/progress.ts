@@ -26,6 +26,7 @@ import { awardModeRewards, type ModeRewardPaid } from './modeRewards';
 import { recordMoveMastery } from './moveMastery';
 import { relationshipCounters } from './relationships';
 import { hasPerk } from './mapItems';
+import { claimDexRewards } from './dexRewards';
 import { claimBankMilestones, claimRegionAccounts, loanDue, vaultDeposit } from './bank';
 import { runStamps } from './recap';
 import { settleMentor } from './mentors';
@@ -347,6 +348,7 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
   profile.lifetimeBankCredits += base.savings + base.stipend;
   const achievements = counts ? awardAchievements(content, profile, now) : [];
   claimBankMilestones(content, profile, now);
+  claimDexRewards(content, profile, now);
   if (counts) {
     claimRegionAccounts(content, profile, run.regionsCleared, now);
     vaultDeposit(content, profile, run, !run.victory && hasPerk(content, run, 'insurance'));

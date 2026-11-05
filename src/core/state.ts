@@ -505,6 +505,9 @@ export const RaidBattleSchema = z.object({
   bossUid: z.string().nullable().default(null),
   /** S400 Boss Training Mode: a practice fight keeps the party as it was; it is restored when the fight ends and nothing is paid out. */
   practice: z.object({ party: z.array(PokemonInstanceSchema) }).nullable().default(null),
+  /** S404 Raid Medals: damage dealt to the boss and HP mended by Supports, by Pokémon uid. */
+  damageBy: z.record(z.string(), z.number().int().min(0)).default({}),
+  healedBy: z.record(z.string(), z.number().int().min(0)).default({}),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 
@@ -1187,6 +1190,8 @@ export const RunStateSchema = z.object({
     areas: z.array(z.string()),
     memorial: z.array(z.object({ uid: z.string(), speciesId: z.string(), level: z.number().int(), shiny: z.boolean(), ace: z.boolean(), area: z.string(), cause: z.string() })),
   }).optional(),
+  /** Time Attack: speed points earned and fast trainer wins so far (core/rules.ts `timeAttackPoints`). */
+  timeAttack: z.object({ points: z.number().int().min(0), fast: z.number().int().min(0) }).optional(),
   /** Modifier Run: the blessings and curses picked so far (they stack). */
   mutators: z.array(z.string()).optional(),
   /** Effects of the last temporary signature choice per mechanic, so the next choice can replace them. */
@@ -1465,6 +1470,12 @@ export const LegacySchema = z.object({
   boards: z.record(z.string(), z.array(z.object({ key: z.string(), runId: z.string(), at: z.string(), archetypeId: z.string(), score: z.number().int(), badges: z.number().int(), encounters: z.number().int(), victory: z.boolean() }))).default({}),
   /** Co-op ghosts imported from a friend's code, by seed (core/ghost.ts). */
   ghosts: z.record(z.string(), z.object({ from: z.string(), victory: z.boolean(), badges: z.number().int(), regionReached: z.number().int(), encounters: z.number().int(), team: z.array(z.string()), actions: z.array(z.string()) })).default({}),
+  /** Up to 3 earned achievements shown on the Trainer Card (core/social.ts). */
+  showcase: z.array(z.string()).max(3).default([]),
+  /** Photo Contest entries, one per week (core/social.ts). */
+  photos: z.array(z.object({ week: z.string(), theme: z.string(), note: z.string(), stars: z.number().int().min(1).max(5), at: z.string() })).max(60).default([]),
+  /** Trade Board: Pokémon posted for a friend to take, waiting for the reply code (core/social.ts). */
+  tradeBoard: z.array(z.object({ id: z.string(), want: z.string().nullable(), at: z.string(), mon: z.object({ speciesId: z.string(), level: z.number().int().min(1).max(1000), shiny: z.boolean(), abilitySlot: z.number().int().min(-1), moves: z.array(z.string()).min(1).max(4) }) })).max(10).default([]),
 });
 export type LegacyState = z.infer<typeof LegacySchema>;
 
@@ -1718,6 +1729,8 @@ export const SettingsSchema = z.object({
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
   victoryPoses: z.boolean().default(false),
+  /** S254 Trainer portrait expressions: a portrait of the foe trainer reacts to the fight (off by default). */
+  trainerExpressions: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

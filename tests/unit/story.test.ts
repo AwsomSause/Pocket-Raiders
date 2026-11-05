@@ -97,7 +97,7 @@ describe('story foundation: random streams', () => {
     regions: (RAW_CONTENT.regions as { custom?: boolean }[]).filter((r) => !r.custom),
     runPrep: { ...(RAW_CONTENT.runPrep as object), starterPools: (RAW_CONTENT.runPrep as { starterPools: { filter?: { region?: string } }[] }).starterPools.filter((p) => !['torren', 'frontier-isles', 'trial-archipelago'].includes(p.filter?.region ?? '')) },
     // The Major Update §1 rarity audit changed these items' rarity and stack limit; old seeds use the old values.
-    itemCatalog: catalog.filter((e) => !eventItem(e) && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && !String(e.id).endsWith('-lure')).map((e) => (PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)),
+    itemCatalog: catalog.filter((e) => !eventItem(e) && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && e.id !== 'exp-charm' && !String(e.id).endsWith('-lure')).map((e) => (PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)),
     // The draft deals (bundles, bargains, a risk) join the reward pool, which would change old seeds' drafts.
     rewards: (RAW_CONTENT.rewards as { id: string }[]).filter((r) => !r.id.startsWith('deal-')),
     // The Camp Council (one more rest spot) the Relic Shrine and the world events (milestones, rare sites, callbacks, legendary route, the exploration events, weather fronts, roamers and camps) would shift what an old seed meets, so they are left out too.

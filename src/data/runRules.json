@@ -214,6 +214,18 @@
       "group": "speed-clear"
     },
     {
+      "id": "time-attack",
+      "name": "Time Attack",
+      "status": "supported",
+      "bonus": 0.1,
+      "blurb": "Score from speed: every trainer win in 8 turns or fewer adds points to your run score (more for faster wins).",
+      "group": "time-attack",
+      "timeAttack": {
+        "turns": 8,
+        "perTurn": 10
+      }
+    },
+    {
       "id": "solo-run",
       "name": "Solo Run",
       "status": "supported",
@@ -445,7 +457,10 @@
       "progressionEligible": true,
       "checkpoints": false,
       "rewardBonus": 0.3,
-      "timePressure": { "daysPerRegion": 14, "perDay": 0.01 },
+      "timePressure": {
+        "daysPerRegion": 14,
+        "perDay": 0.01
+      },
       "blurb": "A run clock in game days: end rewards start +30%, and melt 1% for every day past 14 days per region. Resting costs days. Steps and rests cost time, battles do not."
     },
     {

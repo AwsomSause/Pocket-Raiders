@@ -95,6 +95,13 @@
    { "dex": 500, "multiplier": 3, "label": "Platinum" }
   ]
  },
+ "dexRewards": [
+  { "dex": 25, "title": "Dex Rookie", "credits": 50, "rp": 5 },
+  { "dex": 100, "title": "Dex Ranger", "credits": 150, "rp": 15 },
+  { "dex": 250, "title": "Dex Scholar", "credits": 400, "rp": 40 },
+  { "dex": 500, "title": "Dex Master", "credits": 1000, "rp": 100 },
+  { "dex": 900, "title": "Living Dex", "credits": 3000, "rp": 250 }
+ ],
  "catchChain": {
   "shinyPerLink": 2,
   "maxLinks": 10,

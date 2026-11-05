@@ -61,6 +61,8 @@ export const RunRulesDataSchema = z.object({
       doublesOnly: z.boolean().optional(),
       /** Pacifist (S300): wild Pokémon can't be knocked out; win by catching or running. */
       pacifist: z.boolean().optional(),
+      /** Time Attack (S303): each trainer win in `turns` or fewer turns scores `(turns - taken + 1) * perTurn` points. */
+      timeAttack: z.object({ turns: z.number().int().min(1), perTurn: z.number().int().min(1) }).optional(),
       /** Level 50 Cup (S290): the party's level cap for the whole run. */
       levelCap: z.number().int().min(1).optional(),
     }),
@@ -216,6 +218,12 @@ export const quickWinBonus = (rules: Pick<RunRules, 'modifierIds'>, turnsTaken: 
   rules.modifierIds.reduce((sum, id) => {
     const q = getModifier(id)?.quickWin;
     return sum + (q && turnsTaken <= q.turns ? q.money : 0);
+  }, 0);
+/** Time Attack points for a trainer win that took `turnsTaken` turns (0 when the modifier is off or the win was slow). */
+export const timeAttackPoints = (rules: Pick<RunRules, 'modifierIds'>, turnsTaken: number): number =>
+  rules.modifierIds.reduce((sum, id) => {
+    const t = getModifier(id)?.timeAttack;
+    return sum + (t && turnsTaken <= t.turns ? (t.turns - Math.max(1, turnsTaken) + 1) * t.perTurn : 0);
   }, 0);
 export const bossRemix = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.bossRemix);
 /** Inverse Battle is on. */

@@ -888,6 +888,7 @@ function raidEndOfTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, 
     const mend = Math.min(supportHeal(content, battle, player.mon), maxHp(content, player.mon) - player.mon.hp);
     if (mend > 0) {
       player.mon.hp += mend;
+      battle.raid.healedBy[player.mon.uid] = (battle.raid.healedBy[player.mon.uid] ?? 0) + mend;
       events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
     }
   }
@@ -2086,6 +2087,10 @@ function takeHp(
     }
   }
   let lost = Math.min(Math.max(0, amount), c.mon.hp);
+  if (c.side === 'enemy' && lost > 0 && ctx.battle.raid && ctx.battle.raid.minionUid !== c.mon.uid) {
+    const hero = ctx.party[ctx.battle.activeIndex]?.uid;
+    if (hero) ctx.battle.raid.damageBy[hero] = (ctx.battle.raid.damageBy[hero] ?? 0) + lost;
+  }
   let lastStand: string | null = null;
   let stand = false;
   if (c.vol.bide && lost > 0) c.vol.bide.damage += lost;
