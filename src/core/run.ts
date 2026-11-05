@@ -13,6 +13,7 @@
 // next region, or wins the run after the last one.
 
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
+import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
@@ -1593,7 +1594,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         case 'elite': {
           const memberId = stage.eliteFour[node.column - 1];
           if (!memberId) throw new Error(`No Elite Four member for column ${node.column}`);
-          return planEliteFour(content, archetype, memberId, run.regionIndex, scale, r, bossRemix(run.rules));
+          return planEliteFour(content, archetype, memberId, run.regionIndex, scale, r, bossRemix(run.rules) || eliteRematchDue(content, run));
         }
         case 'champion':
           return planChampion(content, archetype, stage.leaderId, run.regionIndex, scale, r, bossRemix(run.rules) || run.story.flags[FINALE_FLAG] === 'pending', isFinalBoss(content, run));
