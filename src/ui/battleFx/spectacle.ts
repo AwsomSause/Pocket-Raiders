@@ -12,7 +12,8 @@
 import { ruleWipe, wipeAssetId, type WipeMask } from './ruleWipe';
 import type Phaser from 'phaser';
 import { paintGlass, type MotionLevel } from '../aero';
-import { textStyle } from '../theme';
+import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
+import type { VictoryPose } from '../../core/presentation/victoryPose';
 
 export type IntroKind = 'wild' | 'wild-dark' | 'trainer' | 'rival' | 'boss';
 
@@ -382,4 +383,42 @@ export function phaseBanner(scene: Phaser.Scene, rule: string, rim: number, moti
   scene.tweens.add({ targets: c, scaleY: 1.06, duration: 160, yoyo: true, delay: 380 });
   scene.tweens.add({ targets: c, x: -W * 0.6, duration: 260, delay: 1900, ease: 'Cubic.easeIn' });
   return beat(scene, [c], 2200);
+}
+
+/** S257: a one-line text recap banner at the bottom of the screen after a skipped cutscene. Fades itself. */
+export function showRecapBanner(scene: Phaser.Scene, text: string, ms = 2600): void {
+  const t = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 30, text, textStyle(18, '#ffffff', { stroke: '#101830', strokeThickness: 4, backgroundColor: '#101830cc', padding: { x: 12, y: 6 }, wordWrap: { width: GAME_WIDTH - 180 }, align: 'center' })).setOrigin(0.5, 1).setDepth(26500).setScrollFactor(0).setData('noJuice', true).setName('skip-recap');
+  scene.tweens.add({ targets: t, alpha: { from: 0, to: 1 }, duration: 200 });
+  scene.tweens.add({ targets: t, alpha: 0, delay: ms, duration: 360, onComplete: () => t.destroy() });
+}
+
+/** S250: a victory pose picked from the winner's types and weight. Falls back to the plain hop. */
+export function victoryPose(scene: Phaser.Scene, target: Phaser.GameObjects.GameObject, pose: VictoryPose, motion: MotionLevel): Promise<void> {
+  if (motion !== 'full' || !target.active) return Promise.resolve();
+  if (pose === 'hop') return hop(scene, target, motion);
+  const t = target as unknown as { x: number; y: number; scaleX: number; scaleY: number; angle: number; setTint?: (c: number) => void; clearTint?: () => void };
+  const home = { x: t.x, y: t.y, sx: t.scaleX, sy: t.scaleY };
+  const restore = (): void => {
+    t.x = home.x; t.y = home.y; t.scaleX = home.sx; t.scaleY = home.sy; t.angle = 0; t.clearTint?.();
+  };
+  const run = (cfg: Record<string, unknown>): Promise<void> =>
+    new Promise((resolve) => scene.tweens.add({ targets: target, ...cfg, onComplete: () => { restore(); resolve(); } }));
+  switch (pose) {
+    case 'flare':
+      t.setTint?.(0xffb070);
+      return run({ scaleX: home.sx * 1.2, scaleY: home.sy * 1.2, duration: 220, yoyo: true, repeat: 1, ease: 'Sine.easeInOut' });
+    case 'splash':
+      return run({ y: home.y - 24, scaleY: home.sy * 1.12, scaleX: home.sx * 0.92, duration: 200, yoyo: true, repeat: 1, ease: 'Quad.easeOut' });
+    case 'spin':
+      return run({ angle: 360, y: home.y - 14, duration: 520, ease: 'Sine.easeInOut' });
+    case 'stomp':
+      return run({ y: home.y + 6, scaleY: home.sy * 0.88, duration: 130, yoyo: true, repeat: 2, ease: 'Quad.easeIn' });
+    case 'flip':
+      return run({ angle: -360, y: home.y - 30, duration: 480, ease: 'Quad.easeOut' });
+    case 'zap':
+      t.setTint?.(0xfff070);
+      return run({ x: home.x + 6, duration: 45, yoyo: true, repeat: 7, ease: 'Linear' });
+    case 'sparkle':
+      return run({ scaleX: home.sx * 1.1, scaleY: home.sy * 1.1, angle: 6, duration: 240, yoyo: true, repeat: 1, ease: 'Sine.easeInOut' });
+  }
 }

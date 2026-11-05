@@ -21,6 +21,8 @@ import { AERO, drawGlass, ensureRowFrames, paintGlass } from './aero';
 import { paintSkinBackdrop, paintSkinHeader, paintSkinRow, skinFor } from './screenSkins';
 import type { ScreenId } from '../core/presentation/screenStyles';
 import { glideIn, iconHop, justRedrawn, uiTiming } from './wiiMotion';
+import { spritesAnimate } from './display';
+import { idleLoopFor } from '../core/presentation/idleLoops';
 import { clampTexts, fitBlock, fitLine } from './fitText';
 import { paintBackdrop, type Skin as DSkin } from './dSkins';
 
@@ -444,7 +446,9 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
       const species = lookSpecies(content, mon);
       const max = calcStats(content, mon).hp;
       iconTile(scene, box, mon.hp <= 0);
-      box.add(pokemonIcon(scene, species, 34, 36, 1.5));
+      const icon = pokemonIcon(scene, species, 34, 36, 1.5);
+      box.add(icon);
+      livelyIcon(scene, icon, mon.uid, mon.hp <= 0);
       const shiny = mon.shiny ? ' ★' : '';
       const nameText = scene.add.text(72, 6, `${species.name}${genderSign(content, mon)}${shiny}`, textStyle(26));
       box.add(nameText);
@@ -512,4 +516,20 @@ export function speciesRow(species: Species): PickerRow {
       box.add(scene.add.text(64, h / 2, species.name, textStyle(24)).setOrigin(0, 0.5));
     },
   };
+}
+
+/** S255: a gentle idle loop on a party icon (Settings > Lively team screen). Presentation only. */
+function livelyIcon(scene: Phaser.Scene, icon: Phaser.GameObjects.GameObject, uid: string, fainted: boolean): void {
+  const s = services().session.settings;
+  if (!s.livelyTeam || s.disableAllAnimations || s.battleAnimations !== 'full' || !spritesAnimate()) return;
+  const loop = idleLoopFor(uid, fainted);
+  const t = icon as unknown as { x: number; y: number; scaleY: number };
+  if (!loop) return;
+  scene.time.delayedCall(loop.delay, () => {
+    if (!icon.active) return;
+    const base = { x: t.x, y: t.y, scaleY: t.scaleY };
+    if (loop.kind === 'hop') scene.tweens.add({ targets: icon, y: base.y - loop.amount, duration: loop.half, yoyo: true, repeat: -1, ease: 'Bounce.easeOut', hold: loop.half });
+    else if (loop.kind === 'sway') scene.tweens.add({ targets: icon, x: base.x + loop.amount, duration: loop.half * 1.5, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    else scene.tweens.add({ targets: icon, scaleY: base.scaleY * (1 + loop.amount), duration: loop.half * 1.5, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+  });
 }

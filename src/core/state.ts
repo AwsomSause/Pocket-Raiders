@@ -1712,6 +1712,12 @@ export const SettingsSchema = z.object({
   shakeStory: z.number().min(0).max(1).default(1),
   /** S252 Day-night palette shift: the branching map takes the light of the local time of day (off by default). */
   mapDayNight: z.boolean().default(false),
+  /** S257 Cutscene skip with recap: skipping a cutscene shows a one-line text summary of it (off by default). */
+  skipRecap: z.boolean().default(false),
+  /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
+  livelyTeam: z.boolean().default(false),
+  /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
+  victoryPoses: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 
