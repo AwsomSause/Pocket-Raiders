@@ -76,7 +76,7 @@ const Action = z.object({
   rewards: GradeRewards.optional(),
   options: z.array(Option).default([]),
   /** Options built from the profile instead of the list: lastTeam, history, trophies, relics, pets, items. */
-  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'contracts', 'ghosts', 'mail', 'items', 'memorial']).optional(),
+  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial']).optional(),
   /** What a dynamic option pays; "{name}" in `say` is the option's name. */
   template: Option.optional(),
   goods: z.array(Good).default([]),
@@ -132,7 +132,7 @@ export const TownDataSchema = z.object({
   pools: z.object({ cries: z.array(z.string()).min(4), memory: z.array(z.string()).min(4) }),
   /** Fan Club (S358): followers from your history unlock tiers; each tier adds starting money to every run. */
   fanClub: z.array(z.object({ fans: Count, money: Count, label: z.string() })),
-  caps: z.object({ notes: Count, graffiti: Count, photos: Count, pins: Count, wishes: Count, boonItems: Count }),
+  caps: z.object({ notes: Count, graffiti: Count, photos: Count, pins: Count, wishes: Count, boonItems: Count, vault: Count }),
 });
 export type TownData = z.infer<typeof TownDataSchema>;
 export const TOWN = TownDataSchema.parse(json);

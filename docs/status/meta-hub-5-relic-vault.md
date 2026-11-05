@@ -1,0 +1,1 @@
+- Meta/Hub slice 5: Relic Vault (S464) at the Relic Museum: store up to 2 uncursed relics (`town.json` caps.vault, `sets.vault`); they are granted to every later run via `townStartGrants`.relics and `applyStartGrants` (`grantRelic`). Shrine offering also empties the slot. Profile town `sets` is a free record, so no save bump.

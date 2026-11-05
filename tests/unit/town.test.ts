@@ -325,3 +325,19 @@ describe('Guild Hall Board (S364)', () => {
     expect(g.money).toBe(money + 500);
   });
 });
+
+describe('Relic Vault (S464)', () => {
+  it('stores up to two uncursed relics, which join every later run', () => {
+    let p = rich();
+    const t = townOf(p);
+    const ids = (CAMP.relics.slice(0, 4)).map((r) => r.id);
+    t.sets.relics = ids;
+    p = { ...p, town: t } as Profile;
+    p = ok(p, 'vault-store', { choice: ids[0]! }).profile;
+    p = ok(p, 'vault-store', { choice: ids[1]! }).profile;
+    expect(act(p, 'vault-store', { choice: ids[2]! }).ok).toBe(false);
+    expect(townStartGrants(content, p).relics).toEqual([ids[0], ids[1]]);
+    p = ok(p, 'vault-store', { choice: ids[0]! }).profile;
+    expect(townStartGrants(content, p).relics).toEqual([ids[1]]);
+  });
+});
