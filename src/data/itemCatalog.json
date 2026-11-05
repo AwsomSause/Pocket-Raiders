@@ -15091,5 +15091,29 @@
     }
    ]
   }
+ },
+ {
+  "id": "exp-charm",
+  "name": "Exp. Charm",
+  "family": "Map and encounter items",
+  "description": "Wild battles give 25% more EXP for the rest of the run",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "lucky-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "exp",
+     "percent": 25
+    }
+   ]
+  }
  }
 ]
