@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('phaser', () => ({ default: {} }));
 import { nextScreenChoice, ORIGINAL, RANDOM, SCREEN_IDS, SCREEN_STYLES, SCREEN_STYLES_READY, screenChoice, screenChoiceLabel, screenStyleOf } from '../../src/core/presentation/screenStyles';
 import { SETTINGS } from '../../src/core/settingsRegistry';
 import { SaveManager } from '../../src/save/saveManager';
