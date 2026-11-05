@@ -9,6 +9,7 @@ import { Picker, type PickerRow } from './partyPanel';
 import type { FieldMenuHost } from './fieldMenus';
 import { runInteractionPrompt } from './interactionPrompt';
 import { textStyle } from './theme';
+import { itemVisual } from './sprites';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { CAMP_SKINS } from './dSkins';
 
@@ -20,7 +21,23 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:stuff': { name: 'Camp Pack', desc: 'Oil, keys, bottles, scraps, pages, tokens, luck and relics.', group: 'camp' },
 };
 
-interface Choice { label: string; desc?: string; problem?: string | null }
+interface Choice { label: string; desc?: string; problem?: string | null; group?: string }
+
+/** One icon per camp group, from the item art (cells in the Wii, scrapbook, field base and card looks). */
+const GROUP_ICON: Record<string, string> = { kitchen: 'item.strawberry_sweet', workshop: 'item.nugget', market: 'item.amulet_coin', gadgets: 'item.coin_case', camp: 'item.potion' };
+
+function cellRow(c: Choice): PickerRow {
+  return {
+    problem: c.problem ?? null,
+    hint: c.desc,
+    draw: (scene: Phaser.Scene, box, w, h) => {
+      const icon = c.group ? GROUP_ICON[c.group] : undefined;
+      if (icon) box.add(itemVisual(scene, icon, w / 2, h / 2 - 16, 2.4));
+      box.add(scene.add.text(w / 2, h - 28, c.label, textStyle(18)).setOrigin(0.5));
+      if (c.desc) box.add(scene.add.text(w / 2, h - 11, c.desc, textStyle(12, '#d8d0e0', { wordWrap: { width: w - 16 }, maxLines: 1 })).setOrigin(0.5));
+    },
+  };
+}
 
 function textRow(c: Choice): PickerRow {
   return {
@@ -33,17 +50,21 @@ function textRow(c: Choice): PickerRow {
   };
 }
 
-function choose(host: FieldMenuHost, title: string, items: Choice[], onPick: (i: number) => void, onBack: () => void, tabs?: ConstructorParameters<typeof Picker>[1]['tabs']): void {
+function choose(host: FieldMenuHost, title: string, items: Choice[], onPick: (i: number) => void, onBack: () => void, tabs?: ConstructorParameters<typeof Picker>[1]['tabs'], cells = false): void {
   const { session, } = services();
   const look = screenStyleOf('camp', session.settings.screenStyles, `${session.run!.seed}:${session.run!.encountersCompleted}`);
+  const full = look === 'original' ? undefined : CAMP_SKINS[look];
+  // Only the main camp list uses icon cells; the item and Pokémon pickers keep plain rows in the same look.
+  const asCells = cells && full?.layout?.cell === true;
+  const skinOf = full && !asCells && full.layout?.cell ? { ...full, layout: undefined } : full;
   const picker: Picker = new Picker(host.scene, {
     glass: true,
-    skin: look === 'original' ? undefined : CAMP_SKINS[look],
+    skin: skinOf,
     title,
-    columns: 1,
-    rowHeight: 64,
+    columns: asCells ? 3 : 1,
+    rowHeight: asCells ? 116 : 64,
     tabs,
-    rows: items.length > 0 ? items.map(textRow) : [textRow({ label: 'Nothing here yet.', problem: 'Nothing to pick.' })],
+    rows: items.length > 0 ? items.map(asCells ? cellRow : textRow) : [textRow({ label: 'Nothing here yet.', problem: 'Nothing to pick.' })],
     onSelect: (i) => { picker.close(); host.setPicker(null); onPick(i); },
     onBack: () => { picker.close(); host.setPicker(null); onBack(); },
   });
@@ -62,14 +83,14 @@ export function openCampMenu(host: FieldMenuHost, group = 0, note = ''): void {
     const real = getAction(d.id);
     const used = real ? usedHere(run, real) : 0;
     const wearText = real?.gadget && hasGadget(run, real.gadget) ? ` (${gadgetUses(run, real.gadget)} uses left)` : '';
-    return { label: d.name, desc: `${d.desc}${wearText}${used > 0 ? ' · done' : ''}`, problem: real ? campProblem(content, run, d.id) : null };
+    return { label: d.name, desc: `${d.desc}${wearText}${used > 0 ? ' · done' : ''}`, problem: real ? campProblem(content, run, d.id) : null, group: g };
   });
   const tokens = campOf(run).tokens;
   choose(host, `Camp${note ? ` · ${note.slice(0, 70)}` : ''}${tokens > 0 ? ` · ${tokens} tokens` : ''}`, items, (i) => runAction(host, defs[i]!.id, group, reopen), leave, {
     labels: GROUPS.map((x) => x[1]),
     index: group,
     onChange: (to) => { host.setPicker(null); openCampMenu(host, to, note); },
-  });
+  }, true);
 }
 
 type Back = (msg: string) => void;
