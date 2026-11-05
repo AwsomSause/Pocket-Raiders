@@ -112,7 +112,7 @@ test('your Pokémon glides between Hub Town tiles, and the Trainer Select cursor
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   await openSettings(page, {});
-  // Hub Town is a Settings choice (Arena Lobby is the default Hub).
+  // Pin Hub Town (the default) so this test never depends on the default.
   await page.evaluate(() => { const s = (window as any).__pkr.session; s.saveSettings({ ...s.settings, hubStyle: 'town' }); });
   for (const [key, name, keyName] of [['Hub', 'hubtown-player', 'ArrowRight'], ['TrainerSelect', 'trainer-cursor', 'ArrowRight']] as const) {
     await page.evaluate((k) => void (window as any).__pkr.game.scene.getScenes(true)[0].scene.start(k), key);
