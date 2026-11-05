@@ -11,6 +11,7 @@ import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
 import { inspectSave, reportLines } from '../save/saveInspector';
 import { categoryLabel, parseSplits, splitLines } from '../core/tools/speedrun';
 import { peekStreams } from '../core/tools/rngView';
+import { acceptOffer, cancelOffer, logPhoto, postOffer, readOffer, redeemReply, SHOWCASE_SLOTS, showcaseOf, toggleShowcase, weekTheme } from '../core/social';
 import { backupDue } from '../core/tools/backup';
 import { packSeeds } from '../core/configPack';
 import { loadStoredPacks } from '../core/tools/modPacks';
@@ -60,10 +61,13 @@ export function openTools(host: ToolsHost): void {
     { label: 'Check a save file', sub: 'Pick a save record or exported save: shows its version, the upgrade steps and any damage. Changes nothing.', go: () => openSaveCheck(host) },
     { label: 'Speedrun timer', sub: `Shows run time and badge splits on the map. Now ${device.speedrunOn() ? 'on' : 'off'}; Enter to switch, then see the last run's splits.`, go: () => openSpeedrun(host) },
     { label: 'RNG streams (debug)', sub: 'Shows the current run\'s random streams and what each will roll next. Looking changes nothing.', go: () => openRngView(host) },
+    { label: 'Achievements showcase', sub: `Pick up to ${SHOWCASE_SLOTS} earned achievements to show on your Trainer Card.`, go: () => openShowcase(host) },
+    { label: 'Photo contest', sub: 'A new theme each week. Take a shot (F9 saves a framed screenshot) and log it here.', go: () => openPhotos(host) },
+    { label: 'Trade board', sub: 'Swap kept Pokémon with friends using short codes. No server; each code works once.', go: () => openTradeBoard(host) },
     { label: 'Report a bug', sub: 'Bundles the version, seed and recent errors into a file you can send.', go: () => openBugReport(host) },
     { label: 'Back up my save', sub: due ? 'You have not saved a copy in a while. Enter to download one.' : 'Download a copy of your profile and settings.', go: () => backup(host) },
   ];
-  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 10 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
+  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 13 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
 }
 
 export function openChangelog(host: ToolsHost): void {
@@ -177,6 +181,80 @@ function openRngView(host: ToolsHost): void {
   const run = services().session.run;
   const rows = run ? peekStreams(run.rng, 3).map((v) => row(v.name, `state ${v.state}`, v.next.join('  '))) : [row('No run in progress', 'Start a run to see its streams.')];
   page(host, 'RNG streams', rows);
+}
+
+function openShowcase(host: ToolsHost): void {
+  const { session } = services();
+  const p = session.profile;
+  const shown = new Set(showcaseOf(p));
+  const earned = [...session.content.achievements.values()].filter((a) => p.achievements[a.id]);
+  const rows = earned.length ? earned.map((a) => row(a.name, a.description, shown.has(a.id) ? 'Shown' : '')) : [row('Nothing earned yet', 'Win battles and finish runs to earn achievements.')];
+  page(host, `Showcase  ·  ${shown.size}/${SHOWCASE_SLOTS}`, rows, (n) => {
+    const a = earned[n];
+    if (!a) return;
+    const r = toggleShowcase(session.profile, a.id);
+    if ('problem' in r) return host.restart(r.problem);
+    session.changeProfile(() => r.profile);
+    openShowcase(host);
+  });
+}
+
+function openPhotos(host: ToolsHost): void {
+  const { session } = services();
+  const today = new Date().toISOString().slice(0, 10);
+  const rows = [row(`This week: ${weekTheme(today)}`, 'Enter to log your entry (a note and your own star rating).', 'Log'), ...legacyOf(session.profile).photos.map((x) => row(`${x.week}  ·  ${x.theme}`, x.note, '★'.repeat(x.stars)))];
+  page(host, 'Photo contest', rows, (n) => {
+    if (n !== 0) return;
+    const note = window.prompt(`Describe your shot for "${weekTheme(today)}":`, '');
+    if (note === null) return;
+    const stars = Number(window.prompt('Rate it yourself, 1 to 5 stars:', '3'));
+    session.changeProfile((pr) => logPhoto(pr, today, note, stars));
+    host.restart('Entry logged.');
+  });
+}
+
+function openTradeBoard(host: ToolsHost): void {
+  const { session } = services();
+  const p = session.profile;
+  const name = (id: string) => session.content.species.get(id)?.name ?? id;
+  const kept = p.pastPokemon;
+  const board = legacyOf(p).tradeBoard;
+  const done = (r: { ok: boolean; reason?: string; profile?: typeof p; code?: string; reply?: string }, keep: string): void => {
+    if (!r.ok || !r.profile) return host.restart(r.reason ?? 'That did not work.');
+    session.changeProfile(() => r.profile!);
+    const text = r.code ?? r.reply;
+    if (text) void navigator.clipboard?.writeText(text).catch(() => undefined);
+    host.restart(text ? `${keep} Code copied: send it to your friend.` : keep);
+  };
+  const items: { label: string; sub: string; go: () => void }[] = [
+    { label: 'Post an offer', sub: `Put one of your ${kept.length} kept Pokémon on the board and copy its code.`, go: () => {
+      const list = kept.map((m, i) => `${i + 1} ${name(m.speciesId)} Lv${m.level}`).join(', ');
+      const pick = window.prompt(`Which one? ${list}`, '1');
+      if (pick === null) return;
+      const want = window.prompt('Species id you want back (empty: a gift)', '') ?? '';
+      done(postOffer(session.profile, Number(pick) - 1, want.trim() || null, 'A friend', new Date().toISOString()), 'Offer posted.');
+    } },
+    { label: 'Take a friend\'s offer', sub: 'Paste their TB1 code. You get a reply code to send back.', go: () => {
+      const code = window.prompt('Paste the offer code:', '');
+      if (!code) return;
+      const read = readOffer(code);
+      if (!read.ok) return host.restart(read.reason);
+      let give: number | null = null;
+      if (read.offer.want) {
+        const list = kept.map((m, i) => `${i + 1} ${name(m.speciesId)}`).join(', ');
+        const pick = window.prompt(`${read.offer.from} wants a ${name(read.offer.want)}. Which of yours? ${list}`, '1');
+        if (pick === null) return;
+        give = Number(pick) - 1;
+      }
+      done(acceptOffer(session.profile, code, give, new Date().toISOString()), `You received ${name(read.offer.mon.speciesId)}.`);
+    } },
+    { label: 'Use a friend\'s reply', sub: 'Paste the TR1 code they sent back to finish your offer.', go: () => {
+      const code = window.prompt('Paste the reply code:', '');
+      if (code) done(redeemReply(session.profile, code, new Date().toISOString()), 'Trade finished.');
+    } },
+    ...board.map((e) => ({ label: `Open: ${name(e.mon.speciesId)} Lv${e.mon.level}`, sub: `Wants ${e.want ? name(e.want) : 'nothing (gift)'}. Enter cancels it and returns the Pokémon.`, go: () => done(cancelOffer(session.profile, e.id), 'Offer cancelled.') })),
+  ];
+  page(host, 'Trade board', items.map((i) => row(i.label, i.sub)), (n) => items[n]!.go());
 }
 
 function openBugReport(host: ToolsHost): void {

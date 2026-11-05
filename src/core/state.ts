@@ -1467,6 +1467,12 @@ export const LegacySchema = z.object({
   boards: z.record(z.string(), z.array(z.object({ key: z.string(), runId: z.string(), at: z.string(), archetypeId: z.string(), score: z.number().int(), badges: z.number().int(), encounters: z.number().int(), victory: z.boolean() }))).default({}),
   /** Co-op ghosts imported from a friend's code, by seed (core/ghost.ts). */
   ghosts: z.record(z.string(), z.object({ from: z.string(), victory: z.boolean(), badges: z.number().int(), regionReached: z.number().int(), encounters: z.number().int(), team: z.array(z.string()), actions: z.array(z.string()) })).default({}),
+  /** Up to 3 earned achievements shown on the Trainer Card (core/social.ts). */
+  showcase: z.array(z.string()).max(3).default([]),
+  /** Photo Contest entries, one per week (core/social.ts). */
+  photos: z.array(z.object({ week: z.string(), theme: z.string(), note: z.string(), stars: z.number().int().min(1).max(5), at: z.string() })).max(60).default([]),
+  /** Trade Board: Pokémon posted for a friend to take, waiting for the reply code (core/social.ts). */
+  tradeBoard: z.array(z.object({ id: z.string(), want: z.string().nullable(), at: z.string(), mon: z.object({ speciesId: z.string(), level: z.number().int().min(1).max(1000), shiny: z.boolean(), abilitySlot: z.number().int().min(-1), moves: z.array(z.string()).min(1).max(4) }) })).max(10).default([]),
 });
 export type LegacyState = z.infer<typeof LegacySchema>;
 

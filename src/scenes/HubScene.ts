@@ -10,6 +10,7 @@ import { BANK_MAX_TIER, bankTier, exchangeProblem, nextTier, tierProblem } from 
 import { notify } from '../ui/overlays';
 import { NOOK, collectWish, localLeaderboard, reputationOf, stampCeremony, stampsOwed, konamiJoke, konamiStep, cookieReady, crackCookie, donate, donationNext, donationProblem, fortuneFor, makeWish, nookOf, redeemCode, wishProblem, writeNote } from '../core/hubNook';
 import { LEGACY, legacySummary, ascend, buyNode, contactProblem, intelLevel, legacyOf, networkSlots, nextPrestige, nodeProblem, nodeStatus, prestigeProblem, prestigeRank, regionBoard, serviceFor, shelfProblem, shelveSeed, toggleContact, trainMove, trainProblem, unshelveSeed } from '../core/legacy';
+import { showcaseOf } from '../core/social';
 import { STANDARD_CHOICE } from '../core/rules';
 import { decodeSeedCode, encodeSeedCode } from '../core/seedCode';
 import { contractBoard, contractDone, contractRewardText } from '../core/contracts';
@@ -1877,6 +1878,7 @@ export class HubScene extends Phaser.Scene {
           label(1, `Runs ${p.stats.runsEnded}`);
           label(2, `Wins ${p.stats.battlesWon}`);
           label(3, `Best ${p.stats.bestEncounters} encounters`);
+          showcaseOf(p).forEach((id, i) => box.add(scene.add.text(x + 330 * scale, y + (140 + i * 34) * scale, `★ ${session.content.achievements.get(id)?.name ?? id}`, textStyle(15, '#ffe888')).setShadow(1, 1, '#103050', 0, false, true)));
           const badges = Math.min(8, p.best.badges ?? 0);
           for (let i = 0; i < badges; i++) box.add(scene.add.circle(x + (40 + i * 44) * scale, y + 316 * scale, 7, 0xf8d848).setStrokeStyle(1, 0x805800));
         },
