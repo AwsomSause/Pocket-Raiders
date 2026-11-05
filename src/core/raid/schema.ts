@@ -33,6 +33,8 @@ export const RaidModifiersSchema = z.object({
   /** Healing restriction: no healing items and no Healing cheer. */
   noHealing: z.boolean().optional(),
   /** Rotating weakness: every `everyTurns` turns the boss is weak to the next type (your moves of it do `boost` times the damage). */
+  /** S397 Boss Weak Spots: the exposed zone swaps every `everyTurns` turns between the body (physical hits do `boost` times the damage) and the core (special hits do). */
+  weakSpots: z.object({ everyTurns: z.number().int().min(2).max(6), boost: z.number().min(1.1).max(1.6) }).optional(),
   rotatingWeakness: z.object({ types: z.array(TypeNameSchema).min(2).max(6), everyTurns: z.number().int().min(2).max(6), boost: z.number().min(1.1).max(2) }).optional(),
 });
 export type RaidModifiers = z.infer<typeof RaidModifiersSchema>;
