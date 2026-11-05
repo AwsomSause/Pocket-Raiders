@@ -1710,6 +1710,8 @@ export const SettingsSchema = z.object({
   shakeStory: z.number().min(0).max(1).default(1),
   /** S252 Day-night palette shift: the branching map takes the light of the local time of day (off by default). */
   mapDayNight: z.boolean().default(false),
+  /** S257 Cutscene skip with recap: skipping a cutscene shows a one-line text summary of it (off by default). */
+  skipRecap: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

@@ -12,7 +12,7 @@
 import { ruleWipe, wipeAssetId, type WipeMask } from './ruleWipe';
 import type Phaser from 'phaser';
 import { paintGlass, type MotionLevel } from '../aero';
-import { textStyle } from '../theme';
+import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 
 export type IntroKind = 'wild' | 'wild-dark' | 'trainer' | 'rival' | 'boss';
 
@@ -382,4 +382,11 @@ export function phaseBanner(scene: Phaser.Scene, rule: string, rim: number, moti
   scene.tweens.add({ targets: c, scaleY: 1.06, duration: 160, yoyo: true, delay: 380 });
   scene.tweens.add({ targets: c, x: -W * 0.6, duration: 260, delay: 1900, ease: 'Cubic.easeIn' });
   return beat(scene, [c], 2200);
+}
+
+/** S257: a one-line text recap banner at the bottom of the screen after a skipped cutscene. Fades itself. */
+export function showRecapBanner(scene: Phaser.Scene, text: string, ms = 2600): void {
+  const t = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 30, text, textStyle(18, '#ffffff', { stroke: '#101830', strokeThickness: 4, backgroundColor: '#101830cc', padding: { x: 12, y: 6 }, wordWrap: { width: GAME_WIDTH - 180 }, align: 'center' })).setOrigin(0.5, 1).setDepth(26500).setScrollFactor(0).setData('noJuice', true).setName('skip-recap');
+  scene.tweens.add({ targets: t, alpha: { from: 0, to: 1 }, duration: 200 });
+  scene.tweens.add({ targets: t, alpha: 0, delay: ms, duration: 360, onComplete: () => t.destroy() });
 }
