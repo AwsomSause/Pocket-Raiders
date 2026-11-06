@@ -68,6 +68,8 @@ import { transformAnimId } from '../core/presentation/transformAnims';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
+import { poseMoment } from '../ui/dialogue/poseMoment';
+import { poseForMoments } from '../core/presentation/poses';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
@@ -3485,6 +3487,7 @@ export class BattleScene extends Phaser.Scene {
    */
   /** `motion` is false under reduced motion or no animations: the banner still shows, without shake or aura. */
   private showMoment(cue: PresentationCue, motion: boolean): void {
+    this.poseForCue(cue);
     if (!cue.major) return;
     try {
       const color = Phaser.Display.Color.HexStringToColor(cue.color).color;
@@ -3506,6 +3509,15 @@ export class BattleScene extends Phaser.Scene {
     } catch (err) {
       console.warn('Story moment could not be shown', err);
     }
+  }
+
+  /** A moment's pose and emote bubble on the Pokémon it is about (cue ids -> story.json category). Presentation only. */
+  private poseForCue(cue: PresentationCue): void {
+    const { battleAnimations } = services().session.settings;
+    if (battleAnimations === 'off' || !cue.ids?.length) return;
+    const defs = services().session.content.story.definitions;
+    const look = poseForMoments(cue.ids.flatMap((id) => defs.filter((d) => d.id === id)));
+    if (look) poseMoment(this, cue.side === 'enemy' ? this.enemySprite : this.playerSprite, look, this.motion);
   }
 
   /** Throw, wobble, and either click shut or burst open. */
