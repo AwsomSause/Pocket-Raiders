@@ -1,1 +1,1686 @@
-[]
+[
+ {
+  "id": "th_shadows_viridian",
+  "letter": "I",
+  "nameKey": "th.th_shadows_viridian.name",
+  "beatSheet": [
+   {
+    "act": 0,
+    "slot": "b_wind_in_the_pines"
+   },
+   {
+    "act": 1,
+    "slot": "b_line_of_leaving"
+   },
+   {
+    "act": 1,
+    "slot": "b_wrens_call"
+   },
+   {
+    "act": 1,
+    "slot": "b_empty_burrow"
+   },
+   {
+    "act": 1,
+    "slot": "b_rival_picnic"
+   },
+   {
+    "act": 1,
+    "slot": "b_first_stake"
+   },
+   {
+    "act": 1,
+    "slot": "b_dunmere_ledger"
+   },
+   {
+    "act": 1,
+    "slot": "b_gym_scene_marr"
+   },
+   {
+    "act": 1,
+    "slot": "b_night_without_crickets"
+   },
+   {
+    "act": 2,
+    "slot": "b_greywick_moor"
+   },
+   {
+    "act": 2,
+    "slot": "b_two_letterheads"
+   },
+   {
+    "act": 2,
+    "slot": "b_pilar_clinic"
+   },
+   {
+    "act": 2,
+    "slot": "b_ferry_of_seeds"
+   },
+   {
+    "act": 2,
+    "slot": "b_rival_split"
+   },
+   {
+    "act": 2,
+    "slot": "b_moor_walk"
+   },
+   {
+    "act": 2,
+    "slot": "b_brook_at_the_gate"
+   },
+   {
+    "act": 2,
+    "slot": "b_camp_without_birds"
+   },
+   {
+    "act": 3,
+    "slot": "b_logging_camp"
+   },
+   {
+    "act": 3,
+    "slot": "b_the_hush"
+   },
+   {
+    "act": 3,
+    "slot": "b_verdelis_sighting"
+   },
+   {
+    "act": 3,
+    "slot": "b_first_fire"
+   },
+   {
+    "act": 3,
+    "slot": "b_grove_census_opens"
+   },
+   {
+    "act": 3,
+    "slot": "b_counter_count"
+   },
+   {
+    "act": 3,
+    "slot": "b_ranger_asks"
+   },
+   {
+    "act": 3,
+    "slot": "b_who_lit_it"
+   },
+   {
+    "act": 4,
+    "slot": "b_burned_stand"
+   },
+   {
+    "act": 4,
+    "slot": "b_joss_in_the_smoke"
+   },
+   {
+    "act": 4,
+    "slot": "b_twist_both_hands"
+   },
+   {
+    "act": 4,
+    "slot": "b_rival_choice"
+   },
+   {
+    "act": 4,
+    "slot": "b_stand_or_flee"
+   },
+   {
+    "act": 4,
+    "slot": "b_bramble_old_trees"
+   },
+   {
+    "act": 4,
+    "slot": "b_hollis_hint"
+   },
+   {
+    "act": 5,
+    "slot": "b_pylon_ridge"
+   },
+   {
+    "act": 5,
+    "slot": "b_greenwall_gate"
+   },
+   {
+    "act": 5,
+    "slot": "b_evil_hideout"
+   },
+   {
+    "act": 5,
+    "slot": "b_pilar_turns"
+   },
+   {
+    "act": 5,
+    "slot": "b_brook_ledger"
+   },
+   {
+    "act": 5,
+    "slot": "b_last_rest"
+   },
+   {
+    "act": 6,
+    "slot": "b_the_choice"
+   },
+   {
+    "act": 6,
+    "slot": "b_strand_or_greaves"
+   },
+   {
+    "act": 6,
+    "slot": "b_verdelis_truth"
+   },
+   {
+    "act": 6,
+    "slot": "b_the_standing"
+   },
+   {
+    "act": 7,
+    "slot": "b_forest_answers"
+   },
+   {
+    "act": 7,
+    "slot": "b_ending_scene"
+   },
+   {
+    "act": 8,
+    "slot": "b_first_dawn"
+   }
+  ],
+  "slotRules": [
+   {
+    "slot": "b_line_of_leaving",
+    "event": "ev_vi_line_of_leaving"
+   },
+   {
+    "slot": "b_first_stake",
+    "event": "ev_vi_stake_and_string"
+   },
+   {
+    "slot": "b_pilar_clinic",
+    "event": "ev_vi_pilars_clinic"
+   },
+   {
+    "slot": "b_two_letterheads",
+    "event": "ev_vi_the_other_pamphlet"
+   },
+   {
+    "slot": "b_brook_at_the_gate",
+    "event": "ev_vi_brook_at_dusk"
+   },
+   {
+    "slot": "b_first_fire",
+    "event": "ev_vi_burn_that_isnt"
+   },
+   {
+    "slot": "b_bramble_old_trees",
+    "event": "ev_vi_hollis_map"
+   },
+   {
+    "slot": "b_verdelis_sighting",
+    "event": "ev_vi_verdelis_shadow"
+   },
+   {
+    "slot": "b_grove_census_opens",
+    "event": "ev_vi_grove_census",
+    "acts": [
+     3,
+     4
+    ]
+   },
+   {
+    "slot": "b_the_choice",
+    "event": "ev_vi_the_choice"
+   }
+  ],
+  "endings": [
+   "end_vi_standing",
+   "end_vi_restored",
+   "end_vi_scarred",
+   "end_vi_reckoning",
+   "end_vi_quiet_leaving"
+  ],
+  "weight": 1,
+  "needs": [],
+  "events": [
+   "ev_vi_line_of_leaving",
+   "ev_vi_stake_and_string",
+   "ev_vi_pilars_clinic",
+   "ev_vi_the_other_pamphlet",
+   "ev_vi_brook_at_dusk",
+   "ev_vi_burn_that_isnt",
+   "ev_vi_hollis_map",
+   "ev_vi_verdelis_shadow",
+   "ev_vi_grove_census",
+   "ev_vi_the_choice"
+  ],
+  "endingGrid": [
+   {
+    "ending": "end_vi_standing",
+    "nameKey": "end.end_vi_standing.name",
+    "sceneKey": "end.end_vi_standing.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "vi_verdelis_truth",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "vi_rapport",
+      "op": ">=",
+      "value": 9
+     },
+     {
+      "kind": "flag",
+      "key": "vi_exposed",
+      "op": ">=",
+      "value": 2
+     }
+    ]
+   },
+   {
+    "ending": "end_vi_restored",
+    "nameKey": "end.end_vi_restored.name",
+    "sceneKey": "end.end_vi_restored.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "vi_verdelis_truth",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "vi_exposed",
+      "op": ">=",
+      "value": 1
+     },
+     {
+      "kind": "flag",
+      "key": "vi_burned_stands",
+      "op": "<",
+      "value": 1
+     }
+    ]
+   },
+   {
+    "ending": "end_vi_scarred",
+    "nameKey": "end.end_vi_scarred.name",
+    "sceneKey": "end.end_vi_scarred.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "vi_census_held",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "vi_burned_stands",
+      "op": ">=",
+      "value": 2
+     }
+    ]
+   },
+   {
+    "ending": "end_vi_reckoning",
+    "nameKey": "end.end_vi_reckoning.name",
+    "sceneKey": "end.end_vi_reckoning.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "vi_negotiated",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_vi_quiet_leaving",
+    "nameKey": "end.end_vi_quiet_leaving.name",
+    "sceneKey": "end.end_vi_quiet_leaving.scene",
+    "when": []
+   }
+  ],
+  "twists": [
+   {
+    "id": "tw_both_hands",
+    "revealSlot": "b_twist_both_hands",
+    "act": 4,
+    "revealKey": "tw.tw_both_hands.reveal",
+    "motiveKey": "tw.tw_both_hands.motive",
+    "consequenceKey": "tw.tw_both_hands.consequence",
+    "clues": [
+     {
+      "id": "clue_paint",
+      "slot": "b_two_letterheads",
+      "textKey": "tw.tw_both_hands.clue.clue_paint"
+     },
+     {
+      "id": "clue_courier",
+      "slot": "b_ferry_of_seeds",
+      "textKey": "tw.tw_both_hands.clue.clue_courier"
+     },
+     {
+      "id": "clue_memo_date",
+      "slot": "b_first_fire",
+      "textKey": "tw.tw_both_hands.clue.clue_memo_date"
+     },
+     {
+      "id": "clue_pilar_silence",
+      "slot": "b_pilar_clinic",
+      "textKey": "tw.tw_both_hands.clue.clue_pilar_silence"
+     }
+    ]
+   },
+   {
+    "id": "tw_hollis_signed",
+    "revealSlot": "b_brook_ledger",
+    "act": 5,
+    "revealKey": "tw.tw_hollis_signed.reveal",
+    "motiveKey": "tw.tw_hollis_signed.motive",
+    "consequenceKey": "tw.tw_hollis_signed.consequence",
+    "clues": [
+     {
+      "id": "clue_missing_trail",
+      "slot": "b_bramble_old_trees",
+      "textKey": "tw.tw_hollis_signed.clue.clue_missing_trail"
+     },
+     {
+      "id": "clue_stake_tag",
+      "slot": "b_first_stake",
+      "textKey": "tw.tw_hollis_signed.clue.clue_stake_tag"
+     },
+     {
+      "id": "clue_hollis_refusal",
+      "slot": "b_logging_camp",
+      "textKey": "tw.tw_hollis_signed.clue.clue_hollis_refusal"
+     }
+    ]
+   }
+  ],
+  "journal": {
+   "nameKey": "th.th_shadows_viridian.journal.name",
+   "templates": [
+    "th.th_shadows_viridian.journal.t1",
+    "th.th_shadows_viridian.journal.t2",
+    "th.th_shadows_viridian.journal.t3"
+   ]
+  },
+  "backstoryFit": {
+   "bs_viridian": "excellent",
+   "bs_ex_criminal": "possible",
+   "bs_hisui": "possible",
+   "bs_aether": "possible",
+   "bs_champion_heir": "blocked"
+  },
+  "battleFlags": []
+ },
+ {
+  "id": "th_rivals_promise",
+  "letter": "F",
+  "nameKey": "th.th_rivals_promise.name",
+  "beatSheet": [
+   {
+    "act": 0,
+    "slot": "b_last_words_on_the_dock"
+   },
+   {
+    "act": 1,
+    "slot": "b_first_battle"
+   },
+   {
+    "act": 1,
+    "slot": "b_the_promise_is_spoken"
+   },
+   {
+    "act": 1,
+    "slot": "b_rival_hurries"
+   },
+   {
+    "act": 1,
+    "slot": "b_shared_umbrella"
+   },
+   {
+    "act": 1,
+    "slot": "b_odd_ferry_log"
+   },
+   {
+    "act": 1,
+    "slot": "b_gym_scene"
+   },
+   {
+    "act": 1,
+    "slot": "b_lost_pocketbook"
+   },
+   {
+    "act": 1,
+    "slot": "b_camp_apart"
+   },
+   {
+    "act": 2,
+    "slot": "b_harbor_cup_invite"
+   },
+   {
+    "act": 2,
+    "slot": "b_rival_trains_hard"
+   },
+   {
+    "act": 2,
+    "slot": "b_rusk_dockside"
+   },
+   {
+    "act": 2,
+    "slot": "b_sparring_trade"
+   },
+   {
+    "act": 2,
+    "slot": "b_the_wrong_ferry"
+   },
+   {
+    "act": 2,
+    "slot": "b_letter_returned"
+   },
+   {
+    "act": 2,
+    "slot": "b_gym_scene_2"
+   },
+   {
+    "act": 2,
+    "slot": "b_apology_unsent"
+   },
+   {
+    "act": 3,
+    "slot": "b_harbor_cup_opens"
+   },
+   {
+    "act": 3,
+    "slot": "b_bracket_reveal"
+   },
+   {
+    "act": 3,
+    "slot": "b_cup_round_brineholt"
+   },
+   {
+    "act": 3,
+    "slot": "b_blackout_in_the_hall"
+   },
+   {
+    "act": 3,
+    "slot": "b_the_promise_changes"
+   },
+   {
+    "act": 3,
+    "slot": "b_cup_final_lanternreach"
+   },
+   {
+    "act": 3,
+    "slot": "b_who_was_it_for"
+   },
+   {
+    "act": 3,
+    "slot": "b_rival_leaves_early"
+   },
+   {
+    "act": 4,
+    "slot": "b_find_the_rival"
+   },
+   {
+    "act": 4,
+    "slot": "b_the_promise_made_to"
+   },
+   {
+    "act": 4,
+    "slot": "b_twist_other_person"
+   },
+   {
+    "act": 4,
+    "slot": "b_rusk_leverage"
+   },
+   {
+    "act": 4,
+    "slot": "b_rival_asks_for_help"
+   },
+   {
+    "act": 4,
+    "slot": "b_pack_the_hall"
+   },
+   {
+    "act": 4,
+    "slot": "b_choice_to_stand_down"
+   },
+   {
+    "act": 5,
+    "slot": "b_the_docks_at_night"
+   },
+   {
+    "act": 5,
+    "slot": "b_crew_in_the_open"
+   },
+   {
+    "act": 5,
+    "slot": "b_hideout_beat7"
+   },
+   {
+    "act": 5,
+    "slot": "b_rival_ace_returns"
+   },
+   {
+    "act": 5,
+    "slot": "b_lanterns_over_water"
+   },
+   {
+    "act": 5,
+    "slot": "b_last_talk"
+   },
+   {
+    "act": 6,
+    "slot": "b_the_choice"
+   },
+   {
+    "act": 6,
+    "slot": "b_final_bracket"
+   },
+   {
+    "act": 6,
+    "slot": "b_rusk_falls"
+   },
+   {
+    "act": 6,
+    "slot": "b_promise_answered"
+   },
+   {
+    "act": 7,
+    "slot": "b_the_cup_or_not"
+   },
+   {
+    "act": 7,
+    "slot": "b_ending_scene"
+   },
+   {
+    "act": 8,
+    "slot": "b_letter_to_the_dock"
+   }
+  ],
+  "slotRules": [
+   {
+    "slot": "b_the_promise_is_spoken",
+    "event": "ev_rp_dock_words"
+   },
+   {
+    "slot": "b_shared_umbrella",
+    "event": "ev_rp_one_umbrella"
+   },
+   {
+    "slot": "b_odd_ferry_log",
+    "event": "ev_rp_ledger_page"
+   },
+   {
+    "slot": "b_letter_returned",
+    "event": "ev_rp_unsent_letter"
+   },
+   {
+    "slot": "b_rival_trains_hard",
+    "event": "ev_rp_training_reps"
+   },
+   {
+    "slot": "b_bracket_reveal",
+    "event": "ev_rp_cup_draw",
+    "acts": [
+     3
+    ]
+   },
+   {
+    "slot": "b_the_wrong_ferry",
+    "event": "ev_rp_wrong_ferry"
+   },
+   {
+    "slot": "b_lanterns_over_water",
+    "event": "ev_rp_lantern_toast"
+   },
+   {
+    "slot": "b_lost_pocketbook",
+    "event": "ev_rp_ribbon"
+   },
+   {
+    "slot": "b_the_choice",
+    "event": "ev_rp_the_choice"
+   }
+  ],
+  "endings": [
+   "end_rp_kept_together",
+   "end_rp_renegotiated",
+   "end_rp_broken",
+   "end_rp_cup_alone",
+   "end_rp_unspoken"
+  ],
+  "weight": 1,
+  "needs": [],
+  "events": [
+   "ev_rp_dock_words",
+   "ev_rp_one_umbrella",
+   "ev_rp_ledger_page",
+   "ev_rp_unsent_letter",
+   "ev_rp_training_reps",
+   "ev_rp_cup_draw",
+   "ev_rp_wrong_ferry",
+   "ev_rp_lantern_toast",
+   "ev_rp_ribbon",
+   "ev_rp_the_choice"
+  ],
+  "endingGrid": [
+   {
+    "ending": "end_rp_kept_together",
+    "nameKey": "end.end_rp_kept_together.name",
+    "sceneKey": "end.end_rp_kept_together.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rp_renegotiated",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "rp_bond",
+      "op": ">=",
+      "value": 1
+     },
+     {
+      "kind": "flag",
+      "key": "rp_rusk_defeated",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_rp_renegotiated",
+    "nameKey": "end.end_rp_renegotiated.name",
+    "sceneKey": "end.end_rp_renegotiated.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rp_renegotiated",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_rp_broken",
+    "nameKey": "end.end_rp_broken.name",
+    "sceneKey": "end.end_rp_broken.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rp_broken",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "rp_rescued",
+      "op": "==",
+      "value": false
+     }
+    ]
+   },
+   {
+    "ending": "end_rp_cup_alone",
+    "nameKey": "end.end_rp_cup_alone.name",
+    "sceneKey": "end.end_rp_cup_alone.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rp_cup_won",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "rp_rival_left",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_rp_unspoken",
+    "nameKey": "end.end_rp_unspoken.name",
+    "sceneKey": "end.end_rp_unspoken.scene",
+    "when": []
+   }
+  ],
+  "twists": [
+   {
+    "id": "tw_promise_to_other",
+    "revealSlot": "b_the_promise_made_to",
+    "act": 4,
+    "revealKey": "tw.tw_promise_to_other.reveal",
+    "motiveKey": "tw.tw_promise_to_other.motive",
+    "consequenceKey": "tw.tw_promise_to_other.consequence",
+    "clues": [
+     {
+      "id": "clue_sentence",
+      "slot": "b_the_promise_is_spoken",
+      "textKey": "tw.tw_promise_to_other.clue.clue_sentence"
+     },
+     {
+      "id": "clue_letter",
+      "slot": "b_letter_returned",
+      "textKey": "tw.tw_promise_to_other.clue.clue_letter"
+     },
+     {
+      "id": "clue_lantern_unlit",
+      "slot": "b_who_was_it_for",
+      "textKey": "tw.tw_promise_to_other.clue.clue_lantern_unlit"
+     }
+    ]
+   },
+   {
+    "id": "tw_ace_with_rusk",
+    "revealSlot": "b_the_docks_at_night",
+    "act": 5,
+    "revealKey": "tw.tw_ace_with_rusk.reveal",
+    "motiveKey": "tw.tw_ace_with_rusk.motive",
+    "consequenceKey": "tw.tw_ace_with_rusk.consequence",
+    "clues": [
+     {
+      "id": "clue_ribbon",
+      "slot": "b_lost_pocketbook",
+      "textKey": "tw.tw_ace_with_rusk.clue.clue_ribbon"
+     },
+     {
+      "id": "clue_cargo_log",
+      "slot": "b_odd_ferry_log",
+      "textKey": "tw.tw_ace_with_rusk.clue.clue_cargo_log"
+     },
+     {
+      "id": "clue_ace_cry",
+      "slot": "b_the_wrong_ferry",
+      "textKey": "tw.tw_ace_with_rusk.clue.clue_ace_cry"
+     }
+    ]
+   }
+  ],
+  "journal": {
+   "nameKey": "th.th_rivals_promise.journal.name",
+   "templates": [
+    "th.th_rivals_promise.journal.t1",
+    "th.th_rivals_promise.journal.t2",
+    "th.th_rivals_promise.journal.t3"
+   ]
+  },
+  "backstoryFit": {
+   "bs_ex_criminal": "good",
+   "bs_champion_heir": "good",
+   "bs_viridian": "good",
+   "bs_aether": "possible",
+   "bs_hisui": "possible"
+  },
+  "battleFlags": [
+   "rp_cup_won",
+   "rp_rusk_defeated",
+   "rp_rescued"
+  ]
+ },
+ {
+  "id": "th_champions_legacy",
+  "letter": "B",
+  "nameKey": "th.th_champions_legacy.name",
+  "beatSheet": [
+   {
+    "act": 0,
+    "slot": "b_gideons_trophy"
+   },
+   {
+    "act": 1,
+    "slot": "b_hale_hails_you"
+   },
+   {
+    "act": 1,
+    "slot": "b_the_gilt_pin"
+   },
+   {
+    "act": 1,
+    "slot": "b_press_pit"
+   },
+   {
+    "act": 1,
+    "slot": "b_odette_marr"
+   },
+   {
+    "act": 1,
+    "slot": "b_a_small_fix"
+   },
+   {
+    "act": 1,
+    "slot": "b_lucia_odds"
+   },
+   {
+    "act": 1,
+    "slot": "b_gym_scene"
+   },
+   {
+    "act": 1,
+    "slot": "b_the_rule_book"
+   },
+   {
+    "act": 2,
+    "slot": "b_selene_notices"
+   },
+   {
+    "act": 2,
+    "slot": "b_tournament_invite"
+   },
+   {
+    "act": 2,
+    "slot": "b_hale_trains"
+   },
+   {
+    "act": 2,
+    "slot": "b_piers_the_referee"
+   },
+   {
+    "act": 2,
+    "slot": "b_circle_scout"
+   },
+   {
+    "act": 2,
+    "slot": "b_crane_on_the_bridge"
+   },
+   {
+    "act": 2,
+    "slot": "b_gym_scene_2"
+   },
+   {
+    "act": 2,
+    "slot": "b_orme_hedges"
+   },
+   {
+    "act": 3,
+    "slot": "b_registration_letter"
+   },
+   {
+    "act": 3,
+    "slot": "b_hale_trains_hard"
+   },
+   {
+    "act": 3,
+    "slot": "b_press_gossip"
+   },
+   {
+    "act": 3,
+    "slot": "b_group_seeding_rumour"
+   },
+   {
+    "act": 3,
+    "slot": "b_blackout_hall"
+   },
+   {
+    "act": 3,
+    "slot": "b_the_fixed_card"
+   },
+   {
+    "act": 3,
+    "slot": "b_hallway_talk"
+   },
+   {
+    "act": 3,
+    "slot": "b_travel_to_cogwell"
+   },
+   {
+    "act": 4,
+    "slot": "b_exhibition_opens"
+   },
+   {
+    "act": 4,
+    "slot": "b_twist_reinstate"
+   },
+   {
+    "act": 4,
+    "slot": "b_ashdown_in_person"
+   },
+   {
+    "act": 4,
+    "slot": "b_selene_refuses"
+   },
+   {
+    "act": 4,
+    "slot": "b_hale_walks_out"
+   },
+   {
+    "act": 4,
+    "slot": "b_knockout_at_meridian"
+   },
+   {
+    "act": 4,
+    "slot": "b_the_forfeit_question"
+   },
+   {
+    "act": 5,
+    "slot": "b_the_circle_club"
+   },
+   {
+    "act": 5,
+    "slot": "b_ledger_of_odds"
+   },
+   {
+    "act": 5,
+    "slot": "b_hideout_beat7"
+   },
+   {
+    "act": 5,
+    "slot": "b_orme_turns"
+   },
+   {
+    "act": 5,
+    "slot": "b_piers_deal"
+   },
+   {
+    "act": 5,
+    "slot": "b_final_prep"
+   },
+   {
+    "act": 6,
+    "slot": "b_the_choice"
+   },
+   {
+    "act": 6,
+    "slot": "b_final_match"
+   },
+   {
+    "act": 6,
+    "slot": "b_ashdown_falls"
+   },
+   {
+    "act": 6,
+    "slot": "b_the_title"
+   },
+   {
+    "act": 7,
+    "slot": "b_champion_speech"
+   },
+   {
+    "act": 7,
+    "slot": "b_ending_scene"
+   },
+   {
+    "act": 8,
+    "slot": "b_name_on_the_wall"
+   }
+  ],
+  "slotRules": [
+   {
+    "slot": "b_the_gilt_pin",
+    "event": "ev_cl_gilt_pin"
+   },
+   {
+    "slot": "b_press_pit",
+    "event": "ev_cl_press_pit"
+   },
+   {
+    "slot": "b_lucia_odds",
+    "event": "ev_cl_odds_board"
+   },
+   {
+    "slot": "b_piers_the_referee",
+    "event": "ev_cl_referee_tell"
+   },
+   {
+    "slot": "b_hale_trains",
+    "event": "ev_cl_locker_talk"
+   },
+   {
+    "slot": "b_selene_notices",
+    "event": "ev_cl_empty_wall"
+   },
+   {
+    "slot": "b_ashdown_in_person",
+    "event": "ev_cl_ashdown_letter"
+   },
+   {
+    "slot": "b_final_prep",
+    "event": "ev_cl_last_clean_match"
+   },
+   {
+    "slot": "b_the_rule_book",
+    "event": "ev_cl_sealed_file"
+   },
+   {
+    "slot": "b_the_choice",
+    "event": "ev_cl_the_choice"
+   }
+  ],
+  "endings": [
+   "end_cl_clean_title",
+   "end_cl_circle_exposed",
+   "end_cl_joint_champions",
+   "end_cl_principled_forfeit",
+   "end_cl_wall_unchanged"
+  ],
+  "weight": 1,
+  "needs": [],
+  "events": [
+   "ev_cl_gilt_pin",
+   "ev_cl_press_pit",
+   "ev_cl_odds_board",
+   "ev_cl_referee_tell",
+   "ev_cl_locker_talk",
+   "ev_cl_empty_wall",
+   "ev_cl_ashdown_letter",
+   "ev_cl_last_clean_match",
+   "ev_cl_sealed_file",
+   "ev_cl_the_choice"
+  ],
+  "endingGrid": [
+   {
+    "ending": "end_cl_clean_title",
+    "nameKey": "end.end_cl_clean_title.name",
+    "sceneKey": "end.end_cl_clean_title.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "cl_won_final",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "cl_circle_exposed",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "cl_selene_trust",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   },
+   {
+    "ending": "end_cl_circle_exposed",
+    "nameKey": "end.end_cl_circle_exposed.name",
+    "sceneKey": "end.end_cl_circle_exposed.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "cl_circle_exposed",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_cl_joint_champions",
+    "nameKey": "end.end_cl_joint_champions.name",
+    "sceneKey": "end.end_cl_joint_champions.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "cl_shared_title",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_cl_principled_forfeit",
+    "nameKey": "end.end_cl_principled_forfeit.name",
+    "sceneKey": "end.end_cl_principled_forfeit.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "cl_forfeit",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_cl_wall_unchanged",
+    "nameKey": "end.end_cl_wall_unchanged.name",
+    "sceneKey": "end.end_cl_wall_unchanged.scene",
+    "when": []
+   }
+  ],
+  "twists": [
+   {
+    "id": "tw_reinstate_ashdown",
+    "revealSlot": "b_twist_reinstate",
+    "act": 4,
+    "revealKey": "tw.tw_reinstate_ashdown.reveal",
+    "motiveKey": "tw.tw_reinstate_ashdown.motive",
+    "consequenceKey": "tw.tw_reinstate_ashdown.consequence",
+    "clues": [
+     {
+      "id": "clue_odds",
+      "slot": "b_lucia_odds",
+      "textKey": "tw.tw_reinstate_ashdown.clue.clue_odds"
+     },
+     {
+      "id": "clue_whistle",
+      "slot": "b_piers_the_referee",
+      "textKey": "tw.tw_reinstate_ashdown.clue.clue_whistle"
+     },
+     {
+      "id": "clue_pin",
+      "slot": "b_the_gilt_pin",
+      "textKey": "tw.tw_reinstate_ashdown.clue.clue_pin"
+     },
+     {
+      "id": "clue_locker_card",
+      "slot": "b_the_fixed_card",
+      "textKey": "tw.tw_reinstate_ashdown.clue.clue_locker_card"
+     }
+    ]
+   },
+   {
+    "id": "tw_selene_knew",
+    "revealSlot": "b_ledger_of_odds",
+    "act": 5,
+    "revealKey": "tw.tw_selene_knew.reveal",
+    "motiveKey": "tw.tw_selene_knew.motive",
+    "consequenceKey": "tw.tw_selene_knew.consequence",
+    "clues": [
+     {
+      "id": "clue_selene_silence",
+      "slot": "b_selene_notices",
+      "textKey": "tw.tw_selene_knew.clue.clue_selene_silence"
+     },
+     {
+      "id": "clue_letter_fragment",
+      "slot": "b_orme_hedges",
+      "textKey": "tw.tw_selene_knew.clue.clue_letter_fragment"
+     },
+     {
+      "id": "clue_sealed_file",
+      "slot": "b_the_rule_book",
+      "textKey": "tw.tw_selene_knew.clue.clue_sealed_file"
+     }
+    ]
+   }
+  ],
+  "journal": {
+   "nameKey": "th.th_champions_legacy.journal.name",
+   "templates": [
+    "th.th_champions_legacy.journal.t1",
+    "th.th_champions_legacy.journal.t2",
+    "th.th_champions_legacy.journal.t3"
+   ]
+  },
+  "backstoryFit": {
+   "bs_champion_heir": "excellent",
+   "bs_viridian": "possible",
+   "bs_ex_criminal": "possible",
+   "bs_aether": "possible",
+   "bs_hisui": "possible"
+  },
+  "battleFlags": [
+   "cl_won_final"
+  ]
+ },
+ {
+  "id": "th_marauder_conspiracy",
+  "letter": "J",
+  "nameKey": "th.th_marauder_conspiracy.name",
+  "beatSheet": [
+   {
+    "act": 1,
+    "slot": "b_me_01_rumor"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_02_first_rival_battle"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_03_torn_wire"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_04_mover_coats"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_05_leaders_student"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_06_gym_one"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_07_quiet_call"
+   },
+   {
+    "act": 1,
+    "slot": "b_me_08_vance_call"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_09_invitation"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_10_rail_or_mountain"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_11_hound_ambush"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_12_rival_motive"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_13_gym_two"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_14_exhibition_opens"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_15_stolen_case"
+   },
+   {
+    "act": 2,
+    "slot": "b_me_16_banquet"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_17_empty_vault"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_18_exhibit_hall_fight"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_19_back_door_begins"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_20_abandoned_lab"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_21_quill_sign_off"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_22_tell_the_league"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_23_gym_three"
+   },
+   {
+    "act": 3,
+    "slot": "b_me_24_vance_secret"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_25_rival_missing"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_26_coded_sheet"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_27_port_lathe_smugglers"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_28_rival_confronted"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_29_rival_secret_pack"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_30_rival_turning_point"
+   },
+   {
+    "act": 4,
+    "slot": "b_me_31_aftermath"
+   },
+   {
+    "act": 5,
+    "slot": "b_me_32_planning_the_assault"
+   },
+   {
+    "act": 5,
+    "slot": "b_me_33_longhouse_approach"
+   },
+   {
+    "act": 5,
+    "slot": "b_me_34_rival_position"
+   },
+   {
+    "act": 5,
+    "slot": "b_me_35_approach_choice"
+   },
+   {
+    "act": 5,
+    "slot": "b_me_36_executive_fights"
+   },
+   {
+    "act": 5,
+    "slot": "b_me_37_quill_and_engine"
+   },
+   {
+    "act": 6,
+    "slot": "b_me_38_engine_wakes_equinar"
+   },
+   {
+    "act": 6,
+    "slot": "b_me_39_the_choice"
+   },
+   {
+    "act": 6,
+    "slot": "b_me_40_ashgrove_duel"
+   },
+   {
+    "act": 6,
+    "slot": "b_me_41_stabilize_or_end"
+   },
+   {
+    "act": 7,
+    "slot": "b_me_42_finale_rival"
+   },
+   {
+    "act": 7,
+    "slot": "b_me_43_exhibition_aftermath"
+   },
+   {
+    "act": 8,
+    "slot": "b_me_44_cabinet_opens"
+   }
+  ],
+  "slotRules": [
+   {
+    "slot": "b_me_03_torn_wire",
+    "event": "ev_me_cage_cave"
+   },
+   {
+    "slot": "b_me_04_mover_coats",
+    "event": "ev_me_mover_coats"
+   },
+   {
+    "slot": "b_me_15_stolen_case",
+    "event": "ev_me_stolen_case"
+   },
+   {
+    "slot": "b_me_16_banquet",
+    "event": "ev_me_banquet"
+   },
+   {
+    "slot": "b_me_17_empty_vault",
+    "event": "ev_me_empty_vault"
+   },
+   {
+    "slot": "b_me_21_quill_sign_off",
+    "event": "ev_me_quill_sign_off"
+   },
+   {
+    "slot": "b_me_26_coded_sheet",
+    "event": "ev_me_coded_sheet"
+   },
+   {
+    "slot": "b_me_30_rival_turning_point",
+    "event": "ev_me_rival_secret"
+   },
+   {
+    "slot": "b_me_38_engine_wakes_equinar",
+    "event": "ev_me_consent"
+   },
+   {
+    "slot": "b_me_39_the_choice",
+    "event": "ev_me_the_choice"
+   }
+  ],
+  "endings": [
+   "end_me_silent_hinge",
+   "end_me_equinar_home",
+   "end_me_architect_walks",
+   "end_me_quorum_splits",
+   "end_me_hollow_victory",
+   "end_me_ascension_denied",
+   "end_me_long_wait"
+  ],
+  "weight": 1,
+  "needs": [],
+  "events": [
+   "ev_me_cage_cave",
+   "ev_me_mover_coats",
+   "ev_me_stolen_case",
+   "ev_me_banquet",
+   "ev_me_empty_vault",
+   "ev_me_quill_sign_off",
+   "ev_me_coded_sheet",
+   "ev_me_rival_secret",
+   "ev_me_consent",
+   "ev_me_the_choice"
+  ],
+  "endingGrid": [
+   {
+    "ending": "end_me_silent_hinge",
+    "nameKey": "end.end_me_silent_hinge.name",
+    "sceneKey": "end.end_me_silent_hinge.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "me_choice_calm",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_consent",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_me_equinar_home",
+    "nameKey": "end.end_me_equinar_home.name",
+    "sceneKey": "end.end_me_equinar_home.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "me_legend_rescued",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_ashgrove_defeated",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_rival_helps",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_me_architect_walks",
+    "nameKey": "end.end_me_architect_walks.name",
+    "sceneKey": "end.end_me_architect_walks.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "me_ashgrove_escaped",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_legend_rescued",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_me_quorum_splits",
+    "nameKey": "end.end_me_quorum_splits.name",
+    "sceneKey": "end.end_me_quorum_splits.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "me_ashgrove_defeated",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_exec_survived",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_me_hollow_victory",
+    "nameKey": "end.end_me_hollow_victory.name",
+    "sceneKey": "end.end_me_hollow_victory.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "me_legend_rescued",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_key_losses",
+      "op": ">=",
+      "value": 2
+     },
+     {
+      "kind": "flag",
+      "key": "me_rival_loyal",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_me_ascension_denied",
+    "nameKey": "end.end_me_ascension_denied.name",
+    "sceneKey": "end.end_me_ascension_denied.scene",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "me_engine_destroyed",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "me_legend_escaped",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_me_long_wait",
+    "nameKey": "end.end_me_long_wait.name",
+    "sceneKey": "end.end_me_long_wait.scene",
+    "when": []
+   }
+  ],
+  "twists": [
+   {
+    "id": "tw_rival_secret",
+    "revealSlot": "b_me_30_rival_turning_point",
+    "act": 4,
+    "revealKey": "tw.tw_rival_secret.reveal",
+    "motiveKey": "tw.tw_rival_secret.motive",
+    "consequenceKey": "tw.tw_rival_secret.consequence",
+    "clues": [
+     {
+      "id": "clue_tracker",
+      "slot": "b_me_26_coded_sheet",
+      "textKey": "tw.tw_rival_secret.clue.clue_tracker"
+     },
+     {
+      "id": "clue_ledger_name",
+      "slot": "b_me_28_rival_confronted",
+      "textKey": "tw.tw_rival_secret.clue.clue_ledger_name"
+     },
+     {
+      "id": "clue_sign_off",
+      "slot": "b_me_21_quill_sign_off",
+      "textKey": "tw.tw_rival_secret.clue.clue_sign_off"
+     },
+     {
+      "id": "clue_buyers",
+      "slot": "b_me_06_gym_one",
+      "textKey": "tw.tw_rival_secret.clue.clue_buyers"
+     }
+    ]
+   },
+   {
+    "id": "tw_vance_knew",
+    "revealSlot": "b_me_44_cabinet_opens",
+    "act": 8,
+    "revealKey": "tw.tw_vance_knew.reveal",
+    "motiveKey": "tw.tw_vance_knew.motive",
+    "consequenceKey": "tw.tw_vance_knew.consequence",
+    "clues": [
+     {
+      "id": "clue_photo",
+      "slot": "b_me_24_vance_secret",
+      "textKey": "tw.tw_vance_knew.clue.clue_photo"
+     },
+     {
+      "id": "clue_sign_off",
+      "slot": "b_me_21_quill_sign_off",
+      "textKey": "tw.tw_vance_knew.clue.clue_sign_off"
+     },
+     {
+      "id": "clue_vance_call",
+      "slot": "b_me_08_vance_call",
+      "textKey": "tw.tw_vance_knew.clue.clue_vance_call"
+     }
+    ]
+   }
+  ],
+  "journal": {
+   "nameKey": "th.th_marauder_conspiracy.journal.name",
+   "templates": [
+    "th.th_marauder_conspiracy.journal.t1",
+    "th.th_marauder_conspiracy.journal.t2",
+    "th.th_marauder_conspiracy.journal.t3"
+   ]
+  },
+  "backstoryFit": {
+   "bs_ex_criminal": "good",
+   "bs_champion_heir": "good",
+   "bs_viridian": "good",
+   "bs_aether": "excellent",
+   "bs_hisui": "good"
+  },
+  "battleFlags": [
+   "me_ashgrove_defeated",
+   "me_ashgrove_escaped",
+   "me_exec_survived",
+   "me_key_losses",
+   "me_legend_escaped"
+  ]
+ }
+]

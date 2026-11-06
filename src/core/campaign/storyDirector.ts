@@ -158,10 +158,15 @@ export function buildBlueprint(content: Content, inputs: DirectorInputs): StoryB
   const used: { event: string; at: number }[] = [];
   const slots = stops.map((s, at) => {
     const tags = new Set([s.category, ...s.slotTags]);
+    // A theme's exclusive events (`theme_<id>` tag) are only offered inside that theme, and the drawn theme's events are favoured.
+    const mine = `theme_${toId(theme)}`;
     const pool = s.beat ? [] : data.events.filter((e) => e.tags.some((t) => tags.has(t))
+      && !e.tags.some((t) => t.startsWith('theme_') && t !== mine)
       && used.filter((u) => u.event === e.id).length < k.sameEventMaxPerRun
       && !used.some((u) => u.event === e.id && at - u.at < k.sameEventGapStops));
-    const event = pool.length > 0 ? fill.pick(pool).id : s.fallback;
+    const event = pool.length === 0 ? s.fallback
+      : pool.some((e) => e.tags.includes(mine)) ? fill.weighted(pool.map((e) => ({ item: e.id, weight: e.tags.includes(mine) ? k.themeEventWeight : 1 })))
+      : fill.pick(pool).id;
     if (event !== s.fallback) used.push({ event, at });
     return { slot: s.id, stop: at + 1, event, fallbacks: [s.fallback] };
   });
