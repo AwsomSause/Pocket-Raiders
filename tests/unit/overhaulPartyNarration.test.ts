@@ -25,6 +25,13 @@ describe('overhaul party narration', () => {
     expect(seen.size).toBeGreaterThan(5);
     expect(partyNarration(party, 'battle_win', 'run:1', nameOf, typesOf)).toBeTruthy();
   });
+  it('serves the place and hour contexts too', async () => {
+    await ensureNarration();
+    for (const c of ['night', 'sunny', 'boss_intro']) {
+      const lines = new Set(Array.from({ length: 30 }, (_, i) => partyNarration(party, c, `k${i}`, nameOf, typesOf)).filter(Boolean));
+      expect(lines.size, c).toBeGreaterThan(0);
+    }
+  });
   it('an empty party has nothing to say', async () => {
     await ensureNarration();
     expect(partyNarration([], 'rest_node', 'k', nameOf, typesOf)).toBeNull();

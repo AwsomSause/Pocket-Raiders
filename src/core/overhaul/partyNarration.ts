@@ -9,7 +9,8 @@ import { personalityOfMon } from './personality';
 import type { PokemonInstance } from '../state';
 
 type Mon = Pick<PokemonInstance, 'uid' | 'nature' | 'speciesId'>;
-type Context = 'rest_node' | 'battle_win';
+/** A pack context key (rest_node, night, sunny, boss_intro...), or battle_win for the pack's "victory". */
+export type NarrationContext = string;
 
 interface Tables {
   /** `${personalityId}|${context}` and `${Type}|${context}` -> lines with {Name}. */
@@ -37,8 +38,7 @@ export function ensureNarration(): Promise<void> {
     const reactions = new Map<string, string[]>();
     for (const e of r.entries) {
       // The pack's personality and type lines call a won battle "victory".
-      const when = e.context === 'rest_node' ? 'rest_node' : e.context === 'victory' ? 'battle_win' : null;
-      if (!when) continue;
+      const when = e.context === 'victory' ? 'battle_win' : e.context;
       if (e.source === 'personality-context' && e.personality) push(reactions, `${e.personality}|${when}`, e.text);
       else if (e.source === 'type-context' && e.type) push(reactions, `${e.type.toLowerCase()}|${when}`, e.text);
     }
@@ -56,7 +56,7 @@ export function resetNarration(): void {
 }
 
 /** One line about the party for this moment, or null (not loaded, or nothing fits). `typesOf` gives a species' types. */
-export function partyNarration(party: readonly Mon[], when: Context, key: string, nameOf: (m: Mon) => string, typesOf: (m: Mon) => readonly string[]): string | null {
+export function partyNarration(party: readonly Mon[], when: NarrationContext, key: string, nameOf: (m: Mon) => string, typesOf: (m: Mon) => readonly string[]): string | null {
   if (!tables) return null;
   const picks: { mon: Mon; line: string; lore: boolean }[] = [];
   for (const mon of party) {
