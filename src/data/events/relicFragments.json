@@ -1,0 +1,232 @@
+{
+ "events": [
+  {
+   "id": "relic-fragment-dig",
+   "name": "Fragment Dig Site",
+   "group": "Relic Fragments",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A dig site with a bucket of shards. A sign reads: \"Collect three pieces of a relic and the Forge can put them together.\"",
+   "choices": [
+    {
+     "label": "Dig by hand: 50% find a Relic Fragment, otherwise ₽100",
+     "chance": 0.5,
+     "success": {
+      "text": "A glint in the dirt: a Relic Fragment.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-frag",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Only coins and pebbles. ₽100.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hire a digger (₽300): a Relic Fragment for sure",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The digger hands over a Relic Fragment.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "relic-frag",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-fragment-ruins",
+   "name": "Ruined Shrine",
+   "group": "Relic Fragments",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "Broken walls and a cracked altar. Pieces of an old relic lie everywhere.",
+   "choices": [
+    {
+     "label": "Search carefully: 70% two Relic Fragments, otherwise one",
+     "chance": 0.7,
+     "success": {
+      "text": "Two matching shards: two Relic Fragments.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-frag",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "Just one shard worth keeping: a Relic Fragment.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-frag",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-forge",
+   "name": "The Relic Forge",
+   "group": "Relic Fragments",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A smith with a hot forge and one rule: \"Bring me your Relic Fragments and I will fuse them into one relic.\"",
+   "choices": [
+    {
+     "label": "Fragment Charm (3 fragments): +8% EXP",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "relic-frag",
+       "atLeast": 3
+      },
+      {
+       "kind": "flag",
+       "key": "frag-charm",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Three shards fuse into a charm that hums with growth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-frag",
+        "amount": -3
+       },
+       {
+        "kind": "flag",
+        "key": "frag-charm",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "fragment-charm",
+        "name": "Fragment Charm",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.08
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fragment Crown (5 fragments): +10% money, +10% healing",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "relic-frag",
+       "atLeast": 5
+      },
+      {
+       "kind": "flag",
+       "key": "frag-crown",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Five shards become a crown. Coins and care both go further.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-frag",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "frag-crown",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "fragment-crown",
+        "name": "Fragment Crown",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You keep your shards and walk on.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "relic-frag",
+     "atLeast": 3
+    }
+   ]
+  }
+ ]
+}
