@@ -25,6 +25,8 @@ import { moveLore, moveRank, topMoves } from '../core/moveMastery';
 import { noteOpen, noteProblem, researchNotes, silhouettes } from '../core/researchNotes';
 import { collectionSets, MILESTONE_PAY, researchTotals, setProgress } from '../core/collection';
 import { arenasOpen, CARD_FRAMES, CRY_THEMES, frameOpen, getFrame, type CardFrame } from '../core/wardrobe';
+import { abilityHunt } from '../core/abilityHunt';
+import { eggChart, eggGroupName } from '../core/eggGroupChart';
 import { abilityChoices, atLeast, eggMoveOptions, masteredStarters, familyId, familyMembers, familyPerk, familyRank, nextGoal, rankIndex, RANK_BADGES, RANK_NAMES, speciesRank, type MasteryRank } from '../core/mastery';
 import { evolutionUnlocked, questLineView, stepsDone } from '../core/quests';
 import { eligibleSpecies, licenseProblem, licenseStatus, poolProblem, poolStatus, type LicenseStatus, type PoolStatus } from '../core/runPrep';
@@ -1282,6 +1284,26 @@ export class HubScene extends Phaser.Scene {
     unlock('bronze', 'first egg move', perk?.eggMoves[0] ? moveName(perk.eggMoves[0]) : 'none usable yet', usable.length > 1 ? cycleEgg(0) : undefined);
     const choices = abilityChoices(content, p, family);
     unlock('silver', 'Hidden Ability', perk?.abilitySlot !== null && perk?.abilitySlot !== undefined ? abilityName(perk.abilitySlot) : abilityName(-1));
+    const chart = eggChart(content, family);
+    rows.push({
+      problem: null,
+      hint: chart.canBreed ? `Can pair with ${chart.partnerCount} base forms, e.g. ${chart.partners.join(', ')}.` : 'This family cannot breed.',
+      draw: (scene, box, w, h) => {
+        box.add(scene.add.text(12, h / 2, 'Egg groups', textStyle(17, COLORS.textLight)).setOrigin(0, 0.5));
+        box.add(scene.add.text(w - 12, h / 2, chart.groups.length > 0 ? chart.groups.map(eggGroupName).join(' · ') : '—', textStyle(16, chart.canBreed ? COLORS.textLight : COLORS.textMuted)).setOrigin(1, 0.5));
+      },
+    });
+    const hunt = abilityHunt(content, p, family);
+    if (hunt.has) {
+      rows.push({
+        problem: null,
+        hint: hunt.ways.join(' '),
+        draw: (scene, box, w, h) => {
+          box.add(scene.add.text(12, h / 2, 'Hidden Ability hunt', textStyle(17, COLORS.textLight)).setOrigin(0, 0.5));
+          box.add(scene.add.text(w - 12, h / 2, hunt.ability, textStyle(16, hunt.unlocked ? RANK_COLOR.silver : COLORS.textMuted)).setOrigin(1, 0.5));
+        },
+      });
+    }
     unlock('gold', 'second egg move', perk?.eggMoves[1] ? moveName(perk.eggMoves[1]) : 'none usable yet', usable.length > 2 ? cycleEgg(1) : undefined);
     unlock('gold', 'choose its ability', perk?.abilitySlot !== null && perk?.abilitySlot !== undefined ? abilityName(perk.abilitySlot) : '—', choices.length > 1 ? () => {
       const at = choices.indexOf(perk?.abilitySlot ?? choices[0]!);
