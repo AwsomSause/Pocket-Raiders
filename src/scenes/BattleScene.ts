@@ -638,6 +638,13 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The sprites the contact shadows follow, with the y each stands at (flyers and levitators float). */
+  /** Re-applies the battle style's sprite look (Ink's white silhouettes) after move flashes clear the tint. */
+  private reskin(): void {
+    const look = this.skin?.sprite;
+    if (!look) return;
+    for (const t of this.shadowTargets()) if (t.visual?.active) look(t.visual);
+  }
+
   private shadowTargets(): ShadowTarget[] {
     const content = services().session.content;
     const floats = (mon: PokemonInstance | null | undefined) => {
@@ -3576,6 +3583,7 @@ export class BattleScene extends Phaser.Scene {
       }
       // What the trainer says about it (spoken lines, after the event's own text).
       for (const line of drama.filter((d) => d.at === index)) await this.sayTrainer(line);
+      this.reskin();
     }
     // Make sure the boxes match the real state at the end of the turn.
     const run = this.run;
@@ -3594,6 +3602,7 @@ export class BattleScene extends Phaser.Scene {
       const active = run.party.find((m) => m.uid === this.shown.player.uid);
       if (active) await this.refreshInfoBox(this.playerBox, active, false);
     }
+    this.reskin();
     this.updateHeader();
   }
 
