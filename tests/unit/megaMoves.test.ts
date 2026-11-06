@@ -102,12 +102,17 @@ describe('the Mega-only slot', () => {
     expect(megaMoveFor(content, 'abomasnow')).toBeNull();
   });
 
-  it('the enemy side does not get signature moves, and endMegaMoves clears every slot', () => {
+  it('a boss ace that Mega Evolves gets its signature move too, and endMegaMoves clears every slot', () => {
     const s = setup('abomasnow', { 'mega-ring': 1, abomasite: 1 });
-    evolve(s);
     expect(s.foe.moves.some((m) => m.megaSig)).toBe(false);
-    endMegaMoves(s.ctx.party);
+    const ace = createPokemon(content, 'abomasnow-mega', 60, 'e2');
+    ace.moves = [{ id: 'tackle', pp: 35 }];
+    expect(grantMegaMove(content, ace)).toBe('glacier-maul');
+    expect(ace.moves.map((m) => m.id)).toEqual(['tackle', 'glacier-maul']);
+    evolve(s);
+    endMegaMoves([s.player, ace]);
     expect(s.player.moves.some((m) => m.megaSig)).toBe(false);
+    expect(ace.moves.some((m) => m.megaSig)).toBe(false);
   });
 
   it('saves and loads mid-battle, and an older save without the field still loads', () => {

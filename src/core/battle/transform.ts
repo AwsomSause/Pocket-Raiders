@@ -545,8 +545,8 @@ function changeForm(ctx: TransformContext, side: Side, mon: PokemonInstance, kin
   mon.speciesId = option.formId;
   mon.hp = Math.min(mon.hp, calcStats(ctx.content, mon).hp);
   events.push({ type: 'transform', side, uid: mon.uid, kind, from, to: option.formId, itemId: option.itemId });
-  // Overhaul slice 27: a Mega Evolved Pokémon of yours gains its signature move in an extra slot.
-  if (kind === 'mega' && side === 'player') grantMegaMove(ctx.content, mon);
+  // Overhaul slice 27: a Mega Evolved Pokémon (yours or a boss's ace) gains its signature move in an extra slot.
+  if (kind === 'mega') grantMegaMove(ctx.content, mon);
   // A levelled Mega Stone steadies its Pokémon: it heals a share of max HP (S479).
   if (kind === 'mega' && side === 'player' && option.itemId && ctx.gimmicks && mon.hp > 0) {
     const level = gimmickLevel(ctx.content, ctx.gimmicks.uses[stoneKey(option.itemId)] ?? 0);
@@ -568,7 +568,7 @@ export function revertTransformations(content: Content, battle: BattleState, par
   const keepAt = permanentMegaFriendship(perks);
   const limit = megaPartyLimit(perks) ?? Infinity;
   let megas = party.filter((p) => getSpecies(content, p.speciesId).form?.kind === 'mega' && !battle.transform.forms[p.uid]).length;
-  endMegaMoves(party);
+  endMegaMoves([...party, ...battle.enemyTeam]);
   for (const mon of party) endDynamax(content, battle, 'player', mon);
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
   for (const mon of [...party, ...battle.enemyTeam]) {
