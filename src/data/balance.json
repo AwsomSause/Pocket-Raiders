@@ -614,6 +614,11 @@
  "sos": {
   "enabled": true
  },
+ "moments": {
+  "minor": { "perRun": null, "cooldownBattles": 0 },
+  "major": { "perRun": null, "cooldownBattles": 1 },
+  "landmark": { "perRun": 3, "cooldownBattles": 5 }
+ },
  "powerBudget": {
   "level": 50,
   "caps": { "baby": 145, "basic": 190, "middle": 195, "final": 270, "legendary": 330, "mythical": 280, "form": 360 },

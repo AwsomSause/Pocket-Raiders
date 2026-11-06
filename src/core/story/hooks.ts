@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
 import { applyMastery } from '../mastery';
@@ -430,9 +431,11 @@ function trainerVow(content: Content, run: RunState, triggers: StoryTrigger[], a
 /** Runs the event queue over the turn's triggers: effects, memories and cues. */
 function resolveTriggers(content: Content, run: RunState, triggers: StoryTrigger[], where: Where): PresentationCue[] {
   if (triggers.length === 0) return [];
-  const budgetLeft = content.story.majorCuesPerBattle - run.story.majorCuesThisBattle;
+  // Moment Director (Overhaul slice 5): the run-wide cap and cooldown for cinematic moments, on top of the per-battle one.
+  const budgetLeft = Math.min(content.story.majorCuesPerBattle - run.story.majorCuesThisBattle, momentsLeft(content, run, 'major'));
   const result = resolveQueue(triggers, budgetLeft);
   run.story.majorCuesThisBattle += result.majorUsed;
+  noteMoments(run, 'major', result.majorUsed);
   const tell = (t: StoryTrigger, suppressed: boolean) => {
     const def = content.story.definitions.find((d) => d.id === t.defId)!;
     const actor = t.uid;
