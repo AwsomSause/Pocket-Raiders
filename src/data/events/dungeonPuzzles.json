@@ -1,0 +1,1512 @@
+{
+ "events": [
+  {
+   "id": "dz-mansion",
+   "name": "Haunted Mansion",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#140c1c",
+    "effect": "flicker"
+   },
+   "intro": "A leaning manor, every window dark. Three lamps stand cold in the hall and a vault door waits upstairs. Light all three and the door will open. Ghosts do not want you to.",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "The door slams shut behind you. Four doors stand open in the hall: library, kitchen, cellar and the vault stairs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": -9
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-library"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-kitchen"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-cellar"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-vault"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Peek in the porch",
+     "success": {
+      "text": "Dust and a few coins. You find some clue to the lamps.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-library",
+   "name": "Mansion Library",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "flicker"
+   },
+   "intro": "Books hang in the air. A brass lamp on the reading desk is dark. A riddle is carved in the shelf: which number comes after all the others?",
+   "choices": [
+    {
+     "label": "Solve the riddle (Intelligence)",
+     "success": {
+      "text": "The lamp flares. One lamp lit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "The books swarm you. Paper cuts and a fright.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the poltergeist books",
+     "success": {
+      "text": "The books fall. The lamp lights itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 1,
+       "chain": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You close the door on the swirling pages.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-kitchen",
+   "name": "Mansion Kitchen",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#241410",
+    "effect": "flicker"
+   },
+   "intro": "A cold stove with a lamp on top. Pots clatter by themselves. Something here wants to be fed.",
+   "choices": [
+    {
+     "label": "Light the stove (Fire type)",
+     "success": {
+      "text": "The stove roars and the lamp catches. One lamp lit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ]
+    },
+    {
+     "label": "Leave a berry offering",
+     "success": {
+      "text": "The pots go quiet and the lamp glows. One lamp lit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "loseItem"
+       }
+      ]
+     },
+     "chance": 0.6,
+     "failure": {
+      "text": "The offering is thrown back at you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back out",
+     "success": {
+      "text": "You shut the kitchen door.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-cellar",
+   "name": "Mansion Cellar",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0c0c18",
+    "effect": "shake"
+   },
+   "intro": "Stairs go down into the dark. A third lamp sits at the bottom behind a floor of loose boards. A trap, surely.",
+   "choices": [
+    {
+     "label": "Step on the quiet boards (Luck)",
+     "success": {
+      "text": "You tiptoe across and take the lamp. One lamp lit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       }
+      ]
+     },
+     "check": "luck",
+     "failure": {
+      "text": "A board snaps and a spiked rail swings out.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Float across (Levitate)",
+     "success": {
+      "text": "Your Pokémon drifts over the traps. One lamp lit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "levitate"
+       ],
+       "label": "a Pokémon with Levitate"
+      }
+     ]
+    },
+    {
+     "label": "Face the cellar keeper",
+     "success": {
+      "text": "The keeper's Pokémon fall. The lamp is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Cellar Keeper",
+       "size": 2,
+       "types": [
+        "ghost",
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-vault",
+   "name": "Mansion Vault",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "glint"
+   },
+   "intro": "A heavy door with three empty lamp sockets. It does not move unless all three lamps are lit.",
+   "choices": [
+    {
+     "label": "Open the vault (3 lamps lit)",
+     "success": {
+      "text": "The sockets glow and the door swings wide. The manor's treasure is yours.",
+      "effects": [
+       {
+        "kind": "betterDraft",
+        "extra": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag",
+         "reaper-cloth",
+         "spooky-plate"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 14
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mansion-lamp",
+       "atLeast": 3
+      }
+     ]
+    },
+    {
+     "label": "Force the door (Strength)",
+     "success": {
+      "text": "The hinges give. A small stash spills out.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "pearl",
+         "heart-scale"
+        ]
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "The door holds and a ghost slams it on your fingers.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave the vault door for another day.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork",
+   "name": "Clockwork Vault",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "requires": [],
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1a",
+    "effect": "rattle"
+   },
+   "intro": "A hall of gears under a stone dome. Three levers must be pulled and the middle door will open. The floor is full of traps.",
+   "choices": [
+    {
+     "label": "Step inside",
+     "success": {
+      "text": "Gears start to turn. Three side rooms open: the lever hall, the pit and the sparks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": -9
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-lever"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-pit"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-sparks"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-clockwork-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Study the dome",
+     "success": {
+      "text": "You sketch the gear pattern.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-lever",
+   "name": "Lever Hall",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1a",
+    "effect": "fog"
+   },
+   "intro": "Two levers jut from the wall. One is right. One drops a blade. A small plate says: the cold lever is the true one.",
+   "choices": [
+    {
+     "label": "Pull the cold lever (Intelligence)",
+     "success": {
+      "text": "A gear clunks home. One lever set.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": 1
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "The wrong lever. Blades whistle past.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the warm lever",
+     "success": {
+      "text": "A blade drops. One lever set anyway, but you are cut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-pit",
+   "name": "Pit Room",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a1a",
+    "effect": "shake"
+   },
+   "intro": "A pit full of spikes with a lever on the far side. A narrow beam spans it.",
+   "choices": [
+    {
+     "label": "Fly across",
+     "success": {
+      "text": "Your Pokémon carries you over. One lever set.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Balance on the beam (Speed)",
+     "success": {
+      "text": "You make it across and pull the lever. One lever set.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": 1
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "You slip and catch the edge. Bruised but alive.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-sparks",
+   "name": "Spark Room",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#18181e",
+    "effect": "glint"
+   },
+   "intro": "Live wires snake across the floor. A lever sits in a cage of arcs.",
+   "choices": [
+    {
+     "label": "Ground the wires (Ground type)",
+     "success": {
+      "text": "The sparks die. One lever set.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ]
+    },
+    {
+     "label": "Take the jolt (Luck)",
+     "success": {
+      "text": "You grab the lever through the sparks. One lever set.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vault-lever",
+        "amount": 1
+       }
+      ]
+     },
+     "check": "luck",
+     "failure": {
+      "text": "The jolt bites you hard.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.14
+       },
+       {
+        "kind": "status",
+        "status": "paralysis"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-clockwork-door",
+   "name": "Clockwork Door",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1a",
+    "effect": "glint"
+   },
+   "intro": "A round door of interlocking gears. Three slots wait for the levers.",
+   "choices": [
+    {
+     "label": "Open the door (3 levers set)",
+     "success": {
+      "text": "The gears part. A chamber of parts and prizes lies beyond.",
+      "effects": [
+       {
+        "kind": "betterDraft",
+        "extra": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "magnet",
+         "iron-ball"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 14
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "vault-lever",
+       "atLeast": 3
+      }
+     ]
+    },
+    {
+     "label": "Pry the door (Strength)",
+     "success": {
+      "text": "It bends enough to grab a few things.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "star-piece"
+        ]
+       }
+      ]
+     },
+     "check": "strength",
+     "failure": {
+      "text": "The gears bite your arm.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt",
+   "name": "Trapped Crypt",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "rock",
+    "ghost"
+   ],
+   "requires": [],
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#101018",
+    "effect": "fog"
+   },
+   "intro": "Stone stairs lead down to a crypt of three trapped chambers. Whoever built it did not want visitors, and left a lot of gold.",
+   "choices": [
+    {
+     "label": "Descend",
+     "success": {
+      "text": "Cold air. The first chamber is a corridor of dart holes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-darts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Scout the stairs",
+     "success": {
+      "text": "You note where the plates are.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-darts",
+   "name": "Dart Corridor",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14141c",
+    "effect": "rattle"
+   },
+   "intro": "The walls are pocked with holes. A pressure plate every few steps.",
+   "choices": [
+    {
+     "label": "Pick your way (Intelligence)",
+     "success": {
+      "text": "You find the safe tiles. The pit chamber is next.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-pit"
+       }
+      ]
+     },
+     "check": "intelligence",
+     "failure": {
+      "text": "Darts fly. You make it through scratched.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-pit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a sturdy Pokémon ahead",
+     "success": {
+      "text": "It shrugs the darts off. The pit chamber is next.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-pit"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyAbility",
+       "abilities": [
+        "sturdy",
+        "levitate"
+       ],
+       "label": "a Pokémon with Sturdy or Levitate"
+      }
+     ]
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-pit",
+   "name": "Pit Chamber",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0c0c10",
+    "effect": "shake"
+   },
+   "intro": "The floor ends in a spiked pit with a thin ledge. The way on is across.",
+   "choices": [
+    {
+     "label": "Edge along the ledge (Speed)",
+     "success": {
+      "text": "Across, heart pounding. The guardian room is next.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-guardian"
+       }
+      ]
+     },
+     "check": "speed",
+     "failure": {
+      "text": "The ledge crumbles. You haul yourselves out, hurt.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-guardian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fly over",
+     "success": {
+      "text": "Easy. The guardian room is next.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-crypt-guardian"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-crypt-guardian",
+   "name": "Crypt Guardian",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1018",
+    "effect": "shake"
+   },
+   "intro": "A stone door and the crypt's last guardian. Its Pokémon have waited a long time.",
+   "choices": [
+    {
+     "label": "Fight the guardian",
+     "success": {
+      "text": "The guardian yields. The treasure room opens.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "soft-sand",
+         "spooky-plate"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Crypt Guardian",
+       "size": 3,
+       "types": [
+        "rock",
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 1
+        },
+        {
+         "kind": "research",
+         "amount": 10
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sneak past (Luck)",
+     "success": {
+      "text": "You slip into the treasure room.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "star-piece",
+         "pearl"
+        ]
+       }
+      ]
+     },
+     "check": "luck",
+     "failure": {
+      "text": "The guardian wakes and a falling stone hits you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-dive",
+   "name": "Underwater Dive",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "requires": [],
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#0a2a48",
+    "effect": "float"
+   },
+   "intro": "A dark blue shaft in the shallows. Diving gear sits on the rocks. Four breaths of air, and every room below costs one.",
+   "choices": [
+    {
+     "label": "Dive in (Water type)",
+     "success": {
+      "text": "You sink into the blue. Air: 4.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": -9
+       },
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": 4
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-reef"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Study the reef from above",
+     "success": {
+      "text": "You note what swims below.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You back away and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-dive-reef",
+   "name": "Reef Room",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0a3a5a",
+    "effect": "float"
+   },
+   "intro": "A coral garden. Strange fish drift past. Air is going.",
+   "choices": [
+    {
+     "label": "Net a reef Pokémon (1 air)",
+     "success": {
+      "text": "A rare water Pokémon joins you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "types": [
+         "water"
+        ],
+        "levelBonus": 2,
+        "shinyMultiplier": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-wreck"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dive-air",
+       "atLeast": 1
+      }
+     ]
+    },
+    {
+     "label": "Swim on (1 air)",
+     "success": {
+      "text": "You kick deeper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-wreck"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dive-air",
+       "atLeast": 1
+      }
+     ]
+    },
+    {
+     "label": "Surface",
+     "success": {
+      "text": "You surface with a lungful of fresh air. The dive is over.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-dive-wreck",
+   "name": "Sunken Wreck",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#08283a",
+    "effect": "float"
+   },
+   "intro": "A ship lies on its side, its hold still shut. Your air gauge ticks.",
+   "choices": [
+    {
+     "label": "Crack the hold (1 air)",
+     "success": {
+      "text": "Crates of sunken goods drift loose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": -1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pearl",
+         "big-pearl",
+         "heart-scale"
+        ],
+        "count": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-trench"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dive-air",
+       "atLeast": 1
+      }
+     ]
+    },
+    {
+     "label": "Swim on (1 air)",
+     "success": {
+      "text": "You pass the wreck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-trench"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dive-air",
+       "atLeast": 1
+      }
+     ]
+    },
+    {
+     "label": "Surface",
+     "success": {
+      "text": "You rise slowly, no trouble.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-dive-trench",
+   "name": "Deep Trench",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#04101c",
+    "effect": "float"
+   },
+   "intro": "The light fades. A huge shape moves in the dark. This is the last of your air.",
+   "choices": [
+    {
+     "label": "Fight the deep one (1 air)",
+     "success": {
+      "text": "You beat it back and grab a glowing shard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dive-air",
+        "amount": -1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "comet-shard",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 14
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "water"
+       ],
+       "levelBonus": 3,
+       "chain": 1,
+       "win": []
+      }
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dive-air",
+       "atLeast": 1
+      }
+     ]
+    },
+    {
+     "label": "Surface fast",
+     "success": {
+      "text": "You rush up, gasping. Everyone is fine.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Stay too long",
+     "success": {
+      "text": "You run out of air. The team makes it back, but badly shaken.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-sky-route",
+   "name": "Sky Route",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "flying"
+   ],
+   "requires": [],
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#7ac0ff",
+    "effect": "float"
+   },
+   "intro": "A line of cloud-wide updrafts rising from a cliff. Only Pokémon that can fly could ride it.",
+   "choices": [
+    {
+     "label": "Ride the updrafts",
+     "success": {
+      "text": "Your flyers carry the team high. The ground rushes by and the gym comes into view.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Gather feathers from the cliff",
+     "success": {
+      "text": "A flyer scoops up loose feathers.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak",
+         "razor-claw"
+        ]
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "The route is too high for your team.",
+      "effects": []
+     }
+    }
+   ],
+   "secret": [
+    {
+     "kind": "partyType",
+     "type": "flying"
+    }
+   ]
+  },
+  {
+   "id": "dz-rival-ambush",
+   "name": "Rival Ambush",
+   "group": "Dungeon Puzzles",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#2a4a1a",
+    "effect": "none"
+   },
+   "intro": "Your rival jumps out of the tall grass, grinning. They have been waiting for you.",
+   "choices": [
+    {
+     "label": "Fight",
+     "success": {
+      "text": "You win. They shrug, annoyed, and slip you something for the road.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "betterDraft",
+         "extra": 1
+        }
+       ]
+      }
+     },
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ]
+    },
+    {
+     "label": "Run for it (Speed)",
+     "success": {
+      "text": "You duck past and leave them in the grass.",
+      "effects": []
+     },
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "check": "speed",
+     "failure": {
+      "text": "They catch you. A shove and a laugh. You pay for it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave them off",
+     "success": {
+      "text": "They look disappointed and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
