@@ -1,0 +1,3 @@
+# Battle platform alignment
+
+Pokémon battle sprites now stand on their platform: `pokemonVisual` anchors each sprite on its feet (the lowest opaque pixel over all frames, and the middle of the lowest fifth of the first frame) instead of the padded frame edge (`feetOrigin` in `src/ui/sprites.ts`). About 19% of the art was off-centre by 3 px or more (up to 26). Double battles: both spots of a side now sit on that side's one platform (`DUO_POS` is built from `ENEMY_POS` / `PLAYER_POS`); before, one foe stood off the platform. Presentation only; no battle state, RNG or saves. Known limit: floaters (Koffing, Jellicent) keep the hover that is baked into their art. Test: `tests/e2e/spriteAlignment.spec.ts`.
