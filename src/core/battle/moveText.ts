@@ -2,6 +2,9 @@
 
 import type { Move } from '../contentSchema';
 import { counterLine } from './typeRules';
+import descriptionsJson from '../../data/moveDescriptions.json';
+
+const DESCRIPTIONS = descriptionsJson as Record<string, string>;
 
 const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'accuracy', eva: 'evasiveness' };
 const STATUS: Record<string, string> = { brn: 'burn the foe', psn: 'poison the foe', par: 'paralyze the foe', slp: 'put the foe to sleep', frz: 'freeze the foe' };
@@ -53,4 +56,17 @@ export function moveDescription(move: Move): string {
   const c = moveEffectClauses(move);
   if (c.length > 0) return `${c.join('. ')}.`;
   return move.category === 'status' ? 'A support move.' : 'A straightforward attack.';
+}
+
+/** The game's own description of a move (moveDescriptions.json), or null for moves it has none for (Z-Moves, Max Moves). */
+export function moveFlavor(moveId: string): string | null {
+  return DESCRIPTIONS[moveId] ?? null;
+}
+
+/** Beta 4.4: the full description: what the games say, then what it does here in numbers (chances, stages). */
+export function moveFullDescription(move: Move): string {
+  const flavor = moveFlavor(move.id);
+  const clauses = moveEffectClauses(move);
+  if (!flavor) return moveDescription(move);
+  return clauses.length > 0 ? `${flavor}\nIn this game: ${clauses.join('. ')}.` : flavor;
 }

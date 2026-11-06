@@ -72,7 +72,9 @@
   "perBattleWon": 1,
   "perBossWon": 3,
   "perVitamin": 5,
-  "perFaint": -1
+  "perFaint": -1,
+  "loafBelow": 40,
+  "loafChance": 0.3
  },
  "money": {
   "startingMoney": 0,
@@ -186,6 +188,9 @@
  "nativeWeight": 3,
  "wildMaxBaseStats": 560,
   "levelBst": { "base": 290, "perLevel": 9, "retries": 10 },
+ "stagePlan": { "catcher": 2, "fighter": 5, "explorer": 2, "shopper": 3000, "heals": 2, "wipes": 1, "themeBonus": 3, "maxSignals": 2 },
+  "hyperMove": { "powerBonus": 20, "pp": 5 },
+ "competitiveGyms": { "fromStage": 4, "training": 1, "ai": 0.1, "items": ["leftovers", "life-orb", "sitrus-berry", "expert-belt"] },
  "bossBands": [
   { "minLevel": 101, "training": 1, "ai": 0.05, "signatureSwaps": 1, "items": ["leftovers", "sitrus-berry"] },
   { "minLevel": 201, "training": 2, "ai": 0.1, "signatureSwaps": 2, "items": ["leftovers", "life-orb", "sitrus-berry"] },
@@ -202,9 +207,10 @@
  "opening": { "encounters": 4, "maxBaseStats": 340, "levelOffset": 1, "minLevel": 4, "softMovesUntilLevel": 15,
   "maxLevel": 6 },
  "rival": { "stage": 0, "column": 5, "level": 5, "depth": true, "starters": ["bulbasaur", "charmander", "squirtle", "chikorita", "cyndaquil", "totodile", "treecko", "torchic", "mudkip"] },
- "legendaryWildChance": 0.02,
- "legendaryMinRegion": 1,
+ "legendaryWildChance": 0.0025,
+ "legendaryMinRegion": 2,
  "heldItemSlots": 8,
+ "itemCaps": { "bonusMax": 3 },
  "rareEncounterBst": 480,
  "evolution": {
   "trainerItemLevel": 30,
@@ -432,23 +438,23 @@
   "keepsakeCandyMultiplier": 2
  },
  "attributeEffects": {
-  "strengthPhysicalDamage": 1.0,
-  "intelligenceSpecialDamage": 1.0,
-  "speedStat": 1.0,
-  "charismaPriceCut": 0.5,
-  "charismaExpGain": 1.0,
-  "charismaFriendshipGain": 1.0,
-  "luckUncommonWeight": 0.5,
-  "luckRareWeight": 1.0,
-  "luckShinyChance": 1.0,
-  "rageDamageDealt": 2.0,
+  "strengthPhysicalDamage": 0.5,
+  "intelligenceSpecialDamage": 0.5,
+  "speedStat": 0.5,
+  "charismaPriceCut": 0.3,
+  "charismaExpGain": 0.5,
+  "charismaFriendshipGain": 0.75,
+  "luckUncommonWeight": 0.25,
+  "luckRareWeight": 0.4,
+  "luckShinyChance": 0.5,
+  "rageDamageDealt": 1.0,
   "rageDamageTaken": 1.0,
-  "peaceHealing": 2.0,
-  "peaceDamageTakenCut": 0.5,
-  "goodCatch": 2.0,
-  "evilMoney": 1.0,
-  "luckEpicWeight": 1.5,
-  "luckDraftVariety": 1.0
+  "peaceHealing": 1.0,
+  "peaceDamageTakenCut": 0.35,
+  "goodCatch": 1.0,
+  "evilMoney": 0.5,
+  "luckEpicWeight": 0.5,
+  "luckDraftVariety": 0.5
  },
  "events": {
   "perStage": [
@@ -639,11 +645,14 @@
   ]
  },
  "frugalRunMaxSpent": 300,
+ "resale": { "share": 0.5, "fullSellShare": 0.9, "appraiseShare": 0.95 },
  "shopSale": {
   "everyStages": 3,
   "discount": 0.2
  },
  "priceSwing": { "range": 0.1, "repeat": 0.05, "repeatCap": 0.25 },
+ "omen": { "partySample": 3, "perExtraFoe": 2, "calmAtMost": -2, "direAtLeast": 4 },
+ "lastChance": { "share": 0.25 },
  "wealthTax": { "base": 4000, "perRegion": 2500, "rate": 0.15 },
  "shopTypes": {
   "boutique": { "categories": ["charm", "attribute", "evolution", "transformation"], "priceFactor": 1.1, "earlyRare": 3 },
@@ -817,6 +826,16 @@
    "lowTypes": ["rock", "ground", "steel"],
    "highHeal": 0.9,
    "lowBall": 0.9
+  },
+  "migration": {
+   "factor": 2,
+   "awayFactor": 0.5,
+   "seasons": {
+    "Spring": ["flying", "bug", "grass"],
+    "Summer": ["fire", "water", "electric"],
+    "Autumn": ["normal", "ghost", "fighting"],
+    "Winter": ["ice", "steel", "dark"]
+   }
   },
   "milestoneDays": [
    7,

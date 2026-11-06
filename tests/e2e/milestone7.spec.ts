@@ -71,6 +71,8 @@ test('the Briefing shows the run’s attributes, and a shop Plate raises one whe
     const { session, game } = (window as any).__pkr;
     session.debugJumpToColumn(5);
     session.run.money = 5000;
+    // Dynamic Prices (S67) swing prices a little; this test is about something else, so switch the swing off.
+    session.content.balance.priceSwing = { range: 0, repeat: 0, repeatCap: 0 };
     session.run.badges = ['e2e-badge'];
     const node = session.run.stage.map.nodes.find((n: any) => n.id === session.run.stage.current);
     node.sides.push({ id: 'e2e-shop', kind: 'shop', used: false });

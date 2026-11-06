@@ -102,7 +102,7 @@ describe('minigame payouts', () => {
       }
     }
     report.push('');
-  }, 300_000); // a slow simulation (about 95 s alone); it timed out at 120 s when CI runs many files at once
+  }, 300000);
 
   it('writes the report when asked', () => {
     if (process.env.BALANCE_REPORT) writeFileSync('docs/plans/balance-report.md', `${report.join('\n')}\n`);

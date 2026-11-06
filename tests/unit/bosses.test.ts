@@ -73,9 +73,16 @@ describe('boss teams', () => {
       // Beta 4.4: the boss's set ace (its first signature family) always goes last.
       const team = { ...boss.teams.gym[Math.min(stageNumber, 15)]!, members: withSetAce(content, boss, 'gym', Math.min(stageNumber, 15), [...boss.teams.gym[Math.min(stageNumber, 15)]!.members]) };
       expect(plan.members.map((m) => m.speciesId)).toEqual(team.members.map((m) => m.speciesId));
-      expect(plan.members.map((m) => m.moves)).toEqual(team.members.map((m) => m.moves));
-      expect(plan.ai).toBe(team.ai);
       expect(plan.leaderId).toBe('brock');
+      if (stageNumber < content.balance.competitiveGyms.fromStage) {
+        expect(plan.members.map((m) => m.moves)).toEqual(team.members.map((m) => m.moves));
+        expect(plan.ai).toBe(team.ai);
+      } else {
+        // Beta 4.4: from Stage 5 the leader brings a competitive set: best moves, held items, sharper AI.
+        expect(plan.ai).toBeGreaterThan(team.ai);
+        expect(plan.members.every((m) => m.held && Object.keys(m.held).length === 1)).toBe(true);
+        expect(plan.members.every((m) => (m.moves ?? []).length > 0)).toBe(true);
+      }
     }
     // Past level 100 (stage 30 is region 4) the last team is upgraded for its band (bossBands.ts): sharper AI, held items.
     const late = planGymLeader(content, RED, 'brock', 30, scaleAt(30 % 8, FULL.columns, Math.floor(30 / 8)), new Rng(hashSeed('gym-30')));

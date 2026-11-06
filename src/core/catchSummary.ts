@@ -5,6 +5,7 @@ import { typeEffectiveness } from './battle/damage';
 import { TYPE_NAMES, type Content } from './contentSchema';
 import { abilityOf, calcStats, getSpecies, isUsableMove } from './pokemon';
 import type { PokemonInstance } from './state';
+import { natureEffectText, natureName } from './natures';
 
 const STAT_LABELS = [
   ['hp', 'HP'],
@@ -61,10 +62,13 @@ export function catchSummary(content: Content, mon: PokemonInstance, compareTo?:
         .map((e) => `${getSpecies(content, e.to).name} (${e.level !== undefined ? `Lv${e.level}` : (content.items.get(e.item!)?.name ?? e.item!)})`)
         .join(', ')
     : 'Does not evolve';
+  // Beta 4.4: the nature shows on the catch screen (it changes two stats by 10%).
+  const nature = `Nature: ${natureName(mon.nature ?? 'hardy')} (${natureEffectText(mon.nature ?? 'hardy')})`;
   const lines = extras.compact
     ? [
         `${species.name}${mon.shiny ? '  ★ Shiny' : ''}   Lv${mon.level}${extras.firstDiscovery ? '   NEW!' : ''}`,
         `Type: ${species.types.map((t) => t.toUpperCase()).join(' / ')}   Ability: ${abilityName}`,
+        nature,
         `Stats: ${statLine(stats as unknown as Record<string, number>)}`,
         `Moves: ${mon.moves.map((m) => content.moves.get(m.id)?.name ?? m.id).join(', ')}`,
       ]
@@ -75,7 +79,7 @@ export function catchSummary(content: Content, mon: PokemonInstance, compareTo?:
         matchups(content, species.types),
         `Stats: ${statLine(stats as unknown as Record<string, number>)}`,
         `Base: ${statLine(base as unknown as Record<string, number>)}  (BST ${bst})`,
-        `Ability: ${abilityName}`,
+        `Ability: ${abilityName}   ${nature}`,
         `Can have: ${[...species.abilities.normal, ...(species.abilities.hidden ? [`${species.abilities.hidden} (Hidden)`] : [])].map((id) => content.abilities.get(id.replace(' (Hidden)', ''))?.name ?? id).join(', ') || 'unknown'}`,
         `Evolves: ${evo}`,
         'Moves:',

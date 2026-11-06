@@ -1334,6 +1334,8 @@ export const EncounterModSchema = z.discriminatedUnion('mod', [
   /** A chance (percent per copy) that the wild Pokémon is this species. */
   z.object({ mod: z.literal('species'), species: z.string(), percent: z.number().positive().max(100) }),
   /** The wild Pokémon loses its first turn. */
+  /** Weather Idols (S427): the next wild battle starts in this weather. */
+  z.object({ mod: z.literal('weather'), weather: WeatherSchema }),
   z.object({ mod: z.literal('freeTurn') }),
   /** Catching the wild Pokémon also drops a cheap Bag item (Pinap Berry). */
   z.object({ mod: z.literal('drop') }),
@@ -1432,6 +1434,12 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */
   z.object({ perk: z.literal('journal') }),
+  /** Last Chance Charm (S389): after each won fight, one fallen Pokémon gets back up with part of its HP. */
+  z.object({ perk: z.literal('lastChance') }),
+  /** Augur's Bell (S380): the map shows an omen (calm, uneasy or dire) for each fight you can walk to. */
+  z.object({ perk: z.literal('omen') }),
+  /** Oval Charm (S432): every Egg gets one extra step toward hatching each time it would tick. */
+  z.object({ perk: z.literal('ovalCharm') }),
   /** Seal Case: catching a Pokémon shows a special effect and gives Luck. */
   z.object({ perk: z.literal('sealCase'), luck: z.number().int().positive() }),
   /** Seal Bag: items sell for their full shop price instead of half. */
@@ -1956,9 +1964,15 @@ export const BalanceSchema = z.object({
   /** Ideas W1 rules: Type Resonance, Bleed, Curse Tags, Hazard burst, Underdog XP (core/battle/w1Rules.ts). */
   w1: W1ConfigSchema,
   /** The shop puts one item on sale: it changes every this many stages, and takes this share off the price. */
+  /** Selling never pays more than this share of what the shop charges right now (stops buy-cheap, sell-back loops). */
+  resale: z.object({ share: z.number().min(0).max(1), fullSellShare: z.number().min(0).max(1), appraiseShare: z.number().min(0).max(1) }).default({ share: 0.5, fullSellShare: 0.9, appraiseShare: 0.95 }),
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
   /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
   priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
+  /** Omens (S380): the fight's gap = foe level (+perExtraFoe per extra foe) minus your best `partySample` fighters' level; at most calmAtMost is calm, at least direAtLeast is dire. */
+  omen: z.object({ partySample: z.number().int().min(1).max(6), perExtraFoe: z.number().min(0), calmAtMost: z.number(), direAtLeast: z.number() }).default({ partySample: 3, perExtraFoe: 2, calmAtMost: -2, direAtLeast: 4 }),
+  /** Last Chance Revives (S389): the share of max HP the revived Pokémon gets back. */
+  lastChance: z.object({ share: z.number().positive().max(1) }).default({ share: 0.25 }),
   /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
   wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */
@@ -2085,6 +2099,10 @@ export const BalanceSchema = z.object({
     perVitamin: z.number().min(0),
     /** Lost when it faints (a negative number). */
     perFaint: z.number().max(0),
+    /** Mood (S57): a player Pokémon below this friendship sometimes loafs instead of acting; 0 turns it off. */
+    loafBelow: z.number().min(0),
+    /** The loaf chance at friendship 0; it falls to 0 at loafBelow. */
+    loafChance: z.number().min(0).max(1),
   }),
   /**
    * Enemy levels climb through each region from its start level to just under its level cap:
@@ -2213,7 +2231,7 @@ export const BalanceSchema = z.object({
   /** Exploration (core/world.ts): fog of war, weather fronts, roaming Legendaries and checkpoint camps. */
   world: WorldBalanceSchema,
   /** The day counter and day/night cycle (core/clock.ts): four times of day, a step of the map takes `ticksPerStep` of them. */
-  clock: z.object({ ticksPerStep: z.number().int().min(0).max(4), milestoneDays: z.array(z.number().int().min(2)).min(1), /** Days in a season of the run's calendar; each new season is a festival day. */ seasonLength: z.number().int().min(2), /** Real-world dates (month-day) the camp celebrates; the host passes today's date into the run. */ specialDates: z.array(z.object({ id: z.string(), label: z.string(), on: z.string().regex(/^\d\d-\d\d$/) })), /** Types that turn up more in the wild at each time of day. */ periodTypes: z.object({ morning: z.array(TypeNameSchema), afternoon: z.array(TypeNameSchema), evening: z.array(TypeNameSchema), night: z.array(TypeNameSchema) }), periodWildFactor: z.number().min(1), /** Merchants' prices by the hour (1 = normal). */ shopHours: z.object({ morning: z.number().positive(), afternoon: z.number().positive(), evening: z.number().positive(), night: z.number().positive() }) , /** Tide Clock (S2, core/clock.ts): the tide turns every `length` parts of the day, so it drifts against day and night. */ tide: z.object({ length: z.number().int().min(1), wildFactor: z.number().min(1), highTypes: z.array(TypeNameSchema), lowTypes: z.array(TypeNameSchema), highHeal: z.number().positive(), lowBall: z.number().positive() })}),
+  clock: z.object({ ticksPerStep: z.number().int().min(0).max(4), milestoneDays: z.array(z.number().int().min(2)).min(1), /** Days in a season of the run's calendar; each new season is a festival day. */ seasonLength: z.number().int().min(2), /** Real-world dates (month-day) the camp celebrates; the host passes today's date into the run. */ specialDates: z.array(z.object({ id: z.string(), label: z.string(), on: z.string().regex(/^\d\d-\d\d$/) })), /** Types that turn up more in the wild at each time of day. */ periodTypes: z.object({ morning: z.array(TypeNameSchema), afternoon: z.array(TypeNameSchema), evening: z.array(TypeNameSchema), night: z.array(TypeNameSchema) }), periodWildFactor: z.number().min(1), /** Merchants' prices by the hour (1 = normal). */ shopHours: z.object({ morning: z.number().positive(), afternoon: z.number().positive(), evening: z.number().positive(), night: z.number().positive() }) , /** Tide Clock (S2, core/clock.ts): the tide turns every `length` parts of the day, so it drifts against day and night. */ tide: z.object({ length: z.number().int().min(1), wildFactor: z.number().min(1), highTypes: z.array(TypeNameSchema), lowTypes: z.array(TypeNameSchema), highHeal: z.number().positive(), lowBall: z.number().positive() }), /** Migration Seasons (S135, core/clock.ts): the types that pass through in each season turn up `factor` times more, and `awayFactor` times as often in the opposite season. */ migration: z.object({ factor: z.number().min(1), awayFactor: z.number().gt(0).max(1), seasons: z.object({ Spring: z.array(TypeNameSchema), Summer: z.array(TypeNameSchema), Autumn: z.array(TypeNameSchema), Winter: z.array(TypeNameSchema) }) }).optional() }),
   attributeGrowth: z.array(
     z.object({
       attribute: AttributeKeySchema,
@@ -2275,6 +2293,12 @@ export const BalanceSchema = z.object({
   /** Regular enemies (wild and trainer) may not exceed base + perLevel × level total base stats; up to `retries` re-draws, keeping the weakest. */
   levelBst: z.object({ base: z.number().int().positive(), perLevel: z.number().positive(), retries: z.number().int().min(0) }),
   /** Boss teams past level 100 (core/bossBands.ts), chosen by the team's top level. */
+  /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
+  /** Beta 4.4: a Hyper/Overdrive moment unlocks a move in an extra slot for the battle: this much more power, this many PP. */
+  hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
+  /** Beta 4.4: the next stage is built from what the player did on the last (core/stagePlan.ts). Thresholds per stage. */
+  stagePlan: z.object({ catcher: z.number().int().min(1), fighter: z.number().int().min(1), explorer: z.number().int().min(1), shopper: z.number().int().min(1), heals: z.number().int().min(1), wipes: z.number().int().min(1), themeBonus: z.number().min(0), maxSignals: z.number().int().min(0) }).default({ catcher: 2, fighter: 5, explorer: 2, shopper: 3000, heals: 2, wipes: 1, themeBonus: 3, maxSignals: 2 }),
+  competitiveGyms: z.object({ fromStage: z.number().int().min(0), training: z.number().int().min(0), ai: z.number().min(0).max(1), items: z.array(z.string()) }).default({ fromStage: 4, training: 1, ai: 0.1, items: ['leftovers', 'life-orb', 'sitrus-berry', 'expert-belt'] }),
   bossBands: z.array(z.object({ minLevel: z.number().int().min(101), training: z.number().int().min(0), ai: z.number().min(0).max(1), signatureSwaps: z.number().int().min(0), items: z.array(z.string()) })).default([]),
   /** Combat Threat Rating (core/threat.ts) and the Encounter Director (core/encounterDirector.ts). 100 = all-70 base stats with a 60-power same-type attack. */
   threat: z.object({
@@ -2308,6 +2332,8 @@ export const BalanceSchema = z.object({
   legendaryMinRegion: z.number().int().min(0),
   /** How many different items one Pokémon can hold (trainer perks change it). */
   heldItemSlots: z.number().int().positive(),
+  /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
+  itemCaps: z.object({ bonusMax: z.number().int().min(1) }).default({ bonusMax: 3 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
@@ -2738,6 +2764,14 @@ export const EventRuleSchema = z.object({
   noAttacks: z.boolean().optional(),
   /** No bag items in this fight (Mentor's Examination). */
   noItems: z.boolean().optional(),
+  /** The weather changes every turn, in this order (Weather Rival). */
+  weatherCycle: z.array(WeatherSchema).min(2).max(4).optional(),
+  /** Every stat change is inverted for both sides (The Contrarian). */
+  contrary: z.boolean().optional(),
+  /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */
+  cursedHat: z.boolean().optional(),
+  /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
+  pinchHitter: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),

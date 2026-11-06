@@ -926,7 +926,11 @@
   "critStage": 0,
   "target": "enemy",
   "flags": [],
-  "effects": {}
+  "effects": {
+   "confuse": {
+    "chance": 10
+   }
+  }
  },
  {
   "id": "psybeam",
@@ -940,7 +944,11 @@
   "critStage": 0,
   "target": "enemy",
   "flags": [],
-  "effects": {}
+  "effects": {
+   "confuse": {
+    "chance": 10
+   }
+  }
  },
  {
   "id": "psychic",
@@ -1751,7 +1759,11 @@
   "flags": [
    "pulse"
   ],
-  "effects": {}
+  "effects": {
+   "confuse": {
+    "chance": 20
+   }
+  }
  },
  {
   "id": "air-slash",
@@ -4632,7 +4644,9 @@
   "flags": [
    "slicing"
   ],
-  "effects": {}
+  "effects": {
+   "breaksProtect": true
+  }
  },
  {
   "id": "minimize",
@@ -5967,7 +5981,9 @@
   "critStage": 0,
   "target": "enemy",
   "flags": [],
-  "effects": {}
+  "effects": {
+   "crashOnMiss": true
+  }
  },
  {
   "id": "superpower",
@@ -8050,7 +8066,16 @@
   "flags": [
    "contact"
   ],
-  "effects": {}
+  "effects": {
+   "statChanges": [
+    {
+     "stat": "eva",
+     "stages": 1,
+     "target": "self",
+     "chance": 100
+    }
+   ]
+  }
  },
  {
   "id": "ancient-power",
@@ -10691,7 +10716,9 @@
   "critStage": 0,
   "target": "enemy",
   "flags": [],
-  "effects": {}
+  "effects": {
+   "breaksProtect": true
+  }
  },
  {
   "id": "fell-stinger",

@@ -92,6 +92,16 @@
       "group": "dex"
     },
     {
+      "id": "no-item-caps",
+      "name": "No Item Caps",
+      "status": "supported",
+      "bonus": 0,
+      "blurb": "Bonus items stack past the usual cap of 3, but battles pay half the money.",
+      "battleMoney": 0.5,
+      "noItemCaps": true,
+      "group": "economy"
+    },
+    {
       "id": "rich-route",
       "name": "Rich Route",
       "status": "supported",

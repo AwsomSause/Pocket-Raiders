@@ -2,6 +2,7 @@
 // Starter Laboratory's pools by category, with pools built from evolved
 // species, bosses' signature Pokémon and type/region filters.
 
+import { isLegendaryLike } from '../../src/core/trainerPerks';
 import { describe, expect, it } from 'vitest';
 import { STARTER_POOL_CATEGORIES } from '../../src/core/contentSchema';
 import { createProfile } from '../../src/core/profile';
@@ -31,7 +32,8 @@ describe('starter sets', () => {
         const s = content.species.get(id)!;
         expect(s.evolutionStage, `${p.id}: ${id}`).toBe(1);
         // An earned special-form set (Spooky Set) offers forms the wild never does.
-        if (!p.specialForms && !p.specimens) expect(isWildEligible(content, s), `${p.id}: ${id}`).toBe(true);
+        // Ultra Beasts left the wild (Beta 4.4) but stay starters in the villain sets that earn them.
+        if (!p.specialForms && !p.specimens) expect(isWildEligible(content, s) || isLegendaryLike(s), `${p.id}: ${id}`).toBe(true);
       }
     }
   });
