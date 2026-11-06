@@ -27,7 +27,7 @@ export function drawDaylight(town: HubTownView, scene: Phaser.Scene, period: Per
   if (!light.lamps) return 0;
   let lit = 0;
   town.world(() => {
-    for (const [name, px, py, depth] of HUB_TOWN.props) {
+    for (const [name, px, py, depth] of town.map.props) {
       if (!name.startsWith('lamp')) continue;
       const frame = scene.textures.getFrame(overworldAssetIds.props, name);
       const w = frame?.width ?? T;
@@ -43,13 +43,13 @@ export function drawDaylight(town: HubTownView, scene: Phaser.Scene, period: Per
 }
 
 /** Starts the town's sounds; the fountain follows how close you stand. */
-export function startTownSound(town: HubTownView, scene: Phaser.Scene, period: Period): void {
+export function startTownSound(town: HubTownView, scene: Phaser.Scene, period: Period, at: { x: number; y: number } = FOUNTAIN): void {
   startAmbient(scene, period);
   const fountain = startFountain(scene);
   if (!fountain) return;
   const update = (): void => {
     const t = town.tile();
-    fountain(1 - Math.hypot(t.x - FOUNTAIN.x, t.y - FOUNTAIN.y) / HEARD);
+    fountain(1 - Math.hypot(t.x - at.x, t.y - at.y) / HEARD);
   };
   update();
   scene.events.on(Phaser.Scenes.Events.UPDATE, update);
