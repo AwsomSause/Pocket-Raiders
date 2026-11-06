@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildContent } from '../../src/data';
 import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
-import { COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId } from '../../src/core/overhaul/growth';
+import { bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId } from '../../src/core/overhaul/growth';
 import type { PokemonInstance } from '../../src/core/state';
 
 const content = buildContent();
@@ -99,5 +99,50 @@ describe('growth paths (first cut)', () => {
     expect(growthDamageMultiplier(CFG, m('deep-swimmer'), 'fire', 1, 1, [], { foeTypes: ['Fire'] })).toBe(1);
     expect(growthDamageMultiplier(CFG, m('rival-breaker'), 'fire', 1, 1, [], { rival: true })).toBeCloseTo(1.05);
     expect(growthLine(m('forge-born'), CFG)).toMatch(/Steel damage against Ice/);
+  });
+
+  it('counts moves used and hits landed', () => {
+    const mv = { accuracy: 100, category: 'physical', type: 'normal', flags: [] as string[], hpFrac: 1 };
+    expect(moveCounters(mv)).toEqual(['useSure']);
+    expect(moveCounters({ ...mv, accuracy: 70, flags: ['sound'] })).toEqual(['useRisky', 'useSound']);
+    expect(moveCounters({ ...mv, category: 'status', accuracy: null })).toEqual(['useStatus']);
+    expect(moveCounters({ ...mv, type: 'Fire', hpFrac: 0.4 })).toContain('useFireLow');
+    expect(moveCounters({ ...mv, type: 'fire', hpFrac: 0.6 })).not.toContain('useFireLow');
+    expect(hitCounters(100, 100, false)).toEqual(['hitHigh']);
+    expect(hitCounters(100, 100, true)).toEqual(['hitHigh', 'koFull']);
+    expect(hitCounters(70, 100, true)).toEqual([]);
+    expect(hitCounters(76, 100, false)).toEqual(['hitHigh']);
+  });
+
+  it('bumps counters only when switched on', () => {
+    const h: { growth?: Record<string, number> } = {};
+    bumpGrowth({ ...CFG, enabled: false }, h, ['useSure']);
+    expect(h.growth).toBeUndefined();
+    bumpGrowth(CFG, h, ['useSure', 'useSure']);
+    expect(h.growth).toEqual({ useSure: 2 });
+  });
+
+  it('batch 3 paths need their own thresholds and boost in their own cases', () => {
+    const mk = (uid: string, n: number) => ({ uid, knockoutsDealt: 0, closeCalls: 0, growth: { useSure: n } });
+    expect(pathFor(CFG, mk('a', 29), ['normal'], [mk('a', 29)])).toBeNull();
+    expect(pathFor(CFG, mk('a', 30), ['normal'], [mk('a', 30)])).toBe('steady');
+    const m = (p: string) => ({ growthPath: p });
+    expect(growthDamageMultiplier(CFG, m('steady'), 'normal', 1, 1, [], { accuracy: 100 })).toBeCloseTo(1.03);
+    expect(growthDamageMultiplier(CFG, m('steady'), 'normal', 1, 1, [], { accuracy: 90 })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('chorus-lead'), 'normal', 1, 1, [], { sound: true })).toBeCloseTo(1.03);
+    expect(growthDamageMultiplier(CFG, m('tank-buster'), 'normal', 1, 1, [], { foeHpFrac: 0.8 })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('tank-buster'), 'normal', 1, 1, [], { foeHpFrac: 0.75 })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('bond-breaker'), 'normal', 1, 1, [], { foeHpFrac: 1 })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('bond-breaker'), 'normal', 1, 1, [], { foeHpFrac: 0.99 })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('ember-heart'), 'fire', 1, 0.4, [])).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('ember-heart'), 'fire', 1, 0.6, [])).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('gambler'), 'normal', 1, 1, [], { accuracy: 70 })).toBe(1);
+    expect(growthAccuracyMultiplier(CFG, m('gambler'), 70, 'physical')).toBeCloseTo(1.05);
+    expect(growthAccuracyMultiplier(CFG, m('gambler'), 80, 'physical')).toBe(1);
+    expect(growthAccuracyMultiplier(CFG, m('support'), null, 'status')).toBe(1);
+    expect(growthAccuracyMultiplier(CFG, m('support'), 90, 'status')).toBeCloseTo(1.05);
+    expect(growthAccuracyMultiplier(CFG, m('support'), 90, 'physical')).toBe(1);
+    expect(growthAccuracyMultiplier(CFG, {}, 50, 'status')).toBe(1);
+    expect(growthLine(m('steady'), CFG)).toMatch(/\+3% damage with 100%-accuracy moves/);
   });
 });

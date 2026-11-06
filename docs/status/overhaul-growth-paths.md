@@ -16,3 +16,14 @@ New per-Pokémon KO counters (`growth` on its story history, optional so no save
 - Deep Swimmer (Water KOs on Fire/Rock/Ground foes) and Forge-born (Steel KOs on Ice/Rock/Fairy foes), each +5% of that type against those foes.
 These come before Last Stand, Striker and the type paths when a Pokémon qualifies.
 Still unplayed (79): paths that need counters for turns, moves used, healing, nodes, items, time of day or town visits. They stay off rather than get a stand-in rule.
+
+## Batch 3: move and hit counters (7 more, 34 of 106 play)
+New counters filled in `story/hooks.ts` from the moves a Pokémon uses and the hits it lands (all in `growth` on its story history, no save bump):
+- Steady (30 uses of 100%-accuracy damaging moves): +3% damage with them.
+- Gambler (8 uses of moves of under 80% accuracy): +5% accuracy with those moves.
+- Chorus Lead (10 sound moves): +3% damage with sound moves.
+- Support (15 status moves): +5% accuracy with status moves.
+- Tank Buster (12 hits on foes above 75% HP): +5% damage against foes above 75% HP.
+- Bond Breaker (4 KOs on foes at full HP, most in the party): +5% damage against foes at full HP.
+- Ember Heart (6 Fire moves used under 50% HP): +5% Fire damage under 50% HP.
+Limits: the pack's exact "earned by" wording is simplified to these counters; 72 paths still need counters (turns, healing, nodes, time of day, items, town visits, eggs).
