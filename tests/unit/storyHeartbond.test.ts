@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { adjustBond, bondOf } from '../../src/core/bond';
+import { berryFlavor, careAction, favoriteFlavor, hatedFlavor } from '../../src/core/care';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
@@ -202,5 +203,28 @@ describe('temperament beats', () => {
     run.story.v2 = undefined;
     expect(takeBeat(run, content.storyData.text, name)).toBeNull();
     expect(uid).toBeTruthy();
+  });
+});
+
+describe('snack heartbond', () => {
+  const berries = () => [...content.catalog.values()].filter((e) => e.family.startsWith('Berries')).map((e) => e.id);
+  function feedSetup() {
+    const { run, uid } = setup();
+    run.phase = 'map';
+    const mon = run.party[0]!;
+    return { run, uid, mon, loved: berries().find((b) => berryFlavor(b) === favoriteFlavor(mon))!, hated: berries().find((b) => berryFlavor(b) === hatedFlavor(mon))! };
+  }
+  it('a loved snack pays affection +2, a hated one pays nothing', () => {
+    const a = feedSetup();
+    a.run.looseHeld = { [a.loved]: 1 };
+    const before = bondOf(a.run, a.uid).affection;
+    const after = careAction(content, a.run, 0, 'feed').run;
+    expect(bondOf(after, a.uid).affection - before).toBe(2);
+    const b = feedSetup();
+    b.run.looseHeld = { [b.hated]: 1 };
+    const beforeHated = bondOf(b.run, b.uid).affection;
+    const afterHated = careAction(content, b.run, 0, 'feed').run;
+    expect(bondOf(afterHated, b.uid).affection).toBe(beforeHated);
+    expect(afterHated.story.v2!.heartbond.ledger).toEqual([]);
   });
 });

@@ -166,6 +166,7 @@ export function careAction(content: Content, current: RunState, partyIndex: numb
   const seed = `${mon.uid}:${run.encountersCompleted}:${action}`;
   const tick = () => (care.done[action] = used(care, action) + 1);
   let message = '';
+  let snack: 'liked' | 'neutral' | 'hated' | null = null;
   switch (action) {
     case 'pet':
       tick();
@@ -184,6 +185,7 @@ export function careAction(content: Content, current: RunState, partyIndex: numb
       tick();
       const berry = bagBerries(content, run, mon)[0]!;
       const reaction = berryReaction(mon, berry);
+      snack = reaction;
       run.looseHeld![berry] = (run.looseHeld![berry] ?? 1) - 1;
       if (run.looseHeld![berry]! <= 0) delete run.looseHeld![berry];
       const r = CARE.feed[reaction];
@@ -366,7 +368,11 @@ export function careAction(content: Content, current: RunState, partyIndex: numb
       message = care.ace ? `${name} is now your ace.` : `${name} is no longer your ace.`;
       break;
   }
-  heartbondCare(run, mon.uid, 'care_touch', `care${run.encountersCompleted}`, Object.values(care.done).reduce((a, n) => a + n, 0));
+  // Heartbond: a care touch pays affection +1 (+2 for a loved snack); a hated snack pays nothing and never costs Heartbond.
+  if (snack !== 'hated') {
+    const paid = heartbondCare(run, mon.uid, 'care_touch', `care${run.encountersCompleted}`, Object.values(care.done).reduce((a, n) => a + n, 0)).paid.length > 0;
+    if (paid && snack === 'liked') adjustBond(bondOf(run, mon.uid), { affection: 1 });
+  }
   return { run, message };
 }
 
