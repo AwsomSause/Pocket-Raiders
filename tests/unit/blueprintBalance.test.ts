@@ -75,7 +75,7 @@ describe('expedition routes', () => {
 });
 
 describe('minigame payouts', () => {
-  it('a random player earns little, a perfect player is held to the stage cap', () => {
+  it('the stage money cap stays well under a gym prize', () => {
     const eco = content.minigames.economy;
     report.push('## Minigames', '', `Stage money cap: ${eco.stageMoneyCap} × region number. Gym prize at the region's level cap shown for scale.`, '', '| Region | Cap | Gym prize | Cap / gym |', '|---|---|---|---|');
     for (let region = 0; region < 4; region++) {
@@ -85,7 +85,13 @@ describe('minigame payouts', () => {
       expect(cap / prize, `region ${region + 1}`).toBeLessThanOrEqual(0.5);
     }
     report.push('', '| Game | Tier | Random-player gold/silver/bronze/none (of 30) | Mean money | Best-medal money |', '|---|---|---|---|---|');
-    for (const def of content.minigames.games) {
+  });
+
+  // One test per game, so a new game adds its own small test instead of lengthening one big one.
+  describe.each(content.minigames.games.map((g) => g.id))('%s', (id) => {
+    it('a random player earns little and is not handed gold on most runs', () => {
+      const eco = content.minigames.economy;
+      const def = content.minigames.games.find((g) => g.id === id)!;
       for (let tier = 0; tier < 3; tier++) {
         const medals = { gold: 0, silver: 0, bronze: 0, none: 0 };
         let money = 0;
@@ -100,9 +106,8 @@ describe('minigame payouts', () => {
         expect(medals.gold, `${def.id} tier ${tier + 1}`).toBeLessThanOrEqual(15);
         expect(money / 30, `${def.id} tier ${tier + 1}`).toBeLessThanOrEqual(best);
       }
-    }
-    report.push('');
-  }, 400000);
+    }, 120000);
+  });
 
   it('writes the report when asked', () => {
     if (process.env.BALANCE_REPORT) writeFileSync('docs/plans/balance-report.md', `${report.join('\n')}\n`);
