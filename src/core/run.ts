@@ -187,6 +187,8 @@ import { styleTrick } from './rivals/tricks';
 import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, recordNarrativeDefeat } from './rivals/narrativeDefeat';
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
+import { isBossFight } from './battle/spectacle';
+import { heartbondTurn, heartbondVictory } from './story2/heartbond';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
@@ -2546,6 +2548,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const enemyCombo_ = enemyCombo(content, run, enemyBefore);
   if (enemyCombo_) engineEvents.push(enemyCombo_);
   updateBondsTurn(run, engineEvents);
+  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, engineEvents as { type: string; side?: string; uid?: string }[]);
   partyLifeTurn(content, run, engineEvents);
   run.rng.battle = rng.state;
   run.rng.capture = captureRng.state;
@@ -2582,6 +2585,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
+  if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId));
   if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);

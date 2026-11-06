@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adjustBond, bondOf } from '../../src/core/bond';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { HEARTBOND, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
+import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
 import { content } from './helpers';
@@ -113,5 +113,28 @@ describe('core temperaments', () => {
     for (const id of ids) expect(temperamentOf(id), id).toBeDefined();
     for (const tm of Object.keys(TEMPERAMENTS)) expect(TEMPERAMENT_NAMES[tm as keyof typeof TEMPERAMENTS]).toBeTruthy();
     expect(temperamentOf('nope')).toBeUndefined();
+  });
+});
+
+describe('battle hooks', () => {
+  it('a partner Hyper moment pays once through the ledger; other Pokémon and replays pay nothing', () => {
+    const { run, uid } = setup();
+    const before = bondOf(run, uid).synchronization;
+    const ev = [{ type: 'hyper', side: 'player', uid }, { type: 'hyper', side: 'player', uid: 'other' }];
+    expect(heartbondTurn(run, 'b1', 2, ev).paid).toEqual(['hyper_moment']);
+    expect(bondOf(run, uid).synchronization - before).toBe(3);
+    expect(heartbondTurn(run, 'b1', 2, ev).paid).toEqual([]);
+  });
+  it('a milestone win pays only for a boss or rival fight, and only once', () => {
+    const { run, uid } = setup();
+    expect(heartbondVictory(run, 'b1', false).paid).toEqual([]);
+    expect(heartbondVictory(run, 'b1', true).paid).toEqual(['milestone_win']);
+    expect(heartbondVictory(run, 'b1', true).paid).toEqual([]);
+    expect(bondOf(run, uid).respect).toBeGreaterThan(0);
+  });
+  it('without a Story Run the hooks do nothing', () => {
+    const { run } = setup();
+    run.story.v2 = undefined;
+    expect(heartbondTurn(run, 'b', 1, [{ type: 'hyper', side: 'player', uid: 'x' }]).paid).toEqual([]);
   });
 });

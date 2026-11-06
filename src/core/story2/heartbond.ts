@@ -123,3 +123,33 @@ export function refreshHeartbond(run: RunState): { score: number; level: number;
   const level = heartbondLevel(score);
   return { score, level, latched: updateLatches(v2, level) };
 }
+
+type TurnEvent = { type: string; side?: string; uid?: string };
+
+/**
+ * Battle hook: reads one turn's events and pays the partner through the ledger. Only the partner earns Heartbond;
+ * a Hyper moment and a faint are the sources a plain turn can see (Feats, clutch and guard come from their own hooks).
+ */
+export function heartbondTurn(run: RunState, battleKey: string, turn: number, events: readonly TurnEvent[]): PayResult {
+  const partner = run.story.v2?.heartbond.partner;
+  if (!partner) return { paid: [], folded: [] };
+  const fired: string[] = [];
+  for (const e of events) {
+    if (e.uid !== partner || e.side !== 'player') continue;
+    if (e.type === 'hyper') fired.push('hyper_moment');
+    else if (e.type === 'faint') fired.push('faint_loss');
+  }
+  if (!fired.length) return { paid: [], folded: [] };
+  const r = payHeartbond(run, partner, battleKey, turn, fired);
+  refreshHeartbond(run);
+  return r;
+}
+
+/** A won battle: the partner earns a milestone win only when `milestone` (a leader, rival or boss fight). */
+export function heartbondVictory(run: RunState, battleKey: string, milestone: boolean): PayResult {
+  const partner = run.story.v2?.heartbond.partner;
+  if (!partner || !milestone || !run.party.some((m) => m.uid === partner)) return { paid: [], folded: [] };
+  const r = payHeartbond(run, partner, battleKey, 0, ['milestone_win']);
+  refreshHeartbond(run);
+  return r;
+}

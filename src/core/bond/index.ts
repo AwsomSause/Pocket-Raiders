@@ -53,7 +53,7 @@ export function updateBondsTurn(run: RunState, events: readonly BattleEvent[]): 
       const b = run.story.histories[e.uid] && bondOf(run, e.uid);
       if (b) adjustBond(b, { strain: 8, trust: -2, confidence: -5 });
       for (const m of run.party) if (m.uid !== e.uid && m.hp > 0 && run.story.histories[m.uid]) adjustBond(bondOf(run, m.uid), { strain: 1 });
-    } else if (e.type === 'hyper' && e.side === 'player' && run.story.histories[e.uid]) {
+    } else if (e.type === 'hyper' && e.side === 'player' && run.story.histories[e.uid] && run.story.v2?.heartbond.partner !== e.uid) {
       adjustBond(bondOf(run, e.uid), { trust: 3, synchronization: 3, confidence: 4 });
     } else if (e.type === 'faint' && e.side === 'enemy') {
       for (const uid of e.participants) if (run.story.histories[uid]) adjustBond(bondOf(run, uid), { synchronization: 1, confidence: 2 });
