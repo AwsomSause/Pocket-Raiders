@@ -173,6 +173,7 @@ import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
+import { advanceStreak, applyPity } from './streaks';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
@@ -327,6 +328,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     calendar: { today: null, startedOn: null },
     legacyRival: pickLegacyRival(opts.rivalArchive ?? [], opts.seed),
     rentalsUsed: [],
+    streaks: { wins: 0, best: 0, faintedSeen: 0, rareMisses: 0 },
     raids: { entered: 0, won: 0, lost: 0, bestTier: 0, done: [], escaped: [], unlockedTier: opts.raidTierUnlocked ?? 6 },
     totems: { entered: 0, won: 0, lost: 0, done: [], unlocks: [], research: 0 },
     expedition: null,
@@ -2700,6 +2702,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (hidden) itemsFound.push(hidden);
   const dropped = battle.kind === 'wild' ? catchDrop(run, stock, outcome === 'caught') : null;
   if (dropped) itemsFound.push(dropped);
+  const streakGift = outcome === 'win' ? advanceStreak(content, run) : null;
+  if (streakGift) itemsFound.push(streakGift.item);
   for (const id of itemsFound) addItem(run.inventory, id, 1);
   if (outcome === 'win') {
     count(run, 'battlesWon');
@@ -2850,7 +2854,8 @@ function newDraft(content: Content, run: RunState, weights: Parameters<typeof ge
   const forced = run.draftCarry ?? [];
   if (extra > 0) run.itemCounters = Object.fromEntries(Object.entries(run.itemCounters!).filter(([key]) => key !== 'draft-extra'));
   delete run.draftCarry;
-  return withStream(run.rng, 'reward', (r) => generateDraft(content, run, r, weights, undefined, { size: content.balance.draftSize + extra, forced }));
+  const draft = withStream(run.rng, 'reward', (r) => generateDraft(content, run, r, weights, undefined, { size: content.balance.draftSize + extra, forced }));
+  return applyPity(content, run, draft, forced);
 }
 
 /** Puts a reward into the next draft (once). */
