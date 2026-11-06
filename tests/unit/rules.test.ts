@@ -333,3 +333,28 @@ describe('Speed Clear (catalog 101)', () => {
     expect(quickWinBonus(off, 1)).toBe(0);
   });
 });
+
+describe('Endless Tower (S14)', () => {
+  const tower = () => ({ seed: 'tower-seed', mutators: undefined as string[] | undefined, rules: makeRules({ modeId: 'endless-tower', difficultyId: 'standard', modifierIds: [], deathBlock: false }), regionOrder: ['a', 'b'] });
+  it('has no lap limit and adds a level curse every lap', () => {
+    const run = tower();
+    const base = run.rules.enemyLevelBonus;
+    for (let i = 1; i <= 25; i++) expect(extendEndless(run as never)).toBe(true);
+    expect(run.rules.loops).toBe(25);
+    expect(run.regionOrder).toHaveLength(2 * 26);
+    expect(run.mutators).toHaveLength(25);
+    expect(run.rules.enemyLevelBonus).toBeGreaterThan(base + 25 * 4);
+  });
+  it('picks the same curses for the same seed', () => {
+    const a = tower();
+    const b = tower();
+    for (let i = 0; i < 6; i++) { extendEndless(a as never); extendEndless(b as never); }
+    expect(a.mutators).toEqual(b.mutators);
+  });
+  it('is a practice mode and plain Endless gains no curses', () => {
+    expect(RUN_RULES.modes.find((m) => m.id === 'endless-tower')!.progressionEligible).toBe(false);
+    const run = { ...tower(), rules: makeRules({ modeId: 'endless', difficultyId: 'standard', modifierIds: [], deathBlock: false }) };
+    extendEndless(run as never);
+    expect(run.mutators).toBeUndefined();
+  });
+});
