@@ -366,3 +366,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-s10-rivals.md`: Story S10: seven rivals data (teams, scenes, lines, packs), Kael/Soren clue ledgers, theme role table, fair-play audit gate (not yet wired into runs).
 - `story-s11-themes.md`: Story S11: four theme cards (Viridian, Rival's Promise, Champion's Legacy, Mythic Equation), ending sim, audit gate.
 - story-s5-backstory-loader.md: S5 backstory loader plus the Viridian slice (intro, events, arcs, echoes, ending, Chronicle, profile fold).
+- `story-s9b-fork-gate.md`: Story S9b: Fork Gate, pass, make-up fights and Rematch Day on the Orrery Circuit.

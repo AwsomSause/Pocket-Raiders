@@ -190,8 +190,9 @@ export function castAuthoredLeague(content: Content, run: RunState, regionIndex:
   return league;
 }
 
-/** The boss who runs the gym at a Story Run stage (the first door unless the player chose another). Null in Classic. */
+/** The boss who runs the gym at a Story Run stage: the chosen door, else the first one until the Fork Gate is answered. Null in Classic. */
 export function circuitLeader(content: Content, run: RunState, region: number, index: number): Boss | null {
-  const id = chooseDoor(content, run, region, index);
+  const c = ensureCircuit(content, run);
+  const id = c ? c.chosen[String(gymKey(region, index))] ?? c.cast[gymKey(region, index)]?.doors[0] : null;
   return id ? content.bosses.get(id) ?? null : null;
 }

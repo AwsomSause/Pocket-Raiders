@@ -1,6 +1,7 @@
 // Story Overhaul S4: the Orrery Circuit campaign and the Narrative Director (blueprint, Story Stops, Acts, evil override, League gate).
 
 import { describe, expect, it } from 'vitest';
+import { ensureCircuit, recordBadge } from '../../src/core/campaign/circuitCast';
 import { evilConfig, HIDEOUT_AT_LEAGUE, leagueAfterRegion } from '../../src/core/campaign/circuit';
 import {
   buildBlueprint, checksumOf, CHAMPION_STAGE, ELITE_STAGE, ensureStoryRun, replanStops, SCENE_STAGE, storyActOf, validateBlueprint, type DirectorInputs,
@@ -25,6 +26,11 @@ function winGym(run: RunState): RunState {
   mon.moves = [{ id: 'flamethrower', pp: 64 }, { id: 'crunch', pp: 64 }];
   r.party[0] = mon;
   r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
+  // The Gym Fork asks for a door first (S9b); any non-circuit answer takes the first one, then the gym node is chosen again.
+  if (r.phase === 'decision') {
+    r = resolveDecision(content, r, { kind: 'skipMove' }).run;
+    r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
+  }
   for (let guard = 0; r.phase !== 'map' && r.phase !== 'over' && guard < 600; guard++) {
     if (r.phase === 'battle') {
       for (const m of r.battle!.enemyTeam) m.hp = Math.min(m.hp, 1);
@@ -157,6 +163,7 @@ describe('the Orrery Circuit', () => {
     expect(leagueAfterRegion(content.campaigns.get('multi-region')!, 0)).toBe(true);
     let run = storyRun('circuit4');
     run.stage!.index = 7;
+    for (let i = 0; i < 5; i++) recordBadge(ensureCircuit(content, run)!, `earlier${i}`, 0, 'gym'); // six of eight: five earlier badges, this gym is the sixth
     run = winGym(run);
     expect(run.phase).toBe('map');
     expect(run.regionIndex).toBe(1);
@@ -167,6 +174,7 @@ describe('the Orrery Circuit', () => {
     expect(run.story.v2!.stops.done).toContain(gateStop.id);
     run.regionIndex = 2;
     run.stage!.index = 7;
+    for (let i = 0; i < 5; i++) recordBadge(ensureCircuit(content, run)!, `later${i}`, 2, 'gym');
     run = winGym(run);
     expect(run.stage!.kind).toBe('league');
     const champ = run.stage!.map.nodes.find((n) => n.kind === 'champion')!;
