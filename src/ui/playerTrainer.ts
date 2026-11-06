@@ -51,11 +51,14 @@ export class PlayerTrainerActor {
     y: number,
     private readonly height: number,
     private readonly motion: MotionLevel,
+    tint = 0xffffff,
   ) {
     const key = playerAnimId(look, 'back_idle');
     this.sprite = scene.add.sprite(x, y, key, '0001.png').setOrigin(0.5, 1);
     this.cell = this.sprite.height;
     this.sprite.setScale(height / this.cell);
+    /** P8: the generic pose wears the trainer's colour (white = untouched). Tint survives the frame swaps. */
+    if (tint !== 0xffffff) this.sprite.setTint(tint);
   }
 
   /** True when the Look's battle strips are loaded. */
