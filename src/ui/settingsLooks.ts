@@ -22,6 +22,10 @@ export interface SettingsLook {
   tabInk: (on: boolean) => string;
   /** A backing card behind the rows (notebook paper, sticker sheet), or null. */
   card?: { fill: number; rim: number };
+  /** Rows in this many columns when a page has enough rows (sticker cards). */
+  columns?: number;
+  /** A species that floats beside the rows (the Rotom assistant). */
+  mascot?: string;
 }
 
 const pill = (fill: number, rim: number, onRim: number, radius = 16, shadow = true): PillPainter => (g, x, y, w, h, s) => {
@@ -67,12 +71,12 @@ export const SETTINGS_LOOKS: Record<string, SettingsLook> = {
   rotom: {
     tabs: 'side', ink: '#2a2a32', kicker: 'Rotom Assistant', painter: pill(0xf2f2f4, 0xd8c8d0, 0xff6aa0, 14), thin: underline(0xb8c8d8, 0x2a9aff),
     tab: (g, x, y, w, h, on) => g.fillStyle(on ? 0xe83a3a : 0xffffff, 1).fillCircle(x + w / 2, y + h / 2, Math.min(w, h) / 2 + 2).lineStyle(3, 0x1a1a22, 1).strokeCircle(x + w / 2, y + h / 2, Math.min(w, h) / 2 + 2),
-    tabInk: (on) => (on ? '#ffffff' : '#2a2a32'),
+    tabInk: (on) => (on ? '#ffffff' : '#2a2a32'), mascot: 'rotom',
   },
   sticker: {
     tabs: 'top', ink: '#a02a70', kicker: 'Options', painter: pill(0xffffff, 0xff9ccc, 0xff4a98, 14, false), thin: underline(0xb8c8d8, 0x2a9aff),
     tab: (g, x, y, w, h, on) => g.fillStyle(on ? 0xff7ab8 : 0xffffff, 1).fillRoundedRect(x, y, w, h, h / 2).lineStyle(2, 0xff9ccc, 1).strokeRoundedRect(x, y, w, h, h / 2),
-    tabInk: (on) => (on ? '#ffffff' : '#a02a70'),
+    tabInk: (on) => (on ? '#ffffff' : '#a02a70'), columns: 2,
   },
 };
 

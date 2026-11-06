@@ -21,7 +21,7 @@ test('raid and totem looks draw their boss card and still start the fight', asyn
     await waitFor(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
-  const cases: [string, string, string][] = [['raid', 'maxden', 'raid'], ['raid', 'shonen', 'raid'], ['raid', 'tera', 'raid'], ['totem', 'ink', 'totem']];
+  const cases: [string, string, string][] = [['raid', 'maxden', 'raid'], ['raid', 'shonen', 'raid'], ['raid', 'tera', 'raid'], ['totem', 'ink', 'totem'], ['totem', 'sunset', 'totem'], ['totem', 'classic', 'totem']];
   for (const [screen, look, kind] of cases) {
     const sideId = await page.evaluate(([scr, st, k]) => {
       const p = (window as any).__pkr;

@@ -18,6 +18,7 @@ import { framedScreenshot, runShareCard } from '../ui/shareCard';
 import { UI_THEMES, themeIsLight, FONT_SCALE } from '../core/presentation/uiPrefs';
 import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
 import { drawSettingsTabs, hasSettingsLook, SETTINGS_LOOKS, type SettingsLook } from '../ui/settingsLooks';
+import { pokemonVisual } from '../ui/sprites';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { Picker } from '../ui/partyPanel';
@@ -286,7 +287,15 @@ export class SettingsScene extends Phaser.Scene {
         ui.add(gc);
       }
     } else ui.add(drawPanel(this, 40, top - 8, 560, 400 - (top - 78), { alpha: 0.95 }));
-    const rowH = Math.min(40, Math.floor((380 - (top - 78)) / Math.max(rows.length, 1)));
+    const cols = look?.columns && rows.length >= 6 ? look.columns : 1;
+    if (cols > 1) area = { ...area, w: Math.floor(area.w / cols) };
+    const rowH = Math.min(40, Math.floor((380 - (top - 78)) / Math.max(Math.ceil(rows.length / cols), 1)));
+    const mascot = look?.mascot ? services().session.content.species.get(look.mascot) : undefined;
+    if (mascot) {
+      const v = pokemonVisual(this, mascot, 'front', 820, 440, 3, false);
+      ui.add(v as unknown as Phaser.GameObjects.GameObject);
+      if (services().session.settings.battleAnimations !== 'off') this.tweens.add({ targets: v, y: 428, duration: 1100, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    }
     this.hintText = this.add.text(48, 474, '', textStyle(18, this.look && this.skinned?.light ? this.look.ink : COLORS.textLight, { wordWrap: { width: 800 } }));
     ui.add(this.hintText);
     ui.add(this.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 12, this.page === 'search' ? 'Type to search  ·  Up/Down  ·  Enter: change  ·  Esc: back' : 'Arrows: move  ·  Enter: change  ·  Esc: back', textStyle(14, COLORS.textMuted)).setOrigin(1, 1));
@@ -298,6 +307,7 @@ export class SettingsScene extends Phaser.Scene {
       ...(look ? { color: look.ink, glass: { motion: services().session.settings.battleAnimations, paint: rowH >= 30 ? look.painter : look.thin } } : this.look && this.skinned?.light ? { color: this.look.ink } : {}),
       itemWidth: area.w,
       itemHeight: rowH,
+      ...(cols > 1 ? { columns: cols } : {}),
       fontSize: rowH >= 36 ? 24 : rowH >= 30 ? 20 : 17,
       onSelect: (i) => rows[i]!.action(),
       onFocus: (i) => this.hintText?.setText(rows[i]?.hint ?? ''),

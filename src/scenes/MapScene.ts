@@ -1184,12 +1184,13 @@ export class MapScene extends Phaser.Scene {
     const pv = totemPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     // Screens redesign: the Ink Ruler look draws the totem card like its mock-up.
-    if (screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`) === 'ink') {
+    const totemLook = screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`);
+    if (totemLook !== 'original') {
       const leave = (): void => {
         this.picker?.close();
         this.picker = null;
       };
-      this.picker = new StopCard(this, 'ink', {
+      this.picker = new StopCard(this, totemLook as StopLook, {
         kicker: 'TOTEM',
         title: `${pv.name} · ${pv.tier}`,
         species,
