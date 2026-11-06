@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
 import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
@@ -151,6 +152,7 @@ export class MapScene extends Phaser.Scene {
   private picker: PickerLike | null = null;
   private info: Phaser.GameObjects.Text | null = null;
   private notice: Phaser.GameObjects.Text | null = null;
+  private omens: Record<string, Omen> = {};
   private endArmed = false;
   private busy = false;
   private colSpacing = COL_SPACING;
@@ -187,6 +189,7 @@ export class MapScene extends Phaser.Scene {
   preload(): void {
     const { session } = services();
     this.previews = session.run?.phase === 'map' ? mapPreviews(session.content, session.run) : {};
+    this.omens = session.run?.phase === 'map' ? mapOmens(session.content, session.run) : {};
     const shown = Object.values(this.previews).flatMap((p) => p.team.flatMap((m) => session.content.species.get(m.speciesId) ?? []));
     // Fishing spots beside the current node: their Pokémon are shown in the picker.
     const run = session.run;
@@ -565,6 +568,8 @@ export class MapScene extends Phaser.Scene {
       // Itemfinder: the stop hiding an item.
       if (n.id === hidden && !visited) mapLayer.add(this.add.text(x - r + 2, y - r + 2, '✦', textStyle(22, '#f8e070', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       if (!fog) this.drawPreview(mapLayer, n, x, y, r);
+      const omen = fog ? null : this.omens[n.id];
+      if (omen) mapLayer.add(this.add.text(x - r + 2, y + r - 12, '●', textStyle(20, OMEN_COLOR[omen.tier], { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       // A weather front over this node: a small badge in the front's colour.
       const front = fog ? null : frontAt(content, run, n);
       if (front) {
@@ -889,7 +894,7 @@ export class MapScene extends Phaser.Scene {
         const kind = boss ? `${boss.title}${types}` : KIND_STYLE[n.kind].label;
         const risk = n.harder ? '  ·  Risk: high (better rewards)' : boss ? '  ·  Risk: boss' : '';
         const sides = n.sides.map((s) => (s.kind === 'heal' ? 'healing spot' : s.kind === 'fish' ? 'fishing spot' : s.kind === 'raid' ? 'raid den' : s.kind === 'totem' ? 'Totem territory' : s.kind === 'expedition' ? 'expedition gate' : s.kind === 'service' ? (SERVICES.services.find((x) => x.id === s.serviceId)?.name ?? 'service') : s.kind === 'event' ? (stopIsHidden(content, services().session.run!, n, s) ? 'mystery "?" stop' : `${content.events.get(s.eventId ?? '')?.name ?? 'event'} stop`) : s.kind === 'plaza' ? 'Trainer Plaza' : 'shop'));
-        const seen = this.previewText(n) || (n.kind === 'wild' ? `Habitat: likely ${habitatList(services().session.content, services().session.run!).join(', ')}` : '');
+        const seen = this.previewText(n) || this.omens[n.id]?.text || (n.kind === 'wild' ? `Habitat: likely ${habitatList(services().session.content, services().session.run!).join(', ')}` : '');
         const route = routeKind(services().session.run!, n);
         const anomaly = stageAnomaly(services().session.content, services().session.run!);
         return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${seen ? `\n${seen}` : ''}`;
@@ -1624,6 +1629,8 @@ export class MapScene extends Phaser.Scene {
 }
 
 /** The newest rival headline for the map's notice corner (world recognition), or ''. */
+const OMEN_COLOR: Record<OmenTier, string> = { calm: '#70e070', uneasy: '#f0d060', dire: '#f06060' };
+
 function newsLine(content: Parameters<typeof topHeadline>[0], run: Parameters<typeof topHeadline>[1]): string {
   const h = topHeadline(content, run);
   return h ? `News: ${h}` : '';

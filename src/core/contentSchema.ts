@@ -1334,6 +1334,8 @@ export const EncounterModSchema = z.discriminatedUnion('mod', [
   /** A chance (percent per copy) that the wild Pokémon is this species. */
   z.object({ mod: z.literal('species'), species: z.string(), percent: z.number().positive().max(100) }),
   /** The wild Pokémon loses its first turn. */
+  /** Weather Idols (S427): the next wild battle starts in this weather. */
+  z.object({ mod: z.literal('weather'), weather: WeatherSchema }),
   z.object({ mod: z.literal('freeTurn') }),
   /** Catching the wild Pokémon also drops a cheap Bag item (Pinap Berry). */
   z.object({ mod: z.literal('drop') }),
@@ -1432,6 +1434,12 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */
   z.object({ perk: z.literal('journal') }),
+  /** Last Chance Charm (S389): after each won fight, one fallen Pokémon gets back up with part of its HP. */
+  z.object({ perk: z.literal('lastChance') }),
+  /** Augur's Bell (S380): the map shows an omen (calm, uneasy or dire) for each fight you can walk to. */
+  z.object({ perk: z.literal('omen') }),
+  /** Oval Charm (S432): every Egg gets one extra step toward hatching each time it would tick. */
+  z.object({ perk: z.literal('ovalCharm') }),
   /** Seal Case: catching a Pokémon shows a special effect and gives Luck. */
   z.object({ perk: z.literal('sealCase'), luck: z.number().int().positive() }),
   /** Seal Bag: items sell for their full shop price instead of half. */
@@ -1959,6 +1967,10 @@ export const BalanceSchema = z.object({
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
   /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
   priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
+  /** Omens (S380): the fight's gap = foe level (+perExtraFoe per extra foe) minus your best `partySample` fighters' level; at most calmAtMost is calm, at least direAtLeast is dire. */
+  omen: z.object({ partySample: z.number().int().min(1).max(6), perExtraFoe: z.number().min(0), calmAtMost: z.number(), direAtLeast: z.number() }).default({ partySample: 3, perExtraFoe: 2, calmAtMost: -2, direAtLeast: 4 }),
+  /** Last Chance Revives (S389): the share of max HP the revived Pokémon gets back. */
+  lastChance: z.object({ share: z.number().positive().max(1) }).default({ share: 0.25 }),
   /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
   wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */

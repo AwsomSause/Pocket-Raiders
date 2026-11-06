@@ -177,6 +177,8 @@ test('shop items: a Coupon halves a price and the Member Card sells an item earl
     node.sides = [{ id: 'e2e-shop', kind: 'shop', used: false }];
     run.stage.current = node.id;
     run.money = 5000;
+    // Dynamic Prices (S67) swing prices a little; this test is about something else, so switch the swing off.
+    session.content.balance.priceSwing = { range: 0, repeat: 0, repeatCap: 0 };
     session.visitSide('e2e-shop');
     session.run.shop.type = 'mart'; // this test is about the Poké Mart's stock
     for (const s of game.scene.getScenes(true)) s.scene.stop();

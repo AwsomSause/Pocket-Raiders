@@ -11,7 +11,7 @@
 // as before, and the items never change another stream's rolls.
 
 import { bridgeEventStop } from './events';
-import type { CatalogEffect, CatalogEntry, Content, EncounterMod, Perk, Theme, TypeName } from './contentSchema';
+import type { CatalogEffect, CatalogEntry, Content, EncounterMod, Perk, Theme, TypeName, Weather } from './contentSchema';
 import { hooksOf } from './battle/held';
 import { runArchetype } from './archetypes';
 import { fishingRareTriesPerk, foodCount, hiddenItemChancePerk } from './trainerPerks';
@@ -241,8 +241,10 @@ export function useRepel(content: Content, run: RunState): string {
 }
 
 /** Battle set-up from map items for a wild battle: free turns (Poké Doll) and the foe's lowered Speed (Poké Toy). */
-export function wildBattleSetup(content: Content, run: RunState, mods = activeMods(content, run)): { freeTurns: number; foeSpeed: number; drop: boolean } {
+export function wildBattleSetup(content: Content, run: RunState, mods = activeMods(content, run)): { freeTurns: number; foeSpeed: number; drop: boolean; weather: Weather | null } {
+  const weathers = modsOf(mods, 'weather');
   return {
+    weather: weathers.length > 0 ? weathers[weathers.length - 1]!.mod.weather : null,
     drop: modsOf(mods, 'drop').length > 0,
     freeTurns: modsOf(mods, 'freeTurn').length > 0 ? 1 : 0,
     foeSpeed: modsOf(mods, 'foeSpeed').reduce((sum, m) => sum + m.mod.stages * m.copies, 0),
