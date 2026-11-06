@@ -213,7 +213,7 @@ export const MORE_EVENTS: Json[] = [
     ch('Walk on', leave()),
   ]),
   ev('mirror-match', 'Mirror Match', T, { rarity: 'rare', minStage: 3, cast: ['trainer.mira'], effect: 'glint', tint: '#203040' }, 'A trainer who looks like you, with a team that looks like yours…', [
-    ch('Battle your mirror', fight('It\'s like fighting yourself!', trainer('Mirror Trainer', { size: 3, lv: 2, win: [better(1), attr('intelligence', 2)] }))),
+    ch('Battle your mirror', fight('It\'s like fighting yourself!', trainer('Mirror Trainer', { size: 3, lv: 2, mirror: true, win: [better(1), attr('intelligence', 2)] }))),
     ch('Walk away', out('Spooky.', attr('luck', 1))),
   ]),
   ev('little-league', 'Little League', T, { rarity: 'common', cast: ['trainer.youngster_m'], effect: 'sparkle' }, 'Kids practise battling. They want a coach.', [

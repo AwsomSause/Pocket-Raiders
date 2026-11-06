@@ -23,6 +23,7 @@ import { freshStages, freshVolatile, type BattleState, type DoublesState, type P
 import { firstStrikeBonus } from '../trainerEvolution';
 import { compareTurnOrder } from './damage';
 import { setAnnounceContent, doublesSteps as S, forcedMoveId, hasUsableMove, type BattleContext, type BattleEvent, type Combatant, type PlayerAction, type Side, type SlotCommand } from './engine';
+import { comboName } from './battleFlair';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
 
@@ -438,9 +439,12 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
   // Ideas W1 combo: two allies using damaging moves of the same type fire a joint attack; the second one hits harder.
   battle.comboUid = undefined;
   const mine = turn.queue.filter((p) => p.user.side === 'player' && p.move.category !== 'status' && p.move.power !== null);
-  if (mine.length === 2 && mine[0]!.move.type === mine[1]!.move.type) {
+  // S26: a named pair of types (Water + Electric = Thunderstorm, ...) also makes a combo.
+  const named = mine.length === 2 ? comboName(content, mine[0]!.move.type, mine[1]!.move.type) : null;
+  if (mine.length === 2 && (mine[0]!.move.type === mine[1]!.move.type || named)) {
     battle.comboUid = mine[1]!.user.mon.uid;
-    events.push({ type: 'spectacle', kind: 'combo', side: 'player', text: `${getSpecies(content, mine[0]!.user.mon.speciesId).name} and ${getSpecies(content, mine[1]!.user.mon.speciesId).name} line up a ${mine[0]!.move.type}-type combo attack!` });
+    const pairNames = `${getSpecies(content, mine[0]!.user.mon.speciesId).name} and ${getSpecies(content, mine[1]!.user.mon.speciesId).name}`;
+    events.push({ type: 'spectacle', kind: 'combo', side: 'player', text: named ? `${pairNames} combine into ${named}!` : `${pairNames} line up a ${mine[0]!.move.type}-type combo attack!` });
   }
 
   // 4. Moves.

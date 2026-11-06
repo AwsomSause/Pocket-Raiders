@@ -1,0 +1,12 @@
+- Battle/AI batch 4 (rundown §9; `balance.json` `battleFlair`, defaults in `core/battle/battleFlairConfig.ts`, rules in `core/battle/battleFlair.ts`):
+  - **S26 Combo Moves:** in doubles, two allies hitting with a named type pair (Water + Electric = Thunderstorm, Fire + Grass = Wildfire, 10 pairs) fire a named combo. It uses the same bonus as the old same-type combo.
+  - **S167 Combo Ability Pairs:** in doubles, ability pairs (Plus/Minus, Drizzle/Swift Swim, Drought/Chlorophyll, Intimidate/Defiant, ... 10 pairs) give both allies +1 once per battle.
+  - **S32 Spectator Crowd:** in trainer battles, the crowd cheers when you use your 3rd and 5th different damaging move type (+1 Attack or Sp. Atk to that Pokémon).
+  - **S44 Environmental Interactables:** a Water hit floods the floor for 3 turns, and the next Electric move then gets +30%, which drains the water. A Fire hit burns away Grassy Terrain and may burn the target.
+  - **S264 Boss Phase Scripts:** each boss phase (gym leaders, finals; spectacle phases) also swaps the boss's weakest move for its strongest same-type move it could know at its level. Raids and Totems are unchanged.
+  - **S265 Wild Behaviour Types:** existing wild behaviours now change the fight: territorial ones ambush (+Atk), guarding ones brace (+Def), timid ones are ready to bolt (+Spe), sick ones start at 75% HP. Singles only.
+  - **S278 Adaptive Shop AI:** shops take 20% off evolution items that someone in your party evolves with.
+  - **S281 Sabotage Events:** on each map step there is a 5% chance that your rival filches one item from a stack of 2+ healing or catching items. It never takes the last one, and the map shows a note. It rolls on its own seeded stream.
+  - **S274 Mirror Match (finished):** the mirror trainer now copies your lead and your other standing Pokémon (up to the fight's size), with their moves.
+  - Tests: `tests/unit/battleAiBatch4.test.ts`. Story fingerprints are unchanged because batch 4 is switched off there. No save change: `battle.flair` is optional.
+  - Limits: the flood and the crowd have no on-screen icon, only battle lines. Sabotage names "Your rival" rather than a specific rival.

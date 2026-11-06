@@ -55,6 +55,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
+import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
 import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
@@ -2741,6 +2742,11 @@ function executeMove(
   user.vol.exposed = false;
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
   if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
+  // S32: the crowd cheers when you show it a new mix of move types.
+  if (!continuing && user.side === 'player' && crowdSees(ctx.content, ctx.battle, move)) {
+    events.push(say('player', 'spectator', 'The crowd roars at the variety! They cheer your Pokémon on.', user.mon.uid));
+    applyStageChange(ctx, user, move.category === 'physical' ? 'atk' : 'spa', 1, events);
+  }
   if (!move.effects.rage) user.vol.raging = false;
   if (!move.effects.protect) user.vol.protectChain = 0;
   if (slot !== -1) Held.noteMoveUsed(ctx, user, move.id);
@@ -3312,6 +3318,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   let dealt = 0;
   let landed = 0;
   let anyCrit = false;
+  // S44: an Electric hit on a flooded floor shocks the water (once, then the water drains).
+  const shock = shockWater(content, ctx.battle, moveType);
+  if (shock > 1) events.push(say(user.side, 'arena', 'The current races through the water on the floor!', user.mon.uid));
   for (let hit = 0; hit < hits && target.mon.hp > 0 && user.mon.hp > 0; hit++) {
     let damage: number;
     let crit = false;
@@ -3366,6 +3375,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'orichalcum-pulse' && physical && weather === 'sun') attackBoost *= 4 / 3;
       if (userAbility === 'hadron-engine' && !physical && ctx.battle.terrain?.id === 'electric') attackBoost *= 4 / 3;
       if (sheerForce) powerMult *= 1.3;
+      powerMult *= shock;
       // S158 Ability Awakening.
       powerMult *= awakeningPower(content, user.mon);
       // S159 trainer class passives: the enemy team's signature-type power or guard.
@@ -3545,6 +3555,12 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   if (landed > 0) elementalReaction(ctx, user, target, moveType, events);
+  // S44: hits change the arena (Water floods the floor, Fire burns Grassy Terrain and may burn the target).
+  const arena = landed > 0 ? arenaReaction(content, ctx.battle, moveType) : null;
+  if (arena) {
+    events.push(say(user.side, 'arena', arena.text, user.mon.uid));
+    if (arena.kind === 'scorch' && target.mon.hp > 0 && !target.mon.status) tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
+  }
   if (landed > 0 && target.mon.hp > 0) {
     // Smelling Salts and Wake-Up Slap use up the status they punish; Steel Roller and Ice Spinner clear the terrain.
     const cures = (fx.powerRule === 'doubleTargetParalyzed' && target.mon.status?.id === 'par') || (fx.powerRule === 'doubleTargetAsleep' && target.mon.status?.id === 'slp');
@@ -5765,6 +5781,16 @@ export function w1DoublesStart(ctx: BattleContext, players: Combatant[], foes: C
       for (const [stat, n] of Object.entries(content.balance.w1.play.grudge.boost)) applyStageChange(ctx, c, stat as BoostStat, n, events);
     }
   }
+  // S167: two allies whose abilities pair up both get a boost, once a battle.
+  const pair = players.length === 2 && !battle.flair?.paired ? abilityPair(content, abilityIn(ctx, players[0]!), abilityIn(ctx, players[1]!)) : null;
+  if (pair) {
+    flairState(battle).paired = true;
+    events.push(say('player', 'combo', pair.text));
+    for (const c of players) {
+      focus?.(c);
+      applyStageChange(ctx, c, pair.boost, 1, events);
+    }
+  }
   if (battle.spectator && !battle.spectator.used) {
     battle.spectator.used = true;
     events.push(say('player', 'spectator', `${battle.spectator.name} cheers and tosses you a boost!`));
@@ -5884,6 +5910,9 @@ function spectacleEndOfTurn(ctx: BattleContext, spec: NonNullable<BattleState['s
   for (const due of duePhases(content, battle, spec, foe.hp / maxHp(content, foe))) {
     spec.phases.push(due.index);
     applyBossPhase(ctx, enemy, due.phase as RaidPhase, events);
+    // S264: each phase also brings out a stronger move.
+    const swap = phaseMoveSwap(content, foe);
+    if (swap) events.push(say('enemy', 'signature', `${nameOf(ctx, foe)} drops ${content.moves.get(swap.out)?.name ?? swap.out} and readies ${content.moves.get(swap.in)?.name ?? swap.in}!`, foe.uid));
   }
 }
 
