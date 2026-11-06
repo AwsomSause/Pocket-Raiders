@@ -297,6 +297,24 @@
       "blurb": "Retired: Quick Route is now a mode. Runs saved with this option still load.",
       "campaignId": "quick-route",
       "group": "campaign"
+    },
+    {
+      "id": "random-encounters",
+      "name": "Random Encounters",
+      "status": "supported",
+      "bonus": 0.1,
+      "blurb": "Randomizer: every wild Pokémon and ordinary trainer Pokémon is a random species. Bosses and rivals keep their teams.",
+      "group": "random-encounters",
+      "randomEncounters": true
+    },
+    {
+      "id": "random-moves",
+      "name": "Random Moves",
+      "status": "supported",
+      "bonus": 0.1,
+      "blurb": "Randomizer: every Pokémon you start with and every wild or ordinary trainer Pokémon gets a random moveset (two of its own types, two of any).",
+      "group": "random-moves",
+      "randomMoves": true
     }
   ],
   "modes": [
