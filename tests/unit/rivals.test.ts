@@ -332,7 +332,9 @@ describe('rival battle outcome in a real battle', () => {
     const r = after.story.rivals[0]!;
     expect(r.encounters).toBe(1);
     // W0: it watched the Tackle you used (not a status move, not your whole party).
-    expect(r.seen).toEqual([expect.objectContaining({ signal: 'moveType', value: 'normal', source: 'fought' })]);
+    expect(r.seen!.filter((s) => s.signal === 'moveType')).toEqual([expect.objectContaining({ signal: 'moveType', value: 'normal', source: 'fought' })]);
+    // W2: it also saw who you led with.
+    expect(r.seen).toContainEqual(expect.objectContaining({ signal: 'lead', value: again.party[0]!.speciesId }));
     expect(r.rivalPotential).toBeGreaterThan(first.story.rivals[0]!.rivalPotential);
     expect(['recognized', 'recurring', 'active', 'nemesis', 'contender', 'ally', 'retired']).toContain(r.state);
     // One encounter is enough history unless the rival became an ally or retired.

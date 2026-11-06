@@ -12,8 +12,8 @@ const envelope = (record: string, v: number, data: unknown) => JSON.stringify({ 
 const profileOf = () => new SaveManager(new MemoryStorageProvider(), content).loadOrCreateProfile(() => 'p1').profile;
 
 describe('save versions', () => {
-  it('are profile 20, run 40, settings 39 and every step has a migration', () => {
-    expect(CURRENT_VERSIONS).toMatchObject({ profile: 20, run: 40, settings: 39 });
+  it('are profile 20, run 40, settings 40 and every step has a migration', () => {
+    expect(CURRENT_VERSIONS).toMatchObject({ profile: 20, run: 40, settings: 40 });
     expect(MIGRATIONS.profile[19]).toBeTypeOf('function');
     expect(MIGRATIONS.run[39]).toBeTypeOf('function');
     expect(MIGRATIONS.settings[38]).toBeTypeOf('function');
@@ -126,8 +126,7 @@ describe('migration_failure_keeps_raw', () => {
 });
 
 describe('story data loader', () => {
-  it('ships empty story data that validates, with a hash', () => {
-    expect(content.storyData.characters).toEqual([]);
+  it('ships story data that validates, with a hash', () => {
     expect(content.storyData.hash).toMatch(/^[0-9a-f]{16}$/);
     expect(() => buildContent()).not.toThrow();
   });

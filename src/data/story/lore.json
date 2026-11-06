@@ -1,1 +1,466 @@
-[]
+[
+ {
+  "id": "lore_marauder_divisions",
+  "category": 3,
+  "nameKey": "lore.lore_marauder_divisions.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_pell_orrin",
+   "ch_cass_verrin"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_marauder_divisions.i1",
+    "sources": [
+     "ch_pell_orrin"
+    ]
+   },
+   {
+    "textKey": "lore.lore_marauder_divisions.i2",
+    "sources": [
+     "ch_cass_verrin"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_tally",
+  "category": 9,
+  "nameKey": "lore.lore_tally.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_tally"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_tally.i1",
+    "sources": [
+     "ch_tally"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_ex_criminal_notoriety",
+  "category": 2,
+  "nameKey": "lore.lore_ex_criminal_notoriety.name",
+  "states": [
+   "rumor",
+   "known"
+  ],
+  "sources": [
+   "ch_halima_fenn",
+   "ch_pell_orrin"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_ex_criminal_notoriety.i1",
+    "sources": [
+     "ch_halima_fenn"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_marr_heir",
+  "category": 4,
+  "nameKey": "lore.lore_marr_heir.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_odette_marr"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_marr_heir.i1",
+    "sources": [
+     "ch_odette_marr"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_bedrock",
+  "category": 9,
+  "nameKey": "lore.lore_bedrock.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_bedrock",
+   "ch_gideon_hartwell"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_bedrock.i1",
+    "sources": [
+     "ch_gideon_hartwell"
+    ]
+   },
+   {
+    "textKey": "lore.lore_bedrock.i2",
+    "sources": [
+     "ch_bedrock"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_hartwell_final",
+  "category": 5,
+  "nameKey": "lore.lore_hartwell_final.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_silas_crane",
+   "ch_tavi_marsh",
+   "ch_gideon_hartwell"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_hartwell_final.i1",
+    "sources": [
+     "ch_tavi_marsh"
+    ]
+   },
+   {
+    "textKey": "lore.lore_hartwell_final.i2",
+    "sources": [
+     "ch_silas_crane"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_weedle_two_readings",
+  "category": 9,
+  "nameKey": "lore.lore_weedle_two_readings.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_odessa_fennimore"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_weedle_two_readings.i1",
+    "sources": [
+     "ch_odessa_fennimore"
+    ]
+   },
+   {
+    "textKey": "lore.lore_weedle_two_readings.i2",
+    "sources": [
+     "ch_odessa_fennimore"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_viridian_gift",
+  "category": 9,
+  "nameKey": "lore.lore_viridian_gift.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_ilya_santangelo",
+   "ch_hollis_wren"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_viridian_gift.i1",
+    "sources": [
+     "ch_hollis_wren"
+    ]
+   },
+   {
+    "textKey": "lore.lore_viridian_gift.i2",
+    "sources": [
+     "ch_ilya_santangelo"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_the_hush",
+  "category": 6,
+  "nameKey": "lore.lore_the_hush.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_elder_butterfree"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_the_hush.i1",
+    "sources": [
+     "ch_elder_butterfree"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_greenwall_holdings",
+  "category": 2,
+  "nameKey": "lore.lore_greenwall_holdings.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_greenwall_manager",
+   "ch_hollis_wren"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_greenwall_holdings.i1",
+    "sources": [
+     "ch_hollis_wren"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_concordance",
+  "category": 3,
+  "nameKey": "lore.lore_concordance.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified",
+   "contested"
+  ],
+  "sources": [
+   "ch_okoro",
+   "ch_iris_vandermeer"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_concordance.i1",
+    "sources": [
+     "ch_okoro"
+    ]
+   },
+   {
+    "textKey": "lore.lore_concordance.i2",
+    "sources": [
+     "ch_iris_vandermeer"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_sound_of_quiet",
+  "category": 9,
+  "nameKey": "lore.lore_sound_of_quiet.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_okoro"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_sound_of_quiet.i1",
+    "sources": [
+     "ch_okoro"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_vance_reviewed",
+  "category": 5,
+  "nameKey": "lore.lore_vance_reviewed.name",
+  "states": [
+   "rumor",
+   "known"
+  ],
+  "sources": [
+   "ch_okoro"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_vance_reviewed.i1",
+    "sources": [
+     "ch_okoro"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_aether_division",
+  "category": 2,
+  "nameKey": "lore.lore_aether_division.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_castellan",
+   "ch_okoro"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_aether_division.i1",
+    "sources": [
+     "ch_castellan"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_cairnmoor_relic",
+  "category": 5,
+  "nameKey": "lore.lore_cairnmoor_relic.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_prosper_lund"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_cairnmoor_relic.i1",
+    "sources": [
+     "ch_prosper_lund"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_dictionary",
+  "category": 1,
+  "nameKey": "lore.lore_dictionary.name",
+  "states": [
+   "rumor",
+   "known"
+  ],
+  "sources": [
+   "ch_prosper_lund",
+   "ch_mara_kuroda_lund"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_dictionary.i1",
+    "sources": [
+     "ch_prosper_lund"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_kuroda_letter",
+  "category": 7,
+  "nameKey": "lore.lore_kuroda_letter.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_ravenna_kuroda"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_kuroda_letter.i1",
+    "sources": [
+     "ch_ravenna_kuroda"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_temporal_disturbance",
+  "category": 6,
+  "nameKey": "lore.lore_temporal_disturbance.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_prosper_lund"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_temporal_disturbance.i1",
+    "sources": [
+     "ch_prosper_lund"
+    ]
+   },
+   {
+    "textKey": "lore.lore_temporal_disturbance.i2",
+    "sources": [
+     "ch_ravenna_kuroda"
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,5 @@
+# Story S1, backstory 2: Champion to Be (`bs_champion_heir`)
+
+- Data only (`src/data/story/*.json`, `text/en.json`); the S5 loader plays it. 6 characters (Gideon Hartwell, Bedrock, Odette Marr, Silas Crane, Tavi Marsh, the Examiner), intro scene, the 8 events (Bedrock is a 4-step arc, Calls from Home is a 4-step arc), 3 echo events, reception modifiers, 5 ending scenes, 2 interactables, 3 Lore entries, Larvitar Remembrance. Every speaking role has 3 variants; story gates stay at 0.
+- Endings are an ordered grid, first match wins: Third Way, Heir, Refusal, Shadow, then Own Name as the catch-all. Meters (`legacy` -10..10, `own_name`) are flags/counters set by event effects.
+- Limits: stand-in art (existing trainer sprites; Bedrock uses the Tyranitar front sprite); `item_champions_ledger`, `item_marr_token`, `item_sponsor_funds`, `item_legacy_keepsake`, both encounter pools and `prop_hartwell_crest` are named but not built. The Gilt Circle antagonist is only a flag (`gilt_circle`). Effects are data for the S5 loader.

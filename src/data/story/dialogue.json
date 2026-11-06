@@ -1,1 +1,254 @@
-[]
+[
+ {
+  "id": "dlg_ev_intro_ex_criminal_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_ex_criminal.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_old_uniform_b2",
+  "speaker": "ch_pell_orrin",
+  "when": [],
+  "textKey": "ev_old_uniform.b2",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_unfinished_business_b2",
+  "speaker": "ch_cass_verrin",
+  "when": [],
+  "textKey": "ev_unfinished_business.b2",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_parole_b1",
+  "speaker": "ch_halima_fenn",
+  "when": [],
+  "textKey": "ev_parole.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_pell_defection_1_b1",
+  "speaker": "ch_pell_orrin",
+  "when": [],
+  "textKey": "ev_pell_defection_1.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_pell_defection_2_b1",
+  "speaker": "ch_pell_orrin",
+  "when": [],
+  "textKey": "ev_pell_defection_2.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_nell_rescue_1_b1",
+  "speaker": "ch_nell_hallam",
+  "when": [],
+  "textKey": "ev_nell_rescue_1.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_nell_rescue_2_b1",
+  "speaker": "ch_nell_hallam",
+  "when": [],
+  "textKey": "ev_nell_rescue_2.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_intro_champion_heir_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_champion_heir.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_name_to_live_up_to_b1",
+  "speaker": "ch_odette_marr",
+  "when": [],
+  "textKey": "ev_name_to_live_up_to.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_fathers_shadow_b1",
+  "speaker": "ch_silas_crane",
+  "when": [],
+  "textKey": "ev_fathers_shadow.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_1_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_1.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_2_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_2.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_3_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_3.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_4_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_4.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_press_pit_b1",
+  "speaker": "ch_tavi_marsh",
+  "when": [],
+  "textKey": "ev_press_pit.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_the_sponsor_b1",
+  "speaker": "ch_the_examiner",
+  "when": [],
+  "textKey": "ev_the_sponsor.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_intro_viridian_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_viridian.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_old_friend_b1",
+  "speaker": "ch_odessa_fennimore",
+  "when": [],
+  "textKey": "ev_old_friend.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_old_friend_2_b1",
+  "speaker": "ch_odessa_fennimore",
+  "when": [],
+  "textKey": "ev_old_friend_2.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_researchers_offer_b1",
+  "speaker": "ch_ilya_santangelo",
+  "when": [],
+  "textKey": "ev_researchers_offer.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_intro_aether_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_aether.b1",
+  "tags": [
+   "aether"
+  ]
+ },
+ {
+  "id": "dlg_ev_familiar_voice_b1",
+  "speaker": "ch_okoro",
+  "when": [],
+  "textKey": "ev_familiar_voice.b1",
+  "tags": [
+   "aether"
+  ]
+ },
+ {
+  "id": "dlg_ev_subject_four_b1",
+  "speaker": "ch_odile",
+  "when": [],
+  "textKey": "ev_subject_four.b1",
+  "tags": [
+   "aether"
+  ]
+ },
+ {
+  "id": "dlg_ev_decommission_b1",
+  "speaker": "ch_castellan",
+  "when": [],
+  "textKey": "ev_decommission.b1",
+  "tags": [
+   "aether"
+  ]
+ },
+ {
+  "id": "dlg_ev_intro_hisui_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_hisui.b1",
+  "tags": [
+   "hisui"
+  ]
+ },
+ {
+  "id": "dlg_ev_familiar_stranger_b1",
+  "speaker": "ch_mara_kuroda_lund",
+  "when": [],
+  "textKey": "ev_familiar_stranger.b1",
+  "tags": [
+   "hisui"
+  ]
+ },
+ {
+  "id": "dlg_ev_lost_vocabulary_b1",
+  "speaker": "ch_prosper_lund",
+  "when": [],
+  "textKey": "ev_lost_vocabulary.b1",
+  "tags": [
+   "hisui"
+  ]
+ }
+]

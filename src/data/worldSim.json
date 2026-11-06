@@ -1,0 +1,13 @@
+{
+  "_note": "Story Overhaul W8 (design 14.10): numbers and text for the world simulation tick. Status: limited.",
+  "budget": { "mystery": 4, "rumors": 12, "disturbances": 6, "recordsPerTick": 40, "hintsPerNode": 3 },
+  "chance": { "mystery": 0.35, "disturbance": 0.2 },
+  "mysteryReward": { "research": 3 },
+  "heardAfterBadges": 1,
+  "names": ["a hooded trainer", "a masked wanderer", "a trainer in a grey cloak", "a lone traveler with no badge", "a trainer nobody can name", "a hiker with a sealed letter"],
+  "rumors": {
+    "mystery": ["People say {who} slipped into {place} last night.", "Someone saw {who} heading for {place}.", "{place} has a new visitor: {who}."],
+    "disturbance": ["The wild Pokémon are restless. Something big is moving.", "A farmer swears a legendary shadow crossed the field.", "The birds all left town this morning."],
+    "heard": ["{leader} has heard your name.", "News of you reached {leader}.", "{leader} is expecting you."]
+  }
+}

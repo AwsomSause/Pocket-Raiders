@@ -738,8 +738,10 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
-  /** W0: damaging moves you used this battle, by move id (the rival's adaptations read only what it saw here). */
+  /** W0/W2: moves you used this battle, by move id (the rival's adaptations read only what it saw here). */
   playerMovesSeen: z.record(z.string(), z.number().int().min(1)).optional(),
+  /** W2: times you chose to switch this battle (rival adaptation trigger #4). */
+  playerSwitches: z.number().int().min(0).optional(),
   /** Beta 4.4: your Pokémon that already got a Hyper slot this battle (once each). */
   hyperMoved: z.array(z.string()).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
@@ -1713,7 +1715,9 @@ export const SettingsSchema = z.object({
   /** Skip the drifting ambience particles (clouds, fog and rays stay). */
   reduceParticles: z.boolean().default(false),
   /** Battle text speed: all at once, a quick typewriter, or a slower one. */
-  textSpeed: z.enum(['instant', 'fast', 'normal', 'slow']).default('instant'),
+  textSpeed: z.enum(['instant', 'faster', 'fast', 'normal', 'slow']).default('instant'),
+  /** How fast spoken lines (trainers talking) type out; they always type like speech unless 'instant'. */
+  speechSpeed: z.enum(['slow', 'normal', 'fast', 'faster', 'instant']).default('normal'),
   /** Battle messages move on by themselves after `messageDelay` (otherwise only move and damage lines do). */
   autoAdvance: z.boolean().default(false),
   messageDelay: z.enum(['short', 'normal', 'long']).default('normal'),

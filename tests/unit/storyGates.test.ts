@@ -5,7 +5,8 @@ import { PARITY_ITEMS, storyGates, type StoryGateContext } from '../../src/quali
 import { BackstorySchema, RemembranceSchema, type StoryData } from '../../src/core/story2/schema';
 import { content } from './helpers';
 
-const empty = (): StoryData => structuredClone(content.storyData);
+// A blank StoryData: the shipped story content is authored now, so gate tests start from empty arrays.
+const empty = (): StoryData => ({ ...structuredClone(content.storyData), characters: [], events: [], arcs: [], themes: [], remembrances: [], moveMoments: [], dialogue: [], lore: [], news: [], interactables: [], backstories: [], quiz: [], text: {} });
 const count = (data: StoryData, id: string, ctx: StoryGateContext = {}) => storyGates(data, content, ctx).find((g) => g.id === id)!.offenders.length;
 const character = (over: object = {}) => ({ id: 'dara', v: 1, nameKey: 'c.dara', age: 20, role: 'rival' as const, poses: { a: 'x.png', b: 'y.png', c: 'z.png', d: 'w.png' }, tier: 1 as const, party: [], relationClass: 'friend' as const, romanceable: false, tellings: [], bio: [{ tier: 1, textKey: 'c.dara.bio', spoiler: false }], flags: [], ...over });
 const event = (over: object = {}) => ({ id: 'ev', v: 1, tags: [], requires: [], roles: {}, beats: [], choices: [], outputs: [], variants: [], cost: 1, tier: 'A' as const, moment: 'none' as const, ...over });

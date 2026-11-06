@@ -1,1 +1,232 @@
-[]
+[
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "id": "int_old_access_door",
+  "verbs": [
+   "use",
+   "look"
+  ],
+  "icon": "keepsake",
+  "outputs": [
+   {
+    "id": "int_old_access_door_1",
+    "kind": "open_door",
+    "phrase": "old_access_phrase",
+    "oncePerRun": true
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "id": "int_sleeper_informant",
+  "verbs": [
+   "talk",
+   "look"
+  ],
+  "outputs": [
+   {
+    "id": "int_sleeper_informant_1",
+    "kind": "start_battle",
+    "character": "ch_marek_voss"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "id": "int_family_name_door",
+  "verbs": [
+   "talk",
+   "use"
+  ],
+  "icon": "badge",
+  "outputs": [
+   {
+    "id": "int_family_name_door_1",
+    "kind": "start_battle",
+    "character": "ch_silas_crane",
+    "speak": "family_name"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "id": "int_fan_autograph",
+  "verbs": [
+   "talk",
+   "look"
+  ],
+  "outputs": [
+   {
+    "id": "int_fan_autograph_1",
+    "kind": "add_counter",
+    "counter": "legacy",
+    "amount": 1
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   },
+   {
+    "kind": "flag",
+    "key": "rapport",
+    "op": ">=",
+    "value": 6
+   }
+  ],
+  "id": "int_walk_up_wild",
+  "verbs": [
+   "talk",
+   "look"
+  ],
+  "icon": "bandana",
+  "outputs": [
+   {
+    "id": "int_walk_up_wild_1",
+    "kind": "walk_up_join",
+    "nodes": 1
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "id": "int_ranger_shortcut",
+  "verbs": [
+   "use"
+  ],
+  "outputs": [
+   {
+    "id": "int_ranger_shortcut_1",
+    "kind": "skip_node",
+    "oncePerAct": true
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "id": "int_research_terminal",
+  "verbs": [
+   "use",
+   "read"
+  ],
+  "icon": "tone",
+  "outputs": [
+   {
+    "id": "int_research_terminal_1",
+    "kind": "free_hint",
+    "oncePerFacility": true
+   },
+   {
+    "id": "int_research_terminal_2",
+    "kind": "unlock_lore",
+    "lore": "lore_concordance",
+    "state": "known"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "id": "int_scan_gate",
+  "verbs": [
+   "use"
+  ],
+  "outputs": [
+   {
+    "id": "int_scan_gate_1",
+    "kind": "add_counter",
+    "counter": "telemetry",
+    "amount": 1
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "id": "int_dig_puzzle_door",
+  "verbs": [
+   "use",
+   "look"
+  ],
+  "icon": "tone",
+  "outputs": [
+   {
+    "id": "int_dig_puzzle_door_1",
+    "kind": "puzzle_door",
+    "site": "archaeological"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "id": "int_time_slip_wild",
+  "verbs": [
+   "look",
+   "talk"
+  ],
+  "outputs": [
+   {
+    "id": "int_time_slip_wild_1",
+    "kind": "start_battle",
+    "character": "ch_tin",
+    "timeSlip": true
+   }
+  ]
+ }
+]

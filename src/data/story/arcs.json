@@ -1,1 +1,400 @@
-[]
+[
+ {
+  "id": "arc_tally",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_tally_1"
+   },
+   {
+    "event": "ev_tally_2"
+   },
+   {
+    "event": "ev_tally_3"
+   },
+   {
+    "event": "ev_tally_4"
+   },
+   {
+    "event": "ev_tally_5",
+    "onFail": "ev_echo_ex_crim_03"
+   }
+  ],
+  "nodeCost": 5,
+  "branches": [
+   {
+    "id": "follow",
+    "exit": "tally_trusted",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   },
+   {
+    "id": "let_go",
+    "exit": "tally_lost"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_tally_fx_1",
+    "kind": "unlock",
+    "what": "remembrance",
+    "target": "rm_sandile"
+   }
+  ],
+  "exits": [
+   "tally_trusted",
+   "tally_lost"
+  ]
+ },
+ {
+  "id": "arc_pell_defection",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_pell_defection_1"
+   },
+   {
+    "event": "ev_pell_defection_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "done",
+    "exit": "pell_defected"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_pell_defection_fx_1",
+    "kind": "set_flag",
+    "key": "pell_state",
+    "value": "defected"
+   }
+  ],
+  "exits": [
+   "pell_defected"
+  ]
+ },
+ {
+  "id": "arc_nell_rescue",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_nell_rescue_1"
+   },
+   {
+    "event": "ev_nell_rescue_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "done",
+    "exit": "nell_rescued"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_nell_rescue_fx_1",
+    "kind": "add_counter",
+    "counter": "redemption",
+    "amount": 8
+   }
+  ],
+  "exits": [
+   "nell_rescued"
+  ]
+ },
+ {
+  "id": "arc_bedrock",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_bedrock_1"
+   },
+   {
+    "event": "ev_bedrock_2"
+   },
+   {
+    "event": "ev_bedrock_3"
+   },
+   {
+    "event": "ev_bedrock_4"
+   }
+  ],
+  "nodeCost": 4,
+  "branches": [
+   {
+    "id": "pass",
+    "exit": "bedrock_ally"
+   },
+   {
+    "id": "fall_short",
+    "exit": "bedrock_distant"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_bedrock_fx_1",
+    "kind": "unlock",
+    "what": "remembrance",
+    "target": "rm_larvitar"
+   }
+  ],
+  "exits": [
+   "bedrock_ally",
+   "bedrock_distant"
+  ]
+ },
+ {
+  "id": "arc_hartwell_calls",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_hartwell_call_1"
+   },
+   {
+    "event": "ev_hartwell_call_2"
+   },
+   {
+    "event": "ev_hartwell_call_3"
+   },
+   {
+    "event": "ev_hartwell_call_4"
+   }
+  ],
+  "nodeCost": 0,
+  "branches": [
+   {
+    "id": "warm",
+    "exit": "call_warm"
+   },
+   {
+    "id": "stilted",
+    "exit": "call_stilted"
+   },
+   {
+    "id": "argument",
+    "exit": "call_argument"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "call_warm",
+   "call_stilted",
+   "call_argument"
+  ]
+ },
+ {
+  "id": "arc_old_friend",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_old_friend"
+   },
+   {
+    "event": "ev_old_friend_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "done",
+    "exit": "weedle_remembered"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_old_friend_fx_1",
+    "kind": "unlock",
+    "what": "remembrance",
+    "target": "rm_weedle"
+   }
+  ],
+  "exits": [
+   "weedle_remembered"
+  ]
+ },
+ {
+  "id": "arc_migration",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_migration_1"
+   },
+   {
+    "event": "ev_migration_2"
+   },
+   {
+    "event": "ev_migration_3"
+   },
+   {
+    "event": "ev_migration_4"
+   },
+   {
+    "event": "ev_migration_5"
+   }
+  ],
+  "nodeCost": 5,
+  "branches": [
+   {
+    "id": "solved",
+    "exit": "migration_solved"
+   },
+   {
+    "id": "failed",
+    "exit": "migration_failed"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "migration_solved",
+   "migration_failed"
+  ]
+ },
+ {
+  "id": "arc_proto",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_proto_1"
+   },
+   {
+    "event": "ev_proto_2"
+   },
+   {
+    "event": "ev_proto_3"
+   },
+   {
+    "event": "ev_proto_4"
+   }
+  ],
+  "nodeCost": 4,
+  "branches": [
+   {
+    "id": "stabilize",
+    "exit": "proto_partner"
+   },
+   {
+    "id": "retrieve",
+    "exit": "proto_retrieved"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "proto_partner",
+   "proto_retrieved"
+  ]
+ },
+ {
+  "id": "arc_audio_logs",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_audio_log_1"
+   },
+   {
+    "event": "ev_audio_log_2"
+   },
+   {
+    "event": "ev_audio_log_3"
+   }
+  ],
+  "nodeCost": 0,
+  "branches": [
+   {
+    "id": "all",
+    "exit": "logs_complete"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_audio_logs_fx_1",
+    "kind": "unlock_lore",
+    "lore": "lore_sound_of_quiet",
+    "state": "known"
+   },
+   {
+    "id": "arc_audio_logs_fx_2",
+    "kind": "set_flag",
+    "key": "starter_line_quiet",
+    "value": true
+   }
+  ],
+  "exits": [
+   "logs_complete"
+  ]
+ },
+ {
+  "id": "arc_captive",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_captive_1"
+   },
+   {
+    "event": "ev_captive_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "out",
+    "exit": "captive_out"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "captive_out"
+  ]
+ },
+ {
+  "id": "arc_temporal",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_temporal_1"
+   },
+   {
+    "event": "ev_temporal_2"
+   },
+   {
+    "event": "ev_temporal_3"
+   },
+   {
+    "event": "ev_temporal_4"
+   },
+   {
+    "event": "ev_temporal_5"
+   }
+  ],
+  "nodeCost": 5,
+  "branches": [
+   {
+    "id": "home",
+    "exit": "went_home"
+   },
+   {
+    "id": "stay",
+    "exit": "stayed"
+   },
+   {
+    "id": "bridge",
+    "exit": "bridged"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "went_home",
+   "stayed",
+   "bridged"
+  ]
+ }
+]

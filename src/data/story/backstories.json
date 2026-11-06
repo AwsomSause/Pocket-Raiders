@@ -1,1 +1,546 @@
-[]
+[
+ {
+  "id": "bs_ex_criminal",
+  "nameKey": "bs.ex_criminal.name",
+  "signatureProp": "prop_torn_patch",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_old_uniform",
+   "ev_unfinished_business",
+   "ev_tally_1",
+   "ev_ledger_room",
+   "ev_parole",
+   "ev_dead_drop",
+   "ev_rank_and_file",
+   "ev_departure_truth"
+  ],
+  "echoEvents": [
+   "ev_echo_ex_crim_01",
+   "ev_echo_ex_crim_02",
+   "ev_echo_ex_crim_03"
+  ],
+  "encounterPools": [
+   "enc_marauder_squad_ex",
+   "enc_abandoned_pawniard"
+  ],
+  "remembranceUnlocks": [
+   "rm_sandile",
+   "rm_pawniard"
+  ],
+  "exclusiveItem": "item_old_pass",
+  "endings": [
+   "end_redeemed",
+   "end_reconciled",
+   "end_relapse",
+   "end_ghost"
+  ],
+  "catchAllEnding": "end_ghost",
+  "endingGrid": [
+   {
+    "ending": "end_redeemed",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "redemption",
+      "op": ">=",
+      "value": 70
+     },
+     {
+      "kind": "flag",
+      "key": "truth_accepted",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_reconciled",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "redemption",
+      "op": ">=",
+      "value": 45
+     },
+     {
+      "kind": "flag",
+      "key": "truth_accepted",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_relapse",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "contract_done",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "truth_accepted",
+      "op": "==",
+      "value": false
+     }
+    ]
+   },
+   {
+    "ending": "end_ghost",
+    "when": []
+   }
+  ]
+ },
+ {
+  "id": "bs_champion_heir",
+  "nameKey": "bs.champion_heir.name",
+  "signatureProp": "prop_hartwell_crest",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_name_to_live_up_to",
+   "ev_bedrock_1",
+   "ev_unfinished_final",
+   "ev_fathers_shadow",
+   "ev_hartwell_call_1",
+   "ev_press_pit",
+   "ev_trophy_room",
+   "ev_the_sponsor"
+  ],
+  "echoEvents": [
+   "ev_echo_champion_heir_01",
+   "ev_echo_champion_heir_02",
+   "ev_echo_champion_heir_03"
+  ],
+  "encounterPools": [
+   "enc_family_name_veterans",
+   "enc_old_guard_elite"
+  ],
+  "remembranceUnlocks": [
+   "rm_larvitar"
+  ],
+  "exclusiveItem": "item_champions_ledger",
+  "endings": [
+   "end_third_way",
+   "end_heir",
+   "end_refusal",
+   "end_shadow",
+   "end_own_name"
+  ],
+  "catchAllEnding": "end_own_name",
+  "endingGrid": [
+   {
+    "ending": "end_third_way",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "own_name",
+      "op": ">=",
+      "value": 3
+     },
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "affection",
+      "op": ">=",
+      "value": 50
+     },
+     {
+      "kind": "flag",
+      "key": "final_resolved",
+      "op": "!=",
+      "value": "none"
+     }
+    ]
+   },
+   {
+    "ending": "end_heir",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 6
+     },
+     {
+      "kind": "flag",
+      "key": "championship_won",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_refusal",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": "<=",
+      "value": -6
+     }
+    ]
+   },
+   {
+    "ending": "end_shadow",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 3
+     },
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "respect",
+      "op": "<",
+      "value": 30
+     },
+     {
+      "kind": "flag",
+      "key": "final_loss",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_own_name",
+    "when": []
+   }
+  ]
+ },
+ {
+  "id": "bs_viridian",
+  "nameKey": "bs.viridian.name",
+  "signatureProp": "prop_leaf_satchel",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_forest_remembers",
+   "ev_old_friend",
+   "ev_migration_1",
+   "ev_childhood_map",
+   "ev_first_aid",
+   "ev_researchers_offer",
+   "ev_the_hush",
+   "ev_last_summer"
+  ],
+  "echoEvents": [
+   "ev_echo_viridian_01",
+   "ev_echo_viridian_02",
+   "ev_echo_viridian_03"
+  ],
+  "encounterPools": [
+   "enc_walk_up_wild",
+   "enc_viridian_boss_act4"
+  ],
+  "remembranceUnlocks": [
+   "rm_caterpie",
+   "rm_weedle",
+   "rm_oddish",
+   "rm_poliwag"
+  ],
+  "exclusiveItem": "item_greenwardens_whistle",
+  "endings": [
+   "end_gardener",
+   "end_echo",
+   "end_listener",
+   "end_reckoning"
+  ],
+  "catchAllEnding": "end_reckoning",
+  "endingGrid": [
+   {
+    "ending": "end_gardener",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 8
+     },
+     {
+      "kind": "flag",
+      "key": "migration",
+      "op": "!=",
+      "value": "sabotaged"
+     },
+     {
+      "kind": "flag",
+      "key": "migration",
+      "op": "!=",
+      "value": "none"
+     }
+    ]
+   },
+   {
+    "ending": "end_echo",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport_nature",
+      "op": "==",
+      "value": "resonant"
+     },
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 9
+     }
+    ]
+   },
+   {
+    "ending": "end_listener",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport_nature",
+      "op": "==",
+      "value": "practiced"
+     },
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   },
+   {
+    "ending": "end_reckoning",
+    "when": []
+   }
+  ]
+ },
+ {
+  "id": "bs_aether",
+  "nameKey": "bs.aether.name",
+  "signatureProp": "prop_zero_stitch",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_subject_zero",
+   "ev_familiar_voice",
+   "ev_humanitys_question",
+   "ev_proto_1",
+   "ev_calibration",
+   "ev_subject_four",
+   "ev_audio_log_1",
+   "ev_decommission"
+  ],
+  "echoEvents": [
+   "ev_echo_aether_01",
+   "ev_echo_aether_02",
+   "ev_echo_aether_03"
+  ],
+  "encounterPools": [
+   "enc_gene_spliced",
+   "enc_containment_squad"
+  ],
+  "remembranceUnlocks": [
+   "rm_ralts",
+   "rm_porygon"
+  ],
+  "exclusiveItem": "item_concordance_core",
+  "endings": [
+   "end_own_choice",
+   "end_proof",
+   "end_integration",
+   "end_dissolve"
+  ],
+  "catchAllEnding": "end_dissolve",
+  "endingGrid": [
+   {
+    "ending": "end_own_choice",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 70
+     }
+    ]
+   },
+   {
+    "ending": "end_proof",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "false"
+     },
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "ending": "end_proof",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "inverted"
+     },
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "ending": "end_integration",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   },
+   {
+    "ending": "end_dissolve",
+    "when": []
+   }
+  ]
+ },
+ {
+  "id": "bs_hisui",
+  "nameKey": "bs.hisui.name",
+  "signatureProp": "prop_hisuian_satchel",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_world_reborn",
+   "ev_familiar_stranger",
+   "ev_old_method",
+   "ev_temporal_1",
+   "ev_lost_vocabulary",
+   "ev_old_road",
+   "ev_museum_piece",
+   "ev_return_window"
+  ],
+  "echoEvents": [
+   "ev_echo_hisui_01",
+   "ev_echo_hisui_02",
+   "ev_echo_hisui_03"
+  ],
+  "encounterPools": [
+   "enc_hisuian_alpha",
+   "enc_time_slip",
+   "enc_ancient_trainers"
+  ],
+  "remembranceUnlocks": [
+   "rm_rowlet",
+   "rm_cyndaquil",
+   "rm_oshawott"
+  ],
+  "exclusiveItem": "item_hisuian_satchel",
+  "endings": [
+   "end_home",
+   "end_bridge",
+   "end_present",
+   "end_lost"
+  ],
+  "catchAllEnding": "end_lost",
+  "endingGrid": [
+   {
+    "ending": "end_home",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "return_choice",
+      "op": "==",
+      "value": "home"
+     }
+    ]
+   },
+   {
+    "ending": "end_bridge",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "window_state",
+      "op": "==",
+      "value": "open"
+     }
+    ]
+   },
+   {
+    "ending": "end_present",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "return_choice",
+      "op": "==",
+      "value": "stay"
+     },
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": "<",
+      "value": 4
+     }
+    ]
+   },
+   {
+    "ending": "end_present",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "return_choice",
+      "op": "==",
+      "value": "stay"
+     }
+    ]
+   },
+   {
+    "ending": "end_lost",
+    "when": []
+   }
+  ]
+ }
+]

@@ -76,7 +76,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle } from './events';
+import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -212,9 +212,14 @@ import { finalRivalLine, tellCampfire } from './story/highHype';
 import { ultimateRival } from './rivals/ultimate';
 import { applyGrandInfluence, endGrandBattle, grandNotes, startGrandBattle } from './story/grandEnemy';
 import { simulateRivalWorld } from './rivals/world';
+import { grantShinyEgg } from './shinyEgg';
+import { worldTick } from './worldSim/tick';
 import { noteProtagonistTitle, rivalSighting } from './rivals/recognition';
 import { rivalRivalries, rivalTeamUp } from './rivals/rivalries';
 import { ensureAce, withSignatureAce } from './rivals/signatureTeam';
+import { withAceLadder } from './rivals/aces';
+import { rivalAdaptation } from './rivals/adaptTriggers';
+import { teamCoverageMax, withCoverage } from './rivals/coverage';
 import { pickLegacyRival } from './rivals/legacy';
 import { rivalReturn, rivalReturnFlag, rivalSeenFlag, RIVAL_SEEN_ANY, scheduleKey, waitingRival } from './rivals/adapt';
 import { rematchRule, returnFlag, revisedTeam, waitingTrainer } from './story/returns';
@@ -232,6 +237,7 @@ import { evilStageStart } from './evil/teams';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
+import { PSEUDO } from './dungeon/pseudo';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
 import { planReunion, reunionPokemon } from './story/reunion';
@@ -610,6 +616,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
+  grantShinyEgg(content, run);
   simulateRivalWorld(content, run);
   rivalCatchesMonRival(content, run);
   rivalRivalries(content, run);
@@ -619,6 +626,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   tellAct(content, run);
   worldStageStart(content, run);
   evilStageStart(content, run);
+  worldTick(content, run);
   applyGrandInfluence(content, run);
   growCrisis(content, run);
   grandGauntlet(content, run);
@@ -1883,7 +1891,14 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       ensureAce(content, rivalBack);
       // §21 a major rival keeps its semi-canon team; §9/§10 its ace carries what it learned.
       const ret = rivalReturn(content, run, rivalBack, canonPlan(content, rivalBack, plan), rule.effect);
-      ret.plan = withAceProgress(content, rivalBack, withSignatureAce(content, rivalBack, ret.plan));
+      // W2 (14.6/14.7/14.5): the ace's ladder step, then the adaptation triggers (from what the rival saw), then the ace's coverage set.
+      const ladder = withAceLadder(content, run, rivalBack, withSignatureAce(content, rivalBack, ret.plan));
+      ret.plan = withAceProgress(content, rivalBack, ladder.plan);
+      const adapted = rivalAdaptation(content, run, rivalBack, ret.plan, !!ret.countered, teamCoverageMax(content, run));
+      const coverage = withCoverage(content, run, rivalBack, adapted.plan, !!ret.countered || adapted.applied.length > 0, teamCoverageMax(content, run) - adapted.coverage);
+      ret.plan = coverage.plan;
+      const w2 = [ladder.note, ...adapted.lines, coverage.note].filter(Boolean).join(' ');
+      if (w2) ret.note = [ret.note, w2].filter(Boolean).join(' ');
       // §11 a Pokémon rival it caught is always on its team, last in line (behind its ace).
       carried = carriedMonRival(run, rivalBack);
       if (carried) {
@@ -2599,6 +2614,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     failRaid(content, run);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
+  }
+  if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
+    pseudoLost(content, run);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
   }
   if (battle.outcome === 'lose' && battle.event && isApprenticeBattle(content, battle.event)) {
     apprenticeLost(content, run);
@@ -3606,4 +3626,15 @@ export function debugGiveItem(content: Content, current: RunState, itemId: strin
 /** Overhaul slice 20: gives the battle just created its environment and (rarely) a condition. Seeded by hash, no RNG stream used. */
 function assignField(content: Content, run: RunState, boss: boolean): void {
   run.battle!.overhaulField = rollField(run.seed, run.encountersCompleted, boss ? 'boss' : run.regionIndex < 2 ? 'mid' : 'late', content.balance.overhaulField);
+}
+
+/** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
+export function pseudoLost(content: Content, run: RunState): void {
+  for (const m of run.party) {
+    const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
+    if (m.hp < floor) m.hp = floor;
+    m.status = null;
+  }
+  run.battle = null;
+  run.phase = 'map';
 }

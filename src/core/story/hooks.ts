@@ -49,6 +49,7 @@ import { addReputation } from '../rivals/reputation';
 import { createMajorRival, learnFromBattle, recordAce, type Knockout } from '../rivals/major';
 import { maybeFormMonRival, monRivalAfterBattle, monRivalCandidate } from '../rivals/monRivals';
 import { recordSacrifice } from '../rivals/sacrifice';
+import { longestSweep, recordSightings } from '../rivals/adaptTriggers';
 
 const ENGINE_EFFECTS = new Set<string>(Object.values(HYPER_EFFECTS));
 
@@ -298,7 +299,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         emit(content, run, 'knockout', {
           where,
           actors: by ? [e.uid, by] : [e.uid],
-          data: { side: e.side, moveId: move, speciesId: mon(e.uid)?.speciesId ?? null, bySpeciesId: mon(by)?.speciesId ?? null },
+          data: { side: e.side, moveId: move, speciesId: mon(e.uid)?.speciesId ?? null, bySpeciesId: mon(by)?.speciesId ?? null, turn: run.battle?.turn ?? 0 },
           text: e.side === 'player' ? `Fainted to ${speciesOf(by)}` : avenged ? `Avenged a fallen teammate by knocking out ${speciesOf(e.uid)}` : `Knocked out ${speciesOf(e.uid)}`,
           importance: avenged ? content.story.importance.closeCall : undefined,
           emotions: avenged ? ['justice'] : undefined,
@@ -618,6 +619,16 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
     rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
+    // W2: everything else it watched (setup, switches, your lead, a sweep, a legend...) for its adaptation triggers.
+    const leadUid = run.story.events.find((e) => e.type === 'battleStarted' && e.where.battle === index)?.actors[0];
+    recordSightings(content, rivalBack, {
+      moves: battle.playerMovesSeen ?? {},
+      switches: battle.playerSwitches ?? 0,
+      gimmicks: battle.transform?.used.player ?? [],
+      lead: run.party.find((m) => m.uid === leadUid)?.speciesId ?? null,
+      sweep: longestSweep(kos.filter((k) => k.data.side === 'enemy' && k.actors[1]).map((k) => ({ by: k.actors[1]!, turn: Number(k.data.turn ?? 0) }))),
+      legends: run.party.filter((m) => fought.includes(m.uid) && content.species.get(m.speciesId)?.tags.some((t) => t === 'legendary' || t === 'mythical')).map((m) => m.speciesId),
+    }, ended.id);
     // §9/§10: the ace's record, and what the rival learned from this battle.
     recordAce(content, rivalBack, battle.enemyTeam, result === 'lose');
     for (const text of learnFromBattle(content, run, rivalBack, enemyKos, where)) emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: rivalBack.id, outcome: 'studied' }, text });

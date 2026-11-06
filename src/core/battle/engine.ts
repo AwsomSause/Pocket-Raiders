@@ -713,6 +713,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
   // 1. Switching and items go before any move.
   if (action.kind === 'switch') {
+    battle.playerSwitches = (battle.playerSwitches ?? 0) + 1;
     events.push({ type: 'switchOut', side: 'player', uid: ctx.party[battle.activeIndex]!.uid });
     // Switching out ends a Dynamax.
     endDynamax(content, battle, 'player', ctx.party[battle.activeIndex]!, events as TransformStepEvent[]);
@@ -2841,7 +2842,7 @@ function executeMove(
   user.vol.exposed = false;
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
   if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
-  if (!continuing && user.side === 'player' && move.category !== 'status') {
+  if (!continuing && user.side === 'player') {
     const seenMoves = (ctx.battle.playerMovesSeen ??= {});
     seenMoves[move.id] = (seenMoves[move.id] ?? 0) + 1;
   }

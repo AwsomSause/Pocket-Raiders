@@ -1,0 +1,517 @@
+{
+ "note": "Story Overhaul W2 (design 14.5): 20 coverage sets a rival ace may carry. Each must pass the fairness budget (balance.rivalCoverage, core/rivals/coverage.ts). openWeakness = the ace's weaknesses no coverage move answers (computed and checked by tests). A move the species can't learn falls back to its closest same-type move (status limited).",
+ "sets": [
+  {
+   "id": "cv_swellow_heat_wave",
+   "species": "swellow",
+   "philosophy": "unexpected_coverage",
+   "stab": [
+    "brave-bird"
+   ],
+   "coverage": [
+    {
+     "move": "heat-wave",
+     "answers": [
+      "grass",
+      "ice",
+      "bug",
+      "steel"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "electric",
+    "rock"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "late"
+  },
+  {
+   "id": "cv_typhlosion_thunder_punch",
+   "species": "typhlosion",
+   "philosophy": "counter_training",
+   "stab": [
+    "flamethrower"
+   ],
+   "coverage": [
+    {
+     "move": "thunder-punch",
+     "answers": [
+      "water",
+      "flying"
+     ],
+     "learn": "tutor"
+    }
+   ],
+   "openWeakness": [
+    "ground",
+    "rock"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_gyarados_ice_fang",
+   "species": "gyarados",
+   "philosophy": "counter_training",
+   "stab": [
+    "waterfall"
+   ],
+   "coverage": [
+    {
+     "move": "ice-fang",
+     "answers": [
+      "grass",
+      "ground",
+      "flying",
+      "dragon"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "electric",
+    "rock"
+   ],
+   "minPhase": "late",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_garchomp_fire_fang",
+   "species": "garchomp",
+   "philosophy": "anticipation_training",
+   "stab": [
+    "dragon-claw"
+   ],
+   "coverage": [
+    {
+     "move": "fire-fang",
+     "answers": [
+      "grass",
+      "ice",
+      "bug",
+      "steel"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "dragon",
+    "fairy"
+   ],
+   "minPhase": "late",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_excadrill_rock_slide",
+   "species": "excadrill",
+   "philosophy": "specialist_training",
+   "stab": [
+    "drill-run"
+   ],
+   "coverage": [
+    {
+     "move": "rock-slide",
+     "answers": [
+      "fire",
+      "ice",
+      "flying",
+      "bug"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "water",
+    "ground",
+    "fighting"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_alakazam_energy_ball",
+   "species": "alakazam",
+   "philosophy": "counter_training",
+   "stab": [
+    "psychic"
+   ],
+   "coverage": [
+    {
+     "move": "energy-ball",
+     "answers": [
+      "water",
+      "ground",
+      "rock"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "bug",
+    "ghost",
+    "dark"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_blaziken_thunder_punch",
+   "species": "blaziken",
+   "philosophy": "counter_training",
+   "stab": [
+    "blaze-kick"
+   ],
+   "coverage": [
+    {
+     "move": "thunder-punch",
+     "answers": [
+      "water",
+      "flying"
+     ],
+     "learn": "tutor"
+    }
+   ],
+   "openWeakness": [
+    "ground",
+    "psychic"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_roserade_weather_ball",
+   "species": "roserade",
+   "philosophy": "experimental_training",
+   "stab": [
+    "giga-drain"
+   ],
+   "coverage": [
+    {
+     "move": "weather-ball",
+     "answers": [
+      "steel",
+      "bug",
+      "ice"
+     ],
+     "learn": "level",
+     "asType": "fire"
+    }
+   ],
+   "openWeakness": [
+    "fire",
+    "flying",
+    "psychic"
+   ],
+   "minPhase": "late",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_feraligatr_dragon_claw",
+   "species": "feraligatr",
+   "philosophy": "counter_training",
+   "stab": [
+    "waterfall"
+   ],
+   "coverage": [
+    {
+     "move": "dragon-claw",
+     "answers": [
+      "dragon"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "electric",
+    "grass"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_tyranitar_fire_blast",
+   "species": "tyranitar",
+   "philosophy": "counter_training",
+   "stab": [
+    "crunch"
+   ],
+   "coverage": [
+    {
+     "move": "fire-blast",
+     "answers": [
+      "steel",
+      "ice",
+      "bug"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "fighting",
+    "water",
+    "ground",
+    "fairy"
+   ],
+   "minPhase": "late",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_gengar_focus_blast",
+   "species": "gengar",
+   "philosophy": "unexpected_coverage",
+   "stab": [
+    "shadow-ball"
+   ],
+   "coverage": [
+    {
+     "move": "focus-blast",
+     "answers": [
+      "dark",
+      "normal",
+      "steel"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "ground",
+    "psychic",
+    "ghost"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_gardevoir_mystical_fire",
+   "species": "gardevoir",
+   "philosophy": "personal_signature",
+   "stab": [
+    "moonblast"
+   ],
+   "coverage": [
+    {
+     "move": "mystical-fire",
+     "answers": [
+      "steel",
+      "bug"
+     ],
+     "learn": "level"
+    }
+   ],
+   "openWeakness": [
+    "poison",
+    "ghost"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_lucario_shadow_ball",
+   "species": "lucario",
+   "philosophy": "counter_training",
+   "stab": [
+    "aura-sphere"
+   ],
+   "coverage": [
+    {
+     "move": "shadow-ball",
+     "answers": [
+      "ghost",
+      "psychic"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "fire",
+    "fighting",
+    "ground"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_dragonite_earthquake",
+   "species": "dragonite",
+   "philosophy": "anticipation_training",
+   "stab": [
+    "dragon-claw"
+   ],
+   "coverage": [
+    {
+     "move": "earthquake",
+     "answers": [
+      "electric",
+      "steel",
+      "fire"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "ice",
+    "dragon",
+    "fairy"
+   ],
+   "minPhase": "late",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_arcanine_thunder_fang",
+   "species": "arcanine",
+   "philosophy": "counter_training",
+   "stab": [
+    "flare-blitz"
+   ],
+   "coverage": [
+    {
+     "move": "thunder-fang",
+     "answers": [
+      "water",
+      "flying"
+     ],
+     "learn": "egg"
+    }
+   ],
+   "openWeakness": [
+    "ground",
+    "rock"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_machamp_ice_punch",
+   "species": "machamp",
+   "philosophy": "counter_training",
+   "stab": [
+    "cross-chop"
+   ],
+   "coverage": [
+    {
+     "move": "ice-punch",
+     "answers": [
+      "flying",
+      "grass",
+      "dragon"
+     ],
+     "learn": "tutor"
+    }
+   ],
+   "openWeakness": [
+    "psychic",
+    "fairy"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_starmie_grass_knot",
+   "species": "starmie",
+   "philosophy": "counter_training",
+   "stab": [
+    "surf"
+   ],
+   "coverage": [
+    {
+     "move": "grass-knot",
+     "answers": [
+      "water",
+      "ground",
+      "rock"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "electric",
+    "grass",
+    "bug",
+    "ghost",
+    "dark"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_pidgeot_heat_wave",
+   "species": "pidgeot",
+   "philosophy": "unexpected_coverage",
+   "stab": [
+    "hurricane"
+   ],
+   "coverage": [
+    {
+     "move": "heat-wave",
+     "answers": [
+      "steel",
+      "bug",
+      "grass"
+     ],
+     "learn": "level"
+    }
+   ],
+   "openWeakness": [
+    "electric",
+    "rock"
+   ],
+   "minPhase": "early",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_weavile_poison_jab",
+   "species": "weavile",
+   "philosophy": "counter_training",
+   "stab": [
+    "night-slash"
+   ],
+   "coverage": [
+    {
+     "move": "poison-jab",
+     "answers": [
+      "fairy",
+      "grass"
+     ],
+     "learn": "level"
+    }
+   ],
+   "openWeakness": [
+    "fighting",
+    "fire",
+    "bug",
+    "rock",
+    "steel"
+   ],
+   "minPhase": "mid",
+   "maxPhase": "champion"
+  },
+  {
+   "id": "cv_zoroark_focus_blast",
+   "species": "zoroark",
+   "philosophy": "unexpected_coverage",
+   "stab": [
+    "night-daze"
+   ],
+   "coverage": [
+    {
+     "move": "focus-blast",
+     "answers": [
+      "normal",
+      "dark",
+      "steel"
+     ],
+     "learn": "tm"
+    }
+   ],
+   "openWeakness": [
+    "fighting",
+    "bug",
+    "fairy"
+   ],
+   "minPhase": "late",
+   "maxPhase": "champion"
+  }
+ ]
+}

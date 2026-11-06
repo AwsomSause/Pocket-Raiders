@@ -1,1 +1,931 @@
-[]
+[
+ {
+  "id": "ch_vance",
+  "v": 1,
+  "nameKey": "ch.ch_vance.name",
+  "age": 55,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lenora.png",
+   "happy": "public/assets/images/trainer/lenora.png",
+   "angry": "public/assets/images/trainer/lenora.png",
+   "sad": "public/assets/images/trainer/lenora.png"
+  },
+  "tier": 1,
+  "home": "lantern_hollow",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "dictaphone_note"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_vance.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_vance.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_vance.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_pell_orrin",
+  "v": 1,
+  "nameKey": "ch.ch_pell_orrin.name",
+  "age": 24,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/roughneck.png",
+   "happy": "public/assets/images/trainer/roughneck.png",
+   "angry": "public/assets/images/trainer/roughneck.png",
+   "sad": "public/assets/images/trainer/roughneck.png"
+  },
+  "tier": 1,
+  "home": "forest_road",
+  "party": [
+   "pawniard"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "jokes_to_hide_worry"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_pell_orrin.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_pell_orrin.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_pell_orrin.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_cass_verrin",
+  "v": 1,
+  "nameKey": "ch.ch_cass_verrin.name",
+  "age": 38,
+  "role": "villain",
+  "poses": {
+   "neutral": "public/assets/images/trainer/malva.png",
+   "happy": "public/assets/images/trainer/malva.png",
+   "angry": "public/assets/images/trainer/malva.png",
+   "sad": "public/assets/images/trainer/malva.png"
+  },
+  "tier": 1,
+  "home": "marauder_cafe",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_cass_verrin.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_cass_verrin.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_cass_verrin.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_halima_fenn",
+  "v": 1,
+  "nameKey": "ch.ch_halima_fenn.name",
+  "age": 41,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/viola.png",
+   "happy": "public/assets/images/trainer/viola.png",
+   "angry": "public/assets/images/trainer/viola.png",
+   "sad": "public/assets/images/trainer/viola.png"
+  },
+  "tier": 1,
+  "home": "integrity_bureau",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_halima_fenn.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_halima_fenn.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_halima_fenn.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_marek_voss",
+  "v": 1,
+  "nameKey": "ch.ch_marek_voss.name",
+  "age": 47,
+  "role": "villain",
+  "poses": {
+   "neutral": "public/assets/images/trainer/drayton.png",
+   "happy": "public/assets/images/trainer/drayton.png"
+  },
+  "tier": 2,
+  "home": "marauder_acquisition",
+  "party": [],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_marek_voss.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_marek_voss.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_tally",
+  "v": 1,
+  "nameKey": "ch.ch_tally.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/551.png",
+   "happy": "public/assets/images/pokemon/551.png"
+  },
+  "tier": 2,
+  "party": [
+   "sandile"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "clipped_scale"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_tally.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_tally.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_nell_hallam",
+  "v": 1,
+  "nameKey": "ch.ch_nell_hallam.name",
+  "age": 19,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/fairy_tale_girl.png",
+   "happy": "public/assets/images/trainer/fairy_tale_girl.png"
+  },
+  "tier": 2,
+  "home": "hollow_tree",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_nell_hallam.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_nell_hallam.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_gideon_hartwell",
+  "v": 1,
+  "nameKey": "ch.ch_gideon_hartwell.name",
+  "age": 52,
+  "role": "family",
+  "poses": {
+   "neutral": "public/assets/images/trainer/blue.png",
+   "happy": "public/assets/images/trainer/blue.png",
+   "angry": "public/assets/images/trainer/blue.png",
+   "sad": "public/assets/images/trainer/blue.png"
+  },
+  "tier": 1,
+  "home": "hartwell_house",
+  "party": [
+   "tyranitar"
+  ],
+  "relationClass": "family",
+  "romanceable": false,
+  "tellings": [
+   "stiff_two_sentences"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_gideon_hartwell.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_gideon_hartwell.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_gideon_hartwell.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_bedrock",
+  "v": 1,
+  "nameKey": "ch.ch_bedrock.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/248.png",
+   "happy": "public/assets/images/pokemon/248.png"
+  },
+  "tier": 2,
+  "party": [
+   "tyranitar"
+  ],
+  "relationClass": "family",
+  "romanceable": false,
+  "tellings": [
+   "scarred_watcher"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_bedrock.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_bedrock.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_odette_marr",
+  "v": 1,
+  "nameKey": "ch.ch_odette_marr.name",
+  "age": 46,
+  "role": "leader",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lenora.png",
+   "happy": "public/assets/images/trainer/lenora.png",
+   "angry": "public/assets/images/trainer/lenora.png",
+   "sad": "public/assets/images/trainer/lenora.png"
+  },
+  "tier": 1,
+  "home": "marr_gym",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_odette_marr.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_odette_marr.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_odette_marr.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_silas_crane",
+  "v": 1,
+  "nameKey": "ch.ch_silas_crane.name",
+  "age": 50,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/roark.png",
+   "happy": "public/assets/images/trainer/roark.png"
+  },
+  "tier": 2,
+  "home": "crane_dojo",
+  "party": [],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_silas_crane.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_silas_crane.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_tavi_marsh",
+  "v": 1,
+  "nameKey": "ch.ch_tavi_marsh.name",
+  "age": 33,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/penny.png",
+   "happy": "public/assets/images/trainer/penny.png"
+  },
+  "tier": 2,
+  "home": "league_press",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_tavi_marsh.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_tavi_marsh.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_the_examiner",
+  "v": 1,
+  "nameKey": "ch.ch_the_examiner.name",
+  "age": 58,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/wikstrom.png"
+  },
+  "tier": 3,
+  "home": "league_office",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_the_examiner.bio1",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_hollis_wren",
+  "v": 1,
+  "nameKey": "ch.ch_hollis_wren.name",
+  "age": 67,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/hiker.png",
+   "happy": "public/assets/images/trainer/hiker.png",
+   "angry": "public/assets/images/trainer/hiker.png",
+   "sad": "public/assets/images/trainer/hiker.png"
+  },
+  "tier": 1,
+  "home": "viridian_forest",
+  "party": [
+   "arcanine"
+  ],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "reads_tracks"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_hollis_wren.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_hollis_wren.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_hollis_wren.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_odessa_fennimore",
+  "v": 1,
+  "nameKey": "ch.ch_odessa_fennimore.name",
+  "age": 29,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/aroma_lady.png",
+   "happy": "public/assets/images/trainer/aroma_lady.png",
+   "angry": "public/assets/images/trainer/aroma_lady.png",
+   "sad": "public/assets/images/trainer/aroma_lady.png"
+  },
+  "tier": 1,
+  "home": "berry_farm",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_odessa_fennimore.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_odessa_fennimore.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_odessa_fennimore.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_ilya_santangelo",
+  "v": 1,
+  "nameKey": "ch.ch_ilya_santangelo.name",
+  "age": 44,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/will.png",
+   "happy": "public/assets/images/trainer/will.png",
+   "angry": "public/assets/images/trainer/will.png",
+   "sad": "public/assets/images/trainer/will.png"
+  },
+  "tier": 1,
+  "home": "field_lab",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_ilya_santangelo.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_ilya_santangelo.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_ilya_santangelo.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_elder_butterfree",
+  "v": 1,
+  "nameKey": "ch.ch_elder_butterfree.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/12.png",
+   "happy": "public/assets/images/pokemon/12.png"
+  },
+  "tier": 2,
+  "party": [
+   "butterfree"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "regal_bearing"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_elder_butterfree.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_elder_butterfree.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_greenwall_manager",
+  "v": 1,
+  "nameKey": "ch.ch_greenwall_manager.name",
+  "age": 39,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/worker_m.png"
+  },
+  "tier": 3,
+  "home": "greenwall_holdings",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_greenwall_manager.bio1",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_okoro",
+  "v": 1,
+  "nameKey": "ch.ch_okoro.name",
+  "age": 58,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/amarys.png",
+   "happy": "public/assets/images/trainer/amarys.png",
+   "angry": "public/assets/images/trainer/amarys.png",
+   "sad": "public/assets/images/trainer/amarys.png"
+  },
+  "tier": 1,
+  "home": "halvard_aether_division",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "counting_voice"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_okoro.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_okoro.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_okoro.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_castellan",
+  "v": 1,
+  "nameKey": "ch.ch_castellan.name",
+  "age": 51,
+  "role": "villain",
+  "poses": {
+   "neutral": "public/assets/images/trainer/will.png",
+   "happy": "public/assets/images/trainer/will.png",
+   "angry": "public/assets/images/trainer/will.png",
+   "sad": "public/assets/images/trainer/will.png"
+  },
+  "tier": 1,
+  "home": "containment",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_castellan.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_castellan.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_castellan.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_odile",
+  "v": 1,
+  "nameKey": "ch.ch_odile.name",
+  "age": 20,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/tulip.png",
+   "happy": "public/assets/images/trainer/tulip.png",
+   "angry": "public/assets/images/trainer/tulip.png",
+   "sad": "public/assets/images/trainer/tulip.png"
+  },
+  "tier": 1,
+  "home": "concordance_orbit",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "subject_four"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_odile.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_odile.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_odile.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_proto",
+  "v": 1,
+  "nameKey": "ch.ch_proto.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/137.png",
+   "happy": "public/assets/images/pokemon/137.png"
+  },
+  "tier": 2,
+  "party": [
+   "porygon"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "failed_loop"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_proto.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_proto.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_iris_vandermeer",
+  "v": 1,
+  "nameKey": "ch.ch_iris_vandermeer.name",
+  "age": 36,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lacey.png",
+   "happy": "public/assets/images/trainer/lacey.png"
+  },
+  "tier": 2,
+  "home": "clinic",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_iris_vandermeer.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_iris_vandermeer.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_ravenna_kuroda",
+  "v": 1,
+  "nameKey": "ch.ch_ravenna_kuroda.name",
+  "age": 45,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lenora.png",
+   "happy": "public/assets/images/trainer/lenora.png",
+   "angry": "public/assets/images/trainer/lenora.png",
+   "sad": "public/assets/images/trainer/lenora.png"
+  },
+  "tier": 1,
+  "home": "hisui_survey_corps",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "stern_and_wry"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_ravenna_kuroda.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_ravenna_kuroda.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_ravenna_kuroda.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_prosper_lund",
+  "v": 1,
+  "nameKey": "ch.ch_prosper_lund.name",
+  "age": 38,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/burgh.png",
+   "happy": "public/assets/images/trainer/burgh.png",
+   "angry": "public/assets/images/trainer/burgh.png",
+   "sad": "public/assets/images/trainer/burgh.png"
+  },
+  "tier": 1,
+  "home": "cairnmoor_dig",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "too_excited"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_prosper_lund.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_prosper_lund.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_prosper_lund.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_mara_kuroda_lund",
+  "v": 1,
+  "nameKey": "ch.ch_mara_kuroda_lund.name",
+  "age": 27,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/viola.png",
+   "happy": "public/assets/images/trainer/viola.png",
+   "angry": "public/assets/images/trainer/viola.png",
+   "sad": "public/assets/images/trainer/viola.png"
+  },
+  "tier": 1,
+  "home": "ferry_stop",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_mara_kuroda_lund.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_mara_kuroda_lund.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_tin",
+  "v": 1,
+  "nameKey": "ch.ch_tin.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/722.png"
+  },
+  "tier": 3,
+  "party": [
+   "rowlet"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "left_behind"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_tin.bio1",
+    "spoiler": true
+   }
+  ]
+ }
+]

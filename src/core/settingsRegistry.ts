@@ -11,7 +11,7 @@ import { AUTO_RULES } from './battle/autoBattle';
 import { applyPerfPreset, nextPerfPreset, PERF_INFO } from './tools/perfPreset';
 import { nextPadButton, PAD_ACTIONS, PAD_ACTION_LABEL, POPUP_SCALES, PAD_BUTTON_NAMES, remapPad, TOOLTIP_DELAY_MS, TRANSITION_INFO, UI_THEME_ORDER, UI_THEMES } from './presentation/uiPrefs';
 
-export type SettingCategory = 'display' | 'audio' | 'gameplay' | 'animations' | 'text' | 'accessibility' | 'controls' | 'data';
+export type SettingCategory = 'display' | 'audio' | 'gameplay' | 'animations' | 'text' | 'accessibility' | 'controls' | 'story' | 'data';
 
 export const SETTING_CATEGORIES: { id: SettingCategory; label: string; blurb: string }[] = [
   { id: 'display', label: 'Display', blurb: 'Screen size, contrast and interface look.' },
@@ -21,6 +21,7 @@ export const SETTING_CATEGORIES: { id: SettingCategory; label: string; blurb: st
   { id: 'text', label: 'Text & Dialogue', blurb: 'Text speed, trainer talk and battle messages.' },
   { id: 'accessibility', label: 'Accessibility', blurb: 'Presets, reduced effects and readability.' },
   { id: 'controls', label: 'Controls', blurb: 'Gamepad, touch layout, hold-to-confirm and haptics.' },
+  { id: 'story', label: 'Story', blurb: 'Story scenes, dramatic moments, subtitles and spoilers.' },
   { id: 'data', label: 'Save & Data', blurb: 'Export, import and reset.' },
 ];
 
@@ -47,6 +48,15 @@ export interface SettingDef {
 }
 
 type Key = keyof Settings;
+type StoryKey = keyof Settings['story'];
+
+/** A Story Run setting that cycles through `order`. Story settings never change the accessibility profile. */
+function storyChoice<K extends StoryKey>(key: K, labels: Record<string, string>, order: readonly Settings['story'][K][]): Pick<SettingDef, 'show' | 'next'> {
+  return {
+    show: (s) => labels[String(s.story[key])] ?? String(s.story[key]),
+    next: (s) => ({ ...s, story: { ...s.story, [key]: order[(order.indexOf(s.story[key]) + 1) % order.length]! } }),
+  };
+}
 
 const custom = (s: Settings): Settings => ({ ...s, accessibilityProfile: 'custom' });
 const pct = (v: number) => `${Math.round(v * 100)}%`;
@@ -147,7 +157,8 @@ export const SETTINGS: SettingDef[] = [
   { id: 'shakeIntensity', label: 'Screen shake', description: 'How strong screen shake is. 0% turns it off.', category: 'animations', also: ['accessibility'], applies: 'now', disabled: (s) => animOff(s) || s.battleAnimations !== 'full', ...level('shakeIntensity', [1, 0.5, 0.25, 0], 0.01) },
   { id: 'reduceParticles', label: 'Particle effects', description: 'Reduced drops the drifting specks; clouds and fog stay.', category: 'animations', also: ['accessibility'], applies: 'now', disabled: animOff, ...toggle('reduceParticles', 'Reduced', 'Full') },
   // Text & Dialogue
-  { id: 'textSpeed', label: 'Battle text speed', description: 'How fast battle messages appear.', category: 'text', applies: 'now', ...choice('textSpeed', { instant: 'Instant', fast: 'Fast', normal: 'Normal', slow: 'Slow' }, ['instant', 'fast', 'normal', 'slow']) },
+  { id: 'textSpeed', label: 'Battle text speed', description: 'How fast battle messages appear.', category: 'text', applies: 'now', ...choice('textSpeed', { instant: 'Instant', faster: 'Faster', fast: 'Fast', normal: 'Normal', slow: 'Slow' }, ['instant', 'faster', 'fast', 'normal', 'slow']) },
+  { id: 'speechSpeed', label: 'Speech speed', description: 'How fast trainers\' lines type out. Lines slow at commas and full stops and speed up on shouts, like real talking.', category: 'text', applies: 'now', ...choice('speechSpeed', { slow: 'Slow', normal: 'Normal', fast: 'Fast', faster: 'Faster', instant: 'Instant' }, ['slow', 'normal', 'fast', 'faster', 'instant']) },
   { id: 'dialogueFrequency', label: 'Trainer talk', description: 'How much trainers speak in battle.', category: 'text', applies: 'now', ...choice('dialogueFrequency', { off: 'Off', low: 'Low', normal: 'Normal', high: 'High' }, ['normal', 'high', 'off', 'low']) },
   { id: 'skipSeenDialogue', label: 'Skip seen event text', description: 'Map-event text you have read before shows at once instead of typing out.', category: 'text', applies: 'now', ...toggle('skipSeenDialogue') },
   { id: 'autoAdvance', label: 'Auto-advance messages', description: 'Messages move on by themselves after a short wait.', category: 'text', applies: 'now', ...toggle('autoAdvance') },
@@ -170,6 +181,17 @@ export const SETTINGS: SettingDef[] = [
   { id: 'oneHanded', label: 'One-handed layout', description: 'Bunches the on-screen buttons to the left or right edge.', category: 'controls', also: ['accessibility'], applies: 'now', show: (s) => ({ off: 'Off', left: 'Left hand', right: 'Right hand' })[s.oneHanded], next: (s) => ({ ...s, oneHanded: ({ off: 'left', left: 'right', right: 'off' } as const)[s.oneHanded] }) },
   { id: 'victoryJingle', label: 'Badge jingle', description: 'Which short tune plays when you win a badge.', category: 'audio', applies: 'now', show: (s) => ({ badge: 'Badge fanfare', item_get: 'Item chime', pkmn_get: 'New Pokémon', evo_success: 'Evolution', tm_get: 'TM tune' })[s.victoryJingle], next: (s) => ({ ...s, victoryJingle: ({ badge: 'item_get', item_get: 'pkmn_get', pkmn_get: 'evo_success', evo_success: 'tm_get', tm_get: 'badge' } as const)[s.victoryJingle] }) },
   ...PAD_ACTIONS.map((action): SettingDef => ({ id: `pad_${action}`, label: `Gamepad: ${PAD_ACTION_LABEL[action]}`, description: `Which button does ${PAD_ACTION_LABEL[action]}. A button already in use swaps with this one. The left stick always moves.`, category: 'controls', applies: 'now', show: (s) => PAD_BUTTON_NAMES[s.gamepadMap[action]]!, next: (s) => ({ ...s, gamepadMap: remapPad(s.gamepadMap, action, nextPadButton(s.gamepadMap[action])) }) })),
+  // ---- Story (Story Overhaul S18) ----
+  { id: 'storyIntensity', label: 'Story intensity', description: 'Full: all optional scenes. Streamlined: skips optional and camp scenes. Minimal: only required beats.', category: 'story', applies: 'now', ...storyChoice('intensity', { full: 'Full', streamlined: 'Streamlined', minimal: 'Minimal' }, ['full', 'streamlined', 'minimal']) },
+  { id: 'storyDramatic', label: 'Dramatic moments', description: 'Cinematic story moments in battle. Off turns every one into a plain line. Never changes battle rules.', category: 'story', applies: 'now', ...storyChoice('dramaticMoments', { off: 'Off', quiet: 'Quiet', full: 'Full', prompt: 'Ask first' }, ['off', 'quiet', 'full', 'prompt']) },
+  { id: 'storyAutonomy', label: 'Pokémon autonomy', description: 'Personality offers such as a switch or recall. You can always override one (it costs 1 Heartbond).', category: 'story', applies: 'now', ...storyChoice('autonomy', { off: 'Off', flavor: 'Text only', full: 'Full' }, ['off', 'flavor', 'full']) },
+  { id: 'storyRomance', label: 'Romance', description: 'Not available yet.', category: 'story', applies: 'now', disabled: () => true, show: () => 'Off (not available yet)', next: (s) => s },
+  { id: 'storyActivities', label: 'Camp activities', description: 'Quick shortens camp and party activities to one step.', category: 'story', applies: 'now', ...storyChoice('activities', { standard: 'Standard', quick: 'Quick' }, ['standard', 'quick']) },
+  { id: 'storyReduceMotion', label: 'Reduce motion', description: 'A shortcut for Reduced animation intensity plus Reduced flash, also found under Animations and Accessibility.', category: 'story', applies: 'now', show: (s) => (s.animationIntensity === 'reduced' && s.reducedFlash ? 'On' : 'Off'), next: (s) => (s.animationIntensity === 'reduced' && s.reducedFlash ? { ...s, animationIntensity: 'normal', reducedFlash: false } : { ...s, animationIntensity: 'reduced', reducedFlash: true }) },
+  { id: 'storySubtitleSize', label: 'Subtitle size', description: 'Size of cutscene and bubble text.', category: 'story', also: ['accessibility'], applies: 'now', ...storyChoice('subtitleSize', { small: 'Small', medium: 'Medium', large: 'Large' }, ['small', 'medium', 'large']) },
+  { id: 'storySubtitleStyle', label: 'Subtitle style', description: 'Plain text, or text on a boxed background (easier to read).', category: 'story', also: ['accessibility'], applies: 'now', ...storyChoice('subtitleStyle', { plain: 'Plain', boxed: 'Boxed' }, ['plain', 'boxed']) },
+  { id: 'storySpoilerGuard', label: 'Spoiler guard', description: 'Hides hint text beyond what you have found in the story archives.', category: 'story', applies: 'now', ...storyChoice('spoilerGuard', { true: 'On', false: 'Off' }, [true, false]) },
+  { id: 'storyJournalVoice', label: 'Journal voice', description: "Vance's notes, or a plain list.", category: 'story', applies: 'now', ...storyChoice('journalVoice', { vance: 'Vance', plain: 'Plain' }, ['vance', 'plain']) },
 ];
 
 export const settingById = (id: string): SettingDef | undefined => SETTINGS.find((d) => d.id === id);
