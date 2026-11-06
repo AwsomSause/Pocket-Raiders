@@ -1,6 +1,7 @@
 // Short plain-words description of what a move does, built from its data (no move text is stored). Pure.
 
 import type { Move } from '../contentSchema';
+import { counterLine } from './typeRules';
 
 const STAT: Record<string, string> = { atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', acc: 'accuracy', eva: 'evasiveness' };
 const STATUS: Record<string, string> = { brn: 'burn the foe', psn: 'poison the foe', par: 'paralyze the foe', slp: 'put the foe to sleep', frz: 'freeze the foe' };
@@ -41,6 +42,9 @@ export function moveEffectClauses(move: Move): string[] {
   if (e.rest) out.push('Sleeps two turns, heals fully');
   if (e.noop) out.push('Does nothing');
   if (move.priority !== 0) out.push(`Priority ${move.priority > 0 ? '+' : ''}${move.priority}`);
+  // S170 counter types.
+  const counter = counterLine(move);
+  if (counter) out.push(counter);
   return out;
 }
 

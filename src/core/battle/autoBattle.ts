@@ -17,7 +17,7 @@ import { mentorPathOf, mentorshipOf } from '../story/mentorship';
 import { typeEffectiveness } from './damage';
 import { estimateDamage, itemProblem, moveValue, switchProblem, telegraphedAttack, forcedMoveId, type EnemyBrain, type PlayerAction, type SlotAction, type SlotCommand } from './engine';
 import { moveBlockReason } from './moveBlock';
-import { rallyProblem } from './spectacle';
+import { bondScoreOf, rallyProblem } from './spectacle';
 import { canDynamax, teraOption, zMoveOptions, type TransformRequest } from './transform';
 
 /** What the trainer has taught a Pokémon to favour in Auto-Battle ("Trainer Instillment"); saved in the Pokémon's bond habits. */
@@ -209,7 +209,7 @@ export interface AutoPick {
 }
 
 function context(run: RunState, content: Content) {
-  return { content: battleContent(content, run.rules), battle: run.battle!, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(content, run), noBattleItems: noBattleItems(run.rules) };
+  return { content: battleContent(content, run.rules, run.regionOrder[run.regionIndex]), battle: run.battle!, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(content, run), noBattleItems: noBattleItems(run.rules), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
 }
 
 const nameOf = (content: Content, mon: PokemonInstance) => getSpecies(content, mon.speciesId).name;
@@ -307,6 +307,17 @@ export function chooseAutoSwitchIn(content: Content, run: RunState): AutoPick | 
  * The action the active Pokémon would take now (null when Auto-Battle can't play this turn). It weighs damage, accuracy, type
  * matchup, knock-outs, status, set-up, healing, switching and the special actions, then bends each by its character.
  */
+/** S43 Pace Controls: rules the player sets for Auto-Battle (Settings > Gameplay). They win over the Pokémon's own character. */
+export type AutoRule = 'superEffective' | 'healLow' | 'noItems' | 'stayIn';
+export const AUTO_RULES: { id: AutoRule; label: string; description: string }[] = [
+  { id: 'superEffective', label: 'Super-effective first', description: 'Auto-Battle always uses a super-effective attack when it has one.' },
+  { id: 'healLow', label: 'Heal under 30%', description: 'Auto-Battle uses a healing item from the Bag when the Pokémon drops under 30% HP.' },
+  { id: 'noItems', label: 'Save items', description: 'Auto-Battle never uses Bag items (Heal under 30% still does).' },
+  { id: 'stayIn', label: 'Never switch', description: 'Auto-Battle never switches a Pokémon out by choice.' },
+];
+/** Hit-points share under which the "Heal under 30%" rule uses an item. */
+export const AUTO_HEAL_SHARE = 0.3;
+
 interface DecideOpts {
   /** One Pokémon of a double battle: no switching, cheers, Brace or Rally (the scene keeps those to single battles). */
   slot?: boolean;
@@ -314,6 +325,8 @@ interface DecideOpts {
   taken?: string[];
   /** A partner already used an item this turn. */
   noItems?: boolean;
+  /** S43 Pace Controls. */
+  rules?: readonly AutoRule[];
 }
 
 function decide(content: Content, run: RunState, opts: DecideOpts = {}): AutoPick | null {
@@ -407,14 +420,29 @@ function decide(content: Content, run: RunState, opts: DecideOpts = {}): AutoPic
     return { i: x.i, move, score: Math.max(0, score), why, tags, damage };
   });
   // A Pokémon that refuses a reckless order would waste the turn: don't pick those.
-  const best = scored.reduce((a, b) => (b.score > a.score ? b : a));
+  let best = scored.reduce((a, b) => (b.score > a.score ? b : a));
+  const rules = opts.rules ?? [];
+  // S43 rule: a super-effective attack beats anything else (the best-scored of them).
+  if (rules.includes('superEffective')) {
+    const se = scored.filter((s) => s.move.category !== 'status' && s.damage > 0 && typeEffectiveness(ctx.content.typeChart, s.move.type, foeTypes) > 1);
+    if (se.length > 0) {
+      best = se.reduce((a, b) => (b.score > a.score ? b : a));
+      best.why = `Your rule: ${best.move.name} is super effective.`;
+      best.score = Math.max(best.score, ...scored.map((s) => s.score)) + 1;
+    }
+  }
+  // S43 rule: heal under 30% HP with the smallest potion that covers it.
+  if (rules.includes('healLow') && !opts.noItems && hp < AUTO_HEAL_SHARE && mon.hp > 0) {
+    const forced = chooseAutoItem(content, run, ctx, mon, { ...profile, caution: 1, fear: 1, support: 1, aggr: 0 }, hp, false);
+    if (forced && forced.tags.includes('defensive')) return { ...forced, reason: `Your rule: heal under ${Math.round(AUTO_HEAL_SHARE * 100)}% HP.` };
+  }
 
   // Bag items: a hurt or afflicted Pokémon may use a potion or a cure (it costs the turn), unless it can finish the foe.
-  const itemPick = opts.noItems ? null : chooseAutoItem(content, run, ctx, mon, profile, hp, best.tags.includes('ko') || (best.tags.includes('defensive') && best.score > 0.5));
+  const itemPick = opts.noItems || rules.includes('noItems') ? null : chooseAutoItem(content, run, ctx, mon, profile, hp, best.tags.includes('ko') || (best.tags.includes('defensive') && best.score > 0.5));
   if (itemPick) return itemPick;
 
   // Switching: a Pokémon that can't hurt the foe, or is about to be knocked out by a better matchup, may step back.
-  if (!opts.slot && !battle.eventRule?.noSwitch) {
+  if (!opts.slot && !battle.eventRule?.noSwitch && !rules.includes('stayIn')) {
     const hopeless = best.damage <= 0 || (best.damage / Math.max(1, foe.hp) < 0.08 && best.score < 0.9);
     const exposed = danger && foeFirst;
     if (hopeless || exposed) {
@@ -527,8 +555,8 @@ function decideDoubles(content: Content, run: RunState): AutoPick | null {
 }
 
 /** The action (or, in a double battle, the pair of commands) Auto-Battle would play now; null when it can't play this turn. */
-export function chooseAutoAction(content: Content, run: RunState): AutoPick | null {
+export function chooseAutoAction(content: Content, run: RunState, rules: readonly AutoRule[] = []): AutoPick | null {
   if (autoBattleProblem(run)) return null;
-  return run.battle!.doubles ? decideDoubles(content, run) : decide(content, run);
+  return run.battle!.doubles ? decideDoubles(content, run) : decide(content, run, { rules });
 }
 

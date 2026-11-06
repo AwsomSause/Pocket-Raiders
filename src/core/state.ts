@@ -43,6 +43,8 @@ export const StatusSchema = z.object({
   left: z.number().int().min(0).optional(),
   /** Poison only: badly poisoned (Toxic), `turns` counts up. */
   bad: z.boolean().optional(),
+  /** Burn and poison only (S161): how many times it has stacked (absent = 1). */
+  stacks: z.number().int().min(1).optional(),
 });
 export type Status = z.infer<typeof StatusSchema>;
 
@@ -246,6 +248,8 @@ export const VolatileSchema = z.object({
   telekinesis: z.number().int().min(0).default(0),
   /** Octolock: trapped, stats fall each turn. */
   octolock: z.boolean().default(false),
+  /** S162 elemental reactions: the type of the last damaging hit it took (absent = none). */
+  element: z.string().optional(),
   /** Syrup Bomb: Speed falls for this many turns. */
   syrup: z.number().int().min(0).default(0),
   /** Salt Cure: loses HP each turn. */
@@ -1709,6 +1713,8 @@ export const SettingsSchema = z.object({
   autoBattle: z.boolean().default(false),
   /** Auto-Battle: say why a Pokémon chose its action. */
   autoExplain: z.boolean().default(true),
+  /** S43 Pace Controls: rules Auto-Battle always follows (core/battle/autoBattle.ts AUTO_RULES). */
+  autoRules: z.array(z.enum(['superEffective', 'healLow', 'noItems', 'stayIn'])).default([]),
   /** W11 (UI, accessibility, presentation). All presentation only. */
   uiTheme: z.enum(['classic', 'aero', 'ds', 'wii', 'cyber']).default('classic'),
   fontSize: z.enum(['normal', 'large', 'huge']).default('normal'),

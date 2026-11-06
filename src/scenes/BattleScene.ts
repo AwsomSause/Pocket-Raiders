@@ -18,7 +18,7 @@ import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent } from '../core/battle/intent';
-import { momentumMax, rallyProblem } from '../core/battle/spectacle';
+import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
 import { canDynamax, maxMoveOptions, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -1976,7 +1976,7 @@ export class BattleScene extends Phaser.Scene {
 
   private async runAuto(): Promise<void> {
     const { session } = services();
-    const pick = chooseAutoAction(session.content, this.run);
+    const pick = chooseAutoAction(session.content, this.run, session.settings.autoRules);
     if (!pick) {
       this.showRootMenu();
       return;
@@ -2439,7 +2439,7 @@ export class BattleScene extends Phaser.Scene {
     const doubles = run.battle?.doubles;
     const idx = doubles ? run.party.indexOf(this.activeMon()) : -1;
     const battle = doubles && idx >= 0 && idx !== run.battle!.activeIndex ? { ...run.battle!, activeIndex: idx } : run.battle!;
-    return { content: battleContent(services().session.content, run.rules), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle) };
+    return { content: battleContent(services().session.content, run.rules, run.regionOrder[run.regionIndex]), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
   }
 
   private openBag(): void {

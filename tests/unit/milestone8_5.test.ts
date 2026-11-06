@@ -28,6 +28,7 @@ import { buyItem, chooseStarter, createRun, debugReplaceEnemy, shopStock, takeTu
 import type { PokemonInstance, RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
+import { adjustBond, bondOf } from '../../src/core/bond';
 import { content, toBattle } from './helpers';
 
 // Mega Evolution happens by itself (PokeRogue style), so a plain move is enough.
@@ -486,6 +487,8 @@ describe('Z-Moves in a run', () => {
     setMoves(run.battle!.enemyTeam[0]!, 'growl');
     setMoves(run.party[0]!, 'tackle');
     Object.assign(run.inventory, Z_KIT);
+    // S174 Z-Crystal Bonding: a Z-Move needs a trained bond.
+    adjustBond(bondOf(run, run.party[0]!.uid), { trust: 100, affection: 100 });
     return run;
   };
 

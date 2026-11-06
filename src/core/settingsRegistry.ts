@@ -7,6 +7,7 @@ import { EVENT_STYLE_LABELS, eventStyleOf, nextEventStyle } from './presentation
 import { PLAZA_STYLE_LABELS, nextPlazaStyle, plazaStyleOf } from './presentation/plazaStyles';
 import { applyProfile, nextProfile, PROFILE_INFO } from './accessibility';
 import type { Settings } from './state';
+import { AUTO_RULES } from './battle/autoBattle';
 import { applyPerfPreset, nextPerfPreset, PERF_INFO } from './tools/perfPreset';
 import { nextPadButton, PAD_ACTIONS, PAD_ACTION_LABEL, POPUP_SCALES, PAD_BUTTON_NAMES, remapPad, TOOLTIP_DELAY_MS, TRANSITION_INFO, UI_THEME_ORDER, UI_THEMES } from './presentation/uiPrefs';
 
@@ -121,6 +122,7 @@ export const SETTINGS: SettingDef[] = [
   // Gameplay
   { id: 'autoBattle', label: 'Auto-Battle', description: 'Your Pokémon choose their own actions in battle (single battles). EXP from such battles is halved. Also on the battle screen.', category: 'gameplay', applies: 'now', ...toggle('autoBattle') },
   { id: 'autoExplain', label: 'Auto-Battle explanations', description: 'Say why a Pokémon chose its action.', category: 'gameplay', applies: 'now', ...toggle('autoExplain') },
+  ...AUTO_RULES.map((r) => ({ id: `autoRule-${r.id}`, label: `Auto rule: ${r.label}`, description: r.description, category: 'gameplay' as const, applies: 'now' as const, show: (s: Settings) => (s.autoRules.includes(r.id) ? 'On' : 'Off'), next: (s: Settings) => ({ ...s, autoRules: s.autoRules.includes(r.id) ? s.autoRules.filter((x) => x !== r.id) : [...s.autoRules, r.id] }) })),
   { id: 'battleSpeed', label: 'Battle speed', description: 'How fast battles play. Outcomes never change.', category: 'gameplay', applies: 'now', ...choice('battleSpeed', { showcase: 'Showcase', normal: 'Normal', fast: 'Fast', quick: 'Quick' }, ['normal', 'fast', 'quick', 'showcase']) },
   { id: 'skillPrompts', label: 'Skill prompts', description: 'Optional mini-moments: draw your aim, echo a signature shout, time a skill throw, scan a foe, a countdown on a few events, double-tap to Mega/Z/Tera. Never required; results are only small bonuses.', category: 'gameplay', applies: 'nextBattle', ...toggle('skillPrompts') },
   { id: 'performancePreset', label: 'Performance preset', description: 'Low, Medium or High: sets particles, effect and shake strength and sprite idle animation together.', category: 'display', also: ['accessibility'], applies: 'now', show: (s) => PERF_INFO[s.performancePreset].label, next: (s) => applyPerfPreset(s, nextPerfPreset(s.performancePreset)) },

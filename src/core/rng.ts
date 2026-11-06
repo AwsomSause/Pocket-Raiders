@@ -66,6 +66,16 @@ export class Rng {
   private c: number;
   private d: number;
 
+  /** Elite Duelist (S275): every roll is the middle value and the state never moves. */
+  private steady = false;
+
+  /** A copy that always rolls the middle value (0.5): no luck either way. Its state never changes. */
+  static steady(state: RngState): Rng {
+    const r = new Rng(state);
+    r.steady = true;
+    return r;
+  }
+
   constructor(state: RngState) {
     this.a = state.a >>> 0;
     this.b = state.b >>> 0;
@@ -90,6 +100,7 @@ export class Rng {
 
   /** Float in [0, 1). */
   float(): number {
+    if (this.steady) return 0.5;
     return this.nextUint32() / 4294967296;
   }
 
