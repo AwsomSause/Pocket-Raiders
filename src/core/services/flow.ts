@@ -18,6 +18,8 @@ import { specialFamily } from '../specialForms';
 import { applyCatalog, catalogTargetProblem, getCatalogEntry } from '../catalog';
 import { addItem, itemUseProblem } from '../items';
 import { applyRecipe, CRAFTING, materialName, recipeCost, recipeProblem } from '../crafting';
+import { applyFusion, fusionOptions, TERA_FORGE } from '../moveFusion';
+import { TYPE_NAMES } from '../contentSchema';
 import { isHostile } from '../rivals/outcome';
 import { changeFriendship } from '../friendship';
 import { ATTRIBUTE_KEYS, METER_ATTRIBUTES, type Content, type Item, type StatName } from '../contentSchema';
@@ -222,6 +224,8 @@ export function serviceView(content: Content, run: RunState, sideId: string): Se
     }
     case 'tutor':
       for (const m of run.party) for (const id of tutorMoves(content, m, sideId, run)) add(`tutor:${m.uid}:${id}`, `${monName(content, m)}: ${moveName(content, id)}`, replaceText(content, m, id), price(run, C.tutor), side.used ? 'The tutor has already taught someone.' : null);
+      // S155 Move Fusion: two known moves of fusing types become one hybrid move.
+      for (const m of run.party) for (const f of fusionOptions(content, m)) add(`fuse:${m.uid}:${f.result}`, `${monName(content, m)}: fuse ${moveName(content, f.a)} + ${moveName(content, f.b)}`, `Both are used up and become ${moveName(content, f.result)}.`, price(run, C.tutor) * 2, side.used ? 'The tutor has already taught someone.' : null);
       break;
     case 'reminder':
       for (const m of run.party) for (const id of reminderMoves(content, m)) add(`remind:${m.uid}:${id}`, `${monName(content, m)}: ${moveName(content, id)}`, replaceText(content, m, id), price(run, C.reminder));
@@ -329,6 +333,13 @@ export function serviceView(content: Content, run: RunState, sideId: string): Se
       const have = Object.entries(run.materials).filter(([, n]) => n > 0).map(([id, n]) => `${n} ${materialName(id)}`).join(', ');
       add('look', 'Check your materials', have ? `You hold: ${have}.` : 'You hold no materials yet. Win battles and raids to collect them.', 0);
       for (const r of CRAFTING.recipes) add(`craft:${r.id}`, r.name, `Costs ${Object.entries(recipeCost(content, run, r)).map(([id, n]) => `${n} ${materialName(id)}`).join(', ')}${r.money ? ` and ₽${r.money}` : ''}.`, 0, recipeProblem(content, run, r));
+      // S175 Tera Forge: a type's material becomes that type's Tera Shard (only types whose material you hold enough of).
+      for (const t of TYPE_NAMES) {
+        const mat = CRAFTING.typeMaterial[t];
+        if (!mat || (run.materials[mat] ?? 0) < TERA_FORGE.material || !content.items.has(`${t}-tera-shard`)) continue;
+        const problem = run.badges.length < TERA_FORGE.minBadges ? `Needs ${TERA_FORGE.minBadges} badge.` : null;
+        add(`tera:${t}`, `Forge a ${content.items.get(`${t}-tera-shard`)!.name}`, `Costs ${TERA_FORGE.material} ${materialName(mat)}. Use it from the Bag to change a Pokémon's Tera Type.`, TERA_FORGE.money, problem);
+      }
       break;
     }
     case 'hall':
@@ -490,6 +501,22 @@ export function useService(content: Content, current: RunState, sideId: string, 
     case 'craft': {
       const recipe = CRAFTING.recipes.find((r) => r.id === uid)!;
       message = applyRecipe(content, run, recipe);
+      break;
+    }
+    case 'tera': {
+      const mat = CRAFTING.typeMaterial[uid!]!;
+      run.materials[mat] = (run.materials[mat] ?? 0) - TERA_FORGE.material;
+      if (run.materials[mat] === 0) delete run.materials[mat];
+      addItem(run.inventory, `${uid}-tera-shard`, 1);
+      message = `Forged a ${content.items.get(`${uid}-tera-shard`)?.name ?? 'Tera Shard'}.`;
+      break;
+    }
+    case 'fuse': {
+      const f = fusionOptions(content, mon!).find((o) => o.result === arg)!;
+      applyFusion(content, mon!, f);
+      side.used = true;
+      count(run, 'tutorMoves');
+      message = `${monName(content, mon!)} fused ${moveName(content, f.a)} and ${moveName(content, f.b)} into ${moveName(content, f.result)}!`;
       break;
     }
     case 'fossil': {

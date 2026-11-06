@@ -71,6 +71,10 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
+  /** S171 condition evolutions: uses of the moves a route counts (core/conditionEvolution.ts). */
+  moveCounts: z.record(z.string(), z.number().int().min(0)).optional(),
+  /** S158 Ability Awakening: times it showed its ability in battle (see battle/growthStats.ts). */
+  abilityUses: z.number().int().min(0).optional(),
   /** S168 weather tolerance: sandstorm/hail chip turns it has endured, per weather (see weatherTolerance). */
   weatherEndured: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Held items (catalog id → copies). A Pokémon can hold many items, each up to its catalog max (director, Q1). */
@@ -141,6 +145,8 @@ export const VolatileSchema = z.object({
   protectChain: z.number().int().min(0).default(0),
   /** Turns left of being bound (Wrap); it can't switch out meanwhile. */
   bound: z.number().int().min(0).default(0),
+  /** The move that bound it (Fire Spin, Whirlpool...), so each turn's squeeze shows that move's art. */
+  boundBy: z.string().optional(),
   /** Seeded by Leech Seed. */
   seeded: z.boolean().default(false),
   /** The two-turn move it is charging (it uses it next turn). */
@@ -711,7 +717,7 @@ export const BattleStateSchema = z.object({
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
-  narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60) }).optional(),
+  narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60), /** The rival's last Pokémon already held on once; the next knockout sticks. */ refused: z.boolean().optional() }).optional(),
   /** Nemesis system: the nemesis back for its Return or Reckoning, and the telegraphed change told in the intro. */
   nemesis: z.string().optional(),
   nemesisNote: z.string().optional(),

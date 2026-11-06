@@ -45,6 +45,7 @@ import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
+import { applyFormShift } from '../core/formShift';
 import { toggleCamp } from '../core/trainingCamp';
 import { applyMentorLesson, type MentorLesson } from '../core/mentorLesson';
 import { cycleXpPolicy, XP_POLICY_RULES } from '../core/teamPolicy';
@@ -629,6 +630,15 @@ export class GameSession {
   nursery(eggUid: string, choice: NurseryChoice): string {
     const run = structuredClone(this.requireRun());
     const message = applyNursery(this.content, run, eggUid, choice);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Form shift: swaps a Pokémon with its regional variant for one Moon Stone (ideas S52). */
+  formShift(uid: string, target: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = applyFormShift(this.content, run, uid, target);
     this.run = run;
     this.persistRun();
     return message;

@@ -131,7 +131,9 @@ function preEvolution(s: SpeciesRow): SpeciesRow | undefined {
   if (!fromId) return undefined;
   // A regional form pre-evolves into the same region's form when there is one (e.g. growlithe-hisui).
   const suffix = s.form?.kind === 'regional' ? s.id.slice(s.form.base.length) : '';
-  return species.get(fromId + suffix) ?? species.get(fromId);
+  // darmanitan-galar-standard pre-evolves into darumaka-galar: try the region part of a longer suffix too.
+  const region = suffix.split('-').slice(0, 2).join('-');
+  return species.get(fromId + suffix) ?? (region ? species.get(fromId + region) : undefined) ?? species.get(fromId);
 }
 
 /** How far up its line a species is: 0 for a first stage. */

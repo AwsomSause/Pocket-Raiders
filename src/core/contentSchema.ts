@@ -8,6 +8,8 @@ import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
 import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
+import { OpponentAiSchema, DEFAULT_OPPONENT_AI } from './battle/opponentAiConfig';
+import { GrowthStatsSchema, DEFAULT_GROWTH_STATS } from './battle/growthConfig';
 import type { StoryConfig } from './story/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
@@ -1928,6 +1930,10 @@ export const BalanceSchema = z.object({
   typeRules: TypeRulesSchema.default(DEFAULT_TYPE_RULES),
   /** S174 Z-Crystal Bonding: a Pokémon needs this bond score (0-100, trust + affection) before it can use a Z-Move (0 = off). */
   zBond: z.object({ minBond: z.number().int().min(0).max(100) }).default({ minBond: 30 }),
+  /** Battle/AI batch 2 (S269 taunts, S272 team roles, S273 fatigue, S280 trap setting): battle/opponentAi.ts. */
+  opponentAi: OpponentAiSchema.default(DEFAULT_OPPONENT_AI),
+  /** Battle/AI batch 3 (S157 Focus, S158 Ability Awakening): battle/growthStats.ts. */
+  growthStats: GrowthStatsSchema.default(DEFAULT_GROWTH_STATS),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z
@@ -2306,7 +2312,7 @@ export const BalanceSchema = z.object({
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
   /** `depth` (Kice spec §11/§21): the first rival becomes the major rival and wild Pokémon rivals can form (off only in old-seed fingerprints). */
-  rival: z.object({ stage: z.number().int().min(0), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
+  rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
   candies: z.object({ perRelease: z.number().int().min(0), perLevels: z.number().int().min(1) }),
   /** Run-end payout into the Bank (GAME_DESIGN.md §14.2). */

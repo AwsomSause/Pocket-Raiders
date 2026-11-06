@@ -9,6 +9,7 @@ import { calcStats, getSpecies } from '../pokemon';
 import { currentEnemy, type PokemonInstance, type RunState, type SideEffects, type Stages } from '../state';
 import { emotionOf } from '../story/emotions';
 import { STANCE_INFO, autoProfile, stanceOf } from './autoBattle';
+import { awakeningLevel, focusOf } from './growthStats';
 
 export interface Conditions {
   field: string[];
@@ -72,6 +73,9 @@ export function battleConditions(content: Content, run: RunState): Conditions {
     out.yours.push(`${species.name} Lv.${mon.level}${mon.nature ? ` · ${cap(mon.nature)}` : ''}`);
     out.yours.push(`Mood: ${emotion ? emotion.name : 'steady'} · ${profile.style}`);
     out.yours.push(`Stance: ${STANCE_INFO[stance].name}${taught ? ' (taught)' : ''}`);
+    // S157 Focus and S158 Ability Awakening.
+    const awake = awakeningLevel(content, mon.abilityUses);
+    out.yours.push(`Focus ${focusOf(mon)}/100${awake > 0 ? ` · Ability Awakening ${awake}` : ''}`);
     const status = statusWord(mon);
     if (status) out.yours.push(status);
     const stages = stageLine(battle.playerStages);

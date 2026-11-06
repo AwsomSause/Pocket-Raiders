@@ -55,7 +55,7 @@ import {
   rollLegendaryWild,
   withPartyStrength,
 } from './encounters';
-import { evolveFully, type EvolutionResult } from './evolution';
+import { evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
@@ -144,7 +144,7 @@ import { allyLevel, applyTotemHp, describeAlly, describeTotemRewards, freshTotem
 import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase } from './priceSwing';
-import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, freshPlaza } from './state';
+import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { getTheme, pickGymLeader, pickTheme, typesPool, wildEligibleSpecies } from './themes';
@@ -178,6 +178,8 @@ import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
+import { conditionEvolutionTarget } from './conditionEvolution';
+import { roleOrder } from './battle/opponentAi';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { noteBountyKills } from './bounties';
 import { withChampionTeam } from './story/championDefense';
@@ -535,6 +537,29 @@ export function hatchEggs(content: Content, run: RunState): void {
   growGarden(run);
 }
 
+/**
+ * Beta 4.4: the first rival is a forced meeting on Stage 1, Level `balance.rival.column`: every node of that column is a
+ * trainer, so every route meets it. Changes kinds only after the map is rolled, so no other roll moves.
+ */
+function forceFirstRivalColumn(content: Content, run: RunState, index: number, map: StageMap): void {
+  const cfg = content.balance.rival;
+  if (run.regionIndex !== 0 || index !== cfg.stage || run.story.flags[FIRST_RIVAL_FLAG] !== undefined || cfg.column >= map.columns) return;
+  if (map.trainerColumns.includes(cfg.column)) return;
+  // The stage's first trainer level moves to the rival's level (a map keeps exactly two trainer levels).
+  const moved = map.trainerColumns[0]!;
+  for (const node of map.nodes) {
+    if (node.column === moved) {
+      node.kind = 'wild';
+      node.note = `wild, column ${moved} (its trainers moved to column ${cfg.column} for the first rival)`;
+    } else if (node.column === cfg.column) {
+      node.kind = 'trainer';
+      node.harder = false;
+      node.note = `trainer column ${cfg.column} (the first rival waits here)`;
+    }
+  }
+  map.trainerColumns = [cfg.column, ...map.trainerColumns.slice(1)].sort((a, b) => a - b);
+}
+
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
   fillRegionOrder(content, run);
@@ -545,6 +570,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
     const leader = pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
     return { theme, leader, map: generateStageMap(content, campaign, r) };
   });
+  forceFirstRivalColumn(content, run, index, map);
   const problems = validateStageMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid stage map: ${problems.join('; ')}`);
   noteSkips(content, run);
@@ -1730,7 +1756,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       markTakeover(run, takeover);
     }
     // The first rival: the first ordinary trainer of balance.rival.stage is scripted (one starter-line Pokémon).
-    const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
+    const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
       plan = planFirstRival(content, run.seed);
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
@@ -1766,7 +1792,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       }
       const said = majorNote(content, rivalBack, ret.plan.members.find((m) => familyId(content, m.speciesId) === rivalBack.ace)?.speciesId ?? null);
       if (said) ret.note = [said, ret.note].filter(Boolean).join(' ');
-      const trained = withTrainingEvolution(content, ret.plan.members);
+      // Beta 4.4: once a rival's Pokémon evolved mid-battle it stays evolved; only an unevolved rival is brought in a stage lower.
+      const evolvedBefore = run.story.flags[`drama:rival:${rivalBack.id}:midBattleEvolution`] !== undefined;
+      const trained = evolvedBefore ? { members: ret.plan.members, index: -1 } : withTrainingEvolution(content, ret.plan.members);
       plan = { ...ret.plan, members: trained.members };
       trainingIndex = trained.index;
       const finale = finalRivalLine(content, run, rivalBack.id, ultimateRival(run)?.id === rivalBack.id);
@@ -1827,7 +1855,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       plan = { ...plan, members: trained.members };
       trainingIndex = trained.index;
     }
-    const team = plan.members.map((m, i) => {
+    const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
       const speciesId = plan.leaderId ? m.speciesId : lockSpecies(content, run, m.speciesId, `${node.id}:${i}`);
@@ -1836,9 +1864,12 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (!plan.leaderId) randomizeMoves(content, run, mon);
       return mon;
     });
+    // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
+    const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
+    const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     run.battle.ai = plan.ai;
-    run.battle.levelInfo = plan.levelInfo;
+    run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
     if (back) run.battle.returning = back.id;
     if (isRival) run.battle.rival = true;
@@ -2719,6 +2750,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       evolutions.push({ ...evo, uid: mon.uid });
       // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
       emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, content.species.get(evo.from)?.name ?? evo.from, content.species.get(evo.to)?.name ?? evo.to) });
+      for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+    }
+    // S171: a route by weather, a known move or a move used often enough.
+    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;
+    if (special) {
+      const evo = evolve(content, mon, special);
+      evolutions.push({ ...evo, uid: mon.uid });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
     }
   }

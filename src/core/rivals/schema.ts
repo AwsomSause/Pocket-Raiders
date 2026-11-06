@@ -22,6 +22,10 @@ export const RivalConfigSchema = z.object({
     threshold: z.number().min(1),
     dominantHpShare: z.number().min(0).max(1),
     dominantMaxTurns: z.number().int().min(1),
+    /** Beta 4.4: no ordinary trainer sparks a rivalry before this stage index of the first region (0 = Stage 1). */
+    minStage: z.number().int().min(0).default(0),
+    /** Beta 4.4: a memorable win only sparks a rivalry this often (rolled on the rival's own seeded stream). */
+    chance: z.number().min(0).max(1).default(1),
   }),
   traitSpread: z.number().int().min(0).max(50),
   states: z.object({ recurringAt: z.number(), activeAt: z.number(), nemesisAt: z.number(), nemesisMinVindictiveness: z.number(), contenderAt: z.number(), contenderMinAmbition: z.number() }),

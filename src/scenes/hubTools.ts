@@ -6,7 +6,7 @@ import { contentStatuses, problemEntries, statusLines } from '../core/tools/cont
 import { localStats } from '../core/tools/localStats';
 import { buildBugReport, bugReportHeadline } from '../core/tools/bugReport';
 import { boardCode, mergedBoard } from '../core/tools/seedBoard';
-import { installPack, removePack } from '../core/tools/modPacks';
+import { installPack, removePack, removeProblem } from '../core/tools/modPacks';
 import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
 import { inspectSave, reportLines } from '../save/saveInspector';
 import { categoryLabel, parseSplits, splitLines } from '../core/tools/speedrun';
@@ -170,11 +170,13 @@ function openSeedBoard(host: ToolsHost): void {
 function openPacks(host: ToolsHost): void {
   const loaded = loadStoredPacks(packStore);
   const rows: PickerRow[] = [row('Add a pack from a file', 'Pick a .json pack. It is checked first; bad packs are refused.', 'Add')];
-  for (const p of loaded.packs) rows.push(row(`${p.name}  ·  ${p.author}`, `${Object.keys(p.flavor).length} line sets, ${p.seeds.length} seeds. Enter removes it.`, 'Remove'));
+  for (const p of loaded.packs) rows.push(row(`${p.name}  ·  ${p.author}`, `${Object.keys(p.flavor).length} line sets, ${p.seeds.length} seeds, ${p.events.length} events. Enter removes it.`, 'Remove'));
   for (const problem of loaded.problems) rows.push(row('Skipped pack', problem, '', COLORS.textMuted));
   page(host, `Mod packs  ·  ${loaded.packs.length}`, rows, (n) => {
     if (n === 0) pickTextFile((text) => host.restart(installPack(packStore, text).message));
     else if (loaded.packs[n - 1]) {
+      const blocked = removeProblem(packStore, loaded.packs[n - 1]!.id, !!services().session.run);
+      if (blocked) return host.restart(blocked);
       removePack(packStore, loaded.packs[n - 1]!.id);
       host.restart('Pack removed. Restart the game to drop its lines.');
     }

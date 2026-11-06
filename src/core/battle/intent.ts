@@ -6,6 +6,7 @@ import type { Content } from '../contentSchema';
 import { isBossClass } from '../trainerPerks';
 import { currentEnemy, type BattleState, type PokemonInstance } from '../state';
 import { moveValue } from './engine';
+import { typeEffectiveness } from './damage';
 
 export interface EnemyIntent {
   moveId: string;
@@ -32,4 +33,31 @@ export function enemyIntent(content: Content, battle: BattleState, target: Pokem
   const name = content.species.get(foe.speciesId)?.name ?? foe.speciesId;
   const attack = move.category !== 'status';
   return { moveId: move.id, moveName: move.name, attack, text: attack ? `${name} is lining up ${move.name}!` : `${name} is preparing ${move.name}...` };
+}
+
+const TAUNTS_ATTACK = ['"%m will hit %t right where it hurts!"', '"Ha! %t won\'t like %m one bit!"', '"Get ready, %m is coming for %t!"'];
+const TAUNTS_SETUP = ['"Give us a moment, we\'re about to %m!"', '"Watch closely. %m, and then it\'s over!"', '"You\'re in for it once we %m!"'];
+
+/**
+ * S269 Trainer Taunts: an ordinary trainer smart enough (`opponentAi.tauntMinAi`) says out loud the move it values most when
+ * that move is a super-effective hit or a set-up move. Pure and RNG-free like the boss intent; the foe may still pick otherwise.
+ */
+export function trainerTaunt(content: Content, battle: BattleState, target: PokemonInstance, party?: PokemonInstance[]): EnemyIntent | null {
+  if (!battle.trainer || hasTelegraphedIntent(battle) || battle.outcome || battle.doubles) return null;
+  if (battle.ai <= 0 || battle.ai < content.balance.opponentAi.tauntMinAi) return null;
+  const foe = currentEnemy(battle);
+  const usable = foe.moves.filter((m) => m.pp > 0);
+  if (foe.hp <= 0 || usable.length === 0) return null;
+  const brain = { content, ai: Math.max(battle.ai, 0.7), target, stages: battle.enemyStages, battle, party };
+  const best = usable.map((m) => ({ id: m.id, v: moveValue(brain, foe, m.id) })).reduce((a, b) => (b.v > a.v ? b : a));
+  const move = content.moves.get(best.id);
+  if (!move) return null;
+  const targetTypes = content.species.get(target.speciesId)?.types ?? [];
+  const attack = move.category !== 'status';
+  const superHit = attack && typeEffectiveness(content.typeChart, move.type, targetTypes) > 1;
+  const setup = !attack && (move.effects.statChanges ?? []).some((c) => c.target === 'self' && c.stages > 0);
+  if (!superHit && !setup) return null;
+  const lines = superHit ? TAUNTS_ATTACK : TAUNTS_SETUP;
+  const line = lines[battle.turn % lines.length]!.replace('%m', move.name).replace('%t', content.species.get(target.speciesId)?.name ?? 'your Pokémon');
+  return { moveId: move.id, moveName: move.name, attack, text: `${battle.trainer.name}: ${line}` };
 }

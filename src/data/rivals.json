@@ -7,7 +7,9 @@
   "flawlessGain": 15,
   "threshold": 12,
   "dominantHpShare": 0.9,
-  "dominantMaxTurns": 4
+  "dominantMaxTurns": 4,
+  "minStage": 2,
+  "chance": 0.35
  },
  "traitSpread": 10,
  "states": {

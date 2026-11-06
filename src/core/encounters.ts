@@ -292,7 +292,8 @@ export function bossTeamIndex(role: BossRole, number: number): number {
 
 /** The species of a boss's team, in battle order (the last one is the ace). Needs no roll, so map previews can show it. */
 export function bossTeamSpecies(content: Content, role: BossRole, bossId: string, number: number, remix = false): string[] {
-  return remixedMembers(getBoss(content, bossId), role, bossTeamIndex(role, number), remix, `${role}:${bossId}:${number}`).map((m) => m.speciesId);
+  const boss = getBoss(content, bossId);
+  return withSetAce(content, boss, role, bossTeamIndex(role, number), remixedMembers(boss, role, bossTeamIndex(role, number), remix, `${role}:${bossId}:${number}`)).map((m) => m.speciesId);
 }
 
 const textHash = (text: string): number => [...text].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
@@ -318,6 +319,33 @@ export function remixedMembers(boss: { teams: Record<BossRole, readonly BossTeam
   return remixMembers(members, true, key);
 }
 
+/** A species' first evolution stage (forms count as their base), for matching an ace family. */
+function firstStage(content: Content, speciesId: string): string {
+  let s = content.species.get(speciesId);
+  if (s?.form && s.form.kind !== 'regional' && s.form.kind !== 'alternate') s = content.species.get(s.form.base) ?? s;
+  for (let guard = 0; s && s.evolutionStage > 1 && s.evolvesFrom && guard < 4; guard++) s = content.species.get(s.evolvesFrom);
+  return s?.id ?? speciesId;
+}
+
+/**
+ * Beta 4.4: a boss always carries its set ace (the family of its first signature Pokémon) and sends it out last,
+ * whatever Boss Remix does to the rest of the order. A team without one borrows it, with its authored moves,
+ * from the nearest of the boss's other teams. Hashed data only, so previews match the fight.
+ */
+export function withSetAce(content: Content, boss: { signature: readonly string[]; teams: Record<BossRole, readonly BossTeam[]> }, role: BossRole, index: number, members: BossTeam['members'][number][]): BossTeam['members'][number][] {
+  const sig = boss.signature[0];
+  if (!sig || members.length === 0) return members;
+  const family = firstStage(content, sig);
+  const at = members.findIndex((m) => firstStage(content, m.speciesId) === family);
+  if (at >= 0) return [...members.slice(0, at), ...members.slice(at + 1), members[at]!];
+  const teams = boss.teams[role].map((t, i) => ({ t, d: Math.abs(i - index) })).filter((x) => x.d > 0).sort((a, b) => a.d - b.d);
+  for (const { t } of teams) {
+    const donor = t.members.find((m) => firstStage(content, m.speciesId) === family);
+    if (donor) return [...members.slice(0, -1), donor];
+  }
+  return members;
+}
+
 /**
  * A boss's team for a battle: the species, moves and training come from
  * bossTeams.json; levels follow the difficulty curve with the role's bonus,
@@ -328,7 +356,7 @@ function planBoss(content: Content, archetype: Archetype, role: BossRole, bossId
   const team: BossTeam = boss.teams[role][bossTeamIndex(role, number)]!;
   const { aceBonus } = content.balance.difficulty;
   const levelInfo: EnemyLevelBreakdown[] = [];
-  const authored = remixedMembers(boss, role, bossTeamIndex(role, number), remix, `${role}:${bossId}:${number}`).map((m, i) => {
+  const authored = withSetAce(content, boss, role, bossTeamIndex(role, number), remixedMembers(boss, role, bossTeamIndex(role, number), remix, `${role}:${bossId}:${number}`)).map((m, i) => {
     const info = enemyLevel(content, archetype, scale, bonus + (i === team.members.length - 1 ? aceBonus : 0), rng);
     levelInfo.push(info);
     return { speciesId: m.speciesId, level: info.level, moves: m.moves, training: m.training } as PlannedMember;

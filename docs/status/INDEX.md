@@ -104,6 +104,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `narrative-defeat.md`: Narrative rival defeats (M12, spec §3; `core/rivals/narrativeDefeat.ts`, `data/narrativeDefeats.json`): a riva
 - `overdrive-behaviors.md`: Overdrive behaviors (spec 8): three new moments decided by the battle engine on the "hyper" stream (`core/batt
 - `pack-music-followup.md`: 
+- `packs-and-plugins.md`: Social/tech slice 8 (S325 Content Pack Loader, S337 Lazy Asset Loading, S338 Texture Atlas Builder, S340 Autom
 - `party-life.md`: Party personality & chemistry (APPROVED.md §1, §9, §10). Code `src/core/partyLife/` (rules, state), data `src/
 - `perk-rereads-2.md`: Left-out 2.8 (second batch of perk re-reads): Ginter now puts the 2 nearest locked shop entries for rare or ep
 - `perk-rereads.md`: Left-out 2.8 (first perk re-reads): Raihan's weather boost now covers sandstorm and hail (`weatherDamageMultip
@@ -239,9 +240,11 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
 - `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
+- `beta44-battle.md`: Beta 4.4 part 1: Choice lock, Refused to go down, sleep 2-4, one Mega, set aces, binding-move art, Melony, rival characters/sparks, first rival on Stage 1 level 5, battle freeze fixes.
 - `gimmick-levels.md`: Mega Stone levels, Dynamax Band levels and Z-Ring attunement (S479, S480, S482), run v38.
 - `growth-mentor.md`: Growth slice 6: Pokémon Mentor lessons in the Camp menu (S48).
 - `growth-nursery.md`: Growth slice 7: Breeding Nursery (pick a parent move or the hatch ability for an Egg).
 - `run-events-b-batch4.md`: Run events B batch 4: 14 more trainer events (dance-off, mentor exam with no bag items, type roulette, mirror trainer, twins, underdogs, charity match, chef cook-off...).
 - [meta-hub-11-seasonal-dojo-cards](meta-hub-11-seasonal-dojo-cards.md): seasonal quests, card backgrounds, rival dojo.
 - `raid-coop.md`: Raids & bosses slice 7: S410 co-op raids (hot-seat, 2 players share the party, own cheers, tougher boss, bigger prize).
+- `growth-form-shift.md`: Growth slice 8: Regional Form Shifts (swap to a regional variant for a Moon Stone).

@@ -18,7 +18,7 @@ import { genderSign } from '../core/gender';
 import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
-import { enemyIntent } from '../core/battle/intent';
+import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
@@ -75,6 +75,7 @@ import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
 import { battleTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
 import { planCues } from '../core/presentation/cues';
+import { applyCueHooks } from '../core/presentation/hooks';
 import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
 import { autoBattleProblem, autoProfile, chooseAutoAction, STANCES, STANCE_INFO, stanceOf, type Stance } from '../core/battle/autoBattle';
@@ -94,6 +95,7 @@ import { chargeUp, cinematic, prefetchCinematics, type CineKind } from '../ui/ba
 import { dynamaxPatternKey, STATUS_PULSE, statusPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
 import { dropPattern, wearPattern, wornPattern } from '../ui/battleFx/formPattern';
 import { loadAssets } from '../ui/lazyAssets';
+import { tweenDone } from '../ui/tweenDone';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
@@ -177,8 +179,8 @@ interface InfoBox {
 }
 
 const sleep = (scene: Phaser.Scene, ms: number) => new Promise<void>((resolve) => scene.time.delayedCall(ms, resolve));
-const tween = (scene: Phaser.Scene, config: Phaser.Types.Tweens.TweenBuilderConfig) =>
-  new Promise<void>((resolve) => scene.tweens.add({ ...config, onComplete: () => resolve() }));
+// Always settles, even when another effect kills the tween (a killed tween never calls onComplete).
+const tween = tweenDone;
 
 export class BattleScene extends Phaser.Scene {
   private message!: Phaser.GameObjects.Text;
@@ -783,6 +785,9 @@ export class BattleScene extends Phaser.Scene {
     if (standInClass) return { assetId: standInClass.spriteAssetId, label: trainer.name };
     if (boss) return { assetId: boss.spriteAssetId, label: boss.name };
     const cls = content.trainers.get(trainer.classId);
+    // Beta 4.4: a rival is drawn as its own character (Silver, Hop, Nemona...), not always as Blue.
+    const character = trainer.classId === 'rival' ? content.bosses.get(trainer.name.toLowerCase()) : undefined;
+    if (cls && character) return { assetId: character.sprites.default, label: trainer.name };
     if (cls) return { assetId: cls.spriteAssetId, label: cls.name };
     // A boss's ace back as a nemesis: drawn as that boss (the battle itself is not a boss fight).
     const nemesisBoss = this.run.story.nemeses.find((n) => n.id === this.run.battle?.nemesis)?.trainer;
@@ -2178,7 +2183,7 @@ export class BattleScene extends Phaser.Scene {
               ? ' It will Dynamax!'
               : '';
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
-    const intent = this.run.battle && !this.run.battle.doubles ? enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) : null;
+    const intent = this.run.battle && !this.run.battle.doubles ? (enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
     const battleNow = this.run.battle!;
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
@@ -2335,7 +2340,7 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           const name = zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
-          const disabled = slot.pp <= 0 || (zMoves !== null && !zMoves[i]);
+          const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
           const styled = this.skin?.moveText?.({ name, type: move.type, category: move.category, power: String(move.power ?? fixedDamageLabel(move.effects.fixedDamage)), accuracy: move.accuracy === null || move.accuracy === undefined ? '-' : String(move.accuracy), pp: slot.pp, maxPp: maxPp(content, slot) });
@@ -2772,7 +2777,9 @@ export class BattleScene extends Phaser.Scene {
     const { battleAnimations } = session.settings;
     const effectIntensity = capFlash(session.settings.effectIntensity, session.settings.reducedFlash);
     // What the screen shows for each event; worked out from the finished turn, so it can't change it.
-    const cues = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
+    const planned = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
+    // Plugin hooks (S344) may reshape the cues; skipped when animations are off. Presentation only.
+    const cues = battleAnimations === 'off' ? planned : applyCueHooks(planned, events);
 
     for (const [index, e] of events.entries()) {
       // "Charmander used Ember!" goes up before its animation; other messages follow theirs.
@@ -2852,6 +2859,12 @@ export class BattleScene extends Phaser.Scene {
         case 'hyper':
           // A Hyper moment: hung on, got back up, shook off its status or dug in (or the foe's rage).
           if (e.side === 'enemy') this.riledUid = e.variant === null || e.variant === 'uncontrollable' ? e.uid : null;
+          // Beta 4.4: a moment for a Pokémon that isn't on the field never borrows the active Pokémon's HP bar.
+          if (mon && e.uid && e.uid !== mon.uid) {
+            const live = this.findLive(e.side, e.uid);
+            if (live && e.cured) live.status = null;
+            break;
+          }
           mon!.hp = e.hpAfter;
           if (e.cured) mon!.status = null;
           if (sprite && sprite.alpha < 1) sprite.setAlpha(1);
@@ -2934,7 +2947,13 @@ export class BattleScene extends Phaser.Scene {
         }
         case 'item': {
           playSfxLazy(this, 'ui.use_item', 0.8);
-          preText = `You used the ${content.items.get(e.itemId)?.name ?? 'item'}!`;
+          // The trainer's own item (a Hyper Potion) says so, and fills the foe's box rather than yours.
+          const foeItem = this.shown.enemy && e.targetUid === this.shown.enemy.uid;
+          preText = foeItem ? e.message : `You used the ${content.items.get(e.itemId)?.name ?? 'item'}!`;
+          if (foeItem && this.shown.enemy) {
+            this.shown.enemy.hp = e.hpAfter;
+            await this.refreshInfoBox(this.enemyBox, this.shown.enemy, true);
+          }
           break;
         }
         case 'held': {
