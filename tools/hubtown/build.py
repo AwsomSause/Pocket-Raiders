@@ -254,21 +254,8 @@ def build_map(L, mapname, out_json, spawn_id):
             if not in_plaza and (xx, yy) not in interior: continue
             stone = ('vr', 5 + (xx - x0) % 3, (yy - y0) % 3)
             sand = ('vr', 1, 22)
-            ws = [_stone_weight(xx + (px + 1) / T, yy + (py + 1) / T) for py in range(0, T, 2) for px in range(0, T, 2)]
-            if min(ws) >= 15 / 16: ground[yy][xx] = stone; continue
-            if max(ws) <= 0.5 / 16: ground[yy][xx] = sand; continue
-            a_img, b_img = _tile_img(sand), _tile_img(stone)
-            out = a_img.copy(); bp = b_img.load(); op = out.load()
-            k = 0
-            for py in range(0, T, 2):
-                for px in range(0, T, 2):
-                    if ws[k] * 16 > BAYER[(py // 2) % 4][(px // 2) % 4] + 0.5:
-                        for sy in (0, 1):
-                            for sx in (0, 1): op[px + sx, py + sy] = bp[px + sx, py + sy]
-                    k += 1
-            key = ('mix', mapname, xx, yy)
-            SYNTH[key] = out
-            ground[yy][xx] = key
+            # Hard edge (Kice 2026-11-06): the speckled dither was removed, stone inside the square and plain sand outside.
+            ground[yy][xx] = stone if in_plaza else sand
     water_tiles = set()
     for r in L.water: blob(rect_set(*r), 'g4', (0, 8)); water_tiles |= rect_set(*r)
     for r in L.beach:
