@@ -2839,6 +2839,10 @@ function executeMove(
   user.vol.exposed = false;
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
   if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
+  if (!continuing && user.side === 'player' && move.category !== 'status') {
+    const seenMoves = (ctx.battle.playerMovesSeen ??= {});
+    seenMoves[move.id] = (seenMoves[move.id] ?? 0) + 1;
+  }
   // S32: the crowd cheers when you show it a new mix of move types.
   if (!continuing && user.side === 'player' && crowdSees(ctx.content, ctx.battle, move)) {
     events.push(say('player', 'spectator', 'The crowd roars at the variety! They cheer your Pokémon on.', user.mon.uid));
