@@ -1,0 +1,66 @@
+{
+ "status": "supported",
+ "source": "src/core/battle/transform.ts header (GAME_DESIGN.md 5f) and THE OVERHAUL.md section 3.5; checked against the engine by tests/unit/transformCheck.test.ts",
+ "mechanics": {
+  "mega": {
+   "name": "Mega Evolution / Primal Reversion",
+   "keyItem": "mega-ring",
+   "unlockedBy": "the form's Mega Stone (or Red/Blue Orb for Primal) in the Bag",
+   "trigger": "automatic",
+   "limit": "none",
+   "consumesResource": false,
+   "excludes": [
+    "dynamax"
+   ],
+   "reverts": "end of battle",
+   "persistsThroughRun": "Mega Ring and stones stay in the Bag",
+   "perPokemon": "every Pokémon with its stone transforms by itself"
+  },
+  "tera": {
+   "name": "Terastallization",
+   "keyItem": "tera-orb",
+   "unlockedBy": "Tera Orb",
+   "trigger": "player choice",
+   "limit": "once per battle per side",
+   "consumesResource": false,
+   "excludes": [
+    "zmove",
+    "dynamax"
+   ],
+   "reverts": "end of battle",
+   "persistsThroughRun": "Tera Orb stays in the Bag",
+   "perPokemon": "a Pokémon uses at most one of Tera, Z-Move and Dynamax per battle"
+  },
+  "zmove": {
+   "name": "Z-Move",
+   "keyItem": "z-ring",
+   "unlockedBy": "Z-Ring plus the Z-Crystal of the move's type",
+   "trigger": "player choice",
+   "limit": "once per battle per side",
+   "consumesResource": false,
+   "excludes": [
+    "tera",
+    "dynamax"
+   ],
+   "reverts": "the Z-Move is a single move; nothing to revert",
+   "persistsThroughRun": "Z-Ring and crystals stay in the Bag",
+   "perPokemon": "a Pokémon uses at most one of Tera, Z-Move and Dynamax per battle"
+  },
+  "dynamax": {
+   "name": "Dynamax / Gigantamax",
+   "keyItem": "dynamax-band",
+   "unlockedBy": "Dynamax Band (Gigantamax form if the species has one)",
+   "trigger": "player choice (Gigantamax form is automatic)",
+   "limit": "once per battle per side, for balance.transformations.dynamaxTurns turns",
+   "consumesResource": false,
+   "excludes": [
+    "mega",
+    "tera",
+    "zmove"
+   ],
+   "reverts": "after its turns, on switching out or fainting, and at end of battle",
+   "persistsThroughRun": "Dynamax Band stays in the Bag",
+   "perPokemon": "a Pokémon uses at most one of Tera, Z-Move and Dynamax per battle"
+  }
+ }
+}
