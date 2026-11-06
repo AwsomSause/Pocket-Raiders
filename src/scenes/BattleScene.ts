@@ -140,6 +140,8 @@ const TEXT_MS = { faster: 6, fast: 12, normal: 28, slow: 50 } as const;
 const AUTO_EVENTS = new Set<string>(['move', 'noPp', 'miss', 'damage', 'noEffect', 'fail']);
 // Where the Pokémon stand: on the arena's ground patches (PokeRogue's layout).
 const ENEMY_POS = { x: 648, y: 246 };
+/** Where your trainer waits off screen between throws. */
+const TRAINER_OFF_X = -160;
 const PLAYER_POS = { x: 312, y: 400 };
 /** The bottom message bar, and the command window on its right. */
 const MESSAGE_Y = 396;
@@ -248,6 +250,8 @@ export class BattleScene extends Phaser.Scene {
   private fieldBase = 0;
   /** The player's trainer on the field (Overhaul P2): null in doubles and for trainers that keep their own throwing sprite. */
   private trainerActor: PlayerTrainerActor | null = null;
+  private trainerHomeX = 0;
+  private trainerAway: Phaser.Time.TimerEvent | null = null;
   private trainerReady: Promise<void> = Promise.resolve();
   /** The doubles target picker's marker on the highlighted Pokémon. */
   private reticle: Phaser.GameObjects.Graphics | null = null;
@@ -455,6 +459,7 @@ export class BattleScene extends Phaser.Scene {
       // Two databoxes a side, smaller; the focused spot's box is enemyBox / playerBox.
       const d = battle.doubles;
       const box = (side: Side, spot: Spot) => {
+        if (this.skin) return this.makeDuoSkinBox(side, spot);
         const b = this.makeInfoBox(DUO_BOX[side][spot].x, DUO_BOX[side][spot].y, side === 'player');
         b.container.setScale(DUO_BOX.scale);
         return b;
@@ -825,18 +830,54 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The throw for sending a Pokémon out: its own caught ball flies to its spot and opens there. */
-  private sendOutMoment(mon: PokemonInstance): Promise<void> {
+  private async sendOutMoment(mon: PokemonInstance): Promise<void> {
     const ball = mon.caughtBall ?? DEFAULT_BALL;
     const at = this.spotXY('player');
-    return this.trainerActor!.play('sendOut', {
+    const actor = await this.trainerIn();
+    if (!actor) return;
+    await actor.play('sendOut', {
       target: { x: at.x, y: at.y - 50 },
       makeBall: (x, y) => ballVisual(this, ball, x, y),
       onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
     });
+    this.trainerOut();
   }
 
   /**
-   * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform. Trainers with their own
+   * Your trainer only shows for throws, recalls and the end of the battle (Kice 2026-11-06): it slides back in
+   * from the left for the moment, then steps off again (trainerOut). Presentation only.
+   */
+  private async trainerIn(): Promise<PlayerTrainerActor | null> {
+    const actor = this.trainerActor;
+    if (!actor) return null;
+    this.trainerAway?.remove();
+    this.trainerAway = null;
+    const s = actor.sprite;
+    this.tweens.killTweensOf(s);
+    s.setVisible(true);
+    if (s.x === this.trainerHomeX) return actor;
+    if (this.motion === 'off') s.x = this.trainerHomeX;
+    else await tween(this, { targets: s, x: this.trainerHomeX, duration: 220, ease: 'Quad.easeOut' });
+    return actor;
+  }
+
+  /** The trainer steps off screen a moment after a throw (a following recall or throw cancels it). */
+  private trainerOut(delay = 400): void {
+    const actor = this.trainerActor;
+    if (!actor) return;
+    this.trainerAway?.remove();
+    this.trainerAway = this.time.delayedCall(delay, () => {
+      this.trainerAway = null;
+      const s = actor.sprite;
+      if (!s.active) return;
+      const hide = () => s.setVisible(false).setX(TRAINER_OFF_X);
+      if (this.motion === 'off') hide();
+      else this.tweens.add({ targets: s, x: TRAINER_OFF_X, duration: 320, ease: 'Quad.easeIn', onComplete: hide });
+    });
+  }
+
+  /**
+   * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform for the opening throw; it then leaves (trainerOut). Trainers with their own
    * throwing sprite keep the older opening throw; doubles have no trainer on the field. Skip: Enter, Space or a tap.
    */
   private setupTrainerActor(doubles: boolean): void {
@@ -848,7 +889,8 @@ export class BattleScene extends Phaser.Scene {
     const look = playerLookForBattle();
     this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      const actor = new PlayerTrainerActor(this, look, PLAYER_POS.x - 175, PLAYER_POS.y - 4, 190, this.motion, throwTint(art));
+      this.trainerHomeX = PLAYER_POS.x - 175;
+      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, PLAYER_POS.y - 4, 190, this.motion, throwTint(art));
       // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
       this.field.addAt(actor.sprite, this.fieldBase);
       actor.idle();
@@ -1112,6 +1154,28 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** A databox laid out by the battle style (its mock-up's shape and parts). */
+  /**
+   * A battle style's databox in a double battle: the style's own box, shrunk, at the style's spot for that side,
+   * with the second box stacked below it (or above, when below would run into the message bar).
+   */
+  private makeDuoSkinBox(side: Side, spot: Spot): InfoBox {
+    const L = this.skin!.layout;
+    const spec = side === 'player' ? L.player : L.foe;
+    const [px, py, pw, ph] = spec.panel;
+    const tall = Math.min(ph, 110);
+    const scale = Math.min(DUO_BOX.scale, 300 / (px + pw), 70 / tall);
+    const step = Math.max(40, Math.round((py + tall) * scale + 8));
+    const floor = L.bar ? L.bar[1] : MESSAGE_Y + 20;
+    const below = spec.y + step + (py + tall) * scale <= floor;
+    const y = spec.y + spot * (below ? step : -step);
+    // Boxes on the right keep their right edge; boxes on the left keep their left edge.
+    const right = spec.x + (px + pw) / 2 > GAME_WIDTH / 2;
+    const x = right ? spec.x + (px + pw) * (1 - scale) : spec.x;
+    const b = this.makeSkinBox(spec, side === 'player');
+    b.container.setPosition(x, y).setScale(scale);
+    return b;
+  }
+
   private makeSkinBox(spec: BoxSpec, isPlayer: boolean): InfoBox {
     const skin = this.skin!;
     const container = this.add.container(spec.x, spec.y);
@@ -2891,7 +2955,7 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
-    if (result.wiped || result.defeated) void this.trainerActor?.play('defeat');
+    if (result.wiped || result.defeated) void this.trainerIn().then((a) => a?.play('defeat'));
     if (result.wiped) {
       await this.say(result.run.phase === 'battle' ? 'The VS Recorder rewinds the tape... the battle starts again!' : result.run.rules.modeId === 'adventure' ? 'Your party fainted... you return to the start of the stage, healed.' : 'Death-Block! You return to the start of the stage with your party healed.');
       this.scene.start(sceneForRun(result.run));
@@ -2914,7 +2978,7 @@ export class BattleScene extends Phaser.Scene {
       stopProceduralAudio();
       playMusic(this, victoryTrack({ trainer: Boolean(trainer), boss: Boolean(bossWin), role: this.role }));
     }
-    if (end.outcome === 'win') void this.trainerActor?.play('win');
+    if (end.outcome === 'win') void this.trainerIn().then((a) => a?.play('win'));
     if (end.outcome === 'win' && this.playerSprite) {
       if (services().session.settings.victoryPoses) {
         const sp = getSpecies(content, this.activeMon().speciesId);
@@ -3146,7 +3210,7 @@ export class BattleScene extends Phaser.Scene {
         case 'weatherDamage':
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
-          if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp) void this.trainerActor?.play('hit');
+          if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
           if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
           if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && e.side === 'enemy' && session.settings.skillPrompts)) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
@@ -3231,7 +3295,7 @@ export class BattleScene extends Phaser.Scene {
         }
         case 'switchOut': {
           if (sprite) this.tweens.killTweensOf(sprite);
-          const recall = e.side === 'player' ? this.trainerActor?.play('recall') : undefined;
+          const recall = e.side === 'player' && this.trainerActor ? this.trainerIn().then((a) => a?.play('recall')).then(() => this.trainerOut()) : undefined;
           if (sprite) await tween(this, { targets: sprite, alpha: 0, duration: 250 });
           await recall;
           break;
@@ -3547,8 +3611,9 @@ export class BattleScene extends Phaser.Scene {
     const item = services().session.content.items.get(itemId);
     // The trainer throws it (Overhaul P2/P3): the ball leaves the hand on the release frame; without a trainer it starts at the left edge.
     let hand = { x: 200, y: 380 };
-    const actor = this.trainerActor;
+    const actor = await this.trainerIn();
     if (actor) {
+      this.trainerOut(1200);
       let release: (() => void) | undefined;
       const released = new Promise<void>((resolve) => (release = resolve));
       const played = actor.play('sendOut', { onRelease: (h) => { hand = h; release?.(); } });
