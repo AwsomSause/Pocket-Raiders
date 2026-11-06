@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adjustBond, bondOf } from '../../src/core/bond';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
+import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
 import { content } from './helpers';
@@ -146,6 +146,18 @@ describe('guard hook', () => {
     expect(heartbondTurn(run, 'b1', 1, ev).paid).toEqual(['guard_ally']);
     expect(heartbondTurn(run, 'b1', 2, ev).paid).toEqual(['guard_ally']);
     expect(heartbondTurn(run, 'b1', 3, ev).paid).toEqual([]);
+  });
+});
+
+describe('clutch hook', () => {
+  it('survives from half HP down to 15% or less pays once; a faint or a small dip does not', () => {
+    expect(clutchSurvived(60, 10, 100)).toBe(true);
+    expect(clutchSurvived(60, 0, 100)).toBe(false);
+    expect(clutchSurvived(60, 40, 100)).toBe(false);
+    expect(clutchSurvived(30, 10, 100)).toBe(false);
+    const { run, uid } = setup();
+    expect(heartbondTurn(run, 'b1', 1, [{ type: 'clutch', side: 'player', uid }]).paid).toEqual(['clutch_survive']);
+    expect(heartbondTurn(run, 'b1', 2, [{ type: 'clutch', side: 'player', uid }]).paid).toEqual([]);
   });
 });
 

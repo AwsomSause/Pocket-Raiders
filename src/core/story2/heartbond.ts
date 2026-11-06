@@ -139,6 +139,7 @@ export function heartbondTurn(run: RunState, battleKey: string, turn: number, ev
     if (e.type === 'hyper') fired.push('hyper_moment');
     else if (e.type === 'faint') fired.push('faint_loss');
     else if (e.type === 'sacrifice') fired.push('guard_ally');
+    else if (e.type === 'clutch') fired.push('clutch_survive');
   }
   if (!fired.length) return { paid: [], folded: [] };
   const r = payHeartbond(run, partner, battleKey, turn, fired);
@@ -161,4 +162,9 @@ export function heartbondCare(run: RunState, uid: string, source: string, key: s
   const r = payHeartbond(run, uid, key, turn, [source]);
   refreshHeartbond(run);
   return r;
+}
+
+/** A clutch survive: started the turn at half HP or more and ended it alive at 15% or less. */
+export function clutchSurvived(hpBefore: number, hpAfter: number, maxHp: number): boolean {
+  return maxHp > 0 && hpAfter > 0 && hpBefore >= maxHp * 0.5 && hpAfter <= maxHp * 0.15;
 }
