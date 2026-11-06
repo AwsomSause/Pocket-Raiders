@@ -184,6 +184,17 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
     }));
   }
 
+  // Tidy and Thorn Warden: the engine leaves `avoid:<uid>` and `thorn:<uid>` marks; turn them into counters once.
+  if (battle.growthMarks?.some((m) => m.startsWith('avoid:') || m.startsWith('thorn:'))) {
+    const left: string[] = [];
+    for (const m of battle.growthMarks) {
+      const [kind, uid] = m.split(':');
+      if (kind === 'avoid' || kind === 'thorn') bumpGrowth(content.balance.overhaulGrowth, run.story.histories[uid ?? ''], [kind === 'avoid' ? 'tidyHazard' : 'thornHit']);
+      else left.push(m);
+    }
+    battle.growthMarks = left;
+  }
+
   events.forEach((e, i) => {
     switch (e.type) {
       case 'move':

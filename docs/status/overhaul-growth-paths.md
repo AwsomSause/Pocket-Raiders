@@ -86,3 +86,9 @@ Read from the per-move use counts each Pokémon's story history already keeps (`
 - Dojo Student (Fighting type, 15+ uses of one Fighting move, single top): +3% accuracy with that move. The move is remembered on the Pokémon as `growthMove` (optional field, no save bump).
 Fast Learner is checked before Dojo Student.
 Still unplayed (10) and why: Closer (same rule as Loner), Fossil Memory (Rock is immune to sandstorm, the edge would do nothing), Burrower (no charge-interrupt chance in the engine), Free Spirit (no "wander off" node mechanic), Cheerleader (no team morale), Shield Sibling (pair bonds are not visible to the battle), Scout, Pivot, Tidy and Thorn Warden (no counter for first strikes against unseen foes, pivot switch-ins, hazards avoided or contact punishments yet). Tests: `tests/unit/growthMoveHistory.test.ts`.
+
+## Batch 10: Tidy and Thorn Warden (98 of 106 play)
+- Tidy: counter `tidyHazard` (6+, most in party) from clearing hazards (Rapid Spin, Defog, Tidy Up) and from dodging them on switch-in (Heavy-Duty Boots, or a flyer with no Stealth Rock down). Edge: entry-hazard damage taken −5% (`growthHazardMultiplier`).
+- Thorn Warden (Grass): counter `thornHit` (5+) each time its Rough Skin, Iron Barbs, Static-style contact status, or a contact-punishing Protect move hits a foe. Edge: +5% damage to a foe that made contact this turn or last (engine marks `contact:<uid>:<turn>`). Rocky Helmet is not counted yet (held-item module).
+- The engine leaves `avoid:`/`thorn:` marks in `growthMarks`; `story/hooks.ts` turns them into counters. No save bump.
+Still unplayed (8): Closer, Fossil Memory, Burrower, Free Spirit, Cheerleader, Shield Sibling, Scout, Pivot (reasons as above; Scout and Pivot need first-strike and pivot-switch tracking). Tests: `tests/unit/growthHazardContact.test.ts`.
