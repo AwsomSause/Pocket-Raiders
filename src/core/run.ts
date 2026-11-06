@@ -79,6 +79,7 @@ import { wildLuck } from './wildLuck';
 import { arenaFor } from './battle/w1Play';
 import { underdogXpMultiplier } from './battle/w1Rules';
 import { expShareUnlocked, FIRST_RIVAL_FLAG } from './firstRival';
+import { bankOverflowXp, xpPolicyMultiplier } from './teamPolicy';
 import { canonPlan, characterOf, majorNote, withAceProgress } from './rivals/major';
 import { beginMonRivalBattle, carriedMonRival, dueMonRival, monRivalMember, rivalCatchesMonRival } from './rivals/monRivals';
 import { armSacrifice, sacrificeEcho } from './rivals/sacrifice';
@@ -2441,9 +2442,12 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       const perkXp = xpPerk(archetype.modifiers, { types: monSpecies.types, baseSpeed: monSpecies.baseStats.spe, isStarter: run.log.starterUid === mon.uid, isBossBattle: bossBattle, ultraBeast: isUltraBeast(mon.speciesId), isHatched: mon.hatched === true, isDoubles: battle.doubles !== undefined });
       const full = xpForDefeat(baseExp, defeated.level, mon.level, multiplier * underdog * perkXp * (1 + catchUp / 100) * expMultiplier(content, mon));
       const squirt = mon === run.party[0] && (run.itemCounters?.['squirt-exp'] ?? 0) > 0 ? 1 + (perksOf(activePerks(content, run), 'squirt')[0]?.perk.percent ?? 5) / 100 : 1;
-      const amount = Math.floor((participants.includes(uid) ? full : Math.floor((full * Math.min(100, share)) / 100)) * squirt);
+      const amount = Math.floor((participants.includes(uid) ? full : Math.floor((full * Math.min(100, share)) / 100)) * squirt * xpPolicyMultiplier(run, uid));
       if (amount <= 0) continue;
+      const xpBefore = mon.xp;
       const result = gainXp(content, mon, amount, runLevelCap(content, run));
+      // Experience a capped Pokémon cannot use is banked and pays out Bag items (ideas S61).
+      bankOverflowXp(content, run, amount - (mon.xp - xpBefore));
       out.push({ type: 'xp', uid, amount });
       if (result.levelsGained > 0) {
         out.push({ type: 'levelUp', uid, level: result.newLevel });

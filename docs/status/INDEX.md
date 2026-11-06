@@ -222,3 +222,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - story-endings-mysteries.md: S115 betrayal, S120 ending variations, S122 secret endings, S125 mystery, S129 lead chatter
 - `growth-shop-fossils.md`: Growth slice 1: Tuning Dust sold in shops, Bond Lv on the party Personality tab, 10 evolved Hisuian fossils.
 - dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)
+- `growth-xp-share.md`: Growth slice 2: Camp "Experience share" (Even/Focus/Catch-up) and capped XP paying Hyper Potions.
