@@ -9,11 +9,11 @@ const CX = 300;
 const CY = 330;
 const R = 150;
 
-/** Bubbles round the ring from upper left over the top to the right, as in the mock-up. */
+/** Bubbles round the ring from upper left over the top to the right, as in the mock-up (starting clear of your trainer, ending on screen). */
 const ring = (size: number, w: number, h: number) => (n: number) => {
-  const step = n > 1 ? Math.min(50, 230 / (n - 1)) : 0;
+  const step = n > 1 ? Math.min(45, 180 / (n - 1)) : 0;
   return menuOf(size, w, h, (i) => {
-    const a = ((-150 + i * step) * Math.PI) / 180;
+    const a = ((-120 + i * step) * Math.PI) / 180;
     return [CX + Math.cos(a) * (R + 40) - w / 2, CY + Math.sin(a) * (R + 40) - h / 2];
   }, { columns: n, align: 'center', bare: true });
 };
@@ -28,7 +28,7 @@ export const ringSkin: BattleSkin = {
     message: { x: 614, y: 420, w: 312, size: 18 },
     command: null,
     tabs: { x: 600, y: 274 },
-    moveInfo: { x: 614, y: 410 },
+    moveInfo: { x: 614, y: 396 },
     root: ring(20, 120, 48),
     moves: ring(20, 150, 60),
   },
