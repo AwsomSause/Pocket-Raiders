@@ -20,6 +20,7 @@ import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
 import { PocketFolk, folkAssets, pocketFolk } from '../ui/hubTown/pocketFolk';
 import { itemVisual, pokemonIcon } from '../ui/sprites';
 import { onInputAction } from '../ui/input';
+import type { TownPanelLike } from '../ui/townPanel';
 import { openBuilding, openTown, townBusy, type TownHost } from '../ui/townMenu';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
@@ -31,7 +32,7 @@ const T = POCKET_TOWN.tile;
 const FOUNTAIN = { x: 36, y: 32 };
 
 export class TownScene extends Phaser.Scene {
-  private picker: Picker | null = null;
+  private picker: TownPanelLike | null = null;
   private note!: Phaser.GameObjects.Text;
   private decorMode = false;
   private decorLayer: Phaser.GameObjects.Container | null = null;
