@@ -3,7 +3,8 @@
 // `fight` (core/exhibition), seeded from the game's own state, so nothing touches the gameplay RNG streams.
 
 import type { Content } from '../contentSchema';
-import { fight, type ExhibitionFighter, type ExhibitionTeam } from '../exhibition';
+import { natureName, NATURE_IDS } from '../natures';
+import { fight, palaceStyle, type ExhibitionFighter, type ExhibitionTeam } from '../exhibition';
 import { Rng } from '../rng';
 import type { BaseState, Cell, MinigameModule } from './games';
 
@@ -19,12 +20,12 @@ const label = (f: ExhibitionFighter) => `${f.name} Lv${f.level}`;
 const TRAINERS = ['Frontier Brain', 'Tower Tycoon', 'Factory Head', 'Palace Maven', 'Pyramid King', 'Arcade Star', 'Hall Matron'];
 
 /** Fights one round: your three against a fresh team. True when you win. */
-function duel(c: Content, s: FrontState, mine: ExhibitionFighter[], foeLevel: number): boolean {
+function duel(c: Content, s: FrontState, mine: ExhibitionFighter[], foeLevel: number, palaceRules = false): boolean {
   const r = rng(s);
   const foe: ExhibitionTeam = { trainer: r.pick(TRAINERS), fighters: draw(c, r, 3, foeLevel) };
   keep(s, r);
   s.fights += 1;
-  const res = fight(c, s.fseed, `f${s.fights}`, { trainer: 'You', fighters: mine }, foe);
+  const res = fight(c, s.fseed, `f${s.fights}`, { trainer: 'You', fighters: mine }, foe, { palace: palaceRules });
   s.msg = res.winner === 0 ? `Round won against ${foe.trainer}.` : `Lost to ${foe.trainer}.`;
   return res.winner === 0;
 }
@@ -95,11 +96,21 @@ const factory: MinigameModule<FrontState> = {
 };
 
 // ---------- Battle Palace (S441): the team plays on its own; you only set the lineup ----------
+const STYLE_TEXT = { attack: 'attacks', support: 'defends', fickle: 'fickle', free: 'balanced' } as const;
 const palace: MinigameModule<FrontState> = {
-  start: (c, p, rs) => startFront(c, p, rs, 5),
+  start(c, p, rs) {
+    const s = startFront(c, p, rs, 5);
+    const r = rng(s);
+    s.pool.forEach((f) => (f.nature = r.pick([...NATURE_IDS])));
+    keep(s, r);
+    return s;
+  },
   view(_c, s) {
     const hud = [`Round ${Math.min(s.round + 1, s.rounds)}/${s.rounds}`, `Won: ${s.won}`, s.msg];
-    if (s.phase === 'pick') return { hud, prompt: `Pick your lineup in order (${s.team.length}/3). Once inside, your Pokémon choose moves on their own.`, cols: 3, cells: poolCells(s, (i) => `r${i}`), done: s.done };
+    if (s.phase === 'pick') {
+      const cells = poolCells(s, (i) => `r${i}`).map((cell, i) => ({ ...cell, detail: `Lv${s.pool[i]!.level} ${natureName(s.pool[i]!.nature!)}: ${STYLE_TEXT[palaceStyle(s.pool[i]!.nature)]}` }));
+      return { hud, prompt: `Pick your lineup in order (${s.team.length}/3). Nature decides how each one fights: attackers only strike, defenders use status moves, fickle ones alternate.`, cols: 3, cells, done: s.done };
+    }
     return { hud, prompt: 'Your Pokémon fight their own way. Send them in.', cols: 1, cells: [{ id: 'go', label: 'Next round', tone: 'hot', disabled: s.done }], done: s.done };
   },
   act(c, s, id) {
@@ -109,7 +120,7 @@ const palace: MinigameModule<FrontState> = {
       if (!s.team.includes(i) && s.team.length < 3) s.team.push(i);
       else if (s.team.includes(i)) s.team = s.team.filter((x) => x !== i);
       if (s.team.length === 3) s.phase = 'between';
-    } else if (s.phase === 'between' && id === 'go') finishRound(s, duel(c, s, s.team.map((i) => s.pool[i]!), roundLevel(s)));
+    } else if (s.phase === 'between' && id === 'go') finishRound(s, duel(c, s, s.team.map((i) => s.pool[i]!), roundLevel(s), true));
   },
   result: (s) => ({ score: s.won, max: s.rounds }),
 };
