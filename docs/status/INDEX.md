@@ -333,3 +333,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `player-trainer-battle-p2.md`: player trainer on the battle field (Overhaul P2).
 - [item-held-hooks](item-held-hooks.md): P5, 15 held hooks, Ability Shield/Capsule/Patch
 - 2026-11-06 role-pool-casting: any boss fills any league role, seeded roleCast stream, wild-card caps (docs/status/role-pool-casting.md)
+- `caught-ball-p3.md`: caught ball tracking and ball throws (Overhaul P3).

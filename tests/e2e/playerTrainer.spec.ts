@@ -10,12 +10,12 @@ async function waitForScene(page: Page, key: string) {
   await page.waitForTimeout(250);
 }
 
-test('player trainer plays every moment, each is skippable, and the battle state is untouched', async ({ page }) => {
+async function startBattle(page: Page, seed: string): Promise<string[]> {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
-  await page.goto('/?seed=e2e-trainer&debug=1');
+  await page.goto(`/?seed=${seed}&debug=1`);
   await waitForScene(page, 'MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
     await page.keyboard.press('Enter');
@@ -25,6 +25,11 @@ test('player trainer plays every moment, each is skippable, and the battle state
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
+  return errors;
+}
+
+test('player trainer plays every moment, each is skippable, and the battle state is untouched', async ({ page }) => {
+  const errors = await startBattle(page, 'e2e-trainer');
   const has = () => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').trainerActor));
   await expect.poll(has).toBe(true);
   await page.screenshot({ path: 'test-results/player-trainer.png' });
@@ -51,5 +56,23 @@ test('player trainer plays every moment, each is skippable, and the battle state
     expect(r.frames, moment).toBeGreaterThan(1);
   }
   expect(await state()).toBe(before);
+  expect(errors).toEqual([]);
+});
+
+test('a Pokémon caught in a Great Ball is thrown from a Great Ball (and the ball opens with the pack effect)', async ({ page }) => {
+  const errors = await startBattle(page, 'e2e-greatball');
+  await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').trainerActor))).toBe(true);
+  const seen = await page.evaluate(async () => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    const mon = structuredClone(b.shown.player);
+    mon.caughtBall = 'great-ball';
+    const keys = new Set<string>();
+    const poll = setInterval(() => b.children.list.forEach((c: any) => c.texture?.key && keys.add(c.texture.key)), 15);
+    await b.sendOutMoment(mon);
+    await new Promise((r) => setTimeout(r, 100));
+    clearInterval(poll);
+    return [...keys];
+  });
+  expect(seen).toContain('ball.gb');
   expect(errors).toEqual([]);
 });
