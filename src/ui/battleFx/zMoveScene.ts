@@ -27,6 +27,8 @@ export interface ZSceneOptions {
   titleId?: string;
   /** The battle's own backdrop picture (the reference stage is the battle's backdrop, tinted); null draws a plain striped stage. */
   backdropKey?: string | null;
+  /** The arena's platform picture (`<backdrop>.enemy`); the scene's bases are cut from it. Null draws plain ellipses. */
+  baseKey?: string | null;
   /** True when the Pokémon is the foe's: the trainer comes in from the right. */
   opposes: boolean;
   /** Flash strength 0..1 and shake 0..1 from the animation settings. */
@@ -85,7 +87,41 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
   }
   const tintLayer = scene.add.rectangle(cx, H / 2, W, H, o.tint, 0).setOrigin(0.5);
   const dim = scene.add.rectangle(cx, H / 2, W, H, 0x000000, 0).setOrigin(0.5);
-  const makeBase = (x: number, y: number) => {
+  // The arena's own platform: the opaque part of its picture, found once.
+  const baseBox = (() => {
+    if (!has(o.baseKey ?? null)) return null;
+    try {
+      const src = scene.textures.get(o.baseKey!).getSourceImage() as HTMLImageElement | HTMLCanvasElement;
+      const cv = document.createElement('canvas');
+      cv.width = src.width;
+      cv.height = src.height;
+      const ctx = cv.getContext('2d');
+      if (!ctx) return null;
+      ctx.drawImage(src, 0, 0);
+      const px = ctx.getImageData(0, 0, cv.width, cv.height).data;
+      let x0 = cv.width, y0 = cv.height, x1 = -1, y1 = -1;
+      for (let yy = 0; yy < cv.height; yy++) {
+        for (let xx = 0; xx < cv.width; xx++) {
+          if ((px[(yy * cv.width + xx) * 4 + 3] ?? 0) > 16) {
+            x0 = Math.min(x0, xx);
+            y0 = Math.min(y0, yy);
+            x1 = Math.max(x1, xx);
+            y1 = Math.max(y1, yy);
+          }
+        }
+      }
+      return x1 < 0 ? null : { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+    } catch {
+      return null;
+    }
+  })();
+  const makeBase = (x: number, y: number): Phaser.GameObjects.Image | Phaser.GameObjects.Graphics => {
+    if (baseBox) {
+      const S = 3;
+      const img = scene.add.image(x - (baseBox.x + baseBox.w / 2) * S, y - (baseBox.y + baseBox.h / 2) * S, o.baseKey!).setOrigin(0).setScale(S);
+      img.setCrop(baseBox.x, baseBox.y, baseBox.w, baseBox.h);
+      return img;
+    }
     const g = scene.add.graphics({ x, y });
     g.fillStyle(0xb7a9d6, 1).fillEllipse(0, 0, 330, 78);
     g.fillStyle(0xffffff, 0.8).fillEllipse(0, -4, 290, 62);
@@ -189,7 +225,7 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
       trainerBase?.setVisible(true);
     });
     tw({ targets: tr, x: trainerX, duration: 8 * F, delay: t + 4 * F, ease: 'Quad.easeOut' });
-    if (trainerBase) tw({ targets: trainerBase, x: trainerX, duration: 8 * F, delay: t + 4 * F, ease: 'Quad.easeOut' });
+    if (trainerBase) tw({ targets: trainerBase, x: `+=${trainerX - trainerStartX}`, duration: 8 * F, delay: t + 4 * F, ease: 'Quad.easeOut' });
     t += 13 * F;
     if (ring) {
       const r = ring;
