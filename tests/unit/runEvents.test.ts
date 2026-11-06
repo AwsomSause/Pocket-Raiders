@@ -25,7 +25,7 @@ describe('W5 priority and tags', () => {
     const cat = catalogue.events.map((e) => content.events.get(e.id)!);
     expect(cat.every(Boolean)).toBe(true);
     expect(cat).toHaveLength(25);
-    expect(cat.filter((e) => e.disabled)).toHaveLength(13);
+    expect(cat.filter((e) => e.disabled)).toHaveLength(9);
   });
   it('disabled events are never offered', () => {
     const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'd', seed: 'd', archetypeId: 'red' }), 0));

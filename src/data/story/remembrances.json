@@ -49,5 +49,31 @@
    "kind": "backstory",
    "arg": "bs_ex_criminal"
   }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_larvitar",
+  "line": [
+   "larvitar",
+   "pupitar",
+   "tyranitar"
+  ],
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "temperament": "stubborn",
+  "moves": [
+   "crunch",
+   "leer",
+   "bite"
+  ],
+  "keystone": "bedrocks_heir",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_bedrock_4"
+  }
  }
 ]

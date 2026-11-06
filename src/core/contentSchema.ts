@@ -2949,6 +2949,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** A Shadow foe (a Snag Ball can't take it; it can be caught like any wild one) / a calm Blissful foe (only a Blessing Ball catches it). */
     shadow: z.boolean().default(false),
     blissful: z.boolean().default(false),
+    /** W7: a fight inside a pseudo stage (a loss ejects, the run goes on). */
+    pseudo: z.boolean().optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
@@ -2984,6 +2986,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */
     weather: WeatherSchema.optional(),
     terrain: TerrainSchema.optional(),
+    /** W7: a fight inside a pseudo stage: a loss ejects to the map with a partial heal and the run goes on. */
+    pseudo: z.boolean().optional(),
     /** Run events B: share of max HP your party recovers between the fights of a `chain` (Relay Battle). */
     chainHeal: z.number().min(0).max(1).optional(),
     /** Run events B: special rules for this fight (see EventRuleSchema). */
@@ -3098,6 +3102,8 @@ export const EventDefSchema = z.object({
   forced: z.boolean().default(false),
   /** W5: overrides the base priority (forced events 70 to 100). */
   priority: z.number().int().min(0).max(100).optional(),
+  /** W7: an event that opens a pseudo stage or region: capped (1 per region, 2 per run), never in a League stage or a blocked campaign. */
+  pseudo: z.boolean().default(false),
   /** W5: off until the system it needs exists (dungeons, pseudo stages). Never drawn, never queued. */
   disabled: z.boolean().default(false),
   /** Stages themed with these types see it more often. */
