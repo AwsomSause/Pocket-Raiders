@@ -15,5 +15,5 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 - M8.75 still open: D Bank tiers/licenses/challenges, E Pokédex extras, G levels to 500 + custom regions, H later hub systems. M8.5: regional forms as a mechanic (if wanted). M9: built.
 - M10 visuals (Visual Bible V1-V5): next = level-up/reward reveal transitions, per-region palettes, perf pass.
 - Mega signature moves (Overhaul 27-28): all 142 built (92 core + 50 Delta/Z-Mega); note `docs/status/mega-signature-moves.md`. Limit: Elder Gale is single-target.
-- Story Overhaul Track W: W0, W1, W3 done (`docs/status/story-w0-rival-observed.md`, `story-w1-rival-foundations.md`, `story-w3-dialogue-consequences.md`); W2 and W4 in other threads, next W5.
+- Story Overhaul Track W: W0, W1, W3 done (`docs/status/story-w0-rival-observed.md`, `story-w1-rival-foundations.md`, `story-w3-dialogue-consequences.md`); W4 done (`docs/status/W4.md`), W2 in another thread, next W5.
 - CI: `.github/workflows` runs `check` on every PR; branch protection is still off.
