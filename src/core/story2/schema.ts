@@ -154,7 +154,16 @@ export const StoryV2Schema = z.object({
   quiz: z.object({ traitVector: z.record(z.string(), z.number()), picks: z.array(z.string()) }).optional(),
   starter: z.object({ lineId: z.string(), temperament: z.string(), twist: z.string().optional(), keystone: z.array(z.string()).default([]) }).optional(),
   heartbondOverrides: z.number().int().min(0).default(0),
-  cast: z.record(z.string(), z.object({ stage: z.string(), attrs: z.record(z.string(), z.number()).default({}), memories: z.array(z.string()).default([]) })).default({}),
+  cast: z.record(z.string(), z.object({
+    stage: z.string(), attrs: z.record(z.string(), z.number()).default({}), memories: z.array(z.string()).default([]),
+    /** S8 relationship record: flags (met, owes_player...), gate events passed, structured memories, the stage waiting to settle, last contact. */
+    flags: z.record(z.string(), z.boolean()).default({}),
+    gates: z.array(z.string()).default([]),
+    mem: z.array(z.object({ tag: z.string(), salience: z.number().int().min(1).max(10), node: z.number().int().min(0) })).default([]),
+    scenes: z.number().int().min(0).default(0),
+    pending: z.string().nullable().default(null),
+    last: z.object({ node: z.number().int().min(0), summary: z.string() }).nullable().default(null),
+  })).default({}),
   arcs: z.record(z.string(), z.object({ state: z.string(), step: z.number().int().default(0), nodeCost: z.number().default(0) })).default({}),
   facts: z.record(z.string(), Scalar).default({}),
   stops: z.object({ index: z.number().int().default(0), planned: z.number().int().default(0), done: z.array(z.string()).default([]) }).default({ index: 0, planned: 0, done: [] }),
