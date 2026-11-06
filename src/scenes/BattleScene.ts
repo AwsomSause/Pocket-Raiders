@@ -67,6 +67,7 @@ import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
@@ -3179,6 +3180,8 @@ export class BattleScene extends Phaser.Scene {
                 makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
                 crystalKey: (crystalId ? content.items.get(crystalId)?.iconAssetId : null) ?? null,
                 ringKey: 'cine.key.zmove',
+                monHeightM: pokemonHeightM(sp),
+                trainerHeightM: art ? trainerHeightM(art) : undefined,
                 backdropKey: this.arenaBgKey,
                 baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
                 tint: glowColor,
