@@ -269,3 +269,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `follow-mode.md`: Follow Mode camp toggle, lead gains friendship and finds items (S501).
 - `run-events-b-batch8.md`: Run events B batch 8: Blindfold Bout (hidden foe) and Magician's Misdirection (decoy foe name).
 - `mining-spots.md`: Mining Spots S231 (`core/mining.ts`, new map stop).
+- `z-trials.md`: 18 island Z-Trial events, a Z-Crystal per type (S502).
