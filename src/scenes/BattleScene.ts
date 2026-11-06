@@ -23,7 +23,7 @@ import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
-import { canDynamax, maxMoveOptions, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
+import { canDynamax, maxMoveOptions, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
@@ -61,6 +61,7 @@ import { transformAnimId } from '../core/presentation/transformAnims';
 import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
+import { zMoveScene } from '../ui/battleFx/zMoveScene';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -3057,7 +3058,31 @@ export class BattleScene extends Phaser.Scene {
           };
           const at = this.spotXY(e.side);
           const cine: CineKind | null = e.kind === 'mega' || e.kind === 'primal' || e.kind === 'dynamax' || e.kind === 'gigantamax' || e.kind === 'dynamaxEnd' || e.kind === 'zmove' || e.kind === 'tera' ? e.kind : null;
-          if (cine) {
+          if (cine === 'zmove' && this.motion === 'full' && !services().session.settings.fastZMove && mon) {
+            // The full reference scene (Fast Z-Move off): Pokémon turned to face you, trainer and Z-Ring, Z-Crystal, white-out, title.
+            const zMove = zBase ? zMoveFor(content, zBase) : null;
+            const sp = content.species.get(mon.speciesId)!;
+            const mine = e.side === 'player';
+            const art = mine ? this.playerArt() : null;
+            const crystalId = zBase ? ownedZCrystal(content, this.run.inventory, zBase.type) : null;
+            const feel = this.cineFeel('zmove');
+            await this.playBeat(
+              zMoveScene(this, {
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
+                crystalKey: (crystalId ? content.items.get(crystalId)?.iconAssetId : null) ?? null,
+                ringKey: 'cine.key.zmove',
+                tint: glowColor,
+                title: zMove?.name,
+                titleId: zMove?.id,
+                opposes: !mine,
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
+            playSfx(this, 'se.level_up');
+          } else if (cine) {
             const zMove = zBase ? zMoveFor(content, zBase) : null;
             await this.playBeat(
               cinematic(this, {

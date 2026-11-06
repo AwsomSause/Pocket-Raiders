@@ -792,6 +792,8 @@ export const BattleStateSchema = z.object({
   enraged: z.object({ uid: z.string(), left: z.number().int().min(0), priority: z.number().int() }).optional(),
   /** §10 a rival's counter move: its Pokémon `uid` uses `moveId` whenever `target` is in front of it. */
   rivalCounter: z.object({ uid: z.string(), target: z.string(), moveId: z.string() }).optional(),
+  /** Overhaul slice 20: this battle's environment and battlefield condition (core/overhaul/field.ts). Optional: older saves load without it. */
+  overhaulField: z.object({ env: z.string().nullable(), condition: z.object({ id: z.string(), turns: z.number().int().min(0) }).nullable() }).optional(),
 });
 export type BattleState = z.infer<typeof BattleStateSchema>;
 
@@ -1787,6 +1789,8 @@ export const SettingsSchema = z.object({
   skipGuard: z.boolean().default(true),
   /** Overhaul slice 6: the move menu starts on the move each Pokémon used last (on by default). */
   rememberChoices: z.boolean().default(true),
+  /** Fast Z-Move: the short Z-Move cinematic instead of the full reference scene (off by default). */
+  fastZMove: z.boolean().default(false),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */

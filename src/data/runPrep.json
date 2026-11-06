@@ -534,7 +534,7 @@
     "counter": "bossWinsLead.electric",
     "atLeast": 2
    },
-   "unlockText": "Win 2 boss battles with a Electric-type leading"
+   "unlockText": "Win 2 boss battles with an Electric-type leading"
   },
   {
    "id": "type-ice",
@@ -551,7 +551,7 @@
     "counter": "bossWinsLead.ice",
     "atLeast": 2
    },
-   "unlockText": "Win 2 boss battles with a Ice-type leading"
+   "unlockText": "Win 2 boss battles with an Ice-type leading"
   },
   {
    "id": "type-fighting",

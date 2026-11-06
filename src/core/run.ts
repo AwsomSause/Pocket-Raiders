@@ -81,6 +81,7 @@ import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoic
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
+import { rollField } from './overhaul/field';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -1741,6 +1742,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     outbreakShadow(content, run, enemy, node.id);
     run.battle = createBattle('wild', [enemy], activeIndex, activeUid);
+    assignField(content, run, false);
     if (alphaFoe) {
       run.battle.alpha = true;
       run.battle.enemyStages.atk = 1;
@@ -1924,6 +1926,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
+    assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
@@ -3488,4 +3491,9 @@ export function debugGiveItem(content: Content, current: RunState, itemId: strin
   markAssisted(run);
   addItem(run.inventory, itemId, quantity);
   return run;
+}
+
+/** Overhaul slice 20: gives the battle just created its environment and (rarely) a condition. Seeded by hash, no RNG stream used. */
+function assignField(content: Content, run: RunState, boss: boolean): void {
+  run.battle!.overhaulField = rollField(run.seed, run.encountersCompleted, boss ? 'boss' : run.regionIndex < 2 ? 'mid' : 'late', content.balance.overhaulField);
 }

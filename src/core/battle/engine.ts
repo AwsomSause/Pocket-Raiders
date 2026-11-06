@@ -56,6 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
+import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
 import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
@@ -817,6 +818,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     applyTurnHeal(ctx, playerC, events);
     applyTerrain(ctx, [playerC, enemy], events);
     tickSides(ctx, events);
+    const fieldEnd = tickCondition(ctx.battle.overhaulField);
+    if (fieldEnd) events.push(say('enemy', 'arena', fieldEnd));
     recordFaints(ctx, playerC, enemy, events);
   }
   if (!anyFainted(playerC, enemy)) {
@@ -2248,7 +2251,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -5704,10 +5707,20 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
   eventStartRules(ctx, events);
+  overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
   const passive = classPassiveOf(ctx.content, ctx.battle);
   if (passive) events.push(say('enemy', 'arena', passiveLine(ctx.battle.trainer!.name, passive)));
   return events;
+}
+
+/** Overhaul slice 20: the battle's environment and condition are announced; a weather condition sets its weather. */
+function overhaulFieldStart(ctx: BattleContext, events: BattleEvent[]): void {
+  const f = ctx.battle.overhaulField;
+  if (!f) return;
+  for (const line of fieldBanners(f)) events.push(say('enemy', 'arena', line));
+  const w = conditionWeather(f);
+  if (w && setWeather(ctx, w, f.condition!.turns + 2)) events.push({ type: 'weather', weather: w });
 }
 
 /** S280: a smart trainer whose team knows an entry hazard has laid one on your side before the battle. */
