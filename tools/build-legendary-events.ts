@@ -6,7 +6,7 @@ import { BESPOKE } from './legendary/bespoke.ts';
 
 const read = (name: string) => JSON.parse(readFileSync(new URL(`../src/data/${name}`, import.meta.url), 'utf8'));
 const speciesFile = read('species.json');
-const species: any[] = Array.isArray(speciesFile) ? speciesFile : speciesFile.species;
+const species: any[] = [...(Array.isArray(speciesFile) ? speciesFile : speciesFile.species), ...read('storySpecies.json').species]; // + Story Overhaul S15 species
 const byId = new Map<string, any>(species.map((s) => [s.id, s]));
 
 interface TypeKit { word: string; weather?: string; terrain?: string; env: string; deep: string; affinity: string[]; peril: string[]; tint: string; accent: string; time?: string[]; distort?: boolean; wildTypes: string[]; motif: string; phase: string }
@@ -55,7 +55,7 @@ for (const s of legends) {
   const total = bst(s);
   const tier = total >= 660 ? 4 : total >= 600 ? 3 : total >= 540 ? 2 : 1;
   const rarity = b?.rarity ?? (s.tags.includes('mythical') || total >= 660 ? 'veryRare' : total >= 580 ? 'rare' : 'uncommon');
-  const minRegion = tier === 1 ? 1 : tier === 2 ? 1 : tier === 3 ? 2 : 3;
+  const minRegion = Math.max(s.tags.includes("mythical") ? 2 : 1, tier === 1 ? 1 : tier === 2 ? 1 : tier === 3 ? 2 : 3); // Mythicals come from region 3 on (index 2)
   const attackStat = s.baseStats.spa >= s.baseStats.atk ? 'spa' : 'atk';
   const defStat = s.baseStats.spd >= s.baseStats.def ? 'spd' : 'def';
   const id = `legend-${s.id}`;

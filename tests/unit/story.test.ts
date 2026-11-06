@@ -24,6 +24,8 @@ import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { autoplay, gameplayFingerprint, step } from './autoplay';
 import { content, toBattle } from './helpers';
+
+const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
 // The Google Drive pack's items (tools/drive/build-items.py) came later too.
 import DRIVE_ITEMS from '../../tools/drive/items.json';
 import LIBRARY_ITEMS from '../../tools/drive/library-items.json';
@@ -92,6 +94,15 @@ describe('story foundation: random streams', () => {
   const NO_W1 = { resonance: { minParty: 3, bonus: 1 }, bleed: { maxStacks: 1, perStack: 0, moves: ['none'] }, curse: { bonus: 1, followUpTypes: ['ghost'] }, hazardBurst: { fraction: 0 }, luck: { meterBonus: 0, meterCap: 1, chainBonus: 0, chainCap: 1, alphaChance: 0, alphaLevels: 0, alphaMoney: 1 }, bench: { minFriendship: 255 }, play: { combo: { bonus: 1 }, aim: { moves: ['none'], accuracy: { miss: 1, ok: 1, good: 1, perfect: 1 } }, shout: { damage: { miss: 1, ok: 1, good: 1, perfect: 1 } }, throw: { catch: { miss: 1, ok: 1, good: 1, perfect: 1 }, weakenedBelow: 0 }, deal: { below: 0, money: 1, classes: [] }, mindRead: { types: ['none'] }, grudge: { boost: {} }, spectator: { chance: 0, boost: {}, names: ['x'] }, arena: { every: 99, fraction: 0, interact: 0, types: {} } }, underdog: { levels: 99, xpBonus: 1 } };
   const noHyper = buildContent({
     ...structuredClone(RAW_CONTENT),
+    // The ten Story Overhaul species (S15) join the wild pools and would change old seeds' encounters.
+    species: (RAW_CONTENT.species as { id: string; evolutions?: { to: string }[]; evolvesFrom?: string | null }[])
+      .filter((sp) => !STORY_SPECIES.has(sp.id))
+      .map((sp) => ({ ...sp, evolutions: sp.evolutions?.filter((e) => !STORY_SPECIES.has(e.to)), evolvesFrom: sp.evolvesFrom && STORY_SPECIES.has(sp.evolvesFrom) ? null : sp.evolvesFrom })),
+    // ...and so do their Legendary events and finale Totems.
+    legendaryEvents: (() => {
+      const f = RAW_CONTENT.legendaryEvents as { events: { legendary: { species: string } }[]; totems: { id: string }[] };
+      return { ...structuredClone(f), events: f.events.filter((e) => !STORY_SPECIES.has(e.legendary.species)), totems: f.totems.filter((t) => ![...STORY_SPECIES].some((id) => t.id === `legend-${id}`)) };
+    })(),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
     eventsHelpers: { events: [] },

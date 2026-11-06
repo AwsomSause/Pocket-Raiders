@@ -66,7 +66,7 @@ describe('Legendary boss battles', () => {
   const finales = events.map((e) => ({ e, boss: e.finale.kind === 'raid' ? content.raids.raids.find((r) => r.id === (e.finale as { raidId: string }).raidId) : e.finale.kind === 'totem' ? content.totems.totems.find((t) => t.id === (e.finale as { totemId: string }).totemId) : undefined }));
 
   it('every Legendary event ends in a boss with at least two phases that get tougher as it falls', () => {
-    expect(finales.length).toBe(101);
+    expect(finales.length).toBe(107);
     for (const { e, boss } of finales) {
       expect(boss, e.id).toBeTruthy();
       const phases = boss!.phases;
