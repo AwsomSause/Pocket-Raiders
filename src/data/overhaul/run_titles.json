@@ -1,0 +1,677 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/run_titles.json",
+ "entries": [
+  {
+   "id": "broken-crown",
+   "template": "The Run of the Broken {noun}",
+   "phase": "start",
+   "requires": [
+    "noun"
+   ],
+   "tone": "grim"
+  },
+  {
+   "id": "ember-sunken",
+   "template": "{adj} {noun} and the Sunken {place}",
+   "phase": "start",
+   "requires": [
+    "noun",
+    "adj",
+    "place"
+   ],
+   "tone": "mythic"
+  },
+  {
+   "id": "long-road",
+   "template": "The Long Road Through the {weather}",
+   "phase": "start",
+   "requires": [
+    "weather"
+   ],
+   "tone": "epic"
+  },
+  {
+   "id": "last-light",
+   "template": "The Last Light of the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "somber"
+  },
+  {
+   "id": "ashes-of",
+   "template": "Ashes of the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "grim"
+  },
+  {
+   "id": "song-of",
+   "template": "The Song of the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "across-the",
+   "template": "Across the {adj} {place}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "place"
+   ],
+   "tone": "adventurous"
+  },
+  {
+   "id": "beneath-the",
+   "template": "Beneath the {adj} {place}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "place"
+   ],
+   "tone": "mysterious"
+  },
+  {
+   "id": "before-the",
+   "template": "Before the {weather} Breaks",
+   "phase": "start",
+   "requires": [
+    "weather"
+   ],
+   "tone": "tense"
+  },
+  {
+   "id": "after-the",
+   "template": "After the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "reflective"
+  },
+  {
+   "id": "oath-of",
+   "template": "The Oath of the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "solemn"
+  },
+  {
+   "id": "road-to-place",
+   "template": "The Road to the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "plain"
+  },
+  {
+   "id": "return-to",
+   "template": "The Return to the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "nostalgic"
+  },
+  {
+   "id": "whispers-of",
+   "template": "Whispers from the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "eerie"
+  },
+  {
+   "id": "walk-through",
+   "template": "A Walk Through the {adj} {place}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "place"
+   ],
+   "tone": "gentle"
+  },
+  {
+   "id": "fire-and-tide",
+   "template": "{type} and {type2}: A {adj} Reckoning",
+   "phase": "start",
+   "requires": [
+    "type",
+    "type2",
+    "adj"
+   ],
+   "tone": "dramatic"
+  },
+  {
+   "id": "quiet-before",
+   "template": "The Quiet Before the {weather}",
+   "phase": "start",
+   "requires": [
+    "weather"
+   ],
+   "tone": "tense"
+  },
+  {
+   "id": "heart-of",
+   "template": "The Heart of the {adj} {place}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "place"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "winter-of",
+   "template": "The Winter of the {noun}",
+   "phase": "start",
+   "requires": [
+    "noun"
+   ],
+   "tone": "grim"
+  },
+  {
+   "id": "summer-of",
+   "template": "The Summer of the {noun}",
+   "phase": "start",
+   "requires": [
+    "noun"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "shadow-over",
+   "template": "A Shadow Over the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "dark"
+  },
+  {
+   "id": "light-over",
+   "template": "A Light Over the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "hopeful"
+  },
+  {
+   "id": "crossing-of",
+   "template": "The Crossing of the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "epic"
+  },
+  {
+   "id": "tale-of",
+   "template": "The Tale of the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "storybook"
+  },
+  {
+   "id": "lantern-for",
+   "template": "A Lantern for the {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "gentle"
+  },
+  {
+   "id": "river-of",
+   "template": "The River of {adj} {noun}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "noun"
+   ],
+   "tone": "mythic"
+  },
+  {
+   "id": "bell-of",
+   "template": "The Bell of the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "solemn"
+  },
+  {
+   "id": "garden-of",
+   "template": "The {adj} Garden of the {place}",
+   "phase": "start",
+   "requires": [
+    "adj",
+    "place"
+   ],
+   "tone": "gentle"
+  },
+  {
+   "id": "storm-over",
+   "template": "Storm Over the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "tense"
+  },
+  {
+   "id": "three-roads",
+   "template": "Three Roads to the {place}",
+   "phase": "start",
+   "requires": [
+    "place"
+   ],
+   "tone": "adventurous"
+  },
+  {
+   "id": "what-the",
+   "template": "What the {noun} Remembered",
+   "phase": "start",
+   "requires": [
+    "noun"
+   ],
+   "tone": "reflective"
+  },
+  {
+   "id": "mvp-and-place",
+   "template": "{mvp} and the {adj} {place}",
+   "phase": "end",
+   "requires": [
+    "mvp",
+    "adj",
+    "place"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "mvp-carried",
+   "template": "The Run {mvp} Carried",
+   "phase": "end",
+   "requires": [
+    "mvp"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "mvp-never",
+   "template": "{mvp} Never Looked Back",
+   "phase": "end",
+   "requires": [
+    "mvp"
+   ],
+   "tone": "heroic"
+  },
+  {
+   "id": "mvp-last",
+   "template": "{mvp}: The Last Stand",
+   "phase": "end",
+   "requires": [
+    "mvp"
+   ],
+   "tone": "heroic"
+  },
+  {
+   "id": "legend-met",
+   "template": "The Day We Met {legend}",
+   "phase": "end",
+   "requires": [
+    "legend"
+   ],
+   "tone": "awe"
+  },
+  {
+   "id": "legend-caught",
+   "template": "{legend} and the Long Road",
+   "phase": "end",
+   "requires": [
+    "legend"
+   ],
+   "tone": "epic"
+  },
+  {
+   "id": "legend-shadow",
+   "template": "In the Shadow of {legend}",
+   "phase": "end",
+   "requires": [
+    "legend"
+   ],
+   "tone": "tense"
+  },
+  {
+   "id": "rival-final",
+   "template": "{rival} at the End of the Road",
+   "phase": "end",
+   "requires": [
+    "rival"
+   ],
+   "tone": "dramatic"
+  },
+  {
+   "id": "rival-friend",
+   "template": "Beating {rival}, Finding a Friend",
+   "phase": "end",
+   "requires": [
+    "rival"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "rival-grudge",
+   "template": "A Grudge Called {rival}",
+   "phase": "end",
+   "requires": [
+    "rival"
+   ],
+   "tone": "dramatic"
+  },
+  {
+   "id": "champion-fell",
+   "template": "The Day {champion} Fell",
+   "phase": "end",
+   "requires": [
+    "champion"
+   ],
+   "tone": "triumphant"
+  },
+  {
+   "id": "champion-near",
+   "template": "One Step From {champion}",
+   "phase": "end",
+   "requires": [
+    "champion"
+   ],
+   "tone": "bittersweet"
+  },
+  {
+   "id": "sweep-run",
+   "template": "The Run Without a Scratch",
+   "phase": "end",
+   "requires": [
+    "flawless"
+   ],
+   "tone": "triumphant"
+  },
+  {
+   "id": "last-hp",
+   "template": "One HP From Glory",
+   "phase": "end",
+   "requires": [
+    "oneHp"
+   ],
+   "tone": "tense"
+  },
+  {
+   "id": "comeback-run",
+   "template": "From the Edge Back to the Crown",
+   "phase": "end",
+   "requires": [
+    "comeback"
+   ],
+   "tone": "triumphant"
+  },
+  {
+   "id": "fallen-friends",
+   "template": "The Ones We Left Behind",
+   "phase": "end",
+   "requires": [
+    "fainted"
+   ],
+   "tone": "somber"
+  },
+  {
+   "id": "bond-run",
+   "template": "The Friends Who Stayed",
+   "phase": "end",
+   "requires": [
+    "bond"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "shiny-run",
+   "template": "A Run Worth a Sparkle",
+   "phase": "end",
+   "requires": [
+    "shiny"
+   ],
+   "tone": "joyful"
+  },
+  {
+   "id": "eggs-run",
+   "template": "The Run of Many Eggs",
+   "phase": "end",
+   "requires": [
+    "hatches"
+   ],
+   "tone": "cheerful"
+  },
+  {
+   "id": "trade-run",
+   "template": "The Run That Traded Hearts",
+   "phase": "end",
+   "requires": [
+    "trades"
+   ],
+   "tone": "warm"
+  },
+  {
+   "id": "lonely-run",
+   "template": "One Against the Road",
+   "phase": "end",
+   "requires": [
+    "solo"
+   ],
+   "tone": "stoic"
+  },
+  {
+   "id": "hard-run",
+   "template": "The Hardest Mile",
+   "phase": "end",
+   "requires": [
+    "loss"
+   ],
+   "tone": "somber"
+  },
+  {
+   "id": "gym-run",
+   "template": "Eight Badges, One Road",
+   "phase": "end",
+   "requires": [
+    "badges"
+   ],
+   "tone": "plain"
+  },
+  {
+   "id": "elite-run",
+   "template": "Four Doors to the Crown",
+   "phase": "end",
+   "requires": [
+    "elite"
+   ],
+   "tone": "epic"
+  },
+  {
+   "id": "event-run",
+   "template": "The Run of Many Strange Things",
+   "phase": "end",
+   "requires": [
+    "events"
+   ],
+   "tone": "whimsical"
+  },
+  {
+   "id": "weather-run",
+   "template": "A {weather} to Remember",
+   "phase": "end",
+   "requires": [
+    "weather"
+   ],
+   "tone": "reflective"
+  },
+  {
+   "id": "dream-run",
+   "template": "The Dream We Almost Had",
+   "phase": "end",
+   "requires": [
+    "nearWin"
+   ],
+   "tone": "bittersweet"
+  },
+  {
+   "id": "home-run",
+   "template": "The Run That Led Home",
+   "phase": "end",
+   "requires": [
+    "home"
+   ],
+   "tone": "warm"
+  }
+ ],
+ "pools": {
+  "noun": [
+   "Crown",
+   "Flame",
+   "Tower",
+   "Lantern",
+   "Tide",
+   "Promise",
+   "Compass",
+   "Banner",
+   "Key",
+   "Feather",
+   "Stone",
+   "Mirror",
+   "Bell",
+   "Seed",
+   "Ember",
+   "Thread",
+   "Shield",
+   "Sword",
+   "Garden",
+   "Storm",
+   "Harvest",
+   "Echo",
+   "Moon",
+   "Sun",
+   "Star",
+   "River",
+   "Bridge",
+   "Gate",
+   "Map",
+   "Road",
+   "Hearth",
+   "Egg",
+   "Coin",
+   "Door",
+   "Letter",
+   "Song",
+   "Wing",
+   "Root",
+   "Bloom",
+   "Shadow"
+  ],
+  "adj": [
+   "Silent",
+   "Golden",
+   "Hollow",
+   "Wandering",
+   "Forgotten",
+   "Burning",
+   "Frozen",
+   "Restless",
+   "Gentle",
+   "Crooked",
+   "Distant",
+   "Faded",
+   "Last",
+   "First",
+   "Quiet",
+   "Stubborn",
+   "Bright",
+   "Patient",
+   "Ancient",
+   "Lonely",
+   "Wild",
+   "Sleepless",
+   "Salted",
+   "Silver",
+   "Emerald",
+   "Crimson",
+   "Pale",
+   "Secret",
+   "Rusted",
+   "Humble"
+  ],
+  "place": [
+   "Hollow",
+   "Ridge",
+   "Harbor",
+   "Spire",
+   "Marsh",
+   "Pass",
+   "Glade",
+   "Shoals",
+   "Ruins",
+   "Vale",
+   "Reach",
+   "Docks",
+   "Crossing",
+   "Orchard",
+   "Cairn",
+   "Cape",
+   "Barrow",
+   "Fen",
+   "Strand",
+   "Basin",
+   "Terrace",
+   "Gorge",
+   "Keep",
+   "Mire",
+   "Heath",
+   "Drift",
+   "Garden",
+   "Archway",
+   "Lighthouse",
+   "Narrows"
+  ],
+  "weather": [
+   "Storm",
+   "Rain",
+   "Fog",
+   "Snow",
+   "Heat",
+   "Wind",
+   "Thunder",
+   "Dust",
+   "Frost",
+   "Tide"
+  ]
+ }
+}

@@ -1,0 +1,745 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/move_mastery_ideas.json",
+ "entries": [
+  {
+   "move": "Flamethrower",
+   "experienced": "{name}'s flames burn a deeper orange.",
+   "mastered": "A ring of embers circles the target before the stream, and the flame leaves a small glowing trail.",
+   "moveId": "flamethrower"
+  },
+  {
+   "move": "Fire Blast",
+   "experienced": "{name}'s fire takes the shape of a bright star.",
+   "mastered": "The star splits into five points that drift down like a falling sun.",
+   "moveId": "fire-blast"
+  },
+  {
+   "move": "Ember",
+   "experienced": "{name} sends the embers out with a flick.",
+   "mastered": "The embers trace a brief, perfect spiral before landing.",
+   "moveId": "ember"
+  },
+  {
+   "move": "Flare Blitz",
+   "experienced": "{name} comes in wrapped in a tight flame.",
+   "mastered": "A comet tail streaks behind, and a faint ring of heat lingers.",
+   "moveId": "flare-blitz"
+  },
+  {
+   "move": "Heat Wave",
+   "experienced": "{name} breathes out a wide, steady heat.",
+   "mastered": "The air visibly bends, and a glowing mirage follows the wave.",
+   "moveId": "heat-wave"
+  },
+  {
+   "move": "Overheat",
+   "experienced": "{name} burns bright and clean.",
+   "mastered": "The flame goes white, then settles into a calm orange glow.",
+   "moveId": "overheat"
+  },
+  {
+   "move": "Fire Spin",
+   "experienced": "{name}'s spiral tightens neatly.",
+   "mastered": "The spiral pauses for a beat as a flame-lit lantern, then closes.",
+   "moveId": "fire-spin"
+  },
+  {
+   "move": "Water Gun",
+   "experienced": "{name}'s stream is steady and sharp.",
+   "mastered": "The stream arcs into a rainbow for half a second.",
+   "moveId": "water-gun"
+  },
+  {
+   "move": "Surf",
+   "experienced": "{name} rides in on a clean wave.",
+   "mastered": "The wave curls in a perfect shape, with light under the crest.",
+   "moveId": "surf"
+  },
+  {
+   "move": "Hydro Pump",
+   "experienced": "{name} fires with full control.",
+   "mastered": "The stream spirals like a screw and ends in a halo of droplets.",
+   "moveId": "hydro-pump"
+  },
+  {
+   "move": "Scald",
+   "experienced": "{name}'s steam rises cleanly.",
+   "mastered": "A thin plume of steam draws a quick shape in the air.",
+   "moveId": "scald"
+  },
+  {
+   "move": "Waterfall",
+   "experienced": "{name} rises along the current.",
+   "mastered": "It climbs a rope of water that glints at the top.",
+   "moveId": "waterfall"
+  },
+  {
+   "move": "Aqua Jet",
+   "experienced": "{name} streaks forward in a clean line.",
+   "mastered": "A droplet comet trails behind it, scattering at the end.",
+   "moveId": "aqua-jet"
+  },
+  {
+   "move": "Bubble Beam",
+   "experienced": "{name}'s bubbles come in even rows.",
+   "mastered": "The bubbles catch the light and pop in a chime-like sequence.",
+   "moveId": "bubble-beam"
+  },
+  {
+   "move": "Muddy Water",
+   "experienced": "{name} churns the water with a practiced swirl.",
+   "mastered": "The water forms a small tidal ring before breaking over the foe.",
+   "moveId": "muddy-water"
+  },
+  {
+   "move": "Razor Leaf",
+   "experienced": "{name}'s leaves fly in tight formation.",
+   "mastered": "The leaves form a spiral that closes like a flower.",
+   "moveId": "razor-leaf"
+  },
+  {
+   "move": "Solar Beam",
+   "experienced": "{name} gathers sunlight without hurry.",
+   "mastered": "The beam gleams gold and draws a faint lens flare.",
+   "moveId": "solar-beam"
+  },
+  {
+   "move": "Giga Drain",
+   "experienced": "{name} draws energy in a long, even stream.",
+   "mastered": "Glowing seeds drift from the target back to the user.",
+   "moveId": "giga-drain"
+  },
+  {
+   "move": "Leaf Blade",
+   "experienced": "{name}'s blade is clean and precise.",
+   "mastered": "A leaf-shaped afterimage remains for a moment.",
+   "moveId": "leaf-blade"
+  },
+  {
+   "move": "Energy Ball",
+   "experienced": "{name} shapes a rounder, brighter ball.",
+   "mastered": "The ball pulses like a heartbeat as it launches.",
+   "moveId": "energy-ball"
+  },
+  {
+   "move": "Vine Whip",
+   "experienced": "{name}'s vines snap neatly.",
+   "mastered": "The vines briefly spell a small knot in the air.",
+   "moveId": "vine-whip"
+  },
+  {
+   "move": "Spore",
+   "experienced": "{name} releases the spores lightly.",
+   "mastered": "The spores glow faintly gold as they drift down.",
+   "moveId": "spore"
+  },
+  {
+   "move": "Thunderbolt",
+   "experienced": "{name}'s bolt is straight and bright.",
+   "mastered": "The bolt splits into three clean prongs at the end.",
+   "moveId": "thunderbolt"
+  },
+  {
+   "move": "Thunder",
+   "experienced": "{name} calls down a heavy strike.",
+   "mastered": "The sky flashes white and the afterglow forms a tiny cloud.",
+   "moveId": "thunder"
+  },
+  {
+   "move": "Thunder Wave",
+   "experienced": "{name} sends a ripple of sparks.",
+   "mastered": "The ripple flows outward in perfect concentric rings.",
+   "moveId": "thunder-wave"
+  },
+  {
+   "move": "Volt Tackle",
+   "experienced": "{name} charges as a living spark.",
+   "mastered": "A trailing arc forms a halo behind it.",
+   "moveId": "volt-tackle"
+  },
+  {
+   "move": "Discharge",
+   "experienced": "{name} releases a bright web of sparks.",
+   "mastered": "The web forms a net that lingers in the air.",
+   "moveId": "discharge"
+  },
+  {
+   "move": "Spark",
+   "experienced": "{name} crackles with focused energy.",
+   "mastered": "The sparks trace its outline for a moment.",
+   "moveId": "spark"
+  },
+  {
+   "move": "Ice Beam",
+   "experienced": "{name}'s beam sparkles at the edges.",
+   "mastered": "The beam leaves a snowflake shape in the air.",
+   "moveId": "ice-beam"
+  },
+  {
+   "move": "Blizzard",
+   "experienced": "{name} calls up a clean white gale.",
+   "mastered": "The snow swirls into a single gentle spiral.",
+   "moveId": "blizzard"
+  },
+  {
+   "move": "Icicle Spear",
+   "experienced": "{name} fires with an even rhythm.",
+   "mastered": "The icicles line up in a perfect row before they fly.",
+   "moveId": "icicle-spear"
+  },
+  {
+   "move": "Avalanche",
+   "experienced": "{name} sends a controlled rush of snow.",
+   "mastered": "A small shower of snow glitters after the impact.",
+   "moveId": "avalanche"
+  },
+  {
+   "move": "Aurora Beam",
+   "experienced": "{name}'s beam holds many colors.",
+   "mastered": "The beam bends like a ribbon.",
+   "moveId": "aurora-beam"
+  },
+  {
+   "move": "Close Combat",
+   "experienced": "{name} fights with practiced precision.",
+   "mastered": "Each strike lands with a different afterimage.",
+   "moveId": "close-combat"
+  },
+  {
+   "move": "Dynamic Punch",
+   "experienced": "{name} lands the punch with a deep shake.",
+   "mastered": "A shockwave ring follows the fist.",
+   "moveId": "dynamic-punch"
+  },
+  {
+   "move": "Drain Punch",
+   "experienced": "{name} strikes and steadies itself.",
+   "mastered": "A soft light passes from fist to user.",
+   "moveId": "drain-punch"
+  },
+  {
+   "move": "Aura Sphere",
+   "experienced": "{name} shapes the sphere with a steady hand.",
+   "mastered": "The sphere bursts into a ring of blue sparks.",
+   "moveId": "aura-sphere"
+  },
+  {
+   "move": "Focus Blast",
+   "experienced": "{name} gathers focus without wasting breath.",
+   "mastered": "The sphere hums once, then lands in total silence.",
+   "moveId": "focus-blast"
+  },
+  {
+   "move": "Brick Break",
+   "experienced": "{name} breaks through cleanly.",
+   "mastered": "A fine ring of dust marks where it struck.",
+   "moveId": "brick-break"
+  },
+  {
+   "move": "Mach Punch",
+   "experienced": "{name} blurs in and out.",
+   "mastered": "Three faint afterimages follow the fist.",
+   "moveId": "mach-punch"
+  },
+  {
+   "move": "Poison Jab",
+   "experienced": "{name}'s jab lands with a bright purple glint.",
+   "mastered": "A droplet of violet light remains in the air.",
+   "moveId": "poison-jab"
+  },
+  {
+   "move": "Sludge Bomb",
+   "experienced": "{name} lobs a dense, perfect blob.",
+   "mastered": "The sludge pops in a tidy splash.",
+   "moveId": "sludge-bomb"
+  },
+  {
+   "move": "Toxic",
+   "experienced": "{name} lets the poison drift slowly.",
+   "mastered": "A swirl of purple vapor traces the target's outline.",
+   "moveId": "toxic"
+  },
+  {
+   "move": "Venoshock",
+   "experienced": "{name} delivers a precise dose.",
+   "mastered": "Purple veins of light spread across the target.",
+   "moveId": "venoshock"
+  },
+  {
+   "move": "Earthquake",
+   "experienced": "{name} sends a deep, steady rumble.",
+   "mastered": "Cracks in the ground form a neat star shape.",
+   "moveId": "earthquake"
+  },
+  {
+   "move": "Earth Power",
+   "experienced": "{name} calls up the earth cleanly.",
+   "mastered": "Glowing crystals rise and slowly sink back.",
+   "moveId": "earth-power"
+  },
+  {
+   "move": "Dig",
+   "experienced": "{name} disappears into the ground without a sound.",
+   "mastered": "A ring of dust marks where it vanished and returns.",
+   "moveId": "dig"
+  },
+  {
+   "move": "Bulldoze",
+   "experienced": "{name} pushes the ground in a wave.",
+   "mastered": "The wave of dust rolls over neatly.",
+   "moveId": "bulldoze"
+  },
+  {
+   "move": "Mud Shot",
+   "experienced": "{name} flings mud with a smart flick.",
+   "mastered": "The mud lands in a neat pattern.",
+   "moveId": "mud-shot"
+  },
+  {
+   "move": "Sand Attack",
+   "experienced": "{name} sprays sand in a perfect arc.",
+   "mastered": "The sand hangs for a moment like a golden curtain.",
+   "moveId": "sand-attack"
+  },
+  {
+   "move": "Air Slash",
+   "experienced": "{name} cuts the air with a clean slash.",
+   "mastered": "A crescent of light remains in the air.",
+   "moveId": "air-slash"
+  },
+  {
+   "move": "Brave Bird",
+   "experienced": "{name} dives with fierce resolve.",
+   "mastered": "A bird-shaped trail of light follows the dive.",
+   "moveId": "brave-bird"
+  },
+  {
+   "move": "Hurricane",
+   "experienced": "{name} stirs the wind with control.",
+   "mastered": "The storm spins into a perfect eye.",
+   "moveId": "hurricane"
+  },
+  {
+   "move": "Aerial Ace",
+   "experienced": "{name} slices through unseen.",
+   "mastered": "A faint white feather drifts down.",
+   "moveId": "aerial-ace"
+  },
+  {
+   "move": "Fly",
+   "experienced": "{name} soars well above the field.",
+   "mastered": "The sun flashes off its silhouette as it dives.",
+   "moveId": "fly"
+  },
+  {
+   "move": "Drill Peck",
+   "experienced": "{name} spins like a drill.",
+   "mastered": "A tiny spiral of air remains.",
+   "moveId": "drill-peck"
+  },
+  {
+   "move": "Psychic",
+   "experienced": "{name} bends the air with calm focus.",
+   "mastered": "A bright ring pulses outward, and the target glows briefly.",
+   "moveId": "psychic"
+  },
+  {
+   "move": "Psyshock",
+   "experienced": "{name} pushes with an exact, narrow force.",
+   "mastered": "A neat glass-like ripple passes through the foe.",
+   "moveId": "psyshock"
+  },
+  {
+   "move": "Future Sight",
+   "experienced": "{name} stares past the present.",
+   "mastered": "A faint violet afterimage appears over the target.",
+   "moveId": "future-sight"
+  },
+  {
+   "move": "Calm Mind",
+   "experienced": "{name} breathes slowly and settles.",
+   "mastered": "A soft glow surrounds the user for a moment.",
+   "moveId": "calm-mind"
+  },
+  {
+   "move": "Zen Headbutt",
+   "experienced": "{name} thinks, then strikes.",
+   "mastered": "A flash of violet circles the point of impact.",
+   "moveId": "zen-headbutt"
+  },
+  {
+   "move": "Shadow Ball",
+   "experienced": "{name}'s sphere is deep and smooth.",
+   "mastered": "The sphere flickers out a tiny ghostly face.",
+   "moveId": "shadow-ball"
+  },
+  {
+   "move": "Shadow Sneak",
+   "experienced": "{name} slips out of the shadow cleanly.",
+   "mastered": "It leaves a thin shadow behind.",
+   "moveId": "shadow-sneak"
+  },
+  {
+   "move": "Hex",
+   "experienced": "{name} speaks the hex softly.",
+   "mastered": "Violet marks appear over the target and fade.",
+   "moveId": "hex"
+  },
+  {
+   "move": "Phantom Force",
+   "experienced": "{name} vanishes without a trace.",
+   "mastered": "It reappears with a ripple of cold air.",
+   "moveId": "phantom-force"
+  },
+  {
+   "move": "Night Shade",
+   "experienced": "{name} stares into the target's eyes.",
+   "mastered": "A pale glow flickers across the field.",
+   "moveId": "night-shade"
+  },
+  {
+   "move": "Dark Pulse",
+   "experienced": "{name} releases a clean wave of dark.",
+   "mastered": "The wave leaves a ring of darkness that thins out.",
+   "moveId": "dark-pulse"
+  },
+  {
+   "move": "Crunch",
+   "experienced": "{name} bites down with great control.",
+   "mastered": "A bright white bite mark fades on the target.",
+   "moveId": "crunch"
+  },
+  {
+   "move": "Foul Play",
+   "experienced": "{name} turns the foe's strength around.",
+   "mastered": "A mirrored afterimage of the foe appears behind it.",
+   "moveId": "foul-play"
+  },
+  {
+   "move": "Knock Off",
+   "experienced": "{name} deftly lifts an item.",
+   "mastered": "A tiny spark falls where the item was.",
+   "moveId": "knock-off"
+  },
+  {
+   "move": "Sucker Punch",
+   "experienced": "{name} strikes before anyone can react.",
+   "mastered": "A quick flash of black hits the field.",
+   "moveId": "sucker-punch"
+  },
+  {
+   "move": "Dragon Claw",
+   "experienced": "{name} slashes in a clean arc.",
+   "mastered": "Three faint golden claw marks remain.",
+   "moveId": "dragon-claw"
+  },
+  {
+   "move": "Dragon Pulse",
+   "experienced": "{name} sends a rippling pulse.",
+   "mastered": "A glowing dragon silhouette uncoils in the wave.",
+   "moveId": "dragon-pulse"
+  },
+  {
+   "move": "Outrage",
+   "experienced": "{name} lets its fury run free.",
+   "mastered": "The dragon's roar echoes after the move ends.",
+   "moveId": "outrage"
+  },
+  {
+   "move": "Draco Meteor",
+   "experienced": "{name} summons a perfect starfall.",
+   "mastered": "The meteors arrange into a brief constellation.",
+   "moveId": "draco-meteor"
+  },
+  {
+   "move": "Dragon Dance",
+   "experienced": "{name} dances in an ancient rhythm.",
+   "mastered": "A ring of golden light follows each step.",
+   "moveId": "dragon-dance"
+  },
+  {
+   "move": "Iron Head",
+   "experienced": "{name}'s head gleams with metal.",
+   "mastered": "A bright silver flash marks the impact.",
+   "moveId": "iron-head"
+  },
+  {
+   "move": "Flash Cannon",
+   "experienced": "{name} gathers silver light.",
+   "mastered": "The beam tapers into a thin, perfect line.",
+   "moveId": "flash-cannon"
+  },
+  {
+   "move": "Meteor Mash",
+   "experienced": "{name} swings with comet speed.",
+   "mastered": "A small star trails behind.",
+   "moveId": "meteor-mash"
+  },
+  {
+   "move": "Bullet Punch",
+   "experienced": "{name} strikes with steel-fast reflexes.",
+   "mastered": "A silver blur lingers in the air.",
+   "moveId": "bullet-punch"
+  },
+  {
+   "move": "Gyro Ball",
+   "experienced": "{name} spins at the perfect pitch.",
+   "mastered": "A gleaming ring surrounds the spin.",
+   "moveId": "gyro-ball"
+  },
+  {
+   "move": "Moonblast",
+   "experienced": "{name}'s moonlight is pure and quiet.",
+   "mastered": "A crescent shape glows over the target.",
+   "moveId": "moonblast"
+  },
+  {
+   "move": "Dazzling Gleam",
+   "experienced": "{name} gives off a gentle radiance.",
+   "mastered": "The radiance forms a ring of tiny stars.",
+   "moveId": "dazzling-gleam"
+  },
+  {
+   "move": "Play Rough",
+   "experienced": "{name} bounds in with a grin.",
+   "mastered": "A cloud of sparkles puffs where it lands.",
+   "moveId": "play-rough"
+  },
+  {
+   "move": "Moonlight",
+   "experienced": "{name} bathes in soft light.",
+   "mastered": "A silver glow gathers and drifts over its shoulders.",
+   "moveId": "moonlight"
+  },
+  {
+   "move": "Draining Kiss",
+   "experienced": "{name} blows a gentle kiss.",
+   "mastered": "A heart-shaped glow floats to the user.",
+   "moveId": "draining-kiss"
+  },
+  {
+   "move": "Hyper Beam",
+   "experienced": "{name} releases the beam with perfect form.",
+   "mastered": "The beam fades into a faint after-glow that lingers.",
+   "moveId": "hyper-beam"
+  },
+  {
+   "move": "Body Slam",
+   "experienced": "{name} lands with a heavy thump.",
+   "mastered": "A small ring of dust rolls out.",
+   "moveId": "body-slam"
+  },
+  {
+   "move": "Double-Edge",
+   "experienced": "{name} commits to the charge.",
+   "mastered": "A bright streak of white trails behind it.",
+   "moveId": "double-edge"
+  },
+  {
+   "move": "Return",
+   "experienced": "{name} strikes with its trainer in mind.",
+   "mastered": "A warm light glows around the user.",
+   "moveId": "return"
+  },
+  {
+   "move": "Quick Attack",
+   "experienced": "{name} is a streak of white.",
+   "mastered": "A line of light remains for a heartbeat.",
+   "moveId": "quick-attack"
+  },
+  {
+   "move": "Extreme Speed",
+   "experienced": "{name} is gone in a blink.",
+   "mastered": "Several soft afterimages catch up all at once.",
+   "moveId": "extreme-speed"
+  },
+  {
+   "move": "Swords Dance",
+   "experienced": "{name} dances with a bright resolve.",
+   "mastered": "Spectral blades whirl around it and vanish.",
+   "moveId": "swords-dance"
+  },
+  {
+   "move": "Protect",
+   "experienced": "{name} raises a firm barrier.",
+   "mastered": "The barrier shimmers like glass and chimes once.",
+   "moveId": "protect"
+  },
+  {
+   "move": "Substitute",
+   "experienced": "{name} creates a lifelike double.",
+   "mastered": "The double waves at the foe.",
+   "moveId": "substitute"
+  },
+  {
+   "move": "Rest",
+   "experienced": "{name} settles into a quiet sleep.",
+   "mastered": "A tiny bubble rises and pops slowly.",
+   "moveId": "rest"
+  },
+  {
+   "move": "Recover",
+   "experienced": "{name} breathes in and out and stands tall.",
+   "mastered": "Glowing motes gather and sink into it.",
+   "moveId": "recover"
+  },
+  {
+   "move": "Stealth Rock",
+   "experienced": "{name} scatters stones in a neat circle.",
+   "mastered": "The stones glow briefly before going dim.",
+   "moveId": "stealth-rock"
+  },
+  {
+   "move": "Spikes",
+   "experienced": "{name} lays the spikes in a tidy spiral.",
+   "mastered": "A faint shimmer marks where they lie.",
+   "moveId": "spikes"
+  },
+  {
+   "move": "Will-O-Wisp",
+   "experienced": "{name} lets a pale flame bob into place.",
+   "mastered": "The flame traces a small figure-eight.",
+   "moveId": "will-o-wisp"
+  },
+  {
+   "move": "Rock Slide",
+   "experienced": "{name} directs the stones with care.",
+   "mastered": "The rocks land in a perfect line.",
+   "moveId": "rock-slide"
+  },
+  {
+   "move": "Stone Edge",
+   "experienced": "{name} raises sharp stones in a circle.",
+   "mastered": "The stones hover for a beat, then fall like rain.",
+   "moveId": "stone-edge"
+  },
+  {
+   "move": "Rock Tomb",
+   "experienced": "{name} entombs the foe neatly.",
+   "mastered": "A thin chime echoes from the stone.",
+   "moveId": "rock-tomb"
+  },
+  {
+   "move": "Power Gem",
+   "experienced": "{name} makes the gem glow brighter.",
+   "mastered": "The gem sparks rainbow light.",
+   "moveId": "power-gem"
+  },
+  {
+   "move": "Bug Buzz",
+   "experienced": "{name}'s buzz is pitch-perfect.",
+   "mastered": "The sound forms a visible wave that sparkles.",
+   "moveId": "bug-buzz"
+  },
+  {
+   "move": "X-Scissor",
+   "experienced": "{name} crosses its blades with exact timing.",
+   "mastered": "A bright X remains in the air.",
+   "moveId": "x-scissor"
+  },
+  {
+   "move": "U-turn",
+   "experienced": "{name} turns and returns in one smooth movement.",
+   "mastered": "A looping arc of light traces the turn.",
+   "moveId": "u-turn"
+  },
+  {
+   "move": "Signal Beam",
+   "experienced": "{name} sends a colorful pulse.",
+   "mastered": "The pulse flickers through every color in turn.",
+   "moveId": "signal-beam"
+  },
+  {
+   "move": "Leech Life",
+   "experienced": "{name} drinks deeply and cleanly.",
+   "mastered": "A thin ruby thread links user and target.",
+   "moveId": "leech-life"
+  },
+  {
+   "move": "Quiver Dance",
+   "experienced": "{name} dances in a graceful pattern.",
+   "mastered": "Shimmering scales fall around it.",
+   "moveId": "quiver-dance"
+  },
+  {
+   "move": "Hone Claws",
+   "experienced": "{name} sharpens its claws with a satisfying scrape.",
+   "mastered": "Tiny sparks pop off the claws.",
+   "moveId": "hone-claws"
+  },
+  {
+   "move": "Roar",
+   "experienced": "{name} gives a steady, authoritative roar.",
+   "mastered": "The echo rolls around the whole arena.",
+   "moveId": "roar"
+  },
+  {
+   "move": "Whirlwind",
+   "experienced": "{name} stirs the wind to a perfect spiral.",
+   "mastered": "Leaves spin in a single tidy ring.",
+   "moveId": "whirlwind"
+  },
+  {
+   "move": "Mean Look",
+   "experienced": "{name} locks eyes with its target.",
+   "mastered": "Faint red marks flicker in the foe's eyes.",
+   "moveId": "mean-look"
+  },
+  {
+   "move": "Perish Song",
+   "experienced": "{name} sings in a low, steady voice.",
+   "mastered": "A ghostly chime rings once for each turn.",
+   "moveId": "perish-song"
+  },
+  {
+   "move": "Sing",
+   "experienced": "{name} hums a smooth lullaby.",
+   "mastered": "Small musical notes drift across the field.",
+   "moveId": "sing"
+  },
+  {
+   "move": "Hypnosis",
+   "experienced": "{name} sways its gaze.",
+   "mastered": "A gentle swirl of color fades from the target.",
+   "moveId": "hypnosis"
+  },
+  {
+   "move": "Thunder Fang",
+   "experienced": "{name} bites down with a crackle.",
+   "mastered": "Sparks flicker along the fang.",
+   "moveId": "thunder-fang"
+  },
+  {
+   "move": "Fire Fang",
+   "experienced": "{name} bites with a glow of heat.",
+   "mastered": "A trail of embers lingers.",
+   "moveId": "fire-fang"
+  },
+  {
+   "move": "Ice Fang",
+   "experienced": "{name} bites with a snap of cold.",
+   "mastered": "A small frost pattern blooms on the target.",
+   "moveId": "ice-fang"
+  },
+  {
+   "move": "Land's Wrath",
+   "experienced": "{name} shakes the field with measured force.",
+   "mastered": "A ring of light runs across the cracks.",
+   "moveId": "lands-wrath"
+  },
+  {
+   "move": "Origin Pulse",
+   "experienced": "{name} releases a deep, ancient wave.",
+   "mastered": "The surface of the field ripples like water.",
+   "moveId": "origin-pulse"
+  },
+  {
+   "move": "Precipice Blades",
+   "experienced": "{name} raises blades from the ground in a steady rhythm.",
+   "mastered": "The blades flare with red light as they rise.",
+   "moveId": "precipice-blades"
+  }
+ ]
+}

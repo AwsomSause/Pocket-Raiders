@@ -1,0 +1,1264 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/signature_moments_library.json",
+ "entries": [
+  {
+   "id": "last-second-survival",
+   "name": "The Last-Second Survival",
+   "category": "Clutch",
+   "trigger": "survived_at_1hp in a boss battle",
+   "scene": "The hit lands and the screen holds its breath, then the Pokémon is still standing, trembling and furious.",
+   "budget": "major"
+  },
+  {
+   "id": "sweep-from-nothing",
+   "name": "The Sweep From Nothing",
+   "category": "Clutch",
+   "trigger": "3+ KOs in a row by one Pokémon after the rest fainted",
+   "scene": "One Pokémon walks out alone and the arena goes quiet. When it walks back, no one else has the heart to speak.",
+   "budget": "major"
+  },
+  {
+   "id": "comeback-drums",
+   "name": "Comeback Drums",
+   "category": "Clutch",
+   "trigger": "win while down to the last Pokémon vs. full team",
+   "scene": "The crowd noise fades into a steady drumbeat as the last Pokémon steps up. It does not look scared.",
+   "budget": "major"
+  },
+  {
+   "id": "no-wasted-turn",
+   "name": "No Wasted Turn",
+   "category": "Clutch",
+   "trigger": "win a battle with every turn dealing damage or boosting",
+   "scene": "Every move is purposeful. The opponent never had a moment to breathe.",
+   "budget": "minor"
+  },
+  {
+   "id": "perfect-read",
+   "name": "The Perfect Read",
+   "category": "Clutch",
+   "trigger": "opponent's predicted switch punished",
+   "scene": "The trainer's eyes narrow. The Pokémon is already moving to meet the switch-in.",
+   "budget": "minor"
+  },
+  {
+   "id": "bad-matchup-hero",
+   "name": "The Bad-Matchup Hero",
+   "category": "Clutch",
+   "trigger": "KO a foe that resists all of its moves",
+   "scene": "It shouldn't work. It works.",
+   "budget": "major"
+  },
+  {
+   "id": "speed-tie-luck",
+   "name": "The Speed-Tie Win",
+   "category": "Clutch",
+   "trigger": "win a speed tie",
+   "scene": "Two Pokémon move at the same instant. The coin lands in your favor.",
+   "budget": "minor"
+  },
+  {
+   "id": "crit-in-the-dark",
+   "name": "The Critical in the Dark",
+   "category": "Clutch",
+   "trigger": "a crit ends a boss battle",
+   "scene": "The attack hits the exact spot that matters. Silence, then a roar.",
+   "budget": "major"
+  },
+  {
+   "id": "dodge-streak",
+   "name": "The Dodge Streak",
+   "category": "Clutch",
+   "trigger": "3 consecutive misses by opponent",
+   "scene": "The foe swings and swings but your Pokémon keeps just out of reach.",
+   "budget": "minor"
+  },
+  {
+   "id": "weather-flip",
+   "name": "The Weather Flip",
+   "category": "Clutch",
+   "trigger": "replace opponent's weather and win",
+   "scene": "Rain gives way to sun. The foe's plan drips away with it.",
+   "budget": "minor"
+  },
+  {
+   "id": "status-stalemate",
+   "name": "The Status Stalemate",
+   "category": "Clutch",
+   "trigger": "win while both sides are statused",
+   "scene": "Both sides are hurting. One stays on its feet.",
+   "budget": "minor"
+  },
+  {
+   "id": "one-hit-wonder",
+   "name": "The One-Hit Wonder",
+   "category": "Clutch",
+   "trigger": "KO a full-HP boss Pokémon in one turn",
+   "scene": "Not even the boss expected that. The arena goes silent.",
+   "budget": "major"
+  },
+  {
+   "id": "tank-it-all",
+   "name": "Tank It All",
+   "category": "Clutch",
+   "trigger": "survive 5 super-effective hits in one battle",
+   "scene": "The Pokémon braces after every blow. It does not fall.",
+   "budget": "major"
+  },
+  {
+   "id": "synchronized-strike",
+   "name": "The Synchronized Strike",
+   "category": "Clutch",
+   "trigger": "two Pokémon KO the same foe in one turn",
+   "scene": "Two attacks hit at the same instant, and the foe drops without a sound.",
+   "budget": "minor"
+  },
+  {
+   "id": "sacrifice-play",
+   "name": "The Sacrifice Play",
+   "category": "Clutch",
+   "trigger": "a Pokémon faints to enable a teammate's win",
+   "scene": "It takes the hit so the next one can finish the job.",
+   "budget": "major"
+  },
+  {
+   "id": "revenge-kill",
+   "name": "The Revenge",
+   "category": "Clutch",
+   "trigger": "KO the foe that fainted a teammate on the next turn",
+   "scene": "The next Pokémon arrives with a cold look in its eyes.",
+   "budget": "minor"
+  },
+  {
+   "id": "endurance-run",
+   "name": "The Endurance Run",
+   "category": "Clutch",
+   "trigger": "win a battle lasting 20+ turns",
+   "scene": "Both sides are exhausted. One is just a little less so.",
+   "budget": "major"
+  },
+  {
+   "id": "berry-at-the-brink",
+   "name": "The Berry at the Brink",
+   "category": "Clutch",
+   "trigger": "a pinch berry activates in a boss fight",
+   "scene": "At the last breath, a berry restores a spark.",
+   "budget": "minor"
+  },
+  {
+   "id": "priority-snipe",
+   "name": "The Priority Snipe",
+   "category": "Clutch",
+   "trigger": "a priority move finishes a faster foe",
+   "scene": "The faster foe never gets to move. It never expected that.",
+   "budget": "minor"
+  },
+  {
+   "id": "rematch-redeemed",
+   "name": "The Rematch Redeemed",
+   "category": "Clutch",
+   "trigger": "win against an opponent that previously beat the team",
+   "scene": "The old defeat is a memory now. The trainer's hand relaxes on the ball.",
+   "budget": "major"
+  },
+  {
+   "id": "first-victory",
+   "name": "The First Victory",
+   "category": "Bonding",
+   "trigger": "first win of a run",
+   "scene": "The first win, small as it is, makes the whole team stand a little taller.",
+   "budget": "minor"
+  },
+  {
+   "id": "nickname-moment",
+   "name": "The Nickname",
+   "category": "Bonding",
+   "trigger": "a Pokémon is nicknamed",
+   "scene": "The name sticks immediately, as if it had always been there.",
+   "budget": "minor"
+  },
+  {
+   "id": "shared-berry",
+   "name": "The Shared Berry",
+   "category": "Bonding",
+   "trigger": "a berry is split between teammates",
+   "scene": "Two Pokémon share one small snack and a quiet understanding.",
+   "budget": "minor"
+  },
+  {
+   "id": "nap-pile",
+   "name": "The Nap Pile",
+   "category": "Bonding",
+   "trigger": "rest node with 3+ Pokémon that like naps",
+   "scene": "The team ends up in a single sleeping pile. No one is sure who started it.",
+   "budget": "minor"
+  },
+  {
+   "id": "protective-stance",
+   "name": "The Protective Stance",
+   "category": "Bonding",
+   "trigger": "a Pokémon takes a hit meant for a bonded teammate",
+   "scene": "It steps forward without being asked.",
+   "budget": "major"
+  },
+  {
+   "id": "first-night-away",
+   "name": "The First Night Away",
+   "category": "Bonding",
+   "trigger": "a hatched or newly caught Pokémon's first rest node",
+   "scene": "It stays near the trainer all night, eyes open.",
+   "budget": "minor"
+  },
+  {
+   "id": "heart-to-heart",
+   "name": "The Heart-to-Heart",
+   "category": "Bonding",
+   "trigger": "bond reaches 80",
+   "scene": "The Pokémon sits down next to you and stays there.",
+   "budget": "major"
+  },
+  {
+   "id": "reluctant-friend",
+   "name": "The Reluctant Friend",
+   "category": "Bonding",
+   "trigger": "a Pokémon with an independent personality reaches bond 50",
+   "scene": "It still pretends not to care, but it walks closer to you than before.",
+   "budget": "minor"
+  },
+  {
+   "id": "shiny-glimmer",
+   "name": "The Glimmer",
+   "category": "Bonding",
+   "trigger": "first battle after catching a shiny",
+   "scene": "The sun catches the Pokémon's coat in a way that no one forgets.",
+   "budget": "major"
+  },
+  {
+   "id": "birthday-party",
+   "name": "The Surprise Party",
+   "category": "Bonding",
+   "trigger": "a hatched Pokémon reaches level 20",
+   "scene": "The team gathers around, a bit awkward, a bit proud.",
+   "budget": "minor"
+  },
+  {
+   "id": "lullaby-night",
+   "name": "The Lullaby",
+   "category": "Bonding",
+   "trigger": "rest node with a Pokémon that knows a sound move",
+   "scene": "A soft song drifts across the camp until everyone is asleep.",
+   "budget": "minor"
+  },
+  {
+   "id": "storm-shelter",
+   "name": "The Storm Shelter",
+   "category": "Bonding",
+   "trigger": "rain node with 3+ teammates huddled",
+   "scene": "The team presses together under a rock overhang while the rain falls.",
+   "budget": "minor"
+  },
+  {
+   "id": "tough-love",
+   "name": "Tough Love",
+   "category": "Bonding",
+   "trigger": "a trainer scolds a Pokémon after a mistake and it improves",
+   "scene": "The Pokémon takes the lesson to heart, then does it right.",
+   "budget": "minor"
+  },
+  {
+   "id": "long-goodbye",
+   "name": "The Long Goodbye",
+   "category": "Bonding",
+   "trigger": "a Pokémon is released or traded after bond 70",
+   "scene": "It looks back until you cannot see it anymore.",
+   "budget": "landmark"
+  },
+  {
+   "id": "promise-at-dawn",
+   "name": "The Promise at Dawn",
+   "category": "Bonding",
+   "trigger": "a Pokémon at bond 100 at a rest node",
+   "scene": "A quiet exchange at dawn. No words needed.",
+   "budget": "landmark"
+  },
+  {
+   "id": "trust-fall",
+   "name": "The Trust Fall",
+   "category": "Bonding",
+   "trigger": "a Pokémon succeeds at a risky move after a trainer's call",
+   "scene": "The Pokémon trusts the call completely.",
+   "budget": "minor"
+  },
+  {
+   "id": "evolving-light",
+   "name": "The Evolving Light",
+   "category": "Evolution",
+   "trigger": "evolved",
+   "scene": "The light grows and the old shape fades. The new one steps forward as if it had always been there.",
+   "budget": "major"
+  },
+  {
+   "id": "evolution-interrupted",
+   "name": "The Interrupted Evolution",
+   "category": "Evolution",
+   "trigger": "player cancels an evolution",
+   "scene": "The light fades. The Pokémon blinks and looks relieved, or confused.",
+   "budget": "minor"
+  },
+  {
+   "id": "evolution-by-trade",
+   "name": "The Trade Evolution",
+   "category": "Evolution",
+   "trigger": "trade evolution",
+   "scene": "The exchange machine hums and glows, and something new emerges on the other side.",
+   "budget": "major"
+  },
+  {
+   "id": "evolution-by-stone",
+   "name": "The Stone's Light",
+   "category": "Evolution",
+   "trigger": "stone evolution",
+   "scene": "The stone dissolves in light as the Pokémon lifts its head.",
+   "budget": "major"
+  },
+  {
+   "id": "evolution-at-dusk",
+   "name": "Evolution at Dusk",
+   "category": "Evolution",
+   "trigger": "evolved during dusk or night",
+   "scene": "The dusk deepens as the Pokémon changes, and the stars watch.",
+   "budget": "major"
+  },
+  {
+   "id": "evolution-in-battle",
+   "name": "The Mid-Battle Evolution",
+   "category": "Evolution",
+   "trigger": "evolved right after a battle ends",
+   "scene": "Battle's end brings the glow. The crowd falls silent.",
+   "budget": "major"
+  },
+  {
+   "id": "mega-surge",
+   "name": "The Mega Surge",
+   "category": "Transformation",
+   "trigger": "transformation: mega",
+   "scene": "Energy rises through the Key Stone and the Pokémon's silhouette blazes.",
+   "budget": "major"
+  },
+  {
+   "id": "dynamax-tower",
+   "name": "The Dynamax Tower",
+   "category": "Transformation",
+   "trigger": "transformation: dynamax",
+   "scene": "The Pokémon grows tall as a building and the weather rushes to catch up.",
+   "budget": "major"
+  },
+  {
+   "id": "tera-crown",
+   "name": "The Tera Crown",
+   "category": "Transformation",
+   "trigger": "transformation: tera",
+   "scene": "A crystal crown shimmers into place over the Pokémon's head.",
+   "budget": "major"
+  },
+  {
+   "id": "z-pose",
+   "name": "The Z-Pose",
+   "category": "Transformation",
+   "trigger": "transformation: z-move",
+   "scene": "The trainer and Pokémon strike a pose that crackles with power.",
+   "budget": "major"
+  },
+  {
+   "id": "hyper-surge",
+   "name": "The Hyper Surge",
+   "category": "Transformation",
+   "trigger": "hyper",
+   "scene": "The trainer's pulse and the Pokémon's pulse sync for a heartbeat.",
+   "budget": "major"
+  },
+  {
+   "id": "overdrive-roar",
+   "name": "The Overdrive Roar",
+   "category": "Transformation",
+   "trigger": "overdrive",
+   "scene": "The Pokémon roars and the air itself cracks.",
+   "budget": "landmark"
+  },
+  {
+   "id": "primal-return",
+   "name": "The Primal Return",
+   "category": "Transformation",
+   "trigger": "transformation: primal",
+   "scene": "The ancient form returns and the sky rearranges itself to fit it.",
+   "budget": "landmark"
+  },
+  {
+   "id": "form-change-breeze",
+   "name": "The Form Change",
+   "category": "Transformation",
+   "trigger": "form change triggered by weather or time",
+   "scene": "A breeze passes and the Pokémon changes with it.",
+   "budget": "minor"
+  },
+  {
+   "id": "mastery-flourish",
+   "name": "The Mastery Flourish",
+   "category": "Progression",
+   "trigger": "mastery_up to Mastered",
+   "scene": "The move gets a flourish that wasn't there before.",
+   "budget": "minor"
+  },
+  {
+   "id": "growth-path-chosen",
+   "name": "The Path Chosen",
+   "category": "Progression",
+   "trigger": "growth path earned",
+   "scene": "The Pokémon seems to settle into a role it was meant for.",
+   "budget": "major"
+  },
+  {
+   "id": "level-30-mark",
+   "name": "The Thirty Mark",
+   "category": "Progression",
+   "trigger": "a Pokémon reaches level 30",
+   "scene": "A small change in posture: it has stopped being a beginner.",
+   "budget": "minor"
+  },
+  {
+   "id": "move-learned-late",
+   "name": "The Late Lesson",
+   "category": "Progression",
+   "trigger": "a Pokémon learns a move 10+ levels later than usual",
+   "scene": "The move comes slowly, and so does the smile.",
+   "budget": "minor"
+  },
+  {
+   "id": "tm-surprise",
+   "name": "The TM Surprise",
+   "category": "Progression",
+   "trigger": "a TM teaches an unexpected move",
+   "scene": "The Pokémon blinks at the new move, then tries it with delight.",
+   "budget": "minor"
+  },
+  {
+   "id": "training-montage",
+   "name": "The Training Montage",
+   "category": "Progression",
+   "trigger": "3 consecutive wins without healing",
+   "scene": "Cut to the Pokémon running laps while the music rises.",
+   "budget": "minor"
+  },
+  {
+   "id": "first-boss",
+   "name": "The First Boss",
+   "category": "Boss",
+   "trigger": "first boss battle begins",
+   "scene": "The banner drops. The Pokémon steps up beside you.",
+   "budget": "major"
+  },
+  {
+   "id": "gym-badge-moment",
+   "name": "The Badge",
+   "category": "Boss",
+   "trigger": "gym badge earned",
+   "scene": "The badge catches the light for a moment before it is pinned.",
+   "budget": "major"
+  },
+  {
+   "id": "elite-door",
+   "name": "The Elite Door",
+   "category": "Boss",
+   "trigger": "Elite Four battle begins",
+   "scene": "The doors close behind you. There's no turning back.",
+   "budget": "major"
+  },
+  {
+   "id": "champion-throne",
+   "name": "The Champion's Throne",
+   "category": "Boss",
+   "trigger": "Champion battle begins",
+   "scene": "The arena lights rise, and the champion stands with their back to you.",
+   "budget": "landmark"
+  },
+  {
+   "id": "rival-meeting",
+   "name": "The Rival Meeting",
+   "category": "Rival",
+   "trigger": "rival encounter",
+   "scene": "The rival smiles. It isn't friendly.",
+   "budget": "major"
+  },
+  {
+   "id": "rival-respect",
+   "name": "The Rival's Respect",
+   "category": "Rival",
+   "trigger": "rival loses a close battle",
+   "scene": "They look at you for a long moment and nod.",
+   "budget": "major"
+  },
+  {
+   "id": "rival-confession",
+   "name": "The Rival's Confession",
+   "category": "Rival",
+   "trigger": "rival bond event",
+   "scene": "The rival says what they never meant to say.",
+   "budget": "major"
+  },
+  {
+   "id": "rival-team-up",
+   "name": "The Team-Up",
+   "category": "Rival",
+   "trigger": "a rival joins a double battle",
+   "scene": "For one battle, you fight side by side.",
+   "budget": "landmark"
+  },
+  {
+   "id": "rival-rematch-calm",
+   "name": "The Calm Before",
+   "category": "Rival",
+   "trigger": "a rematch against the rival after they won last time",
+   "scene": "Both of you wait. Neither wants to blink.",
+   "budget": "minor"
+  },
+  {
+   "id": "rival-gift-moment",
+   "name": "The Rival's Gift",
+   "category": "Rival",
+   "trigger": "a rival gives an item",
+   "scene": "They hand it over without looking at you.",
+   "budget": "minor"
+  },
+  {
+   "id": "rival-defeat-bitter",
+   "name": "The Bitter Defeat",
+   "category": "Rival",
+   "trigger": "rival defeats you",
+   "scene": "They don't gloat. Somehow that's worse.",
+   "budget": "major"
+  },
+  {
+   "id": "rival-final-sprint",
+   "name": "The Final Sprint",
+   "category": "Rival",
+   "trigger": "final rival battle begins",
+   "scene": "The wind picks up and neither of you speaks.",
+   "budget": "landmark"
+  },
+  {
+   "id": "legend-sighting",
+   "name": "The Sighting",
+   "category": "Legendary",
+   "trigger": "legendary sighting flag",
+   "scene": "A shape passes over the horizon, and everyone looks up.",
+   "budget": "major"
+  },
+  {
+   "id": "legend-awaken",
+   "name": "The Awakening",
+   "category": "Legendary",
+   "trigger": "a shrine awakens a legendary",
+   "scene": "The ground trembles once. Then again.",
+   "budget": "landmark"
+  },
+  {
+   "id": "legend-caught-hush",
+   "name": "The Hush",
+   "category": "Legendary",
+   "trigger": "a legendary is caught",
+   "scene": "The arena falls silent as the ball closes. Then, a single click.",
+   "budget": "landmark"
+  },
+  {
+   "id": "legend-escaped",
+   "name": "The Empty Sky",
+   "category": "Legendary",
+   "trigger": "a legendary escapes",
+   "scene": "The sky is empty where it was. Everyone feels it.",
+   "budget": "major"
+  },
+  {
+   "id": "legend-bond-hold",
+   "name": "The Hold",
+   "category": "Legendary",
+   "trigger": "a legendary at bond 50",
+   "scene": "It watches you in a way that wants to speak.",
+   "budget": "major"
+  },
+  {
+   "id": "mythical-glimpse",
+   "name": "The Glimpse",
+   "category": "Legendary",
+   "trigger": "a mythical sighting",
+   "scene": "It vanishes before you are sure it was there.",
+   "budget": "major"
+  },
+  {
+   "id": "shrine-offering",
+   "name": "The Offering",
+   "category": "Legendary",
+   "trigger": "an item is placed at a shrine",
+   "scene": "The shrine glows softly and a distant bell rings.",
+   "budget": "major"
+  },
+  {
+   "id": "region-arrival",
+   "name": "The Arrival",
+   "category": "Exploration",
+   "trigger": "region_enter",
+   "scene": "The map unfolds and the new music begins.",
+   "budget": "minor"
+  },
+  {
+   "id": "first-snow",
+   "name": "The First Snow",
+   "category": "Exploration",
+   "trigger": "snow node for the first time",
+   "scene": "A Pokémon catches a flake on its nose and freezes in awe.",
+   "budget": "minor"
+  },
+  {
+   "id": "desert-heat",
+   "name": "The Heat Haze",
+   "category": "Exploration",
+   "trigger": "desert node",
+   "scene": "Even the shadows seem to wobble.",
+   "budget": "minor"
+  },
+  {
+   "id": "cave-glow",
+   "name": "The Cave Glow",
+   "category": "Exploration",
+   "trigger": "cave node with crystals",
+   "scene": "The walls shimmer in colors no one expected.",
+   "budget": "minor"
+  },
+  {
+   "id": "mountain-top",
+   "name": "The Mountain Top",
+   "category": "Exploration",
+   "trigger": "mountain node cleared",
+   "scene": "The whole region unrolls below.",
+   "budget": "minor"
+  },
+  {
+   "id": "sea-breeze",
+   "name": "The Sea Breeze",
+   "category": "Exploration",
+   "trigger": "beach node",
+   "scene": "Salt and sunlight. The team relaxes.",
+   "budget": "minor"
+  },
+  {
+   "id": "neon-city",
+   "name": "The City Lights",
+   "category": "Exploration",
+   "trigger": "city node at night",
+   "scene": "The team stares at the lights like small stars.",
+   "budget": "minor"
+  },
+  {
+   "id": "forest-hush",
+   "name": "The Forest Hush",
+   "category": "Exploration",
+   "trigger": "forest node",
+   "scene": "The birds stop. The wind stops. Something old is watching.",
+   "budget": "minor"
+  },
+  {
+   "id": "ruin-echo",
+   "name": "The Ruin Echo",
+   "category": "Exploration",
+   "trigger": "ruins node",
+   "scene": "Each footstep returns half a second late.",
+   "budget": "minor"
+  },
+  {
+   "id": "rain-puddles",
+   "name": "The Puddle Splash",
+   "category": "Exploration",
+   "trigger": "rain node",
+   "scene": "One Pokémon splashes. Another follows. The trainer sighs.",
+   "budget": "minor"
+  },
+  {
+   "id": "fireflies",
+   "name": "The Fireflies",
+   "category": "Exploration",
+   "trigger": "night node near water",
+   "scene": "Lights drift up from the reeds and the whole team goes quiet.",
+   "budget": "minor"
+  },
+  {
+   "id": "shooting-star",
+   "name": "The Shooting Star",
+   "category": "Exploration",
+   "trigger": "night rest node",
+   "scene": "A line of light crosses the sky. Everyone watches.",
+   "budget": "minor"
+  },
+  {
+   "id": "old-road",
+   "name": "The Old Road",
+   "category": "Exploration",
+   "trigger": "route with old ruins",
+   "scene": "A road older than any map continues beyond the trees.",
+   "budget": "minor"
+  },
+  {
+   "id": "harbor-bells",
+   "name": "The Harbor Bells",
+   "category": "Exploration",
+   "trigger": "harbor node",
+   "scene": "Distant bells carry across the water and the team turns toward them.",
+   "budget": "minor"
+  },
+  {
+   "id": "village-festival",
+   "name": "The Village Festival",
+   "category": "Exploration",
+   "trigger": "town festival event",
+   "scene": "The team is pulled into a dance that nobody planned.",
+   "budget": "major"
+  },
+  {
+   "id": "shop-window",
+   "name": "The Shop Window",
+   "category": "Town",
+   "trigger": "shop node with a rare item",
+   "scene": "A Pokémon presses its nose to the glass.",
+   "budget": "minor"
+  },
+  {
+   "id": "pokemon-center-night",
+   "name": "The Night Shift",
+   "category": "Town",
+   "trigger": "pokemon center at night",
+   "scene": "The nurse hums while the team sleeps.",
+   "budget": "minor"
+  },
+  {
+   "id": "town-greeting",
+   "name": "The Town Greeting",
+   "category": "Town",
+   "trigger": "town with a returning NPC",
+   "scene": "A familiar face waves and the team waves back.",
+   "budget": "minor"
+  },
+  {
+   "id": "gym-lobby",
+   "name": "The Gym Lobby",
+   "category": "Town",
+   "trigger": "gym lobby before a boss",
+   "scene": "The team stands still and listens to the echo of previous matches.",
+   "budget": "minor"
+  },
+  {
+   "id": "team-photo",
+   "name": "The Team Photo",
+   "category": "Team",
+   "trigger": "photo event",
+   "scene": "Everyone holds still for a moment. One Pokémon blinks at the wrong time.",
+   "budget": "minor"
+  },
+  {
+   "id": "chemistry-click",
+   "name": "The Chemistry Click",
+   "category": "Team",
+   "trigger": "chemistry_change to a new combo",
+   "scene": "A glance between two teammates that wasn't there yesterday.",
+   "budget": "major"
+  },
+  {
+   "id": "trio-pose",
+   "name": "The Trio Pose",
+   "category": "Team",
+   "trigger": "trio chemistry active",
+   "scene": "Three Pokémon fall into a pose they clearly rehearsed.",
+   "budget": "major"
+  },
+  {
+   "id": "rivalry-spar",
+   "name": "The Friendly Spar",
+   "category": "Team",
+   "trigger": "two bonded teammates spar at rest",
+   "scene": "Dust, laughter, and a quiet score kept by both.",
+   "budget": "minor"
+  },
+  {
+   "id": "new-member-welcome",
+   "name": "The Welcome",
+   "category": "Team",
+   "trigger": "a new Pokémon joins",
+   "scene": "Everyone makes a space. Someone slides over.",
+   "budget": "minor"
+  },
+  {
+   "id": "veteran-guidance",
+   "name": "The Veteran's Guidance",
+   "category": "Team",
+   "trigger": "an elder teaches a young Pokémon",
+   "scene": "The older one demonstrates once and walks away, trusting.",
+   "budget": "minor"
+  },
+  {
+   "id": "sibling-spat",
+   "name": "The Sibling Spat",
+   "category": "Team",
+   "trigger": "two teammates of the same line disagree",
+   "scene": "A shout, a sulk, a reconciliation over a berry.",
+   "budget": "minor"
+  },
+  {
+   "id": "team-huddle",
+   "name": "The Huddle",
+   "category": "Team",
+   "trigger": "before a boss battle with high morale",
+   "scene": "The team gathers, shoulder to shoulder, for a breath.",
+   "budget": "major"
+  },
+  {
+   "id": "team-low-morale",
+   "name": "The Heavy Silence",
+   "category": "Team",
+   "trigger": "morale below 20",
+   "scene": "Nobody speaks. A Pokémon quietly leans against the lead.",
+   "budget": "minor"
+  },
+  {
+   "id": "morale-spike",
+   "name": "The Morale Spike",
+   "category": "Team",
+   "trigger": "morale jumps by 30+",
+   "scene": "The mood turns, like sunlight breaking through.",
+   "budget": "minor"
+  },
+  {
+   "id": "captain-moment",
+   "name": "The Captain",
+   "category": "Team",
+   "trigger": "a Pokémon with 5+ MVP awards",
+   "scene": "The others quietly look to it first.",
+   "budget": "major"
+  },
+  {
+   "id": "rookie-shines",
+   "name": "The Rookie Shines",
+   "category": "Team",
+   "trigger": "a lowest-level Pokémon lands a decisive KO",
+   "scene": "The team looks at the rookie with new respect.",
+   "budget": "major"
+  },
+  {
+   "id": "underdog-bond",
+   "name": "The Underdog",
+   "category": "Team",
+   "trigger": "a weaker Pokémon gets bond 70",
+   "scene": "It was never the strongest, but it never gave up.",
+   "budget": "major"
+  },
+  {
+   "id": "oldest-friend",
+   "name": "The Oldest Friend",
+   "category": "Team",
+   "trigger": "the longest-serving Pokémon enters a boss battle",
+   "scene": "It has been here from the start, and it knows.",
+   "budget": "major"
+  },
+  {
+   "id": "egg-hatch-hush",
+   "name": "The Hatch",
+   "category": "Hatching",
+   "trigger": "hatched",
+   "scene": "The shell cracks, the room holds its breath, and a small voice says hello.",
+   "budget": "major"
+  },
+  {
+   "id": "egg-warmth",
+   "name": "The Egg's Warmth",
+   "category": "Hatching",
+   "trigger": "rest node with an egg in party",
+   "scene": "The trainer sits with the egg a little longer.",
+   "budget": "minor"
+  },
+  {
+   "id": "rare-egg-hatch",
+   "name": "The Rare Hatch",
+   "category": "Hatching",
+   "trigger": "hatched with a rare trait",
+   "scene": "The shell glitters. Something unusual looks back.",
+   "budget": "landmark"
+  },
+  {
+   "id": "baby-first-steps",
+   "name": "The First Steps",
+   "category": "Hatching",
+   "trigger": "a baby evolves for the first time",
+   "scene": "It wobbles, then walks with its head held high.",
+   "budget": "minor"
+  },
+  {
+   "id": "trade-moment",
+   "name": "The Trade",
+   "category": "Trading",
+   "trigger": "traded",
+   "scene": "The machine hums. The Pokémon looks at its new home.",
+   "budget": "major"
+  },
+  {
+   "id": "trade-return",
+   "name": "The Return",
+   "category": "Trading",
+   "trigger": "a traded Pokémon returns",
+   "scene": "The reunion is a quiet one.",
+   "budget": "landmark"
+  },
+  {
+   "id": "npc-friendship",
+   "name": "The Friend in Town",
+   "category": "NPC",
+   "trigger": "npc_met for the third time",
+   "scene": "The NPC remembers your name.",
+   "budget": "minor"
+  },
+  {
+   "id": "npc-gift-moment",
+   "name": "The Small Gift",
+   "category": "NPC",
+   "trigger": "npc gives a gift",
+   "scene": "They press it into your hand and look away.",
+   "budget": "minor"
+  },
+  {
+   "id": "npc-farewell",
+   "name": "The Farewell",
+   "category": "NPC",
+   "trigger": "a recurring NPC says goodbye",
+   "scene": "They wave until you are out of sight.",
+   "budget": "major"
+  },
+  {
+   "id": "npc-danger",
+   "name": "The Rescue",
+   "category": "NPC",
+   "trigger": "npc in danger event",
+   "scene": "You hear the cry before you see them.",
+   "budget": "major"
+  },
+  {
+   "id": "npc-return-late",
+   "name": "The Late Return",
+   "category": "NPC",
+   "trigger": "an NPC returns after 10+ nodes",
+   "scene": "They look older, braver, or both.",
+   "budget": "major"
+  },
+  {
+   "id": "choice-regret",
+   "name": "The Regret",
+   "category": "Choice",
+   "trigger": "a choice leads to a bad outcome",
+   "scene": "The team says nothing, which is its own kind of comfort.",
+   "budget": "minor"
+  },
+  {
+   "id": "choice-wisdom",
+   "name": "The Right Call",
+   "category": "Choice",
+   "trigger": "a choice leads to a good outcome",
+   "scene": "A quiet feeling that the road was right.",
+   "budget": "minor"
+  },
+  {
+   "id": "choice-risk",
+   "name": "The Gamble",
+   "category": "Choice",
+   "trigger": "a risky choice taken",
+   "scene": "The trainer breathes out slowly and says yes.",
+   "budget": "minor"
+  },
+  {
+   "id": "choice-refuse",
+   "name": "The Refusal",
+   "category": "Choice",
+   "trigger": "refuse a tempting offer",
+   "scene": "The Pokémon looks up with new respect.",
+   "budget": "minor"
+  },
+  {
+   "id": "chain-complete",
+   "name": "The Chain Closes",
+   "category": "Choice",
+   "trigger": "an event chain completes",
+   "scene": "The loose ends meet in one scene and the story settles.",
+   "budget": "major"
+  },
+  {
+   "id": "chain-expired",
+   "name": "The Chain Lost",
+   "category": "Choice",
+   "trigger": "an event chain expires",
+   "scene": "A flag remains of what could have been.",
+   "budget": "minor"
+  },
+  {
+   "id": "rest-fire",
+   "name": "The Campfire",
+   "category": "Rest",
+   "trigger": "rest node",
+   "scene": "Flames, quiet, and the day's story told by firelight.",
+   "budget": "minor"
+  },
+  {
+   "id": "rest-rain",
+   "name": "The Rainy Rest",
+   "category": "Rest",
+   "trigger": "rest node in rain",
+   "scene": "The rain on the canopy is enough.",
+   "budget": "minor"
+  },
+  {
+   "id": "rest-snow",
+   "name": "The Snowy Rest",
+   "category": "Rest",
+   "trigger": "rest node in snow",
+   "scene": "Shared warmth and snow falling softly on the tent.",
+   "budget": "minor"
+  },
+  {
+   "id": "rest-night-talk",
+   "name": "The Night Talk",
+   "category": "Rest",
+   "trigger": "rest node after a boss battle",
+   "scene": "A quiet conversation under the stars.",
+   "budget": "major"
+  },
+  {
+   "id": "rest-after-loss",
+   "name": "The Slow Morning",
+   "category": "Rest",
+   "trigger": "rest node after a defeat",
+   "scene": "The sun rises and no one rushes.",
+   "budget": "minor"
+  },
+  {
+   "id": "rest-before-boss",
+   "name": "The Last Rest",
+   "category": "Rest",
+   "trigger": "rest node before the champion",
+   "scene": "The camp is quiet, almost reverent.",
+   "budget": "major"
+  },
+  {
+   "id": "berry-feast",
+   "name": "The Berry Feast",
+   "category": "Rest",
+   "trigger": "rest node with 5+ berries",
+   "scene": "Everyone eats until nobody can move.",
+   "budget": "minor"
+  },
+  {
+   "id": "item-discovery",
+   "name": "The Discovery",
+   "category": "Item",
+   "trigger": "rare item found",
+   "scene": "A glint in the grass. The team gathers to look.",
+   "budget": "minor"
+  },
+  {
+   "id": "held-item-gift",
+   "name": "The Gift",
+   "category": "Item",
+   "trigger": "held item given to a bonded Pokémon",
+   "scene": "It holds the item as if it were precious.",
+   "budget": "minor"
+  },
+  {
+   "id": "item-lost",
+   "name": "The Lost Item",
+   "category": "Item",
+   "trigger": "an item is lost",
+   "scene": "The team spends a moment searching, then moves on.",
+   "budget": "minor"
+  },
+  {
+   "id": "heirloom-found",
+   "name": "The Heirloom",
+   "category": "Item",
+   "trigger": "an heirloom item found",
+   "scene": "It feels heavier than it is.",
+   "budget": "major"
+  },
+  {
+   "id": "shop-bargain",
+   "name": "The Bargain",
+   "category": "Item",
+   "trigger": "a shop discount event",
+   "scene": "The shopkeeper winks and the trainer pretends not to notice.",
+   "budget": "minor"
+  },
+  {
+   "id": "run-start-vow",
+   "name": "The Starting Vow",
+   "category": "Run",
+   "trigger": "run begins",
+   "scene": "The first step is always the quietest.",
+   "budget": "minor"
+  },
+  {
+   "id": "run-midpoint",
+   "name": "The Midpoint",
+   "category": "Run",
+   "trigger": "run reaches 50%",
+   "scene": "A look back at the road. The way ahead is long.",
+   "budget": "major"
+  },
+  {
+   "id": "run-last-stretch",
+   "name": "The Last Stretch",
+   "category": "Run",
+   "trigger": "run reaches 90%",
+   "scene": "The team can smell the end.",
+   "budget": "major"
+  },
+  {
+   "id": "run-victory",
+   "name": "The Victory",
+   "category": "Run",
+   "trigger": "run won",
+   "scene": "The arena empties. The team remains, breathing.",
+   "budget": "landmark"
+  },
+  {
+   "id": "run-defeat",
+   "name": "The Quiet Defeat",
+   "category": "Run",
+   "trigger": "run lost",
+   "scene": "The team does not look away from each other.",
+   "budget": "landmark"
+  },
+  {
+   "id": "run-mvp",
+   "name": "The MVP Reveal",
+   "category": "Run",
+   "trigger": "run summary: MVP selected",
+   "scene": "The story of the run is told through one Pokémon.",
+   "budget": "landmark"
+  },
+  {
+   "id": "run-epitaph",
+   "name": "The Epitaph",
+   "category": "Run",
+   "trigger": "run ends",
+   "scene": "A line is written for the run.",
+   "budget": "major"
+  },
+  {
+   "id": "hall-of-fame",
+   "name": "The Hall of Fame",
+   "category": "Run",
+   "trigger": "run won: Hall of Fame",
+   "scene": "Each Pokémon's name rises onto the wall.",
+   "budget": "landmark"
+  },
+  {
+   "id": "second-run",
+   "name": "The Second Run",
+   "category": "Run",
+   "trigger": "new run after a completed run",
+   "scene": "The map is different. The trainer is not.",
+   "budget": "minor"
+  },
+  {
+   "id": "legend-guest",
+   "name": "The Guest Appearance",
+   "category": "Run",
+   "trigger": "a past run's Pokémon appears as an NPC echo",
+   "scene": "The Pokémon looks at you as if recognizing a friend.",
+   "budget": "major",
+   "disabled": "Cross-run memory is off (director decision C, 2026-11-06)."
+  },
+  {
+   "id": "mood-swing",
+   "name": "The Mood Swing",
+   "category": "Personality",
+   "trigger": "a Pokémon's mood flips after a win or loss",
+   "scene": "It laughs, then sulks, then laughs again.",
+   "budget": "minor"
+  },
+  {
+   "id": "nervous-victory",
+   "name": "The Nervous Victory",
+   "category": "Personality",
+   "trigger": "a nervous Pokémon wins a boss fight",
+   "scene": "It shakes and wins at the same time.",
+   "budget": "major"
+  },
+  {
+   "id": "brave-stand",
+   "name": "The Brave Stand",
+   "category": "Personality",
+   "trigger": "a brave Pokémon stands its ground against a legendary",
+   "scene": "It plants its feet.",
+   "budget": "major"
+  },
+  {
+   "id": "lazy-effort",
+   "name": "The Lazy Effort",
+   "category": "Personality",
+   "trigger": "a lazy Pokémon makes an impressive play",
+   "scene": "It yawns, then does something amazing.",
+   "budget": "minor"
+  },
+  {
+   "id": "curious-find",
+   "name": "The Curious Find",
+   "category": "Personality",
+   "trigger": "a curious Pokémon finds an item",
+   "scene": "It runs back with the item, tail wagging.",
+   "budget": "minor"
+  },
+  {
+   "id": "proud-refusal",
+   "name": "The Proud Refusal",
+   "category": "Personality",
+   "trigger": "a proud Pokémon refuses an item",
+   "scene": "It would rather earn it.",
+   "budget": "minor"
+  },
+  {
+   "id": "shy-step",
+   "name": "The Shy Step",
+   "category": "Personality",
+   "trigger": "a shy Pokémon approaches an NPC",
+   "scene": "It takes one step and blushes.",
+   "budget": "minor"
+  },
+  {
+   "id": "loyal-wait",
+   "name": "The Loyal Wait",
+   "category": "Personality",
+   "trigger": "a loyal Pokémon waits at a gate",
+   "scene": "It stays exactly where it was told.",
+   "budget": "minor"
+  },
+  {
+   "id": "mischief-note",
+   "name": "The Mischief",
+   "category": "Personality",
+   "trigger": "a mischievous Pokémon pranks a teammate",
+   "scene": "A feathered tail, a stolen berry, a smirk.",
+   "budget": "minor"
+  },
+  {
+   "id": "stoic-smile",
+   "name": "The Stoic Smile",
+   "category": "Personality",
+   "trigger": "a stoic Pokémon smiles for the first time",
+   "scene": "It happens so quickly nobody believes it.",
+   "budget": "major"
+  }
+ ]
+}

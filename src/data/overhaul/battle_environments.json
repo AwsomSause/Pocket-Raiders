@@ -1,0 +1,567 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/battle_environments.json",
+ "entries": [
+  {
+   "id": "forest",
+   "name": "Forest",
+   "biome": "forest",
+   "presentation": "Dappled light, rustling leaves",
+   "mechanic": "pow:Grass:+10",
+   "banner": "Leaves rustle. Grass moves surge."
+  },
+  {
+   "id": "deep-forest",
+   "name": "Deep Forest",
+   "biome": "forest",
+   "presentation": "Thick canopy, bird calls hushed",
+   "mechanic": "pow:Bug:+10",
+   "banner": "The canopy hums with insects. Bug moves surge."
+  },
+  {
+   "id": "bamboo-grove",
+   "name": "Bamboo Grove",
+   "biome": "forest",
+   "presentation": "Tall stalks swaying, sun in stripes",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "mossy-glade",
+   "name": "Mossy Glade",
+   "biome": "forest",
+   "presentation": "Soft green light, dripping water",
+   "mechanic": "pow:Grass/Water:+10",
+   "banner": "Moss and moisture. Grass and Water moves surge."
+  },
+  {
+   "id": "autumn-woods",
+   "name": "Autumn Woods",
+   "biome": "forest",
+   "presentation": "Falling red leaves, crisp air",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "haunted-wood",
+   "name": "Haunted Wood",
+   "biome": "forest",
+   "presentation": "Pale mist, twisted trunks",
+   "mechanic": "pow:Ghost:+10",
+   "banner": "Something watches. Ghost moves surge."
+  },
+  {
+   "id": "volcano",
+   "name": "Volcano",
+   "biome": "volcano",
+   "presentation": "Heat haze, falling embers",
+   "mechanic": "pow:Fire:+10",
+   "banner": "Heat shimmers. Fire moves surge."
+  },
+  {
+   "id": "magma-chamber",
+   "name": "Magma Chamber",
+   "biome": "volcano",
+   "presentation": "Glowing rivers, red-lit rock",
+   "mechanic": "pow:Fire:+10",
+   "banner": "Magma glows below. Fire moves surge."
+  },
+  {
+   "id": "ash-fields",
+   "name": "Ash Fields",
+   "biome": "volcano",
+   "presentation": "Grey drifts, dim sun",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "hot-springs",
+   "name": "Hot Springs",
+   "biome": "volcano",
+   "presentation": "Steam, warm stone, quiet",
+   "mechanic": "pow:Water:+10",
+   "banner": "Warm steam rises. Water moves surge."
+  },
+  {
+   "id": "obsidian-flats",
+   "name": "Obsidian Flats",
+   "biome": "volcano",
+   "presentation": "Black glass underfoot, hard reflections",
+   "mechanic": "pow:Dark:+10",
+   "banner": "Black glass reflects. Dark moves surge."
+  },
+  {
+   "id": "ocean",
+   "name": "Open Ocean",
+   "biome": "water",
+   "presentation": "Rolling waves, salt spray",
+   "mechanic": "pow:Water:+10",
+   "banner": "Waves roll in. Water moves surge."
+  },
+  {
+   "id": "beach",
+   "name": "Beach",
+   "biome": "water",
+   "presentation": "Surf, wet sand, bright sky",
+   "mechanic": "pow:Water:+10",
+   "banner": "Surf rolls up. Water moves surge."
+  },
+  {
+   "id": "tide-pools",
+   "name": "Tide Pools",
+   "biome": "water",
+   "presentation": "Shallow pools, small crabs",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "coral-reef",
+   "name": "Coral Reef",
+   "biome": "water",
+   "presentation": "Dappled blue light, schools of fish",
+   "mechanic": "pow:Water/Fairy:+10",
+   "banner": "The reef glows. Water and Fairy moves surge."
+  },
+  {
+   "id": "harbor",
+   "name": "Harbor",
+   "biome": "water",
+   "presentation": "Creaking docks, gulls",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "lighthouse-cliff",
+   "name": "Lighthouse Cliff",
+   "biome": "water",
+   "presentation": "Wind-cut stone, a far beam",
+   "mechanic": "pow:Flying:+10",
+   "banner": "The wind climbs the cliff. Flying moves surge."
+  },
+  {
+   "id": "river-bank",
+   "name": "River Bank",
+   "biome": "water",
+   "presentation": "Reeds, a slow current",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "waterfall-basin",
+   "name": "Waterfall Basin",
+   "biome": "water",
+   "presentation": "Roaring white water, mist",
+   "mechanic": "pow:Water:+10",
+   "banner": "Spray fills the air. Water moves surge."
+  },
+  {
+   "id": "snowfield",
+   "name": "Snowfield",
+   "biome": "ice",
+   "presentation": "Falling snow, breath clouds",
+   "mechanic": "pow:Ice:+10",
+   "banner": "Snow falls. Ice moves surge."
+  },
+  {
+   "id": "glacier",
+   "name": "Glacier",
+   "biome": "ice",
+   "presentation": "Blue ice walls, creaking",
+   "mechanic": "pow:Ice:+10",
+   "banner": "The ice groans. Ice moves surge."
+  },
+  {
+   "id": "frozen-lake",
+   "name": "Frozen Lake",
+   "biome": "ice",
+   "presentation": "A flat white plain, faint cracks",
+   "mechanic": "pow:Ice:+10",
+   "banner": "The ice shifts underfoot. Ice moves surge."
+  },
+  {
+   "id": "blizzard-pass",
+   "name": "Blizzard Pass",
+   "biome": "ice",
+   "presentation": "Howling white, narrow trail",
+   "mechanic": "pow:Fire:-10",
+   "banner": "A bitter wind bites. Fire moves weaken."
+  },
+  {
+   "id": "snowy-village",
+   "name": "Snowy Village",
+   "biome": "ice",
+   "presentation": "Chimney smoke, lantern light",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "ruins",
+   "name": "Ancient Ruins",
+   "biome": "ruins",
+   "presentation": "Glowing glyphs, drifting dust",
+   "mechanic": "pow:Ghost/Psychic:+10",
+   "banner": "Old glyphs wake. Ghost and Psychic moves surge."
+  },
+  {
+   "id": "sunken-ruins",
+   "name": "Sunken Ruins",
+   "biome": "ruins",
+   "presentation": "Green water, drowned columns",
+   "mechanic": "pow:Water:+10",
+   "banner": "Drowned halls echo. Water moves surge."
+  },
+  {
+   "id": "sealed-temple",
+   "name": "Sealed Temple",
+   "biome": "ruins",
+   "presentation": "Torches, long shadows",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "tomb",
+   "name": "Forgotten Tomb",
+   "biome": "ruins",
+   "presentation": "Dust, still air, painted walls",
+   "mechanic": "pow:Ghost:+10",
+   "banner": "The tomb is quiet. Ghost moves surge."
+  },
+  {
+   "id": "watchtower",
+   "name": "Broken Watchtower",
+   "biome": "ruins",
+   "presentation": "Wind through empty windows",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "colosseum",
+   "name": "Old Colosseum",
+   "biome": "ruins",
+   "presentation": "Sand floor, carved crowds",
+   "mechanic": "pow:Fighting:+10",
+   "banner": "The old crowd roars. Fighting moves surge."
+  },
+  {
+   "id": "city",
+   "name": "City Street",
+   "biome": "city",
+   "presentation": "Neon, traffic hum",
+   "mechanic": "pow:Electric:+10",
+   "banner": "Neon crackles. Electric moves surge."
+  },
+  {
+   "id": "rooftop",
+   "name": "Rooftop",
+   "biome": "city",
+   "presentation": "Wind, antennae, skyline",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "power-plant",
+   "name": "Power Plant",
+   "biome": "city",
+   "presentation": "Humming coils, caged lights",
+   "mechanic": "pow:Electric:+10",
+   "banner": "Coils hum. Electric moves surge."
+  },
+  {
+   "id": "subway",
+   "name": "Subway Platform",
+   "biome": "city",
+   "presentation": "Echoing tunnel, flickering signs",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "market",
+   "name": "Market Square",
+   "biome": "city",
+   "presentation": "Colored awnings, shouting vendors",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "factory",
+   "name": "Factory Floor",
+   "biome": "city",
+   "presentation": "Conveyors, sparks, steam",
+   "mechanic": "pow:Steel:+10",
+   "banner": "Metal rings. Steel moves surge."
+  },
+  {
+   "id": "laboratory",
+   "name": "Laboratory",
+   "biome": "city",
+   "presentation": "White light, humming machines",
+   "mechanic": "pow:Psychic:+10",
+   "banner": "The machines hum. Psychic moves surge."
+  },
+  {
+   "id": "cave",
+   "name": "Cave",
+   "biome": "cave",
+   "presentation": "Echo, low light",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "crystal-cave",
+   "name": "Crystal Cave",
+   "biome": "cave",
+   "presentation": "Prismatic glints, faint chimes",
+   "mechanic": "pow:Rock/Fairy:+10",
+   "banner": "Crystals ring. Rock and Fairy moves surge."
+  },
+  {
+   "id": "mine",
+   "name": "Abandoned Mine",
+   "biome": "cave",
+   "presentation": "Rusted rails, dripping dark",
+   "mechanic": "pow:Ground:+10",
+   "banner": "The ground shifts. Ground moves surge."
+  },
+  {
+   "id": "underground-lake",
+   "name": "Underground Lake",
+   "biome": "cave",
+   "presentation": "Black water, glowing moss",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "meadow",
+   "name": "Meadow",
+   "biome": "field",
+   "presentation": "Wind, flowers",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "flower-field",
+   "name": "Flower Field",
+   "biome": "field",
+   "presentation": "Swaying color, drifting petals",
+   "mechanic": "pow:Grass/Fairy:+10",
+   "banner": "Petals drift. Grass and Fairy moves surge."
+  },
+  {
+   "id": "open-plains",
+   "name": "Open Plains",
+   "biome": "field",
+   "presentation": "Wide sky, long grass",
+   "mechanic": "pow:Normal:+10",
+   "banner": "The plains stretch wide. Normal moves surge."
+  },
+  {
+   "id": "farmland",
+   "name": "Farmland",
+   "biome": "field",
+   "presentation": "Fences, barns, quiet",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "orchard",
+   "name": "Orchard",
+   "biome": "field",
+   "presentation": "Rows of fruit trees, buzzing",
+   "mechanic": "pow:Bug:+10",
+   "banner": "Insects hum. Bug moves surge."
+  },
+  {
+   "id": "desert",
+   "name": "Desert",
+   "biome": "dry",
+   "presentation": "Dunes, hard sun",
+   "mechanic": "pow:Ground:+10",
+   "banner": "Sand shifts. Ground moves surge."
+  },
+  {
+   "id": "canyon",
+   "name": "Canyon",
+   "biome": "dry",
+   "presentation": "Red stone walls, long echo",
+   "mechanic": "pow:Rock:+10",
+   "banner": "The cliffs echo. Rock moves surge."
+  },
+  {
+   "id": "oasis",
+   "name": "Oasis",
+   "biome": "dry",
+   "presentation": "Palms, still water",
+   "mechanic": "pow:Water:+10",
+   "banner": "Cool water in hot air. Water moves surge."
+  },
+  {
+   "id": "badlands",
+   "name": "Badlands",
+   "biome": "dry",
+   "presentation": "Cracked earth, buzzards",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "mountain-peak",
+   "name": "Mountain Peak",
+   "biome": "high",
+   "presentation": "Thin air, wide view",
+   "mechanic": "pow:Flying:+10",
+   "banner": "The wind is strong. Flying moves surge."
+  },
+  {
+   "id": "mountain-pass",
+   "name": "Mountain Pass",
+   "biome": "high",
+   "presentation": "Switchbacks, cold wind",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "cloud-city",
+   "name": "Cloud Realm",
+   "biome": "high",
+   "presentation": "White floor, endless sky",
+   "mechanic": "pow:Flying/Dragon:+10",
+   "banner": "Clouds spread wide. Flying and Dragon moves surge."
+  },
+  {
+   "id": "thunder-ridge",
+   "name": "Thunder Ridge",
+   "biome": "high",
+   "presentation": "Dark clouds, distant flashes",
+   "mechanic": "pow:Electric:+10",
+   "banner": "The sky crackles. Electric moves surge."
+  },
+  {
+   "id": "dragon-shrine",
+   "name": "Dragon Shrine",
+   "biome": "high",
+   "presentation": "Stone steps, red gates, old banners",
+   "mechanic": "pow:Dragon:+10",
+   "banner": "Ancient power gathers. Dragon moves surge."
+  },
+  {
+   "id": "swamp",
+   "name": "Swamp",
+   "biome": "wet",
+   "presentation": "Slow water, thick air",
+   "mechanic": "pow:Poison:+10",
+   "banner": "The air is foul. Poison moves surge."
+  },
+  {
+   "id": "bog",
+   "name": "Bog",
+   "biome": "wet",
+   "presentation": "Black mud, bubbling gas",
+   "mechanic": "pow:Poison/Ground:+10",
+   "banner": "The bog bubbles. Poison and Ground moves surge."
+  },
+  {
+   "id": "mangrove",
+   "name": "Mangrove",
+   "biome": "wet",
+   "presentation": "Tangled roots, tide-line",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "night-street",
+   "name": "Night Street",
+   "biome": "dark",
+   "presentation": "Lamplight, long shadows",
+   "mechanic": "pow:Dark:+10",
+   "banner": "Shadows lengthen. Dark moves surge."
+  },
+  {
+   "id": "graveyard",
+   "name": "Graveyard",
+   "biome": "dark",
+   "presentation": "Old stone, cold fog",
+   "mechanic": "pow:Ghost:+10",
+   "banner": "The air chills. Ghost moves surge."
+  },
+  {
+   "id": "cathedral",
+   "name": "Hollow Cathedral",
+   "biome": "dark",
+   "presentation": "Colored light through broken glass",
+   "mechanic": "pow:Fairy/Psychic:+10",
+   "banner": "Light falls in colors. Fairy and Psychic moves surge."
+  },
+  {
+   "id": "circus",
+   "name": "Traveling Circus",
+   "biome": "town",
+   "presentation": "Striped tents, calliope tune",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "stadium",
+   "name": "Stadium",
+   "biome": "town",
+   "presentation": "Floodlights, cheering crowd",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "gym-hall",
+   "name": "Gym Hall",
+   "biome": "town",
+   "presentation": "Banners, polished floor",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "dojo",
+   "name": "Dojo",
+   "biome": "town",
+   "presentation": "Paper walls, straw mats",
+   "mechanic": "pow:Fighting:+10",
+   "banner": "The dojo is still. Fighting moves surge."
+  },
+  {
+   "id": "pokemon-center",
+   "name": "Pokémon Center Grounds",
+   "biome": "town",
+   "presentation": "Warm windows, fountain",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "ancient-battlefield",
+   "name": "Ancient Battlefield",
+   "biome": "special",
+   "presentation": "Weathered banners, wind, old iron",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "distortion",
+   "name": "Distortion Zone",
+   "biome": "special",
+   "presentation": "Warped geometry, inverted gravity",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "ultra-space",
+   "name": "Ultra Space",
+   "biome": "special",
+   "presentation": "Neon voids, distant lights",
+   "mechanic": "none",
+   "banner": null
+  },
+  {
+   "id": "legendary-altar",
+   "name": "Legend's Altar",
+   "biome": "special",
+   "presentation": "Shafts of light, a single stone",
+   "mechanic": "none",
+   "banner": null
+  }
+ ]
+}

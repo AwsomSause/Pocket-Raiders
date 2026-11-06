@@ -1,0 +1,502 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/battlefield_conditions.json",
+ "entries": [
+  {
+   "id": "downpour",
+   "name": "Sudden Downpour",
+   "stage": "mid",
+   "announce": "Dark clouds roll in overhead.",
+   "effect": "Rain starts at end of next turn.",
+   "duration": 3,
+   "counterplay": "Water and Electric users want it; Fire users can switch out early."
+  },
+  {
+   "id": "falling-debris",
+   "name": "Falling Debris",
+   "stage": "mid",
+   "announce": "Pebbles trickle down from above.",
+   "effect": "At end of turn 3, each active Pokémon takes 1/16 max HP (Rock-types immune).",
+   "duration": 1,
+   "counterplay": "Rock-types and fast KOs avoid it."
+  },
+  {
+   "id": "gale",
+   "name": "Gale",
+   "stage": "mid",
+   "announce": "The wind starts to build.",
+   "effect": "Flying-types gain +1 Speed.",
+   "duration": 3,
+   "counterplay": "Non-Flying teams can slow the pace with a stalling move."
+  },
+  {
+   "id": "unstable-ground",
+   "name": "Unstable Ground",
+   "stage": "mid",
+   "announce": "The ground trembles slightly.",
+   "effect": "Ground moves gain +20% power.",
+   "duration": 3,
+   "counterplay": "Flying and Levitate users are untouched by Ground moves."
+  },
+  {
+   "id": "strange-energy",
+   "name": "Strange Energy",
+   "stage": "mid",
+   "announce": "The air hums with something unseen.",
+   "effect": "Psychic and Fairy moves gain +10% crit chance.",
+   "duration": 3,
+   "counterplay": "Dark-types are unaffected by the Psychic half of the hum."
+  },
+  {
+   "id": "fog",
+   "name": "Fog",
+   "stage": "mid",
+   "announce": "Mist begins to gather.",
+   "effect": "Accuracy of all moves −5% until it clears.",
+   "duration": 3,
+   "counterplay": "Never-miss moves and No Guard are unaffected."
+  },
+  {
+   "id": "heat-wave",
+   "name": "Heat Wave",
+   "stage": "mid",
+   "announce": "The air shimmers with heat.",
+   "effect": "Sun begins at end of next turn.",
+   "duration": 3,
+   "counterplay": "Water moves and switching soften the damage."
+  },
+  {
+   "id": "sandstorm-front",
+   "name": "Sandstorm Front",
+   "stage": "mid",
+   "announce": "A tan haze stains the horizon.",
+   "effect": "Sandstorm begins at end of next turn.",
+   "duration": 3,
+   "counterplay": "Rock, Ground and Steel are immune to the chip."
+  },
+  {
+   "id": "cold-snap",
+   "name": "Cold Snap",
+   "stage": "mid",
+   "announce": "A sudden chill creeps in.",
+   "effect": "Snow begins at end of next turn.",
+   "duration": 3,
+   "counterplay": "Ice-types gain; Fire moves are weaker in the cold."
+  },
+  {
+   "id": "thunderclap",
+   "name": "Thunderclap",
+   "stage": "mid",
+   "announce": "Distant thunder rumbles closer.",
+   "effect": "Electric moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Ground-types shrug it off."
+  },
+  {
+   "id": "mud-slick",
+   "name": "Mud Slick",
+   "stage": "mid",
+   "announce": "The ground turns soft and wet.",
+   "effect": "Ground-type Pokémon take −10% Speed.",
+   "duration": 3,
+   "counterplay": "Flyers are unaffected."
+  },
+  {
+   "id": "tremor",
+   "name": "Tremor",
+   "stage": "mid",
+   "announce": "A low rumble passes under the field.",
+   "effect": "At end of turn 2, grounded Pokémon lose 1/32 max HP.",
+   "duration": 1,
+   "counterplay": "Fliers and Levitate are unaffected."
+  },
+  {
+   "id": "rockslide-warning",
+   "name": "Rockslide Warning",
+   "stage": "mid",
+   "announce": "Loose stone clatters from the slope.",
+   "effect": "Rock moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Steel and Fighting resist the stones."
+  },
+  {
+   "id": "smoke-cloud",
+   "name": "Smoke Cloud",
+   "stage": "mid",
+   "announce": "A thick plume rolls across the field.",
+   "effect": "Accuracy of Fire moves −10%.",
+   "duration": 3,
+   "counterplay": "Water moves clear the smoke."
+  },
+  {
+   "id": "mist-veil",
+   "name": "Mist Veil",
+   "stage": "mid",
+   "announce": "A pale mist hugs the ground.",
+   "effect": "Stat drops from foes are prevented for 3 turns.",
+   "duration": 3,
+   "counterplay": "Direct damage is unchanged."
+  },
+  {
+   "id": "aurora-sky",
+   "name": "Aurora Sky",
+   "stage": "mid",
+   "announce": "Green light starts to ripple above.",
+   "effect": "Ice and Fairy moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Fire and Steel resist the shimmer."
+  },
+  {
+   "id": "sunbeam",
+   "name": "Sunbeam",
+   "stage": "mid",
+   "announce": "A break opens in the clouds.",
+   "effect": "Healing moves restore +10% more.",
+   "duration": 3,
+   "counterplay": "Prevents nothing; a pure comfort."
+  },
+  {
+   "id": "shadow-fall",
+   "name": "Shadow Fall",
+   "stage": "mid",
+   "announce": "The light begins to fail.",
+   "effect": "Dark and Ghost moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Fairy and Normal resist the dark."
+  },
+  {
+   "id": "whirlwind-gust",
+   "name": "Whirlwind Gust",
+   "stage": "mid",
+   "announce": "Leaves spin up in a tight ring.",
+   "effect": "Pokémon switching in take −1/16 max HP.",
+   "duration": 3,
+   "counterplay": "Heavy hitters should avoid a risky swap."
+  },
+  {
+   "id": "static-field",
+   "name": "Static Field",
+   "stage": "late",
+   "announce": "A crackle runs through the air.",
+   "effect": "Electric moves gain +10% power; Ground moves lose 10%.",
+   "duration": 3,
+   "counterplay": "Rubber-boot swaps and resistances help."
+  },
+  {
+   "id": "tidal-surge",
+   "name": "Tidal Surge",
+   "stage": "late",
+   "announce": "The sea pulls back with a hiss.",
+   "effect": "Water moves gain +20% power for 2 turns.",
+   "duration": 2,
+   "counterplay": "Grass and Dragon resist the surge."
+  },
+  {
+   "id": "wildfire",
+   "name": "Wildfire",
+   "stage": "late",
+   "announce": "Smoke rises from the tree line.",
+   "effect": "Fire moves gain +10% power; Grass-types lose 1/16 max HP at end of turn 3.",
+   "duration": 3,
+   "counterplay": "Water and Fire types hold up best."
+  },
+  {
+   "id": "lightning-storm",
+   "name": "Lightning Storm",
+   "stage": "late",
+   "announce": "Heavy clouds crack with light.",
+   "effect": "Rain begins at end of next turn; Electric moves gain +10% crit chance.",
+   "duration": 3,
+   "counterplay": "Ground-types are the safe choice."
+  },
+  {
+   "id": "hailstorm-front",
+   "name": "Hailstorm Front",
+   "stage": "late",
+   "announce": "Pale clouds drop in low.",
+   "effect": "Hail begins at end of next turn.",
+   "duration": 3,
+   "counterplay": "Ice-types are immune; others take chip."
+  },
+  {
+   "id": "ash-fall",
+   "name": "Ash Fall",
+   "stage": "late",
+   "announce": "Grey flakes begin to drift down.",
+   "effect": "Accuracy of all moves −5% until it clears.",
+   "duration": 3,
+   "counterplay": "Never-miss moves and No Guard are unaffected."
+  },
+  {
+   "id": "quake",
+   "name": "Quake",
+   "stage": "late",
+   "announce": "The ground shudders once, deeply.",
+   "effect": "At end of turn 2, all active Pokémon take 1/16 max HP (Flying, Levitate immune).",
+   "duration": 1,
+   "counterplay": "Flyers and Levitate users take nothing."
+  },
+  {
+   "id": "stone-rain",
+   "name": "Stone Rain",
+   "stage": "late",
+   "announce": "Small stones begin to patter down.",
+   "effect": "Rock-types take −10% Special damage for 3 turns; all others take 1/32 max HP at end of turn.",
+   "duration": 3,
+   "counterplay": "Rock-types actually enjoy it."
+  },
+  {
+   "id": "overgrowth",
+   "name": "Overgrowth",
+   "stage": "late",
+   "announce": "Vines slip over the ground.",
+   "effect": "Grass moves gain +10% power; Speed −5% for all.",
+   "duration": 3,
+   "counterplay": "Fire moves cut through the vines."
+  },
+  {
+   "id": "glass-rain",
+   "name": "Glass Rain",
+   "stage": "late",
+   "announce": "Something glitters high up.",
+   "effect": "Fairy and Ice moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Steel and Fire resist the shards."
+  },
+  {
+   "id": "dust-devil",
+   "name": "Dust Devil",
+   "stage": "late",
+   "announce": "A spinning dust column rises.",
+   "effect": "Accuracy of Physical moves −5%.",
+   "duration": 3,
+   "counterplay": "Special attackers are unaffected."
+  },
+  {
+   "id": "moonrise",
+   "name": "Moonrise",
+   "stage": "late",
+   "announce": "The moon edges above the horizon.",
+   "effect": "Ghost and Psychic moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Dark-types resist Psychic."
+  },
+  {
+   "id": "eclipse",
+   "name": "Eclipse",
+   "stage": "late",
+   "announce": "The sun starts to go dark.",
+   "effect": "Dark moves gain +10% power; Fairy moves lose 10%.",
+   "duration": 3,
+   "counterplay": "Steel and Fighting are not bothered."
+  },
+  {
+   "id": "shockwave",
+   "name": "Shockwave",
+   "stage": "late",
+   "announce": "Metal hums with a rising pitch.",
+   "effect": "Steel and Electric moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Ground-types brush off the Electric half."
+  },
+  {
+   "id": "sinkhole",
+   "name": "Sinkhole",
+   "stage": "late",
+   "announce": "A circle of ground sags.",
+   "effect": "Ground moves gain +20% power; Flying immune.",
+   "duration": 3,
+   "counterplay": "Flyers and Levitate users avoid it."
+  },
+  {
+   "id": "rolling-fog",
+   "name": "Rolling Fog",
+   "stage": "late",
+   "announce": "Fog banks roll in off the water.",
+   "effect": "Accuracy of all moves −5%; Water moves gain +5% power.",
+   "duration": 3,
+   "counterplay": "Never-miss moves are unaffected."
+  },
+  {
+   "id": "arc-flash",
+   "name": "Arc Flash",
+   "stage": "late",
+   "announce": "Sparks drift off the machinery.",
+   "effect": "Steel moves gain +10% power; Electric moves gain +10% crit chance.",
+   "duration": 3,
+   "counterplay": "Ground-types shrug it off."
+  },
+  {
+   "id": "spore-drift",
+   "name": "Spore Drift",
+   "stage": "late",
+   "announce": "Pale spores float on the wind.",
+   "effect": "Spore-based moves gain +10% accuracy.",
+   "duration": 3,
+   "counterplay": "Grass-types are immune to spores."
+  },
+  {
+   "id": "searing-noon",
+   "name": "Searing Noon",
+   "stage": "late",
+   "announce": "The sky bleaches white.",
+   "effect": "Sun begins; Fire moves gain +10%; Water moves −10%.",
+   "duration": 3,
+   "counterplay": "Water-types can still hit hard."
+  },
+  {
+   "id": "bitter-wind",
+   "name": "Bitter Wind",
+   "stage": "late",
+   "announce": "The wind starts to bite.",
+   "effect": "Fire moves lose 10% power.",
+   "duration": 3,
+   "counterplay": "Ice and Steel don't mind."
+  },
+  {
+   "id": "terror-tide",
+   "name": "Terror Tide",
+   "stage": "boss",
+   "announce": "A low horn sounds across the water.",
+   "effect": "Water moves gain +10% power; speed −5% for all.",
+   "duration": 3,
+   "counterplay": "Use Grass and Electric to flip the tide."
+  },
+  {
+   "id": "titans-step",
+   "name": "Titan's Step",
+   "stage": "boss",
+   "announce": "The ground rings with distant footfalls.",
+   "effect": "At end of turns 2 and 4, all grounded Pokémon take 1/32 max HP.",
+   "duration": 2,
+   "counterplay": "Flyers are unaffected."
+  },
+  {
+   "id": "stormwall",
+   "name": "Stormwall",
+   "stage": "boss",
+   "announce": "A dark line of clouds closes in.",
+   "effect": "Rain begins; Electric moves gain +10% crit chance.",
+   "duration": 3,
+   "counterplay": "Ground-types are protected."
+  },
+  {
+   "id": "firewall",
+   "name": "Firewall",
+   "stage": "boss",
+   "announce": "A line of fire races across the field.",
+   "effect": "Fire moves gain +10% power; Fire-types heal 1/16 at end of turn.",
+   "duration": 3,
+   "counterplay": "Water moves and weather change it."
+  },
+  {
+   "id": "wintergale",
+   "name": "Wintergale",
+   "stage": "boss",
+   "announce": "A white wall of wind arrives.",
+   "effect": "Ice moves gain +10%; Fire and Grass lose −5% Speed.",
+   "duration": 3,
+   "counterplay": "Fire-types should switch to avoid it."
+  },
+  {
+   "id": "blackout",
+   "name": "Blackout",
+   "stage": "boss",
+   "announce": "The lights go out all at once.",
+   "effect": "Accuracy of all moves −10% for 2 turns.",
+   "duration": 2,
+   "counterplay": "Never-miss moves are unaffected."
+  },
+  {
+   "id": "legends-hush",
+   "name": "Legend's Hush",
+   "stage": "boss",
+   "announce": "The wind stops. Nothing moves.",
+   "effect": "Priority moves are blocked for 2 turns.",
+   "duration": 2,
+   "counterplay": "Switching is the only option."
+  },
+  {
+   "id": "rift-tremor",
+   "name": "Rift Tremor",
+   "stage": "boss",
+   "announce": "Space ripples at the edge of vision.",
+   "effect": "Psychic and Dragon moves gain +10% power.",
+   "duration": 3,
+   "counterplay": "Dark and Fairy resist the rift."
+  },
+  {
+   "id": "world-tree-bloom",
+   "name": "World-Tree Bloom",
+   "stage": "boss",
+   "announce": "Pale blossoms fall from nowhere.",
+   "effect": "Grass and Fairy moves gain +10%; all recover 1/32 HP at end of turn.",
+   "duration": 3,
+   "counterplay": "Fire and Poison cut through."
+  },
+  {
+   "id": "abyss-pressure",
+   "name": "Abyss Pressure",
+   "stage": "boss",
+   "announce": "The air feels heavy, like deep water.",
+   "effect": "Speed of all Pokémon −5%.",
+   "duration": 3,
+   "counterplay": "Water-types stay mobile."
+  },
+  {
+   "id": "reactor-leak",
+   "name": "Reactor Leak",
+   "stage": "evilteam",
+   "announce": "An alarm starts to sound.",
+   "effect": "At end of turn 2, all active non-Steel Pokémon take 1/16 max HP.",
+   "duration": 1,
+   "counterplay": "Steel-types are immune."
+  },
+  {
+   "id": "signal-jammer",
+   "name": "Signal Jammer",
+   "stage": "evilteam",
+   "announce": "A machine hums at a high pitch.",
+   "effect": "Move accuracy −5% for all; boosting is blocked for 2 turns.",
+   "duration": 2,
+   "counterplay": "Never-miss moves are unaffected."
+  },
+  {
+   "id": "gravity-device",
+   "name": "Gravity Device",
+   "stage": "evilteam",
+   "announce": "The machine spools up.",
+   "effect": "Gravity applies for 3 turns: Flying and Levitate lose immunity to Ground.",
+   "duration": 3,
+   "counterplay": "Levitate users are caught off guard."
+  },
+  {
+   "id": "cryo-vent",
+   "name": "Cryo Vent",
+   "stage": "evilteam",
+   "announce": "A pipe hisses frost across the floor.",
+   "effect": "Snow begins; Ice moves gain +10%.",
+   "duration": 3,
+   "counterplay": "Fire resists the vent."
+  },
+  {
+   "id": "overload-coil",
+   "name": "Overload Coil",
+   "stage": "evilteam",
+   "announce": "A coil crackles and glows brighter.",
+   "effect": "Electric moves gain +20% power; Ground moves lose 10%.",
+   "duration": 3,
+   "counterplay": "Ground-types shrug it off."
+  },
+  {
+   "id": "toxin-spill",
+   "name": "Toxin Spill",
+   "stage": "evilteam",
+   "announce": "A vat tips and a sour smell spreads.",
+   "effect": "At end of turn 2, non-Poison and non-Steel Pokémon take 1/16 max HP.",
+   "duration": 1,
+   "counterplay": "Poison and Steel avoid it."
+  }
+ ]
+}
