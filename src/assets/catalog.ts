@@ -233,7 +233,7 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...['max/bg', 'max/icon', 'max/spiral', 'max/spiral2', 'ultra/bg', 'ultra/icon', 'tera/bg', 'tera/icon', 'tera/spiral', 'transitions/black_bars', 'transitions/impact', 'transitions/shine'].map(
     (name): AssetEntry => ({ id: `cine.raid.${name.replace('/', '.')}`, kind: 'image', category: 'ui', path: `images/packs/raid/${name}.png`, lazy: true }),
   ),
-  ...['mega/orb_1', 'mega/shine', 'primal/icon_groudon', 'primal/icon_kyogre'].map(
+  ...['mega/orb_1', 'mega/orb_2', 'mega/icon', 'mega/shine', 'skip_button', 'primal/icon_groudon', 'primal/icon_kyogre'].map(
     (name): AssetEntry => ({ id: `cine.dbk.${name.replace('/', '.')}`, kind: 'image', category: 'ui', path: `images/packs/dbk/${name}.png`, lazy: true }),
   ),
   // Z-Move title cards and the Z-Power particle (Deluxe Battle Kit Z-Power, via the Pokémon Memories repo;

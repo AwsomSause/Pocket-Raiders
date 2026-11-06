@@ -19489,6 +19489,128 @@
       "hitStopMs": 0,
       "telegraph": "normal",
       "script": "growl"
+    },
+    "glacier-maul": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "calamity-edge": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "phantom-disaster": {
+      "anim": "lick",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "primeval-dive": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "ironclad-quake": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "mind-overclock": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "skysong-requiem": {
+      "anim": "light-of-ruin",
+      "source": "type",
+      "shake": 3,
+      "flash": "#ee99ac",
+      "hitStopMs": 87,
+      "telegraph": "strong"
+    },
+    "draco-dynamo": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "healing-chorus": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "grudge-stitch": {
+      "anim": "lick",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "tidal-rockfall": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "frostfang-cataclysm": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "hornet-barrage": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "fortress-cannon": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "blazing-overdrive": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
     }
   },
   "commonPack": {

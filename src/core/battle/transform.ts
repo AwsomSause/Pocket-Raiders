@@ -50,6 +50,7 @@ import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { effectiveHeld } from './held';
 import { zMoveDelayTurns, megaDelayTurns, megaPartyLimit, permanentMegaFriendship } from '../trainerPerks';
 import type { BattleState, PokemonInstance } from '../state';
+import { grantMegaMove, endMegaMoves } from './megaMove';
 import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
 
 type Side = 'player' | 'enemy';
@@ -58,7 +59,7 @@ export type FormChangeKind = 'mega' | 'primal' | 'gigantamax' | 'tera' | 'abilit
 export type BattleMechanic = 'tera' | 'zmove' | 'dynamax';
 
 /** The player's request, sent with a move (a Z-Move applies to that move). */
-export type TransformRequest = { kind: 'tera' } | { kind: 'zmove' } | { kind: 'dynamax' };
+export type TransformRequest = { kind: 'tera' } | { kind: 'zmove' } | { kind: 'dynamax' } | { kind: 'mega' };
 
 export interface TransformEvent {
   type: 'transform';
@@ -93,6 +94,8 @@ export interface TransformContext {
   inventory: Record<string, number>;
   disabledMechanics?: readonly TransformKind[];
   perks?: Perks;
+  /** The player chooses Mega Evolution from the Action button (a `mega` request) instead of it happening by itself. Simulations leave it off. */
+  manualMega?: boolean;
   /** S174 Z-Crystal Bonding: bond score (0-100) of one of your Pokémon. Absent = not checked (simulations). */
   bondScore?: (uid: string) => number;
   /** Gimmick progression: use counts and type hits this run (core/gimmicks). */
@@ -145,11 +148,24 @@ function oncePerPokemon(ctx: TransformContext, mon: PokemonInstance): string | n
 }
 
 /** Why the player's active Pokémon can't do this transformation now (with the move in `moveIndex`), or null if it can. */
+/** The Mega form the active Pokémon could take right now (key item, stone, once per battle, trainer delay), or null. */
+export function megaOption(ctx: TransformContext): FormOption | null {
+  const mon = ctx.party[ctx.battle.activeIndex];
+  const { battle } = ctx;
+  if (!mon || mon.hp <= 0 || ctx.disabledMechanics?.includes('mega')) return null;
+  if (battle.transform.forms[mon.uid] || battle.transform.used.player.includes('mega')) return null;
+  if (stoneForms(ctx.content, mon.speciesId, true).some((o) => o.itemId && owns(ctx.inventory, o.itemId))) return null;
+  const form = permanentForm(ctx.content, ctx.inventory, mon, ctx.disabledMechanics);
+  if (form?.kind !== 'mega' || battle.playerVolatile.turnsOut < megaDelayTurns(ctx.perks)) return null;
+  return form.option;
+}
+
 export function transformProblem(ctx: TransformContext, request: TransformRequest, moveIndex = -1): string | null {
   const mon = ctx.party[ctx.battle.activeIndex];
   if (!mon) return 'No active Pokémon.';
   if (request.kind === 'zmove') return zMoveProblem(ctx, mon, moveIndex);
   if (request.kind === 'dynamax') return dynamaxProblem(ctx, mon);
+  if (request.kind === 'mega') return megaOption(ctx) ? null : "Mega Evolution isn't available right now.";
   return teraProblem(ctx, mon);
 }
 
@@ -383,7 +399,7 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
     const orb = megaOn ? stoneForms(content, player.speciesId, true).find((o) => o.itemId && owns(ctx.inventory, o.itemId)) : undefined;
     const form = orb ? null : permanentForm(content, ctx.inventory, player, ctx.disabledMechanics);
     if (orb) changeForm(ctx, 'player', player, 'primal', orb, events);
-    else if (form && (form.kind !== 'mega' || battle.playerVolatile.turnsOut >= megaDelayTurns(ctx.perks))) {
+    else if (form && (form.kind !== 'mega' || ((!ctx.manualMega || request?.kind === 'mega') && battle.playerVolatile.turnsOut >= megaDelayTurns(ctx.perks)))) {
       // Beta 4.4: one Mega Evolution per battle (a Gigantamax form is only a look; Dynamax itself is already once per battle).
       if (form.kind !== 'mega' || !battle.transform.used.player.includes('mega')) {
         changeForm(ctx, 'player', player, form.kind, form.option, events);
@@ -391,6 +407,8 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
       }
     }
   }
+  // A bonded Mega that stayed Mega from the last battle has its signature move again.
+  if (player.hp > 0 && !battle.transform.forms[player.uid] && getSpecies(content, player.speciesId).form?.kind === 'mega') grantMegaMove(content, player);
   if (enemy.hp > 0 && !battle.transform.forms[enemy.uid] && enemyMay(enemy)) {
     const orb = stoneForms(content, enemy.speciesId, true)[0];
     if (orb) changeForm(ctx, 'enemy', enemy, 'primal', { ...orb, itemId: null }, events);
@@ -542,6 +560,8 @@ function changeForm(ctx: TransformContext, side: Side, mon: PokemonInstance, kin
   mon.speciesId = option.formId;
   mon.hp = Math.min(mon.hp, calcStats(ctx.content, mon).hp);
   events.push({ type: 'transform', side, uid: mon.uid, kind, from, to: option.formId, itemId: option.itemId });
+  // Overhaul slice 27: a Mega Evolved Pokémon (yours or a boss's ace) gains its signature move in an extra slot.
+  if (kind === 'mega') grantMegaMove(ctx.content, mon);
   // A levelled Mega Stone steadies its Pokémon: it heals a share of max HP (S479).
   if (kind === 'mega' && side === 'player' && option.itemId && ctx.gimmicks && mon.hp > 0) {
     const level = gimmickLevel(ctx.content, ctx.gimmicks.uses[stoneKey(option.itemId)] ?? 0);
@@ -563,6 +583,7 @@ export function revertTransformations(content: Content, battle: BattleState, par
   const keepAt = permanentMegaFriendship(perks);
   const limit = megaPartyLimit(perks) ?? Infinity;
   let megas = party.filter((p) => getSpecies(content, p.speciesId).form?.kind === 'mega' && !battle.transform.forms[p.uid]).length;
+  endMegaMoves([...party, ...battle.enemyTeam]);
   for (const mon of party) endDynamax(content, battle, 'player', mon);
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
   for (const mon of [...party, ...battle.enemyTeam]) {

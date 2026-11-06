@@ -33,6 +33,8 @@ import { content, toBattle } from './helpers';
 
 // Mega Evolution happens by itself (PokeRogue style), so a plain move is enough.
 const MEGA: PlayerAction = { kind: 'move', index: 0 };
+/** In a real run Mega Evolution is chosen from the Action button (a `mega` request). */
+const MEGA_CHOSEN: PlayerAction = { kind: 'move', index: 0, transform: { kind: 'mega' } };
 
 function setMoves(mon: PokemonInstance, ...ids: string[]) {
   mon.moves = ids.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
@@ -208,7 +210,7 @@ describe('Mega Evolution in a run', () => {
     let run = newRun('mega-save');
     run.battle!.enemyTeam[0]!.hp = 500; // stays up for a turn
     run.battle!.enemyTeam[0]!.level = 100;
-    let result = takeTurn(content, run, MEGA);
+    let result = takeTurn(content, run, MEGA_CHOSEN);
     run = result.run;
     expect(run.phase).toBe('battle');
     expect(run.party[0]!.speciesId).toBe('venusaur-mega');
@@ -225,9 +227,20 @@ describe('Mega Evolution in a run', () => {
     expect(result.run.party[0]!.speciesId).toBe('venusaur');
   });
 
+  it('only happens when the player picks Mega from the Action button (once per battle)', () => {
+    const run = newRun('mega-choice');
+    run.battle!.enemyTeam[0]!.hp = 500;
+    run.battle!.enemyTeam[0]!.level = 100;
+    const skipped = takeTurn(content, run, MEGA);
+    expect(skipped.run.party[0]!.speciesId).toBe('venusaur');
+    const chosen = takeTurn(content, skipped.run, MEGA_CHOSEN);
+    expect(chosen.run.party[0]!.speciesId).toBe('venusaur-mega');
+    expect(chosen.run.battle!.transform.used.player).toEqual(['mega']);
+  });
+
   it('is deterministic: the same run and actions give the same events', () => {
-    const a = takeTurn(content, newRun('mega-det'), MEGA);
-    const b = takeTurn(content, newRun('mega-det'), MEGA);
+    const a = takeTurn(content, newRun('mega-det'), MEGA_CHOSEN);
+    const b = takeTurn(content, newRun('mega-det'), MEGA_CHOSEN);
     expect(a.events).toEqual(b.events);
   });
 });

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
 import { moveLore, moveRank, recordMoveMastery, topMoves } from '../../src/core/moveMastery';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { STANDARD_CHOICE } from '../../src/core/rules';
@@ -27,10 +28,18 @@ describe('Move Mastery (#107)', () => {
     expect(topMoves(p)[0]).toMatchObject({ moveId: move, uses: 31, rank: 'silver' });
   });
   it('lore grows with rank and adds no power', () => {
-    const move = [...content.moves.keys()][0]!;
+    const flavoured = new Set(overhaulCatalogs().move_mastery_ideas.entries.map((e) => e.moveId));
+    const move = [...content.moves.keys()].find((m) => !flavoured.has(m))!;
     expect(moveLore(content, move, 'none')).toEqual([]);
     expect(moveLore(content, move, 'bronze')).toHaveLength(1);
     expect(moveLore(content, move, 'silver')).toHaveLength(2);
     expect(moveLore(content, move, 'gold')).toHaveLength(3);
+  });
+  it('the pack adds a flavour line for its moves: experienced below gold, mastered at gold', () => {
+    const e = overhaulCatalogs().move_mastery_ideas.entries.find((x) => x.moveId && content.moves.has(x.moveId))!;
+    const base = (r: 'bronze' | 'gold') => moveLore(content, e.moveId!, r);
+    expect(base('bronze').at(-1)).toBe(e.experienced.replaceAll('{name}', 'Your Pokémon'));
+    expect(base('gold').at(-1)).toBe(e.mastered.replaceAll('{name}', 'Your Pokémon'));
+    expect(base('gold').join(' ')).not.toContain('{name}');
   });
 });

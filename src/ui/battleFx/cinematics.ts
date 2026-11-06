@@ -139,6 +139,23 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   /** Fades every layer out over the last 300 ms. */
   const fadeAll = () => at(Math.max(0, total * o.speed - 300), () => tw({ targets: objs.filter((x) => (x as Phaser.GameObjects.Image).active), alpha: 0, duration: 300 }));
 
+  /** Slowly turning light rays over the Max-energy field (drawn, so there is no picture edge to show). */
+  const maxRays = (duration: number, fadeAt?: number) => {
+    const g = add(scene.add.graphics().setDepth(depth + 1).setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2));
+    const n = 24;
+    const len = Math.hypot(GAME_WIDTH, GAME_HEIGHT);
+    g.fillStyle(0xffffff, 0.22 * Math.max(0.4, o.intensity));
+    for (let i = 0; i < n; i += 2) {
+      const a0 = (i / n) * Math.PI * 2;
+      const a1 = ((i + 1) / n) * Math.PI * 2;
+      g.fillTriangle(0, 0, Math.cos(a0) * len, Math.sin(a0) * len, Math.cos(a1) * len, Math.sin(a1) * len);
+    }
+    g.setAlpha(0);
+    tw({ targets: g, alpha: 1, duration: 300 });
+    tw({ targets: g, angle: 30, duration });
+    if (fadeAt !== undefined) tw({ targets: g, alpha: 0, duration: 900, delay: fadeAt });
+  };
+
   /** The old sprite (before the swap): turned white, red or hidden by the scenes below. */
   const oldSprite = o.sprite instanceof Phaser.GameObjects.Sprite ? o.sprite : null;
   const jiggle = (target: Phaser.GameObjects.GameObject & { x: number }, delay: number, times = 3) => {
@@ -505,12 +522,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: pink, fillAlpha: 1, duration: 380, delay: 2300 });
     at(2300, () => {
       whiteFlash(0.6);
-      if (has('cine.raid.transitions.impact')) {
-        const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
-        rays.setScale(rays.scaleX * 1.6);
-        tw({ targets: rays, angle: 30, duration: swapAt - 2300 + 1200 });
-        tw({ targets: rays, alpha: 0, duration: 900, delay: swapAt - 2300 + 400 });
-      }
+      maxRays(swapAt - 2300 + 1200, swapAt - 2300 + 400);
     });
     // 2700-3300: the ball falls from above and slams down; the screen shakes four times.
     at(2700, () => {
@@ -592,14 +604,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       }
     }
     tw({ targets: pink, fillAlpha: 1, duration: 260, delay: 480 });
-    at(480, () => {
-      if (has('cine.raid.transitions.impact')) {
-        const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
-        rays.setScale(rays.scaleX * 1.6);
-        tw({ targets: rays, angle: 25, duration: swapAt });
-      }
-      if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.35, depth + 1);
-    });
+    at(480, () => maxRays(swapAt));
     // The darkness the scene fades into just before the battle comes back.
     const dark = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x14060e, 0).setDepth(depth + 6));
     tw({ targets: dark, fillAlpha: 1, duration: 420, delay: swapAt - 520 });

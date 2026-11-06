@@ -17,6 +17,7 @@ import { PARTY_LIFE, createPartyLife, type Pair, type PartyLifeState, type Perso
 
 export * from './schema';
 import { identityLine } from '../overhaul/personality';
+import { activeCombos, COMBO_CAMP_POINTS } from '../overhaul/chemistry';
 const RULES = PARTY_LIFE.rules;
 const BOSS_KINDS = ['gym', 'elite', 'champion'];
 
@@ -237,6 +238,23 @@ export function partyLifeBond(run: RunState, chemistry: number, calm: number, se
 /** A rest stop was used: the next scene may be a campfire. */
 export function partyLifeCamp(run: RunState): void {
   life(run).ctx.camp = true;
+}
+
+/**
+ * Overhaul slice 24: at a rest stop every active team-chemistry combo warms the pairs inside it (more for rarer tiers);
+ * returns the scene line of the rarest active combo (ties by a hash of the run), or null when none is active.
+ */
+export function partyLifeCombos(content: Content, run: RunState): string | null {
+  const active = activeCombos(content, run.party);
+  if (!active.length) return null;
+  for (const { combo, members } of active) {
+    for (let i = 0; i < members.length; i++) for (let j = i + 1; j < members.length; j++) addChem(run, members[i]!, members[j]!, COMBO_CAMP_POINTS[combo.tier]);
+  }
+  const rank = { common: 0, uncommon: 1, rare: 2, epic: 3 } as const;
+  const top = Math.max(...active.map((a) => rank[a.combo.tier]));
+  const best = active.filter((a) => rank[a.combo.tier] === top);
+  const pick = best[fnv(`${run.runId}:${run.encountersCompleted}:combo`) % best.length]!.combo;
+  return `${pick.name}: ${pick.scene}`;
 }
 
 // ---------- battle hooks (read by core/story/moments.ts) ----------
