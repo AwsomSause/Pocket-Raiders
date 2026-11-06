@@ -18,6 +18,7 @@ import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { styleFor } from '../ui/tradeStyles';
 import type { RowWidget, TradeCtx, TradeRow, TradeStyle } from '../ui/tradeStyles/types';
 import { sceneForRun } from './routing';
+import { ensureNarration, partyNarration } from '../core/overhaul/partyNarration';
 
 export interface TradeSceneData {
   source: TradeSource;
@@ -150,6 +151,12 @@ export class TradeScene extends Phaser.Scene {
     const { session } = services();
     try {
       this.notice = this.data0.source === 'service' ? session.useService(this.data0.sideId, row.offer.id) : session.usePlaza(this.data0.sideId, 'traders', row.offer.id).message;
+      // The pack's trade reaction from the party (text only; the file loads on request).
+      void ensureNarration().catch(() => undefined);
+      const run = session.run;
+      const nameOf = (m: { speciesId: string }) => session.content.species.get(m.speciesId)?.name ?? m.speciesId;
+      const react = run ? partyNarration(run.party, 'trade', `${run.runId}:${run.encountersCompleted}:${row.offer.id}`, nameOf, (m) => session.content.species.get(m.speciesId)?.types ?? []) : null;
+      if (react) this.notice = `${this.notice} ${react}`;
     } catch (err) {
       playSfx(this, 'ui.error', 0.5);
       this.notice = String(err instanceof Error ? err.message : err);
