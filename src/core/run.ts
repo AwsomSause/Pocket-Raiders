@@ -71,6 +71,7 @@ import { layEgg, tickEggs } from './eggs';
 import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
+import { evoStoneNearby } from './evoEncounter';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
@@ -2768,6 +2769,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (hidden) itemsFound.push(hidden);
   const dropped = battle.kind === 'wild' ? catchDrop(run, stock, outcome === 'caught') : null;
   if (dropped) itemsFound.push(dropped);
+  const stoneNearby = outcome === 'win' && battle.kind === 'wild' && !battle.raid && !battle.totem ? evoStoneNearby(content, run, currentEnemy(battle).speciesId, `${run.encountersCompleted}`) : null;
+  if (stoneNearby) itemsFound.push(stoneNearby);
   const streakGift = outcome === 'win' ? advanceStreak(content, run) : null;
   if (streakGift) itemsFound.push(streakGift.item);
   for (const id of itemsFound) addItem(run.inventory, id, 1);

@@ -1978,6 +1978,8 @@ export const BalanceSchema = z.object({
   /** Elite Four Rematches (S127): after this many battles won per region cleared so far, the Elite Four field remixed teams. */
   /** Weather-Locked Spawns (S234): off in the old-seed story check. */
   spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
+  /** Evolution Encounters (S236): chance a beaten wild pre-evolution turns up with its stone nearby; off in the old-seed story check. */
+  evoEncounter: z.object({ enabled: z.boolean().default(true), chance: z.number().min(0).max(1).default(0.3) }).default({ enabled: true, chance: 0.3 }),
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
