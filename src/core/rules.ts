@@ -38,6 +38,8 @@ export const RunRulesDataSchema = z.object({
       /** Wild and trainer Pokémon come from one generation picked from the seed. */
       lockGeneration: z.boolean().optional(),
       battleMoney: z.number().min(0).optional(),
+      /** No Item Caps: bonus items stack to their full catalog limit instead of the capped one. */
+      noItemCaps: z.boolean().optional(),
       enemyLevel: z.number().int().optional(),
       researchScale: z.number().min(0).optional(),
       blind: z.boolean().optional(),
@@ -218,6 +220,7 @@ const product = (rules: Pick<RunRules, 'modifierIds'>, pick: (m: NonNullable<Ret
   rules.modifierIds.reduce((n, id) => n * (pick(getModifier(id)!) ?? 1), 1);
 
 export const blindMap = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.blind);
+export const noItemCaps = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noItemCaps);
 export const noRevives = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noRevives);
 export const noBattleItems = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noBattleItems);
 /** The No Evolution contract is on. */

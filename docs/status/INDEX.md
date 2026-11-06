@@ -249,6 +249,11 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `raid-coop.md`: Raids & bosses slice 7: S410 co-op raids (hot-seat, 2 players share the party, own cheers, tougher boss, bigger prize).
 - `growth-form-shift.md`: Growth slice 8: Regional Form Shifts (swap to a regional variant for a Moon Stone).
 - `growth-capsule-quests.md`: Growth slice 9: Ability Capsule Quests (six trials pay ability swaps).
+- `beta44-economy.md`: Beta 4.4 part 2: attribute nerf, resale cap, item caps + No Item Caps, rarer legendaries, themed trades.
+- `beta44-trainers.md`: Beta 4.4 part 3: gym entrance fixed, competitive gym teams and gimmicks from Stage 5.
+- `beta44-ui.md`: Beta 4.4 part 4: Devon Scope preview fix, nature on catch screen, move side effects and descriptions, skip guard (settings v33).
+- `beta44-hyper-slot.md`: Beta 4.4 part 5a: Hyper moment grants a +20-power bonus move for the battle, keep-or-skip after.
+- `beta44-stage-plan.md`: Beta 4.4 part 5b: each stage is built from what you did on the last one (theme weighting, fitting stops, banner reasons).
 - `growth-diaries.md`: Pokémon Diaries (S64): Hall of Fame notes per remembered Pokémon, derived from Legacy Cards, no save change.
 - `run-events-b-batch5.md`: Run events B batch 5: Weather Rival (weather changes every turn) and Underground Duel; the games and training lists were already built.
 - `run-events-b-batch6.md`: Run events B batch 6: The Contrarian (stat changes inverted), Pinch Hitter (fainted Pokémon get up once), Cursed Hat (statuses swap each turn).

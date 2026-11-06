@@ -797,7 +797,7 @@ export function giveItem(content: Content, run: RunState, id: string, times: num
       continue;
     }
     const entry = content.catalog.get(id);
-    if (!entry || entry.status !== 'supported' || isFreeReroll(run, entry)) { words.push(sold()); continue; }
+    if (!entry || entry.status !== 'supported' || isFreeReroll(content, run, entry)) { words.push(sold()); continue; }
     const target = entry.stacksOn === 'pokemon' ? run.party.find((m) => catalogTargetProblem(content, run, entry, m) === null) : undefined;
     if (entry.stacksOn === 'pokemon' && !target) { words.push(sold()); continue; }
     const result = applyCatalog(content, run, entry, target, { moneyMultiplier: 1, rng });

@@ -60,9 +60,11 @@ function upgradeTraining(species: Species, training: PlannedMember['training'], 
  * Upgrades a boss team for its band. `signature` is the boss's signature list (ace first);
  * the `swaps` weakest members (never the ace) are replaced by signature species not yet in the team.
  */
-export function applyBossBand(content: Content, members: PlannedMember[], signature: readonly string[], ai: number): { members: PlannedMember[]; ai: number; band?: BossBand } {
+export function applyBossBand(content: Content, members: PlannedMember[], signature: readonly string[], ai: number, competitive = false): { members: PlannedMember[]; ai: number; band?: BossBand } {
   const top = Math.max(0, ...members.map((m) => m.level));
-  const band = bossBand(content, top);
+  // A later gym leader (Beta 4.4) gets at least the competitive upgrade: no signature swaps, but best moves, training, items and AI.
+  const c = content.balance.competitiveGyms;
+  const band = bossBand(content, top) ?? (competitive ? { minLevel: 101, training: c.training, ai: c.ai, signatureSwaps: 0, items: c.items } : undefined);
   if (!band || members.length === 0) return { members, ai };
   let team = members.map((m) => ({ ...m, speciesId: evolvedFormAt(content, m.speciesId, m.level) }));
   // Signature swaps: weakest non-ace members first.

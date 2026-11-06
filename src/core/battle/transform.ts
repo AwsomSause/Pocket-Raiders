@@ -592,16 +592,24 @@ export function revertTransformations(content: Content, battle: BattleState, par
 }
 
 /** The mechanics a trainer battle's opponent may use (bosses only; see balance.transformations). */
-export function bossMechanics(content: Content, role: 'gym' | 'elite' | 'champion' | null, gymNumber: number, disabled: readonly TransformKind[]): TransformKind[] {
+export function bossMechanics(content: Content, role: 'gym' | 'elite' | 'champion' | null, gymNumber: number, disabled: readonly TransformKind[], bossId?: string): TransformKind[] {
   const rules = content.balance.transformations;
   const allowed = role === 'gym' ? gymNumber >= rules.bossGymFrom : role !== null && rules.league;
   if (!allowed) return [];
+  // Beta 4.4: each later gym leader has a signature gimmick (Tera, a Z-Move or Dynamax, fixed per leader); a Mega still comes first when the ace can.
+  if (role === 'gym' && bossId) {
+    const pick = GYM_GIMMICKS[[...bossId].reduce((n, ch) => (n * 31 + ch.charCodeAt(0)) >>> 0, 7) % GYM_GIMMICKS.length]!;
+    return (['mega', pick] as TransformKind[]).filter((m) => !disabled.includes(m));
+  }
   // The Elite Four's aces unleash a Z-Move and the champion's ace Dynamaxes, once a battle; a Mega form or Tera comes first for the rest.
   const mechanics: TransformKind[] = ['mega', 'tera'];
   if (role === 'elite') mechanics.push('zmove');
   if (role === 'champion') mechanics.push('dynamax');
   return mechanics.filter((m) => !disabled.includes(m));
 }
+
+/** The gimmicks a later gym leader can be given (one each, from the leader's id). */
+const GYM_GIMMICKS: readonly TransformKind[] = ['tera', 'zmove', 'dynamax'];
 
 /** The boss's strongest damaging move that has a Z-Move, or null. */
 function bossZMove(content: Content, mon: PokemonInstance): Move | null {

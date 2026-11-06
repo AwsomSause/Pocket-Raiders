@@ -72,10 +72,12 @@ import { layEgg, tickEggs } from './eggs';
 import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
+import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from './stagePlan';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
-import { passivePercent } from './catalog';
+import { effectiveMax, passivePercent } from './catalog';
+import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
 import { wildLuck } from './wildLuck';
@@ -149,7 +151,7 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
-import { getTheme, pickGymLeader, pickTheme, typesPool, wildEligibleSpecies } from './themes';
+import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
   recordBattleStarted,
@@ -567,10 +569,12 @@ function enterStage(content: Content, run: RunState, index: number): void {
   fillRegionOrder(content, run);
   const campaign = getCampaign(content, run.campaignId);
   const region = currentRegion(content, run);
-  const { theme, leader, map } = withStream(run.rng, 'map', (r) => {
-    const theme = pickTheme(content, run.usedThemes, r);
+  // Beta 4.4: the stage is decided only now, from what the player did on the last one (core/stagePlan.ts).
+  const signals = stageSignals(content, run);
+  const { theme, leader, map, themeLine } = withStream(run.rng, 'map', (r) => {
+    const { theme, line } = pickPlannedTheme(content, run, signals, r);
     const leader = pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
-    return { theme, leader, map: generateStageMap(content, campaign, r) };
+    return { theme, leader, map: generateStageMap(content, campaign, r), themeLine: line };
   });
   forceFirstRivalColumn(content, run, index, map);
   const problems = validateStageMap(map);
@@ -614,6 +618,8 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeMinigameStop(content, run);
   placeServiceStop(run);
   placePlaza(run);
+  const planLines = [themeLine, ...tailorStage(content, run, signals)].filter((l): l is string => !!l);
+  snapshotStagePlan(run, planLines);
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
@@ -1064,11 +1070,12 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
   for (const node of mapChoices(content, run)) {
     const from = node.kind === 'wild' ? wildFrom : node.kind === 'trainer' ? trainerFrom : null;
     if (!from) continue;
-    const copy = structuredClone(run);
     // A preview never stops the map: with no Pokémon able to battle there is nothing to show.
-    if (!copy.party.some((p) => p.hp > 0)) break;
-    startEncounter(content, copy, node);
-    const battle = copy.battle!;
+    if (!run.party.some((p) => p.hp > 0)) break;
+    // Walk to the node on a copy exactly as choosing it would (the clock ticks, roamers move, ...), so the
+    // preview is the battle the player gets (Beta 4.4: a tick of the clock could change the Pokémon).
+    const battle = moveToNode(content, run, node.id, () => undefined).battle;
+    if (!battle) continue;
     out[node.id] = { ...from, team: battle.enemyTeam.map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer?.name ?? null };
   }
   const gym = stage.map.nodes.find((n) => n.kind === 'gym');
@@ -1094,21 +1101,18 @@ function activePreviewItems(content: Content, run: RunState): string[] {
 }
 
 /**
- * Fame Checker: the gym leaders of this region's stages still to come, found
- * by starting those stages on a copy of the run, so they are exactly the ones
- * the player will meet and no roll is used.
+ * Fame Checker: the gym leaders this region can still send at you. Beta 4.4: a stage is only decided when you reach
+ * it (built from what you did on the one before, core/stagePlan.ts), so this names the region's leaders not met yet,
+ * not a fixed order. Uses no roll.
  */
 export function nextGymLeaders(content: Content, run: RunState): { leaderId: string; types: TypeName[] }[] {
   const stage = run.stage;
   if (!stage || stage.kind !== 'stage' || !hasPerk(content, run, 'nextLeaders')) return [];
   const campaign = getCampaign(content, run.campaignId);
-  const copy = structuredClone(run);
-  const out: { leaderId: string; types: TypeName[] }[] = [];
-  for (let index = stage.index + 1; index < campaign.stagesPerRegion; index++) {
-    enterStage(content, copy, index);
-    out.push({ leaderId: copy.stage!.leaderId, types: [...getTheme(content, copy.stage!.themeId).types] });
-  }
-  return out;
+  if (stage.index + 1 >= campaign.stagesPerRegion) return [];
+  return currentRegion(content, run)
+    .gymLeaders.filter((id) => !run.usedLeaders.includes(id) && content.bosses.has(id))
+    .map((id) => ({ leaderId: id, types: [...content.bosses.get(id)!.types] as TypeName[] }));
 }
 
 // ---------- fishing (M8.75 slice 3b-3) ----------
@@ -1931,7 +1935,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Bosses hold items, from their own generator so no other roll changes.
     if (role) giveBossItems(content, team, role, run.regionIndex, new Rng(hashSeed(`${run.seed}::boss-items::${run.regionIndex}::${stage.index}::${node.id}`)));
     // Gym number counted from the start of the run (1 = the first gym).
-    run.battle.transform.enemyMechanics = bossMechanics(content, role, run.badges.length + 1, run.disabledMechanics);
+    run.battle.transform.enemyMechanics = bossMechanics(content, role, run.badges.length + 1, run.disabledMechanics, run.battle.trainer?.leaderId ?? undefined);
     // Meteor's Prophecy: every third boss also gains a random second type (its own seed, so no other roll changes).
     if (role && thirdBossLevels(runPerks(content, run)) > 0) {
       const c = run.log.counters;
@@ -2006,7 +2010,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     spendUse(run, voucher.itemId);
     const entry = content.catalog.get(voucher.item)!;
     const owned = run.passives?.[voucher.item] ?? 0;
-    if (entry.max === null || owned < entry.max) {
+    const max = effectiveMax(content, run, entry);
+    if (max === null || owned < max) {
       run.passives = { ...run.passives, [voucher.item]: owned + 1 };
       return { run, message: `Welcome to the shop! You traded your voucher for a ${entry.name}.` };
     }
@@ -2104,9 +2109,19 @@ const RARITY_VALUE: Record<string, number> = { common: 60, uncommon: 120, rare: 
 export function sellPrice(content: Content, run: RunState, itemId: string): number | null {
   const item = content.items.get(itemId);
   if (!item || item.category === 'key' || item.category === 'transformation' || item.category === 'attribute') return null;
-  const listed = content.shop.find((e) => e.item === itemId)?.price;
-  const base = listed ?? RARITY_VALUE[content.catalog.get(itemId)?.rarity ?? 'common'] ?? 60;
-  return Math.max(1, Math.floor(hasPerk(content, run, 'fullSell') ? base : base / 2));
+  const entry = content.shop.find((e) => e.item === itemId);
+  const base = entry?.price ?? RARITY_VALUE[content.catalog.get(itemId)?.rarity ?? 'common'] ?? 60;
+  const fullSell = hasPerk(content, run, 'fullSell');
+  const price = Math.max(1, Math.floor(fullSell ? base : base / 2));
+  // Never more than a share of what the shop charges now, so discounts can't be sold back at a profit.
+  const cap = resaleCap(content, run, itemId, fullSell ? content.balance.resale.fullSellShare : content.balance.resale.share);
+  return cap === null ? price : Math.min(price, cap);
+}
+
+/** The most a sale (or appraisal) of an item may pay: `share` of the shop's current price, or null when no shop sells it. */
+export function resaleCap(content: Content, run: RunState, itemId: string, share: number): number | null {
+  const entry = content.shop.find((e) => e.item === itemId);
+  return entry ? Math.floor(shopPrice(content, run, entry) * share) : null;
 }
 
 /** Sells one of an item to the shop. */
@@ -2344,6 +2359,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const enemyBefore = battle.enemyIndex;
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
   const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
+  // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
+  engineEvents.push(...grantHyperMoves(content, run, engineEvents));
   // A practiced pair hands over after a faint (yours, or a rival's).
   if (wasForced && action.kind === 'switch' && outgoing) {
     const combo = playerCombo(content, run, outgoing, run.party[action.partyIndex]!.uid);
@@ -2413,6 +2430,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     for (const mon of run.party) endHeldBattle(mon);
   }
 
+  // Beta 4.4: Hyper slots end with the battle; after a win or catch each is offered to keep.
+  if (battle.outcome) endHyperMoves(run, (battle.outcome === 'win' || battle.outcome === 'caught') && !battle.raid?.practice);
   if (battle.outcome === 'win' && !run.party.some((m) => m.hp > 0)) {
     // A double KO that the player wins (recoil, Explosion by the foe) must not leave a team that cannot fight again.
     run.party[battle.activeIndex]!.hp = 1;

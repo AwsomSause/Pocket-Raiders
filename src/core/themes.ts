@@ -3,6 +3,7 @@
 // wild Pokémon appear, which trainer classes show up, and which gym leader
 // waits at the end. Themes and gym leaders never repeat within a run (D6).
 
+import { isLegendaryLike } from './trainerPerks';
 import { gatePool } from './availability';
 import { isSpecialForm } from './specialForms';
 import type { Boss, Content, Species, Theme, TrainerClass, TypeName } from './contentSchema';
@@ -28,7 +29,8 @@ export const baseStatTotal = (s: Species) => Object.values(s.baseStats).reduce((
  * balance.wildMaxBaseStats (which keeps Ultra Beasts and Paradox Pokémon out of early routes).
  */
 export function isWildEligible(content: Content, s: Species, allowSpecial = false): boolean {
-  if (s.evolutionStage !== 1 || s.tags.includes('legendary') || s.tags.includes('mythical')) return false;
+  // Legendaries, Mythicals and Ultra Beasts come only from events, story and rare legendary rolls.
+  if (s.evolutionStage !== 1 || isLegendaryLike(s)) return false;
   if (s.form && s.form.kind !== 'regional' && s.form.kind !== 'alternate') return false;
   // Special forms (Delta, Z, Spooky, regional) are event-only discoveries.
   if (!allowSpecial && isSpecialForm(s)) return false;

@@ -42,6 +42,7 @@ import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel } from '../ui/aero';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
+import { moveFullDescription } from '../core/battle/moveText';
 
 /** The EBDX art the Egg hatch uses (loaded only when an Egg is hatching). */
 const HATCH_ASSETS = ['pack.ebdx.egg', 'pack.ebdx.eggCracks', 'pack.ebdx.hatch.hatchbg', 'pack.ebdx.hatch.line', 'pack.ebdx.hatch.overlay', 'pack.ebdx.hatch.shine6', 'pack.ebdx.hatch.shine7', 'se.egg_get'];
@@ -189,6 +190,13 @@ export class DecisionScene extends Phaser.Scene {
       { label: `Don't learn ${newMove.name}` },
     ];
     drawPanel(this, 300, 210, 620, 310);
+    // Beta 4.4: the full description of the focused move (the new one on "Don't learn").
+    const full = (i: number) => {
+      const slot = mon.moves[i];
+      const m = content.moves.get(slot ? slot.id : moveId)!;
+      return `${slot ? m.name : `NEW: ${m.name}`}: ${moveFullDescription(m)}`;
+    };
+    const about = this.add.text(24, 360, full(0), textStyle(18, '#d8d0e0', { wordWrap: { width: 260 }, lineSpacing: 2 }));
     this.menu = new Menu(this, {
       x: 316,
       y: 222,
@@ -196,6 +204,7 @@ export class DecisionScene extends Phaser.Scene {
       itemHeight: 58,
       itemWidth: 600,
       fontSize: 24,
+      onFocus: (i) => about.setText(full(i)),
       onSelect: (i) => {
         if (i >= mon.moves.length) {
           this.confirm(`Give up on learning ${newMove.name}?`, () => this.resolve({ kind: 'skipMove' }));
@@ -249,6 +258,7 @@ export class DecisionScene extends Phaser.Scene {
     const wide = moveIds.length > 7;
     const shown = moveIds.slice(0, wide ? 15 : 7);
     drawPanel(this, 300, 150, 620, 380);
+    const about = this.add.text(24, 360, shown[0] ? moveFullDescription(content.moves.get(shown[0])!) : '', textStyle(18, '#d8d0e0', { wordWrap: { width: 260 }, lineSpacing: 2 }));
     this.menu = new Menu(this, {
       x: 316,
       y: 160,
@@ -260,6 +270,8 @@ export class DecisionScene extends Phaser.Scene {
       itemHeight: 46,
       itemWidth: wide ? 300 : 600,
       fontSize: 22,
+      // Beta 4.4: the focused move's full description under the list.
+      onFocus: (i) => about.setText(shown[i] ? moveFullDescription(content.moves.get(shown[i]!)!) : ''),
       onSelect: (i) => {
         if (i >= shown.length) this.confirm(`Throw away the ${itemName}?`, () => this.resolve({ kind: 'skipMove' }));
         else this.resolve({ kind: 'teachMove', moveIndex: i });

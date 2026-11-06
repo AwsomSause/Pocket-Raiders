@@ -47,7 +47,7 @@ export function isRewardEligible(content: Content, run: RunState, reward: Reward
   if (reward.effect.kind === 'addItem' && noRevives(run.rules) && content.items.get(reward.effect.item)?.category === 'revive') return false;
   if (reward.effect.kind === 'catalog') {
     const entry = getCatalogEntry(content, reward.effect.entry);
-    return isFreeReroll(run, entry) || isCatalogUseful(content, run, entry);
+    return isFreeReroll(content, run, entry) || isCatalogUseful(content, run, entry);
   }
   if (reward.effect.kind === 'vitamin') {
     const stat = reward.effect.stat;
@@ -92,7 +92,7 @@ export function rewardTargetProblem(content: Content, run: RunState, reward: Rew
 
 /** A free re-roll card: a team or player item the run already has the most of. */
 export function isRerollReward(content: Content, run: RunState, reward: Reward): boolean {
-  return reward.effect.kind === 'catalog' && isFreeReroll(run, getCatalogEntry(content, reward.effect.entry));
+  return reward.effect.kind === 'catalog' && isFreeReroll(content, run, getCatalogEntry(content, reward.effect.entry));
 }
 
 export function rewardFamily(reward: Reward): string {
@@ -187,7 +187,7 @@ export function applyReward(content: Content, run: RunState, archetype: Archetyp
   switch (effect.kind) {
     case 'catalog': {
       const entry = getCatalogEntry(content, effect.entry);
-      if (isFreeReroll(run, entry)) {
+      if (isFreeReroll(content, run, entry)) {
         messages.push(`You already have the ${entry.name}. Free re-roll!`);
         run.log.rewardsTaken.push(rewardId);
         return { rewardId, messages, pending, reroll: true };

@@ -89,29 +89,29 @@ describe('permanent attributes grow from lifetime counters', () => {
   });
 });
 
-describe('effects: each point is worth the full percentage', () => {
+describe('effects: each point is worth its percentage (Beta 4.4 nerf)', () => {
   it('plain attributes', () => {
-    expect(fx({ strength: 100 }).physicalDamage).toBeCloseTo(2);
-    expect(fx({ strength: 1 }).physicalDamage).toBeCloseTo(1.01);
-    expect(fx({ intelligence: 50 }).specialDamage).toBeCloseTo(1.5);
-    expect(fx({ speed: 100 }).speed).toBeCloseTo(2);
-    expect(fx({ charisma: 30 }).price).toBeCloseTo(0.85); // half a percent per point (balance pass, 2026-10-25)
-    expect(fx({ charisma: 100 }).price).toBeCloseTo(0.5);
-    expect(fx({ charisma: 30 }).exp).toBeCloseTo(1.3);
+    expect(fx({ strength: 100 }).physicalDamage).toBeCloseTo(1.5);
+    expect(fx({ strength: 2 }).physicalDamage).toBeCloseTo(1.01);
+    expect(fx({ intelligence: 50 }).specialDamage).toBeCloseTo(1.25);
+    expect(fx({ speed: 100 }).speed).toBeCloseTo(1.5);
+    expect(fx({ charisma: 30 }).price).toBeCloseTo(0.91); // 0.3% per point (Beta 4.4)
+    expect(fx({ charisma: 100 }).price).toBeCloseTo(0.7);
+    expect(fx({ charisma: 30 }).exp).toBeCloseTo(1.15);
   });
 
   it('meters: one end or the other, never both', () => {
     const rage = fx({ ragePeace: 10 });
-    expect(rage.damageDealt).toBeCloseTo(1.2);
+    expect(rage.damageDealt).toBeCloseTo(1.1);
     expect(rage.damageTaken).toBeCloseTo(1.1);
     expect(rage.healing).toBe(1);
     const peace = fx({ ragePeace: -10 });
-    expect(peace.healing).toBeCloseTo(1.2);
-    expect(peace.damageTaken).toBeCloseTo(0.95); // half a percent per point (balance pass, 2026-10-25)
+    expect(peace.healing).toBeCloseTo(1.1);
+    expect(peace.damageTaken).toBeCloseTo(0.965); // 0.35% per point (Beta 4.4)
     expect(peace.damageDealt).toBe(1);
-    expect(fx({ goodEvil: 10 }).catchRate).toBeCloseTo(1.2);
-    expect(fx({ goodEvil: -100 }).money).toBeCloseTo(2);
-    expect(fx({ goodEvil: -10 }).money).toBeCloseTo(1.1);
+    expect(fx({ goodEvil: 10 }).catchRate).toBeCloseTo(1.1);
+    expect(fx({ goodEvil: -100 }).money).toBeCloseTo(1.5);
+    expect(fx({ goodEvil: -10 }).money).toBeCloseTo(1.05);
   });
 
   it('zero attributes change nothing', () => {
@@ -123,14 +123,14 @@ describe('effects: each point is worth the full percentage', () => {
 });
 
 describe('Luck', () => {
-  it('tilts the draft weights (rare 8.5% → 15% at Luck 100) and leaves common alone', () => {
+  it('tilts the draft weights (rare 8.5% → about 11.5% at Luck 100) and leaves common alone', () => {
     const w = luckWeights(content.balance.rarityWeights, fx({ luck: 100 }));
     const total = w.common! + w.uncommon! + w.rare!;
     expect(w.common).toBe(content.balance.rarityWeights.common);
-    expect(w.rare! / total).toBeCloseTo(0.148, 2);
+    expect(w.rare! / total).toBeCloseTo(0.115, 2);
   });
 
-  it('doubles the shiny chance at Luck 100 (1/2000 → 1/1000)', () => {
+  it('raises the shiny chance by half at Luck 100 (1/2000 → 1/1333)', () => {
     const count = (multiplier: number) => {
       const rng = new Rng(hashSeed('shiny'));
       let n = 0;
@@ -140,7 +140,8 @@ describe('Luck', () => {
     const base = count(1);
     const lucky = count(fx({ luck: 100 }).shinyChance);
     expect(base / 200_000).toBeCloseTo(1 / 2000, 3);
-    expect(lucky / base).toBeGreaterThan(1.7);
+    expect(lucky / base).toBeGreaterThan(1.35);
+    expect(lucky / base).toBeLessThan(1.65);
   });
 });
 
@@ -150,7 +151,7 @@ describe('effects in the game', () => {
     const c0 = newRun('c0');
     expect(shopPrice(content, c0, entry)).toBe(Math.round(entry.price * dynamicPriceFactor(content, c0, entry.item)));
     const c1 = newRun('c1', { charisma: 10 });
-    expect(shopPrice(content, c1, entry)).toBe(Math.round(entry.price * 0.95 * dynamicPriceFactor(content, c1, entry.item)));
+    expect(shopPrice(content, c1, entry)).toBe(Math.round(entry.price * 0.97 * dynamicPriceFactor(content, c1, entry.item)));
   });
 
   function battleDamage(attributes: Partial<Attributes>, seed: string) {
@@ -177,15 +178,15 @@ describe('effects in the game', () => {
     const plain = battleDamage({}, 'dmg');
     const strong = battleDamage({ strength: 100 }, 'dmg');
     const furious = battleDamage({ strength: 100, ragePeace: 100 }, 'dmg');
-    expect(strong.dealt).toBeGreaterThan(plain.dealt * 1.8);
-    expect(furious.dealt).toBeGreaterThan(strong.dealt * 2);
+    expect(strong.dealt).toBeGreaterThan(plain.dealt * 1.35);
+    expect(furious.dealt).toBeGreaterThan(strong.dealt * 1.8);
   });
 
-  it('Peace lowers damage taken, to half at Peace 100', () => {
+  it('Peace lowers damage taken, by 35% at Peace 100', () => {
     expect(battleDamage({ ragePeace: -50 }, 'dmg').taken).toBeLessThan(battleDamage({}, 'dmg').taken);
     const full = battleDamage({}, 'dmg').taken;
-    expect(battleDamage({ ragePeace: -100 }, 'dmg').taken).toBeGreaterThanOrEqual(Math.floor(full * 0.5) - 1);
-    expect(battleDamage({ ragePeace: -100 }, 'dmg').taken).toBeLessThanOrEqual(Math.ceil(full * 0.5) + 1);
+    expect(battleDamage({ ragePeace: -100 }, 'dmg').taken).toBeGreaterThanOrEqual(Math.floor(full * 0.65) - 1);
+    expect(battleDamage({ ragePeace: -100 }, 'dmg').taken).toBeLessThanOrEqual(Math.ceil(full * 0.65) + 1);
   });
 
   it('counts enemies defeated by type, and stats raised, for growth', () => {

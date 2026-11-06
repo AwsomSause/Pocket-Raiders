@@ -1964,6 +1964,8 @@ export const BalanceSchema = z.object({
   /** Ideas W1 rules: Type Resonance, Bleed, Curse Tags, Hazard burst, Underdog XP (core/battle/w1Rules.ts). */
   w1: W1ConfigSchema,
   /** The shop puts one item on sale: it changes every this many stages, and takes this share off the price. */
+  /** Selling never pays more than this share of what the shop charges right now (stops buy-cheap, sell-back loops). */
+  resale: z.object({ share: z.number().min(0).max(1), fullSellShare: z.number().min(0).max(1), appraiseShare: z.number().min(0).max(1) }).default({ share: 0.5, fullSellShare: 0.9, appraiseShare: 0.95 }),
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
   /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
   priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
@@ -2287,6 +2289,12 @@ export const BalanceSchema = z.object({
   /** Regular enemies (wild and trainer) may not exceed base + perLevel × level total base stats; up to `retries` re-draws, keeping the weakest. */
   levelBst: z.object({ base: z.number().int().positive(), perLevel: z.number().positive(), retries: z.number().int().min(0) }),
   /** Boss teams past level 100 (core/bossBands.ts), chosen by the team's top level. */
+  /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
+  /** Beta 4.4: a Hyper/Overdrive moment unlocks a move in an extra slot for the battle: this much more power, this many PP. */
+  hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
+  /** Beta 4.4: the next stage is built from what the player did on the last (core/stagePlan.ts). Thresholds per stage. */
+  stagePlan: z.object({ catcher: z.number().int().min(1), fighter: z.number().int().min(1), explorer: z.number().int().min(1), shopper: z.number().int().min(1), heals: z.number().int().min(1), wipes: z.number().int().min(1), themeBonus: z.number().min(0), maxSignals: z.number().int().min(0) }).default({ catcher: 2, fighter: 5, explorer: 2, shopper: 3000, heals: 2, wipes: 1, themeBonus: 3, maxSignals: 2 }),
+  competitiveGyms: z.object({ fromStage: z.number().int().min(0), training: z.number().int().min(0), ai: z.number().min(0).max(1), items: z.array(z.string()) }).default({ fromStage: 4, training: 1, ai: 0.1, items: ['leftovers', 'life-orb', 'sitrus-berry', 'expert-belt'] }),
   bossBands: z.array(z.object({ minLevel: z.number().int().min(101), training: z.number().int().min(0), ai: z.number().min(0).max(1), signatureSwaps: z.number().int().min(0), items: z.array(z.string()) })).default([]),
   /** Combat Threat Rating (core/threat.ts) and the Encounter Director (core/encounterDirector.ts). 100 = all-70 base stats with a 60-power same-type attack. */
   threat: z.object({
@@ -2320,6 +2328,8 @@ export const BalanceSchema = z.object({
   legendaryMinRegion: z.number().int().min(0),
   /** How many different items one Pokémon can hold (trainer perks change it). */
   heldItemSlots: z.number().int().positive(),
+  /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
+  itemCaps: z.object({ bonusMax: z.number().int().min(1) }).default({ bonusMax: 3 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
