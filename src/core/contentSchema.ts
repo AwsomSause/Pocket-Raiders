@@ -2358,7 +2358,9 @@ export const BalanceSchema = z.object({
   /** Spreadsheet availability (core/availability.ts): a species unlocks at its sheet minimum level minus levelSlack; rarityWeights scale the odds of unlocked ones. */
   availability: z.object({
     levelSlack: z.number().int().min(0),
-    rarityWeights: z.object({ common: z.number().positive(), uncommon: z.number().positive(), rare: z.number().positive(), veryRare: z.number().positive(), legendary: z.number().positive(), mythical: z.number().positive() }),
+    rarityWeights: z.object({ common: z.number().positive(), uncommon: z.number().positive(), rare: z.number().positive(), veryRare: z.number().positive(), epic: z.number().positive(), legendary: z.number().positive(), mythical: z.number().positive(), special: z.number().min(0) }),
+    /** Egg species odds per rarity tier (core/rarity.ts); 0 = never from an egg. */
+    eggRarityWeights: z.object({ common: z.number().min(0), uncommon: z.number().min(0), rare: z.number().min(0), veryRare: z.number().min(0), epic: z.number().min(0), legendary: z.number().min(0), mythical: z.number().min(0), special: z.number().min(0) }),
   }),
   /** The gentle opening: for the first `encounters` fights of a run, wild Pokémon above `maxBaseStats` are swapped for weaker ones and are `levelOffset` levels lower (never below `minLevel`). */
   /** Streak Bonuses (S313): a gift each time the win streak reaches a milestone (it repeats every `wins` wins). Pity Counters (S321): after this many reward drafts with no rare or better reward, the next draft carries one. */

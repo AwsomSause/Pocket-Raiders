@@ -1,0 +1,119 @@
+{
+ "status": "suggested",
+ "source": "THE OVERHAUL.md section 4 (8 tiers); sheet tiers from availability.json",
+ "tiers": [
+  {
+   "id": "common",
+   "name": "Common",
+   "color": "#cfd8dc"
+  },
+  {
+   "id": "uncommon",
+   "name": "Uncommon",
+   "color": "#81c784"
+  },
+  {
+   "id": "rare",
+   "name": "Rare",
+   "color": "#64b5f6"
+  },
+  {
+   "id": "veryRare",
+   "name": "Very Rare",
+   "color": "#ba68c8"
+  },
+  {
+   "id": "epic",
+   "name": "Epic",
+   "color": "#ffb74d"
+  },
+  {
+   "id": "legendary",
+   "name": "Legendary",
+   "color": "#ffd54f"
+  },
+  {
+   "id": "mythical",
+   "name": "Mythical",
+   "color": "#f06292"
+  },
+  {
+   "id": "special",
+   "name": "Special / Event Exclusive",
+   "color": "#4dd0e1"
+  }
+ ],
+ "sheetMap": {
+  "common": "common",
+  "uncommon": "uncommon",
+  "rare": "rare",
+  "veryRare": "veryRare",
+  "legendary": "legendary",
+  "mythical": "mythical"
+ },
+ "speciesOverrides": {
+  "nihilego": "epic",
+  "buzzwole": "epic",
+  "pheromosa": "epic",
+  "xurkitree": "epic",
+  "celesteela": "epic",
+  "kartana": "epic",
+  "guzzlord": "epic",
+  "poipole": "epic",
+  "naganadel": "epic",
+  "stakataka": "epic",
+  "blacephalon": "epic",
+  "great-tusk": "epic",
+  "scream-tail": "epic",
+  "brute-bonnet": "epic",
+  "flutter-mane": "epic",
+  "slither-wing": "epic",
+  "sandy-shocks": "epic",
+  "iron-treads": "epic",
+  "iron-bundle": "epic",
+  "iron-hands": "epic",
+  "iron-jugulis": "epic",
+  "iron-moth": "epic",
+  "iron-thorns": "epic",
+  "roaring-moon": "epic",
+  "iron-valiant": "epic",
+  "walking-wake": "epic",
+  "iron-leaves": "epic",
+  "gouging-fire": "epic",
+  "raging-bolt": "epic",
+  "iron-boulder": "epic",
+  "iron-crown": "epic",
+  "dragonite": "epic",
+  "tyranitar": "epic",
+  "salamence": "epic",
+  "metagross": "epic",
+  "garchomp": "epic",
+  "hydreigon": "epic",
+  "goodra": "epic",
+  "kommo-o": "epic",
+  "dragapult": "epic",
+  "baxcalibur": "epic"
+ },
+ "formShift": {
+  "regional": 0,
+  "alternate": 0,
+  "mega": 0,
+  "gigantamax": 1,
+  "primal": 0,
+  "battle": 0
+ },
+ "evolutionShift": {
+  "item": 0,
+  "condition": 1,
+  "region": 1
+ },
+ "wildBlocked": [
+  "special",
+  "mythical"
+ ],
+ "eggBlocked": [
+  "legendary",
+  "mythical",
+  "special"
+ ]
+}

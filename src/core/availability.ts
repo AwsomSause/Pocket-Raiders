@@ -8,6 +8,7 @@
 import { z } from 'zod';
 import availabilityJson from '../data/availability.json';
 import type { Content } from './contentSchema';
+import { wildRarityWeight } from './rarity';
 import type { PoolEntry } from './themes';
 
 export const AVAILABILITY_RARITIES = ['common', 'uncommon', 'rare', 'veryRare', 'legendary', 'mythical'] as const;
@@ -53,8 +54,7 @@ export const isUnlockedAt = (content: Content, speciesId: string, level: number)
 
 /** Odds multiplier from the spreadsheet rarity (1 without a row). */
 export function availabilityWeight(content: Content, speciesId: string): number {
-  const row = availabilityOf(content, speciesId);
-  return row ? content.balance.availability.rarityWeights[row.rarity] : 1;
+  return availabilityOf(content, speciesId) ? wildRarityWeight(content, speciesId) : 1;
 }
 
 /**

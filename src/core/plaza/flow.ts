@@ -2,6 +2,7 @@
 // Pure rules. Stock, visitors, rumours and events are drawn from the run seed, the region and the stage, so a plaza looks the
 // same on a reload and different from run to run. Nothing here uses the battle, encounter or reward streams.
 
+import { pickEggSpecies } from '../rarity';
 import { exhibitionFor } from '../exhibition';
 import { applyEffect, startClubBattle, tradeCandidates } from '../events';
 import { evilMarkup, plazaAgent, plazaVillain } from '../evil/plaza';
@@ -824,7 +825,7 @@ export function usePlaza(content: Content, current: RunState, sideId: string, se
       const t = PLAZA_LIFE.eggTraders.find((x) => x.id === a)!;
       if (b !== 'buy') run.eggs = run.eggs.filter((eg) => eg.uid !== b);
       const rare = new Rng(hashSeed(`${run.seed}::plaza-egg::${a}::${run.itemCounters?.['eggs-laid'] ?? 0}`));
-      const species = rare.pick(wildEligibleSpecies(content).filter((s) => s.evolutionStage === 1));
+      const species = pickEggSpecies(content, wildEligibleSpecies(content).filter((s) => s.evolutionStage === 1), rare);
       const levels = run.party.map((m) => m.level);
       const level = Math.max(1, Math.min(runLevelCap(content, run), Math.floor(levels.reduce((x, y) => x + y, 0) / Math.max(1, levels.length)) - 5));
       layEgg(content, run, species.id, { level, left: 3, unit: 'stage', source: t.name, origin: t.origin }, rare);
