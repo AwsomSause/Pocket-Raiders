@@ -23,6 +23,7 @@ import { leadChatter } from '../core/leadChatter';
 import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
 import { pinnedObjective } from '../core/objectives';
+import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { FRAME_ASSET_IDS, headerBar } from '../ui/frames';
@@ -422,7 +423,17 @@ export class MapScene extends Phaser.Scene {
       const tag = this.add.text(26, 68, `${TIMELINE.title}${ahead}`, textStyle(14, '#ff9fe0', { stroke: '#2a0a2a', strokeThickness: 4 }));
       if (services().session.settings.battleAnimations === 'full') this.tweens.add({ targets: tag, alpha: 0.55, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
-    if (pinned) this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0);
+    if (pinned) {
+      const pinText = this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0).setName('pinned-quest');
+      // Reroll Points: tap the Run Quest line to swap it for ₽100 (+₽100 each time).
+      if (pinned.kind === 'runQuest') {
+        pinText.setInteractive({ useHandCursor: true }).on('pointerup', () => {
+          const r = rerollRunQuest(content, run);
+          if (r.ok) services().session.saveRunNow();
+          this.scene.restart({ notice: r.ok ? r.line : r.line, focus: this.index });
+        });
+      }
+    }
 
     // ---------- the map (scrolls sideways) ----------
     // A bike chosen from the Items menu changes where the player can go.
