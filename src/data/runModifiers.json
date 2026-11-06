@@ -1,0 +1,13 @@
+{
+  "note": "Run modifiers (THE OVERHAUL 16.6). Some stages carry one: it re-weights the wild pool toward its types. Weights only; eligibility is checked first. Picked by a hash of seed, region and stage, so there is no save change and no RNG draw.",
+  "chancePercent": 30,
+  "firstStage": 1,
+  "modifiers": [
+    { "id": "bug-outbreak", "name": "Bug Outbreak", "banner": "A Bug Outbreak swarms this stage!", "types": ["bug"], "factor": 3 },
+    { "id": "dragon-territory", "name": "Dragon Territory", "banner": "Dragon Territory: something huge is nearby.", "types": ["dragon"], "factor": 2.5 },
+    { "id": "electric-surge", "name": "Electric Surge", "banner": "An Electric Surge crackles through the area!", "types": ["electric"], "factor": 3 },
+    { "id": "ghostly-migration", "name": "Ghostly Migration", "banner": "A Ghostly Migration drifts in.", "types": ["ghost"], "factor": 3 },
+    { "id": "ancient-discoveries", "name": "Ancient Discoveries", "banner": "Ancient Discoveries stir the ground.", "types": ["rock", "ground"], "factor": 2.5 },
+    { "id": "weather-disruption", "name": "Weather Disruption", "banner": "Weather Disruption stirs the sky.", "types": ["water", "ice", "flying"], "factor": 2 }
+  ]
+}

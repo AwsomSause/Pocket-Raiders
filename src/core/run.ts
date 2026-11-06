@@ -86,6 +86,7 @@ import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, 
 import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
+import { modifierBanner, modifierWildWeight } from './runModifiers';
 import { quirkReaction } from './overhaul/personality';
 import { countedScene, finisherScene, partyNarration } from './overhaul/partyNarration';
 import { timeOfDay } from './arenaStyle';
@@ -1770,7 +1771,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -1818,6 +1819,10 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     else {
       const echo = sacrificeEcho(content, run, enemy.speciesId, activeUid);
       if (echo) run.battle.rivalNote = echo;
+      else if (!legendary) {
+        const banner = modifierBanner(content, run, enemy.speciesId);
+        if (banner) run.battle.rivalNote = banner;
+      }
     }
     claimArea(run);
     rememberPick(content, run, 'wild', familyId(content, enemy.speciesId));
