@@ -1,7 +1,8 @@
 // F209: the mod loader. Packs are JSON (Zod-checked in core/configPack.ts, never code). Imported packs are kept on this
 // device (not in a save) and applied when the game starts. Pure list handling; storage is passed in.
 
-import { applyConfigPack, parseConfigPack, type ConfigPack } from '../configPack';
+import { applyConfigPack, applyPackEvents, parseConfigPack, type ConfigPack } from '../configPack';
+import type { Content } from '../contentSchema';
 
 export const MAX_PACKS = 8;
 
@@ -17,12 +18,12 @@ export interface LoadedPacks {
 }
 
 /** Applies every stored pack that validates; the rest are reported and skipped. */
-export function loadStoredPacks(store: PackStore): LoadedPacks {
+export function loadStoredPacks(store: PackStore, content?: Pick<Content, 'events'>): LoadedPacks {
   const packs: ConfigPack[] = [];
   const problems: string[] = [];
   for (const text of store.get().slice(0, MAX_PACKS)) {
     const r = parseConfigPack(text);
-    if (r.ok) (packs.push(r.pack), applyConfigPack(r.pack));
+    if (r.ok) (packs.push(r.pack), applyConfigPack(r.pack), content && applyPackEvents(r.pack, content));
     else problems.push(r.errors[0] ?? 'invalid pack');
   }
   return { packs, problems };
@@ -39,6 +40,16 @@ export function installPack(store: PackStore, text: string): { ok: boolean; mess
   if (others.length >= MAX_PACKS) return { ok: false, message: `You can keep ${MAX_PACKS} packs; remove one first.` };
   store.set([...others, text]);
   return { ok: true, message: `Pack "${r.pack.name}" by ${r.pack.author} is installed. Restart the game to apply it.` };
+}
+
+/** A pack that adds events must not be removed while a run might hold one of its stops: say why, or null when it is fine. */
+export function removeProblem(store: PackStore, id: string, runInProgress: boolean): string | null {
+  if (!runInProgress) return null;
+  const has = store.get().some((t) => {
+    const p = parseConfigPack(t);
+    return p.ok && p.pack.id === id && p.pack.events.length > 0;
+  });
+  return has ? 'This pack adds map events. Finish or abandon your current run before removing it.' : null;
 }
 
 export function removePack(store: PackStore, id: string): void {

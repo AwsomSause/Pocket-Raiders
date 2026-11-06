@@ -75,6 +75,7 @@ import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
 import { battleTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
 import { planCues } from '../core/presentation/cues';
+import { applyCueHooks } from '../core/presentation/hooks';
 import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
 import { autoBattleProblem, autoProfile, chooseAutoAction, STANCES, STANCE_INFO, stanceOf, type Stance } from '../core/battle/autoBattle';
@@ -2770,7 +2771,9 @@ export class BattleScene extends Phaser.Scene {
     const { battleAnimations } = session.settings;
     const effectIntensity = capFlash(session.settings.effectIntensity, session.settings.reducedFlash);
     // What the screen shows for each event; worked out from the finished turn, so it can't change it.
-    const cues = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
+    const planned = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
+    // Plugin hooks (S344) may reshape the cues; skipped when animations are off. Presentation only.
+    const cues = battleAnimations === 'off' ? planned : applyCueHooks(planned, events);
 
     for (const [index, e] of events.entries()) {
       // "Charmander used Ember!" goes up before its animation; other messages follow theirs.

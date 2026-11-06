@@ -104,6 +104,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `narrative-defeat.md`: Narrative rival defeats (M12, spec §3; `core/rivals/narrativeDefeat.ts`, `data/narrativeDefeats.json`): a riva
 - `overdrive-behaviors.md`: Overdrive behaviors (spec 8): three new moments decided by the battle engine on the "hyper" stream (`core/batt
 - `pack-music-followup.md`: 
+- `packs-and-plugins.md`: Social/tech slice 8 (S325 Content Pack Loader, S337 Lazy Asset Loading, S338 Texture Atlas Builder, S340 Autom
 - `party-life.md`: Party personality & chemistry (APPROVED.md §1, §9, §10). Code `src/core/partyLife/` (rules, state), data `src/
 - `perk-rereads-2.md`: Left-out 2.8 (second batch of perk re-reads): Ginter now puts the 2 nearest locked shop entries for rare or ep
 - `perk-rereads.md`: Left-out 2.8 (first perk re-reads): Raihan's weather boost now covers sandstorm and hail (`weatherDamageMultip
