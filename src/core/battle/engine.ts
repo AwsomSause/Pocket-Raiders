@@ -871,6 +871,7 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[]): void {
     if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
+  if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
 }
 
 /** Encore!: after a turn, critical hits build Hype, a miss or failed move costs some, and full Hype starts the damage boost. */

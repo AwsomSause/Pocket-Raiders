@@ -1174,6 +1174,7 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
     if (b.rule) {
       run.battle.eventRule = b.rule;
+      if (b.rule.weatherCycle) run.battle.weather = { id: b.rule.weatherCycle[0]!, turns: 5 };
       if (b.rule.foeAsleep) for (const mon of team) mon.status = { id: 'slp', turns: 3 };
       for (const [stat, n] of Object.entries(b.rule.stages ?? {})) {
         run.battle.playerStages[stat as 'atk'] = n;

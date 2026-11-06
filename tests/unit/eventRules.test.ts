@@ -95,4 +95,14 @@ describe('event fight rules (run events B batch 3)', () => {
     expect(run.battle?.eventRule?.noItems).toBe(true);
     expect(itemProblem({ content, battle: run.battle!, party: run.party, inventory: { potion: 1 } as never }, 'potion')).toMatch(/forbids/);
   });
+  it('weatherCycle rotates the weather each turn and starts on the first entry', () => {
+    const b = battle({ weatherCycle: ['rain', 'sun', 'hail'] }, 2) as { weather: { id: string } | null; turn: number; outcome: null };
+    eventRuleEnd(b as never, []);
+    expect(b.weather?.id).toBe('sun');
+    b.turn = 3;
+    eventRuleEnd(b as never, []);
+    expect(b.weather?.id).toBe('hail');
+    expect(start('weather-rival').battle?.weather?.id).toBe('rain');
+    expect(start('underground-duel').battle?.weather?.id).toBe('sand');
+  });
 });
