@@ -66,6 +66,7 @@ import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { teraScene } from '../ui/battleFx/teraScene';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -3128,6 +3129,29 @@ export class BattleScene extends Phaser.Scene {
                 tint: glowColor,
                 title: zMove?.name,
                 titleId: zMove?.id,
+                opposes: !mine,
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
+            playSfx(this, 'se.level_up');
+          } else if (cine === 'tera' && this.motion === 'full' && !services().session.settings.fastTera && mon && teraType) {
+            // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
+            const sp = content.species.get(mon.speciesId)!;
+            const mine = e.side === 'player';
+            const playerArt = mine ? this.playerArt() : null;
+            const feel = this.cineFeel('tera');
+            const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
+            await this.playBeat(
+              teraScene(this, {
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                backdropKey: this.arenaBgKey,
+                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
+                decorate: (v) => wearPattern(this, v, teraPatternKey(patternType), this.motion, () => undefined),
+                makeTrainer: playerArt ? (x, y) => trainerVisual(this, playerArt, '', x, y, 3.2) : null,
+                orbKey: 'cine.key.tera',
+                tint: glowColor,
                 opposes: !mine,
                 intensity: feel.intensity,
                 shake: feel.shake,
