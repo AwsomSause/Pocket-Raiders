@@ -215,6 +215,9 @@ import { simulateRivalWorld } from './rivals/world';
 import { noteProtagonistTitle, rivalSighting } from './rivals/recognition';
 import { rivalRivalries, rivalTeamUp } from './rivals/rivalries';
 import { ensureAce, withSignatureAce } from './rivals/signatureTeam';
+import { withAceLadder } from './rivals/aces';
+import { rivalAdaptation } from './rivals/adaptTriggers';
+import { teamCoverageMax, withCoverage } from './rivals/coverage';
 import { pickLegacyRival } from './rivals/legacy';
 import { rivalReturn, rivalReturnFlag, rivalSeenFlag, RIVAL_SEEN_ANY, scheduleKey, waitingRival } from './rivals/adapt';
 import { rematchRule, returnFlag, revisedTeam, waitingTrainer } from './story/returns';
@@ -1883,7 +1886,14 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       ensureAce(content, rivalBack);
       // §21 a major rival keeps its semi-canon team; §9/§10 its ace carries what it learned.
       const ret = rivalReturn(content, run, rivalBack, canonPlan(content, rivalBack, plan), rule.effect);
-      ret.plan = withAceProgress(content, rivalBack, withSignatureAce(content, rivalBack, ret.plan));
+      // W2 (14.6/14.7/14.5): the ace's ladder step, then the adaptation triggers (from what the rival saw), then the ace's coverage set.
+      const ladder = withAceLadder(content, run, rivalBack, withSignatureAce(content, rivalBack, ret.plan));
+      ret.plan = withAceProgress(content, rivalBack, ladder.plan);
+      const adapted = rivalAdaptation(content, run, rivalBack, ret.plan, !!ret.countered, teamCoverageMax(content, run));
+      const coverage = withCoverage(content, run, rivalBack, adapted.plan, !!ret.countered || adapted.applied.length > 0, teamCoverageMax(content, run) - adapted.coverage);
+      ret.plan = coverage.plan;
+      const w2 = [ladder.note, ...adapted.lines, coverage.note].filter(Boolean).join(' ');
+      if (w2) ret.note = [ret.note, w2].filter(Boolean).join(' ');
       // §11 a Pokémon rival it caught is always on its team, last in line (behind its ace).
       carried = carriedMonRival(run, rivalBack);
       if (carried) {

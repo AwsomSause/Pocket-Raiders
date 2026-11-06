@@ -192,6 +192,7 @@
  "wildMaxBaseStats": 560,
   "levelBst": { "base": 290, "perLevel": 9, "retries": 10 },
  "stagePlan": { "catcher": 2, "fighter": 5, "explorer": 2, "shopper": 3000, "heals": 2, "wipes": 1, "themeBonus": 3, "maxSignals": 2 },
+  "rivalCoverage": { "aceMax": { "early": 1, "mid": 2, "late": 2, "champion": 2 }, "teamMax": 3, "teamMaxChampion": 4, "openWeaknesses": 2, "wideHits": 4, "observedBattles": 3, "desperationSetbacks": 2, "phaseStarts": { "mid": 2, "late": 5, "champion": 9 } },
   "overhaulRivalRoles": { "enabled": true, "additionalCounters": 1 },
   "overhaulGrowth": { "enabled": true, "bonus": 0.05, "minKos": 8, "minCloseCalls": 2, "minRoleKos": 4 },
   "starterSets": { "enabled": false },
