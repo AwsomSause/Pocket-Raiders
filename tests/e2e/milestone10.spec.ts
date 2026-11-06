@@ -141,9 +141,6 @@ test('slice 2: the trainer VS intro can be skipped and the battle carries on', a
 });
 
 /** True while a text with exactly this content is on the battle screen (inside any container). */
-const showsText = (page: Page, text: string) =>
-  page.evaluate((t) => (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.text === t || o.list?.some((c: any) => c.text === t)), text);
-
 const hasNamed = (page: Page, name: string) =>
   page.evaluate((n) => (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.name === n), name);
 
@@ -175,7 +172,10 @@ test('slice 4: a gym leader gets a title card, an ace beat and a victory stamp',
     add.text = (...a: any[]) => (w.__m10Seen.push(a[2]), orig(...a));
     pkr.game.scene.getScene('Battle').scene.restart();
   });
-  await expect.poll(() => showsText(page, 'Gym Leader Brock'), { timeout: 15_000, intervals: [100] }).toBe(true);
+  // The boss is named on entry: by the boss entrance (name in capitals, Beta 4.4) or, once that was skipped, by the title card.
+  await expect
+    .poll(() => page.evaluate(() => ((window as any).__m10Seen as string[]).some((t) => typeof t === 'string' && t.toLowerCase() === 'gym leader brock')), { timeout: 15_000, intervals: [100] })
+    .toBe(true);
   await page.screenshot({ path: 'test-results/m10-boss-title.png' });
   // Catalog 67: the stage is The Chemical Plant, so lab light panels hang behind the battle.
   await expect
