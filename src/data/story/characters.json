@@ -927,5 +927,284 @@
     "spoiler": true
    }
   ]
+ },
+ {
+  "id": "ch_dara_quinlan",
+  "v": 1,
+  "nameKey": "ch.ch_dara_quinlan.name",
+  "age": 20,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/rika.png",
+   "happy": "public/assets/images/trainer/rika.png",
+   "angry": "public/assets/images/trainer/rika.png",
+   "sad": "public/assets/images/trainer/rika.png"
+  },
+  "tier": 1,
+  "home": "cairnmoor_ferry",
+  "party": [
+   "quaxly",
+   "starly"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_dara_quinlan.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_dara_quinlan.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_dara_quinlan.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_hale_brightwater",
+  "v": 1,
+  "nameKey": "ch.ch_hale_brightwater.name",
+  "age": 22,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/larry.png",
+   "happy": "public/assets/images/trainer/larry.png",
+   "angry": "public/assets/images/trainer/larry.png",
+   "sad": "public/assets/images/trainer/larry.png"
+  },
+  "tier": 1,
+  "home": "greywick",
+  "party": [
+   "chimchar"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_hale_brightwater.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_hale_brightwater.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_hale_brightwater.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_ines_calloway",
+  "v": 1,
+  "nameKey": "ch.ch_ines_calloway.name",
+  "age": 19,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/poppy.png",
+   "happy": "public/assets/images/trainer/poppy.png",
+   "angry": "public/assets/images/trainer/poppy.png",
+   "sad": "public/assets/images/trainer/poppy.png"
+  },
+  "tier": 1,
+  "home": "greywick_shop",
+  "party": [
+   "grubbin",
+   "trapinch"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_ines_calloway.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_ines_calloway.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_ines_calloway.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_pip_marchetti",
+  "v": 1,
+  "nameKey": "ch.ch_pip_marchetti.name",
+  "age": 21,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/guitarist.png",
+   "happy": "public/assets/images/trainer/guitarist.png",
+   "angry": "public/assets/images/trainer/guitarist.png",
+   "sad": "public/assets/images/trainer/guitarist.png"
+  },
+  "tier": 1,
+  "home": "hallow_marrow",
+  "party": [
+   "pikipek",
+   "gastly"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_pip_marchetti.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_pip_marchetti.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_pip_marchetti.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_soren_lindqvist",
+  "v": 1,
+  "nameKey": "ch.ch_soren_lindqvist.name",
+  "age": 23,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/psychic_m.png",
+   "happy": "public/assets/images/trainer/psychic_m.png",
+   "angry": "public/assets/images/trainer/psychic_m.png",
+   "sad": "public/assets/images/trainer/psychic_m.png"
+  },
+  "tier": 1,
+  "home": "hallow_marrow_ruins",
+  "party": [
+   "abra",
+   "beldum"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_soren_lindqvist.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_soren_lindqvist.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_soren_lindqvist.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_kael_verhoeven",
+  "v": 1,
+  "nameKey": "ch.ch_kael_verhoeven.name",
+  "age": 20,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/hassel.png",
+   "happy": "public/assets/images/trainer/hassel.png",
+   "angry": "public/assets/images/trainer/hassel.png",
+   "sad": "public/assets/images/trainer/hassel.png"
+  },
+  "tier": 1,
+  "home": "dunmere",
+  "party": [
+   "aron",
+   "pawniard"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_kael_verhoeven.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_kael_verhoeven.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_kael_verhoeven.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_marisol_teague",
+  "v": 1,
+  "nameKey": "ch.ch_marisol_teague.name",
+  "age": 21,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/shauntal.png",
+   "happy": "public/assets/images/trainer/shauntal.png",
+   "angry": "public/assets/images/trainer/shauntal.png",
+   "sad": "public/assets/images/trainer/shauntal.png"
+  },
+  "tier": 1,
+  "home": "dunmere_quarry",
+  "party": [
+   "pidove",
+   "duskull"
+  ],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_marisol_teague.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_marisol_teague.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_marisol_teague.bio3",
+    "spoiler": true
+   }
+  ]
  }
 ]

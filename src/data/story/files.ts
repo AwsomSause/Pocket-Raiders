@@ -2,7 +2,7 @@
 import { StoryDataSchema, type StoryData } from '../../core/story2/schema';
 
 // (tools/lib/storyFiles.ts keeps the same list for node-only tools.)
-export const STORY_FILES = ['characters', 'events', 'arcs', 'themes', 'remembrances', 'moveMoments', 'dialogue', 'lore', 'news', 'interactables', 'backstories', 'quiz', 'blueprintRules'] as const;
+export const STORY_FILES = ['characters', 'events', 'arcs', 'themes', 'remembrances', 'moveMoments', 'dialogue', 'lore', 'news', 'interactables', 'backstories', 'quiz', 'blueprintRules', 'rivals', 'rivalThemes'] as const;
 
 export function storyDataFromFiles(raw: Record<string, unknown>): StoryData {
   const parsed = StoryDataSchema.safeParse(raw);

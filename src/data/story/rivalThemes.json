@@ -1,0 +1,202 @@
+[
+ {
+  "theme": "th_price_of_power",
+  "primary": "rv_soren",
+  "secondary": "rv_hale",
+  "friendly": "rv_dara",
+  "pack": {
+   "rival": "rv_soren",
+   "pack": "c"
+  },
+  "preferred": [
+   "secret",
+   "turned_villain"
+  ],
+  "allowed": [
+   "competitive"
+  ],
+  "avoid": [
+   "reluctant"
+  ]
+ },
+ {
+  "theme": "th_champions_legacy",
+  "primary": "rv_hale",
+  "secondary": "rv_marisol",
+  "friendly": "rv_dara",
+  "pack": {
+   "rival": "rv_marisol",
+   "pack": "a"
+  },
+  "preferred": [
+   "competitive"
+  ],
+  "allowed": [
+   "friendly",
+   "fallen"
+  ],
+  "avoid": [
+   "secret"
+  ]
+ },
+ {
+  "theme": "th_missing_myth",
+  "primary": "rv_pip",
+  "secondary": "rv_ines",
+  "friendly": "rv_dara",
+  "pack": {
+   "rival": "rv_pip",
+   "pack": "b"
+  },
+  "preferred": [
+   "unpredictable",
+   "secret"
+  ],
+  "allowed": [
+   "reluctant"
+  ],
+  "avoid": [
+   "competitive"
+  ]
+ },
+ {
+  "theme": "th_broken_league",
+  "primary": "rv_marisol",
+  "secondary": "rv_kael",
+  "friendly": "rv_ines",
+  "pack": {
+   "rival": "rv_marisol",
+   "pack": "b"
+  },
+  "preferred": [
+   "fallen",
+   "turned_villain"
+  ],
+  "allowed": [
+   "unpredictable"
+  ],
+  "avoid": [
+   "friendly"
+  ]
+ },
+ {
+  "theme": "th_forgotten_region",
+  "primary": "rv_ines",
+  "secondary": "rv_dara",
+  "friendly": "rv_pip",
+  "pack": {
+   "rival": "rv_ines",
+   "pack": "b"
+  },
+  "preferred": [
+   "reluctant"
+  ],
+  "allowed": [
+   "friendly",
+   "unpredictable"
+  ],
+  "avoid": [
+   "turned_villain"
+  ]
+ },
+ {
+  "theme": "th_rivals_promise",
+  "primary": "rv_dara",
+  "secondary": "rv_ines",
+  "friendly": "rv_hale",
+  "pack": {
+   "rival": "rv_dara",
+   "pack": "b"
+  },
+  "preferred": [
+   "friendly",
+   "reluctant"
+  ],
+  "allowed": [
+   "fallen"
+  ],
+  "avoid": [
+   "unpredictable"
+  ]
+ },
+ {
+  "theme": "th_human_experiment",
+  "primary": "rv_soren",
+  "secondary": "rv_ines",
+  "friendly": "rv_dara",
+  "pack": {
+   "rival": "rv_soren",
+   "pack": "a"
+  },
+  "preferred": [
+   "secret"
+  ],
+  "allowed": [
+   "reluctant",
+   "friendly"
+  ],
+  "avoid": [
+   "competitive"
+  ]
+ },
+ {
+  "theme": "th_last_old_world",
+  "primary": "rv_ines",
+  "secondary": "rv_pip",
+  "friendly": "rv_dara",
+  "pack": {
+   "rival": "rv_ines",
+   "pack": "c"
+  },
+  "preferred": [
+   "reluctant"
+  ],
+  "allowed": [
+   "unpredictable",
+   "friendly"
+  ],
+  "avoid": [
+   "turned_villain"
+  ]
+ },
+ {
+  "theme": "th_shadows_viridian",
+  "primary": "rv_dara",
+  "secondary": "rv_kael",
+  "friendly": "rv_pip",
+  "pack": {
+   "rival": "rv_kael",
+   "pack": "b"
+  },
+  "preferred": [
+   "friendly"
+  ],
+  "allowed": [
+   "reluctant",
+   "turned_villain"
+  ],
+  "avoid": [
+   "fallen"
+  ]
+ },
+ {
+  "theme": "th_marauder_conspiracy",
+  "primary": "rv_kael",
+  "secondary": "rv_soren",
+  "friendly": "rv_hale",
+  "pack": {
+   "rival": "rv_soren",
+   "pack": "a"
+  },
+  "preferred": [
+   "turned_villain",
+   "secret"
+  ],
+  "allowed": [
+   "competitive"
+  ],
+  "avoid": [
+   "friendly"
+  ]
+ }
+]

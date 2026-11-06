@@ -2522,6 +2522,11 @@ export const BalanceSchema = z.object({
     maxConsecutiveHighIntensity: z.number().int().min(1),
     sameEventGapStops: z.number().int().min(0),
     sameEventMaxPerRun: z.number().int().min(1),
+    /** S10 (design R4): rival team size and level band per Act 1 to 6, as fractions of the region level cap. A Friendly rival uses the band minus `friendlyOffset`. */
+    rivalBands: z.object({
+      acts: z.array(z.object({ band: z.tuple([z.number().min(0).max(1), z.number().min(0).max(1)]), size: z.number().int().min(1).max(6) })).length(6),
+      friendlyOffset: z.number().min(0).max(0.2),
+    }).default({ acts: [{ band: [0.45, 0.55], size: 2 }, { band: [0.55, 0.65], size: 3 }, { band: [0.65, 0.75], size: 4 }, { band: [0.75, 0.85], size: 5 }, { band: [0.88, 0.95], size: 6 }, { band: [0.95, 1], size: 6 }], friendlyOffset: 0.03 }),
   }),
   rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), /** Harder rivals: the opener is the player level + this; the ace is the player level + aceOffset. */ openerOffset: z.number().int().default(0), aceOffset: z.number().int().default(2), /** 1 keeps the old single-Pokémon first rival (used to pin old-seed tests). */ members: z.number().int().min(1).max(2).default(2), /** False restores the old rule: a rival loss ends a non-Story run (used to pin old-seed tests). */ softLoss: z.boolean().default(true), /** False keeps the fixed level instead of following the player's level (old-seed tests). */ followPlayer: z.boolean().default(true), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */

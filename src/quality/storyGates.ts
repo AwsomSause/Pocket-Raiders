@@ -1,8 +1,9 @@
-// Story Overhaul v2: the 20 named content gates over src/data/story/*.json. Each returns the offending records, so
+// Story Overhaul v2: the named content gates over src/data/story/*.json. Each returns the offending records, so
 // `npm run report:check` shows a count and tests/unit/storyGates.test.ts can seed one bad record per gate.
 // Empty story data passes every gate.
 import type { Content } from '../core/contentSchema';
 import type { StoryData } from '../core/story2/schema';
+import { rivalAudit } from '../core/story2/storyRivals';
 import { TEMPLATE_TOKENS, tokensIn } from '../core/story2/templates';
 
 export interface StoryGateContext {
@@ -138,6 +139,8 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
   const MB = 1_000_000;
   const sizes = ctx.fileSizes ?? {};
   add('story-bundle-budget', 'Story data over its size budget', 'A story data file over 0.6 MB, or text/en.json over 0.1 MB in the main bundle.', Object.entries(sizes).filter(([name, n]) => n > (name === 'text' ? 0.1 * MB : 0.6 * MB)).map(([name, n]) => `${name}: ${n} bytes`));
+
+  add('story-rival-audit', 'Story rivals failing the fair-play audit', 'Rival data with a missing reference, a bad team, a clue ledger below the fair-play rules, or a theme row that breaks the role rules.', rivalAudit(data, content?.species));
 
   add('story-hash-stable', 'Story content hash out of date', 'hash.json differs from the hash of the data (run npm run data:story).', ctx.hashFresh === false ? ['src/data/story/hash.json is stale'] : []);
   return gates;
