@@ -8,6 +8,8 @@ import { applyStartGrants, startGrants } from '../../src/core/legacy';
 import { ProfileSchema, type Profile } from '../../src/core/state';
 import { recordTownRun as recordRun, applyReward, basementCode, collections, dummyHit, getTownAction, jukeboxTracks, ledger, localDay, mailToday, optionsOf, recordTownRun, spendTownStart, statueTarget, TOWN, townAction, townOf, townProblem, townStartGrants, todaysQuests, townStats, townWeather, visitBuilding, KINDS } from '../../src/core/town';
 import { Rng, hashSeed } from '../../src/core/rng';
+import * as townApi from '../../src/core/town';
+const require_town = () => townApi;
 import { content } from './helpers';
 
 const DAY = new Date(2026, 10, 3, 12, 0, 0); // a Tuesday, noon
@@ -339,6 +341,29 @@ describe('Relic Vault (S464)', () => {
     expect(townStartGrants(content, p).relics).toEqual([ids[0], ids[1]]);
     p = ok(p, 'vault-store', { choice: ids[0]! }).profile;
     expect(townStartGrants(content, p).relics).toEqual([ids[1]]);
+  });
+});
+
+describe('Dream Tower and garden visitors (S109, S475)', () => {
+  it('a dream costs credits and describes a real region', () => {
+    const p = rich();
+    const before = p.bankCredits;
+    const regionId = [...content.regions.keys()][0]!;
+    const r = ok(p, 'dream-peek', { choice: regionId });
+    expect(r.profile.bankCredits).toBe(before - townApi.townPrice(p, 10));
+    expect(r.message).toMatch(/dream/i);
+    const poor = { ...rich(), bankCredits: 0 };
+    expect(act(poor, 'dream-peek', { choice: regionId }).ok).toBe(false);
+  });
+  it('the day brings three visitors, the same all day, each greeted once', () => {
+    const { gardenVisitors } = require_town();
+    const a = gardenVisitors(content, DAY);
+    expect(a).toHaveLength(3);
+    expect(gardenVisitors(content, DAY)).toEqual(a);
+    const id = `${a[0]}@${localDay(DAY)}`;
+    const p = ok(rich(), 'garden-visitors', { choice: id }).profile;
+    expect(p.researchPoints).toBe(rich().researchPoints + 1);
+    expect(ok(p, 'garden-visitors', { choice: id }).profile.researchPoints).toBe(p.researchPoints); // the gift pays once
   });
 });
 

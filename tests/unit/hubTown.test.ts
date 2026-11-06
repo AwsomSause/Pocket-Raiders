@@ -297,3 +297,16 @@ describe('NPC schedules and gossip (S348, S350)', () => {
     expect(lines).toMatch(/Memorial Wall/);
   });
 });
+
+describe('Teleporters (S467)', () => {
+  it('every place has a standing spot to jump to, and it is walkable', async () => {
+    const { teleportSpot } = await import('../../src/core/hubTown/world');
+    const grid = new WalkGrid(HUB_TOWN);
+    for (const pl of HUB_TOWN.places) {
+      const spot = teleportSpot(pl.id)!;
+      expect(spot, pl.id).not.toBeNull();
+      expect(grid.isSolid(spot.x, spot.y), pl.id).toBe(false);
+    }
+    expect(teleportSpot('nowhere')).toBeNull();
+  });
+});

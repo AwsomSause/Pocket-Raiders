@@ -91,6 +91,18 @@
      ]
     },
     {
+     "id": "garden-visitors",
+     "name": "Wild visitors",
+     "desc": "Three wild Pokémon wander into the garden each day. Greet one for a small gift (S475).",
+     "kind": "pick",
+     "rows": [
+      "S475"
+     ],
+     "limit": "none",
+     "dynamic": "visitors",
+     "template": {"id": "visitor", "label": "{name}", "desc": "", "say": "", "reward": {"items": {"oran-berry": 1}, "xp": 1, "rp": 1}, "once": true}
+    },
+    {
      "id": "garden-lesson",
      "name": "Tutorial garden",
      "desc": "The Professor explains the game in a small hands-on lesson. Each lesson pays once.",
@@ -154,6 +166,26 @@
        }
       }
      ]
+    }
+   ]
+  },
+  {
+   "id": "dreamtower",
+   "name": "Dream Tower",
+   "icon": "item.dream_ball",
+   "blurb": "Spend credits to dream of the road ahead (S109).",
+   "actions": [
+    {
+     "id": "dream-peek",
+     "name": "Dream of a region",
+     "desc": "Pick a region and dream of the gym leaders and Champion who wait there. A small, honest hint.",
+     "kind": "pick",
+     "rows": [
+      "S109"
+     ],
+     "limit": "none",
+     "dynamic": "regions",
+     "template": {"id": "dream", "label": "{name}", "desc": "", "say": "", "cost": {"credits": 10}, "reward": {"xp": 1}, "once": false}
     }
    ]
   },

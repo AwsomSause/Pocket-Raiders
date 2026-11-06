@@ -159,8 +159,25 @@ export function optionsOf(content: Content, p: Profile, a: TownAction, now: Date
     case 'memorial': return memorialList(content, p).map((m) => from(String(m.index), `${m.name} Lv${m.level}${m.ace ? ' ★' : ''}`, `${m.cause} · ${t.counts[`flower:${m.index}`] ?? 0} flowers`));
     case 'items': return t.lost.map((id, i) => ({ id: `${i}:${id}`, label: id.replace(/-/g, ' '), desc: 'Left behind', say: 'It is waiting for you.', once: false }));
     case 'mail': return mailToday(content, p, now).map((m) => ({ id: m.id, label: `${m.from}${t.sets.mail?.includes(m.id) ? '' : ' (new)'}`, desc: m.text.slice(0, 70), say: m.text, once: true, reward: m.gift }));
+    // Dream Tower (S109): peek at a region's road ahead (its gym leaders and its Champion) from the real campaign data.
+    case 'regions': return [...content.regions.values()].map((r) => {
+      const nice = (id: string) => id.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      const gyms = r.gymLeaders.slice(0, 4).map(nice).join(', ');
+      return from(r.id, r.name, `${r.gymLeaders.length} gyms`, `You dream of ${r.name}: ${gyms}${r.gymLeaders.length > 4 ? ' and more' : ''} wait on the road. ${r.champions[0] ? `At the end, ${nice(r.champions[0])}.` : ''} Dreams are only a hint.`);
+    });
+    // Garden visitors (S475): three wild Pokémon wander in each day; one per option per day.
+    case 'visitors': return gardenVisitors(content, now).map((id) => ({ id: `${id}@${localDay(now)}`, label: content.species.get(id)?.name ?? id, desc: 'A wild visitor today', say: `${content.species.get(id)?.name ?? id} nibbles a berry, then trots off. It left a gift.`, once: true, reward: tpl?.reward }));
     default: return a.options.map(base);
   }
+}
+
+/** Today's garden visitors (S475): three seeded picks from the common species, same all day. */
+export function gardenVisitors(content: Content, now: Date): string[] {
+  const pool = [...content.species.values()].filter((sp) => { const t = Object.values(sp.baseStats).reduce((n, v) => n + v, 0); return t > 0 && t <= 400; }).map((sp) => sp.id).sort();
+  const rng = new Rng(hashSeed(`town::garden-visitors::${localDay(now)}`));
+  const out: string[] = [];
+  for (let i = 0; i < 3 && pool.length > 0; i++) out.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+  return out;
 }
 
 export interface Mail { id: string; from: string; text: string; gift?: Reward }

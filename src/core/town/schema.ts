@@ -76,7 +76,7 @@ const Action = z.object({
   rewards: GradeRewards.optional(),
   options: z.array(Option).default([]),
   /** Options built from the profile instead of the list: lastTeam, history, trophies, relics, pets, items. */
-  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial']).optional(),
+  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial', 'regions', 'visitors']).optional(),
   /** What a dynamic option pays; "{name}" in `say` is the option's name. */
   template: Option.optional(),
   goods: z.array(Good).default([]),
