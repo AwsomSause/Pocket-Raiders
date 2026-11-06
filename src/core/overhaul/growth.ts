@@ -17,7 +17,7 @@ export const DEFAULT_GROWTH_CONFIG: GrowthConfig = { enabled: true, bonus: 0.05,
 interface History { uid: string; knockoutsDealt: number; closeCalls: number; battles?: number; evolutions?: readonly unknown[]; bond?: { trust?: number; affection?: number } | undefined; growth?: Record<string, number> | undefined }
 
 /** Counter-based paths: pack id, the counter it reads, and the plain-words bonus. All give +bonus damage in the stated case. */
-export const COUNTER_PATHS: Record<string, { counter: string; words: string; min?: number }> = {
+export const COUNTER_PATHS: Record<string, { counter: string; words: string; min?: number; cap?: number; type?: string }> = {
   'rival-breaker': { counter: 'koRival', words: 'damage against rival Pokémon' },
   'gym-slayer': { counter: 'koGym', words: 'damage against Gym Leader Pokémon' },
   'elite-slayer': { counter: 'koElite', words: 'damage against Elite Four Pokémon' },
@@ -26,9 +26,9 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   'deep-swimmer': { counter: 'koWaterVsFRG', words: 'Water damage against Fire, Rock and Ground foes' },
   'forge-born': { counter: 'koSteelVsIRF', words: 'Steel damage against Ice, Rock and Fairy foes' },
   // Batch 3: counted from the moves it uses and the hits it lands.
-  steady: { counter: 'useSure', words: 'damage with 100%-accuracy moves', min: 30 },
+  steady: { counter: 'useSure', words: 'damage with 100%-accuracy moves', min: 30, cap: 0.03 },
   gambler: { counter: 'useRisky', words: 'accuracy with moves of 80% accuracy or less', min: 8 },
-  'chorus-lead': { counter: 'useSound', words: 'damage with sound moves', min: 10 },
+  'chorus-lead': { counter: 'useSound', words: 'damage with sound moves', min: 10, cap: 0.03 },
   support: { counter: 'useStatus', words: 'accuracy with status moves', min: 15 },
   'tank-buster': { counter: 'hitHigh', words: 'damage against foes above 75% HP', min: 12 },
   'bond-breaker': { counter: 'koFull', words: 'damage against foes at full HP' },
@@ -41,6 +41,14 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   caretaker: { counter: 'berryFeed', words: 'damage (it has been fed many berries)', min: 5 },
   'treasure-nose': { counter: 'fieldItem', words: 'damage (it was in front when field items turned up)', min: 5 },
   'move-collector': { counter: 'tmLearned', words: 'damage (it has learned many TM and tutor moves)', min: 3 },
+  // Batch 4: time of day and weather (the run clock's period and the battle's weather).
+  'night-owl-path': { counter: 'winNight', words: 'damage in night battles', min: 3 },
+  sunbather: { counter: 'winDay', words: 'damage in daytime battles (morning and afternoon)', min: 3 },
+  'dawn-runner': { counter: 'winFirst', words: 'Speed in the first battle of a day', min: 2, cap: 0.03 },
+  moonlit: { counter: 'useFairyNight', words: 'Fairy damage in night battles', min: 6, type: 'fairy' },
+  'weather-wise': { counter: 'battleWeather', words: 'accuracy in any weather', min: 3, cap: 0.03 },
+  'storm-chaser': { counter: 'battleChange', words: 'Speed in rain and snow', min: 3, cap: 0.03 },
+  windrunner: { counter: 'turnTailwind', words: 'Speed under its own Tailwind', min: 5, cap: 0.03, type: 'flying' },
 
 };
 
@@ -58,7 +66,7 @@ export function noteMapGrowth(content: Content, run: { story: { histories: Recor
 }
 
 /** What one move use tells the growth counters. `hpFrac` is the user's HP share before it moved. */
-export interface MoveFacts { accuracy: number | null; category: string; type: string; flags: readonly string[]; hpFrac: number }
+export interface MoveFacts { accuracy: number | null; category: string; type: string; flags: readonly string[]; hpFrac: number; night?: boolean }
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');
@@ -66,6 +74,7 @@ export function moveCounters(f: MoveFacts): string[] {
   if (f.accuracy !== null && f.accuracy < 80) out.push('useRisky');
   if (f.flags.includes('sound')) out.push('useSound');
   if (f.type.toLowerCase() === 'fire' && f.category !== 'status' && f.hpFrac < 0.5) out.push('useFireLow');
+  if (f.night && f.type.toLowerCase() === 'fairy' && f.category !== 'status') out.push('useFairyNight');
   return out;
 }
 /** What one damaging hit tells the counters: `before` and `max` are the foe's HP around the hit; `ko` when it fainted. */
@@ -74,6 +83,13 @@ export function hitCounters(before: number, max: number, ko: boolean): string[] 
   if (before > max * 0.75) out.push('hitHigh');
   if (ko && before >= max) out.push('koFull');
   return out;
+}
+/** Add a counter once per battle for one Pokémon (`marks` is the battle's `growthMarks`). */
+export function bumpGrowthOnce(cfg: GrowthConfig, history: { growth?: Record<string, number> | undefined } | undefined, marks: string[], uid: string, counter: string): void {
+  const key = `${counter}:${uid}`;
+  if (marks.includes(key)) return;
+  marks.push(key);
+  bumpGrowth(cfg, history, [counter]);
 }
 export function bumpGrowth(cfg: GrowthConfig, history: { growth?: Record<string, number> | undefined } | undefined, counters: readonly string[]): void {
   if (!cfg.enabled || !history) return;
@@ -137,6 +153,7 @@ export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[
   for (const [id, def] of Object.entries(COUNTER_PATHS)) {
     const n = mon.growth?.[def.counter] ?? 0;
     if (n < (def.min ?? cfg.minRoleKos)) continue;
+    if (def.type && !types.some((t) => t.toLowerCase() === def.type)) continue;
     const top = Math.max(...party.map((h) => h.growth?.[def.counter] ?? 0));
     if (n === top && party.filter((h) => (h.growth?.[def.counter] ?? 0) === top).length === 1 && (!best || n > best.n)) best = { id, n };
   }
@@ -170,7 +187,7 @@ export function assignGrowthPaths(content: Content, party: PokemonInstance[], hi
 }
 
 /** Damage multiplier from the attacker's path for one hit. `hpFrac` is the attacker's HP share (0..1). */
-export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number }
+export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string }
 export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string, effectiveness: number, hpFrac: number, monTypes: readonly string[], hit: HitFacts = {}): number {
   const id = mon.growthPath;
   if (!cfg.enabled || !id) return 1;
@@ -188,12 +205,16 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
       : id === 'chorus-lead' ? hit.sound === true
       : id === 'tank-buster' ? (hit.foeHpFrac ?? 0) > 0.75
       : id === 'bond-breaker' ? (hit.foeHpFrac ?? 0) >= 1
+      : id === 'night-owl-path' ? hit.period === 'night'
+      : id === 'sunbather' ? hit.period === 'morning' || hit.period === 'afternoon'
+      : id === 'moonlit' ? moveType.toLowerCase() === 'fairy' && hit.period === 'night'
+      : id === 'dawn-runner' || id === 'weather-wise' || id === 'storm-chaser' || id === 'windrunner' ? false
       : id === 'ember-heart' ? moveType.toLowerCase() === 'fire' && hpFrac < 0.5
       : id === 'gambler' || id === 'support' ? false
       : FLAT_PATHS.has(id) ? true
       : id === 'deep-swimmer' ? moveType.toLowerCase() === 'water' && foe.some((t) => ['fire', 'rock', 'ground'].includes(t))
       : moveType.toLowerCase() === 'steel' && foe.some((t) => ['ice', 'rock', 'fairy'].includes(t));
-    const amount = id === 'steady' || id === 'chorus-lead' ? Math.min(cfg.bonus, 0.03) : cfg.bonus;
+    const amount = Math.min(cfg.bonus, COUNTER_PATHS[id]?.cap ?? cfg.bonus);
     return ok ? 1 + amount : 1;
   }
   const gate = overhaulCatalogs().growth_paths.entries.find((p) => p.id === id)?.gate;
@@ -205,11 +226,24 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
 }
 
 /** Accuracy multiplier for the two accuracy paths (Gambler: moves under 80%; Support: status moves). */
-export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string): number {
+export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null): number {
   if (!cfg.enabled || accuracy === null) return 1;
+  if (mon.growthPath === 'weather-wise' && weather) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'gambler' && accuracy < 80) return 1 + cfg.bonus;
   if (mon.growthPath === 'support' && category === 'status') return 1 + cfg.bonus;
   return 1;
+}
+
+/** Speed multiplier for the Speed paths: Dawn Runner (first battle of a day), Storm Chaser (rain, snow), Windrunner (own Tailwind). */
+export function growthSpeedMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, facts: { firstOfDay: boolean; weather: string | null; tailwind: boolean }): number {
+  if (!cfg.enabled) return 1;
+  const up = 1 + Math.min(cfg.bonus, 0.03);
+  switch (mon.growthPath) {
+    case 'dawn-runner': return facts.firstOfDay ? up : 1;
+    case 'storm-chaser': return facts.weather === 'rain' || facts.weather === 'snow' ? up : 1;
+    case 'windrunner': return facts.tailwind ? up : 1;
+    default: return 1;
+  }
 }
 
 /** Plain words for the Pokémon info page, or null. */
@@ -219,6 +253,6 @@ export function growthLine(mon: Pick<PokemonInstance, 'growthPath'>, cfg: Growth
   if (!p) return null;
   const pct = Math.round(cfg.bonus * 100);
   const counter = COUNTER_PATHS[p.id];
-  const effect = STAT_FLAT.has(p.id) ? `+${pct}% damage (earned over the run)` : counter ? `+${p.id === 'steady' || p.id === 'chorus-lead' ? Math.min(pct, 3) : pct}% ${counter.words}` : p.id === 'last-stand' ? `+${pct}% damage under a quarter HP` : p.id === 'striker' ? `+${pct}% on super-effective hits` : `+${pct}% damage with its own type`;
+  const effect = STAT_FLAT.has(p.id) ? `+${pct}% damage (earned over the run)` : counter ? `+${Math.min(pct, Math.round((counter.cap ?? cfg.bonus) * 100))}% ${counter.words}` : p.id === 'last-stand' ? `+${pct}% damage under a quarter HP` : p.id === 'striker' ? `+${pct}% on super-effective hits` : `+${pct}% damage with its own type`;
   return `Growth path, ${p.name}: ${effect}. ${p.flavor}`;
 }

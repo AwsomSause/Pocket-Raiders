@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthSpeedMultiplier } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -298,6 +298,8 @@ export interface BattleContext {
   attributes?: AttributeEffects;
   /** The player's team items (run.passives): the Plates help every team member. */
   teamItems?: Record<string, number>;
+  /** The run clock's period while this battle is fought (growth paths: Night Owl, Sunbather, Moonlit). Absent = no clock. */
+  period?: 'morning' | 'afternoon' | 'evening' | 'night';
   /** Bond score (0 to 100) of one of your Pokémon: Last Stand and Revenge need a deep bond. Absent = 0. */
   bondScore?: (uid: string) => number;
   /** Hyper moments for your Pokémon (none when absent). */
@@ -2098,6 +2100,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   if (ability && weather && WEATHER_SPEED[ability]?.includes(weather)) speed *= 2;
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
+  if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0 }));
   if (ability === 'surge-surfer' && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
   return speed * (c.side === 'player' ? (ctx.attributes?.speed ?? 1) : 1);
@@ -2254,7 +2257,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)) }) : 1);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), period: ctx.period }) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3307,7 +3310,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
-      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category);
+      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null);
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;

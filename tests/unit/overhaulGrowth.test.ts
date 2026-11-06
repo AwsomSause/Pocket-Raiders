@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildContent } from '../../src/data';
 import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
-import { bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId, noteMapGrowth } from '../../src/core/overhaul/growth';
+import { bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, growthSpeedMultiplier, typePathId, noteMapGrowth } from '../../src/core/overhaul/growth';
 import type { PokemonInstance } from '../../src/core/state';
 
 const content = buildContent();
@@ -191,5 +191,51 @@ describe('growth paths: run-map counters and run-stat paths', () => {
       expect(growthDamageMultiplier(CFG, m, 'normal', 1, 1, ['electric'])).toBeCloseTo(1.05);
       expect(growthLine(m, CFG)).toContain('+5%');
     }
+  });
+});
+
+describe('growth paths batch 4: time of day and weather', () => {
+  const m = (p?: string) => ({ growthPath: p });
+  const speed = (p: string, f: Partial<{ firstOfDay: boolean; weather: string | null; tailwind: boolean }>) => growthSpeedMultiplier(CFG, m(p), { firstOfDay: false, weather: null, tailwind: false, ...f });
+  it('all seven paths are real pack paths with a counter', () => {
+    const ids = new Set(overhaulCatalogs().growth_paths.entries.map((p) => p.id));
+    for (const id of ['night-owl-path', 'sunbather', 'moonlit', 'weather-wise', 'storm-chaser', 'dawn-runner', 'windrunner']) { expect(ids.has(id)).toBe(true); expect(COUNTER_PATHS[id]).toBeDefined(); }
+  });
+  it('counts Fairy moves only at night', () => {
+    const f = { accuracy: 90, category: 'special', type: 'Fairy', flags: [], hpFrac: 1 };
+    expect(moveCounters({ ...f, night: true })).toContain('useFairyNight');
+    expect(moveCounters({ ...f, night: false })).not.toContain('useFairyNight');
+    expect(moveCounters({ ...f, type: 'Fire', night: true })).not.toContain('useFairyNight');
+  });
+  it('Night Owl and Sunbather boost by period; Moonlit only Fairy at night', () => {
+    expect(growthDamageMultiplier(CFG, m('night-owl-path'), 'fire', 1, 1, [], { period: 'night' })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('night-owl-path'), 'fire', 1, 1, [], { period: 'morning' })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('sunbather'), 'fire', 1, 1, [], { period: 'afternoon' })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('sunbather'), 'fire', 1, 1, [], { period: 'evening' })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('moonlit'), 'fairy', 1, 1, ['fairy'], { period: 'night' })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('moonlit'), 'fire', 1, 1, ['fairy'], { period: 'night' })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('moonlit'), 'fairy', 1, 1, ['fairy'], { period: 'day' })).toBe(1);
+  });
+  it('Speed paths apply only in their case; Weather-Wise needs weather', () => {
+    expect(speed('dawn-runner', { firstOfDay: true })).toBeCloseTo(1.03);
+    expect(speed('dawn-runner', {})).toBe(1);
+    expect(speed('storm-chaser', { weather: 'rain' })).toBeCloseTo(1.03);
+    expect(speed('storm-chaser', { weather: 'sun' })).toBe(1);
+    expect(speed('windrunner', { tailwind: true })).toBeCloseTo(1.03);
+    expect(speed('windrunner', {})).toBe(1);
+    expect(growthAccuracyMultiplier(CFG, m('weather-wise'), 90, 'physical', 'snow')).toBeCloseTo(1.03);
+    expect(growthAccuracyMultiplier(CFG, m('weather-wise'), 90, 'physical', null)).toBe(1);
+  });
+  it('earns by counters, with type gates and a party-top rule', () => {
+    const w = (uid: string, g: Record<string, number>) => ({ ...h(uid, 0), growth: g });
+    expect(pathFor(CFG, w('a', { winNight: 3 }), ['water'], [w('a', { winNight: 3 })])).toBe('night-owl-path');
+    expect(pathFor(CFG, w('a', { winNight: 2 }), ['water'], [w('a', { winNight: 2 })])).toBeNull();
+    expect(pathFor(CFG, w('a', { useFairyNight: 6 }), ['fire'], [w('a', { useFairyNight: 6 })])).toBeNull();
+    expect(pathFor(CFG, w('a', { useFairyNight: 6 }), ['fairy'], [w('a', { useFairyNight: 6 })])).toBe('moonlit');
+    expect(pathFor(CFG, w('a', { turnTailwind: 5 }), ['flying'], [w('a', { turnTailwind: 5 })])).toBe('windrunner');
+  });
+  it('the info line states the 3% caps', () => {
+    expect(growthLine({ growthPath: 'dawn-runner' }, CFG)).toContain('+3% Speed in the first battle of a day');
+    expect(growthLine({ growthPath: 'night-owl-path' }, CFG)).toContain('+5% damage in night battles');
   });
 });

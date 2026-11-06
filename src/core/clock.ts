@@ -17,6 +17,8 @@ export interface RunClock {
   tick: number;
   /** Milestone days already celebrated at camp. */
   celebrated: number[];
+  /** The last clock day a battle began on (the first battle of a day, for the Dawn Runner path). */
+  lastBattleDay?: number | undefined;
 }
 
 export const freshClock = (): RunClock => ({ day: 1, tick: 0, celebrated: [] });

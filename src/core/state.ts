@@ -632,6 +632,9 @@ export const BattleStateSchema = z.object({
   hype: z.number().int().min(0).default(0),
   hypeTurns: z.number().int().min(0).default(0),
   hypeLoaded: z.boolean().default(false),
+  /** Growth paths (core/overhaul/growth.ts): the first battle of a clock day, and once-per-battle marks. Optional, so no save bump. */
+  firstOfDay: z.boolean().optional(),
+  growthMarks: z.array(z.string()).optional(),
   /** Index into run.party of the Pokémon currently fighting. */
   activeIndex: z.number().int().min(0),
   /** The opposing team (one Pokémon for wild battles). */
@@ -1302,7 +1305,7 @@ export const RunStateSchema = z.object({
   /** Personalities in play: pair chemistry, grudges, pacts, the scene waiting on the map and the scrapbook (core/partyLife). */
   partyLife: PartyLifeStateSchema.default(() => createPartyLife()),
   /** The day counter and time of day (core/clock.ts); time passes only with the player's actions. */
-  clock: z.object({ day: z.number().int().min(1), tick: z.number().int().min(0).max(3), celebrated: z.array(z.number().int()) }).default(() => ({ day: 1, tick: 0, celebrated: [] })),
+  clock: z.object({ day: z.number().int().min(1), tick: z.number().int().min(0).max(3), celebrated: z.array(z.number().int()), lastBattleDay: z.number().int().optional() }).default(() => ({ day: 1, tick: 0, celebrated: [] })),
   /** The real-world date as the host last gave it ("MM-DD"), and the date the run began. The core never reads a clock: the host passes the date in (core/clock.ts setCalendar). */
   calendar: z.object({ today: z.string().nullable(), startedOn: z.string().nullable() }).default(() => ({ today: null, startedOn: null })),
   /** An earlier run's rival whose character may shape one of this run's rivals (picked at the start from the account archive; null: none). */
