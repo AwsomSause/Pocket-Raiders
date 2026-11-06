@@ -334,5 +334,111 @@
     "when": []
    }
   ]
+ },
+ {
+  "id": "bs_aether",
+  "nameKey": "bs.aether.name",
+  "signatureProp": "prop_zero_stitch",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_subject_zero",
+   "ev_familiar_voice",
+   "ev_humanitys_question",
+   "ev_proto_1",
+   "ev_calibration",
+   "ev_subject_four",
+   "ev_audio_log_1",
+   "ev_decommission"
+  ],
+  "echoEvents": [
+   "ev_echo_aether_01",
+   "ev_echo_aether_02",
+   "ev_echo_aether_03"
+  ],
+  "encounterPools": [
+   "enc_gene_spliced",
+   "enc_containment_squad"
+  ],
+  "remembranceUnlocks": [
+   "rm_ralts",
+   "rm_porygon"
+  ],
+  "exclusiveItem": "item_concordance_core",
+  "endings": [
+   "end_own_choice",
+   "end_proof",
+   "end_integration",
+   "end_dissolve"
+  ],
+  "catchAllEnding": "end_dissolve",
+  "endingGrid": [
+   {
+    "ending": "end_own_choice",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 70
+     }
+    ]
+   },
+   {
+    "ending": "end_proof",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "false"
+     },
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "ending": "end_proof",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "inverted"
+     },
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "ending": "end_integration",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   },
+   {
+    "ending": "end_dissolve",
+    "when": []
+   }
+  ]
  }
 ]

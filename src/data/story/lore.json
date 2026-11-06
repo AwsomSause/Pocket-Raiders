@@ -264,5 +264,105 @@
     ]
    }
   ]
+ },
+ {
+  "id": "lore_concordance",
+  "category": 3,
+  "nameKey": "lore.lore_concordance.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified",
+   "contested"
+  ],
+  "sources": [
+   "ch_okoro",
+   "ch_iris_vandermeer"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_concordance.i1",
+    "sources": [
+     "ch_okoro"
+    ]
+   },
+   {
+    "textKey": "lore.lore_concordance.i2",
+    "sources": [
+     "ch_iris_vandermeer"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_sound_of_quiet",
+  "category": 9,
+  "nameKey": "lore.lore_sound_of_quiet.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_okoro"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_sound_of_quiet.i1",
+    "sources": [
+     "ch_okoro"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_vance_reviewed",
+  "category": 5,
+  "nameKey": "lore.lore_vance_reviewed.name",
+  "states": [
+   "rumor",
+   "known"
+  ],
+  "sources": [
+   "ch_okoro"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_vance_reviewed.i1",
+    "sources": [
+     "ch_okoro"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_aether_division",
+  "category": 2,
+  "nameKey": "lore.lore_aether_division.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_castellan",
+   "ch_okoro"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_aether_division.i1",
+    "sources": [
+     "ch_castellan"
+    ]
+   }
+  ]
  }
 ]

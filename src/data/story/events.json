@@ -6880,5 +6880,2211 @@
   "tier": "A",
   "moment": "landmark",
   "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_intro_aether",
+  "v": 1,
+  "tags": [
+   "intro"
+  ],
+  "requires": [],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_intro_aether_b1",
+    "kind": "line",
+    "line": "dlg_ev_intro_aether_b1"
+   },
+   {
+    "id": "ev_intro_aether_b2",
+    "kind": "narration",
+    "textKey": "ev_intro_aether.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "starts",
+    "textKey": "ev_intro_aether.c.starts",
+    "effects": [
+     {
+      "id": "ev_intro_aether_starts_1",
+      "kind": "add_counter",
+      "counter": "resolve",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "ends",
+    "textKey": "ev_intro_aether.c.ends",
+    "effects": [
+     {
+      "id": "ev_intro_aether_ends_1",
+      "kind": "add_counter",
+      "counter": "independence",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "dont_know",
+    "textKey": "ev_intro_aether.c.dont_know",
+    "effects": [
+     {
+      "id": "ev_intro_aether_dont_know_1",
+      "kind": "add_counter",
+      "counter": "curiosity",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_intro_aether_out_1",
+    "kind": "set_flag",
+    "key": "bs_aether_intro",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_intro_aether_vance_v1",
+    "textKey": "ev_intro_aether.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_aether_vance_v2",
+    "textKey": "ev_intro_aether.vance.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_aether_vance_v3",
+    "textKey": "ev_intro_aether.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 1
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_subject_zero",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "files": {
+    "character": "ch_okoro"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_subject_zero_b1",
+    "kind": "narration",
+    "textKey": "ev_subject_zero.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "read",
+    "textKey": "ev_subject_zero.c.read",
+    "effects": [
+     {
+      "id": "ev_subject_zero_read_1",
+      "kind": "add_counter",
+      "counter": "files_found",
+      "amount": 1
+     },
+     {
+      "id": "ev_subject_zero_read_2",
+      "kind": "unlock_lore",
+      "lore": "lore_concordance",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "copy",
+    "textKey": "ev_subject_zero.c.copy",
+    "effects": [
+     {
+      "id": "ev_subject_zero_copy_1",
+      "kind": "add_counter",
+      "counter": "files_found",
+      "amount": 1
+     },
+     {
+      "id": "ev_subject_zero_copy_2",
+      "kind": "add_counter",
+      "counter": "intel",
+      "amount": 1
+     },
+     {
+      "id": "ev_subject_zero_copy_3",
+      "kind": "unlock_lore",
+      "lore": "lore_concordance",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "burn",
+    "textKey": "ev_subject_zero.c.burn",
+    "effects": [
+     {
+      "id": "ev_subject_zero_burn_1",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 6
+     },
+     {
+      "id": "ev_subject_zero_burn_2",
+      "kind": "add_counter",
+      "counter": "intel",
+      "amount": -1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_subject_zero_out_1",
+    "kind": "set_flag",
+    "key": "seen_subject_zero",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "files",
+    "id": "ev_subject_zero_files_v1",
+    "textKey": "ev_subject_zero.files.v1",
+    "when": []
+   },
+   {
+    "role": "files",
+    "id": "ev_subject_zero_files_v2",
+    "textKey": "ev_subject_zero.files.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "files",
+    "id": "ev_subject_zero_files_v3",
+    "textKey": "ev_subject_zero.files.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "files_found",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_familiar_voice",
+  "v": 1,
+  "tags": [
+   "character",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "okoro": {
+    "character": "ch_okoro"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_familiar_voice_b1",
+    "kind": "line",
+    "line": "dlg_ev_familiar_voice_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "listen",
+    "textKey": "ev_familiar_voice.c.listen",
+    "effects": [
+     {
+      "id": "ev_familiar_voice_listen_1",
+      "kind": "add_relationship",
+      "character": "ch_okoro",
+      "attr": "trust",
+      "amount": 5
+     }
+    ]
+   },
+   {
+    "id": "challenge",
+    "textKey": "ev_familiar_voice.c.challenge",
+    "effects": [
+     {
+      "id": "ev_familiar_voice_challenge_1",
+      "kind": "add_relationship",
+      "character": "ch_okoro",
+      "attr": "suspicion",
+      "amount": 10
+     }
+    ]
+   },
+   {
+    "id": "walk_away",
+    "textKey": "ev_familiar_voice.c.walk_away",
+    "effects": [
+     {
+      "id": "ev_familiar_voice_walk_away_1",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "ask_truth",
+    "textKey": "ev_familiar_voice.c.ask_truth",
+    "effects": [
+     {
+      "id": "ev_familiar_voice_ask_truth_1",
+      "kind": "set_flag",
+      "key": "premise_known",
+      "value": true
+     },
+     {
+      "id": "ev_familiar_voice_ask_truth_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 4
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_familiar_voice_out_1",
+    "kind": "set_flag",
+    "key": "met_okoro",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "okoro",
+    "id": "ev_familiar_voice_okoro_v1",
+    "textKey": "ev_familiar_voice.okoro.v1",
+    "when": []
+   },
+   {
+    "role": "okoro",
+    "id": "ev_familiar_voice_okoro_v2",
+    "textKey": "ev_familiar_voice.okoro.v2",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "true"
+     }
+    ]
+   },
+   {
+    "role": "okoro",
+    "id": "ev_familiar_voice_okoro_v3",
+    "textKey": "ev_familiar_voice.okoro.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "partial"
+     }
+    ]
+   },
+   {
+    "role": "okoro",
+    "id": "ev_familiar_voice_okoro_v4",
+    "textKey": "ev_familiar_voice.okoro.v4",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "inverted"
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_humanitys_question",
+  "v": 1,
+  "tags": [
+   "wild",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "ralts": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_humanitys_question_b1",
+    "kind": "narration",
+    "textKey": "ev_humanitys_question.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "investigate",
+    "textKey": "ev_humanitys_question.c.investigate",
+    "effects": [
+     {
+      "id": "ev_humanitys_question_investigate_1",
+      "kind": "unlock",
+      "what": "remembrance",
+      "target": "rm_ralts"
+     },
+     {
+      "id": "ev_humanitys_question_investigate_2",
+      "kind": "add_counter",
+      "counter": "files_found",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "reject",
+    "textKey": "ev_humanitys_question.c.reject",
+    "effects": []
+   },
+   {
+    "id": "tell_vance",
+    "textKey": "ev_humanitys_question.c.tell_vance",
+    "effects": [
+     {
+      "id": "ev_humanitys_question_tell_vance_1",
+      "kind": "set_flag",
+      "key": "professor_knew",
+      "value": true
+     },
+     {
+      "id": "ev_humanitys_question_tell_vance_2",
+      "kind": "unlock_lore",
+      "lore": "lore_vance_reviewed",
+      "state": "known"
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "ralts",
+    "id": "ev_humanitys_question_ralts_v1",
+    "textKey": "ev_humanitys_question.ralts.v1",
+    "when": []
+   },
+   {
+    "role": "ralts",
+    "id": "ev_humanitys_question_ralts_v2",
+    "textKey": "ev_humanitys_question.ralts.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "ralts",
+    "id": "ev_humanitys_question_ralts_v3",
+    "textKey": "ev_humanitys_question.ralts.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_proto_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_proto",
+   "lab"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "proto": {
+    "character": "ch_proto"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_proto_1_b1",
+    "kind": "narration",
+    "textKey": "ev_proto_1.b1"
+   },
+   {
+    "id": "ev_proto_1_b2",
+    "kind": "narration",
+    "textKey": "ev_proto_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_proto_1_out_1",
+    "kind": "add_counter",
+    "counter": "proto_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "proto",
+    "id": "ev_proto_1_proto_v1",
+    "textKey": "ev_proto_1.proto.v1",
+    "when": []
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_1_proto_v2",
+    "textKey": "ev_proto_1.proto.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_1_proto_v3",
+    "textKey": "ev_proto_1.proto.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "proto_trust",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_proto_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_proto",
+   "lab"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "proto": {
+    "character": "ch_proto"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_proto_2_b1",
+    "kind": "narration",
+    "textKey": "ev_proto_2.b1"
+   },
+   {
+    "id": "ev_proto_2_b2",
+    "kind": "narration",
+    "textKey": "ev_proto_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_proto_2_out_1",
+    "kind": "add_counter",
+    "counter": "proto_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "proto",
+    "id": "ev_proto_2_proto_v1",
+    "textKey": "ev_proto_2.proto.v1",
+    "when": []
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_2_proto_v2",
+    "textKey": "ev_proto_2.proto.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_2_proto_v3",
+    "textKey": "ev_proto_2.proto.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "proto_trust",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_proto_3",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_proto",
+   "lab"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "proto": {
+    "character": "ch_proto"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_proto_3_b1",
+    "kind": "narration",
+    "textKey": "ev_proto_3.b1"
+   },
+   {
+    "id": "ev_proto_3_b2",
+    "kind": "narration",
+    "textKey": "ev_proto_3.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_proto_3_out_1",
+    "kind": "add_counter",
+    "counter": "proto_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "proto",
+    "id": "ev_proto_3_proto_v1",
+    "textKey": "ev_proto_3.proto.v1",
+    "when": []
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_3_proto_v2",
+    "textKey": "ev_proto_3.proto.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_3_proto_v3",
+    "textKey": "ev_proto_3.proto.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "proto_trust",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_proto_4",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_proto",
+   "lab"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "proto": {
+    "character": "ch_proto"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_proto_4_b1",
+    "kind": "narration",
+    "textKey": "ev_proto_4.b1"
+   },
+   {
+    "id": "ev_proto_4_b2",
+    "kind": "narration",
+    "textKey": "ev_proto_4.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "stabilize",
+    "textKey": "ev_proto_4.c.stabilize",
+    "effects": [
+     {
+      "id": "ev_proto_4_stabilize_1",
+      "kind": "unlock",
+      "what": "remembrance",
+      "target": "rm_porygon"
+     },
+     {
+      "id": "ev_proto_4_stabilize_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 6
+     },
+     {
+      "id": "ev_proto_4_stabilize_3",
+      "kind": "set_flag",
+      "key": "proto_state",
+      "value": "partner"
+     }
+    ]
+   },
+   {
+    "id": "retrieve",
+    "textKey": "ev_proto_4.c.retrieve",
+    "effects": [
+     {
+      "id": "ev_proto_4_retrieve_1",
+      "kind": "set_flag",
+      "key": "proto_state",
+      "value": "retrieved"
+     },
+     {
+      "id": "ev_proto_4_retrieve_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": -6
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_proto_4_out_1",
+    "kind": "chronicle",
+    "entry": "chr_proto"
+   }
+  ],
+  "variants": [
+   {
+    "role": "proto",
+    "id": "ev_proto_4_proto_v1",
+    "textKey": "ev_proto_4.proto.v1",
+    "when": []
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_4_proto_v2",
+    "textKey": "ev_proto_4.proto.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "proto",
+    "id": "ev_proto_4_proto_v3",
+    "textKey": "ev_proto_4.proto.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "proto_trust",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "major",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_calibration",
+  "v": 1,
+  "tags": [
+   "checkpoint",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "iris": {
+    "character": "ch_iris_vandermeer"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_calibration_b1",
+    "kind": "narration",
+    "textKey": "ev_calibration.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "honest",
+    "textKey": "ev_calibration.c.honest",
+    "effects": [
+     {
+      "id": "ev_calibration_honest_1",
+      "kind": "add_counter",
+      "counter": "telemetry",
+      "amount": 1
+     },
+     {
+      "id": "ev_calibration_honest_2",
+      "kind": "add_relationship",
+      "character": "ch_iris_vandermeer",
+      "attr": "trust",
+      "amount": 15
+     }
+    ]
+   },
+   {
+    "id": "cheat",
+    "textKey": "ev_calibration.c.cheat",
+    "effects": [
+     {
+      "id": "ev_calibration_cheat_1",
+      "kind": "set_flag",
+      "key": "hacker_debt",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "refuse",
+    "textKey": "ev_calibration.c.refuse",
+    "effects": [
+     {
+      "id": "ev_calibration_refuse_1",
+      "kind": "add_relationship",
+      "character": "ch_iris_vandermeer",
+      "attr": "suspicion",
+      "amount": 10
+     },
+     {
+      "id": "ev_calibration_refuse_2",
+      "kind": "add_counter",
+      "counter": "telemetry",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_calibration_out_1",
+    "kind": "set_flag",
+    "key": "calibrated",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "iris",
+    "id": "ev_calibration_iris_v1",
+    "textKey": "ev_calibration.iris.v1",
+    "when": []
+   },
+   {
+    "role": "iris",
+    "id": "ev_calibration_iris_v2",
+    "textKey": "ev_calibration.iris.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "iris",
+    "id": "ev_calibration_iris_v3",
+    "textKey": "ev_calibration.iris.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_subject_four",
+  "v": 1,
+  "tags": [
+   "character",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "odile": {
+    "character": "ch_odile"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_subject_four_b1",
+    "kind": "line",
+    "line": "dlg_ev_subject_four_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "befriend",
+    "textKey": "ev_subject_four.c.befriend",
+    "effects": [
+     {
+      "id": "ev_subject_four_befriend_1",
+      "kind": "set_flag",
+      "key": "odile_state",
+      "value": "ally"
+     },
+     {
+      "id": "ev_subject_four_befriend_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 6
+     },
+     {
+      "id": "ev_subject_four_befriend_3",
+      "kind": "add_relationship",
+      "character": "ch_odile",
+      "attr": "affection",
+      "amount": 20
+     }
+    ]
+   },
+   {
+    "id": "warn",
+    "textKey": "ev_subject_four.c.warn",
+    "effects": [
+     {
+      "id": "ev_subject_four_warn_1",
+      "kind": "set_flag",
+      "key": "odile_state",
+      "value": "warned"
+     },
+     {
+      "id": "ev_subject_four_warn_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 3
+     }
+    ]
+   },
+   {
+    "id": "abandon",
+    "textKey": "ev_subject_four.c.abandon",
+    "effects": [
+     {
+      "id": "ev_subject_four_abandon_1",
+      "kind": "set_flag",
+      "key": "odile_state",
+      "value": "enemy"
+     },
+     {
+      "id": "ev_subject_four_abandon_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": -8
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_subject_four_out_1",
+    "kind": "set_flag",
+    "key": "met_odile",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "odile",
+    "id": "ev_subject_four_odile_v1",
+    "textKey": "ev_subject_four.odile.v1",
+    "when": []
+   },
+   {
+    "role": "odile",
+    "id": "ev_subject_four_odile_v2",
+    "textKey": "ev_subject_four.odile.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "odile",
+    "id": "ev_subject_four_odile_v3",
+    "textKey": "ev_subject_four.odile.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_audio_log_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_audio_logs",
+   "discovery"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "log": {
+    "character": "ch_okoro"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_audio_log_1_b1",
+    "kind": "narration",
+    "textKey": "ev_audio_log_1.b1"
+   },
+   {
+    "id": "ev_audio_log_1_b2",
+    "kind": "narration",
+    "textKey": "ev_audio_log_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_audio_log_1_out_1",
+    "kind": "add_counter",
+    "counter": "logs_found",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "log",
+    "id": "ev_audio_log_1_log_v1",
+    "textKey": "ev_audio_log_1.log.v1",
+    "when": []
+   },
+   {
+    "role": "log",
+    "id": "ev_audio_log_1_log_v2",
+    "textKey": "ev_audio_log_1.log.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "log",
+    "id": "ev_audio_log_1_log_v3",
+    "textKey": "ev_audio_log_1.log.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise_known",
+      "op": "==",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_audio_log_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_audio_logs",
+   "discovery"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "log": {
+    "character": "ch_okoro"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_audio_log_2_b1",
+    "kind": "narration",
+    "textKey": "ev_audio_log_2.b1"
+   },
+   {
+    "id": "ev_audio_log_2_b2",
+    "kind": "narration",
+    "textKey": "ev_audio_log_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_audio_log_2_out_1",
+    "kind": "add_counter",
+    "counter": "logs_found",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "log",
+    "id": "ev_audio_log_2_log_v1",
+    "textKey": "ev_audio_log_2.log.v1",
+    "when": []
+   },
+   {
+    "role": "log",
+    "id": "ev_audio_log_2_log_v2",
+    "textKey": "ev_audio_log_2.log.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "log",
+    "id": "ev_audio_log_2_log_v3",
+    "textKey": "ev_audio_log_2.log.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise_known",
+      "op": "==",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_audio_log_3",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_audio_logs",
+   "discovery"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "log": {
+    "character": "ch_okoro"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_audio_log_3_b1",
+    "kind": "narration",
+    "textKey": "ev_audio_log_3.b1"
+   },
+   {
+    "id": "ev_audio_log_3_b2",
+    "kind": "narration",
+    "textKey": "ev_audio_log_3.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_audio_log_3_out_1",
+    "kind": "add_counter",
+    "counter": "logs_found",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "log",
+    "id": "ev_audio_log_3_log_v1",
+    "textKey": "ev_audio_log_3.log.v1",
+    "when": []
+   },
+   {
+    "role": "log",
+    "id": "ev_audio_log_3_log_v2",
+    "textKey": "ev_audio_log_3.log.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "log",
+    "id": "ev_audio_log_3_log_v3",
+    "textKey": "ev_audio_log_3.log.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise_known",
+      "op": "==",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_decommission",
+  "v": 1,
+  "tags": [
+   "confrontation",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "castellan": {
+    "character": "ch_castellan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_decommission_b1",
+    "kind": "line",
+    "line": "dlg_ev_decommission_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "surrender",
+    "textKey": "ev_decommission.c.surrender",
+    "effects": [
+     {
+      "id": "ev_decommission_surrender_1",
+      "kind": "set_flag",
+      "key": "decommission",
+      "value": "captive"
+     },
+     {
+      "id": "ev_decommission_surrender_2",
+      "kind": "add_counter",
+      "counter": "humanity",
+      "amount": 0
+     }
+    ],
+    "goto": "arc_captive"
+   },
+   {
+    "id": "run",
+    "textKey": "ev_decommission.c.run",
+    "effects": [
+     {
+      "id": "ev_decommission_run_1",
+      "kind": "set_flag",
+      "key": "decommission",
+      "value": "chase"
+     },
+     {
+      "id": "ev_decommission_run_2",
+      "kind": "add_counter",
+      "counter": "telemetry",
+      "amount": 1
+     }
+    ],
+    "goto": "ev_chase"
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "castellan",
+    "id": "ev_decommission_castellan_v1",
+    "textKey": "ev_decommission.castellan.v1",
+    "when": []
+   },
+   {
+    "role": "castellan",
+    "id": "ev_decommission_castellan_v2",
+    "textKey": "ev_decommission.castellan.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "castellan",
+    "id": "ev_decommission_castellan_v3",
+    "textKey": "ev_decommission.castellan.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_captive_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_captive"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "warden": {
+    "character": "ch_castellan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_captive_1_b1",
+    "kind": "narration",
+    "textKey": "ev_captive_1.b1"
+   },
+   {
+    "id": "ev_captive_1_b2",
+    "kind": "narration",
+    "textKey": "ev_captive_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_captive_1_out_1",
+    "kind": "unlock_lore",
+    "lore": "lore_concordance",
+    "state": "verified"
+   }
+  ],
+  "variants": [
+   {
+    "role": "warden",
+    "id": "ev_captive_1_warden_v1",
+    "textKey": "ev_captive_1.warden.v1",
+    "when": []
+   },
+   {
+    "role": "warden",
+    "id": "ev_captive_1_warden_v2",
+    "textKey": "ev_captive_1.warden.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "warden",
+    "id": "ev_captive_1_warden_v3",
+    "textKey": "ev_captive_1.warden.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 60
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_captive_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_captive"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "warden": {
+    "character": "ch_castellan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_captive_2_b1",
+    "kind": "narration",
+    "textKey": "ev_captive_2.b1"
+   },
+   {
+    "id": "ev_captive_2_b2",
+    "kind": "narration",
+    "textKey": "ev_captive_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_captive_2_out_1",
+    "kind": "unlock_lore",
+    "lore": "lore_concordance",
+    "state": "verified"
+   }
+  ],
+  "variants": [
+   {
+    "role": "warden",
+    "id": "ev_captive_2_warden_v1",
+    "textKey": "ev_captive_2.warden.v1",
+    "when": []
+   },
+   {
+    "role": "warden",
+    "id": "ev_captive_2_warden_v2",
+    "textKey": "ev_captive_2.warden.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "warden",
+    "id": "ev_captive_2_warden_v3",
+    "textKey": "ev_captive_2.warden.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 60
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_chase",
+  "v": 1,
+  "tags": [
+   "chase",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "squad": {
+    "character": "ch_castellan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_chase_b1",
+    "kind": "narration",
+    "textKey": "ev_chase.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_chase_out_1",
+    "kind": "add_counter",
+    "counter": "telemetry",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "squad",
+    "id": "ev_chase_squad_v1",
+    "textKey": "ev_chase.squad.v1",
+    "when": []
+   },
+   {
+    "role": "squad",
+    "id": "ev_chase_squad_v2",
+    "textKey": "ev_chase.squad.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "squad",
+    "id": "ev_chase_squad_v3",
+    "textKey": "ev_chase.squad.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "odile_state",
+      "op": "==",
+      "value": "ally"
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_echo_aether_01",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_iris_vandermeer"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_aether_01_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_aether_01.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_01_speaker_v1",
+    "textKey": "ev_echo_aether_01.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_01_speaker_v2",
+    "textKey": "ev_echo_aether_01.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_01_speaker_v3",
+    "textKey": "ev_echo_aether_01.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "telemetry",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_echo_aether_02",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_odile"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_aether_02_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_aether_02.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_02_speaker_v1",
+    "textKey": "ev_echo_aether_02.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_02_speaker_v2",
+    "textKey": "ev_echo_aether_02.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_02_speaker_v3",
+    "textKey": "ev_echo_aether_02.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "telemetry",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_echo_aether_03",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_castellan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_aether_03_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_aether_03.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_03_speaker_v1",
+    "textKey": "ev_echo_aether_03.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_03_speaker_v2",
+    "textKey": "ev_echo_aether_03.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_aether_03_speaker_v3",
+    "textKey": "ev_echo_aether_03.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "telemetry",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_mod_aether",
+  "v": 1,
+  "tags": [
+   "modifier",
+   "system"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "roles": {},
+  "beats": [],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_mod_aether_out_1",
+    "kind": "add_relationship",
+    "character": "class_rival",
+    "attr": "suspicion",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_aether_out_2",
+    "kind": "add_relationship",
+    "character": "class_researcher",
+    "attr": "trust",
+    "amount": 10
+   },
+   {
+    "id": "ev_mod_aether_out_3",
+    "kind": "add_relationship",
+    "character": "class_researcher",
+    "attr": "fear",
+    "amount": 10
+   },
+   {
+    "id": "ev_mod_aether_out_4",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "curiosity",
+    "amount": 3
+   }
+  ],
+  "variants": [],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_end_own_choice",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_own_choice_b1",
+    "kind": "narration",
+    "textKey": "ev_end_own_choice.b1"
+   },
+   {
+    "id": "ev_end_own_choice_b2",
+    "kind": "narration",
+    "textKey": "ev_end_own_choice.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_own_choice_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_own_choice"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_own_choice_narrator_v1",
+    "textKey": "ev_end_own_choice.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_own_choice_narrator_v2",
+    "textKey": "ev_end_own_choice.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_own_choice_narrator_v3",
+    "textKey": "ev_end_own_choice.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_end_proof",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_proof_b1",
+    "kind": "narration",
+    "textKey": "ev_end_proof.b1"
+   },
+   {
+    "id": "ev_end_proof_b2",
+    "kind": "narration",
+    "textKey": "ev_end_proof.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_proof_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_proof"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_proof_narrator_v1",
+    "textKey": "ev_end_proof.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_proof_narrator_v2",
+    "textKey": "ev_end_proof.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_proof_narrator_v3",
+    "textKey": "ev_end_proof.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_end_integration",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_integration_b1",
+    "kind": "narration",
+    "textKey": "ev_end_integration.b1"
+   },
+   {
+    "id": "ev_end_integration_b2",
+    "kind": "narration",
+    "textKey": "ev_end_integration.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_integration_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_integration"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_integration_narrator_v1",
+    "textKey": "ev_end_integration.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_integration_narrator_v2",
+    "textKey": "ev_end_integration.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_integration_narrator_v3",
+    "textKey": "ev_end_integration.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_end_dissolve",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_dissolve_b1",
+    "kind": "narration",
+    "textKey": "ev_end_dissolve.b1"
+   },
+   {
+    "id": "ev_end_dissolve_b2",
+    "kind": "narration",
+    "textKey": "ev_end_dissolve.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_dissolve_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_dissolve"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_dissolve_narrator_v1",
+    "textKey": "ev_end_dissolve.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_dissolve_narrator_v2",
+    "textKey": "ev_end_dissolve.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_aether"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_dissolve_narrator_v3",
+    "textKey": "ev_end_dissolve.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_aether"
  }
 ]
