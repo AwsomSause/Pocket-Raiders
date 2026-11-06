@@ -1,0 +1,194 @@
+{
+  "note": "Voice archetypes (Story Overhaul W1, design 14.3). Voice is dialogue colour and trait targets only; battle behaviour stays in rivalProfiles personalities and styles.",
+  "voices": [
+    {
+      "id": "competitive",
+      "traits": {
+        "ambition": 85,
+        "pride": 60
+      },
+      "personalities": [
+        "prodigy",
+        "speedrunner",
+        "perpetual-runner-up"
+      ],
+      "styles": [
+        "snowball",
+        "blitz"
+      ]
+    },
+    {
+      "id": "arrogant",
+      "traits": {
+        "pride": 90,
+        "empathy": 30
+      },
+      "personalities": [
+        "showboat",
+        "social-climber",
+        "prodigy"
+      ],
+      "styles": [
+        "ace-centric"
+      ]
+    },
+    {
+      "id": "friendly",
+      "traits": {
+        "empathy": 80,
+        "pride": 30
+      },
+      "personalities": [
+        "golden-retriever",
+        "people-pleaser",
+        "gentle-giant"
+      ],
+      "styles": [
+        "trust-fighter"
+      ]
+    },
+    {
+      "id": "ruthless",
+      "traits": {
+        "vindictiveness": 80,
+        "empathy": 20
+      },
+      "personalities": [
+        "avenger",
+        "pragmatist",
+        "control-freak"
+      ],
+      "styles": [
+        "executioner",
+        "revenge-striker"
+      ]
+    },
+    {
+      "id": "mysterious",
+      "traits": {
+        "adaptability": 70,
+        "pride": 35
+      },
+      "personalities": [
+        "quiet-observer",
+        "loner",
+        "secret-softie"
+      ],
+      "styles": [
+        "anti-meta",
+        "scout"
+      ]
+    },
+    {
+      "id": "intellectual",
+      "traits": {
+        "adaptability": 85,
+        "ambition": 60
+      },
+      "personalities": [
+        "scholar",
+        "tactician",
+        "innovator"
+      ],
+      "styles": [
+        "counter-builder",
+        "stallbreaker"
+      ]
+    },
+    {
+      "id": "insecure",
+      "traits": {
+        "resilience": 30,
+        "pride": 55
+      },
+      "personalities": [
+        "underdog",
+        "self-saboteur",
+        "burnout"
+      ],
+      "styles": [
+        "last-stand",
+        "gambit"
+      ]
+    },
+    {
+      "id": "idealistic",
+      "traits": {
+        "empathy": 65,
+        "resilience": 70
+      },
+      "personalities": [
+        "idealist",
+        "spiritualist",
+        "fallen-idealist"
+      ],
+      "styles": [
+        "protector",
+        "guardian"
+      ]
+    },
+    {
+      "id": "reckless",
+      "traits": {
+        "adaptability": 30,
+        "ambition": 65
+      },
+      "personalities": [
+        "gambler",
+        "chaos-agent",
+        "speedrunner"
+      ],
+      "styles": [
+        "berserker",
+        "improviser"
+      ]
+    },
+    {
+      "id": "manipulative",
+      "traits": {
+        "adaptability": 80,
+        "empathy": 25
+      },
+      "personalities": [
+        "tease",
+        "control-freak",
+        "former-antagonist"
+      ],
+      "styles": [
+        "disruptor",
+        "bond-breaker"
+      ]
+    },
+    {
+      "id": "stoic",
+      "traits": {
+        "resilience": 85,
+        "empathy": 40
+      },
+      "personalities": [
+        "ice-queen-king",
+        "veteran",
+        "traditionalist"
+      ],
+      "styles": [
+        "fortress",
+        "attrition"
+      ]
+    },
+    {
+      "id": "obsessive",
+      "traits": {
+        "ambition": 90,
+        "vindictiveness": 60
+      },
+      "personalities": [
+        "obsessive",
+        "avenger",
+        "collector"
+      ],
+      "styles": [
+        "specialist"
+      ]
+    }
+  ]
+}

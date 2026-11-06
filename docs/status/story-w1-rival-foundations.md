@@ -1,0 +1,8 @@
+# W1: Rival and trainer foundations
+
+- **Pool as data** (`majorRivals.json` `poolClass`): primary (Blue, Silver, Wally, Gladion, Bede, Hop, Nemona, Hugh), secondary (Gary, Barry, Cheren, Bianca, Hau, Calem, Brendan, May), special (N, Kieran, need `approved: true`). `rivals/pool.ts`: `poolFor(slot)`, `isMainEligible`, `pickMainRival(seed, mode)`. Main draws only from primary; special never fills the main slot. Story picks a fixed main rival from its own seeded stream; **Classic returns null and keeps its random rival draw** (Kice). A used character is skipped.
+- **12 voices** (`rivalVoices.json`, `rivals/voice.ts`): trait targets, personalities, styles; optional `Rival.voice`; `voiceOf` derives one when absent. Dialogue colour only.
+- **Importance I1 to I4** (`rivals/importance.ts`): derived `importanceOf(facts)`, never stored.
+- **Reputation** (`rivalReputation.json`, `rivals/reputation.ts`): 7 counters in `run.story.flags` (`rep:<cat>`), per-region cap per category, levels, 20 recognition lines, `recognitionLine` once per trainer per category. No save change.
+- Limits: only the Rival source is fed so far (rival won +5, major rival third defeat +15, wired in `story/hooks.ts`). Champion, Bond, Villain, Strategy, Exploration and Legendary sources arrive with the slices that own those events (W5-W7, S tracks). Nothing calls `pickMainRival` or `recognitionLine` yet: the story blueprint (S track) and trainer-opening dialogue read them. Brendan/May/Hugh/N/Kieran are not in the trainer class `rival` name list, so Classic never draws them.
+- Tests: `tests/unit/rivalFoundation.test.ts`.

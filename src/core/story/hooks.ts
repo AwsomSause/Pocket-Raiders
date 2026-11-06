@@ -45,6 +45,7 @@ import { memoryAfterBattle } from '../memories/encounters';
 import { nemesisAfterBattle, noteNemesisBreakFree, noteNemesisFaint, noteRivalResult } from './nemesis';
 import type { Rival, StoryEventDefinition, StoryTriggerKind, Where } from './schema';
 import { rivalProgress } from '../rivals/progression';
+import { addReputation } from '../rivals/reputation';
 import { createMajorRival, learnFromBattle, recordAce, type Knockout } from '../rivals/major';
 import { maybeFormMonRival, monRivalAfterBattle, monRivalCandidate } from '../rivals/monRivals';
 import { recordSacrifice } from '../rivals/sacrifice';
@@ -608,6 +609,11 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   if (rivalBack && (result === 'win' || result === 'lose')) {
     const hpShare = totalHp > 0 ? Math.round((hpLeft / totalHp) * 100) / 100 : 0;
     noteRivalResult(run, rivalBack.id, result === 'win');
+    // W1 reputation: beating a rival counts; the major rival's third defeat counts more (once).
+    if (result === 'win') {
+      addReputation(run, 'rival', 'rivalWon');
+      if (rivalBack.major && Number(run.story.flags[`rivalW:${rivalBack.id}`] ?? 0) === 3) addReputation(run, 'rival', 'majorRivalThrice');
+    }
     // A narrative defeat (M12) is the rival's story win, not an ordinary one.
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
     rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };

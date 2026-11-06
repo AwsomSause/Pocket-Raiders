@@ -1,0 +1,222 @@
+{
+  "note": "Reputation (Story Overhaul W1, design 14.9). Counters live in run.story.flags as rep:<category>; no save change.",
+  "categories": {
+    "champion": {
+      "cap": 25,
+      "levels": {
+        "noted": 20,
+        "known": 45,
+        "renowned": 75
+      }
+    },
+    "rival": {
+      "cap": 25,
+      "levels": {
+        "noted": 20,
+        "known": 45,
+        "renowned": 75
+      }
+    },
+    "bond": {
+      "cap": 25,
+      "levels": {
+        "noted": 20,
+        "known": 45,
+        "renowned": 75
+      }
+    },
+    "villain": {
+      "cap": 25,
+      "levels": {
+        "noted": 20,
+        "known": 45,
+        "renowned": 75
+      }
+    },
+    "strategy": {
+      "cap": 20,
+      "levels": {
+        "noted": 20,
+        "known": 45,
+        "renowned": 75
+      }
+    },
+    "exploration": {
+      "cap": 25,
+      "levels": {
+        "noted": 20,
+        "known": 45,
+        "renowned": 75
+      }
+    },
+    "legendary": {
+      "cap": 30,
+      "levels": {
+        "noted": 20,
+        "known": 40,
+        "renowned": 60
+      }
+    }
+  },
+  "gains": {
+    "eliteBeaten": 6,
+    "championBeaten": 25,
+    "rivalWon": 5,
+    "majorRivalThrice": 15,
+    "bondMilestone": 4,
+    "hyperMoment": 3,
+    "friendshipEvolution": 5,
+    "evilTeamBeat": 8,
+    "hideoutCleared": 20,
+    "superEffectiveOnly": 3,
+    "unusualTeam": 10,
+    "dungeonDone": 10,
+    "landmark": 5,
+    "pseudoStageDone": 15,
+    "legendaryCaughtOrBeaten": 20,
+    "legendaryOwned": 10
+  },
+  "npcChance": 0.3,
+  "lines": [
+    {
+      "id": 1,
+      "category": "champion",
+      "level": "known",
+      "who": "gym",
+      "text": "You beat the Champion of the last region? Then I'll try harder."
+    },
+    {
+      "id": 2,
+      "category": "champion",
+      "level": "renowned",
+      "who": "any",
+      "text": "Three Champions fell to you. I need a minute."
+    },
+    {
+      "id": 3,
+      "category": "champion",
+      "level": "noted",
+      "who": "trainer",
+      "text": "I heard the Elite Four talked about you."
+    },
+    {
+      "id": 4,
+      "category": "rival",
+      "level": "known",
+      "who": "trainer",
+      "text": "You're the one that keeps beating {rival}, right?"
+    },
+    {
+      "id": 5,
+      "category": "rival",
+      "level": "renowned",
+      "who": "reporter",
+      "text": "A story, please. Rival's Nightmare, in your words."
+    },
+    {
+      "id": 6,
+      "category": "bond",
+      "level": "known",
+      "who": "breeder",
+      "text": "Your Pokémon look at you like family."
+    },
+    {
+      "id": 7,
+      "category": "bond",
+      "level": "renowned",
+      "who": "elder",
+      "text": "I haven't seen a bond like that in thirty years."
+    },
+    {
+      "id": 8,
+      "category": "villain",
+      "level": "known",
+      "who": "villager",
+      "text": "You took down a hideout. We heard."
+    },
+    {
+      "id": 9,
+      "category": "villain",
+      "level": "renowned",
+      "who": "grunt",
+      "text": "That's the one! Run! The boss will want to know!"
+    },
+    {
+      "id": 10,
+      "category": "strategy",
+      "level": "known",
+      "who": "scholar",
+      "text": "A mono-type team. That takes nerve."
+    },
+    {
+      "id": 11,
+      "category": "strategy",
+      "level": "noted",
+      "who": "gym",
+      "text": "Super effective, every time? Rude. I'm impressed."
+    },
+    {
+      "id": 12,
+      "category": "strategy",
+      "level": "renowned",
+      "who": "analyst",
+      "text": "I read your battles. They read like an essay."
+    },
+    {
+      "id": 13,
+      "category": "exploration",
+      "level": "known",
+      "who": "hiker",
+      "text": "You came out of the old mine? Nobody comes out."
+    },
+    {
+      "id": 14,
+      "category": "exploration",
+      "level": "renowned",
+      "who": "ranger",
+      "text": "The Rangers want a map of what you've seen."
+    },
+    {
+      "id": 15,
+      "category": "legendary",
+      "level": "noted",
+      "who": "child",
+      "text": "Is it true you've seen a legend?"
+    },
+    {
+      "id": 16,
+      "category": "legendary",
+      "level": "known",
+      "who": "researcher",
+      "text": "Could I take notes? Just notes. No touching."
+    },
+    {
+      "id": 17,
+      "category": "legendary",
+      "level": "renowned",
+      "who": "elite",
+      "text": "A legend follows you. I'd like to see why."
+    },
+    {
+      "id": 18,
+      "category": "champion",
+      "level": "known",
+      "who": "rival-competitive",
+      "text": "The Champion lost to you. So I can too."
+    },
+    {
+      "id": 19,
+      "category": "rival",
+      "level": "renowned",
+      "who": "rival-insecure",
+      "text": "Everyone says your name. Mine, never."
+    },
+    {
+      "id": 20,
+      "category": "exploration",
+      "level": "known",
+      "who": "merchant",
+      "text": "A buyer who goes where others don't? Welcome."
+    }
+  ]
+}

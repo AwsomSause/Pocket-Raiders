@@ -343,6 +343,8 @@ export const RivalSchema = z.object({
   }).optional(),
   /** §10 moves it studied from you (taught to its ace as signature moves), and counters it trained for one of your Pokémon. */
   studied: z.array(z.object({ moveId: z.string(), from: z.string(), at: z.string() })).optional(),
+  /** W1: one of the 12 voice archetypes (rivalVoices.json); dialogue colour only. Derived from the personality when absent. */
+  voice: z.string().optional(),
   /** W0 observed information: attack types it has watched you use (newest last, max 40). A counter may only read this, never your live party. */
   seen: z.array(z.object({ signal: z.literal('moveType'), value: z.string(), source: z.enum(['fought', 'witnessed', 'public']), at: z.string(), uses: z.number().int().min(1) })).max(40).optional(),
   counters: z.array(z.object({ target: z.string(), targetName: z.string(), moveId: z.string(), at: z.string() })).optional(),

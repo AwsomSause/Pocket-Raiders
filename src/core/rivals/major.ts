@@ -25,7 +25,7 @@ import { RIVAL_ARCS, RIVAL_CONFIG, RIVAL_PROFILES } from './schema';
 const LinesSchema = z.object({ intro: z.string(), studied: z.string(), counter: z.string() });
 export const MajorRivalsSchema = z.object({
   note: z.string(),
-  characters: z.record(z.string(), z.object({ home: z.string(), personality: z.string(), style: z.string(), pool: z.array(z.string()).min(3), lines: LinesSchema })),
+  characters: z.record(z.string(), z.object({ home: z.string(), personality: z.string(), style: z.string(), pool: z.array(z.string()).min(3), lines: LinesSchema, poolClass: z.enum(['primary', 'secondary', 'special']), approved: z.boolean().optional() })),
   config: z.object({
     interval: z.number().int().min(1),
     aceHeldAt: z.number().int().min(0),
