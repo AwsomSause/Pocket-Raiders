@@ -356,3 +356,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `story-s13-cast.md`: Story S13 part 3: Character Database (view model, Hub Tales & News row).
 - `story-s16-cutscenes.md`: Story S16: Cutscene Manager plan/skip/reduce-motion, runner, 10 Trainer Introduction templates.
 region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and signature wilds
+- `mythical-chains.md`: 12 Mythical quest chains (clue, trial, wild Mythical battle), one per run, from stage 9.

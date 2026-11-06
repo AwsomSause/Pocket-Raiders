@@ -199,6 +199,7 @@
   "overhaulGrowth": { "enabled": true, "bonus": 0.05, "minKos": 8, "minCloseCalls": 2, "minRoleKos": 4 },
   "starterSets": { "enabled": false },
  "overhaulChains": { "enabled": true, "legendaryMinStage": 7 },
+ "mythicalChains": { "enabled": true, "minStage": 9 },
   "overhaulField": { "powerCap": 0.3, "envChance": 0.6, "conditionChance": { "mid": 0.15, "late": 0.25, "boss": 0.35 } },
   "hyperMove": { "powerBonus": 20, "pp": 5 },
  "battleRisk": {"aiWeight": 0.3, "thresholds": {"moderate": 0.8, "high": 1.1, "veryHigh": 1.4, "extreme": 1.8}, "keyMoveFactor": 1.3},
