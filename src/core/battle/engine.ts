@@ -652,7 +652,18 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     if (forcedMoveId(battle.playerVolatile)) battle.playerVolatile = freshVolatileKeeping(battle.playerVolatile);
     // A Choice item locks the move, not the Pokémon: switching and items stay open, another move becomes the locked one.
     const locked = choiceLockIndex(battle, ctx.party);
-    if (locked !== null && action.kind === 'move' && action.index !== -1 && action.index !== locked) action = { ...action, index: locked };
+    if (locked !== null && action.kind === 'move' && action.index !== -1 && action.index !== locked) {
+      // Lock Breaker (S429): it may leave the lock for a price in HP, and the new move becomes the lock.
+      const me = ctx.party[battle.activeIndex]!;
+      const cost = Held.choiceBreakCost(content, me);
+      if (cost !== null && me.hp > 1) {
+        const paid = Math.min(me.hp - 1, Math.max(1, Math.floor(maxHp(content, me) * cost)));
+        me.hp -= paid;
+        delete battle.held!.choice[me.uid];
+        events.push({ type: 'recoil', side: 'player', amount: paid, hpAfter: me.hp });
+        events.push(say('player', 'lockBreak', `${nameOf(ctx, me)} breaks its Choice lock!`, me.uid));
+      } else action = { ...action, index: locked };
+    }
     validateAction(ctx, action);
   }
   // Berserk Mode (S385): out of control, it throws its strongest move whatever you chose.

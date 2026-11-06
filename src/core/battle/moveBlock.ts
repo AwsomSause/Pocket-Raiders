@@ -3,6 +3,7 @@
 
 import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance } from '../state';
+import { choiceBreakCost } from './held';
 
 /** A short reason the move in `slot` is blocked, or null when it can be used. */
 export function moveBlockReason(content: Content, battle: BattleState, mon: PokemonInstance, slot: number): string | null {
@@ -11,7 +12,7 @@ export function moveBlockReason(content: Content, battle: BattleState, mon: Poke
   if (!known || !move) return null;
   if (known.pp <= 0) return 'no PP left';
   const lock = battle.held?.choice[mon.uid];
-  if (lock && lock !== move.id && mon.moves.some((m) => m.id === lock && m.pp > 0)) return 'Choice lock';
+  if (lock && lock !== move.id && mon.moves.some((m) => m.id === lock && m.pp > 0) && !(choiceBreakCost(content, mon) !== null && mon.hp > 1)) return 'Choice lock';
   const v = battle.playerVolatile;
   if (v.disabled && v.disabled.turns > 0 && v.disabled.moveId === move.id) return `Disabled for ${v.disabled.turns} more turn${v.disabled.turns === 1 ? '' : 's'}`;
   if (v.torment && v.lastMove === move.id) return 'Torment: it cannot repeat';

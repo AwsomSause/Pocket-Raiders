@@ -1174,6 +1174,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   }),
   /** Locked into the first move it uses until it switches out (Choice items). */
   z.object({ hook: z.literal('choiceLock') }),
+  /** Lock Breaker (S429): the holder may leave a Choice lock for another move, which becomes the new lock, for this share of its max HP (never lethal). */
+  z.object({ hook: z.literal('choiceBreak'), hpCost: z.number().min(0).max(0.5) }),
   /** More critical-hit stages; `critDamage` replaces the 1.5x of a critical hit. */
   z.object({ hook: z.literal('crit'), stages: z.number().int().min(0), critDamage: z.number().positive().optional(), /** Extra stages per critical hit in a row (up to 3): the Streak Lens (ideas W1). */ streakStages: z.number().int().min(0).optional(), species: Species }),
   /** The holder's moves are more accurate (only when it moves after the target, for the Zoom Lens). */

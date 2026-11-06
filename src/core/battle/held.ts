@@ -348,6 +348,17 @@ export function noteMoveUsed(ctx: HeldContext, user: Holder, moveId: string): vo
   if (hooks(hooksOf(ctx, user.mon, user.side), 'choiceLock').length > 0 && !state.choice[user.mon.uid]) state.choice[user.mon.uid] = moveId;
 }
 
+/** Lock Breaker (S429): the HP share it costs this holder to leave a Choice lock, or null when it can't. */
+export function choiceBreakCost(content: Content, mon: PokemonInstance): number | null {
+  let cost: number | null = null;
+  for (const [itemId, copies] of Object.entries(mon.held ?? {})) {
+    const entry = content.catalog.get(itemId);
+    if (copies <= 0 || entry?.status !== 'supported' || entry.effect?.kind !== 'held') continue;
+    for (const hook of entry.effect.hooks) if (hook.hook === 'choiceBreak') cost = cost === null ? hook.hpCost : Math.min(cost, hook.hpCost);
+  }
+  return cost;
+}
+
 /** The move a Choice item holds it to, if any. */
 export function choiceLockedMove(ctx: Pick<HeldContext, 'battle'>, mon: PokemonInstance): string | null {
   return ctx.battle.held?.choice[mon.uid] ?? null;

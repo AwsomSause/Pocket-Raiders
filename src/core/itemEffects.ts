@@ -57,6 +57,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
     }
     case 'choiceLock':
       return { text: 'It can only use the first move it picks until it switches out.', catch: 'Locked into one move per battle.' };
+    case 'choiceBreak':
+      return { text: `With a Choice item it may leave its lock for another move, which becomes the new lock. It costs ${pct(hook.hpCost * 100)} of its max HP, never a faint.`, when: 'when it picks a different move' };
     case 'crit':
       return { text: `+${hook.stages} critical-hit stage${hook.stages === 1 ? '' : 's'}${hook.critDamage ? `; critical hits do ${times(hook.critDamage)} instead of ×1.5` : ''}.`, when: hook.species ? 'for its own species' : undefined };
     case 'accuracy':
