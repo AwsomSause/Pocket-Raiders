@@ -5,7 +5,7 @@ import { createPokemon } from '../../src/core/pokemon';
 import { openHistory } from '../../src/core/story/record';
 import { berryFlavor, careAction, favoriteFlavor, hatedFlavor } from '../../src/core/care';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
+import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, recoveryScenes, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
 import { content } from './helpers';
@@ -229,6 +229,27 @@ describe('snack heartbond', () => {
     const afterHated = careAction(content, b.run, 0, 'feed').run;
     expect(bondOf(afterHated, b.uid).affection).toBe(beforeHated);
     expect(afterHated.story.v2!.heartbond.ledger).toEqual([]);
+  });
+});
+
+describe('recovery and keystone', () => {
+  it('every Temperament has a Keystone line', () => {
+    for (const tm of Object.keys(TEMPERAMENTS)) expect(content.storyData.text[`hb.keystone.${tm}`], tm).toContain('{pokemon}');
+  });
+  it('level 10 latched plus a Recovery stop plays the Keystone Memory once; a waiting beat plays first', () => {
+    const { run, v2 } = setup();
+    const text = content.storyData.text;
+    const name = () => 'Pika';
+    expect(recoveryScenes(run, text, name)).toEqual([]);
+    v2.heartbond.latched.push(10);
+    v2.heartbond.pending = [3];
+    const first = recoveryScenes(run, text, name);
+    expect(first).toHaveLength(2);
+    expect(first.every((l) => l.includes('Pika'))).toBe(true);
+    expect(v2.heartbond.keystoneReady).toBe(true);
+    expect(recoveryScenes(run, text, name)).toEqual([]);
+    run.story.v2 = undefined;
+    expect(recoveryScenes(run, text, name)).toEqual([]);
   });
 });
 
