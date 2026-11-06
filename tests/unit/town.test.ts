@@ -443,7 +443,10 @@ describe('Seasonal quests, card backgrounds, rival dojo (S471, S472, S474)', () 
     const p = rich();
     expect(act(p, 'hall-cardbg', { choice: 'cb-sunrise' }).ok).toBe(false);
     p.town = { ...townOf(p), sets: { ...townOf(p).sets, cardbg: ['cb-sunrise'] } };
-    expect(townOf(ok(p, 'hall-cardbg', { choice: 'cb-sunrise' }).profile).equipped.cardbg).toBe('cb-sunrise');
+    const q = ok(p, 'hall-cardbg', { choice: 'cb-sunrise' }).profile;
+    expect(townOf(q).equipped.cardbg).toBe('cb-sunrise');
+    expect(townApi.cardBackground(q)).toMatchObject({ id: 'cb-sunrise', name: 'Sunrise' });
+    expect(townApi.cardBackground(rich())).toBeNull();
   });
   it('rival sparring needs a finished run and pays once a day', () => {
     const p = rich();
