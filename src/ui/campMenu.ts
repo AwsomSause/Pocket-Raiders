@@ -6,6 +6,7 @@ import { benchList, bagBerryChoices, campOf, campProblem, CAMP, comboList, curse
 import { campers, campProblem as boxCampProblem, CAMP_RULES } from '../core/trainingCamp';
 import { mentorLessons } from '../core/mentorLesson';
 import { nurseryChoices } from '../core/nursery';
+import { formShiftProblem, formShiftTargets } from '../core/formShift';
 import { promptById } from '../core/interaction/prompt';
 import { services } from '../game/services';
 import { Picker, type PickerRow } from './partyPanel';
@@ -23,6 +24,7 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:journal': { name: 'Item Journal', desc: 'The first time you used each item.', group: 'workshop' },
   'view:mentor': { name: 'Mentor lesson', desc: 'A more evolved teammate teaches a younger one a move (once each).', group: 'camp' },
   'view:nursery': { name: 'Nursery', desc: 'Before an Egg hatches: a parent passes on one move, or you pick its ability.', group: 'camp' },
+  'view:formshift': { name: 'Form shift', desc: 'Swap a Pokémon with its regional variant (costs a Moon Stone; swap back any time).', group: 'camp' },
   'view:xp': { name: 'Experience share', desc: 'Choose how experience is split: Even, Focus on the lead, or Catch-up.', group: 'camp' },
   'view:training': { name: 'Training camp', desc: 'Send up to two Box Pokémon to train: they gain experience after every win.', group: 'camp' },
   'view:stuff': { name: 'Camp Pack', desc: 'Oil, keys, bottles, scraps, pages, tokens, luck and relics.', group: 'camp' },
@@ -133,6 +135,12 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
   }
   if (id === 'view:album') { const album = session.profile.camp?.album ?? []; return choose(host, `Photo Album (${album.length})`, album.map((s) => ({ label: content.species.get(s)?.name ?? s })), again, again); }
   if (id === 'view:journal') { const j = session.profile.camp?.journal ?? []; return choose(host, `Item Journal (${j.length})`, j.map((s) => ({ label: content.items.get(s)?.name ?? content.catalog.get(s)?.name ?? s })), again, again); }
+  if (id === 'view:formshift') {
+    const rows = run.party.flatMap((m) => formShiftTargets(content, m).map((t) => ({ m, t })));
+    if (rows.length === 0) return back('Nobody in your party has a regional variant.');
+    const nm = (id2: string) => content.species.get(id2)?.name ?? id2;
+    return choose(host, 'Form shift', rows.map(({ m, t }) => ({ label: `${nm(m.speciesId)} > ${nm(t)}`, desc: `Lv${m.level}`, problem: formShiftProblem(content, run, m, t) })), (i) => back(session.formShift(rows[i]!.m.uid, rows[i]!.t)), again);
+  }
   if (id === 'view:nursery') {
     const eggs = run.eggs.filter((e) => nurseryChoices(content, run, e).length > 0);
     if (eggs.length === 0) return back('No Egg needs the nursery: you need an Egg that has not been here yet.');
