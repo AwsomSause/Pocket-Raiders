@@ -7,8 +7,8 @@ import { genderOf } from './gender';
 import type { Content, Evolution } from './contentSchema';
 import { blocksEvolution } from './battle/held';
 import { friendshipReady } from './friendship';
-import { calcStats, getSpecies, isUsableMove, maxHp } from './pokemon';
-import type { PokemonInstance } from './state';
+import { calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from './pokemon';
+import type { PokemonInstance, RunState } from './state';
 
 /** A stable number from a Pokémon's id, so a branching evolution always goes the same way for that Pokémon. */
 function uidHash(uid: string): number {
@@ -121,4 +121,23 @@ export function evolveFully(content: Content, mon: PokemonInstance, regionId?: s
     }
   }
   return results;
+}
+
+/**
+ * A second Pokémon an evolution also gives (Nincada to Ninjask leaves a Shedinja behind), when the
+ * player has the item it needs (a Poké Ball, used up). Same level and moves as the evolved Pokémon,
+ * as in the main games. Its ability comes from the run seed and its uid, so no gameplay RNG is used.
+ * The caller offers it to the player as a "caught" decision (join, box or release).
+ */
+export function evolutionGift(content: Content, run: RunState, mon: PokemonInstance, evo: Pick<EvolutionResult, 'from' | 'to'>): PokemonInstance | null {
+  const gives = getSpecies(content, evo.from).evolutions.find((e) => e.to === evo.to)?.gives;
+  const have = run.inventory[gives?.needsItem ?? ''] ?? 0;
+  if (!gives || have <= 0) return null;
+  if (have === 1) delete run.inventory[gives.needsItem];
+  else run.inventory[gives.needsItem] = have - 1;
+  const uid = `p${run.nextUid}`;
+  run.nextUid += 1;
+  const gift = createPokemon(content, gives.species, mon.level, uid, `${run.seed}:${uid}`);
+  gift.moves = mon.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+  return gift;
 }

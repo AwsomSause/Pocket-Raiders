@@ -1,7 +1,7 @@
 // Individual Pokémon: creating them, their stats, experience and level-ups.
 
 import { careMultiplier } from './care/mods';
-import { natureMultiplier, rollNature } from './natures';
+import { effectiveNature, natureMultiplier, rollNature } from './natures';
 import type { Content, GrowthRate, Species, StatBlock, StatName } from './contentSchema';
 import { STAT_NAMES } from './contentSchema';
 import { Rng, hashSeed } from './rng';
@@ -38,7 +38,7 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
     const raw =
       stat === 'hp'
         ? Math.floor((2 * base * mon.level) / 100) + mon.level + 10
-        : Math.floor(((Math.floor((2 * base * mon.level) / 100) + 5) * Math.round(natureMultiplier(mon.nature, stat) * 100)) / 100);
+        : Math.floor(((Math.floor((2 * base * mon.level) / 100) + 5) * Math.round(natureMultiplier(effectiveNature(mon), stat) * 100)) / 100);
     const stacks = mon.vitamins[stat] ?? 0;
     const boost = ((mon.statBoosts?.[stat] ?? 0) + (stat === 'hp' ? mon.perkHp ?? 0 : 0)) / 100;
     stats[stat] = Math.floor(raw * (1 + perStack * stacks + boost) * (content.balance.careEffects ? careMultiplier(mon.care, stat) : 1));

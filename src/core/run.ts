@@ -59,7 +59,7 @@ import {
   rollLegendaryWild,
   withPartyStrength,
 } from './encounters';
-import { evolve, evolveFully, type EvolutionResult } from './evolution';
+import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
@@ -2837,6 +2837,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     for (const mon of run.party) {
       if (mon.hp > 0 && battle.participants.includes(mon.uid)) changeFriendship(content, mon, boss ? perBossWon : perBattleWon, gainMultiplier);
     }
+    // A temporary mint wears off after the set number of won battles (S418).
+    for (const mon of run.party) {
+      if (mon.tempNature && battle.participants.includes(mon.uid)) {
+        if (mon.tempNature.battles <= 1) delete mon.tempNature;
+        else mon.tempNature = { ...mon.tempNature, battles: mon.tempNature.battles - 1 };
+      }
+    }
     // Shadow Pokémon that fought are soothed; at 0 the haze lifts.
     shadowPurified = soothePartyAfterBattle(content, run, battle.participants, shadowStages);
     // Freeing a Pokémon from the haze is a kindness the world remembers.
@@ -2851,6 +2858,12 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
       emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, content.species.get(evo.from)?.name ?? evo.from, content.species.get(evo.to)?.name ?? evo.to) });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+      const gift = evolutionGift(content, run, mon, evo);
+      if (gift) {
+        discover(run, gift.speciesId, true);
+        count(run, 'pokemonCaught');
+        caughtPending.push({ kind: 'caught', mon: gift });
+      }
     }
     // S171: a route by weather, a known move or a move used often enough.
     const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;

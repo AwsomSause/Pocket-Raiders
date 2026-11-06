@@ -81,6 +81,8 @@ export const EvolutionSchema = z
     condition: z.enum(['atkGtDef', 'atkLtDef', 'atkEqDef']).optional(),
     /** Only a male or only a female Pokémon takes this branch (Kirlia to Gallade, Burmy to Mothim). */
     gender: z.enum(['male', 'female']).optional(),
+    /** A second Pokémon this evolution also gives, if the player has the item (Nincada to Ninjask also gives Shedinja for a Poké Ball). */
+    gives: z.object({ species: z.string(), needsItem: z.string() }).optional(),
   })
   .refine((e) => (e.level === undefined) !== (e.item === undefined), { message: 'an evolution needs exactly one of level or item' });
 export type Evolution = z.infer<typeof EvolutionSchema>;
@@ -1493,7 +1495,7 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   /** Raises the max PP of one move the player picks (each up is +20%, at most 3 per move). */
   z.object({ kind: z.literal('ppUp'), ups: z.number().int().min(1).max(3) }),
   /** Changes one Pokémon's nature (Mints). */
-  z.object({ kind: z.literal('nature'), nature: z.enum(NATURE_IDS) }),
+  z.object({ kind: z.literal('nature'), nature: z.enum(NATURE_IDS), /** S418 temporary mint: the nature only lasts this many won battles, then the real one returns. */ battles: z.number().int().min(1).max(10).optional() }),
   /** Tuning Dust: nudges a nature one step so the named stat is the raised one (the lowered stat stays). */
   z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Care for one Pokémon: heal HP, revive, cure status, restore one move's PP; friendship and attribute side effects. */
