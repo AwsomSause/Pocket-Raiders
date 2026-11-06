@@ -90,6 +90,32 @@ export function turnFacts(events: readonly { type: string; side?: string; amount
   }
   return f;
 }
+/**
+ * Doubles: the same facts per player Pokémon on the field. `start` are the player Pokémon that begin the turn and the foe
+ * focus; `focus` events say which Pokémon the following events are about. A hit is credited to whoever moved last.
+ * Foe misses are not counted (the target of a miss is not known), so Dodger stays a singles path.
+ */
+export function doublesTurnFacts(events: readonly { type: string; side?: string; uid?: string; amount?: number }[], start: { player: string; enemy: string | undefined }): Map<string, TurnFacts> {
+  const out = new Map<string, TurnFacts>();
+  const facts = (uid: string | undefined): TurnFacts | null => {
+    if (!uid) return null;
+    let f = out.get(uid);
+    if (!f) { f = { switched: false, hitFoe: false, tookHit: false, missed: false, moved: false, foeMisses: 0, absorbed: 0 }; out.set(uid, f); }
+    return f;
+  };
+  const cur: { player: string | undefined; enemy: string | undefined } = { ...start };
+  let mover: string | undefined;
+  for (const e of events) {
+    if ((e.type === 'focus' || e.type === 'switchIn') && (e.side === 'player' || e.side === 'enemy')) cur[e.side] = e.uid;
+    else if (e.type === 'switchOut' && e.side === 'player') { const f = facts(e.uid); if (f) f.switched = true; }
+    else if (e.type === 'move' && e.side === 'player') { mover = cur.player; const f = facts(mover); if (f) f.moved = true; }
+    else if (e.type === 'move') mover = undefined;
+    else if (e.type === 'damage' && e.side === 'enemy') { const f = facts(mover); if (f) f.hitFoe = true; }
+    else if (e.type === 'damage' && e.side === 'player') { const f = facts(cur.player); if (f) { f.tookHit = true; f.absorbed += e.amount ?? 0; } }
+    else if (e.type === 'miss' && e.side === 'player') { const f = facts(cur.player); if (f) f.missed = true; }
+  }
+  return out;
+}
 /** A turn spent waiting: it used a move that did no damage and did not miss (a status move, Protect...). */
 export const waitedTurn = (f: TurnFacts): boolean => !f.switched && f.moved && !f.hitFoe && !f.missed;
 

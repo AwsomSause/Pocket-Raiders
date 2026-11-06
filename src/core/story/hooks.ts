@@ -4,7 +4,7 @@
 // decided by the battle engine; this file only tells their story).
 
 import { periodOf } from '../clock';
-import { addGrowth, bumpGrowth, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
+import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
@@ -147,7 +147,20 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   if (firstMove?.type === 'move' && firstMove.side === 'player' && active.player && prior.sideEffects.player.tailwind > 0) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['turnTailwind']);
 
   // Growth paths: what this turn tells the counters of the Pokémon that started it (turns, hits, misses).
-  if (active.player) {
+  if (prior.doubles) {
+    // Doubles: each player Pokémon that began the turn gets its own facts (who moved, hit, was hit).
+    const uids = [before.party[prior.activeIndex]?.uid, prior.doubles.player.index >= 0 ? before.party[prior.doubles.player.index]?.uid : undefined].filter((u): u is string => Boolean(u));
+    const trainerClass = battle.trainer?.classId ?? null;
+    const facts = doublesTurnFacts(events, { player: active.player ?? '', enemy: active.enemy });
+    for (const uid of uids) {
+      const me = mon(uid);
+      const f = facts.get(uid) ?? { switched: false, hitFoe: false, tookHit: false, missed: false, moved: false, foeMisses: 0, absorbed: 0 };
+      if (me) addGrowth(content.balance.overhaulGrowth, run.story.histories[uid], turnCounters(f, {
+        turn: prior.turn, lead: true, boss: Boolean(battle.rival || battle.rivalId) || trainerClass === 'gym-leader' || trainerClass === 'elite-four' || trainerClass === 'champion',
+        maxHp: maxHp(content, me), hpAfter: me.hp,
+      }));
+    }
+  } else if (active.player) {
     const me = mon(active.player);
     const trainerClass = battle.trainer?.classId ?? null;
     if (me) addGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], turnCounters(turnFacts(events), {
@@ -182,6 +195,10 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
           marks.push('weatherEvent');
           if (marks.filter((m) => m === 'weatherEvent').length >= 2) bumpGrowthOnce(cfg, run.story.histories[active.player], marks, active.player, 'battleChange');
         }
+        break;
+      case 'focus':
+        // Doubles: the events that follow are about this Pokémon (so counters go to the right one).
+        active[e.side] = e.uid;
         break;
       case 'switchIn':
         active[e.side] = e.uid;
