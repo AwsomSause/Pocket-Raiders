@@ -167,6 +167,8 @@ export function optionsOf(content: Content, p: Profile, a: TownAction, now: Date
     });
     // Garden visitors (S475): three wild Pokémon wander in each day; one per option per day.
     case 'visitors': return gardenVisitors(content, now).map((id) => ({ id: `${id}@${localDay(now)}`, label: content.species.get(id)?.name ?? id, desc: 'A wild visitor today', say: `${content.species.get(id)?.name ?? id} nibbles a berry, then trots off. It left a gift.`, once: true, reward: tpl?.reward }));
+    // Lab Research (S462): caught species you have not studied yet; the study costs Research Points.
+    case 'labSpecies': return p.speciesCaught.filter((id) => !(t.sets.research ?? []).includes(id) && content.species.has(id)).slice(0, 40).map((id) => from(id, content.species.get(id)!.name, 'Not studied yet'));
     default: return a.options.map(base);
   }
 }
@@ -342,6 +344,14 @@ function runPick(c: Ctx): string {
     const res = miniBattle(c.content, { speciesId: lead.speciesId, level: lead.level }, ghost, rngFor(c.t, key));
     const tag = `${c.content.species.get(lead.speciesId)?.name} Lv${lead.level} vs the ghost ${c.content.species.get(ghost.speciesId)?.name} Lv${ghost.level}.`;
     return res.win ? `${tag} ${res.log.slice(-2).join(' ')} Practice win in ${res.rounds} rounds! ${reward(c, r)}` : `${tag} ${res.log.slice(-2).join(' ')} The ghost wins this time. Try again next run.`;
+  }
+  if (id === 'lab-research') {
+    const sp = c.content.species.get(o.id);
+    if (!sp) return fail('Nothing to study.');
+    (c.t.sets.research ??= []).includes(o.id) || c.t.sets.research.push(o.id);
+    pay(c.p, c.t, cost);
+    const b = sp!.baseStats;
+    return `${sp!.name} studied. HP ${b.hp} · Atk ${b.atk} · Def ${b.def} · Sp.Atk ${b.spa} · Sp.Def ${b.spd} · Speed ${b.spe}. ${reward(c, r)}`.trim();
   }
   if (id === 'mail-read') {
     c.t.sets.mail = [...new Set([...(c.t.sets.mail ?? []), o.id])];

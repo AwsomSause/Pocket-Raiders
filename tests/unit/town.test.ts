@@ -367,6 +367,42 @@ describe('Dream Tower and garden visitors (S109, S475)', () => {
   });
 });
 
+describe('Lab research, trading cards, notice filters (S462, S357, S478)', () => {
+  it('lab research costs 2 Research Points, shows base stats and lists a species once', () => {
+    const p = rich();
+    p.speciesCaught = ['bulbasaur'];
+    expect(optionsOf(content, p, getTownAction('lab-research')!, DAY).map((o) => o.id)).toEqual(['bulbasaur']);
+    const r = ok(p, 'lab-research', { choice: 'bulbasaur' });
+    expect(r.profile.researchPoints).toBe(p.researchPoints - 2);
+    expect(r.message).toMatch(/HP 45/);
+    expect(optionsOf(content, r.profile, getTownAction('lab-research')!, DAY)).toHaveLength(0);
+    expect(act({ ...p, researchPoints: 0, speciesCaught: ['bulbasaur'] }, 'lab-research', { choice: 'bulbasaur' }).ok).toBe(false);
+  });
+  it('trading cards come from caught species and trainers run, rarer with base stats', () => {
+    const p = rich();
+    p.speciesCaught = ['caterpie', 'mewtwo'];
+    const cards = townApi.tradingCards(content, p);
+    expect(cards.find((c) => c.id === 'caterpie')!.rarity).toBe('common');
+    expect(cards.find((c) => c.id === 'mewtwo')!.rarity).toBe('holo');
+    expect(townApi.tradingCards(content, { ...p, speciesCaught: ['nope'] })).toEqual([]);
+  });
+  it('the notice board sorts ready-to-claim first and filters by state', () => {
+    const t = townOf(rich());
+    const today = '2026-11-03';
+    const quests = [
+      { id: 'a', text: 'A', action: 'x', reward: { credits: 5 } },
+      { id: 'b', text: 'B', action: 'y', reward: { credits: 20 } },
+      { id: 'c', text: 'C', action: 'z', reward: { credits: 1 } },
+    ];
+    t.daily['used:z'] = today;
+    t.daily['claim:a'] = today;
+    expect(townApi.noticeBoard(t, today, quests, 'all').map((n) => n.id)).toEqual(['c', 'b', 'a']);
+    expect(townApi.noticeBoard(t, today, quests, 'open').map((n) => n.id)).toEqual(['b']);
+    expect(townApi.noticeBoard(t, today, quests, 'claim').map((n) => n.id)).toEqual(['c']);
+    expect(townApi.noticeBoard(t, today, quests, 'done').map((n) => n.id)).toEqual(['a']);
+  });
+});
+
 describe('Rival Sponsors (S360)', () => {
   it('a rival sponsor pays only when you beat your earlier best', () => {
     const p = ok(rich(), 'hall-sponsor', { choice: 'sponsor-rival-trail' }).profile;

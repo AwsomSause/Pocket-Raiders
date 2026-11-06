@@ -280,6 +280,18 @@
      "options": []
     },
     {
+     "id": "lab-research",
+     "name": "Lab research",
+     "desc": "Spend 2 Research Points to study a species you have caught and learn its base stats (S462).",
+     "kind": "pick",
+     "rows": [
+      "S462"
+     ],
+     "limit": "none",
+     "dynamic": "labSpecies",
+     "template": {"id": "lab", "label": "{name}", "desc": "", "say": "", "cost": {"rp": 2}, "reward": {"xp": 1}, "once": false}
+    },
+    {
      "id": "library-quiz",
      "name": "Take the quiz",
      "desc": "Three questions a day. Right answers pay.",
@@ -2928,6 +2940,16 @@
      "goods": [
       {"id": "harbor-ticket", "label": "Boat ticket", "desc": "One guaranteed expedition gate next run.", "set": "boon", "cost": {"credits": 80}, "reward": {"stuff": {"harbor-ticket": 1}}}
      ]
+    },
+    {
+     "id": "hall-cards",
+     "name": "Trading Cards",
+     "desc": "A card for every species you catch and every Trainer you have run as. Rare ones shine.",
+     "kind": "view",
+     "rows": [
+      "S357"
+     ],
+     "view": "cards"
     },
     {
      "id": "hall-market",
