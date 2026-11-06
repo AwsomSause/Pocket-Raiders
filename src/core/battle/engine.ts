@@ -554,6 +554,7 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   const mon = ctx.party[partyIndex];
   if (!mon) return 'There is no Pokémon in that slot.';
   if (partyIndex === ctx.battle.activeIndex && !ctx.battle.needsSwitch) return 'That Pokémon is already in battle.';
+  if (ctx.battle.eventRule?.noSwitch && !ctx.battle.needsSwitch) return 'Honor duel: no switching allowed!';
   if (ctx.setStyle && ctx.battle.kind === 'trainer' && !ctx.battle.needsSwitch) return 'Set style: no switching in trainer battles.';
   if (mon.hp <= 0) return 'That Pokémon has fainted.';
   const active = ctx.party[ctx.battle.activeIndex];
@@ -829,11 +830,23 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
   battle.turn += 1;
+  eventRuleEnd(battle, events);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
   return events;
+}
+
+/** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
+export function eventRuleEnd(battle: BattleState, events: BattleEvent[]): void {
+  const rule = battle.eventRule;
+  if (!rule || battle.outcome) return;
+  if (rule.suddenDeath) {
+    const fell = events.filter((e) => e.type === 'faint');
+    if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
+  }
+  if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
 }
 
 /** Encore!: after a turn, critical hits build Hype, a miss or failed move costs some, and full Hype starts the damage boost. */
@@ -1083,6 +1096,7 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
     const slot = mon.moves[action.index];
     if (!slot) throw new Error(`Invalid move slot ${action.index}`);
     if (slot.pp <= 0) throw new Error(`${slot.id} has no PP left`);
+    if (ctx.battle.eventRule?.noAttacks && ctx.content.moves.get(slot.id)?.category !== 'status' && mon.moves.some((m) => m.pp > 0 && ctx.content.moves.get(m.id)?.category === 'status')) throw new Error('Pacifist challenge: use a status move!');
     if (action.transform) {
       const problem = transformProblem(ctx, action.transform, action.index);
       if (problem) throw new Error(problem);

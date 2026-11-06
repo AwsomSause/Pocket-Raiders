@@ -219,3 +219,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `zip-z6i-dex.md`: Z6i: Research Room dex sets open a member list (icon, number, name, caught/seen mark); Enter opens a species p
 - `zip-z6j-bag-layout.md`: Z6j: the Bag menu sits on the pack's Bag backdrop (orange grid, BAG plate, dark list area); the Picker skips i
 - story-endings-mysteries.md: S115 betrayal, S120 ending variations, S122 secret endings, S125 mystery, S129 lead chatter
+- `run-events-b-batch3.md`: Run events B batch 3: 9 trainer fights with new fight rules (no switch, no attacks, sudden death, turn limit, sleeping foes, reversed lead, start stages).
