@@ -314,3 +314,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-memories.md`: Overhaul slice 19: won-run epilogue gets a run title, a fair MVP with title and two milestone memories.
 - `overhaul-trainer-lines.md`: Overhaul slice 22 (lines): the pack speaks for gym leaders, Elite Four and champions in battle drama.
 - `overhaul-event-chains.md`: Overhaul slice 23: the 180 pack event chains play as map events with real rewards and battles; 20 legendary chains capped to one per run.
+- `overhaul-aftermath.md`: Overhaul slice 26 (aftermath): beating a boss leaves one voice-based line in the run, shown in the won-run epilogue. No save change.
