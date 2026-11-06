@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { buildEpilogue, endingFor, endingVariationLines, secretEndingLines } from '../../src/core/ending';
+import { buildEpilogue, endingFor, endingVariationLines, factionLines, secretEndingLines } from '../../src/core/ending';
 import { leadChatter } from '../../src/core/leadChatter';
+import { companionSupport, COMPANION_FLAG } from '../../src/core/companionSupport';
+import { emptyNpcMemory, seedNpcMemory } from '../../src/core/npcMemory';
 import { buildCredits } from '../../src/core/credits';
 import { getArchetype } from '../../src/core/archetypes';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -76,5 +78,38 @@ describe('story endings and lead chatter (S120, S122, S129)', () => {
   it('the lead Pokémon always has a line, and it does not change on a redraw', () => {
     expect(leadChatter(content, base)).toBe(leadChatter(content, base));
     expect(leadChatter(content, { ...base, party: [] })).toBeNull();
+  });
+});
+
+describe('companion, factions and legend trail (S112, S114, S117)', () => {
+  const base = chooseStarter(content, createRun(content, { runId: 'co', seed: 'co', archetypeId: 'red' }), 0);
+
+  it('faction standing adds epilogue lines only from two points up', () => {
+    const run = structuredClone(base);
+    expect(factionLines(run)).toEqual([]);
+    run.story.flags['ev:rep-rangers'] = 3;
+    run.story.flags['ev:rep-scholars'] = 1;
+    expect(factionLines(run)).toHaveLength(1);
+    expect(factionLines(run)[0]).toContain('seat free');
+  });
+
+  it('the companion heals once per fight, only below half HP, and never without a companion', () => {
+    const run = structuredClone(base);
+    run.battle = { outcome: undefined, doubles: undefined, activeIndex: 0 } as never;
+    const mon = run.party[0]!;
+    mon.hp = 1;
+    expect(companionSupport(content, run)).toBeNull();
+    run.story.flags[COMPANION_FLAG] = 1;
+    const first = companionSupport(content, run);
+    expect(first?.amount).toBeGreaterThan(0);
+    mon.hp = 1;
+    expect(companionSupport(content, run)).toBeNull();
+  });
+
+  it('lore from earlier runs seeds a new run so the legend trail can continue', () => {
+    const mem = { ...emptyNpcMemory(), lore: ['legend-trail-1'] };
+    const story = seedNpcMemory({ flags: {} as Record<string, number> }, mem);
+    expect(story.flags['ev:lore-legend-trail-1']).toBe(1);
+    expect(content.npcStory.lore.some((l) => l.id === 'legend-trail-3')).toBe(true);
   });
 });

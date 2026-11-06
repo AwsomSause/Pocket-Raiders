@@ -35,7 +35,7 @@ export function buildEpilogue(content: Content, run: RunState): string[] {
   if (Number(f['ev:charity'] ?? 0) > 0) out.push('The orphanage ledger keeps your name at the top of its page.');
   if (Number(f['ev:oath-steel'] ?? 0) > 0 || Number(f['ev:oath-mercy'] ?? 0) > 0) out.push('The shrine keeper marks your oath as kept.');
   if (Number(f['ev:umbrella-friend'] ?? 0) > 0) out.push('Somewhere, a stranger remembers the umbrella you shared.');
-  out.push(...endingVariationLines(content, run), ...secretEndingLines(run));
+  out.push(...endingVariationLines(content, run), ...secretEndingLines(run), ...factionLines(run));
   return out;
 }
 
@@ -63,4 +63,14 @@ export function secretEndingLines(run: RunState): string[] {
   if (Number(f['ev:charity'] ?? 0) > 0 && Number(f['ev:umbrella-friend'] ?? 0) > 0 && Number(f['ev:mystery-solved'] ?? 0) > 0) out.push('SECRET ENDING, The Quiet Hero: a stranger you helped left a lantern lit for you at the gate.');
   if (Number(f['ev:betrayal-forgiven'] ?? 0) > 0) out.push('SECRET ENDING, A Second Chance: someone who once betrayed you stands in the crowd, and nods.');
   return out;
+}
+
+const FACTIONS: Array<[string, string]> = [['rangers', 'The Rangers'], ['scholars', 'The Scholars'], ['syndicate', 'The Syndicate']];
+
+/** Reputation Factions (S114): standing with each crew, 0 to 3+ (event flags `rep-<crew>`). */
+export const factionStanding = (run: RunState, key: string): number => Number(run.story.flags[`ev:rep-${key}`] ?? 0);
+
+/** Epilogue lines for the crews that took notice of you. Pure. */
+export function factionLines(run: RunState): string[] {
+  return FACTIONS.filter(([k]) => factionStanding(run, k) >= 2).map(([k, name]) => `${name} count you as one of their own${factionStanding(run, k) >= 3 ? ' and keep a seat free for you' : ''}.`);
 }
