@@ -2398,8 +2398,6 @@ export const BalanceSchema = z.object({
    * generation(s) are this many times as likely as others (still themed).
    */
   nativeWeight: z.number().min(1),
-  /** false turns the stage run modifiers (Bug Outbreak ...) off; the old-seed story test uses it. */
-  runModifiersEnabled: z.boolean().default(true),
   /** Wild Pokémon have a base stat total no higher than this (keeps Ultra Beasts and Paradox Pokémon out). */
   wildMaxBaseStats: z.number().int().positive(),
   /** Regular enemies (wild and trainer) may not exceed base + perLevel × level total base stats; up to `retries` re-draws, keeping the weakest. */
