@@ -4,6 +4,7 @@
 
 import type { Content } from '../contentSchema';
 import type { Profile } from '../state';
+import { fanClub, marketSwing, townOf } from '../town';
 import { hubPokemon } from './world';
 
 type Line = (c: Content, p: Profile) => string | null;
@@ -41,6 +42,16 @@ const HISTORY: Line[] = [
     const earned = Object.keys(p.achievements).length;
     return earned ? `${earned} of ${c.achievements.size} achievements! The Achievement Hall up north keeps them all.` : null;
   },
+  // Gossip Network (S350): townsfolk repeat what you did around town (read from the town record, never changed).
+  (_c, p) => (townOf(p).memorial.length > 0 ? 'Someone leaves fresh flowers at the Memorial Wall after every run. Word is it is you.' : null),
+  (_c, p) => (fanClub(p).tiers.some((t) => t.reached) ? `The Fan Club has ${fanClub(p).fans} followers now. Half of them know your name.` : null),
+  (_c, p) => ((townOf(p).counts.coins ?? 0) > 0 ? 'I hear you pull chores at the café. The barista says you tip well.' : null),
+  (_c, p) => (townOf(p).last?.victory ? 'Did you hear? Your last run ended in a win. They threw a small parade.' : townOf(p).last ? `The word at the market: you made it ${townOf(p).last!.cleared} regions in on your last run.` : null),
+  (_c, p) => {
+    const m = marketSwing(p);
+    return m.pct !== 0 ? `The stalls say prices are ${m.pct < 0 ? 'down' : 'up'} ${Math.abs(Math.round(m.pct * 100))}% right now. ${m.why}` : null;
+  },
+  (_c, p) => ((townOf(p).boon.stuff['harbor-ticket'] ?? 0) > 0 || (townOf(p).boon.items['airship-pass'] ?? 0) > 0 ? 'A pilot was asking about you. Seems you have a ticket out of here.' : null),
   (_c, p) => (p.bankCredits >= 300 ? `${p.bankCredits} Bank Credits... The Strange Merchant by the tent would love to see those.` : null),
 ];
 

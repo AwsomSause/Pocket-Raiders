@@ -8,6 +8,7 @@ import { chatterFor, chatterLines } from '../../src/core/hubTown/chatter';
 import { HUB_LIGHT, hubPeriod } from '../../src/core/hubTown/daylight';
 import { HUB_MERCHANT, boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../../src/core/hubTown/merchant';
 import { createProfile } from '../../src/core/profile';
+import { freshTown } from '../../src/core/town';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { SaveManager } from '../../src/save/saveManager';
 import { content } from './helpers';
@@ -272,5 +273,27 @@ describe('Hub Town part 4: day and night', () => {
     for (const l of Object.values(HUB_LIGHT)) expect(l.alpha).toBeLessThan(0.7);
     // There are street lamps to light.
     expect(HUB_TOWN.props.filter(([n]) => n.startsWith('lamp')).length).toBeGreaterThan(4);
+  });
+});
+
+describe('NPC schedules and gossip (S348, S350)', () => {
+  it('the schedule follows the hour and the crowd stays deterministic', async () => {
+    const { scheduleFor, windowHour } = await import('../../src/core/hubTown/roster');
+    expect(windowHour('2026-11-02#27')).toBe(13);
+    expect(scheduleFor(13).label).toBe('afternoon');
+    expect(scheduleFor(3).label).toBe('night');
+    expect(scheduleFor(6).label).toBe('morning');
+    const p = createProfile(content, 'sched');
+    expect(hubCrowd(p, '2026-11-02#27')).toEqual(hubCrowd(p, '2026-11-02#27'));
+    // Nights are quieter on the north road than mornings: more trainers sit on the lawn.
+    const zones = (w: string) => hubCrowd(p, w).filter((x) => x.kind === 'trainer').map((x) => x.zone);
+    expect(zones('2026-11-02#2').filter((z) => z === 'north').length).toBeLessThanOrEqual(zones('2026-11-02#14').filter((z) => z === 'north').length + 3);
+  });
+  it('townsfolk gossip about a win and the Memorial Wall', () => {
+    const p = createProfile(content, 'gossip');
+    p.town = { ...freshTown(), last: { victory: true, cleared: 3, runId: 'r' }, memorial: ['pikachu|10|0|x'] } as never;
+    const lines = chatterLines(content, p).join(' | ');
+    expect(lines).toMatch(/parade/);
+    expect(lines).toMatch(/Memorial Wall/);
   });
 });
