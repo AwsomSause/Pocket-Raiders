@@ -148,6 +148,12 @@ export const StoryV2Schema = z.object({
   facts: z.record(z.string(), Scalar).default({}),
   stops: z.object({ index: z.number().int().default(0), planned: z.number().int().default(0), done: z.array(z.string()).default([]) }).default({ index: 0, planned: 0, done: [] }),
   replans: z.array(z.record(z.string(), Scalar)).default([]),
+  /** W3: per-rival relationship record (Respect, Rivalry, Affection, Suspicion, 0 to 100) and the gate events passed. */
+  rel: z.record(z.string(), z.object({ respect: z.number().int().min(0).max(100), rivalry: z.number().int().min(0).max(100), affection: z.number().int().min(0).max(100), suspicion: z.number().int().min(0).max(100), met: z.boolean().default(true), gates: z.array(z.string()).default([]) })).default({}),
+  /** W3: hidden consequences waiting to surface (due is a linear stage number), the scenes already played and the consequences already fired. */
+  queue: z.array(z.object({ id: z.string(), hidden: z.string(), rival: z.string(), due: z.number().int().min(0) })).default([]),
+  scenesDone: z.array(z.string()).default([]),
+  fired: z.array(z.string()).default([]),
 });
 export type StoryV2 = z.infer<typeof StoryV2Schema>;
 
