@@ -113683,7 +113683,13 @@
   "eggGroups": [
    "no-eggs"
   ],
-  "color": "green"
+  "color": "green",
+  "abilities": {
+   "normal": [
+    "aura-break"
+   ],
+   "hidden": null
+  }
  },
  {
   "id": "diancie",
@@ -149021,7 +149027,13 @@
   "eggGroups": [
    "water2"
   ],
-  "color": "pink"
+  "color": "pink",
+  "abilities": {
+   "normal": [
+    "commander"
+   ],
+   "hidden": "storm-drain"
+  }
  },
  {
   "id": "tatsugiri-droopy-mega",
@@ -149111,7 +149123,13 @@
   "eggGroups": [
    "water2"
   ],
-  "color": "pink"
+  "color": "pink",
+  "abilities": {
+   "normal": [
+    "commander"
+   ],
+   "hidden": "storm-drain"
+  }
  },
  {
   "id": "tatsugiri-stretchy-mega",
@@ -149201,7 +149219,13 @@
   "eggGroups": [
    "water2"
   ],
-  "color": "pink"
+  "color": "pink",
+  "abilities": {
+   "normal": [
+    "commander"
+   ],
+   "hidden": "storm-drain"
+  }
  },
  {
   "id": "annihilape",

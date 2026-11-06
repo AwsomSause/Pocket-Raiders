@@ -1336,7 +1336,7 @@
  {
   "id": "electrium-z",
   "name": "Electrium Z",
-  "description": "Lets a Pokémon turn a Electric-type move into a Z-Move (needs the Z-Ring).",
+  "description": "Lets a Pokémon turn an Electric-type move into a Z-Move (needs the Z-Ring).",
   "category": "transformation",
   "iconAssetId": "item.electrium_z",
   "usableInBattle": false,
@@ -1364,7 +1364,7 @@
  {
   "id": "icium-z",
   "name": "Icium Z",
-  "description": "Lets a Pokémon turn a Ice-type move into a Z-Move (needs the Z-Ring).",
+  "description": "Lets a Pokémon turn an Ice-type move into a Z-Move (needs the Z-Ring).",
   "category": "transformation",
   "iconAssetId": "item.icium_z",
   "usableInBattle": false,
