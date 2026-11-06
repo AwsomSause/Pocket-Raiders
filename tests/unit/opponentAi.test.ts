@@ -1,7 +1,7 @@
-// Battle/AI batch 2: S280 trap setting, S273 fatigue, S272 team roles, S269 trainer taunts.
+// Battle/AI batch 2: S280 trap setting, S272 team roles, S269 trainer taunts.
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, startBattle, type BattleContext } from '../../src/core/battle/engine';
-import { fatiguedAi, isFatigued, preBattleTrap, roleOrder } from '../../src/core/battle/opponentAi';
+import { preBattleTrap, roleOrder } from '../../src/core/battle/opponentAi';
 import { trainerTaunt } from '../../src/core/battle/intent';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -40,23 +40,6 @@ describe('S280 trap setting', () => {
     startBattle(ctx);
     expect(battle.sideEffects.player.stealthRock).toBe(true);
     expect(battle.sideEffects.player.spikes).toBe(0);
-  });
-});
-
-describe('S273 fatigue', () => {
-  it('starts at the set turn, falls each turn and stops at the floor', () => {
-    const f = content.balance.opponentAi.fatigue;
-    expect(fatiguedAi(content, { ai: 0.8, turn: f.fromTurn - 1 })).toBe(0.8);
-    expect(fatiguedAi(content, { ai: 0.8, turn: f.fromTurn })).toBeCloseTo(0.8 * (1 - f.perTurn));
-    expect(fatiguedAi(content, { ai: 0.8, turn: 500 })).toBeCloseTo(0.8 * f.floor);
-    expect(fatiguedAi(content, { ai: 0, turn: 500 })).toBe(0);
-    expect(isFatigued(content, { ai: 0.8, turn: f.fromTurn })).toBe(true);
-  });
-  it('says so once in battle', () => {
-    const { battle, ctx } = trainerBattle([mon('snorlax', 60, 'e1', 'splash')], 0.6, mon('snorlax', 60, 'p1', 'splash'));
-    let lines = 0;
-    for (let t = 0; t < content.balance.opponentAi.fatigue.fromTurn + 2 && !battle.outcome; t++) lines += resolveTurn(ctx, { kind: 'move', index: 0 }).filter((e) => e.type === 'spectacle' && e.text.includes('getting tired')).length;
-    expect(lines).toBe(1);
   });
 });
 

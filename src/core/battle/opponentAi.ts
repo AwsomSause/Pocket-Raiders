@@ -1,5 +1,5 @@
 // Battle/AI batch 2: opponent behaviour that needs no random numbers. S280 trap setting before a fight,
-// S273 fatigue in long fights, S272 team roles (lead and ace). Tuning: balance.json `opponentAi`.
+// S272 team roles (lead and ace). Tuning: balance.json `opponentAi`.
 
 import type { Content } from '../contentSchema';
 import { getSpecies } from '../pokemon';
@@ -24,17 +24,6 @@ export function preBattleTrap(content: Content, battle: Pick<BattleState, 'kind'
   }
   return null;
 }
-
-/** S273: the foe's AI smartness this turn: it tires in a long fight (never below `floor` of where it started). */
-export function fatiguedAi(content: Content, battle: Pick<BattleState, 'ai' | 'turn'>): number {
-  const f = content.balance.opponentAi.fatigue;
-  if (battle.ai <= 0 || battle.turn < f.fromTurn) return battle.ai;
-  const tired = 1 - f.perTurn * (battle.turn - f.fromTurn + 1);
-  return battle.ai * Math.max(f.floor, tired);
-}
-
-/** True when the foe is tired this turn (for the battle line). */
-export const isFatigued = (content: Content, battle: Pick<BattleState, 'ai' | 'turn'>): boolean => fatiguedAi(content, battle) < battle.ai;
 
 const total = (content: Content, m: PokemonInstance) => Object.values(getSpecies(content, m.speciesId).baseStats).reduce((a, b) => a + b, 0);
 const speed = (content: Content, m: PokemonInstance) => getSpecies(content, m.speciesId).baseStats.spe;

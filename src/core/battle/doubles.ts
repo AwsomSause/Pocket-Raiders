@@ -22,7 +22,6 @@ import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { freshStages, freshVolatile, type BattleState, type DoublesState, type PokemonInstance, type Stages, type Volatile } from '../state';
 import { firstStrikeBonus } from '../trainerEvolution';
 import { compareTurnOrder } from './damage';
-import { fatiguedAi } from './opponentAi';
 import { setAnnounceContent, doublesSteps as S, forcedMoveId, hasUsableMove, type BattleContext, type BattleEvent, type Combatant, type PlayerAction, type Side, type SlotCommand } from './engine';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
@@ -633,7 +632,7 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
   let slot: number;
   if (lockedIndex >= 0) slot = lockedIndex;
   else if (usable.length === 0) slot = -1;
-  else if (battle.ai > 0 && rng.chance(fatiguedAi(content, battle))) {
+  else if (battle.ai > 0 && rng.chance(battle.ai)) {
     const scored = usable.map((x) => ({ i: x.i, score: worth(S.resolveMove(content, foe.mon, x.i)).score }));
     slot = scored.reduce((b, x) => (x.score > b.score ? x : b)).i;
   } else slot = rng.pick(usable).i;

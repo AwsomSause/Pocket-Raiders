@@ -1930,7 +1930,7 @@ export const BalanceSchema = z.object({
   typeRules: TypeRulesSchema.default(DEFAULT_TYPE_RULES),
   /** S174 Z-Crystal Bonding: a Pokémon needs this bond score (0-100, trust + affection) before it can use a Z-Move (0 = off). */
   zBond: z.object({ minBond: z.number().int().min(0).max(100) }).default({ minBond: 30 }),
-  /** Battle/AI batch 2 (S269 taunts, S272 team roles, S273 fatigue, S280 trap setting): battle/opponentAi.ts. */
+  /** Battle/AI batch 2 (S269 taunts, S272 team roles, S280 trap setting): battle/opponentAi.ts. */
   opponentAi: OpponentAiSchema.default(DEFAULT_OPPONENT_AI),
   /** Battle/AI batch 3 (S157 Focus, S158 Ability Awakening): battle/growthStats.ts. */
   growthStats: GrowthStatsSchema.default(DEFAULT_GROWTH_STATS),

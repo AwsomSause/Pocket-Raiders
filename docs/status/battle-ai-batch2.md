@@ -1,6 +1,5 @@
 - Battle/AI batch 2, opponent AI (rundown §9; `balance.json` `opponentAi`, defaults in `core/battle/opponentAiConfig.ts`, rules in `core/battle/opponentAi.ts` and `battle/intent.ts`):
   - **S280 Trap Setting AI:** a trainer with AI 0.3+ whose team knows Stealth Rock, Spikes, Toxic Spikes or Sticky Web lays one layer on your side before the battle, with a line. Singles only; never wild, raids, Totems.
-  - **S273 Gauntlet AI Fatigue:** from turn 10 the foe's AI smartness falls 5% a turn, down to half; one "getting tired" line. (Read as long fights, since every gauntlet fight is a new trainer.)
   - **S272 Team Composition Rules:** ordinary trainers lead with their hazard setter (else fastest) and keep their ace (highest base stats) for last. Bosses, rivals, nemeses keep their order.
   - **S269 Trainer Taunts:** a trainer with AI 0.3+ (not a boss; bosses already telegraph) says its planned move out loud when it is super effective or a set-up move. RNG-free; it may still pick otherwise.
   - Already built: S263 Adaptive Opponents ("The Hunter Has Become the Hunted" counter teams in `run.ts`, rival adaptation in `rivals/adapt.ts`).
