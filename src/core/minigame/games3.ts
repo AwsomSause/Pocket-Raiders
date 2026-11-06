@@ -409,6 +409,52 @@ const snap: MinigameModule<SnapState> = {
   result: (s) => ({ score: Math.min(s.points, s.shots * 3), max: s.shots * 3 }),
 };
 
+// ---------- Pokémon Contest (S487): appeal in the judged condition; repeating one wears the judges out ----------
+const COND = ['Cool', 'Beauty', 'Cute', 'Smart', 'Tough'] as const;
+interface ContestState extends BaseState {
+  cond: number[];
+  judge: number[];
+  round: number;
+  last: number;
+  points: number;
+  best: number;
+}
+const contest: MinigameModule<ContestState> = {
+  start(_c, p, rs) {
+    const r = new Rng(rs);
+    const rounds = p.rounds!;
+    const judge = Array.from({ length: rounds }, () => r.int(0, 4));
+    const cond = [p.c0 ?? 0, p.c1 ?? 0, p.c2 ?? 0, p.c3 ?? 0, p.c4 ?? 0];
+    return { ...base(r.state), cond, judge, round: 0, last: -1, points: 0, best: rounds * (p.base! + 2 + 6 + p.bonus!) };
+  },
+  view(_c, s) {
+    return {
+      hud: [`Round ${Math.min(s.round + 1, s.judge.length)}/${s.judge.length}`, `Points: ${s.points}`, `Conditions: ${s.cond.map((v, i) => `${COND[i]} ${v}`).join(', ')}`, s.msg],
+      prompt: `The judges want ${COND[s.judge[s.round] ?? 0]} this round. Pick your appeal; repeating the last appeal scores less. Feed Poffins (Berry Blending) to raise your lead's conditions.`,
+      cols: 5,
+      cells: COND.map((n, i) => ({ id: String(i), label: n, detail: `${s.cond[i]}`, tone: i === s.judge[s.round] ? ('hot' as const) : ('info' as const), disabled: s.done })),
+      done: s.done,
+    };
+  },
+  act(_c, s, id) {
+    if (s.done) return;
+    const i = Number(id);
+    const r = rng(s);
+    const flair = r.int(0, 2);
+    keep(s, r);
+    const match = i === s.judge[s.round];
+    let pts = 2 + s.cond[i]! + flair + (match ? 6 : 0);
+    if (i === s.last) pts = Math.ceil(pts / 2);
+    s.points += pts;
+    s.msg = `${COND[i]} appeal: +${pts}${match ? ' (just what they wanted!)' : ''}`;
+    s.last = i;
+    s.round += 1;
+    if (s.round >= s.judge.length) s.done = true;
+  },
+  // `max` is generous: a very well-fed lead scores near it, an unfed one reaches roughly half.
+  result: (s) => ({ score: Math.min(s.points, s.best), max: s.best }),
+};
+
 export const MINIGAMES_3: Record<string, MinigameModule<never>> = {
   'obstacle-course': athlete as never,
   'bug-contest': bugContest as never,
@@ -417,4 +463,5 @@ export const MINIGAMES_3: Record<string, MinigameModule<never>> = {
   'pinball-bonus': pinball as never,
   'ranger-styler': styler as never,
   'snap-photo': snap as never,
+  'pokemon-contest': contest as never,
 };

@@ -36,7 +36,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 17, run: 36, settings: 31, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 17, run: 37, settings: 31, meta: 1, timeline: 1 };
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -327,6 +327,11 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     35: (data) => {
       const run = data as Json & { minigames?: Json };
       return run.minigames && typeof run.minigames === 'object' ? { ...run, minigames: { frontierPoints: 0, ...run.minigames } } : run;
+    },
+    // v37 (Contest conditions): runs started before it have raised none.
+    36: (data) => {
+      const run = data as Json & { minigames?: Json };
+      return run.minigames && typeof run.minigames === 'object' ? { ...run, minigames: { contest: {}, ...run.minigames } } : run;
     },
   },
   settings: {

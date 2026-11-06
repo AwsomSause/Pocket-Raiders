@@ -235,3 +235,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `lures-weather-spawns.md`: Lure Crafting S223, Lure Towers S237, Weather-Locked Spawns S234 (`core/spawnLocks.ts`, `crafting.json` lure recipes).
 - `growth-training-camp.md`: Growth slice 5: Training Camps (two Box Pokémon gain XP after each win).
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
+- `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
