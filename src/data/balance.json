@@ -59,7 +59,8 @@
  "transformations": {
   "bossGymFrom": 5,
   "league": true,
-  "dynamaxTurns": 3
+  "dynamaxTurns": 3,
+  "gimmick": { "levels": [2, 5, 9], "megaHealPerLevel": 10, "zAttuneUses": 5 }
  },
  "friendship": {
   "max": 255,
