@@ -190,6 +190,7 @@
   "grass/steel": 0.6, "fighting/ghost": 0.7, "fighting/psychic": 0.7, "fighting/dark": 0.7, "fire/steel": 0.6, "electric/steel": 0.6, "poison/steel": 0.6
  },
  "nativeWeight": 3,
+ "signatureWeight": 2,
  "wildMaxBaseStats": 560,
   "levelBst": { "base": 290, "perLevel": 9, "retries": 10 },
  "stagePlan": { "catcher": 2, "fighter": 5, "explorer": 2, "shopper": 3000, "heals": 2, "wipes": 1, "themeBonus": 3, "maxSignals": 2 },
