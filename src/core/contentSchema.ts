@@ -1960,6 +1960,8 @@ export const BalanceSchema = z.object({
   battleFlair: BattleFlairSchema.default(DEFAULT_BATTLE_FLAIR),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
+  /** Overhaul slice 5 (story/momentDirector.ts): per tier, how many moments a run may show (null = no cap) and battles between two of them. */
+  moments: z.object({ minor: z.object({ perRun: z.number().int().min(0).nullable(), cooldownBattles: z.number().int().min(0) }), major: z.object({ perRun: z.number().int().min(0).nullable(), cooldownBattles: z.number().int().min(0) }), landmark: z.object({ perRun: z.number().int().min(0).nullable(), cooldownBattles: z.number().int().min(0) }) }).default({ minor: { perRun: null, cooldownBattles: 0 }, major: { perRun: null, cooldownBattles: 0 }, landmark: { perRun: null, cooldownBattles: 0 } }),
   /** Overhaul slice 4 (core/powerBudget.ts): Threat Rating caps per power class at `level`, and the cap on a learnable move's effective power. */
   powerBudget: z.object({
     level: z.number().int().min(1).max(100),

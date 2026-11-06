@@ -38,7 +38,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `src/core/eggs.ts` | Eggs: lay (species, shine, egg moves rolled then), count down per battle or stage, hatch into a "caught" decision. |
 | `src/core/battle/` | `engine.ts` **big** (1930) turn engine; `abilities.ts`; `damage.ts` pure maths; `held.ts` held items; `transform.ts` Mega/Tera/Z/Dynamax; `hyper.ts` Hyper moments (M8.9); `doubles.ts` double battles (two a side: focus, spread moves, aiming, ally moves/abilities, AI). |
 | `src/core/presentation/` | Presentation-cue layer: `cues.ts` (engine events → animation plan), `moveAnims.ts`, `animFormat.ts`. |
-| `src/core/story/` | Story layer (M8.9): `schema`, `record` (domain events), `effects` + `ledger` (never apply twice), `queue`, `hooks` (run → story), `hyper` (Hyper moment eligibility). Guide: `docs/story-foundation.md`. |
+| `src/core/story/` | Story layer (M8.9): `schema`, `record` (domain events), `effects` + `ledger` (never apply twice), `queue`, `hooks` (run → story), `hyper` (Hyper moment eligibility), `momentDirector` (per-run caps on story moments, Overhaul slice 5). Guide: `docs/story-foundation.md`. |
 | `src/core/raid/` | Raids: `schema` (raids.json shape), `raid.ts` (shields, phases, telegraph, timer, den placement; the engine calls its hooks). |
 | `src/core/events.ts` | Map events ("!"/"?" stops): placement, choices, checks, effects, event battles. Data: `src/data/events.json`, built from `tools/events/*.ts` by `npm run data:events`. Screen: `src/scenes/EventScene.ts`. |
 | `src/core/trade/view.ts` | Trade Stop model (Trade Post + Plaza traders) for `src/scenes/TradeScene.ts`; styles in `src/ui/tradeStyles/` (one file each), setting in `core/presentation/tradeStyles.ts`. |
