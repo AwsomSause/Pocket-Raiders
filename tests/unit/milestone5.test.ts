@@ -2,6 +2,7 @@
 // the Bank payout, achievements, trainer unlocks and their passives, the Run
 // History, save upgrades and export/import.
 
+import { dynamicPriceFactor } from '../../src/core/priceSwing';
 import { tideShopMultiplier } from '../../src/core/clock';
 import { describe, expect, it } from 'vitest';
 import { getArchetype, typeModifiers } from '../../src/core/archetypes';
@@ -192,16 +193,16 @@ describe('trainer unlocks', () => {
     const ball = content.shop.find((e) => e.item === 'poke-ball')!;
     // The weekly sale takes 20% off whichever item it picks (the same for both runs, same seed).
     const offFor = (r: RunState) => (shopSaleItem(content, r) === 'poke-ball' ? 1 - content.balance.shopSale.discount : 1);
-    expect(shopPrice(content, run, ball)).toBe(Math.round(ball.price * 1.5 * offFor(run)));
+    expect(shopPrice(content, run, ball)).toBe(Math.round(ball.price * 1.5 * offFor(run) * dynamicPriceFactor(content, run, 'poke-ball')));
     const plain = newRun('red');
-    expect(shopPrice(content, plain, ball)).toBe(Math.round(ball.price * offFor(plain)));
+    expect(shopPrice(content, plain, ball)).toBe(Math.round(ball.price * offFor(plain) * dynamicPriceFactor(content, plain, 'poke-ball')));
   });
 
   it('Giovanni: shop stock unlocks two badges sooner and healing costs more', () => {
     let run = newRun('gio', 'giovanni');
     expect(shopStock(content, run).map((e) => e.item)).toContain('great-ball'); // normally 2 badges
     const potion = content.shop.find((e) => e.item === 'potion')!;
-    expect(shopPrice(content, run, potion)).toBe(Math.round(potion.price * 1.25 * tideShopMultiplier(content, run, 'healing')));
+    expect(shopPrice(content, run, potion)).toBe(Math.round(potion.price * 1.25 * tideShopMultiplier(content, run, 'healing') * dynamicPriceFactor(content, run, 'potion')));
     const node = run.stage!.map.nodes[0]!;
     node.sides.push({ id: 's', kind: 'shop', used: false });
     run.stage!.current = node.id;
@@ -209,8 +210,9 @@ describe('trainer unlocks', () => {
     run = visitSide(content, run, 's').run;
     // A plain Poké Mart (other shop kinds sell other goods and prices; tests/unit/shopTypes.test.ts).
     run.shop = { ...run.shop!, type: 'mart' };
+    const swing = dynamicPriceFactor(content, run, 'great-ball');
     run = buyItem(content, run, 'great-ball').run;
-    expect(run.money).toBe(1000 - content.shop.find((e) => e.item === 'great-ball')!.price);
+    expect(run.money).toBe(1000 - Math.round(content.shop.find((e) => e.item === 'great-ball')!.price * swing));
   });
 
   it('Misty: Water-type Pokémon hit harder and take more super-effective damage', () => {
