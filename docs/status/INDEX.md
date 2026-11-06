@@ -321,6 +321,8 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-final-checks.md`: Overhaul slices 29-30: 100-run simulation (`npm run sim:overhaul`) vs the pre-Overhaul game, and the THE OVERHAUL.md §18 acceptance checklist with test evidence.
 - `player-art-p1.md`: player trainer art registry and strips (Overhaul P1).
 - `story-foundation-f0.md`: Story Overhaul F0: profile v20 / run v40 / settings v39 containers, `data:story` + `src/data/story/`, Zod schemas, the 19 story gates. Later story slices add fields inside the containers; no more bumps.
+- [item-library-wiring](item-library-wiring.md): P4, 97 library pictures wired (91 items + 6 candies)
+- `walkable-pocket-town.md`: Pocket Town is a walkable second map on the Hub Town engine (data/pocketTown.json, tools/hubtown/pocket.py); Esc is the Town directory. Panels are slice 2.
 - story-icons-p7.md: P7 pack icon wiring (107 icons, lazy catalog ids, debug gallery)
 - 2026-11-06 ui-fixes-fonts: font slimming and battle/hub layout fixes (docs/status/ui-fixes-fonts.md)
 - `story-s1a-archive-and-checks.md`: Story S1a: Starter Sets archive switch (`balance.starterSets.enabled=false`) and live-game claim checks (lost fights end the run today; no `championDefense.ts`, no Rapport meter).
