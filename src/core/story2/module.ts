@@ -63,6 +63,17 @@ export function startBackstory(content: Content, run: RunState): void {
   if (v2.module.queue.length > 0) v2.module.active = v2.module.queue.shift()!;
 }
 
+/** The player's (or a sim's) pick: switches a fresh run to this backstory (any module in the data, enabled or not) and restarts its module. Only before play begins. */
+export function chooseBackstory(content: Content, run: RunState, id: string): void {
+  const v2 = run.story.v2;
+  if (!v2 || !moduleOf(content.storyData, id) || v2.module?.backstory === id) return;
+  v2.module = undefined;
+  v2.facts = {};
+  v2.fired = [];
+  v2.protagonist = { look: 'look_a', name: '', pronouns: 'they', ...v2.protagonist, backstory: id };
+  startBackstory(content, run);
+}
+
 // ---------- effects (each effect id applies once) ----------
 
 function addRelationship(run: RunState, character: string, attr: string, amount: number): void {

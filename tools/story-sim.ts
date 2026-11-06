@@ -6,10 +6,12 @@
 import { writeFileSync } from 'node:fs';
 import type * as Auto from '../tests/unit/autoplay.ts';
 import type * as Data from '../src/data/index.ts';
+import type * as Mod from '../src/core/story2/module.ts';
 import { closeModules, loadModule } from './lib/gameModules.ts';
 
 const { autoplay } = await loadModule<typeof Auto>('/tests/unit/autoplay.ts');
 const { buildContent } = await loadModule<typeof Data>('/src/data/index.ts');
+const { chooseBackstory } = await loadModule<typeof Mod>('/src/core/story2/module.ts');
 await closeModules();
 
 const content = buildContent();
@@ -30,7 +32,7 @@ for (const backstory of backstories) {
         seed, archetypeId: 'red', campaignId: 'orrery-circuit', steps: STEPS, smart: true, starterLevel: LEVEL || undefined, healOnMap: true,
         onStep: (r) => {
           row.steps++;
-          if (r.story.v2 && !r.story.v2.protagonist) r.story.v2.protagonist = { look: 'look_a', name: 'Sim', pronouns: 'they', backstory };
+          if (r.story.v2 && r.story.v2.protagonist?.backstory !== backstory) chooseBackstory(content, r, backstory);
           return r;
         },
       });

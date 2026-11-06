@@ -1,5 +1,6 @@
 // Story S20: a short Story Run per backstory plays without errors, is deterministic, and every module validates.
 import { describe, expect, it } from 'vitest';
+import { chooseBackstory } from '../../src/core/story2/module';
 import { validateModule } from '../../src/core/story2/moduleValidator';
 import { autoplay } from './autoplay';
 import { content } from './helpers';
@@ -7,7 +8,7 @@ import { content } from './helpers';
 const play = (backstory: string, seed: string) => autoplay({
   seed, campaignId: 'orrery-circuit', steps: 500, smart: true, healOnMap: true,
   onStep: (r) => {
-    if (r.story.v2 && !r.story.v2.protagonist) r.story.v2.protagonist = { look: 'look_a', name: 'Sim', pronouns: 'they', backstory };
+    if (r.story.v2 && r.story.v2.protagonist?.backstory !== backstory) chooseBackstory(content, r, backstory);
     return r;
   },
 });
