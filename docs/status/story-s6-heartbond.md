@@ -1,0 +1,9 @@
+# Story S6 (part 1): Heartbond core and Core Temperaments
+
+- `core/story2/heartbond.ts`: Heartbond score from the partner's Bond record (never saved), level ladder (thresholds and weights in one `HEARTBOND` table), latches for levels 3, 5, 6, 7, 8, 9, 10 (the displayed level can fall, the unlock cannot; the scene waits in `pending` until a safe moment), Keystone flag set at the next Recovery stop after latch 10, and `payHeartbond`: every pay goes through the Bond Engine and a ledger key `battle:uid:source:turn`, one payer per turn by rank (story beat > milestone win > feat > hyper/overdrive > clutch survive > signature > guard ally > underdog), caps per battle/stop, lower sources are "folded". Replays cannot pay twice. Pays never read settings, so Autonomy Off still reaches level 10.
+- `run.story.v2.heartbond` (partner uid, latched, pending, keystoneReady, ledger of at most 600 keys) lives inside the existing run v40 container: no save bump.
+- `core/story2/temperament.ts`: the 16 Core Temperaments and the map from all 58 personalities (a test fails if one is unmapped or extra).
+- Fixed along the way: the `.default({...})` objects in the story run schema were shared between parses (a later parse could see an earlier one's changes); `heartbond` and `stops` now use function defaults.
+- Note: the design doc says its "good run" example (HS 68.75) is Level 5 "nearly 6", but its own table puts the level 6 line at 66, so the code gives level 6. Tune the thresholds if that matters.
+- Not built (S6 part 2): nothing calls `payHeartbond` yet (the battle, camp and care hooks), no party-menu Talk/Pet/Feed/Embrace actions, snacks and keepsakes use, override offers and their cost, the Heartbond meter UI, temperament beats at latches 3, 6, 9, and the Moment Director cap (rule 5) wiring.
+- Tests: `tests/unit/storyHeartbond.test.ts` (10).

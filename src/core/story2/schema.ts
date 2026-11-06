@@ -187,6 +187,14 @@ export const StoryV2Schema = z.object({
   quiz: z.object({ traitVector: z.record(z.string(), z.number()), picks: z.array(z.string()) }).optional(),
   starter: z.object({ lineId: z.string(), temperament: z.string(), twist: z.string().optional(), keystone: z.array(z.string()).default([]) }).optional(),
   heartbondOverrides: z.number().int().min(0).default(0),
+  /** S6: the partner's uid, levels already latched (unlocks never fall), latches waiting for a safe moment to play, the Keystone flag, and the pay ledger. */
+  heartbond: z.object({
+    partner: z.string().optional(),
+    latched: z.array(z.number().int().min(1).max(10)).default([]),
+    pending: z.array(z.number().int().min(1).max(10)).default([]),
+    keystoneReady: z.boolean().default(false),
+    ledger: z.array(z.string()).max(600).default([]),
+  }).default(() => ({ latched: [], pending: [], keystoneReady: false, ledger: [] })),
   cast: z.record(z.string(), z.object({
     stage: z.string(), attrs: z.record(z.string(), z.number()).default({}), memories: z.array(z.string()).default([]),
     /** S8 relationship record: flags (met, owes_player...), gate events passed, structured memories, the stage waiting to settle, last contact. */
@@ -199,7 +207,7 @@ export const StoryV2Schema = z.object({
   })).default({}),
   arcs: z.record(z.string(), z.object({ state: z.string(), step: z.number().int().default(0), nodeCost: z.number().default(0) })).default({}),
   facts: z.record(z.string(), Scalar).default({}),
-  stops: z.object({ index: z.number().int().default(0), planned: z.number().int().default(0), done: z.array(z.string()).default([]) }).default({ index: 0, planned: 0, done: [] }),
+  stops: z.object({ index: z.number().int().default(0), planned: z.number().int().default(0), done: z.array(z.string()).default([]) }).default(() => ({ index: 0, planned: 0, done: [] })),
   replans: z.array(z.record(z.string(), Scalar)).default([]),
   /** W3: per-rival relationship record (Respect, Rivalry, Affection, Suspicion, 0 to 100) and the gate events passed. */
   rel: z.record(z.string(), z.object({ respect: z.number().int().min(0).max(100), rivalry: z.number().int().min(0).max(100), affection: z.number().int().min(0).max(100), suspicion: z.number().int().min(0).max(100), met: z.boolean().default(true), gates: z.array(z.string()).default([]) })).default({}),
