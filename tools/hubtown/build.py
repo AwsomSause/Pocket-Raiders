@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Hub Town builder (offline asset tool, Python 3 + Pillow).
 
-Turns tools/hubtown/layout.py into the game's Hub Town data and atlases, cutting every tile and building
+Turns tools/hubtown/layout.py (Hub Town) and pocket_layout.py (Pocket Town) into the game data and atlases, cutting every tile and building
 straight out of the Pokémon-Memories tilesets (github.com/AwsomSause/Pokemon-Memories):
 
   public/assets/images/overworld/hubtown_tiles.png   ground tiles in a 16-column grid (32 px)
@@ -18,7 +18,7 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
-import layout as L
+import layout as HUB_L, pocket_layout as POCKET_L
 from extract import extract, cache, TS as TS_FILES
 import extract as EX
 
@@ -73,206 +73,244 @@ def footprint(n, px, py):
             if cover >= 0.28: tiles.add((tx, ty))
     return sorted(tiles)
 
-# ---------- ground ----------
-W, H = L.W, L.H
-rnd = random.Random(7)
-grass = [('vr', 1, 1)] * 6 + [('vr', 0, 0)] * 3 + [('vr', 1, 0), ('vr', 0, 1), ('vr', 0, 2)]
-ground = [[rnd.choice(grass) for _ in range(W)] for _ in range(H)]
-overlay = [[None] * W for _ in range(H)]
 
-def rect_set(x, y, w, h): return {(xx, yy) for xx in range(x, x + w) for yy in range(y, y + h)}
+COLS = 16
+SYNTH = {}   # dithered plaza-edge tiles made on the fly (key carries the map name)
+safe = lambda s: re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_')
 
-# door stubs: every building door meets a path
-path_mask = set()
-for r in L.paths: path_mask |= rect_set(*r)
-# The sand ring around the plaza is an organic blob, not a box, so the square melts into the meadow (Kice 2026-11-02).
-import random as _random
-_ring_rng = _random.Random(2026)
-rx, ry, rw, rh = L.plaza_ring
-ring = set()
-cx_, cy_ = rx + rw / 2 - 0.5, ry + rh / 2 - 0.5
-for yy in range(ry - 3, ry + rh + 3):
-    for xx in range(rx - 3, rx + rw + 3):
-        # a rounded rectangle (superellipse) with a little wobble along the edge
-        nx, ny = abs(xx - cx_) / (rw / 2 + 1.2), abs(yy - cy_) / (rh / 2 + 1.2)
-        if nx ** 4 + ny ** 4 <= 1 + _ring_rng.uniform(-0.18, 0.12): ring.add((xx, yy))
-# smooth: drop tiles with fewer than two neighbours, fill single holes (the edge tiles need both sides)
-for _ in range(3):
-    nb = lambda t: sum((t[0] + dx, t[1] + dy) in ring for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
-    ring = {t for t in ring if nb(t) >= 2}
-    for yy in range(ry - 3, ry + rh + 3):
-        for xx in range(rx - 3, rx + rw + 3):
-            if (xx, yy) not in ring and nb((xx, yy)) >= 3: ring.add((xx, yy))
-# no one-tile-wide necks: a tile needs a neighbour on at least one side horizontally and vertically
-ring = {t for t in ring if ((t[0] - 1, t[1]) in ring or (t[0] + 1, t[1]) in ring) and ((t[0], t[1] - 1) in ring or (t[0], t[1] + 1) in ring)}
-path_mask |= ring
-
-building_tiles = set()   # building footprints (for the minimap)
-taken = set()   # every tile under a placed picture (trees keep off them)
-places = []
-props = []      # (frame, px, py, depth)
-solid = set()
-
-def place(n, x, y):
-    """Place a stamp by the top-left TILE of its solid picture: whole tiles only, centred in its tile span, so every
-    building and prop lines up with the ground grid (Kice 2026-11-02)."""
-    im = stamp_img(n); a = im.split()[3].point(lambda v: 255 if v > 200 else 0)
-    bb = a.getbbox() or (0, 0, im.width, im.height)
-    wt = -(-(bb[2] - bb[0]) // T); ht = -(-(bb[3] - bb[1]) // T)
-    px = int(round(x)) * T + ((wt * T - (bb[2] - bb[0])) // 4) * 2 - bb[0]
-    py = (int(round(y)) + ht) * T - bb[3]
-    props.append((n, px, py, py + bb[3]))
-    fp = footprint(n, px, py)
-    solid.update(fp)
-    taken.update(rect_set(int(round(x)), int(round(y)), wt, ht))
-    return px, py, im.width, im.height, fp
-
-def door_for(fp, px, w, frac):
-    if not fp: return None
-    bottom = max(t[1] for t in fp)
-    target = (px + w * frac) / T
-    row = [t for t in fp if t[1] == bottom]
-    return min(row, key=lambda t: abs(t[0] + 0.5 - target))
-
-for (lid, name, n, x, y, frac, rooms, blurb) in L.locations:
-    px, py, w, h, fp = place(n, x, y)
-    building_tiles.update(fp)
-    dx, dy = door_for(fp, px, w, frac)
-    # carve a stub path from the door down to the nearest road; a stub that would cross a fence (or never meets a
-    # road) becomes a short doorstep instead, so no path runs into a fence
-    fenced = set()
-    for fx, fy, fw, fh, _gaps in L.fences: fenced |= rect_set(fx, fy, fw, fh)
-    stub, met = [], False
-    for yy in range(dy + 1, dy + 10):
-        if (dx, yy) in path_mask: met = True; break
-        if any((xx, yy) in fenced for xx in (dx - 1, dx, dx + 1)): break
-        stub.append(yy)
-    for yy in (stub if met else stub[:1]):
-        for xx in (dx - 1, dx, dx + 1): path_mask.add((xx, yy))
-    places.append({'id': lid, 'name': name, 'kind': 'building', 'rooms': rooms, 'blurb': blurb,
-                   'door': {'x': dx, 'y': dy}, 'stand': {'x': dx, 'y': dy + 1, 'facing': 'up'}})
-for (sid, name, n, x, y, rooms, blurb) in L.spots:
-    px, py, w, h, fp = place(n, x, y)
-    if n == 'arch':
-        cx = int((px + w / 2) // T); by = int((py + h) // T) - 1
-        # walking through the arch: the trigger is the middle of the gateway
-        # the gateway tile itself is the trigger: stepping onto it asks first (never starts anything by walking alone)
-        inside = 'up' if by > H // 2 else 'down'
-        places.append({'id': sid, 'name': name, 'kind': 'gate', 'rooms': rooms, 'blurb': blurb,
-                       'door': {'x': cx, 'y': by}, 'stand': {'x': cx, 'y': by - 1 if inside == 'up' else by + 1, 'facing': 'down' if inside == 'up' else 'up'}})
-    else:
-        tx, ty = (fp[-1] if fp else (int(x), int(y + 1)))
-        places.append({'id': sid, 'name': name, 'kind': 'sign', 'rooms': rooms, 'blurb': blurb,
-                       'door': {'x': tx, 'y': ty}, 'stand': {'x': tx, 'y': ty + 1, 'facing': 'up'}})
-for n, x, y in L.objects: place(n, x, y)
-
-# trees: keep off roads, doors and the gateways
-blockers = set(path_mask)
-for p in places: blockers |= {(p['stand']['x'] + d, p['stand']['y'] + e) for d in (-1, 0, 1) for e in (0, 1)}
-for p in places:
-    if p['kind'] == 'gate': blockers |= rect_set(p['door']['x'] - 4, p['door']['y'] - 4, 9, 6)
-blockers |= taken
-for n, x, y in L.trees:
-    if rect_set(int(x), int(y), 3, 3) & blockers: continue
-    place(n, x, y)
-
-# fences
-for fx, fy, fw, fh, gaps in L.fences:
-    gaps = set(map(tuple, gaps))
-    for xx in range(fx, fx + fw):
-        for yy in range(fy, fy + fh):
-            ex = 0 if xx == fx else (2 if xx == fx + fw - 1 else 1); ey = 0 if yy == fy else (2 if yy == fy + fh - 1 else 1)
-            if (ex == 1 and ey == 1) or (xx, yy) in gaps: continue
-            props.append((f'fence_{ex}{ey}', xx * T, yy * T, yy * T + T)); solid.add((xx, yy))
-
-def blob(mask, ts, base, inner=None, layer=ground):
-    bx, by = base
-    for (x, y) in mask:
-        if not (0 <= x < W and 0 <= y < H): continue
-        n = lambda dx, dy: (x + dx, y + dy) in mask
-        cx = 0 if not n(-1, 0) else (2 if not n(1, 0) else 1); cy = 0 if not n(0, -1) else (2 if not n(0, 1) else 1)
-        t = (bx + cx, by + cy)
-        if inner and cx == 1 and cy == 1:
-            ix, iy = inner
-            if not n(-1, -1): t = (ix, iy)
-            elif not n(1, -1): t = (ix + 1, iy)
-            elif not n(-1, 1): t = (ix, iy + 1)
-            elif not n(1, 1): t = (ix + 1, iy + 1)
-        layer[y][x] = (ts, *t)
-
-blob(path_mask, 'vr', (0, 21), (3, 21))
-x0, y0, w0, h0 = L.plaza
-for yy in range(y0, y0 + h0):
-    for xx in range(x0, x0 + w0): ground[yy][xx] = ('vr', 5 + (xx - x0) % 3, (yy - y0) % 3)
-# Soft plaza edge (Kice 2026-11-02): the stone square dissolves into the sand ring with a DS-style ordered dither,
-# pixel by pixel (in 2 px steps, the art's own pixel size), over about three tiles either side of the square's rim.
-SYNTH = {}
-BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]
-_noise = _random.Random(11)
-_wob = {(i, j): _noise.uniform(-0.35, 0.35) for i in range(-8, W + 8) for j in range(-8, H + 8)}
-def _tile_img(key):
-    ts, c, r = key
-    return TS_IMG(ts).crop((c * T, r * T, c * T + T, r * T + T))
-def _stone_weight(X, Y):
-    # distance outside the plaza rect, in tiles (negative inside), with rounded corners and a slow wobble
-    dx = max(x0 - X, X - (x0 + w0), 0.0); dy = max(y0 - Y, Y - (y0 + h0), 0.0)
-    out = (dx * dx + dy * dy) ** 0.5
-    inside = min(X - x0, (x0 + w0) - X, Y - y0, (y0 + h0) - Y)
-    d = out if out > 0 else -max(inside, 0.0)
-    i, j = int(X // 1), int(Y // 1)
-    fx, fy = X - i, Y - j
-    wob = (_wob[(i, j)] * (1 - fx) * (1 - fy) + _wob[(i + 1, j)] * fx * (1 - fy) + _wob[(i, j + 1)] * (1 - fx) * fy + _wob[(i + 1, j + 1)] * fx * fy)
-    return max(0.0, min(1.0, 0.5 - (d + wob) / 3.2))
-interior = {t for t in ring if all((t[0] + ddx, t[1] + ddy) in ring for ddx in (-1, 0, 1) for ddy in (-1, 0, 1))}
-for yy in range(y0 - 4, y0 + h0 + 4):
-    for xx in range(x0 - 4, x0 + w0 + 4):
-        in_plaza = x0 <= xx < x0 + w0 and y0 <= yy < y0 + h0
-        if not in_plaza and (xx, yy) not in interior: continue
-        stone = ('vr', 5 + (xx - x0) % 3, (yy - y0) % 3)
-        sand = ('vr', 1, 22)
-        ws = [_stone_weight(xx + (px + 1) / T, yy + (py + 1) / T) for py in range(0, T, 2) for px in range(0, T, 2)]
-        if min(ws) >= 15 / 16: ground[yy][xx] = stone; continue
-        if max(ws) <= 0.5 / 16: ground[yy][xx] = sand; continue
-        a_img, b_img = _tile_img(sand), _tile_img(stone)
-        out = a_img.copy(); bp = b_img.load(); op = out.load()
-        k = 0
-        for py in range(0, T, 2):
-            for px in range(0, T, 2):
-                if ws[k] * 16 > BAYER[(py // 2) % 4][(px // 2) % 4] + 0.5:
-                    for sy in (0, 1):
-                        for sx in (0, 1): op[px + sx, py + sy] = bp[px + sx, py + sy]
-                k += 1
-        key = ('mix', xx, yy, 0)
-        SYNTH[key] = out
-        ground[yy][xx] = key
-water_tiles = set()
-for r in L.water: blob(rect_set(*r), 'g4', (0, 8)); water_tiles |= rect_set(*r)
-for r in L.beach:
-    blob(rect_set(*r), 'g4', (5, 5)); bx, by, bw, bh = r
-    water_tiles |= rect_set(bx + 1, by + 1, bw - 2, bh - 2)
-for bx, by in L.bridges:
-    for i in range(3):
-        for j in range(3): overlay[by + j][bx + i] = ('vr', 2 + i, 75 + j); water_tiles.discard((bx + i, by + j))
-for d in L.decals:
-    ts, c, r, x, y = d
-    if 0 <= x < W and 0 <= y < H and (x, y) not in path_mask and not (x0 <= x < x0 + w0 and y0 <= y < y0 + h0): overlay[y][x] = (ts, c, r)
-solid |= water_tiles
-# the pier is walkable over the lake
-for n, x, y in L.objects:
-    if n in WALKABLE:
-        im = stamp_img(n)
-        for xx in range(int(x), int(x + im.width / T + 0.5)):
-            for yy in range(int(y), int(y + im.height / T + 0.5)): solid.discard((xx, yy))
-
-# ---------- atlases ----------
 uniq = []
 idx = {}
 def tid(t):
     if t is None: return -1
     if t not in idx: idx[t] = len(uniq); uniq.append(t)
     return idx[t]
-g_layer = [tid(ground[y][x]) for y in range(H) for x in range(W)]
-o_layer = [tid(overlay[y][x]) for y in range(H) for x in range(W)]
+
+def build_map(L, mapname, out_json, spawn_id):
+    """Build one walkable map (Hub Town or Pocket Town) into out_json; both share the two atlases. Returns its props."""
+    # ---------- ground ----------
+    W, H = L.W, L.H
+    rnd = random.Random(7)
+    grass = [('vr', 1, 1)] * 6 + [('vr', 0, 0)] * 3 + [('vr', 1, 0), ('vr', 0, 1), ('vr', 0, 2)]
+    ground = [[rnd.choice(grass) for _ in range(W)] for _ in range(H)]
+    overlay = [[None] * W for _ in range(H)]
+
+    def rect_set(x, y, w, h): return {(xx, yy) for xx in range(x, x + w) for yy in range(y, y + h)}
+
+    # door stubs: every building door meets a path
+    path_mask = set()
+    for r in L.paths: path_mask |= rect_set(*r)
+    # The sand ring around the plaza is an organic blob, not a box, so the square melts into the meadow (Kice 2026-11-02).
+    import random as _random
+    _ring_rng = _random.Random(2026)
+    rx, ry, rw, rh = L.plaza_ring
+    ring = set()
+    cx_, cy_ = rx + rw / 2 - 0.5, ry + rh / 2 - 0.5
+    for yy in range(ry - 3, ry + rh + 3):
+        for xx in range(rx - 3, rx + rw + 3):
+            # a rounded rectangle (superellipse) with a little wobble along the edge
+            nx, ny = abs(xx - cx_) / (rw / 2 + 1.2), abs(yy - cy_) / (rh / 2 + 1.2)
+            if nx ** 4 + ny ** 4 <= 1 + _ring_rng.uniform(-0.18, 0.12): ring.add((xx, yy))
+    # smooth: drop tiles with fewer than two neighbours, fill single holes (the edge tiles need both sides)
+    for _ in range(3):
+        nb = lambda t: sum((t[0] + dx, t[1] + dy) in ring for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+        ring = {t for t in ring if nb(t) >= 2}
+        for yy in range(ry - 3, ry + rh + 3):
+            for xx in range(rx - 3, rx + rw + 3):
+                if (xx, yy) not in ring and nb((xx, yy)) >= 3: ring.add((xx, yy))
+    # no one-tile-wide necks: a tile needs a neighbour on at least one side horizontally and vertically
+    ring = {t for t in ring if ((t[0] - 1, t[1]) in ring or (t[0] + 1, t[1]) in ring) and ((t[0], t[1] - 1) in ring or (t[0], t[1] + 1) in ring)}
+    path_mask |= ring
+
+    building_tiles = set()   # building footprints (for the minimap)
+    taken = set()   # every tile under a placed picture (trees keep off them)
+    places = []
+    props = []      # (frame, px, py, depth)
+    solid = set()
+
+    def place(n, x, y):
+        """Place a stamp by the top-left TILE of its solid picture: whole tiles only, centred in its tile span, so every
+        building and prop lines up with the ground grid (Kice 2026-11-02)."""
+        im = stamp_img(n); a = im.split()[3].point(lambda v: 255 if v > 200 else 0)
+        bb = a.getbbox() or (0, 0, im.width, im.height)
+        wt = -(-(bb[2] - bb[0]) // T); ht = -(-(bb[3] - bb[1]) // T)
+        px = int(round(x)) * T + ((wt * T - (bb[2] - bb[0])) // 4) * 2 - bb[0]
+        py = (int(round(y)) + ht) * T - bb[3]
+        props.append((n, px, py, py + bb[3]))
+        fp = footprint(n, px, py)
+        solid.update(fp)
+        taken.update(rect_set(int(round(x)), int(round(y)), wt, ht))
+        return px, py, im.width, im.height, fp
+
+    def door_for(fp, px, w, frac):
+        if not fp: return None
+        bottom = max(t[1] for t in fp)
+        target = (px + w * frac) / T
+        row = [t for t in fp if t[1] == bottom]
+        return min(row, key=lambda t: abs(t[0] + 0.5 - target))
+
+    for (lid, name, n, x, y, frac, rooms, blurb) in L.locations:
+        px, py, w, h, fp = place(n, x, y)
+        building_tiles.update(fp)
+        dx, dy = door_for(fp, px, w, frac)
+        # carve a stub path from the door down to the nearest road; a stub that would cross a fence (or never meets a
+        # road) becomes a short doorstep instead, so no path runs into a fence
+        fenced = set()
+        for fx, fy, fw, fh, _gaps in L.fences: fenced |= rect_set(fx, fy, fw, fh)
+        stub, met = [], False
+        for yy in range(dy + 1, dy + 10):
+            if (dx, yy) in path_mask: met = True; break
+            if any((xx, yy) in fenced for xx in (dx - 1, dx, dx + 1)): break
+            stub.append(yy)
+        for yy in (stub if met else stub[:1]):
+            for xx in (dx - 1, dx, dx + 1): path_mask.add((xx, yy))
+        places.append({'id': lid, 'name': name, 'kind': 'building', 'rooms': rooms, 'blurb': blurb,
+                       'door': {'x': dx, 'y': dy}, 'stand': {'x': dx, 'y': dy + 1, 'facing': 'up'}})
+    for (sid, name, n, x, y, rooms, blurb) in L.spots:
+        px, py, w, h, fp = place(n, x, y)
+        if n == 'arch':
+            cx = int((px + w / 2) // T); by = int((py + h) // T) - 1
+            # walking through the arch: the trigger is the middle of the gateway
+            # the gateway tile itself is the trigger: stepping onto it asks first (never starts anything by walking alone)
+            inside = 'up' if by > H // 2 else 'down'
+            places.append({'id': sid, 'name': name, 'kind': 'gate', 'rooms': rooms, 'blurb': blurb,
+                           'door': {'x': cx, 'y': by}, 'stand': {'x': cx, 'y': by - 1 if inside == 'up' else by + 1, 'facing': 'down' if inside == 'up' else 'up'}})
+        else:
+            tx, ty = (fp[-1] if fp else (int(x), int(y + 1)))
+            places.append({'id': sid, 'name': name, 'kind': 'sign', 'rooms': rooms, 'blurb': blurb,
+                           'door': {'x': tx, 'y': ty}, 'stand': {'x': tx, 'y': ty + 1, 'facing': 'up'}})
+    for n, x, y in L.objects: place(n, x, y)
+
+    # trees: keep off roads, doors and the gateways
+    blockers = set(path_mask)
+    for p in places: blockers |= {(p['stand']['x'] + d, p['stand']['y'] + e) for d in (-1, 0, 1) for e in (0, 1)}
+    for p in places:
+        if p['kind'] == 'gate': blockers |= rect_set(p['door']['x'] - 4, p['door']['y'] - 4, 9, 6)
+    blockers |= taken
+    for n, x, y in L.trees:
+        if rect_set(int(x), int(y), 3, 3) & blockers: continue
+        place(n, x, y)
+
+    # fences
+    for fx, fy, fw, fh, gaps in L.fences:
+        gaps = set(map(tuple, gaps))
+        for xx in range(fx, fx + fw):
+            for yy in range(fy, fy + fh):
+                ex = 0 if xx == fx else (2 if xx == fx + fw - 1 else 1); ey = 0 if yy == fy else (2 if yy == fy + fh - 1 else 1)
+                if (ex == 1 and ey == 1) or (xx, yy) in gaps: continue
+                props.append((f'fence_{ex}{ey}', xx * T, yy * T, yy * T + T)); solid.add((xx, yy))
+
+    def blob(mask, ts, base, inner=None, layer=ground):
+        bx, by = base
+        for (x, y) in mask:
+            if not (0 <= x < W and 0 <= y < H): continue
+            n = lambda dx, dy: (x + dx, y + dy) in mask
+            cx = 0 if not n(-1, 0) else (2 if not n(1, 0) else 1); cy = 0 if not n(0, -1) else (2 if not n(0, 1) else 1)
+            t = (bx + cx, by + cy)
+            if inner and cx == 1 and cy == 1:
+                ix, iy = inner
+                if not n(-1, -1): t = (ix, iy)
+                elif not n(1, -1): t = (ix + 1, iy)
+                elif not n(-1, 1): t = (ix, iy + 1)
+                elif not n(1, 1): t = (ix + 1, iy + 1)
+            layer[y][x] = (ts, *t)
+
+    blob(path_mask, 'vr', (0, 21), (3, 21))
+    x0, y0, w0, h0 = L.plaza
+    for yy in range(y0, y0 + h0):
+        for xx in range(x0, x0 + w0): ground[yy][xx] = ('vr', 5 + (xx - x0) % 3, (yy - y0) % 3)
+    # Soft plaza edge (Kice 2026-11-02): the stone square dissolves into the sand ring with a DS-style ordered dither,
+    # pixel by pixel (in 2 px steps, the art's own pixel size), over about three tiles either side of the square's rim.
+    BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]
+    _noise = _random.Random(11)
+    _wob = {(i, j): _noise.uniform(-0.35, 0.35) for i in range(-8, W + 8) for j in range(-8, H + 8)}
+    def _tile_img(key):
+        ts, c, r = key
+        return TS_IMG(ts).crop((c * T, r * T, c * T + T, r * T + T))
+    def _stone_weight(X, Y):
+        # distance outside the plaza rect, in tiles (negative inside), with rounded corners and a slow wobble
+        dx = max(x0 - X, X - (x0 + w0), 0.0); dy = max(y0 - Y, Y - (y0 + h0), 0.0)
+        out = (dx * dx + dy * dy) ** 0.5
+        inside = min(X - x0, (x0 + w0) - X, Y - y0, (y0 + h0) - Y)
+        d = out if out > 0 else -max(inside, 0.0)
+        i, j = int(X // 1), int(Y // 1)
+        fx, fy = X - i, Y - j
+        wob = (_wob[(i, j)] * (1 - fx) * (1 - fy) + _wob[(i + 1, j)] * fx * (1 - fy) + _wob[(i, j + 1)] * (1 - fx) * fy + _wob[(i + 1, j + 1)] * fx * fy)
+        return max(0.0, min(1.0, 0.5 - (d + wob) / 3.2))
+    interior = {t for t in ring if all((t[0] + ddx, t[1] + ddy) in ring for ddx in (-1, 0, 1) for ddy in (-1, 0, 1))}
+    for yy in range(y0 - 4, y0 + h0 + 4):
+        for xx in range(x0 - 4, x0 + w0 + 4):
+            in_plaza = x0 <= xx < x0 + w0 and y0 <= yy < y0 + h0
+            if not in_plaza and (xx, yy) not in interior: continue
+            stone = ('vr', 5 + (xx - x0) % 3, (yy - y0) % 3)
+            sand = ('vr', 1, 22)
+            ws = [_stone_weight(xx + (px + 1) / T, yy + (py + 1) / T) for py in range(0, T, 2) for px in range(0, T, 2)]
+            if min(ws) >= 15 / 16: ground[yy][xx] = stone; continue
+            if max(ws) <= 0.5 / 16: ground[yy][xx] = sand; continue
+            a_img, b_img = _tile_img(sand), _tile_img(stone)
+            out = a_img.copy(); bp = b_img.load(); op = out.load()
+            k = 0
+            for py in range(0, T, 2):
+                for px in range(0, T, 2):
+                    if ws[k] * 16 > BAYER[(py // 2) % 4][(px // 2) % 4] + 0.5:
+                        for sy in (0, 1):
+                            for sx in (0, 1): op[px + sx, py + sy] = bp[px + sx, py + sy]
+                    k += 1
+            key = ('mix', mapname, xx, yy)
+            SYNTH[key] = out
+            ground[yy][xx] = key
+    water_tiles = set()
+    for r in L.water: blob(rect_set(*r), 'g4', (0, 8)); water_tiles |= rect_set(*r)
+    for r in L.beach:
+        blob(rect_set(*r), 'g4', (5, 5)); bx, by, bw, bh = r
+        water_tiles |= rect_set(bx + 1, by + 1, bw - 2, bh - 2)
+    for bx, by in L.bridges:
+        for i in range(3):
+            for j in range(3): overlay[by + j][bx + i] = ('vr', 2 + i, 75 + j); water_tiles.discard((bx + i, by + j))
+    for d in L.decals:
+        ts, c, r, x, y = d
+        if 0 <= x < W and 0 <= y < H and (x, y) not in path_mask and not (x0 <= x < x0 + w0 and y0 <= y < y0 + h0): overlay[y][x] = (ts, c, r)
+    solid |= water_tiles
+    # the pier is walkable over the lake
+    for n, x, y in L.objects:
+        if n in WALKABLE:
+            im = stamp_img(n)
+            for xx in range(int(x), int(x + im.width / T + 0.5)):
+                for yy in range(int(y), int(y + im.height / T + 0.5)): solid.discard((xx, yy))
+
+    g_layer = [tid(ground[y][x]) for y in range(H) for x in range(W)]
+    o_layer = [tid(overlay[y][x]) for y in range(H) for x in range(W)]
+    # ---------- minimap: one character per tile ----------
+    # '.' grass, '=' road, 'o' plaza stone, '~' water, '#' building, 'T' trees, fences and other solid things
+    def mini(x, y):
+        if (x, y) in water_tiles: return '~'
+        if (x, y) in building_tiles: return '#'
+        if (x, y) in solid: return 'T'
+        if x0 <= x < x0 + w0 and y0 <= y < y0 + h0: return 'o'
+        if (x, y) in path_mask: return '='
+        return '.'
+    minimap = [''.join(mini(x, y) for x in range(W)) for y in range(H)]
+
+    # ---------- map json ----------
+    props.sort(key=lambda p: (p[3], p[1]))
+    for k in L.keepers: k['sprite'] = safe(k['sprite'])
+    out = {
+        'size': [W, H], 'tile': T, 'columns': COLS,
+        'ground': g_layer, 'overlay': o_layer,
+        'props': [[n, px, py, d] for n, px, py, d in props],
+        'solid': sorted([x, y] for x, y in solid if 0 <= x < W and 0 <= y < H),
+        'water': [list(r) for r in L.water],
+        'places': places, 'spawn': next(({'x': p['stand']['x'], 'y': p['stand']['y'], 'facing': 'up'} for p in places if p['id'] == spawn_id), L.spawn), 'keepers': L.keepers, 'zones': L.zones,
+        'pads': L.pads, 'districts': L.districts,
+        'minimap': minimap,
+    }
+    json.dump(out, open(os.path.join(ROOT, out_json), 'w'), separators=(',', ':'))
+    return props, solid, places
+
+hub_props, hub_solid, hub_places = build_map(HUB_L, 'hub', 'src/data/hubTown.json', 'prep')
+pocket_props, pocket_solid, pocket_places = build_map(POCKET_L, 'pocket', 'src/data/pocketTown.json', 'hubgate')
+props = hub_props + pocket_props
+
+# ---------- atlases ----------
 COLS = 16
 rows = (len(uniq) + COLS - 1) // COLS
 tiles_img = Image.new('RGBA', (COLS * T, rows * T))
@@ -304,7 +342,6 @@ TRAINERS = ['trBackpacker_F', 'trBattleGirl', 'trBlackBelt', 'trDancer', 'trFish
             'ace trainer f', 'hood man', 'POKEMONBREADER2', 'blue overworld', 'brendan_walk', 'boy_run', 'girl_run', 'nemona', 'steve',
             'Zinnia', 'Emma', 'Jane', 'Einer', 'Gab overworld', 'essentia', 'Mia_walk', 'Raya_walk', '003-Gladion', '022-Lusamine',
             '055-Aether Employee Female', 'trchar150', 'trchar154']
-safe = lambda s: re.sub(r'[^A-Za-z0-9]+', '_', s).strip('_')
 os.makedirs(os.path.join(OUT_IMG, 'trainers'), exist_ok=True)
 trainers = []
 for t in TRAINERS:
@@ -321,29 +358,4 @@ for f in sorted(os.listdir(fdir)):
     if f.endswith('.png'): followers[f[:-4]] = Image.open(os.path.join(fdir, f)).width // 4
 json.dump({'trainers': trainers, 'followers': followers}, open(os.path.join(ROOT, 'src/data/overworld.json'), 'w'), separators=(',', ':'))
 
-# ---------- minimap: one character per tile ----------
-# '.' grass, '=' road, 'o' plaza stone, '~' water, '#' building, 'T' trees, fences and other solid things
-def mini(x, y):
-    if (x, y) in water_tiles: return '~'
-    if (x, y) in building_tiles: return '#'
-    if (x, y) in solid: return 'T'
-    if x0 <= x < x0 + w0 and y0 <= y < y0 + h0: return 'o'
-    if (x, y) in path_mask: return '='
-    return '.'
-minimap = [''.join(mini(x, y) for x in range(W)) for y in range(H)]
-
-# ---------- map json ----------
-props.sort(key=lambda p: (p[3], p[1]))
-for k in L.keepers: k['sprite'] = safe(k['sprite'])
-out = {
-    'size': [W, H], 'tile': T, 'columns': COLS,
-    'ground': g_layer, 'overlay': o_layer,
-    'props': [[n, px, py, d] for n, px, py, d in props],
-    'solid': sorted([x, y] for x, y in solid if 0 <= x < W and 0 <= y < H),
-    'water': [list(r) for r in L.water],
-    'places': places, 'spawn': next(({'x': p['stand']['x'], 'y': p['stand']['y'], 'facing': 'up'} for p in places if p['id'] == 'prep'), L.spawn), 'keepers': L.keepers, 'zones': L.zones,
-    'pads': L.pads, 'districts': L.districts,
-    'minimap': minimap,
-}
-json.dump(out, open(os.path.join(ROOT, 'src/data/hubTown.json'), 'w'), separators=(',', ':'))
-print(f'tiles {len(uniq)}  props {len(frames)} frames / {len(props)} placed  solid {len(solid)}  places {len(places)}  trainers {len(trainers)}  followers {len(followers)}')
+print(f'tiles {len(uniq)}  props {len(frames)} frames / {len(hub_props)} + {len(pocket_props)} placed  places {len(hub_places)} + {len(pocket_places)}  trainers {len(trainers)}  followers {len(followers)}')

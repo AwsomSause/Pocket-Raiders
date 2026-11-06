@@ -56,7 +56,7 @@ export const HubTownSchema = z.object({
 export type HubTownData = z.infer<typeof HubTownSchema>;
 
 export const HUB_TOWN: HubTownData = HubTownSchema.parse(json);
-/** Pocket Town (Appendix S.5): the second map on the same engine, built by tools/hubtown/pocket.py. */
+/** Pocket Town (Appendix S.5): the second map on the same engine, built by tools/hubtown/pocket_layout.py via build.py. */
 export const POCKET_TOWN: HubTownData = HubTownSchema.parse(pocketJson);
 
 export const OverworldSchema = z.object({
