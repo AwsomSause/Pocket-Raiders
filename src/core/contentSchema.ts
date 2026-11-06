@@ -2728,6 +2728,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
 export const EventRuleSchema = z.object({
   noSwitch: z.boolean().optional(),
   noAttacks: z.boolean().optional(),
+  /** No bag items in this fight (Mentor's Examination). */
+  noItems: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),

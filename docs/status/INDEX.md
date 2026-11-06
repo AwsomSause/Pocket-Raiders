@@ -240,3 +240,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
 - `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
 - `growth-mentor.md`: Growth slice 6: Pokémon Mentor lessons in the Camp menu (S48).
+- `run-events-b-batch4.md`: Run events B batch 4: 14 more trainer events (dance-off, mentor exam with no bag items, type roulette, mirror trainer, twins, underdogs, charity match, chef cook-off...).
