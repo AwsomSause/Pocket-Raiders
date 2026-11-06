@@ -1,27 +1,359 @@
 {
   "note": "Kice spec §9/§10/§11/§21/§29 (major-update-spec). The guaranteed major rival is the first rival (stage 2), made into a full rival record. Characters are semi-canon: each keeps Pokémon from its canonical teams (Gen 1 Blue/Gary, Gen 2 Silver, Gen 4 Barry, Gen 8 Hop), evolved and levelled to this game. Pools are families (first stages); the starter comes from the first-rival roll. Numbers below are the rules for studied moves, counter moves, Pokémon rivals and the sacrifice event.",
   "characters": {
-    "Blue": { "home": "Kanto", "personality": "prodigy", "style": "snowball", "pool": ["pidgey", "abra", "rattata", "exeggcute", "growlithe", "magikarp", "rhyhorn"], "lines": { "intro": "Smell ya later? Nope. {rival} wants a rematch, and {ace} is first in line.", "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." } },
-    "Gary": { "home": "Kanto", "personality": "social-climber", "style": "ace-centric", "pool": ["eevee", "growlithe", "pidgey", "krabby", "scyther", "nidoran-m"], "lines": { "intro": "{rival} brought a cheering section. {ace} soaks it up.", "studied": "{rival} copied your {move} and calls it his own now.", "counter": "\"Your {target} won't embarrass me twice,\" says {rival}. {ace} knows {move}." } },
-    "Silver": { "home": "Johto", "personality": "avenger", "style": "revenge-striker", "pool": ["gastly", "zubat", "magnemite", "sneasel", "abra"], "lines": { "intro": "{rival} glares. {ace} is stronger than last time, and wants you to know it.", "studied": "{rival} took your {move} for himself. Strength is strength.", "counter": "{rival} only cares about beating your {target}. {ace} learned {move} for it." } },
-    "Barry": { "home": "Sinnoh", "personality": "speedrunner", "style": "blitz", "pool": ["starly", "budew", "buizel", "munchlax", "ponyta", "heracross"], "lines": { "intro": "{rival} runs in late and fines you anyway. {ace} is ready!", "studied": "{rival} practiced your {move} a thousand times. {ace} has it now!", "counter": "{rival} drew up a plan just for your {target}: {move}!" } },
-    "Hop": { "home": "Galar", "personality": "golden-retriever", "style": "trust-fighter", "pool": ["wooloo", "rookidee", "snorlax", "phantump", "pincurchin", "heatmor"], "lines": { "intro": "{rival} grins. \"{ace} and I have been training nonstop, mate!\"", "studied": "{rival} loved your {move} so much that {ace} learned it.", "counter": "{rival} studied your {target} all week. {ace} answers with {move}." } },
-    "Bede": { "home": "Galar", "personality": "prodigy", "style": "ace-centric", "pool": ["hatenna", "ponyta", "gothita", "mawile"], "lines": { "intro": "{rival} expects nothing less than a win, and {ace} agrees.", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Hau": { "home": "Alola", "personality": "golden-retriever", "style": "trust-fighter", "pool": ["pikipek", "eevee", "noibat", "pikachu"], "lines": { "intro": "{rival} grins and waves. {ace} is ready for round two!", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Gladion": { "home": "Alola", "personality": "avenger", "style": "revenge-striker", "pool": ["type-null", "zorua", "riolu", "zubat", "porygon"], "lines": { "intro": "{rival} says nothing. {ace} says enough.", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Cheren": { "home": "Unova", "personality": "prodigy", "style": "snowball", "pool": ["purrloin", "lillipup", "pidove", "roggenrola"], "lines": { "intro": "{rival} has a plan for you, and {ace} is the first step.", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Bianca": { "home": "Unova", "personality": "golden-retriever", "style": "trust-fighter", "pool": ["munna", "minccino", "lillipup", "petilil"], "lines": { "intro": "{rival} tripped on the way here, but {ace} is raring to go!", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Wally": { "home": "Hoenn", "personality": "golden-retriever", "style": "trust-fighter", "pool": ["ralts", "budew", "magnemite", "delibird"], "lines": { "intro": "{rival} has grown stronger since last time. So has {ace}.", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Calem": { "home": "Kalos", "personality": "social-climber", "style": "ace-centric", "pool": ["fletchling", "flabebe", "honedge", "absol"], "lines": { "intro": "{rival} adjusts a cap. {ace} steps forward like a star.", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }},
-    "Nemona": { "home": "Paldea", "personality": "speedrunner", "style": "blitz", "pool": ["pawmi", "lechonk", "rockruff", "tinkatink"], "lines": { "intro": "{rival} can't wait another second. {ace}, let's go!", "studied": "{rival} has been studying your {move}. Now {ace} uses it too.", "counter": "{rival} trained {ace} for one job: {move} for your {target}." }}
+    "Blue": {
+      "home": "Kanto",
+      "personality": "prodigy",
+      "style": "snowball",
+      "pool": [
+        "pidgey",
+        "abra",
+        "rattata",
+        "exeggcute",
+        "growlithe",
+        "magikarp",
+        "rhyhorn"
+      ],
+      "lines": {
+        "intro": "Smell ya later? Nope. {rival} wants a rematch, and {ace} is first in line.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "primary"
+    },
+    "Gary": {
+      "home": "Kanto",
+      "personality": "social-climber",
+      "style": "ace-centric",
+      "pool": [
+        "eevee",
+        "growlithe",
+        "pidgey",
+        "krabby",
+        "scyther",
+        "nidoran-m"
+      ],
+      "lines": {
+        "intro": "{rival} brought a cheering section. {ace} soaks it up.",
+        "studied": "{rival} copied your {move} and calls it his own now.",
+        "counter": "\"Your {target} won't embarrass me twice,\" says {rival}. {ace} knows {move}."
+      },
+      "poolClass": "secondary"
+    },
+    "Silver": {
+      "home": "Johto",
+      "personality": "avenger",
+      "style": "revenge-striker",
+      "pool": [
+        "gastly",
+        "zubat",
+        "magnemite",
+        "sneasel",
+        "abra"
+      ],
+      "lines": {
+        "intro": "{rival} glares. {ace} is stronger than last time, and wants you to know it.",
+        "studied": "{rival} took your {move} for himself. Strength is strength.",
+        "counter": "{rival} only cares about beating your {target}. {ace} learned {move} for it."
+      },
+      "poolClass": "primary"
+    },
+    "Barry": {
+      "home": "Sinnoh",
+      "personality": "speedrunner",
+      "style": "blitz",
+      "pool": [
+        "starly",
+        "budew",
+        "buizel",
+        "munchlax",
+        "ponyta",
+        "heracross"
+      ],
+      "lines": {
+        "intro": "{rival} runs in late and fines you anyway. {ace} is ready!",
+        "studied": "{rival} practiced your {move} a thousand times. {ace} has it now!",
+        "counter": "{rival} drew up a plan just for your {target}: {move}!"
+      },
+      "poolClass": "secondary"
+    },
+    "Hop": {
+      "home": "Galar",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "wooloo",
+        "rookidee",
+        "snorlax",
+        "phantump",
+        "pincurchin",
+        "heatmor"
+      ],
+      "lines": {
+        "intro": "{rival} grins. \"{ace} and I have been training nonstop, mate!\"",
+        "studied": "{rival} loved your {move} so much that {ace} learned it.",
+        "counter": "{rival} studied your {target} all week. {ace} answers with {move}."
+      },
+      "poolClass": "primary"
+    },
+    "Bede": {
+      "home": "Galar",
+      "personality": "prodigy",
+      "style": "ace-centric",
+      "pool": [
+        "hatenna",
+        "ponyta",
+        "gothita",
+        "mawile"
+      ],
+      "lines": {
+        "intro": "{rival} expects nothing less than a win, and {ace} agrees.",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "primary"
+    },
+    "Hau": {
+      "home": "Alola",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "pikipek",
+        "eevee",
+        "noibat",
+        "pikachu"
+      ],
+      "lines": {
+        "intro": "{rival} grins and waves. {ace} is ready for round two!",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Gladion": {
+      "home": "Alola",
+      "personality": "avenger",
+      "style": "revenge-striker",
+      "pool": [
+        "type-null",
+        "zorua",
+        "riolu",
+        "zubat",
+        "porygon"
+      ],
+      "lines": {
+        "intro": "{rival} says nothing. {ace} says enough.",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "primary"
+    },
+    "Cheren": {
+      "home": "Unova",
+      "personality": "prodigy",
+      "style": "snowball",
+      "pool": [
+        "purrloin",
+        "lillipup",
+        "pidove",
+        "roggenrola"
+      ],
+      "lines": {
+        "intro": "{rival} has a plan for you, and {ace} is the first step.",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Bianca": {
+      "home": "Unova",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "munna",
+        "minccino",
+        "lillipup",
+        "petilil"
+      ],
+      "lines": {
+        "intro": "{rival} tripped on the way here, but {ace} is raring to go!",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Wally": {
+      "home": "Hoenn",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "ralts",
+        "budew",
+        "magnemite",
+        "delibird"
+      ],
+      "lines": {
+        "intro": "{rival} has grown stronger since last time. So has {ace}.",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "primary"
+    },
+    "Calem": {
+      "home": "Kalos",
+      "personality": "social-climber",
+      "style": "ace-centric",
+      "pool": [
+        "fletchling",
+        "flabebe",
+        "honedge",
+        "absol"
+      ],
+      "lines": {
+        "intro": "{rival} adjusts a cap. {ace} steps forward like a star.",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "Nemona": {
+      "home": "Paldea",
+      "personality": "speedrunner",
+      "style": "blitz",
+      "pool": [
+        "pawmi",
+        "lechonk",
+        "rockruff",
+        "tinkatink"
+      ],
+      "lines": {
+        "intro": "{rival} can't wait another second. {ace}, let's go!",
+        "studied": "{rival} has been studying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "primary"
+    },
+    "Hugh": {
+      "home": "Unova",
+      "personality": "prodigy",
+      "style": "snowball",
+      "pool": [
+        "snivy",
+        "tepig",
+        "oshawott",
+        "pidove",
+        "lillipup",
+        "joltik"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is ready for you.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "primary"
+    },
+    "Brendan": {
+      "home": "Hoenn",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "treecko",
+        "swellow",
+        "mudkip",
+        "zigzagoon",
+        "wingull"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is ready for you.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "May": {
+      "home": "Hoenn",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "torchic",
+        "beautifly",
+        "skitty",
+        "roselia",
+        "wingull"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is ready for you.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
+    },
+    "N": {
+      "home": "Unova",
+      "personality": "quiet-observer",
+      "style": "anti-meta",
+      "pool": [
+        "zorua",
+        "klink",
+        "sigilyph",
+        "vanillite",
+        "joltik"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is ready for you.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "special",
+      "approved": false
+    },
+    "Kieran": {
+      "home": "Paldea",
+      "personality": "obsessive",
+      "style": "specialist",
+      "pool": [
+        "poliwrath",
+        "hawlucha",
+        "ninetales",
+        "bisharp",
+        "joltik"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is ready for you.",
+        "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "special",
+      "approved": false
+    }
   },
   "config": {
     "interval": 2,
     "aceHeldAt": 2,
-    "aceHeld": { "fire": "charcoal", "water": "mystic-water", "grass": "miracle-seed", "electric": "magnet", "fighting": "black-belt", "poison": "poison-barb", "ground": "soft-sand", "flying": "sharp-beak", "rock": "hard-stone", "ghost": "spell-tag", "dragon": "dragon-fang", "steel": "metal-coat", "normal": "silk-scarf", "fairy": "fairy-feather" },
+    "aceHeld": {
+      "fire": "charcoal",
+      "water": "mystic-water",
+      "grass": "miracle-seed",
+      "electric": "magnet",
+      "fighting": "black-belt",
+      "poison": "poison-barb",
+      "ground": "soft-sand",
+      "flying": "sharp-beak",
+      "rock": "hard-stone",
+      "ghost": "spell-tag",
+      "dragon": "dragon-fang",
+      "steel": "metal-coat",
+      "normal": "silk-scarf",
+      "fairy": "fairy-feather"
+    },
     "aceHeldFallback": "life-orb",
-    "study": { "max": 2, "minKos": 1 },
-    "counter": { "max": 2 }
+    "study": {
+      "max": 2,
+      "minKos": 1
+    },
+    "counter": {
+      "max": 2
+    }
   },
   "monRival": {
     "note": "Persistent Pokémon rivalries (§11): one wild individual per run at a time; it takes the first wild battle of each later stage, can't be caught, and a hostile trainer rival may catch it and then always carries it.",
@@ -32,7 +364,16 @@
     "atkBoost": 1,
     "catchChance": 0.4,
     "catchAfterMeetings": 2,
-    "marks": ["a torn ear", "a scar over one eye", "a chipped fang", "a crooked tail", "a notched horn", "a singed tuft", "a cracked shell", "a bent whisker"]
+    "marks": [
+      "a torn ear",
+      "a scar over one eye",
+      "a chipped fang",
+      "a crooked tail",
+      "a notched horn",
+      "a singed tuft",
+      "a cracked shell",
+      "a bent whisker"
+    ]
   },
   "sacrifice": {
     "note": "§29: rare and only when every condition holds. The rival Pokémon (caught by a trainer) is that trainer's last Pokémon in reserve, and the attacker's hit would knock out its rival. Armed per battle by a seeded roll of its own.",
