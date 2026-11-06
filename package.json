@@ -28,6 +28,7 @@
     "data:trainer-perks": "node tools/import-trainer-perks.ts && node tools/build-quests.ts && node tools/build-trainer-unlocks.ts",
     "data:traits": "node tools/import-species-traits.ts",
     "data:custom": "node tools/import-custom-forms.ts",
+    "data:story-species": "node tools/build-story-species.ts",
     "data:abilities": "node tools/import-abilities.ts",
     "data:availability": "node tools/import-availability.ts",
     "data:rival-catalog": "node tools/import-rival-catalog.ts",

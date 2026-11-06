@@ -70,6 +70,8 @@ import customSpeciesJson from './customSpecies.json';
 import formTraitsJson from './formTraits.json';
 import speciesFixesJson from './speciesFixes.json';
 import customEvolutionsJson from './customEvolutions.json';
+// Story Overhaul S15: ten new species (npm run data:story-species).
+import storySpeciesJson from './storySpecies.json';
 import themesJson from './themes.json';
 import trainersJson from './trainers.json';
 // Every trainer class from the Google Drive packs (tools/drive/build-trainers.py): one class per sprite.
@@ -201,6 +203,15 @@ export function mergeSpecies(base: unknown[], custom: unknown[], evolutions: { f
   return [...merged, ...custom];
 }
 
+/** Small field changes on existing species (Eevee now evolves from Tuftin). */
+export function patchSpecies(species: unknown[], patches: { id: string; evolvesFrom: string }[]): unknown[] {
+  const by = new Map(patches.map((p) => [p.id, p]));
+  return species.map((s) => {
+    const p = by.get((s as { id: string }).id);
+    return p ? { ...(s as object), evolvesFrom: p.evolvesFrom } : s;
+  });
+}
+
 interface SpeciesFixes {
   learnsets: Record<string, { level: number; move: string }[]>;
   replaceMoves: Record<string, Record<string, string>>;
@@ -236,7 +247,10 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 }
 
 export const RAW_CONTENT: RawContent = {
-  species: applySpeciesFixes(mergeSpecies(speciesJson, customSpeciesJson, customEvolutionsJson), speciesFixesJson),
+  species: applySpeciesFixes(
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions]), storySpeciesJson.patches),
+    speciesFixesJson,
+  ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   moves: [...movesJson, ...megaMovesJson.moves],
   abilities: abilitiesJson,
@@ -251,7 +265,7 @@ export const RAW_CONTENT: RawContent = {
   rewards: [...rewardsJson, ...megaStonesJson.rewards],
   items: [...itemsJson, ...megaStonesJson.items],
   itemCatalog: itemCatalogJson,
-  learnables: learnablesJson,
+  learnables: { ...learnablesJson, ...storySpeciesJson.learnables },
   trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
   bossTeams: bossTeamsJson,

@@ -20953,5 +20953,383 @@
     "charisma": 4
    }
   }
+ },
+ {
+  "id": "weakness-policy",
+  "name": "Weakness Policy",
+  "family": "Battle held items (newer games)",
+  "description": "Hit by a super-effective move: +2 Attack and +2 Sp. Atk, once per battle",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/weaknesspolicy",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "weaknessPolicy"
+    }
+   ]
+  }
+ },
+ {
+  "id": "blunder-policy",
+  "name": "Blunder Policy",
+  "family": "Battle held items (newer games)",
+  "description": "After one of its moves misses: +2 Speed, once per battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/blunderpolicy",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "blunderPolicy"
+    }
+   ]
+  }
+ },
+ {
+  "id": "throat-spray",
+  "name": "Throat Spray",
+  "family": "Battle held items (newer games)",
+  "description": "After it uses a sound move: +1 Sp. Atk, once per battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/throatspray",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "throatSpray"
+    }
+   ]
+  }
+ },
+ {
+  "id": "eject-pack",
+  "name": "Eject Pack",
+  "family": "Battle held items (newer games)",
+  "description": "When an opponent lowers its stats, it switches out (once per battle)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/ejectpack",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "ejectPack"
+    }
+   ]
+  }
+ },
+ {
+  "id": "room-service",
+  "name": "Room Service",
+  "family": "Battle held items (newer games)",
+  "description": "While Trick Room is up: -1 Speed, once per battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/roomservice",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "roomService"
+    }
+   ]
+  }
+ },
+ {
+  "id": "booster-energy",
+  "name": "Booster Energy",
+  "family": "Battle held items (newer games)",
+  "description": "Paradox Pokémon only: +1 to its best stat when it comes in, once per battle",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/boosterenergy",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "boosterEnergy",
+     "species": [
+      "great-tusk",
+      "scream-tail",
+      "brute-bonnet",
+      "flutter-mane",
+      "slither-wing",
+      "sandy-shocks",
+      "roaring-moon",
+      "walking-wake",
+      "gouging-fire",
+      "raging-bolt",
+      "iron-treads",
+      "iron-bundle",
+      "iron-hands",
+      "iron-jugulis",
+      "iron-moth",
+      "iron-thorns",
+      "iron-valiant",
+      "iron-leaves",
+      "iron-boulder",
+      "iron-crown",
+      "koraidon",
+      "miraidon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "mirror-herb",
+  "name": "Mirror Herb",
+  "family": "Battle held items (newer games)",
+  "description": "Copies the stat boosts an opponent just got, once per battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/mirrorherb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "mirrorHerb"
+    }
+   ]
+  }
+ },
+ {
+  "id": "covert-cloak",
+  "name": "Covert Cloak",
+  "family": "Battle held items (newer games)",
+  "description": "Added effects of moves (status, flinch, stat drops) never hit the holder",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/covertcloak",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "covertCloak"
+    }
+   ]
+  }
+ },
+ {
+  "id": "clear-amulet",
+  "name": "Clear Amulet",
+  "family": "Battle held items (newer games)",
+  "description": "Opponents can't lower the holder's stats",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/clearamulet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "clearAmulet"
+    }
+   ]
+  }
+ },
+ {
+  "id": "loaded-dice",
+  "name": "Loaded Dice",
+  "family": "Battle held items (newer games)",
+  "description": "Multi-hit moves hit at least 4 times",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/loadeddice",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "loadedDice"
+    }
+   ]
+  }
+ },
+ {
+  "id": "punching-glove",
+  "name": "Punching Glove",
+  "family": "Battle held items (newer games)",
+  "description": "Punching moves hit 10% harder and don't make contact",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/punchingglove",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "punchingGlove",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "protective-pads",
+  "name": "Protective Pads",
+  "family": "Battle held items (newer games)",
+  "description": "The holder's moves never make contact (Rocky Helmet and friends don't trigger)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/protectivepads",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "protectivePads"
+    }
+   ]
+  }
+ },
+ {
+  "id": "heavy-duty-boots",
+  "name": "Heavy-Duty Boots",
+  "family": "Battle held items (newer games)",
+  "description": "Entry hazards (Spikes, Stealth Rock, Sticky Web) don't hurt the holder",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/heavydutyboots",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "heavyDutyBoots"
+    }
+   ]
+  }
+ },
+ {
+  "id": "utility-umbrella",
+  "name": "Utility Umbrella",
+  "family": "Battle held items (newer games)",
+  "description": "Weather doesn't help, weaken or hurt the holder or its moves",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/utilityumbrella",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "utilityUmbrella"
+    }
+   ]
+  }
+ },
+ {
+  "id": "terrain-extender",
+  "name": "Terrain Extender",
+  "family": "Battle held items (newer games)",
+  "description": "Terrain the holder sets lasts 3 more turns",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/terrainextender",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "terrainExtender",
+     "turns": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "ability-shield",
+  "name": "Ability Shield",
+  "family": "Battle held items (newer games)",
+  "description": "The holder's ability can't be ignored (Mold Breaker) or changed by opponents",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/abilityshield",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "abilityShield"
+    }
+   ]
+  }
+ },
+ {
+  "id": "ability-capsule",
+  "name": "Ability Capsule",
+  "family": "Ability items",
+  "description": "Swaps a Pokémon between its normal abilities (needs two)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/abilitycapsule",
+  "status": "supported",
+  "effect": {
+   "kind": "ability",
+   "mode": "swap"
+  }
+ },
+ {
+  "id": "ability-patch",
+  "name": "Ability Patch",
+  "family": "Ability items",
+  "description": "Gives a Pokémon its hidden ability",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/abilitypatch",
+  "status": "supported",
+  "effect": {
+   "kind": "ability",
+   "mode": "hidden"
+  }
  }
 ]

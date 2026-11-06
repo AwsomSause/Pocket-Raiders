@@ -328,3 +328,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `story-s1a-archive-and-checks.md`: Story S1a: Starter Sets archive switch (`balance.starterSets.enabled=false`) and live-game claim checks (lost fights end the run today; no `championDefense.ts`, no Rapport meter).
 - `pocket-town-menus.md`: Pocket Town buildings open themed panels (district frame, icon, header; own layouts for Library, Shrine, Capsule Corner, Dojo).
 - `story-s1b-loss-resolver-validator.md`: Story S1b: Story Run keeps going after a lost rival fight, Variant Resolver, Module Validator.
+- story-species: ten new Story Overhaul species (S15), stand-in art, level-only evolutions
+- `polish-sweep-p9.md`: Overhaul P9: asset audit counts down, Phaser chunk, content baseline raised.
+- `player-trainer-battle-p2.md`: player trainer on the battle field (Overhaul P2).
+- [item-held-hooks](item-held-hooks.md): P5, 15 held hooks, Ability Shield/Capsule/Patch
