@@ -63,3 +63,11 @@ Left off on purpose (3): Trapper (trapping has no turn count in the engine), Med
 
 ## Batch 7 (part 1): doubles battles fill the counters
 In a doubles battle the story hooks now follow the engine's `focus` events, so KO, move, hit and status counters go to the Pokémon that acted (before, everything went to the left-hand Pokémon). The per-turn counters (`doublesTurnFacts` in `growth.ts`) are filled for both partners that began the turn: who moved, hit the foe, was hit, missed, switched out. Not counted in doubles: foe misses (Dodger), because a miss event does not say who was aimed at. Tests: `tests/unit/growthDoubles.test.ts`.
+
+## Batch 7 (part 2): battle-situation paths (13 more, 87 of 106 play)
+KO situations are read in `story/hooks.ts` (`koSituation`) and the engine reads the field at hit time (`growthSituation` in `engine.ts`). Each needs the single top count (min 4 unless noted):
+- Hunter (KOs on a foe under 50% HP): +5% against foes under 50% HP. Sweeper (a KO when it already scored one this battle; mark `ko:<uid>` in `growthMarks`): +5% after its first KO of a battle. Comeback (KOs while your party had fewer Pokémon left than the foe): +5% in that case. Duelist (KOs when both sides were down to the last one): +5% in that case. Glass Cannon (6 KOs at 80%+ HP): +5% at full HP, -3% Defense.
+- Speedster (15 turns it moved first) and Scarfer (KOs after moving first while holding a Choice item): +3% Speed once it has a KO this battle.
+- Legend Hunter (100% of a Legendary's max HP dealt, in total): +5% against Legendary and Mythical-like foes. Rival Mirror (5 battles against a foe sharing a type): +3% against such foes. Grudge Keeper (KOs on a foe whose kind knocked out one of yours earlier, the game's existing grudge list): +5% against such foes.
+- Silk Spinner (Bug, 4 Speed-lowering moves), Haunt Keeper (Ghost, 4 Ghost status moves), Trickster (Dark, 4 uses of Taunt, Torment or Fake Out): +5% accuracy with those moves (Taunt and Fake Out are already 100%, so Trickster mostly helps through accuracy drops).
+Limits: Comeback and Duelist count the field at the end of the turn; Closer was not added (it is the same rule as Loner); Scout, Pivot, Lucky, Vanguard, Tidy, Berry Friend, Medic, Bodyguard, Trapper and the rest of the unplayed list are next. Tests: `tests/unit/growthBattleFacts.test.ts`.
