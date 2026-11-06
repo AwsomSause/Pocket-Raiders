@@ -3,7 +3,8 @@ import { eligibleEvents } from '../../src/core/events';
 import { createProfile } from '../../src/core/profile';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { foldTreasureHunt, freshTreasureHunt, seedTreasureHunt } from '../../src/core/treasureHunt';
-import { CURRENT_VERSIONS, MIGRATIONS } from '../../src/save/saveManager';
+import { CURRENT_VERSIONS, MIGRATIONS, SaveManager } from '../../src/save/saveManager';
+import { MemoryStorageProvider } from '../../src/save/storage';
 import { ProfileSchema } from '../../src/core/state';
 import { content } from './helpers';
 
@@ -58,5 +59,17 @@ describe('profile save v18 migration', () => {
   });
   it('a new profile starts with an empty hunt', () => {
     expect(createProfile(content, 'p').treasureHunt).toEqual({ pieces: [], claimed: false });
+  });
+});
+
+describe('profile save v17 loads through the save manager', () => {
+  it('a version 17 profile opens with an empty treasure hunt', () => {
+    const storage = new MemoryStorageProvider();
+    const { treasureHunt: _t, ...old } = createProfile(content, 'p17');
+    storage.set('pkr.profile', JSON.stringify({ format: 'pkmn-roguelike', record: 'profile', schemaVersion: 17, savedAt: '', data: old }));
+    const { profile, warning } = new SaveManager(storage, content).loadOrCreateProfile(() => 'new');
+    expect(warning).toBeUndefined();
+    expect(profile.profileId).toBe('p17');
+    expect(profile.treasureHunt).toEqual({ pieces: [], claimed: false });
   });
 });
