@@ -1,0 +1,1 @@
+- Ash particles (idea S251, follow-up to presentation-pack-2): Fire arenas (either type) also get slowly falling grey ash flakes (`ambience.ts`, `hasAsh`). Look only, not a battle weather; respects Reduce particles and motion settings. Test `tests/unit/ashAmbience.test.ts`.

@@ -37,6 +37,8 @@ export const AMBIENCE: Record<string, Preset> = {
   grass: { particle: P, tint: 0xb8f080, flow: 'drift', count: 10, size: 0.22, additive: true, clouds: true, rays: true },
   bug: { particle: P, tint: 0xf0f070, flow: 'twinkle', count: 12, size: 0.14, additive: true, rays: true },
   fire: { particle: P, tint: 0xffa040, flow: 'rise', count: 14, size: 0.22, additive: true },
+  // S251: grey ash flakes sinking through volcanic (Fire) arenas. Look only; not a battle weather.
+  ash: { particle: P, tint: 0x9a9a9a, flow: 'fall', count: 14, size: 0.16 },
   water: { particle: 'pack.ebdx.bubble', flow: 'rise', count: 12, size: 1.6, rays: true },
   electric: { particle: STAR, tint: 0xfff070, flow: 'twinkle', count: 12, size: 3, additive: true },
   ice: { particle: 'pack.ebdx.snow', flow: 'fall', count: 16, size: 1.6, fog: 'light' },
@@ -63,6 +65,9 @@ export function arenaType(arenaId: string): string {
   ];
   return table.find(([re]) => re.test(name))?.[1] ?? 'normal';
 }
+
+/** S251: Fire arenas (either type) also get falling ash. */
+export const hasAsh = (types: readonly string[]): boolean => types.slice(0, 2).includes('fire');
 
 /** Fixed pseudo-random sequence (no gameplay RNG): golden-ratio steps. */
 const spread = (i: number) => (i * 0.6180339887) % 1;
@@ -107,6 +112,7 @@ export function addAmbience(scene: Phaser.Scene, field: Phaser.GameObjects.Conta
   if (!services().session.settings.reduceParticles) {
     particles(scene, put, main, main.count, 0, moving);
     if (accent) particles(scene, put, accent, 4, 50, moving);
+    if (hasAsh(types)) particles(scene, put, AMBIENCE.ash!, AMBIENCE.ash!.count, 90, moving);
   }
   return objs;
 }
