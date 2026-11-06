@@ -73,6 +73,20 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   bruiser: { counter: 'tradeTurn', words: 'Attack and Defense while at full HP', min: 15, cap: 0.03 },
   anchor: { counter: 'bossTurn', words: 'more HP restored by held-item and move healing', min: 20 },
   dodger: { counter: 'forcedMiss', words: 'evasion while above 75% HP', min: 10, cap: 0.03 },
+  // Batch 7: battle facts (KO situations and a few move kinds), counted in story/hooks.ts.
+  hunter: { counter: 'koLow', words: 'damage against foes below 50% HP' },
+  sweeper: { counter: 'koChain', words: 'damage after it has scored a KO in the same battle' },
+  comeback: { counter: 'koBehind', words: 'damage when your party has fewer Pokémon left than the foe' },
+  duelist: { counter: 'koDuel', words: 'damage when both sides are down to their last Pokémon' },
+  'glass-cannon': { counter: 'koHealthy', words: 'damage at full HP (but -3% Defense)', min: 6 },
+  speedster: { counter: 'movedFirst', words: 'Speed on the turn after its first KO of a battle', min: 15, cap: 0.03 },
+  scarfer: { counter: 'koScarf', words: 'Speed on the turn after its first KO of a battle', cap: 0.03 },
+  'legend-hunter': { counter: 'hitLegend', words: 'damage against Legendary Pokémon', min: 100 },
+  'rival-mirror': { counter: 'mirrorBattle', words: 'damage against foes sharing one of its types', min: 5, cap: 0.03 },
+  'grudge-keeper': { counter: 'koGrudge', words: 'damage against foes that knocked out one of your Pokémon before' },
+  'silk-spinner': { counter: 'dropSpe', words: 'accuracy with moves that lower the foe\'s Speed', min: 4, type: 'bug' },
+  'haunt-keeper': { counter: 'hauntMove', words: 'accuracy with Ghost status moves (curses, hauntings)', min: 4, type: 'ghost' },
+  trickster: { counter: 'useTrick', words: 'accuracy with Taunt, Torment and Fake Out', min: 4, type: 'dark' },
 
 };
 
@@ -141,6 +155,7 @@ export function addGrowth(cfg: GrowthConfig, history: { growth?: Record<string, 
 /** Defense multiplier for the defender's path (Wall above half HP, Bruiser at full HP; physical Defense only). */
 export function growthDefenseMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, hpFrac: number): number {
   if (!cfg.enabled) return 1;
+  if (mon.growthPath === 'glass-cannon') return 0.97;
   if (mon.growthPath === 'wall' && hpFrac > 0.5) return 1 + cfg.bonus;
   if (mon.growthPath === 'bruiser' && hpFrac >= 1) return 1 + Math.min(cfg.bonus, 0.03);
   return 1;
@@ -170,7 +185,7 @@ export function noteMapGrowth(content: Content, run: { story: { histories: Recor
 /** What one move use tells the growth counters. `hpFrac` is the user's HP share before it moved. */
 export interface MoveFacts { accuracy: number | null; category: string; type: string; flags: readonly string[]; hpFrac: number; night?: boolean }
 /** What the move itself is, for the setup-move paths. */
-export interface MoveRoleFacts { id: string; category: string; weather?: unknown; terrain?: unknown; field?: string; wonderRoom?: unknown; sideMove?: string; clearHazards?: unknown; statChanges?: readonly { stages: number; target: string }[] }
+export interface MoveRoleFacts { id: string; category: string; type?: string; weather?: unknown; terrain?: unknown; field?: string; wonderRoom?: unknown; sideMove?: string; clearHazards?: unknown; statChanges?: readonly { stages: number; target: string; stat?: string }[] }
 export function moveRoleCounters(m: MoveRoleFacts): string[] {
   const out: string[] = [];
   if (m.weather) out.push('setWeather');
@@ -182,6 +197,9 @@ export function moveRoleCounters(m: MoveRoleFacts): string[] {
   if (m.clearHazards) out.push('useClean');
   if (m.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)) out.push('dropFoe');
   if (m.category === 'status' && m.statChanges?.some((c) => c.target === 'self' && c.stages > 0)) out.push('raiseSelf');
+  if (m.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) out.push('dropSpe');
+  if (m.category === 'status' && m.type?.toLowerCase() === 'ghost') out.push('hauntMove');
+  if (m.id === 'taunt' || m.id === 'torment' || m.id === 'fake-out') out.push('useTrick');
   return out;
 }
 /** True the first time per battle for this key (`marks` is the battle's `growthMarks`). */
@@ -191,7 +209,7 @@ export function growthOnce(marks: string[], key: string): boolean {
   return true;
 }
 /** Paths whose edge is not damage (status chances, durations, healing, accuracy, Protect). */
-const NON_DAMAGE: ReadonlySet<string> = new Set(['live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
+const NON_DAMAGE: ReadonlySet<string> = new Set(['speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');
@@ -222,7 +240,7 @@ export function bumpGrowth(cfg: GrowthConfig, history: { growth?: Record<string,
 }
 
 /** What a KO tells the growth counters. `by` are the winner's types, `foe` the fallen foe's types. */
-export interface KoFacts { by: readonly string[]; foe: readonly string[]; rival: boolean; trainerClass: string | null; solo: boolean; firstTurn?: boolean }
+export interface KoFacts { by: readonly string[]; foe: readonly string[]; rival: boolean; trainerClass: string | null; solo: boolean; firstTurn?: boolean; foeLow?: boolean; chain?: boolean; behind?: boolean; duel?: boolean; healthy?: boolean; scarf?: boolean; grudge?: boolean }
 
 /** The counters one KO adds to (names from COUNTER_PATHS). */
 export function koCounters(f: KoFacts): string[] {
@@ -236,6 +254,13 @@ export function koCounters(f: KoFacts): string[] {
   if (f.trainerClass === 'champion') out.push('koChampion');
   if (f.solo) out.push('koSolo');
   if (f.firstTurn) out.push('koFirst');
+  if (f.foeLow) out.push('koLow');
+  if (f.chain) out.push('koChain');
+  if (f.behind) out.push('koBehind');
+  if (f.duel) out.push('koDuel');
+  if (f.healthy) out.push('koHealthy');
+  if (f.scarf) out.push('koScarf');
+  if (f.grudge) out.push('koGrudge');
   if (by.includes('water') && foe.some((t) => ['fire', 'rock', 'ground'].includes(t))) out.push('koWaterVsFRG');
   if (by.includes('steel') && foe.some((t) => ['ice', 'rock', 'fairy'].includes(t))) out.push('koSteelVsIRF');
   return out;
@@ -313,7 +338,7 @@ export function assignGrowthPaths(content: Content, party: PokemonInstance[], hi
 }
 
 /** Damage multiplier from the attacker's path for one hit. `hpFrac` is the attacker's HP share (0..1). */
-export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string; turn?: number; turnsOut?: number; waited?: boolean; unhit?: boolean }
+export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string; behind?: boolean; duel?: boolean; chain?: boolean; legend?: boolean; grudge?: boolean; mirror?: boolean; turn?: number; turnsOut?: number; waited?: boolean; unhit?: boolean }
 export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string, effectiveness: number, hpFrac: number, monTypes: readonly string[], hit: HitFacts = {}): number {
   const id = mon.growthPath;
   if (!cfg.enabled || !id) return 1;
@@ -331,6 +356,14 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
       : id === 'chorus-lead' ? hit.sound === true
       : id === 'tank-buster' ? (hit.foeHpFrac ?? 0) > 0.75
       : id === 'bond-breaker' ? (hit.foeHpFrac ?? 0) >= 1
+      : id === 'hunter' ? (hit.foeHpFrac ?? 1) < 0.5
+      : id === 'sweeper' ? hit.chain === true
+      : id === 'comeback' ? hit.behind === true
+      : id === 'duelist' ? hit.duel === true
+      : id === 'glass-cannon' ? hpFrac >= 1
+      : id === 'legend-hunter' ? hit.legend === true
+      : id === 'rival-mirror' ? hit.mirror === true
+      : id === 'grudge-keeper' ? hit.grudge === true
       : id === 'night-owl-path' ? hit.period === 'night'
       : id === 'sunbather' ? hit.period === 'morning' || hit.period === 'afternoon'
       : id === 'moonlit' ? moveType.toLowerCase() === 'fairy' && hit.period === 'night'
@@ -357,12 +390,16 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
   return 1;
 }
 
+const TRICKS: ReadonlySet<string> = new Set(['taunt', 'torment', 'fake-out']);
 /** Accuracy multiplier for the two accuracy paths (Gambler: moves under 80%; Support: status moves). */
-export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false): number {
+export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false, extra: { moveId?: string; lowersSpe?: boolean } = {}): number {
   if (!cfg.enabled || accuracy === null) return 1;
   if (mon.growthPath === 'steady-hand' && moveType.toLowerCase() === 'normal') return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'weather-wise' && weather) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'disruptor' && lowersFoe) return 1 + cfg.bonus;
+  if (mon.growthPath === 'silk-spinner' && extra.lowersSpe) return 1 + cfg.bonus;
+  if (mon.growthPath === 'haunt-keeper' && category === 'status' && moveType.toLowerCase() === 'ghost') return 1 + cfg.bonus;
+  if (mon.growthPath === 'trickster' && TRICKS.has(extra.moveId ?? '')) return 1 + cfg.bonus;
   if (mon.growthPath === 'gambler' && accuracy < 80) return 1 + cfg.bonus;
   if (mon.growthPath === 'support' && category === 'status') return 1 + cfg.bonus;
   return 1;
@@ -378,13 +415,14 @@ export function growthStatusChance(cfg: GrowthConfig, mon: Pick<PokemonInstance,
 }
 
 /** Speed multiplier for the Speed paths: Dawn Runner (first battle of a day), Storm Chaser (rain, snow), Windrunner (own Tailwind). */
-export function growthSpeedMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, facts: { firstOfDay: boolean; weather: string | null; tailwind: boolean }): number {
+export function growthSpeedMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, facts: { firstOfDay: boolean; weather: string | null; tailwind: boolean; koed?: boolean }): number {
   if (!cfg.enabled) return 1;
   const up = 1 + Math.min(cfg.bonus, 0.03);
   switch (mon.growthPath) {
     case 'dawn-runner': return facts.firstOfDay ? up : 1;
     case 'storm-chaser': return facts.weather === 'rain' || facts.weather === 'snow' ? up : 1;
     case 'windrunner': return facts.tailwind ? up : 1;
+    case 'speedster': case 'scarfer': return facts.koed ? up : 1;
     default: return 1;
   }
 }

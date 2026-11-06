@@ -2095,6 +2095,7 @@ export const BalanceSchema = z.object({
   /** Habitat Ecosystem (S219): off in the old-seed story check. */
   ecosystem: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   biomes: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
+  runModifiers: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   teamTemplates: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   /** Capture Styles (S224): befriend / negotiate / trap items with their own odds. Off by default; the ball catch flow stays the default. */
   captureStyles: z
@@ -2426,6 +2427,7 @@ export const BalanceSchema = z.object({
   /** Archived Starter Sets (Story Overhaul S.6): off hides the Starter Laboratory and the starter pool picker; data, code and saves stay. */
   starterSets: z.object({ enabled: z.boolean() }).default({ enabled: false }),
   overhaulChains: z.object({ enabled: z.boolean(), legendaryMinStage: z.number().int().min(1) }).default({ enabled: true, legendaryMinStage: 7 }),
+  mythicalChains: z.object({ enabled: z.boolean(), minStage: z.number().int().min(1) }).default({ enabled: true, minStage: 9 }),
   overhaulField: z.object({ powerCap: z.number().min(0).max(1), envChance: z.number().min(0).max(1), conditionChance: z.object({ mid: z.number().min(0).max(1), late: z.number().min(0).max(1), boss: z.number().min(0).max(1) }) }).default({ powerCap: 0.3, envChance: 0.6, conditionChance: { mid: 0.15, late: 0.25, boss: 0.35 } }),
   hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
   /** Beta 4.4: the next stage is built from what the player did on the last (core/stagePlan.ts). Thresholds per stage. */

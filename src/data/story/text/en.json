@@ -1045,5 +1045,22 @@
  "lore.fn_margin_sketches.name": "Field Note: Marginalia",
  "lore.fn_margin_sketches.i1": "Every sketch in the margin is a Pokémon seen once. None are labeled.",
  "lore.fn_quiet_roads.name": "Field Note: Quiet Roads",
- "lore.fn_quiet_roads.i1": "Roads in the Reaches go quiet before something happens. They also go quiet before festivals."
+ "lore.fn_quiet_roads.i1": "Roads in the Reaches go quiet before something happens. They also go quiet before festivals.",
+ "intro.rival_challenge.1": "{speaker} spins a Poké Ball and catches it without looking.",
+ "intro.rival_challenge.2": "\"Ready, {player}? Do not hold back.\"",
+ "intro.leader_pose.title": "{title} {speaker}",
+ "intro.leader_pose.1": "\"Show me what you and {pokemon} have learned.\"",
+ "intro.champion_entry.title": "{title} {speaker}",
+ "intro.champion_entry.1": "The crowd rises as {speaker} walks into the light.",
+ "intro.champion_entry.2": "\"Every road leads here, {player}. Let us see yours.\"",
+ "intro.villain_reveal.1": "A figure stands in shadow. Then {speaker} steps forward.",
+ "intro.villain_reveal.2": "\"{player}. I wondered when you would find me.\"",
+ "intro.legendary_focus.1": "The air goes still. {pokemon} turns toward you.",
+ "intro.grunt_flank.1": "\"Hold it right there!\" Three {team} grunts spread out.",
+ "intro.alpha_roar.1": "The ground shakes. {pokemon} roars across the {region}.",
+ "intro.ambush_cut.1": "\"Now!\" {speaker} springs from cover.",
+ "intro.ally_join.1": "{speaker} steps in beside you. \"Room for one more?\"",
+ "intro.tournament_spotlight.title": "{town} Exhibition",
+ "intro.tournament_spotlight.1": "\"Next up: {player} against {speaker}!\"",
+ "cutscene.recap.default": "The scene played out. You moved on."
 }

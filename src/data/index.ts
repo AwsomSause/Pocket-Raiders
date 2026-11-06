@@ -111,6 +111,7 @@ const eventsExtraFiles = Object.values(import.meta.glob<unknown>('./events/*.jso
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
 import { chainEvents } from '../core/overhaul/chains';
+import { mythicalChainEvents } from '../core/overhaul/mythicalChains';
 import { dungeonEvents } from '../core/dungeon/compile';
 import { validateAllDungeons } from '../core/dungeon/schema';
 import { pseudoEvents, validateAllPseudo } from '../core/dungeon/pseudo';
@@ -388,6 +389,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   for (const p of validateAllPseudo()) problems.push(`pseudoStages.json ${p}`);
   if (hasCatalog) gamesEvents.push(...pseudoEvents());
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
+  if (balance?.mythicalChains.enabled) gamesEvents.push(...mythicalChainEvents(balance.mythicalChains));
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);

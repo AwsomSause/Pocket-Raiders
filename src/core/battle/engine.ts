@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, turnFacts, waitedTurn } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -1638,6 +1638,23 @@ function switchOutAbility(ctx: BattleContext, mon: PokemonInstance): void {
 // ---------- abilities ----------
 
 /** The weather that counts: Cloud Nine and Air Lock on either side switch its effects off (it still runs out). */
+/** What the field looks like for the growth paths that read it (Comeback, Duelist, Sweeper, Legend Hunter, Rival Mirror, Grudge Keeper). */
+function growthSituation(ctx: BattleContext, user: Combatant, target: Combatant): Pick<HitFacts, 'behind' | 'duel' | 'chain' | 'legend' | 'grudge' | 'mirror'> {
+  if (user.side !== 'player' || !ctx.content.balance.overhaulGrowth.enabled) return {};
+  const mine = ctx.party.filter((m) => m.hp > 0).length;
+  const theirs = ctx.battle.enemyTeam.filter((m) => m.hp > 0).length;
+  const foe = getSpecies(ctx.content, target.mon.speciesId);
+  const types = getSpecies(ctx.content, user.mon.speciesId).types;
+  return {
+    behind: mine < theirs,
+    duel: mine === 1 && theirs === 1,
+    chain: (ctx.battle.growthMarks ?? []).includes(`ko:${user.mon.uid}`),
+    legend: isLegendaryLike(foe),
+    grudge: ctx.battle.grudgeMons?.includes(user.mon.uid) === true,
+    mirror: foe.types.some((t) => types.includes(t)),
+  };
+}
+
 /** The player's Pokémon has this growth path (and the switch is on). */
 function growthHas(ctx: BattleContext, c: Combatant, path: string): boolean {
   return c.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && c.mon.growthPath === path;
@@ -2118,7 +2135,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   if (ability && weather && WEATHER_SPEED[ability]?.includes(weather)) speed *= 2;
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
-  if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0 }));
+  if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0, koed: (ctx.battle.growthMarks ?? []).includes(`ko:${c.mon.uid}`) }));
   if (ability === 'surge-surfer' && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
   return speed * (c.side === 'player' ? (ctx.attributes?.speed ?? 1) : 1);
@@ -2275,7 +2292,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, period: ctx.period }) : 1);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, period: ctx.period, ...growthSituation(ctx, user, target) }) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3334,7 +3351,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
-      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)));
+      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
