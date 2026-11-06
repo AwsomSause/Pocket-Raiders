@@ -91,6 +91,18 @@
      ]
     },
     {
+     "id": "garden-visitors",
+     "name": "Wild visitors",
+     "desc": "Three wild Pokémon wander into the garden each day. Greet one for a small gift (S475).",
+     "kind": "pick",
+     "rows": [
+      "S475"
+     ],
+     "limit": "none",
+     "dynamic": "visitors",
+     "template": {"id": "visitor", "label": "{name}", "desc": "", "say": "", "reward": {"items": {"oran-berry": 1}, "xp": 1, "rp": 1}, "once": true}
+    },
+    {
      "id": "garden-lesson",
      "name": "Tutorial garden",
      "desc": "The Professor explains the game in a small hands-on lesson. Each lesson pays once.",
@@ -153,6 +165,49 @@
         "runs": 3
        }
       }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dreamtower",
+   "name": "Dream Tower",
+   "icon": "item.dream_ball",
+   "blurb": "Spend credits to dream of the road ahead (S109).",
+   "actions": [
+    {
+     "id": "dream-peek",
+     "name": "Dream of a region",
+     "desc": "Pick a region and dream of the gym leaders and Champion who wait there. A small, honest hint.",
+     "kind": "pick",
+     "rows": [
+      "S109"
+     ],
+     "limit": "none",
+     "dynamic": "regions",
+     "template": {"id": "dream", "label": "{name}", "desc": "", "say": "", "cost": {"credits": 10}, "reward": {"xp": 1}, "once": false}
+    }
+   ]
+  },
+  {
+   "id": "orchard",
+   "name": "Berry Orchard",
+   "icon": "item.sitrus_berry",
+   "blurb": "Rows of berry trees that fruit again every day.",
+   "actions": [
+    {
+     "id": "orchard-pick",
+     "name": "Pick from a tree",
+     "desc": "Shake one tree a day for berries that wait in your next run's pocket.",
+     "kind": "pick",
+     "rows": [
+      "F131"
+     ],
+     "limit": "day",
+     "options": [
+      {"id": "tree-oran", "label": "Oran tree", "desc": "Three Oran Berries.", "say": "Berries thump into the grass.", "reward": {"items": {"oran-berry": 3}}, "once": false},
+      {"id": "tree-pecha", "label": "Pecha tree", "desc": "Two Pecha Berries.", "say": "Pink berries tumble down.", "reward": {"items": {"pecha-berry": 2}}, "once": false},
+      {"id": "tree-sitrus", "label": "Sitrus tree", "desc": "One Sitrus Berry and a track point.", "say": "A golden Sitrus Berry drops into your hands.", "reward": {"items": {"sitrus-berry": 1}, "xp": 1}, "once": false}
      ]
     }
    ]
@@ -246,6 +301,18 @@
      "limit": "none",
      "pool": "lore",
      "options": []
+    },
+    {
+     "id": "lab-research",
+     "name": "Lab research",
+     "desc": "Spend 2 Research Points to study a species you have caught and learn its base stats (S462).",
+     "kind": "pick",
+     "rows": [
+      "S462"
+     ],
+     "limit": "none",
+     "dynamic": "labSpecies",
+     "template": {"id": "lab", "label": "{name}", "desc": "", "say": "", "cost": {"rp": 2}, "reward": {"xp": 1}, "once": false}
     },
     {
      "id": "library-quiz",
@@ -2879,7 +2946,9 @@
      "options": [
       {"id": "sponsor-trail", "label": "Trail Co.", "desc": "Clear 1 region: 40 credits.", "say": "Trail Co. will watch your progress.", "once": false, "reward": {"stuff": {"sponsor-trail": 1}}},
       {"id": "sponsor-gear", "label": "Gym Gear", "desc": "Earn 4 badges: 70 credits.", "say": "Gym Gear counts your badges.", "once": false, "reward": {"stuff": {"sponsor-gear": 1}}},
-      {"id": "sponsor-drinks", "label": "Champion Drinks", "desc": "Win the run: 130 credits.", "say": "Champion Drinks bets on a win.", "once": false, "reward": {"stuff": {"sponsor-drinks": 1}}}
+      {"id": "sponsor-drinks", "label": "Champion Drinks", "desc": "Win the run: 130 credits.", "say": "Champion Drinks bets on a win.", "once": false, "reward": {"stuff": {"sponsor-drinks": 1}}},
+      {"id": "sponsor-rival-trail", "label": "Rival Rush (Trail Co. rival)", "desc": "A faction-backed rival team races your best pace. Clear more regions than your best run: 110 credits.", "say": "Trail Co.'s rivals are already warming up.", "once": false, "reward": {"stuff": {"sponsor-rival-trail": 1}}},
+      {"id": "sponsor-rival-gear", "label": "Rival Rush (Gym Gear rival)", "desc": "A Gym Gear-backed rival team challenges you. Earn more badges than in any earlier run: 150 credits.", "say": "Gym Gear's rival team is training hard.", "once": false, "reward": {"stuff": {"sponsor-rival-gear": 1}}}
      ]
     },
     {
@@ -2893,6 +2962,39 @@
      "set": "boon",
      "goods": [
       {"id": "harbor-ticket", "label": "Boat ticket", "desc": "One guaranteed expedition gate next run.", "set": "boon", "cost": {"credits": 80}, "reward": {"stuff": {"harbor-ticket": 1}}}
+     ]
+    },
+    {
+     "id": "hall-cards",
+     "name": "Trading Cards",
+     "desc": "A card for every species you catch and every Trainer you have run as. Rare ones shine.",
+     "kind": "view",
+     "rows": [
+      "S357"
+     ],
+     "view": "cards"
+    },
+    {
+     "id": "hall-market",
+     "name": "Market board",
+     "desc": "Town prices move between runs: a sale after a win, higher when supplies are short.",
+     "kind": "view",
+     "rows": [
+      "S347"
+     ],
+     "view": "market"
+    },
+    {
+     "id": "hall-airship",
+     "name": "Airship Hangar",
+     "desc": "Buy an Airship Pass. Next run you can fly two columns ahead to any stop, once per pass.",
+     "kind": "buy",
+     "rows": [
+      "S367"
+     ],
+     "set": "boon",
+     "goods": [
+      {"id": "airship-pass", "label": "Airship Pass", "desc": "One flight over the next column.", "set": "boon", "cost": {"credits": 120}, "reward": {"items": {"airship-pass": 1}}}
      ]
     },
     {
@@ -4295,7 +4397,9 @@
  "sponsors": [
   { "id": "sponsor-trail", "goal": { "regions": 1 }, "credits": 40 },
   { "id": "sponsor-gear", "goal": { "badges": 4 }, "credits": 70 },
-  { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 }
+  { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 },
+  { "id": "sponsor-rival-trail", "goal": { "outpaceRegions": true }, "credits": 110, "rival": "Trail Co." },
+  { "id": "sponsor-rival-gear", "goal": { "outpaceBadges": true }, "credits": 150, "rival": "Gym Gear" }
  ],
  "economy": { "discountPerTier": 0.05 },
  "fanClub": [

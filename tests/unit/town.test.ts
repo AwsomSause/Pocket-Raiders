@@ -8,6 +8,8 @@ import { applyStartGrants, startGrants } from '../../src/core/legacy';
 import { ProfileSchema, type Profile } from '../../src/core/state';
 import { recordTownRun as recordRun, applyReward, basementCode, collections, dummyHit, getTownAction, jukeboxTracks, ledger, localDay, mailToday, optionsOf, recordTownRun, spendTownStart, statueTarget, TOWN, townAction, townOf, townProblem, townStartGrants, todaysQuests, townStats, townWeather, visitBuilding, KINDS } from '../../src/core/town';
 import { Rng, hashSeed } from '../../src/core/rng';
+import * as townApi from '../../src/core/town';
+const require_town = () => townApi;
 import { content } from './helpers';
 
 const DAY = new Date(2026, 10, 3, 12, 0, 0); // a Tuesday, noon
@@ -342,6 +344,88 @@ describe('Relic Vault (S464)', () => {
   });
 });
 
+describe('Dream Tower and garden visitors (S109, S475)', () => {
+  it('a dream costs credits and describes a real region', () => {
+    const p = rich();
+    const before = p.bankCredits;
+    const regionId = [...content.regions.keys()][0]!;
+    const r = ok(p, 'dream-peek', { choice: regionId });
+    expect(r.profile.bankCredits).toBe(before - townApi.townPrice(p, 10));
+    expect(r.message).toMatch(/dream/i);
+    const poor = { ...rich(), bankCredits: 0 };
+    expect(act(poor, 'dream-peek', { choice: regionId }).ok).toBe(false);
+  });
+  it('the day brings three visitors, the same all day, each greeted once', () => {
+    const { gardenVisitors } = require_town();
+    const a = gardenVisitors(content, DAY);
+    expect(a).toHaveLength(3);
+    expect(gardenVisitors(content, DAY)).toEqual(a);
+    const id = `${a[0]}@${localDay(DAY)}`;
+    const p = ok(rich(), 'garden-visitors', { choice: id }).profile;
+    expect(p.researchPoints).toBe(rich().researchPoints + 1);
+    expect(ok(p, 'garden-visitors', { choice: id }).profile.researchPoints).toBe(p.researchPoints); // the gift pays once
+  });
+});
+
+describe('Lab research, trading cards, notice filters (S462, S357, S478)', () => {
+  it('lab research costs 2 Research Points, shows base stats and lists a species once', () => {
+    const p = rich();
+    p.speciesCaught = ['bulbasaur'];
+    expect(optionsOf(content, p, getTownAction('lab-research')!, DAY).map((o) => o.id)).toEqual(['bulbasaur']);
+    const r = ok(p, 'lab-research', { choice: 'bulbasaur' });
+    expect(r.profile.researchPoints).toBe(p.researchPoints - 2);
+    expect(r.message).toMatch(/HP 45/);
+    expect(optionsOf(content, r.profile, getTownAction('lab-research')!, DAY)).toHaveLength(0);
+    expect(act({ ...p, researchPoints: 0, speciesCaught: ['bulbasaur'] }, 'lab-research', { choice: 'bulbasaur' }).ok).toBe(false);
+  });
+  it('trading cards come from caught species and trainers run, rarer with base stats', () => {
+    const p = rich();
+    p.speciesCaught = ['caterpie', 'mewtwo'];
+    const cards = townApi.tradingCards(content, p);
+    expect(cards.find((c) => c.id === 'caterpie')!.rarity).toBe('common');
+    expect(cards.find((c) => c.id === 'mewtwo')!.rarity).toBe('holo');
+    expect(townApi.tradingCards(content, { ...p, speciesCaught: ['nope'] })).toEqual([]);
+  });
+  it('the notice board sorts ready-to-claim first and filters by state', () => {
+    const t = townOf(rich());
+    const today = '2026-11-03';
+    const quests = [
+      { id: 'a', text: 'A', action: 'x', reward: { credits: 5 } },
+      { id: 'b', text: 'B', action: 'y', reward: { credits: 20 } },
+      { id: 'c', text: 'C', action: 'z', reward: { credits: 1 } },
+    ];
+    t.daily['used:z'] = today;
+    t.daily['claim:a'] = today;
+    expect(townApi.noticeBoard(t, today, quests, 'all').map((n) => n.id)).toEqual(['c', 'b', 'a']);
+    expect(townApi.noticeBoard(t, today, quests, 'open').map((n) => n.id)).toEqual(['b']);
+    expect(townApi.noticeBoard(t, today, quests, 'claim').map((n) => n.id)).toEqual(['c']);
+    expect(townApi.noticeBoard(t, today, quests, 'done').map((n) => n.id)).toEqual(['a']);
+  });
+});
+
+describe('Berry Orchard', () => {
+  it('one tree a day pays berries into the next run', () => {
+    const p = ok(rich(), 'orchard-pick', { choice: 'tree-oran' }).profile;
+    expect(townOf(p).boon.items['oran-berry']).toBe(3);
+    expect(act(p, 'orchard-pick', { choice: 'tree-pecha' }).ok).toBe(false);
+  });
+});
+
+describe('Rival Sponsors (S360)', () => {
+  it('a rival sponsor pays only when you beat your earlier best', () => {
+    const p = ok(rich(), 'hall-sponsor', { choice: 'sponsor-rival-trail' }).profile;
+    const old = { regionsCleared: 2, regions: 3, badges: 1, encounters: 5, victory: false, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x', runId: 'old' };
+    p.runHistory = [old] as never;
+    const run = { runId: 'r', seed: 's', victory: false, inventory: {}, camp: { relics: [], stuff: { 'sponsor-rival-trail': 1 } } };
+    const slow = structuredClone(p);
+    recordRun(content, slow, { ...run, regionIndex: 2 });
+    expect(slow.bankCredits).toBe(p.bankCredits);
+    const fast = structuredClone(p);
+    recordRun(content, fast, { ...run, regionIndex: 3 });
+    expect(fast.bankCredits).toBe(p.bankCredits + 110);
+  });
+});
+
 describe('Sponsor Deals (S359)', () => {
   it('a signed sponsor pays at run end only when its goal was met', () => {
     let p = rich();
@@ -361,17 +445,31 @@ describe('Sponsor Deals (S359)', () => {
 
 describe('Town Economy (S347)', () => {
   it('Fan Club tiers cut credit prices in the town shops', async () => {
-    const { townDiscount, townPrice } = await import('../../src/core/town');
+    const { townDiscount, townPrice, marketSwing } = await import('../../src/core/town');
     const p = rich();
     expect(townDiscount(p)).toBe(0);
     expect(townPrice(p, 60)).toBe(60);
     const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = Array.from({ length: 2 }, () => ({ ...run, victory: false })) as never; // 12 fans: no tier yet
+    expect(townDiscount(p)).toBe(0);
     p.runHistory = Array.from({ length: 2 }, () => run) as never; // 26 fans = tier 1
     expect(townDiscount(p)).toBeCloseTo(0.05);
-    expect(townPrice(p, 60)).toBe(57);
+    const price = Math.max(1, Math.round(60 * 0.95 * (1 + marketSwing(p).pct)));
+    expect(townPrice(p, 60)).toBe(price);
     const before = p.bankCredits;
     const q = ok(p, 'hall-guild', { choice: 'guild-medic' }).profile;
-    expect(q.bankCredits).toBe(before - 57);
+    expect(q.bankCredits).toBe(before - townPrice(p, 60));
     expect(townPrice(p, 0)).toBe(0);
+  });
+  it('Market swings (S347): steady with no runs, a sale after a win, same inputs same price', async () => {
+    const { marketSwing } = await import('../../src/core/town');
+    const p = rich();
+    expect(marketSwing(p).pct).toBe(0);
+    const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = [run, run, run] as never;
+    const won = marketSwing(p).pct;
+    p.runHistory = [{ ...run, victory: false }, run, run] as never;
+    expect(Math.round((marketSwing(p).pct - won) * 100)).toBe(5);
+    expect(marketSwing(p)).toEqual(marketSwing(p));
   });
 });

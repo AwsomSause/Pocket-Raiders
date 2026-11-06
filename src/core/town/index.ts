@@ -159,8 +159,27 @@ export function optionsOf(content: Content, p: Profile, a: TownAction, now: Date
     case 'memorial': return memorialList(content, p).map((m) => from(String(m.index), `${m.name} Lv${m.level}${m.ace ? ' ★' : ''}`, `${m.cause} · ${t.counts[`flower:${m.index}`] ?? 0} flowers`));
     case 'items': return t.lost.map((id, i) => ({ id: `${i}:${id}`, label: id.replace(/-/g, ' '), desc: 'Left behind', say: 'It is waiting for you.', once: false }));
     case 'mail': return mailToday(content, p, now).map((m) => ({ id: m.id, label: `${m.from}${t.sets.mail?.includes(m.id) ? '' : ' (new)'}`, desc: m.text.slice(0, 70), say: m.text, once: true, reward: m.gift }));
+    // Dream Tower (S109): peek at a region's road ahead (its gym leaders and its Champion) from the real campaign data.
+    case 'regions': return [...content.regions.values()].map((r) => {
+      const nice = (id: string) => id.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      const gyms = r.gymLeaders.slice(0, 4).map(nice).join(', ');
+      return from(r.id, r.name, `${r.gymLeaders.length} gyms`, `You dream of ${r.name}: ${gyms}${r.gymLeaders.length > 4 ? ' and more' : ''} wait on the road. ${r.champions[0] ? `At the end, ${nice(r.champions[0])}.` : ''} Dreams are only a hint.`);
+    });
+    // Garden visitors (S475): three wild Pokémon wander in each day; one per option per day.
+    case 'visitors': return gardenVisitors(content, now).map((id) => ({ id: `${id}@${localDay(now)}`, label: content.species.get(id)?.name ?? id, desc: 'A wild visitor today', say: `${content.species.get(id)?.name ?? id} nibbles a berry, then trots off. It left a gift.`, once: true, reward: tpl?.reward }));
+    // Lab Research (S462): caught species you have not studied yet; the study costs Research Points.
+    case 'labSpecies': return p.speciesCaught.filter((id) => !(t.sets.research ?? []).includes(id) && content.species.has(id)).slice(0, 40).map((id) => from(id, content.species.get(id)!.name, 'Not studied yet'));
     default: return a.options.map(base);
   }
+}
+
+/** Today's garden visitors (S475): three seeded picks from the common species, same all day. */
+export function gardenVisitors(content: Content, now: Date): string[] {
+  const pool = [...content.species.values()].filter((sp) => { const t = Object.values(sp.baseStats).reduce((n, v) => n + v, 0); return t > 0 && t <= 400; }).map((sp) => sp.id).sort();
+  const rng = new Rng(hashSeed(`town::garden-visitors::${localDay(now)}`));
+  const out: string[] = [];
+  for (let i = 0; i < 3 && pool.length > 0; i++) out.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+  return out;
 }
 
 export interface Mail { id: string; from: string; text: string; gift?: Reward }
@@ -325,6 +344,14 @@ function runPick(c: Ctx): string {
     const res = miniBattle(c.content, { speciesId: lead.speciesId, level: lead.level }, ghost, rngFor(c.t, key));
     const tag = `${c.content.species.get(lead.speciesId)?.name} Lv${lead.level} vs the ghost ${c.content.species.get(ghost.speciesId)?.name} Lv${ghost.level}.`;
     return res.win ? `${tag} ${res.log.slice(-2).join(' ')} Practice win in ${res.rounds} rounds! ${reward(c, r)}` : `${tag} ${res.log.slice(-2).join(' ')} The ghost wins this time. Try again next run.`;
+  }
+  if (id === 'lab-research') {
+    const sp = c.content.species.get(o.id);
+    if (!sp) return fail('Nothing to study.');
+    (c.t.sets.research ??= []).includes(o.id) || c.t.sets.research.push(o.id);
+    pay(c.p, c.t, cost);
+    const b = sp!.baseStats;
+    return `${sp!.name} studied. HP ${b.hp} · Atk ${b.atk} · Def ${b.def} · Sp.Atk ${b.spa} · Sp.Def ${b.spd} · Speed ${b.spe}. ${reward(c, r)}`.trim();
   }
   if (id === 'mail-read') {
     c.t.sets.mail = [...new Set([...(c.t.sets.mail ?? []), o.id])];
@@ -690,7 +717,11 @@ export function recordTownRun(content: Content, profile: Profile, run: { runId: 
   for (const sp of TOWN.sponsors) {
     if ((run.camp?.stuff?.[sp.id] ?? 0) < 1) continue;
     const g = sp.goal;
-    const met = (g.victory ? run.victory : true) && (g.regions === undefined || (run.regionIndex ?? 0) + (run.victory ? 1 : 0) >= g.regions) && (g.badges === undefined || (run.badges?.length ?? 0) >= g.badges);
+    // Rival Sponsors (S360): a rival team backed by a faction runs your best pace; beat it.
+    const earlier = profile.runHistory.filter((r) => r.runId !== run.runId);
+    const cleared = (run.regionIndex ?? 0) + (run.victory ? 1 : 0);
+    const rivalMet = (!g.outpaceRegions || cleared > Math.max(0, ...earlier.map((r) => r.regionsCleared))) && (!g.outpaceBadges || (run.badges?.length ?? 0) > Math.max(0, ...earlier.map((r) => r.badges)));
+    const met = rivalMet && (g.victory ? run.victory : true) && (g.regions === undefined || (run.regionIndex ?? 0) + (run.victory ? 1 : 0) >= g.regions) && (g.badges === undefined || (run.badges?.length ?? 0) >= g.badges);
     if (met) { profile.bankCredits += sp.credits; profile.lifetimeBankCredits += sp.credits; }
   }
   // Memorial Wall: Nuzlocke losses, and aces that fell in any run.
