@@ -51,5 +51,5 @@ Written by `npm run data:overhaul` (tools/import-overhaul-pack.ts). Do not edit 
 
 **item_synergies species partners** (30): Kommo-o-Totem, Magearna-Original, Marowak-Alola-Totem, Meowstic-F, Mimikyu-Busted-Totem, Mimikyu-Totem, Necrozma-Dawn-Wings, Necrozma-Dusk-Mane, Ogerpon-Cornerstone, Ogerpon-Hearthflame, Ogerpon-Wellspring, Pikachu-Alola, Pikachu-Belle, Pikachu-Cosplay, Pikachu-Hoenn, Pikachu-Kalos, Pikachu-Libre, Pikachu-Original, Pikachu-Partner, Pikachu-PhD, Pikachu-Pop-Star, Pikachu-Rock-Star, Pikachu-Sinnoh, Pikachu-Starter, Pikachu-Unova, Pikachu-World, Poltchageist-Artisan, Sinistea-Antique, Tatsugiri-Droopy, Tatsugiri-Stretchy
 
-**major_trainers without a game boss** (37): Archer, Argenta, Ariana, Atticus, Birch, Brandon, Buck, Burnet, Cassiopeia, Clavell, Courtney, Cyrano, Dahlia, Darach, Eri, Florian, Gold, Greta, Juliana, Jupiter, Lucy, Magnolia, Mars, Mela, Oleana, Petrel, Professor Oak, Proton, Rose, Sada, Saturn, Spenser, Steven Stone, Tucker, Turo, Victor, Zinzolin
+**major_trainers without a game boss** (13): Brandon, Burnet, Cassiopeia, Clavell, Cyrano, Florian, Gold, Greta, Juliana, Magnolia, Spenser, Steven Stone, Tucker
 

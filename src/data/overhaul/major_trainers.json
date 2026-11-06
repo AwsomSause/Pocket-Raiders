@@ -240,7 +240,7 @@
     "gentle guidance"
    ],
    "motto": "The world of Pokémon is vast.",
-   "bossId": null,
+   "bossId": "professor-oak",
    "aceId": "nidoking"
   },
   {
@@ -2080,7 +2080,7 @@
     "limitless energy"
    ],
    "motto": "I'm going to save the world.",
-   "bossId": null,
+   "bossId": "rose",
    "aceId": "copperajah"
   },
   {
@@ -2096,7 +2096,7 @@
     "stern rules"
    ],
    "motto": "Work is work.",
-   "bossId": null,
+   "bossId": "oleana",
    "aceId": "garbodor"
   },
   {
@@ -2128,7 +2128,7 @@
     "loud cheers"
    ],
    "motto": "Let's do this!",
-   "bossId": null,
+   "bossId": "victor",
    "aceId": "cinderace"
   },
   {
@@ -2464,7 +2464,7 @@
     "burning rage"
    ],
    "motto": "Do you want to fight?",
-   "bossId": null,
+   "bossId": "mela",
    "aceId": "revavroom"
   },
   {
@@ -2480,7 +2480,7 @@
     "venomous words"
    ],
    "motto": "Quiet. I'm thinking.",
-   "bossId": null,
+   "bossId": "atticus",
    "aceId": "revavroom"
   },
   {
@@ -2512,7 +2512,7 @@
     "hard fists"
    ],
    "motto": "Out of my way.",
-   "bossId": null,
+   "bossId": "eri",
    "aceId": "revavroom"
   },
   {
@@ -2560,7 +2560,7 @@
     "deep regret"
    ],
    "motto": "For my goal.",
-   "bossId": null,
+   "bossId": "sada",
    "aceId": "koraidon"
   },
   {
@@ -2576,7 +2576,7 @@
     "deep regret"
    ],
    "motto": "For my goal.",
-   "bossId": null,
+   "bossId": "turo",
    "aceId": "miraidon"
   },
   {
@@ -2672,7 +2672,7 @@
     "cold speeches"
    ],
    "motto": "Prepare yourself.",
-   "bossId": null,
+   "bossId": "mars",
    "aceId": "purugly"
   },
   {
@@ -2688,7 +2688,7 @@
     "sharp humor"
    ],
    "motto": "You can't win.",
-   "bossId": null,
+   "bossId": "jupiter",
    "aceId": "skuntank"
   },
   {
@@ -2704,7 +2704,7 @@
     "cold orders"
    ],
    "motto": "I'll finish this.",
-   "bossId": null,
+   "bossId": "saturn",
    "aceId": "toxicroak"
   },
   {
@@ -2720,7 +2720,7 @@
     "icy speeches"
    ],
    "motto": "For our lord.",
-   "bossId": null,
+   "bossId": "zinzolin",
    "aceId": "cryogonal"
   },
   {
@@ -2736,7 +2736,7 @@
     "hard glares"
    ],
    "motto": "I serve my boss.",
-   "bossId": null,
+   "bossId": "ariana",
    "aceId": "arbok"
   },
   {
@@ -2752,7 +2752,7 @@
     "loyal fervor"
    ],
    "motto": "For the boss.",
-   "bossId": null,
+   "bossId": "archer",
    "aceId": "houndoom"
   },
   {
@@ -2768,7 +2768,7 @@
     "sharp whispers"
    ],
    "motto": "Let's make this quick.",
-   "bossId": null,
+   "bossId": "proton",
    "aceId": "golbat"
   },
   {
@@ -2784,7 +2784,7 @@
     "sly humor"
    ],
    "motto": "Heh, you can't tell.",
-   "bossId": null,
+   "bossId": "petrel",
    "aceId": "weezing"
   },
   {
@@ -2800,7 +2800,7 @@
     "an odd obsession"
    ],
    "motto": "...Magma.",
-   "bossId": null,
+   "bossId": "courtney",
    "aceId": "camerupt"
   },
   {
@@ -2944,7 +2944,7 @@
     "running away"
    ],
    "motto": "Hurry, hurry!",
-   "bossId": null,
+   "bossId": "birch",
    "aceId": "zigzagoon"
   },
   {
@@ -2976,7 +2976,7 @@
     "bright smiles"
    ],
    "motto": "Isn't it wonderful?",
-   "bossId": "juniper",
+   "bossId": "aureajuniper",
    "aceId": "stoutland"
   },
   {
@@ -2992,7 +2992,7 @@
     "calm lectures"
    ],
    "motto": "There's so much to discover.",
-   "bossId": "sycamore",
+   "bossId": "augustinesycamore",
    "aceId": "charizard"
   },
   {
@@ -3168,7 +3168,7 @@
     "a deadly smile"
    ],
    "motto": "Fear me.",
-   "bossId": null,
+   "bossId": "lucy",
    "aceId": "seviper"
   },
   {
@@ -3184,7 +3184,7 @@
     "old Kalos tales"
    ],
    "motto": "Pleased to meet you.",
-   "bossId": null,
+   "bossId": "darach",
    "aceId": "kyurem"
   },
   {
@@ -3200,7 +3200,7 @@
     "tradition"
    ],
    "motto": "I fight with honor.",
-   "bossId": null,
+   "bossId": "argenta",
    "aceId": "escavalier"
   },
   {
@@ -3232,7 +3232,7 @@
     "calm assessments"
    ],
    "motto": "Bloom.",
-   "bossId": null,
+   "bossId": "dahlia",
    "aceId": "roserade"
   },
   {
@@ -3280,7 +3280,7 @@
     "drive"
    ],
    "motto": "Keep at it.",
-   "bossId": null,
+   "bossId": "buck",
    "aceId": "infernape"
   },
   {
