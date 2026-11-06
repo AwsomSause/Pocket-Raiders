@@ -1,0 +1,341 @@
+// Story Overhaul S2: the prologue shell. Look and mode, Beat 1 (cold open), Beat 2 (the station),
+// Beat 3 (Professor Vance), Beat 4 (name and pronouns) and Beat 10 (departure). Beats 5 to 9 belong to
+// other slices and are skipped here. All rules live in core/story2/{identity,prologue}.ts.
+
+import Phaser from 'phaser';
+import { services } from '../game/services';
+import { onInputAction } from '../ui/input';
+import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
+import { Menu, type MenuOption } from '../ui/widgets';
+import { drawBackdrop } from '../ui/widgets';
+import type { ProfileStory } from '../core/story2/schema';
+import { LOOKS, lookReady, previewSentence, renderTokens, vanceTone, type PronounSet, type Tone } from '../core/story2/identity';
+import { BEATS, beatsFor, canSkipPrologue, chooseMode, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setLook, setTone, shortIntake, type BeatId, type PrologueMode } from '../core/story2/prologue';
+import { BRIEFING, FIRST_NAME_USE, MONTAGE, OBJECTS, PRONOUN_PROMPT, QUICK_OBJECTS, VANCE_CLOSING, VANCE_NAME_PROMPT, VANCE_OPENING, VANCE_QUESTIONS } from '../core/story2/prologueText';
+
+type Step = 'intake' | 'look' | 'mode' | BeatId;
+
+export class PrologueScene extends Phaser.Scene {
+  private menu: Menu | null = null;
+  private inputs: HTMLInputElement[] = [];
+  private mode: PrologueMode = 'full';
+  private tones: Tone[] = [];
+  private examined = new Set<string>();
+  private shot = 0;
+  private pronounPick: 'she' | 'he' | 'they' | 'custom' | null = null;
+  private onConfirm: (() => void) | null = null;
+
+  constructor() {
+    super('Prologue');
+  }
+
+  private get story() {
+    return services().session.profile.story;
+  }
+
+  private edit(change: (s: ProfileStory) => ProfileStory): void {
+    services().session.changeProfile((p) => ({ ...p, story: change(p.story) }));
+  }
+
+  create(): void {
+    this.tones = [];
+    this.examined.clear();
+    this.shot = 0;
+    this.pronounPick = null;
+    drawBackdrop(this);
+    onInputAction(this, (a) => {
+      if (this.menu) this.menu.handle(a);
+      else if (a === 'confirm') this.onConfirm?.();
+    });
+    this.events.once('shutdown', () => this.clearInputs());
+    this.go(this.story.prologue.done ? 'intake' : 'look');
+  }
+
+  // ---------- layout helpers ----------
+
+  private clear(): void {
+    this.menu?.destroy();
+    this.menu = null;
+    this.onConfirm = null;
+    this.clearInputs();
+    this.children.removeAll(true);
+    drawBackdrop(this);
+  }
+
+  private clearInputs(): void {
+    this.inputs.forEach((el) => el.remove());
+    this.inputs = [];
+  }
+
+  private title(text: string): void {
+    this.add.text(GAME_WIDTH / 2, 28, text, textStyle(30, COLORS.textLight)).setOrigin(0.5);
+  }
+
+  private body(lines: string[], y = 90): number {
+    const t = this.add.text(60, y, lines.join('\n\n'), textStyle(20, COLORS.text, { wordWrap: { width: GAME_WIDTH - 120 } }));
+    return y + t.height + 16;
+  }
+
+  private choose(options: MenuOption[], onSelect: (i: number) => void, y: number, onBack?: () => void, initialIndex?: number): void {
+    this.menu?.destroy();
+    this.menu = new Menu(this, { x: 60, y, options, itemWidth: GAME_WIDTH - 120, itemHeight: 40, fontSize: 20, onSelect, onBack, initialIndex });
+  }
+
+  private next(text: string, fn: () => void): void {
+    this.add.text(GAME_WIDTH - 40, GAME_HEIGHT - 30, text, textStyle(16, '#8a7f96')).setOrigin(1, 0.5);
+    this.onConfirm = fn;
+    this.input.once('pointerup', fn);
+  }
+
+  private inputBox(label: string, y: number, value = '', max = 14): HTMLInputElement {
+    this.add.text(60, y - 22, label, textStyle(15, '#c9bfd6'));
+    const el = document.createElement('input');
+    el.type = 'text';
+    el.value = value;
+    el.maxLength = max;
+    el.autocomplete = 'off';
+    el.spellcheck = false;
+    el.setAttribute('aria-label', label);
+    el.dataset.testid = `prologue-${label.toLowerCase().replace(/[^a-z]+/g, '-')}`;
+    Object.assign(el.style, { position: 'fixed', zIndex: '20', boxSizing: 'border-box', font: '16px monospace', padding: '0 12px', border: '2px solid #6fd0ff', borderRadius: '12px', background: '#10203a', color: '#ffffff', outline: 'none' } satisfies Partial<CSSStyleDeclaration>);
+    el.addEventListener('keydown', (e) => {
+      e.stopPropagation();
+      if (e.key === 'Enter') this.onConfirm?.();
+    });
+    document.body.appendChild(el);
+    const place = () => {
+      const rect = this.game.canvas.getBoundingClientRect();
+      const k = rect.width / GAME_WIDTH;
+      Object.assign(el.style, { left: `${rect.left + 60 * k}px`, top: `${rect.top + y * k}px`, width: `${360 * k}px`, height: `${36 * k}px`, fontSize: `${Math.max(16, 18 * k)}px` });
+    };
+    place();
+    this.scale.on('resize', place, this);
+    this.events.on('postupdate', place, this);
+    this.events.once('shutdown', () => { this.scale.off('resize', place, this); this.events.off('postupdate', place, this); });
+    this.inputs.push(el);
+    return el;
+  }
+
+  private say(text: string): void {
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 70, text, textStyle(17, '#f0e0a0', { align: 'center', wordWrap: { width: GAME_WIDTH - 80 } })).setOrigin(0.5).setName('notice');
+  }
+
+  // ---------- flow ----------
+
+  private go(step: Step): void {
+    this.clear();
+    switch (step) {
+      case 'intake': return this.stepIntake();
+      case 'look': return this.stepLook();
+      case 'mode': return this.stepMode();
+      case 'cold_open': return this.stepMontage();
+      case 'station': return this.stepStation();
+      case 'professor': this.tones = []; this.gettingToIt = false; return this.stepProfessor(0);
+      case 'identity': return this.stepName();
+      case 'briefing': return this.stepBriefing();
+      default: return this.advance(step); // beats other slices own
+    }
+  }
+
+  /** The next built beat after `after`; beats that are not built yet are skipped. */
+  private advance(after: Step): void {
+    this.edit((s) => (BEATS.some((b) => b.id === after) ? markBeat(s, after as BeatId) : s));
+    const order = beatsFor(this.mode);
+    const at = order.indexOf(after as BeatId);
+    const rest = order.slice(at + 1);
+    const nxt = rest.find((id) => BEATS.find((b) => b.id === id)?.built);
+    this.go(nxt ?? 'briefing');
+  }
+
+  private stepIntake(): void {
+    const s = this.story;
+    const intake = shortIntake(s)!;
+    this.title('Lantern Hollow Field Station');
+    let y = this.body([`VANCE: ${renderTokens(intake.greeting, { name: s.protagonist.name, pronouns: s.protagonist.pronouns })}`, ...(intake.extraLine ? [`VANCE: ${intake.extraLine}`] : [])]);
+    if (intake.extraLine) this.edit((st) => markBeat(st, 'intake'));
+    y += 10;
+    this.choose([{ label: 'Replay the prologue' }, { label: 'Back to the title' }], (i) => (i === 0 ? this.go('look') : this.leave()), y, () => this.leave());
+  }
+
+  private stepLook(): void {
+    this.title('This is how you appear');
+    const y = this.body(['Choose your Look. Your name and pronouns come later, and the Look never changes them. You can change the Look in Settings.']);
+    this.add.text(60, y + 4, 'Look B animations are still in the works.', textStyle(15, '#8a7f96'));
+    const options: MenuOption[] = LOOKS.map((l) => ({ label: l.status === 'ready' ? l.label : `${l.label}  (COMING SOON)`, disabled: !lookReady(l.id) }));
+    this.choose(options, (i) => {
+      const look = LOOKS[i]!;
+      if (!lookReady(look.id)) return;
+      this.edit((st) => setLook(st, look.id).story);
+      this.go(quickStartOffered(this.story) ? 'mode' : this.startBeats());
+    }, y + 34, () => this.leave());
+  }
+
+  private startBeats(): Step {
+    return beatsFor(this.mode).find((id) => BEATS.find((b) => b.id === id)?.built && id !== 'look') ?? 'briefing';
+  }
+
+  private stepMode(): void {
+    this.title('How long do you want the opening?');
+    const y = this.body(['The full opening is the default. Quick Start keeps the heart of it. Nothing is cut for good: the opening can be replayed from the title screen.']);
+    const modes: { label: string; mode: PrologueMode }[] = [
+      { label: 'Full Story (about 25 minutes)', mode: 'full' },
+      { label: 'Quick Start (about 6 minutes)', mode: 'quick' },
+      ...(canSkipPrologue(services().session.slot) ? [{ label: 'Skip Prologue (later saves only)', mode: 'skipped' as const }] : []),
+    ];
+    this.choose(modes.map((m) => ({ label: m.label })), (i) => {
+      this.mode = modes[i]!.mode;
+      this.edit((st) => chooseMode(st, this.mode));
+      this.go(this.startBeats());
+    }, y, () => this.go('look'));
+  }
+
+  private stepMontage(): void {
+    const m = MONTAGE[this.shot]!;
+    this.title(`Opening  ${this.shot + 1} / ${MONTAGE.length}`);
+    this.body([m.shot, `VANCE (a recording): "${m.line}"`], 140);
+    this.next('Enter to continue', () => {
+      if (this.shot + 1 >= MONTAGE.length) return this.advance('cold_open');
+      this.shot += 1;
+      this.go('cold_open');
+    });
+    const skip = this.add.text(40, GAME_HEIGHT - 30, 'Skip opening', textStyle(16, '#c9bfd6')).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
+    skip.on('pointerup', (_p: unknown, _x: unknown, _y: unknown, e: Phaser.Types.Input.EventData) => { e.stopPropagation(); this.advance('cold_open'); });
+  }
+
+  private stepStation(note = '', at = 0): void {
+    this.clear();
+    const need = this.mode === 'quick' ? QUICK_OBJECTS : OBJECTS.map((o) => o.id);
+    this.title('Beat 2: The station');
+    const y = this.body(['Lantern Hollow Field Station, a lighthouse with a greenhouse bolted to its side. Examine what you like' + (this.mode === 'quick' ? ' (the map and the clipping are the ones that matter).' : ' (all five).')], 80);
+    const options: MenuOption[] = OBJECTS.map((o) => ({ label: `${this.examined.has(o.id) ? '✓ ' : ''}${o.name}` }));
+    const ready = requiredObjects(this.mode) === 0 || need.every((id) => this.examined.has(id));
+    options.push({ label: ready ? 'Go and meet the Professor' : 'Go and meet the Professor  (examine the objects first)', disabled: !ready });
+    this.choose(options, (i) => {
+      if (i === OBJECTS.length) return this.advance('station');
+      const o = OBJECTS[i]!;
+      this.examined.add(o.id);
+      this.stepStation(o.lines.join('\n'), i);
+    }, y, undefined, at);
+    if (note) this.say(note);
+  }
+
+  private stepProfessor(q: number, reply = ''): void {
+    this.clear();
+    const lastQ = this.mode === 'full' ? VANCE_QUESTIONS.length : 1;
+    this.title('Beat 3: Professor Vance');
+    if (q >= lastQ) {
+      const tone = vanceTone(this.tones);
+      this.edit((s) => setTone(s, tone, this.gettingToIt));
+      this.body([reply && `VANCE: ${reply}`, `VANCE: ${VANCE_CLOSING[tone]}`, `VANCE: ${VANCE_NAME_PROMPT}`].filter(Boolean) as string[], 80);
+      return this.next('Enter to continue', () => this.advance('professor'));
+    }
+    const question = VANCE_QUESTIONS[q]!;
+    const intro = q === 0 ? VANCE_OPENING : reply ? [`VANCE: ${reply}`] : [];
+    const y = this.body([...intro, `VANCE: ${question.prompt}`], 80);
+    this.choose(question.options.map((o) => ({ label: o.text })), (i) => {
+      const pick = question.options[i]!;
+      this.tones.push(pick.tone);
+      if (pick.flag === 'getting_to_it') this.gettingToIt = true;
+      this.stepProfessor(q + 1, pick.reply);
+    }, y);
+  }
+  private gettingToIt = false;
+
+  private stepName(error = '', keep = ''): void {
+    this.clear();
+    this.title('Beat 4: Identity');
+    this.body(['VANCE: For the record. Your name?', 'Name: 1 to 12 letters, numbers, spaces, hyphens or apostrophes.'], 80);
+    const box = this.inputBox('Name', 250, keep || this.story.protagonist.name);
+    box.focus({ preventScroll: true });
+    const confirm = () => {
+      const r = setIdentity(this.story, box.value, 'they');
+      if (!r.ok && r.error !== 'Pick one.') return void this.stepName(r.error, box.value);
+      this.nameDraft = box.value;
+      this.stepPronouns();
+    };
+    this.onConfirm = confirm;
+    this.choose([{ label: 'Confirm' }, { label: 'Back' }], (i) => (i === 0 ? confirm() : this.go('professor')), 310, () => this.go('professor'));
+    if (error) this.say(error);
+  }
+  private nameDraft = '';
+
+  private stepPronouns(error = ''): void {
+    this.clear();
+    this.title('Beat 4: Identity');
+    const y = this.body([`VANCE: ${PRONOUN_PROMPT}`], 80);
+    const mark = (k: string) => (this.pronounPick === k ? '● ' : '○ ');
+    const options: MenuOption[] = [
+      { label: `${mark('she')}she/her` }, { label: `${mark('he')}he/him` }, { label: `${mark('they')}they/them` }, { label: `${mark('custom')}Custom` },
+      { label: 'Confirm', disabled: this.pronounPick === null }, { label: 'Back' },
+    ];
+    this.choose(options, (i) => {
+      if (i <= 3) {
+        this.pronounPick = (['she', 'he', 'they', 'custom'] as const)[i]!;
+        return this.pronounPick === 'custom' ? this.stepCustom() : this.stepPronouns();
+      }
+      if (i === 5) return this.stepName('', this.nameDraft);
+      this.finishIdentity(this.pronounPick!);
+    }, y, () => this.stepName('', this.nameDraft));
+    if (error) this.say(error);
+  }
+
+  private stepCustom(error = ''): void {
+    this.clear();
+    this.title('Beat 4: Custom pronouns');
+    this.body(['Four words, each 2 to 12 letters: he/him style. For example: xe, xem, xyr, xemself.'], 70);
+    const boxes = ['Subject (they)', 'Object (them)', 'Possessive (their)', 'Reflexive (themself)'].map((l, i) => this.inputBox(l, 190 + i * 62, this.customDraft[i] ?? '', 12));
+    boxes[0]!.focus({ preventScroll: true });
+    const read = (): PronounSet => ({ subj: boxes[0]!.value, obj: boxes[1]!.value, poss: boxes[2]!.value, reflexive: boxes[3]!.value });
+    const confirm = () => {
+      this.customDraft = boxes.map((b) => b.value);
+      const r = setIdentity(this.story, this.nameDraft, read());
+      if (!r.ok) return this.stepCustom(r.error);
+      this.finishIdentity(read());
+    };
+    this.onConfirm = confirm;
+    this.choose([{ label: 'Confirm' }, { label: 'Back' }], (i) => (i === 0 ? confirm() : this.stepPronouns()), 440, () => this.stepPronouns());
+    if (error) this.say(error);
+  }
+  private customDraft: string[] = [];
+
+  private finishIdentity(pick: 'she' | 'he' | 'they' | 'custom' | PronounSet): void {
+    const choice = pick === 'custom' ? ({ subj: this.customDraft[0] ?? '', obj: this.customDraft[1] ?? '', poss: this.customDraft[2] ?? '', reflexive: this.customDraft[3] ?? '' } satisfies PronounSet) : pick;
+    const r = setIdentity(this.story, this.nameDraft, choice);
+    if (!r.ok) return this.stepPronouns(r.error);
+    this.edit(() => r.story);
+    if (this.mode === 'full') return this.stepPreview();
+    this.stepFirstUse();
+  }
+
+  private stepPreview(): void {
+    this.clear();
+    this.title('Beat 4: Read it back');
+    const p = this.story.protagonist;
+    const y = this.body([`VANCE: Let me read it back. "${previewSentence({ name: p.name, pronouns: p.pronouns })}"`], 90);
+    this.choose([{ label: 'Looks right' }, { label: 'Change' }], (i) => (i === 0 ? this.stepFirstUse() : this.stepPronouns()), y);
+  }
+
+  private stepFirstUse(): void {
+    this.clear();
+    this.title('Beat 4: Identity');
+    const p = this.story.protagonist;
+    this.body([renderTokens(FIRST_NAME_USE, { name: p.name, pronouns: p.pronouns })], 110);
+    this.next('Enter to continue', () => this.advance('identity'));
+  }
+
+  private stepBriefing(): void {
+    this.clear();
+    this.title('Beat 10: Departure');
+    const p = this.story.protagonist;
+    const y = this.body([...BRIEFING.map((l) => renderTokens(l, { name: p.name, pronouns: p.pronouns })), 'The rest of the opening (the quiz, backstory, first partner and Field Trial) arrives in later updates. Your identity is saved.'], 80);
+    this.choose([{ label: 'Finish' }], () => {
+      this.edit(finishPrologue);
+      this.leave();
+    }, y);
+  }
+
+  private leave(): void {
+    this.clearInputs();
+    this.scene.start('MainMenu');
+  }
+}
