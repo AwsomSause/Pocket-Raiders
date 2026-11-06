@@ -272,6 +272,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       swap();
       whiteFlash(0.8);
       sound('ess-shell-smash', 0.9);
+      rays();
       crystals.forEach((c) => c.setVisible(false));
       // The crystal breaks: shards fly out on fixed paths.
       if (has('cine.dbk.tera.crystal_4')) {
@@ -292,6 +293,23 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(260 / o.speed, 0.01 * (o.shake ?? o.intensity));
     });
     fadeAll();
+  }
+
+  /** The reference's reveal: a sunburst of rays (a blue-white sky with the Tera colour at the core) spins out behind the Pokémon, then fades. */
+  function rays(): void {
+    const g = add(scene.add.graphics().setDepth(depth + 1).setPosition(o.x, o.y));
+    const n = 16;
+    const len = Math.hypot(GAME_WIDTH, GAME_HEIGHT);
+    g.fillStyle(0x7ac0ff, 0.55 * o.intensity);
+    for (let i = 0; i < n; i += 2) {
+      const a0 = (i / n) * Math.PI * 2;
+      const a1 = ((i + 1) / n) * Math.PI * 2;
+      g.fillTriangle(0, 0, Math.cos(a0) * len, Math.sin(a0) * len, Math.cos(a1) * len, Math.sin(a1) * len);
+    }
+    g.fillStyle(o.tint, 0.5 * o.intensity).fillCircle(0, 0, 70);
+    g.setScale(0.2).setAlpha(0.9);
+    tw({ targets: g, scale: 1, angle: 14, duration: 650, ease: 'Cubic.easeOut' });
+    tw({ targets: g, alpha: 0, duration: 450, delay: 450 });
   }
 
   // Deluxe Battle Kit's Dynamax scene: the Pokémon is called back into its
