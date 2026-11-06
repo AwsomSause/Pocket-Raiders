@@ -7,27 +7,55 @@
    "stop": "event",
    "rarity": "uncommon",
    "minStage": 1,
-   "scene": { "cast": ["trainer.worker_m"], "tint": "#1e2b3a", "effect": "none" },
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e2b3a",
+    "effect": "none"
+   },
    "intro": "An old traveler squints at the sky, then at you. \"Fronts, storms, sun that bites. I know what the road will hold. Fifty coins and I will tell you.\"",
    "choices": [
     {
      "label": "Pay for the forecast (₽50)",
-     "requires": [{ "kind": "money", "atLeast": 50 }],
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
      "success": {
       "text": "He taps the dirt and draws the weather in lines. You can see further ahead now.",
-      "effects": [{ "kind": "money", "amount": -50 }, { "kind": "foresight", "columns": 6 }]
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "foresight",
+        "columns": 6
+       }
+      ]
      }
     },
     {
      "label": "Chat for free",
      "success": {
       "text": "\"Wind from the west,\" he says. A small hint, nothing more.",
-      "effects": [{ "kind": "foresight", "columns": 1 }]
+      "effects": [
+       {
+        "kind": "foresight",
+        "columns": 1
+       }
+      ]
      }
     },
     {
      "label": "Walk on",
-     "success": { "text": "He shrugs and goes back to watching the clouds.", "effects": [] }
+     "success": {
+      "text": "He shrugs and goes back to watching the clouds.",
+      "effects": []
+     }
     }
    ]
   },
@@ -38,7 +66,13 @@
    "stop": "event",
    "rarity": "uncommon",
    "minStage": 2,
-   "scene": { "cast": ["trainer.hiker"], "tint": "#3a2a18", "effect": "none" },
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
    "intro": "Travelers share stories round a small fire. One lowers their voice: \"Everyone says there is a place off the main road. Nobody has the same map twice.\"",
    "choices": [
     {
@@ -46,7 +80,10 @@
      "success": {
       "text": "They sketch the road ahead in the ash. Hidden stops show on your map.",
       "effects": [
-       { "kind": "scout", "columns": 5 }
+       {
+        "kind": "scout",
+        "columns": 5
+       }
       ]
      }
     },
@@ -54,12 +91,310 @@
      "label": "Listen and share a story of your own",
      "success": {
       "text": "Stories trade for stories. You leave with a lighter step.",
-      "effects": [{ "kind": "attribute", "key": "charisma", "amount": 2 }]
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 2
+       }
+      ]
      }
     },
     {
      "label": "Not interested",
-     "success": { "text": "Rumors rarely pay. You move on.", "effects": [] }
+     "success": {
+      "text": "Rumors rarely pay. You move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "guide-offer",
+   "name": "A Guide Offers Help",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "A weathered guide offers to show you a shortcut. \"No charge. I just like company.\"",
+   "choices": [
+    {
+     "label": "Accept the company",
+     "success": {
+      "text": "You walk together. He tells you which roads to trust.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guide-trust"
+       },
+       {
+        "kind": "moment",
+        "text": "Befriended a roadside guide.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline politely",
+     "success": {
+      "text": "He nods and heads off alone.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guide-trust",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "guide-betrayal",
+   "name": "The Guide Returns",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "Your old guide waits at the crossing, a little too relaxed. Two strangers lean on the fence behind him. \"Hand over your coins,\" he says, not meeting your eyes.",
+   "choices": [
+    {
+     "label": "Pay up (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You pay. He mumbles an apology. You will not forget his face.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "guide-betrayed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out his name, calmly",
+     "requires": [
+      {
+       "kind": "attribute",
+       "key": "charisma",
+       "atLeast": 4
+      }
+     ],
+     "success": {
+      "text": "He flinches. The strangers slip away. \"I owed them,\" he whispers. \"Thank you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "betrayal-forgiven"
+       },
+       {
+        "kind": "moment",
+        "text": "Forgave a guide who betrayed you.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand your ground",
+     "success": {
+      "text": "Your team steps forward. The strangers vanish, and so does he.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guide-betrayed"
+       }
+      ]
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guide-trust",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "guide-betrayed",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "betrayal-forgiven",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "mystery-clue-1",
+   "name": "The Missing Lantern-Keeper",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "The lamp at the old crossing has gone dark, and the keeper is missing. A torn ledger page flutters on the post.",
+   "choices": [
+    {
+     "label": "Take the ledger page",
+     "success": {
+      "text": "A list of names, one crossed out. Clue 1 of 3.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-clue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "Not your business. The lamp stays dark.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mystery-clue",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "mystery-clue-2",
+   "name": "Muddy Footprints",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "Fresh footprints lead from the dark lamp toward the cliffs. They stop at a cracked cellar door.",
+   "choices": [
+    {
+     "label": "Follow the footprints",
+     "success": {
+      "text": "Inside, a sleeping Pokémon guards a spare key. Clue 2 of 3.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-clue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You move on, uneasy.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mystery-clue",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ]
+  },
+  {
+   "id": "mystery-solved",
+   "name": "The Keeper Is Found",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "The key opens a shed behind the cliffs. The lantern-keeper sits inside, wrapped in a blanket, embarrassed: he locked himself in by accident.",
+   "choices": [
+    {
+     "label": "Free him and relight the lamp",
+     "success": {
+      "text": "The crossing glows again. He presses a coin purse on you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-solved"
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "moment",
+        "text": "Solved the mystery of the missing lantern-keeper.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mystery-clue",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mystery-solved",
+     "atLeast": 0,
+     "atMost": 0
     }
    ]
   }

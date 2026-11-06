@@ -218,3 +218,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `zip-z6h-party.md`: Zip coverage Z6h: party rows show the UIE status badge (SLP PSN BRN PAR FRZ FNT) and held-item mark (`ui/party
 - `zip-z6i-dex.md`: Z6i: Research Room dex sets open a member list (icon, number, name, caught/seen mark); Enter opens a species p
 - `zip-z6j-bag-layout.md`: Z6j: the Bag menu sits on the pack's Bag backdrop (orange grid, BAG plate, dark list area); the Picker skips i
+- story-endings-mysteries.md: S115 betrayal, S120 ending variations, S122 secret endings, S125 mystery, S129 lead chatter
