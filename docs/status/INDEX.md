@@ -326,3 +326,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - story-icons-p7.md: P7 pack icon wiring (107 icons, lazy catalog ids, debug gallery)
 - 2026-11-06 ui-fixes-fonts: font slimming and battle/hub layout fixes (docs/status/ui-fixes-fonts.md)
 - `story-s1a-archive-and-checks.md`: Story S1a: Starter Sets archive switch (`balance.starterSets.enabled=false`) and live-game claim checks (lost fights end the run today; no `championDefense.ts`, no Rapport meter).
+- `pocket-town-menus.md`: Pocket Town buildings open themed panels (district frame, icon, header; own layouts for Library, Shrine, Capsule Corner, Dojo).
