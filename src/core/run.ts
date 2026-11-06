@@ -179,6 +179,7 @@ import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlo
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { noteBountyKills } from './bounties';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -2774,6 +2775,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (dropped) itemsFound.push(dropped);
   const streakGift = outcome === 'win' ? advanceStreak(content, run) : null;
   if (streakGift) itemsFound.push(streakGift.item);
+  const bountyItem = outcome === 'win' ? noteBountyKills(content, run, battle.enemyTeam) : null;
+  if (bountyItem) itemsFound.push(bountyItem);
   for (const id of itemsFound) addItem(run.inventory, id, 1);
   if (outcome === 'win') {
     count(run, 'battlesWon');
