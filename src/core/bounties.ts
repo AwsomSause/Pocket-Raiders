@@ -36,7 +36,7 @@ export function bountyObjective(content: Content, run: Pick<RunState, 'seed' | '
   const b = stageBounty(content, run);
   if (!b) return null;
   const got = Math.min(b.target, run.log.counters[progressKey(b)] ?? 0);
-  return { text: `Bounty: ${b.target} ${b.type}-type Pokémon (₽${b.money} + ${content.items.get(b.item)?.name ?? b.item})`, current: got, target: b.target, done: got >= b.target };
+  return { text: `Bounty: ${b.target} ${b.type}-type (₽${b.money} + ${content.items.get(b.item)?.name ?? b.item})`, current: got, target: b.target, done: got >= b.target };
 }
 
 /** A battle was won: counts the defeated Pokémon of the bounty's type; returns the item the bounty pays when it completes (mutates `run`: counters and money). */

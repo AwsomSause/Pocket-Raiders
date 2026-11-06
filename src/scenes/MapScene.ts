@@ -411,7 +411,9 @@ export class MapScene extends Phaser.Scene {
     if (chatter) this.add.text(GAME_WIDTH / 2, 105, chatter, textStyle(12, '#e8e0c8', { stroke: '#2a2418', strokeThickness: 3 })).setOrigin(0.5, 0).setName('lead-chatter');
     const bounty = league ? null : bountyObjective(content, run);
     const objectives = [...modeObjectives(run), ...(bounty ? [bounty] : [])];
-    if (objectives.length > 0) this.add.text(GAME_WIDTH - 24, 68, objectivesLine(objectives), textStyle(14, '#f0e0a0')).setOrigin(1, 0);
+    // The pinned quest line sits at y=66 on the right, so the objectives (mode steps and the stage bounty) go one row lower when it is shown.
+    const pinned = pinnedObjective(content, run);
+    if (objectives.length > 0) this.add.text(GAME_WIDTH - 24, pinned ? 86 : 68, objectivesLine(objectives), textStyle(14, '#f0e0a0')).setOrigin(1, 0).setName('objectives-line');
 
     // Revisit This Timeline: the False Protagonist's title, and who is ahead of you now.
     if (isFalseProtagonist(run)) {
@@ -420,7 +422,6 @@ export class MapScene extends Phaser.Scene {
       const tag = this.add.text(26, 68, `${TIMELINE.title}${ahead}`, textStyle(14, '#ff9fe0', { stroke: '#2a0a2a', strokeThickness: 4 }));
       if (services().session.settings.battleAnimations === 'full') this.tweens.add({ targets: tag, alpha: 0.55, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
-    const pinned = pinnedObjective(content, run);
     if (pinned) this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0);
 
     // ---------- the map (scrolls sideways) ----------
