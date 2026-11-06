@@ -189,7 +189,7 @@
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 56.439,
+    "threatAvg": 56.431,
     "threatMax": 91,
     "budgetAvg": 95.989,
     "rejectionRate": 0.004,
@@ -251,7 +251,7 @@
      "2": 11,
      "3": 10
     },
-    "threatAvg": 57.763,
+    "threatAvg": 57.755,
     "threatMax": 112,
     "budgetAvg": 118.567,
     "rejectionRate": 0.005,
@@ -319,7 +319,7 @@
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 61.658,
+    "threatAvg": 61.659,
     "threatMax": 104,
     "budgetAvg": 103.994,
     "rejectionRate": 0.006,
@@ -381,7 +381,7 @@
      "2": 257,
      "3": 48
     },
-    "threatAvg": 65.417,
+    "threatAvg": 65.42,
     "threatMax": 134,
     "budgetAvg": 131.603,
     "rejectionRate": 0.011,
@@ -449,7 +449,7 @@
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 65.97,
+    "threatAvg": 65.981,
     "threatMax": 113,
     "budgetAvg": 111.993,
     "rejectionRate": 0.014,
@@ -511,7 +511,7 @@
      "2": 987,
      "3": 50
     },
-    "threatAvg": 75.318,
+    "threatAvg": 75.326,
     "threatMax": 140,
     "budgetAvg": 144.587,
     "rejectionRate": 0.01,

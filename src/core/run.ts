@@ -1797,7 +1797,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         case 'champion':
           return planChampion(content, archetype, stage.leaderId, run.regionIndex, scale, r, bossRemix(run.rules) || run.story.flags[FINALE_FLAG] === 'pending', isFinalBoss(content, run));
         default:
-          return planTrainer(content, archetype, theme, stageNumber, scale, r, run.regionOrder[run.regionIndex], `${run.seed}::${run.regionIndex}::${node.id}`, recentTemplates(run));
+          return planTrainer(content, archetype, theme, stageNumber, scale, r, run.regionOrder[run.regionIndex], `${run.seed}::${run.regionIndex}::${node.id}`, recentTemplates(run), (() => { const w = varietyWeight(content, run, 'trainerSpecies'); return (id: string) => w(familyId(content, id)); })());
       }
     });
     // Trainer tiers: an ordinary trainer's team grows more skilled with progress (its own seed, so no roll changes).
@@ -1811,7 +1811,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const c = run.log.counters;
       if (((c.gymLeadersDefeated ?? 0) + (c.eliteFourDefeated ?? 0) + (c.championsDefeated ?? 0) + 1) % 3 === 0) plan = { ...plan, members: plan.members.map((m) => ({ ...m, level: m.level + bossLevels })) };
     }
-    if (node.kind === 'trainer' && plan.templateId) rememberTemplate(run, plan.templateId);
+    if (node.kind === 'trainer' && plan.templateId) { rememberTemplate(content, run, plan.templateId); for (const m of plan.members) rememberPick(content, run, 'trainerSpecies', familyId(content, m.speciesId)); }
     // Gym Leader Personalities (S126): the leader's mood of the day shapes the opening (own hash, no roll moves).
     if (node.kind === 'gym' && content.balance.leaderMoods) plan = applyLeaderMood(plan, leaderMood(run.seed, stage.leaderId, `${run.regionIndex}:${stage.index}`));
     // The Rival Who Wins Without You (left-out 5.5): a rival that took over a Gym, reached the finals or became

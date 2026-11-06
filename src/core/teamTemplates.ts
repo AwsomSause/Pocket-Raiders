@@ -10,7 +10,9 @@ import type { Content, Species } from './contentSchema';
 import { familyId } from './mastery';
 import { rarityOf } from './rarity';
 import { hashSeed, Rng } from './rng';
+import type { RunState } from './state';
 import { isNative } from './themes';
+import { recentPicks, rememberPick } from './variety';
 
 const Stat = z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']);
 const StatMins = z.partialRecord(Stat, z.number());
@@ -146,16 +148,12 @@ export function templateFit(content: Content, t: TeamTemplate, speciesId: string
   return Math.max(0.05, w);
 }
 
-type CounterRun = { itemCounters?: Record<string, number> };
-
-/** Templates used by the last few ordinary trainers of this run, oldest first (counters in `itemCounters`, no save change). */
-export function recentTemplates(run: CounterRun): string[] {
-  const c = run.itemCounters ?? {};
-  return TEAM_TEMPLATES.templates.filter((t) => (c[`tmpl:${t.id}`] ?? 0) > 0).sort((a, b) => c[`tmpl:${a.id}`]! - c[`tmpl:${b.id}`]!).map((t) => t.id);
+/** Templates used by the last few ordinary trainers of this run, oldest first (shared variety history, pool 'trainer'). */
+export function recentTemplates(run: Pick<RunState, 'history'>): readonly string[] {
+  return recentPicks(run, 'trainer');
 }
 
 /** Records a template as used (mutates `run`). */
-export function rememberTemplate(run: CounterRun, id: string): void {
-  const n = (run.itemCounters?.['tmpl-n'] ?? 0) + 1;
-  run.itemCounters = { ...run.itemCounters, 'tmpl-n': n, [`tmpl:${id}`]: n };
+export function rememberTemplate(content: Content, run: Pick<RunState, 'history'>, id: string): void {
+  rememberPick(content, run, 'trainer', id);
 }
