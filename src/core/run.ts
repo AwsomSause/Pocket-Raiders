@@ -72,6 +72,7 @@ import { layEgg, tickEggs } from './eggs';
 import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
+import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from './stagePlan';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
@@ -149,7 +150,7 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
-import { getTheme, pickGymLeader, pickTheme, typesPool, wildEligibleSpecies } from './themes';
+import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
   recordBattleStarted,
@@ -567,10 +568,12 @@ function enterStage(content: Content, run: RunState, index: number): void {
   fillRegionOrder(content, run);
   const campaign = getCampaign(content, run.campaignId);
   const region = currentRegion(content, run);
-  const { theme, leader, map } = withStream(run.rng, 'map', (r) => {
-    const theme = pickTheme(content, run.usedThemes, r);
+  // Beta 4.4: the stage is decided only now, from what the player did on the last one (core/stagePlan.ts).
+  const signals = stageSignals(content, run);
+  const { theme, leader, map, themeLine } = withStream(run.rng, 'map', (r) => {
+    const { theme, line } = pickPlannedTheme(content, run, signals, r);
     const leader = pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
-    return { theme, leader, map: generateStageMap(content, campaign, r) };
+    return { theme, leader, map: generateStageMap(content, campaign, r), themeLine: line };
   });
   forceFirstRivalColumn(content, run, index, map);
   const problems = validateStageMap(map);
@@ -614,6 +617,8 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeMinigameStop(content, run);
   placeServiceStop(run);
   placePlaza(run);
+  const planLines = [themeLine, ...tailorStage(content, run, signals)].filter((l): l is string => !!l);
+  snapshotStagePlan(run, planLines);
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
@@ -1095,21 +1100,18 @@ function activePreviewItems(content: Content, run: RunState): string[] {
 }
 
 /**
- * Fame Checker: the gym leaders of this region's stages still to come, found
- * by starting those stages on a copy of the run, so they are exactly the ones
- * the player will meet and no roll is used.
+ * Fame Checker: the gym leaders this region can still send at you. Beta 4.4: a stage is only decided when you reach
+ * it (built from what you did on the one before, core/stagePlan.ts), so this names the region's leaders not met yet,
+ * not a fixed order. Uses no roll.
  */
 export function nextGymLeaders(content: Content, run: RunState): { leaderId: string; types: TypeName[] }[] {
   const stage = run.stage;
   if (!stage || stage.kind !== 'stage' || !hasPerk(content, run, 'nextLeaders')) return [];
   const campaign = getCampaign(content, run.campaignId);
-  const copy = structuredClone(run);
-  const out: { leaderId: string; types: TypeName[] }[] = [];
-  for (let index = stage.index + 1; index < campaign.stagesPerRegion; index++) {
-    enterStage(content, copy, index);
-    out.push({ leaderId: copy.stage!.leaderId, types: [...getTheme(content, copy.stage!.themeId).types] });
-  }
-  return out;
+  if (stage.index + 1 >= campaign.stagesPerRegion) return [];
+  return currentRegion(content, run)
+    .gymLeaders.filter((id) => !run.usedLeaders.includes(id) && content.bosses.has(id))
+    .map((id) => ({ leaderId: id, types: [...content.bosses.get(id)!.types] as TypeName[] }));
 }
 
 // ---------- fishing (M8.75 slice 3b-3) ----------

@@ -749,7 +749,7 @@ export class MapScene extends Phaser.Scene {
       } else if (stage.index === 0) {
         this.showBanner(`Region ${run.regionIndex + 1} of ${regions}  ·  ${identity.motif}`, region.name, `Level cap ${cap}  ·  Stage 1: ${blindMap(run.rules) ? '???' : theme.name}  ·  ${leader.title}`);
       } else {
-        this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`);
+        this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
   }
@@ -1141,8 +1141,10 @@ export class MapScene extends Phaser.Scene {
     const leaders = nextGymLeaders(content, run);
     if (leaders.length > 0) {
       const text = leaders.map((l) => `${bossInfo(content, 'gym', l.leaderId).name} (${l.types.map((t) => t.toUpperCase()).join('/')})`).join(', ');
-      rows.push({ action: null, itemId: 'fame-checker', title: 'Fame Checker', text: `Next gym leaders: ${text}`, problem: `Next gym leaders: ${text}` });
+      rows.push({ action: null, itemId: 'fame-checker', title: 'Fame Checker', text: `Gym leaders still in this region: ${text}`, problem: `Gym leaders still in this region: ${text}` });
     }
+    const plan = run.stagePlan?.lines ?? [];
+    if (plan.length > 0) rows.push({ action: null, itemId: '', title: 'Route plan', text: plan.join(' '), problem: plan.join(' ') });
     const licenseText = licenseNote(content, run);
     if (licenseText) rows.push({ action: null, itemId: '', title: `${run.prep.license ? 'Field License' : 'Intel'}: ${licenseName(fieldHintId(content, run)!)}`, text: licenseText, problem: licenseText });
     const gym = run.stage!.map.nodes.find((n) => n.kind === 'gym');
@@ -1602,7 +1604,7 @@ export class MapScene extends Phaser.Scene {
     this.busy = true;
   }
 
-  private showBanner(top: string, title: string, sub: string): void {
+  private showBanner(top: string, title: string, sub: string, plan: readonly string[] = []): void {
     const layer = this.add.container(0, 0).setDepth(80);
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0));
     // A banner band across the screen, like a Pokémon game's location sign.
@@ -1613,10 +1615,16 @@ export class MapScene extends Phaser.Scene {
     layer.add(this.add.text(GAME_WIDTH / 2, 208, top, textStyle(26, COLORS.gold)).setOrigin(0.5));
     layer.add(this.add.text(GAME_WIDTH / 2, 254, title, textStyle(56, COLORS.textLight)).setOrigin(0.5));
     layer.add(this.add.text(GAME_WIDTH / 2, 302, sub, textStyle(20, '#d8d0e0')).setOrigin(0.5));
+    // Beta 4.4: why this stage was built the way it was (core/stagePlan.ts).
+    if (plan.length > 0) {
+      const box = this.add.text(GAME_WIDTH / 2, 346, `Built from your last stage:\n${plan.join('\n')}`, { ...textStyle(18, COLORS.textLight), align: 'center', wordWrap: { width: GAME_WIDTH - 80 } }).setOrigin(0.5, 0);
+      layer.add(this.add.rectangle(GAME_WIDTH / 2, 338, box.width + 32, box.height + 16, 0x181818, 0.92).setOrigin(0.5, 0));
+      layer.add(box);
+    }
     band.x = -GAME_WIDTH;
     this.tweens.add({ targets: band, x: 0, duration: 260, ease: 'Cubic.easeOut' });
     this.busy = true;
-    this.tweens.add({ targets: layer, alpha: 0, delay: 1400, duration: 400, onComplete: () => {
+    this.tweens.add({ targets: layer, alpha: 0, delay: plan.length > 0 ? 3200 : 1400, duration: 400, onComplete: () => {
       layer.destroy();
       this.busy = false;
     } });

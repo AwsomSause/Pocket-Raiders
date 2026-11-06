@@ -246,19 +246,18 @@ describe('map previews', () => {
     expect(mapPreviews(content, mail)[gym.id]!.team.map((m) => m.speciesId)).toEqual(next);
   });
 
-  it('the Fame Checker names the gym leaders still to come, as the stages will really have them', () => {
+  it('the Fame Checker names the gym leaders this region can still send (the order is decided stage by stage)', () => {
     const run = take(newRun('fame'), 'fame-checker');
     const leaders = nextGymLeaders(content, run);
-    expect(leaders).toHaveLength(content.campaigns.get(run.campaignId)!.stagesPerRegion - 1);
-    expect(leaders.every((l) => l.types.length > 0)).toBe(true);
+    expect(leaders.length).toBeGreaterThan(0);
+    expect(leaders.every((l) => l.types.length > 0 && !run.usedLeaders.includes(l.leaderId))).toBe(true);
     expect(nextGymLeaders(content, newRun('fame'))).toEqual([]);
-    // Beat the gym leader: the next stage's leader is the first one named.
+    // Beat the gym leader: the next stage's leader is not named any more.
     const gym = run.stage!.map.nodes.find((n) => n.kind === 'gym')!;
     standOn(run, run.stage!.map.nodes.find((n) => n.next.includes(gym.id))!.id);
     const after = takeAnyReward(win(chooseNode(content, run, gym.id)).run);
     expect(after.stage!.index).toBe(1);
-    expect(after.stage!.leaderId).toBe(leaders[0]!.leaderId);
-    expect(nextGymLeaders(content, after).map((l) => l.leaderId)).toEqual(leaders.slice(1).map((l) => l.leaderId));
+    expect(nextGymLeaders(content, after).map((l) => l.leaderId)).not.toContain(after.stage!.leaderId);
   });
 });
 

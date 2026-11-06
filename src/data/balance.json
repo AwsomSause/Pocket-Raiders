@@ -186,7 +186,8 @@
  "nativeWeight": 3,
  "wildMaxBaseStats": 560,
   "levelBst": { "base": 290, "perLevel": 9, "retries": 10 },
- "hyperMove": { "powerBonus": 20, "pp": 5 },
+ "stagePlan": { "catcher": 2, "fighter": 5, "explorer": 2, "shopper": 3000, "heals": 2, "wipes": 1, "themeBonus": 3, "maxSignals": 2 },
+  "hyperMove": { "powerBonus": 20, "pp": 5 },
  "competitiveGyms": { "fromStage": 4, "training": 1, "ai": 0.1, "items": ["leftovers", "life-orb", "sitrus-berry", "expert-belt"] },
  "bossBands": [
   { "minLevel": 101, "training": 1, "ai": 0.05, "signatureSwaps": 1, "items": ["leftovers", "sitrus-berry"] },

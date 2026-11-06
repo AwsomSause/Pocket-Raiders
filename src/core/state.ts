@@ -1255,6 +1255,8 @@ export const RunStateSchema = z.object({
   mastery: z.record(z.string(), MasteryPerkSchema).default({}),
   /** Game event editions on when the run started ("rivalry-week@2026-W44"): their rules apply and the run counts for them. */
   gameEvents: z.array(z.string()).default([]),
+  /** Beta 4.4: counters when this stage began, and why it was built the way it was (core/stagePlan.ts). */
+  stagePlan: z.object({ counters: z.record(z.string(), z.number().int().min(0)), wipes: z.number().int().min(0), lines: z.array(z.string()) }).optional(),
   /** Permanent attributes when the run started (the profile's, copied so the rules stay pure). */
   baseAttributes: z.record(z.string(), z.number()),
   /** Run-only additions to the attributes (from rewards). */
