@@ -19,7 +19,7 @@ const statusName = (s: string): string => ({ brn: 'burn', psn: 'poison', par: 'p
 const SCALES_WITH_COPIES = new Set<HeldHook['hook']>(['typePower', 'categoryPower', 'accuracy', 'survive', 'contactDamage', 'contactStatus', 'flinch', 'steal', 'endTurn', 'gem']);
 /** Hooks that are used up (or fire once) when they trigger: the rest work all the time. */
 const ACTIVATED = new Set<HeldHook['hook']>([
-  'gem', 'sash', 'survive', 'powerHerb', 'whiteHerb', 'mentalHerb', 'redCard', 'ejectButton', 'airBalloon', 'dodgeFirst', 'steal', 'shedShell', 'wakeAll',
+  'gem', 'sash', 'survive', 'weaknessPolicy', 'blunderPolicy', 'throatSpray', 'ejectPack', 'roomService', 'boosterEnergy', 'mirrorHerb', 'powerHerb', 'whiteHerb', 'mentalHerb', 'redCard', 'ejectButton', 'airBalloon', 'dodgeFirst', 'steal', 'shedShell', 'wakeAll',
   'berryHeal', 'berryCure', 'berryPp', 'berryStat', 'berrySure', 'berryFirst', 'berryResist', 'berrySuper', 'berryRetaliate', 'terrainSeed', 'absorb', 'koHeal', 'koAttribute', 'formHeld',
 ]);
 
@@ -81,6 +81,38 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: `${pct(Math.min(100, hook.percent * c))} chance to make the target flinch.`, when: 'when it moves first' };
     case 'selfStatus':
       return { text: `Gives the holder ${statusName(hook.status)} at the end of its first turn, and its ${cap(hook.type)} moves hit ${pct(hook.percent)} harder.`, catch: `The holder gets ${statusName(hook.status)}.`, when: 'end of its first turn' };
+    case 'weaknessPolicy':
+      return { text: 'Hit by a super-effective move: +2 Attack and +2 Sp. Atk.', once: true };
+    case 'blunderPolicy':
+      return { text: 'After one of its moves misses: +2 Speed.', once: true };
+    case 'throatSpray':
+      return { text: 'After it uses a sound move: +1 Sp. Atk.', once: true };
+    case 'ejectPack':
+      return { text: 'When an opponent lowers its stats, it switches out. Used up.', once: true };
+    case 'roomService':
+      return { text: 'While Trick Room is up: -1 Speed.', once: true };
+    case 'boosterEnergy':
+      return { text: 'On coming in: +1 to its highest stat.', catch: 'Only works for Paradox Pokémon.', once: true };
+    case 'mirrorHerb':
+      return { text: 'Copies the stat boosts an opponent just got.', once: true };
+    case 'covertCloak':
+      return { text: 'Added effects of moves (status, flinch, stat drops) never hit it.' };
+    case 'clearAmulet':
+      return { text: "Opponents can't lower its stats." };
+    case 'loadedDice':
+      return { text: 'Multi-hit moves hit at least 4 times.' };
+    case 'punchingGlove':
+      return { text: `Punching moves hit ${pct(hook.percent)} harder and don't make contact.` };
+    case 'protectivePads':
+      return { text: "Its moves don't make contact, so Rocky Helmet and friends don't trigger." };
+    case 'heavyDutyBoots':
+      return { text: "Entry hazards (Spikes, Stealth Rock...) don't hurt it." };
+    case 'utilityUmbrella':
+      return { text: "Weather doesn't help, weaken or hurt it or its moves." };
+    case 'terrainExtender':
+      return { text: `Terrain it sets lasts ${hook.turns} more turns.` };
+    case 'abilityShield':
+      return { text: "Its ability can't be ignored (Mold Breaker) or changed by opponents." };
     case 'airBalloon':
       return { text: 'Floats: Ground moves miss it until the balloon pops when it is hit.', once: true };
     case 'ringTarget':
