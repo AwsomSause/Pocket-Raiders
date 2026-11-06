@@ -1123,6 +1123,17 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
   return out;
 }
 
+/**
+ * Loot Previews (S320): the chance of each rarity in the reward draft after a gym leader, as whole percents. It reads the same
+ * weights the draft uses (boss weights plus your luck), does the sum only, and never uses a gameplay roll.
+ */
+export function bossLootPreview(content: Content, run: RunState): { rarity: string; percent: number }[] {
+  const weights = luckWeights(content.balance.bossRarityWeights, runAttributeEffects(content, run));
+  const entries = Object.entries(weights).filter(([, w]) => (w ?? 0) > 0) as [string, number][];
+  const total = entries.reduce((n, [, w]) => n + w, 0);
+  return total === 0 ? [] : entries.map(([rarity, w]) => ({ rarity, percent: Math.round((w / total) * 100) }));
+}
+
 /** The map items giving a preview that are working right now. */
 function activePreviewItems(content: Content, run: RunState): string[] {
   const ids = new Set<string>();

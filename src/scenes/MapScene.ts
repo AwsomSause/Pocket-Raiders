@@ -38,7 +38,7 @@ import { minigamePreview } from '../core/minigame/flow';
 import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
 import { anomalyLine, stageAnomaly } from '../core/story/anomaly';
 import { StopCard, type StopLook } from '../ui/stopLooks';
-import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
+import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, bossLootPreview, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
 import { bossInfo, currentRegion, getCampaign, runLevelCap } from '../core/regions';
 import { blindMap } from '../core/rules';
 import { regionRules } from '../core/battle/typeRules';
@@ -1159,6 +1159,10 @@ export class MapScene extends Phaser.Scene {
     if (leaders.length > 0) {
       const text = leaders.map((l) => `${bossInfo(content, 'gym', l.leaderId).name} (${l.types.map((t) => t.toUpperCase()).join('/')})`).join(', ');
       rows.push({ action: null, itemId: 'fame-checker', title: 'Fame Checker', text: `Gym leaders still in this region: ${text}`, problem: `Gym leaders still in this region: ${text}` });
+    }
+    if (run.stage?.map.nodes.some((n) => n.kind === 'gym')) {
+      const text = `Gym leader reward draft: ${bossLootPreview(content, run).map((l) => `${l.rarity} ${l.percent}%`).join(', ')}`;
+      rows.push({ action: null, itemId: 'loot-preview', title: 'Loot Preview', text, problem: text });
     }
     const plan = run.stagePlan?.lines ?? [];
     if (plan.length > 0) rows.push({ action: null, itemId: '', title: 'Route plan', text: plan.join(' '), problem: plan.join(' ') });
