@@ -322,7 +322,7 @@ describe('Terastallization', () => {
     resolveTurn(ctx, TERA);
     expect(a.speciesId).toBe('charizard-mega-y');
     expect(battleTypes(content, battle, a)).toEqual(['fire']);
-    expect(zMoveOptions(ctx)).toEqual([null]);
+    expect(zMoveOptions(ctx).every((o) => o === null)).toBe(true); // a Mega Evolved Pokémon also has its signature move slot
     expect(() => resolveTurn(ctx, { kind: 'move', index: 0, transform: { kind: 'zmove' } })).toThrow(/already transformed/);
   });
 
