@@ -5,6 +5,7 @@ import type { Content } from '../core/contentSchema';
 import type { StoryData } from '../core/story2/schema';
 import { rivalAudit } from '../core/story2/storyRivals';
 import { TEMPLATE_TOKENS, tokensIn } from '../core/story2/templates';
+import { MIN_TWIST_CLUES, validateTheme } from '../core/story2/themes';
 
 export interface StoryGateContext {
   fileExists?: (path: string) => boolean;
@@ -58,7 +59,7 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
 
   const reachable = new Set(data.backstories.flatMap((b) => b.endings));
   add('story-unreachable-ending', 'Story endings nobody can reach', 'Endings no backstory can reach, and backstories with no catch-all ending.', [
-    ...data.themes.flatMap((t) => t.endings.filter((e) => !reachable.has(e)).map((e) => `theme ${t.id}: ending ${e}`)),
+    ...data.themes.flatMap((t) => t.endings.filter((e) => !reachable.has(e) && !t.endingGrid.some((r) => r.ending === e)).map((e) => `theme ${t.id}: ending ${e}`)),
     ...data.backstories.filter((b) => !b.catchAllEnding || !b.endings.includes(b.catchAllEnding)).map((b) => `backstory ${b.id}: no catch-all ending`),
   ]);
 
@@ -96,13 +97,19 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
 
   const twist: string[] = [];
   for (const t of data.themes) {
-    if (!t.twist) continue;
     const order = t.beatSheet.map((b) => b.slot);
-    const reveal = order.indexOf(t.twist.revealSlot);
-    const clues = t.twist.clueSlots.filter((s) => order.indexOf(s) >= 0 && order.indexOf(s) < reveal);
-    if (clues.length < t.twist.minClues) twist.push(`${t.id}: ${clues.length} clue(s) before the reveal, needs ${t.twist.minClues}`);
+    const checks = [...(t.twist ? [{ id: t.id, reveal: t.twist.revealSlot, slots: t.twist.clueSlots, min: t.twist.minClues }] : []),
+      ...t.twists.map((w) => ({ id: `${t.id}/${w.id}`, reveal: w.revealSlot, slots: w.clues.map((c) => c.slot), min: MIN_TWIST_CLUES }))];
+    for (const c of checks) {
+      const reveal = order.indexOf(c.reveal);
+      const clues = c.slots.filter((s) => order.indexOf(s) >= 0 && order.indexOf(s) < reveal);
+      if (clues.length < c.min) twist.push(`${c.id}: ${clues.length} clue(s) before the reveal, needs ${c.min}`);
+    }
   }
   add('story-twist-clues', 'Twists with too few clues', 'Twist cards below the required clue count, or with clues scheduled after the reveal.', twist);
+
+  add('story-theme-audit', 'Story themes that are incomplete', 'Theme cards that break the card rules: event count, slot rules, twist clues, Journal tab, ending table, or an ending nobody can reach.',
+    data.themes.filter((t) => t.events.length > 0 || t.endingGrid.length > 0).flatMap((t) => validateTheme(data, t.id).map((p) => `${t.id}: ${p}`)));
 
   add('story-movemoment-types', 'Move Moments missing types', 'Move Moments with no line for one of the 18 types.', data.moveMoments.flatMap((m) => TYPES.filter((t) => !m.typeMap[t]).map((t) => `${m.id}: ${t}`)));
 
@@ -138,7 +145,7 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
 
   const MB = 1_000_000;
   const sizes = ctx.fileSizes ?? {};
-  add('story-bundle-budget', 'Story data over its size budget', 'A story data file over 0.6 MB, or text/en.json over 0.1 MB in the main bundle.', Object.entries(sizes).filter(([name, n]) => n > (name === 'text' ? 0.1 * MB : 0.6 * MB)).map(([name, n]) => `${name}: ${n} bytes`));
+  add('story-bundle-budget', 'Story data over its size budget', 'A story data file over 0.6 MB, or text/en.json over 0.1 MB in the main bundle.', Object.entries(sizes).filter(([name, n]) => n > (name.startsWith('text') ? 0.1 * MB : 0.6 * MB)).map(([name, n]) => `${name}: ${n} bytes`));
 
   add('story-rival-audit', 'Story rivals failing the fair-play audit', 'Rival data with a missing reference, a bad team, a clue ledger below the fair-play rules, or a theme row that breaks the role rules.', rivalAudit(data, content?.species));
 

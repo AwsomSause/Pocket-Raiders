@@ -2521,6 +2521,8 @@ export const BalanceSchema = z.object({
     replanWindowStops: z.number().int().min(1),
     maxConsecutiveHighIntensity: z.number().int().min(1),
     sameEventGapStops: z.number().int().min(0),
+    /** S11: how much more likely the drawn theme's exclusive events are than a general event for the same slot. */
+    themeEventWeight: z.number().min(1),
     sameEventMaxPerRun: z.number().int().min(1),
     /** S10 (design R4): rival team size and level band per Act 1 to 6, as fractions of the region level cap. A Friendly rival uses the band minus `friendlyOffset`. */
     rivalBands: z.object({

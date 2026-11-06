@@ -51,6 +51,21 @@ export const ThemeSchema = z.object({
   slotRules: z.array(SlotRule), endings: z.array(Id).min(1), weight: z.number(), needs: z.array(Id).default([]),
   /** Twist clue slots and the slot that reveals the twist (for the clue-count gate). */
   twist: z.object({ revealSlot: Id, clueSlots: z.array(Id), minClues: z.number().int().min(0) }).optional(),
+  /** S11: the theme's exclusive events (tagged `theme_<id>`), each pinned to a named beat by a slot rule `{ slot, event }`. */
+  events: z.array(Id).default([]),
+  /** S11: the ending table. First matching row wins; the last row has no conditions. Conditions read run flags and counters. */
+  endingGrid: z.array(z.object({ ending: Id, nameKey: Key, sceneKey: Key, when: z.array(CondSchema).default([]) })).default([]),
+  /** S11: twist cards (reveal beat, act, clue beats). Fair play: 3 or more clues before the reveal. */
+  twists: z.array(z.object({
+    id: Id, revealSlot: Id, act: z.number().int().min(1), revealKey: Key, motiveKey: Key, consequenceKey: Key,
+    clues: z.array(z.object({ id: Id, slot: Id, textKey: Key })),
+  })).default([]),
+  /** S11: the Journal tab (name plus 3 entry templates). */
+  journal: z.object({ nameKey: Key, templates: z.array(Key) }).optional(),
+  /** S11: how well each backstory fits the theme. A missing backstory means no opinion. */
+  backstoryFit: z.record(Id, z.enum(['excellent', 'good', 'possible', 'blocked'])).default({}),
+  /** S11: ending flags the runtime sets when a fight or scene resolves (not by an event choice). */
+  battleFlags: z.array(Id).default([]),
 });
 
 export const RemembranceSchema = z.object({
