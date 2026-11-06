@@ -1,0 +1,455 @@
+{
+  "note": "Choice scenes and hidden consequences (Story Overhaul W3, design 14.18 to 14.20). Deltas are limited to +/-8 per choice and +/-20 per scene. A consequence surfaces min..max stages after the choice, once.",
+  "limits": {
+    "choice": 8,
+    "scene": 20
+  },
+  "scenes": [
+    {
+      "id": "sc_boast_fork",
+      "place": "a road fork before a gym",
+      "hidden": "boasted_to_rival",
+      "intro": "{rival} stops at the fork. \"Big gym ahead. What is your plan?\"",
+      "choices": [
+        {
+          "id": "a",
+          "label": "I won't lose one Pokémon.",
+          "rel": {
+            "respect": 0,
+            "rivalry": 6,
+            "affection": 0,
+            "suspicion": 0
+          },
+          "reply": "Big words. We'll see.",
+          "hidden": "boasted_to_rival"
+        },
+        {
+          "id": "b",
+          "label": "I just want to do my best.",
+          "rel": {
+            "respect": 3,
+            "rivalry": 0,
+            "affection": 3,
+            "suspicion": 0
+          },
+          "reply": "That's... actually nice."
+        },
+        {
+          "id": "c",
+          "label": "Race you there.",
+          "rel": {
+            "respect": 2,
+            "rivalry": 5,
+            "affection": 1,
+            "suspicion": 0
+          },
+          "reply": "You're on. Don't trip."
+        },
+        {
+          "id": "d",
+          "label": "Why do you ask?",
+          "rel": {
+            "respect": 0,
+            "rivalry": 0,
+            "affection": 0,
+            "suspicion": 4
+          },
+          "reply": "No reason. Don't be so tense."
+        }
+      ],
+      "keyChoice": "a",
+      "reactions": {
+        "competitive": "Bold. I'll count your faints.",
+        "arrogant": "Say it twice and I might believe you.",
+        "ruthless": "Then I'll make you lose one.",
+        "idealistic": "Strength without care is a trap.",
+        "insecure": "I wish I could say that.",
+        "friendly": "That's so cool! I believe you!"
+      }
+    },
+    {
+      "id": "sc_injured_trainer",
+      "place": "a roadside",
+      "hidden": "helped_trainer",
+      "intro": "A trainer sits against a rock, her Pokémon shaking. {rival} is already there, watching you.",
+      "choices": [
+        {
+          "id": "a",
+          "label": "Use a Potion on her Pokémon",
+          "rel": {
+            "respect": 4,
+            "rivalry": 0,
+            "affection": 3,
+            "suspicion": -2
+          },
+          "reply": "...I'd have done that. Eventually.",
+          "hidden": "helped_trainer"
+        },
+        {
+          "id": "b",
+          "label": "Carry her to the Pokémon Center",
+          "rel": {
+            "respect": 6,
+            "rivalry": 0,
+            "affection": 5,
+            "suspicion": -3
+          },
+          "reply": "Heavy, isn't it? I'll take her bag.",
+          "hidden": "helped_trainer"
+        },
+        {
+          "id": "c",
+          "label": "Tell {rival} to deal with it",
+          "rel": {
+            "respect": -3,
+            "rivalry": 3,
+            "affection": -2,
+            "suspicion": 3
+          },
+          "reply": "Fine. I will."
+        },
+        {
+          "id": "d",
+          "label": "Walk on",
+          "rel": {
+            "respect": -2,
+            "rivalry": 2,
+            "affection": -3,
+            "suspicion": 5
+          },
+          "reply": "...Okay."
+        }
+      ],
+      "keyChoice": "a",
+      "reactions": {
+        "competitive": "Slow. But it works.",
+        "arrogant": "A Potion? How quaint.",
+        "ruthless": "Waste of supplies.",
+        "idealistic": "This is what I mean. Thank you.",
+        "insecure": "You always know what to do.",
+        "friendly": "You are the best, you know that?"
+      }
+    },
+    {
+      "id": "sc_share_berries",
+      "place": "camp",
+      "hidden": "shared_item",
+      "intro": "{rival} is out of berries and pretends not to be hungry.",
+      "choices": [
+        {
+          "id": "a",
+          "label": "Offer half your berries",
+          "rel": {
+            "respect": 2,
+            "rivalry": -2,
+            "affection": 6,
+            "suspicion": -3
+          },
+          "reply": "Fine. Just this once.",
+          "hidden": "shared_item"
+        },
+        {
+          "id": "b",
+          "label": "Offer the whole bag",
+          "rel": {
+            "respect": 3,
+            "rivalry": -4,
+            "affection": 8,
+            "suspicion": -4
+          },
+          "reply": "That's too much. Take some back.",
+          "hidden": "shared_item"
+        },
+        {
+          "id": "c",
+          "label": "Trade for information",
+          "rel": {
+            "respect": 1,
+            "rivalry": 2,
+            "affection": 0,
+            "suspicion": 2
+          },
+          "reply": "Fair. Ask your question."
+        },
+        {
+          "id": "d",
+          "label": "Eat in front of them",
+          "rel": {
+            "respect": -2,
+            "rivalry": 4,
+            "affection": -4,
+            "suspicion": 3
+          },
+          "reply": "Wow. Okay."
+        }
+      ],
+      "keyChoice": "a",
+      "reactions": {
+        "competitive": "A trade I'll repay in kind.",
+        "arrogant": "I don't need charity.",
+        "ruthless": "What do you want in return?",
+        "idealistic": "Kindness is rare. Thank you.",
+        "insecure": "You'd share with me?",
+        "friendly": "We'll have a picnic! Sit!"
+      }
+    },
+    {
+      "id": "sc_bridge_dare",
+      "place": "a rope bridge",
+      "hidden": "accepted_dare",
+      "intro": "{rival} points at the far side. \"First to cross wins a battle, loser carries the bags.\"",
+      "choices": [
+        {
+          "id": "a",
+          "label": "Accept",
+          "rel": {
+            "respect": 3,
+            "rivalry": 5,
+            "affection": 1,
+            "suspicion": 0
+          },
+          "reply": "Ha! Go!",
+          "hidden": "accepted_dare"
+        },
+        {
+          "id": "b",
+          "label": "Refuse, politely",
+          "rel": {
+            "respect": -1,
+            "rivalry": -2,
+            "affection": 0,
+            "suspicion": 1
+          },
+          "reply": "No fun. Fine.",
+          "hidden": "refused_dare"
+        },
+        {
+          "id": "c",
+          "label": "Counter: cross together",
+          "rel": {
+            "respect": 2,
+            "rivalry": 0,
+            "affection": 4,
+            "suspicion": -1
+          },
+          "reply": "Together? Hm. Okay."
+        },
+        {
+          "id": "d",
+          "label": "Cut the rope (joke)",
+          "rel": {
+            "respect": -2,
+            "rivalry": 3,
+            "affection": -2,
+            "suspicion": 3
+          },
+          "reply": "Not funny! ...a little funny."
+        }
+      ],
+      "keyChoice": "a",
+      "reactions": {
+        "competitive": "Loser carries the bags!",
+        "arrogant": "Hope you packed light.",
+        "ruthless": "Accepting is the first mistake.",
+        "idealistic": "Why do you chase every challenge?",
+        "insecure": "Can I still lose to you? I would like to.",
+        "friendly": "Yay! Race!"
+      }
+    },
+    {
+      "id": "sc_mock_loser",
+      "place": "a town square",
+      "hidden": "mocked_rival",
+      "intro": "{rival} sits on the steps. A poster of their loss is still on the board.",
+      "choices": [
+        {
+          "id": "a",
+          "label": "Nice poster.",
+          "rel": {
+            "respect": -4,
+            "rivalry": 6,
+            "affection": -5,
+            "suspicion": 4
+          },
+          "reply": "...Get out of my sight.",
+          "hidden": "mocked_rival"
+        },
+        {
+          "id": "b",
+          "label": "Everyone loses.",
+          "rel": {
+            "respect": 1,
+            "rivalry": 0,
+            "affection": 2,
+            "suspicion": 0
+          },
+          "reply": "Not helpful. A little helpful."
+        },
+        {
+          "id": "c",
+          "label": "Sit and say nothing",
+          "rel": {
+            "respect": 3,
+            "rivalry": 0,
+            "affection": 4,
+            "suspicion": -2
+          },
+          "reply": "Thanks for not saying anything.",
+          "hidden": "comforted_rival"
+        },
+        {
+          "id": "d",
+          "label": "Offer a rematch",
+          "rel": {
+            "respect": 4,
+            "rivalry": 3,
+            "affection": 1,
+            "suspicion": 0
+          },
+          "reply": "When I'm ready. Soon."
+        }
+      ],
+      "keyChoice": "a",
+      "reactions": {
+        "competitive": "I will beat you for this.",
+        "arrogant": "You'll regret that, peasant.",
+        "ruthless": "Write it down. I will.",
+        "idealistic": "You have changed since the road.",
+        "insecure": "I knew it. I knew it.",
+        "friendly": "That was mean. But... maybe true."
+      }
+    },
+    {
+      "id": "sc_the_promise",
+      "place": "a cliff overlook at dusk",
+      "hidden": "ideal_promise",
+      "intro": "{rival} shares a hope: \"If one of us gets there, help the other. Promise?\"",
+      "choices": [
+        {
+          "id": "a",
+          "label": "I promise.",
+          "rel": {
+            "respect": 4,
+            "rivalry": -3,
+            "affection": 4,
+            "suspicion": -3
+          },
+          "reply": "Then it's real.",
+          "hidden": "ideal_promise"
+        },
+        {
+          "id": "b",
+          "label": "I'll try.",
+          "rel": {
+            "respect": 1,
+            "rivalry": 0,
+            "affection": 1,
+            "suspicion": 1
+          },
+          "reply": "That's honest, I guess."
+        },
+        {
+          "id": "c",
+          "label": "Promises are cheap.",
+          "rel": {
+            "respect": -2,
+            "rivalry": 2,
+            "affection": -3,
+            "suspicion": 4
+          },
+          "reply": "...Okay."
+        },
+        {
+          "id": "d",
+          "label": "Only if you win.",
+          "rel": {
+            "respect": 1,
+            "rivalry": 4,
+            "affection": 0,
+            "suspicion": 1
+          },
+          "reply": "Deal. A race with a prize."
+        }
+      ],
+      "keyChoice": "a",
+      "reactions": {
+        "competitive": "Then don't make me carry you.",
+        "arrogant": "I accept. You'll need the help.",
+        "ruthless": "Promises break. Mine too, if I must.",
+        "idealistic": "This is why I came.",
+        "insecure": "Don't promise. I'll hold you to it.",
+        "friendly": "I'll hold this one forever!"
+      }
+    }
+  ],
+  "consequences": {
+    "helped_trainer": {
+      "min": 2,
+      "max": 3,
+      "cap": 2,
+      "line": "The trainer you helped is back on the road, with a tip for you.",
+      "flags": [
+        "cq:helped_trainer"
+      ]
+    },
+    "mocked_rival": {
+      "min": 2,
+      "max": 2,
+      "cap": 1,
+      "line": "{rival} has been training hard. They want a rematch.",
+      "flags": [
+        "cq:mocked_rival",
+        "cq:revenge_rematch"
+      ]
+    },
+    "shared_item": {
+      "min": 3,
+      "max": 4,
+      "cap": 1,
+      "line": "{rival} left a gift at the next camp, worth more than what you shared.",
+      "flags": [
+        "cq:shared_item"
+      ]
+    },
+    "accepted_dare": {
+      "min": 0,
+      "max": 0,
+      "cap": 1,
+      "line": "A spectator tells others how you crossed that bridge.",
+      "flags": [
+        "cq:accepted_dare"
+      ],
+      "rep": {
+        "category": "strategy",
+        "gain": "unusualTeam"
+      }
+    },
+    "refused_dare": {
+      "min": 3,
+      "max": 3,
+      "cap": 1,
+      "line": "Word is going around that you are a careful trainer.",
+      "flags": [
+        "cq:refused_dare"
+      ]
+    },
+    "ideal_promise": {
+      "min": 3,
+      "max": 3,
+      "cap": 1,
+      "line": "{rival} remembers your promise.",
+      "flags": [
+        "cq:ideal_promise"
+      ]
+    },
+    "comforted_rival": {
+      "min": 2,
+      "max": 3,
+      "cap": 1,
+      "line": "{rival} says thanks, quietly.",
+      "flags": [
+        "cq:comforted_rival"
+      ]
+    }
+  }
+}

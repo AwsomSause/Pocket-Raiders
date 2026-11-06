@@ -1,0 +1,7 @@
+# W3: Dialogue choices and consequences
+
+- `src/data/rivalScenes.json`: the 6 choice scenes of design 14.20 (boast at the fork, injured trainer, share berries, bridge dare, mock the loser, the promise) with replies, six voice reactions for the key choice, and 7 hidden consequences (surface 0 to 4 stages later, per-run caps).
+- `src/core/story2/dialogue.ts`: `playChoice` writes the four deltas (+/-8 each) to `run.story.v2.rel[rival]` (0..100), bridges to `ev:rival-friend` / `ev:rival-heat`, sets the hidden flag and queues its consequence. `surfaceConsequences` fires each due consequence exactly once (queue entry removed and id added to `fired` in one step). `relState` maps the four attributes to stages (gates needed for Close, Trusted, Nemesis).
+- Save: new fields live inside `run.story.v2` (`rel`, `queue`, `scenesDone`, `fired`, all defaulted), inside the run v40 container from F0. No bump. Classic runs have no `v2`, so scenes are refused there with a clear error.
+- Limits: nothing offers a scene to the player yet. W5 (run events) schedules scenes and calls `surfaceConsequences` at each stop and shows the line. Hidden ids without consequence data (for example `boasted_to_rival`, `mocked_rival` text only) just set their flag. The "revenge rematch" and "helped trainer returns" effects are flags (`cq:*`) for W5 events to read.
+- Tests: `tests/unit/storyDialogue.test.ts` (data limits, bridge, once-only across save and load, caps, determinism, relationship states).

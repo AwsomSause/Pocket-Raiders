@@ -82,7 +82,7 @@ describe('run v39 -> v40', () => {
   });
   it('run_v40_story_roundtrip: a Story Run with v2 state saves and loads identically', () => {
     const r = run();
-    r.story.v2 = { mode: 'story_run', contentHash: 'abc', heartbondOverrides: 1, cast: { dara: { stage: 'friend', attrs: { trust: 3 }, memories: ['m1'] } }, arcs: {}, facts: { met_dara: true }, stops: { index: 2, planned: 44, done: ['s1', 's2'] }, replans: [] };
+    r.story.v2 = { mode: 'story_run', contentHash: 'abc', heartbondOverrides: 1, cast: { dara: { stage: 'friend', attrs: { trust: 3 }, memories: ['m1'] } }, arcs: {}, facts: { met_dara: true }, stops: { index: 2, planned: 44, done: ['s1', 's2'] }, replans: [], rel: {}, queue: [], scenesDone: [], fired: [] };
     const sm = new SaveManager(new MemoryStorageProvider(), content);
     sm.saveRun(r);
     const again = sm.loadRun();
