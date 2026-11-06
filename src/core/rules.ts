@@ -5,6 +5,7 @@ import { z } from 'zod';
 import rulesJson from '../data/runRules.json';
 import type { Content, TypeName } from './contentSchema';
 import { getSpecies, usableLearnset } from './pokemon';
+import { applyMutator, MUTATORS } from './mutators';
 import { hashSeed, Rng } from './rng';
 import { poolTypes } from './runPrep';
 import type { PokemonInstance, RunRules, RunState } from './state';
@@ -81,7 +82,7 @@ export const RunRulesDataSchema = z.object({
     once: z.object({ pool: z.string().optional(), trainer: z.string().optional(), title: z.string().optional(), bankCredits: z.number().int().optional(), text: z.string() }),
     repeat: z.object({ bankCredits: z.number().int().optional(), candies: z.number().int().optional(), text: z.string() }),
   })),
-  modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), /** Time Pressure (S20): the mode's reward bonus melts by `perDay` for every in-game day past `daysPerRegion` x regions entered (core/clock.ts timePressureTick). */ timePressure: z.object({ daysPerRegion: z.number().int().min(1), perDay: z.number().positive() }).optional(), blurb: z.string() })).min(1),
+  modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), /** Endless Tower (S14): each new lap also takes a seeded curse (core/mutators.ts), so every floor climb gets harder. */ loopCurse: z.boolean().optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), /** Time Pressure (S20): the mode's reward bonus melts by `perDay` for every in-game day past `daysPerRegion` x regions entered (core/clock.ts timePressureTick). */ timePressure: z.object({ daysPerRegion: z.number().int().min(1), perDay: z.number().positive() }).optional(), blurb: z.string() })).min(1),
 });
 export const RUN_RULES = RunRulesDataSchema.parse(rulesJson);
 
@@ -361,7 +362,7 @@ export const dailyClaimKey = (isoDate: string): string => `daily:${isoDate.slice
  * Endless: when the last champion falls, add another lap of the regions instead of winning (mutates `run`).
  * Returns false in any other mode. Enemies get stronger every lap.
  */
-export function extendEndless(run: Pick<RunState, 'rules' | 'regionOrder'>): boolean {
+export function extendEndless(run: Pick<RunState, 'rules' | 'regionOrder'> & Partial<Pick<RunState, 'seed' | 'mutators'>>): boolean {
   const mode = getMode(run.rules.modeId);
   const bonus = mode?.loopLevelBonus;
   // The configured endpoint: after the last lap the run is won like any other.
@@ -370,6 +371,12 @@ export function extendEndless(run: Pick<RunState, 'rules' | 'regionOrder'>): boo
   run.regionOrder.push(...run.regionOrder.slice(0, lap));
   run.rules.loops += 1;
   run.rules.enemyLevelBonus += bonus;
+  // Endless Tower: every lap also adds a curse (seeded by the run and the lap, never the gameplay stream).
+  if (mode?.loopCurse) {
+    const curses = MUTATORS.mutators.filter((m) => m.kind === 'curse' && (m.enemyLevel ?? 0) > 0);
+    const curse = new Rng(hashSeed(`${run.seed ?? ''}::tower::${run.rules.loops}`)).pick(curses);
+    applyMutator(run as RunState, curse.id);
+  }
   return true;
 }
 

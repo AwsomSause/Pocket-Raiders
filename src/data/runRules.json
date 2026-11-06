@@ -368,6 +368,16 @@
       "loopLimit": 10
     },
     {
+      "id": "endless-tower",
+      "name": "Endless Tower",
+      "status": "supported",
+      "progressionEligible": false,
+      "checkpoints": false,
+      "blurb": "A climb with no top: beat the last champion and the regions start again, with no lap limit. Every lap enemies get +4 levels and a new curse (+2 or +3 more levels). It ends when you wipe. Practice mode: no account progress.",
+      "loopLevelBonus": 4,
+      "loopCurse": true
+    },
+    {
       "id": "spooky",
       "name": "Spooky",
       "status": "supported",
