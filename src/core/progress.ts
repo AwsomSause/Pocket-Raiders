@@ -9,6 +9,7 @@
 //                 trainers are claimed in the Trainer Archive (some cost Bank Credits)
 
 import { isAssisted } from './tools/assisted';
+import { applyDexTallies } from './dexResearch';
 import { directiveProgress, type DirectiveProgress } from './directive';
 import { legacyCard, runEpitaph } from './story/legacy';
 import { getArchetype, researchMultiplier } from './archetypes';
@@ -50,6 +51,10 @@ export function countShiny(run: RunState, speciesId: string): void {
 export function discover(run: RunState, speciesId: string, caught: boolean): void {
   if (!run.log.speciesSeen.includes(speciesId)) run.log.speciesSeen.push(speciesId);
   if (caught && !run.log.speciesCaught.includes(speciesId)) run.log.speciesCaught.push(speciesId);
+  // S497: species research counts every meeting and every catch.
+  const tally = ((run.log.dexTally ??= {})[speciesId] ??= { seen: 0, caught: 0 });
+  if (caught) tally.caught += 1;
+  else tally.seen += 1;
 }
 
 export interface RequirementProgress {
@@ -323,6 +328,7 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
     researchPoints = scaleReward(Math.round(researchPoints * researchScale(run.rules)), run.rules);
     if (runQuestDone) researchPoints += runQuest.researchPoints;
     if (directive?.done) researchPoints += directive.researchPoints;
+    researchPoints += applyDexTallies(profile, run.log.dexTally);
     profile.researchPoints += researchPoints;
     profile.attributes = permanentAttributes(content, profile);
     addTrainerCounters(profile, questTrainer(content, run.archetypeId), runCounters);

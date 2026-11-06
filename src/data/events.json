@@ -69897,6 +69897,830 @@
      }
     }
    ]
+  },
+  {
+   "id": "alpha-noble-arcanine",
+   "name": "Frenzied Noble: Arcanine",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arcanine",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a ridge of burnt grass a huge Arcanine thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Arcanine lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "arcanine"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Arcanine lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "arcanine"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Arcanine charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "arcanine"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-electrode",
+   "name": "Frenzied Noble: Electrode",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "electrode",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a field crackling with static a huge Electrode thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Electrode lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "electrode"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Electrode lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "electrode"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Electrode charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "electrode"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-kleavor",
+   "name": "Frenzied Noble: Kleavor",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kleavor",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a quarry of broken stone a huge Kleavor thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Kleavor lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "kleavor"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Kleavor lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kleavor"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Kleavor charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kleavor"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-lilligant",
+   "name": "Frenzied Noble: Lilligant",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lilligant",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a wildflower meadow a huge Lilligant thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Lilligant lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lilligant"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Lilligant lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "lilligant"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Lilligant charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "lilligant"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-avalugg",
+   "name": "Frenzied Noble: Avalugg",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "avalugg",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a snowfield under grey sky a huge Avalugg thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Avalugg lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "avalugg"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Avalugg lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "avalugg"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Avalugg charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "avalugg"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-wyrdeer",
+   "name": "Frenzied Noble: Wyrdeer",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wyrdeer",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a frozen forest edge a huge Wyrdeer thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Wyrdeer lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wyrdeer"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Wyrdeer lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wyrdeer"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Wyrdeer charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wyrdeer"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-ursaluna",
+   "name": "Frenzied Noble: Ursaluna",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ursaluna",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a muddy wetland a huge Ursaluna thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Ursaluna lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "ursaluna"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Ursaluna lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaluna"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Ursaluna charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaluna"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "alpha-noble-braviary",
+   "name": "Frenzied Noble: Braviary",
+   "group": "Alpha Nobles",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "braviary",
+    "tint": "#4a2a2a",
+    "effect": "none"
+   },
+   "intro": "At a windswept cliff top a huge Braviary thrashes, eyes glowing red. A noble of its kind, driven into a frenzy. It has not noticed you yet.",
+   "choices": [
+    {
+     "label": "Hold your ground and calm it",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You stand tall and breathe slowly. The frenzy fades. Braviary lowers its head and walks with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "braviary"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Braviary lunges. The frenzy is too strong to talk down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "braviary"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fight the frenzied noble",
+     "success": {
+      "text": "Braviary charges, far stronger than a normal one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "braviary"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }

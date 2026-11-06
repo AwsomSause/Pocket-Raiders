@@ -1,0 +1,27 @@
+{
+ "events": [
+  {
+   "id": "reward-wheel",
+   "name": "Free Reward Wheel",
+   "group": "Games of chance",
+   "rarity": "common",
+   "scene": { "cast": [], "effect": "spin" },
+   "intro": "A promoter waves you over to a wheel with its odds painted on it. It is free, no tickets, no catch.",
+   "choices": [
+    {
+     "label": "Small wheel: 80% win ₽300, otherwise a Dire Hit",
+     "chance": 0.8,
+     "success": { "text": "₽300 lands in your hand.", "effects": [{ "kind": "money", "amount": 300 }] },
+     "failure": { "text": "A Dire Hit, then.", "effects": [{ "kind": "item", "id": "dire-hit", "count": 1 }] }
+    },
+    {
+     "label": "Gold wheel: 25% win a Rare Candy, otherwise ₽100",
+     "chance": 0.25,
+     "success": { "text": "The wheel stops on gold: a Rare Candy!", "effects": [{ "kind": "item", "id": "rare-candy", "count": 1 }] },
+     "failure": { "text": "Not this time. ₽100 for trying.", "effects": [{ "kind": "money", "amount": 100 }] }
+    },
+    { "label": "Walk on", "success": { "text": "You leave it be and walk on.", "effects": [] } }
+   ]
+  }
+ ]
+}

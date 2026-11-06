@@ -338,7 +338,7 @@ export function serviceView(content: Content, run: RunState, sideId: string): Se
       const have = Object.entries(run.materials).filter(([, n]) => n > 0).map(([id, n]) => `${n} ${materialName(id)}`).join(', ');
       add('look', 'Check your materials', have ? `You hold: ${have}.` : 'You hold no materials yet. Win battles and raids to collect them.', 0);
       for (const o of trailOptions(content, run)) add(`craft:${TRAIL_PREFIX}${o.speciesId}`, `Follow the scent of ${o.name}`, `Costs ${o.cost} ${materialName(o.material)}. The next 2 wild encounters are far likelier to be ${o.name} or its line.`, 0, trailProblem(content, run, o.speciesId));
-      for (const r of CRAFTING.recipes) add(`craft:${r.id}`, r.name, `Costs ${Object.entries(recipeCost(content, run, r)).map(([id, n]) => `${n} ${materialName(id)}`).join(', ')}${r.money ? ` and ₽${r.money}` : ''}.`, 0, recipeProblem(content, run, r));
+      for (const r of CRAFTING.recipes) if (!r.needs || content.balance[r.needs].enabled) add(`craft:${r.id}`, r.name, `Costs ${Object.entries(recipeCost(content, run, r)).map(([id, n]) => `${n} ${materialName(id)}`).join(', ')}${r.money ? ` and ₽${r.money}` : ''}.`, 0, recipeProblem(content, run, r));
       // S175 Tera Forge: a type's material becomes that type's Tera Shard (only types whose material you hold enough of).
       for (const t of TYPE_NAMES) {
         const mat = CRAFTING.typeMaterial[t];
