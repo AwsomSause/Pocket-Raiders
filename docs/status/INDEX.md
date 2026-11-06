@@ -311,3 +311,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `mega-signature-moves.md`: Overhaul slices 27-28, Mega-only signature move slot; batch 1 (15 of 142 moves); no save version change.
 - `overhaul-hyper-overdrive.md`: Overhaul slice 9: Hyper (bond/defence) and Overdrive (aggressive, costs) are separate, with activation rules and a first-time Continue explanation (profile v19).
 - `overhaul-mastery.md`: Overhaul slice 25 (part): pack flavour text for 123 moves on the move lore page.
+- `overhaul-memories.md`: Overhaul slice 19: won-run epilogue gets a run title, a fair MVP with title and two milestone memories.
