@@ -132,6 +132,12 @@ export function payout(content: Content, run: RunState, def: MinigameDef, tier: 
       const roll = new Rng(hashSeed(`${run.seed}::minigame-effect::${stage.index}:${def.id}:${plays}`));
       if (roll.chance(reward.effect.chance)) lines.push(applyEffect(content, run, reward.effect.kind, reward.effect.amount));
     }
+    const fr = eco.frontier;
+    if (fr.games.includes(def.id)) {
+      const pts = fr.points[medal] * (tier + 1);
+      log.frontierPoints = (log.frontierPoints ?? 0) + pts;
+      if (pts > 0) lines.push(`+${pts} Frontier Points.`);
+    }
     run.money += money;
     log.money += money;
     if (item) {
@@ -167,5 +173,16 @@ export function leaveMinigame(current: RunState): RunState {
   session(run);
   run.minigame = null;
   run.phase = 'map';
+  return run;
+}
+
+/** Spends Frontier Points on a prize from the Frontier shop (S490). Throws when you cannot afford it. */
+export function buyFrontierPrize(content: Content, current: RunState, prizeId: string): RunState {
+  const run = structuredClone(current);
+  const prize = content.minigames.economy.frontier.prizes.find((p) => p.id === prizeId);
+  if (!prize) throw new Error(`No Frontier prize "${prizeId}"`);
+  if (run.minigames.frontierPoints < prize.cost) throw new Error('Not enough Frontier Points');
+  run.minigames.frontierPoints -= prize.cost;
+  addItem(run.inventory, prize.item, prize.count);
   return run;
 }

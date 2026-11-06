@@ -408,6 +408,10 @@ export class GameSession {
     return this.setRun(Mini.minigameAct(this.content, this.requireRun(), cellId));
   }
 
+  buyFrontierPrize(prizeId: string): RunState {
+    return this.setRun(Mini.buyFrontierPrize(this.content, this.requireRun(), prizeId));
+  }
+
   minigameTick(): RunState {
     return this.setRun(Mini.minigameTick(this.content, this.requireRun()));
   }
