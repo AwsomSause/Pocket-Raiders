@@ -348,3 +348,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - [story-s1-bs-hisui](story-s1-bs-hisui.md): S1 backstory 5, Remains of the Past content, gates 0
 - `story-s8-relationships.md`: Story S8: relationship stages, attributes, ripples, memories, consequences (core only, not wired into events yet).
 - `story-s14-news-lore.md`: Story S14: 40 news headlines, Chronicle text templates, 6 Field Notes, token gate (text only; screens come later).
+- `story-s13-relationships.md`: Story S13 part 1: Relationships page (view model, map menu button).
