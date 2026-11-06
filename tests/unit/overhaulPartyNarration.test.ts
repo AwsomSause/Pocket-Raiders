@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
+import { countedScene, ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
 import { content } from './helpers';
 
 const party = ['bulbasaur', 'charmander', 'squirtle', 'pikachu'].map((speciesId, i) => ({ uid: `m${i}`, nature: 'hardy' as const, speciesId }));
@@ -42,6 +42,21 @@ describe('overhaul party narration', () => {
   it('badge reactions exist', async () => {
     await ensureNarration();
     expect(Array.from({ length: 30 }, (_, i) => partyNarration(party, 'badge', `k${i}`, nameOf, typesOf)).some(Boolean)).toBe(true);
+  });
+  it('counted scenes fire once, on the exact count, and only after load', async () => {
+    const names = (k: string, id: string) => (k === 'move' ? (id === 'bug-bite' ? 'Bug Bite' : id) : id.replaceAll('-', ' '));
+    const mon = { uid: 'u1', speciesId: 'metapod' };
+    const use = Array.from({ length: 10 }, () => ({ type: 'move', side: 'player', moveId: 'bug-bite' }));
+    expect(countedScene({}, mon, use, names)).toBeNull();
+    await ensureNarration();
+    const counters: Record<string, number> = {};
+    expect(countedScene(counters, mon, use.slice(0, 9), names)).toBeNull();
+    expect(countedScene(counters, mon, use.slice(9), names)).toMatch(/tenth time Metapod uses Bug Bite/);
+    expect(countedScene(counters, mon, use.slice(9), names)).toBeNull();
+    expect(counters['pack.use.u1.bug-bite']).toBe(11);
+    expect(countedScene({}, undefined, use, names)).toBeNull();
+    // the enemy's moves are never counted
+    expect(countedScene({}, mon, use.map((e) => ({ ...e, side: 'enemy' })), names)).toBeNull();
   });
   it('an empty party has nothing to say', async () => {
     await ensureNarration();

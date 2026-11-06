@@ -86,7 +86,7 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
-import { finisherScene, partyNarration } from './overhaul/partyNarration';
+import { countedScene, finisherScene, partyNarration } from './overhaul/partyNarration';
 import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
@@ -2520,7 +2520,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);
-  if (battle.outcome === 'win') {
+  // A species scene that needs a count (tenth use of a move, first miss, first ability trigger): one quiet line, text only.
+  const counted = countedScene(run.log.counters, run.party[battle.activeIndex], engineEvents as BattleEvent[], (kind, id) => (kind === 'move' ? (content.moves.get(id)?.name ?? id) : id.replaceAll('-', ' ')));
+  if (counted) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: counted });
+  if (battle.outcome === 'win' && !counted) {
     const winKey = `${run.runId}:${run.encountersCompleted}`;
     const winName = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
     const typesOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.types ?? [];
