@@ -129,7 +129,16 @@ export function startAmbient(scene: Phaser.Scene, period: 'morning' | 'afternoon
       osc.start();
       osc.stop(ctx.currentTime + 0.3);
     };
-    const timer = call[2] > 0 ? window.setInterval(beep, call[2]) : 0;
+    const timer = call[2] > 0 && period !== 'morning' ? window.setInterval(beep, call[2]) : 0;
+    // A real birdsong recording (amb-birds.mp3) replaces the synthesised chirps in the morning and afternoon.
+    if (period === 'morning' || period === 'afternoon') {
+      void loadAssets(scene, ['amb.birds']).then(() => {
+        if (!scene.sys.isActive() || !scene.cache.audio.exists('amb.birds')) return;
+        const birds = scene.sound.add('amb.birds', { loop: true, volume: (period === 'morning' ? 0.35 : 0.18) * session.settings.sfxVolume });
+        birds.play();
+        scene.events.once('shutdown', () => birds.destroy());
+      }).catch(() => undefined);
+    }
     scene.events.once('shutdown', () => {
       window.clearInterval(timer);
       try {

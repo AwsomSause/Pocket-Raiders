@@ -27,7 +27,7 @@ export class DexInfo {
       this.root.add(scene.add.text(514 * S, 123 * S, page.types, textStyle(20, '#304050')).setOrigin(0.5));
       const sp = content.species.get(speciesId)!;
       if (page.state !== 'unknown') this.root.add(pokemonVisual(scene, sp, 'front', 160 * S, 168 * S, 2, false));
-      this.root.add(scene.add.text(535 * S, 172 * S, page.note, textStyle(16, '#304050', { wordWrap: { width: 205 * S } })));
+      this.root.add(scene.add.text(535 * S, 172 * S, page.research ? `${page.note}\n\n${page.research}` : page.note, textStyle(16, '#304050', { wordWrap: { width: 205 * S } })));
       page.stats.forEach((line, i) => this.root.add(scene.add.text(40 * S + (i % 4) * 170 * S, 350 * S + Math.floor(i / 4) * 34 * S, line, textStyle(22, '#503820'))));
       this.root.add(scene.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 14, 'Enter or Esc: back', textStyle(14, '#d8d8d8')).setOrigin(1, 1));
     };

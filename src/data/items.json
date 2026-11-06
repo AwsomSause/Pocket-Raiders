@@ -1974,5 +1974,38 @@
    "kind": "natureNudge",
    "stat": "spe"
   }
+ },
+ {
+  "id": "friend-treat",
+  "name": "Friend Treat",
+  "description": "Befriend a wild Pokémon with a treat. Gentle, easy-going species fall for it most; HP does not matter. Needs Capture Styles on.",
+  "category": "ball",
+  "iconAssetId": "ball.friend",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": { "kind": "catch", "multiplier": 1, "style": "befriend" }
+ },
+ {
+  "id": "peace-offering",
+  "name": "Peace Offering",
+  "description": "Negotiate with a wild Pokémon. The lower its level next to your lead's, the likelier it agrees. Needs Capture Styles on.",
+  "category": "ball",
+  "iconAssetId": "ball.premier",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": { "kind": "catch", "multiplier": 1, "style": "negotiate" }
+ },
+ {
+  "id": "snare-trap",
+  "name": "Snare Trap",
+  "description": "Trap a wild Pokémon that is worn down (below half HP) or has a status. Needs Capture Styles on.",
+  "category": "ball",
+  "iconAssetId": "ball.net",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": { "kind": "catch", "multiplier": 1, "style": "trap" }
  }
 ]

@@ -26,6 +26,7 @@ import type { AttributeEffects } from '../attributes';
 import { TYPE_NAMES } from '../contentSchema';
 import type { BoostStat, Content, ItemEffect, Move, PowerRule, Semi, SideMove, Species, StatusId, Terrain, TransformKind, TypeName, Weather } from '../contentSchema';
 import { catchProbability, resolveCatchRoll } from '../capture';
+import { styleProbability, styleProblem, type StyleInput } from '../captureStyles';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
@@ -1331,6 +1332,11 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   const noHeal = raidItemProblem(ctx.content, ctx.battle, item.category === 'healing' || item.category === 'revive');
   if (noHeal) return noHeal;
   if (item.effect.kind === 'catch') {
+    if (item.effect.style) {
+      const foe = (ctx.battle.enemyTeam as BattleState['enemyTeam'] | undefined)?.[ctx.battle.enemyIndex];
+      const early = styleProblem(ctx.content, item.effect.style, styleInput(ctx, foe));
+      if (early) return early;
+    }
     const special = ballRuleProblem(ctx, item.effect.rule);
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
@@ -1357,6 +1363,16 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   if (!target) return 'Choose a Pokémon to use it on.';
   if (item.effect.kind === 'urge') return urgeProblem(ctx, item.effect.what, target, targetIndex!);
   return itemUseProblem(ctx.content, item, target);
+}
+
+/** What a capture style needs to know about the foe and your lead. */
+function styleInput(ctx: Pick<BattleContext, 'content' | 'battle' | 'party'>, foe: PokemonInstance | undefined): StyleInput {
+  const lead = ctx.party[ctx.battle.activeIndex];
+  const species = foe ? getSpecies(ctx.content, foe.speciesId) : undefined;
+  return {
+    foe: { level: foe?.level ?? 1, hp: foe?.hp ?? 0, maxHp: foe ? calcStats(ctx.content, foe).hp : 1, catchRate: species?.catchRate ?? 45, asleepOrParalysed: foe?.status?.id === 'slp' || foe?.status?.id === 'par', hasStatus: !!foe?.status },
+    leadLevel: lead?.level ?? 1,
+  };
 }
 
 /**
@@ -1413,6 +1429,17 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
     (battle.snagged ??= []).push(taken);
     foe.hp = 0;
     events.push({ type: 'ball', itemId, shakes: 3, caught: true });
+    return;
+  }
+  if (item.effect.kind === 'catch' && item.effect.style) {
+    const enemy = currentEnemy(battle);
+    const probability = Math.min(1, styleProbability(content, item.effect.style, styleInput(ctx, enemy)) * ctx.catchMultiplier * skillThrowFactor(skill));
+    const roll = resolveCatchRoll(probability, ctx.captureRng.float());
+    events.push({ type: 'ball', itemId, shakes: roll.shakes, caught: roll.caught });
+    if (roll.caught) {
+      battle.outcome = 'caught';
+      battle.ball = itemId;
+    }
     return;
   }
   if (item.effect.kind === 'catch') {
