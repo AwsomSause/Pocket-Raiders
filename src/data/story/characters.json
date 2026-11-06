@@ -612,5 +612,183 @@
     "spoiler": false
    }
   ]
+ },
+ {
+  "id": "ch_okoro",
+  "v": 1,
+  "nameKey": "ch.ch_okoro.name",
+  "age": 58,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/amarys.png",
+   "happy": "public/assets/images/trainer/amarys.png",
+   "angry": "public/assets/images/trainer/amarys.png",
+   "sad": "public/assets/images/trainer/amarys.png"
+  },
+  "tier": 1,
+  "home": "halvard_aether_division",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "counting_voice"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_okoro.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_okoro.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_okoro.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_castellan",
+  "v": 1,
+  "nameKey": "ch.ch_castellan.name",
+  "age": 51,
+  "role": "villain",
+  "poses": {
+   "neutral": "public/assets/images/trainer/will.png",
+   "happy": "public/assets/images/trainer/will.png",
+   "angry": "public/assets/images/trainer/will.png",
+   "sad": "public/assets/images/trainer/will.png"
+  },
+  "tier": 1,
+  "home": "containment",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_castellan.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_castellan.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_castellan.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_odile",
+  "v": 1,
+  "nameKey": "ch.ch_odile.name",
+  "age": 20,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/tulip.png",
+   "happy": "public/assets/images/trainer/tulip.png",
+   "angry": "public/assets/images/trainer/tulip.png",
+   "sad": "public/assets/images/trainer/tulip.png"
+  },
+  "tier": 1,
+  "home": "concordance_orbit",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "subject_four"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_odile.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_odile.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_odile.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_proto",
+  "v": 1,
+  "nameKey": "ch.ch_proto.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/137.png",
+   "happy": "public/assets/images/pokemon/137.png"
+  },
+  "tier": 2,
+  "party": [
+   "porygon"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "failed_loop"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_proto.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_proto.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_iris_vandermeer",
+  "v": 1,
+  "nameKey": "ch.ch_iris_vandermeer.name",
+  "age": 36,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lacey.png",
+   "happy": "public/assets/images/trainer/lacey.png"
+  },
+  "tier": 2,
+  "home": "clinic",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_iris_vandermeer.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_iris_vandermeer.bio2",
+    "spoiler": false
+   }
+  ]
  }
 ]

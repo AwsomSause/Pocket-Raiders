@@ -179,5 +179,55 @@
    "kind": "event",
    "arg": "ev_map_pond"
   }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_ralts",
+  "line": [
+   "ralts",
+   "kirlia",
+   "gardevoir"
+  ],
+  "types": [
+   "psychic",
+   "fairy"
+  ],
+  "temperament": "sensitive",
+  "moves": [
+   "growl",
+   "confusion",
+   "teleport"
+  ],
+  "keystone": "shared_perception",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_humanitys_question"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_porygon",
+  "line": [
+   "porygon",
+   "porygon2"
+  ],
+  "types": [
+   "normal"
+  ],
+  "temperament": "anxious",
+  "moves": [
+   "tackle",
+   "sharpen",
+   "conversion"
+  ],
+  "keystone": "proto_loop",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_proto_4"
+  }
  }
 ]

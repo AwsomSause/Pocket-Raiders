@@ -258,5 +258,101 @@
    "migration_solved",
    "migration_failed"
   ]
+ },
+ {
+  "id": "arc_proto",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_proto_1"
+   },
+   {
+    "event": "ev_proto_2"
+   },
+   {
+    "event": "ev_proto_3"
+   },
+   {
+    "event": "ev_proto_4"
+   }
+  ],
+  "nodeCost": 4,
+  "branches": [
+   {
+    "id": "stabilize",
+    "exit": "proto_partner"
+   },
+   {
+    "id": "retrieve",
+    "exit": "proto_retrieved"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "proto_partner",
+   "proto_retrieved"
+  ]
+ },
+ {
+  "id": "arc_audio_logs",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_audio_log_1"
+   },
+   {
+    "event": "ev_audio_log_2"
+   },
+   {
+    "event": "ev_audio_log_3"
+   }
+  ],
+  "nodeCost": 0,
+  "branches": [
+   {
+    "id": "all",
+    "exit": "logs_complete"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_audio_logs_fx_1",
+    "kind": "unlock_lore",
+    "lore": "lore_sound_of_quiet",
+    "state": "known"
+   },
+   {
+    "id": "arc_audio_logs_fx_2",
+    "kind": "set_flag",
+    "key": "starter_line_quiet",
+    "value": true
+   }
+  ],
+  "exits": [
+   "logs_complete"
+  ]
+ },
+ {
+  "id": "arc_captive",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_captive_1"
+   },
+   {
+    "event": "ev_captive_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "out",
+    "exit": "captive_out"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "captive_out"
+  ]
  }
 ]
