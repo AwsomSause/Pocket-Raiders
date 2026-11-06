@@ -1,0 +1,1 @@
+- **Minigame balance test scales (2026-11-06):** `tests/unit/blueprintBalance.test.ts` now runs one small test per minigame (120 s each) instead of one 400 s sweep, so adding games no longer risks the timeout. Same checks, same sample size.

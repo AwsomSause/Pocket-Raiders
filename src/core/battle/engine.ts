@@ -856,7 +856,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
   battle.turn += 1;
-  eventRuleEnd(battle, events, ctx.party);
+  eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
@@ -865,7 +865,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 }
 
 /** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
-export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?: PokemonInstance[]): void {
+export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?: PokemonInstance[], content?: Content): void {
   const rule = battle.eventRule;
   if (!rule || battle.outcome) return;
   const mine = party?.[battle.activeIndex];
@@ -875,6 +875,19 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       [mine.status, foe.status] = [foe.status, mine.status];
       events.push({ type: 'raid', tone: 'info', text: 'The cursed hat flips every status condition!' });
     }
+  }
+  if (rule.fanClub) {
+    for (const e of events) {
+      if (e.type !== 'faint') continue;
+      const stages = e.side === 'enemy' ? battle.playerStages : battle.enemyStages;
+      stages.atk = Math.min(6, stages.atk + 1);
+      events.push({ type: 'raid', tone: 'info', text: 'The crowd roars for the side that just scored a KO!' });
+      break;
+    }
+  }
+  if (rule.beginnersLuck && mine && mine.hp > 0 && content) {
+    const amount = Math.max(1, Math.floor(maxHp(content, mine) * 0.06));
+    mine.hp = Math.min(maxHp(content, mine), mine.hp + amount);
   }
   if (rule.suddenDeath) {
     const fell = events.filter((e) => e.type === 'faint');
@@ -3341,7 +3354,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + focusCrit(content, user.mon) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
