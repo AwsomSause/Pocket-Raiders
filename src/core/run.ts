@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
 import { recentTemplates, rememberTemplate } from './teamTemplates';
@@ -1553,8 +1554,18 @@ function claimTotemRewards(content: Content, run: RunState, battle: BattleState)
  * nobody is harmed (the party is healed). Only the story and rival layers record the loss.
  */
 function narrativeDefeatEnd(content: Content, run: RunState, def: NonNullable<ReturnType<typeof getNarrativeDef>>): void {
-  const battle = run.battle!;
-  recordNarrativeDefeat(content, run, def, battle.rivalId);
+  recordNarrativeDefeat(content, run, def, run.battle!.rivalId);
+  softLossEnd(content, run);
+}
+
+/** Story Run: a lost rival fight is recorded and the run goes on (core/story2/loss.ts). */
+function storyLossEnd(content: Content, run: RunState): void {
+  recordStoryLoss(content, run);
+  softLossEnd(content, run);
+}
+
+/** The shared tail of a lost fight the run survives: party healed, node done, no prize or win counters. */
+function softLossEnd(content: Content, run: RunState): void {
   healParty(content, run);
   count(run, 'narrativeDefeats');
   run.hype = 0;
@@ -2599,6 +2610,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     narrativeDefeatEnd(content, run, def);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, narrativeDefeat: { id: def.id, defeatLine: def.defeatLine, victoryLine: def.victoryLine } };
+  }
+  if (battle.outcome === 'lose' && storyLossApplies(run, battle)) {
+    storyLossEnd(content, run);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama };
   }
   if (battle.outcome === 'lose') {
     const enemy = currentEnemy(battle);

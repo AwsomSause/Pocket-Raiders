@@ -13,7 +13,7 @@ export const EffectSchema = z.object({ id: Id.optional(), kind: Id }).catchall(z
 const RoleSpec = z.object({ character: Id.optional(), pool: Id.optional() }).catchall(z.unknown());
 const Beat = z.object({ id: Id, line: Id.optional(), kind: Id.optional() }).catchall(z.unknown());
 const Choice = z.object({ id: Id, textKey: Key, effects: z.array(EffectSchema).default([]), goto: Id.optional() });
-const Variant = z.object({ role: Id, id: Id, textKey: Key });
+const Variant = z.object({ role: Id, id: Id, textKey: Key, when: z.array(CondSchema).default([]) });
 const SlotRule = z.object({ slot: Id }).catchall(z.unknown());
 const Branch = z.object({ id: Id, exit: Id.optional() }).catchall(z.unknown());
 
@@ -82,6 +82,11 @@ export const InteractableSchema = z.object({
 /** A backstory module (5 planned). `parity` lists the parity-checklist items it provides; `endings` the ones it can reach. */
 export const BackstorySchema = z.object({
   id: Id, nameKey: Key, parity: z.array(Id), endings: z.array(Id), catchAllEnding: Id.optional(), signatureProp: Id.optional(),
+  /** Module manifest (design doc, Backstory module system). Every id must exist; the Module Validator checks them. */
+  events: z.array(Id).default([]), echoEvents: z.array(Id).default([]), encounterPools: z.array(Id).default([]),
+  remembranceUnlocks: z.array(Id).default([]), exclusiveItem: Id.optional(),
+  /** The ending grid: first matching row wins; the last row must have no conditions (the catch-all). */
+  endingGrid: z.array(z.object({ ending: Id, when: z.array(CondSchema).default([]) })).default([]),
 });
 
 export const QuizQuestionSchema = z.object({

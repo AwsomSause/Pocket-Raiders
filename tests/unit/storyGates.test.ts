@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { PARITY_ITEMS, storyGates, type StoryGateContext } from '../../src/quality/storyGates';
-import type { StoryData } from '../../src/core/story2/schema';
+import { BackstorySchema, type StoryData } from '../../src/core/story2/schema';
 import { content } from './helpers';
 
 const empty = (): StoryData => structuredClone(content.storyData);
@@ -27,9 +27,9 @@ describe('story gates', () => {
     ['story-unresolved-ids', (d) => { d.events = [event({ roles: { a: { character: 'nobody' } } })]; }],
     ['story-event-variants', (d) => { d.events = [event({ roles: { a: {} } })]; }],
     ['story-branch-no-exit', (d) => { d.arcs = [{ id: 'arc', v: 1, steps: [], nodeCost: 1, branches: [{ id: 'b' }], effects: [], exits: ['x'] }]; }],
-    ['story-unreachable-ending', (d) => { d.backstories = [{ id: 'bs', nameKey: 'k', parity: [], endings: ['e1'] }]; }],
+    ['story-unreachable-ending', (d) => { d.backstories = [BackstorySchema.parse({ id: 'bs', nameKey: 'k', parity: [], endings: ['e1'] })]; }],
     ['story-canon-write', (d) => { d.events = [event({ outputs: [{ kind: 'fact', target: 'canon.dara' }] })]; }],
-    ['story-backstory-parity', (d) => { d.backstories = [{ id: 'bs', nameKey: 'k', parity: PARITY_ITEMS.slice(1) as unknown as string[], endings: ['e'], catchAllEnding: 'e' }]; }],
+    ['story-backstory-parity', (d) => { d.backstories = [BackstorySchema.parse({ id: 'bs', nameKey: 'k', parity: PARITY_ITEMS.slice(1), endings: ['e'], catchAllEnding: 'e' })]; }],
     ['story-quiz-balance', (d) => { d.quiz = [{ id: 'q1', quick: false, textKey: 'k', answers: [{ id: 'a', textKey: 'k', weights: { bold: 3 } }, { id: 'b', textKey: 'k', weights: { calm: 3 } }] }]; }],
     ['story-remembrance-unlock', (d) => { d.remembrances = [{ id: 'r', v: 1, line: ['pidgey'], types: ['flying'], temperament: 't', affinity: {}, unlock: { kind: 'event', arg: 'missing_event' }, moves: [], keystone: 'k', status: 'supported' }]; }],
     ['story-romance-age', (d) => { d.characters = [character({ romanceable: true, age: 17 })]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }],
