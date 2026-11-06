@@ -1336,6 +1336,10 @@ export class BattleScene extends Phaser.Scene {
 
   /** Shows one message. Move and damage lines (`auto`) move on after a short delay; every other line waits for a confirm press. */
   private say(text: string, autoLine = false): Promise<void> {
+    if (this.run?.battle?.eventRule?.silent) {
+      text = '…';
+      autoLine = true;
+    }
     const settings = services().session.settings;
     // Only move and damage lines advance by themselves, unless Settings > Auto-advance is on.
     const auto = autoLine || settings.autoAdvance;
