@@ -4,7 +4,7 @@
 import type Phaser from 'phaser';
 import { contractBoard, contractDone } from '../core/contracts';
 import { promptById } from '../core/interaction/prompt';
-import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, townDiscount, noticeBoard, NOTICE_FILTERS, tradingCards, type NoticeFilter, marketSwing, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
+import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, townDiscount, noticeBoard, hubTips, rankUpgrades, prestigeCosmetics, NOTICE_FILTERS, tradingCards, type NoticeFilter, marketSwing, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
 import { services } from '../game/services';
 import { pokemonAssetIds } from '../assets/catalog';
 import { playCry, playMusicLazy } from './audio';
@@ -354,6 +354,15 @@ function view(host: TownHost, a: TownAction, done: (m: string) => void, again: (
         { label: `Holo ${count('holo')} · Rare ${count('rare')} · Uncommon ${count('uncommon')} · Common ${count('common')}`, desc: `${cards.filter((c) => c.kind === 'trainer').length} Trainer cards, ${cards.filter((c) => c.kind === 'species').length} species cards` },
         ...best.slice(0, 24).map((c) => ({ label: `${c.name}${c.rarity === 'holo' ? ' ✦' : ''}`, desc: `${c.kind === 'trainer' ? 'Trainer' : 'Species'} card · ${c.rarity}` })),
       ], again);
+    }
+    case 'tips': return show(host, 'Guide Pip says...', hubTips(p).map((t) => ({ label: t, desc: '' })), again);
+    case 'rank': {
+      const r = rankUpgrades(p, TOWN.buildings, (b) => { const bd = TOWN.buildings.find((x) => x.id === b.id); return bd ? buildingProblem(p, bd) : null; });
+      return show(host, `Social rank ${r.rank}/${TOWN.fanClub.length} · ${r.open} buildings open`, r.locked.length ? r.locked.map((l) => ({ label: l.name, desc: `Locked: ${l.need}` })) : [{ label: 'Every building is open', desc: '' }], again);
+    }
+    case 'prestige': {
+      const list = prestigeCosmetics(content, p);
+      return show(host, 'Mastery prestige', list.length ? list.map((x) => ({ label: `${x.name} · ${'★'.repeat(x.stars)}`, desc: `${x.title} badge shown on your card` })) : [{ label: 'No prestige yet', desc: 'Win boss fights, evolve and clear regions with a species to earn stars.' }], again);
     }
     case 'market': {
       const m = marketSwing(p);

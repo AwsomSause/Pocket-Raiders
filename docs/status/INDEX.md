@@ -229,3 +229,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)
 - [meta-hub-9-remaining](meta-hub-9-remaining.md): Airship, market swings, rival sponsors, Dream Tower, garden visitors, lab, cards, notice filters, orchard, NPC schedules, gossip, teleporters.
 - `presentation-ash.md`: ash particles in Fire arenas (S251).
+- [meta-hub-10-tips-rank-prestige](meta-hub-10-tips-rank-prestige.md): Guide Pip tips, social rank, mastery prestige.
