@@ -1,1 +1,46 @@
-[]
+[
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "id": "int_old_access_door",
+  "verbs": [
+   "use",
+   "look"
+  ],
+  "icon": "keepsake",
+  "outputs": [
+   {
+    "id": "int_old_access_door_1",
+    "kind": "open_door",
+    "phrase": "old_access_phrase",
+    "oncePerRun": true
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "id": "int_sleeper_informant",
+  "verbs": [
+   "talk",
+   "look"
+  ],
+  "outputs": [
+   {
+    "id": "int_sleeper_informant_1",
+    "kind": "start_battle",
+    "character": "ch_marek_voss"
+   }
+  ]
+ }
+]

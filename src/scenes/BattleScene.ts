@@ -74,6 +74,7 @@ import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { DEFAULT_BALL } from '../core/ballLook';
+import { throwKind, throwTint } from '../core/archetypeTint';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
@@ -841,11 +842,11 @@ export class BattleScene extends Phaser.Scene {
     this.trainerReady = Promise.resolve();
     if (doubles) return;
     const art = this.playerArt();
-    if (art && bossBackId(art)) return;
+    if (throwKind(art) === 'own') return;
     const look = playerLookForBattle();
     this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      const actor = new PlayerTrainerActor(this, look, PLAYER_POS.x - 175, PLAYER_POS.y - 4, 190, this.motion);
+      const actor = new PlayerTrainerActor(this, look, PLAYER_POS.x - 175, PLAYER_POS.y - 4, 190, this.motion, throwTint(art));
       actor.sprite.setDepth(4);
       actor.idle();
       this.trainerActor = actor;

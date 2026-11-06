@@ -126,8 +126,7 @@ describe('migration_failure_keeps_raw', () => {
 });
 
 describe('story data loader', () => {
-  it('ships empty story data that validates, with a hash', () => {
-    expect(content.storyData.characters).toEqual([]);
+  it('ships story data that validates, with a hash', () => {
     expect(content.storyData.hash).toMatch(/^[0-9a-f]{16}$/);
     expect(() => buildContent()).not.toThrow();
   });

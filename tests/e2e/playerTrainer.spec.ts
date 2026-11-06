@@ -32,6 +32,8 @@ test('player trainer plays every moment, each is skippable, and the battle state
   const errors = await startBattle(page, 'e2e-trainer');
   const has = () => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').trainerActor));
   await expect.poll(has).toBe(true);
+  // P8: the generic pose wears this trainer's colour.
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').trainerActor.sprite.isTinted)).toBe(true);
   await page.screenshot({ path: 'test-results/player-trainer.png' });
 
   const state = () => page.evaluate(() => JSON.stringify((window as any).__pkr.game.scene.getScene('Battle').run.battle));

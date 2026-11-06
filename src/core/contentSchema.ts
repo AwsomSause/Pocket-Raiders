@@ -2394,6 +2394,13 @@ export const BalanceSchema = z.object({
   /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
   /** Beta 4.4: a Hyper/Overdrive moment unlocks a move in an extra slot for the battle: this much more power, this many PP. */
   /** Overhaul slice 20: battle environments and conditions (core/overhaul/field.ts). */
+  /** Story Overhaul W2 (14.5): the rival coverage fairness budget (core/rivals/coverage.ts) and the region each ace phase starts in. */
+  rivalCoverage: z.object({
+    aceMax: z.object({ early: z.number().int().min(0), mid: z.number().int().min(0), late: z.number().int().min(0), champion: z.number().int().min(0) }),
+    teamMax: z.number().int().min(0), teamMaxChampion: z.number().int().min(0), openWeaknesses: z.number().int().min(0), wideHits: z.number().int().min(1),
+    observedBattles: z.number().int().min(1), desperationSetbacks: z.number().int().min(0),
+    phaseStarts: z.object({ mid: z.number().int().min(0), late: z.number().int().min(0), champion: z.number().int().min(0) }),
+  }).default({ aceMax: { early: 1, mid: 2, late: 2, champion: 2 }, teamMax: 3, teamMaxChampion: 4, openWeaknesses: 2, wideHits: 4, observedBattles: 3, desperationSetbacks: 2, phaseStarts: { mid: 2, late: 5, champion: 9 } }),
   overhaulRivalRoles: z.object({ enabled: z.boolean(), additionalCounters: z.number().int().min(0) }).default({ enabled: true, additionalCounters: 1 }),
   overhaulGrowth: z.object({ enabled: z.boolean(), bonus: z.number().min(0).max(0.3), minKos: z.number().int().min(1), minCloseCalls: z.number().int().min(1), minRoleKos: z.number().int().min(1).default(4) }).default({ enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2, minRoleKos: 4 }),
   /** Archived Starter Sets (Story Overhaul S.6): off hides the Starter Laboratory and the starter pool picker; data, code and saves stay. */
@@ -2949,6 +2956,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** A Shadow foe (a Snag Ball can't take it; it can be caught like any wild one) / a calm Blissful foe (only a Blessing Ball catches it). */
     shadow: z.boolean().default(false),
     blissful: z.boolean().default(false),
+    /** W7: a fight inside a pseudo stage (a loss ejects, the run goes on). */
+    pseudo: z.boolean().optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
@@ -2984,6 +2993,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */
     weather: WeatherSchema.optional(),
     terrain: TerrainSchema.optional(),
+    /** W7: a fight inside a pseudo stage: a loss ejects to the map with a partial heal and the run goes on. */
+    pseudo: z.boolean().optional(),
     /** Run events B: share of max HP your party recovers between the fights of a `chain` (Relay Battle). */
     chainHeal: z.number().min(0).max(1).optional(),
     /** Run events B: special rules for this fight (see EventRuleSchema). */
@@ -3098,6 +3109,8 @@ export const EventDefSchema = z.object({
   forced: z.boolean().default(false),
   /** W5: overrides the base priority (forced events 70 to 100). */
   priority: z.number().int().min(0).max(100).optional(),
+  /** W7: an event that opens a pseudo stage or region: capped (1 per region, 2 per run), never in a League stage or a blocked campaign. */
+  pseudo: z.boolean().default(false),
   /** W5: off until the system it needs exists (dungeons, pseudo stages). Never drawn, never queued. */
   disabled: z.boolean().default(false),
   /** Stages themed with these types see it more often. */

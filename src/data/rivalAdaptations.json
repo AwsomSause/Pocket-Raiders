@@ -1,0 +1,160 @@
+{
+ "note": "Story Overhaul W2 (design 14.7): the 14 rival adaptation triggers. A trigger reads only rival.seen (rule O1). A battle counts when its signal reached perBattle uses; the trigger fires when `battles` battles count and their uses add up to `total`. once = fires at most once a run. Per meeting: 1 hard and 1 soft. #6 is the existing resist swap in adapt.ts rivalReturn.",
+ "aiBoost": 0.1,
+ "triggers": [
+  {
+   "n": 1,
+   "id": "setup",
+   "signal": "setup",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 2,
+   "total": 0,
+   "battles": 2,
+   "line": "{rival} watched you stack boosts. This time {ace} is ready."
+  },
+  {
+   "n": 2,
+   "id": "typePlans",
+   "signal": "moveType",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 1,
+   "total": 3,
+   "battles": 2,
+   "line": "{rival} has a lot of plans for {type} types."
+  },
+  {
+   "n": 3,
+   "id": "quickMoves",
+   "signal": "priority",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 2,
+   "total": 0,
+   "battles": 2,
+   "line": "The air feels odd. {rival} studied your quick moves."
+  },
+  {
+   "n": 4,
+   "id": "switching",
+   "signal": "switches",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 4,
+   "total": 0,
+   "battles": 2,
+   "line": "{rival} noticed how often you switch."
+  },
+  {
+   "n": 5,
+   "id": "statusGuard",
+   "signal": "status",
+   "cap": "soft",
+   "once": false,
+   "perBattle": 1,
+   "total": 3,
+   "battles": 2,
+   "line": "{rival} packed something against status."
+  },
+  {
+   "n": 6,
+   "id": "resistSwap",
+   "signal": "moveType",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 1,
+   "line": "{rival} studied your {type} moves and brought {species}."
+  },
+  {
+   "n": 7,
+   "id": "antiStall",
+   "signal": "recovery",
+   "cap": "soft",
+   "once": false,
+   "perBattle": 1,
+   "total": 3,
+   "battles": 2,
+   "line": "{rival} doesn't plan to wait."
+  },
+  {
+   "n": 8,
+   "id": "weather",
+   "signal": "weather",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 2,
+   "line": "{rival} looked at the sky before the fight."
+  },
+  {
+   "n": 9,
+   "id": "hazardProof",
+   "signal": "hazards",
+   "cap": "soft",
+   "once": false,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 2,
+   "line": "{rival} won't be slowed by spikes this time."
+  },
+  {
+   "n": 10,
+   "id": "bigMoment",
+   "signal": "gimmick",
+   "cap": "hard",
+   "once": true,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 1,
+   "line": "{rival} saw your big moment. {ace} has a trick for it."
+  },
+  {
+   "n": 11,
+   "id": "knownLead",
+   "signal": "lead",
+   "cap": "soft",
+   "once": false,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 3,
+   "line": "{rival} knows who you lead with."
+  },
+  {
+   "n": 12,
+   "id": "oneHit",
+   "signal": "sweep",
+   "cap": "hard",
+   "once": false,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 2,
+   "line": "{rival} won't fall to one hit again."
+  },
+  {
+   "n": 13,
+   "id": "prickly",
+   "signal": "pivot",
+   "cap": "soft",
+   "once": false,
+   "perBattle": 1,
+   "total": 3,
+   "battles": 2,
+   "line": "{rival} brought something prickly."
+  },
+  {
+   "n": 14,
+   "id": "legend",
+   "signal": "legend",
+   "cap": "soft",
+   "once": true,
+   "perBattle": 1,
+   "total": 0,
+   "battles": 1,
+   "line": "{rival} sees the legend in your team. {rival} is not backing down."
+  }
+ ]
+}

@@ -1,0 +1,1195 @@
+{
+ "status": "limited",
+ "source": "Story Overhaul Design v2 Part AD. Every track reuses an existing sound until composed; see docs/status/story-audio.md.",
+ "fadeMs": 2000,
+ "tracks": [
+  {
+   "id": "mu_lm_protagonist_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "protagonist"
+  },
+  {
+   "id": "mu_lm_protagonist_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "protagonist"
+  },
+  {
+   "id": "mu_lm_protagonist_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "protagonist"
+  },
+  {
+   "id": "mu_lm_ch_vance_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_vance"
+  },
+  {
+   "id": "mu_lm_ch_vance_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_vance"
+  },
+  {
+   "id": "mu_lm_ch_vance_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_vance"
+  },
+  {
+   "id": "mu_lm_ch_dara_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_dara"
+  },
+  {
+   "id": "mu_lm_ch_dara_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_dara"
+  },
+  {
+   "id": "mu_lm_ch_dara_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_dara"
+  },
+  {
+   "id": "mu_lm_ch_hale_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_hale"
+  },
+  {
+   "id": "mu_lm_ch_hale_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_hale"
+  },
+  {
+   "id": "mu_lm_ch_hale_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_hale"
+  },
+  {
+   "id": "mu_lm_ch_ines_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_ines"
+  },
+  {
+   "id": "mu_lm_ch_ines_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_ines"
+  },
+  {
+   "id": "mu_lm_ch_ines_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_ines"
+  },
+  {
+   "id": "mu_lm_ch_pip_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_pip"
+  },
+  {
+   "id": "mu_lm_ch_pip_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_pip"
+  },
+  {
+   "id": "mu_lm_ch_pip_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_pip"
+  },
+  {
+   "id": "mu_lm_ch_soren_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_soren"
+  },
+  {
+   "id": "mu_lm_ch_soren_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_soren"
+  },
+  {
+   "id": "mu_lm_ch_soren_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_soren"
+  },
+  {
+   "id": "mu_lm_ch_kael_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_kael"
+  },
+  {
+   "id": "mu_lm_ch_kael_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_kael"
+  },
+  {
+   "id": "mu_lm_ch_kael_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_kael"
+  },
+  {
+   "id": "mu_lm_ch_marisol_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_marisol"
+  },
+  {
+   "id": "mu_lm_ch_marisol_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_marisol"
+  },
+  {
+   "id": "mu_lm_ch_marisol_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_marisol"
+  },
+  {
+   "id": "mu_lm_ch_gideon_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_gideon"
+  },
+  {
+   "id": "mu_lm_ch_gideon_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_gideon"
+  },
+  {
+   "id": "mu_lm_ch_gideon_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_gideon"
+  },
+  {
+   "id": "mu_lm_ch_evander_ashgrove_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_evander_ashgrove"
+  },
+  {
+   "id": "mu_lm_ch_evander_ashgrove_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_evander_ashgrove"
+  },
+  {
+   "id": "mu_lm_ch_evander_ashgrove_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_evander_ashgrove"
+  },
+  {
+   "id": "mu_lm_ch_lysandra_quill_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_lysandra_quill"
+  },
+  {
+   "id": "mu_lm_ch_lysandra_quill_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_lysandra_quill"
+  },
+  {
+   "id": "mu_lm_ch_lysandra_quill_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_lysandra_quill"
+  },
+  {
+   "id": "mu_lm_ch_marek_voss_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_marek_voss"
+  },
+  {
+   "id": "mu_lm_ch_marek_voss_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_marek_voss"
+  },
+  {
+   "id": "mu_lm_ch_marek_voss_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_marek_voss"
+  },
+  {
+   "id": "mu_lm_ch_cass_verrin_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_cass_verrin"
+  },
+  {
+   "id": "mu_lm_ch_cass_verrin_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_cass_verrin"
+  },
+  {
+   "id": "mu_lm_ch_cass_verrin_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_cass_verrin"
+  },
+  {
+   "id": "mu_lm_ch_ilse_rennick_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_ilse_rennick"
+  },
+  {
+   "id": "mu_lm_ch_ilse_rennick_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_ilse_rennick"
+  },
+  {
+   "id": "mu_lm_ch_ilse_rennick_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_ilse_rennick"
+  },
+  {
+   "id": "mu_lm_ch_selene_aurelian_calm",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "ch_selene_aurelian"
+  },
+  {
+   "id": "mu_lm_ch_selene_aurelian_tense",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ch_selene_aurelian"
+  },
+  {
+   "id": "mu_lm_ch_selene_aurelian_final",
+   "kind": "loop",
+   "group": "leitmotif",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.credits",
+   "stemOf": "ch_selene_aurelian"
+  },
+  {
+   "id": "mu_team_mythic_marauders_calm",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "mythic_marauders"
+  },
+  {
+   "id": "mu_team_mythic_marauders_tense",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "stemOf": "mythic_marauders"
+  },
+  {
+   "id": "mu_team_mythic_marauders_final",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "stemOf": "mythic_marauders"
+  },
+  {
+   "id": "mu_team_hollow_choir_calm",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "hollow_choir"
+  },
+  {
+   "id": "mu_team_hollow_choir_tense",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "stemOf": "hollow_choir"
+  },
+  {
+   "id": "mu_team_hollow_choir_final",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "stemOf": "hollow_choir"
+  },
+  {
+   "id": "mu_team_ironvein_combine_calm",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "ironvein_combine"
+  },
+  {
+   "id": "mu_team_ironvein_combine_tense",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "stemOf": "ironvein_combine"
+  },
+  {
+   "id": "mu_team_ironvein_combine_final",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "stemOf": "ironvein_combine"
+  },
+  {
+   "id": "mu_team_pale_cartographers_calm",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "pale_cartographers"
+  },
+  {
+   "id": "mu_team_pale_cartographers_tense",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "stemOf": "pale_cartographers"
+  },
+  {
+   "id": "mu_team_pale_cartographers_final",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "stemOf": "pale_cartographers"
+  },
+  {
+   "id": "mu_team_wildfire_accord_calm",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "wildfire_accord"
+  },
+  {
+   "id": "mu_team_wildfire_accord_tense",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "stemOf": "wildfire_accord"
+  },
+  {
+   "id": "mu_team_wildfire_accord_final",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "stemOf": "wildfire_accord"
+  },
+  {
+   "id": "mu_team_gilt_circle_calm",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.event",
+   "stemOf": "gilt_circle"
+  },
+  {
+   "id": "mu_team_gilt_circle_tense",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 45,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "stemOf": "gilt_circle"
+  },
+  {
+   "id": "mu_team_gilt_circle_final",
+   "kind": "loop",
+   "group": "team",
+   "lengthSec": 75,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "stemOf": "gilt_circle"
+  },
+  {
+   "id": "mu_region_cairnmoor_town",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.hub"
+  },
+  {
+   "id": "mu_region_cairnmoor_route",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.map"
+  },
+  {
+   "id": "mu_region_cairnmoor_tension",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.event"
+  },
+  {
+   "id": "mu_region_tidewrack_town",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.hub"
+  },
+  {
+   "id": "mu_region_tidewrack_route",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.map"
+  },
+  {
+   "id": "mu_region_tidewrack_tension",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.event"
+  },
+  {
+   "id": "mu_region_orrery_basin_town",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.hub"
+  },
+  {
+   "id": "mu_region_orrery_basin_route",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.map"
+  },
+  {
+   "id": "mu_region_orrery_basin_tension",
+   "kind": "loop",
+   "group": "region",
+   "lengthSec": 105,
+   "source": "reuse",
+   "reuse": "bgm.event"
+  },
+  {
+   "id": "mu_battle_rival_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.battle_rival"
+  },
+  {
+   "id": "mu_battle_rival_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.battle_rival",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "mu_battle_leader_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.battle_leader"
+  },
+  {
+   "id": "mu_battle_leader_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.battle_leader",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "mu_battle_elite_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite"
+  },
+  {
+   "id": "mu_battle_elite_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "mu_battle_champion_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite"
+  },
+  {
+   "id": "mu_battle_champion_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.battle_elite",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "mu_battle_team_leader_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer"
+  },
+  {
+   "id": "mu_battle_team_leader_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.battle_trainer",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "mu_battle_legendary_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.raid.ultra"
+  },
+  {
+   "id": "mu_battle_legendary_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.raid.ultra",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "mu_battle_alpha_a",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.raid.max"
+  },
+  {
+   "id": "mu_battle_alpha_b",
+   "kind": "loop",
+   "group": "battle",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.raid.max",
+   "note": "phase B plays at +8 percent tempo"
+  },
+  {
+   "id": "st_feat",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 5,
+   "source": "reuse",
+   "reuse": "ui.vs_flash"
+  },
+  {
+   "id": "st_keystone",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 8,
+   "source": "reuse",
+   "reuse": "me.key_item"
+  },
+  {
+   "id": "st_evolution_moment",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 6,
+   "source": "reuse",
+   "reuse": "me.evo_success"
+  },
+  {
+   "id": "st_bond_up",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 3,
+   "source": "reuse",
+   "reuse": "me.pkmn_get"
+  },
+  {
+   "id": "st_archive_unlock",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 3,
+   "source": "reuse",
+   "reuse": "me.key_item"
+  },
+  {
+   "id": "st_rel_up",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 2,
+   "source": "reuse",
+   "reuse": "ui.select"
+  },
+  {
+   "id": "st_rel_down",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 2,
+   "source": "reuse",
+   "reuse": "ui.cancel"
+  },
+  {
+   "id": "st_rel_gate",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 2,
+   "source": "reuse",
+   "reuse": "ui.door"
+  },
+  {
+   "id": "st_news",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 2,
+   "source": "reuse",
+   "reuse": "ui.page"
+  },
+  {
+   "id": "st_tip",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 1,
+   "source": "reuse",
+   "reuse": "ui.exclaim"
+  },
+  {
+   "id": "st_badge_circuit",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 6,
+   "source": "reuse",
+   "reuse": "me.badge"
+  },
+  {
+   "id": "st_league_gate",
+   "kind": "oneShot",
+   "group": "stinger",
+   "lengthSec": 8,
+   "source": "reuse",
+   "reuse": "bgm.victory_leader"
+  },
+  {
+   "id": "mu_opening_montage",
+   "kind": "oneShot",
+   "group": "opening",
+   "lengthSec": 90,
+   "source": "reuse",
+   "reuse": "bgm.menu"
+  },
+  {
+   "id": "mu_quiz_lab_base",
+   "kind": "stem",
+   "group": "quiz",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "mu_quiz_lab"
+  },
+  {
+   "id": "mu_quiz_lab_think",
+   "kind": "stem",
+   "group": "quiz",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "mu_quiz_lab"
+  },
+  {
+   "id": "mu_quiz_lab_warm",
+   "kind": "stem",
+   "group": "quiz",
+   "lengthSec": 60,
+   "source": "reuse",
+   "reuse": "bgm.hub",
+   "stemOf": "mu_quiz_lab"
+  },
+  {
+   "id": "se_page_flip",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.page"
+  },
+  {
+   "id": "se_choice_hover",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.cursor"
+  },
+  {
+   "id": "se_choice_confirm",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.select"
+  },
+  {
+   "id": "se_tone_warm",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.item"
+  },
+  {
+   "id": "se_tone_firm",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.select"
+  },
+  {
+   "id": "se_tone_curious",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.exclaim"
+  },
+  {
+   "id": "se_tone_humor",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.cursor"
+  },
+  {
+   "id": "se_log_open",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.menu_open"
+  },
+  {
+   "id": "se_log_close",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.menu_close"
+  },
+  {
+   "id": "se_skip",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.cancel"
+  },
+  {
+   "id": "se_note_added",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.item"
+  },
+  {
+   "id": "se_archive_unlock",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "me.key_item"
+  },
+  {
+   "id": "se_name_confirm",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.select"
+  },
+  {
+   "id": "se_error",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.error"
+  },
+  {
+   "id": "se_rel_stage_up",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.select"
+  },
+  {
+   "id": "se_rel_stage_down",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.cancel"
+  },
+  {
+   "id": "se_rel_gate_open",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.door"
+  },
+  {
+   "id": "se_rel_betrayal",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.error"
+  },
+  {
+   "id": "se_rel_reconcile",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.item"
+  },
+  {
+   "id": "se_rel_ripple",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.cursor"
+  },
+  {
+   "id": "se_news_arrive",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.page"
+  },
+  {
+   "id": "se_tip_arrive",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.exclaim"
+  },
+  {
+   "id": "se_heartbond_tick",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.cursor"
+  },
+  {
+   "id": "se_heartbond_level",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "me.pkmn_get"
+  },
+  {
+   "id": "se_heartbond_strain",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.poison_step"
+  },
+  {
+   "id": "se_heartbond_override",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.vs_flash"
+  },
+  {
+   "id": "se_keystone_open",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.menu_open"
+  },
+  {
+   "id": "se_keystone_close",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.menu_close"
+  },
+  {
+   "id": "se_feat_vignette_in",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.vs_flash"
+  },
+  {
+   "id": "se_feat_timeslow",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.vs_sword"
+  },
+  {
+   "id": "se_feat_resolve_spark",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.ability"
+  },
+  {
+   "id": "se_feat_banner",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.vs_flash"
+  },
+  {
+   "id": "se_feat_release",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.recall"
+  },
+  {
+   "id": "se_feat_echo",
+   "kind": "sfx",
+   "group": "sfx",
+   "lengthSec": null,
+   "source": "reuse",
+   "reuse": "ui.ability"
+  }
+ ]
+}
