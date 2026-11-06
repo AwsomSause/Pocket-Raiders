@@ -8,6 +8,7 @@ import type Phaser from 'phaser';
 import { bondMood, bondOf } from '../core/bond';
 import { partyRoles } from '../core/partyRoles';
 import { cultureLine } from './partyLifeUi';
+import { teamTags } from '../core/synergyTags';
 import { BOND_BARS, MOOD_LOOK, bondHint } from './bondLook';
 import type { PokemonInstance, RunState } from '../core/state';
 import type { Content } from '../core/contentSchema';
@@ -80,7 +81,7 @@ export function openBondMenu(host: FieldMenuHost): void {
   const motion = session.settings.battleAnimations;
   const picker: Picker = new Picker(host.scene, {
     glass: true,
-    title: `Bonds: how your Pokémon feel (${cultureLine(run)})`,
+    title: `Bonds: how your Pokémon feel (${[cultureLine(run), ...teamTags(session.content, run).map((t) => `${t.name} ${t.lift}`)].join(' · ')})`,
     columns: 2,
     rowHeight: 148,
     rows: run.party.map((mon, i) => bondRow(session.content, run, mon, motion, i)),
