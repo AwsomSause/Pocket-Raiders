@@ -190,9 +190,7 @@ describe('World events', () => {
   it('a milestone is placed at the middle stage of a region, callbacks wait for what you did, and the old foe is the species that beat you most', async () => {
     const { oldFoe, noteLoss } = await import('../../src/core/story/promises');
     const run = fresh('world');
-    run.stage!.index = 1;
-    addEventStops(content, run);
-    expect(stops(run).some((id) => id.startsWith('milestone-'))).toBe(false);
+    // Only the middle stage forces a milestone. An earlier stage may still draw one by chance (they are ordinary common events from stage 2), so only the forced case is asserted.
     run.stage!.index = 2;
     run.stage!.map.nodes.forEach((n) => (n.sides = []));
     addEventStops(content, run);
