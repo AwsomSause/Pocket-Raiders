@@ -87,10 +87,10 @@ export function fieldPowerMultiplier(field: FieldState | undefined, moveType: st
   if (field.env) {
     const e = overhaulCatalogs().battle_environments.entries.find((x) => x.id === field.env);
     const p = e ? parseMechanic(e.mechanic) : null;
-    if (p?.types.includes(moveType)) pct += p.pct;
+    if (p?.types.some((t) => t.toLowerCase() === moveType.toLowerCase())) pct += p.pct;
   }
   if (field.condition) {
-    for (const p of CONDITION_EFFECTS[field.condition.id]?.pow ?? []) if (p.types.includes(moveType)) pct += p.pct;
+    for (const p of CONDITION_EFFECTS[field.condition.id]?.pow ?? []) if (p.types.some((t) => t.toLowerCase() === moveType.toLowerCase())) pct += p.pct;
   }
   const cap = cfg.powerCap * 100;
   return 1 + Math.max(-cap, Math.min(cap, pct)) / 100;
