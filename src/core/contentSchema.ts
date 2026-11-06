@@ -2458,6 +2458,12 @@ export const BalanceSchema = z.object({
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
   /** `depth` (Kice spec §11/§21): the first rival becomes the major rival and wild Pokémon rivals can form (off only in old-seed fingerprints). */
+  /** Role Pool Casting (Story Overhaul S.3/S.4): wild cards (characters outside the region league lists) fill roles at these caps, drawn at `wildCardWeight` against 1 for a core leader. `teamLeaders` are never cast while their evil team is the run's. */
+  rolePool: z.object({
+    wildCardWeight: z.number().min(0).max(1),
+    wildCardMax: z.object({ gymPerRegion: z.number().int().min(0), elitePerRun: z.number().int().min(0), championPerRun: z.number().int().min(0) }),
+    teamLeaders: z.record(z.string(), z.array(z.string())),
+  }).default({ wildCardWeight: 0.2, wildCardMax: { gymPerRegion: 1, elitePerRun: 1, championPerRun: 1 }, teamLeaders: {} }),
   rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
   candies: z.object({ perRelease: z.number().int().min(0), perLevels: z.number().int().min(1) }),

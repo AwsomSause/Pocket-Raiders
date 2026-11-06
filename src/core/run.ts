@@ -165,6 +165,7 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
+import { castGymLeader, castLeague } from './rolePool';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
@@ -320,6 +321,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     stage: null,
     usedThemes: [],
     usedLeaders: [],
+    roleCast: [],
     materials: {},
     plaza: freshPlaza(),
     badges: [],
@@ -591,7 +593,9 @@ function enterStage(content: Content, run: RunState, index: number): void {
   const signals = stageSignals(content, run);
   const { theme, leader, map, themeLine } = withStream(run.rng, 'map', (r) => {
     const { theme, line } = pickPlannedTheme(content, run, signals, r);
-    const leader = pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
+    // The old region-locked pick is still rolled (and dropped) so every other 'map' roll stays where it was; the cast itself comes from 'roleCast'.
+    pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
+    const leader = castGymLeader(content, run, theme, run.regionIndex, index);
     return { theme, leader, map: generateStageMap(content, campaign, r), themeLine: line };
   });
   forceFirstRivalColumn(content, run, index, map);
@@ -648,7 +652,8 @@ function enterLeague(content: Content, run: RunState): void {
   fillRegionOrder(content, run);
   const campaign = getCampaign(content, run.campaignId);
   const region = currentRegion(content, run);
-  const league = withStream(run.rng, 'map', (r) => pickLeague(content, region, campaign, run.usedLeaders, r));
+  withStream(run.rng, 'map', (r) => pickLeague(content, region, campaign, run.usedLeaders, r)); // rolled and dropped: keeps the 'map' stream where it was
+  const league = castLeague(content, run, campaign, run.regionIndex);
   const map = generateLeagueMap(campaign.eliteFourSize);
   const problems = validateLeagueMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid league map: ${problems.join('; ')}`);
