@@ -249,6 +249,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `raid-coop.md`: Raids & bosses slice 7: S410 co-op raids (hot-seat, 2 players share the party, own cheers, tougher boss, bigger prize).
 - `growth-form-shift.md`: Growth slice 8: Regional Form Shifts (swap to a regional variant for a Moon Stone).
 - `growth-capsule-quests.md`: Growth slice 9: Ability Capsule Quests (six trials pay ability swaps).
+- `growth-diaries.md`: Pokémon Diaries (S64): Hall of Fame notes per remembered Pokémon, derived from Legacy Cards, no save change.
 - `run-events-b-batch5.md`: Run events B batch 5: Weather Rival (weather changes every turn) and Underground Duel; the games and training lists were already built.
 - `run-events-b-batch6.md`: Run events B batch 6: The Contrarian (stat changes inverted), Pinch Hitter (fainted Pokémon get up once), Cursed Hat (statuses swap each turn).
 - migration-seasons.md: Migration Seasons, seasonal wild weights (S135)

@@ -89,3 +89,18 @@ describe('Hall of Fame', () => {
     expect(RunRecordSchema.parse(old).legacy[0]).toMatchObject({ mentor: null, records: [] });
   });
 });
+
+describe('Pokémon Diaries (S64)', () => {
+  it('writes the same note for the same card and skips plain cards', () => {
+    const p = createProfile(content, 'diary');
+    p.runHistory = [record({ runId: 'a', victory: true, legacy: [
+      { speciesId: 'pikachu', level: 50, shiny: false, titles: ['The Unbroken'], tags: [], signature: 'Held on at 1 HP', mentor: null, records: [] },
+      { speciesId: 'onix', level: 20, shiny: false, titles: [], tags: ['Run Ace'], signature: null, mentor: null, records: [] },
+    ] })];
+    const a = hallOfFame(p, (id) => id.toUpperCase());
+    expect(a.diaries).toHaveLength(1);
+    expect(a.diaries[0]!.text).toContain('Lv50 PIKACHU');
+    expect(a.diaries[0]!.text).toContain('Held on at 1 HP');
+    expect(hallOfFame(p, (id) => id.toUpperCase()).diaries[0]!.text).toBe(a.diaries[0]!.text);
+  });
+});
