@@ -5,6 +5,7 @@ import { CHANGELOG, entriesSince, latestChangelogId } from '../core/tools/change
 import { contentStatuses, problemEntries, statusLines } from '../core/tools/contentStatusView';
 import { localStats } from '../core/tools/localStats';
 import { buildBugReport, bugReportHeadline } from '../core/tools/bugReport';
+import { berryEntries, berryLines } from '../core/tools/berryBestiary';
 import { boardCode, mergedBoard } from '../core/tools/seedBoard';
 import { installPack, removePack, removeProblem } from '../core/tools/modPacks';
 import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
@@ -71,6 +72,7 @@ export function openTools(host: ToolsHost): void {
   const due = backupDue({ runs: session.profile.runHistory.length, lastExportAt: device.lastExport(), lastRemindedAt: null, now: new Date().toISOString() });
   const items: { label: string; sub: string; go: () => void }[] = [
     { label: "What's new", sub: 'Changes in each update.', go: () => openChangelog(host) },
+    { label: 'Berry Bestiary', sub: 'What every berry does, how rare it is and how it grows in a Berry Garden.', go: () => openBerries(host) },
     { label: 'Content status', sub: 'How much of the game is fully working, limited or switched off.', go: () => openContentStatus(host) },
     { label: 'My stats', sub: 'Numbers worked out on this device from your own runs. Nothing is sent anywhere.', go: () => openStats(host) },
     { label: 'Seed board', sub: 'Curated seeds, plus seeds from your mod packs. Put one on the shelf (Enter).', go: () => openSeedBoard(host) },
@@ -377,6 +379,14 @@ function openReplayDiff(host: ToolsHost): void {
       page(host, 'Replay diff', textRows(a && b ? diffLines(diffRuns(a, b)) : ['One of the files is not a saved run.']));
     }),
   );
+}
+
+function openBerries(host: ToolsHost): void {
+  const berries = berryEntries(services().session.content);
+  page(host, 'Berry Bestiary', berries.map((b) => row(b.name, b.effect, b.rarity)), (n) => {
+    const b = berries[n];
+    if (b) page(host, b.name, textRows(berryLines(b)), () => undefined, () => openBerries(host));
+  });
 }
 
 async function openProvenance(host: ToolsHost): Promise<void> {
