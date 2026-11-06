@@ -44,7 +44,9 @@ describe('overhaul field: power and cap', () => {
   it('no field changes nothing', () => expect(fieldPowerMultiplier(undefined, 'Fire')).toBe(1));
   it('environment +10% on its types only', () => {
     expect(fieldPowerMultiplier({ env: 'forest', condition: null }, 'Grass')).toBeCloseTo(1.1);
-    expect(fieldPowerMultiplier({ env: 'forest', condition: null }, 'Fire')).toBe(1);
+    expect(fieldPowerMultiplier({ env: 'forest', condition: null }, 'fire')).toBe(1);
+    // the engine passes lowercase type names
+    expect(fieldPowerMultiplier({ env: 'forest', condition: null }, 'grass')).toBeCloseTo(1.1);
   });
   it('environment and condition add up but never pass +30%', () => {
     const f = { env: 'forest', condition: { id: 'tidal-surge', turns: 2 } };

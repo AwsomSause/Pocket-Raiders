@@ -184,7 +184,7 @@ import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from 
 import { createStoryState, emit } from './story/record';
 import { chainGivesTalent, chainShiny, extendChain, shinyCharmTiers } from './catchChain';
 import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift, careOf } from './care';
-import { createPartyLife, partyLifeCamp, partyLifeTurn, partyLifeVictory } from './partyLife';
+import { createPartyLife, partyLifeCombos, partyLifeCamp, partyLifeTurn, partyLifeVictory } from './partyLife';
 import { diaryLine, seedNpcMemory } from './npcMemory';
 import { seedTreasureHunt } from './treasureHunt';
 import { npcShopFactor, secretTierEntries } from './npcShop';
@@ -2050,13 +2050,14 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     healParty(content, run);
     careRest(run, content);
     partyLifeCamp(run);
+    const comboLine = partyLifeCombos(content, run);
     runSide.used = true;
     count(run, 'healStopsUsed');
     // A Blissful Pokémon's aura calms the Shadow Pokémon resting beside it.
     const calmed = blissfulAtRest(content, run);
     takeCheckpoint(run);
     const camp = quirkReaction(run.party, 'rest_node', `${run.runId}:${run.encountersCompleted}:${sideId}`, (m) => content.species.get(m.speciesId)?.name ?? m.speciesId);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}` };
   }
   run.phase = 'shop';
   // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
