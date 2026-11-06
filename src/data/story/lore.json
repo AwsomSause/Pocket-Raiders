@@ -364,5 +364,103 @@
     ]
    }
   ]
+ },
+ {
+  "id": "lore_cairnmoor_relic",
+  "category": 5,
+  "nameKey": "lore.lore_cairnmoor_relic.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_prosper_lund"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_cairnmoor_relic.i1",
+    "sources": [
+     "ch_prosper_lund"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_dictionary",
+  "category": 1,
+  "nameKey": "lore.lore_dictionary.name",
+  "states": [
+   "rumor",
+   "known"
+  ],
+  "sources": [
+   "ch_prosper_lund",
+   "ch_mara_kuroda_lund"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_dictionary.i1",
+    "sources": [
+     "ch_prosper_lund"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_kuroda_letter",
+  "category": 7,
+  "nameKey": "lore.lore_kuroda_letter.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_ravenna_kuroda"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_kuroda_letter.i1",
+    "sources": [
+     "ch_ravenna_kuroda"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_temporal_disturbance",
+  "category": 6,
+  "nameKey": "lore.lore_temporal_disturbance.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_prosper_lund"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_temporal_disturbance.i1",
+    "sources": [
+     "ch_prosper_lund"
+    ]
+   },
+   {
+    "textKey": "lore.lore_temporal_disturbance.i2",
+    "sources": [
+     "ch_ravenna_kuroda"
+    ]
+   }
+  ]
  }
 ]

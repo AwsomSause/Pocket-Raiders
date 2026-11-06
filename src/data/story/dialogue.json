@@ -223,5 +223,32 @@
   "tags": [
    "aether"
   ]
+ },
+ {
+  "id": "dlg_ev_intro_hisui_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_hisui.b1",
+  "tags": [
+   "hisui"
+  ]
+ },
+ {
+  "id": "dlg_ev_familiar_stranger_b1",
+  "speaker": "ch_mara_kuroda_lund",
+  "when": [],
+  "textKey": "ev_familiar_stranger.b1",
+  "tags": [
+   "hisui"
+  ]
+ },
+ {
+  "id": "dlg_ev_lost_vocabulary_b1",
+  "speaker": "ch_prosper_lund",
+  "when": [],
+  "textKey": "ev_lost_vocabulary.b1",
+  "tags": [
+   "hisui"
+  ]
  }
 ]

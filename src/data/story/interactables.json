@@ -184,5 +184,49 @@
     "amount": 1
    }
   ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "id": "int_dig_puzzle_door",
+  "verbs": [
+   "use",
+   "look"
+  ],
+  "icon": "tone",
+  "outputs": [
+   {
+    "id": "int_dig_puzzle_door_1",
+    "kind": "puzzle_door",
+    "site": "archaeological"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "id": "int_time_slip_wild",
+  "verbs": [
+   "look",
+   "talk"
+  ],
+  "outputs": [
+   {
+    "id": "int_time_slip_wild_1",
+    "kind": "start_battle",
+    "character": "ch_tin",
+    "timeSlip": true
+   }
+  ]
  }
 ]

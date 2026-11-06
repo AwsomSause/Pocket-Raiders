@@ -9086,5 +9086,1920 @@
   "tier": "A",
   "moment": "landmark",
   "backstory": "bs_aether"
+ },
+ {
+  "id": "ev_intro_hisui",
+  "v": 1,
+  "tags": [
+   "intro"
+  ],
+  "requires": [],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_intro_hisui_b1",
+    "kind": "line",
+    "line": "dlg_ev_intro_hisui_b1"
+   },
+   {
+    "id": "ev_intro_hisui_b2",
+    "kind": "narration",
+    "textKey": "ev_intro_hisui.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "hisui",
+    "textKey": "ev_intro_hisui.c.hisui",
+    "effects": [
+     {
+      "id": "ev_intro_hisui_hisui_1",
+      "kind": "add_counter",
+      "counter": "resolve",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "dont_laugh",
+    "textKey": "ev_intro_hisui.c.dont_laugh",
+    "effects": [
+     {
+      "id": "ev_intro_hisui_dont_laugh_1",
+      "kind": "add_counter",
+      "counter": "compassion",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "deflect",
+    "textKey": "ev_intro_hisui.c.deflect",
+    "effects": [
+     {
+      "id": "ev_intro_hisui_deflect_1",
+      "kind": "add_counter",
+      "counter": "independence",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_intro_hisui_out_1",
+    "kind": "set_flag",
+    "key": "bs_hisui_intro",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_intro_hisui_vance_v1",
+    "textKey": "ev_intro_hisui.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_hisui_vance_v2",
+    "textKey": "ev_intro_hisui.vance.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_hisui_vance_v3",
+    "textKey": "ev_intro_hisui.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 1
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_world_reborn",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "act1",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "lund": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_world_reborn_b1",
+    "kind": "narration",
+    "textKey": "ev_world_reborn.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "claim",
+    "textKey": "ev_world_reborn.c.claim",
+    "effects": [
+     {
+      "id": "ev_world_reborn_claim_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": 1
+     },
+     {
+      "id": "ev_world_reborn_claim_2",
+      "kind": "unlock_lore",
+      "lore": "lore_cairnmoor_relic",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "let_keep",
+    "textKey": "ev_world_reborn.c.let_keep",
+    "effects": [
+     {
+      "id": "ev_world_reborn_let_keep_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": 2
+     },
+     {
+      "id": "ev_world_reborn_let_keep_2",
+      "kind": "unlock_lore",
+      "lore": "lore_cairnmoor_relic",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "catalog",
+    "textKey": "ev_world_reborn.c.catalog",
+    "effects": [
+     {
+      "id": "ev_world_reborn_catalog_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": -1
+     },
+     {
+      "id": "ev_world_reborn_catalog_2",
+      "kind": "add_relationship",
+      "character": "ch_prosper_lund",
+      "attr": "trust",
+      "amount": 15
+     },
+     {
+      "id": "ev_world_reborn_catalog_3",
+      "kind": "unlock_lore",
+      "lore": "lore_cairnmoor_relic",
+      "state": "known"
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_world_reborn_out_1",
+    "kind": "set_flag",
+    "key": "relic_seen",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "lund",
+    "id": "ev_world_reborn_lund_v1",
+    "textKey": "ev_world_reborn.lund.v1",
+    "when": []
+   },
+   {
+    "role": "lund",
+    "id": "ev_world_reborn_lund_v2",
+    "textKey": "ev_world_reborn.lund.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "lund",
+    "id": "ev_world_reborn_lund_v3",
+    "textKey": "ev_world_reborn.lund.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_familiar_stranger",
+  "v": 1,
+  "tags": [
+   "character",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "mara": {
+    "character": "ch_mara_kuroda_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_familiar_stranger_b1",
+    "kind": "line",
+    "line": "dlg_ev_familiar_stranger_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "talk",
+    "textKey": "ev_familiar_stranger.c.talk",
+    "effects": [
+     {
+      "id": "ev_familiar_stranger_talk_1",
+      "kind": "add_relationship",
+      "character": "ch_mara_kuroda_lund",
+      "attr": "trust",
+      "amount": 15
+     },
+     {
+      "id": "ev_familiar_stranger_talk_2",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": -1
+     }
+    ]
+   },
+   {
+    "id": "distance",
+    "textKey": "ev_familiar_stranger.c.distance",
+    "effects": [
+     {
+      "id": "ev_familiar_stranger_distance_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "truth",
+    "textKey": "ev_familiar_stranger.c.truth",
+    "effects": [
+     {
+      "id": "ev_familiar_stranger_truth_1",
+      "kind": "add_relationship",
+      "character": "ch_mara_kuroda_lund",
+      "attr": "trust",
+      "amount": 25
+     },
+     {
+      "id": "ev_familiar_stranger_truth_2",
+      "kind": "set_flag",
+      "key": "mara_knows",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_familiar_stranger_out_1",
+    "kind": "set_flag",
+    "key": "met_mara",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "mara",
+    "id": "ev_familiar_stranger_mara_v1",
+    "textKey": "ev_familiar_stranger.mara.v1",
+    "when": []
+   },
+   {
+    "role": "mara",
+    "id": "ev_familiar_stranger_mara_v2",
+    "textKey": "ev_familiar_stranger.mara.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "mara",
+    "id": "ev_familiar_stranger_mara_v3",
+    "textKey": "ev_familiar_stranger.mara.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_mara_kuroda_lund",
+      "key": "trust",
+      "op": ">=",
+      "value": 30
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_old_method",
+  "v": 1,
+  "tags": [
+   "alpha",
+   "battle",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "observer": {
+    "character": "ch_ravenna_kuroda"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_old_method_b1",
+    "kind": "narration",
+    "textKey": "ev_old_method.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "strong",
+    "textKey": "ev_old_method.c.strong",
+    "effects": [
+     {
+      "id": "ev_old_method_strong_1",
+      "kind": "rules_variant",
+      "variant": "old_method",
+      "style": "strong"
+     }
+    ]
+   },
+   {
+    "id": "agile",
+    "textKey": "ev_old_method.c.agile",
+    "effects": [
+     {
+      "id": "ev_old_method_agile_1",
+      "kind": "rules_variant",
+      "variant": "old_method",
+      "style": "agile"
+     }
+    ]
+   },
+   {
+    "id": "sneak",
+    "textKey": "ev_old_method.c.sneak",
+    "effects": [
+     {
+      "id": "ev_old_method_sneak_1",
+      "kind": "rules_variant",
+      "variant": "old_method",
+      "style": "sneak"
+     }
+    ]
+   },
+   {
+    "id": "modern",
+    "textKey": "ev_old_method.c.modern",
+    "effects": []
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_old_method_out_1",
+    "kind": "set_flag",
+    "key": "old_method_offered",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "observer",
+    "id": "ev_old_method_observer_v1",
+    "textKey": "ev_old_method.observer.v1",
+    "when": []
+   },
+   {
+    "role": "observer",
+    "id": "ev_old_method_observer_v2",
+    "textKey": "ev_old_method.observer.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "observer",
+    "id": "ev_old_method_observer_v3",
+    "textKey": "ev_old_method.observer.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "old_method_used",
+      "op": "==",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_temporal_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_temporal",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "distortions": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_temporal_1_b1",
+    "kind": "narration",
+    "textKey": "ev_temporal_1.b1"
+   },
+   {
+    "id": "ev_temporal_1_b2",
+    "kind": "narration",
+    "textKey": "ev_temporal_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_temporal_1_out_1",
+    "kind": "set_flag",
+    "key": "window_state",
+    "value": "opening"
+   }
+  ],
+  "variants": [
+   {
+    "role": "distortions",
+    "id": "ev_temporal_1_distortions_v1",
+    "textKey": "ev_temporal_1.distortions.v1",
+    "when": []
+   },
+   {
+    "role": "distortions",
+    "id": "ev_temporal_1_distortions_v2",
+    "textKey": "ev_temporal_1.distortions.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "distortions",
+    "id": "ev_temporal_1_distortions_v3",
+    "textKey": "ev_temporal_1.distortions.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_temporal_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_temporal",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "records": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_temporal_2_b1",
+    "kind": "narration",
+    "textKey": "ev_temporal_2.b1"
+   },
+   {
+    "id": "ev_temporal_2_b2",
+    "kind": "narration",
+    "textKey": "ev_temporal_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "records",
+    "id": "ev_temporal_2_records_v1",
+    "textKey": "ev_temporal_2.records.v1",
+    "when": []
+   },
+   {
+    "role": "records",
+    "id": "ev_temporal_2_records_v2",
+    "textKey": "ev_temporal_2.records.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "records",
+    "id": "ev_temporal_2_records_v3",
+    "textKey": "ev_temporal_2.records.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_temporal_3",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_temporal",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "site": {
+    "character": "ch_ravenna_kuroda"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_temporal_3_b1",
+    "kind": "narration",
+    "textKey": "ev_temporal_3.b1"
+   },
+   {
+    "id": "ev_temporal_3_b2",
+    "kind": "narration",
+    "textKey": "ev_temporal_3.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "site",
+    "id": "ev_temporal_3_site_v1",
+    "textKey": "ev_temporal_3.site.v1",
+    "when": []
+   },
+   {
+    "role": "site",
+    "id": "ev_temporal_3_site_v2",
+    "textKey": "ev_temporal_3.site.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "site",
+    "id": "ev_temporal_3_site_v3",
+    "textKey": "ev_temporal_3.site.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_temporal_4",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_temporal",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "shepherd": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_temporal_4_b1",
+    "kind": "narration",
+    "textKey": "ev_temporal_4.b1"
+   },
+   {
+    "id": "ev_temporal_4_b2",
+    "kind": "narration",
+    "textKey": "ev_temporal_4.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "shepherd",
+    "id": "ev_temporal_4_shepherd_v1",
+    "textKey": "ev_temporal_4.shepherd.v1",
+    "when": []
+   },
+   {
+    "role": "shepherd",
+    "id": "ev_temporal_4_shepherd_v2",
+    "textKey": "ev_temporal_4.shepherd.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "shepherd",
+    "id": "ev_temporal_4_shepherd_v3",
+    "textKey": "ev_temporal_4.shepherd.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_temporal_5",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_temporal",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "window": {
+    "character": "ch_mara_kuroda_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_temporal_5_b1",
+    "kind": "narration",
+    "textKey": "ev_temporal_5.b1"
+   },
+   {
+    "id": "ev_temporal_5_b2",
+    "kind": "narration",
+    "textKey": "ev_temporal_5.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "approach",
+    "textKey": "ev_temporal_5.c.approach",
+    "effects": [
+     {
+      "id": "ev_temporal_5_approach_1",
+      "kind": "set_flag",
+      "key": "window_state",
+      "value": "opening"
+     }
+    ],
+    "goto": "ev_return_window"
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_temporal_5_out_1",
+    "kind": "chronicle",
+    "entry": "chr_temporal"
+   }
+  ],
+  "variants": [
+   {
+    "role": "window",
+    "id": "ev_temporal_5_window_v1",
+    "textKey": "ev_temporal_5.window.v1",
+    "when": []
+   },
+   {
+    "role": "window",
+    "id": "ev_temporal_5_window_v2",
+    "textKey": "ev_temporal_5.window.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "window",
+    "id": "ev_temporal_5_window_v3",
+    "textKey": "ev_temporal_5.window.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_lost_vocabulary",
+  "v": 1,
+  "tags": [
+   "comedy",
+   "dictionary",
+   "act1",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "lund": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_lost_vocabulary_b1",
+    "kind": "line",
+    "line": "dlg_ev_lost_vocabulary_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "learn_one",
+    "textKey": "ev_lost_vocabulary.c.learn_one",
+    "effects": [
+     {
+      "id": "ev_lost_vocabulary_learn_one_1",
+      "kind": "add_counter",
+      "counter": "words",
+      "amount": 1
+     },
+     {
+      "id": "ev_lost_vocabulary_learn_one_2",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": -1
+     }
+    ]
+   },
+   {
+    "id": "laugh",
+    "textKey": "ev_lost_vocabulary.c.laugh",
+    "effects": [
+     {
+      "id": "ev_lost_vocabulary_laugh_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_lost_vocabulary_out_1",
+    "kind": "unlock_lore",
+    "lore": "lore_dictionary",
+    "state": "known"
+   }
+  ],
+  "variants": [
+   {
+    "role": "lund",
+    "id": "ev_lost_vocabulary_lund_v1",
+    "textKey": "ev_lost_vocabulary.lund.v1",
+    "when": []
+   },
+   {
+    "role": "lund",
+    "id": "ev_lost_vocabulary_lund_v2",
+    "textKey": "ev_lost_vocabulary.lund.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "lund",
+    "id": "ev_lost_vocabulary_lund_v3",
+    "textKey": "ev_lost_vocabulary.lund.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "words",
+      "op": ">=",
+      "value": 12
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_old_road",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "kuroda": {
+    "character": "ch_ravenna_kuroda"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_old_road_b1",
+    "kind": "narration",
+    "textKey": "ev_old_road.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "open_ball",
+    "textKey": "ev_old_road.c.open_ball",
+    "effects": [
+     {
+      "id": "ev_old_road_open_ball_1",
+      "kind": "unlock",
+      "what": "remembrance",
+      "target": "rm_hisui_starter"
+     },
+     {
+      "id": "ev_old_road_open_ball_2",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": -1
+     }
+    ]
+   },
+   {
+    "id": "read_letter",
+    "textKey": "ev_old_road.c.read_letter",
+    "effects": [
+     {
+      "id": "ev_old_road_read_letter_1",
+      "kind": "unlock_lore",
+      "lore": "lore_kuroda_letter",
+      "state": "known"
+     },
+     {
+      "id": "ev_old_road_read_letter_2",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_old_road_out_1",
+    "kind": "set_flag",
+    "key": "old_road_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "kuroda",
+    "id": "ev_old_road_kuroda_v1",
+    "textKey": "ev_old_road.kuroda.v1",
+    "when": []
+   },
+   {
+    "role": "kuroda",
+    "id": "ev_old_road_kuroda_v2",
+    "textKey": "ev_old_road.kuroda.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "kuroda",
+    "id": "ev_old_road_kuroda_v3",
+    "textKey": "ev_old_road.kuroda.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "old_method_used",
+      "op": "==",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_museum_piece",
+  "v": 1,
+  "tags": [
+   "museum",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "lund": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_museum_piece_b1",
+    "kind": "narration",
+    "textKey": "ev_museum_piece.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "request",
+    "textKey": "ev_museum_piece.c.request",
+    "effects": [
+     {
+      "id": "ev_museum_piece_request_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": 1
+     },
+     {
+      "id": "ev_museum_piece_request_2",
+      "kind": "set_flag",
+      "key": "museum",
+      "value": "reclaimed"
+     }
+    ]
+   },
+   {
+    "id": "note",
+    "textKey": "ev_museum_piece.c.note",
+    "effects": [
+     {
+      "id": "ev_museum_piece_note_1",
+      "kind": "add_counter",
+      "counter": "displacement",
+      "amount": -1
+     },
+     {
+      "id": "ev_museum_piece_note_2",
+      "kind": "set_flag",
+      "key": "museum",
+      "value": "noted"
+     }
+    ]
+   },
+   {
+    "id": "leave",
+    "textKey": "ev_museum_piece.c.leave",
+    "effects": [
+     {
+      "id": "ev_museum_piece_leave_1",
+      "kind": "set_flag",
+      "key": "museum",
+      "value": "left"
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "lund",
+    "id": "ev_museum_piece_lund_v1",
+    "textKey": "ev_museum_piece.lund.v1",
+    "when": []
+   },
+   {
+    "role": "lund",
+    "id": "ev_museum_piece_lund_v2",
+    "textKey": "ev_museum_piece.lund.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "lund",
+    "id": "ev_museum_piece_lund_v3",
+    "textKey": "ev_museum_piece.lund.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_prosper_lund",
+      "key": "trust",
+      "op": ">=",
+      "value": 30
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_return_window",
+  "v": 1,
+  "tags": [
+   "finale",
+   "act5"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   },
+   {
+    "kind": "flag",
+    "key": "window_state",
+    "op": "==",
+    "value": "opening"
+   }
+  ],
+  "roles": {
+   "mara": {
+    "character": "ch_mara_kuroda_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_return_window_b1",
+    "kind": "narration",
+    "textKey": "ev_return_window.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "go_back",
+    "textKey": "ev_return_window.c.go_back",
+    "effects": [
+     {
+      "id": "ev_return_window_go_back_1",
+      "kind": "set_flag",
+      "key": "return_choice",
+      "value": "home"
+     },
+     {
+      "id": "ev_return_window_go_back_2",
+      "kind": "set_flag",
+      "key": "window_state",
+      "value": "shut"
+     }
+    ]
+   },
+   {
+    "id": "stay",
+    "textKey": "ev_return_window.c.stay",
+    "effects": [
+     {
+      "id": "ev_return_window_stay_1",
+      "kind": "set_flag",
+      "key": "return_choice",
+      "value": "stay"
+     },
+     {
+      "id": "ev_return_window_stay_2",
+      "kind": "set_flag",
+      "key": "window_state",
+      "value": "shut"
+     }
+    ]
+   },
+   {
+    "id": "bridge",
+    "textKey": "ev_return_window.c.bridge",
+    "effects": [
+     {
+      "id": "ev_return_window_bridge_1",
+      "kind": "set_flag",
+      "key": "return_choice",
+      "value": "bridge"
+     },
+     {
+      "id": "ev_return_window_bridge_2",
+      "kind": "set_flag",
+      "key": "window_state",
+      "value": "open"
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_return_window_out_1",
+    "kind": "chronicle",
+    "entry": "chr_return_window"
+   }
+  ],
+  "variants": [
+   {
+    "role": "mara",
+    "id": "ev_return_window_mara_v1",
+    "textKey": "ev_return_window.mara.v1",
+    "when": []
+   },
+   {
+    "role": "mara",
+    "id": "ev_return_window_mara_v2",
+    "textKey": "ev_return_window.mara.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "mara",
+    "id": "ev_return_window_mara_v3",
+    "textKey": "ev_return_window.mara.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_mara_kuroda_lund",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_echo_hisui_01",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_prosper_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_hisui_01_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_hisui_01.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_01_speaker_v1",
+    "textKey": "ev_echo_hisui_01.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_01_speaker_v2",
+    "textKey": "ev_echo_hisui_01.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_01_speaker_v3",
+    "textKey": "ev_echo_hisui_01.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_echo_hisui_02",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_mara_kuroda_lund"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_hisui_02_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_hisui_02.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_02_speaker_v1",
+    "textKey": "ev_echo_hisui_02.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_02_speaker_v2",
+    "textKey": "ev_echo_hisui_02.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_02_speaker_v3",
+    "textKey": "ev_echo_hisui_02.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_echo_hisui_03",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_tin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_hisui_03_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_hisui_03.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_03_speaker_v1",
+    "textKey": "ev_echo_hisui_03.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_03_speaker_v2",
+    "textKey": "ev_echo_hisui_03.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_hisui_03_speaker_v3",
+    "textKey": "ev_echo_hisui_03.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_mod_hisui",
+  "v": 1,
+  "tags": [
+   "modifier",
+   "system"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "roles": {},
+  "beats": [],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_mod_hisui_out_1",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "trust",
+    "amount": -5
+   },
+   {
+    "id": "ev_mod_hisui_out_2",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "curiosity",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_hisui_out_3",
+    "kind": "add_relationship",
+    "character": "class_rival",
+    "attr": "respect",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_hisui_out_4",
+    "kind": "add_relationship",
+    "character": "class_researcher",
+    "attr": "trust",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_hisui_out_5",
+    "kind": "add_relationship",
+    "character": "class_researcher",
+    "attr": "curiosity",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_hisui_out_6",
+    "kind": "add_relationship",
+    "character": "class_elite",
+    "attr": "respect",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_hisui_out_7",
+    "kind": "add_relationship",
+    "character": "class_trainer",
+    "attr": "trust",
+    "amount": -5
+   }
+  ],
+  "variants": [],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_end_home",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_home_b1",
+    "kind": "narration",
+    "textKey": "ev_end_home.b1"
+   },
+   {
+    "id": "ev_end_home_b2",
+    "kind": "narration",
+    "textKey": "ev_end_home.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_home_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_home"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_home_narrator_v1",
+    "textKey": "ev_end_home.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_home_narrator_v2",
+    "textKey": "ev_end_home.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_home_narrator_v3",
+    "textKey": "ev_end_home.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_end_present",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_present_b1",
+    "kind": "narration",
+    "textKey": "ev_end_present.b1"
+   },
+   {
+    "id": "ev_end_present_b2",
+    "kind": "narration",
+    "textKey": "ev_end_present.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_present_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_present"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_present_narrator_v1",
+    "textKey": "ev_end_present.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_present_narrator_v2",
+    "textKey": "ev_end_present.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_present_narrator_v3",
+    "textKey": "ev_end_present.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_end_bridge",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_bridge_b1",
+    "kind": "narration",
+    "textKey": "ev_end_bridge.b1"
+   },
+   {
+    "id": "ev_end_bridge_b2",
+    "kind": "narration",
+    "textKey": "ev_end_bridge.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_bridge_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_bridge"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_bridge_narrator_v1",
+    "textKey": "ev_end_bridge.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_bridge_narrator_v2",
+    "textKey": "ev_end_bridge.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_bridge_narrator_v3",
+    "textKey": "ev_end_bridge.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_end_lost",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_lost_b1",
+    "kind": "narration",
+    "textKey": "ev_end_lost.b1"
+   },
+   {
+    "id": "ev_end_lost_b2",
+    "kind": "narration",
+    "textKey": "ev_end_lost.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_lost_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_lost"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_lost_narrator_v1",
+    "textKey": "ev_end_lost.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_lost_narrator_v2",
+    "textKey": "ev_end_lost.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_hisui"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_lost_narrator_v3",
+    "textKey": "ev_end_lost.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_hisui"
  }
 ]

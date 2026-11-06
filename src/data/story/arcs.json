@@ -354,5 +354,47 @@
   "exits": [
    "captive_out"
   ]
+ },
+ {
+  "id": "arc_temporal",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_temporal_1"
+   },
+   {
+    "event": "ev_temporal_2"
+   },
+   {
+    "event": "ev_temporal_3"
+   },
+   {
+    "event": "ev_temporal_4"
+   },
+   {
+    "event": "ev_temporal_5"
+   }
+  ],
+  "nodeCost": 5,
+  "branches": [
+   {
+    "id": "home",
+    "exit": "went_home"
+   },
+   {
+    "id": "stay",
+    "exit": "stayed"
+   },
+   {
+    "id": "bridge",
+    "exit": "bridged"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "went_home",
+   "stayed",
+   "bridged"
+  ]
  }
 ]

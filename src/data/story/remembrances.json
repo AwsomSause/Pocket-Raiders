@@ -229,5 +229,81 @@
    "kind": "event",
    "arg": "ev_proto_4"
   }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_rowlet",
+  "line": [
+   "rowlet",
+   "dartrix",
+   "decidueye"
+  ],
+  "types": [
+   "grass",
+   "flying"
+  ],
+  "temperament": "brave",
+  "moves": [
+   "tackle",
+   "growl",
+   "leer"
+  ],
+  "keystone": "hisui_rowlet",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_old_road"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_cyndaquil",
+  "line": [
+   "cyndaquil",
+   "quilava",
+   "typhlosion"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "brave",
+  "moves": [
+   "tackle",
+   "leer",
+   "scratch"
+  ],
+  "keystone": "hisui_cyndaquil",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_old_road"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_oshawott",
+  "line": [
+   "oshawott",
+   "dewott",
+   "samurott"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "brave",
+  "moves": [
+   "tackle",
+   "growl",
+   "scratch"
+  ],
+  "keystone": "hisui_oshawott",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_old_road"
+  }
  }
 ]

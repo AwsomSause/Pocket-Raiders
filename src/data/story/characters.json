@@ -790,5 +790,142 @@
     "spoiler": false
    }
   ]
+ },
+ {
+  "id": "ch_ravenna_kuroda",
+  "v": 1,
+  "nameKey": "ch.ch_ravenna_kuroda.name",
+  "age": 45,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lenora.png",
+   "happy": "public/assets/images/trainer/lenora.png",
+   "angry": "public/assets/images/trainer/lenora.png",
+   "sad": "public/assets/images/trainer/lenora.png"
+  },
+  "tier": 1,
+  "home": "hisui_survey_corps",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "stern_and_wry"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_ravenna_kuroda.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_ravenna_kuroda.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_ravenna_kuroda.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_prosper_lund",
+  "v": 1,
+  "nameKey": "ch.ch_prosper_lund.name",
+  "age": 38,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/burgh.png",
+   "happy": "public/assets/images/trainer/burgh.png",
+   "angry": "public/assets/images/trainer/burgh.png",
+   "sad": "public/assets/images/trainer/burgh.png"
+  },
+  "tier": 1,
+  "home": "cairnmoor_dig",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "too_excited"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_prosper_lund.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_prosper_lund.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_prosper_lund.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_mara_kuroda_lund",
+  "v": 1,
+  "nameKey": "ch.ch_mara_kuroda_lund.name",
+  "age": 27,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/viola.png",
+   "happy": "public/assets/images/trainer/viola.png",
+   "angry": "public/assets/images/trainer/viola.png",
+   "sad": "public/assets/images/trainer/viola.png"
+  },
+  "tier": 1,
+  "home": "ferry_stop",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_mara_kuroda_lund.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_mara_kuroda_lund.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_tin",
+  "v": 1,
+  "nameKey": "ch.ch_tin.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/722.png"
+  },
+  "tier": 3,
+  "party": [
+   "rowlet"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "left_behind"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_tin.bio1",
+    "spoiler": true
+   }
+  ]
  }
 ]
