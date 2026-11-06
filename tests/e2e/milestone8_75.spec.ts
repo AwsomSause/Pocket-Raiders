@@ -270,7 +270,8 @@ test('map movement items: the Items menu puts you on a Bicycle, and the Devon Sc
   await page.waitForTimeout(250);
   await page.screenshot({ path: 'test-results/m875-map-items-info.png' });
   const rows = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').itemRows().map((r: any) => r.title));
-  expect(rows).toEqual(['Bicycle', 'Fame Checker', 'Rule Book']);
+  // Loot Preview (S320) is listed because this stage has a gym.
+  expect(rows).toEqual(['Bicycle', 'Fame Checker', 'Loot Preview', 'Rule Book']);
   await page.keyboard.press('Escape');
   expect(errors).toEqual([]);
 });

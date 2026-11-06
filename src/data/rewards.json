@@ -1737,7 +1737,7 @@
  {
   "id": "electrium-z",
   "name": "Electrium Z",
-  "description": "Z-Crystal: turns a Electric-type move into a Z-Move (needs the Z-Ring).",
+  "description": "Z-Crystal: turns an Electric-type move into a Z-Move (needs the Z-Ring).",
   "category": "transformation",
   "rarity": "uncommon",
   "effect": {
@@ -1769,7 +1769,7 @@
  {
   "id": "icium-z",
   "name": "Icium Z",
-  "description": "Z-Crystal: turns a Ice-type move into a Z-Move (needs the Z-Ring).",
+  "description": "Z-Crystal: turns an Ice-type move into a Z-Move (needs the Z-Ring).",
   "category": "transformation",
   "rarity": "uncommon",
   "effect": {

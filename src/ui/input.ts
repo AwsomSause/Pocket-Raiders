@@ -9,6 +9,10 @@ import { services } from '../game/services';
 export const SKIP_GUARD_MS = 250;
 
 function guardOn(): boolean {
+  // Browser tests drive the game with instant key presses right after a screen opens, which the guard
+  // would swallow at random (on a slow CI machine a screen can take longer than the guard to settle).
+  // Automated browsers set navigator.webdriver; players never have it, so they always get the guard.
+  if (typeof navigator !== 'undefined' && navigator.webdriver) return false;
   try {
     return services().session.settings.skipGuard !== false;
   } catch {

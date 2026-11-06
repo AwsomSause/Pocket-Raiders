@@ -1,0 +1,170 @@
+{
+ "events": [
+  {
+   "id": "key-item-workshop-rod",
+   "name": "Key Item Workshop: Rods",
+   "group": "Upgrades",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A tinkerer's shed hums with solder smoke. \"Bring me a rod and I'll bring it up a level. Parts cost money, work is free.\"",
+   "choices": [
+    {
+     "label": "Old Rod to Good Rod (₽600)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "old-rod"
+      },
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "The reel is rebuilt. A Good Rod, ready to cast.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "loseItem",
+        "id": "old-rod"
+       },
+       {
+        "kind": "item",
+        "id": "good-rod",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Good Rod to Super Rod (₽1200)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "good-rod"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "New line, new hook. A Super Rod can pull the rare ones.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "loseItem",
+        "id": "good-rod"
+       },
+       {
+        "kind": "item",
+        "id": "super-rod",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave the shed to its smoke.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "key-item-workshop-bike",
+   "name": "Key Item Workshop: Bikes",
+   "group": "Upgrades",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A tinkerer's shed hums with solder smoke. \"Bring me a bike and I'll bring it up a level. Parts cost money, work is free.\"",
+   "choices": [
+    {
+     "label": "Bicycle to Mach Bike (₽1500)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "bicycle"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "Drop bars and a sprint gear: a Mach Bike.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "loseItem",
+        "id": "bicycle"
+       },
+       {
+        "kind": "item",
+        "id": "mach-bike",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mach Bike to Acro Bike (₽2000)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "mach-bike"
+      },
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "Rails and a pop-up wheel: an Acro Bike.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "loseItem",
+        "id": "mach-bike"
+       },
+       {
+        "kind": "item",
+        "id": "acro-bike",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave the shed to its smoke.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
