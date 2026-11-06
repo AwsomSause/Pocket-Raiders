@@ -1904,5 +1904,75 @@
    "multiplier": 5,
    "rule": "weight300"
   }
+ },
+ {
+  "id": "tuning-dust-atk",
+  "name": "Attack Tuning Dust",
+  "description": "Nudges a Pokémon's nature so Attack is the raised stat (the lowered stat stays).",
+  "category": "nature",
+  "iconAssetId": "item.gen5/adamant-mint",
+  "usableInBattle": false,
+  "usableOutside": true,
+  "target": "party",
+  "effect": {
+   "kind": "natureNudge",
+   "stat": "atk"
+  }
+ },
+ {
+  "id": "tuning-dust-def",
+  "name": "Defense Tuning Dust",
+  "description": "Nudges a Pokémon's nature so Defense is the raised stat (the lowered stat stays).",
+  "category": "nature",
+  "iconAssetId": "item.gen5/adamant-mint",
+  "usableInBattle": false,
+  "usableOutside": true,
+  "target": "party",
+  "effect": {
+   "kind": "natureNudge",
+   "stat": "def"
+  }
+ },
+ {
+  "id": "tuning-dust-spa",
+  "name": "Sp. Atk Tuning Dust",
+  "description": "Nudges a Pokémon's nature so Sp. Atk is the raised stat (the lowered stat stays).",
+  "category": "nature",
+  "iconAssetId": "item.gen5/adamant-mint",
+  "usableInBattle": false,
+  "usableOutside": true,
+  "target": "party",
+  "effect": {
+   "kind": "natureNudge",
+   "stat": "spa"
+  }
+ },
+ {
+  "id": "tuning-dust-spd",
+  "name": "Sp. Def Tuning Dust",
+  "description": "Nudges a Pokémon's nature so Sp. Def is the raised stat (the lowered stat stays).",
+  "category": "nature",
+  "iconAssetId": "item.gen5/adamant-mint",
+  "usableInBattle": false,
+  "usableOutside": true,
+  "target": "party",
+  "effect": {
+   "kind": "natureNudge",
+   "stat": "spd"
+  }
+ },
+ {
+  "id": "tuning-dust-spe",
+  "name": "Speed Tuning Dust",
+  "description": "Nudges a Pokémon's nature so Speed is the raised stat (the lowered stat stays).",
+  "category": "nature",
+  "iconAssetId": "item.gen5/adamant-mint",
+  "usableInBattle": false,
+  "usableOutside": true,
+  "target": "party",
+  "effect": {
+   "kind": "natureNudge",
+   "stat": "spe"
+  }
  }
 ]

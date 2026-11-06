@@ -2,6 +2,7 @@
 // each attribute's effect, run modifiers from rewards, Luck in the draft and
 // the shiny roll, and save upgrades.
 
+import { dynamicPriceFactor } from '../../src/core/priceSwing';
 import { describe, expect, it } from 'vitest';
 import { getArchetype } from '../../src/core/archetypes';
 import {
@@ -146,8 +147,10 @@ describe('Luck', () => {
 describe('effects in the game', () => {
   it('Charisma lowers shop prices', () => {
     const entry = content.shop.find((e) => e.item === 'poke-ball')!;
-    expect(shopPrice(content, newRun('c0'), entry)).toBe(entry.price);
-    expect(shopPrice(content, newRun('c1', { charisma: 10 }), entry)).toBe(Math.round(entry.price * 0.95));
+    const c0 = newRun('c0');
+    expect(shopPrice(content, c0, entry)).toBe(Math.round(entry.price * dynamicPriceFactor(content, c0, entry.item)));
+    const c1 = newRun('c1', { charisma: 10 });
+    expect(shopPrice(content, c1, entry)).toBe(Math.round(entry.price * 0.95 * dynamicPriceFactor(content, c1, entry.item)));
   });
 
   function battleDamage(attributes: Partial<Attributes>, seed: string) {

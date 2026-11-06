@@ -32,6 +32,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `catch-chains-shiny-charm.md`: Catch Chains (S218) + Shiny Charm tiers (S225), roadmap slice 6 (`core/catchChain.ts`, numbers in `balance.jso
 - `challenge-modes.md`: Challenge modes and seeds (W8, ideas F77/F82/F84/F78/F79/M107-M109/F106-F107/F14): new modes in `runRules.json
 - `default-original-designs.md`: Kice: every menu or visual with selectable looks now starts on its original, pre-rework design. Redesigned loo
+- `dev-tools-pack.md`: Social/tech slice 6 (S327 Balance Dashboard, S328 Playtest Bot Reports, S329 Replay Diff, S332 Feature Flags, 
 - `dex-completion-rewards.md`: Dex Completion Rewards (S239; `core/dexRewards.ts`, `balance.json` `dexRewards`): species caught across all ru
 - `doubles-limits.md`: Left-out 5.10 Doubles limits: in a double battle either of your Pokémon can Mega/Tera/Z/Dynamax (one of each m
 - `drama-flavor.md`: Left-out 2.1 (rest): Battle Drama lines now pick by bond, rival arc and your trainer's favoured type (`drama.j
@@ -220,3 +221,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `zip-z6j-bag-layout.md`: Z6j: the Bag menu sits on the pack's Bag backdrop (orange grid, BAG plate, dark list area); the Picker skips i
 - story-endings-mysteries.md: S115 betrayal, S120 ending variations, S122 secret endings, S125 mystery, S129 lead chatter
 - `presentation-pack-2.md`: Presentation pack 2 (S240 battle camera, S242 map parallax, S253 move anim packs, S256 stickers, S258 run tips; settings v31).
+- `run-events-b-batch3.md`: Run events B batch 3: 9 trainer fights with new fight rules (no switch, no attacks, sudden death, turn limit, sleeping foes, reversed lead, start stages).
+- `minigames-more-games.md`: seven new minigames (Pokéathlon course, Bug Contest, Puzzle Slots, Dance Battle, Pinball, Styler, Snap Photo; S437, S445, S446, S451, S453, S486, S493, S494) and Battle Palace nature move rules.
+- `growth-shop-fossils.md`: Growth slice 1: Tuning Dust sold in shops, Bond Lv on the party Personality tab, 10 evolved Hisuian fossils.
+- dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)

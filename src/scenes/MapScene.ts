@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { wealthTaxNotice } from '../core/priceSwing';
 import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
 import { crossingHint, obstacleAt, towerClimb, TRAVERSAL } from '../core/traversal';
@@ -676,7 +677,7 @@ export class MapScene extends Phaser.Scene {
     const riding = run.moveMode ? mapActions(content, run).find((a) => a.on) : undefined;
     const working = [riding ? `Riding the ${content.catalog.get(riding.itemId)!.name}` : '', mapItemSummary(content, run)].filter(Boolean).join(' · ');
     this.notice = this.add
-      .text(GAME_WIDTH - 24, 482, data.notice ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
+      .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
       .setOrigin(1, 0);
     fitBlock(this.notice, 300, 48);
     this.focus(Math.min(data.focus ?? 0, this.options.length - 1), false);
@@ -1205,12 +1206,13 @@ export class MapScene extends Phaser.Scene {
     const pv = totemPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     // Screens redesign: the Ink Ruler look draws the totem card like its mock-up.
-    if (screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`) === 'ink') {
+    const totemLook = screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`);
+    if (totemLook !== 'original') {
       const leave = (): void => {
         this.picker?.close();
         this.picker = null;
       };
-      this.picker = new StopCard(this, 'ink', {
+      this.picker = new StopCard(this, totemLook as StopLook, {
         kicker: 'TOTEM',
         title: `${pv.name} · ${pv.tier}`,
         species,

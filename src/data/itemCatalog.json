@@ -9764,6 +9764,166 @@
   }
  },
  {
+  "id": "hisui-inferno-fossil",
+  "name": "Hisuian Inferno Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Arcanine joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "claw-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "arcanine-hisui"
+  }
+ },
+ {
+  "id": "hisui-thunder-fossil",
+  "name": "Hisuian Thunder Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Electrode joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "dome-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "electrode-hisui"
+  }
+ },
+ {
+  "id": "hisui-ghostfire-fossil",
+  "name": "Hisuian Ghostfire Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Typhlosion joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "skull-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "typhlosion-hisui"
+  }
+ },
+ {
+  "id": "hisui-blade-fossil",
+  "name": "Hisuian Blade Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Samurott joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "claw-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "samurott-hisui"
+  }
+ },
+ {
+  "id": "hisui-quill-fossil",
+  "name": "Hisuian Quill Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Decidueye joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "root-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "decidueye-hisui"
+  }
+ },
+ {
+  "id": "hisui-phantom-fossil",
+  "name": "Hisuian Phantom Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Zoroark joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "cover-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "zoroark-hisui"
+  }
+ },
+ {
+  "id": "hisui-slime-fossil",
+  "name": "Hisuian Slime Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Goodra joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "dome-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "goodra-hisui"
+  }
+ },
+ {
+  "id": "hisui-bloom-fossil",
+  "name": "Hisuian Bloom Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Lilligant joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "root-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "lilligant-hisui"
+  }
+ },
+ {
+  "id": "hisui-crest-fossil",
+  "name": "Hisuian Crest Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Braviary joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "claw-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "braviary-hisui"
+  }
+ },
+ {
+  "id": "hisui-glacier-fossil",
+  "name": "Hisuian Glacier Fossil",
+  "family": "Fossils",
+  "description": "Hisuian Avalugg joins your party, fully evolved",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "cover-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "avalugg-hisui"
+  }
+ },
+ {
   "id": "flame-mail",
   "name": "Flame Mail",
   "family": "Mail",
