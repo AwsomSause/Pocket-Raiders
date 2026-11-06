@@ -299,3 +299,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-personality.md`: Overhaul slice 21: 58 personalities and 54 quirks per Pokémon (from its id, no save change); rest and win quirk reactions.
 - `overhaul-battle-info.md`: Overhaul slice 8: battle Info panel adds move matchups, transformations, revealed abilities/items; hidden foes stay hidden.
 - `overhaul-egg-pools.md`: Overhaul slice 14, egg pools per tier and region (see file).
+- `overhaul-trainer-templates.md`: Overhaul slice 16, trainer roles and 17 team templates (see file).
