@@ -2744,6 +2744,15 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
 }
 
 /** After a win or a catch: prize money, evolutions, then decisions or the reward draft. */
+/** The pack's party narration for what just happened after a battle: an evolution, an Egg hatching, a new team member. One line at most. */
+function momentNarration(content: Content, run: RunState, outcome: 'win' | 'caught', evolved: boolean, hatched: boolean): string[] {
+  const when = evolved ? 'evolution' : hatched ? 'hatch' : outcome === 'caught' ? 'new_member' : null;
+  if (!when) return [];
+  const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
+  const line = partyNarration(run.party, when, `${run.runId}:${run.encountersCompleted}:${when}`, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
+  return line ? [line] : [];
+}
+
 function finishBattle(content: Content, run: RunState): BattleEndResult {
   const battle = run.battle!;
   // A temporary ally goes home: no experience, no catch-up, and it never stays in the party.
@@ -3052,7 +3061,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   // Modifier Run: every few battles, pick a blessing or curse.
   if (!run.victory && mutatorDue(getMode(run.rules.modeId)?.mutatorEvery, run.encountersCompleted)) run.pending.push({ kind: 'mutator', choices: mutatorOffer(run, (run.mutators ?? []).length) });
   // Eggs: one more battle (won or caught) for every battle Egg (stage Eggs count at each new stage).
-  if (!run.victory) tickEggs(content, run, 'battle');
+  const hatchedNow = run.victory ? [] : tickEggs(content, run, 'battle');
   // A Pokémon from a past run comes to meet you (after any caught Pokémon's decision).
   const reunion = run.reunion;
   if (reunion && !reunion.done && !run.victory && run.encountersCompleted >= reunion.afterEncounters) {
@@ -3074,7 +3083,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   // A fished Pokémon is an extra catch, and an event battle has its own rewards: no reward draft after them.
   run.afterDecisions = chained ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
   continueAfterDecisions(content, run);
-  return { outcome, moneyGained, itemsFound, caughtSpeciesId, shadowPurified, shadowStages, rescued, blissfulHealed, aftermath: (raidWin as { notes?: string[] } | null)?.notes ?? [], evolutions, bondTaught, recap, badge, regionCleared, finale, victory: run.victory, eventRewards, voiceJoined, materials: materialsGained };
+  return { outcome, moneyGained, itemsFound, caughtSpeciesId, shadowPurified, shadowStages, rescued, blissfulHealed, aftermath: [...((raidWin as { notes?: string[] } | null)?.notes ?? []), ...momentNarration(content, run, outcome, evolutions.length > 0, hatchedNow.length > 0)], evolutions, bondTaught, recap, badge, regionCleared, finale, victory: run.victory, eventRewards, voiceJoined, materials: materialsGained };
 }
 
 /**
