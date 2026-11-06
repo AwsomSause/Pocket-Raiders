@@ -25,8 +25,8 @@ export const manga: PartySkin = {
       g.fillStyle(0x000000, 1).fillRect(0, 0, 4, 300);
       c.add(g);
       sprite(c, m, w / 2, 285, on ? 1.9 : 1.6, ctx);
-      text(c, w / 2, 288, m.name.toUpperCase(), 12, '#ffffff', { origin: [0.5, 0], w: w - 8, extra: { stroke: '#101010', strokeThickness: 4 } });
-      text(c, w / 2, 304, `Lv${m.level}`, 11, '#101010', { origin: [0.5, 0] });
+      text(c, w / 2, 266, m.name.toUpperCase(), 12, '#ffffff', { origin: [0.5, 0], w: w - 8, extra: { stroke: '#101010', strokeThickness: 4 } });
+      text(c, w / 2, 280, `Lv${m.level}`, 11, '#ffffff', { origin: [0.5, 0], extra: { stroke: '#101010', strokeThickness: 4 } });
       if (on) {
         const f = scene.add.graphics();
         f.lineStyle(6, 0x101010, 1).strokeRect(2, 2, w - 4, 296).lineStyle(2, 0xffffff, 1).strokeRect(7, 7, w - 14, 286);
