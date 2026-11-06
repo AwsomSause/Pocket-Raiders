@@ -2536,7 +2536,10 @@ export const BalanceSchema = z.object({
       echoFromAct: z.number().int().min(1),
       maxSnapshots: z.number().int().min(1),
       rolls: z.record(z.string(), z.array(z.object({ key: z.string(), options: z.array(z.object({ value: z.string(), weight: z.number().min(0) })).min(1) }))).default({}),
-    }).default({ enabledBackstories: ['bs_viridian'], gapStops: 1, echoFromAct: 4, maxSnapshots: 40, rolls: {} }),
+      /** S20: counters a module starts with (the design's start values; a counter without one starts at 0) and the floor and cap of counters that have one. */
+      starts: z.record(z.string(), z.record(z.string(), z.number())).default({}),
+      limits: z.record(z.string(), z.tuple([z.number(), z.number()])).default({}),
+    }).default({ enabledBackstories: ['bs_viridian'], gapStops: 1, echoFromAct: 4, maxSnapshots: 40, rolls: {}, starts: {}, limits: {} }),
   }),
   rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), /** Harder rivals: the opener is the player level + this; the ace is the player level + aceOffset. */ openerOffset: z.number().int().default(0), aceOffset: z.number().int().default(2), /** 1 keeps the old single-Pokémon first rival (used to pin old-seed tests). */ members: z.number().int().min(1).max(2).default(2), /** False restores the old rule: a rival loss ends a non-Story run (used to pin old-seed tests). */ softLoss: z.boolean().default(true), /** False keeps the fixed level instead of following the player's level (old-seed tests). */ followPlayer: z.boolean().default(true), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
