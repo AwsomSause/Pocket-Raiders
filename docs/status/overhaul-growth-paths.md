@@ -42,3 +42,13 @@ Uses the run clock's period (`periodOf`, passed to the battle as `ctx.period`) a
 - Weather-Wise (3 battles with weather up): +3% accuracy in any weather. Storm Chaser (3 battles where the weather was set twice or more): +3% Speed in rain and snow.
 - Windrunner (Flying type, 5 turns it moved first under its own Tailwind): +3% Speed under its own Tailwind. The game has no gale weather, so only Tailwind counts.
 Each needs the single top count in the party. Tests: `tests/unit/overhaulGrowth.test.ts`.
+
+## Batch 5: turn counters (9 more, 61 of 106 play)
+Counters are filled each turn of a singles battle for the Pokémon that started the turn (`turnCounters` in `growth.ts`, called from `story/hooks.ts`; none when it switched out). Two small battle flags (`waited`, `unhit` on the battle volatile, default false, so no save bump) remember the last turn. Paths need the pack's "most in the party" rule too:
+- Lead-Out (5 battles as lead): +5% damage in turns 1–2. Opener (4 KOs on turn 1): +5% damage on its first turn out.
+- Quiet Strength (20 turns not hit): +3% damage after a turn it was not hit. Patient (12 turns spent waiting, i.e. a no-damage move that did not miss): +5% damage after such a turn.
+- Steady Hand (Normal types, 40 turns ending above 50% HP): +3% accuracy with Normal moves.
+- Wall (300% of max HP absorbed while surviving the turn): +5% Defense above 50% HP. Bruiser (15 turns it hit and was hit): +3% damage and +3% Defense at full HP.
+- Anchor (20 boss-fight turns on the field; boss = gym, elite, champion, rival): held-item and recovery-move healing restores 5% more.
+- Dodger (10 foe misses): foes' accuracy ÷1.03 while it is above 75% HP.
+Limits: Doubles battles do not fill these counters. "Damage absorbed" and "evasions" are simplified to hit damage taken and foe misses; Anchor boosts healing amounts by 5% (not +5% of max HP), and drain moves are not included. The rest need mechanics the game does not have yet (Free Spirit, Cheerleader, Fast Learner and others).

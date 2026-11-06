@@ -23,6 +23,7 @@ import { freshHeldState } from '../state';
 import type { BattleState, HeldState, PokemonInstance, Stages, Volatile } from '../state';
 import { clampStage } from './damage';
 import { setHooks } from '../itemSets';
+import { growthHealMultiplier } from '../overhaul/growth';
 
 export type Side = 'player' | 'enemy';
 
@@ -443,7 +444,7 @@ export function endureMultiplier(ctx: Pick<HeldContext, 'content' | 'teamItems'>
 
 export function drainMultiplier(ctx: Pick<HeldContext, 'content' | 'teamItems' | 'perks'>, mon: PokemonInstance, side: Side): number {
   const m = hooks(hooksOf(ctx, mon, side), 'drain').reduce((m, h) => m * (1 + h.hook.percent / 100), 1);
-  return side === 'player' ? scaleHeldBonus(ctx.perks, m) : m;
+  return side === 'player' ? scaleHeldBonus(ctx.perks, m) * growthHealMultiplier(ctx.content.balance.overhaulGrowth, mon) : m;
 }
 
 export function bindMultiplier(ctx: Pick<HeldContext, 'content' | 'teamItems'>, mon: PokemonInstance, side: Side): number {

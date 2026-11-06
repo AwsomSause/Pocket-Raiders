@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { buildContent } from '../../src/data';
 import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
-import { bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, growthSpeedMultiplier, typePathId, noteMapGrowth } from '../../src/core/overhaul/growth';
+import { VolatileSchema } from '../../src/core/state';
+import { addGrowth, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, turnCounters, turnFacts, waitedTurn, bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, growthSpeedMultiplier, typePathId, noteMapGrowth } from '../../src/core/overhaul/growth';
 import type { PokemonInstance } from '../../src/core/state';
 
 const content = buildContent();
@@ -237,5 +238,82 @@ describe('growth paths batch 4: time of day and weather', () => {
   it('the info line states the 3% caps', () => {
     expect(growthLine({ growthPath: 'dawn-runner' }, CFG)).toContain('+3% Speed in the first battle of a day');
     expect(growthLine({ growthPath: 'night-owl-path' }, CFG)).toContain('+5% damage in night battles');
+  });
+});
+
+describe('growth paths batch 5: turn counters', () => {
+  const g = (counter: string, n: number) => ({ uid: 'a', knockoutsDealt: 0, closeCalls: 0, growth: { [counter]: n } });
+  const opt = { turn: 3, lead: true, boss: false, maxHp: 100, hpAfter: 80 };
+  const ev = (...e: Array<[string, string, number?]>) => e.map(([type, side, amount]) => ({ type, side, amount }));
+
+  it('reads one turn: hits, misses, waiting', () => {
+    const f = turnFacts(ev(['move', 'player'], ['damage', 'enemy', 10], ['move', 'enemy'], ['damage', 'player', 30], ['miss', 'enemy']));
+    expect(f).toMatchObject({ hitFoe: true, tookHit: true, foeMisses: 1, absorbed: 30 });
+    expect(waitedTurn(f)).toBe(false);
+    expect(waitedTurn(turnFacts(ev(['move', 'player'], ['stat', 'player'])))).toBe(true);
+    expect(waitedTurn(turnFacts(ev(['move', 'player'], ['miss', 'player'])))).toBe(false);
+    expect(waitedTurn(turnFacts(ev(['switchOut', 'player'], ['move', 'player'])))).toBe(false);
+  });
+
+  it('counts turns for the active Pokémon, none when it switched out', () => {
+    const f = turnFacts(ev(['move', 'player'], ['damage', 'enemy', 5], ['damage', 'player', 40], ['miss', 'enemy']));
+    const c = Object.fromEntries(turnCounters(f, { ...opt, turn: 1, boss: true }));
+    expect(c).toMatchObject({ leadBattle: 1, healthyTurn: 1, absorbed: 40, tradeTurn: 1, bossTurn: 1, forcedMiss: 1 });
+    expect(c.quietTurn).toBeUndefined();
+    expect(turnCounters(turnFacts(ev(['switchOut', 'player'])), opt)).toEqual([]);
+    // A faint earns no healthy, boss or absorbed credit.
+    const d = Object.fromEntries(turnCounters(f, { ...opt, hpAfter: 0 }));
+    expect(d.healthyTurn ?? d.absorbed ?? d.bossTurn).toBeUndefined();
+  });
+
+  it('adds counters only when switched on', () => {
+    const hist: { growth?: Record<string, number> } = {};
+    addGrowth({ ...CFG, enabled: false }, hist, [['quietTurn', 1]]);
+    expect(hist.growth).toBeUndefined();
+    addGrowth(CFG, hist, [['quietTurn', 1], ['quietTurn', 2]]);
+    expect(hist.growth).toEqual({ quietTurn: 3 });
+  });
+
+  it('each new path needs its threshold and the party top; Steady Hand needs a Normal type', () => {
+    for (const [id, counter, min] of [['lead-out', 'leadBattle', 5], ['opener', 'koFirst', 4], ['quiet-strength', 'quietTurn', 20], ['patient', 'waitTurn', 12], ['wall', 'absorbed', 300], ['bruiser', 'tradeTurn', 15], ['anchor', 'bossTurn', 20], ['dodger', 'forcedMiss', 10]] as const) {
+      expect(COUNTER_PATHS[id]?.counter).toBe(counter);
+      expect(overhaulCatalogs().growth_paths.entries.some((p) => p.id === id)).toBe(true);
+      expect(pathFor(CFG, g(counter, min - 1), ['fire'], [g(counter, min - 1)])).toBeNull();
+      expect(pathFor(CFG, g(counter, min), ['fire'], [g(counter, min)])).toBe(id);
+    }
+    expect(pathFor(CFG, g('healthyTurn', 40), ['fire'], [g('healthyTurn', 40)])).toBeNull();
+    expect(pathFor(CFG, g('healthyTurn', 40), ['normal'], [g('healthyTurn', 40)])).toBe('steady-hand');
+  });
+
+  it('boosts in each path\'s own case', () => {
+    const mult = (id: string, hpFrac: number, hit = {}) => growthDamageMultiplier(CFG, { growthPath: id }, 'normal', 1, hpFrac, ['normal'], hit);
+    expect(mult('lead-out', 1, { turn: 2 })).toBeCloseTo(1.05);
+    expect(mult('lead-out', 1, { turn: 3 })).toBe(1);
+    expect(mult('opener', 1, { turnsOut: 0 })).toBeCloseTo(1.05);
+    expect(mult('opener', 1, { turnsOut: 1 })).toBe(1);
+    expect(mult('patient', 1, { waited: true })).toBeCloseTo(1.05);
+    expect(mult('patient', 1, {})).toBe(1);
+    expect(mult('quiet-strength', 1, { unhit: true })).toBeCloseTo(1.03);
+    expect(mult('quiet-strength', 1, { unhit: false })).toBe(1);
+    expect(mult('bruiser', 1)).toBeCloseTo(1.03);
+    expect(mult('bruiser', 0.9)).toBe(1);
+    const w = { growthPath: 'wall' }, b = { growthPath: 'bruiser' };
+    expect(growthDefenseMultiplier(CFG, w, 0.6)).toBeCloseTo(1.05);
+    expect(growthDefenseMultiplier(CFG, w, 0.5)).toBe(1);
+    expect(growthDefenseMultiplier(CFG, b, 1)).toBeCloseTo(1.03);
+    expect(growthDefenseMultiplier(CFG, b, 0.99)).toBe(1);
+    expect(growthEvasionMultiplier(CFG, { growthPath: 'dodger' }, 0.8)).toBeCloseTo(1.03);
+    expect(growthEvasionMultiplier(CFG, { growthPath: 'dodger' }, 0.75)).toBe(1);
+    expect(growthHealMultiplier(CFG, { growthPath: 'anchor' })).toBeCloseTo(1.05);
+    expect(growthHealMultiplier(CFG, { growthPath: 'wall' })).toBe(1);
+    expect(growthAccuracyMultiplier(CFG, { growthPath: 'steady-hand' }, 90, 'physical', null, 'Normal')).toBeCloseTo(1.03);
+    expect(growthAccuracyMultiplier(CFG, { growthPath: 'steady-hand' }, 90, 'physical', null, 'fire')).toBe(1);
+    expect(growthLine({ growthPath: 'wall' }, CFG)).toContain('+5% Defense while above 50% HP');
+  });
+
+  it('an old save without the new battle flags still loads, as false', () => {
+    const old = VolatileSchema.parse({ confusion: 0 });
+    expect(old.waited).toBe(false);
+    expect(old.unhit).toBe(false);
   });
 });

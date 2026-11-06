@@ -166,6 +166,9 @@ export const VolatileSchema = z.object({
   locked: z.object({ moveId: z.string(), turns: z.number().int().min(0) }).nullable().default(null),
   /** Full turns it has been in battle (Fake Out works only on the first). */
   turnsOut: z.number().int().min(0).default(0),
+  /** Growth paths (Patient, Quiet Strength): last turn it only waited / was not hit. Old saves read false. */
+  waited: z.boolean().default(false),
+  unhit: z.boolean().default(false),
   /** Flash Fire took a Fire move: its own Fire moves are 1.5× as strong. */
   flashFire: z.boolean().default(false),
   /** Truant: it loafs around on its next turn. */
@@ -315,6 +318,8 @@ export const freshVolatile = (): Volatile => ({
   semi: null,
   locked: null,
   turnsOut: 0,
+  waited: false,
+  unhit: false,
   flashFire: false,
   truant: false,
   typeShift: null,
