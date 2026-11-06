@@ -20,6 +20,7 @@ import type * as Data from '../src/data/index.ts';
 import type * as Save from '../src/save/saveManager.ts';
 import { readCatalogInputs } from './catalogInputs.ts';
 import { closeModules, loadModule, root } from './lib/gameModules.ts';
+import { readStory, storedHash } from './lib/storyFiles.ts';
 
 const args = process.argv.slice(2);
 const flag = (name: string) => args.includes(name);
@@ -47,6 +48,8 @@ await closeModules();
 const content = getContent();
 const existsCache = new Map<string, boolean>();
 const catalog = readCatalogInputs();
+const story = readStory();
+
 const report = buildContentReport(content, {
   assetExists: (path) => {
     let hit = existsCache.get(path);
@@ -59,6 +62,8 @@ const report = buildContentReport(content, {
   migrations: Object.fromEntries(Object.entries(MIGRATIONS).map(([record, m]) => [record, Object.keys(m).map(Number)])),
   mechanics: JSON.parse(readFileSync(join(root, 'src', 'quality', 'mechanics.json'), 'utf8')),
   fileExists: (path) => existsSync(join(root, path)),
+  storyFileSizes: story.sizes,
+  storyHashFresh: storedHash() === story.hash,
   catalogIds: { trainerAssetIds: catalog.trainerAssetIds, itemAssetIds: catalog.itemAssetIds, backgroundAssetIds: catalog.backgroundAssetIds },
 });
 

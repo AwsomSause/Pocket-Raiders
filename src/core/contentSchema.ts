@@ -12,6 +12,7 @@ import { OpponentAiSchema, DEFAULT_OPPONENT_AI } from './battle/opponentAiConfig
 import { GrowthStatsSchema, DEFAULT_GROWTH_STATS } from './battle/growthConfig';
 import { BattleFlairSchema, DEFAULT_BATTLE_FLAIR } from './battle/battleFlairConfig';
 import type { StoryConfig } from './story/schema';
+import type { StoryData } from './story2/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
 import type { ShadowWorldFile } from './shadowWorld/schema';
@@ -3121,6 +3122,8 @@ export interface Content {
   trainerTiers: TrainerTiers;
   /** Story layer settings and story event definitions (story.json, core/story). */
   story: StoryConfig;
+  /** Story Overhaul v2 data (empty until content slices fill src/data/story). */
+  storyData: StoryData;
   /** Raid bosses and den placement (raids.json, core/raid). */
   raids: RaidFile;
   /** Map events (events.json, core/events.ts). */

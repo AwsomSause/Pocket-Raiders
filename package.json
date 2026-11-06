@@ -55,6 +55,7 @@
     "report:perf": "node tools/report-perf.ts",
     "data:events": "node tools/build-events.ts",
     "data:quests": "node tools/build-quests.ts",
+    "data:story": "node tools/build-story.ts",
     "data:npc-trainers": "node tools/build-npc-trainers.ts",
     "data:npc-movesets": "node tools/build-npc-movesets.ts",
     "data:npc-events": "node tools/build-npc-events.ts",

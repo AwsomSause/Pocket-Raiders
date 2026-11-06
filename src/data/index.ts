@@ -42,6 +42,8 @@ import { MOMENT_EFFECTS } from '../core/story/moments';
 import { STORY_TRIGGERS, StoryConfigSchema } from '../core/story/schema';
 import achievementsJson from './achievements.json';
 import trainerQuestsJson from './trainerQuests.json';
+import { RAW_STORY } from './story/raw';
+import { StoryDataSchema } from '../core/story2/schema';
 import gameEventsJson from './gameEvents.json';
 import runPrepJson from './runPrep.json';
 import archetypesJson from './archetypes.json';
@@ -140,6 +142,8 @@ export interface RawContent {
   trainerTiers: unknown;
   balance: unknown;
   story: unknown;
+  /** Story Overhaul v2 data (src/data/story/*.json); optional so test content can omit it. */
+  storyData?: unknown;
   raids: unknown;
   events: unknown;
   totems: unknown;
@@ -257,6 +261,7 @@ export const RAW_CONTENT: RawContent = {
   trainerTiers: trainerTiersJson,
   balance: balanceJson,
   story: storyJson,
+  storyData: RAW_STORY,
   raids: raidsJson,
   events: eventsJson,
   totems: totemsJson,
@@ -301,6 +306,10 @@ function toMap<T extends { id: string }>(items: T[], label: string, problems: st
     map.set(item.id, item);
   }
   return map;
+}
+
+function emptyStory(): Record<string, unknown> {
+  return { characters: [], events: [], arcs: [], themes: [], remembrances: [], moveMoments: [], dialogue: [], lore: [], news: [], interactables: [], backstories: [], quiz: [], blueprintRules: {}, text: {}, hash: '' };
 }
 
 export function buildContent(raw: RawContent = RAW_CONTENT): Content {
@@ -397,6 +406,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     trainerTiers,
     balance,
     story,
+    storyData: parse(StoryDataSchema, raw.storyData ?? RAW_STORY, 'story/*.json', problems) ?? StoryDataSchema.parse(emptyStory()),
     raids,
     events: toMap(eventsFile.events, 'events.json', problems),
     totems,

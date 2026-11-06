@@ -14,6 +14,7 @@ import { recordLegacyRun } from './legacyRuns';
 import { recordHeirloom } from './memories/heirloom';
 import { foldNpcMemory } from './npcMemory';
 import { foldTreasureHunt } from './treasureHunt';
+import { freshProfileStory } from './story2/schema';
 import { claimPast } from './memories/past';
 import { ATTRIBUTE_NAMES, type Profile, type RunState } from './state';
 
@@ -62,6 +63,7 @@ export function createProfile(content: Content, profileId: string): Profile {
     npcMemory: { npcs: {}, lore: [], epilogues: [], news: [], ngPlus: 0, hintsSeen: [], seenEvents: [] },
     hubTown: { pokemon: null, merchantDay: '', bought: [] },
     treasureHunt: { pieces: [], claimed: false },
+    story: freshProfileStory(),
     legacyRuns: [],
     nook: { cookieDay: null, cookies: 0, wishDay: null, wishPaid: true, wishes: 0, note: null, noteDelivered: true, codesUsed: [], donated: 0, jokes: 0, stamps: 0, nodeNames: {} },
     memories: { heirlooms: [], claimed: [], cameos: [] },

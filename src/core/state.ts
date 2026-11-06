@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
 import { TreasureHuntSchema } from './treasureHunt';
 import { EVENT_STYLE_IDS } from './presentation/eventStyles';
 import { PLAZA_STYLE_IDS } from './presentation/plazaStyles';
@@ -1686,10 +1687,14 @@ export const ProfileSchema = z.object({
   hubTown: HubTownProfileSchema.default({ pokemon: null, merchantDay: '', bought: [] }),
   /** Treasure Hunt Season (S150, profile v18): the map pieces found over several runs (core/treasureHunt.ts). */
   treasureHunt: TreasureHuntSchema.default({ pieces: [], claimed: false }),
+  /** Story Overhaul v2 (profile v20): the Look, name, prologue, Remembrance, lore and cast archives. A damaged object falls back to defaults. */
+  story: ProfileStorySchema,
 });
 export type Profile = z.infer<typeof ProfileSchema>;
 
 export const SettingsSchema = z.object({
+  /** Story Overhaul v2 settings (settings v39). */
+  story: StorySettingsSchema.default(STORY_SETTINGS_DEFAULTS),
   musicVolume: z.number().min(0).max(1),
   sfxVolume: z.number().min(0).max(1),
   muted: z.boolean(),
