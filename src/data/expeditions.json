@@ -37,7 +37,7 @@
           "label": "Pry it open",
           "result": "Supplies!",
           "effect": {
-            "item": "hyper-potion"
+            "item": "premier-ball"
           }
         },
         {
@@ -283,7 +283,7 @@
       "restHeal": 0.3,
       "cache": [
         {
-          "item": "hyper-potion",
+          "item": "premier-ball",
           "chance": 1
         },
         {
@@ -297,7 +297,7 @@
         "moneyPerLevel": 120,
         "items": [
           {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 1
           },
           {
@@ -306,7 +306,7 @@
           }
         ],
         "megaStones": 1,
-        "researchBonusItem": "hyper-potion"
+        "researchBonusItem": "premier-ball"
       },
       "unlocks": "draft-cup",
       "failureKeep": 0.3
@@ -349,7 +349,7 @@
       "restHeal": 0.3,
       "cache": [
         {
-          "item": "hyper-potion",
+          "item": "premier-ball",
           "chance": 1
         },
         {
@@ -417,7 +417,7 @@
       "restHeal": 0.3,
       "cache": [
         {
-          "item": "hyper-potion",
+          "item": "premier-ball",
           "chance": 1
         },
         {
@@ -613,7 +613,7 @@
       "restHeal": 0.3,
       "cache": [
         {
-          "item": "hyper-potion",
+          "item": "premier-ball",
           "chance": 1
         },
         {

@@ -716,12 +716,12 @@
     },
     {
       "id": "hyper",
-      "name": "Best Potion",
+      "name": "Premier Ball Mix",
       "a": "bag:super-potion",
       "b": "bag:super-potion",
       "gives": {
         "kind": "item",
-        "item": "hyper-potion",
+        "item": "premier-ball",
         "amount": 1
       },
       "locked": true
@@ -1071,7 +1071,7 @@
       220
     ],
     "materials": 3,
-    "item": "hyper-potion",
+    "item": "premier-ball",
     "lockpick": {
       "miss": 0.2,
       "ok": 0.5,
@@ -1108,7 +1108,7 @@
       "2:1"
     ],
     "success": {
-      "item": "hyper-potion",
+      "item": "premier-ball",
       "amount": 1
     },
     "fail": "bubbles and pops harmlessly"

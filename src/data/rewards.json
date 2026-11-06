@@ -32,20 +32,20 @@
   "iconAssetId": "item.super_potion"
  },
  {
-  "id": "hyper-potion",
-  "name": "Hyper Potion",
-  "description": "A Hyper Potion (restores 120 HP).",
+  "id": "premier-ball",
+  "name": "Premier Ball",
+  "description": "A Premier Ball (a plain white ball, made for celebrations).",
   "category": "healing",
   "rarity": "rare",
   "effect": {
    "kind": "addItem",
-   "item": "hyper-potion",
+   "item": "premier-ball",
    "quantity": 1
   },
   "stacking": "stacks",
   "scope": "run",
   "moneyMultiplierApplies": false,
-  "iconAssetId": "item.hyper_potion"
+  "iconAssetId": "ball.premier"
  },
  {
   "id": "full-heal",
@@ -1937,7 +1937,7 @@
  {
   "id": "deal-medic-gamble",
   "name": "Medic Gamble",
-  "description": "A risk: 50% to win 4 Hyper Potions, otherwise you get nothing.",
+  "description": "A risk: 50% to win 4 Premier Balls, otherwise you get nothing.",
   "category": "consumable",
   "rarity": "rare",
   "family": "deal",
@@ -1947,7 +1947,7 @@
    "chance": 0.5,
    "items": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "quantity": 4
     }
    ]

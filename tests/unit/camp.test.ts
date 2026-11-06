@@ -209,8 +209,8 @@ describe('kitchen and workshop', () => {
     const run = setup();
     run.inventory.potion = 4;
     const results = CAMP.mixPotions.ratios.map((r) => act(run, 'mix', { item: 'bag:potion', item2: 'bag:potion', choice: r }));
-    expect(results.filter((r) => r.run.inventory['hyper-potion']).length).toBe(1);
-    expect(results.filter((r) => !r.run.inventory['hyper-potion'] && r.run.inventory.potion === 3).length).toBe(CAMP.mixPotions.ratios.length - 1);
+    expect(results.filter((r) => r.run.inventory['premier-ball']).length).toBe(1);
+    expect(results.filter((r) => !r.run.inventory['premier-ball'] && r.run.inventory.potion === 3).length).toBe(CAMP.mixPotions.ratios.length - 1);
   });
   it('recycling gives scrap; label and tidy change the Bag; sniff and sniffItem hint', () => {
     let run = setup();

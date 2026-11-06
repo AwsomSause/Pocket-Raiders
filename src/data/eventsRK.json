@@ -198,7 +198,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -1140,7 +1140,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -3152,7 +3152,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -3436,7 +3436,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -3671,7 +3671,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
