@@ -12,6 +12,7 @@ import { applyMastery } from '../mastery';
 import type { Content } from '../contentSchema';
 import { CHAMPION_CLASS, ELITE_FOUR_CLASS, GYM_LEADER_CLASS } from '../encounters';
 import { maxHp } from '../pokemon';
+import { isLegendaryLike } from '../trainerPerks';
 import { withStream } from '../rng';
 import type { RunEvent } from '../run';
 import { currentEnemy, type PokemonInstance, type RunState } from '../state';
@@ -118,6 +119,8 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
     return m ? name(content, m.speciesId) : '???';
   };
   const triggers: StoryTrigger[] = [];
+  /** The foe's HP just before the last hit it took (Hunter: a KO on a foe under half HP). */
+  let lastHit: { before: number; max: number } | null = null;
 
   /** Friendly Competition: two teammates take turns landing finishing blows (counted across the run). */
   const noteFinisher = (by: string, at: number) => {
@@ -145,6 +148,15 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   // Windrunner: the player's Pokémon moved before the foe this turn while its own Tailwind was up.
   const firstMove = events.find((e) => e.type === 'move');
   if (firstMove?.type === 'move' && firstMove.side === 'player' && active.player && prior.sideEffects.player.tailwind > 0) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['turnTailwind']);
+
+  // Speedster: it moved before the foe this turn (singles). Rival Mirror: it shares a type with the foe (once per battle).
+  if (!prior.doubles && firstMove?.type === 'move' && firstMove.side === 'player' && active.player) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['movedFirst']);
+  if (!prior.doubles && active.player && active.enemy) {
+    const a = mon(active.player);
+    const b = mon(active.enemy);
+    const mine = a ? content.species.get(a.speciesId)?.types ?? [] : [];
+    if (b && (content.species.get(b.speciesId)?.types ?? []).some((t) => mine.includes(t))) bumpGrowthOnce(content.balance.overhaulGrowth, run.story.histories[active.player], (battle.growthMarks ??= []), active.player, 'mirrorBattle');
+  }
 
   // Growth paths: what this turn tells the counters of the Pokémon that started it (turns, hits, misses).
   if (prior.doubles) {
@@ -177,7 +189,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         if (e.side === 'player' && active.player) {
           const mv = content.moves.get(e.moveId);
           const me = mon(active.player);
-          if (mv) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveRoleCounters({ id: mv.id, category: mv.category, ...mv.effects, sideMove: mv.effects.sideMove, field: mv.effects.field }));
+          if (mv) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveRoleCounters({ id: mv.id, category: mv.category, type: mv.type, ...mv.effects, sideMove: mv.effects.sideMove, field: mv.effects.field }));
           if (mv && me) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveCounters({ accuracy: mv.accuracy, category: mv.category, type: mv.type, flags: mv.flags, hpFrac: me.hp / Math.max(1, maxHp(content, me)), night: periodOf(run) === 'night' }));
         }
         emit(content, run, 'moveUsed', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, moveId: e.moveId } });
@@ -227,7 +239,13 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
       case 'damage': {
         if (e.side === 'enemy' && active.player) {
           const foe = mon(active.enemy);
-          if (foe) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], hitCounters(e.hpAfter + e.amount, maxHp(content, foe), e.hpAfter <= 0));
+          if (foe) {
+            bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], hitCounters(e.hpAfter + e.amount, maxHp(content, foe), e.hpAfter <= 0));
+            lastHit = { before: e.hpAfter + e.amount, max: maxHp(content, foe) };
+            // Legend Hunter: damage dealt to a Legendary, in percent of its max HP.
+            const sp = content.species.get(foe.speciesId);
+            if (sp && isLegendaryLike(sp)) addGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], [['hitLegend', Math.round((e.amount / Math.max(1, lastHit.max)) * 100)]]);
+          }
         }
         if (e.side !== 'player' || e.hpAfter <= 0) break;
         // A hit that was survived by enduring is told by that event instead.
@@ -324,7 +342,8 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         if (e.side === 'enemy' && by) {
           noteFinisher(by, i);
           const winner = run.party.find((m) => m.uid === by);
-          if (winner) noteGrowthKo(content.balance.overhaulGrowth, run.story.histories[by], { by: content.species.get(winner.speciesId)?.types ?? [], foe: content.species.get(mon(e.uid)?.speciesId ?? '')?.types ?? [], rival: Boolean(battle.rival || battle.rivalId), trainerClass: battle.trainer?.classId ?? null, solo: run.party.filter((m) => m.hp > 0).length === 1, firstTurn: prior.turn === 1 });
+          if (winner) noteGrowthKo(content.balance.overhaulGrowth, run.story.histories[by], { by: content.species.get(winner.speciesId)?.types ?? [], foe: content.species.get(mon(e.uid)?.speciesId ?? '')?.types ?? [], rival: Boolean(battle.rival || battle.rivalId), trainerClass: battle.trainer?.classId ?? null, solo: run.party.filter((m) => m.hp > 0).length === 1, firstTurn: prior.turn === 1, ...koSituation(content, run, by, winner, lastHit, firstMove?.type === 'move' && firstMove.side === 'player') });
+          (battle.growthMarks ??= []).push(`ko:${by}`);
         }
         noteNemesisFaint(run, e.side, e.uid, by);
         // Rivalry kinds (left-out 5.4): a loss may start a Bitter or One-Sided rivalry; a win may make one Mutual.
@@ -838,4 +857,20 @@ function recordRunEnded(content: Content, run: RunState): void {
 /** Debug and old saves: makes sure every party Pokémon has a history (mutates `run`). */
 export function ensureHistories(content: Content, run: RunState): void {
   for (const mon of run.party) openHistory(content, run, mon.uid, mon.speciesId, mon.uid === run.log.starterUid ? 'starter' : 'gift');
+}
+
+/** The situation of one KO for the Hunter, Sweeper, Comeback, Duelist, Glass Cannon, Scarfer and Grudge Keeper counters. */
+function koSituation(content: Content, run: RunState, by: string, winner: PokemonInstance, hit: { before: number; max: number } | null, movedFirst: boolean) {
+  const battle = run.battle!;
+  const mine = run.party.filter((m) => m.hp > 0).length;
+  const theirs = battle.enemyTeam.filter((m) => m.hp > 0).length + 1; // the foe that just fell still counts
+  return {
+    foeLow: hit !== null && hit.before < hit.max * 0.5,
+    chain: (battle.growthMarks ?? []).includes(`ko:${by}`),
+    behind: mine < theirs,
+    duel: mine === 1 && theirs === 1,
+    healthy: winner.hp >= maxHp(content, winner) * 0.8,
+    scarf: movedFirst && Object.keys(winner.held ?? {}).some((id) => id.startsWith('choice-')),
+    grudge: battle.grudgeMons?.includes(by) === true,
+  };
 }
