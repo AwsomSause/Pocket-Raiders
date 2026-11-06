@@ -1,0 +1,1 @@
+- Hub Town ambience: real birdsong recording `audio/ambience/amb-birds.mp3` (provenance in its folder) plays under the synthesised wind in the morning and afternoon (lazy-loaded, respects mute and the sound-effects volume; the morning chirps are no longer synthesised). Night and evening keep the synthesised crickets and hoots.
