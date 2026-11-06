@@ -71,7 +71,7 @@ export function settingPaths(value: unknown, prefix = ''): string[] {
  * Settings whose keys are data (item ids, rarities, side-stop kinds): the code
  * reads the whole map, so only the map's own name has to appear in the code.
  */
-const DATA_KEYED = new Set(['startingItems', 'rarityWeights', 'harderRarityWeights', 'bossRarityWeights', 'stage.sideWeights', 'typeRarity', 'comboRarity', 'candyShop[].items']);
+const DATA_KEYED = new Set(['startingItems', 'rarityWeights', 'harderRarityWeights', 'bossRarityWeights', 'stage.sideWeights', 'typeRarity', 'comboRarity', 'candyShop[].items', 'bossStrategy.byType', 'bossStrategy.byBoss', 'bossStrategy.byRivalStyle', 'bossStrategy.byEvilTeam', 'bossStrategy.strategies']);
 
 /** The settings in balance.json that no game code reads. */
 export function unusedSettings(balanceJson: unknown, sources: string[]): string[] {
