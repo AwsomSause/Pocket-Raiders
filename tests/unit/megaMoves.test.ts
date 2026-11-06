@@ -230,3 +230,20 @@ describe('batch 2-3 moves in battle', () => {
     expect(r.events.some((e) => e.type === 'bound' && e.side === 'enemy' && e.moveId === 'hexed-mirage')).toBe(true);
   });
 });
+
+describe('every signature move runs', () => {
+  it('each one can be used for a turn without breaking the battle, and drains PP', () => {
+    for (const id of Object.values(megaMovesJson.byForm)) {
+      const user = createPokemon(content, 'snorlax', 60, 'p9');
+      user.moves = [{ id, pp: content.moves.get(id)!.pp }];
+      const foe = createPokemon(content, 'bulbasaur', 60, 'e9');
+      foe.moves = [{ id: 'splash', pp: 40 }];
+      const battle = createBattle('wild', [foe], 0, user.uid);
+      const ctx: BattleContext = { content, battle, party: [user], inventory: {}, rng: new Rng(hashSeed(`all-${id}`)), captureRng: new Rng(hashSeed(`allc-${id}`)), catchMultiplier: 1 };
+      const events = resolveTurn(ctx, { kind: 'move', index: 0 }) as BattleEvent[];
+      expect(events.some((e) => e.type === 'move' && e.side === 'player' && e.moveId === id), id).toBe(true);
+      expect(user.moves[0]!.pp, id).toBe(content.moves.get(id)!.pp - 1);
+    }
+  });
+});
+

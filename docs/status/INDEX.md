@@ -308,6 +308,6 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-battle-risk.md`: Overhaul slice 18: strategy-aware boss AI and Low-to-Extreme risk labels in the battle intro.
 - `tera-full-scene.md`: full Tera cutscene like the reference, Fast Tera setting (settings v37).
 - `overhaul-chemistry.md`: Overhaul slice 24 (chemistry): team combos give camp chemistry and a scene line; also fixes the slice 20 type-case bug.
-- `mega-signature-moves.md`: Overhaul slices 27-28, Mega-only signature move slot; batch 1 (15 of 142 moves); no save version change.
+- `mega-signature-moves.md`: Overhaul slices 27-28, Mega-only signature move slot; all 142 moves; no save version change.
 - `overhaul-hyper-overdrive.md`: Overhaul slice 9: Hyper (bond/defence) and Overdrive (aggressive, costs) are separate, with activation rules and a first-time Continue explanation (profile v19).
 - `overhaul-mastery.md`: Overhaul slice 25 (part): pack flavour text for 123 moves on the move lore page.

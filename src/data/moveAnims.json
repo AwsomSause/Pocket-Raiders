@@ -19858,6 +19858,796 @@
       "flash": "#e0c068",
       "hitStopMs": 80,
       "telegraph": "strong"
+    },
+    "shadow-shuriken-storm": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "leviathan-s-wrath": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sky-lariat": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "magma-core-eruption": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "titan-horn": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "hellhound-howl": {
+      "anim": "baddy-bad",
+      "source": "type",
+      "shake": 2,
+      "flash": "#705848",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "mama-s-embrace": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "mirage-skystream": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "luster-lance": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "bunny-barrage": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "aura-cannon": {
+      "anim": "focus-blast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "aura-burst-z": {
+      "anim": "doom-desire",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "doom-desire-charging"
+    },
+    "clockwork-requiem": {
+      "anim": "doom-desire",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "doom-desire-charging"
+    },
+    "hypnotic-tentacle": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "thunder-gallop": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "twin-jaw-crush": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "meditation-strike": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "bloom-sanctuary": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "veil-pulse": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "quantum-meteor": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "overmind-breaker": {
+      "anim": "psychic-fangs",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 68,
+      "telegraph": "normal"
+    },
+    "genesis-burst": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "cyclone-razor": {
+      "anim": "hurricane",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 77,
+      "telegraph": "strong"
+    },
+    "colossus-pincer": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "regal-blaze": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "voltstrike-rampage": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "plasma-surge": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "gemstone-hex": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "dragon-maelstrom": {
+      "anim": "glaive-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "verdant-dragon-cut": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "steel-pincer-rush": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "centipede-cataclysm": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "inferno-pepper": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "brawler-s-pride": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "razorjaw-frenzy": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "steel-wing-barrage": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "shellbreak-cannon": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "soaring-talon-dive": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "stellar-core-beam": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "iron-serpent-coil": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "torrent-crash": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "draconic-mimicry": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "colossal-rampage": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "bloom-cannon": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "pitcher-plant-gorge": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "plasma-fang-blitz": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "primordial-order": {
+      "anim": "glaive-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "pixie-bloom-storm": {
+      "anim": "light-of-ruin",
+      "source": "type",
+      "shake": 3,
+      "flash": "#ee99ac",
+      "hitStopMs": 87,
+      "telegraph": "strong"
+    },
+    "phantom-dragonfire": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "shadowtide-barrage": {
+      "anim": "baddy-bad",
+      "source": "type",
+      "shake": 2,
+      "flash": "#705848",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "gale-blade-dance": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "frostbolt-elegy": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "blizzard-lancer": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "solar-flare-pollen": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "frostclaw-rush": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "molten-glacier": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "ember-wraith": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "thunderforge-lariat": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "shadow-wyrm-gale": {
+      "anim": "baddy-bad",
+      "source": "type",
+      "shake": 2,
+      "flash": "#705848",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "venomous-twin-bolt": {
+      "anim": "doom-desire",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "doom-desire-charging"
+    },
+    "gem-magma-hex": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "thorn-maw-snare": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "meadow-mind-palm": {
+      "anim": "play-rough",
+      "source": "type",
+      "shake": 3,
+      "flash": "#ee99ac",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "toxic-caldera": {
+      "anim": "belch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "spectral-tide-lure": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "webbed-meteor-crash": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "overgrown-ruin-smash": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "psycho-bunny-rush": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "umbra-quake-pulse": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "spectral-spoon-surge": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "frozen-grave-hex": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "glacier-ironbind": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "zenith-wyvern-drive": {
+      "anim": "glaive-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "spore-shroud-burst": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "bubble-fairy-crash": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "prism-scale-gale": {
+      "anim": "bug-buzz",
+      "source": "type",
+      "shake": 2,
+      "flash": "#a8b820",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "pillar-demolisher": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "eclipse-dread": {
+      "anim": "baddy-bad",
+      "source": "type",
+      "shake": 2,
+      "flash": "#705848",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "triple-drill-burrow": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "thunderfist-rampage": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "gigadrill-breaker": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "abyssal-jaw": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "desert-mirage-dive": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "boulder-avalanche": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "cottonstorm-dance": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "ancient-scythe-cleave": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "foundry-cannon": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "wildgrowth-aegis": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "serene-tide-gloria": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "spiral-shell-cannon": {
+      "anim": "meteor-beam",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 80,
+      "telegraph": "strong",
+      "chargeAnim": "meteor-beam-charging"
+    },
+    "whirlpool-hook": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "emberfang-roar": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "tempest-fan-slash": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "slumber-avalanche": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "cinder-shell-slam": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "eruption-ember-slide": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "fairy-cotton-gust": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
     }
   },
   "commonPack": {
