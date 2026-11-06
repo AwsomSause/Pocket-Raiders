@@ -3,9 +3,9 @@
 
 import { catchProbability } from '../capture';
 import { shinyMeterText } from '../wildLuck';
-import { TYPE_NAMES, type Content } from '../contentSchema';
+import { TYPE_NAMES, type Content, type TypeName } from '../contentSchema';
 import { typeEffectiveness } from './damage';
-import { calcStats, getSpecies } from '../pokemon';
+import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { currentEnemy, type PokemonInstance, type RunState, type SideEffects, type Stages } from '../state';
 import { emotionOf } from '../story/emotions';
 import { STANCE_INFO, autoProfile, stanceOf } from './autoBattle';
@@ -15,6 +15,44 @@ export interface Conditions {
   field: string[];
   yours: string[];
   foe: string[];
+  /** Overhaul slice 8: how each of your moves fares against the foe's type (empty while the foe is hidden). */
+  moves: string[];
+}
+
+/** What the player has seen the foe show this battle (an ability that triggered, a held item that acted). Nothing else is ever told. */
+export interface FoeReveals {
+  ability?: string;
+  items?: string[];
+}
+
+const TRANSFORM_NAMES: Record<string, string> = { mega: 'Mega Evolved', primal: 'Primal Reversion', gigantamax: 'Gigantamax', tera: 'Terastallized', zmove: 'Z-Move used', dynamax: 'Dynamaxed', ability: 'Ability form' };
+const KIND_NAMES: Record<string, string> = { mega: 'Mega Evolution', primal: 'Primal Reversion', gigantamax: 'Gigantamax', tera: 'Terastallization', zmove: 'Z-Move', dynamax: 'Dynamax', ability: 'Ability form' };
+
+/** The foe's identity is hidden until it has moved (Blindfold Bout, Misdirection) or while an Illusion holds. */
+export function foeIdentityHidden(battle: NonNullable<RunState['battle']>): boolean {
+  return Boolean((battle.eventRule?.hiddenFoe || battle.eventRule?.decoyFoe) && !battle.enemyVolatile?.lastMove);
+}
+
+/** Types a Pokémon has right now: its Tera type once Terastallized, plus any extra type a boss carries. */
+function currentTypes(content: Content, battle: NonNullable<RunState['battle']>, mon: PokemonInstance): TypeName[] {
+  const tera = battle.transform.teraTypes[mon.uid];
+  const base = tera ? [tera] : [...getSpecies(content, mon.speciesId).types];
+  const extra = battle.transform.bonusTypes[mon.uid];
+  return extra && !base.includes(extra) ? [...base, extra] : base;
+}
+
+function transformLines(battle: NonNullable<RunState['battle']>, mon: PokemonInstance, side: 'player' | 'enemy'): string[] {
+  const out: string[] = [];
+  const form = battle.transform.forms[mon.uid];
+  const tera = battle.transform.teraTypes[mon.uid];
+  if (form && form.kind !== 'tera' && form.kind !== 'dynamax') out.push(TRANSFORM_NAMES[form.kind] ?? form.kind);
+  if (tera) out.push(`Terastallized: ${cap(tera)}`);
+  const dyn = battle.transform.dynamax[mon.uid];
+  if (dyn !== undefined) out.push(`Dynamaxed: ${dyn} turn${dyn === 1 ? '' : 's'} left`);
+  if (battle.transform.mechanics[mon.uid] === 'zmove') out.push('Z-Move used');
+  const used = battle.transform.used[side];
+  if (used.length) out.push(`${side === 'player' ? 'You have used' : 'Foe has used'}: ${[...new Set(used)].map((k) => KIND_NAMES[k] ?? k).join(', ')} (once per battle)`);
+  return out;
 }
 
 const STAT: Record<string, string> = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe', acc: 'Acc', eva: 'Eva' };
@@ -42,9 +80,9 @@ function sideLine(side: SideEffects, who: string): string | null {
 
 const statusWord = (m: PokemonInstance) => (m.status ? ({ brn: 'Burned', psn: 'Poisoned', par: 'Paralyzed', slp: 'Asleep', frz: 'Frozen' } as Record<string, string>)[m.status.id] ?? m.status.id : null);
 
-export function battleConditions(content: Content, run: RunState): Conditions {
+export function battleConditions(content: Content, run: RunState, reveals: FoeReveals = {}): Conditions {
   const battle = run.battle;
-  const out: Conditions = { field: [], yours: [], foe: [] };
+  const out: Conditions = { field: [], yours: [], foe: [], moves: [] };
   if (!battle) return out;
   const f = out.field;
   if (battle.weather) f.push(`Weather: ${cap(battle.weather.id)}${battle.weather.turns ? ` (${battle.weather.turns} turns)` : ''}`);
@@ -73,6 +111,11 @@ export function battleConditions(content: Content, run: RunState): Conditions {
     out.yours.push(`${species.name} Lv.${mon.level}${mon.nature ? ` · ${cap(mon.nature)}` : ''}`);
     out.yours.push(`Mood: ${emotion ? emotion.name : 'steady'} · ${profile.style}`);
     out.yours.push(`Stance: ${STANCE_INFO[stance].name}${taught ? ' (taught)' : ''}`);
+    const ownAbility = abilityOf(content, mon);
+    if (ownAbility) out.yours.push(`Ability: ${content.abilities.get(ownAbility)?.name ?? ownAbility}`);
+    out.yours.push(...transformLines(battle, mon, 'player'));
+    const hyperMove = mon.moves.find((m) => m.hyper);
+    if (hyperMove) out.yours.push(`Hyper move ready: ${content.moves.get(hyperMove.id)?.name ?? hyperMove.id}`);
     // S157 Focus and S158 Ability Awakening.
     const awake = awakeningLevel(content, mon.abilityUses);
     out.yours.push(`Focus ${focusOf(mon)}/100${awake > 0 ? ` · Ability Awakening ${awake}` : ''}`);
@@ -95,10 +138,29 @@ export function battleConditions(content: Content, run: RunState): Conditions {
   if (battle.playerVolatile?.bleed) out.yours.push(`Bleeding x${battle.playerVolatile.bleed}`);
   if (battle.playerVolatile?.curseTag) out.yours.push('Curse-tagged: Ghost and Dark moves hit harder');
   const foe = currentEnemy(battle);
-  const foeSpecies = getSpecies(content, foe.speciesId);
-  out.foe.push(`${foeSpecies.name} Lv.${foe.level}`);
-  out.foe.push(`Type: ${foeSpecies.types.map(cap).join(' / ')}`);
-  if (battle.kind === 'wild') {
+  // What the player can see: an Illusion shows the species it copies, and a hidden foe shows nothing until it has moved.
+  const hidden = foeIdentityHidden(battle);
+  const seen = battle.enemyVolatile?.illusion ? { ...foe, speciesId: battle.enemyVolatile.illusion } : foe;
+  const foeSpecies = getSpecies(content, seen.speciesId);
+  const foeTypes = battle.enemyVolatile?.illusion ? [...foeSpecies.types] : currentTypes(content, battle, foe);
+  if (hidden) out.foe.push('???  Its identity stays hidden until it moves.');
+  else {
+    out.foe.push(`${foeSpecies.name} Lv.${foe.level}`);
+    out.foe.push(`Type: ${foeTypes.map(cap).join(' / ')}`);
+    out.foe.push(...transformLines(battle, foe, 'enemy'));
+    out.foe.push(`Ability: ${reveals.ability ? content.abilities.get(reveals.ability)?.name ?? reveals.ability : 'not shown yet'}`);
+    if (reveals.items?.length) out.foe.push(`Held item seen: ${reveals.items.map((id) => content.catalog.get(id)?.name ?? id).join(', ')}`);
+    // Overhaul slice 8: each of your moves against what you can see.
+    const mon0 = run.party[battle.activeIndex];
+    for (const slot of mon0?.moves ?? []) {
+      const move = content.moves.get(slot.id);
+      if (!move) continue;
+      if (move.category === 'status') continue;
+      const m = typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes);
+      out.moves.push(`${move.name}: ${m === 0 ? 'no effect' : m > 1 ? `super effective ×${m}` : m < 1 ? `not very effective ×${m}` : 'normal damage'}${slot.pp <= 0 ? ' (no PP)' : ''}`);
+    }
+  }
+  if (battle.kind === 'wild' && !hidden) {
     // Weakened capture bonus: show the numbers (a plain ball; HP and status both raise the odds).
     const maxHp = calcStats(content, foe).hp;
     const base = { maxHp, catchRate: foeSpecies.catchRate, ballMultiplier: 1, finalMultiplier: 1 };
@@ -106,7 +168,7 @@ export function battleConditions(content: Content, run: RunState): Conditions {
     const now = catchProbability({ ...base, hp: foe.hp, statusMultiplier: foe.status ? content.ruleset.catchStatusMultipliers[foe.status.id] ?? 1 : 1 });
     out.foe.push(`Catch odds (plain ball): ${Math.round(now * 100)}% now, ${Math.round(full * 100)}% at full health${foe.status ? ' (status helps)' : ''}`);
   }
-  if (battle.scanned === 'ok') {
+  if (battle.scanned === 'ok' && !hidden) {
     const weak = TYPE_NAMES.filter((t) => typeEffectiveness(content.typeChart, t, foeSpecies.types) > 1);
     out.foe.push(`Scanned: weak to ${weak.map(cap).join(', ') || 'nothing special'}`);
   } else if (battle.scanned === 'fail') out.foe.push('Scan unclear');
