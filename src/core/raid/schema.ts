@@ -21,7 +21,8 @@ export const RaidPhaseSchema = z.object({
   cleanse: z.boolean().optional(),
   /** S392 Raid Shields by Phase: a fresh shield worth this share of the boss's max HP rises when the phase starts. */
   shield: z.number().min(0.05).max(0.5).optional(),
-});
+  // Strict on purpose: a phase can raise stats, set weather or add a shield, but never heal the boss or hide its stats.
+}).strict();
 export type RaidPhase = z.infer<typeof RaidPhaseSchema>;
 
 /** Field rules of a raid (Raid Battles pack): all optional. */
