@@ -9,6 +9,7 @@ import { createPokemon } from '../../src/core/pokemon';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { MoveSlotSchema } from '../../src/core/state';
 import megaMovesJson from '../../src/data/megaMoves.json';
+import { movePower } from '../../src/core/powerBudget';
 import { content } from './helpers';
 
 const ROSTER = readFileSync(join(import.meta.dirname, '..', '..', 'tools', 'data', 'mega-roster.tsv'), 'utf8')
@@ -51,6 +52,10 @@ describe('Mega signature move data', () => {
       const row = ROSTER.find((r) => r[1] === move.name)!;
       expect(move.type).toBe(row[2]);
     }
+  });
+
+  it('every signature move is under the content gate move cap (slice 4 power budget)', () => {
+    for (const id of Object.values(megaMovesJson.byForm)) expect(movePower(content.moves.get(id)!), id).toBeLessThanOrEqual(content.balance.powerBudget.moveCap);
   });
 
   it('never shows up in the random-move rules or the signature tables of other moves', () => {
@@ -184,5 +189,44 @@ describe('batch 1 moves in battle', () => {
   });
   it('is deterministic: same seed, same events', () => {
     expect(JSON.stringify(fight('blaziken-mega', 'blazing-overdrive', 's1').events)).toBe(JSON.stringify(fight('blaziken-mega', 'blazing-overdrive', 's1').events));
+  });
+});
+
+describe('batch 2-3 moves in battle', () => {
+  /** A Pokémon carrying the move as an ordinary slot (the engine does not care how it got it), fought on new seeds until it lands. */
+  function carry(species: string, moveId: string, hp?: number, foeSpecies = 'chansey') {
+    for (let i = 0; i < 8; i++) {
+      const user = createPokemon(content, species, 60, 'p9');
+      user.moves = [{ id: moveId, pp: content.moves.get(moveId)!.pp }];
+      if (hp) user.hp = hp;
+      const foe = createPokemon(content, foeSpecies, 60, 'e9');
+      foe.moves = [{ id: 'splash', pp: 40 }];
+      const battle = createBattle('wild', [foe], 0, user.uid);
+      const ctx: BattleContext = { content, battle, party: [user], inventory: {}, rng: new Rng(hashSeed(`c${i}`)), captureRng: new Rng(hashSeed(`cc${i}`)), catchMultiplier: 1 };
+      const events = resolveTurn(ctx, { kind: 'move', index: 0 }) as BattleEvent[];
+      if (damageTo(events, 'enemy').length > 0) return { user, battle, events };
+    }
+    throw new Error(`${moveId} never landed`);
+  }
+  it('Zenith Inferno sets Sun after it lands', () => {
+    expect(carry('snorlax', 'zenith-inferno').battle.weather?.id).toBe('sun');
+  });
+  it('Moonlit Miracle heals its user by part of the damage', () => {
+    const r = carry('snorlax', 'moonlit-miracle', 20);
+    expect(r.user.hp).toBeGreaterThan(20);
+  });
+  it('Celestial Drake Rush raises Attack and lowers Defense of its user', () => {
+    const r = carry('snorlax', 'celestial-drake-rush');
+    expect(r.events.some((e) => e.type === 'stat' && e.side === 'player' && e.stat === 'atk' && e.change > 0)).toBe(true);
+    expect(r.events.some((e) => e.type === 'stat' && e.side === 'player' && e.stat === 'def' && e.change < 0)).toBe(true);
+  });
+  it('Sandstorm Fang sets a sandstorm and Crystal Toxin Bloom lays Toxic Spikes on the foe side', () => {
+    expect(carry('snorlax', 'sandstorm-fang').battle.weather?.id).toBe('sand');
+    const r = carry('snorlax', 'crystal-toxin-bloom');
+    expect(JSON.stringify(r.battle.sideEffects.enemy)).toMatch(/toxic/i);
+  });
+  it('Hexed Mirage traps its target', () => {
+    const r = carry('snorlax', 'hexed-mirage', undefined, 'bulbasaur');
+    expect(r.events.some((e) => e.type === 'bound' && e.side === 'enemy' && e.moveId === 'hexed-mirage')).toBe(true);
   });
 });

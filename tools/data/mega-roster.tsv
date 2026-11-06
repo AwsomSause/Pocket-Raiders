@@ -25,7 +25,7 @@ crabominable-mega|Glacial Haymaker|ice|P|100|90|8|20% lowers target Spe; lowers 
 darkrai-mega|Nightmare Eclipse|dark|S|95|95|5|Double damage to a sleeping target|2
 delphox-mega|Psyflame Cascade|psychic|S|95|100|8|20% burn|2
 diancie-mega|Diamond Tempest|rock|S|95|95|5|20% lowers target SpD|2
-dragalge-mega|Venom Wyrmwave|poison|S|90|100|10|30% badly poison|2
+dragalge-mega|Venom Wyrmwave|poison|S|90|100|10|30% poison|2
 dragonite-mega|Celestial Drake Rush|dragon|P|100|100|5|Raises user Atk 1; lowers user Def 1|2
 drampa-mega|Elder Gale|dragon|S|95|100|10|20% lowers target SpA|2
 eelektross-mega|Voltcoil Crush|electric|P|95|100|10|30% paralyze|2
@@ -75,7 +75,7 @@ sableye-mega|Gemstone Hex|ghost|S|85|100|10|Lowers target Atk and SpA 1|5
 salamence-mega|Dragon Maelstrom|dragon|P|100|100|5|Raises user Atk 1; lowers user Def 1|5
 sceptile-mega|Verdant Dragon Cut|grass|P|95|100|8|High crit; 20% raises user Spe|5
 scizor-mega|Steel Pincer Rush|bug|P|90|100|10|Hits first (+1); 20% lowers target Def|6
-scolipede-mega|Centipede Cataclysm|bug|P|95|100|10|30% badly poison|6
+scolipede-mega|Centipede Cataclysm|bug|P|95|100|10|30% poison|6
 scovillain-mega|Inferno Pepper|fire|S|95|100|10|30% burn; sets Sun 3 turns|6
 scrafty-mega|Brawler's Pride|dark|P|95|100|10|Raises user Def 1|6
 sharpedo-mega|Razorjaw Frenzy|water|P|100|95|8|Bite move; 20% flinch|6
@@ -107,7 +107,7 @@ girafarig-delta-mega|Venomous Twin Bolt|steel|S|105|100|10|Hits 2 times; 30% poi
 sableye-delta-mega|Gem Magma Hex|fire|P|105|95|10|30% burn; lowers user Def 1|8
 mawile-delta-mega|Thorn Maw Snare|grass|P|105|95|10|Hits 2 times; 30% lowers target Def|8
 medicham-delta-mega|Meadow Mind Palm|fairy|P|105|100|10|Raises user Atk 1|8
-camerupt-delta-mega|Toxic Caldera|poison|S|95|100|10|30% badly poison|8
+camerupt-delta-mega|Toxic Caldera|poison|S|95|100|10|30% poison|8
 milotic-delta-mega|Spectral Tide Lure|ghost|S|100|100|8|Heals user 1/2 of damage; lowers user SpD 1|8
 metagross-delta-spider-mega|Webbed Meteor Crash|ground|P|100|95|5|Traps target; user takes 1/4 recoil|8
 metagross-delta-ruin-mega|Overgrown Ruin Smash|grass|P|100|95|5|20% flinch; lowers user Spe 1|8

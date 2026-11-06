@@ -11,11 +11,11 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BUILT_BATCH = Number(process.env.MEGA_BATCH ?? 1);
+const BUILT_BATCH = Number(process.env.MEGA_BATCH ?? 3);
 
 const root = join(import.meta.dirname, '..');
 const STATS: Record<string, string> = { Atk: 'atk', Def: 'def', SpA: 'spa', SpD: 'spd', Spe: 'spe' };
-const STATUS: Record<string, string> = { burn: 'brn', paralyze: 'par', poison: 'psn', 'badly poison': 'tox', freeze: 'frz' };
+const STATUS: Record<string, string> = { burn: 'brn', paralyze: 'par', poison: 'psn', freeze: 'frz' };
 const WEATHER: Record<string, string> = { snow: 'snow', sun: 'sun', rain: 'rain', sandstorm: 'sand' };
 const TERRAIN: Record<string, string> = { grassy: 'grassy', electric: 'electric' };
 /** Physical moves that are thrown or dropped rather than touched: no contact flag. */
@@ -40,7 +40,7 @@ function build(row: Row): Record<string, unknown> {
   for (const raw of row.text.split(';').map((c) => c.trim()).filter(Boolean)) {
     const c = raw.toLowerCase().replace(/ \d+ turns$/, '');
     let m: RegExpMatchArray | null;
-    if ((m = /^(\d+)% (burn|paralyze|poison|badly poison|freeze)$/.exec(c))) effects.status = { id: STATUS[m[2]!], chance: Number(m[1]) };
+    if ((m = /^(\d+)% (burn|paralyze|poison|freeze)$/.exec(c))) effects.status = { id: STATUS[m[2]!], chance: Number(m[1]) };
     else if ((m = /^(\d+)% confuse$/.exec(c))) effects.confuse = { chance: Number(m[1]) };
     else if ((m = /^(\d+)% flinch$/.exec(c))) effects.flinchChance = Number(m[1]);
     else if ((m = /^(\d+)% lowers target (\w+)$/.exec(c.replace(/(spa|spd|spe|atk|def)/, (s) => s[0]!.toUpperCase() + s.slice(1).replace('pa', 'pA').replace('pd', 'pD'))))) statChanges.push({ stat: STATS[m[2]!], stages: -1, target: 'enemy', chance: Number(m[1]) });
