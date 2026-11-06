@@ -1701,6 +1701,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     claimArea(run);
     const setup = wildBattleSetup(content, run, mods);
+    if (setup.weather) run.battle.weather = { id: setup.weather, turns: 999 };
     if (setup.drop) run.itemCounters = { ...run.itemCounters, 'pinap-drop': 1 };
     if (setup.freeTurns > 0) run.battle.mapItems = { freeTurns: setup.freeTurns, thrown: 0 };
     if (setup.foeSpeed !== 0) run.battle.enemyStages.spe = Math.max(-6, Math.min(6, run.battle.enemyStages.spe + setup.foeSpeed));
