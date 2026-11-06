@@ -317,3 +317,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-aftermath.md`: Overhaul slice 26 (aftermath): beating a boss leaves one voice-based line in the run, shown in the won-run epilogue. No save change.
 - `overhaul-growth-paths.md`: Overhaul slice 25 (growth paths): 34 of the 106 pack paths play (Last Stand, Striker, 18 type paths, KO-counter and move/hit-counter paths), small damage or accuracy edges. No save bump.
 - `overhaul-rival-roles.md`: Overhaul slice 22 (rival roles): major keeps full counter-picks, the additional rival gets at most one, friendly rivals spar with none. Run-only, no save change.
+- `trainer-sprite-upgrade.md`: placeholder trainer and grunt sprites swapped for proper ones
