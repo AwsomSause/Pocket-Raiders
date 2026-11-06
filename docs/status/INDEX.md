@@ -319,3 +319,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-rival-roles.md`: Overhaul slice 22 (rival roles): major keeps full counter-picks, the additional rival gets at most one, friendly rivals spar with none. Run-only, no save change.
 - `trainer-sprite-upgrade.md`: placeholder trainer and grunt sprites swapped for proper ones
 - `overhaul-final-checks.md`: Overhaul slices 29-30: 100-run simulation (`npm run sim:overhaul`) vs the pre-Overhaul game, and the THE OVERHAUL.md §18 acceptance checklist with test evidence.
+- `player-art-p1.md`: player trainer art registry and strips (Overhaul P1).

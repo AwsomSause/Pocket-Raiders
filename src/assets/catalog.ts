@@ -6,7 +6,9 @@
 // which files are really present and writes public/assets/manifest.json, and
 // the game uses placeholders for anything missing.
 //
-// This file must stay free of runtime imports so the Node tools can use it.
+// This file may only import pure-data modules (./playerArt) so the Node tools can use it.
+
+import { allPlayerAnims, playerAnimBase, playerAnimId } from './playerArt.ts';
 
 /** Plaza walk sheets copied from Pokemon Memories (tools/build-plaza-map.py); core/presentation/plazaStyles.ts places them. */
 
@@ -258,6 +260,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
   // Animated boss sprites and the throwing back sprites (Pokémon Memories repo), loaded when a battle needs them.
   ...BOSS_ANIMATED.map((n): AssetEntry => ({ ...atlas(`boss.anim.${n}`, 'trainer', `images/bosses/anim/${n}`), lazy: true })),
   ...BOSS_BACKS.map((n): AssetEntry => ({ ...atlas(`boss.back.${n}`, 'trainer', `images/bosses/back/${n}`), lazy: true })),
+  // Player trainer art (Story Overhaul P1, src/assets/playerArt.ts): one strip per animation, loaded when a scene needs it.
+  ...allPlayerAnims().map(([look, anim]): AssetEntry => ({ ...atlas(playerAnimId(look, anim), 'trainer', playerAnimBase(look, anim)), lazy: true })),
   // VS screens (Pokémon Memories repo): one card per boss that has one, the HGSS Kanto leaders' own bars, the shared art.
   ...Object.values(VS_CARDS).flat().map((n): AssetEntry => ({ id: `vs.card.${n}`, kind: 'image', category: 'trainer', path: `images/packs/memories/vs/cards/${n}.png`, lazy: true })),
   ...VS_BARS.map((n): AssetEntry => ({ id: `vs.bar.${n}`, kind: 'image', category: 'ui', path: `images/packs/memories/vs/bars/${n}.png`, lazy: true })),

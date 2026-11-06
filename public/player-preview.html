@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8"><title>Player art preview</title>
+<style>body{font:14px sans-serif;background:#1c1f26;color:#eee;margin:16px}h2{margin:20px 0 8px}.g{display:flex;flex-wrap:wrap;gap:12px}.c{background:#2b3040;padding:8px;border-radius:6px;text-align:center}canvas{image-rendering:pixelated;background:#8a93a6;display:block;margin:0 auto 4px}</style>
+<h1>Player trainer animations</h1><p>Every animation from <code>src/assets/playerArt.ts</code> plays in a loop. Open at <code>player-preview.html</code>.</p>
+<div id="out"></div>
+<script>
+const REG = {
+  a: {throw:9,celebrate:9,command:9,disappointment:9,hit:9,recall:9,back_idle:1,angry:2,pissed:2,sad:2,looking_up:2,item_offer:4,petting:2,excited:1,happy:1,hunger:1,laughing:1,walk_mid:1,nervous:1,read_letter:1,shock:1,disappointed:1,flinch:1,portrait:1,pidgey:9},
+  b: {throw:9,portrait:1}
+};
+const out = document.getElementById('out');
+for (const look of Object.keys(REG)) {
+  out.insertAdjacentHTML('beforeend', `<h2>Look ${look.toUpperCase()}${look === 'b' ? ' (stub, COMING SOON)' : ''}</h2><div class="g" id="g_${look}"></div>`);
+  for (const [anim, n] of Object.entries(REG[look])) {
+    const img = new Image();
+    img.onload = () => {
+      const w = img.width / n, h = img.height;
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.style.width = w * 1.5 + 'px';
+      const ctx = cv.getContext('2d'); let i = 0;
+      const draw = () => { ctx.clearRect(0, 0, w, h); ctx.drawImage(img, i * w, 0, w, h, 0, 0, w, h); i = (i + 1) % n; };
+      draw(); if (n > 1) setInterval(draw, 120);
+      const d = document.createElement('div'); d.className = 'c'; d.append(cv, `${anim} (${n})`);
+      document.getElementById('g_' + look).append(d);
+    };
+    img.src = `assets/images/packs/mc/look_${look}/${anim}.png`;
+  }
+}
+</script>
