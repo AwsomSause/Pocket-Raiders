@@ -21,7 +21,11 @@ export default defineConfig(({ command }) => ({
     target: 'es2022',
     chunkSizeWarningLimit: 2000,
     // Hide rolldown's plugin-timing printout: build noise that every check and e2e run repeats.
-    rolldownOptions: { checks: { pluginTimings: false } },
+    rolldownOptions: {
+      checks: { pluginTimings: false },
+      // Phaser in its own file: it never changes between deploys, so browsers keep it cached while the game code and data update.
+      output: { codeSplitting: { groups: [{ name: 'phaser', test: /node_modules[\\/]phaser/ }] } },
+    },
   },
   test: {
     include: ['tests/unit/**/*.test.ts'],
