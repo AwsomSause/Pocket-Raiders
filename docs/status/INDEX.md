@@ -234,3 +234,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `growth-paired-moves.md`: Growth slice 4: Bond Level 2+ pairs get a named paired-move bonus on the faint hand-over.
 - `lures-weather-spawns.md`: Lure Crafting S223, Lure Towers S237, Weather-Locked Spawns S234 (`core/spawnLocks.ts`, `crafting.json` lure recipes).
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
+- `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.

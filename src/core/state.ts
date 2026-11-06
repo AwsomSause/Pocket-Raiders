@@ -1288,7 +1288,9 @@ export const RunStateSchema = z.object({
     discount: z.object({ percent: z.number().int(), stage: z.number().int() }).nullable().default(null),
     /** Battle Frontier Points won this run and not yet spent (run v36). */
     frontierPoints: z.number().int().min(0).default(0),
-  }).default(() => ({ stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0 })),
+    /** Contest conditions per Pokémon uid: Cool, Beauty, Cute, Smart, Tough (S487), raised by Poffins (run v37). */
+    contest: z.record(z.string(), z.array(z.number().int().min(0)).length(5)).default({}),
+  }).default(() => ({ stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0, contest: {} })),
   expeditions: z.object({ completed: z.array(z.string()), failed: z.array(z.string()), unlocked: z.array(z.string()), last: z.array(z.string()).default([]) }).default(() => ({ completed: [], failed: [], unlocked: [], last: [] })),
   /** Legendary world events (core/legendary): gates placed per region, and what happened with each event. Optional: older runs have none. */
   legendary: LegendaryRecordSchema.optional(),
