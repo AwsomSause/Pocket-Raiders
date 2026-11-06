@@ -1387,6 +1387,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('acroBike') }),
   /** Once per stage, from the Items menu: ride past the next wild Pokémon and still get its reward (Mach Bike). */
   z.object({ perk: z.literal('machBike') }),
+  /** From the Items menu, one trip (S367 Airship Pass): fly to any stop two columns ahead, over the next column. */
+  z.object({ perk: z.literal('airship') }),
   /** At the next shop, turns into this run-long item, or into `refund` money if the player already has it (Bike Voucher). */
   z.object({ perk: z.literal('voucher'), item: z.string(), refund: z.number().int().min(0) }),
   /** From the Items menu: fight a trainer you beat on this stage again, for double money (VS Seeker). */

@@ -227,4 +227,5 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)
 - `growth-xp-share.md`: Growth slice 2: Camp "Experience share" (Even/Focus/Catch-up) and capped XP paying Hyper Potions.
 - wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)
+- [meta-hub-9-remaining](meta-hub-9-remaining.md): Airship, market swings, rival sponsors, Dream Tower, garden visitors, lab, cards, notice filters, orchard, NPC schedules, gossip, teleporters.
 - `presentation-ash.md`: ash particles in Fire arenas (S251).

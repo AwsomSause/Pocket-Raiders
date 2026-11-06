@@ -76,7 +76,7 @@ const Action = z.object({
   rewards: GradeRewards.optional(),
   options: z.array(Option).default([]),
   /** Options built from the profile instead of the list: lastTeam, history, trophies, relics, pets, items. */
-  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial']).optional(),
+  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial', 'regions', 'visitors', 'labSpecies']).optional(),
   /** What a dynamic option pays; "{name}" in `say` is the option's name. */
   template: Option.optional(),
   goods: z.array(Good).default([]),
@@ -132,7 +132,7 @@ export const TownDataSchema = z.object({
   pools: z.object({ cries: z.array(z.string()).min(4), memory: z.array(z.string()).min(4) }),
   /** Fan Club (S358): followers from your history unlock tiers; each tier adds starting money to every run. */
   /** Sponsor Deals (S359): signed before a run; the credits are paid at run end when the goal was met. */
-  sponsors: z.array(z.object({ id: z.string(), goal: z.object({ victory: z.boolean().optional(), regions: Count.optional(), badges: Count.optional() }), credits: Count })),
+  sponsors: z.array(z.object({ id: z.string(), goal: z.object({ victory: z.boolean().optional(), regions: Count.optional(), badges: Count.optional(), outpaceRegions: z.boolean().optional(), outpaceBadges: z.boolean().optional() }), credits: Count, /** Rival Sponsors (S360): the faction backing the rival team you must outpace. */ rival: z.string().optional() })),
   /** Town Economy (S347): a share off every credit price in the town's shops per Fan Club tier reached. */
   economy: z.object({ discountPerTier: z.number().min(0).max(0.25) }),
   fanClub: z.array(z.object({ fans: Count, money: Count, label: z.string() })),

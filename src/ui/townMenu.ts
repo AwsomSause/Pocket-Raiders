@@ -4,7 +4,7 @@
 import type Phaser from 'phaser';
 import { contractBoard, contractDone } from '../core/contracts';
 import { promptById } from '../core/interaction/prompt';
-import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
+import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, townDiscount, noticeBoard, NOTICE_FILTERS, tradingCards, type NoticeFilter, marketSwing, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
 import { services } from '../game/services';
 import { pokemonAssetIds } from '../assets/catalog';
 import { playCry, playMusicLazy } from './audio';
@@ -257,14 +257,19 @@ function gacha(host: TownHost, a: TownAction, done: (m: string) => void): void {
   if (motion() === 'off') { taps = 2; tap(); }
 }
 
-function daily(host: TownHost, a: TownAction, done: (m: string) => void, again: () => void): void {
+function daily(host: TownHost, a: TownAction, done: (m: string) => void, again: () => void, filter: NoticeFilter = 'all'): void {
   const { session } = services();
   if (a.view !== 'quests') return call(a, {}, done);
   const t = townOf(session.profile);
   const today = todayKey();
-  const quests = todaysQuests(t, today);
-  choose(host, 'Daily quests', quests.map((q) => ({ label: q.text, desc: t.daily[`claim:${q.id}`] === today ? 'Claimed' : t.daily[`used:${q.action}`] === today ? 'Done: press to claim' : `Do it in ${TOWN.buildings.find((b) => b.actions.some((x) => x.id === q.action))?.name ?? 'town'}` })), (i) => call(a, { choice: quests[i]!.id }, done), again);
+  const notices = noticeBoard(t, today, todaysQuests(t, today), filter);
+  const where = (action: string) => TOWN.buildings.find((b) => b.actions.some((x) => x.id === action))?.name ?? 'town';
+  // Notice filters (S478): the first row cycles All, Ready to claim, Open, Done; the list is sorted by priority.
+  const items = [{ label: `Filter: ${NOTICE_LABEL[filter]}`, desc: 'Press to change. Ready-to-claim notices come first.' }, ...notices.map((n) => ({ label: n.text, desc: n.state === 'done' ? 'Claimed' : n.state === 'claim' ? 'Done: press to claim' : `Do it in ${where(n.action)}` }))];
+  choose(host, 'Daily quests', items, (i) => (i === 0 ? daily(host, a, done, again, NOTICE_FILTERS[(NOTICE_FILTERS.indexOf(filter) + 1) % NOTICE_FILTERS.length]!) : call(a, { choice: notices[i - 1]!.id }, done)), again);
 }
+
+const NOTICE_LABEL: Record<NoticeFilter, string> = { all: 'All', claim: 'Ready to claim', open: 'Open', done: 'Claimed' };
 
 function place(host: TownHost, a: TownAction, done: (m: string) => void, again: () => void): void {
   const { session } = services();
@@ -339,6 +344,20 @@ function view(host: TownHost, a: TownAction, done: (m: string) => void, again: (
     case 'fans': {
       const f = fanClub(p);
       return show(host, `Fan Club · ${f.fans} followers · +₽${f.money} each run`, f.tiers.map((t) => ({ label: `${t.label} (${t.need} fans)`, desc: `${t.reached ? 'Reached' : 'Locked'} · +₽${t.money} starting money` })), again);
+    }
+    case 'cards': {
+      const cards = tradingCards(content, p);
+      const rank = { holo: 0, rare: 1, uncommon: 2, common: 3 } as const;
+      const best = [...cards].sort((x, y) => rank[x.rarity] - rank[y.rarity] || x.name.localeCompare(y.name));
+      const count = (r: string) => cards.filter((c) => c.rarity === r).length;
+      return show(host, `Trading Cards · ${cards.length} cards`, [
+        { label: `Holo ${count('holo')} · Rare ${count('rare')} · Uncommon ${count('uncommon')} · Common ${count('common')}`, desc: `${cards.filter((c) => c.kind === 'trainer').length} Trainer cards, ${cards.filter((c) => c.kind === 'species').length} species cards` },
+        ...best.slice(0, 24).map((c) => ({ label: `${c.name}${c.rarity === 'holo' ? ' ✦' : ''}`, desc: `${c.kind === 'trainer' ? 'Trainer' : 'Species'} card · ${c.rarity}` })),
+      ], again);
+    }
+    case 'market': {
+      const m = marketSwing(p);
+      return show(host, 'Market board', [{ label: `Town prices ${m.pct > 0 ? '+' : ''}${Math.round(m.pct * 100)}% today`, desc: m.why }, { label: `Fan Club discount -${Math.round(townDiscount(p) * 100)}%`, desc: 'Earned from your followers.' }], again);
     }
     case 'ledger': return openLedger(host, 'all', 'newest', again);
     case 'roster': return show(host, 'Townsfolk', rosterOpen(p).map((n) => ({ label: n.open ? `${n.name} · ${n.role}` : '???', desc: n.open ? `"${n.line}"` : `Moves in at ${n.need} achievements` })), again);

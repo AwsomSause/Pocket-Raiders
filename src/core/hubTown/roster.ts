@@ -16,6 +16,27 @@ const STARTER_CROWD = ['pikachu', 'eevee', 'bulbasaur', 'charmander', 'squirtle'
 const TRAINER_ZONES = ['plaza', 'plaza', 'plaza', 'north', 'north', 'west', 'east', 'south', 'south', 'lawn', 'meadow'];
 const MON_ZONES = ['plaza', 'plaza', 'sanctuary', 'sanctuary', 'sanctuary', 'lawn', 'meadow', 'meadow', 'west', 'east', 'north', 'south'];
 
+/**
+ * NPC schedules (S348): where townsfolk are by time of day (the hour of the crowd window). Mornings the trainers
+ * work the north and west streets, afternoons they gather at the plaza and the east market, evenings they head
+ * south, and at night they drift to the lawn and the plaza. Pure data keyed by the window, never gameplay RNG.
+ */
+export const SCHEDULE: { from: number; label: string; trainers: string[]; pokemon: string[] }[] = [
+  { from: 5, label: 'morning', trainers: ['north', 'north', 'west', 'west', 'plaza'], pokemon: ['meadow', 'lawn', 'sanctuary', 'plaza'] },
+  { from: 12, label: 'afternoon', trainers: ['plaza', 'plaza', 'east', 'east', 'north'], pokemon: ['plaza', 'sanctuary', 'sanctuary', 'east'] },
+  { from: 17, label: 'evening', trainers: ['plaza', 'south', 'south', 'east'], pokemon: ['plaza', 'south', 'meadow', 'sanctuary'] },
+  { from: 22, label: 'night', trainers: ['plaza', 'lawn', 'lawn', 'south'], pokemon: ['lawn', 'meadow', 'sanctuary'] },
+];
+/** The schedule slot for an hour (0-23); before 5 am it is still night. */
+export function scheduleFor(hour: number): (typeof SCHEDULE)[number] {
+  return [...SCHEDULE].reverse().find((s) => hour >= s.from) ?? SCHEDULE[SCHEDULE.length - 1]!;
+}
+/** The hour a crowd window falls in ("2026-11-02#27" = slot 27 of 48 = 13:30). */
+export function windowHour(window: string, minutes = CROWD_WINDOW_MINUTES): number {
+  const slot = Number(window.split('#')[1] ?? 0);
+  return Math.floor((slot * minutes) / 60) % 24;
+}
+
 export interface Wanderer {
   id: string;
   kind: 'trainer' | 'pokemon';
@@ -80,20 +101,21 @@ export function hubCrowd(p: Pick<Profile, 'profileId' | 'stats' | 'mastery'>, wi
   };
 
   const size = crowdSize(p);
+  const sched = scheduleFor(windowHour(window));
   const out: Wanderer[] = [];
   const keeperSheets = new Set(map.keepers.map((k) => k.sprite));
   const sheets = OVERWORLD.trainers.filter((s) => !keeperSheets.has(s));
   const species = crowdSpecies(p);
   for (let i = 0; i < size.pokemon && species.length; i++) {
     const speciesId = species[rng.int(0, species.length - 1)]!;
-    const zone = MON_ZONES[rng.int(0, MON_ZONES.length - 1)]!;
+    const zone = rng.chance(0.25) ? MON_ZONES[rng.int(0, MON_ZONES.length - 1)]! : sched.pokemon[rng.int(0, sched.pokemon.length - 1)]!;
     const start = spotIn(zone);
     if (!start) continue;
     out.push({ id: `mon-${i}`, kind: 'pokemon', sheet: followerKey(speciesId)!, speciesId, zone, start, facing: facings[rng.int(0, 3)]! });
   }
   for (let i = 0; i < size.trainers && sheets.length; i++) {
     const sheet = sheets.splice(rng.int(0, sheets.length - 1), 1)[0]!;
-    const zone = TRAINER_ZONES[rng.int(0, TRAINER_ZONES.length - 1)]!;
+    const zone = rng.chance(0.25) ? TRAINER_ZONES[rng.int(0, TRAINER_ZONES.length - 1)]! : sched.trainers[rng.int(0, sched.trainers.length - 1)]!;
     const start = spotIn(zone);
     if (!start) continue;
     out.push({ id: `trainer-${i}`, kind: 'trainer', sheet, zone, start, facing: facings[rng.int(0, 3)]! });

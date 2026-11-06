@@ -726,7 +726,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (mode === 'bicycle') stage.visited.push(nextChoices(stage).find((n) => n.next.includes(nodeId))!.id);
   // An event's express ride (ideas W4) sets the bicycle mode without an item: nothing to use up then.
   const modeItem = mode ? perkItem(content, run, mode) : null;
-  if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
+  if (mode === 'airship' && modeItem) spendUse(run, modeItem);
+  else if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
   stage.current = nodeId;
   stage.visited.push(nodeId);
   stepClock(content, run);
@@ -798,6 +799,11 @@ export function mapChoices(content: Content, run: RunState): MapNode[] {
     for (const n of plain) for (const id of n.next) ahead.set(id, findNode(stage.map, id));
     return ahead.size > 0 ? [...ahead.values()] : plain;
   }
+  if (run.moveMode === 'airship') {
+    const column = currentColumn(stage) + 2;
+    const far = stage.map.nodes.filter((n) => n.column === column);
+    return far.length > 0 ? far : plain;
+  }
   if (run.moveMode === 'acroBike') {
     const column = currentColumn(stage) + 1;
     return stage.map.nodes.filter((n) => n.column === column);
@@ -805,7 +811,7 @@ export function mapChoices(content: Content, run: RunState): MapNode[] {
   return plain;
 }
 
-export type MapActionKind = 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt';
+export type MapActionKind = 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt';
 
 export interface MapAction {
   kind: MapActionKind;
@@ -884,6 +890,11 @@ export function mapActions(content: Content, run: RunState): MapAction[] {
     if (!itemId) continue;
     const used = usedThisStage(run, itemId) ? 'Already used on this stage.' : null;
     out.push({ kind: bike.kind, itemId, text: `${bike.text} (once per stage)`, problem: league ?? used ?? bike.problem, on: run.moveMode === bike.kind });
+  }
+  const pass = perkItem(content, run, 'airship');
+  if (pass) {
+    const far = stage.kind === 'stage' && stage.map.nodes.some((n) => n.column === currentColumn(stage) + 2);
+    out.push({ kind: 'airship', itemId: pass, text: `Fly two columns ahead to any stop (${usesLeft(run, pass)} left)`, problem: league ?? (far ? null : 'Too close to the gym to fly.'), on: run.moveMode === 'airship' });
   }
   const seeker = perkItem(content, run, 'rematch');
   if (seeker) {
@@ -973,7 +984,7 @@ export function useMapAction(content: Content, current: RunState, kind: MapActio
         return { run, message: `You put the ${name} away.` };
       }
       run.moveMode = kind;
-      return { run, message: `You got on the ${name}. Choose where to ride.` };
+      return { run, message: kind === 'airship' ? `The ${name} is ready. Choose where to fly.` : `You got on the ${name}. Choose where to ride.` };
     }
   }
 }
