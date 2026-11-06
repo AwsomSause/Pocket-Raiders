@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { ensureNarration, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
+import { ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
 import { content } from './helpers';
 
 const party = ['bulbasaur', 'charmander', 'squirtle', 'pikachu'].map((speciesId, i) => ({ uid: `m${i}`, nature: 'hardy' as const, speciesId }));
@@ -31,6 +31,17 @@ describe('overhaul party narration', () => {
       const lines = new Set(Array.from({ length: 30 }, (_, i) => partyNarration(party, c, `k${i}`, nameOf, typesOf)).filter(Boolean));
       expect(lines.size, c).toBeGreaterThan(0);
     }
+  });
+  it('finisher scenes need the exact species and move', async () => {
+    expect(finisherScene('bulbasaur', 'Frenzy Plant')).toBeNull();
+    await ensureNarration();
+    expect(finisherScene('bulbasaur', 'Frenzy Plant')).toMatch(/Frenzy Plant finishes a boss battle/);
+    expect(finisherScene('bulbasaur', 'Tackle')).toBeNull();
+    expect(finisherScene('missingno', 'Frenzy Plant')).toBeNull();
+  });
+  it('badge reactions exist', async () => {
+    await ensureNarration();
+    expect(Array.from({ length: 30 }, (_, i) => partyNarration(party, 'badge', `k${i}`, nameOf, typesOf)).some(Boolean)).toBe(true);
   });
   it('an empty party has nothing to say', async () => {
     await ensureNarration();
