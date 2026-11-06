@@ -462,5 +462,143 @@
     ]
    }
   ]
+ },
+ {
+  "id": "lore_fn_sandile_scale",
+  "category": 9,
+  "nameKey": "lore.fn_sandile_scale.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_vance"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.fn_sandile_scale.i1",
+    "sources": [
+     "ch_vance"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_fn_whistle",
+  "category": 9,
+  "nameKey": "lore.fn_whistle.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_vance"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.fn_whistle.i1",
+    "sources": [
+     "ch_vance"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_fn_berry_trail",
+  "category": 9,
+  "nameKey": "lore.fn_berry_trail.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_vance"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.fn_berry_trail.i1",
+    "sources": [
+     "ch_vance"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_fn_station_log",
+  "category": 9,
+  "nameKey": "lore.fn_station_log.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_vance"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.fn_station_log.i1",
+    "sources": [
+     "ch_vance"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_fn_margin_sketches",
+  "category": 9,
+  "nameKey": "lore.fn_margin_sketches.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_vance"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.fn_margin_sketches.i1",
+    "sources": [
+     "ch_vance"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_fn_quiet_roads",
+  "category": 9,
+  "nameKey": "lore.fn_quiet_roads.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_vance"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.fn_quiet_roads.i1",
+    "sources": [
+     "ch_vance"
+    ]
+   }
+  ]
  }
 ]

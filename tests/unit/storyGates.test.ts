@@ -1,4 +1,4 @@
-// Story Overhaul F0: each of the 19 story gates passes on empty data and reports a seeded bad record.
+// Story Overhaul F0: each of the 20 story gates passes on empty data and reports a seeded bad record.
 
 import { describe, expect, it } from 'vitest';
 import { PARITY_ITEMS, storyGates, type StoryGateContext } from '../../src/quality/storyGates';
@@ -10,10 +10,10 @@ const empty = (): StoryData => ({ ...structuredClone(content.storyData), charact
 const count = (data: StoryData, id: string, ctx: StoryGateContext = {}) => storyGates(data, content, ctx).find((g) => g.id === id)!.offenders.length;
 const character = (over: object = {}) => ({ id: 'dara', v: 1, nameKey: 'c.dara', age: 20, role: 'rival' as const, poses: { a: 'x.png', b: 'y.png', c: 'z.png', d: 'w.png' }, tier: 1 as const, party: [], relationClass: 'friend' as const, romanceable: false, tellings: [], bio: [{ tier: 1, textKey: 'c.dara.bio', spoiler: false }], flags: [], ...over });
 const event = (over: object = {}) => ({ id: 'ev', v: 1, tags: [], requires: [], roles: {}, beats: [], choices: [], outputs: [], variants: [], cost: 1, tier: 'A' as const, moment: 'none' as const, ...over });
-const GATES = ['story-unresolved-ids', 'story-event-variants', 'story-branch-no-exit', 'story-unreachable-ending', 'story-canon-write', 'story-backstory-parity', 'story-quiz-balance', 'story-remembrance-unlock', 'story-romance-age', 'story-twist-clues', 'story-movemoment-types', 'story-character-sheet', 'story-string-keys', 'story-pose-set', 'story-look-lock', 'story-species-budget', 'story-asset-files', 'story-bundle-budget', 'story-hash-stable'];
+const GATES = ['story-unresolved-ids', 'story-event-variants', 'story-branch-no-exit', 'story-unreachable-ending', 'story-canon-write', 'story-backstory-parity', 'story-quiz-balance', 'story-remembrance-unlock', 'story-romance-age', 'story-twist-clues', 'story-movemoment-types', 'story-character-sheet', 'story-string-keys', 'story-template-tokens', 'story-pose-set', 'story-look-lock', 'story-species-budget', 'story-asset-files', 'story-bundle-budget', 'story-hash-stable'];
 
 describe('story gates', () => {
-  it('there are 19, and empty data passes every one', () => {
+  it('there are 20, and empty data passes every one', () => {
     const gates = storyGates(empty(), content, { fileExists: () => true, overBudgetIds: new Set(), hashFresh: true, fileSizes: {} });
     expect(gates.map((g) => g.id)).toEqual(GATES);
     for (const g of gates) expect(g.offenders, g.id).toEqual([]);
@@ -38,6 +38,7 @@ describe('story gates', () => {
     ['story-movemoment-types', (d) => { d.moveMoments = [{ id: 'm', trigger: 'finisher', templateKey: 'k', typeMap: { fire: 'k' } }]; }],
     ['story-character-sheet', (d) => { d.characters = [character({ bio: [] })]; d.text = { 'c.dara': 'x' }; }],
     ['story-string-keys', (d) => { d.characters = [character()]; }],
+    ['story-template-tokens', (d) => { d.text = { 'x.y': 'Hello {nobody}' }; }],
     ['story-pose-set', (d) => { d.characters = [character({ poses: { a: 'x.png' } })]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }],
     ['story-look-lock', () => {}, { lookB: { enabled: true, checklistDone: false } }],
     ['story-species-budget', (d) => { d.remembrances = [RemembranceSchema.parse({ id: 'r', v: 1, line: ['mewtwo'], types: ['psychic'], temperament: 't', affinity: {}, unlock: { kind: 'start' }, moves: [], keystone: 'k', status: 'supported' })]; }, { overBudgetIds: new Set(['mewtwo']) }],
@@ -45,7 +46,7 @@ describe('story gates', () => {
     ['story-bundle-budget', () => {}, { fileSizes: { events: 700_000 } }],
     ['story-hash-stable', () => {}, { hashFresh: false }],
   ];
-  it('gate_each_catches_bad_record: each of the 19 gates reports a seeded bad record', () => {
+  it('gate_each_catches_bad_record: each of the 20 gates reports a seeded bad record', () => {
     expect(bad.map((b) => b[0])).toEqual(GATES);
     for (const [id, seed, ctx] of bad) {
       const d = empty();
