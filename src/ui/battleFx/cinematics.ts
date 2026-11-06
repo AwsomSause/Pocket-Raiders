@@ -21,7 +21,7 @@ import { evolveLook } from './evolveStyles';
 import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { Beat } from './spectacle';
-import { CINE_ASSETS, CINE_MS, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
+import { CINE_ASSETS, CINE_MS, DYNAMAX_SCALE, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
 import { FORM_LOOK_ASSETS } from './formLook';
 import shards from './primegaShards.json';
 
@@ -143,7 +143,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: item, alpha: 0, y: y - 44, duration: 220, delay: 640 });
   };
 
-  if (!reduced && o.kind !== 'evolve' && o.kind !== 'dynamaxEnd') keyItem();
+  if (!reduced && o.kind !== 'evolve' && o.kind !== 'dynamaxEnd' && o.kind !== 'zmove') keyItem();
   if (reduced) {
     // Reduced motion: a soft glow and the symbol, no flying pieces or shaking.
     if (has('cine.dbk.mega.shine')) {
@@ -312,58 +312,60 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: g, alpha: 0, duration: 450, delay: 450 });
   }
 
-  // Deluxe Battle Kit's Dynamax scene: the Pokémon is called back into its
-  // ball, the ball swells with red Max energy, flies up, slams down onto the
-  // field and bursts open on the giant Pokémon.
+  // The Dynamax scene, after the reference footage: the screen floods pink with
+  // light rays, the Pokémon is a white silhouette that swells to giant size,
+  // takes on red Max energy, then the scene fades to dark and the battle
+  // returns with the giant Pokémon standing in it.
   function giantBall(): void {
+    const grow = o.kind === 'gigantamax' ? 1.3 : DYNAMAX_SCALE;
+    const ms = CINE_MS[o.kind];
+    const swapAt = SWAP_AT[o.kind];
     bars();
-    if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.8);
-    for (const [k, dir, size] of [['spiral', 1, 1.1], ['spiral2', -1, 1.4]] as const) {
-      const key = `cine.raid.max.${k}`;
-      if (!has(key)) continue;
-      const sp = add(scene.add.image(o.x, o.y, key).setBlendMode('ADD').setDepth(depth + 1).setScale(0.2).setAlpha(0.8));
-      tw({ targets: sp, scale: size * 0.6, angle: dir * 360, duration: CINE_MS[o.kind] - 300, ease: 'Sine.easeInOut' });
+    // The pink field and slowly turning rays.
+    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0xe83a8c, 0).setDepth(depth));
+    tw({ targets: pink, fillAlpha: 1, duration: 320 });
+    if (has('cine.raid.transitions.impact')) {
+      const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
+      rays.setScale(rays.scaleX * 1.6);
+      tw({ targets: rays, angle: 25, duration: swapAt });
     }
-    // Recalled: the Pokémon turns red and shrinks into the ball.
-    if (oldSprite?.active) {
-      oldSprite.setTintFill(0xff3060);
-      tw({ targets: oldSprite, scale: 0, alpha: 0.4, duration: 320, ease: 'Cubic.easeIn' });
-    }
+    if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.35, depth + 1);
+    // The darkness the scene fades into just before the battle comes back.
+    const dark = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x14060e, 0).setDepth(depth + 6));
+    tw({ targets: dark, fillAlpha: 1, duration: 420, delay: swapAt - 520 });
     sound('ess-flash2', 0.7);
-    const ball = has('pack.ebdx.tr.ball')
-      ? add(scene.add.image(o.x, o.y, 'pack.ebdx.tr.ball').setDepth(depth + 4).setScale(0.05).setAlpha(0))
-      : add(scene.add.circle(o.x, o.y, 120, 0xff3060).setDepth(depth + 4).setScale(0.05).setAlpha(0));
-    tw({ targets: ball, alpha: 1, duration: 120, delay: 300 });
-    // It swells with Max energy…
-    tw({ targets: ball, scale: 0.9, duration: 550, delay: 350, ease: 'Back.easeOut' });
-    at(450, () => (ball as Phaser.GameObjects.Image).setTint?.(0xff6080));
-    const glow = has('pack.dbk.burst') ? add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 3).setScale(0.2).setAlpha(0)) : null;
-    if (glow) tw({ targets: glow, scale: 1.2, alpha: 0.9, duration: 500, delay: 400, yoyo: true, hold: 200 });
-    // …rises off the top of the screen…
-    tw({ targets: [ball, ...(glow ? [glow] : [])], y: -200, duration: 360, delay: 950, ease: 'Back.easeIn' });
-    // …and slams down onto the field.
-    at(1350, () => {
-      ball.setPosition(o.x, -200).setScale(1.4);
-      tw({ targets: ball, y: o.y + 40, duration: 220, ease: 'Quad.easeIn' });
-    });
-    at(1580, () => {
+    // The silhouette: a copy of the Pokémon's own art, filled white.
+    let ghost: Phaser.GameObjects.Image | null = null;
+    if (oldSprite?.active && oldSprite.texture && oldSprite.texture.key !== '__MISSING') {
+      const m = oldSprite.getWorldTransformMatrix();
+      const base = Math.abs(m.scaleX) || 1;
+      ghost = add(scene.add.image(m.tx, m.ty, oldSprite.texture.key, oldSprite.frame?.name).setOrigin(oldSprite.originX, oldSprite.originY).setScale(base).setDepth(depth + 3));
+      ghost.setTintFill(0xffffff);
+      oldSprite.setAlpha(0);
+      tw({ targets: ghost, scale: base * grow, duration: 1150, delay: 350, ease: 'Cubic.easeOut' });
+      // White turns to red Max energy as it reaches full size.
+      at(1450, () => {
+        if (!ghost?.active) return;
+        ghost.clearTint();
+        ghost.setTint(0xff5a78);
+        whiteFlash(0.4);
+      });
+    } else if (oldSprite?.active) {
+      oldSprite.setTintFill(0xffffff);
+      tw({ targets: oldSprite, scale: oldSprite.scale * grow, duration: 1150, delay: 350, ease: 'Cubic.easeOut' });
+    }
+    const glow = has('pack.dbk.burst') ? add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3).setAlpha(0)) : null;
+    if (glow) tw({ targets: glow, scale: 2.2, alpha: 0.8, duration: 1000, delay: 450, yoyo: true });
+    at(1450, () => {
       sound('ess-explosion', 0.9);
-      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(380 / o.speed, 0.016 * (o.shake ?? o.intensity));
-      jiggle(ball as Phaser.GameObjects.Image, 0, 3);
+      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(380 / o.speed, 0.012 * (o.shake ?? o.intensity));
     });
-    at(SWAP_AT[o.kind], () => {
-      ball.setVisible(false);
+    at(swapAt, () => {
+      ghost?.setVisible(false);
       swap();
-      whiteFlash(0.7);
-      if (has('pack.dbk.burst')) {
-        const b = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 3).setScale(0.4));
-        tw({ targets: b, scale: 2.2, alpha: 0, duration: 650, ease: 'Cubic.easeOut' });
-      }
-      if (has('cine.raid.max.icon')) {
-        const icon = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'cine.raid.max.icon').setDepth(depth + 5).setScale(1.2).setAlpha(0));
-        tw({ targets: icon, scale: 0.7, alpha: 1, duration: 260, ease: 'Back.easeOut' });
-      }
     });
+    // The new (giant) sprite is already there when the dark lifts.
+    tw({ targets: dark, fillAlpha: 0, duration: Math.max(200, ms - swapAt), delay: swapAt });
     fadeAll();
   }
 
@@ -417,51 +419,80 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   }
 
   function zPower(): void {
-    // Its title card is small: start loading it now, it shows at 550 ms if it made it.
+    // Reference look (Gen 7 Z-Move): dim the field, the Pokémon turns into a white shape with the Z-Crystal over it,
+    // blue speed lines build to a white-out, then the move's name arrives with the rainbow Z-ring.
     const titleKey = o.titleId ? zTitleAssetId(o.titleId) : '';
     if (titleKey && !has(titleKey) && services().assets.has(titleKey)) void loadAssets(scene, [titleKey]).catch(() => undefined);
-    bars();
-    if (has('cine.raid.ultra.bg')) cover('cine.raid.ultra.bg', 0.85);
+    const cx = GAME_WIDTH / 2;
+    const cy = GAME_HEIGHT / 2;
+    const color = `#${o.tint.toString(16).padStart(6, '0')}`;
+    const dim = add(scene.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x050814, 0).setDepth(depth));
+    tw({ targets: dim, fillAlpha: 0.82, duration: 260 });
+    // 1. The Pokémon turns to a white shape.
+    at(250, () => oldSprite?.active && oldSprite.setTintFill(0xffffff));
+    // The Z-Crystal floats above it.
+    const crystalKey = keyItemFor('zmove');
+    if (crystalKey && has(crystalKey)) {
+      const gem = add(scene.add.image(o.x, o.y - 90, crystalKey).setDepth(depth + 8).setAlpha(0));
+      gem.setScale(72 / Math.max(gem.width, gem.height));
+      tw({ targets: gem, alpha: 1, y: gem.y - 14, duration: 350, delay: 250, ease: 'Sine.easeOut' });
+      tw({ targets: gem, y: gem.y - 24, duration: 500, delay: 700, yoyo: true, ease: 'Sine.easeInOut' });
+    }
+    // 2. Blue speed lines build behind the white shape, then a white-out.
     if (has('cine.raid.transitions.impact')) {
-      const lines = cover('cine.raid.transitions.impact', 0.8, depth + 1);
-      tw({ targets: lines, angle: 8, duration: 1800 });
+      const blue = add(scene.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x2a8cff, 0).setDepth(depth + 1));
+      tw({ targets: blue, fillAlpha: 0.9, duration: 500, delay: 650 });
+      const lines = cover('cine.raid.transitions.impact', 0.9, depth + 2);
+      lines.setAlpha(0).setTint(0x8fd0ff);
+      tw({ targets: lines, alpha: 0.95, angle: 10, duration: 900, delay: 650 });
     }
-    // Z-Power rings in the move's type colour.
-    for (let i = 0; i < 3; i++) {
-      if (!has('cine.raid.transitions.shine')) break;
-      const ring = add(scene.add.image(o.x, o.y, 'cine.raid.transitions.shine').setTint(o.tint).setBlendMode('ADD').setDepth(depth + 2).setScale(0.2).setAlpha(0));
-      tw({ targets: ring, scale: 0.9, alpha: { from: 1, to: 0 }, duration: 600, delay: 200 + i * 300, ease: 'Quad.easeOut' });
+    for (let i = 0; i < 12; i++) {
+      if (!has('cine.dbk.zpower.particle')) break;
+      const a = (i / 12) * Math.PI * 2;
+      const p = add(scene.add.image(o.x + Math.cos(a) * 260, o.y + Math.sin(a) * 170, 'cine.dbk.zpower.particle').setTint(0xcfe8ff).setBlendMode('ADD').setDepth(depth + 4).setScale(1.2).setAlpha(0));
+      tw({ targets: p, x: o.x, y: o.y, scale: 0.3, alpha: { from: 1, to: 0.2 }, duration: 520, delay: 500 + (i % 4) * 90, ease: 'Cubic.easeIn' });
     }
-    if (has('cine.raid.ultra.icon')) {
-      const z = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 50, 'cine.raid.ultra.icon').setDepth(depth + 5).setScale(2).setAlpha(0));
-      tw({ targets: z, scale: 0.6, alpha: 1, duration: 420, delay: 250, ease: 'Back.easeOut' });
-      tw({ targets: z, y: z.y - 8, duration: 500, delay: 700, yoyo: true, ease: 'Sine.easeInOut' });
-    }
-    // Z-Power particles stream in to the Pokémon from a fixed ring (Deluxe Battle Kit's Z-Move scene).
-    if (has('cine.dbk.zpower.particle')) {
-      for (let i = 0; i < 12; i++) {
-        const a = (i / 12) * Math.PI * 2;
-        const p = add(scene.add.image(o.x + Math.cos(a) * 260, o.y + Math.sin(a) * 170, 'cine.dbk.zpower.particle').setTint(o.tint).setBlendMode('ADD').setDepth(depth + 3).setScale(1.2).setAlpha(0));
-        tw({ targets: p, x: o.x, y: o.y, scale: 0.3, alpha: { from: 1, to: 0.2 }, duration: 520, delay: 80 + (i % 4) * 90, ease: 'Cubic.easeIn' });
-      }
-    }
-    // The title: the pack's card when it has loaded, otherwise the name in type-coloured letters.
-    at(550, () => {
+    if (oldSprite) at(900, () => oldSprite.active && oldSprite.setScale(oldSprite.scaleX * 1.08, oldSprite.scaleY * 1.08));
+    const flash = add(scene.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0xffffff, 0).setDepth(depth + 20));
+    tw({ targets: flash, fillAlpha: 1, duration: 260, delay: 1050 });
+    tw({ targets: flash, fillAlpha: 0, duration: 380, delay: 1380 });
+    // 3. The move screen: darkened field, rainbow Z-ring and the move's name, sliding in from the left.
+    at(1300, () => {
       if (over) return;
+      if (oldSprite?.active) oldSprite.clearTint().setVisible(false);
+      for (const x of objs) if (x !== flash && x !== dim) (x as Phaser.GameObjects.Image).setVisible?.(false);
+      dim.setFillStyle(0x0a0a14, 1).setDepth(depth + 2);
+      const glow = add(scene.add.rectangle(cx, cy + 40, GAME_WIDTH, 120, o.tint, 0.25).setDepth(depth + 3).setBlendMode('ADD'));
+      glow.setAlpha(0);
+      tw({ targets: glow, alpha: 1, duration: 200 });
+      const ringX = 70;
+      const ringY = cy + 40;
+      const g = add(scene.add.graphics().setDepth(depth + 6));
+      const rainbow = [0xff4040, 0xff9a30, 0xffe040, 0x50d060, 0x40b0ff, 0x6060ff, 0xc060ff];
+      rainbow.forEach((c, i) => {
+        g.lineStyle(9, c, 1);
+        g.beginPath();
+        g.arc(ringX, ringY, 44, Phaser.Math.DegToRad(i * 36 + 10), Phaser.Math.DegToRad(i * 36 + 40));
+        g.strokePath();
+      });
+      g.fillStyle(0xffffff, 1).fillCircle(ringX, ringY, 6);
+      g.setAlpha(0);
+      tw({ targets: g, alpha: 1, duration: 220 });
+      tw({ targets: g, scale: { from: 0.4, to: 1 }, duration: 260, ease: 'Back.easeOut' });
       const key = o.titleId ? zTitleAssetId(o.titleId) : '';
       if (key && has(key)) {
-        const card = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 70, key).setDepth(depth + 6).setScale(2.4).setAlpha(0));
-        tw({ targets: card, scale: 1.2, alpha: 1, duration: 300, ease: 'Back.easeOut' });
-        if ((o.shake ?? 1) > 0) tw({ targets: card, x: card.x + 4 * (o.shake ?? 1), duration: 50, delay: 320, yoyo: true, repeat: 3 });
+        const card = add(scene.add.image(cx + 40, ringY, key).setDepth(depth + 7).setScale(1.1).setAlpha(0));
+        tw({ targets: card, alpha: 1, x: cx + 20, duration: 300, ease: 'Cubic.easeOut' });
       } else if (o.title) {
-        const color = `#${o.tint.toString(16).padStart(6, '0')}`;
-        const t = add(scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 70, o.title.toUpperCase(), textStyle(40, '#ffffff', { stroke: color, strokeThickness: 8 })).setOrigin(0.5).setDepth(depth + 6).setScale(0.4).setAlpha(0));
-        tw({ targets: t, scale: 1, alpha: 1, duration: 360, ease: 'Back.easeOut' });
+        const t = add(scene.add.text(ringX + 52, ringY, o.title, textStyle(34, '#ffffff', { stroke: color, strokeThickness: 7 })).setOrigin(0, 0.5).setDepth(depth + 7).setAlpha(0));
+        t.x -= 80;
+        tw({ targets: t, alpha: 1, x: ringX + 52, duration: 320, ease: 'Cubic.easeOut' });
       }
+      sound('ess-flash2', 0.8);
     });
     sound('ess-refresh', 0.9);
-    at(600, () => sound('ess-flash2', 0.8));
     at(SWAP_AT.zmove - 1, swap);
+    at(total * o.speed - 320, () => oldSprite?.active && oldSprite.clearTint().setVisible(true));
     fadeAll();
   }
 
@@ -471,6 +502,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     finish = () => {
       if (over) return;
       over = true;
+      if (o.kind === 'zmove' && oldSprite?.active) oldSprite.setVisible(true);
       timers.forEach((t) => t.remove(false));
       swap();
       for (const x of objs) {

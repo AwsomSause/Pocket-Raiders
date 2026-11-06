@@ -93,6 +93,7 @@ import { crisisLevel } from '../core/story/crisis';
 import { moveRank } from '../core/moveMastery';
 import { chargeUp, cinematic, prefetchCinematics, type CineKind } from '../ui/battleFx/cinematics';
 import { actionTab, type ActionTab } from '../ui/actionTab';
+import { DYNAMAX_SCALE } from '../ui/battleFx/cineLook';
 import { dynamaxPatternKey, STATUS_PULSE, statusPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
 import { dropPattern, wearPattern, wornPattern } from '../ui/battleFx/formPattern';
 import { loadAssets } from '../ui/lazyAssets';
@@ -122,8 +123,6 @@ const ENEMY_POS = { x: 648, y: 246 };
 const PLAYER_POS = { x: 312, y: 400 };
 /** The bottom message bar, and the command window on its right. */
 const MESSAGE_Y = 396;
-/** A Dynamaxed Pokémon is drawn this much larger (a stand-in until the M9.5 effect). */
-const DYNAMAX_SCALE = 1.35;
 const COMMAND_X = 588;
 /** How long Auto-Battle's chosen action stays on screen before it is played (Back cancels). */
 const AUTO_PICK_MS = 1100;
