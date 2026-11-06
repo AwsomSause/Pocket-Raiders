@@ -240,3 +240,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
 - `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
 - `growth-mentor.md`: Growth slice 6: Pokémon Mentor lessons in the Camp menu (S48).
+- `growth-nursery.md`: Growth slice 7: Breeding Nursery (pick a parent move or the hatch ability for an Egg).
