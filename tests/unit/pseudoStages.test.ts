@@ -12,7 +12,9 @@ describe('W7 pseudo stage records', () => {
     expect(PSEUDO.records).toHaveLength(10);
     expect(validateAllPseudo()).toEqual([]);
     expect(PSEUDO.records.filter((r) => r.countsAsStage).map((r) => r.id)).toEqual(['ps_evil_hideout']);
-    expect(PSEUDO.records.every((r) => r.status === 'limited')).toBe(true);
+    // Five are opened by run events; Safari, Distortion World (reached from the Distortion Incident later), Dreamscape, Evil Hideout and Celestial Expanse have no entry yet, so they stay disabled.
+    expect(PSEUDO.records.filter((r) => r.status === 'disabled').map((r) => r.id).sort()).toEqual(['ps_celestial_expanse', 'ps_distortion_world', 'ps_dreamscape', 'ps_evil_hideout', 'ps_safari_zone']);
+    expect(PSEUDO.records.filter((r) => r.status !== 'disabled').every((r) => r.status === 'limited')).toBe(true);
   });
   it('rejects a record that breaks the rules', () => {
     const base = structuredClone(PSEUDO.records[0]!);
@@ -24,13 +26,14 @@ describe('W7 pseudo stage records', () => {
 
 describe('W7 gates and rooms', () => {
   it('every gate offers Leave and Enter before any fight (P2) and every room is in the live content', () => {
-    for (const r of PSEUDO.records) {
+    const live = PSEUDO.records.filter((r) => r.status !== 'disabled');
+    for (const r of live) {
       const gate = content.events.get(pseudoGateId(r))!;
       expect(gate.room).toBe(true);
       expect(gate.choices.map((c) => c.label)).toEqual([`Enter ${r.name}`, 'Leave']);
       expect(gate.choices.every((c) => !c.success.battle)).toBe(true);
     }
-    expect(pseudoEvents().length).toBe(PSEUDO.records.length + PSEUDO.records.reduce((n, r) => n + r.nodes.length, 0));
+    expect(pseudoEvents().length).toBe(live.length + live.reduce((n, r) => n + r.nodes.length, 0));
   });
   it('every battle inside a pseudo stage is marked so a loss ejects (P5)', () => {
     for (const e of pseudoEvents() as { id: string; choices: { success: { battle?: { pseudo?: boolean } }; failure?: { battle?: { pseudo?: boolean } } }[] }[]) {
@@ -39,7 +42,7 @@ describe('W7 gates and rooms', () => {
   });
   it('the boss reward is not doubled: the boss win adds no extra reward item (P4)', () => {
     const rooms = pseudoEvents() as { id: string; choices: { success: { effects: { kind: string; id?: string }[]; battle?: { win: { kind: string }[] } } }[] }[];
-    for (const r of PSEUDO.records) {
+    for (const r of PSEUDO.records.filter((x) => x.status !== 'disabled')) {
       const boss = r.nodes.filter((n) => n.kind === 'boss').map((n) => r.id.replace(/_/g, '-') + '-' + n.id);
       const items = rooms.filter((e) => boss.includes(e.id)).flatMap((e) => e.choices.flatMap((c) => [...c.success.effects, ...(c.success.battle?.win ?? [])])).filter((x) => x.kind === 'item' && (x as { id?: string }).id === r.reward.item);
       expect(items.length, r.id).toBe(0);

@@ -57,7 +57,8 @@ export const pseudoGateId = gateId;
 
 /** The gate and all rooms of every record, as raw events. The gate is what the entry events open. */
 export function pseudoEvents(records: readonly PseudoRecord[] = PSEUDO.records): Record<string, unknown>[] {
-  return records.flatMap((r) => {
+  // A disabled record has no event that opens it yet, so it builds no rooms (a room nothing opens is a content error).
+  return records.filter((r) => r.status !== 'disabled').flatMap((r) => {
     const def = roomDef(r);
     const first = `${r.id.replace(/_/g, '-')}-${r.nodes[0]!.id}`;
     const gate = {
