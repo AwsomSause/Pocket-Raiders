@@ -190,6 +190,29 @@
    ]
   },
   {
+   "id": "orchard",
+   "name": "Berry Orchard",
+   "icon": "item.sitrus_berry",
+   "blurb": "Rows of berry trees that fruit again every day.",
+   "actions": [
+    {
+     "id": "orchard-pick",
+     "name": "Pick from a tree",
+     "desc": "Shake one tree a day for berries that wait in your next run's pocket.",
+     "kind": "pick",
+     "rows": [
+      "F131"
+     ],
+     "limit": "day",
+     "options": [
+      {"id": "tree-oran", "label": "Oran tree", "desc": "Three Oran Berries.", "say": "Berries thump into the grass.", "reward": {"items": {"oran-berry": 3}}, "once": false},
+      {"id": "tree-pecha", "label": "Pecha tree", "desc": "Two Pecha Berries.", "say": "Pink berries tumble down.", "reward": {"items": {"pecha-berry": 2}}, "once": false},
+      {"id": "tree-sitrus", "label": "Sitrus tree", "desc": "One Sitrus Berry and a track point.", "say": "A golden Sitrus Berry drops into your hands.", "reward": {"items": {"sitrus-berry": 1}, "xp": 1}, "once": false}
+     ]
+    }
+   ]
+  },
+  {
    "id": "dojo",
    "name": "Training Dojo",
    "icon": "item.scanner",

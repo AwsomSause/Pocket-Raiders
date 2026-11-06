@@ -403,6 +403,14 @@ describe('Lab research, trading cards, notice filters (S462, S357, S478)', () =>
   });
 });
 
+describe('Berry Orchard', () => {
+  it('one tree a day pays berries into the next run', () => {
+    const p = ok(rich(), 'orchard-pick', { choice: 'tree-oran' }).profile;
+    expect(townOf(p).boon.items['oran-berry']).toBe(3);
+    expect(act(p, 'orchard-pick', { choice: 'tree-pecha' }).ok).toBe(false);
+  });
+});
+
 describe('Rival Sponsors (S360)', () => {
   it('a rival sponsor pays only when you beat your earlier best', () => {
     const p = ok(rich(), 'hall-sponsor', { choice: 'sponsor-rival-trail' }).profile;
