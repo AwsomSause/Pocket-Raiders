@@ -2312,7 +2312,7 @@ export const BalanceSchema = z.object({
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
   /** `depth` (Kice spec §11/§21): the first rival becomes the major rival and wild Pokémon rivals can form (off only in old-seed fingerprints). */
-  rival: z.object({ stage: z.number().int().min(0), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
+  rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
   candies: z.object({ perRelease: z.number().int().min(0), perLevels: z.number().int().min(1) }),
   /** Run-end payout into the Bank (GAME_DESIGN.md §14.2). */

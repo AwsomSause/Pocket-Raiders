@@ -28,6 +28,9 @@ import { legacyNote, pokemonInfluence, substitute, trainingExchange, triangleEff
 import { reputation, signature } from '../../src/core/rivals/bonds';
 import { content, toBattle } from './helpers';
 
+// These tests make rivals from early fights on purpose; the Beta 4.4 spark gate (later stage, 1 in 3) is tested in beta44.test.ts.
+Object.assign(RIVAL_CONFIG.spark, { minStage: 0, chance: 1 });
+
 function trainerBattle(seed: string, opts: { leaderId?: string | null; faintedMate?: boolean } = {}): RunState {
   const run = structuredClone(toBattle(chooseStarter(content, createRun(content, { runId: 'rv', seed, archetypeId: 'red' }), 0)));
   const lead = createPokemon(content, 'jolteon', 50, run.party[0]!.uid);

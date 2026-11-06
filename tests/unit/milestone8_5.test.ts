@@ -97,7 +97,7 @@ describe('Mega Evolution in battle (PokeRogue style)', () => {
     expect(events[0]!.type).toBe('transform');
   });
 
-  it('every Pokémon with its stone Mega Evolves in every battle, with no limit, and stays Mega through switching', () => {
+  it('only one Pokémon Mega Evolves per battle (Beta 4.4), and it stays Mega through switching', () => {
     const a = mon('venusaur', 50, 'p1', 'tackle');
     const b = mon('charizard', 50, 'p2', 'tackle');
     const e = mon('snorlax', 60, 'e1', 'growl');
@@ -105,12 +105,13 @@ describe('Mega Evolution in battle (PokeRogue style)', () => {
     resolveTurn(ctx, MEGA);
     expect(a.speciesId).toBe('venusaur-mega');
     expect(transforms(resolveTurn(ctx, MEGA))).toEqual([]);
-    // The Pokémon that comes in Mega Evolves before the turn's moves.
+    // The second stone holder comes in and stays itself: the battle's Mega Evolution is spent.
     const events = transforms(resolveTurn(ctx, { kind: 'switch', partyIndex: 1 }));
-    expect(events.map((x) => x.type === 'transform' && x.to)).toEqual(['charizard-mega-y']);
+    expect(events).toEqual([]);
+    expect(b.speciesId).toBe('charizard');
     resolveTurn(ctx, { kind: 'switch', partyIndex: 0 });
     expect(a.speciesId).toBe('venusaur-mega');
-    expect(battle.transform.used.player).toEqual([]);
+    expect(battle.transform.used.player).toEqual(['mega']);
   });
 
   it('Charizard takes Mega X when you own Charizardite X, otherwise Y', () => {

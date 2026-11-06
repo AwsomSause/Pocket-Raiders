@@ -69,6 +69,16 @@ const STATUS_WORDS: Record<string, string> = { brn: 'BURNED!', psn: 'POISONED!',
 const NO_CONTACT = new Set(['miss', 'noEffect', 'fail', 'noPp', 'protected', 'avoided', 'charge']);
 
 /**
+ * Beta 4.4: a binding move's squeeze shows that move's own art (Fire Spin's flames, Whirlpool's water), not
+ * the Wrap picture for every one. Wrap and Bind keep the shared bind animation; an unknown move falls back to it.
+ */
+export function bindChoice(anims: MoveAnims, moveId: string | undefined): { anim: string; alt?: string } {
+  const base = commonChoice(anims, 'bind');
+  if (!moveId || moveId === 'wrap' || moveId === 'bind' || !anims.moves[moveId]) return base;
+  return { anim: presentationFor(anims, moveId).anim, alt: base.anim };
+}
+
+/**
  * Plans the cues for one turn's events. The result has one list per event,
  * played just before that event's message. Events the plan doesn't know
  * (experience, level-ups …) get an empty list.
@@ -165,7 +175,8 @@ export function planCues(
       case 'bindDamage':
       case 'seedDamage': {
         const common = e.type === 'residual' ? `status.${e.status}` : e.type === 'confusionHit' ? 'confusion' : e.type === 'bindDamage' ? 'bind' : e.type === 'seedDamage' ? 'seed' : '';
-        if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common) });
+        if (full && e.type === 'bindDamage') cues.push({ kind: 'commonAnim', side: e.side, ...bindChoice(anims, e.moveId) });
+        else if (full && common) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, common) });
         cues.push({ kind: 'number', side: e.side, amount: e.amount, tone: 'damage', motion: full });
         break;
       }
@@ -198,7 +209,7 @@ export function planCues(
         if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'protect') });
         break;
       case 'bound':
-        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'bind') });
+        if (full) cues.push({ kind: 'commonAnim', side: e.side, ...bindChoice(anims, e.moveId) });
         break;
       case 'seeded':
         if (full) cues.push({ kind: 'commonAnim', side: e.side, ...commonChoice(anims, 'seed') });

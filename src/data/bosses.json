@@ -171,7 +171,7 @@
  {"id": "allister", "name": "Allister", "types": ["ghost"], "sprites": {"default": "boss.allister"}, "signature": ["gengar", "mimikyu", "cursola", "polteageist", "runerigus"]},
  {"id": "opal", "name": "Opal", "types": ["fairy"], "sprites": {"default": "boss.opal"}, "signature": ["alcremie", "togekiss", "mawile", "weezing", "hatterene"]},
  {"id": "gordie", "name": "Gordie", "types": ["rock"], "sprites": {"default": "trainer.gordie"}, "signature": ["coalossal", "barbaracle", "shuckle", "stonjourner", "tyranitar"]},
- {"id": "melony", "name": "Melony", "types": ["ice"], "sprites": {"default": "boss.melony"}, "signature": ["lapras", "frosmoth", "eiscue", "darmanitan", "mr-rime"]},
+ {"id": "melony", "name": "Melony", "types": ["ice"], "sprites": {"default": "boss.melony"}, "signature": ["lapras", "frosmoth", "eiscue", "darmanitan-galar-standard", "mr-rime"]},
  {"id": "piers", "name": "Piers", "types": ["dark"], "sprites": {"default": "boss.piers"}, "signature": ["obstagoon", "skuntank", "malamar", "scrafty", "toxtricity"]},
  {"id": "raihan", "name": "Raihan", "types": ["dragon"], "sprites": {"default": "boss.raihan"}, "signature": ["duraludon", "flygon", "gigalith", "sandaconda", "goodra", "turtonator"]},
  {"id": "marnie", "name": "Marnie", "types": ["dark"], "sprites": {"default": "boss.marnie-masters4"}, "signature": ["grimmsnarl", "morpeko", "liepard", "scrafty", "toxicroak", "obstagoon"]},

@@ -5,6 +5,7 @@
 // bouncy: ease in with overshoot, hold one beat, drift out.
 
 import Phaser from 'phaser';
+import { tweenDone } from '../tweenDone';
 import type { AnimPlan } from '../../core/presentation/animRegistry';
 import '../../core/presentation/storyAnims';
 import '../../core/presentation/spectacleAnims';
@@ -22,8 +23,7 @@ export interface StoryTools extends FxTools {
 
 const col = (hex: string) => Phaser.Display.Color.HexStringToColor(hex).color;
 const pause = (scene: Phaser.Scene, ms: number) => new Promise<void>((resolve) => scene.time.delayedCall(ms, resolve));
-const tweenTo = (scene: Phaser.Scene, config: Phaser.Types.Tweens.TweenBuilderConfig) =>
-  new Promise<void>((resolve) => scene.tweens.add({ ...config, onComplete: () => resolve() }));
+const tweenTo = tweenDone;
 
 /** Squash and stretch the Pokémon a little, then settle back to exactly where it was. */
 function bounce(t: StoryTools, by: number, ms: number): void {

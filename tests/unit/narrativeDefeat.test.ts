@@ -28,16 +28,21 @@ function playOut(run: RunState) {
   return { run: r, last: last! };
 }
 
-describe('the narrative fight cannot be won', () => {
-  it('the rival\'s last Pokémon holds on, and the fight ends as the story loss', () => {
+describe('the narrative fight', () => {
+  it('the rival\'s last Pokémon refuses to go down once, then falls for real (Beta 4.4)', () => {
     // A weak foe against the player: an ordinary battle would be won on the first hit.
     const run = debugReplaceEnemy(content, toBattle(start('n9')), 'rattata', 1);
     run.battle!.narrative = { id: DEF.id, maxTurns: 12 };
     run.battle!.rivalId = 'rv1';
-    const { run: after, last } = playOut(run);
-    expect(last.narrativeDefeat?.id).toBe(DEF.id);
+    let r = run;
+    for (let guard = 0; !r.battle!.narrative!.refused && guard < 20; guard++) r = takeTurn(content, r, { kind: 'move', index: 0 }).run;
+    expect(r.phase).toBe('battle');
+    expect(r.battle!.enemyTeam[0]!.hp).toBeGreaterThan(0);
+    const { run: after, last } = playOut(r);
+    expect(last.narrativeDefeat).toBeUndefined();
     expect(after.phase).not.toBe('over');
-    expect(after.log.battlesWon).toBe(0);
+    expect(after.log.battlesWon).toBe(1);
+    expect(after.story.flags[narrativeFlag(DEF.id)]).toBe('won');
   });
 });
 

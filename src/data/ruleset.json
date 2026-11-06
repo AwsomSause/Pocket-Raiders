@@ -18,8 +18,8 @@
   "paralysisSpeedMultiplier": 0.5,
   "fullParalysisChance": 0.25,
   "freezeThawChance": 0.2,
-  "sleepTurnsMin": 1,
-  "sleepTurnsMax": 3,
+  "sleepTurnsMin": 2,
+  "sleepTurnsMax": 4,
   "struggleMoveId": "struggle",
   "catchStatusMultipliers": {
     "slp": 2.5,

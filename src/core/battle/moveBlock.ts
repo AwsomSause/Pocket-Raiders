@@ -10,6 +10,8 @@ export function moveBlockReason(content: Content, battle: BattleState, mon: Poke
   const move = known ? content.moves.get(known.id) : undefined;
   if (!known || !move) return null;
   if (known.pp <= 0) return 'no PP left';
+  const lock = battle.held?.choice[mon.uid];
+  if (lock && lock !== move.id && mon.moves.some((m) => m.id === lock && m.pp > 0)) return 'Choice lock';
   const v = battle.playerVolatile;
   if (v.disabled && v.disabled.turns > 0 && v.disabled.moveId === move.id) return `Disabled for ${v.disabled.turns} more turn${v.disabled.turns === 1 ? '' : 's'}`;
   if (v.torment && v.lastMove === move.id) return 'Torment: it cannot repeat';

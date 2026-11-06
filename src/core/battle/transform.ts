@@ -383,7 +383,13 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
     const orb = megaOn ? stoneForms(content, player.speciesId, true).find((o) => o.itemId && owns(ctx.inventory, o.itemId)) : undefined;
     const form = orb ? null : permanentForm(content, ctx.inventory, player, ctx.disabledMechanics);
     if (orb) changeForm(ctx, 'player', player, 'primal', orb, events);
-    else if (form && (form.kind !== 'mega' || battle.playerVolatile.turnsOut >= megaDelayTurns(ctx.perks))) changeForm(ctx, 'player', player, form.kind, form.option, events);
+    else if (form && (form.kind !== 'mega' || battle.playerVolatile.turnsOut >= megaDelayTurns(ctx.perks))) {
+      // Beta 4.4: one Mega Evolution per battle (a Gigantamax form is only a look; Dynamax itself is already once per battle).
+      if (form.kind !== 'mega' || !battle.transform.used.player.includes('mega')) {
+        changeForm(ctx, 'player', player, form.kind, form.option, events);
+        if (form.kind === 'mega') battle.transform.used.player.push('mega');
+      }
+    }
   }
   if (enemy.hp > 0 && !battle.transform.forms[enemy.uid] && enemyMay(enemy)) {
     const orb = stoneForms(content, enemy.speciesId, true)[0];

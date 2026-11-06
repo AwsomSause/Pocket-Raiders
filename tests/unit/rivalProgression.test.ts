@@ -10,6 +10,9 @@ import type { RunState } from '../../src/core/state';
 import { RivalSchema } from '../../src/core/story/schema';
 import { content } from './helpers';
 
+// These tests make rivals from early fights on purpose; the Beta 4.4 spark gate (later stage, 1 in 3) is tested in beta44.test.ts.
+Object.assign(RIVAL_CONFIG.spark, { minStage: 0, chance: 1 });
+
 const where = { region: 0, stage: 1, level: 1, node: null, battle: 1, turn: null };
 const NO = { sponsored: false, openDebt: false, leaguePatron: false, hostileFaction: false, hasAlly: false, hasRival: false, mentorRival: false, legacy: false, crisis: false, sharedSpecies: false, copiesYou: false, devotedBond: false, bosses: 0 };
 const input = (id: string): SparkInput => ({

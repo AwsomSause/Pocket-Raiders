@@ -968,7 +968,15 @@ export class MapScene extends Phaser.Scene {
         this.busy = true;
         playSfx(this, 'ui.select');
         const repelled = option.node.kind === 'wild' && repelActive(session.content, session.run!);
-        const run = session.chooseNode(option.node.id);
+        let run: ReturnType<typeof session.chooseNode>;
+        try {
+          run = session.chooseNode(option.node.id);
+        } catch (err) {
+          // Beta 4.4 "battles won't load": a failed start used to leave the map frozen (busy) with no word why.
+          console.error('Could not start that stop', err);
+          this.scene.restart({ notice: 'That stop could not start. Try again, or pick another route.', focus: i });
+          break;
+        }
         if (repelled && run.phase === 'map') {
           this.scene.restart({ notice: 'The Repel kept wild Pokémon away!', focus: 0 });
           break;
