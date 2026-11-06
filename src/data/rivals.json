@@ -42,6 +42,12 @@
   "quest": { "settleWins": 3, "money": 2500, "itemId": "full-restore", "quantity": 2 },
   "pastShown": 5
  },
+ "siblings": {
+  "chance": 0.5,
+  "potentialShare": 0.75,
+  "vindictivenessGain": 20,
+  "names": ["Ash", "Brook", "Cleo", "Dane", "Edie", "Finn", "Gus", "Hana", "Iris", "Jory", "Kit", "Lena", "Milo", "Nell", "Owen", "Pia"]
+ },
  "promotion": {
   "progress": [1, 2, 3],
   "chance": 0.3,
