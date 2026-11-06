@@ -3022,7 +3022,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
 
   // Metronome, Mirror Move, Copycat: use another move instead.
   if (fx.callMove) {
-    const pool = [...content.moves.values()].filter((m) => m.supported && !m.effects.callMove && !m.effects.charge && !m.effects.protect && !m.flags.includes('zmove') && !m.flags.includes('max')).map((m) => m.id).sort();
+    const pool = [...content.moves.values()].filter((m) => m.supported && !m.effects.callMove && !m.effects.charge && !m.effects.protect && !m.flags.includes('zmove') && !m.flags.includes('max') && !m.flags.includes('megasig')).map((m) => m.id).sort();
     const id = fx.callMove === 'metronome' ? (pool.length ? rng.pick(pool) : null) : (target.vol.lastMove ?? (fx.callMove === 'copycat' ? user.vol.lastMove : null));
     const called = id ? content.moves.get(id) : undefined;
     if (!called || called.effects.callMove) {
@@ -3158,7 +3158,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
 
-  if (fx.terrain) {
+  // Overhaul slice 27: an attack with a weather or terrain effect (a Mega signature move) hits first and sets it after landing (below).
+  if (fx.terrain && move.category === 'status') {
     if (ctx.battle.terrain?.id === fx.terrain) {
       events.push({ type: 'fail', side: user.side });
     } else {
@@ -3168,7 +3169,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     return;
   }
 
-  if (fx.weather) {
+  if (fx.weather && move.category === 'status') {
     if (weather === fx.weather) {
       events.push({ type: 'fail', side: user.side });
     } else {
@@ -3716,6 +3717,17 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   postHitExtras(ctx, user, target, move, landed, movedFirst, events);
   // Hazard-setting and hazard-clearing attacks (Ceaseless Edge, Stone Axe, Rapid Spin).
   if (landed > 0 && fx.sideMove) applySideMove(ctx, user, fx.sideMove, events);
+  // An attack that also sets weather or terrain (Mega signature moves); a status move did that above.
+  if (landed > 0) {
+    if (fx.weather && weather !== fx.weather) {
+      setWeather(ctx, fx.weather, Held.weatherTurns(ctx, user, fx.weather, 5));
+      events.push({ type: 'weather', weather: fx.weather });
+    }
+    if (fx.terrain && ctx.battle.terrain?.id !== fx.terrain) {
+      ctx.battle.terrain = { id: fx.terrain, turns: 5 };
+      events.push({ type: 'terrain', terrain: fx.terrain });
+    }
+  }
   if (landed > 0 && fx.clearHazards) clearHazards(ctx, user, fx.clearHazards, events);
 
   // Extra effects only land if the target is still standing. Serene Grace doubles their chances; Shield Dust blocks them.

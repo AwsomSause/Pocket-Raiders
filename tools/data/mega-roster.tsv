@@ -1,0 +1,143 @@
+# form | move | type | cat | power | acc | pp | effect | batch  (see docs/status/mega-signature-moves.md)
+abomasnow-mega|Glacier Maul|ice|P|100|90|8|Sets Snow; 20% lowers target Def|1
+absol-mega|Calamity Edge|dark|P|95|100|10|High crit rate; lowers user Def 1|1
+absol-mega-z|Phantom Disaster|ghost|P|95|100|10|High crit rate; 30% lowers target Spe|1
+aerodactyl-mega|Primeval Dive|rock|P|100|90|8|30% flinch; user takes 1/4 recoil|1
+aggron-mega|Ironclad Quake|steel|P|95|100|8|Raises user Def 1|1
+alakazam-mega|Mind Overclock|psychic|S|100|100|8|20% confuse; lowers user SpD 1|1
+altaria-mega|Skysong Requiem|fairy|S|90|100|10|Heals user 1/2 of damage|1
+ampharos-mega|Draco Dynamo|electric|S|95|100|10|30% paralyze|1
+audino-mega|Healing Chorus|normal|St|-|-|8|Heals user 50% max HP and cures its status|1
+banette-mega|Grudge Stitch|ghost|P|70|100|10|Hits first (+1); 30% lowers target Atk|1
+barbaracle-mega|Tidal Rockfall|rock|P|100|90|8|Lowers target Spe 1|1
+baxcalibur-mega|Frostfang Cataclysm|ice|P|100|90|5|20% lowers target Def; user takes 1/4 recoil|1
+beedrill-mega|Hornet Barrage|bug|P|25|95|10|Hits 3 times|1
+blastoise-mega|Fortress Cannon|water|S|95|100|8|Pulse move; 20% lowers target SpD|1
+blaziken-mega|Blazing Overdrive|fire|P|95|100|8|Raises user Spe 1; lowers user Def 1|1
+camerupt-mega|Caldera Burst|fire|S|105|90|8|30% burn; lowers user SpA 1|2
+chandelure-mega|Soulflame Waltz|ghost|S|95|100|8|30% burn|2
+charizard-mega-x|Dragonflare Claw|dragon|P|95|100|8|20% burn|2
+charizard-mega-y|Zenith Inferno|fire|S|95|90|8|Sets Sun; 10% burn|2
+chesnaught-mega|Bulwark Spike|grass|P|90|100|8|Raises user Def 1|2
+chimecho-mega|Resonant Bell|steel|S|80|100|10|20% lowers target SpD|2
+clefable-mega|Moonlit Miracle|fairy|S|95|100|10|Heals user 1/4 of damage|2
+crabominable-mega|Glacial Haymaker|ice|P|100|90|8|20% lowers target Spe; lowers user Spe 1|2
+darkrai-mega|Nightmare Eclipse|dark|S|95|95|5|Double damage to a sleeping target|2
+delphox-mega|Psyflame Cascade|psychic|S|95|100|8|20% burn|2
+diancie-mega|Diamond Tempest|rock|S|95|95|5|20% lowers target SpD|2
+dragalge-mega|Venom Wyrmwave|poison|S|90|100|10|30% badly poison|2
+dragonite-mega|Celestial Drake Rush|dragon|P|100|100|5|Raises user Atk 1; lowers user Def 1|2
+drampa-mega|Elder Gale|dragon|S|95|100|10|20% lowers target SpA|2
+eelektross-mega|Voltcoil Crush|electric|P|95|100|10|30% paralyze|2
+emboar-mega|Pyre Slam|fire|P|100|95|8|20% burn; user takes 1/4 recoil|3
+excadrill-mega|Bedrock Borer|ground|P|95|100|10|Ignores target's Def boosts; 20% flinch|3
+falinks-mega|Phalanx Charge|fighting|P|90|100|10|Raises user Atk 1|3
+feraligatr-mega|Tidal Rampage|water|P|95|100|8|20% lowers target Def|3
+floette-mega|Eternal Bloom|fairy|S|95|95|8|Heals user 1/2 of damage|3
+froslass-mega|Frostbite Veil|ice|S|90|100|10|30% lowers target Spe|3
+gallade-mega|Sacred Sword Dance|fighting|P|95|100|10|High crit rate; ignores target's Def boosts|3
+garchomp-mega|Sandstorm Fang|ground|P|95|100|5|Sets Sandstorm 5 turns; 20% flinch|3
+garchomp-mega-z|Zephyr Dragoon|dragon|P|95|100|5|20% raises user Spe|3
+gardevoir-mega|Embrace of Dawn|fairy|S|100|100|8|Heals user 1/2 of damage|3
+gengar-mega|Hexed Mirage|ghost|S|95|100|10|Traps target; 20% lowers target SpD|3
+glalie-mega|Whiteout Maw|ice|P|100|100|8|Sets Snow 5 turns; 10% freeze|3
+glimmora-mega|Crystal Toxin Bloom|rock|S|95|95|8|Sets Toxic Spikes on foe side|3
+golisopod-mega|Abyssal Carapace|bug|P|90|100|8|Raises user Def 2|3
+golurk-mega|Colossus Quake|ground|P|105|90|8|lowers user Spe 1|3
+greninja-mega|Shadow Shuriken Storm|water|S|25|95|8|Hits 3 times; high crit|4
+gyarados-mega|Leviathan's Wrath|water|P|100|100|8|Raises user Atk 1; lowers user Def 1|4
+hawlucha-mega|Sky Lariat|fighting|P|95|100|10|30% flinch|4
+heatran-mega|Magma Core Eruption|fire|S|100|95|5|30% burn; lowers user SpA 1|4
+heracross-mega|Titan Horn|bug|P|100|95|8|Hits 2 times; 20% flinch|4
+houndoom-mega|Hellhound Howl|dark|S|90|100|10|30% burn|4
+kangaskhan-mega|Mama's Embrace|normal|P|85|100|10|Heals user 1/4 of damage; 20% flinch|4
+latias-mega|Mirage Skystream|dragon|S|95|100|5|Raises user SpD 1|4
+latios-mega|Luster Lance|dragon|S|95|100|5|20% lowers target SpD|4
+lopunny-mega|Bunny Barrage|fighting|P|25|95|10|Hits 3 times; 20% flinch|4
+lucario-mega|Aura Cannon|fighting|S|95|100|8|Pulse move; 20% lowers target SpD|4
+lucario-mega-z|Aura Burst Z|steel|S|95|100|8|Raises user SpA 1|4
+magearna-mega|Clockwork Requiem|steel|S|95|95|5|20% lowers target SpD|4
+malamar-mega|Hypnotic Tentacle|dark|P|90|100|10|30% confuse|4
+manectric-mega|Thunder Gallop|electric|P|90|100|10|Hits first (+1); 30% paralyze|4
+mawile-mega|Twin Jaw Crush|steel|P|100|90|8|Hits 2 times; 30% lowers target Def|5
+medicham-mega|Meditation Strike|fighting|P|90|100|10|Raises user Atk 1|5
+meganium-mega|Bloom Sanctuary|grass|S|90|100|8|Heals user 1/2 of damage; sets Grassy Terrain|5
+meowstic-male-mega|Veil Pulse|psychic|S|85|100|10|Hits first (+1); 20% confuse|5
+metagross-mega|Quantum Meteor|steel|P|100|90|5|20% flinch; user takes 1/4 recoil|5
+mewtwo-mega-x|Overmind Breaker|psychic|P|100|100|5|Ignores target's Def boosts; lowers user Def 1|5
+mewtwo-mega-y|Genesis Burst|psychic|S|100|100|5|Raises user SpA 1; lowers user SpD 1|5
+pidgeot-mega|Cyclone Razor|flying|S|90|100|10|Hits first (+1); high crit rate|5
+pinsir-mega|Colossus Pincer|bug|P|100|90|8|Traps target|5
+pyroar-mega|Regal Blaze|fire|S|95|100|10|30% burn|5
+raichu-mega-x|Voltstrike Rampage|electric|P|100|100|8|30% paralyze; user takes 1/4 recoil|5
+raichu-mega-y|Plasma Surge|electric|S|100|100|8|Sets Electric Terrain 5 turns|5
+sableye-mega|Gemstone Hex|ghost|S|85|100|10|Lowers target Atk and SpA 1|5
+salamence-mega|Dragon Maelstrom|dragon|P|100|100|5|Raises user Atk 1; lowers user Def 1|5
+sceptile-mega|Verdant Dragon Cut|grass|P|95|100|8|High crit; 20% raises user Spe|5
+scizor-mega|Steel Pincer Rush|bug|P|90|100|10|Hits first (+1); 20% lowers target Def|6
+scolipede-mega|Centipede Cataclysm|bug|P|95|100|10|30% badly poison|6
+scovillain-mega|Inferno Pepper|fire|S|95|100|10|30% burn; sets Sun 3 turns|6
+scrafty-mega|Brawler's Pride|dark|P|95|100|10|Raises user Def 1|6
+sharpedo-mega|Razorjaw Frenzy|water|P|100|95|8|Bite move; 20% flinch|6
+skarmory-mega|Steel Wing Barrage|steel|P|90|100|10|Hits 2 times|6
+slowbro-mega|Shellbreak Cannon|water|S|95|100|10|Raises user Def 1|6
+staraptor-mega|Soaring Talon Dive|fighting|P|100|100|8|Raises user Spe 1; lowers user Def 1|6
+starmie-mega|Stellar Core Beam|psychic|S|95|100|8|20% confuse|6
+steelix-mega|Iron Serpent Coil|steel|P|100|95|8|Traps target|6
+swampert-mega|Torrent Crash|water|P|95|100|8|Sets Rain 5 turns; 20% lowers target Spe|6
+tatsugiri-curly-mega|Draconic Mimicry|dragon|S|90|100|10|20% lowers target SpD|6
+tyranitar-mega|Colossal Rampage|rock|P|100|90|5|Sets Sandstorm 5 turns; lowers user Def 1|6
+venusaur-mega|Bloom Cannon|grass|S|95|100|8|Heals user 1/4 of damage; 20% poison|6
+victreebel-mega|Pitcher Plant Gorge|grass|P|90|100|10|Heals user 1/2 of damage; 20% poison|6
+zeraora-mega|Plasma Fang Blitz|electric|P|95|100|5|Hits first (+1); 30% paralyze|7
+zygarde-mega|Primordial Order|dragon|P|100|100|5|Heals user 1/4 of damage; lowers user Spe 1|7
+venusaur-delta-mega|Pixie Bloom Storm|fairy|S|95|100|8|Heals user 1/4 of damage; 20% confuse|7
+charizard-delta-mega|Phantom Dragonfire|ghost|S|100|95|8|20% burn; lowers user SpA 1|7
+blastoise-delta-mega|Shadowtide Barrage|dark|S|100|100|8|20% lowers target SpD; lowers user SpD 1|7
+bisharp-delta-mega|Gale Blade Dance|flying|P|90|100|10|High crit rate; raises user Spe 1|7
+gardevoir-delta-mega|Frostbolt Elegy|electric|S|95|100|10|20% paralyze|7
+gallade-delta-mega|Blizzard Lancer|electric|P|95|100|10|High crit rate; 20% paralyze|7
+sunflora-delta-mega|Solar Flare Pollen|fire|S|105|100|10|30% poison; sets Sun|7
+scizor-delta-mega|Frostclaw Rush|ice|P|90|100|10|Hits first (+1); 20% lowers target Def|7
+glalie-delta-mega|Molten Glacier|fire|P|95|100|10|20% burn; sets Snow|7
+froslass-delta-mega|Ember Wraith|fire|S|95|100|10|30% burn|7
+typhlosion-delta-mega|Thunderforge Lariat|electric|S|100|95|8|30% paralyze; lowers user SpA 1|7
+pidgeot-delta-mega|Shadow Wyrm Gale|dark|S|90|100|10|Hits first (+1); 20% flinch|7
+girafarig-delta-mega|Venomous Twin Bolt|steel|S|105|100|10|Hits 2 times; 30% poison|7
+sableye-delta-mega|Gem Magma Hex|fire|P|105|95|10|30% burn; lowers user Def 1|8
+mawile-delta-mega|Thorn Maw Snare|grass|P|105|95|10|Hits 2 times; 30% lowers target Def|8
+medicham-delta-mega|Meadow Mind Palm|fairy|P|105|100|10|Raises user Atk 1|8
+camerupt-delta-mega|Toxic Caldera|poison|S|95|100|10|30% badly poison|8
+milotic-delta-mega|Spectral Tide Lure|ghost|S|100|100|8|Heals user 1/2 of damage; lowers user SpD 1|8
+metagross-delta-spider-mega|Webbed Meteor Crash|ground|P|100|95|5|Traps target; user takes 1/4 recoil|8
+metagross-delta-ruin-mega|Overgrown Ruin Smash|grass|P|100|95|5|20% flinch; lowers user Spe 1|8
+lopunny-delta-mega|Psycho Bunny Rush|fighting|P|25|95|10|Hits 3 times; 20% confuse|8
+lucario-delta-mega|Umbra Quake Pulse|dark|P|95|100|8|Raises user Atk 1|8
+alakazam-z-mega|Spectral Spoon Surge|psychic|S|100|100|8|20% confuse; lowers user SpD 1|8
+gengar-z-mega|Frozen Grave Hex|ghost|S|95|100|10|30% lowers target Spe|8
+steelix-z-mega|Glacier Ironbind|ice|P|100|95|8|Traps target|8
+dragonite-z-mega|Zenith Wyvern Drive|dragon|P|100|100|5|Raises user Atk 1; lowers user Def 1|8
+amoonguss-z-mega|Spore Shroud Burst|grass|P|90|100|10|30% poison; heals user 1/4 of damage|8
+azumarill-z-mega|Bubble Fairy Crash|water|S|95|100|10|Raises user SpA 1|8
+butterfree-z-mega|Prism Scale Gale|bug|S|90|100|10|30% lowers target SpA|9
+conkeldurr-z-mega|Pillar Demolisher|fighting|P|100|95|8|20% flinch; lowers user Spe 1|9
+darkrai-z-mega|Eclipse Dread|dark|S|100|95|5|Double damage to a sleeping target; lowers user SpD 1|9
+dugtrio-z-mega|Triple Drill Burrow|ground|P|35|95|10|Hits 3 times; 20% lowers target Def|9
+electivire-z-mega|Thunderfist Rampage|electric|P|100|100|5|30% paralyze; user takes 1/4 recoil|9
+excadrill-z-mega|Gigadrill Breaker|ground|P|100|100|8|Ignores target's Def boosts; lowers user Def 1|9
+feraligatr-z-mega|Abyssal Jaw|water|P|100|100|5|Bite move; 20% flinch; lowers user Def 1|9
+flygon-z-mega|Desert Mirage Dive|ground|P|95|100|8|Sets Sandstorm; 20% lowers target Spe|9
+golem-z-mega|Boulder Avalanche|rock|P|105|90|10|20% flinch|9
+jumpluff-z-mega|Cottonstorm Dance|grass|P|90|100|10|Raises user Spe 1|9
+kabutops-z-mega|Ancient Scythe Cleave|rock|P|100|95|10|High crit rate; 20% lowers target Def|9
+magmortar-z-mega|Foundry Cannon|fire|S|100|95|5|30% burn; lowers user SpA 1|9
+meganium-z-mega|Wildgrowth Aegis|grass|S|90|100|8|Heals user 1/2 of damage; sets Grassy Terrain|9
+milotic-z-mega|Serene Tide Gloria|water|S|95|100|8|Heals user 1/2 of damage|9
+omastar-z-mega|Spiral Shell Cannon|rock|S|105|90|10|20% lowers target SpD; raises user Def 1|9
+poliwrath-z-mega|Whirlpool Hook|water|P|100|100|8|Raises user Atk 1; lowers user Spe 1|10
+pyroar-z-mega|Emberfang Roar|fire|S|100|100|10|30% burn; 20% lowers target SpA|10
+shiftry-z-mega|Tempest Fan Slash|grass|P|95|100|10|High crit rate; 30% flinch|10
+snorlax-z-mega|Slumber Avalanche|normal|P|100|100|5|Heals user 1/4 of damage; lowers user Spe 1|10
+torkoal-z-mega|Cinder Shell Slam|fire|P|105|95|10|Raises user Def 1; 30% burn|10
+typhlosion-z-mega|Eruption Ember Slide|fire|S|100|95|8|30% burn; lowers user SpA 1|10
+whimsicott-z-mega|Fairy Cotton Gust|grass|S|90|100|10|30% lowers target Atk|10

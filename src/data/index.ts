@@ -57,6 +57,7 @@ import zMovesJson from './zMoves.json';
 import maxMovesJson from './maxMoves.json';
 import regionsJson from './regions.json';
 import movesJson from './moves.json';
+import megaMovesJson from './megaMoves.json';
 import rewardsJson from './rewards.json';
 import rulesetJson from './ruleset.json';
 import trainerTiersJson from './trainerTiers.json';
@@ -230,7 +231,8 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 
 export const RAW_CONTENT: RawContent = {
   species: applySpeciesFixes(mergeSpecies(speciesJson, customSpeciesJson, customEvolutionsJson), speciesFixesJson),
-  moves: movesJson,
+  // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
+  moves: [...movesJson, ...megaMovesJson.moves],
   abilities: abilitiesJson,
   typeChart: typeChartJson,
   archetypes: archetypesJson,

@@ -14,4 +14,5 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 - Starter sets / quests / mastery / events plan: fully built (see Done).
 - M8.75 still open: D Bank tiers/licenses/challenges, E Pokédex extras, G levels to 500 + custom regions, H later hub systems. M8.5: regional forms as a mechanic (if wanted). M9: built.
 - M10 visuals (Visual Bible V1-V5): next = level-up/reward reveal transitions, per-region palettes, perf pass.
+- Mega signature moves (Overhaul 27-28): batch 1 of 10 built (15 of 142 moves), the rest wait for the power budget (slice 4); note `docs/status/mega-signature-moves.md`.
 - CI: `.github/workflows` runs `check` on every PR; branch protection is still off.

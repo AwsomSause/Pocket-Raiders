@@ -2429,8 +2429,8 @@ export class BattleScene extends Phaser.Scene {
     const options = anyPp
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
-          // Beta 4.4: the Hyper slot's move is starred.
-          const name = (slot.hyper ? '★ ' : '') + zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
+          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : '') + zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
