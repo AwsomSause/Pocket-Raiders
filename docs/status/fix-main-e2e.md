@@ -1,0 +1,1 @@
+- Fix main e2e: Settings keeps "Disable all animations" and "Battle motion" as the first Animations rows (new rows from other slices had pushed them down, breaking the milestone9 and optionsBackdrop specs); milestone1 declines the level-up move prompt before the Reward draft. Not fixed: w12Tools times out under load (passed alone and in one CI run).
