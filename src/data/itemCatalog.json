@@ -15786,5 +15786,26 @@
     }
    ]
   }
+ },
+ {
+  "id": "lock-breaker",
+  "name": "Lock Breaker",
+  "family": "Battle held items",
+  "description": "With a Choice item: may switch to another move, which becomes the new lock, for 10% max HP",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "choice-band",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "choiceBreak",
+     "hpCost": 0.1
+    }
+   ]
+  }
  }
 ]
