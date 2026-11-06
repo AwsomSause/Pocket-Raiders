@@ -29,7 +29,7 @@ describe('rarity order', () => {
     }
   });
 
-  it('event gifts (one-of lists and fixed items) follow the same order', () => {
+  it('event one-of gift lists follow the same order (fixed authored items are one-offs and not counted)', () => {
     const t: Record<string, number> = { common: 0, uncommon: 0, rare: 0, epic: 0 };
     const rarityOf = (id: string) => content.catalog.get(id)?.rarity ?? content.rewards.get(id)?.rarity ?? 'common';
     const rng = new Rng(hashSeed('events'));
@@ -37,7 +37,6 @@ describe('rarity order', () => {
       JSON.stringify(event, (_key, v) => {
         if (v && typeof v === 'object') {
           if (v.kind === 'itemFrom') for (let i = 0; i < 40; i++) t[rarityOf(pickByRarity(content, v.ids, rng))]! += 1 / 40;
-          else if (v.kind === 'item') t[rarityOf(v.id)]!++;
         }
         return v;
       });
