@@ -83,7 +83,7 @@ export function room(d: RoomDef, nodeIndex: number): Raw {
     choices.push({ label: 'Use an Escape Rope to skip it', requires: [{ kind: 'item', id: 'escape-rope' }], success: { text: 'You haul the party over the trap on a rope. The rope is spent.', effects: [{ kind: 'loseItem', id: 'escape-rope' }, ...(to ? [open(to)] : [])] } });
   }
   return {
-    id: roomId(d, n.id), name: nodeIndex === 0 ? d.name : `${d.name}: ${n.kind}`, group: 'Dungeons', stop: 'dungeon', rarity: 'rare', tags: ['Dungeon', 'Exploration'],
+    id: roomId(d, n.id), name: nodeIndex === 0 ? d.name : `${d.name}: ${n.kind}`, group: 'Dungeons', stop: 'delve', rarity: 'rare', tags: ['Dungeon', 'Exploration'],
     minStage: 1, room: true, types: [], requires: [], scene: { cast: [], effect: 'none', ...(d.pseudo ? { tint: d.pseudo.tint } : {}) }, intro: first, choices,
   };
 }
