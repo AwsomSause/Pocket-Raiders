@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthSpeedMultiplier, turnFacts, waitedTurn } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, turnFacts, waitedTurn } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -1636,6 +1636,15 @@ function switchOutAbility(ctx: BattleContext, mon: PokemonInstance): void {
 // ---------- abilities ----------
 
 /** The weather that counts: Cloud Nine and Air Lock on either side switch its effects off (it still runs out). */
+/** The player's Pokémon has this growth path (and the switch is on). */
+function growthHas(ctx: BattleContext, c: Combatant, path: string): boolean {
+  return c.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && c.mon.growthPath === path;
+}
+/** +1 turn for a duration path, the first time in this battle. */
+function growthExtraTurn(ctx: BattleContext, c: Combatant, path: string): number {
+  return growthHas(ctx, c, path) && growthOnce((ctx.battle.growthMarks ??= []), `turn:${path}`) ? 1 : 0;
+}
+
 function weatherNow(ctx: BattleContext): Weather | null {
   const w = ctx.battle.weather?.id ?? null;
   if (!w) return null;
@@ -3175,7 +3184,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (ctx.battle.terrain?.id === fx.terrain) {
       events.push({ type: 'fail', side: user.side });
     } else {
-      ctx.battle.terrain = { id: fx.terrain, turns: 5 };
+      ctx.battle.terrain = { id: fx.terrain, turns: 5 + growthExtraTurn(ctx, user, 'terrain-master') };
       events.push({ type: 'terrain', terrain: fx.terrain });
     }
     return;
@@ -3185,7 +3194,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (weather === fx.weather) {
       events.push({ type: 'fail', side: user.side });
     } else {
-      setWeather(ctx, fx.weather, Held.weatherTurns(ctx, user, fx.weather, 5));
+      setWeather(ctx, fx.weather, Held.weatherTurns(ctx, user, fx.weather, 5) + growthExtraTurn(ctx, user, 'rain-dancer'));
       events.push({ type: 'weather', weather: fx.weather });
     }
     return;
@@ -3193,7 +3202,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
 
   if (fx.protect) {
     // Works only when the user moves first; each use in a row is a third as likely to work.
-    if (movedFirst && rng.chance(1 / 3 ** user.vol.protectChain)) {
+    // Tricky Feet: the first back-to-back Protect of the battle is a little likelier to work.
+    const dodgeBonus = user.vol.protectChain > 0 && growthHas(ctx, user, 'tricky-feet') && growthOnce((ctx.battle.growthMarks ??= []), 'turn:tricky-feet') ? Math.min(ctx.content.balance.overhaulGrowth.bonus, 0.03) : 0;
+    if (movedFirst && rng.chance(Math.min(1, 1 / 3 ** user.vol.protectChain + dodgeBonus))) {
       user.protected = true;
       if (fx.protectContact) PROTECT_CONTACT.set(user, fx.protectContact);
       user.vol.protectChain += 1;
@@ -3316,7 +3327,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
-      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type);
+      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)));
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
@@ -3734,21 +3745,21 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   // An attack that also sets weather or terrain (Mega signature moves); a status move did that above.
   if (landed > 0) {
     if (fx.weather && weather !== fx.weather) {
-      setWeather(ctx, fx.weather, Held.weatherTurns(ctx, user, fx.weather, 5));
+      setWeather(ctx, fx.weather, Held.weatherTurns(ctx, user, fx.weather, 5) + growthExtraTurn(ctx, user, 'rain-dancer'));
       events.push({ type: 'weather', weather: fx.weather });
     }
     if (fx.terrain && ctx.battle.terrain?.id !== fx.terrain) {
-      ctx.battle.terrain = { id: fx.terrain, turns: 5 };
+      ctx.battle.terrain = { id: fx.terrain, turns: 5 + growthExtraTurn(ctx, user, 'terrain-master') };
       events.push({ type: 'terrain', terrain: fx.terrain });
     }
   }
-  if (landed > 0 && fx.clearHazards) clearHazards(ctx, user, fx.clearHazards, events);
+  if (landed > 0 && fx.clearHazards) { clearHazards(ctx, user, fx.clearHazards, events); if (growthHas(ctx, user, 'cleaner')) healMon(ctx, user, 1 / 16, events); }
 
   // Extra effects only land if the target is still standing. Serene Grace doubles their chances; Shield Dust blocks them.
   const chanceMult = userAbility === 'serene-grace' ? 2 : 1;
   const shielded = foeAbility === 'shield-dust';
   const userTypes = getSpecies(ctx.content, user.mon.speciesId).types;
-  const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1)) / 100);
+  const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1) + (user.side === 'player' ? growthStatusChance(ctx.content.balance.overhaulGrowth, user.mon, statusId) : 0)) / 100);
   if (target.mon.hp > 0 && !sheerForce && !shielded) {
     if (fx.randomStatus && roll(fx.randomStatus.chance)) {
       const id = fx.randomStatus.ids[rng.int(0, fx.randomStatus.ids.length - 1)]!;
@@ -3757,7 +3768,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (fx.status && roll(fx.status.chance, fx.status.id)) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
     if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
-    if (fx.confuse && roll(fx.confuse.chance)) tryConfuse(ctx, user, target, events, false);
+    if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
   }
   if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
     target.vol.bound = rng.int(4, 5);
@@ -4286,13 +4297,15 @@ function applySideMove(ctx: BattleContext, user: Combatant, move: SideMove, even
     case 'auroraVeil': {
       const w = weatherNow(ctx);
       if (fx.auroraVeil > 0 || (w !== 'snow' && w !== 'hail')) return false;
-      fx.auroraVeil = Held.lightClayTurns(ctx, user) ?? SIDE_TURNS.auroraVeil!;
+      fx.auroraVeil = (Held.lightClayTurns(ctx, user) ?? SIDE_TURNS.auroraVeil!) + growthExtraTurn(ctx, user, 'screen-keeper');
       break;
     }
     default:
       if (fx[move] > 0) return false;
-      fx[move] = (move === 'reflect' || move === 'lightScreen' ? Held.lightClayTurns(ctx, user) : null) ?? SIDE_TURNS[move]!;
+      fx[move] = ((move === 'reflect' || move === 'lightScreen' ? Held.lightClayTurns(ctx, user) : null) ?? SIDE_TURNS[move]!) + (move === 'reflect' || move === 'lightScreen' ? growthExtraTurn(ctx, user, 'screen-keeper') : 0);
   }
+  // Hazard Setter: this Pokémon's hazards sting a little more for the rest of the battle.
+  if ((HAZARDS as readonly string[]).includes(move) && growthHas(ctx, user, 'hazard-setter')) growthOnce((ctx.battle.growthMarks ??= []), 'hazard+');
   events.push({ type: 'sideEffect', side, effect: move, on: true });
   return true;
 }
@@ -4641,7 +4654,8 @@ function applyHazards(ctx: BattleContext, c: Combatant, events: BattleEvent[]): 
   const grounded = isGrounded(ctx, c);
   const hurt = (hazard: 'spikes' | 'stealthRock', amount: number) => {
     if (c.mon.hp <= 0 || abilityIn(ctx, c) === 'magic-guard') return;
-    const { lost, lastStand } = takeHp(ctx, c, Math.max(1, amount));
+    const extra = c.side === 'enemy' && (ctx.battle.growthMarks ?? []).includes('hazard+') ? Math.floor(max / 32) : 0;
+    const { lost, lastStand } = takeHp(ctx, c, Math.max(1, amount + extra));
     events.push({ type: 'hazard', side: c.side, hazard, amount: lost, hpAfter: c.mon.hp });
     if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
   };
@@ -4699,7 +4713,10 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   if (fx.toxic) {
     if (!canGetStatus(ctx, user, target, 'psn', move)) return void events.push({ type: 'fail', side: user.side });
     tryInflictStatus(ctx, user, target, 'psn', move, events, true);
-    if (target.mon.status?.id === 'psn') target.mon.status.bad = true;
+    if (target.mon.status?.id === 'psn') {
+      target.mon.status.bad = true;
+      if (growthHas(ctx, user, 'toxic-weaver')) target.mon.status.turns = 1;
+    }
     return;
   }
   if (fx.roost) {
@@ -4990,7 +5007,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
       events.push({ type: 'fieldEnd', field: 'trickRoom' });
     } else if (f[fx.field] > 0) events.push({ type: 'fail', side: user.side });
     else {
-      f[fx.field] = 5;
+      f[fx.field] = 5 + (fx.field === 'trickRoom' ? growthExtraTurn(ctx, user, 'trick-roomer') : 0);
       events.push({ type: 'fieldStart', field: fx.field });
     }
     return;
@@ -5239,7 +5256,10 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     }
     didSomething = true;
   }
-  if (fx.clearHazards) didSomething = clearHazards(ctx, user, fx.clearHazards, events) || didSomething;
+  if (fx.clearHazards) {
+    didSomething = clearHazards(ctx, user, fx.clearHazards, events) || didSomething;
+    if (growthHas(ctx, user, 'cleaner')) healMon(ctx, user, 1 / 16, events);
+  }
   if (fx.confuse) didSomething = tryConfuse(ctx, user, target, events, true) || didSomething;
   if (fx.seed) {
     if (target.vol.seeded || getSpecies(content, target.mon.speciesId).types.includes('grass')) {
@@ -5257,6 +5277,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     const recipient = change.target === 'self' ? user : target;
     didSomething = changeStage(ctx, user, recipient, change.stat, change.stages, events) || didSomething;
   }
+  if (growthHas(ctx, user, 'buffer') && user.mon.hp > 0 && fx.statChanges?.some((c) => c.target === 'self' && c.stages > 0)) healMon(ctx, user, 1 / 32, events);
   if (!didSomething && !fx.statChanges?.length && !fx.status && !fx.confuse && !fx.clearHazards) events.push({ type: 'fail', side: user.side });
 }
 

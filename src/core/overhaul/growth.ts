@@ -41,6 +41,20 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   caretaker: { counter: 'berryFeed', words: 'damage (it has been fed many berries)', min: 5 },
   'treasure-nose': { counter: 'fieldItem', words: 'damage (it was in front when field items turned up)', min: 5 },
   'move-collector': { counter: 'tmLearned', words: 'damage (it has learned many TM and tutor moves)', min: 3 },
+  // Batch 6: status and setup moves. Counters come from the moves a Pokémon uses (`moveRoleCounters`) and what they inflict.
+  'live-wire': { counter: 'inflictPar', words: 'chance to paralyse with its moves', min: 3, type: 'electric' },
+  'glacial-mind': { counter: 'inflictFrz', words: 'chance to freeze with its moves', min: 2, cap: 0.03, type: 'ice' },
+  'dream-weaver': { counter: 'inflictSleepConf', words: 'chance to confuse or put to sleep with its moves', min: 3, cap: 0.03, type: 'psychic' },
+  'toxic-weaver': { counter: 'useToxic', words: 'on Toxic: the poison starts one step stronger', min: 4, type: 'poison' },
+  'rain-dancer': { counter: 'setWeather', words: 'on weather it sets: lasts 1 turn longer (once per battle)', min: 3 },
+  'terrain-master': { counter: 'setTerrain', words: 'on terrain it sets: lasts 1 turn longer (once per battle)', min: 3 },
+  'trick-roomer': { counter: 'useRoom', words: 'on Trick Room it sets: lasts 1 turn longer (once per battle)', min: 3 },
+  'screen-keeper': { counter: 'useScreen', words: 'on screens it sets: last 1 turn longer (once per battle)', min: 4 },
+  'hazard-setter': { counter: 'setHazard', words: 'of max HP extra from the hazards it sets (1/32)', min: 4 },
+  cleaner: { counter: 'useClean', words: 'of max HP restored by hazard removal moves (1/16)', min: 3 },
+  disruptor: { counter: 'dropFoe', words: 'accuracy with stat-lowering moves', min: 6 },
+  buffer: { counter: 'raiseSelf', words: 'of max HP restored by stat-raising moves (1/32)', min: 6 },
+  'tricky-feet': { counter: 'dodge', words: 'Protect success chance (once per battle)', min: 3, cap: 0.03 },
   // Batch 4: time of day and weather (the run clock's period and the battle's weather).
   'night-owl-path': { counter: 'winNight', words: 'damage in night battles', min: 3 },
   sunbather: { counter: 'winDay', words: 'damage in daytime battles (morning and afternoon)', min: 3 },
@@ -129,6 +143,29 @@ export function noteMapGrowth(content: Content, run: { story: { histories: Recor
 
 /** What one move use tells the growth counters. `hpFrac` is the user's HP share before it moved. */
 export interface MoveFacts { accuracy: number | null; category: string; type: string; flags: readonly string[]; hpFrac: number; night?: boolean }
+/** What the move itself is, for the setup-move paths. */
+export interface MoveRoleFacts { id: string; category: string; weather?: unknown; terrain?: unknown; field?: string; wonderRoom?: unknown; sideMove?: string; clearHazards?: unknown; statChanges?: readonly { stages: number; target: string }[] }
+export function moveRoleCounters(m: MoveRoleFacts): string[] {
+  const out: string[] = [];
+  if (m.weather) out.push('setWeather');
+  if (m.terrain) out.push('setTerrain');
+  if (m.field === 'trickRoom' || m.wonderRoom) out.push('useRoom');
+  if (m.sideMove === 'reflect' || m.sideMove === 'lightScreen' || m.sideMove === 'auroraVeil') out.push('useScreen');
+  if (m.sideMove === 'spikes' || m.sideMove === 'toxicSpikes' || m.sideMove === 'stealthRock' || m.sideMove === 'stickyWeb') out.push('setHazard');
+  if (m.id === 'toxic' || m.id === 'toxic-spikes') out.push('useToxic');
+  if (m.clearHazards) out.push('useClean');
+  if (m.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)) out.push('dropFoe');
+  if (m.category === 'status' && m.statChanges?.some((c) => c.target === 'self' && c.stages > 0)) out.push('raiseSelf');
+  return out;
+}
+/** True the first time per battle for this key (`marks` is the battle's `growthMarks`). */
+export function growthOnce(marks: string[], key: string): boolean {
+  if (marks.includes(key)) return false;
+  marks.push(key);
+  return true;
+}
+/** Paths whose edge is not damage (status chances, durations, healing, accuracy, Protect). */
+const NON_DAMAGE: ReadonlySet<string> = new Set(['live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');
@@ -271,6 +308,7 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
       : id === 'night-owl-path' ? hit.period === 'night'
       : id === 'sunbather' ? hit.period === 'morning' || hit.period === 'afternoon'
       : id === 'moonlit' ? moveType.toLowerCase() === 'fairy' && hit.period === 'night'
+      : NON_DAMAGE.has(id) ? false
       : id === 'dawn-runner' || id === 'weather-wise' || id === 'storm-chaser' || id === 'windrunner' ? false
       : id === 'lead-out' ? (hit.turn ?? 99) <= 2
       : id === 'opener' ? hit.turnsOut === 0
@@ -294,13 +332,23 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
 }
 
 /** Accuracy multiplier for the two accuracy paths (Gambler: moves under 80%; Support: status moves). */
-export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = ''): number {
+export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false): number {
   if (!cfg.enabled || accuracy === null) return 1;
   if (mon.growthPath === 'steady-hand' && moveType.toLowerCase() === 'normal') return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'weather-wise' && weather) return 1 + Math.min(cfg.bonus, 0.03);
+  if (mon.growthPath === 'disruptor' && lowersFoe) return 1 + cfg.bonus;
   if (mon.growthPath === 'gambler' && accuracy < 80) return 1 + cfg.bonus;
   if (mon.growthPath === 'support' && category === 'status') return 1 + cfg.bonus;
   return 1;
+}
+
+/** Extra percentage points on a status or confusion chance from the attacker's path (Live Wire, Glacial Mind, Dream Weaver). */
+export function growthStatusChance(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, statusId: string | undefined): number {
+  if (!cfg.enabled) return 0;
+  if (mon.growthPath === 'live-wire' && statusId === 'par') return cfg.bonus * 100;
+  if (mon.growthPath === 'glacial-mind' && statusId === 'frz') return Math.min(cfg.bonus, 0.03) * 100;
+  if (mon.growthPath === 'dream-weaver' && (statusId === 'slp' || statusId === 'confusion')) return Math.min(cfg.bonus, 0.03) * 100;
+  return 0;
 }
 
 /** Speed multiplier for the Speed paths: Dawn Runner (first battle of a day), Storm Chaser (rain, snow), Windrunner (own Tailwind). */
