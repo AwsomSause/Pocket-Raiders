@@ -18,6 +18,7 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:cookbook': { name: 'Cookbook', desc: 'Every recipe you know, and the ones still hidden.', group: 'kitchen' },
   'view:album': { name: 'Photo Album', desc: 'Species you have photographed (kept across runs).', group: 'gadgets' },
   'view:journal': { name: 'Item Journal', desc: 'The first time you used each item.', group: 'workshop' },
+  'view:xp': { name: 'Experience share', desc: 'Choose how experience is split: Even, Focus on the lead, or Catch-up.', group: 'camp' },
   'view:stuff': { name: 'Camp Pack', desc: 'Oil, keys, bottles, scraps, pages, tokens, luck and relics.', group: 'camp' },
 };
 
@@ -126,6 +127,7 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
   }
   if (id === 'view:album') { const album = session.profile.camp?.album ?? []; return choose(host, `Photo Album (${album.length})`, album.map((s) => ({ label: content.species.get(s)?.name ?? s })), again, again); }
   if (id === 'view:journal') { const j = session.profile.camp?.journal ?? []; return choose(host, `Item Journal (${j.length})`, j.map((s) => ({ label: content.items.get(s)?.name ?? content.catalog.get(s)?.name ?? s })), again, again); }
+  if (id === 'view:xp') return back(session.cycleXpShare());
   if (id === 'view:stuff') {
     const camp = campOf(run);
     const rows: Choice[] = [...Object.entries(camp.stuff).filter(([, n]) => n > 0).map(([k, n]) => ({ label: k, desc: `×${n}` })), { label: 'Luck', desc: String(camp.luck) }, { label: 'Morality', desc: String(camp.morality) }, { label: CAMP.market.tokenName + 's', desc: String(camp.tokens) }, ...camp.relics.map((r) => ({ label: CAMP.relics.find((x) => x.id === r.id)?.name ?? r.id, desc: `${CAMP.relics.find((x) => x.id === r.id)?.blurb ?? ''}${r.cursed ? ' CURSED' : ''}` }))];

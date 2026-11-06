@@ -823,5 +823,6 @@
    50,
    100
   ]
- }
+ },
+  "overlevel": { "xpPerItem": 400, "item": "hyper-potion" }
 }
