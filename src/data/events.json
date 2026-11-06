@@ -13926,6 +13926,7 @@
       "battle": {
        "kind": "trainer",
        "name": "Mirror Trainer",
+           "mirror": true,
        "size": 3,
        "types": [],
        "levelBonus": 2,

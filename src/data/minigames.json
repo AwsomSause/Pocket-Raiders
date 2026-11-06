@@ -2920,6 +2920,95 @@
         "slowFactor": 1,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "mystery-dungeon",
+      "name": "Mystery Dungeon",
+      "category": "skill",
+      "blurb": "A random floor crawl.",
+      "instructions": "Explore fogged floors. Find the stairs down, pick up loot, and avoid traps. Monsters cost HP but drop loot. You have limited steps.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "floors": 3,
+            "hp": 5,
+            "turns": 45
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "floors": 4,
+            "hp": 4,
+            "turns": 55
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "floors": 5,
+            "hp": 4,
+            "turns": 60
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "3 per floor descended plus 1 per loot, up to 5 per floor.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.65,
+        "gold": 0.9
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 120,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 190,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
     }
   ]
 }

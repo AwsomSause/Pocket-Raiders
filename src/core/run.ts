@@ -22,7 +22,8 @@ import { wandererStageStart, wandererStep } from './wanderer';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
-import { wildCatchMultiplier } from './wildBehavior';
+import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
+import { buildPriceFactor, sabotageStep, wildEffect } from './battle/battleFlair';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
@@ -788,7 +789,9 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const crossed = crossObstacle(content, run, node);
   // Earthquake tremors (a live-event rule) shift the stops ahead.
   const tremor = tremorStep(content, run);
-  const notes = [crossed, tremor].filter(Boolean).join(' ');
+  // S281: a rival may filch an item on the way.
+  const sabotage = sabotageStep(content, run);
+  const notes = [crossed, tremor, sabotage].filter(Boolean).join(' ');
   if (notes) onCross(notes);
   // A trainer tailing you steps out after a few nodes (ideas W4, wandering trainer).
   wandererStep(content, run);
@@ -2102,7 +2105,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -2331,8 +2334,22 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
+  wildBehaviorEffect(content, run, events);
   countAttributeGrowth(content, run, events);
   return { run, events };
+}
+
+/** S265: a wild behaviour changes the fight once, when the battle begins (singles only; no random numbers). */
+function wildBehaviorEffect(content: Content, run: RunState, events: RunEvent[]): void {
+  const battle = run.battle!;
+  if (battle.doubles) return;
+  const framing = wildBehavior(content, run);
+  const fx = framing ? wildEffect(content, framing.id) : null;
+  const foe = battle.enemyTeam[battle.enemyIndex];
+  if (!fx || !foe) return;
+  for (const [stat, n] of Object.entries(fx.boost ?? {})) battle.enemyStages[stat as keyof typeof battle.enemyStages] = Math.min(6, battle.enemyStages[stat as keyof typeof battle.enemyStages] + n);
+  if (fx.hurt) foe.hp = Math.max(1, Math.round(foe.hp * (1 - fx.hurt)));
+  events.push({ type: 'spectacle', kind: 'arena', side: 'enemy', text: fx.text, uid: foe.uid } as RunEvent);
 }
 
 /**

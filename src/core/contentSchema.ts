@@ -10,6 +10,7 @@ import { W1ConfigSchema } from './battle/w1Rules';
 import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
 import { OpponentAiSchema, DEFAULT_OPPONENT_AI } from './battle/opponentAiConfig';
 import { GrowthStatsSchema, DEFAULT_GROWTH_STATS } from './battle/growthConfig';
+import { BattleFlairSchema, DEFAULT_BATTLE_FLAIR } from './battle/battleFlairConfig';
 import type { StoryConfig } from './story/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
@@ -1942,6 +1943,8 @@ export const BalanceSchema = z.object({
   opponentAi: OpponentAiSchema.default(DEFAULT_OPPONENT_AI),
   /** Battle/AI batch 3 (S157 Focus, S158 Ability Awakening): battle/growthStats.ts. */
   growthStats: GrowthStatsSchema.default(DEFAULT_GROWTH_STATS),
+  /** Battle/AI batch 4 (S26, S167, S32, S44, S264, S265, S278, S281): battle/battleFlair.ts. */
+  battleFlair: BattleFlairSchema.default(DEFAULT_BATTLE_FLAIR),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z

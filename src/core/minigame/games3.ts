@@ -455,6 +455,84 @@ const contest: MinigameModule<ContestState> = {
   result: (s) => ({ score: Math.min(s.points, s.best), max: s.best }),
 };
 
+// ---------- Mystery Dungeon floors (S492): a fogged floor crawl; find the stairs, grab loot, dodge traps ----------
+const DG = 5;
+type DgCell = '.' | 'S' | 'T' | 'M' | 'I';
+interface DungeonState extends BaseState {
+  floor: number;
+  floors: number;
+  grid: DgCell[];
+  pos: number;
+  seen: number[];
+  hp: number;
+  turns: number;
+  loot: number;
+}
+const dgNear = (a: number, b: number): boolean => Math.abs((a % DG) - (b % DG)) <= 1 && Math.abs(Math.floor(a / DG) - Math.floor(b / DG)) <= 1;
+function dgFloor(s: DungeonState): void {
+  const r = rng(s);
+  const spots = r.shuffle(Array.from({ length: DG * DG }, (_, i) => i));
+  s.grid = Array.from({ length: DG * DG }, () => '.' as DgCell);
+  s.pos = spots[0]!;
+  // The stairs are never right next to the start.
+  const far = spots.slice(1).filter((i) => !dgNear(i, s.pos));
+  const stairs = far[0]!;
+  s.grid[stairs] = 'S';
+  const rest = spots.slice(1).filter((i) => i !== stairs);
+  rest.slice(0, 2 + Math.min(s.floor, 2)).forEach((i) => (s.grid[i] = 'T'));
+  rest.slice(4, 7).forEach((i) => (s.grid[i] = 'M'));
+  rest.slice(7, 9).forEach((i) => (s.grid[i] = 'I'));
+  keep(s, r);
+  s.seen = [s.pos];
+}
+const dungeon: MinigameModule<DungeonState> = {
+  start(_c, p, rs) {
+    const s: DungeonState = { ...base(rs), floor: 0, floors: p.floors!, grid: [], pos: 0, seen: [], hp: p.hp!, turns: p.turns!, loot: 0 };
+    dgFloor(s);
+    return s;
+  },
+  view(_c, s) {
+    const cells: Cell[] = s.grid.map((k, i) => {
+      const known = s.seen.some((v) => dgNear(v, i));
+      const here = i === s.pos;
+      const label = here ? '☺' : !known ? '?' : k === 'S' ? '▼' : k === 'T' ? '✖' : k === 'M' ? 'M' : k === 'I' ? '✚' : s.seen.includes(i) ? '·' : ' ';
+      return { id: String(i), label, tone: here ? ('good' as const) : !known ? ('dim' as const) : k === 'S' ? ('hot' as const) : k === 'T' || k === 'M' ? ('bad' as const) : k === 'I' ? ('info' as const) : ('dim' as const), disabled: s.done || !dgNear(s.pos, i) || here };
+    });
+    return { hud: [`Floor ${s.floor + 1}/${s.floors}`, `HP: ${s.hp}`, `Steps: ${s.turns}`, `Loot: ${s.loot}`, s.msg], prompt: 'Step to a neighbouring tile. ▼ stairs, ✚ loot, ✖ trap, M monster (costs HP, then drops loot). Unseen tiles are ?.', cols: DG, cells, done: s.done };
+  },
+  act(_c, s, id) {
+    if (s.done) return;
+    const i = Number(id);
+    if (!dgNear(s.pos, i) || i === s.pos) return;
+    s.pos = i;
+    if (!s.seen.includes(i)) s.seen.push(i);
+    s.turns -= 1;
+    const k = s.grid[i];
+    s.msg = '';
+    if (k === 'T') {
+      s.hp -= 1;
+      s.msg = 'A trap!';
+      s.grid[i] = '.';
+    } else if (k === 'M') {
+      s.hp -= 1;
+      s.loot += 1;
+      s.msg = 'You beat a wild Pokémon and it dropped loot.';
+      s.grid[i] = '.';
+    } else if (k === 'I') {
+      s.loot += 1;
+      s.msg = 'Found loot!';
+      s.grid[i] = '.';
+    } else if (k === 'S') {
+      s.floor += 1;
+      s.msg = 'Down the stairs!';
+      if (s.floor >= s.floors) s.done = true;
+      else dgFloor(s);
+    }
+    if (s.hp <= 0 || s.turns <= 0) s.done = true;
+  },
+  result: (s) => ({ score: Math.min(s.floor * 3 + s.loot, s.floors * 5), max: s.floors * 5 }),
+};
+
 export const MINIGAMES_3: Record<string, MinigameModule<never>> = {
   'obstacle-course': athlete as never,
   'bug-contest': bugContest as never,
@@ -464,4 +542,5 @@ export const MINIGAMES_3: Record<string, MinigameModule<never>> = {
   'ranger-styler': styler as never,
   'snap-photo': snap as never,
   'pokemon-contest': contest as never,
+  'mystery-dungeon': dungeon as never,
 };

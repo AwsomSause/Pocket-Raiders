@@ -772,6 +772,8 @@ export const BattleStateSchema = z.object({
   scanned: z.enum(['ok', 'fail']).optional(),
   /** Doubles: the ally whose hit this turn is the second half of a combo (ideas W1). */
   comboUid: z.string().optional(),
+  /** Battle/AI batch 4 (battle/battleFlair.ts): move types the crowd has seen and cheers given (S32), the turn a flood ends (S44), whether the ability pair fired (S167). */
+  flair: z.object({ crowdTypes: z.array(z.string()).default([]), cheers: z.number().int().min(0).default(0), floodUntil: z.number().int().default(-1), paired: z.boolean().default(false) }).optional(),
   /** Critical hits in a row per Pokémon (uid); the Streak Lens reads it (ideas W1). */
   critStreak: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Nuzlocke: this wild Pokémon is not the area's first encounter, so it can't be caught (core/nuzlocke.ts). */
