@@ -1,0 +1,235 @@
+{
+ "events": [
+  {
+   "id": "rooftop-rumble",
+   "name": "Rooftop Rumble",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#232a30",
+    "effect": "none"
+   },
+   "intro": "A brawl on a windy rooftop. \"Knock them off fast and the bonus is yours!\"",
+   "choices": [
+    {
+     "label": "Rumble!",
+     "success": {
+      "text": "The wind howls over the edge.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rooftop Brawler",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "turnLimit": 4
+       },
+       "slowWin": [
+        {
+         "kind": "money",
+         "amount": 450
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay on the stairs",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "library-duel-silence",
+   "name": "Library Duel Silence",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#24241f",
+    "effect": "none"
+   },
+   "intro": "A librarian presses a finger to their lips. \"Shh. This duel is silent. No battle text.\"",
+   "choices": [
+    {
+     "label": "Duel in silence",
+     "success": {
+      "text": "Not a word is spoken.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Silent Librarian",
+       "classId": "psychic",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "silent": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Whisper goodbye",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "eco-ranger-test",
+   "name": "Eco Ranger Test",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1f2e24",
+    "effect": "none"
+   },
+   "intro": "A ranger tests you: \"Calm wild-hearted Pokémon without a single knockout. Put each one to sleep or wear it down to its last sliver.\"",
+   "choices": [
+    {
+     "label": "Take the ranger test",
+     "success": {
+      "text": "The ranger nods. \"No knockouts, remember.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Eco Ranger",
+       "classId": "hiker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ],
+       "rule": {
+        "spare": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mimic-mayhem",
+   "name": "Mimic Mayhem",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1f33",
+    "effect": "none"
+   },
+   "intro": "A street mime copies your every move. \"Watch me! Whatever you do, my Pokémon does next.\"",
+   "choices": [
+    {
+     "label": "Face the mime",
+     "success": {
+      "text": "The mime mirrors your stance.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Street Mime",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "mimic": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Ignore the mime",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

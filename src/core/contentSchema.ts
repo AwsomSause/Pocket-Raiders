@@ -2008,6 +2008,8 @@ export const BalanceSchema = z.object({
   /** Elite Four Rematches (S127): after this many battles won per region cleared so far, the Elite Four field remixed teams. */
   /** Weather-Locked Spawns (S234): off in the old-seed story check. */
   spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
+  /** Habitat Ecosystem (S219): off in the old-seed story check. */
+  ecosystem: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
@@ -2784,6 +2786,12 @@ export const EventRuleSchema = z.object({
   hiddenFoe: z.boolean().optional(),
   /** The foe's name shows as this species until it has used a move (Magician's Misdirection). Display only. */
   decoyFoe: z.string().optional(),
+  /** After each turn the foe forgets its own moves and knows only the move you just used (Mimic Mayhem). */
+  mimic: z.boolean().optional(),
+  /** No KOs: damage leaves the foe at 1 HP, and you win when every foe is asleep or at 1 HP (Eco Ranger Test). */
+  spare: z.boolean().optional(),
+  /** The battle text is silent: every line shows as "..." (Library Duel Silence). Display only. */
+  silent: z.boolean().optional(),
   /** Every stat change is inverted for both sides (The Contrarian). */
   contrary: z.boolean().optional(),
   /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */

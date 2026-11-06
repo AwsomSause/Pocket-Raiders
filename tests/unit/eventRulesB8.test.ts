@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { eventRuleEnd } from '../../src/core/battle/engine';
 import { chooseEvent } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
+
+const currentFoe = (b: { enemyTeam: { moves: { id: string }[] }[]; enemyIndex: number }) => b.enemyTeam[b.enemyIndex]!;
 
 describe('hidden-foe rules (run events B batch 8)', () => {
   const start = (eventId: string) => {
@@ -20,5 +23,22 @@ describe('hidden-foe rules (run events B batch 8)', () => {
     expect(magic.battle?.eventRule?.decoyFoe).toBe('magikarp');
     expect(content.species.has(magic.battle!.eventRule!.decoyFoe!)).toBe(true);
     expect(RunStateSchema.parse(JSON.parse(JSON.stringify(magic))).battle?.eventRule).toEqual(magic.battle?.eventRule);
+  });
+  it('batch 9: mimic copies your move, spare wins without a KO, and the events carry their rules', () => {
+    const mime = start('mimic-mayhem');
+    const battle = mime.battle!;
+    battle.playerVolatile.lastMove = 'tackle';
+    eventRuleEnd(battle, [], mime.party, content);
+    expect(currentFoe(battle).moves.map((m) => m.id)).toEqual(['tackle']);
+    const ranger = start('eco-ranger-test').battle!;
+    expect(ranger.eventRule?.spare).toBe(true);
+    ranger.enemyTeam.forEach((m) => (m.hp = 1));
+    eventRuleEnd(ranger, [], [], content);
+    expect(ranger.outcome).toBe('win');
+    const awake = start('eco-ranger-test').battle!;
+    eventRuleEnd(awake, [], [], content);
+    expect(awake.outcome).toBeNull();
+    expect(start('library-duel-silence').battle?.eventRule?.silent).toBe(true);
+    expect(start('rooftop-rumble').battle?.eventRule?.turnLimit).toBe(4);
   });
 });
