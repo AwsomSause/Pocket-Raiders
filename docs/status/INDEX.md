@@ -304,3 +304,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-p0-database.md`: Overhaul P0 audit report; Pokémon database checked vs PokeAPI; Tympole and 12 wrong moves fixed; Shedinja; validator.
 - `overhaul-battle-risk.md`: Overhaul slice 18: strategy-aware boss AI and Low-to-Extreme risk labels in the battle intro.
 - `tera-full-scene.md`: full Tera cutscene like the reference, Fast Tera setting (settings v37).
+- `mega-signature-moves.md`: Overhaul slices 27-28, Mega-only signature move slot; batch 1 (15 of 142 moves); no save version change.

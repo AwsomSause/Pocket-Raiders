@@ -50,6 +50,7 @@ import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { effectiveHeld } from './held';
 import { zMoveDelayTurns, megaDelayTurns, megaPartyLimit, permanentMegaFriendship } from '../trainerPerks';
 import type { BattleState, PokemonInstance } from '../state';
+import { grantMegaMove, endMegaMoves } from './megaMove';
 import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
 
 type Side = 'player' | 'enemy';
@@ -406,6 +407,8 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
       }
     }
   }
+  // A bonded Mega that stayed Mega from the last battle has its signature move again.
+  if (player.hp > 0 && !battle.transform.forms[player.uid] && getSpecies(content, player.speciesId).form?.kind === 'mega') grantMegaMove(content, player);
   if (enemy.hp > 0 && !battle.transform.forms[enemy.uid] && enemyMay(enemy)) {
     const orb = stoneForms(content, enemy.speciesId, true)[0];
     if (orb) changeForm(ctx, 'enemy', enemy, 'primal', { ...orb, itemId: null }, events);
@@ -557,6 +560,8 @@ function changeForm(ctx: TransformContext, side: Side, mon: PokemonInstance, kin
   mon.speciesId = option.formId;
   mon.hp = Math.min(mon.hp, calcStats(ctx.content, mon).hp);
   events.push({ type: 'transform', side, uid: mon.uid, kind, from, to: option.formId, itemId: option.itemId });
+  // Overhaul slice 27: a Mega Evolved Pokémon (yours or a boss's ace) gains its signature move in an extra slot.
+  if (kind === 'mega') grantMegaMove(ctx.content, mon);
   // A levelled Mega Stone steadies its Pokémon: it heals a share of max HP (S479).
   if (kind === 'mega' && side === 'player' && option.itemId && ctx.gimmicks && mon.hp > 0) {
     const level = gimmickLevel(ctx.content, ctx.gimmicks.uses[stoneKey(option.itemId)] ?? 0);
@@ -578,6 +583,7 @@ export function revertTransformations(content: Content, battle: BattleState, par
   const keepAt = permanentMegaFriendship(perks);
   const limit = megaPartyLimit(perks) ?? Infinity;
   let megas = party.filter((p) => getSpecies(content, p.speciesId).form?.kind === 'mega' && !battle.transform.forms[p.uid]).length;
+  endMegaMoves([...party, ...battle.enemyTeam]);
   for (const mon of party) endDynamax(content, battle, 'player', mon);
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
   for (const mon of [...party, ...battle.enemyTeam]) {

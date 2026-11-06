@@ -32,6 +32,8 @@ export const MoveSlotSchema = z.object({
   ppUps: z.number().int().min(0).max(3).optional(),
   /** Beta 4.4: a move a Hyper/Overdrive moment unlocked for this battle only (the extra slot; +power). Removed when the battle ends. */
   hyper: z.literal(true).optional(),
+  /** Overhaul slice 27: a Mega signature move, added when the Pokémon Mega Evolves and removed when the battle ends (battle/megaMove.ts). */
+  megaSig: z.literal(true).optional(),
   /** Times this Pokémon used the move this run, and the mastery star it earned (core/care: +1 PP, +5% accuracy). */
   uses: z.number().int().min(0).optional(),
   star: z.boolean().optional(),
