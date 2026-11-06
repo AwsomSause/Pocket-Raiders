@@ -339,3 +339,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - story-audio: story music, stinger and SFX id list with reuse sounds, cross-fade plan, audio budget gate (S17)
 - `hubtown-garden-village.md`: Hub Town v4 Garden Village layout (Kice's pick of 6 mockups)
 - [story-s1-bs-champion-heir](story-s1-bs-champion-heir.md): S1 backstory 2, Champion to Be content, gates 0
+- [story-s1-bs-viridian](story-s1-bs-viridian.md): S1 backstory 3, Viridian Virtuoso content, gates 0

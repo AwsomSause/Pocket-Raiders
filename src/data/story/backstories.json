@@ -225,5 +225,114 @@
     "when": []
    }
   ]
+ },
+ {
+  "id": "bs_viridian",
+  "nameKey": "bs.viridian.name",
+  "signatureProp": "prop_leaf_satchel",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_forest_remembers",
+   "ev_old_friend",
+   "ev_migration_1",
+   "ev_childhood_map",
+   "ev_first_aid",
+   "ev_researchers_offer",
+   "ev_the_hush",
+   "ev_last_summer"
+  ],
+  "echoEvents": [
+   "ev_echo_viridian_01",
+   "ev_echo_viridian_02",
+   "ev_echo_viridian_03"
+  ],
+  "encounterPools": [
+   "enc_walk_up_wild",
+   "enc_viridian_boss_act4"
+  ],
+  "remembranceUnlocks": [
+   "rm_caterpie",
+   "rm_weedle",
+   "rm_oddish",
+   "rm_poliwag"
+  ],
+  "exclusiveItem": "item_greenwardens_whistle",
+  "endings": [
+   "end_gardener",
+   "end_echo",
+   "end_listener",
+   "end_reckoning"
+  ],
+  "catchAllEnding": "end_reckoning",
+  "endingGrid": [
+   {
+    "ending": "end_gardener",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 8
+     },
+     {
+      "kind": "flag",
+      "key": "migration",
+      "op": "!=",
+      "value": "sabotaged"
+     },
+     {
+      "kind": "flag",
+      "key": "migration",
+      "op": "!=",
+      "value": "none"
+     }
+    ]
+   },
+   {
+    "ending": "end_echo",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport_nature",
+      "op": "==",
+      "value": "resonant"
+     },
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 9
+     }
+    ]
+   },
+   {
+    "ending": "end_listener",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport_nature",
+      "op": "==",
+      "value": "practiced"
+     },
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   },
+   {
+    "ending": "end_reckoning",
+    "when": []
+   }
+  ]
  }
 ]

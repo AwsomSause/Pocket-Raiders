@@ -1,0 +1,5 @@
+# Story S1, backstory 3: Viridian Virtuoso (`bs_viridian`)
+
+- Data only (`src/data/story/*.json`, `text/en.json`); the S5 loader plays it. 5 characters (Hollis Wren, Odessa Fennimore, Dr. Santangelo, the Elder Butterfree, the Greenwall field manager), intro, the 8 events (Old Friend is a 2-step arc, the Migration a 5-step arc, the Childhood Map opens three 1-Node micro events), 3 echo events, reception modifiers, 4 ending scenes, 2 interactables, 4 Lore entries, 4 Remembrances (Caterpie, Weedle, Oddish, Poliwag). Every speaking role has 3 variants; story gates stay at 0.
+- Rapport is a counter, the Ecology Clock a counter, and the Open Question is the flag `rapport_nature` (`practiced` 70% / `resonant` 30%, rolled by the loader). Endings in order: Gardener, Echo, Listener, then Reckoning as catch-all.
+- Limits: the Nidoran pair Remembrance is not authored (the schema's `Id` pattern forbids the hyphen in `nidoran-f` / `nidoran-m`; needs a schema or id decision). Stand-in art; `item_greenwardens_whistle`, `item_ranger_thanks`, the encounter pools and `prop_leaf_satchel` are named, not built. Effects are data for the S5 loader.
