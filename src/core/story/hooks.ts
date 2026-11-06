@@ -4,7 +4,7 @@
 // decided by the battle engine; this file only tells their story).
 
 import { periodOf } from '../clock';
-import { addGrowth, bumpGrowth, bumpGrowthOnce, hitCounters, moveCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
+import { addGrowth, bumpGrowth, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
@@ -109,6 +109,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   const where: Where = { ...whereNow(run), turn: prior.turn };
   const active: Record<Side, string | undefined> = { player: before.party[prior.activeIndex]?.uid, enemy: currentEnemy(prior).uid };
   const lastMove: Record<Side, string | null> = { player: null, enemy: null };
+  let lastMover: Side | null = null;
   const mon = (uid: string | undefined) => (uid ? run.party.find((m) => m.uid === uid) ?? battle.enemyTeam.find((m) => m.uid === uid) : undefined);
   const speciesOf = (uid: string | undefined) => {
     const m = mon(uid);
@@ -157,9 +158,11 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
     switch (e.type) {
       case 'move':
         lastMove[e.side] = e.moveId;
+        lastMover = e.side;
         if (e.side === 'player' && active.player) {
           const mv = content.moves.get(e.moveId);
           const me = mon(active.player);
+          if (mv) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveRoleCounters({ id: mv.id, category: mv.category, ...mv.effects, sideMove: mv.effects.sideMove, field: mv.effects.field }));
           if (mv && me) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveCounters({ accuracy: mv.accuracy, category: mv.category, type: mv.type, flags: mv.flags, hpFrac: me.hp / Math.max(1, maxHp(content, me)), night: periodOf(run) === 'night' }));
         }
         emit(content, run, 'moveUsed', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, moveId: e.moveId } });
@@ -186,7 +189,20 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
       case 'switchOut':
         emit(content, run, 'switchOut', { where, actors: [e.uid], data: { side: e.side } });
         break;
+      case 'confused':
+        // Dream Weaver: the foe was confused on the player's turn.
+        if (e.side === 'enemy' && lastMover === 'player' && active.player) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['inflictSleepConf']);
+        break;
+      case 'protected':
+        // Tricky Feet: the player's Protect blocked a move.
+        if (e.side === 'player' && active.player) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['dodge']);
+        break;
       case 'status':
+        // Live Wire, Glacial Mind, Dream Weaver: a status landed on the foe on the player's turn.
+        if (e.side === 'enemy' && lastMover === 'player' && active.player) {
+          const c = e.status === 'par' ? 'inflictPar' : e.status === 'frz' ? 'inflictFrz' : e.status === 'slp' ? 'inflictSleepConf' : '';
+          if (c) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], [c]);
+        }
         emit(content, run, 'statusInflicted', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, status: e.status } });
         break;
       case 'damage': {

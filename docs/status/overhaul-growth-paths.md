@@ -52,3 +52,11 @@ Counters are filled each turn of a singles battle for the Pokémon that started 
 - Anchor (20 boss-fight turns on the field; boss = gym, elite, champion, rival): held-item and recovery-move healing restores 5% more.
 - Dodger (10 foe misses): foes' accuracy ÷1.03 while it is above 75% HP.
 Limits: Doubles battles do not fill these counters. "Damage absorbed" and "evasions" are simplified to hit damage taken and foe misses; Anchor boosts healing amounts by 5% (not +5% of max HP), and drain moves are not included. The rest need mechanics the game does not have yet (Free Spirit, Cheerleader, Fast Learner and others).
+
+## Batch 6: status and setup moves (13 more)
+Counters from the moves the Pokémon uses (`moveRoleCounters`) and from statuses that land on the foe during its turn (`story/hooks.ts`). A path needs the single top count in the party; type paths need the type. No save change.
+- Live Wire (Electric, 3 paralysis inflicted): +5 points paralysis chance on its moves' side effects. Glacial Mind (Ice, 2 freezes): +3 freeze. Dream Weaver (Psychic, 3 sleeps or confusions): +3 sleep and confusion.
+- Toxic Weaver (Poison, 4 Toxic or Toxic Spikes): its Toxic starts one step stronger.
+- Rain Dancer (3 weather moves), Terrain Master (3 terrains), Trick Roomer (3 Trick/Wonder Room), Screen Keeper (4 screens): the first one set each battle lasts +1 turn.
+- Hazard Setter (4 hazards set): hazards it set sting 1/32 max HP more that battle. Cleaner (3 removal moves): they restore 1/16 HP. Disruptor (6 stat-lowering moves): +5% accuracy with them. Buffer (6 self stat-raising moves): they restore 1/32 HP. Tricky Feet (3 moves blocked by its Protect): the first back-to-back Protect of a battle has +3% success.
+Left off on purpose (3): Trapper (trapping has no turn count in the engine), Medic and Bodyguard (they need ally healing and ally protection, which only exist in doubles and nothing tracks them yet). Tests: `tests/unit/growthSetupPaths.test.ts`.
