@@ -2,6 +2,7 @@
 // Every option shows its price and why it cannot be picked. Choices come from the run seed and the stop, never from UI events,
 // so a reload shows the same offers. Paying and applying happen together, once.
 
+import { modifierWildWeight } from '../runModifiers';
 import { cleanseRelic, cursedRelics } from '../camp';
 import { bossInfo } from '../regions';
 import { count, discover } from '../progress';
@@ -130,7 +131,7 @@ export function generateTradeOffer(content: Content, run: RunState, sideId: stri
     rare: ids(wild.filter(fits(C.tradeBstSpread * 1.5)).filter((s) => ['rare', 'veryRare', 'epic'].includes(rarityOf(content, s.id)))),
     themed: ids(normal.filter((s) => s.types.some((t) => own.types.includes(t)))),
     risky: ids(wild.filter(within(bst * (1 + C.tradeBstSpread), bst * (1 + TRADES.riskySpread)))),
-  }, (id) => recent(familyId(content, id)));
+  }, (id) => recent(familyId(content, id)) * modifierWildWeight(content, run, id));
 }
 
 /** The Trade Post's offer for one party member: similar strength, sometimes a regional form (only reachable this way or by events). */
