@@ -616,7 +616,7 @@
  },
  "moments": {
   "minor": { "perRun": null, "cooldownBattles": 0 },
-  "major": { "perRun": null, "cooldownBattles": 0 },
+  "major": { "perRun": null, "cooldownBattles": 1 },
   "landmark": { "perRun": 3, "cooldownBattles": 5 }
  },
  "powerBudget": {

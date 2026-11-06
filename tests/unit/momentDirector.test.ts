@@ -36,6 +36,16 @@ describe('Moment Director', () => {
     expect(momentsShown(run, 'minor')).toBe(500);
   });
 
+  it('at most one cinematic (major) moment per battle, as the director chose', () => {
+    expect(content.balance.moments.major).toEqual({ perRun: null, cooldownBattles: 1 });
+    const run = at(newRun(), 4);
+    noteMoments(run, 'major');
+    expect(momentAllowed(content, run, 'major')).toBe(false);
+    expect(momentAllowed(content, at(run, 5), 'major')).toBe(true);
+    const played = autoplay({ seed: 'md-one', steps: 400, healOnMap: true, smart: true });
+    expect(momentsShown(played, 'major')).toBeLessThanOrEqual(played.encountersCompleted + 1);
+  });
+
   it('a cap of 0 switches a tier off (failure case: nothing may show)', () => {
     const c = buildContent();
     c.balance.moments.landmark = { perRun: 0, cooldownBattles: 0 };
@@ -47,9 +57,11 @@ describe('Moment Director', () => {
     c.balance.moments.major = { perRun: 2, cooldownBattles: 0 };
     const a = autoplay({ content: c, seed: 'md-run', steps: 500, healOnMap: true, smart: true });
     expect(momentsShown(a, 'major')).toBeLessThanOrEqual(2);
-    const free = autoplay({ seed: 'md-run', steps: 500, healOnMap: true, smart: true });
+    const off = buildContent();
+    off.balance.moments.major = { perRun: null, cooldownBattles: 0 };
+    const free = autoplay({ content: off, seed: 'md-run', steps: 500, healOnMap: true, smart: true });
     expect(momentsShown(free, 'major')).toBeGreaterThan(2);
-    expect(momentsShown(autoplay({ seed: 'md-run', steps: 500, healOnMap: true, smart: true }), 'major')).toBe(momentsShown(free, 'major'));
+    expect(momentsShown(autoplay({ content: off, seed: 'md-run', steps: 500, healOnMap: true, smart: true }), 'major')).toBe(momentsShown(free, 'major'));
     // Only how a moment is told changes: the battles fought are the same.
     expect(a.encountersCompleted).toBe(free.encountersCompleted);
   });
