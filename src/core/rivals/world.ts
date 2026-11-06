@@ -19,6 +19,7 @@ import { rivalTransfers } from './transfer';
 import { promoteRival } from './promotion';
 import { rivalProgress } from './progression';
 import { maybeSibling } from './siblings';
+import { rivalActivity, snapshotLeads } from './activity';
 
 type Edge = RunState['story']['rivalGraph'][number];
 
@@ -41,6 +42,7 @@ export function simulateRivalWorld(content: Content, run: RunState): void {
   story.flags[key] = true;
   const w = RIVAL_CONFIG.world;
   let rumor: string | null = null;
+  const leadsBefore = snapshotLeads(run);
   for (const r of story.rivals) {
     const rng = new Rng(hashSeed(`${run.seed}::rival-world::${run.regionIndex}.${stage}::${r.id}`));
     r.away += 1;
@@ -143,4 +145,6 @@ export function simulateRivalWorld(content: Content, run: RunState): void {
     const accurate = rng.float() >= w.distortedRumorChance;
     emit(content, run, 'rivalryFormed', { data: { outcome: 'rumor', accurate }, text: accurate ? `Word is that ${rumor}` : `You heard a rumour that ${rumor}, though a second account tells it differently` });
   }
+  // W4: tracker fields, race pace and news (rivals/activity.ts); the line above used one news slot if it fired.
+  rivalActivity(content, run, leadsBefore, rumor ? 1 : 0);
 }

@@ -33,7 +33,7 @@ export const RIVAL_STATUS_NAMES: Record<RivalStatus, string> = {
 const cfg = () => RIVAL_CONFIG.progression;
 export const stageKeyOf = (run: Pick<RunState, 'regionIndex' | 'stage'>) => `${run.regionIndex}.${run.stage?.index ?? 0}`;
 
-function freshRecord(region: number): RivalWorldRecord {
+export function freshRecord(region: number): RivalWorldRecord {
   return { lead: 0, badges: 0, region, regionsDone: 0, wins: 0, defeats: 0, fame: 0, milestones: [] };
 }
 
