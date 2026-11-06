@@ -62,10 +62,14 @@ export function prefetchCinematics(scene: Phaser.Scene): void {
 
 export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   let swapped = false;
+  let newVisual: Visual | null = null;
+  /** Put back when the cinematic ends. */
+  const onEnd: Array<() => void> = [];
   const swap = () => {
     if (swapped) return;
     swapped = true;
     const shown = o.onSwap();
+    if (shown) newVisual = shown;
     if (shown instanceof Phaser.GameObjects.Sprite && o.kind === 'evolve' && o.motion !== 'off') {
       shown.setTintFill(0xffffff);
       scene.time.delayedCall(420 / o.speed, () => shown.active && shown.clearTint());
@@ -143,7 +147,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: item, alpha: 0, y: y - 44, duration: 220, delay: 640 });
   };
 
-  if (!reduced && o.kind !== 'evolve' && o.kind !== 'dynamaxEnd' && o.kind !== 'zmove') keyItem();
+  if (!reduced && o.kind !== 'evolve' && o.kind !== 'dynamaxEnd' && o.kind !== 'zmove' && o.kind !== 'mega') keyItem();
   if (reduced) {
     // Reduced motion: a soft glow and the symbol, no flying pieces or shaking.
     if (has('cine.dbk.mega.shine')) {
@@ -151,7 +155,9 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       tw({ targets: glow, alpha: 0.8, duration: 200, yoyo: true, hold: 200 });
     }
     at(SWAP_AT[o.kind] === CINE_MS[o.kind] ? 600 : 250, swap);
-  } else if (o.kind === 'mega' || o.kind === 'primal') {
+  } else if (o.kind === 'mega') {
+    megaReference();
+  } else if (o.kind === 'primal') {
     mega();
   } else if (o.kind === 'tera') {
     teraCrystal();
@@ -238,6 +244,122 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
         const mark = add(scene.add.image(o.x, o.y - 30, sym).setDepth(depth + 6).setScale(0));
         const size = sym.startsWith('cine') ? 0.6 : 3;
         tw({ targets: mark, scale: size, duration: 380, ease: 'Back.easeOut', yoyo: true, hold: 520 });
+      }
+    });
+    fadeAll();
+  }
+
+  /**
+   * Mega Evolution, as in the director's reference clip: the scene goes dark,
+   * the Pokémon is a black silhouette while the key stone and Mega Stone
+   * float over it and a pink spark reaches it, it turns white, a white ball
+   * grows round it and cracks into a crystal that deepens from white to red,
+   * the crystal bursts in a white flash, and the Mega form is revealed over
+   * blue light rays with the Mega symbol above it.
+   */
+  function megaReference(): void {
+    const cx = GAME_WIDTH / 2;
+    const cy = GAME_HEIGHT / 2;
+    const dim = add(scene.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0).setDepth(depth));
+    tw({ targets: dim, fillAlpha: 0.88, duration: 300 });
+    const megaSfx = scene.cache.audio.exists('cine.sfx.mega1');
+    sound(megaSfx ? 'cine.sfx.mega1' : 'ess-harden', 1);
+    // 1. The Pokémon goes dark, then white.
+    at(150, () => oldSprite?.active && oldSprite.setTintFill(0x000000));
+    at(1200, () => oldSprite?.active && oldSprite.setTintFill(0xffffff));
+    // 2. The key stone and the Mega Stone float above; a pink spark flies to the Pokémon.
+    const props: Phaser.GameObjects.GameObject[] = [];
+    const stones: Array<[string, number, number, number]> = [['cine.key.mega', -70, -120, 36], ['cine.dbk.mega.orb_1', -20, -96, 40]];
+    for (const [key, dx, dy, size] of stones) {
+      if (!has(key)) continue;
+      const st = add(scene.add.image(o.x + dx, o.y + dy, key).setDepth(depth + 8).setAlpha(0));
+      props.push(st);
+      if (key.includes('orb')) st.setTint(o.tint).setBlendMode('ADD');
+      st.setScale(size / Math.max(st.width, st.height));
+      tw({ targets: st, alpha: 1, duration: 250, delay: 300 });
+      tw({ targets: st, y: st.y - 8, duration: 500, yoyo: true, repeat: 1, delay: 500, ease: 'Sine.easeInOut' });
+    }
+    const spark = add(scene.add.image(o.x - 120, o.y - 20, has('pack.dbk.particle') ? 'pack.dbk.particle' : '__WHITE').setTint(0xff4a98).setBlendMode('ADD').setDepth(depth + 8).setScale(has('pack.dbk.particle') ? 1.4 : 0.6).setAlpha(0));
+    props.push(spark);
+    tw({ targets: spark, alpha: 1, duration: 200, delay: 400 });
+    tw({ targets: spark, x: o.x, y: o.y, duration: 700, delay: 500, ease: 'Sine.easeIn' });
+    tw({ targets: spark, alpha: 0, scale: 0.2, duration: 150, delay: 1200 });
+    // 3. A white ball grows round it, cracks, and deepens from white to red.
+    const radius = Math.min(150, Math.max(...shards.centres.map(([dx, dy]) => Math.hypot(dx!, dy!))) * 0.7 + 30);
+    const ball = add(scene.add.circle(o.x, o.y, radius, 0xffffff, 1).setDepth(depth + 7).setScale(0.2).setAlpha(0));
+    tw({ targets: ball, scale: 1, alpha: 1, duration: 260, delay: 1300, ease: 'Back.easeOut' });
+    const crystal = 'cine.primega.mega';
+    const S = 0.7;
+    const pieces = has(crystal)
+      ? shards.centres.map(([dx, dy], i) => {
+          const n = String(i + 1).padStart(2, '0');
+          const p = add(scene.add.image(o.x + dx! * S, o.y + dy! * S, crystal, `p${n}`).setScale(S).setAlpha(0).setDepth(depth + 8).setTintFill(0xffffff));
+          const c = add(scene.add.image(p.x, p.y, crystal, `c${n}`).setScale(S).setAlpha(0).setDepth(depth + 9).setBlendMode('ADD').setTint(0xfff0c0));
+          tw({ targets: p, alpha: 1, duration: 120, delay: 1600 });
+          tw({ targets: c, alpha: 1, duration: 400, delay: 2300 });
+          return { p, c, dx: dx!, dy: dy!, i };
+        })
+      : [];
+    const fade = { v: 0 };
+    const white = Phaser.Display.Color.ValueToColor(0xffffff);
+    const red = Phaser.Display.Color.ValueToColor(0x6e1824);
+    tw({
+      targets: fade,
+      v: 1,
+      duration: 800,
+      delay: 1650,
+      onUpdate: () => {
+        const c = Phaser.Display.Color.Interpolate.ColorWithColor(white, red, 100, Math.round(fade.v * 100));
+        const col = Phaser.Display.Color.GetColor(c.r, c.g, c.b);
+        ball.setFillStyle(col);
+        for (const s of pieces) s.p.active && s.p.setTintFill(col);
+      },
+    });
+    if (!megaSfx) {
+      at(1400, () => sound('ess-twine', 0.7));
+      at(1900, () => sound('ess-refresh', 0.8));
+    }
+    // 4. Burst: the swap happens under a full white flash, then the reveal.
+    at(SWAP_AT.mega, () => {
+      swap();
+      sound(megaSfx ? 'cine.sfx.mega2' : 'ess-shell-smash', 1);
+      ball.destroy();
+      props.forEach((x) => x.destroy());
+      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(260 / o.speed, 0.01 * (o.shake ?? o.intensity));
+      for (const s of pieces) {
+        const len = Math.hypot(s.dx, s.dy) || 1;
+        const v = 220 + ((s.i * 53) % 140);
+        tw({ targets: [s.p, s.c], x: o.x + (s.dx / len) * v, duration: 700, ease: 'Quad.easeOut' });
+        tw({ targets: [s.p, s.c], y: o.y + (s.dy / len) * v * 0.7 + 100, duration: 700, ease: 'Quad.easeIn' });
+        tw({ targets: [s.p, s.c], angle: (s.i % 2 ? 1 : -1) * (120 + s.i * 9), alpha: 0, duration: 700 });
+      }
+      // Blue sky with light rays turning slowly, and a bright halo round the Pokémon.
+      add(scene.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x0f7de6, 1).setDepth(depth + 3));
+      const rays = add(scene.add.graphics({ x: o.x, y: o.y }).setDepth(depth + 4));
+      rays.fillStyle(0x8fd8ff, 0.5);
+      const R = Math.hypot(GAME_WIDTH, GAME_HEIGHT);
+      for (let i = 0; i < 28; i++) {
+        const a = (i / 28) * Math.PI * 2;
+        const w = 0.09 + ((i * 7) % 5) * 0.015;
+        rays.fillTriangle(0, 0, Math.cos(a) * R, Math.sin(a) * R, Math.cos(a + w) * R, Math.sin(a + w) * R);
+      }
+      tw({ targets: rays, angle: 10, duration: 1400 });
+      if (has('cine.dbk.mega.shine')) {
+        const halo = add(scene.add.image(o.x, o.y, 'cine.dbk.mega.shine').setTint(0xfff4c8).setBlendMode('ADD').setDepth(depth + 5).setScale(0.4));
+        tw({ targets: halo, scale: 1.1, alpha: 0.7, duration: 1100 });
+      }
+      // The real sprite lives inside the battle field (below this layer), so the reveal draws a copy above the sky: a silhouette that colours in.
+      if (newVisual instanceof Phaser.GameObjects.Sprite && newVisual.active) {
+        const m = newVisual.getWorldTransformMatrix().decomposeMatrix() as { translateX: number; translateY: number; scaleX: number; scaleY: number };
+        const copy = add(scene.add.sprite(m.translateX, m.translateY, newVisual.texture.key, newVisual.frame.name).setOrigin(newVisual.originX, newVisual.originY).setScale(m.scaleX, m.scaleY).setDepth(depth + 6));
+        copy.setTintFill(0x000000);
+        at(450, () => copy.active && copy.clearTint());
+      }
+      whiteFlash(1);
+      const sym = 'pack.ebdx.symMega';
+      if (has(sym)) {
+        const mark = add(scene.add.image(o.x, o.y - 70, sym).setDepth(depth + 10).setScale(0));
+        tw({ targets: mark, scale: 3, duration: 380, delay: 450, ease: 'Back.easeOut', yoyo: true, hold: 520 });
       }
     });
     fadeAll();
@@ -505,6 +627,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       if (o.kind === 'zmove' && oldSprite?.active) oldSprite.setVisible(true);
       timers.forEach((t) => t.remove(false));
       swap();
+      onEnd.forEach((fn) => fn());
       for (const x of objs) {
         scene.tweens.killTweensOf(x);
         x.destroy();
