@@ -138,6 +138,7 @@ export function heartbondTurn(run: RunState, battleKey: string, turn: number, ev
     if (e.uid !== partner || e.side !== 'player') continue;
     if (e.type === 'hyper') fired.push('hyper_moment');
     else if (e.type === 'faint') fired.push('faint_loss');
+    else if (e.type === 'sacrifice') fired.push('guard_ally');
   }
   if (!fired.length) return { paid: [], folded: [] };
   const r = payHeartbond(run, partner, battleKey, turn, fired);
