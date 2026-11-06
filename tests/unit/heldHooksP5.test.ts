@@ -181,11 +181,11 @@ describe('Ability Capsule and Patch', () => {
     m.abilitySlot = 0;
     const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'ab', archetypeId: 'red' }), 0);
     const first = abilityOf(content, m);
-    applyCatalog(content, run, getCatalogEntry(content, 'ability-capsule'), m, { moneyMultiplier: 1, rng: new Rng(1) });
+    applyCatalog(content, run, getCatalogEntry(content, 'ability-capsule'), m, { moneyMultiplier: 1, rng: new Rng(hashSeed('t')) });
     expect(abilityOf(content, m)).toBe(species.abilities.normal[1]);
     expect(abilityOf(content, m)).not.toBe(first);
     expect(catalogTargetProblem(content, run, getCatalogEntry(content, 'ability-patch'), m)).toBeNull();
-    applyCatalog(content, run, getCatalogEntry(content, 'ability-patch'), m, { moneyMultiplier: 1, rng: new Rng(1) });
+    applyCatalog(content, run, getCatalogEntry(content, 'ability-patch'), m, { moneyMultiplier: 1, rng: new Rng(hashSeed('t')) });
     expect(abilityOf(content, m)).toBe(species.abilities.hidden);
     expect(catalogTargetProblem(content, run, getCatalogEntry(content, 'ability-patch'), m)).toMatch(/already/);
     expect(catalogTargetProblem(content, run, getCatalogEntry(content, 'ability-capsule'), m)).toMatch(/hidden/);
