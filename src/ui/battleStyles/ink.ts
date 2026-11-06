@@ -11,10 +11,10 @@ const SEAL = 0xc02020;
 const P = (x: number, y: number) => new Phaser.Geom.Point(x, y);
 const CJK = '"Yu Mincho", "Hiragino Mincho ProN", "Noto Serif CJK JP", "IPAMincho", "MS Mincho", serif';
 
-/** A ruled list down the left, under the seal. */
+/** A ruled list on the paper at the bottom right, clear of your trainer and the brush stroke. */
 const list = (size: number) => (n: number) => {
-  const step = n <= 4 ? 34 : Math.max(26, 280 / n);
-  return menuOf(size, 240, step - 2, (i) => [40, 160 + i * step], { bare: true, focusColor: '#c02020' });
+  const step = n <= 4 ? 34 : Math.max(24, 144 / n);
+  return menuOf(size, 240, step - 2, (i) => [680, 392 + i * step], { bare: true, focusColor: '#c02020' });
 };
 
 export const ink: BattleSkin = {
@@ -24,13 +24,13 @@ export const ink: BattleSkin = {
     foe: { x: 620, y: 12, panel: [0, 0, 300, 40], name: [0, 2, 18], level: [300, 2, 16], hp: [0, 30, 300, 6], status: [0, 40] },
     player: { x: 340, y: 434, panel: [0, 0, 300, 62], name: [0, 2, 18], level: [300, 2, 16], hp: [0, 30, 300, 6], hpText: { at: [300, 38, 16] }, xp: [0, 58, 300], status: [0, 66] },
     bar: null,
-    message: { x: 40, y: 450, w: 270, size: 17 },
+    message: { x: 40, y: 450, w: 270, size: 18 },
     command: null,
-    tabs: { x: 40, y: 124 },
-    moveInfo: { x: 40, y: 450 },
+    tabs: { x: 560, y: 356 },
+    moveInfo: { x: 40, y: 420 },
     root: list(18),
     moves: list(18),
-    header: { x: 940, y: 58 },
+    header: { x: 600, y: 22 },
   },
   databox: (scene, _isPlayer, [x, y, w, h]) => {
     // A brush rule under the name, like a scroll label.
@@ -47,8 +47,8 @@ export const ink: BattleSkin = {
   backdrop: (scene, field) => {
     const g = scene.add.graphics();
     g.fillStyle(PAPER, 1).fillRect(0, 0, 960, 540);
-    // One black brush stroke behind the fighters.
-    g.fillStyle(SUMI, 1).fillPoints([P(300, 110), P(424, 60), P(920, 89), P(870, 420), P(337, 391)], true);
+    // One black brush stroke behind both fighters (your Pokémon too, so its white silhouette shows).
+    g.fillStyle(SUMI, 1).fillPoints([P(270, 120), P(424, 60), P(920, 89), P(900, 330), P(580, 352), P(540, 420), P(200, 410)], true);
     field.add(g);
   },
   sprite: (visual) => {

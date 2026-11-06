@@ -24,7 +24,7 @@ export const stadium: BattleSkin = {
     foe: { x: 16, y: 52, panel: [0, 0, 300, 50], name: [18, 6, 18], upper: true, level: 'inline', hpText: { at: [288, 6, 18], pct: true }, hp: [18, 38, 270, 8], status: [0, 56] },
     player: { x: 644, y: 300, panel: [0, 0, 300, 62], name: [14, 6, 18], upper: true, level: 'inline', hpText: { at: [282, 6, 18] }, hp: [14, 38, 270, 8], xp: [14, 54, 270], status: [0, 68] },
     bar: [16, 384, 620, 34],
-    message: { x: 34, y: 392, w: 590, size: 17 },
+    message: { x: 34, y: 392, w: 590, size: 18 },
     command: null,
     tabs: { x: 652, y: 392 },
     moveInfo: { x: 34, y: 392, inline: true },

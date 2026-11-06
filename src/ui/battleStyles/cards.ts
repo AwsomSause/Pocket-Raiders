@@ -7,9 +7,9 @@ import type { BattleSkin } from './types';
 const GOLD = 0xffe14a;
 
 /** A fanned hand: cards spread around the middle, tilted, the outer ones lower. */
-const hand = (size: number, w: number, h: number, y: number, maxStep: number, tilt: number, inset?: number) => (n: number) => {
+const hand = (size: number, w: number, h: number, y: number, maxStep: number, tilt: number, inset?: number, cx = 506) => (n: number) => {
   const step = Math.min(maxStep, (700 - w) / Math.max(1, n - 1));
-  const x0 = 506 - ((n - 1) * step + w) / 2;
+  const x0 = cx - ((n - 1) * step + w) / 2;
   const rot = (i: number) => (i - (n - 1) / 2) * tilt;
   return menuOf(size, w, h, (i) => [x0 + i * step, y + Math.abs(rot(i)) * 2], { columns: n, align: inset ? 'left' : 'center', angle: rot, lift: 30, bare: true, inset });
 };
@@ -25,8 +25,9 @@ export const cards: BattleSkin = {
     command: null,
     tabs: { x: 16, y: 366 },
     moveInfo: { x: 24, y: 404 },
-    root: hand(20, 112, 148, 400, 124, 7),
-    moves: hand(18, 140, 196, 336, 128, 8, 14),
+    // Both hands stay on screen (the outer cards drop a little) and clear of the message panel on the left.
+    root: hand(20, 112, 140, 376, 124, 6),
+    moves: hand(18, 168, 180, 344, 176, 5, 14, 590),
   },
   databox: (scene, _isPlayer, [x, y, w, h]) => {
     const g = scene.add.graphics();
@@ -55,7 +56,7 @@ export const cards: BattleSkin = {
     g.lineStyle(2, 0xffffff, 0.6).strokeCircle(x + w / 2, art.y + art.h / 2, Math.min(art.h, w) * 0.28);
   },
   rootTints: [0xd83848, 0xd09020, 0x30a860, 0x8a40d0, 0x3080d8, 0x30b8c0, 0xd0a020, 0x707890],
-  moveText: (m) => ({ label: m.name, detail: `${up(m.type)}\n\n\n\n\nPWR ${m.power} ACC ${m.accuracy}\nPP ${m.pp}/${m.maxPp}` }),
+  moveText: (m) => ({ label: m.name, detail: `${up(m.type)}\n\n\n\n\nPP ${m.pp}/${m.maxPp}` }),
   backdrop: (scene, field) => {
     const g = scene.add.graphics();
     g.fillGradientStyle(0x0a1428, 0x0a1428, 0x0a1428, 0x0a1428, 0, 0, 0.85, 0.85).fillRect(0, 297, 960, 243);

@@ -20,7 +20,7 @@ export const classic: BattleSkin = {
   buttonText: '#ffffff',
   layout: {
     foe: { x: 20, y: 40, panel: [0, 0, 330, 87], name: [24, 14, 22], upper: true, level: [306, 14, 20], hp: [168, 56, 134, 8], status: [24, 92], team: [10, -36, 34] },
-    player: { x: 560, y: 290, panel: [40, 0, 326, 118], name: [56, 14, 22], upper: true, level: [326, 14, 20], hp: [192, 55, 130, 8], hpText: { at: [338, 66, 18] }, xp: [56, 107, 270], status: [56, 124] },
+    player: { x: 560, y: 290, panel: [40, 0, 326, 118], name: [56, 14, 22], upper: true, level: [326, 14, 20], hp: [192, 55, 130, 8], hpText: { at: [322, 68, 18] }, xp: [56, 107, 270], status: [56, 124] },
     bar: [0, 444, 960, 96],
     message: { x: 30, y: 474, w: 360, size: 24 },
     command: null,
