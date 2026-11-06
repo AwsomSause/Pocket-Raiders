@@ -225,8 +225,8 @@ describe('what the townspeople say', () => {
 describe('Hub Town part 3: a smaller, tidier town with a minimap and a Hub style setting', () => {
   const [W, H] = HUB_TOWN.size;
 
-  it('is the smaller 64 x 48 town, with a minimap row for every tile row', () => {
-    expect([W, H]).toEqual([64, 48]);
+  it('is the 60 x 54 Garden Village town, with a minimap row for every tile row', () => {
+    expect([W, H]).toEqual([60, 54]);
     expect(HUB_TOWN.minimap).toHaveLength(H);
     for (const row of HUB_TOWN.minimap) expect(row).toHaveLength(W);
     // Every building's door is drawn as part of a building on the minimap.

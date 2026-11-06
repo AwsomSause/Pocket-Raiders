@@ -1,1 +1,2345 @@
-[]
+[
+ {
+  "id": "ev_intro_ex_criminal",
+  "v": 1,
+  "tags": [
+   "intro"
+  ],
+  "requires": [],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_intro_ex_criminal_b1",
+    "kind": "line",
+    "line": "dlg_ev_intro_ex_criminal_b1"
+   },
+   {
+    "id": "ev_intro_ex_criminal_b2",
+    "kind": "narration",
+    "textKey": "ev_intro_ex_criminal.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "nothing",
+    "textKey": "ev_intro_ex_criminal.c.nothing",
+    "effects": [
+     {
+      "id": "ev_intro_ex_criminal_nothing_1",
+      "kind": "add_counter",
+      "counter": "independence",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "everything",
+    "textKey": "ev_intro_ex_criminal.c.everything",
+    "effects": [
+     {
+      "id": "ev_intro_ex_criminal_everything_1",
+      "kind": "add_counter",
+      "counter": "compassion",
+      "amount": 1
+     },
+     {
+      "id": "ev_intro_ex_criminal_everything_2",
+      "kind": "add_counter",
+      "counter": "resolve",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "a_name",
+    "textKey": "ev_intro_ex_criminal.c.a_name",
+    "effects": [
+     {
+      "id": "ev_intro_ex_criminal_a_name_1",
+      "kind": "add_counter",
+      "counter": "ambition",
+      "amount": 1
+     },
+     {
+      "id": "ev_intro_ex_criminal_a_name_2",
+      "kind": "add_counter",
+      "counter": "loyalty",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_intro_ex_criminal_out_1",
+    "kind": "set_flag",
+    "key": "bs_ex_criminal_intro",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_intro_ex_criminal_vance_v1",
+    "textKey": "ev_intro_ex_criminal.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_ex_criminal_vance_v2",
+    "textKey": "ev_intro_ex_criminal.vance.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_ex_criminal_vance_v3",
+    "textKey": "ev_intro_ex_criminal.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 1
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_old_uniform",
+  "v": 1,
+  "tags": [
+   "character",
+   "act1",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "pell": {
+    "character": "ch_pell_orrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_old_uniform_b1",
+    "kind": "narration",
+    "textKey": "ev_old_uniform.b1"
+   },
+   {
+    "id": "ev_old_uniform_b2",
+    "kind": "line",
+    "line": "dlg_ev_old_uniform_b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "apologize",
+    "textKey": "ev_old_uniform.c.apologize",
+    "effects": [
+     {
+      "id": "ev_old_uniform_apologize_1",
+      "kind": "set_flag",
+      "key": "pell_state",
+      "value": "ally"
+     },
+     {
+      "id": "ev_old_uniform_apologize_2",
+      "kind": "add_relationship",
+      "character": "ch_pell_orrin",
+      "attr": "trust",
+      "amount": 15
+     },
+     {
+      "id": "ev_old_uniform_apologize_3",
+      "kind": "ally_for_battles",
+      "character": "ch_pell_orrin",
+      "battles": 1
+     }
+    ]
+   },
+   {
+    "id": "deny",
+    "textKey": "ev_old_uniform.c.deny",
+    "effects": [
+     {
+      "id": "ev_old_uniform_deny_1",
+      "kind": "set_flag",
+      "key": "pell_state",
+      "value": "hostile"
+     },
+     {
+      "id": "ev_old_uniform_deny_2",
+      "kind": "add_counter",
+      "counter": "notoriety",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "explain",
+    "textKey": "ev_old_uniform.c.explain",
+    "effects": [
+     {
+      "id": "ev_old_uniform_explain_1",
+      "kind": "set_flag",
+      "key": "pell_state",
+      "value": "ally"
+     },
+     {
+      "id": "ev_old_uniform_explain_2",
+      "kind": "ally_for_battles",
+      "character": "ch_pell_orrin",
+      "battles": 1
+     }
+    ]
+   },
+   {
+    "id": "ask_others",
+    "textKey": "ev_old_uniform.c.ask_others",
+    "effects": [
+     {
+      "id": "ev_old_uniform_ask_others_1",
+      "kind": "unlock_lore",
+      "lore": "lore_marauder_divisions",
+      "state": "known"
+     },
+     {
+      "id": "ev_old_uniform_ask_others_2",
+      "kind": "set_flag",
+      "key": "pell_state",
+      "value": "wary"
+     }
+    ]
+   },
+   {
+    "id": "ask_help",
+    "textKey": "ev_old_uniform.c.ask_help",
+    "effects": [
+     {
+      "id": "ev_old_uniform_ask_help_1",
+      "kind": "set_flag",
+      "key": "pell_state",
+      "value": "recruited"
+     }
+    ],
+    "goto": "arc_pell_defection"
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_old_uniform_out_1",
+    "kind": "set_flag",
+    "key": "met_pell",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "pell",
+    "id": "ev_old_uniform_pell_v1",
+    "textKey": "ev_old_uniform.pell.v1",
+    "when": []
+   },
+   {
+    "role": "pell",
+    "id": "ev_old_uniform_pell_v2",
+    "textKey": "ev_old_uniform.pell.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "pell",
+    "id": "ev_old_uniform_pell_v3",
+    "textKey": "ev_old_uniform.pell.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pell_orrin",
+      "key": "trust",
+      "op": ">=",
+      "value": 20
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_unfinished_business",
+  "v": 1,
+  "tags": [
+   "character",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   },
+   {
+    "kind": "flag",
+    "key": "seen_marauders",
+    "op": "==",
+    "value": true
+   }
+  ],
+  "roles": {
+   "cass": {
+    "character": "ch_cass_verrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_unfinished_business_b1",
+    "kind": "narration",
+    "textKey": "ev_unfinished_business.b1"
+   },
+   {
+    "id": "ev_unfinished_business_b2",
+    "kind": "line",
+    "line": "dlg_ev_unfinished_business_b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "accept",
+    "textKey": "ev_unfinished_business.c.accept",
+    "effects": [
+     {
+      "id": "ev_unfinished_business_accept_1",
+      "kind": "set_flag",
+      "key": "contract_stage",
+      "value": 1
+     },
+     {
+      "id": "ev_unfinished_business_accept_2",
+      "kind": "set_flag",
+      "key": "cass_state",
+      "value": "contract"
+     }
+    ]
+   },
+   {
+    "id": "decline",
+    "textKey": "ev_unfinished_business.c.decline",
+    "effects": [
+     {
+      "id": "ev_unfinished_business_decline_1",
+      "kind": "set_flag",
+      "key": "cass_state",
+      "value": "declined"
+     }
+    ]
+   },
+   {
+    "id": "finish",
+    "textKey": "ev_unfinished_business.c.finish",
+    "effects": [
+     {
+      "id": "ev_unfinished_business_finish_1",
+      "kind": "add_counter",
+      "counter": "marauder_favor",
+      "amount": 3
+     },
+     {
+      "id": "ev_unfinished_business_finish_2",
+      "kind": "add_counter",
+      "counter": "redemption",
+      "amount": -20
+     },
+     {
+      "id": "ev_unfinished_business_finish_3",
+      "kind": "set_flag",
+      "key": "contract_done",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "sabotage",
+    "textKey": "ev_unfinished_business.c.sabotage",
+    "effects": [
+     {
+      "id": "ev_unfinished_business_sabotage_1",
+      "kind": "add_counter",
+      "counter": "redemption",
+      "amount": 25
+     },
+     {
+      "id": "ev_unfinished_business_sabotage_2",
+      "kind": "add_relationship",
+      "character": "ch_marek_voss",
+      "attr": "suspicion",
+      "amount": 20
+     },
+     {
+      "id": "ev_unfinished_business_sabotage_3",
+      "kind": "add_relationship",
+      "character": "ch_cass_verrin",
+      "attr": "trust",
+      "amount": -30
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_unfinished_business_out_1",
+    "kind": "add_memory",
+    "memory": "mem_cass_offer"
+   }
+  ],
+  "variants": [
+   {
+    "role": "cass",
+    "id": "ev_unfinished_business_cass_v1",
+    "textKey": "ev_unfinished_business.cass.v1",
+    "when": []
+   },
+   {
+    "role": "cass",
+    "id": "ev_unfinished_business_cass_v2",
+    "textKey": "ev_unfinished_business.cass.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "cass",
+    "id": "ev_unfinished_business_cass_v3",
+    "textKey": "ev_unfinished_business.cass.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "cass_state",
+      "op": "==",
+      "value": "declined"
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_tally_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_tally"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "tally": {
+    "character": "ch_tally"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_tally_1_b1",
+    "kind": "narration",
+    "textKey": "ev_tally_1.b1"
+   },
+   {
+    "id": "ev_tally_1_b2",
+    "kind": "narration",
+    "textKey": "ev_tally_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_tally_1_out_1",
+    "kind": "add_counter",
+    "counter": "tally_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "tally",
+    "id": "ev_tally_1_tally_v1",
+    "textKey": "ev_tally_1.tally.v1",
+    "when": []
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_1_tally_v2",
+    "textKey": "ev_tally_1.tally.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_1_tally_v3",
+    "textKey": "ev_tally_1.tally.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_tally_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_tally"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "tally": {
+    "character": "ch_tally"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_tally_2_b1",
+    "kind": "narration",
+    "textKey": "ev_tally_2.b1"
+   },
+   {
+    "id": "ev_tally_2_b2",
+    "kind": "narration",
+    "textKey": "ev_tally_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_tally_2_out_1",
+    "kind": "add_counter",
+    "counter": "tally_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "tally",
+    "id": "ev_tally_2_tally_v1",
+    "textKey": "ev_tally_2.tally.v1",
+    "when": []
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_2_tally_v2",
+    "textKey": "ev_tally_2.tally.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_2_tally_v3",
+    "textKey": "ev_tally_2.tally.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_tally_3",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_tally"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "tally": {
+    "character": "ch_tally"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_tally_3_b1",
+    "kind": "narration",
+    "textKey": "ev_tally_3.b1"
+   },
+   {
+    "id": "ev_tally_3_b2",
+    "kind": "narration",
+    "textKey": "ev_tally_3.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_tally_3_out_1",
+    "kind": "add_counter",
+    "counter": "tally_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "tally",
+    "id": "ev_tally_3_tally_v1",
+    "textKey": "ev_tally_3.tally.v1",
+    "when": []
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_3_tally_v2",
+    "textKey": "ev_tally_3.tally.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_3_tally_v3",
+    "textKey": "ev_tally_3.tally.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_tally_4",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_tally"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "tally": {
+    "character": "ch_tally"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_tally_4_b1",
+    "kind": "narration",
+    "textKey": "ev_tally_4.b1"
+   },
+   {
+    "id": "ev_tally_4_b2",
+    "kind": "narration",
+    "textKey": "ev_tally_4.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_tally_4_out_1",
+    "kind": "add_counter",
+    "counter": "tally_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "tally",
+    "id": "ev_tally_4_tally_v1",
+    "textKey": "ev_tally_4.tally.v1",
+    "when": []
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_4_tally_v2",
+    "textKey": "ev_tally_4.tally.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_4_tally_v3",
+    "textKey": "ev_tally_4.tally.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_tally_5",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_tally"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "tally": {
+    "character": "ch_tally"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_tally_5_b1",
+    "kind": "narration",
+    "textKey": "ev_tally_5.b1"
+   },
+   {
+    "id": "ev_tally_5_b2",
+    "kind": "narration",
+    "textKey": "ev_tally_5.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "follow",
+    "textKey": "ev_tally_5.c.follow",
+    "effects": [
+     {
+      "id": "ev_tally_5_follow_1",
+      "kind": "add_counter",
+      "counter": "tally_trust",
+      "amount": 2
+     },
+     {
+      "id": "ev_tally_5_follow_2",
+      "kind": "unlock_lore",
+      "lore": "lore_tally",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "let_go",
+    "textKey": "ev_tally_5.c.let_go",
+    "effects": [
+     {
+      "id": "ev_tally_5_let_go_1",
+      "kind": "add_counter",
+      "counter": "redemption",
+      "amount": 2
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_tally_5_out_1",
+    "kind": "chronicle",
+    "entry": "chr_tally"
+   }
+  ],
+  "variants": [
+   {
+    "role": "tally",
+    "id": "ev_tally_5_tally_v1",
+    "textKey": "ev_tally_5.tally.v1",
+    "when": []
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_5_tally_v2",
+    "textKey": "ev_tally_5.tally.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "tally",
+    "id": "ev_tally_5_tally_v3",
+    "textKey": "ev_tally_5.tally.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "major",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_ledger_room",
+  "v": 1,
+  "tags": [
+   "facility",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   },
+   {
+    "kind": "flag",
+    "key": "seen_marauders",
+    "op": "==",
+    "value": true
+   }
+  ],
+  "roles": {
+   "scout": {
+    "character": "ch_pell_orrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_ledger_room_b1",
+    "kind": "narration",
+    "textKey": "ev_ledger_room.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "infiltrate",
+    "textKey": "ev_ledger_room.c.infiltrate",
+    "effects": [
+     {
+      "id": "ev_ledger_room_infiltrate_1",
+      "kind": "set_flag",
+      "key": "ledger_intel",
+      "value": "route"
+     }
+    ]
+   },
+   {
+    "id": "negotiate",
+    "textKey": "ev_ledger_room.c.negotiate",
+    "effects": [
+     {
+      "id": "ev_ledger_room_negotiate_1",
+      "kind": "set_flag",
+      "key": "ledger_intel",
+      "value": "roster"
+     }
+    ]
+   },
+   {
+    "id": "fight",
+    "textKey": "ev_ledger_room.c.fight",
+    "effects": [
+     {
+      "id": "ev_ledger_room_fight_1",
+      "kind": "set_flag",
+      "key": "ledger_intel",
+      "value": "keys"
+     },
+     {
+      "id": "ev_ledger_room_fight_2",
+      "kind": "add_counter",
+      "counter": "notoriety",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_ledger_room_out_1",
+    "kind": "set_flag",
+    "key": "ledger_seen",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "scout",
+    "id": "ev_ledger_room_scout_v1",
+    "textKey": "ev_ledger_room.scout.v1",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bs.prior_role",
+      "op": "==",
+      "value": "scout"
+     }
+    ]
+   },
+   {
+    "role": "scout",
+    "id": "ev_ledger_room_scout_v2",
+    "textKey": "ev_ledger_room.scout.v2",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bs.prior_role",
+      "op": "==",
+      "value": "research_assistant"
+     }
+    ]
+   },
+   {
+    "role": "scout",
+    "id": "ev_ledger_room_scout_v3",
+    "textKey": "ev_ledger_room.scout.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bs.prior_role",
+      "op": "==",
+      "value": "handler"
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_parole",
+  "v": 1,
+  "tags": [
+   "character",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "fenn": {
+    "character": "ch_halima_fenn"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_parole_b1",
+    "kind": "line",
+    "line": "dlg_ev_parole_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "cooperate",
+    "textKey": "ev_parole.c.cooperate",
+    "effects": [
+     {
+      "id": "ev_parole_cooperate_1",
+      "kind": "set_flag",
+      "key": "fenn_state",
+      "value": "ally"
+     },
+     {
+      "id": "ev_parole_cooperate_2",
+      "kind": "add_relationship",
+      "character": "ch_halima_fenn",
+      "attr": "respect",
+      "amount": 15
+     },
+     {
+      "id": "ev_parole_cooperate_3",
+      "kind": "give_item",
+      "item": "item_legal_pass"
+     }
+    ]
+   },
+   {
+    "id": "conceal",
+    "textKey": "ev_parole.c.conceal",
+    "effects": [
+     {
+      "id": "ev_parole_conceal_1",
+      "kind": "set_flag",
+      "key": "fenn_state",
+      "value": "wary"
+     },
+     {
+      "id": "ev_parole_conceal_2",
+      "kind": "add_relationship",
+      "character": "ch_halima_fenn",
+      "attr": "suspicion",
+      "amount": 15
+     }
+    ]
+   },
+   {
+    "id": "confess",
+    "textKey": "ev_parole.c.confess",
+    "effects": [
+     {
+      "id": "ev_parole_confess_1",
+      "kind": "set_flag",
+      "key": "fenn_state",
+      "value": "vouched"
+     },
+     {
+      "id": "ev_parole_confess_2",
+      "kind": "add_relationship",
+      "character": "ch_halima_fenn",
+      "attr": "respect",
+      "amount": 30
+     },
+     {
+      "id": "ev_parole_confess_3",
+      "kind": "add_counter",
+      "counter": "notoriety",
+      "amount": -1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_parole_out_1",
+    "kind": "set_flag",
+    "key": "met_fenn",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "fenn",
+    "id": "ev_parole_fenn_v1",
+    "textKey": "ev_parole.fenn.v1",
+    "when": []
+   },
+   {
+    "role": "fenn",
+    "id": "ev_parole_fenn_v2",
+    "textKey": "ev_parole.fenn.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "fenn",
+    "id": "ev_parole_fenn_v3",
+    "textKey": "ev_parole.fenn.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_halima_fenn",
+      "key": "respect",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_dead_drop",
+  "v": 1,
+  "tags": [
+   "rescue",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "nell": {
+    "character": "ch_nell_hallam"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_dead_drop_b1",
+    "kind": "narration",
+    "textKey": "ev_dead_drop.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "stealth",
+    "textKey": "ev_dead_drop.c.stealth",
+    "effects": [
+     {
+      "id": "ev_dead_drop_stealth_1",
+      "kind": "set_flag",
+      "key": "nell_rescue",
+      "value": "stealth"
+     }
+    ],
+    "goto": "arc_nell_rescue"
+   },
+   {
+    "id": "force",
+    "textKey": "ev_dead_drop.c.force",
+    "effects": [
+     {
+      "id": "ev_dead_drop_force_1",
+      "kind": "set_flag",
+      "key": "nell_rescue",
+      "value": "force"
+     },
+     {
+      "id": "ev_dead_drop_force_2",
+      "kind": "add_counter",
+      "counter": "notoriety",
+      "amount": 1
+     }
+    ],
+    "goto": "arc_nell_rescue"
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_dead_drop_out_1",
+    "kind": "set_flag",
+    "key": "nell_known",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "nell",
+    "id": "ev_dead_drop_nell_v1",
+    "textKey": "ev_dead_drop.nell.v1",
+    "when": []
+   },
+   {
+    "role": "nell",
+    "id": "ev_dead_drop_nell_v2",
+    "textKey": "ev_dead_drop.nell.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "nell",
+    "id": "ev_dead_drop_nell_v3",
+    "textKey": "ev_dead_drop.nell.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_rank_and_file",
+  "v": 1,
+  "tags": [
+   "encounter",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "grunt": {
+    "character": "ch_marek_voss"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rank_and_file_b1",
+    "kind": "narration",
+    "textKey": "ev_rank_and_file.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "rank_phrase",
+    "textKey": "ev_rank_and_file.c.rank_phrase",
+    "effects": [
+     {
+      "id": "ev_rank_and_file_rank_phrase_1",
+      "kind": "set_flag",
+      "key": "grunt_converted",
+      "value": true
+     },
+     {
+      "id": "ev_rank_and_file_rank_phrase_2",
+      "kind": "give_item",
+      "item": "item_informant_token"
+     }
+    ]
+   },
+   {
+    "id": "bluff",
+    "textKey": "ev_rank_and_file.c.bluff",
+    "effects": []
+   },
+   {
+    "id": "fight",
+    "textKey": "ev_rank_and_file.c.fight",
+    "effects": [
+     {
+      "id": "ev_rank_and_file_fight_1",
+      "kind": "start_battle",
+      "character": "ch_marek_voss"
+     },
+     {
+      "id": "ev_rank_and_file_fight_2",
+      "kind": "add_counter",
+      "counter": "notoriety",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "grunt",
+    "id": "ev_rank_and_file_grunt_v1",
+    "textKey": "ev_rank_and_file.grunt.v1",
+    "when": []
+   },
+   {
+    "role": "grunt",
+    "id": "ev_rank_and_file_grunt_v2",
+    "textKey": "ev_rank_and_file.grunt.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "grunt",
+    "id": "ev_rank_and_file_grunt_v3",
+    "textKey": "ev_rank_and_file.grunt.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "grunt_converted",
+      "op": "==",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_departure_truth",
+  "v": 1,
+  "tags": [
+   "reveal",
+   "midpoint",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_departure_truth_b1",
+    "kind": "narration",
+    "textKey": "ev_departure_truth.b1"
+   },
+   {
+    "id": "ev_departure_truth_b2",
+    "kind": "narration",
+    "textKey": "ev_departure_truth.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "accept",
+    "textKey": "ev_departure_truth.c.accept",
+    "effects": [
+     {
+      "id": "ev_departure_truth_accept_1",
+      "kind": "add_counter",
+      "counter": "redemption",
+      "amount": 15
+     },
+     {
+      "id": "ev_departure_truth_accept_2",
+      "kind": "set_flag",
+      "key": "truth_accepted",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "cleaned",
+    "textKey": "ev_departure_truth.c.cleaned",
+    "effects": [
+     {
+      "id": "ev_departure_truth_cleaned_1",
+      "kind": "add_counter",
+      "counter": "redemption",
+      "amount": -10
+     },
+     {
+      "id": "ev_departure_truth_cleaned_2",
+      "kind": "set_flag",
+      "key": "truth_accepted",
+      "value": false
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_departure_truth_out_1",
+    "kind": "chronicle",
+    "entry": "chr_departure_truth"
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_departure_truth_vance_v1",
+    "textKey": "ev_departure_truth.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_departure_truth_vance_v2",
+    "textKey": "ev_departure_truth.vance.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_departure_truth_vance_v3",
+    "textKey": "ev_departure_truth.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 3,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_pell_defection_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_pell_defection"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "pell": {
+    "character": "ch_pell_orrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_pell_defection_1_b1",
+    "kind": "line",
+    "line": "dlg_ev_pell_defection_1_b1"
+   },
+   {
+    "id": "ev_pell_defection_1_b2",
+    "kind": "narration",
+    "textKey": "ev_pell_defection_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_pell_defection_1_out_1",
+    "kind": "add_counter",
+    "counter": "redemption",
+    "amount": 3
+   }
+  ],
+  "variants": [
+   {
+    "role": "pell",
+    "id": "ev_pell_defection_1_pell_v1",
+    "textKey": "ev_pell_defection_1.pell.v1",
+    "when": []
+   },
+   {
+    "role": "pell",
+    "id": "ev_pell_defection_1_pell_v2",
+    "textKey": "ev_pell_defection_1.pell.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "pell",
+    "id": "ev_pell_defection_1_pell_v3",
+    "textKey": "ev_pell_defection_1.pell.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "pell_state",
+      "op": "==",
+      "value": "ally"
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_pell_defection_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_pell_defection"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "pell": {
+    "character": "ch_pell_orrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_pell_defection_2_b1",
+    "kind": "line",
+    "line": "dlg_ev_pell_defection_2_b1"
+   },
+   {
+    "id": "ev_pell_defection_2_b2",
+    "kind": "narration",
+    "textKey": "ev_pell_defection_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_pell_defection_2_out_1",
+    "kind": "add_counter",
+    "counter": "redemption",
+    "amount": 3
+   }
+  ],
+  "variants": [
+   {
+    "role": "pell",
+    "id": "ev_pell_defection_2_pell_v1",
+    "textKey": "ev_pell_defection_2.pell.v1",
+    "when": []
+   },
+   {
+    "role": "pell",
+    "id": "ev_pell_defection_2_pell_v2",
+    "textKey": "ev_pell_defection_2.pell.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "pell",
+    "id": "ev_pell_defection_2_pell_v3",
+    "textKey": "ev_pell_defection_2.pell.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "pell_state",
+      "op": "==",
+      "value": "ally"
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_nell_rescue_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_nell_rescue"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "nell": {
+    "character": "ch_nell_hallam"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_nell_rescue_1_b1",
+    "kind": "line",
+    "line": "dlg_ev_nell_rescue_1_b1"
+   },
+   {
+    "id": "ev_nell_rescue_1_b2",
+    "kind": "narration",
+    "textKey": "ev_nell_rescue_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_nell_rescue_1_out_1",
+    "kind": "add_counter",
+    "counter": "redemption",
+    "amount": 3
+   }
+  ],
+  "variants": [
+   {
+    "role": "nell",
+    "id": "ev_nell_rescue_1_nell_v1",
+    "textKey": "ev_nell_rescue_1.nell.v1",
+    "when": []
+   },
+   {
+    "role": "nell",
+    "id": "ev_nell_rescue_1_nell_v2",
+    "textKey": "ev_nell_rescue_1.nell.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "nell",
+    "id": "ev_nell_rescue_1_nell_v3",
+    "textKey": "ev_nell_rescue_1.nell.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "pell_state",
+      "op": "==",
+      "value": "ally"
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_nell_rescue_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_nell_rescue"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "nell": {
+    "character": "ch_nell_hallam"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_nell_rescue_2_b1",
+    "kind": "line",
+    "line": "dlg_ev_nell_rescue_2_b1"
+   },
+   {
+    "id": "ev_nell_rescue_2_b2",
+    "kind": "narration",
+    "textKey": "ev_nell_rescue_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_nell_rescue_2_out_1",
+    "kind": "add_counter",
+    "counter": "redemption",
+    "amount": 3
+   }
+  ],
+  "variants": [
+   {
+    "role": "nell",
+    "id": "ev_nell_rescue_2_nell_v1",
+    "textKey": "ev_nell_rescue_2.nell.v1",
+    "when": []
+   },
+   {
+    "role": "nell",
+    "id": "ev_nell_rescue_2_nell_v2",
+    "textKey": "ev_nell_rescue_2.nell.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "nell",
+    "id": "ev_nell_rescue_2_nell_v3",
+    "textKey": "ev_nell_rescue_2.nell.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "pell_state",
+      "op": "==",
+      "value": "ally"
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_echo_ex_crim_01",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_pell_orrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_ex_crim_01_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_ex_crim_01.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_01_speaker_v1",
+    "textKey": "ev_echo_ex_crim_01.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_01_speaker_v2",
+    "textKey": "ev_echo_ex_crim_01.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_01_speaker_v3",
+    "textKey": "ev_echo_ex_crim_01.speaker.v3",
+    "when": [
+     {
+      "kind": "trait",
+      "key": "courage",
+      "op": ">=",
+      "value": 65
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_echo_ex_crim_02",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_cass_verrin"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_ex_crim_02_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_ex_crim_02.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_02_speaker_v1",
+    "textKey": "ev_echo_ex_crim_02.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_02_speaker_v2",
+    "textKey": "ev_echo_ex_crim_02.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_02_speaker_v3",
+    "textKey": "ev_echo_ex_crim_02.speaker.v3",
+    "when": [
+     {
+      "kind": "trait",
+      "key": "courage",
+      "op": ">=",
+      "value": 65
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_echo_ex_crim_03",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_halima_fenn"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_ex_crim_03_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_ex_crim_03.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_03_speaker_v1",
+    "textKey": "ev_echo_ex_crim_03.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_03_speaker_v2",
+    "textKey": "ev_echo_ex_crim_03.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_ex_crim_03_speaker_v3",
+    "textKey": "ev_echo_ex_crim_03.speaker.v3",
+    "when": [
+     {
+      "kind": "trait",
+      "key": "courage",
+      "op": ">=",
+      "value": 65
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_mod_ex_criminal",
+  "v": 1,
+  "tags": [
+   "modifier",
+   "system"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_ex_criminal"
+   }
+  ],
+  "roles": {},
+  "beats": [],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_mod_ex_criminal_out_1",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "suspicion",
+    "amount": 10
+   },
+   {
+    "id": "ev_mod_ex_criminal_out_2",
+    "kind": "add_relationship",
+    "character": "class_rival",
+    "attr": "rivalry",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_ex_criminal_out_3",
+    "kind": "add_relationship",
+    "character": "class_grunt",
+    "attr": "suspicion",
+    "amount": 20
+   },
+   {
+    "id": "ev_mod_ex_criminal_out_4",
+    "kind": "add_relationship",
+    "character": "class_grunt",
+    "attr": "fear",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_ex_criminal_out_5",
+    "kind": "add_relationship",
+    "character": "class_researcher",
+    "attr": "suspicion",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_ex_criminal_out_6",
+    "kind": "add_relationship",
+    "character": "class_elite",
+    "attr": "suspicion",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_ex_criminal_out_7",
+    "kind": "add_relationship",
+    "character": "class_trainer",
+    "attr": "suspicion",
+    "amount": 5
+   }
+  ],
+  "variants": [],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_end_redeemed",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_redeemed_b1",
+    "kind": "narration",
+    "textKey": "ev_end_redeemed.b1"
+   },
+   {
+    "id": "ev_end_redeemed_b2",
+    "kind": "narration",
+    "textKey": "ev_end_redeemed.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_redeemed_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_redeemed"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_redeemed_narrator_v1",
+    "textKey": "ev_end_redeemed.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_redeemed_narrator_v2",
+    "textKey": "ev_end_redeemed.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_redeemed_narrator_v3",
+    "textKey": "ev_end_redeemed.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_end_reconciled",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_reconciled_b1",
+    "kind": "narration",
+    "textKey": "ev_end_reconciled.b1"
+   },
+   {
+    "id": "ev_end_reconciled_b2",
+    "kind": "narration",
+    "textKey": "ev_end_reconciled.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_reconciled_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_reconciled"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_reconciled_narrator_v1",
+    "textKey": "ev_end_reconciled.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_reconciled_narrator_v2",
+    "textKey": "ev_end_reconciled.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_reconciled_narrator_v3",
+    "textKey": "ev_end_reconciled.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_end_relapse",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_relapse_b1",
+    "kind": "narration",
+    "textKey": "ev_end_relapse.b1"
+   },
+   {
+    "id": "ev_end_relapse_b2",
+    "kind": "narration",
+    "textKey": "ev_end_relapse.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_relapse_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_relapse"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_relapse_narrator_v1",
+    "textKey": "ev_end_relapse.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_relapse_narrator_v2",
+    "textKey": "ev_end_relapse.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_relapse_narrator_v3",
+    "textKey": "ev_end_relapse.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_end_ghost",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_ghost_b1",
+    "kind": "narration",
+    "textKey": "ev_end_ghost.b1"
+   },
+   {
+    "id": "ev_end_ghost_b2",
+    "kind": "narration",
+    "textKey": "ev_end_ghost.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_ghost_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_ghost"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_ghost_narrator_v1",
+    "textKey": "ev_end_ghost.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_ghost_narrator_v2",
+    "textKey": "ev_end_ghost.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_ex_criminal"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_ghost_narrator_v3",
+    "textKey": "ev_end_ghost.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_ex_criminal"
+ }
+]

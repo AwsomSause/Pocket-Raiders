@@ -1,1 +1,103 @@
-[]
+[
+ {
+  "id": "bs_ex_criminal",
+  "nameKey": "bs.ex_criminal.name",
+  "signatureProp": "prop_torn_patch",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_old_uniform",
+   "ev_unfinished_business",
+   "ev_tally_1",
+   "ev_ledger_room",
+   "ev_parole",
+   "ev_dead_drop",
+   "ev_rank_and_file",
+   "ev_departure_truth"
+  ],
+  "echoEvents": [
+   "ev_echo_ex_crim_01",
+   "ev_echo_ex_crim_02",
+   "ev_echo_ex_crim_03"
+  ],
+  "encounterPools": [
+   "enc_marauder_squad_ex",
+   "enc_abandoned_pawniard"
+  ],
+  "remembranceUnlocks": [
+   "rm_sandile",
+   "rm_pawniard"
+  ],
+  "exclusiveItem": "item_old_pass",
+  "endings": [
+   "end_redeemed",
+   "end_reconciled",
+   "end_relapse",
+   "end_ghost"
+  ],
+  "catchAllEnding": "end_ghost",
+  "endingGrid": [
+   {
+    "ending": "end_redeemed",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "redemption",
+      "op": ">=",
+      "value": 70
+     },
+     {
+      "kind": "flag",
+      "key": "truth_accepted",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_reconciled",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "redemption",
+      "op": ">=",
+      "value": 45
+     },
+     {
+      "kind": "flag",
+      "key": "truth_accepted",
+      "op": "==",
+      "value": true
+     }
+    ]
+   },
+   {
+    "ending": "end_relapse",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "contract_done",
+      "op": "==",
+      "value": true
+     },
+     {
+      "kind": "flag",
+      "key": "truth_accepted",
+      "op": "==",
+      "value": false
+     }
+    ]
+   },
+   {
+    "ending": "end_ghost",
+    "when": []
+   }
+  ]
+ }
+]
