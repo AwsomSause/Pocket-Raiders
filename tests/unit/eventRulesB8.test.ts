@@ -41,4 +41,23 @@ describe('hidden-foe rules (run events B batch 8)', () => {
     expect(start('library-duel-silence').battle?.eventRule?.silent).toBe(true);
     expect(start('rooftop-rumble').battle?.eventRule?.turnLimit).toBe(4);
   });
+  it('batch 10: sky, sniper, contest and loaner events carry their rules', () => {
+    expect(start('sky-duel').battle?.eventRule?.sky).toBe(true);
+    expect(start('sniper-ambush').battle?.eventRule?.sniper).toBe(true);
+    const contest = start('contest-judges-challenge').battle!;
+    expect(contest.eventRule?.contest).toBe(4);
+    for (const m of ['tackle', 'growl', 'ember', 'leer']) {
+      contest.playerVolatile.lastMove = m;
+      eventRuleEnd(contest, [], [], content);
+      if (m !== 'leer') expect(contest.outcome).toBeNull();
+    }
+    expect(contest.outcome).toBe('win');
+    const again = start('contest-judges-challenge').battle!;
+    again.playerVolatile.lastMove = 'tackle';
+    eventRuleEnd(again, [], [], content);
+    eventRuleEnd(again, [], [], content);
+    expect(again.outcome).toBeNull();
+    const draft = content.events.get('dream-team-draft')!;
+    expect(draft.choices.filter((c) => JSON.stringify(c).includes('"ally"')).length).toBe(3);
+  });
 });

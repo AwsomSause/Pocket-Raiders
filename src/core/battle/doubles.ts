@@ -629,7 +629,8 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
     }
     if (kind !== 'single' && kind !== 'random') return { score: value(players[0]!) };
     // A single target: the one it hurts most.
-    const best = players.reduce((b, p) => (value(p) > value(b) ? p : b));
+    const defOf = (p: Combatant) => { const st = calcStats(content, p.mon); return move.category === 'special' ? st.spd : st.def; };
+    const best = battle.eventRule?.sniper ? players.reduce((b, p) => (defOf(p) < defOf(b) ? p : b)) : players.reduce((b, p) => (value(p) > value(b) ? p : b));
     return { score: value(best), target: { side: 'player', spot: field.spotOf(best)! } };
   };
   const usable = foe.mon.moves.map((m, i) => ({ m, i })).filter((x) => x.m.pp > 0);
