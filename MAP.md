@@ -93,7 +93,7 @@ To look something up: `grep -n '"id": "pikachu"' src/data/species.json` then rea
 
 ## `tools/` — Node scripts behind `npm run data:*`, `assets:*`, `report:*`
 
-`import-*` bring in the director's data; `build-*` generate data files; `report-content.ts` / `report-balance.ts` write `docs/quality/`; `content-baseline.json` is the CI gate baseline; `lib/gameModules.ts` lets tools import game code.
+`import-*` bring in the director's data; `build-*` generate data files; `report-content.ts` / `report-balance.ts` write `docs/quality/`; `content-baseline.json` is the CI gate baseline; `lib/gameModules.ts` lets tools import game code. `overhaul-sim.ts` (`npm run sim:overhaul`) plays 100 seeded bot runs and prints rare-event, repeat and run-length numbers (Overhaul slice 29).
 
 ## `docs/`
 
