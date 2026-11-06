@@ -15,6 +15,7 @@ import { familyId } from '../mastery';
 import { getSpecies, movesAtLevel, usableLearnset } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
 import { fnv1a } from '../story/moments';
+import { shapePlanned, strategyIdForGroup } from '../bossStrategy';
 import type { PokemonInstance, RunState } from '../state';
 import type { DomainEvent, Rival, Traits, Where } from '../story/schema';
 import { TRAIT_KEYS } from '../story/schema';
@@ -108,6 +109,17 @@ export function createMajorRival(run: RunState, input: { classId: string; name: 
  * its level. The same slot always draws the same family, so the team stays recognizable from meeting to meeting.
  */
 export function canonPlan(content: Content, rival: Rival, plan: TrainerPlan): TrainerPlan {
+  return strategyPlan(content, rival, canonTeam(content, rival, plan));
+}
+
+/** Overhaul slice 17: every rival (major, additional, friendly) fights by its battle style's named strategy. */
+function strategyPlan(content: Content, rival: Rival, plan: TrainerPlan): TrainerPlan {
+  const shaped = shapePlanned(content, strategyIdForGroup(content, 'rival', rival.style), 'rival', true, plan.members, plan.ai);
+  if (!shaped.strategy) return plan;
+  return { ...plan, members: shaped.members, ai: shaped.ai, strategy: shaped.strategy.id, levelInfo: shaped.order.map((i) => plan.levelInfo[i]).filter((x): x is NonNullable<typeof x> => !!x) };
+}
+
+function canonTeam(content: Content, rival: Rival, plan: TrainerPlan): TrainerPlan {
   if (!rival.major) return plan;
   const pool = characterOf(rival.canon ?? rival.name).data.pool.filter((id) => content.species.has(id) && familyId(content, id) !== rival.ace);
   if (pool.length === 0) return plan;

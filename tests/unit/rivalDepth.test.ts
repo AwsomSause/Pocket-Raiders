@@ -84,7 +84,7 @@ describe('Major rival record (§21, §9)', () => {
     expect(canonPlan(content, r, plan)).toEqual(a);
     expect(new Set(a.members.map((m) => familyId(content, m.speciesId))).size).toBe(3);
     // A trainer rival from a Spark keeps its own team.
-    expect(canonPlan(content, { ...r, major: undefined }, plan)).toBe(plan);
+    expect(canonPlan(content, { ...r, major: undefined }, plan).members.map((m) => m.speciesId)).toEqual(plan.members.map((m) => m.speciesId));
   });
 
   it('tracks the ace battle to battle: form, level, moves, held item and record', () => {

@@ -37,7 +37,8 @@ import { pastGauntletLeft, startPastGauntlet } from './memories/encounters';
 import { nextKeepsake, recoverKeepsake } from './memories/keepsakes';
 import { deliverLegacyEgg, legacyEggWaiting } from './memories/heirloom';
 import { noteChoice } from './memories/world';
-import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText } from './evil/teams';
+import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText, evilTeam } from './evil/teams';
+import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
@@ -1183,7 +1184,12 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     });
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
+    // Overhaul slice 17: Evil Team and rival fights follow their named strategy (opener, ace item, sharper AI).
+    const strategyKey = evil ? { kind: 'evil' as const, key: evilTeam(content, run)?.id ?? '' } : rival && rivalTeam.length > 0 ? { kind: 'rival' as const, key: rival.style } : null;
+    const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
+    if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.name, leaderId: null });
+    if (shaped) run.battle.ai = Math.max(run.battle.ai, shaped.ai);
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
     if (b.rule) {

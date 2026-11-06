@@ -96,9 +96,10 @@ describe('boss teams past level 100 (bossBands)', () => {
   it('leaves teams at 100 and below exactly as authored', () => {
     const p = plan(100);
     const authored = content.bosses.get('lance')!.teams.champion[9]!;
-    expect(p.members.map((m) => m.speciesId)).toEqual(authored.members.map((m) => m.speciesId));
-    expect(p.members.every((m) => !m.held)).toBe(true);
-    expect(p.ai).toBe(authored.ai);
+    // Overhaul slice 17: the strategy may lead with another member, gives the ace one item and adds the Champion AI bonus; no band upgrade.
+    expect([...p.members.map((m) => m.speciesId)].sort()).toEqual(authored.members.map((m) => m.speciesId).sort());
+    expect(p.members.slice(0, -1).every((m) => !m.held)).toBe(true);
+    expect(p.ai).toBeCloseTo(Math.min(1, authored.ai + content.balance.bossStrategy.aiBonus.champion), 10);
   });
 
   it('every band item is a real held item and bands rise with level', () => {
