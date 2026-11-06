@@ -3,7 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
-import { noteGrowthKo } from '../overhaul/growth';
+import { bumpGrowth, hitCounters, moveCounters, noteGrowthKo } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
@@ -142,6 +142,11 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
     switch (e.type) {
       case 'move':
         lastMove[e.side] = e.moveId;
+        if (e.side === 'player' && active.player) {
+          const mv = content.moves.get(e.moveId);
+          const me = mon(active.player);
+          if (mv && me) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveCounters({ accuracy: mv.accuracy, category: mv.category, type: mv.type, flags: mv.flags, hpFrac: me.hp / Math.max(1, maxHp(content, me)) }));
+        }
         emit(content, run, 'moveUsed', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, moveId: e.moveId } });
         if (e.side === 'player' && active.player) {
           const t = signatureMove(content, run, active.player, e.moveId, i, triggers.length);
@@ -160,6 +165,10 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         emit(content, run, 'statusInflicted', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, status: e.status } });
         break;
       case 'damage': {
+        if (e.side === 'enemy' && active.player) {
+          const foe = mon(active.enemy);
+          if (foe) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], hitCounters(e.hpAfter + e.amount, maxHp(content, foe), e.hpAfter <= 0));
+        }
         if (e.side !== 'player' || e.hpAfter <= 0) break;
         // A hit that was survived by enduring is told by that event instead.
         const next = events[i + 1];
