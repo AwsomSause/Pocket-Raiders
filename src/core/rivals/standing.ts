@@ -122,6 +122,8 @@ export interface PathInput {
   team: string[];
   hpLeftShare: number;
   turns: number;
+  /** The rival in this battle: its path facts read only what it has seen. */
+  rival?: Rival;
 }
 
 /** Facts about the player's world that the rival paths ask about. */
@@ -131,7 +133,7 @@ export function pathContext(content: Content, run: RunState, input: PathInput) {
   const stage = input.where.stage ?? 0;
   const crises = run.story.events.filter((e) => (e.type === 'closeCall' || e.type === 'survivedFatal') && e.where.region === input.where.region && e.where.stage === stage).length;
   const partySpecies = new Set(run.party.map((m) => m.speciesId));
-  const top = usedTypes(content, run).slice(0, 2);
+  const top = input.rival ? usedTypes(content, run, input.rival).slice(0, 2) : [];
   const typedLikeYou = input.team.filter((id) => getSpecies(content, id).types.some((t) => top.includes(t))).length;
   return {
     sponsored: st.sponsor !== null,

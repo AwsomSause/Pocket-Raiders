@@ -16,7 +16,7 @@ import { RIVAL_ARCS } from '../../src/core/rivals/schema';
 import { edgeKind, simulateRivalWorld } from '../../src/core/rivals/world';
 import { rivalMods } from '../../src/core/rivals/profile';
 import { rivalChronicle } from '../../src/core/rivals/chronicle';
-import { mostUsedType, rivalReturn, rivalReturnFlag, waitingRival } from '../../src/core/rivals/adapt';
+import { mostUsedType, rivalReturn, usedTypes, rivalReturnFlag, waitingRival } from '../../src/core/rivals/adapt';
 import { chooseNode, chooseStarter, createRun, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { RivalSchema } from '../../src/core/story/schema';
@@ -172,9 +172,10 @@ describe('rival return and adaptation', () => {
   it('counter-pick resists the party\'s most-used type and swaps only one member', () => {
     const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'ad', seed: 'ad', archetypeId: 'red' }), 0));
     run.party[0]!.moves = [{ id: 'thunderbolt', pp: 15 }];
-    expect(mostUsedType(content, run)).toBe('electric');
     const rival = sparked('ad').story.rivals[0]!;
     rival.traits.adaptability = 90;
+    rival.seen = [{ signal: 'moveType', value: 'electric', source: 'fought', at: 'ad', uses: 3 }];
+    expect(mostUsedType(content, run, rival)).toBe('electric');
     const plan: TrainerPlan = { classId: 'youngster', name: 'x', leaderId: null, ai: 0, members: [{ speciesId: 'geodude', level: 20 }, { speciesId: 'pidgey', level: 20 }], levelInfo: [{ level: 20 } as never, { level: 20 } as never] };
     const ret = rivalReturn(content, run, rival, plan, { kind: 'rematch', levelBonus: 1, extraMembers: 1, perStage: 1, perRegion: 4 });
     expect(ret.note).toContain('studied your electric moves');
@@ -182,7 +183,31 @@ describe('rival return and adaptation', () => {
     expect(ret.plan.members).toHaveLength(2);
     expect(rivalReturn(content, run, rival, plan, { kind: 'rematch', levelBonus: 1, extraMembers: 1, perStage: 1, perRegion: 4 })).toEqual(ret);
   });
+
+  const plan: TrainerPlan = { classId: 'youngster', name: 'x', leaderId: null, ai: 0, members: [{ speciesId: 'geodude', level: 20 }, { speciesId: 'pidgey', level: 20 }], levelInfo: [{ level: 20 } as never, { level: 20 } as never] };
+  const effect = { kind: 'rematch', levelBonus: 1, extraMembers: 1, perStage: 1, perRegion: 4 } as const;
+
+  it('never counters a move it has not seen', () => {
+    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'w0', seed: 'w0', archetypeId: 'red' }), 0));
+    run.party[0]!.moves = [{ id: 'thunderbolt', pp: 15 }];
+    const rival = sparked('w0').story.rivals[0]!;
+    rival.traits.adaptability = 90;
+    expect(usedTypes(content, run, rival)).toEqual([]);
+    expect(rivalReturn(content, run, rival, plan, effect).note ?? '').not.toContain('electric');
+  });
+
+  it('counters only the types it watched, most watched first', () => {
+    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'w0b', seed: 'w0b', archetypeId: 'red' }), 0));
+    run.party[0]!.moves = [{ id: 'thunderbolt', pp: 15 }];
+    const rival = sparked('w0b').story.rivals[0]!;
+    rival.seen = [
+      { signal: 'moveType', value: 'fire', source: 'fought', at: 'a', uses: 1 },
+      { signal: 'moveType', value: 'water', source: 'fought', at: 'b', uses: 4 },
+    ];
+    expect(usedTypes(content, run, rival)).toEqual(['water', 'fire']);
+  });
 });
+
 
 describe('rival chronicle', () => {
   it('describes each rival: who, how it fights, what it remembers', () => {
@@ -306,6 +331,8 @@ describe('rival battle outcome in a real battle', () => {
     const after = win(again);
     const r = after.story.rivals[0]!;
     expect(r.encounters).toBe(1);
+    // W0: it watched the Tackle you used (not a status move, not your whole party).
+    expect(r.seen).toEqual([expect.objectContaining({ signal: 'moveType', value: 'normal', source: 'fought' })]);
     expect(r.rivalPotential).toBeGreaterThan(first.story.rivals[0]!.rivalPotential);
     expect(['recognized', 'recurring', 'active', 'nemesis', 'contender', 'ally', 'retired']).toContain(r.state);
     // One encounter is enough history unless the rival became an ally or retired.

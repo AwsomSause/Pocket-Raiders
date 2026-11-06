@@ -43,7 +43,7 @@ import { noteCodex } from './codex';
 import { noteRivalryLoss, noteRivalryWin } from './rivalryKinds';
 import { memoryAfterBattle } from '../memories/encounters';
 import { nemesisAfterBattle, noteNemesisBreakFree, noteNemesisFaint, noteRivalResult } from './nemesis';
-import type { StoryEventDefinition, StoryTriggerKind, Where } from './schema';
+import type { Rival, StoryEventDefinition, StoryTriggerKind, Where } from './schema';
 import { rivalProgress } from '../rivals/progression';
 import { createMajorRival, learnFromBattle, recordAce, type Knockout } from '../rivals/major';
 import { maybeFormMonRival, monRivalAfterBattle, monRivalCandidate } from '../rivals/monRivals';
@@ -547,6 +547,19 @@ function noteDuos(content: Content, run: RunState, fought: string[], where: Wher
   }
 }
 
+/** W0: what the rival watched you use this battle, kept by attack type (newest last, at most 40 entries). */
+function recordSeenMoves(content: Content, rival: Rival, moves: Record<string, number> | undefined, at: string): void {
+  const byType = new Map<string, number>();
+  for (const [id, n] of Object.entries(moves ?? {})) {
+    const move = content.moves.get(id);
+    if (move && move.category !== 'status') byType.set(move.type, (byType.get(move.type) ?? 0) + n);
+  }
+  if (byType.size === 0) return;
+  const seen = (rival.seen ??= []);
+  for (const [value, uses] of [...byType.entries()].sort((a, b) => a[0].localeCompare(b[0]))) seen.push({ signal: 'moveType', value, source: 'fought', at, uses });
+  if (seen.length > 40) seen.splice(0, seen.length - 40);
+}
+
 /** The battle's outcome: boss wins and losses, and how close it was. */
 function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const battle = run.battle!;
@@ -598,6 +611,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     // A narrative defeat (M12) is the rival's story win, not an ordinary one.
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
     rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
+    recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
     // §9/§10: the ace's record, and what the rival learned from this battle.
     recordAce(content, rivalBack, battle.enemyTeam, result === 'lose');
     for (const text of learnFromBattle(content, run, rivalBack, enemyKos, where)) emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: rivalBack.id, outcome: 'studied' }, text });
@@ -643,7 +657,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
       turns: battle.turn - 1,
       flawless: run.party.every((m) => m.hp > 0),
       returning: Boolean(battle.returning),
-      ctx: pathContext(content, run, { where, team: battle.enemyTeam.slice(0, 6).map((m) => m.speciesId), hpLeftShare: totalHp > 0 ? hpLeft / totalHp : 0, turns: battle.turn - 1 }),
+      ctx: pathContext(content, run, { where, team: battle.enemyTeam.slice(0, 6).map((m) => m.speciesId), hpLeftShare: totalHp > 0 ? hpLeft / totalHp : 0, turns: battle.turn - 1, ...(rivalBack ? { rival: rivalBack } : {}) }),
     });
     if (rival) {
       const title = `${content.trainers.get(trainer.classId)?.name ?? 'Trainer'} ${trainer.name}`;

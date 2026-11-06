@@ -61,20 +61,18 @@ export function waitingRival(run: RunState, content?: Content): Rival | null {
 }
 
 /** The attack type the party's damaging moves use most (ties: the type listed first in the type chart). */
-export function mostUsedType(content: Content, run: RunState): TypeName | null {
-  return usedTypes(content, run)[0] ?? null;
+export function mostUsedType(content: Content, run: RunState, rival: Rival): TypeName | null {
+  return usedTypes(content, run, rival)[0] ?? null;
 }
 
-/** Attack types your party's damaging moves use, most used first. */
-export function usedTypes(content: Content, run: RunState): TypeName[] {
+/**
+ * Attack types this rival has watched you use, most used first (W0, rule O1). It reads only `rival.seen`,
+ * never your live party, so a rival cannot counter a move it has not seen. No fight yet means no counter.
+ */
+export function usedTypes(content: Content, _run: RunState, rival: Rival): TypeName[] {
   const counts = new Map<TypeName, number>();
-  for (const mon of run.party) {
-    for (const slot of mon.moves) {
-      const move = content.moves.get(slot.id);
-      if (move && move.category !== 'status') counts.set(move.type, (counts.get(move.type) ?? 0) + 1);
-    }
-  }
-  return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([type]) => type);
+  for (const s of rival.seen ?? []) if (s.signal === 'moveType' && s.value in content.typeChart) counts.set(s.value as TypeName, (counts.get(s.value as TypeName) ?? 0) + s.uses);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([type]) => type);
 }
 
 /** W6 I164: the type you told your rival to build around (events rival-asks-advice) is on their next roster. */
@@ -119,7 +117,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   // Personality: vindictive rivals return stronger. Style: how sharp its move choice is.
   const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) }), ai: Math.max(plan.ai, mods.ai) };
   const perks = runPerks(content, run);
-  const type = mostUsedType(content, run);
+  const type = mostUsedType(content, run, rival);
   const seen = bondNote(rival);
   // A trainer perk (Blue, Gen 3): the rival always carries a Pokémon of some type (Blaine: Water).
   const planned = withTeamTypes(content, revised, [...rivalTeamTypes(perks), ...advisedTypes(run)]);
@@ -129,7 +127,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   if (!type || !mods.canAdapt || rival.adaptations.length >= counterCap(rolesCfg, role, mods.adaptCap)) return { plan: planned, note: seen };
   const bias = (speciesId: string) => mods.statBias.reduce((sum, stat) => sum + (getSpecies(content, speciesId).baseStats[stat as 'hp'] ?? 0), 0);
   // One counter-pick for the type you use most; a trainer perk adds a counter for the next most used types.
-  const types = usedTypes(content, run).slice(0, 1 + rivalCounterBonus(perks));
+  const types = usedTypes(content, run, rival).slice(0, 1 + rivalCounterBonus(perks));
   let members = planned.members;
   const notes: string[] = [];
   types.forEach((t, k) => {
