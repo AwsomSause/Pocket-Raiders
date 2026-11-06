@@ -348,9 +348,9 @@ export const FIXED_ASSETS: AssetEntry[] = [
   { id: 'se.egg_get', kind: 'audio', category: 'sound', path: 'audio/se/egg_get.ogg' },
   { id: 'ui.select', kind: 'audio', category: 'sound', path: 'audio/se/ui_decision.ogg' },
   { id: 'ui.error', kind: 'audio', category: 'sound', path: 'audio/se/ui_buzzer.ogg' },
-  { id: 'font.main', kind: 'font', category: 'font', path: 'fonts/pokemon-emerald-pro.ttf' },
+  { id: 'font.main', kind: 'font', category: 'font', path: 'fonts/pokemon-emerald-pro.woff2' },
   // The Gen 3 battle font: chunky pixel text for everything but fine print.
-  { id: 'font.bold', kind: 'font', category: 'font', path: 'fonts/pkmnems.ttf' },
+  { id: 'font.bold', kind: 'font', category: 'font', path: 'fonts/pkmnems.woff2' },
 ];
 
 /**
