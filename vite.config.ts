@@ -24,7 +24,7 @@ export default defineConfig(({ command }) => ({
     rolldownOptions: {
       checks: { pluginTimings: false },
       // Phaser in its own file: it never changes between deploys, so browsers keep it cached while the game code and data update.
-      output: { advancedChunks: { groups: [{ name: 'phaser', test: /node_modules[\\/]phaser/ }] } },
+      output: { codeSplitting: { groups: [{ name: 'phaser', test: /node_modules[\\/]phaser/ }] } },
     },
   },
   test: {
