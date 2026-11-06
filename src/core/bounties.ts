@@ -22,6 +22,7 @@ export function stageBounty(content: Content, run: Pick<RunState, 'seed' | 'regi
   const stage = run.stage;
   if (!stage) return null;
   const cfg = content.balance.luck.bounty;
+  if (cfg.target === 0) return null;
   const key = `${run.regionIndex}:${stage.index}`;
   const type = TYPE_NAMES[new Rng(hashSeed(`${run.seed}::bounty::${key}`)).int(0, TYPE_NAMES.length - 1)]!;
   return { key, type, target: cfg.target, money: cfg.money + cfg.moneyPerStage * stage.index, item: cfg.item };
