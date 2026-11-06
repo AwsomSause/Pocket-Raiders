@@ -381,7 +381,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
   // Story Overhaul W6: dungeons become room events (validated: every branch reaches the exit).
   for (const p of validateAllDungeons()) problems.push(`dungeons.json ${p}`);
-  gamesEvents.push(...dungeonEvents());
+  // They give catalog items, so a stripped-down test content (empty catalog) leaves them out.
+  if (((raw.itemCatalog as unknown[] | undefined) ?? []).length > 0) gamesEvents.push(...dungeonEvents());
   // Story Overhaul W7: pseudo stages and regions (gate + rooms).
   for (const p of validateAllPseudo()) problems.push(`pseudoStages.json ${p}`);
   if (((raw.itemCatalog as unknown[] | undefined) ?? []).length > 0) gamesEvents.push(...pseudoEvents());
