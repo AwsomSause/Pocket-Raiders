@@ -41,6 +41,18 @@ export const SpectacleConfigSchema = z.object({
     minBond: z.number().int().min(0).max(100),
     boost: Boost,
   }),
+  /** Berserk Mode (S385): rage-prone Pokémon lose control at low HP for a few turns of bigger hits. */
+  berserk: z
+    .object({
+      species: z.array(z.string()),
+      /** Goes berserk once its HP share falls to this. */
+      hpBelow: z.number().min(0.05).max(0.9),
+      turns: z.number().int().min(1),
+      damage: z.number().min(1),
+      /** Share of max HP it hurts itself each berserk turn (never knocks it out). */
+      recoil: z.number().min(0).max(0.5),
+    })
+    .default({ species: ['primeape', 'annihilape', 'tyranitar', 'pangoro', 'vigoroth'], hpBelow: 0.34, turns: 3, damage: 1.5, recoil: 0.0625 }),
   /** Phases at HP lines for a boss's last Pokémon, per trainer class (a final boss also gets `final`). */
   phases: z.object({
     classes: z.record(z.string(), z.array(BossPhaseCfgSchema)),

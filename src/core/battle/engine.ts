@@ -97,6 +97,7 @@ import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProble
 import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, shoutDamage, throwCatch, type SkillInput } from './w1Play';
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
+import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
 
@@ -653,6 +654,15 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     const locked = choiceLockIndex(battle, ctx.party);
     if (locked !== null && action.kind === 'move' && action.index !== -1 && action.index !== locked) action = { ...action, index: locked };
     validateAction(ctx, action);
+  }
+  // Berserk Mode (S385): out of control, it throws its strongest move whatever you chose.
+  {
+    const berserkSpec = spectacleOf(content, battle);
+    const me = ctx.party[battle.activeIndex]!;
+    if (berserkSpec && isBerserk(berserkSpec, me) && (action.kind === 'move' || action.kind === 'switch' || action.kind === 'item')) {
+      const pick = berserkMove(content, me);
+      if (pick >= 0) action = { kind: 'move', index: pick };
+    }
   }
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
   battle.skill = action.kind === 'move' ? action.skill : action.kind === 'item' ? action.throwSkill : undefined;
@@ -5895,6 +5905,7 @@ function spectacleDamage(ctx: BattleContext, user: Combatant, target: Combatant,
   let out = damage;
   if (user.side === 'player') {
     if (spec.rallyOn) out *= cfg.momentum.rallyDamage;
+    if (isBerserk(spec, user.mon)) out *= cfg.berserk.damage;
     if (user.mon.awakened?.includes(move.id) && !spec.signed.includes(user.mon.uid) && (ctx.bondScore?.(user.mon.uid) ?? 0) >= cfg.lastStand.minBond) {
       spec.signed.push(user.mon.uid);
       events.push(say('player', 'signature', `${nameOf(ctx, user.mon)} pours its bond into ${move.name}!`, user.mon.uid));
@@ -5910,6 +5921,32 @@ function spectacleAfterHit(ctx: BattleContext, user: Combatant, target: Combatan
   const cfg = spectacleCfg(ctx.content);
   if (user.side === 'player') {
     if (effectiveness > 1 && addMomentum(ctx.content, spec, cfg.momentum.superEffective)) events.push(say('player', 'momentumFull', 'The Momentum Meter is full! Rally is ready!'));
+  }
+}
+
+/** Berserk Mode: a berserk Pokémon hurts itself a little and calms down after its turns; a hurt berserker may snap now. */
+function berserkEndOfTurn(ctx: BattleContext, spec: NonNullable<BattleState['spectacle']>, events: BattleEvent[]): void {
+  const { content, battle } = ctx;
+  const cfg = spectacleCfg(content).berserk;
+  const mon = ctx.party[battle.activeIndex]!;
+  const now = spec.berserk;
+  if (now && (now.uid !== mon.uid || mon.hp <= 0 || battle.outcome)) spec.berserk = null;
+  else if (now) {
+    const hurt = Math.min(mon.hp - 1, Math.max(1, Math.floor(maxHp(content, mon) * cfg.recoil)));
+    if (hurt > 0) {
+      mon.hp -= hurt;
+      events.push({ type: 'recoil', side: 'player', amount: hurt, hpAfter: mon.hp });
+    }
+    now.turns -= 1;
+    if (now.turns <= 0) {
+      spec.berserk = null;
+      events.push(say('player', 'berserk', `${nameOf(ctx, mon)} snaps out of it, panting.`, mon.uid));
+    }
+  }
+  if (!battle.outcome && berserkDue(content, spec, mon)) {
+    spec.berserk = { uid: mon.uid, turns: cfg.turns };
+    spec.berserked.push(mon.uid);
+    events.push(say('player', 'berserk', `${nameOf(ctx, mon)} loses control! BERSERK!`, mon.uid));
   }
 }
 
@@ -5952,6 +5989,7 @@ function spectacleEndOfTurn(ctx: BattleContext, spec: NonNullable<BattleState['s
   const { content, battle } = ctx;
   const cfg = spectacleCfg(content);
   spec.rallyOn = false;
+  berserkEndOfTurn(ctx, spec, events);
   const landed = events.some((e) => e.type === 'damage' && e.side === 'enemy' && e.amount > 0);
   if (landed && action.kind === 'move') {
     spec.streak += 1;

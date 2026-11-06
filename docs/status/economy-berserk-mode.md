@@ -1,0 +1,5 @@
+# Berserk Mode (S385)
+
+A few rage-prone Pokémon lose control once per battle (Kice's pick: Primeape, Annihilape, Tyranitar, Pangoro, Vigoroth; list in `balance.json` > `spectacle.berserk.species`, form species count by their base). When one is at 34% HP or less at the end of a turn, it goes berserk for 3 turns: it throws its strongest damaging move whatever you chose (no switching or items), its hits do 1.5x damage, and it hurts itself 1/16 of max HP each turn (never below 1 HP). Then it calms down and cannot do it again that battle. Not used in double battles (spectacle is off there).
+Rules: `src/core/battle/berserk.ts`; engine hooks in `engine.ts` (`berserkEndOfTurn`, the forced move before the turn, `spectacleDamage`). State is `battle.spectacle.berserk` / `berserked` (defaulted fields, so older saves load and the save version stays). The screen shows it as a `spectacle` line using the Rally flash.
+Tests: `tests/unit/berserk.test.ts`. Not done: a dedicated Berserk animation or portrait tint, and a way for the player to trigger it.
