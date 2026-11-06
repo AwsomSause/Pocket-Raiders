@@ -61,3 +61,21 @@ describe('Glass Cannon, strong vitamins, Mild Revive', () => {
     expect(mon.hp).toBe(Math.max(1, Math.floor(maxHp(content, mon) * 0.25)));
   });
 });
+
+describe('Team Orbs (S421)', () => {
+  it.each(['dawn-orb', 'vigor-orb', 'fury-orb', 'aegis-orb', 'gale-orb'])('%s is a team-wide passive held effect', (id) => {
+    const e = getCatalogEntry(content, id);
+    expect(e.stacksOn).toBe('team');
+    expect(e.effect?.kind).toBe('held');
+    expect(e.status).toBe('supported');
+  });
+
+  it('a team orb reaches every party member in battle', async () => {
+    const { hooksOf } = await import('../../src/core/battle/held');
+    const { createPokemon } = await import('../../src/core/pokemon');
+    const mon = createPokemon(content, 'machamp', 30, 'm');
+    const hooks = hooksOf({ content, teamItems: { 'gale-orb': 2 } }, mon, 'player');
+    expect(hooks.some((h) => h.itemId === 'gale-orb' && h.copies === 2)).toBe(true);
+    expect(hooksOf({ content, teamItems: { 'gale-orb': 2 } }, mon, 'enemy').some((h) => h.itemId === 'gale-orb')).toBe(false);
+  });
+});

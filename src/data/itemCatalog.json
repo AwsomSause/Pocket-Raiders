@@ -15650,5 +15650,118 @@
     }
    ]
   }
+ },
+ {
+  "id": "dawn-orb",
+  "name": "Dawn Orb",
+  "family": "Species items",
+  "description": "Every team member: all stats +4% per copy",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "pass-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.04
+    }
+   ]
+  }
+ },
+ {
+  "id": "vigor-orb",
+  "name": "Vigor Orb",
+  "family": "Species items",
+  "description": "Every team member heals 1/32 max HP at the end of each turn per copy",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "red-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "endTurn",
+     "fraction": 0.03125
+    }
+   ]
+  }
+ },
+ {
+  "id": "fury-orb",
+  "name": "Fury Orb",
+  "family": "Species items",
+  "description": "Every team member: moves hit 6% harder per copy",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "adamant-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "power",
+     "percent": 6
+    }
+   ]
+  }
+ },
+ {
+  "id": "aegis-orb",
+  "name": "Aegis Orb",
+  "family": "Species items",
+  "description": "Every team member: Defense and Sp. Def +5% per copy",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "blue-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.05
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.05
+    }
+   ]
+  }
+ },
+ {
+  "id": "gale-orb",
+  "name": "Gale Orb",
+  "family": "Species items",
+  "description": "Every team member: Speed +5% per copy",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "jade-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.05
+    }
+   ]
+  }
  }
 ]
