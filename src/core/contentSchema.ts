@@ -1334,6 +1334,8 @@ export const EncounterModSchema = z.discriminatedUnion('mod', [
   /** A chance (percent per copy) that the wild Pokémon is this species. */
   z.object({ mod: z.literal('species'), species: z.string(), percent: z.number().positive().max(100) }),
   /** The wild Pokémon loses its first turn. */
+  /** Weather Idols (S427): the next wild battle starts in this weather. */
+  z.object({ mod: z.literal('weather'), weather: WeatherSchema }),
   z.object({ mod: z.literal('freeTurn') }),
   /** Catching the wild Pokémon also drops a cheap Bag item (Pinap Berry). */
   z.object({ mod: z.literal('drop') }),
@@ -1432,6 +1434,12 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */
   z.object({ perk: z.literal('journal') }),
+  /** Last Chance Charm (S389): after each won fight, one fallen Pokémon gets back up with part of its HP. */
+  z.object({ perk: z.literal('lastChance') }),
+  /** Augur's Bell (S380): the map shows an omen (calm, uneasy or dire) for each fight you can walk to. */
+  z.object({ perk: z.literal('omen') }),
+  /** Oval Charm (S432): every Egg gets one extra step toward hatching each time it would tick. */
+  z.object({ perk: z.literal('ovalCharm') }),
   /** Seal Case: catching a Pokémon shows a special effect and gives Luck. */
   z.object({ perk: z.literal('sealCase'), luck: z.number().int().positive() }),
   /** Seal Bag: items sell for their full shop price instead of half. */
@@ -1961,6 +1969,10 @@ export const BalanceSchema = z.object({
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
   /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
   priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
+  /** Omens (S380): the fight's gap = foe level (+perExtraFoe per extra foe) minus your best `partySample` fighters' level; at most calmAtMost is calm, at least direAtLeast is dire. */
+  omen: z.object({ partySample: z.number().int().min(1).max(6), perExtraFoe: z.number().min(0), calmAtMost: z.number(), direAtLeast: z.number() }).default({ partySample: 3, perExtraFoe: 2, calmAtMost: -2, direAtLeast: 4 }),
+  /** Last Chance Revives (S389): the share of max HP the revived Pokémon gets back. */
+  lastChance: z.object({ share: z.number().positive().max(1) }).default({ share: 0.25 }),
   /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
   wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */
@@ -2215,7 +2227,7 @@ export const BalanceSchema = z.object({
   /** Exploration (core/world.ts): fog of war, weather fronts, roaming Legendaries and checkpoint camps. */
   world: WorldBalanceSchema,
   /** The day counter and day/night cycle (core/clock.ts): four times of day, a step of the map takes `ticksPerStep` of them. */
-  clock: z.object({ ticksPerStep: z.number().int().min(0).max(4), milestoneDays: z.array(z.number().int().min(2)).min(1), /** Days in a season of the run's calendar; each new season is a festival day. */ seasonLength: z.number().int().min(2), /** Real-world dates (month-day) the camp celebrates; the host passes today's date into the run. */ specialDates: z.array(z.object({ id: z.string(), label: z.string(), on: z.string().regex(/^\d\d-\d\d$/) })), /** Types that turn up more in the wild at each time of day. */ periodTypes: z.object({ morning: z.array(TypeNameSchema), afternoon: z.array(TypeNameSchema), evening: z.array(TypeNameSchema), night: z.array(TypeNameSchema) }), periodWildFactor: z.number().min(1), /** Merchants' prices by the hour (1 = normal). */ shopHours: z.object({ morning: z.number().positive(), afternoon: z.number().positive(), evening: z.number().positive(), night: z.number().positive() }) , /** Tide Clock (S2, core/clock.ts): the tide turns every `length` parts of the day, so it drifts against day and night. */ tide: z.object({ length: z.number().int().min(1), wildFactor: z.number().min(1), highTypes: z.array(TypeNameSchema), lowTypes: z.array(TypeNameSchema), highHeal: z.number().positive(), lowBall: z.number().positive() })}),
+  clock: z.object({ ticksPerStep: z.number().int().min(0).max(4), milestoneDays: z.array(z.number().int().min(2)).min(1), /** Days in a season of the run's calendar; each new season is a festival day. */ seasonLength: z.number().int().min(2), /** Real-world dates (month-day) the camp celebrates; the host passes today's date into the run. */ specialDates: z.array(z.object({ id: z.string(), label: z.string(), on: z.string().regex(/^\d\d-\d\d$/) })), /** Types that turn up more in the wild at each time of day. */ periodTypes: z.object({ morning: z.array(TypeNameSchema), afternoon: z.array(TypeNameSchema), evening: z.array(TypeNameSchema), night: z.array(TypeNameSchema) }), periodWildFactor: z.number().min(1), /** Merchants' prices by the hour (1 = normal). */ shopHours: z.object({ morning: z.number().positive(), afternoon: z.number().positive(), evening: z.number().positive(), night: z.number().positive() }) , /** Tide Clock (S2, core/clock.ts): the tide turns every `length` parts of the day, so it drifts against day and night. */ tide: z.object({ length: z.number().int().min(1), wildFactor: z.number().min(1), highTypes: z.array(TypeNameSchema), lowTypes: z.array(TypeNameSchema), highHeal: z.number().positive(), lowBall: z.number().positive() }), /** Migration Seasons (S135, core/clock.ts): the types that pass through in each season turn up `factor` times more, and `awayFactor` times as often in the opposite season. */ migration: z.object({ factor: z.number().min(1), awayFactor: z.number().gt(0).max(1), seasons: z.object({ Spring: z.array(TypeNameSchema), Summer: z.array(TypeNameSchema), Autumn: z.array(TypeNameSchema), Winter: z.array(TypeNameSchema) }) }).optional() }),
   attributeGrowth: z.array(
     z.object({
       attribute: AttributeKeySchema,
@@ -2748,6 +2760,14 @@ export const EventRuleSchema = z.object({
   noAttacks: z.boolean().optional(),
   /** No bag items in this fight (Mentor's Examination). */
   noItems: z.boolean().optional(),
+  /** The weather changes every turn, in this order (Weather Rival). */
+  weatherCycle: z.array(WeatherSchema).min(2).max(4).optional(),
+  /** Every stat change is inverted for both sides (The Contrarian). */
+  contrary: z.boolean().optional(),
+  /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */
+  cursedHat: z.boolean().optional(),
+  /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
+  pinchHitter: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
