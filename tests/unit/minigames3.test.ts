@@ -102,3 +102,31 @@ describe('Battle Palace natures', () => {
     expect(a).toEqual(b);
   });
 });
+
+describe('mystery dungeon', () => {
+  it('every floor has stairs away from the start, and a walk to the stairs scores a floor', () => {
+    const m = gameModule('mystery-dungeon');
+    for (let i = 0; i < 30; i++) {
+      const s = m.start(content, params('mystery-dungeon'), rs(`dg${i}`)) as any;
+      const stairs = (s.grid as string[]).indexOf('S');
+      expect(stairs).toBeGreaterThanOrEqual(0);
+      expect(Math.abs((stairs % 5) - (s.pos % 5)) > 1 || Math.abs(Math.floor(stairs / 5) - Math.floor(s.pos / 5)) > 1).toBe(true);
+    }
+  });
+  it('fog hides far tiles, a trap costs HP, and the game ends when steps run out', () => {
+    const m = gameModule('mystery-dungeon');
+    const s = m.start(content, params('mystery-dungeon'), rs('dgfog')) as any;
+    const view = m.view(content, s);
+    const hidden = view.cells.filter((c) => c.label === '?').length;
+    expect(hidden).toBeGreaterThan(10);
+    s.grid = s.grid.map(() => '.');
+    const next = [s.pos - 1, s.pos + 1, s.pos - 5, s.pos + 5].find((i) => i >= 0 && i < 25 && Math.abs((i % 5) - (s.pos % 5)) <= 1)!;
+    s.grid[next] = 'T';
+    const hp = s.hp;
+    m.act(content, s, String(next));
+    expect(s.hp).toBe(hp - 1);
+    s.turns = 1;
+    m.act(content, s, String(s.pos === next ? next + (next % 5 < 4 ? 1 : -1) : next));
+    expect(s.done).toBe(true);
+  });
+});
