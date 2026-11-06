@@ -225,3 +225,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `minigames-more-games.md`: seven new minigames (Pokéathlon course, Bug Contest, Puzzle Slots, Dance Battle, Pinball, Styler, Snap Photo; S437, S445, S446, S451, S453, S486, S493, S494) and Battle Palace nature move rules.
 - `growth-shop-fossils.md`: Growth slice 1: Tuning Dust sold in shops, Bond Lv on the party Personality tab, 10 evolved Hisuian fossils.
 - dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)
+- wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)

@@ -1,0 +1,354 @@
+{
+ "events": [
+  {
+   "id": "wm-1",
+   "name": "Wandering Merchant",
+   "group": "Wandering Merchant",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "callback": false,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a14",
+    "effect": "glint"
+   },
+   "intro": "A cart with a squeaky wheel. \"I walk this road once a stage. Find me at the next stage and my prices drop.\"",
+   "choices": [
+    {
+     "label": "Buy a potion bundle ($200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "A fair deal. He winks and notes your name for the next stop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "max-potion",
+         "full-heal"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a trinket ($350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "A fair deal. He winks and notes your name for the next stop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "amulet-coin",
+         "scope-lens",
+         "focus-sash"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave goodbye",
+     "success": {
+      "text": "He tips his hat. \"Next stage, same cart.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wm-2",
+   "name": "Wandering Merchant: Second Visit",
+   "group": "Wandering Merchant",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wm-route",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a14",
+    "effect": "glint"
+   },
+   "intro": "The squeaky cart again, right where he said. \"Regulars get a better cut.\"",
+   "choices": [
+    {
+     "label": "Buy a stone ($300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A fair deal. He winks and notes your name for the next stop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a held item ($400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "A fair deal. He winks and notes your name for the next stop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "lucky-egg",
+         "razor-claw"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave goodbye",
+     "success": {
+      "text": "He tips his hat. \"Next stage, same cart.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wm-3",
+   "name": "Wandering Merchant: Third Visit",
+   "group": "Wandering Merchant",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wm-route",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a14",
+    "effect": "glint"
+   },
+   "intro": "He waves from the crossroads. \"Third time. I keep a rare box for friends.\"",
+   "choices": [
+    {
+     "label": "Buy the rare box ($500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "A fair deal. He winks and notes your name for the next stop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "comet-shard",
+         "star-piece",
+         "big-pearl"
+        ],
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a revive ($250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "A fair deal. He winks and notes your name for the next stop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave goodbye",
+     "success": {
+      "text": "He tips his hat. \"Next stage, same cart.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wm-4",
+   "name": "Wandering Merchant: Last Stop",
+   "group": "Wandering Merchant",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wm-route",
+     "atLeast": 3,
+     "atMost": 3
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a14",
+    "effect": "glint"
+   },
+   "intro": "The cart is packed up. \"My route ends here. Take this, you earned it.\"",
+   "choices": [
+    {
+     "label": "Take the gift",
+     "success": {
+      "text": "He presses a heavy parcel into your hands and rolls away.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "star-piece",
+         "comet-shard"
+        ],
+        "count": 2
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "wm-route",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
