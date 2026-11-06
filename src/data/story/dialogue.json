@@ -1,1 +1,74 @@
-[]
+[
+ {
+  "id": "dlg_ev_intro_ex_criminal_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_ex_criminal.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_old_uniform_b2",
+  "speaker": "ch_pell_orrin",
+  "when": [],
+  "textKey": "ev_old_uniform.b2",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_unfinished_business_b2",
+  "speaker": "ch_cass_verrin",
+  "when": [],
+  "textKey": "ev_unfinished_business.b2",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_parole_b1",
+  "speaker": "ch_halima_fenn",
+  "when": [],
+  "textKey": "ev_parole.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_pell_defection_1_b1",
+  "speaker": "ch_pell_orrin",
+  "when": [],
+  "textKey": "ev_pell_defection_1.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_pell_defection_2_b1",
+  "speaker": "ch_pell_orrin",
+  "when": [],
+  "textKey": "ev_pell_defection_2.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_nell_rescue_1_b1",
+  "speaker": "ch_nell_hallam",
+  "when": [],
+  "textKey": "ev_nell_rescue_1.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ },
+ {
+  "id": "dlg_ev_nell_rescue_2_b1",
+  "speaker": "ch_nell_hallam",
+  "when": [],
+  "textKey": "ev_nell_rescue_2.b1",
+  "tags": [
+   "ex_criminal"
+  ]
+ }
+]

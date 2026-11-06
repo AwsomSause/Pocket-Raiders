@@ -1,1 +1,249 @@
-[]
+[
+ {
+  "id": "ch_vance",
+  "v": 1,
+  "nameKey": "ch.ch_vance.name",
+  "age": 55,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lenora.png",
+   "happy": "public/assets/images/trainer/lenora.png",
+   "angry": "public/assets/images/trainer/lenora.png",
+   "sad": "public/assets/images/trainer/lenora.png"
+  },
+  "tier": 1,
+  "home": "lantern_hollow",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "dictaphone_note"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_vance.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_vance.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_vance.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_pell_orrin",
+  "v": 1,
+  "nameKey": "ch.ch_pell_orrin.name",
+  "age": 24,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/roughneck.png",
+   "happy": "public/assets/images/trainer/roughneck.png",
+   "angry": "public/assets/images/trainer/roughneck.png",
+   "sad": "public/assets/images/trainer/roughneck.png"
+  },
+  "tier": 1,
+  "home": "forest_road",
+  "party": [
+   "pawniard"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "jokes_to_hide_worry"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_pell_orrin.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_pell_orrin.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_pell_orrin.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_cass_verrin",
+  "v": 1,
+  "nameKey": "ch.ch_cass_verrin.name",
+  "age": 38,
+  "role": "villain",
+  "poses": {
+   "neutral": "public/assets/images/trainer/malva.png",
+   "happy": "public/assets/images/trainer/malva.png",
+   "angry": "public/assets/images/trainer/malva.png",
+   "sad": "public/assets/images/trainer/malva.png"
+  },
+  "tier": 1,
+  "home": "marauder_cafe",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_cass_verrin.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_cass_verrin.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_cass_verrin.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_halima_fenn",
+  "v": 1,
+  "nameKey": "ch.ch_halima_fenn.name",
+  "age": 41,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/viola.png",
+   "happy": "public/assets/images/trainer/viola.png",
+   "angry": "public/assets/images/trainer/viola.png",
+   "sad": "public/assets/images/trainer/viola.png"
+  },
+  "tier": 1,
+  "home": "integrity_bureau",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_halima_fenn.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_halima_fenn.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_halima_fenn.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_marek_voss",
+  "v": 1,
+  "nameKey": "ch.ch_marek_voss.name",
+  "age": 47,
+  "role": "villain",
+  "poses": {
+   "neutral": "public/assets/images/trainer/drayton.png",
+   "happy": "public/assets/images/trainer/drayton.png"
+  },
+  "tier": 2,
+  "home": "marauder_acquisition",
+  "party": [],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_marek_voss.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_marek_voss.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_tally",
+  "v": 1,
+  "nameKey": "ch.ch_tally.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/551.png",
+   "happy": "public/assets/images/pokemon/551.png"
+  },
+  "tier": 2,
+  "party": [
+   "sandile"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "clipped_scale"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_tally.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_tally.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_nell_hallam",
+  "v": 1,
+  "nameKey": "ch.ch_nell_hallam.name",
+  "age": 19,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/fairy_tale_girl.png",
+   "happy": "public/assets/images/trainer/fairy_tale_girl.png"
+  },
+  "tier": 2,
+  "home": "hollow_tree",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_nell_hallam.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_nell_hallam.bio2",
+    "spoiler": false
+   }
+  ]
+ }
+]
