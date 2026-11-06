@@ -231,7 +231,7 @@ export type BattleEvent =
 
 export type PlayerAction =
   /** `transform`: Mega Evolve (etc.) before moving this turn. */
-  | { kind: 'move'; index: number; transform?: TransformRequest; /** Spend a full Momentum Meter: this move is a Surge Strike. */ rally?: boolean; /** A prompt grade earned in the UI: aim drag or signature shout (ideas W1). */ skill?: SkillInput }
+  | { kind: 'move'; index: number; /** Story Run: insist on a move the Pokémon would refuse (costs Heartbond). */ override?: boolean; transform?: TransformRequest; /** Spend a full Momentum Meter: this move is a Surge Strike. */ rally?: boolean; /** A prompt grade earned in the UI: aim drag or signature shout (ideas W1). */ skill?: SkillInput }
   | { kind: 'switch'; partyIndex: number }
   /** `skill`: the grade of a Ball Launcher skill throw (core/camp); it scales the catch rate. `throwSkill`: the grade of the hand-aimed throw ring (ideas W1). */
   | { kind: 'item'; itemId: string; targetIndex?: number; skill?: 'miss' | 'ok' | 'good' | 'perfect'; throwSkill?: SkillInput }

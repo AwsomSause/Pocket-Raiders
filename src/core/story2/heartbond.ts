@@ -82,7 +82,7 @@ export const PAY_SOURCES: Record<string, PaySource> = {
   care_touch: { deltas: { affection: 1 }, cap: 3 },
   faint_loss: { deltas: { strain: 3 } },
   refusal_ignored: { deltas: { trust: -2, strain: 4 }, cap: 3 },
-  override_cost: { deltas: { trust: -2, respect: -2 }, cap: 3 },
+  override_cost: { deltas: { trust: -2, respect: -2 }, cap: 2 },
 };
 const LEDGER_MAX = 600;
 

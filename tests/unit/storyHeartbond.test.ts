@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { adjustBond, bondOf } from '../../src/core/bond';
+import { adjustBond, bondOf, shapeAction, wouldRefuse } from '../../src/core/bond';
+import { createBattle } from '../../src/core/battle/engine';
+import { createPokemon } from '../../src/core/pokemon';
+import { openHistory } from '../../src/core/story/record';
 import { berryFlavor, careAction, favoriteFlavor, hatedFlavor } from '../../src/core/care';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, recoveryScenes, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
@@ -247,5 +250,54 @@ describe('recovery and keystone', () => {
     expect(recoveryScenes(run, text, name)).toEqual([]);
     run.story.v2 = undefined;
     expect(recoveryScenes(run, text, name)).toEqual([]);
+  });
+});
+
+describe('autonomy and override', () => {
+  function refuser() {
+    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'ov', seed: 'ov', archetypeId: 'red' }), 0));
+    const lead = run.party[0]!;
+    openHistory(content, run, lead.uid, lead.speciesId, 'starter');
+    run.party.push(createPokemon(content, 'rattata', 5, 'spare'));
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'e1')], 0, lead.uid, null);
+    run.phase = 'battle';
+    lead.moves = [{ id: 'explosion', pp: 5 }, { id: 'tackle', pp: 5 }];
+    Object.assign(bondOf(run, lead.uid), { autonomy: 80, trust: 20 });
+    run.story.v2 = StoryV2Schema.parse({ mode: 'story_run' });
+    return { run, lead };
+  }
+  it('Autonomy Off or Flavor never offers a refusal; Full does', () => {
+    const { run, lead } = refuser();
+    expect(wouldRefuse(content, run, lead, 'explosion')).toBe(true);
+    for (const mode of ['off', 'flavor'] as const) {
+      run.story.v2!.autonomy = mode;
+      expect(wouldRefuse(content, run, lead, 'explosion')).toBe(false);
+      expect(shapeAction(content, run, { kind: 'move', index: 0 }).action).toEqual({ kind: 'move', index: 0 });
+    }
+  });
+  it('your last conscious Pokémon never refuses', () => {
+    const { run, lead } = refuser();
+    run.party[1]!.hp = 0;
+    expect(wouldRefuse(content, run, lead, 'explosion')).toBe(false);
+  });
+  it('an override sends the command through, costs trust and respect, counts, and is free from the third on', () => {
+    const { run, lead } = refuser();
+    const before = { ...bondOf(run, lead.uid) };
+    const out = shapeAction(content, run, { kind: 'move', index: 0, override: true });
+    expect(out.action).toMatchObject({ kind: 'move', index: 0 });
+    expect(out.events).toEqual([]);
+    expect(bondOf(run, lead.uid).trust - before.trust).toBe(-2);
+    expect(bondOf(run, lead.uid).respect - before.respect).toBe(-2);
+    expect(run.story.v2!.heartbondOverrides).toBe(1);
+    // Not refused again this battle, so a second insist is just a normal command.
+    expect(shapeAction(content, run, { kind: 'move', index: 0, override: true }).action).toMatchObject({ kind: 'move' });
+    expect(run.story.v2!.heartbondOverrides).toBe(1);
+    // The cap: only two pays a battle.
+    for (const t of [2, 3]) expect(payHeartbond(run, lead.uid, `b${run.encountersCompleted}`, t, ['override_cost']).paid.length).toBe(t === 2 ? 1 : 0);
+  });
+  it('Classic runs still refuse as before, and ignore the override flag', () => {
+    const { run } = refuser();
+    run.story.v2 = undefined;
+    expect(shapeAction(content, run, { kind: 'move', index: 0, override: true }).action).toEqual({ kind: 'idle' });
   });
 });
