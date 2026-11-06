@@ -129,6 +129,11 @@ test('Z-Move from the battle menu', async ({ page }) => {
     session.run.party[0].moves = [{ id: 'thunderbolt', pp: 15 }, { id: 'growl', pp: 40 }];
     session.debugGiveItem('z-ring', 1);
     session.debugGiveItem('electrium-z', 1);
+    // The Z-Power needs a bonded Pokémon (S174) and a Z-Ring attuned to the type after 5 hits with it (S482).
+    const lead = session.run.party[0];
+    const h = session.run.story.histories[lead.uid];
+    h.moves = { ...h.moves, thunderbolt: 5 };
+    h.bond = { ...h.bond, trust: 80, affection: 80 };
   });
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
