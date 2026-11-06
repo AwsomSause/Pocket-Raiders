@@ -295,7 +295,7 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       return `What? The ${foe} ${species(e.from)} is evolving!\nIt evolved into ${species(e.to)}!`;
     case 'transform': {
       const before = e.side === 'player' ? species(e.from) : `The ${foe} ${species(e.from)}`;
-      if (e.kind === 'tera') return `${before} Terastallized into the ${e.teraType![0]!.toUpperCase()}${e.teraType!.slice(1)} type!`;
+      if (e.kind === 'tera') return `${before} Terastallized into the ${e.teraType![0]!.toUpperCase()}${e.teraType!.slice(1)}-type!`;
       if (e.kind === 'primal') return `${before}'s Primal Reversion! It reverted to its primal form!`;
       if (e.kind === 'zmove') return `${before} surrounded itself with its Z-Power!`;
       if (e.kind === 'dynamax') return `${before} Dynamaxed!`;

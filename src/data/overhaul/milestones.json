@@ -1,0 +1,1628 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/milestones.json",
+ "entries": [
+  {
+   "id": "M-FIRST",
+   "name": "First Partner",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Starter, or the first Pokémon to join the party",
+   "phrasings": [
+    "{name} was the first to walk beside you.",
+    "Your journey began with {name} at your side.",
+    "Before there was a team, there was {name}."
+   ]
+  },
+  {
+   "id": "M-ALLRUN",
+   "name": "Ride or Die",
+   "category": "journey",
+   "weight": "landmark",
+   "condition": "In the party from the first node to the final node of the run",
+   "phrasings": [
+    "{name} never left your side, not once, from start to finish.",
+    "From the first step to the last battle, {name} was there.",
+    "Every node of the road had {name} on it."
+   ]
+  },
+  {
+   "id": "M-FIRSTWIN",
+   "name": "First Victory",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "First battle won while active",
+   "phrasings": [
+    "{name} won the first battle you ever shared.",
+    "{name} tasted victory for the first time and wanted more.",
+    "The first win belonged to {name}."
+   ]
+  },
+  {
+   "id": "M-FIRSTCATCH",
+   "name": "First Catch",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Landed the damage or status that led to the run's first successful capture",
+   "phrasings": [
+    "{name} helped you catch your very first Pokémon.",
+    "Your first catch happened because of {name}.",
+    "{name} softened up your first catch just right."
+   ]
+  },
+  {
+   "id": "M-GYM",
+   "name": "Badge Earner",
+   "category": "boss",
+   "weight": "major",
+   "condition": "Lands the final blow on a Gym Leader",
+   "phrasings": [
+    "{name} delivered the blow that earned you a badge.",
+    "The Gym Leader fell to {name}.",
+    "{name} finished the Gym Leader off and the badge was yours."
+   ]
+  },
+  {
+   "id": "M-BOSS",
+   "name": "Boss Breaker",
+   "category": "boss",
+   "weight": "major",
+   "condition": "KOs a boss's ace",
+   "phrasings": [
+    "{name} brought down a boss's ace.",
+    "The strongest of the boss's team fell to {name}.",
+    "{name} took out the boss's ace and broke the fight open."
+   ]
+  },
+  {
+   "id": "M-RIVALACE",
+   "name": "Rival's Match",
+   "category": "rival",
+   "weight": "major",
+   "condition": "KOs the rival's ace",
+   "phrasings": [
+    "{name} beat your rival's ace.",
+    "Your rival's pride and joy went down to {name}.",
+    "{name} proved it could stand up to your rival's best."
+   ]
+  },
+  {
+   "id": "M-1HP",
+   "name": "Hanging by a Thread",
+   "category": "clutch",
+   "weight": "major",
+   "condition": "Wins a battle while at 5% HP or lower",
+   "phrasings": [
+    "{name} won while barely standing.",
+    "{name} finished the fight with almost nothing left.",
+    "It should have fainted. {name} didn't."
+   ]
+  },
+  {
+   "id": "M-SAVIOR",
+   "name": "Last One Standing",
+   "category": "clutch",
+   "weight": "landmark",
+   "condition": "Wins a battle as the only conscious party member",
+   "phrasings": [
+    "{name} was the last one standing, and it was enough.",
+    "With every teammate down, {name} turned it around.",
+    "{name} carried the whole team's hopes alone and won."
+   ]
+  },
+  {
+   "id": "M-EVOBATTLE",
+   "name": "Grew Up Mid-Fight",
+   "category": "evolution",
+   "weight": "landmark",
+   "condition": "Evolves immediately after a boss or rival battle",
+   "phrasings": [
+    "{name} evolved right after the biggest fight of the day.",
+    "The battle changed {name}. It evolved afterward.",
+    "{name} came out of that fight a different Pokémon."
+   ]
+  },
+  {
+   "id": "M-UNBROKEN",
+   "name": "Never Fainted",
+   "category": "survival",
+   "weight": "landmark",
+   "condition": "Completes 3 or more boss battles without fainting",
+   "phrasings": [
+    "{name} has never fainted in a boss fight.",
+    "Three bosses and still {name} stands.",
+    "{name} walks out of every boss battle on its own feet."
+   ]
+  },
+  {
+   "id": "M-SWEEP",
+   "name": "Clean Sweep",
+   "category": "battle",
+   "weight": "major",
+   "condition": "KOs 3 or more opponents in a single battle",
+   "phrasings": [
+    "{name} swept through the opposing team.",
+    "Three down in one fight. {name} was unstoppable.",
+    "{name} left nothing standing."
+   ]
+  },
+  {
+   "id": "M-UNDERDOG",
+   "name": "Giant Slayer",
+   "category": "clutch",
+   "weight": "major",
+   "condition": "KOs an opponent 10 or more levels higher",
+   "phrasings": [
+    "{name} took down something much stronger.",
+    "{name} was far outleveled and won anyway.",
+    "The level gap didn't matter to {name}."
+   ]
+  },
+  {
+   "id": "M-LEGEND",
+   "name": "Faced a Legend",
+   "category": "legendary",
+   "weight": "landmark",
+   "condition": "Participates in a Legendary encounter",
+   "phrasings": [
+    "{name} stood before a Legendary Pokémon.",
+    "{name} was there when the legend appeared.",
+    "{name} will never forget the day it faced a legend."
+   ]
+  },
+  {
+   "id": "M-TRANSFORM",
+   "name": "First Transformation",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "First Mega, Tera, Dynamax or Z use in the run",
+   "phrasings": [
+    "{name} transformed for the first time.",
+    "The first transformation belonged to {name}.",
+    "{name} felt the change take hold for the first time."
+   ]
+  },
+  {
+   "id": "M-OVERDRIVE",
+   "name": "Refused to Fall",
+   "category": "clutch",
+   "weight": "landmark",
+   "condition": "Enters Overdrive",
+   "phrasings": [
+    "{name} refused to fall, and something awoke inside it.",
+    "{name} pushed past its limit.",
+    "Something in {name} burned brighter when it mattered most."
+   ]
+  },
+  {
+   "id": "M-HYPER",
+   "name": "In the Zone",
+   "category": "battle",
+   "weight": "major",
+   "condition": "Enters Hyper",
+   "phrasings": [
+    "{name} found the rhythm and couldn't be stopped.",
+    "Everything clicked for {name}.",
+    "{name} was completely in the zone."
+   ]
+  },
+  {
+   "id": "M-FLAWLESS",
+   "name": "Untouched",
+   "category": "battle",
+   "weight": "major",
+   "condition": "Wins a battle without taking any damage",
+   "phrasings": [
+    "{name} won without a scratch.",
+    "Not a single hit landed on {name}.",
+    "{name} made it look effortless."
+   ]
+  },
+  {
+   "id": "M-OHKO",
+   "name": "One and Done",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "KOs a full-HP opponent with a single hit",
+   "phrasings": [
+    "{name} dropped a healthy opponent in one hit.",
+    "One hit from {name} was all it took.",
+    "{name} ended it before it began."
+   ]
+  },
+  {
+   "id": "M-OVERKILL",
+   "name": "Overkill",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "KOs with damage at least double the target's remaining HP",
+   "phrasings": [
+    "{name} hit far harder than it needed to.",
+    "That was more than enough, {name}.",
+    "{name} left no doubt."
+   ]
+  },
+  {
+   "id": "M-REVENGE",
+   "name": "Avenged",
+   "category": "bond",
+   "weight": "major",
+   "condition": "KOs the Pokémon that KO'd a teammate in the same battle",
+   "phrasings": [
+    "{name} avenged a fallen teammate.",
+    "{name} made the foe pay for what it did to a friend.",
+    "A teammate went down, and {name} answered."
+   ]
+  },
+  {
+   "id": "M-CLEANUP",
+   "name": "Cleanup Duty",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Scores the final KO of a trainer battle three times",
+   "phrasings": [
+    "{name} keeps getting the last word.",
+    "{name} finishes what the others start.",
+    "Again and again, {name} takes the final KO."
+   ]
+  },
+  {
+   "id": "M-SE3",
+   "name": "Weakness Hunter",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Lands 3 super-effective hits in a row",
+   "phrasings": [
+    "{name} found the weakness every time.",
+    "Three super-effective hits in a row for {name}.",
+    "{name} read the matchup perfectly."
+   ]
+  },
+  {
+   "id": "M-CRIT3",
+   "name": "Lucky Streak",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Lands 3 critical hits in one battle",
+   "phrasings": [
+    "{name} kept landing critical hits.",
+    "The luck ran hot for {name}.",
+    "Critical hit after critical hit from {name}."
+   ]
+  },
+  {
+   "id": "M-STATUSMASTER",
+   "name": "Plague Bearer",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Inflicts 10 status conditions in a run",
+   "phrasings": [
+    "{name} has a knack for making foes miserable.",
+    "{name} wore down opponents with status after status.",
+    "Few foes escaped {name} unaffected."
+   ]
+  },
+  {
+   "id": "M-WALL",
+   "name": "Immovable",
+   "category": "survival",
+   "weight": "major",
+   "condition": "Takes 5 or more hits in a single battle without fainting",
+   "phrasings": [
+    "{name} took hit after hit and kept standing.",
+    "Nothing seemed to move {name}.",
+    "{name} was a wall that day."
+   ]
+  },
+  {
+   "id": "M-PIVOT",
+   "name": "Safe Landing",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Switches in and absorbs 10 attacks over a run",
+   "phrasings": [
+    "{name} keeps taking the hit for the team.",
+    "{name} is the one you send in when it hurts.",
+    "{name} stepped in again and again to absorb the blow."
+   ]
+  },
+  {
+   "id": "M-SPEEDSTER",
+   "name": "First to Strike",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Outspeeds and KOs 20 opponents",
+   "phrasings": [
+    "{name} strikes before anyone can react.",
+    "{name} is always first.",
+    "The foes never got to move before {name}."
+   ]
+  },
+  {
+   "id": "M-LASTPP",
+   "name": "Last Move Standing",
+   "category": "clutch",
+   "weight": "minor",
+   "condition": "KOs with the final PP of a move",
+   "phrasings": [
+    "{name} won with its very last use of the move.",
+    "{name} squeezed the final PP out for the win.",
+    "One use of the move left, and {name} made it count."
+   ]
+  },
+  {
+   "id": "M-ENDURE",
+   "name": "Hold On",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Survives a lethal hit through Endure, Sturdy, Focus Sash or similar",
+   "phrasings": [
+    "{name} hung on through a hit that should have ended it.",
+    "{name} refused to go down.",
+    "{name} survived by the narrowest margin."
+   ]
+  },
+  {
+   "id": "M-PRIORITY",
+   "name": "Quick Finish",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "KOs with a priority move while slower than the target",
+   "phrasings": [
+    "{name} got there first when it shouldn't have.",
+    "{name} snuck in a finishing blow.",
+    "{name} beat the clock with a priority move."
+   ]
+  },
+  {
+   "id": "M-WEATHERWIN",
+   "name": "Storm Chaser",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Wins a battle while its own weather is active",
+   "phrasings": [
+    "{name} won under skies it made itself.",
+    "{name} used the weather to its advantage.",
+    "The weather turned for {name}."
+   ]
+  },
+  {
+   "id": "M-COMEBACK",
+   "name": "Comeback",
+   "category": "clutch",
+   "weight": "major",
+   "condition": "Wins after the party was behind by two or more Pokémon",
+   "phrasings": [
+    "{name} turned a lost battle around.",
+    "The battle looked lost until {name} stepped up.",
+    "{name} came back from the brink."
+   ]
+  },
+  {
+   "id": "M-TIMEOUT",
+   "name": "Patient Wins",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Wins a battle that lasted 15 or more turns",
+   "phrasings": [
+    "{name} outlasted everyone in a long, grinding battle.",
+    "{name} played the long game and won.",
+    "It took forever, but {name} won in the end."
+   ]
+  },
+  {
+   "id": "M-FASTWIN",
+   "name": "Quick Work",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "Wins a trainer battle in 3 turns or fewer",
+   "phrasings": [
+    "{name} ended that fight before it started.",
+    "The battle was over in a flash thanks to {name}.",
+    "{name} made quick work of it."
+   ]
+  },
+  {
+   "id": "M-RELIEF",
+   "name": "Relief Pitcher",
+   "category": "team",
+   "weight": "minor",
+   "condition": "Switches in after a teammate faints and wins the battle",
+   "phrasings": [
+    "{name} stepped in when it mattered and won.",
+    "{name} came off the bench and saved the battle.",
+    "{name} took over from a fallen teammate and finished it."
+   ]
+  },
+  {
+   "id": "M-HEALEDUP",
+   "name": "Back on Its Feet",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Is revived or healed from fainted status and wins the same battle",
+   "phrasings": [
+    "{name} got back up and kept fighting.",
+    "Down but not out, {name} returned.",
+    "{name} came back from fainting to win."
+   ]
+  },
+  {
+   "id": "M-BOSS5",
+   "name": "Boss Regular",
+   "category": "boss",
+   "weight": "major",
+   "condition": "Participates in 5 boss battles",
+   "phrasings": [
+    "{name} has stood against five bosses.",
+    "Five bosses and counting for {name}.",
+    "{name} is a veteran of boss fights."
+   ]
+  },
+  {
+   "id": "M-GYMALL",
+   "name": "Badge Collector",
+   "category": "boss",
+   "weight": "major",
+   "condition": "Active in every Gym battle of the run",
+   "phrasings": [
+    "{name} fought in every Gym of the journey.",
+    "No Gym went by without {name}.",
+    "{name} was there for every badge."
+   ]
+  },
+  {
+   "id": "M-ELITE",
+   "name": "Elite Contender",
+   "category": "boss",
+   "weight": "major",
+   "condition": "Participates in an Elite Four battle",
+   "phrasings": [
+    "{name} fought at the Elite Four.",
+    "The Elite Four couldn't shake {name}.",
+    "{name} made it all the way to the Elite Four."
+   ]
+  },
+  {
+   "id": "M-CHAMPION",
+   "name": "Champion's Challenger",
+   "category": "boss",
+   "weight": "landmark",
+   "condition": "Participates in the Champion battle",
+   "phrasings": [
+    "{name} faced the Champion.",
+    "{name} stood across from the Champion.",
+    "{name} made it to the very top."
+   ]
+  },
+  {
+   "id": "M-CHAMPKO",
+   "name": "Champion's Bane",
+   "category": "boss",
+   "weight": "landmark",
+   "condition": "KOs the Champion's ace",
+   "phrasings": [
+    "{name} brought down the Champion's ace.",
+    "The Champion's best fell to {name}.",
+    "{name} defeated the Champion's strongest."
+   ]
+  },
+  {
+   "id": "M-VILLAIN",
+   "name": "Team Breaker",
+   "category": "boss",
+   "weight": "major",
+   "condition": "KOs an evil-team leader's ace",
+   "phrasings": [
+    "{name} stopped the villain's best Pokémon.",
+    "The villain's ace fell to {name}.",
+    "{name} broke the evil team's strongest."
+   ]
+  },
+  {
+   "id": "M-ADMIN",
+   "name": "Admin Defeated",
+   "category": "boss",
+   "weight": "minor",
+   "condition": "Participates in defeating an evil-team admin",
+   "phrasings": [
+    "{name} helped take down an admin.",
+    "An admin went down with {name}'s help.",
+    "{name} fought through the evil team's ranks."
+   ]
+  },
+  {
+   "id": "M-GRUNTS",
+   "name": "Grunt Crusher",
+   "category": "battle",
+   "weight": "minor",
+   "condition": "KOs 15 evil-team grunt Pokémon",
+   "phrasings": [
+    "{name} has sent a lot of grunts packing.",
+    "The grunts keep falling to {name}.",
+    "{name} is the grunts' worst nightmare."
+   ]
+  },
+  {
+   "id": "M-TRANSFORM3",
+   "name": "Shapeshifter",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Uses transformations in 3 different battles",
+   "phrasings": [
+    "{name} has transformed three times over.",
+    "{name} is getting used to changing shape.",
+    "Transformation is becoming second nature for {name}."
+   ]
+  },
+  {
+   "id": "M-MEGA",
+   "name": "Mega Resonance",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Mega Evolves for the first time",
+   "phrasings": [
+    "{name} Mega Evolved for the first time.",
+    "The bond between you and {name} reached a new level.",
+    "{name} felt the stone's power respond."
+   ]
+  },
+  {
+   "id": "M-MEGASIG",
+   "name": "Signature Strike",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Uses its Mega Signature Move for the first time",
+   "phrasings": [
+    "{name} unleashed its signature move.",
+    "{name} showed the world what only it can do.",
+    "{name}'s signature move landed."
+   ]
+  },
+  {
+   "id": "M-TERA",
+   "name": "Crystal Heart",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Terastallizes for the first time",
+   "phrasings": [
+    "{name} turned to crystal for the first time.",
+    "{name}'s true type shone through.",
+    "{name} Terastallized and everything changed."
+   ]
+  },
+  {
+   "id": "M-DYNA",
+   "name": "Giant Moment",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Dynamaxes for the first time",
+   "phrasings": [
+    "{name} grew enormous for the first time.",
+    "{name} towered over the field.",
+    "{name} Dynamaxed for the first time."
+   ]
+  },
+  {
+   "id": "M-GMAX",
+   "name": "Gigantamax Glory",
+   "category": "transformation",
+   "weight": "landmark",
+   "condition": "Gigantamaxes for the first time",
+   "phrasings": [
+    "{name} Gigantamaxed and the whole field shook.",
+    "{name} took a form few ever see.",
+    "{name}'s Gigantamax form made its debut."
+   ]
+  },
+  {
+   "id": "M-ZMOVE",
+   "name": "Z-Power",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Uses a Z-Move for the first time",
+   "phrasings": [
+    "{name} released Z-Power for the first time.",
+    "{name} and you moved as one for a Z-Move.",
+    "{name}'s Z-Move lit up the arena."
+   ]
+  },
+  {
+   "id": "M-TERAOFFSET",
+   "name": "Perfect Type",
+   "category": "transformation",
+   "weight": "minor",
+   "condition": "Terastallizes to its own original type",
+   "phrasings": [
+    "{name} doubled down on what it already was.",
+    "{name}'s Tera Type matched its heart.",
+    "{name} became more itself."
+   ]
+  },
+  {
+   "id": "M-DYNASAVE",
+   "name": "Giant Stand",
+   "category": "transformation",
+   "weight": "major",
+   "condition": "Wins a battle while Dynamaxed at under 25% HP",
+   "phrasings": [
+    "{name} won while giant and hurting.",
+    "Even Dynamaxed, {name} was running on fumes.",
+    "{name} was huge, but only just holding on."
+   ]
+  },
+  {
+   "id": "M-NOTRANS",
+   "name": "Pure Strength",
+   "category": "transformation",
+   "weight": "minor",
+   "condition": "Wins 3 boss battles without ever transforming",
+   "phrasings": [
+    "{name} needs no transformation to win.",
+    "{name} wins on raw strength alone.",
+    "No form changes, no gimmicks. Just {name}."
+   ]
+  },
+  {
+   "id": "M-EVOLVED",
+   "name": "Evolved",
+   "category": "evolution",
+   "weight": "major",
+   "condition": "Evolves",
+   "phrasings": [
+    "{name} evolved.",
+    "{name} grew into something new.",
+    "The journey changed {name}."
+   ]
+  },
+  {
+   "id": "M-EVOFINAL",
+   "name": "Final Form",
+   "category": "evolution",
+   "weight": "major",
+   "condition": "Reaches its final evolution",
+   "phrasings": [
+    "{name} reached its final form.",
+    "{name} grew as far as it could grow.",
+    "There is nowhere left for {name} to evolve, and it's magnificent."
+   ]
+  },
+  {
+   "id": "M-EVOTWICE",
+   "name": "Twice Grown",
+   "category": "evolution",
+   "weight": "minor",
+   "condition": "Evolves twice in a single run",
+   "phrasings": [
+    "{name} evolved twice on this journey.",
+    "Two evolutions for {name}, and the journey isn't over.",
+    "{name} has changed twice along the way."
+   ]
+  },
+  {
+   "id": "M-EVOLOW",
+   "name": "Early Bloomer",
+   "category": "evolution",
+   "weight": "minor",
+   "condition": "Evolves before node 10",
+   "phrasings": [
+    "{name} evolved before the journey really got going.",
+    "{name} grew up fast.",
+    "{name} was ready earlier than anyone expected."
+   ]
+  },
+  {
+   "id": "M-EVOLATE",
+   "name": "Late Bloomer",
+   "category": "evolution",
+   "weight": "minor",
+   "condition": "Evolves after node 40",
+   "phrasings": [
+    "{name} took its time and then evolved.",
+    "{name} evolved late, and it was worth the wait.",
+    "The wait for {name}'s evolution was long."
+   ]
+  },
+  {
+   "id": "M-EVOSTONE",
+   "name": "Stone-Touched",
+   "category": "evolution",
+   "weight": "minor",
+   "condition": "Evolves using an evolution item",
+   "phrasings": [
+    "{name} evolved through the power of a stone.",
+    "The stone's glow changed {name}.",
+    "{name} evolved the moment it touched the stone."
+   ]
+  },
+  {
+   "id": "M-EVOTRADE",
+   "name": "Trade Bond",
+   "category": "evolution",
+   "weight": "minor",
+   "condition": "Evolves through a trade",
+   "phrasings": [
+    "{name} evolved after a trade.",
+    "{name} changed on the exchange.",
+    "The trade transformed {name}."
+   ]
+  },
+  {
+   "id": "M-EVOFRIEND",
+   "name": "Friendship's Reward",
+   "category": "evolution",
+   "weight": "major",
+   "condition": "Evolves through friendship",
+   "phrasings": [
+    "{name} evolved because of how much it trusts you.",
+    "{name}'s bond with you made it evolve.",
+    "{name} grew close enough to you to evolve."
+   ]
+  },
+  {
+   "id": "M-EVOWITNESS",
+   "name": "Family Gathering",
+   "category": "evolution",
+   "weight": "minor",
+   "condition": "Evolves with 3 or more teammates in the party",
+   "phrasings": [
+    "{name} evolved with the whole team watching.",
+    "The team cheered when {name} evolved.",
+    "{name}'s evolution was a team celebration."
+   ]
+  },
+  {
+   "id": "M-EVOCUSTOM",
+   "name": "Hidden Path",
+   "category": "evolution",
+   "weight": "landmark",
+   "condition": "Evolves along a custom or hidden evolution path",
+   "phrasings": [
+    "{name} took a path almost nobody knew existed.",
+    "{name} evolved in a way nobody expected.",
+    "{name} discovered a secret way to grow."
+   ]
+  },
+  {
+   "id": "M-CAUGHTRARE",
+   "name": "Rare Find",
+   "category": "collection",
+   "weight": "major",
+   "condition": "Joins after a Rare-or-better capture",
+   "phrasings": [
+    "{name} was a rare find.",
+    "You were lucky to meet {name}.",
+    "{name} is one in a thousand."
+   ]
+  },
+  {
+   "id": "M-SHINY",
+   "name": "Shining Star",
+   "category": "collection",
+   "weight": "landmark",
+   "condition": "Is a shiny Pokémon",
+   "phrasings": [
+    "{name} sparkles like nothing else on your team.",
+    "A shiny {name}: you'll never forget the moment you saw it.",
+    "{name} shines in more ways than one."
+   ]
+  },
+  {
+   "id": "M-SHINYWIN",
+   "name": "Glitter Victory",
+   "category": "collection",
+   "weight": "minor",
+   "condition": "A shiny Pokémon wins a boss battle",
+   "phrasings": [
+    "{name} sparkled all the way to victory.",
+    "{name} shone brightest when it counted.",
+    "A shiny {name} won the day."
+   ]
+  },
+  {
+   "id": "M-LEGENDCATCH",
+   "name": "Legend Joined",
+   "category": "legendary",
+   "weight": "landmark",
+   "condition": "Joins the party after a Legendary encounter",
+   "phrasings": [
+    "{name} joined you after an extraordinary encounter.",
+    "A legend chose to walk with you: {name}.",
+    "{name} is a legend that became a companion."
+   ]
+  },
+  {
+   "id": "M-MYTHCATCH",
+   "name": "Myth Joined",
+   "category": "legendary",
+   "weight": "landmark",
+   "condition": "Joins the party after a Mythical encounter",
+   "phrasings": [
+    "{name} joined you after a once-in-a-lifetime meeting.",
+    "A mythical Pokémon trusts you: {name}.",
+    "{name} came from a story most people don't believe."
+   ]
+  },
+  {
+   "id": "M-HATCHED",
+   "name": "Born on the Road",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Hatched from an egg during the run",
+   "phrasings": [
+    "{name} hatched during your journey.",
+    "{name} was born on the road.",
+    "{name} has never known anything but this adventure."
+   ]
+  },
+  {
+   "id": "M-HATCHSHINY",
+   "name": "Sparkling Egg",
+   "category": "collection",
+   "weight": "landmark",
+   "condition": "Hatched shiny",
+   "phrasings": [
+    "{name} hatched sparkling.",
+    "The egg opened and {name} shone.",
+    "{name} hatched already shining."
+   ]
+  },
+  {
+   "id": "M-TRADED",
+   "name": "Exchange Student",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Joined through a trade",
+   "phrasings": [
+    "{name} came to you in a trade.",
+    "{name} joined the team through an exchange.",
+    "Somebody else raised {name} first."
+   ]
+  },
+  {
+   "id": "M-GIFT",
+   "name": "A Gift",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Received as an NPC gift",
+   "phrasings": [
+    "{name} was given to you as a gift.",
+    "Someone believed in you enough to give you {name}.",
+    "{name} was a gift from the road."
+   ]
+  },
+  {
+   "id": "M-RESCUED",
+   "name": "Rescued",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Joined after a rescue event",
+   "phrasings": [
+    "{name} joined after you helped it in its time of need.",
+    "{name} remembers who helped it.",
+    "You saved {name}, and {name} chose to stay."
+   ]
+  },
+  {
+   "id": "M-EVENTMON",
+   "name": "Chain Reaction",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Joined as the reward of a multi-stage event chain",
+   "phrasings": [
+    "{name} was the end of a long chain of events.",
+    "{name} joined after a story that took many steps.",
+    "{name} was worth every step of the journey to find."
+   ]
+  },
+  {
+   "id": "M-FRIENDLY",
+   "name": "Fast Friends",
+   "category": "bond",
+   "weight": "minor",
+   "condition": "Reaches bond 40 with any teammate within 5 nodes of joining",
+   "phrasings": [
+    "{name} made friends almost immediately.",
+    "{name} fit in right away.",
+    "The team welcomed {name} instantly."
+   ]
+  },
+  {
+   "id": "M-BESTIE",
+   "name": "Best Friends",
+   "category": "bond",
+   "weight": "major",
+   "condition": "Reaches bond 70 with a teammate",
+   "phrasings": [
+    "{name} found a best friend on the team.",
+    "{name} and a teammate became inseparable.",
+    "A true friendship formed around {name}."
+   ]
+  },
+  {
+   "id": "M-ALLBONDED",
+   "name": "Heart of the Team",
+   "category": "bond",
+   "weight": "landmark",
+   "condition": "Reaches bond 50 or higher with every party member",
+   "phrasings": [
+    "{name} is the heart of the team.",
+    "Everyone on the team is close to {name}.",
+    "{name} holds the whole team together."
+   ]
+  },
+  {
+   "id": "M-RIVALRY",
+   "name": "Rivals Within",
+   "category": "bond",
+   "weight": "minor",
+   "condition": "Enters a Friendly Rivals relationship",
+   "phrasings": [
+    "{name} found a worthy rival on its own team.",
+    "{name} spurs a teammate to do better.",
+    "A friendly rivalry began around {name}."
+   ]
+  },
+  {
+   "id": "M-MENTOR",
+   "name": "Mentor",
+   "category": "bond",
+   "weight": "major",
+   "condition": "Gives a mastery boost to a younger teammate through mentorship",
+   "phrasings": [
+    "{name} taught a teammate what it knows.",
+    "{name} became a mentor to a younger teammate.",
+    "A younger Pokémon is learning from {name}."
+   ]
+  },
+  {
+   "id": "M-COMFORT",
+   "name": "Shoulder to Lean On",
+   "category": "bond",
+   "weight": "minor",
+   "condition": "Is present when a teammate recovers from fainting at a rest node",
+   "phrasings": [
+    "{name} stayed beside a teammate through the recovery.",
+    "{name} watched over a hurt friend.",
+    "A teammate healed with {name} nearby."
+   ]
+  },
+  {
+   "id": "M-CAMP",
+   "name": "Campfire Regular",
+   "category": "bond",
+   "weight": "minor",
+   "condition": "Features in 5 camp scenes",
+   "phrasings": [
+    "{name} is always at the campfire.",
+    "{name} loves rest nodes.",
+    "The campfire wouldn't be the same without {name}."
+   ]
+  },
+  {
+   "id": "M-NICKNAME",
+   "name": "Named by You",
+   "category": "bond",
+   "weight": "minor",
+   "condition": "Was given a nickname",
+   "phrasings": [
+    "{name} answers to the name you gave it.",
+    "You gave {name} its name, and it fits.",
+    "{name} wears the name you picked with pride."
+   ]
+  },
+  {
+   "id": "M-TRUST",
+   "name": "Complete Trust",
+   "category": "bond",
+   "weight": "major",
+   "condition": "Reaches maximum friendship",
+   "phrasings": [
+    "{name} trusts you completely.",
+    "{name} would follow you anywhere.",
+    "The bond between you and {name} is unbreakable."
+   ]
+  },
+  {
+   "id": "M-PROTECT",
+   "name": "Guardian",
+   "category": "bond",
+   "weight": "major",
+   "condition": "Takes a hit meant to KO a low-HP teammate (switch-in or Protect-style move)",
+   "phrasings": [
+    "{name} took the blow meant for a friend.",
+    "{name} stood in the way of a knockout.",
+    "{name} protected a teammate when it counted."
+   ]
+  },
+  {
+   "id": "M-DEFEATBOND",
+   "name": "Fell With Honor",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Faints in a boss battle after landing 2 or more KOs",
+   "phrasings": [
+    "{name} went down fighting after taking out two foes.",
+    "{name} fell, but it took the foes with it.",
+    "{name}'s last stand won the battle's momentum."
+   ]
+  },
+  {
+   "id": "M-NEARMISS",
+   "name": "Close Call",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Survives a hit leaving it with exactly 1 HP",
+   "phrasings": [
+    "{name} survived with a single HP.",
+    "One HP was all {name} needed.",
+    "{name} cheated fate by one point."
+   ]
+  },
+  {
+   "id": "M-STATUSFREE",
+   "name": "Shake It Off",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after being afflicted with a status condition",
+   "phrasings": [
+    "{name} won in spite of being sick.",
+    "A bad status didn't stop {name}.",
+    "{name} powered through its condition."
+   ]
+  },
+  {
+   "id": "M-FREEZEWIN",
+   "name": "Thawed Out",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after being frozen",
+   "phrasings": [
+    "{name} thawed out and won.",
+    "{name} was frozen solid and still came out on top.",
+    "Frozen, then fierce: {name}."
+   ]
+  },
+  {
+   "id": "M-SLEEPWIN",
+   "name": "Rested Warrior",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after waking from sleep",
+   "phrasings": [
+    "{name} woke up and won.",
+    "{name} slept through some of it and still won.",
+    "{name} woke at the right moment."
+   ]
+  },
+  {
+   "id": "M-BURNWIN",
+   "name": "Burning Spirit",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after being burned",
+   "phrasings": [
+    "{name} won while burning.",
+    "The burn didn't slow {name}.",
+    "{name} fought on through the flames."
+   ]
+  },
+  {
+   "id": "M-PARAWIN",
+   "name": "Shock Value",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after being paralyzed",
+   "phrasings": [
+    "{name} won in spite of paralysis.",
+    "Paralysis couldn't stop {name}.",
+    "{name} fought through the numbness."
+   ]
+  },
+  {
+   "id": "M-POISONWIN",
+   "name": "Poisoned and Proud",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after being poisoned",
+   "phrasings": [
+    "{name} won with poison coursing through it.",
+    "Poison couldn't beat {name}.",
+    "{name} endured the poison and finished the job."
+   ]
+  },
+  {
+   "id": "M-CONFUSEWIN",
+   "name": "Clear Head",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle after being confused",
+   "phrasings": [
+    "{name} shook off the confusion and won.",
+    "{name} fought through a fog.",
+    "{name} got its head together just in time."
+   ]
+  },
+  {
+   "id": "M-BADWEATHER",
+   "name": "Weathered the Storm",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Wins a battle in weather unfavorable to its type",
+   "phrasings": [
+    "{name} won in conditions that should have beaten it.",
+    "The weather was against {name}, and it won anyway.",
+    "{name} fought the elements and won."
+   ]
+  },
+  {
+   "id": "M-TYPEHATE",
+   "name": "Against the Odds",
+   "category": "clutch",
+   "weight": "major",
+   "condition": "KOs an opponent that resists all of its moves through a secondary move or type change",
+   "phrasings": [
+    "{name} found a way through a wall.",
+    "{name} cracked a matchup that shouldn't be winnable.",
+    "{name} found the one thing that worked."
+   ]
+  },
+  {
+   "id": "M-SETUPSWEEP",
+   "name": "Dance Party",
+   "category": "battle",
+   "weight": "major",
+   "condition": "Sets up with a stat-boosting move and then KOs 2 or more opponents",
+   "phrasings": [
+    "{name} set up and swept the field.",
+    "{name} danced, then dominated.",
+    "{name} found its moment, boosted, and ran wild."
+   ]
+  },
+  {
+   "id": "M-SCREENS",
+   "name": "Sturdy Shield",
+   "category": "team",
+   "weight": "minor",
+   "condition": "Sets up screens that last the full duration 3 times",
+   "phrasings": [
+    "{name} keeps the team protected.",
+    "{name}'s screens saved the day again.",
+    "The team is safe behind {name}'s barrier."
+   ]
+  },
+  {
+   "id": "M-HAZARD",
+   "name": "Hazard Lord",
+   "category": "team",
+   "weight": "minor",
+   "condition": "Sets entry hazards that deal damage 10 times",
+   "phrasings": [
+    "{name} laid traps that paid off.",
+    "{name}'s hazards keep punishing foes.",
+    "The foes keep tripping over what {name} left behind."
+   ]
+  },
+  {
+   "id": "M-HEALER",
+   "name": "Team Medic",
+   "category": "team",
+   "weight": "minor",
+   "condition": "Restores HP to teammates 10 times via moves, abilities or items",
+   "phrasings": [
+    "{name} keeps the team healthy.",
+    "{name} patches everyone up.",
+    "The team leans on {name} when it hurts."
+   ]
+  },
+  {
+   "id": "M-SUPPORT",
+   "name": "Quiet Hero",
+   "category": "team",
+   "weight": "major",
+   "condition": "Contributes the highest support score in a boss battle",
+   "phrasings": [
+    "{name} won the battle without leading the damage.",
+    "{name} was the unsung hero of that fight.",
+    "Nobody noticed {name}, but nothing worked without it."
+   ]
+  },
+  {
+   "id": "M-FIRSTBLOOD",
+   "name": "First Blood",
+   "category": "boss",
+   "weight": "minor",
+   "condition": "Scores the first KO of a boss battle three times",
+   "phrasings": [
+    "{name} draws first blood in boss fights.",
+    "{name} always opens the scoring.",
+    "{name} gets the first KO and sets the tone."
+   ]
+  },
+  {
+   "id": "M-RIVAL3",
+   "name": "Rival Rival",
+   "category": "rival",
+   "weight": "major",
+   "condition": "Participates in 3 rival battles",
+   "phrasings": [
+    "{name} has stood against your rival three times.",
+    "Three rival battles and {name} was in every one.",
+    "{name} knows your rival well by now."
+   ]
+  },
+  {
+   "id": "M-RIVALREV",
+   "name": "Turning the Tables",
+   "category": "rival",
+   "weight": "major",
+   "condition": "Beats a rival's Pokémon that KO'd a teammate in an earlier rival battle",
+   "phrasings": [
+    "{name} settled the score with your rival.",
+    "{name} finally got revenge on your rival's Pokémon.",
+    "The tables turned, thanks to {name}."
+   ]
+  },
+  {
+   "id": "M-RIVALCOUNTER",
+   "name": "Beat the Counter",
+   "category": "rival",
+   "weight": "major",
+   "condition": "Defeats the Pokémon the rival brought specifically to counter you",
+   "phrasings": [
+    "{name} beat the very counter your rival prepared.",
+    "Your rival's plan failed against {name}.",
+    "{name} defeated the answer to its own strength."
+   ]
+  },
+  {
+   "id": "M-MEMORY",
+   "name": "Not Forgotten",
+   "category": "rival",
+   "weight": "minor",
+   "condition": "Is named in a rival's memory callback",
+   "phrasings": [
+    "Your rival remembers {name}.",
+    "{name} left a mark on your rival.",
+    "Even your rival can't forget {name}."
+   ]
+  },
+  {
+   "id": "M-VILLAINFOE",
+   "name": "Marked by Evil",
+   "category": "story",
+   "weight": "major",
+   "condition": "Is named in a villain's dialogue callback",
+   "phrasings": [
+    "The villain knew {name} by name.",
+    "{name} caught the evil team's attention.",
+    "The evil team keeps an eye on {name}."
+   ]
+  },
+  {
+   "id": "M-EVENTHERO",
+   "name": "Event Hero",
+   "category": "story",
+   "weight": "major",
+   "condition": "Is the deciding Pokémon in an event chain's final stage",
+   "phrasings": [
+    "{name} saved the day in an event that took many steps.",
+    "{name} carried the final stage of the chain.",
+    "It all came down to {name}."
+   ]
+  },
+  {
+   "id": "M-SIGMOMENT",
+   "name": "Signature Scene",
+   "category": "story",
+   "weight": "minor",
+   "condition": "Is featured in its species-signature moment",
+   "phrasings": [
+    "{name} had its moment.",
+    "{name} did something only {name} could do.",
+    "That was pure {name}."
+   ]
+  },
+  {
+   "id": "M-WORLDMOMENT",
+   "name": "At Home Here",
+   "category": "story",
+   "weight": "minor",
+   "condition": "Reacts to a region-specific moment",
+   "phrasings": [
+    "{name} felt right at home.",
+    "{name} loved this place.",
+    "The region spoke to {name}."
+   ]
+  },
+  {
+   "id": "M-REGIONSET",
+   "name": "Local Expert",
+   "category": "story",
+   "weight": "minor",
+   "condition": "Is in the party for all battles of a region",
+   "phrasings": [
+    "{name} walked an entire region with you.",
+    "{name} saw the region from end to end.",
+    "{name} knows this region like home."
+   ]
+  },
+  {
+   "id": "M-REGIONMULTI",
+   "name": "World Traveler",
+   "category": "story",
+   "weight": "major",
+   "condition": "Is in the party across 3 different regions",
+   "phrasings": [
+    "{name} has traveled to three regions with you.",
+    "Three regions, one {name}.",
+    "{name} has seen more of the world than most."
+   ]
+  },
+  {
+   "id": "M-RARECHAIN",
+   "name": "Rare Chain Finisher",
+   "category": "story",
+   "weight": "minor",
+   "condition": "Is in the party for a Very Rare or Unique event chain",
+   "phrasings": [
+    "{name} was there for something extraordinary.",
+    "{name} lived through a rare tale.",
+    "{name} saw something almost no one sees."
+   ]
+  },
+  {
+   "id": "M-LEGENDWITNESS",
+   "name": "Sworn to Secrecy",
+   "category": "legendary",
+   "weight": "major",
+   "condition": "Is in the party for a Legendary Sighting",
+   "phrasings": [
+    "{name} saw a legend from afar.",
+    "{name} watched a Legendary pass by.",
+    "{name} is one of the few to have seen it."
+   ]
+  },
+  {
+   "id": "M-LEGENDTRIAL",
+   "name": "Trial Survivor",
+   "category": "legendary",
+   "weight": "major",
+   "condition": "Is active during a Legendary trial battle and passes it",
+   "phrasings": [
+    "{name} passed a Legendary's trial.",
+    "{name} was judged worthy.",
+    "{name} proved itself to a legend."
+   ]
+  },
+  {
+   "id": "M-LEGENDFLEE",
+   "name": "Chased Away",
+   "category": "legendary",
+   "weight": "minor",
+   "condition": "Is active when a Legendary flees",
+   "phrasings": [
+    "{name} was there when the legend disappeared.",
+    "The legend fled, but {name} will remember.",
+    "{name} watched the legend slip away."
+   ]
+  },
+  {
+   "id": "M-RELICFIND",
+   "name": "Relic Finder",
+   "category": "story",
+   "weight": "minor",
+   "condition": "Finds an ancient relic via a Curious or Ground-type reaction",
+   "phrasings": [
+    "{name} sniffed out a relic.",
+    "{name} dug up something old.",
+    "{name} found a piece of history."
+   ]
+  },
+  {
+   "id": "M-ITEMFIND",
+   "name": "Treasure Hunter",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Finds 5 items through teammate-find moments",
+   "phrasings": [
+    "{name} keeps digging up treasure.",
+    "{name} has a nose for finding things.",
+    "Another find from {name}!"
+   ]
+  },
+  {
+   "id": "M-BERRYLOVER",
+   "name": "Berry Fiend",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Eats 10 berries in a run",
+   "phrasings": [
+    "{name} can't resist a berry.",
+    "{name}'s favorite thing is a good berry.",
+    "Berries disappear when {name} is around."
+   ]
+  },
+  {
+   "id": "M-HEALDEBT",
+   "name": "Always on the Mend",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Is healed 20 times across the run",
+   "phrasings": [
+    "{name} spends a lot of time getting patched up.",
+    "{name} takes the hits and keeps coming back for more.",
+    "{name} has been patched up more than anyone."
+   ]
+  },
+  {
+   "id": "M-OVERLEVEL",
+   "name": "Ahead of the Curve",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Is 5 or more levels above the party median",
+   "phrasings": [
+    "{name} is far ahead of the pack.",
+    "{name} has pulled well ahead of its teammates.",
+    "Nobody on the team can catch up to {name}."
+   ]
+  },
+  {
+   "id": "M-UNDERLEVEL",
+   "name": "Late Starter",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Contributes a boss KO while 5 or more levels below the party median",
+   "phrasings": [
+    "{name} is behind the rest in level and keeps up anyway.",
+    "{name} contributes beyond its level.",
+    "{name} punches above its level."
+   ]
+  },
+  {
+   "id": "M-MASTER",
+   "name": "Move Master",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Masters a move (80 uses)",
+   "phrasings": [
+    "{name} mastered a move.",
+    "Eighty uses and {name} has the move down.",
+    "{name} made the move its own."
+   ]
+  },
+  {
+   "id": "M-MASTER3",
+   "name": "Triple Master",
+   "category": "journey",
+   "weight": "landmark",
+   "condition": "Masters 3 moves",
+   "phrasings": [
+    "{name} has mastered three moves.",
+    "{name}'s moveset is a work of art.",
+    "Three moves mastered: {name} is a specialist."
+   ]
+  },
+  {
+   "id": "M-BATTLE100",
+   "name": "Centurion",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Participates in 100 battles",
+   "phrasings": [
+    "{name} has fought a hundred battles.",
+    "One hundred battles for {name}.",
+    "{name} is a veteran of a hundred fights."
+   ]
+  },
+  {
+   "id": "M-KO100",
+   "name": "Hundred Knockouts",
+   "category": "journey",
+   "weight": "major",
+   "condition": "Scores 100 KOs",
+   "phrasings": [
+    "{name} has knocked out a hundred foes.",
+    "One hundred KOs for {name}.",
+    "{name}'s KO count hit a hundred."
+   ]
+  },
+  {
+   "id": "M-TANK1000",
+   "name": "Thousand Hits",
+   "category": "survival",
+   "weight": "minor",
+   "condition": "Absorbs 1000 total damage points over the run",
+   "phrasings": [
+    "{name} has taken a lot of punishment.",
+    "{name} is no stranger to damage.",
+    "{name} has endured a thousand points of damage."
+   ]
+  },
+  {
+   "id": "M-DEPTH",
+   "name": "Deep Run",
+   "category": "journey",
+   "weight": "minor",
+   "condition": "Is active in the final 5 nodes of a run",
+   "phrasings": [
+    "{name} made it deep into the run.",
+    "{name} was there for the late stages.",
+    "{name} kept going when others dropped out."
+   ]
+  },
+  {
+   "id": "M-ALONE",
+   "name": "Solo Run",
+   "category": "journey",
+   "weight": "landmark",
+   "condition": "Wins a boss battle as the only Pokémon sent out",
+   "phrasings": [
+    "{name} won a boss battle without any help.",
+    "One Pokémon, one boss, one win: {name}.",
+    "{name} didn't need anyone else."
+   ]
+  },
+  {
+   "id": "M-WINSTREAK10",
+   "name": "Hot Streak",
+   "category": "battle",
+   "weight": "major",
+   "condition": "Is active for a streak of 10 consecutive victories",
+   "phrasings": [
+    "{name} is on a ten-win streak.",
+    "Ten wins in a row for {name}.",
+    "{name} can't be beaten right now."
+   ]
+  },
+  {
+   "id": "M-SHOWOFF",
+   "name": "Crowd Pleaser",
+   "category": "story",
+   "weight": "minor",
+   "condition": "Appears in 3 run-history highlights",
+   "phrasings": [
+    "{name} keeps making the highlight reel.",
+    "{name} just keeps stealing the show.",
+    "The highlights are full of {name}."
+   ]
+  },
+  {
+   "id": "M-MVP",
+   "name": "Most Valuable",
+   "category": "story",
+   "weight": "landmark",
+   "condition": "Named Run MVP",
+   "phrasings": [
+    "{name} was the heart and soul of the run.",
+    "{name} was the MVP of this journey.",
+    "Nobody did more than {name}."
+   ]
+  },
+  {
+   "id": "M-HALLFAME",
+   "name": "Hall of Fame",
+   "category": "story",
+   "weight": "landmark",
+   "condition": "Enters the Hall of Fame (completed run)",
+   "phrasings": [
+    "{name} is in the Hall of Fame.",
+    "{name}'s name is written in the Hall of Fame.",
+    "{name} will be remembered."
+   ]
+  },
+  {
+   "id": "M-VETERAN",
+   "name": "Veteran of Many",
+   "category": "story",
+   "weight": "landmark",
+   "condition": "Appears in the party of 3 completed runs",
+   "phrasings": [
+    "{name} has been on three journeys.",
+    "Three journeys with {name}.",
+    "{name} is a veteran of many adventures."
+   ],
+   "disabled": "Cross-run memory is off (director decision C, 2026-11-06)."
+  }
+ ]
+}

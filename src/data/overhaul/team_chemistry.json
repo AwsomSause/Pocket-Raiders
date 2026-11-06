@@ -1,0 +1,2228 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/team_chemistry.json",
+ "entries": [
+  {
+   "id": "kanto-trio",
+   "name": "Kanto Trio",
+   "tier": "rare",
+   "requirement": "Bulbasaur+Charmander+Squirtle",
+   "scene": "The three old partners line up in the clearing, trying not to look as if they planned it.",
+   "reward": "Unlocks the \"Where It Began\" scene at the next rest node",
+   "speciesIds": [
+    "bulbasaur",
+    "charmander",
+    "squirtle"
+   ],
+   "complete": true
+  },
+  {
+   "id": "johto-trio",
+   "name": "Johto Trio",
+   "tier": "rare",
+   "requirement": "Chikorita+Cyndaquil+Totodile",
+   "scene": "The three of them sit in a row and share a berry three ways.",
+   "reward": "Unlocks the \"Three Ways\" scene",
+   "speciesIds": [
+    "chikorita",
+    "cyndaquil",
+    "totodile"
+   ],
+   "complete": true
+  },
+  {
+   "id": "hoenn-trio",
+   "name": "Hoenn Trio",
+   "tier": "rare",
+   "requirement": "Treecko+Torchic+Mudkip",
+   "scene": "The trio spreads out to cover three sides of the campfire without being asked.",
+   "reward": "Unlocks the \"Three Corners\" scene",
+   "speciesIds": [
+    "treecko",
+    "torchic",
+    "mudkip"
+   ],
+   "complete": true
+  },
+  {
+   "id": "sinnoh-trio",
+   "name": "Sinnoh Trio",
+   "tier": "rare",
+   "requirement": "Turtwig+Chimchar+Piplup",
+   "scene": "One chases the other two around the camp until all three collapse in a laughing heap.",
+   "reward": "Unlocks the \"Three at Dawn\" scene",
+   "speciesIds": [
+    "turtwig",
+    "chimchar",
+    "piplup"
+   ],
+   "complete": true
+  },
+  {
+   "id": "unova-trio",
+   "name": "Unova Trio",
+   "tier": "rare",
+   "requirement": "Snivy+Tepig+Oshawott",
+   "scene": "They stand shoulder to shoulder and stare down the horizon together.",
+   "reward": "Unlocks the \"Shoulder to Shoulder\" scene",
+   "speciesIds": [
+    "snivy",
+    "tepig",
+    "oshawott"
+   ],
+   "complete": true
+  },
+  {
+   "id": "kalos-trio",
+   "name": "Kalos Trio",
+   "tier": "rare",
+   "requirement": "Chespin+Fennekin+Froakie",
+   "scene": "Each insists it should lead; they settle it with a very serious rock-paper-scissors.",
+   "reward": "Unlocks the \"Settling It\" scene",
+   "speciesIds": [
+    "chespin",
+    "fennekin",
+    "froakie"
+   ],
+   "complete": true
+  },
+  {
+   "id": "alola-trio",
+   "name": "Alola Trio",
+   "tier": "rare",
+   "requirement": "Rowlet+Litten+Popplio",
+   "scene": "They arrange themselves on a log and watch the sunset in silence.",
+   "reward": "Unlocks the \"Island Sunset\" scene",
+   "speciesIds": [
+    "rowlet",
+    "litten",
+    "popplio"
+   ],
+   "complete": true
+  },
+  {
+   "id": "galar-trio",
+   "name": "Galar Trio",
+   "tier": "rare",
+   "requirement": "Grookey+Scorbunny+Sobble",
+   "scene": "They cheer each other on, even when one is clearly losing the race.",
+   "reward": "Unlocks the \"Race to the Rest\" scene",
+   "speciesIds": [
+    "grookey",
+    "scorbunny",
+    "sobble"
+   ],
+   "complete": true
+  },
+  {
+   "id": "paldea-trio",
+   "name": "Paldea Trio",
+   "tier": "rare",
+   "requirement": "Sprigatito+Fuecoco+Quaxly",
+   "scene": "They each bring a gift and wait to see who's picked.",
+   "reward": "Unlocks the \"Three Gifts\" scene",
+   "speciesIds": [
+    "sprigatito",
+    "fuecoco",
+    "quaxly"
+   ],
+   "complete": true
+  },
+  {
+   "id": "starter-mix-two",
+   "name": "Starter Hearts",
+   "tier": "common",
+   "requirement": "~starter:2>=2",
+   "scene": "Two starters from different regions compare their old trainers' habits.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "plusle-minun",
+   "name": "Positive and Negative",
+   "tier": "uncommon",
+   "requirement": "Plusle+Minun",
+   "scene": "The two of them spark in rhythm and look delighted about it.",
+   "reward": "Unlocks a rhythm cheer after wins",
+   "speciesIds": [
+    "plusle",
+    "minun"
+   ],
+   "complete": true
+  },
+  {
+   "id": "latias-latios",
+   "name": "Eon Siblings",
+   "tier": "epic",
+   "requirement": "Latias+Latios",
+   "scene": "They fly in a perfect circle around the party, then settle down as though nothing happened.",
+   "reward": "Unlocks the \"Eon Flight\" scene",
+   "speciesIds": [
+    "latias",
+    "latios"
+   ],
+   "complete": true
+  },
+  {
+   "id": "volbeat-illumise",
+   "name": "Firefly Dance",
+   "tier": "uncommon",
+   "requirement": "Volbeat+Illumise",
+   "scene": "They draw patterns in the night sky together.",
+   "reward": "Night camp scenes show their light show",
+   "speciesIds": [
+    "volbeat",
+    "illumise"
+   ],
+   "complete": true
+  },
+  {
+   "id": "nidoran-pair",
+   "name": "Nidoran Pair",
+   "tier": "uncommon",
+   "requirement": "Nidoran-F+Nidoran-M",
+   "scene": "Each lifts its ears at the other, then pretends not to notice.",
+   "reward": null,
+   "speciesIds": [
+    "nidoran-f",
+    "nidoran-m"
+   ],
+   "complete": true
+  },
+  {
+   "id": "zacian-zamazenta",
+   "name": "Sword and Shield",
+   "tier": "epic",
+   "requirement": "Zacian+Zamazenta",
+   "scene": "They stand back to back, ready for anything.",
+   "reward": "Unlocks the \"Back to Back\" scene",
+   "speciesIds": [
+    "zacian",
+    "zamazenta"
+   ],
+   "complete": true
+  },
+  {
+   "id": "solgaleo-lunala",
+   "name": "Sun and Moon",
+   "tier": "epic",
+   "requirement": "Solgaleo+Lunala",
+   "scene": "One lights the day, one keeps the night, and neither says a word about it.",
+   "reward": "Unlocks the \"Both Skies\" scene",
+   "speciesIds": [
+    "solgaleo",
+    "lunala"
+   ],
+   "complete": true
+  },
+  {
+   "id": "reshiram-zekrom",
+   "name": "Truth and Ideals",
+   "tier": "epic",
+   "requirement": "Reshiram+Zekrom",
+   "scene": "They stare each other down until something shifts between them.",
+   "reward": "Unlocks the \"Two Sides\" scene",
+   "speciesIds": [
+    "reshiram",
+    "zekrom"
+   ],
+   "complete": true
+  },
+  {
+   "id": "kyogre-groudon",
+   "name": "Sea and Land",
+   "tier": "epic",
+   "requirement": "Kyogre+Groudon",
+   "scene": "The sky turns the colors of both sea and land, then calms.",
+   "reward": "Unlocks the \"Truce\" scene",
+   "speciesIds": [
+    "kyogre",
+    "groudon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "dialga-palkia",
+   "name": "Time and Space",
+   "tier": "epic",
+   "requirement": "Dialga+Palkia",
+   "scene": "The air bends in two directions at once and then steadies.",
+   "reward": "Unlocks the \"Both Axes\" scene",
+   "speciesIds": [
+    "dialga",
+    "palkia"
+   ],
+   "complete": true
+  },
+  {
+   "id": "xerneas-yveltal",
+   "name": "Life and Destruction",
+   "tier": "epic",
+   "requirement": "Xerneas+Yveltal",
+   "scene": "They circle each other, each stopping the other from going too far.",
+   "reward": "Unlocks the \"Balance\" scene",
+   "speciesIds": [
+    "xerneas",
+    "yveltal"
+   ],
+   "complete": true
+  },
+  {
+   "id": "cresselia-darkrai",
+   "name": "Dream and Nightmare",
+   "tier": "epic",
+   "requirement": "Cresselia+Darkrai",
+   "scene": "One chases the other's shadow, and the nightmares fade.",
+   "reward": "Unlocks the \"Dream Watch\" scene",
+   "speciesIds": [
+    "cresselia",
+    "darkrai"
+   ],
+   "complete": true
+  },
+  {
+   "id": "mew-mewtwo",
+   "name": "Origin and Echo",
+   "tier": "epic",
+   "requirement": "Mew+Mewtwo",
+   "scene": "The little one floats around the big one, who watches with surprising patience.",
+   "reward": "Unlocks the \"Origin\" scene",
+   "speciesIds": [
+    "mew",
+    "mewtwo"
+   ],
+   "complete": true
+  },
+  {
+   "id": "tapu-quartet",
+   "name": "Guardian Deities",
+   "tier": "epic",
+   "requirement": "Tapu Koko+Tapu Lele+Tapu Bulu+Tapu Fini",
+   "scene": "All four settle onto the island stones and watch you in silence.",
+   "reward": "Unlocks the \"Guardians' Blessing\" scene",
+   "speciesIds": [
+    "tapu-koko",
+    "tapu-lele",
+    "tapu-bulu",
+    "tapu-fini"
+   ],
+   "complete": true
+  },
+  {
+   "id": "swords-of-justice",
+   "name": "Swords of Justice",
+   "tier": "epic",
+   "requirement": "Cobalion+Terrakion+Virizion",
+   "scene": "They form a line and wait for the trainer's word.",
+   "reward": "Unlocks the \"Pledge\" scene",
+   "speciesIds": [
+    "cobalion",
+    "terrakion",
+    "virizion"
+   ],
+   "complete": true
+  },
+  {
+   "id": "forces-of-nature",
+   "name": "Forces of Nature",
+   "tier": "epic",
+   "requirement": "Tornadus+Thundurus+Landorus",
+   "scene": "Wind, thunder and earth take positions around the camp, arguing quietly.",
+   "reward": "Unlocks the \"Storm Council\" scene",
+   "speciesIds": [
+    "tornadus",
+    "thundurus",
+    "landorus"
+   ],
+   "complete": true
+  },
+  {
+   "id": "legendary-birds",
+   "name": "Legendary Birds",
+   "tier": "epic",
+   "requirement": "Articuno+Zapdos+Moltres",
+   "scene": "The three perch on the cliff and look across the world.",
+   "reward": "Unlocks the \"Three Wings\" scene",
+   "speciesIds": [
+    "articuno",
+    "zapdos",
+    "moltres"
+   ],
+   "complete": true
+  },
+  {
+   "id": "legendary-beasts",
+   "name": "Roaming Beasts",
+   "tier": "epic",
+   "requirement": "Raikou+Entei+Suicune",
+   "scene": "They race the wind and pause only for you.",
+   "reward": "Unlocks the \"Three Paths\" scene",
+   "speciesIds": [
+    "raikou",
+    "entei",
+    "suicune"
+   ],
+   "complete": true
+  },
+  {
+   "id": "regis",
+   "name": "The Regis",
+   "tier": "epic",
+   "requirement": "Regirock+Regice+Registeel",
+   "scene": "The three stand like statues, then slowly turn their heads toward you.",
+   "reward": "Unlocks the \"Sealed Door\" scene",
+   "speciesIds": [
+    "regirock",
+    "regice",
+    "registeel"
+   ],
+   "complete": true
+  },
+  {
+   "id": "lake-guardians",
+   "name": "Lake Guardians",
+   "tier": "epic",
+   "requirement": "Uxie+Mesprit+Azelf",
+   "scene": "They hover in a triangle, thinking three different thoughts at the same time.",
+   "reward": "Unlocks the \"Three Minds\" scene",
+   "speciesIds": [
+    "uxie",
+    "mesprit",
+    "azelf"
+   ],
+   "complete": true
+  },
+  {
+   "id": "creation-trio",
+   "name": "Creation Trio",
+   "tier": "epic",
+   "requirement": "Dialga+Palkia+Giratina",
+   "scene": "Three pillars of the world gather and look wary of each other.",
+   "reward": "Unlocks the \"Origin of Everything\" scene",
+   "speciesIds": [
+    "dialga",
+    "palkia",
+    "giratina"
+   ],
+   "complete": true
+  },
+  {
+   "id": "weather-trio",
+   "name": "Weather Trio",
+   "tier": "epic",
+   "requirement": "Kyogre+Groudon+Rayquaza",
+   "scene": "Three forces of weather stand in silence as storms gather and then break.",
+   "reward": "Unlocks the \"Sky and Sea\" scene",
+   "speciesIds": [
+    "kyogre",
+    "groudon",
+    "rayquaza"
+   ],
+   "complete": true
+  },
+  {
+   "id": "tao-trio",
+   "name": "Tao Trio",
+   "tier": "epic",
+   "requirement": "Reshiram+Zekrom+Kyurem",
+   "scene": "Three dragons gather where truth, ideals and emptiness meet.",
+   "reward": "Unlocks the \"Third Voice\" scene",
+   "speciesIds": [
+    "reshiram",
+    "zekrom",
+    "kyurem"
+   ],
+   "complete": true
+  },
+  {
+   "id": "aura-trio",
+   "name": "Aura Trio",
+   "tier": "epic",
+   "requirement": "Xerneas+Yveltal+Zygarde",
+   "scene": "Life, destruction and order stand in a triangle.",
+   "reward": "Unlocks the \"Three Orders\" scene",
+   "speciesIds": [
+    "xerneas",
+    "yveltal",
+    "zygarde"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ruin-quartet",
+   "name": "Treasures of Ruin",
+   "tier": "epic",
+   "requirement": "Wo-Chien+Chien-Pao+Ting-Lu+Chi-Yu",
+   "scene": "Four ancient sealed things gather, whispering.",
+   "reward": "Unlocks the \"Four Curses\" scene",
+   "speciesIds": [
+    "wo-chien",
+    "chien-pao",
+    "ting-lu",
+    "chi-yu"
+   ],
+   "complete": true
+  },
+  {
+   "id": "loyal-three",
+   "name": "Loyal Three",
+   "tier": "epic",
+   "requirement": "Okidogi+Munkidori+Fezandipiti",
+   "scene": "The three stand shoulder to shoulder, and none speaks of what happened.",
+   "reward": "Unlocks the \"What Was Said\" scene",
+   "speciesIds": [
+    "okidogi",
+    "munkidori",
+    "fezandipiti"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ultra-gather",
+   "name": "Ultra Gathering",
+   "tier": "epic",
+   "requirement": "~tag:Ultra Beast>=3",
+   "scene": "Three visitors from another world compare notes in a language no one else speaks.",
+   "reward": "Unlocks the \"Beyond the Wormhole\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "legend-pair-any",
+   "name": "Legends Together",
+   "tier": "rare",
+   "requirement": "~tag:Restricted Legendary>=2",
+   "scene": "Two very large presences share a very small clearing.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "sub-legend-pair",
+   "name": "Quiet Legends",
+   "tier": "uncommon",
+   "requirement": "~tag:Sub-Legendary>=2",
+   "scene": "Two lesser legends look relieved to meet someone who understands.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "eeveelution-three",
+   "name": "Eevee Siblings",
+   "tier": "uncommon",
+   "requirement": "~family:Eevee>=3",
+   "scene": "Three Eeveelutions bicker about whose fur is softest.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "eeveelution-five",
+   "name": "Eevee Reunion",
+   "tier": "rare",
+   "requirement": "~family:Eevee>=5",
+   "scene": "Five of Eevee's forms cluster around the fire, each in its own color.",
+   "reward": "Unlocks the \"Reunion\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "eeveelution-all",
+   "name": "Eight Paths",
+   "tier": "epic",
+   "requirement": "Vaporeon+Jolteon+Flareon+Espeon+Umbreon+Leafeon+Glaceon+Sylveon",
+   "scene": "Eight forms of one small creature, all in one place.",
+   "reward": "Unlocks the \"All Paths\" scene",
+   "speciesIds": [
+    "vaporeon",
+    "jolteon",
+    "flareon",
+    "espeon",
+    "umbreon",
+    "leafeon",
+    "glaceon",
+    "sylveon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "sun-and-moon-eevee",
+   "name": "Sun and Moon Eevees",
+   "tier": "uncommon",
+   "requirement": "Espeon+Umbreon",
+   "scene": "The sun one and the moon one lie back to back.",
+   "reward": null,
+   "speciesIds": [
+    "espeon",
+    "umbreon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "elemental-brothers",
+   "name": "Elemental Brothers",
+   "tier": "uncommon",
+   "requirement": "Vaporeon+Jolteon+Flareon",
+   "scene": "Three brothers with three elements, one very full bowl.",
+   "reward": null,
+   "speciesIds": [
+    "vaporeon",
+    "jolteon",
+    "flareon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "seasons-eevee",
+   "name": "Season-Shifters",
+   "tier": "uncommon",
+   "requirement": "Leafeon+Glaceon",
+   "scene": "One brings spring, one winter; they stand where the two seasons meet.",
+   "reward": null,
+   "speciesIds": [
+    "leafeon",
+    "glaceon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "fairy-eevee-pair",
+   "name": "Ribbons and Fur",
+   "tier": "common",
+   "requirement": "Sylveon+Eevee",
+   "scene": "The young one tries to copy the older one's ribbons.",
+   "reward": null,
+   "speciesIds": [
+    "sylveon",
+    "eevee"
+   ],
+   "complete": true
+  },
+  {
+   "id": "rain-squad",
+   "name": "Rain Squad",
+   "tier": "rare",
+   "requirement": "~weather:rain>=2",
+   "scene": "A downpour makes everyone's day, and some mons' week.",
+   "reward": "Rain-themed scenes unlocked",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "sun-squad",
+   "name": "Sun Squad",
+   "tier": "rare",
+   "requirement": "~weather:sun>=2",
+   "scene": "Two sun-lovers bask side by side and ignore the heat.",
+   "reward": "Sun-themed scenes unlocked",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "sand-squad",
+   "name": "Sand Squad",
+   "tier": "rare",
+   "requirement": "~weather:sand>=2",
+   "scene": "Two sand-lovers shake out their coats together.",
+   "reward": "Sand-themed scenes unlocked",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "snow-squad",
+   "name": "Snow Squad",
+   "tier": "rare",
+   "requirement": "~weather:snow>=2",
+   "scene": "Two cold-lovers build a pile of snow and sit on it.",
+   "reward": "Snow-themed scenes unlocked",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "pelipper-kingdra",
+   "name": "Rain Team Core",
+   "tier": "uncommon",
+   "requirement": "Pelipper+Kingdra",
+   "scene": "One pulls the clouds in; the other swims through them.",
+   "reward": null,
+   "speciesIds": [
+    "pelipper",
+    "kingdra"
+   ],
+   "complete": true
+  },
+  {
+   "id": "torkoal-venusaur",
+   "name": "Sun Core",
+   "tier": "uncommon",
+   "requirement": "Torkoal+Bulbasaur",
+   "scene": "The sun beats down, and the leaves drink it in.",
+   "reward": null,
+   "speciesIds": [
+    "torkoal",
+    "bulbasaur"
+   ],
+   "complete": true
+  },
+  {
+   "id": "tyranitar-excadrill",
+   "name": "Sand Core",
+   "tier": "uncommon",
+   "requirement": "Tyranitar+Excadrill",
+   "scene": "A roar and a whir in the same sandstorm.",
+   "reward": null,
+   "speciesIds": [
+    "tyranitar",
+    "excadrill"
+   ],
+   "complete": true
+  },
+  {
+   "id": "abomasnow-weavile",
+   "name": "Snow Core",
+   "tier": "uncommon",
+   "requirement": "Abomasnow+Sneasel",
+   "scene": "One of them looms, the other slips through the drifts.",
+   "reward": null,
+   "speciesIds": [
+    "abomasnow",
+    "sneasel"
+   ],
+   "complete": true
+  },
+  {
+   "id": "trick-room-duo",
+   "name": "Slow Pair",
+   "tier": "uncommon",
+   "requirement": "Slowpoke+Shuckle",
+   "scene": "Two slow Pokémon share the slowest, quietest afternoon.",
+   "reward": null,
+   "speciesIds": [
+    "slowpoke",
+    "shuckle"
+   ],
+   "complete": true
+  },
+  {
+   "id": "fire-trio",
+   "name": "Flame Trio",
+   "tier": "common",
+   "requirement": "~type:Fire>=3",
+   "scene": "Three fire-types warm up the camp until everyone has to step back.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "water-trio",
+   "name": "Tide Trio",
+   "tier": "common",
+   "requirement": "~type:Water>=3",
+   "scene": "Three water-types splash around the nearest puddle until it's a pond.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "grass-trio",
+   "name": "Grove Trio",
+   "tier": "common",
+   "requirement": "~type:Grass>=3",
+   "scene": "Three grass-types sun themselves in a row, photosynthesizing seriously.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "electric-trio",
+   "name": "Spark Trio",
+   "tier": "common",
+   "requirement": "~type:Electric>=3",
+   "scene": "Three electric-types make everyone's fur stand on end.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "psychic-trio",
+   "name": "Mind Trio",
+   "tier": "common",
+   "requirement": "~type:Psychic>=3",
+   "scene": "Three psychics sit in a triangle, nodding at what no one else hears.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "ghost-trio",
+   "name": "Haunt Trio",
+   "tier": "common",
+   "requirement": "~type:Ghost>=3",
+   "scene": "The campfire dims; three ghosts exchange knowing looks.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "dragon-trio",
+   "name": "Dragon Trio",
+   "tier": "uncommon",
+   "requirement": "~type:Dragon>=3",
+   "scene": "The three of them argue about wings versus scales with equal passion.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "fighting-trio",
+   "name": "Dojo Trio",
+   "tier": "common",
+   "requirement": "~type:Fighting>=3",
+   "scene": "Three fighters spar at dawn without being asked.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "dark-trio",
+   "name": "Shadow Trio",
+   "tier": "common",
+   "requirement": "~type:Dark>=3",
+   "scene": "Three dark-types find the one shadow big enough for all.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "steel-trio",
+   "name": "Forge Trio",
+   "tier": "common",
+   "requirement": "~type:Steel>=3",
+   "scene": "Three steel-types gleam in the firelight and tap each other's plating.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "fairy-trio",
+   "name": "Glimmer Trio",
+   "tier": "common",
+   "requirement": "~type:Fairy>=3",
+   "scene": "Three fairies braid flowers in each other's fur.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "ice-trio",
+   "name": "Frost Trio",
+   "tier": "common",
+   "requirement": "~type:Ice>=3",
+   "scene": "Three ice-types frost the camp's rocks and giggle.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "rock-trio",
+   "name": "Boulder Trio",
+   "tier": "common",
+   "requirement": "~type:Rock>=3",
+   "scene": "Three rock-types stand so still that a bird lands on one.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "ground-trio",
+   "name": "Dust Trio",
+   "tier": "common",
+   "requirement": "~type:Ground>=3",
+   "scene": "Three ground-types dig the same hole from three sides.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "poison-trio",
+   "name": "Venom Trio",
+   "tier": "common",
+   "requirement": "~type:Poison>=3",
+   "scene": "Three poison-types share a quiet, cautious meal.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "bug-trio",
+   "name": "Swarm Trio",
+   "tier": "common",
+   "requirement": "~type:Bug>=3",
+   "scene": "Three bug-types hum in the same key.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "flying-trio",
+   "name": "Gale Trio",
+   "tier": "common",
+   "requirement": "~type:Flying>=3",
+   "scene": "Three flyers circle overhead and trade the lead.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "normal-trio",
+   "name": "Everyday Trio",
+   "tier": "common",
+   "requirement": "~type:Normal>=3",
+   "scene": "Three plain Pokémon do very ordinary, very pleasant things.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-types-six",
+   "name": "Six Colors",
+   "tier": "rare",
+   "requirement": "~distinct:types>=6",
+   "scene": "Six different elements and not a single clash.",
+   "reward": "Unlocks the \"Rainbow Camp\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-1",
+   "name": "Pallet Reunion",
+   "tier": "rare",
+   "requirement": "~gen:1>=6",
+   "scene": "The whole team feels like they're back where the story began.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-2",
+   "name": "Johto Reunion",
+   "tier": "rare",
+   "requirement": "~gen:2>=6",
+   "scene": "The team hums a half-remembered tune from somewhere in Johto.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-3",
+   "name": "Hoenn Reunion",
+   "tier": "rare",
+   "requirement": "~gen:3>=6",
+   "scene": "The air smells faintly of salt and ash.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-4",
+   "name": "Sinnoh Reunion",
+   "tier": "rare",
+   "requirement": "~gen:4>=6",
+   "scene": "Everyone looks toward the mountain, as if remembering it.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-5",
+   "name": "Unova Reunion",
+   "tier": "rare",
+   "requirement": "~gen:5>=6",
+   "scene": "A city's hum drifts in from somewhere that isn't here.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-6",
+   "name": "Kalos Reunion",
+   "tier": "rare",
+   "requirement": "~gen:6>=6",
+   "scene": "Everyone straightens up a little, as if in a fine hall.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-7",
+   "name": "Alola Reunion",
+   "tier": "rare",
+   "requirement": "~gen:7>=6",
+   "scene": "The team sways slightly, as if to waves.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-8",
+   "name": "Galar Reunion",
+   "tier": "rare",
+   "requirement": "~gen:8>=6",
+   "scene": "The team stands in formation, as if before a stadium.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-gen-9",
+   "name": "Paldea Reunion",
+   "tier": "rare",
+   "requirement": "~gen:9>=6",
+   "scene": "Everyone sniffs the air toward a horizon that isn't there.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "fully-evolved",
+   "name": "Fully Grown",
+   "tier": "rare",
+   "requirement": "~evolved:all",
+   "scene": "Every member of the team has grown as far as it can.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "all-nfe",
+   "name": "Still Growing",
+   "tier": "rare",
+   "requirement": "~nfe:all",
+   "scene": "The whole team looks up at you with the same unfinished, hopeful face.",
+   "reward": "Unlocks the \"Little Ones\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "levitators",
+   "name": "Floaters",
+   "tier": "uncommon",
+   "requirement": "~ability:Levitate>=2",
+   "scene": "Two floaters drift over the camp, looking down on everyone gently.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "intimidators",
+   "name": "Glare Squad",
+   "tier": "uncommon",
+   "requirement": "~ability:Intimidate>=2",
+   "scene": "Two glaring mons stare each other out until they both blink.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "pressure-pair",
+   "name": "Pressure Pair",
+   "tier": "uncommon",
+   "requirement": "~ability:Pressure>=2",
+   "scene": "The air feels heavy around the pair.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "sturdy-squad",
+   "name": "Sturdy Squad",
+   "tier": "uncommon",
+   "requirement": "~ability:Sturdy>=2",
+   "scene": "Neither budges, even when the other pokes it.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "size-contrast",
+   "name": "Big and Tiny",
+   "tier": "uncommon",
+   "requirement": "~size:contrast",
+   "scene": "The biggest and smallest on the team sleep in a pile.",
+   "reward": "Unlocks the \"Big and Small\" camp scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "pikachu-family",
+   "name": "Spark Family",
+   "tier": "uncommon",
+   "requirement": "Pichu+Pikachu+Raichu",
+   "scene": "Three generations of sparks cling together for warmth.",
+   "reward": null,
+   "speciesIds": [
+    "pichu",
+    "pikachu",
+    "raichu"
+   ],
+   "complete": true
+  },
+  {
+   "id": "pikachu-eevee",
+   "name": "Two Favorites",
+   "tier": "common",
+   "requirement": "Pikachu+Eevee",
+   "scene": "Two small, popular companions share the same sunbeam.",
+   "reward": null,
+   "speciesIds": [
+    "pikachu",
+    "eevee"
+   ],
+   "complete": true
+  },
+  {
+   "id": "meowth-persian",
+   "name": "Cat's Pride",
+   "tier": "common",
+   "requirement": "Meowth+Persian",
+   "scene": "The pampered one doesn't acknowledge the scrappy one, but saves it the best spot.",
+   "reward": null,
+   "speciesIds": [
+    "meowth",
+    "persian"
+   ],
+   "complete": true
+  },
+  {
+   "id": "gible-line",
+   "name": "Dragon's Education",
+   "tier": "uncommon",
+   "requirement": "Gible+Garchomp",
+   "scene": "The big one shows the small one how to dig; the small one bites it anyway.",
+   "reward": null,
+   "speciesIds": [
+    "gible",
+    "garchomp"
+   ],
+   "complete": true
+  },
+  {
+   "id": "magikarp-gyarados",
+   "name": "Splash and Roar",
+   "tier": "uncommon",
+   "requirement": "Magikarp+Gyarados",
+   "scene": "One splashes helplessly while the other looks fondly down.",
+   "reward": null,
+   "speciesIds": [
+    "magikarp",
+    "gyarados"
+   ],
+   "complete": true
+  },
+  {
+   "id": "slow-brothers",
+   "name": "Slow Brothers",
+   "tier": "uncommon",
+   "requirement": "Slowpoke+Shellder",
+   "scene": "One is slow and one is clamped to its tail, and both are happy.",
+   "reward": null,
+   "speciesIds": [
+    "slowpoke",
+    "shellder"
+   ],
+   "complete": true
+  },
+  {
+   "id": "cubone-marowak",
+   "name": "Bone Keepers",
+   "tier": "uncommon",
+   "requirement": "Cubone+Marowak",
+   "scene": "One wears a skull and the other leaves it a quiet space.",
+   "reward": null,
+   "speciesIds": [
+    "cubone",
+    "marowak"
+   ],
+   "complete": true
+  },
+  {
+   "id": "singing-trio",
+   "name": "Lullaby Trio",
+   "tier": "uncommon",
+   "requirement": "Clefairy+Jigglypuff+Zubat",
+   "scene": "Two sing lullabies and one tries to find the door.",
+   "reward": null,
+   "speciesIds": [
+    "clefairy",
+    "jigglypuff",
+    "zubat"
+   ],
+   "complete": true
+  },
+  {
+   "id": "egg-and-trunk",
+   "name": "Coconut Cousins",
+   "tier": "common",
+   "requirement": "Exeggcute+Exeggutor",
+   "scene": "The egg-heads and the tall one grow in two directions.",
+   "reward": null,
+   "speciesIds": [
+    "exeggcute",
+    "exeggutor"
+   ],
+   "complete": true
+  },
+  {
+   "id": "fighting-brothers",
+   "name": "Fighting Brothers",
+   "tier": "common",
+   "requirement": "Hitmonlee+Hitmonchan",
+   "scene": "They argue about whose style is better, loudly.",
+   "reward": null,
+   "speciesIds": [
+    "hitmonlee",
+    "hitmonchan"
+   ],
+   "complete": true
+  },
+  {
+   "id": "pony-pair",
+   "name": "Gallop Pair",
+   "tier": "common",
+   "requirement": "Ponyta+Rapidash",
+   "scene": "One tries to keep up while the other slows down for it.",
+   "reward": null,
+   "speciesIds": [
+    "ponyta",
+    "rapidash"
+   ],
+   "complete": true
+  },
+  {
+   "id": "rock-family",
+   "name": "Rock Family",
+   "tier": "common",
+   "requirement": "Geodude+Onix",
+   "scene": "Two stony friends share a sunny rock.",
+   "reward": null,
+   "speciesIds": [
+    "geodude",
+    "onix"
+   ],
+   "complete": true
+  },
+  {
+   "id": "mime-line",
+   "name": "Mime Troupe",
+   "tier": "uncommon",
+   "requirement": "Mime Jr.+Mr. Mime+Mr. Rime",
+   "scene": "They perform an invisible play and bow.",
+   "reward": null,
+   "speciesIds": [
+    "mime-jr",
+    "mr-mime",
+    "mr-rime"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ralts-line",
+   "name": "Feeling Family",
+   "tier": "uncommon",
+   "requirement": "Ralts+Gardevoir+Gallade",
+   "scene": "A feeling team, with more being felt than said.",
+   "reward": null,
+   "speciesIds": [
+    "ralts",
+    "gardevoir",
+    "gallade"
+   ],
+   "complete": true
+  },
+  {
+   "id": "beldum-line",
+   "name": "Steel Family",
+   "tier": "uncommon",
+   "requirement": "Beldum+Metagross",
+   "scene": "The three-eyed one watches the smaller.",
+   "reward": null,
+   "speciesIds": [
+    "beldum",
+    "metagross"
+   ],
+   "complete": true
+  },
+  {
+   "id": "bagon-line",
+   "name": "Dream of Flight",
+   "tier": "uncommon",
+   "requirement": "Bagon+Salamence",
+   "scene": "The small one stares at the big one and dreams.",
+   "reward": null,
+   "speciesIds": [
+    "bagon",
+    "salamence"
+   ],
+   "complete": true
+  },
+  {
+   "id": "larvitar-line",
+   "name": "Mountain Born",
+   "tier": "uncommon",
+   "requirement": "Larvitar+Tyranitar",
+   "scene": "A growing one climbs onto the big one's shoulder.",
+   "reward": null,
+   "speciesIds": [
+    "larvitar",
+    "tyranitar"
+   ],
+   "complete": true
+  },
+  {
+   "id": "fossil-pair",
+   "name": "Old Friends",
+   "tier": "uncommon",
+   "requirement": "Aerodactyl+Kabutops",
+   "scene": "Two fossil revivals share the oldest memory.",
+   "reward": null,
+   "speciesIds": [
+    "aerodactyl",
+    "kabutops"
+   ],
+   "complete": true
+  },
+  {
+   "id": "fossil-trio",
+   "name": "Ancient Trio",
+   "tier": "rare",
+   "requirement": "Omanyte+Kabuto+Aerodactyl",
+   "scene": "Three revived Pokémon look at the modern world with curiosity.",
+   "reward": null,
+   "speciesIds": [
+    "omanyte",
+    "kabuto",
+    "aerodactyl"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ghost-gang",
+   "name": "Haunted House",
+   "tier": "uncommon",
+   "requirement": "Gastly+Haunter+Gengar",
+   "scene": "The three move around each other in an old, familiar joke.",
+   "reward": null,
+   "speciesIds": [
+    "gastly",
+    "haunter",
+    "gengar"
+   ],
+   "complete": true
+  },
+  {
+   "id": "pitchfork-pair",
+   "name": "Prank Duo",
+   "tier": "uncommon",
+   "requirement": "Gengar+Zoroark",
+   "scene": "Two masters of illusion try to out-trick one another.",
+   "reward": null,
+   "speciesIds": [
+    "gengar",
+    "zoroark"
+   ],
+   "complete": true
+  },
+  {
+   "id": "shadow-pair",
+   "name": "Shadow and Ghost",
+   "tier": "uncommon",
+   "requirement": "Sableye+Mismagius",
+   "scene": "They share shadows and trade secrets.",
+   "reward": null,
+   "speciesIds": [
+    "sableye",
+    "mismagius"
+   ],
+   "complete": true
+  },
+  {
+   "id": "tricky-team",
+   "name": "Trick Squad",
+   "tier": "rare",
+   "requirement": "Zoroark+Meowstic+Gardevoir",
+   "scene": "The team's face becomes a mask no one can read.",
+   "reward": null,
+   "speciesIds": [
+    "zoroark",
+    "meowstic",
+    "gardevoir"
+   ],
+   "complete": true
+  },
+  {
+   "id": "legend-dog-pair",
+   "name": "Hound and Hound",
+   "tier": "uncommon",
+   "requirement": "Houndoom+Arcanine",
+   "scene": "Two big fiery dogs circle each other, then sit.",
+   "reward": null,
+   "speciesIds": [
+    "houndoom",
+    "arcanine"
+   ],
+   "complete": true
+  },
+  {
+   "id": "pidgey-line",
+   "name": "Sky Family",
+   "tier": "common",
+   "requirement": "Pidgey+Pidgeot",
+   "scene": "The big one keeps watch while the small one practices.",
+   "reward": null,
+   "speciesIds": [
+    "pidgey",
+    "pidgeot"
+   ],
+   "complete": true
+  },
+  {
+   "id": "rattata-line",
+   "name": "Quick Cousins",
+   "tier": "common",
+   "requirement": "Rattata+Raticate",
+   "scene": "The tiny scamperer and the larger one race.",
+   "reward": null,
+   "speciesIds": [
+    "rattata",
+    "raticate"
+   ],
+   "complete": true
+  },
+  {
+   "id": "caterpie-line",
+   "name": "Cocoon Reunion",
+   "tier": "common",
+   "requirement": "Caterpie+Butterfree",
+   "scene": "The one who flew shows the one who crawls the view.",
+   "reward": null,
+   "speciesIds": [
+    "caterpie",
+    "butterfree"
+   ],
+   "complete": true
+  },
+  {
+   "id": "weedle-line",
+   "name": "Stinger Family",
+   "tier": "common",
+   "requirement": "Weedle+Beedrill",
+   "scene": "The small one doesn't realize what it will become.",
+   "reward": null,
+   "speciesIds": [
+    "weedle",
+    "beedrill"
+   ],
+   "complete": true
+  },
+  {
+   "id": "oddish-line",
+   "name": "Weed Family",
+   "tier": "common",
+   "requirement": "Oddish+Vileplume",
+   "scene": "A small one hides under the big one's petals.",
+   "reward": null,
+   "speciesIds": [
+    "oddish",
+    "vileplume"
+   ],
+   "complete": true
+  },
+  {
+   "id": "bellsprout-line",
+   "name": "Vine Family",
+   "tier": "common",
+   "requirement": "Bellsprout+Victreebel",
+   "scene": "The big one swallows nothing; it's just a hug.",
+   "reward": null,
+   "speciesIds": [
+    "bellsprout",
+    "victreebel"
+   ],
+   "complete": true
+  },
+  {
+   "id": "machop-line",
+   "name": "Muscle Family",
+   "tier": "common",
+   "requirement": "Machop+Machamp",
+   "scene": "The big one lifts the small one for fun.",
+   "reward": null,
+   "speciesIds": [
+    "machop",
+    "machamp"
+   ],
+   "complete": true
+  },
+  {
+   "id": "abra-line",
+   "name": "Dream Family",
+   "tier": "common",
+   "requirement": "Abra+Alakazam",
+   "scene": "One sleeps and the other levitates the blanket.",
+   "reward": null,
+   "speciesIds": [
+    "abra",
+    "alakazam"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ponyta-sun",
+   "name": "Sunrise Gallop",
+   "tier": "common",
+   "requirement": "Ponyta+Sunflora",
+   "scene": "The two share a sunrise at the field's edge.",
+   "reward": null,
+   "speciesIds": [
+    "ponyta",
+    "sunflora"
+   ],
+   "complete": true
+  },
+  {
+   "id": "snorlax-munchlax",
+   "name": "Heavy Sleepers",
+   "tier": "common",
+   "requirement": "Munchlax+Snorlax",
+   "scene": "They sleep in a pile and snore in harmony.",
+   "reward": null,
+   "speciesIds": [
+    "munchlax",
+    "snorlax"
+   ],
+   "complete": true
+  },
+  {
+   "id": "togepi-line",
+   "name": "Lucky Egg",
+   "tier": "uncommon",
+   "requirement": "Togepi+Togekiss",
+   "scene": "The small one is carried everywhere; the big one is serene.",
+   "reward": null,
+   "speciesIds": [
+    "togepi",
+    "togekiss"
+   ],
+   "complete": true
+  },
+  {
+   "id": "dratini-line",
+   "name": "Dragon's Wish",
+   "tier": "uncommon",
+   "requirement": "Dratini+Dragonite",
+   "scene": "The big one protects the small one from everything.",
+   "reward": null,
+   "speciesIds": [
+    "dratini",
+    "dragonite"
+   ],
+   "complete": true
+  },
+  {
+   "id": "mareep-line",
+   "name": "Wool Family",
+   "tier": "common",
+   "requirement": "Mareep+Ampharos",
+   "scene": "The small one's wool grows and the big one's light shines.",
+   "reward": null,
+   "speciesIds": [
+    "mareep",
+    "ampharos"
+   ],
+   "complete": true
+  },
+  {
+   "id": "swablu-altaria",
+   "name": "Cloud Friends",
+   "tier": "common",
+   "requirement": "Swablu+Altaria",
+   "scene": "The small one sits on the big one's cloud-wing.",
+   "reward": null,
+   "speciesIds": [
+    "swablu",
+    "altaria"
+   ],
+   "complete": true
+  },
+  {
+   "id": "trapinch-line",
+   "name": "Desert Dragons",
+   "tier": "uncommon",
+   "requirement": "Trapinch+Flygon",
+   "scene": "The grown one shows the small one how to fly out of the pit.",
+   "reward": null,
+   "speciesIds": [
+    "trapinch",
+    "flygon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "feebas-milotic",
+   "name": "Ugly to Beautiful",
+   "tier": "uncommon",
+   "requirement": "Feebas+Milotic",
+   "scene": "The grown one sings for the one still waiting.",
+   "reward": null,
+   "speciesIds": [
+    "feebas",
+    "milotic"
+   ],
+   "complete": true
+  },
+  {
+   "id": "sentret-line",
+   "name": "Lookout Pair",
+   "tier": "common",
+   "requirement": "Sentret+Furret",
+   "scene": "The two keep a long, tall watch.",
+   "reward": null,
+   "speciesIds": [
+    "sentret",
+    "furret"
+   ],
+   "complete": true
+  },
+  {
+   "id": "poliwag-line",
+   "name": "Swirl Family",
+   "tier": "common",
+   "requirement": "Poliwag+Poliwrath",
+   "scene": "The small one tries to copy the champion's pose.",
+   "reward": null,
+   "speciesIds": [
+    "poliwag",
+    "poliwrath"
+   ],
+   "complete": true
+  },
+  {
+   "id": "tyrogue-trio",
+   "name": "Tyrogue Dojo",
+   "tier": "uncommon",
+   "requirement": "Tyrogue+Hitmontop+Hitmonlee+Hitmonchan",
+   "scene": "One became three things, and they all want to be the best.",
+   "reward": null,
+   "speciesIds": [
+    "tyrogue",
+    "hitmontop",
+    "hitmonlee",
+    "hitmonchan"
+   ],
+   "complete": true
+  },
+  {
+   "id": "cleffa-line",
+   "name": "Star-Dust Cousins",
+   "tier": "common",
+   "requirement": "Cleffa+Clefable",
+   "scene": "The big one tells the small one stories about the stars.",
+   "reward": null,
+   "speciesIds": [
+    "cleffa",
+    "clefable"
+   ],
+   "complete": true
+  },
+  {
+   "id": "smoochum-line",
+   "name": "Kiss Cousins",
+   "tier": "common",
+   "requirement": "Smoochum+Jynx",
+   "scene": "The big one blows kisses to the little one.",
+   "reward": null,
+   "speciesIds": [
+    "smoochum",
+    "jynx"
+   ],
+   "complete": true
+  },
+  {
+   "id": "elekid-magby",
+   "name": "Spark and Flame",
+   "tier": "uncommon",
+   "requirement": "Elekid+Magby",
+   "scene": "Two baby elementals try to out-warm each other.",
+   "reward": null,
+   "speciesIds": [
+    "elekid",
+    "magby"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ice-fire-pair",
+   "name": "Fire and Ice",
+   "tier": "uncommon",
+   "requirement": "~type:Fire>=1&~type:Ice>=1",
+   "scene": "One warms the camp while the other chills the drinks.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "thunder-rain-pair",
+   "name": "Thunder and Rain",
+   "tier": "uncommon",
+   "requirement": "~type:Electric>=1&~type:Water>=1",
+   "scene": "The thunder-voiced one and the rain-voiced one harmonize.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "light-dark-pair",
+   "name": "Light and Dark",
+   "tier": "uncommon",
+   "requirement": "~type:Fairy>=1&~type:Dark>=1",
+   "scene": "One shines and one hides, and they get along perfectly.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "steel-fairy-pair",
+   "name": "Armor and Ribbon",
+   "tier": "uncommon",
+   "requirement": "~type:Steel>=1&~type:Fairy>=1",
+   "scene": "The shiny one and the pretty one admire each other.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "dragon-ice-pair",
+   "name": "Frost Wing",
+   "tier": "uncommon",
+   "requirement": "~type:Dragon>=1&~type:Ice>=1",
+   "scene": "Two cold-eyed creatures breathe in sync.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "ground-flying-pair",
+   "name": "Ground and Sky",
+   "tier": "uncommon",
+   "requirement": "~type:Ground>=1&~type:Flying>=1",
+   "scene": "One looks up while the other looks down, and neither is wrong.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "bug-grass-pair",
+   "name": "Garden Pair",
+   "tier": "common",
+   "requirement": "~type:Bug>=1&~type:Grass>=1",
+   "scene": "The bug rests on the grass; the grass tickles back.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "rock-water-pair",
+   "name": "River Stones",
+   "tier": "common",
+   "requirement": "~type:Rock>=1&~type:Water>=1",
+   "scene": "The rock holds the water; the water polishes the rock.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "poison-fairy-pair",
+   "name": "Sweet and Sour",
+   "tier": "common",
+   "requirement": "~type:Poison>=1&~type:Fairy>=1",
+   "scene": "A bright smile hides a sharper thought.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "paradox-donphan",
+   "name": "Past and Future Wrecker",
+   "tier": "rare",
+   "requirement": "Great Tusk+Donphan",
+   "scene": "The big one looks at its ancient relative and tilts its head.",
+   "reward": null,
+   "speciesIds": [
+    "great-tusk",
+    "donphan"
+   ],
+   "complete": true
+  },
+  {
+   "id": "paradox-jigglypuff",
+   "name": "Past Voice",
+   "tier": "rare",
+   "requirement": "Scream Tail+Jigglypuff",
+   "scene": "One sings quietly and the other roars the same tune.",
+   "reward": null,
+   "speciesIds": [
+    "scream-tail",
+    "jigglypuff"
+   ],
+   "complete": true
+  },
+  {
+   "id": "paradox-salamence",
+   "name": "Ancient Flight",
+   "tier": "rare",
+   "requirement": "Roaring Moon+Salamence",
+   "scene": "One is a dream of flight and the other a memory.",
+   "reward": null,
+   "speciesIds": [
+    "roaring-moon",
+    "salamence"
+   ],
+   "complete": true
+  },
+  {
+   "id": "paradox-suicune",
+   "name": "Ancient Wake",
+   "tier": "rare",
+   "requirement": "Walking Wake+Suicune",
+   "scene": "The old guardian and the old echo walk along the same stream.",
+   "reward": null,
+   "speciesIds": [
+    "walking-wake",
+    "suicune"
+   ],
+   "complete": true
+  },
+  {
+   "id": "paradox-entei",
+   "name": "Ancient Flame",
+   "tier": "rare",
+   "requirement": "Gouging Fire+Entei",
+   "scene": "The old furnace and the old flame stand in the same heat.",
+   "reward": null,
+   "speciesIds": [
+    "gouging-fire",
+    "entei"
+   ],
+   "complete": true
+  },
+  {
+   "id": "paradox-raikou",
+   "name": "Ancient Bolt",
+   "tier": "rare",
+   "requirement": "Raging Bolt+Raikou",
+   "scene": "Two storms from different times look at each other and bark.",
+   "reward": null,
+   "speciesIds": [
+    "raging-bolt",
+    "raikou"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-gardevoir",
+   "name": "Future Knight",
+   "tier": "rare",
+   "requirement": "Iron Valiant+Gardevoir",
+   "scene": "The future one doesn't know what to make of the old gentle one.",
+   "reward": null,
+   "speciesIds": [
+    "iron-valiant",
+    "gardevoir"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-tyranitar",
+   "name": "Future Titan",
+   "tier": "rare",
+   "requirement": "Iron Thorns+Tyranitar",
+   "scene": "Two great bodies meet, each unsure which is the original.",
+   "reward": null,
+   "speciesIds": [
+    "iron-thorns",
+    "tyranitar"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-hariyama",
+   "name": "Future Slapper",
+   "tier": "rare",
+   "requirement": "Iron Hands+Hariyama",
+   "scene": "The tireless one claps; the iron one claps back.",
+   "reward": null,
+   "speciesIds": [
+    "iron-hands",
+    "hariyama"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-hydreigon",
+   "name": "Future Hydra",
+   "tier": "rare",
+   "requirement": "Iron Jugulis+Hydreigon",
+   "scene": "Heads and heads and heads stare at each other.",
+   "reward": null,
+   "speciesIds": [
+    "iron-jugulis",
+    "hydreigon"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-moth",
+   "name": "Future Moth",
+   "tier": "rare",
+   "requirement": "Iron Moth+Volcarona",
+   "scene": "Two moths of fire and metal share the same flame.",
+   "reward": null,
+   "speciesIds": [
+    "iron-moth",
+    "volcarona"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-bundle",
+   "name": "Future Winter Gift",
+   "tier": "rare",
+   "requirement": "Iron Bundle+Delibird",
+   "scene": "Two gift-bearers meet and neither has anything to give.",
+   "reward": null,
+   "speciesIds": [
+    "iron-bundle",
+    "delibird"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ancient-moth",
+   "name": "Ancient Moth",
+   "tier": "rare",
+   "requirement": "Slither Wing+Volcarona",
+   "scene": "The old and the burning compare their wings.",
+   "reward": null,
+   "speciesIds": [
+    "slither-wing",
+    "volcarona"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ancient-flutter",
+   "name": "Ancient Ghost",
+   "tier": "rare",
+   "requirement": "Flutter Mane+Misdreavus",
+   "scene": "A ghost and its old echo drift closer.",
+   "reward": null,
+   "speciesIds": [
+    "flutter-mane",
+    "misdreavus"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ancient-mushroom",
+   "name": "Ancient Bloom",
+   "tier": "rare",
+   "requirement": "Brute Bonnet+Amoonguss",
+   "scene": "Two mushrooms stand at slightly different heights.",
+   "reward": null,
+   "speciesIds": [
+    "brute-bonnet",
+    "amoonguss"
+   ],
+   "complete": true
+  },
+  {
+   "id": "ancient-magnet",
+   "name": "Ancient Magnet",
+   "tier": "rare",
+   "requirement": "Sandy Shocks+Magneton",
+   "scene": "The magnets pull gently at each other.",
+   "reward": null,
+   "speciesIds": [
+    "sandy-shocks",
+    "magneton"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-leaves",
+   "name": "Future Verdant",
+   "tier": "rare",
+   "requirement": "Iron Leaves+Virizion",
+   "scene": "Two green swordsmen trade nods.",
+   "reward": null,
+   "speciesIds": [
+    "iron-leaves",
+    "virizion"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-boulder",
+   "name": "Future Horn",
+   "tier": "rare",
+   "requirement": "Iron Boulder+Terrakion",
+   "scene": "Two strong horns look at each other and nod.",
+   "reward": null,
+   "speciesIds": [
+    "iron-boulder",
+    "terrakion"
+   ],
+   "complete": true
+  },
+  {
+   "id": "future-crown",
+   "name": "Future Blade",
+   "tier": "rare",
+   "requirement": "Iron Crown+Cobalion",
+   "scene": "Two blue blades salute each other.",
+   "reward": null,
+   "speciesIds": [
+    "iron-crown",
+    "cobalion"
+   ],
+   "complete": true
+  },
+  {
+   "id": "rocket-trio",
+   "name": "Blast-Off Trio",
+   "tier": "rare",
+   "requirement": "Ekans+Koffing+Meowth",
+   "scene": "The trio of schemers mutters about a plan, and the plan sounds familiar.",
+   "reward": null,
+   "speciesIds": [
+    "ekans",
+    "koffing",
+    "meowth"
+   ],
+   "complete": true
+  },
+  {
+   "id": "frontier-flock",
+   "name": "Flock Together",
+   "tier": "common",
+   "requirement": "~type:Flying>=2&~type:Normal>=1",
+   "scene": "A mixed flock wheels overhead and lands in formation.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "water-grass-fire",
+   "name": "Classic Triangle",
+   "tier": "common",
+   "requirement": "~type:Water>=1&~type:Fire>=1&~type:Grass>=1",
+   "scene": "The old triangle, in the same camp, looking at one another with respect.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "trade-evolved",
+   "name": "Trade Family",
+   "tier": "uncommon",
+   "requirement": "~evo:trade>=2",
+   "scene": "Two Pokémon who changed through an exchange share a look of understanding.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "stone-evolved",
+   "name": "Stone Family",
+   "tier": "uncommon",
+   "requirement": "~evo:stone>=2",
+   "scene": "Two stone-evolved Pokémon polish each other's gems.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "friendship-evolved",
+   "name": "Friendship Family",
+   "tier": "uncommon",
+   "requirement": "~evo:friendship>=2",
+   "scene": "Two friendship-evolved Pokémon lean on each other.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "shiny-pair",
+   "name": "Twin Sparkles",
+   "tier": "rare",
+   "requirement": "~shiny>=2",
+   "scene": "Two shiny Pokémon catch the same light and glow double.",
+   "reward": "Unlocks the \"Twin Sparkle\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "shiny-legend",
+   "name": "Radiant Legend",
+   "tier": "epic",
+   "requirement": "~shiny>=1&~tag:Restricted Legendary>=1",
+   "scene": "A legend and a sparkle stand in the same light.",
+   "reward": "Unlocks the \"Radiant\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "baby-and-giant",
+   "name": "Hatchling and Titan",
+   "tier": "rare",
+   "requirement": "~size:contrast&~evolved:any",
+   "scene": "The smallest bows to the biggest, who bows back.",
+   "reward": "Unlocks the \"Hatchling\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "mythical-pair",
+   "name": "Mythical Pair",
+   "tier": "epic",
+   "requirement": "~tag:Mythical>=2",
+   "scene": "Two mythical Pokémon look at each other as if sharing a very old secret.",
+   "reward": "Unlocks the \"Old Secret\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "paradox-pair-any",
+   "name": "Time-Lost Pair",
+   "tier": "rare",
+   "requirement": "~tag:Paradox>=2",
+   "scene": "Two time-lost visitors look around the camp, bewildered and calm.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "mixed-gen-all",
+   "name": "Time Capsule",
+   "tier": "rare",
+   "requirement": "~distinct:gen>=6",
+   "scene": "Six generations in one team: someone starts a story, and everyone adds a verse.",
+   "reward": "Unlocks the \"Time Capsule\" scene",
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "food-chain",
+   "name": "Food Chain",
+   "tier": "uncommon",
+   "requirement": "~type:Grass>=1&~type:Bug>=1&~type:Flying>=1",
+   "scene": "Everyone is very carefully not looking at everyone else.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "cave-dwellers",
+   "name": "Cave Dwellers",
+   "tier": "common",
+   "requirement": "~type:Rock>=1&~type:Ground>=1&~type:Ghost>=1",
+   "scene": "The camp goes dark and quiet in an oddly cozy way.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "sea-folk",
+   "name": "Sea Folk",
+   "tier": "common",
+   "requirement": "~egg:Water 1>=2",
+   "scene": "A salt-smell settles around the pair, and they sigh in unison.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "field-folk",
+   "name": "Field Folk",
+   "tier": "common",
+   "requirement": "~egg:Field>=3",
+   "scene": "Three field-dwellers roll in the same patch of grass.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "amorphous-crew",
+   "name": "Shapeless Crew",
+   "tier": "uncommon",
+   "requirement": "~egg:Amorphous>=2",
+   "scene": "Two shapeless things share a puddle of nothing in particular.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "mineral-crew",
+   "name": "Mineral Crew",
+   "tier": "uncommon",
+   "requirement": "~egg:Mineral>=2",
+   "scene": "Two mineral beings hum at a frequency only they hear.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "fairy-ring",
+   "name": "Fairy Ring",
+   "tier": "common",
+   "requirement": "~egg:Fairy>=3",
+   "scene": "A ring of tiny fairies forms and holds a very serious meeting.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "human-like-crew",
+   "name": "Humanoid Crew",
+   "tier": "common",
+   "requirement": "~egg:Human-Like>=3",
+   "scene": "Three humanoids nod to each other like old colleagues.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "dragon-egg-crew",
+   "name": "Dragon Kin",
+   "tier": "uncommon",
+   "requirement": "~egg:Dragon>=2",
+   "scene": "Two dragon-kin compare scales.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  },
+  {
+   "id": "undiscovered-pair",
+   "name": "Unknown Pair",
+   "tier": "rare",
+   "requirement": "~egg:Undiscovered>=2",
+   "scene": "Two unknowns compare how much they know about themselves, and agree it's not much.",
+   "reward": null,
+   "speciesIds": [],
+   "complete": true
+  }
+ ]
+}

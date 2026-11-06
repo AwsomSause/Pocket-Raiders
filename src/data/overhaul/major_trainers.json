@@ -1,0 +1,3431 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/major_trainers.json",
+ "entries": [
+  {
+   "id": "red",
+   "name": "Red",
+   "role": "protagonist",
+   "region": "Kanto",
+   "type": "Normal",
+   "ace": "Pikachu",
+   "voice": "gruff",
+   "traits": [
+    "silent mountaintops",
+    "long journeys"
+   ],
+   "motto": "...",
+   "bossId": "red",
+   "aceId": "pikachu"
+  },
+  {
+   "id": "blue",
+   "name": "Blue",
+   "role": "champion",
+   "region": "Kanto",
+   "type": "Normal",
+   "ace": "Blastoise",
+   "voice": "boastful",
+   "traits": [
+    "taunting rivals",
+    "a stylish entrance"
+   ],
+   "motto": "Smell ya later, loser.",
+   "bossId": "blue",
+   "aceId": "blastoise"
+  },
+  {
+   "id": "brock",
+   "name": "Brock",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Rock",
+   "ace": "Onix",
+   "voice": "gruff",
+   "traits": [
+    "cooking for a big family",
+    "patient training"
+   ],
+   "motto": "A solid defense is the best offense.",
+   "bossId": "brock",
+   "aceId": "onix"
+  },
+  {
+   "id": "misty",
+   "name": "Misty",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Water",
+   "ace": "Starmie",
+   "voice": "boastful",
+   "traits": [
+    "graceful swimming",
+    "teasing challengers"
+   ],
+   "motto": "I'm not just another pretty face.",
+   "bossId": "misty",
+   "aceId": "starmie"
+  },
+  {
+   "id": "lt-surge",
+   "name": "Lt. Surge",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Electric",
+   "ace": "Raichu",
+   "voice": "boastful",
+   "traits": [
+    "military discipline",
+    "loud bravado"
+   ],
+   "motto": "Electric power is the only power.",
+   "bossId": "lt-surge",
+   "aceId": "raichu"
+  },
+  {
+   "id": "erika",
+   "name": "Erika",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Grass",
+   "ace": "Vileplume",
+   "voice": "formal",
+   "traits": [
+    "quiet tea",
+    "flower arranging"
+   ],
+   "motto": "Please, let us enjoy the fight.",
+   "bossId": "erika",
+   "aceId": "vileplume"
+  },
+  {
+   "id": "koga",
+   "name": "Koga",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Poison",
+   "ace": "Weezing",
+   "voice": "menacing",
+   "traits": [
+    "ninja traditions",
+    "silent footsteps"
+   ],
+   "motto": "Patience and poison.",
+   "bossId": "koga",
+   "aceId": "weezing"
+  },
+  {
+   "id": "sabrina",
+   "name": "Sabrina",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Psychic",
+   "ace": "Alakazam",
+   "voice": "menacing",
+   "traits": [
+    "quiet stares",
+    "visions"
+   ],
+   "motto": "I saw you coming. Long ago.",
+   "bossId": "sabrina",
+   "aceId": "alakazam"
+  },
+  {
+   "id": "blaine",
+   "name": "Blaine",
+   "role": "gym",
+   "region": "Kanto",
+   "type": "Fire",
+   "ace": "Arcanine",
+   "voice": "eccentric",
+   "traits": [
+    "bad riddles",
+    "volcano hot springs"
+   ],
+   "motto": "I'm hot! Hot! Hot!",
+   "bossId": "blaine",
+   "aceId": "arcanine"
+  },
+  {
+   "id": "giovanni",
+   "name": "Giovanni",
+   "role": "villain",
+   "region": "Kanto",
+   "type": "Ground",
+   "ace": "Rhydon",
+   "voice": "menacing",
+   "traits": [
+    "cold calculation",
+    "an iron-willed empire"
+   ],
+   "motto": "Power is the only truth.",
+   "bossId": "giovanni",
+   "aceId": "rhydon"
+  },
+  {
+   "id": "lorelei",
+   "name": "Lorelei",
+   "role": "elite",
+   "region": "Kanto",
+   "type": "Ice",
+   "ace": "Lapras",
+   "voice": "formal",
+   "traits": [
+    "cold calm",
+    "collecting dolls"
+   ],
+   "motto": "My ice is as cold as my gaze.",
+   "bossId": "lorelei",
+   "aceId": "lapras"
+  },
+  {
+   "id": "bruno",
+   "name": "Bruno",
+   "role": "elite",
+   "region": "Kanto",
+   "type": "Fighting",
+   "ace": "Machamp",
+   "voice": "gruff",
+   "traits": [
+    "punishing training",
+    "discipline"
+   ],
+   "motto": "Believe in your Pokémon. Believe in yourself.",
+   "bossId": "bruno",
+   "aceId": "machamp"
+  },
+  {
+   "id": "agatha",
+   "name": "Agatha",
+   "role": "elite",
+   "region": "Kanto",
+   "type": "Ghost",
+   "ace": "Gengar",
+   "voice": "eccentric",
+   "traits": [
+    "old war stories",
+    "sour jokes"
+   ],
+   "motto": "You're not much of a trainer, are you?",
+   "bossId": "agatha",
+   "aceId": "gengar"
+  },
+  {
+   "id": "lance",
+   "name": "Lance",
+   "role": "champion",
+   "region": "Johto",
+   "type": "Dragon",
+   "ace": "Dragonite",
+   "voice": "formal",
+   "traits": [
+    "dragon legends",
+    "a flowing cape"
+   ],
+   "motto": "Dragon-types are proud, and so am I.",
+   "bossId": "lance",
+   "aceId": "dragonite"
+  },
+  {
+   "id": "professor-oak",
+   "name": "Professor Oak",
+   "role": "mentor",
+   "region": "Kanto",
+   "type": "Normal",
+   "ace": "Nidoking",
+   "voice": "formal",
+   "traits": [
+    "field research",
+    "gentle guidance"
+   ],
+   "motto": "The world of Pokémon is vast.",
+   "bossId": "professor-oak",
+   "aceId": "nidoking"
+  },
+  {
+   "id": "falkner",
+   "name": "Falkner",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Flying",
+   "ace": "Pidgeotto",
+   "voice": "boastful",
+   "traits": [
+    "family pride",
+    "high perches"
+   ],
+   "motto": "My dad's bird techniques are the best.",
+   "bossId": "falkner",
+   "aceId": "pidgeotto"
+  },
+  {
+   "id": "bugsy",
+   "name": "Bugsy",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Bug",
+   "ace": "Scyther",
+   "voice": "eccentric",
+   "traits": [
+    "bug research",
+    "endless notes"
+   ],
+   "motto": "My research on bugs is the best.",
+   "bossId": "bugsy",
+   "aceId": "scyther"
+  },
+  {
+   "id": "whitney",
+   "name": "Whitney",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Normal",
+   "ace": "Miltank",
+   "voice": "cheerful",
+   "traits": [
+    "big tears",
+    "sweet snacks"
+   ],
+   "motto": "You're mean!",
+   "bossId": "whitney",
+   "aceId": "miltank"
+  },
+  {
+   "id": "morty",
+   "name": "Morty",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Ghost",
+   "ace": "Gengar",
+   "voice": "poetic",
+   "traits": [
+    "mystic visions",
+    "midnight tea"
+   ],
+   "motto": "I see the future in the dark.",
+   "bossId": "morty",
+   "aceId": "gengar"
+  },
+  {
+   "id": "chuck",
+   "name": "Chuck",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Fighting",
+   "ace": "Poliwrath",
+   "voice": "boastful",
+   "traits": [
+    "waterfall training",
+    "loud roars"
+   ],
+   "motto": "My Pokémon beat the waterfall itself.",
+   "bossId": "chuck",
+   "aceId": "poliwrath"
+  },
+  {
+   "id": "jasmine",
+   "name": "Jasmine",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Steel",
+   "ace": "Steelix",
+   "voice": "nervous",
+   "traits": [
+    "a sick friend",
+    "the lighthouse"
+   ],
+   "motto": "Um... I'm not good at this.",
+   "bossId": "jasmine",
+   "aceId": "steelix"
+  },
+  {
+   "id": "pryce",
+   "name": "Pryce",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Ice",
+   "ace": "Piloswine",
+   "voice": "gruff",
+   "traits": [
+    "decades of experience",
+    "icy winters"
+   ],
+   "motto": "Experience is the real strength.",
+   "bossId": "pryce",
+   "aceId": "piloswine"
+  },
+  {
+   "id": "clair",
+   "name": "Clair",
+   "role": "gym",
+   "region": "Johto",
+   "type": "Dragon",
+   "ace": "Kingdra",
+   "voice": "boastful",
+   "traits": [
+    "dragon pride",
+    "family honor"
+   ],
+   "motto": "I'm the best Dragon-type user, period.",
+   "bossId": "clair",
+   "aceId": "kingdra"
+  },
+  {
+   "id": "will",
+   "name": "Will",
+   "role": "elite",
+   "region": "Johto",
+   "type": "Psychic",
+   "ace": "Xatu",
+   "voice": "poetic",
+   "traits": [
+    "study of the mind",
+    "long travels"
+   ],
+   "motto": "I have trained all over the world.",
+   "bossId": "will",
+   "aceId": "xatu"
+  },
+  {
+   "id": "karen",
+   "name": "Karen",
+   "role": "elite",
+   "region": "Johto",
+   "type": "Dark",
+   "ace": "Umbreon",
+   "voice": "formal",
+   "traits": [
+    "moonlit nights",
+    "trusting bonds"
+   ],
+   "motto": "Strong Pokémon, weak Pokémon... I'd rather love them all.",
+   "bossId": "karen",
+   "aceId": "umbreon"
+  },
+  {
+   "id": "silver",
+   "name": "Silver",
+   "role": "rival",
+   "region": "Johto",
+   "type": "Dark",
+   "ace": "Feraligatr",
+   "voice": "menacing",
+   "traits": [
+    "a rough past",
+    "an obsession with strength"
+   ],
+   "motto": "Power's all that matters.",
+   "bossId": "silver",
+   "aceId": "feraligatr"
+  },
+  {
+   "id": "ethan",
+   "name": "Ethan",
+   "role": "protagonist",
+   "region": "Johto",
+   "type": "Fire",
+   "ace": "Typhlosion",
+   "voice": "cheerful",
+   "traits": [
+    "long journeys",
+    "new friends"
+   ],
+   "motto": "Let's go!",
+   "bossId": "ethan",
+   "aceId": "typhlosion"
+  },
+  {
+   "id": "lyra",
+   "name": "Lyra",
+   "role": "protagonist",
+   "region": "Johto",
+   "type": "Normal",
+   "ace": "Marill",
+   "voice": "cheerful",
+   "traits": [
+    "joyful walks",
+    "warm hearts"
+   ],
+   "motto": "It's a good day to battle!",
+   "bossId": "lyra",
+   "aceId": "marill"
+  },
+  {
+   "id": "roxanne",
+   "name": "Roxanne",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Rock",
+   "ace": "Nosepass",
+   "voice": "formal",
+   "traits": [
+    "textbook studies",
+    "tidy notes"
+   ],
+   "motto": "I've studied this thoroughly.",
+   "bossId": "roxanne",
+   "aceId": "nosepass"
+  },
+  {
+   "id": "brawly",
+   "name": "Brawly",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Fighting",
+   "ace": "Hariyama",
+   "voice": "cheerful",
+   "traits": [
+    "big waves",
+    "surfing"
+   ],
+   "motto": "Time to ride the wave of battle!",
+   "bossId": "brawly",
+   "aceId": "hariyama"
+  },
+  {
+   "id": "wattson",
+   "name": "Wattson",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Electric",
+   "ace": "Manectric",
+   "voice": "cheerful",
+   "traits": [
+    "bad puns",
+    "electric gadgets"
+   ],
+   "motto": "Wahahahaha! Prepare to be shocked!",
+   "bossId": "wattson",
+   "aceId": "manectric"
+  },
+  {
+   "id": "flannery",
+   "name": "Flannery",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Fire",
+   "ace": "Torkoal",
+   "voice": "nervous",
+   "traits": [
+    "grandfather's legacy",
+    "hot springs"
+   ],
+   "motto": "I... I'm just getting started in this job!",
+   "bossId": "flannery",
+   "aceId": "torkoal"
+  },
+  {
+   "id": "norman",
+   "name": "Norman",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Normal",
+   "ace": "Slaking",
+   "voice": "gruff",
+   "traits": [
+    "fatherhood",
+    "steady training"
+   ],
+   "motto": "Let me show you what a parent can do.",
+   "bossId": "norman",
+   "aceId": "slaking"
+  },
+  {
+   "id": "winona",
+   "name": "Winona",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Flying",
+   "ace": "Altaria",
+   "voice": "formal",
+   "traits": [
+    "sky watching",
+    "graceful flight"
+   ],
+   "motto": "I soar above all.",
+   "bossId": "winona",
+   "aceId": "altaria"
+  },
+  {
+   "id": "tate-liza",
+   "name": "Tate & Liza",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Psychic",
+   "ace": "Solrock",
+   "voice": "cheerful",
+   "traits": [
+    "twin harmony",
+    "matching moves"
+   ],
+   "motto": "We are two, but we fight as one.",
+   "bossId": "tate",
+   "aceId": "solrock"
+  },
+  {
+   "id": "wallace",
+   "name": "Wallace",
+   "role": "champion",
+   "region": "Hoenn",
+   "type": "Water",
+   "ace": "Milotic",
+   "voice": "poetic",
+   "traits": [
+    "beautiful performances",
+    "graceful coordination"
+   ],
+   "motto": "Elegance on the battlefield.",
+   "bossId": "wallace",
+   "aceId": "milotic"
+  },
+  {
+   "id": "juan",
+   "name": "Juan",
+   "role": "gym",
+   "region": "Hoenn",
+   "type": "Water",
+   "ace": "Kingdra",
+   "voice": "formal",
+   "traits": [
+    "elegant performances",
+    "beauty in battle"
+   ],
+   "motto": "Let the beauty of battle shine.",
+   "bossId": "juan",
+   "aceId": "kingdra"
+  },
+  {
+   "id": "sidney",
+   "name": "Sidney",
+   "role": "elite",
+   "region": "Hoenn",
+   "type": "Dark",
+   "ace": "Absol",
+   "voice": "boastful",
+   "traits": [
+    "tough guy style",
+    "rebellious spirit"
+   ],
+   "motto": "Let's get wild!",
+   "bossId": "sidney",
+   "aceId": "absol"
+  },
+  {
+   "id": "phoebe",
+   "name": "Phoebe",
+   "role": "elite",
+   "region": "Hoenn",
+   "type": "Ghost",
+   "ace": "Dusknoir",
+   "voice": "poetic",
+   "traits": [
+    "mountain training",
+    "ghostly tales"
+   ],
+   "motto": "I've learned from ghost stories.",
+   "bossId": "phoebe",
+   "aceId": "dusknoir"
+  },
+  {
+   "id": "glacia",
+   "name": "Glacia",
+   "role": "elite",
+   "region": "Hoenn",
+   "type": "Ice",
+   "ace": "Walrein",
+   "voice": "gruff",
+   "traits": [
+    "cold mountain lands",
+    "fiery battles"
+   ],
+   "motto": "I've traveled in search of a worthy foe.",
+   "bossId": "glacia",
+   "aceId": "walrein"
+  },
+  {
+   "id": "drake",
+   "name": "Drake",
+   "role": "elite",
+   "region": "Hoenn",
+   "type": "Dragon",
+   "ace": "Salamence",
+   "voice": "formal",
+   "traits": [
+    "sea voyages",
+    "dragon bonds"
+   ],
+   "motto": "Show me your bond with your Pokémon.",
+   "bossId": "drake",
+   "aceId": "salamence"
+  },
+  {
+   "id": "steven-stone",
+   "name": "Steven Stone",
+   "role": "champion",
+   "region": "Hoenn",
+   "type": "Steel",
+   "ace": "Metagross",
+   "voice": "poetic",
+   "traits": [
+    "rare stones",
+    "deep caves"
+   ],
+   "motto": "I love stones as much as I love battle.",
+   "bossId": null,
+   "aceId": "metagross"
+  },
+  {
+   "id": "archie",
+   "name": "Archie",
+   "role": "villain",
+   "region": "Hoenn",
+   "type": "Water",
+   "ace": "Sharpedo",
+   "voice": "boastful",
+   "traits": [
+    "the open sea",
+    "oceanic dreams"
+   ],
+   "motto": "The sea is our home!",
+   "bossId": "archie",
+   "aceId": "sharpedo"
+  },
+  {
+   "id": "maxie",
+   "name": "Maxie",
+   "role": "villain",
+   "region": "Hoenn",
+   "type": "Fire",
+   "ace": "Camerupt",
+   "voice": "formal",
+   "traits": [
+    "land expansion",
+    "magma ambition"
+   ],
+   "motto": "For a better world, we must expand.",
+   "bossId": "maxie",
+   "aceId": "camerupt"
+  },
+  {
+   "id": "brendan",
+   "name": "Brendan",
+   "role": "rival",
+   "region": "Hoenn",
+   "type": "Grass",
+   "ace": "Sceptile",
+   "voice": "cheerful",
+   "traits": [
+    "bike rides",
+    "friendly rivalry"
+   ],
+   "motto": "Let's go, rival!",
+   "bossId": "brendan",
+   "aceId": "sceptile"
+  },
+  {
+   "id": "may",
+   "name": "May",
+   "role": "rival",
+   "region": "Hoenn",
+   "type": "Fire",
+   "ace": "Blaziken",
+   "voice": "cheerful",
+   "traits": [
+    "exploring the world",
+    "friendly competition"
+   ],
+   "motto": "Let's see who's stronger!",
+   "bossId": "may",
+   "aceId": "blaziken"
+  },
+  {
+   "id": "roark",
+   "name": "Roark",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Rock",
+   "ace": "Cranidos",
+   "voice": "cheerful",
+   "traits": [
+    "mining expeditions",
+    "digging fossils"
+   ],
+   "motto": "I'm not afraid of a little cave-in.",
+   "bossId": "roark",
+   "aceId": "cranidos"
+  },
+  {
+   "id": "gardenia",
+   "name": "Gardenia",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Grass",
+   "ace": "Roserade",
+   "voice": "cheerful",
+   "traits": [
+    "forest hikes",
+    "nature appreciation"
+   ],
+   "motto": "Let's grow together.",
+   "bossId": "gardenia",
+   "aceId": "roserade"
+  },
+  {
+   "id": "maylene",
+   "name": "Maylene",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Fighting",
+   "ace": "Lucario",
+   "voice": "nervous",
+   "traits": [
+    "training with a sensei",
+    "focus"
+   ],
+   "motto": "Please, I'll do my best.",
+   "bossId": "maylene",
+   "aceId": "lucario"
+  },
+  {
+   "id": "crasher-wake",
+   "name": "Crasher Wake",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Water",
+   "ace": "Floatzel",
+   "voice": "boastful",
+   "traits": [
+    "wrestling shows",
+    "loud masks"
+   ],
+   "motto": "Crash through and be a champ!",
+   "bossId": "crasher-wake",
+   "aceId": "floatzel"
+  },
+  {
+   "id": "fantina",
+   "name": "Fantina",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Ghost",
+   "ace": "Mismagius",
+   "voice": "poetic",
+   "traits": [
+    "theatrical flair",
+    "glamorous shows"
+   ],
+   "motto": "Please enjoy the performance.",
+   "bossId": "fantina",
+   "aceId": "mismagius"
+  },
+  {
+   "id": "byron",
+   "name": "Byron",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Steel",
+   "ace": "Bastiodon",
+   "voice": "gruff",
+   "traits": [
+    "a loyal son",
+    "sturdy work"
+   ],
+   "motto": "Strength like steel.",
+   "bossId": "byron",
+   "aceId": "bastiodon"
+  },
+  {
+   "id": "candice",
+   "name": "Candice",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Ice",
+   "ace": "Abomasnow",
+   "voice": "cheerful",
+   "traits": [
+    "clear focus",
+    "speed training"
+   ],
+   "motto": "Focus, then fight!",
+   "bossId": "candice",
+   "aceId": "abomasnow"
+  },
+  {
+   "id": "volkner",
+   "name": "Volkner",
+   "role": "gym",
+   "region": "Sinnoh",
+   "type": "Electric",
+   "ace": "Luxray",
+   "voice": "gruff",
+   "traits": [
+    "a bored longing",
+    "old rivals"
+   ],
+   "motto": "I'm waiting for a worthy fight.",
+   "bossId": "volkner",
+   "aceId": "luxray"
+  },
+  {
+   "id": "aaron",
+   "name": "Aaron",
+   "role": "elite",
+   "region": "Sinnoh",
+   "type": "Bug",
+   "ace": "Drapion",
+   "voice": "gruff",
+   "traits": [
+    "bug sparring",
+    "honest combat"
+   ],
+   "motto": "There's no trick, only power.",
+   "bossId": "aaron",
+   "aceId": "drapion"
+  },
+  {
+   "id": "bertha",
+   "name": "Bertha",
+   "role": "elite",
+   "region": "Sinnoh",
+   "type": "Ground",
+   "ace": "Hippowdon",
+   "voice": "cheerful",
+   "traits": [
+    "kindly advice",
+    "sweets"
+   ],
+   "motto": "Let me tell you something, dear.",
+   "bossId": "bertha",
+   "aceId": "hippowdon"
+  },
+  {
+   "id": "flint",
+   "name": "Flint",
+   "role": "elite",
+   "region": "Sinnoh",
+   "type": "Fire",
+   "ace": "Infernape",
+   "voice": "boastful",
+   "traits": [
+    "loud competitions",
+    "hot tempers"
+   ],
+   "motto": "Light my fire!",
+   "bossId": "flint",
+   "aceId": "infernape"
+  },
+  {
+   "id": "lucian",
+   "name": "Lucian",
+   "role": "elite",
+   "region": "Sinnoh",
+   "type": "Psychic",
+   "ace": "Mr. Mime",
+   "voice": "poetic",
+   "traits": [
+    "late-night books",
+    "calm routines"
+   ],
+   "motto": "Ah, perfect timing for a story.",
+   "bossId": "lucian",
+   "aceId": "mr-mime"
+  },
+  {
+   "id": "cynthia",
+   "name": "Cynthia",
+   "role": "champion",
+   "region": "Sinnoh",
+   "type": "Ground",
+   "ace": "Garchomp",
+   "voice": "formal",
+   "traits": [
+    "ancient myths",
+    "quiet research"
+   ],
+   "motto": "Let us have a battle worth remembering.",
+   "bossId": "cynthia",
+   "aceId": "garchomp"
+  },
+  {
+   "id": "cyrus",
+   "name": "Cyrus",
+   "role": "villain",
+   "region": "Sinnoh",
+   "type": "Dark",
+   "ace": "Honchkrow",
+   "voice": "menacing",
+   "traits": [
+    "cold logic",
+    "a new world"
+   ],
+   "motto": "Emotions are a flaw.",
+   "bossId": "cyrus",
+   "aceId": "honchkrow"
+  },
+  {
+   "id": "barry",
+   "name": "Barry",
+   "role": "rival",
+   "region": "Sinnoh",
+   "type": "Normal",
+   "ace": "Empoleon",
+   "voice": "cheerful",
+   "traits": [
+    "running everywhere",
+    "losing patience"
+   ],
+   "motto": "Hurry up, hurry up!",
+   "bossId": "barry",
+   "aceId": "empoleon"
+  },
+  {
+   "id": "dawn",
+   "name": "Dawn",
+   "role": "protagonist",
+   "region": "Sinnoh",
+   "type": "Water",
+   "ace": "Piplup",
+   "voice": "cheerful",
+   "traits": [
+    "stylish contests",
+    "warm friends"
+   ],
+   "motto": "Let's make it a performance!",
+   "bossId": "dawn",
+   "aceId": "piplup"
+  },
+  {
+   "id": "lucas",
+   "name": "Lucas",
+   "role": "protagonist",
+   "region": "Sinnoh",
+   "type": "Fire",
+   "ace": "Infernape",
+   "voice": "gruff",
+   "traits": [
+    "snowy mountains",
+    "quiet resolve"
+   ],
+   "motto": "...",
+   "bossId": "lucas",
+   "aceId": "infernape"
+  },
+  {
+   "id": "cilan",
+   "name": "Cilan",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Grass",
+   "ace": "Pansage",
+   "voice": "formal",
+   "traits": [
+    "gourmet evaluation",
+    "tasting notes"
+   ],
+   "motto": "Allow me to be your connoisseur.",
+   "bossId": "cilan",
+   "aceId": "pansage"
+  },
+  {
+   "id": "chili",
+   "name": "Chili",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Fire",
+   "ace": "Pansear",
+   "voice": "cheerful",
+   "traits": [
+    "cooking with spice",
+    "brotherly pride"
+   ],
+   "motto": "Let's heat things up!",
+   "bossId": "chili",
+   "aceId": "pansear"
+  },
+  {
+   "id": "cress",
+   "name": "Cress",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Water",
+   "ace": "Panpour",
+   "voice": "formal",
+   "traits": [
+    "calm cooking",
+    "careful poise"
+   ],
+   "motto": "Cool and collected.",
+   "bossId": "cress",
+   "aceId": "panpour"
+  },
+  {
+   "id": "lenora",
+   "name": "Lenora",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Normal",
+   "ace": "Watchog",
+   "voice": "cheerful",
+   "traits": [
+    "museum guides",
+    "ancient tales"
+   ],
+   "motto": "Welcome to my museum!",
+   "bossId": "lenora",
+   "aceId": "watchog"
+  },
+  {
+   "id": "burgh",
+   "name": "Burgh",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Bug",
+   "ace": "Leavanny",
+   "voice": "eccentric",
+   "traits": [
+    "artistic inspiration",
+    "wild ideas"
+   ],
+   "motto": "Inspiration strikes!",
+   "bossId": "burgh",
+   "aceId": "leavanny"
+  },
+  {
+   "id": "elesa",
+   "name": "Elesa",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Electric",
+   "ace": "Zebstrika",
+   "voice": "boastful",
+   "traits": [
+    "runway shows",
+    "bright lights"
+   ],
+   "motto": "Take a good look at me.",
+   "bossId": "elesa",
+   "aceId": "zebstrika"
+  },
+  {
+   "id": "clay",
+   "name": "Clay",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Ground",
+   "ace": "Excadrill",
+   "voice": "gruff",
+   "traits": [
+    "digging mines",
+    "loud demands"
+   ],
+   "motto": "Let me show you what real work is.",
+   "bossId": "clay",
+   "aceId": "excadrill"
+  },
+  {
+   "id": "skyla",
+   "name": "Skyla",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Flying",
+   "ace": "Swanna",
+   "voice": "cheerful",
+   "traits": [
+    "flying planes",
+    "windy skies"
+   ],
+   "motto": "Take to the skies!",
+   "bossId": "skyla",
+   "aceId": "swanna"
+  },
+  {
+   "id": "brycen",
+   "name": "Brycen",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Ice",
+   "ace": "Beartic",
+   "voice": "formal",
+   "traits": [
+    "silent training",
+    "cold mountains"
+   ],
+   "motto": "Strength through hardship.",
+   "bossId": "brycen",
+   "aceId": "beartic"
+  },
+  {
+   "id": "drayden",
+   "name": "Drayden",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Dragon",
+   "ace": "Haxorus",
+   "voice": "formal",
+   "traits": [
+    "dragon wisdom",
+    "old teachings"
+   ],
+   "motto": "A battle teaches more than words.",
+   "bossId": "drayden",
+   "aceId": "haxorus"
+  },
+  {
+   "id": "iris",
+   "name": "Iris",
+   "role": "champion",
+   "region": "Unova",
+   "type": "Dragon",
+   "ace": "Haxorus",
+   "voice": "cheerful",
+   "traits": [
+    "wild forests",
+    "dragon friendship"
+   ],
+   "motto": "Let's have lots of fun!",
+   "bossId": "iris",
+   "aceId": "haxorus"
+  },
+  {
+   "id": "marlon",
+   "name": "Marlon",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Water",
+   "ace": "Jellicent",
+   "voice": "cheerful",
+   "traits": [
+    "swimming meets",
+    "seaside walks"
+   ],
+   "motto": "Let's fight with a bang!",
+   "bossId": "marlon",
+   "aceId": "jellicent"
+  },
+  {
+   "id": "roxie",
+   "name": "Roxie",
+   "role": "gym",
+   "region": "Unova",
+   "type": "Poison",
+   "ace": "Whirlipede",
+   "voice": "cheerful",
+   "traits": [
+    "punk music",
+    "loud shows"
+   ],
+   "motto": "Let's rock out!",
+   "bossId": "roxie",
+   "aceId": "whirlipede"
+  },
+  {
+   "id": "shauntal",
+   "name": "Shauntal",
+   "role": "elite",
+   "region": "Unova",
+   "type": "Ghost",
+   "ace": "Chandelure",
+   "voice": "poetic",
+   "traits": [
+    "writing stories",
+    "dramatic inspiration"
+   ],
+   "motto": "Your story could inspire me.",
+   "bossId": "shauntal",
+   "aceId": "chandelure"
+  },
+  {
+   "id": "marshal",
+   "name": "Marshal",
+   "role": "elite",
+   "region": "Unova",
+   "type": "Fighting",
+   "ace": "Conkeldurr",
+   "voice": "gruff",
+   "traits": [
+    "rigorous training",
+    "silent practice"
+   ],
+   "motto": "Strength comes from experience.",
+   "bossId": "marshal",
+   "aceId": "conkeldurr"
+  },
+  {
+   "id": "grimsley",
+   "name": "Grimsley",
+   "role": "elite",
+   "region": "Unova",
+   "type": "Dark",
+   "ace": "Bisharp",
+   "voice": "menacing",
+   "traits": [
+    "high-stakes gambling",
+    "sharp suits"
+   ],
+   "motto": "It's all about the gamble.",
+   "bossId": "grimsley",
+   "aceId": "bisharp"
+  },
+  {
+   "id": "caitlin",
+   "name": "Caitlin",
+   "role": "elite",
+   "region": "Unova",
+   "type": "Psychic",
+   "ace": "Gothitelle",
+   "voice": "poetic",
+   "traits": [
+    "quiet tea",
+    "dreamy afternoons"
+   ],
+   "motto": "Our hearts are one.",
+   "bossId": "caitlin",
+   "aceId": "gothitelle"
+  },
+  {
+   "id": "alder",
+   "name": "Alder",
+   "role": "champion",
+   "region": "Unova",
+   "type": "Bug",
+   "ace": "Volcarona",
+   "voice": "cheerful",
+   "traits": [
+    "wandering the plains",
+    "sharing stories"
+   ],
+   "motto": "Let's have a good battle!",
+   "bossId": "alder",
+   "aceId": "volcarona"
+  },
+  {
+   "id": "cheren",
+   "name": "Cheren",
+   "role": "rival",
+   "region": "Unova",
+   "type": "Normal",
+   "ace": "Stoutland",
+   "voice": "formal",
+   "traits": [
+    "disciplined study",
+    "quiet determination"
+   ],
+   "motto": "I'll do this properly.",
+   "bossId": "cheren",
+   "aceId": "stoutland"
+  },
+  {
+   "id": "bianca",
+   "name": "Bianca",
+   "role": "rival",
+   "region": "Unova",
+   "type": "Normal",
+   "ace": "Musharna",
+   "voice": "nervous",
+   "traits": [
+    "falling over",
+    "earnest effort"
+   ],
+   "motto": "I'll try my best!",
+   "bossId": "bianca",
+   "aceId": "musharna"
+  },
+  {
+   "id": "n",
+   "name": "N",
+   "role": "villain",
+   "region": "Unova",
+   "type": "Dragon",
+   "ace": "Zoroark",
+   "voice": "poetic",
+   "traits": [
+    "speaking to Pokémon",
+    "gentle ideals"
+   ],
+   "motto": "I hear their voices.",
+   "bossId": "n",
+   "aceId": "zoroark"
+  },
+  {
+   "id": "ghetsis",
+   "name": "Ghetsis",
+   "role": "villain",
+   "region": "Unova",
+   "type": "Dark",
+   "ace": "Hydreigon",
+   "voice": "menacing",
+   "traits": [
+    "manipulative speeches",
+    "cold ambition"
+   ],
+   "motto": "All is mine, in the end.",
+   "bossId": "ghetsis",
+   "aceId": "hydreigon"
+  },
+  {
+   "id": "hilbert",
+   "name": "Hilbert",
+   "role": "protagonist",
+   "region": "Unova",
+   "type": "Fire",
+   "ace": "Emboar",
+   "voice": "cheerful",
+   "traits": [
+    "new places",
+    "bright smiles"
+   ],
+   "motto": "I'll do my best!",
+   "bossId": "hilbert",
+   "aceId": "emboar"
+  },
+  {
+   "id": "hilda",
+   "name": "Hilda",
+   "role": "protagonist",
+   "region": "Unova",
+   "type": "Water",
+   "ace": "Samurott",
+   "voice": "cheerful",
+   "traits": [
+    "new cities",
+    "bright smiles"
+   ],
+   "motto": "Let's go together!",
+   "bossId": "hilda",
+   "aceId": "samurott"
+  },
+  {
+   "id": "viola",
+   "name": "Viola",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Bug",
+   "ace": "Vivillon",
+   "voice": "cheerful",
+   "traits": [
+    "photography",
+    "watching bugs"
+   ],
+   "motto": "Let me capture this moment.",
+   "bossId": "viola",
+   "aceId": "vivillon"
+  },
+  {
+   "id": "grant",
+   "name": "Grant",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Rock",
+   "ace": "Tyrunt",
+   "voice": "gruff",
+   "traits": [
+    "rock climbing",
+    "silent patience"
+   ],
+   "motto": "I climb to see beyond.",
+   "bossId": "grant",
+   "aceId": "tyrunt"
+  },
+  {
+   "id": "korrina",
+   "name": "Korrina",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Fighting",
+   "ace": "Lucario",
+   "voice": "cheerful",
+   "traits": [
+    "skating around the city",
+    "spirited training"
+   ],
+   "motto": "Let's go with a bright spirit!",
+   "bossId": "korrina",
+   "aceId": "lucario"
+  },
+  {
+   "id": "ramos",
+   "name": "Ramos",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Grass",
+   "ace": "Gogoat",
+   "voice": "formal",
+   "traits": [
+    "old gardens",
+    "quiet wisdom"
+   ],
+   "motto": "You can learn much from a plant.",
+   "bossId": "ramos",
+   "aceId": "gogoat"
+  },
+  {
+   "id": "clemont",
+   "name": "Clemont",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Electric",
+   "ace": "Heliolisk",
+   "voice": "eccentric",
+   "traits": [
+    "inventions",
+    "cheerful accidents"
+   ],
+   "motto": "Let's see what my invention can do!",
+   "bossId": "clemont",
+   "aceId": "heliolisk"
+  },
+  {
+   "id": "valerie",
+   "name": "Valerie",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Fairy",
+   "ace": "Sylveon",
+   "voice": "poetic",
+   "traits": [
+    "fashion design",
+    "delicate poise"
+   ],
+   "motto": "Charm can carry anything.",
+   "bossId": "valerie",
+   "aceId": "sylveon"
+  },
+  {
+   "id": "olympia",
+   "name": "Olympia",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Psychic",
+   "ace": "Meowstic",
+   "voice": "poetic",
+   "traits": [
+    "reading the stars",
+    "mystic rituals"
+   ],
+   "motto": "The future is cleared.",
+   "bossId": "olympia",
+   "aceId": "meowstic"
+  },
+  {
+   "id": "wulfric",
+   "name": "Wulfric",
+   "role": "gym",
+   "region": "Kalos",
+   "type": "Ice",
+   "ace": "Cryogonal",
+   "voice": "formal",
+   "traits": [
+    "a quiet life",
+    "cold winters"
+   ],
+   "motto": "I spend winters reading.",
+   "bossId": "wulfric",
+   "aceId": "cryogonal"
+  },
+  {
+   "id": "malva",
+   "name": "Malva",
+   "role": "elite",
+   "region": "Kalos",
+   "type": "Fire",
+   "ace": "Pyroar",
+   "voice": "menacing",
+   "traits": [
+    "news reporting",
+    "secret plans"
+   ],
+   "motto": "I'll burn this to the ground.",
+   "bossId": "malva",
+   "aceId": "pyroar"
+  },
+  {
+   "id": "siebold",
+   "name": "Siebold",
+   "role": "elite",
+   "region": "Kalos",
+   "type": "Water",
+   "ace": "Barbaracle",
+   "voice": "formal",
+   "traits": [
+    "fine cuisine",
+    "deep philosophy"
+   ],
+   "motto": "Cooking is battle.",
+   "bossId": "siebold",
+   "aceId": "barbaracle"
+  },
+  {
+   "id": "wikstrom",
+   "name": "Wikstrom",
+   "role": "elite",
+   "region": "Kalos",
+   "type": "Steel",
+   "ace": "Aegislash",
+   "voice": "formal",
+   "traits": [
+    "chivalrous oaths",
+    "medieval pride"
+   ],
+   "motto": "I fight with honor.",
+   "bossId": "wikstrom",
+   "aceId": "aegislash"
+  },
+  {
+   "id": "drasna",
+   "name": "Drasna",
+   "role": "elite",
+   "region": "Kalos",
+   "type": "Dragon",
+   "ace": "Noivern",
+   "voice": "cheerful",
+   "traits": [
+    "dragon stories",
+    "gentle smiles"
+   ],
+   "motto": "Dragons are lovely.",
+   "bossId": "drasna",
+   "aceId": "noivern"
+  },
+  {
+   "id": "diantha",
+   "name": "Diantha",
+   "role": "champion",
+   "region": "Kalos",
+   "type": "Fairy",
+   "ace": "Gardevoir",
+   "voice": "poetic",
+   "traits": [
+    "movie sets",
+    "graceful charm"
+   ],
+   "motto": "Let's add a touch of glamour.",
+   "bossId": "diantha",
+   "aceId": "gardevoir"
+  },
+  {
+   "id": "lysandre",
+   "name": "Lysandre",
+   "role": "villain",
+   "region": "Kalos",
+   "type": "Fire",
+   "ace": "Gyarados",
+   "voice": "menacing",
+   "traits": [
+    "cold ideals",
+    "a distant future"
+   ],
+   "motto": "Beauty must be preserved.",
+   "bossId": "lysandre",
+   "aceId": "gyarados"
+  },
+  {
+   "id": "serena",
+   "name": "Serena",
+   "role": "protagonist",
+   "region": "Kalos",
+   "type": "Fairy",
+   "ace": "Braixen",
+   "voice": "cheerful",
+   "traits": [
+    "fashion",
+    "bright journeys"
+   ],
+   "motto": "Let's give it our all!",
+   "bossId": "serena",
+   "aceId": "braixen"
+  },
+  {
+   "id": "calem",
+   "name": "Calem",
+   "role": "protagonist",
+   "region": "Kalos",
+   "type": "Fire",
+   "ace": "Delphox",
+   "voice": "cheerful",
+   "traits": [
+    "bike rides",
+    "cool breezes"
+   ],
+   "motto": "Let's get going!",
+   "bossId": "calem",
+   "aceId": "delphox"
+  },
+  {
+   "id": "hala",
+   "name": "Hala",
+   "role": "captain",
+   "region": "Alola",
+   "type": "Fighting",
+   "ace": "Crabominable",
+   "voice": "gruff",
+   "traits": [
+    "island tradition",
+    "hearty laughs"
+   ],
+   "motto": "A good battle is good for the soul.",
+   "bossId": "hala",
+   "aceId": "crabominable"
+  },
+  {
+   "id": "olivia",
+   "name": "Olivia",
+   "role": "elite",
+   "region": "Alola",
+   "type": "Rock",
+   "ace": "Lycanroc",
+   "voice": "poetic",
+   "traits": [
+    "ocean views",
+    "old rituals"
+   ],
+   "motto": "Let the island watch over you.",
+   "bossId": "olivia",
+   "aceId": "lycanroc"
+  },
+  {
+   "id": "nanu",
+   "name": "Nanu",
+   "role": "captain",
+   "region": "Alola",
+   "type": "Dark",
+   "ace": "Persian",
+   "voice": "gruff",
+   "traits": [
+    "lazy afternoons",
+    "dry jokes"
+   ],
+   "motto": "Yeah, yeah. Let's get this over with.",
+   "bossId": "nanu",
+   "aceId": "persian"
+  },
+  {
+   "id": "hapu",
+   "name": "Hapu",
+   "role": "captain",
+   "region": "Alola",
+   "type": "Ground",
+   "ace": "Mudsdale",
+   "voice": "formal",
+   "traits": [
+    "family pride",
+    "strong lessons"
+   ],
+   "motto": "Let me teach you.",
+   "bossId": "hapu",
+   "aceId": "mudsdale"
+  },
+  {
+   "id": "molayne",
+   "name": "Molayne",
+   "role": "elite",
+   "region": "Alola",
+   "type": "Steel",
+   "ace": "Metagross",
+   "voice": "eccentric",
+   "traits": [
+    "quiet inventions",
+    "spare parts"
+   ],
+   "motto": "Let's try something new.",
+   "bossId": "molayne",
+   "aceId": "metagross"
+  },
+  {
+   "id": "acerola",
+   "name": "Acerola",
+   "role": "elite",
+   "region": "Alola",
+   "type": "Ghost",
+   "ace": "Palossand",
+   "voice": "cheerful",
+   "traits": [
+    "spooky jokes",
+    "haunted hospitality"
+   ],
+   "motto": "Boo! Did I scare you?",
+   "bossId": "acerola",
+   "aceId": "palossand"
+  },
+  {
+   "id": "kahili",
+   "name": "Kahili",
+   "role": "elite",
+   "region": "Alola",
+   "type": "Flying",
+   "ace": "Toucannon",
+   "voice": "formal",
+   "traits": [
+    "golf swings",
+    "clean air"
+   ],
+   "motto": "A fine day for a battle.",
+   "bossId": "kahili",
+   "aceId": "toucannon"
+  },
+  {
+   "id": "kukui",
+   "name": "Kukui",
+   "role": "champion",
+   "region": "Alola",
+   "type": "Normal",
+   "ace": "Incineroar",
+   "voice": "cheerful",
+   "traits": [
+    "loud cheers",
+    "friendly fights"
+   ],
+   "motto": "Let's go, yeah!",
+   "bossId": "kukui",
+   "aceId": "incineroar"
+  },
+  {
+   "id": "hau",
+   "name": "Hau",
+   "role": "rival",
+   "region": "Alola",
+   "type": "Electric",
+   "ace": "Raichu",
+   "voice": "cheerful",
+   "traits": [
+    "malasadas",
+    "laughing with friends"
+   ],
+   "motto": "Let's have fun!",
+   "bossId": "hau",
+   "aceId": "raichu"
+  },
+  {
+   "id": "gladion",
+   "name": "Gladion",
+   "role": "rival",
+   "region": "Alola",
+   "type": "Normal",
+   "ace": "Silvally",
+   "voice": "gruff",
+   "traits": [
+    "a broken past",
+    "lone patrols"
+   ],
+   "motto": "I'll become stronger.",
+   "bossId": "gladion",
+   "aceId": "silvally"
+  },
+  {
+   "id": "lusamine",
+   "name": "Lusamine",
+   "role": "villain",
+   "region": "Alola",
+   "type": "Poison",
+   "ace": "Clefable",
+   "voice": "menacing",
+   "traits": [
+    "beauty obsession",
+    "cold love"
+   ],
+   "motto": "Beauty is forever.",
+   "bossId": "lusamine",
+   "aceId": "clefable"
+  },
+  {
+   "id": "guzma",
+   "name": "Guzma",
+   "role": "villain",
+   "region": "Alola",
+   "type": "Bug",
+   "ace": "Golisopod",
+   "voice": "boastful",
+   "traits": [
+    "rough speeches",
+    "tough pride"
+   ],
+   "motto": "I'm gonna win it all!",
+   "bossId": "guzma",
+   "aceId": "golisopod"
+  },
+  {
+   "id": "milo",
+   "name": "Milo",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Grass",
+   "ace": "Eldegoss",
+   "voice": "cheerful",
+   "traits": [
+    "farming",
+    "steady hands"
+   ],
+   "motto": "Hey there, it's time to get growing!",
+   "bossId": "milo",
+   "aceId": "eldegoss"
+  },
+  {
+   "id": "nessa",
+   "name": "Nessa",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Water",
+   "ace": "Drednaw",
+   "voice": "boastful",
+   "traits": [
+    "swimsuit photos",
+    "big waves"
+   ],
+   "motto": "I'm a star, so show some respect!",
+   "bossId": "nessa",
+   "aceId": "drednaw"
+  },
+  {
+   "id": "kabu",
+   "name": "Kabu",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Fire",
+   "ace": "Centiskorch",
+   "voice": "gruff",
+   "traits": [
+    "a retiring hero",
+    "burning pride"
+   ],
+   "motto": "I'll show you what experience is.",
+   "bossId": "kabu",
+   "aceId": "centiskorch"
+  },
+  {
+   "id": "bea",
+   "name": "Bea",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Fighting",
+   "ace": "Machamp",
+   "voice": "gruff",
+   "traits": [
+    "silent training",
+    "iron discipline"
+   ],
+   "motto": "I'll stay focused.",
+   "bossId": "bea",
+   "aceId": "machamp"
+  },
+  {
+   "id": "allister",
+   "name": "Allister",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Ghost",
+   "ace": "Gengar",
+   "voice": "nervous",
+   "traits": [
+    "a hidden mask",
+    "quiet shyness"
+   ],
+   "motto": "...I'll do my best.",
+   "bossId": "allister",
+   "aceId": "gengar"
+  },
+  {
+   "id": "opal",
+   "name": "Opal",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Fairy",
+   "ace": "Alcremie",
+   "voice": "eccentric",
+   "traits": [
+    "old tales",
+    "sweet tea"
+   ],
+   "motto": "Ahh, you're young!",
+   "bossId": "opal",
+   "aceId": "alcremie"
+  },
+  {
+   "id": "gordie",
+   "name": "Gordie",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Rock",
+   "ace": "Coalossal",
+   "voice": "gruff",
+   "traits": [
+    "bold muscles",
+    "confident growls"
+   ],
+   "motto": "You're about to be rocked.",
+   "bossId": "gordie",
+   "aceId": "coalossal"
+  },
+  {
+   "id": "melony",
+   "name": "Melony",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Ice",
+   "ace": "Lapras",
+   "voice": "formal",
+   "traits": [
+    "motherly care",
+    "cold mornings"
+   ],
+   "motto": "Come here, dear. I'll teach you.",
+   "bossId": "melony",
+   "aceId": "lapras"
+  },
+  {
+   "id": "piers",
+   "name": "Piers",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Dark",
+   "ace": "Obstagoon",
+   "voice": "gruff",
+   "traits": [
+    "punk music",
+    "slow mornings"
+   ],
+   "motto": "Let's rock.",
+   "bossId": "piers",
+   "aceId": "obstagoon"
+  },
+  {
+   "id": "raihan",
+   "name": "Raihan",
+   "role": "gym",
+   "region": "Galar",
+   "type": "Dragon",
+   "ace": "Duraludon",
+   "voice": "boastful",
+   "traits": [
+    "taking selfies",
+    "fierce rivalry"
+   ],
+   "motto": "Show me what you've got!",
+   "bossId": "raihan",
+   "aceId": "duraludon"
+  },
+  {
+   "id": "leon",
+   "name": "Leon",
+   "role": "champion",
+   "region": "Galar",
+   "type": "Fire",
+   "ace": "Charizard",
+   "voice": "boastful",
+   "traits": [
+    "big crowds",
+    "epic stadiums"
+   ],
+   "motto": "Let's have a champion time!",
+   "bossId": "leon",
+   "aceId": "charizard"
+  },
+  {
+   "id": "hop",
+   "name": "Hop",
+   "role": "rival",
+   "region": "Galar",
+   "type": "Normal",
+   "ace": "Dubwool",
+   "voice": "cheerful",
+   "traits": [
+    "loving my brother",
+    "big dreams"
+   ],
+   "motto": "I'm going to be the best!",
+   "bossId": "hop",
+   "aceId": "dubwool"
+  },
+  {
+   "id": "bede",
+   "name": "Bede",
+   "role": "rival",
+   "region": "Galar",
+   "type": "Fairy",
+   "ace": "Hatterene",
+   "voice": "boastful",
+   "traits": [
+    "arrogant speeches",
+    "refined taste"
+   ],
+   "motto": "I'm the best, obviously.",
+   "bossId": "bede",
+   "aceId": "hatterene"
+  },
+  {
+   "id": "marnie",
+   "name": "Marnie",
+   "role": "rival",
+   "region": "Galar",
+   "type": "Dark",
+   "ace": "Morpeko",
+   "voice": "nervous",
+   "traits": [
+    "a rock band",
+    "a quiet heart"
+   ],
+   "motto": "I'll do what I can.",
+   "bossId": "marnie",
+   "aceId": "morpeko"
+  },
+  {
+   "id": "rose",
+   "name": "Rose",
+   "role": "villain",
+   "region": "Galar",
+   "type": "Steel",
+   "ace": "Copperajah",
+   "voice": "formal",
+   "traits": [
+    "big dreams",
+    "limitless energy"
+   ],
+   "motto": "I'm going to save the world.",
+   "bossId": "rose",
+   "aceId": "copperajah"
+  },
+  {
+   "id": "oleana",
+   "name": "Oleana",
+   "role": "admin",
+   "region": "Galar",
+   "type": "Poison",
+   "ace": "Garbodor",
+   "voice": "formal",
+   "traits": [
+    "tidy desks",
+    "stern rules"
+   ],
+   "motto": "Work is work.",
+   "bossId": "oleana",
+   "aceId": "garbodor"
+  },
+  {
+   "id": "gloria",
+   "name": "Gloria",
+   "role": "protagonist",
+   "region": "Galar",
+   "type": "Grass",
+   "ace": "Rillaboom",
+   "voice": "cheerful",
+   "traits": [
+    "new towns",
+    "bright smiles"
+   ],
+   "motto": "Come on, let's go!",
+   "bossId": "gloria",
+   "aceId": "rillaboom"
+  },
+  {
+   "id": "victor",
+   "name": "Victor",
+   "role": "protagonist",
+   "region": "Galar",
+   "type": "Fire",
+   "ace": "Cinderace",
+   "voice": "cheerful",
+   "traits": [
+    "big dreams",
+    "loud cheers"
+   ],
+   "motto": "Let's do this!",
+   "bossId": "victor",
+   "aceId": "cinderace"
+  },
+  {
+   "id": "katy",
+   "name": "Katy",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Bug",
+   "ace": "Teddiursa",
+   "voice": "cheerful",
+   "traits": [
+    "baking sweets",
+    "quiet afternoons"
+   ],
+   "motto": "Please, enjoy a snack.",
+   "bossId": "katy",
+   "aceId": "teddiursa"
+  },
+  {
+   "id": "brassius",
+   "name": "Brassius",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Grass",
+   "ace": "Sudowoodo",
+   "voice": "eccentric",
+   "traits": [
+    "abstract art",
+    "bold ideas"
+   ],
+   "motto": "Art is my battlefield.",
+   "bossId": "brassius",
+   "aceId": "sudowoodo"
+  },
+  {
+   "id": "iono",
+   "name": "Iono",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Electric",
+   "ace": "Bellibolt",
+   "voice": "boastful",
+   "traits": [
+    "livestreaming",
+    "viral dances"
+   ],
+   "motto": "Let's make it a show, chat!",
+   "bossId": "iono",
+   "aceId": "bellibolt"
+  },
+  {
+   "id": "kofu",
+   "name": "Kofu",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Water",
+   "ace": "Veluza",
+   "voice": "cheerful",
+   "traits": [
+    "good food",
+    "loud laughs"
+   ],
+   "motto": "Let's cook up something great!",
+   "bossId": "kofu",
+   "aceId": "veluza"
+  },
+  {
+   "id": "larry",
+   "name": "Larry",
+   "role": "elite",
+   "region": "Paldea",
+   "type": "Flying",
+   "ace": "Staraptor",
+   "voice": "nervous",
+   "traits": [
+    "office work",
+    "long commutes"
+   ],
+   "motto": "...Can we make this quick?",
+   "bossId": "larry",
+   "aceId": "staraptor"
+  },
+  {
+   "id": "ryme",
+   "name": "Ryme",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Ghost",
+   "ace": "Mimikyu",
+   "voice": "poetic",
+   "traits": [
+    "rapping verses",
+    "misty nights"
+   ],
+   "motto": "Let's get a flow going.",
+   "bossId": "ryme",
+   "aceId": "mimikyu"
+  },
+  {
+   "id": "tulip",
+   "name": "Tulip",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Psychic",
+   "ace": "Farigiraf",
+   "voice": "cheerful",
+   "traits": [
+    "makeup",
+    "fashion"
+   ],
+   "motto": "A little glam never hurts.",
+   "bossId": "tulip",
+   "aceId": "farigiraf"
+  },
+  {
+   "id": "grusha",
+   "name": "Grusha",
+   "role": "gym",
+   "region": "Paldea",
+   "type": "Ice",
+   "ace": "Cetitan",
+   "voice": "gruff",
+   "traits": [
+    "snowboarding",
+    "cold calm"
+   ],
+   "motto": "Let's chill.",
+   "bossId": "grusha",
+   "aceId": "cetitan"
+  },
+  {
+   "id": "rika",
+   "name": "Rika",
+   "role": "elite",
+   "region": "Paldea",
+   "type": "Ground",
+   "ace": "Clodsire",
+   "voice": "gruff",
+   "traits": [
+    "dry humor",
+    "quiet endurance"
+   ],
+   "motto": "Let's get on with it.",
+   "bossId": "rika",
+   "aceId": "clodsire"
+  },
+  {
+   "id": "poppy",
+   "name": "Poppy",
+   "role": "elite",
+   "region": "Paldea",
+   "type": "Steel",
+   "ace": "Tinkaton",
+   "voice": "cheerful",
+   "traits": [
+    "small hands",
+    "giant hammers"
+   ],
+   "motto": "I'll give it my all!",
+   "bossId": "poppy",
+   "aceId": "tinkaton"
+  },
+  {
+   "id": "hassel",
+   "name": "Hassel",
+   "role": "elite",
+   "region": "Paldea",
+   "type": "Dragon",
+   "ace": "Baxcalibur",
+   "voice": "formal",
+   "traits": [
+    "calm teaching",
+    "honest effort"
+   ],
+   "motto": "A student must learn.",
+   "bossId": "hassel",
+   "aceId": "baxcalibur"
+  },
+  {
+   "id": "geeta",
+   "name": "Geeta",
+   "role": "champion",
+   "region": "Paldea",
+   "type": "Normal",
+   "ace": "Glimmora",
+   "voice": "formal",
+   "traits": [
+    "a champion's duty",
+    "tidy offices"
+   ],
+   "motto": "Show me what you've learned.",
+   "bossId": "geeta",
+   "aceId": "glimmora"
+  },
+  {
+   "id": "nemona",
+   "name": "Nemona",
+   "role": "rival",
+   "region": "Paldea",
+   "type": "Normal",
+   "ace": "Pawmot",
+   "voice": "cheerful",
+   "traits": [
+    "constant battles",
+    "big grins"
+   ],
+   "motto": "Let's have a great battle!",
+   "bossId": "nemona",
+   "aceId": "pawmot"
+  },
+  {
+   "id": "arven",
+   "name": "Arven",
+   "role": "ally",
+   "region": "Paldea",
+   "type": "Normal",
+   "ace": "Mabosstiff",
+   "voice": "gruff",
+   "traits": [
+    "my sick partner",
+    "secret recipes"
+   ],
+   "motto": "I just want to help.",
+   "bossId": "arven",
+   "aceId": "mabosstiff"
+  },
+  {
+   "id": "penny",
+   "name": "Penny",
+   "role": "ally",
+   "region": "Paldea",
+   "type": "Normal",
+   "ace": "Umbreon",
+   "voice": "nervous",
+   "traits": [
+    "quiet computing",
+    "hidden talent"
+   ],
+   "motto": "I'm doing my best.",
+   "bossId": "penny",
+   "aceId": "umbreon"
+  },
+  {
+   "id": "clavell",
+   "name": "Clavell",
+   "role": "mentor",
+   "region": "Paldea",
+   "type": "Normal",
+   "ace": "Quaquaval",
+   "voice": "formal",
+   "traits": [
+    "school rules",
+    "gentle guidance"
+   ],
+   "motto": "Stay safe, students.",
+   "bossId": null,
+   "aceId": "quaquaval"
+  },
+  {
+   "id": "mustard",
+   "name": "Mustard",
+   "role": "mentor",
+   "region": "Paldea",
+   "type": "Fighting",
+   "ace": "Urshifu",
+   "voice": "boastful",
+   "traits": [
+    "old training days",
+    "lightning-fast reflexes"
+   ],
+   "motto": "It's been a long time since I felt like this!",
+   "bossId": "mustard",
+   "aceId": "urshifu"
+  },
+  {
+   "id": "carmine",
+   "name": "Carmine",
+   "role": "rival",
+   "region": "Paldea",
+   "type": "Poison",
+   "ace": "Ogerpon",
+   "voice": "nervous",
+   "traits": [
+    "a loud sibling",
+    "quiet pride"
+   ],
+   "motto": "I'll do better.",
+   "bossId": "carmine",
+   "aceId": "ogerpon"
+  },
+  {
+   "id": "kieran",
+   "name": "Kieran",
+   "role": "rival",
+   "region": "Paldea",
+   "type": "Dark",
+   "ace": "Poliwrath",
+   "voice": "nervous",
+   "traits": [
+    "late-night training",
+    "silent determination"
+   ],
+   "motto": "I'm going to be strong.",
+   "bossId": "kieran",
+   "aceId": "poliwrath"
+  },
+  {
+   "id": "giacomo",
+   "name": "Giacomo",
+   "role": "admin",
+   "region": "Paldea",
+   "type": "Dark",
+   "ace": "Revavroom",
+   "voice": "boastful",
+   "traits": [
+    "mixing music",
+    "loud outfits"
+   ],
+   "motto": "Let's crank it up!",
+   "bossId": "giacomo",
+   "aceId": "revavroom"
+  },
+  {
+   "id": "mela",
+   "name": "Mela",
+   "role": "admin",
+   "region": "Paldea",
+   "type": "Fire",
+   "ace": "Revavroom",
+   "voice": "boastful",
+   "traits": [
+    "loud engines",
+    "burning rage"
+   ],
+   "motto": "Do you want to fight?",
+   "bossId": "mela",
+   "aceId": "revavroom"
+  },
+  {
+   "id": "atticus",
+   "name": "Atticus",
+   "role": "admin",
+   "region": "Paldea",
+   "type": "Poison",
+   "ace": "Revavroom",
+   "voice": "menacing",
+   "traits": [
+    "careful rants",
+    "venomous words"
+   ],
+   "motto": "Quiet. I'm thinking.",
+   "bossId": "atticus",
+   "aceId": "revavroom"
+  },
+  {
+   "id": "ortega",
+   "name": "Ortega",
+   "role": "admin",
+   "region": "Paldea",
+   "type": "Fairy",
+   "ace": "Revavroom",
+   "voice": "cheerful",
+   "traits": [
+    "sweet words",
+    "soft hearts"
+   ],
+   "motto": "Let's play nice.",
+   "bossId": "ortega",
+   "aceId": "revavroom"
+  },
+  {
+   "id": "eri",
+   "name": "Eri",
+   "role": "admin",
+   "region": "Paldea",
+   "type": "Fighting",
+   "ace": "Revavroom",
+   "voice": "gruff",
+   "traits": [
+    "rude greetings",
+    "hard fists"
+   ],
+   "motto": "Out of my way.",
+   "bossId": "eri",
+   "aceId": "revavroom"
+  },
+  {
+   "id": "cassiopeia",
+   "name": "Cassiopeia",
+   "role": "admin",
+   "region": "Paldea",
+   "type": "Dark",
+   "ace": "Revavroom",
+   "voice": "formal",
+   "traits": [
+    "quiet orders",
+    "steady loyalty"
+   ],
+   "motto": "I'll follow my orders.",
+   "bossId": null,
+   "aceId": "revavroom"
+  },
+  {
+   "id": "cyrano",
+   "name": "Cyrano",
+   "role": "mentor",
+   "region": "Paldea",
+   "type": "Normal",
+   "ace": "Pawmot",
+   "voice": "formal",
+   "traits": [
+    "scholar work",
+    "gentle guidance"
+   ],
+   "motto": "Study well.",
+   "bossId": null,
+   "aceId": "pawmot"
+  },
+  {
+   "id": "sada",
+   "name": "Sada",
+   "role": "villain",
+   "region": "Paldea",
+   "type": "Psychic",
+   "ace": "Koraidon",
+   "voice": "formal",
+   "traits": [
+    "ancient research",
+    "deep regret"
+   ],
+   "motto": "For my goal.",
+   "bossId": "sada",
+   "aceId": "koraidon"
+  },
+  {
+   "id": "turo",
+   "name": "Turo",
+   "role": "villain",
+   "region": "Paldea",
+   "type": "Psychic",
+   "ace": "Miraidon",
+   "voice": "formal",
+   "traits": [
+    "ancient research",
+    "deep regret"
+   ],
+   "motto": "For my goal.",
+   "bossId": "turo",
+   "aceId": "miraidon"
+  },
+  {
+   "id": "lacey",
+   "name": "Lacey",
+   "role": "elite",
+   "region": "Paldea",
+   "type": "Fairy",
+   "ace": "Excadrill",
+   "voice": "formal",
+   "traits": [
+    "stylish thoughts",
+    "sharp attention"
+   ],
+   "motto": "Elegance in battle.",
+   "bossId": "lacey",
+   "aceId": "excadrill"
+  },
+  {
+   "id": "drayton",
+   "name": "Drayton",
+   "role": "elite",
+   "region": "Paldea",
+   "type": "Dragon",
+   "ace": "Archaludon",
+   "voice": "gruff",
+   "traits": [
+    "dry advice",
+    "solid training"
+   ],
+   "motto": "Show me what you have.",
+   "bossId": "drayton",
+   "aceId": "archaludon"
+  },
+  {
+   "id": "tabitha",
+   "name": "Tabitha",
+   "role": "admin",
+   "region": "Hoenn",
+   "type": "Fire",
+   "ace": "Camerupt",
+   "voice": "boastful",
+   "traits": [
+    "big grins",
+    "fire-lit rants"
+   ],
+   "motto": "Hehe, we'll win!",
+   "bossId": "tabitha",
+   "aceId": "camerupt"
+  },
+  {
+   "id": "shelly",
+   "name": "Shelly",
+   "role": "admin",
+   "region": "Hoenn",
+   "type": "Water",
+   "ace": "Sharpedo",
+   "voice": "menacing",
+   "traits": [
+    "snappy temper",
+    "ocean ambition"
+   ],
+   "motto": "Out of my way!",
+   "bossId": "shelly",
+   "aceId": "sharpedo"
+  },
+  {
+   "id": "matt",
+   "name": "Matt",
+   "role": "admin",
+   "region": "Hoenn",
+   "type": "Water",
+   "ace": "Sharpedo",
+   "voice": "boastful",
+   "traits": [
+    "big grins",
+    "loud greetings"
+   ],
+   "motto": "Hah! We'll win!",
+   "bossId": "matt",
+   "aceId": "sharpedo"
+  },
+  {
+   "id": "mars",
+   "name": "Mars",
+   "role": "admin",
+   "region": "Sinnoh",
+   "type": "Dark",
+   "ace": "Purugly",
+   "voice": "menacing",
+   "traits": [
+    "fierce eyes",
+    "cold speeches"
+   ],
+   "motto": "Prepare yourself.",
+   "bossId": "mars",
+   "aceId": "purugly"
+  },
+  {
+   "id": "jupiter",
+   "name": "Jupiter",
+   "role": "admin",
+   "region": "Sinnoh",
+   "type": "Dark",
+   "ace": "Skuntank",
+   "voice": "menacing",
+   "traits": [
+    "cold eyes",
+    "sharp humor"
+   ],
+   "motto": "You can't win.",
+   "bossId": "jupiter",
+   "aceId": "skuntank"
+  },
+  {
+   "id": "saturn",
+   "name": "Saturn",
+   "role": "admin",
+   "region": "Sinnoh",
+   "type": "Dark",
+   "ace": "Toxicroak",
+   "voice": "menacing",
+   "traits": [
+    "bureaucratic reports",
+    "cold orders"
+   ],
+   "motto": "I'll finish this.",
+   "bossId": "saturn",
+   "aceId": "toxicroak"
+  },
+  {
+   "id": "zinzolin",
+   "name": "Zinzolin",
+   "role": "admin",
+   "region": "Unova",
+   "type": "Ice",
+   "ace": "Cryogonal",
+   "voice": "menacing",
+   "traits": [
+    "cold orders",
+    "icy speeches"
+   ],
+   "motto": "For our lord.",
+   "bossId": "zinzolin",
+   "aceId": "cryogonal"
+  },
+  {
+   "id": "ariana",
+   "name": "Ariana",
+   "role": "admin",
+   "region": "Kanto",
+   "type": "Poison",
+   "ace": "Arbok",
+   "voice": "menacing",
+   "traits": [
+    "stern directives",
+    "hard glares"
+   ],
+   "motto": "I serve my boss.",
+   "bossId": "ariana",
+   "aceId": "arbok"
+  },
+  {
+   "id": "archer",
+   "name": "Archer",
+   "role": "admin",
+   "region": "Johto",
+   "type": "Dark",
+   "ace": "Houndoom",
+   "voice": "menacing",
+   "traits": [
+    "stern orders",
+    "loyal fervor"
+   ],
+   "motto": "For the boss.",
+   "bossId": "archer",
+   "aceId": "houndoom"
+  },
+  {
+   "id": "proton",
+   "name": "Proton",
+   "role": "admin",
+   "region": "Johto",
+   "type": "Poison",
+   "ace": "Golbat",
+   "voice": "menacing",
+   "traits": [
+    "sinister laughs",
+    "sharp whispers"
+   ],
+   "motto": "Let's make this quick.",
+   "bossId": "proton",
+   "aceId": "golbat"
+  },
+  {
+   "id": "petrel",
+   "name": "Petrel",
+   "role": "admin",
+   "region": "Johto",
+   "type": "Poison",
+   "ace": "Weezing",
+   "voice": "menacing",
+   "traits": [
+    "disguise tricks",
+    "sly humor"
+   ],
+   "motto": "Heh, you can't tell.",
+   "bossId": "petrel",
+   "aceId": "weezing"
+  },
+  {
+   "id": "courtney",
+   "name": "Courtney",
+   "role": "admin",
+   "region": "Hoenn",
+   "type": "Fire",
+   "ace": "Camerupt",
+   "voice": "menacing",
+   "traits": [
+    "muttered chants",
+    "an odd obsession"
+   ],
+   "motto": "...Magma.",
+   "bossId": "courtney",
+   "aceId": "camerupt"
+  },
+  {
+   "id": "wally",
+   "name": "Wally",
+   "role": "rival",
+   "region": "Hoenn",
+   "type": "Psychic",
+   "ace": "Gardevoir",
+   "voice": "nervous",
+   "traits": [
+    "learning to be brave",
+    "fragile breath"
+   ],
+   "motto": "I'm going to be strong.",
+   "bossId": "wally",
+   "aceId": "gardevoir"
+  },
+  {
+   "id": "lillie",
+   "name": "Lillie",
+   "role": "ally",
+   "region": "Alola",
+   "type": "Ice",
+   "ace": "Vulpix-Alola",
+   "voice": "nervous",
+   "traits": [
+    "reading",
+    "gentle care"
+   ],
+   "motto": "I'll stay with you.",
+   "bossId": "lillie",
+   "aceId": "vulpix-alola"
+  },
+  {
+   "id": "selene",
+   "name": "Selene",
+   "role": "protagonist",
+   "region": "Alola",
+   "type": "Water",
+   "ace": "Primarina",
+   "voice": "cheerful",
+   "traits": [
+    "island sunsets",
+    "new friends"
+   ],
+   "motto": "Let's go!",
+   "bossId": "selene",
+   "aceId": "primarina"
+  },
+  {
+   "id": "elio",
+   "name": "Elio",
+   "role": "protagonist",
+   "region": "Alola",
+   "type": "Fire",
+   "ace": "Incineroar",
+   "voice": "cheerful",
+   "traits": [
+    "island sunsets",
+    "new friends"
+   ],
+   "motto": "Let's go!",
+   "bossId": "elio",
+   "aceId": "incineroar"
+  },
+  {
+   "id": "florian",
+   "name": "Florian",
+   "role": "protagonist",
+   "region": "Paldea",
+   "type": "Fire",
+   "ace": "Skeledirge",
+   "voice": "cheerful",
+   "traits": [
+    "bright mornings",
+    "big adventures"
+   ],
+   "motto": "Let's go!",
+   "bossId": null,
+   "aceId": "skeledirge"
+  },
+  {
+   "id": "juliana",
+   "name": "Juliana",
+   "role": "protagonist",
+   "region": "Paldea",
+   "type": "Water",
+   "ace": "Quaquaval",
+   "voice": "cheerful",
+   "traits": [
+    "bright mornings",
+    "big adventures"
+   ],
+   "motto": "Let's go!",
+   "bossId": null,
+   "aceId": "quaquaval"
+  },
+  {
+   "id": "looker",
+   "name": "Looker",
+   "role": "ally",
+   "region": "Sinnoh",
+   "type": "Normal",
+   "ace": "Mr. Mime",
+   "voice": "eccentric",
+   "traits": [
+    "disguises",
+    "case notes"
+   ],
+   "motto": "The truth is out there.",
+   "bossId": "looker",
+   "aceId": "mr-mime"
+  },
+  {
+   "id": "elm",
+   "name": "Elm",
+   "role": "mentor",
+   "region": "Johto",
+   "type": "Normal",
+   "ace": "Totodile",
+   "voice": "nervous",
+   "traits": [
+    "research notes",
+    "nervous chatter"
+   ],
+   "motto": "Er... have you seen my notes?",
+   "bossId": "elm",
+   "aceId": "totodile"
+  },
+  {
+   "id": "birch",
+   "name": "Birch",
+   "role": "mentor",
+   "region": "Hoenn",
+   "type": "Normal",
+   "ace": "Zigzagoon",
+   "voice": "cheerful",
+   "traits": [
+    "field research",
+    "running away"
+   ],
+   "motto": "Hurry, hurry!",
+   "bossId": "birch",
+   "aceId": "zigzagoon"
+  },
+  {
+   "id": "rowan",
+   "name": "Rowan",
+   "role": "mentor",
+   "region": "Sinnoh",
+   "type": "Normal",
+   "ace": "Staraptor",
+   "voice": "formal",
+   "traits": [
+    "stern lectures",
+    "tidy lab"
+   ],
+   "motto": "Pay attention.",
+   "bossId": "rowan",
+   "aceId": "staraptor"
+  },
+  {
+   "id": "juniper",
+   "name": "Juniper",
+   "role": "mentor",
+   "region": "Unova",
+   "type": "Normal",
+   "ace": "Stoutland",
+   "voice": "cheerful",
+   "traits": [
+    "research reports",
+    "bright smiles"
+   ],
+   "motto": "Isn't it wonderful?",
+   "bossId": "aureajuniper",
+   "aceId": "stoutland"
+  },
+  {
+   "id": "sycamore",
+   "name": "Sycamore",
+   "role": "mentor",
+   "region": "Kalos",
+   "type": "Normal",
+   "ace": "Charizard",
+   "voice": "formal",
+   "traits": [
+    "mega research",
+    "calm lectures"
+   ],
+   "motto": "There's so much to discover.",
+   "bossId": "augustinesycamore",
+   "aceId": "charizard"
+  },
+  {
+   "id": "magnolia",
+   "name": "Magnolia",
+   "role": "mentor",
+   "region": "Galar",
+   "type": "Normal",
+   "ace": "Dubwool",
+   "voice": "formal",
+   "traits": [
+    "ancient legends",
+    "gentle teas"
+   ],
+   "motto": "The legends are real.",
+   "bossId": null,
+   "aceId": "dubwool"
+  },
+  {
+   "id": "sonia",
+   "name": "Sonia",
+   "role": "ally",
+   "region": "Galar",
+   "type": "Fairy",
+   "ace": "Yamper",
+   "voice": "cheerful",
+   "traits": [
+    "history books",
+    "bright excitement"
+   ],
+   "motto": "I'm figuring it out!",
+   "bossId": "sonia",
+   "aceId": "yamper"
+  },
+  {
+   "id": "burnet",
+   "name": "Burnet",
+   "role": "mentor",
+   "region": "Alola",
+   "type": "Normal",
+   "ace": "Rockruff",
+   "voice": "cheerful",
+   "traits": [
+    "home cooking",
+    "science"
+   ],
+   "motto": "Time for science!",
+   "bossId": null,
+   "aceId": "rockruff"
+  },
+  {
+   "id": "palmer",
+   "name": "Palmer",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Normal",
+   "ace": "Snorlax",
+   "voice": "gruff",
+   "traits": [
+    "tough rooms",
+    "steady work"
+   ],
+   "motto": "Prove yourself.",
+   "bossId": "palmer",
+   "aceId": "snorlax"
+  },
+  {
+   "id": "brandon",
+   "name": "Brandon",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Rock",
+   "ace": "Regirock",
+   "voice": "gruff",
+   "traits": [
+    "ancient puzzles",
+    "stern watching"
+   ],
+   "motto": "Face the Pyramid.",
+   "bossId": null,
+   "aceId": "regirock"
+  },
+  {
+   "id": "anabel",
+   "name": "Anabel",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Psychic",
+   "ace": "Alakazam",
+   "voice": "poetic",
+   "traits": [
+    "a calm gaze",
+    "deep patience"
+   ],
+   "motto": "I read your mind.",
+   "bossId": "anabel",
+   "aceId": "alakazam"
+  },
+  {
+   "id": "tucker",
+   "name": "Tucker",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Fire",
+   "ace": "Flareon",
+   "voice": "boastful",
+   "traits": [
+    "big dome",
+    "loud boasts"
+   ],
+   "motto": "Come at me!",
+   "bossId": null,
+   "aceId": "flareon"
+  },
+  {
+   "id": "spenser",
+   "name": "Spenser",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Normal",
+   "ace": "Slaking",
+   "voice": "gruff",
+   "traits": [
+    "quiet halls",
+    "rough charm"
+   ],
+   "motto": "...",
+   "bossId": null,
+   "aceId": "slaking"
+  },
+  {
+   "id": "greta",
+   "name": "Greta",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Fighting",
+   "ace": "Medicham",
+   "voice": "cheerful",
+   "traits": [
+    "spirited fights",
+    "positive energy"
+   ],
+   "motto": "I won't hold back!",
+   "bossId": null,
+   "aceId": "medicham"
+  },
+  {
+   "id": "noland",
+   "name": "Noland",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Bug",
+   "ace": "Heracross",
+   "voice": "cheerful",
+   "traits": [
+    "simple joys",
+    "hard work"
+   ],
+   "motto": "Let's get started!",
+   "bossId": "noland",
+   "aceId": "heracross"
+  },
+  {
+   "id": "lucy",
+   "name": "Lucy",
+   "role": "frontier",
+   "region": "Hoenn",
+   "type": "Normal",
+   "ace": "Seviper",
+   "voice": "formal",
+   "traits": [
+    "a quiet gaze",
+    "a deadly smile"
+   ],
+   "motto": "Fear me.",
+   "bossId": "lucy",
+   "aceId": "seviper"
+  },
+  {
+   "id": "darach",
+   "name": "Darach",
+   "role": "frontier",
+   "region": "Kalos",
+   "type": "Dragon",
+   "ace": "Kyurem",
+   "voice": "formal",
+   "traits": [
+    "a perfect bow",
+    "old Kalos tales"
+   ],
+   "motto": "Pleased to meet you.",
+   "bossId": "darach",
+   "aceId": "kyurem"
+  },
+  {
+   "id": "argenta",
+   "name": "Argenta",
+   "role": "frontier",
+   "region": "Kalos",
+   "type": "Steel",
+   "ace": "Escavalier",
+   "voice": "formal",
+   "traits": [
+    "quiet focus",
+    "tradition"
+   ],
+   "motto": "I fight with honor.",
+   "bossId": "argenta",
+   "aceId": "escavalier"
+  },
+  {
+   "id": "thorton",
+   "name": "Thorton",
+   "role": "frontier",
+   "region": "Sinnoh",
+   "type": "Steel",
+   "ace": "Magnezone",
+   "voice": "gruff",
+   "traits": [
+    "a stern machine",
+    "thick tools"
+   ],
+   "motto": "Calculating.",
+   "bossId": "thorton",
+   "aceId": "magnezone"
+  },
+  {
+   "id": "dahlia",
+   "name": "Dahlia",
+   "role": "frontier",
+   "region": "Sinnoh",
+   "type": "Poison",
+   "ace": "Roserade",
+   "voice": "formal",
+   "traits": [
+    "hidden poison",
+    "calm assessments"
+   ],
+   "motto": "Bloom.",
+   "bossId": "dahlia",
+   "aceId": "roserade"
+  },
+  {
+   "id": "cheryl",
+   "name": "Cheryl",
+   "role": "ally",
+   "region": "Sinnoh",
+   "type": "Grass",
+   "ace": "Chansey",
+   "voice": "nervous",
+   "traits": [
+    "healing",
+    "kind hands"
+   ],
+   "motto": "Please, let me heal you.",
+   "bossId": "cheryl",
+   "aceId": "chansey"
+  },
+  {
+   "id": "riley",
+   "name": "Riley",
+   "role": "ally",
+   "region": "Sinnoh",
+   "type": "Fighting",
+   "ace": "Lucario",
+   "voice": "cheerful",
+   "traits": [
+    "aura reading",
+    "calm steps"
+   ],
+   "motto": "Believe in your Pokémon.",
+   "bossId": "riley",
+   "aceId": "lucario"
+  },
+  {
+   "id": "buck",
+   "name": "Buck",
+   "role": "ally",
+   "region": "Sinnoh",
+   "type": "Fire",
+   "ace": "Infernape",
+   "voice": "gruff",
+   "traits": [
+    "training",
+    "drive"
+   ],
+   "motto": "Keep at it.",
+   "bossId": "buck",
+   "aceId": "infernape"
+  },
+  {
+   "id": "zinnia",
+   "name": "Zinnia",
+   "role": "villain",
+   "region": "Hoenn",
+   "type": "Dragon",
+   "ace": "Salamence",
+   "voice": "poetic",
+   "traits": [
+    "ancient lore",
+    "a distant gaze"
+   ],
+   "motto": "The sky calls.",
+   "bossId": "zinnia",
+   "aceId": "salamence"
+  },
+  {
+   "id": "lisia",
+   "name": "Lisia",
+   "role": "ally",
+   "region": "Hoenn",
+   "type": "Water",
+   "ace": "Altaria",
+   "voice": "cheerful",
+   "traits": [
+    "bright contests",
+    "fun spirit"
+   ],
+   "motto": "Let's shine!",
+   "bossId": "lisia",
+   "aceId": "altaria"
+  },
+  {
+   "id": "nate",
+   "name": "Nate",
+   "role": "protagonist",
+   "region": "Unova",
+   "type": "Fire",
+   "ace": "Emboar",
+   "voice": "cheerful",
+   "traits": [
+    "new places",
+    "a visor"
+   ],
+   "motto": "Let's battle!",
+   "bossId": "nate",
+   "aceId": "emboar"
+  },
+  {
+   "id": "rosa",
+   "name": "Rosa",
+   "role": "protagonist",
+   "region": "Unova",
+   "type": "Water",
+   "ace": "Samurott",
+   "voice": "cheerful",
+   "traits": [
+    "new towns",
+    "a visor"
+   ],
+   "motto": "Let's go!",
+   "bossId": "rosa",
+   "aceId": "samurott"
+  },
+  {
+   "id": "kris",
+   "name": "Kris",
+   "role": "ally",
+   "region": "Johto",
+   "type": "Normal",
+   "ace": "Meganium",
+   "voice": "cheerful",
+   "traits": [
+    "bright mornings",
+    "simple joys"
+   ],
+   "motto": "Hi!",
+   "bossId": "kris",
+   "aceId": "meganium"
+  },
+  {
+   "id": "gold",
+   "name": "Gold",
+   "role": "protagonist",
+   "region": "Johto",
+   "type": "Fire",
+   "ace": "Typhlosion",
+   "voice": "cheerful",
+   "traits": [
+    "new journeys",
+    "cool hats"
+   ],
+   "motto": "Let's go!",
+   "bossId": null,
+   "aceId": "typhlosion"
+  },
+  {
+   "id": "ash",
+   "name": "Ash",
+   "role": "protagonist",
+   "region": "Kanto",
+   "type": "Electric",
+   "ace": "Pikachu",
+   "voice": "cheerful",
+   "traits": [
+    "never giving up",
+    "a love of friends"
+   ],
+   "motto": "I choose you!",
+   "bossId": "ash",
+   "aceId": "pikachu"
+  },
+  {
+   "id": "leaf",
+   "name": "Leaf",
+   "role": "protagonist",
+   "region": "Kanto",
+   "type": "Grass",
+   "ace": "Venusaur",
+   "voice": "cheerful",
+   "traits": [
+    "quiet courage",
+    "warm smiles"
+   ],
+   "motto": "Let's go!",
+   "bossId": "leaf",
+   "aceId": "venusaur"
+  },
+  {
+   "id": "green",
+   "name": "Green",
+   "role": "rival",
+   "region": "Kanto",
+   "type": "Normal",
+   "ace": "Blastoise",
+   "voice": "boastful",
+   "traits": [
+    "taunting rivals",
+    "a stylish entrance"
+   ],
+   "motto": "Smell ya later.",
+   "bossId": "green",
+   "aceId": "blastoise"
+  }
+ ]
+}

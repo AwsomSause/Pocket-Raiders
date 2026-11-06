@@ -92,6 +92,7 @@ import { environmentStory } from '../core/presentation/environmentStory';
 import { crisisLevel } from '../core/story/crisis';
 import { moveRank } from '../core/moveMastery';
 import { chargeUp, cinematic, prefetchCinematics, type CineKind } from '../ui/battleFx/cinematics';
+import { actionTab, type ActionTab } from '../ui/actionTab';
 import { dynamaxPatternKey, STATUS_PULSE, statusPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
 import { dropPattern, wearPattern, wornPattern } from '../ui/battleFx/formPattern';
 import { loadAssets } from '../ui/lazyAssets';
@@ -235,6 +236,8 @@ export class BattleScene extends Phaser.Scene {
   private busy = false;
   /** The transformation the player chose to do with their next move (null = off). */
   private transformChoice: TransformRequest | null = null;
+  private actionTabUi: ActionTab | null = null;
+  private teraJewels: Partial<Record<Side, Phaser.GameObjects.Image>> = {};
   /** The Rally toggle in the command menu (spends a full Momentum Meter on the next attack). */
   private rallyChoice = false;
   private momentumText!: Phaser.GameObjects.Text;
@@ -905,7 +908,16 @@ export class BattleScene extends Phaser.Scene {
   private applyTeraTint(side: 'player' | 'enemy', mon: PokemonInstance): void {
     const type = this.run.battle?.transform.teraTypes[mon.uid];
     const visual = side === 'player' ? this.playerSprite : this.enemySprite;
+    this.teraJewels[side]?.destroy();
+    delete this.teraJewels[side];
     if (!visual || (!type && !mon.dynamaxed)) return;
+    // The Tera Type's jewel floats over the head, bobbing slowly (still when motion is reduced).
+    if (type && !mon.dynamaxed && this.textures.exists('ui.tera.types')) {
+      const at = this.spotXY(side);
+      const jewel = this.add.image(at.x, at.y - 150, 'ui.tera.types', TERA_ICON_ROW[type]).setScale(1.1).setDepth(visual.depth + 5);
+      if (this.motion !== 'off' && this.motion !== 'reduced') this.tweens.add({ targets: jewel, y: jewel.y - 6, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      this.teraJewels[side] = jewel;
+    }
     const color = mon.dynamaxed ? 0xff3060 : (TYPE_COLORS[type!] ?? 0xffffff);
     const tint = Phaser.Display.Color.Interpolate.ColorWithColor(Phaser.Display.Color.ValueToColor(0xffffff), Phaser.Display.Color.ValueToColor(color), 100, 30);
     const value = Phaser.Display.Color.GetColor(tint.r, tint.g, tint.b);
@@ -1588,6 +1600,8 @@ export class BattleScene extends Phaser.Scene {
     this.moveInfo.setVisible(false);
     this.moveBadges?.destroy();
     this.moveBadges = null;
+    this.actionTabUi?.destroy();
+    this.actionTabUi = null;
     this.commandWindow.setVisible(false);
     this.message.setVisible(true);
     this.tabs?.show(false);
@@ -2451,6 +2465,28 @@ export class BattleScene extends Phaser.Scene {
     });
     this.moveInfo.setVisible(true);
     this.showTabs('attack');
+    this.showActionTab();
+  }
+
+  /** The ACTION tab over the move menu: click to cycle Tera / Z-Move / Dynamax on and off; red-orange while one is on. */
+  private showActionTab(): void {
+    const ctx = this.battleCtx();
+    const choices: TransformRequest[] = [
+      ...(teraOption(ctx) ? [{ kind: 'tera' as const }] : []),
+      ...(zMoveOptions(ctx).some((z) => z !== null) ? [{ kind: 'zmove' as const }] : []),
+      ...(canDynamax(ctx) ? [{ kind: 'dynamax' as const }] : []),
+    ];
+    if (choices.length === 0) return;
+    const on = this.transformChoice;
+    this.actionTabUi = actionTab(this, 20, MESSAGE_Y - 26, {
+      on: !!on,
+      icon: on?.kind === 'dynamax' ? { key: 'ui.dynamax.icon' } : { key: 'ui.tera.types', frame: TERA_ICON_ROW[teraOption(ctx) ?? 'normal'] },
+      onClick: () => {
+        const at = choices.findIndex((c) => c.kind === this.transformChoice?.kind);
+        this.transformChoice = choices[at + 1] ?? null;
+        this.showMoveMenu();
+      },
+    });
   }
 
   /**
