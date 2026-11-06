@@ -307,6 +307,8 @@ export interface BattleContext {
   enemyHyperUsed?: boolean;
   /** Transformations switched off for this run (a challenge). */
   disabledMechanics?: readonly TransformKind[];
+  /** Mega Evolution is chosen by the player (a `mega` transform request) rather than happening by itself. */
+  manualMega?: boolean;
   /** Gimmick progression: use counts and type hits this run (core/gimmicks). */
   gimmicks?: import('../gimmicks').GimmickContext;
   /**
