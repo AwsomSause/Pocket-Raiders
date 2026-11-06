@@ -79,8 +79,9 @@ describe('Rods and fishing spots', () => {
   it('the Super Rod shows three, the last the strongest of four draws', () => {
     let first = 0;
     let last = 0;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 12; i++) {
       const run = nextStage(take(newRun(`super-${i}`), 'super-rod'));
+      if (!itemStops(run).some((s) => s.side.kind === 'fish')) continue; // some stages roll no water stop
       const offer = fishingOffer(content, run, fishSpot(run).sideId);
       expect(offer).toHaveLength(3);
       first += bst(offer[0]!.speciesId);
