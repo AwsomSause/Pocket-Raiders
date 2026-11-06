@@ -1,0 +1,31 @@
+{
+  "note": "Mining Spots (S231): a dig on the map. Each dig makes one seeded roll on its table. Shallow is free and mostly small finds; deep costs money and has the fossils and stones. Items must exist in items.json or itemCatalog.json.",
+  "digs": [
+    { "id": "shallow", "name": "Dig near the surface", "cost": 0, "blurb": "Free. Mostly pebbles and small gems; now and then a stone.",
+      "table": [
+        { "kind": "money", "amount": 150, "label": "a Pearl", "weight": 30 },
+        { "kind": "money", "amount": 300, "label": "a Big Pearl", "weight": 14 },
+        { "kind": "item", "id": "fire-stone", "weight": 4 },
+        { "kind": "item", "id": "water-stone", "weight": 4 },
+        { "kind": "item", "id": "leaf-stone", "weight": 4 },
+        { "kind": "item", "id": "thunder-stone", "weight": 4 },
+        { "kind": "nothing", "weight": 40 }
+      ] },
+    { "id": "deep", "name": "Dig deep", "cost": 300, "blurb": "Costs ₽300. Fossils, rarer stones and big gems.",
+      "table": [
+        { "kind": "money", "amount": 600, "label": "a Heart Scale hoard", "weight": 18 },
+        { "kind": "item", "id": "moon-stone", "weight": 10 },
+        { "kind": "item", "id": "sun-stone", "weight": 8 },
+        { "kind": "item", "id": "dusk-stone", "weight": 8 },
+        { "kind": "item", "id": "dawn-stone", "weight": 8 },
+        { "kind": "item", "id": "ice-stone", "weight": 8 },
+        { "kind": "item", "id": "helix-fossil", "weight": 6 },
+        { "kind": "item", "id": "dome-fossil", "weight": 6 },
+        { "kind": "item", "id": "claw-fossil", "weight": 6 },
+        { "kind": "item", "id": "root-fossil", "weight": 6 },
+        { "kind": "item", "id": "skull-fossil", "weight": 6 },
+        { "kind": "item", "id": "armor-fossil", "weight": 6 },
+        { "kind": "nothing", "weight": 12 }
+      ] }
+  ]
+}

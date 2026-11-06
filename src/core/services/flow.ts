@@ -17,6 +17,7 @@ import { abilityOf, addLevels, createPokemon, maxHp, maxPp, usableLearnset, getS
 import { specialFamily } from '../specialForms';
 import { applyCatalog, catalogTargetProblem, getCatalogEntry } from '../catalog';
 import { addItem, itemUseProblem } from '../items';
+import { dig, digOptions } from '../mining';
 import { followTrail, trailOptions, trailProblem, TRAIL_PREFIX } from '../scentTrail';
 import { applyRecipe, CRAFTING, materialName, recipeCost, recipeProblem } from '../crafting';
 import { applyFusion, fusionOptions, TERA_FORGE } from '../moveFusion';
@@ -330,6 +331,9 @@ export function serviceView(content: Content, run: RunState, sideId: string): Se
         if (found) add(`found:${found.index}`, `Lost-and-Found: ${keepsakeName(content, found.k.itemId)}`, `${found.k.line} Sold at a reduced price.`, found.cost, side.used ? 'You already bid today.' : null);
       }
       break;
+    case 'mining':
+      for (const d of digOptions()) add(`dig:${d.id}`, d.name, d.blurb, d.cost, side.used ? 'You already dug here.' : null);
+      break;
     case 'workshop': {
       const have = Object.entries(run.materials).filter(([, n]) => n > 0).map(([id, n]) => `${n} ${materialName(id)}`).join(', ');
       add('look', 'Check your materials', have ? `You hold: ${have}.` : 'You hold no materials yet. Win battles and raids to collect them.', 0);
@@ -499,6 +503,9 @@ export function useService(content: Content, current: RunState, sideId: string, 
     }
     case 'look':
       message = 'The workbench is yours.';
+      break;
+    case 'dig':
+      message = dig(content, run, sideId, uid!);
       break;
     case 'craft': {
       if (uid!.startsWith(TRAIL_PREFIX)) {
