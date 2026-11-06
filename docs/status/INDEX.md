@@ -231,3 +231,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `presentation-ash.md`: ash particles in Fire arenas (S251).
 - `growth-synergy-tags.md`: Growth slice 3: Team Synergy Tags (Sun/Rain/Sand/Snow/Trick Room teams open with a +1 lift).
 - `raid-bosses-slice6.md`: Raids & bosses slice 6: S393 bots, S394 weekly raid, S395 Totem auras, S397 aim picker, S398 loot preview, S399 mini-bosses, S401 cards, S402 talk, S403 crowd, S405 den weather, S406 titans, S407 gauntlet, S408 revenge, S409 capture, S411 puzzle, S412 hazards, role badge. S410 co-op not built.
+- `growth-paired-moves.md`: Growth slice 4: Bond Level 2+ pairs get a named paired-move bonus on the faint hand-over.

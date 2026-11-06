@@ -202,7 +202,7 @@ export type BattleEvent =
   | { type: 'refused'; side: Side; uid: string; moveId: string }
   | { type: 'initiative'; side: Side; uid: string; from: string; to: string }
   | { type: 'teamwork'; side: Side; uid: string; partner: string; name: string; stats: string[] }
-  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number }
+  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number; paired?: string }
   | { type: 'combo'; side: Side; from: string; to: string; stat: 'atk' | 'spa' }
   | { type: 'newMove'; side: Side; uid: string; moveId: string; replaced: string | null }
   | { type: 'turningPoint'; side: Side; uid: string; emotion: string }

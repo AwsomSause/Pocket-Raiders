@@ -284,7 +284,7 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
     case 'teamwork':
       return `${names.nameOf(e.uid)} and ${names.nameOf(e.partner)} work together: ${e.name}! ${e.stats.map((x) => x.toUpperCase()).join(' and ')} rose!`;
     case 'bondLevel':
-      return `${names.nameOf(e.to)} fights on for ${names.nameOf(e.from)}! Bond Level ${e.level}: its ${e.stat === 'atk' ? 'Attack' : 'Sp. Atk'} rose${e.level > 1 ? ' sharply' : ''}!`;
+      return `${names.nameOf(e.to)} fights on for ${names.nameOf(e.from)}! Bond Level ${e.level}: its ${e.stat === 'atk' ? 'Attack' : 'Sp. Atk'} rose${e.level > 1 ? ' sharply' : ''}!${e.paired ? ` Paired move: ${e.paired}! It rose even higher!` : ''}`;
     case 'combo':
       return `${names.nameOf(e.to)} takes over exactly as practiced! Its ${e.stat === 'atk' ? 'Attack' : 'Sp. Atk'} rose!`;
     case 'newMove':
