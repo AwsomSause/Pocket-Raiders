@@ -260,6 +260,8 @@ export interface BattleContext {
   party: PokemonInstance[];
   /** Bag contents (items used in battle are removed from here). */
   inventory: Record<string, number>;
+  /** Hot-Seat Versus (S203): a second player's move index for the foe this turn, used instead of the AI's choice (a forced or locked move still wins). Cleared after the turn. */
+  enemyPick?: number;
   /** The "battle" random stream. */
   rng: Rng;
   /** The "capture" random stream. */
@@ -656,7 +658,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyChoice = choiceLock(battle, enemy.mon);
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
   let enemyMoveIndex =
-    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+  ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
 
   // 1. Switching and items go before any move.

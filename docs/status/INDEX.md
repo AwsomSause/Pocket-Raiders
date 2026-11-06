@@ -169,6 +169,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `shops-redesign.md`: Shops redesign, slice 1 (Kice 2026-11-02; mock-ups in project files `redesign/shops/`): Kice picked six looks
 - `social-profile.md`: Social/tech slice 6 (S214 Achievements Showcase, S215 Photo Contest, S217 Trade Boards): `core/social.ts`, sto
 - `social-share-codes.md`: Social/tech slice 1 (S198 Share Codes, S200 Challenge Cards; S199 Ghost Teams already existed as GH1 ghost cod
+- `social-tools-pack.md`: Social/tech slice 7 (S201 Leaderboard by Seed, S202 Co-op Draft, S203 Hot-Seat Versus, S204 Spectator Replay V
 - `speedrun-timer.md`: Social/tech slice 4 (S211 Speedrun Timer): `core/tools/speedrun.ts`. Off by default; Hub > Tools & Community >
 - `story-elite-four-rematch.md`: Story & rivals S127 Elite Four Rematches: once you have won 25+ battles per region (`balance.eliteRematch`), t
 - `story-gym-leader-moods.md`: Story & rivals S126 Gym Leader Personalities: each gym leader has a mood on the day you face them (`core/story

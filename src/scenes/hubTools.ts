@@ -18,6 +18,17 @@ import { balanceLines, balanceView } from '../core/tools/balanceView';
 import { provenanceLines, provenanceSources } from '../core/tools/provenanceView';
 import { speciesStrength } from '../quality/balanceSim';
 import { RunStateSchema } from '../core/state';
+import { playedSeeds, scoreLine, seedLeaderboard } from '../core/tools/seedLeaderboard';
+import { ghostFor } from '../core/ghost';
+import { COOP_SIZE, coopTeam, draftDone, pick as coopPick, remaining, startCoop, whoseTurn, type CoopDraft } from '../core/tools/coopDraft';
+import { activeMon, hotSeatWinner, moveOptions, playTurn, startHotSeat, type HotSeat } from '../core/tools/hotSeat';
+import { noteKey, parseNotes, setNote, viewAt } from '../core/tools/spectator';
+import { castVote, featured, parseVotes, tally, voteCode } from '../core/tools/packVoting';
+import { addPoster, parsePosters, removePoster } from '../core/tools/fanArt';
+import { wildEligibleSpecies } from '../core/themes';
+import { hashSeed, Rng } from '../core/rng';
+import { eventText } from './../ui/battleText';
+import { pickPosterImage } from '../ui/files';
 import { acceptOffer, cancelOffer, logPhoto, postOffer, readOffer, redeemReply, SHOWCASE_SLOTS, showcaseOf, toggleShowcase, weekTheme } from '../core/social';
 import { backupDue } from '../core/tools/backup';
 import { packSeeds } from '../core/configPack';
@@ -72,6 +83,12 @@ export function openTools(host: ToolsHost): void {
     { label: 'Photo contest', sub: 'A new theme each week. Take a shot (F9 saves a framed screenshot) and log it here.', go: () => openPhotos(host) },
     { label: 'Trade board', sub: 'Swap kept Pokémon with friends using short codes. No server; each code works once.', go: () => openTradeBoard(host) },
     { label: 'Report a bug', sub: 'Bundles the version, seed and recent errors into a file you can send.', go: () => openBugReport(host) },
+    { label: 'Seed leaderboard', sub: 'Your runs on one seed, ranked, with a friend\'s ghost when you have one.', go: () => openSeedBoards(host) },
+    { label: 'Co-op draft', sub: 'Two players alternate picks from a shared pool and share the team as a code.', go: () => openCoop(host, null) },
+    { label: 'Hot-seat versus', sub: 'Two people, one device: pick moves in turn and pass it. Text battle, three Pokémon each.', go: () => openHotSeat(host) },
+    { label: 'Replay viewer', sub: 'Step through a past run\'s journal and add your own notes.', go: () => openReplayList(host) },
+    { label: 'Pack voting', sub: 'Pick featured mod packs with friends\' vote codes. Featured packs show first.', go: () => openVoting(host) },
+    { label: 'Fan art frame', sub: 'Keep up to 3 of your own images as posters. Stored on this device only.', go: () => openFrame(host) },
     { label: 'Feature flags', sub: 'Switch optional parts of the game on or off. Stored on this device only.', go: () => openFlags(host) },
     ...(flagOn(device, 'devTools')
       ? [
@@ -128,8 +145,13 @@ function openStats(host: ToolsHost): void {
 function openSeedBoard(host: ToolsHost): void {
   const { session } = services();
   const p = session.profile;
-  const extra = packSeeds(loadStoredPacks(packStore).packs);
-  const board = mergedBoard(extra);
+  const packs = loadStoredPacks(packStore).packs;
+  const extra = packSeeds(packs);
+  // The pack the player's friends voted for (Pack voting) goes first.
+  const star = featured(parseVotes(device.get(KEYS.votes)), packs.map((x) => x.id));
+  const starSeeds = packSeeds(packs.filter((x) => x.id === star));
+  const merged = mergedBoard(extra);
+  const board = [...merged.filter((e) => starSeeds.some((x) => x.seed === e.seed && x.archetypeId === e.archetypeId)), ...merged.filter((e) => !starSeeds.some((x) => x.seed === e.seed && x.archetypeId === e.archetypeId))];
   const now = new Date().toISOString();
   const rows = board.map((e) => {
     const code = boardCode(e);
@@ -358,4 +380,160 @@ function openReplayDiff(host: ToolsHost): void {
 async function openProvenance(host: ToolsHost): Promise<void> {
   const { default: md } = await import('../../docs/quality/asset-provenance.md?raw');
   page(host, 'Asset sources', textRows(provenanceLines(provenanceSources(md))));
+}
+
+const KEYS = { notes: 'pkr.replayNotes', votes: 'pkr.packVotes', frame: 'pkr.fanArt' } as const;
+
+function openSeedBoards(host: ToolsHost): void {
+  const { session } = services();
+  const seeds = playedSeeds(session.profile.runHistory).slice(0, 12);
+  const rows = seeds.length ? seeds.map((s) => row(s.seed, `${s.runs} run${s.runs === 1 ? '' : 's'}. Enter shows the board.`)) : [row('No runs yet', 'Finish a run to start a board. Runs that used debug tools never count.')];
+  page(host, 'Seed leaderboard', rows, (n) => {
+    const s = seeds[n];
+    if (!s) return;
+    const g = ghostFor(session.profile, s.seed);
+    const board = seedLeaderboard(session.profile.runHistory, s.seed, g ? { from: g.from, victory: g.victory, badges: g.badges, encounters: g.encounters } : null);
+    page(host, `Board: ${s.seed}`, board.map((b, i) => row(scoreLine(b, i + 1), '', b.mine ? 'You' : 'Friend')), () => undefined, () => openSeedBoards(host));
+  });
+}
+
+function openCoop(host: ToolsHost, draft: CoopDraft | null): void {
+  const { session } = services();
+  if (!draft) {
+    const names = (window.prompt('Two names, separated by a comma:', 'Player 1, Player 2') ?? '').split(',');
+    const seed = window.prompt('Seed for the pool (same seed = same pool):', String(Date.now() % 100000)) ?? '';
+    const made = startCoop(wildEligibleSpecies(session.content).map((sp) => sp.id), seed, [names[0] ?? '', names[1] ?? '']);
+    if ('problem' in made) return host.restart(made.problem);
+    return openCoop(host, made);
+  }
+  const name = (id: string) => session.content.species.get(id)?.name ?? id;
+  if (draftDone(draft)) {
+    const { code } = coopTeam(draft);
+    const rows = draft.picks.map((p) => row(name(p.speciesId), `Picked by ${draft.names[p.by]}`), ) as PickerRow[];
+    rows.push(row('Team code', code ?? '', 'Copy'));
+    return page(host, 'Co-op team', rows, (n) => {
+      if (n === rows.length - 1 && code) void navigator.clipboard?.writeText(code).then(() => host.restart('Team code copied.'), () => window.prompt('Team code:', code));
+    }, () => host.close());
+  }
+  const left = remaining(draft);
+  page(host, `${draft.names[whoseTurn(draft)]}: pick ${draft.picks.length + 1} of ${COOP_SIZE}`, left.map((id) => row(name(id), '')), (n) => {
+    const next = left[n] ? coopPick(draft, left[n]!) : null;
+    if (next && !('problem' in next)) openCoop(host, next);
+  }, () => openTools(host));
+}
+
+function openHotSeat(host: ToolsHost): void {
+  const { session } = services();
+  const names = (window.prompt('Two names, separated by a comma:', 'Player 1, Player 2') ?? '').split(',');
+  const seed = window.prompt('Seed (same seed + same picks = same battle):', String(Date.now() % 100000)) ?? '';
+  const pool = wildEligibleSpecies(session.content).map((sp) => sp.id).sort();
+  const rng = new Rng(hashSeed(`${seed}#hotseat-teams`));
+  const mix = rng.shuffle(pool);
+  const h = startHotSeat(session.content, mix.slice(0, 3), mix.slice(3, 6), 50, seed, [names[0] ?? '', names[1] ?? '']);
+  if ('problem' in h) return host.restart(h.problem);
+  hotSeatPick(host, h, 0, 0);
+}
+
+function hotSeatPick(host: ToolsHost, h: HotSeat, side: 0 | 1, firstPick: number): void {
+  const { session } = services();
+  const winner = hotSeatWinner(h);
+  if (winner !== null) return page(host, 'Hot-seat versus', [row(winner === 'draw' ? 'A draw.' : `${h.names[winner]} wins!`, `After ${h.turns} turns.`)], () => undefined, () => host.close());
+  const opts = moveOptions(h, side);
+  const me = activeMon(h, side);
+  const foe = activeMon(h, side === 0 ? 1 : 0);
+  const nm = (id: string) => session.content.species.get(id)?.name ?? id;
+  page(host, `${h.names[side]}: choose a move`, opts.map((o) => row(o.name, `${nm(me.speciesId)} ${me.hp} HP vs ${nm(foe.speciesId)} ${foe.hp} HP`, `PP ${o.pp}`)), (n) => {
+    if (side === 0) return page(host, 'Pass the device', [row(`Pass it to ${h.names[1]}`, 'Look away, player 1. Enter when ready.', 'Ready')], () => hotSeatPick(host, h, 1, n), () => undefined);
+    const result = playTurn(h, firstPick, n);
+    if ('problem' in result) return host.restart(result.problem);
+    const names = { player: nm(activeMon(h, 0).speciesId), enemy: nm(activeMon(h, 1).speciesId), trainer: h.names[1], nameOf: (uid: string) => nm([...h.ctx.party, ...h.ctx.battle.enemyTeam].find((m) => m.uid === uid)?.speciesId ?? uid) };
+    const lines = result.events.map((e) => eventText(session.content, names, e as never)).filter((t): t is string => !!t);
+    page(host, `Turn ${h.turns}`, (lines.length ? lines : ['Nothing happened.']).map((l) => row(l, '')), () => hotSeatPick(host, h, 0, 0), () => hotSeatPick(host, h, 0, 0));
+  }, () => openTools(host));
+}
+
+function openReplayList(host: ToolsHost): void {
+  const runs = services().session.profile.runHistory.filter((r) => r.journal.length).slice(-15).reverse();
+  const rows = runs.length ? runs.map((r) => row(`${r.seed}  ·  ${r.victory ? 'won' : 'lost'}`, `${r.journal.length} steps. Enter to watch.`)) : [row('Nothing to watch', 'Runs with a Journal can be replayed here.')];
+  page(host, 'Replay viewer', rows, (n) => runs[n] && openReplay(host, runs[n]!.runId, runs[n]!.journal, 0));
+}
+
+function openReplay(host: ToolsHost, runId: string, journal: string[], index: number): void {
+  const notes = parseNotes(device.get(KEYS.notes));
+  const v = viewAt(journal, runId, index, notes);
+  const rows = [
+    row(v.line ?? '(empty)', `Step ${v.index + 1} of ${v.total}`),
+    row('Next step', '', v.atEnd ? '' : 'Enter'),
+    row('Previous step', '', v.atStart ? '' : 'Enter'),
+    row(v.note ? `Note: ${v.note}` : 'Add a note', 'Notes stay on this device.', 'Edit'),
+  ];
+  page(host, 'Replay', rows, (n) => {
+    if (n === 1) openReplay(host, runId, journal, v.index + 1);
+    else if (n === 2) openReplay(host, runId, journal, v.index - 1);
+    else if (n === 3) {
+      const text = window.prompt('Note for this step (empty clears it):', notes[noteKey(runId, v.index)] ?? '');
+      if (text !== null) {
+        const next = setNote(notes, journal, runId, v.index, text);
+        if ('problem' in next) return host.restart(next.problem);
+        device.set(KEYS.notes, JSON.stringify(next.notes));
+      }
+      openReplay(host, runId, journal, v.index);
+    }
+  }, () => openReplayList(host));
+}
+
+function openVoting(host: ToolsHost): void {
+  const installed = loadStoredPacks(packStore).packs;
+  const ids = installed.map((p) => p.id);
+  const votes = parseVotes(device.get(KEYS.votes));
+  const top = featured(votes, ids);
+  const rows = [row('Enter a friend\'s vote code', 'Codes look like PV1.pack-id.Name. One vote per friend.', 'Add'), ...tally(votes, ids).map((t) => row(installed.find((p) => p.id === t.packId)?.name ?? t.packId, `Enter makes a vote code to send to friends`, `${t.votes}${t.packId === top ? ' ★' : ''}`))];
+  if (!ids.length) rows.push(row('No packs installed', 'Add one in Mod packs first.'));
+  page(host, 'Pack voting', rows, (n) => {
+    if (n === 0) {
+      const code = window.prompt('Vote code:', '');
+      if (!code) return;
+      const next = castVote(votes, code, ids);
+      if ('problem' in next) return host.restart(next.problem);
+      device.set(KEYS.votes, JSON.stringify(next.votes));
+      return host.restart('Vote counted.');
+    }
+    const t = tally(votes, ids)[n - 1];
+    if (t) window.prompt('Send this code to friends, or add it yourself:', voteCode(t.packId, window.prompt('Your name:', 'Me') ?? 'Me'));
+  });
+}
+
+function openFrame(host: ToolsHost): void {
+  const posters = parsePosters(device.get(KEYS.frame));
+  const rows: PickerRow[] = posters.map((p, i) => ({
+    problem: null,
+    hint: 'Enter removes this poster.',
+    draw: (scene, box, w, h) => {
+      const key = `fanart-${i}-${hashSeed(p.dataUrl).a}`;
+      const show = () => box.scene && box.add(scene.add.image(34, h / 2, key).setDisplaySize(44, 44));
+      if (scene.textures.exists(key)) show();
+      else {
+        scene.textures.once(`addtexture-${key}`, show);
+        scene.textures.addBase64(key, p.dataUrl);
+      }
+      box.add(scene.add.text(70, h / 2, p.title, textStyle(18, COLORS.textLight, { wordWrap: { width: w - 150 } })).setOrigin(0, 0.5));
+      box.add(scene.add.text(w - 12, h / 2, 'Remove', textStyle(15, COLORS.gold)).setOrigin(1, 0.5));
+    },
+  }));
+  rows.push(row('Add a poster', `${posters.length} of 3 used. Pick an image; it is shrunk and kept on this device.`, 'Add'));
+  page(host, 'Fan art frame', rows, (n) => {
+    if (n < posters.length) {
+      device.set(KEYS.frame, JSON.stringify(removePoster(posters, n)));
+      return host.restart('Poster removed.');
+    }
+    pickPosterImage(
+      (dataUrl, name) => {
+        const next = addPoster(posters, name, dataUrl);
+        if ('problem' in next) return host.restart(next.problem);
+        device.set(KEYS.frame, JSON.stringify(next));
+        host.restart('Poster added.');
+      },
+      (m) => host.restart(m),
+    );
+  });
 }
