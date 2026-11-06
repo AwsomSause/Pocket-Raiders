@@ -41,6 +41,9 @@ import { arenaFor, getTheme } from '../core/themes';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
 import { device } from '../game/deviceTools';
+import { flagOn } from '../core/tools/featureFlags';
+import { commentaryLine } from '../core/tools/commentary';
+import { maxHp } from '../core/pokemon';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
 import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy } from '../ui/audio';
@@ -335,6 +338,12 @@ export class MapScene extends Phaser.Scene {
       const sp = updateSplits(old && old.runId === run.runId ? old : newSplits(run.runId, now), now, run.badges.length, false);
       device.setSplits(JSON.stringify(sp));
       this.add.text(GAME_WIDTH - 24, 68, `Run time ${formatMs(now - sp.startedAt)}${sp.splits.length ? `  ·  last split ${formatMs(sp.splits[sp.splits.length - 1]!.ms)}` : ''}`, textStyle(13, hSub)).setOrigin(1, 0).setName('speedrun-hud');
+    }
+    // Run Commentary Bot (S213, off unless the "commentary" feature flag is on): one narrator line, text only.
+    if (flagOn(device, 'commentary')) {
+      const lead = run.party[0];
+      const text = commentaryLine({ seed: run.seed, encounters: run.encountersCompleted, badges: run.badges.length, leadHp: lead ? lead.hp / Math.max(1, maxHp(content, lead)) : 1, partySize: run.party.length, fainted: run.party.filter((p) => p.hp <= 0).length });
+      this.add.text(GAME_WIDTH / 2, 92, `“${text}”`, textStyle(13, '#e8e0c8', { stroke: '#1a1a2a', strokeThickness: 3 })).setOrigin(0.5, 0).setName('commentary');
     }
     // Mentors: who trains you, how far the bond has come and where you stand against the fellow apprentice.
     const mentorLine = league ? null : mentorHudLine(run);

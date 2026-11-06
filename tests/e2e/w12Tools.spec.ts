@@ -17,8 +17,8 @@ test('Tools room pages open and close; offline files are served', async ({ page,
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
   await page.waitForTimeout(400);
 
-  // The list also holds the bracket (a text prompt) and the save check (a file picker): those two have no page to open.
-  for (const item of [0, 1, 2, 3, 4, 7, 8, 13]) {
+  // The list also holds the bracket, co-op draft and hot-seat (text prompts) and the save check (a file picker): those have no page to open.
+  for (const item of [0, 1, 2, 3, 4, 7, 8, 13, 16, 17, 18, 19]) {
     await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
     await page.waitForTimeout(250);
     expect(await hub(page, '!!hub.picker'), 'tools list open').toBe(true);
@@ -51,8 +51,8 @@ test('Developer tools appear only when the flag is on, and their pages open', as
   await page.evaluate(() => void (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub'));
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
   await page.waitForTimeout(400);
-  // 14 balance dashboard, 17 asset sources (13 is the flags page, 15 and 16 need files).
-  for (const item of [14, 17]) {
+  // 20 balance dashboard, 23 asset sources (21 and 22 need files).
+  for (const item of [20, 23]) {
     await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
     await page.waitForTimeout(250);
     for (let i = 0; i < item; i++) await page.keyboard.press('ArrowDown');
