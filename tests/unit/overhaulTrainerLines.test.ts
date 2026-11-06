@@ -80,6 +80,8 @@ describe('overhaul trainer lines', () => {
     expect(tags).toContain('pack:overdrive');
     expect(tags).toContain('pack:ace');
     expect(out.every((c) => c.pool!.length === 1 && c.pool![0]!.length >= 8)).toBe(true);
+    const rf = packMomentCandidates({ ...(ctx([{ type: 'switchIn', side: 'player', uid: 'x' }, { type: 'faint', side: 'enemy', uid: 'y' }], []) as object), prior: {} } as never);
+    expect(rf.map((c) => c.cue?.event)).toEqual(expect.arrayContaining(['pack:read', 'pack:fail']));
     // deterministic
     expect(packMomentCandidates(ctx(evs, []))[0]!.pool).toEqual(packMomentCandidates(ctx(evs, []))[0]!.pool);
   });

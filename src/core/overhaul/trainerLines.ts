@@ -89,7 +89,7 @@ export function archetypePool(classId: string | null | undefined, category: Dial
   return lines && lines.length ? lines : null;
 }
 
-function situationLines(c: PlanCtx, sit: Situation | 'weather' | 'overdrive'): string[] | null {
+function situationLines(c: PlanCtx, sit: Situation | 'weather' | 'overdrive' | 'read'): string[] | null {
   const id = packTrainerFor(c.battle.trainer?.leaderId);
   const lines = (id ? cache?.get(id)?.get(sit) : undefined) ?? archCache?.get(c.battle.trainer?.classId ?? '')?.get(sit);
   return lines && lines.length ? lines : null;
@@ -103,7 +103,7 @@ function situationLines(c: PlanCtx, sit: Situation | 'weather' | 'overdrive'): s
 export function packMomentCandidates(c: PlanCtx): Candidate[] {
   if (!cache) return [];
   const out: Candidate[] = [];
-  const add = (ev: PlanCtx['drama'][number], tag: string, sit: Situation | 'weather' | 'overdrive', tier: Candidate['tier']) => {
+  const add = (ev: PlanCtx['drama'][number], tag: string, sit: Situation | 'weather' | 'overdrive' | 'read', tier: Candidate['tier']) => {
     const lines = situationLines(c, sit);
     if (!lines) return;
     const id = `${c.key}:pack:${tag}`;
@@ -113,6 +113,12 @@ export function packMomentCandidates(c: PlanCtx): Candidate[] {
   c.events.forEach((e: BattleEvent, i) => {
     if (e.type === 'weather') add(at(i), 'weather', 'weather', 'ambient');
     else if (e.type === 'hyper' && e.side === 'player') add(at(i), 'overdrive', 'overdrive', 'tactical');
+  });
+  // You switched Pokémon on purpose and the trainer notices (the pack's `read` lines); their first Pokémon down while
+  // others remain is "the plan failed" (`fail`). Once per battle each.
+  c.events.forEach((e: BattleEvent, i) => {
+    if (e.type === 'switchIn' && e.side === 'player' && c.prior) add(at(i), 'read', 'read', 'ambient');
+    else if (e.type === 'faint' && e.side === 'enemy' && c.battle.enemyTeam.some((m) => m.hp > 0)) add(at(i), 'fail', 'fail', 'tactical');
   });
   const team = c.battle.enemyTeam;
   if (team.length > 1) {
