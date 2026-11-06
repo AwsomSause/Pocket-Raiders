@@ -1,0 +1,160 @@
+{
+ "events": [
+  {
+   "id": "field-overgrowth",
+   "name": "Blocked Path: Overgrowth",
+   "group": "Field moves",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A thick tree, a loose boulder and a still pond block three shortcuts. Each one hides something, if a Pokémon of yours knows the right move.",
+   "choices": [
+    {
+     "label": "Cut the tree down (Cut)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "cut"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon fells the tree. Behind it: a Heart Scale.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "heart-scale",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smash the boulder (Rock Smash)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "rock-smash"
+      }
+     ],
+     "success": {
+      "text": "The boulder cracks open on a Nugget.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Surf across the pond (Surf)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "surf"
+      }
+     ],
+     "success": {
+      "text": "You ride the water to a small island and a Rare Candy.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk around it",
+     "success": {
+      "text": "You find another way round and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "field-hidden-cave",
+   "name": "Blocked Path: Hidden Cave",
+   "group": "Field moves",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A dark cave mouth, a heavy rock and a cliff face each lead somewhere. Field moves would open them.",
+   "choices": [
+    {
+     "label": "Light the cave (Flash)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "The cave glows and shows a Max Ether in the dust.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "max-ether",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the rock aside (Strength)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "The rock rolls away from a PP Up.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pp-up",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig under the cliff (Dig)",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "dig"
+      }
+     ],
+     "success": {
+      "text": "You tunnel in and come up beside a Big Nugget.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "big-nugget",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk around it",
+     "success": {
+      "text": "You find another way round and move on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
