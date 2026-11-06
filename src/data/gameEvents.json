@@ -12716,6 +12716,91 @@
     "w9",
     "collection"
    ]
+  },
+  {
+   "id": "world-boss-week",
+   "version": 1,
+   "name": "World Boss Week",
+   "kind": "weekly",
+   "description": "A huge boss is loose and every trainer is fighting it. Offline, your own raid wins fill the town board; the bar below shows how far the town has got.",
+   "schedule": {
+    "kind": "weeklyRotation"
+   },
+   "seedRule": "isoWeek",
+   "progressionEligibility": true,
+   "eligibility": {
+    "minRunsFinished": 0
+   },
+   "mode": "any",
+   "ruleText": "Raid dens and giants appear more often; boss Pokémon deal 10% more damage. Your wins this week add to the town board.",
+   "modifiers": [
+    {
+     "kind": "bossDamageTakenMultiplier",
+     "value": 1.1
+    }
+   ],
+   "mapEvents": [
+    "alpha-pokemon",
+    "sleeping-giant",
+    "slumbering-snorlax",
+    "legendary-shadow"
+   ],
+   "objectives": [
+    {
+     "id": "town-board-1",
+     "text": "Town board 1: win 2 raids",
+     "counter": "raidsWon",
+     "atLeast": 2,
+     "reward": {
+      "researchPoints": 60
+     }
+    },
+    {
+     "id": "town-board-2",
+     "text": "Town board 2: win 5 raids",
+     "counter": "raidsWon",
+     "atLeast": 5,
+     "reward": {
+      "researchPoints": 120
+     }
+    },
+    {
+     "id": "town-board-3",
+     "text": "Town board 3: beat 3 Totems",
+     "counter": "totemsWon",
+     "atLeast": 3,
+     "reward": {
+      "researchPoints": 120
+     }
+    },
+    {
+     "id": "town-board-4",
+     "text": "Town board 4: win 8 raids",
+     "counter": "raidsWon",
+     "atLeast": 8,
+     "reward": {
+      "researchPoints": 180
+     }
+    }
+   ],
+   "reward": {
+    "researchPoints": 400,
+    "title": "World Boss Slayer",
+    "pool": "bulwarks"
+   },
+   "repeatPolicy": "oncePerEvent",
+   "fallbackReward": {
+    "researchPoints": 200,
+    "candies": 15
+   },
+   "visualTheme": {
+    "color": "#b02818",
+    "icon": "item.golden_mystic_ticket"
+   },
+   "contentTags": [
+    "raids",
+    "totems"
+   ]
   }
  ]
 }
