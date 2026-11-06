@@ -212,6 +212,7 @@ import { finalRivalLine, tellCampfire } from './story/highHype';
 import { ultimateRival } from './rivals/ultimate';
 import { applyGrandInfluence, endGrandBattle, grandNotes, startGrandBattle } from './story/grandEnemy';
 import { simulateRivalWorld } from './rivals/world';
+import { grantShinyEgg } from './shinyEgg';
 import { worldTick } from './worldSim/tick';
 import { noteProtagonistTitle, rivalSighting } from './rivals/recognition';
 import { rivalRivalries, rivalTeamUp } from './rivals/rivalries';
@@ -615,6 +616,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
+  grantShinyEgg(content, run);
   simulateRivalWorld(content, run);
   rivalCatchesMonRival(content, run);
   rivalRivalries(content, run);

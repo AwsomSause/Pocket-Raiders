@@ -2342,6 +2342,8 @@ export const BalanceSchema = z.object({
   startingItems: z.record(z.string(), z.number().int().positive()),
   /** Chance that a wild Pokémon is shiny (director decision D8: 1/2000). */
   shinyChance: z.number().min(0).max(1),
+  /** W9 (design 14.24): the Max Luck shiny egg. `left` is its hatch distance in stages; `origin` is the egg origin whose tier weights it uses. */
+  shinyEgg: z.object({ left: z.number().int().min(1), origin: z.string() }).default({ left: 6, origin: 'Regional Egg' }),
   /** Shiny Charm tiers (S225): species caught across all runs (the dex) lift the shiny chance of every run. */
   shinyCharm: z.object({ tiers: z.array(z.object({ dex: z.number().int().positive(), multiplier: z.number().min(1), label: z.string() })) }),
   /** Dex Completion Rewards (S239): species caught across all runs pay a title, bank credits and research points once each (claim ledger). */

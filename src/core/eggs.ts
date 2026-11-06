@@ -57,6 +57,8 @@ export interface LayOptions {
   origin?: string;
   /** Force a tier (rewards that promise a rare Egg). */
   tier?: string;
+  /** The egg is shiny for certain (the Max Luck egg); no shiny roll is made. */
+  forceShiny?: boolean;
 }
 
 /** Hatched Pokémon start this friendly (Gen 2+: 120). */
@@ -85,7 +87,7 @@ export function layEgg(content: Content, run: RunState, speciesId: string, opts:
     left,
     total: left,
     unit: opts.unit,
-    shiny: rollShiny(content, rng, (opts.shinyMultiplier ?? 1) * tier.shinyMultiplier),
+    shiny: opts.forceShiny ? true : rollShiny(content, rng, (opts.shinyMultiplier ?? 1) * tier.shinyMultiplier),
     tier: tier.id,
     kind: origin?.kind ?? 'standard',
     heat: 0,
