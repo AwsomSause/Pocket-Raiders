@@ -60,7 +60,8 @@ describe('the blueprint', () => {
     expect(bp.stops.filter((s) => s.beat).map((s) => [s.beat, s.stage])).toEqual([[1, 2], [2, 6], [3, 10], [4, 14], [5, 18], [6, 22], [7, ELITE_STAGE]]);
     expect(bp.stops.filter((s) => s.stage === CHAMPION_STAGE).every((s) => s.col === CIRCUIT.eliteFourSize + 1)).toBe(true);
     expect(bp.stops.filter((s) => s.stage === SCENE_STAGE)).toHaveLength(3);
-    expect(bp.slots.every((s) => s.event === s.fallbacks[0])).toBe(true); // no story events yet: every slot plays its fallback
+    const known = new Set(content.storyData.events.map((e) => e.id));
+    expect(bp.slots.every((s) => s.event === s.fallbacks[0] || known.has(s.event))).toBe(true); // a story event by tag, or the fallback
   });
 
   it('fills slots from story events by tag, keeping the repeat rules', () => {
