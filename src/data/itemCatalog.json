@@ -8105,6 +8105,30 @@
   }
  },
  {
+  "id": "airship-pass",
+  "name": "Airship Pass",
+  "family": "Map and encounter items",
+  "description": "From the map, one trip: fly two columns ahead to any stop (S367)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "ss-ticket",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 1
+   },
+   "perks": [
+    {
+     "perk": "airship"
+    }
+   ]
+  }
+ },
+ {
   "id": "bike-voucher",
   "name": "Bike Voucher",
   "family": "Map and encounter items",

@@ -1123,7 +1123,7 @@ export const RunStateSchema = z.object({
   /** Running totals some items need across a run (a Scarf's knockout bonus so far). */
   itemCounters: z.record(z.string(), z.number().int().min(0)).optional(),
   /** A bike chosen from the map's Items menu for the next move (see core/mapItems.ts). */
-  moveMode: z.enum(['bicycle', 'acroBike', 'machBike']).optional(),
+  moveMode: z.enum(['bicycle', 'acroBike', 'machBike', 'airship']).optional(),
   /**
    * Map, shop and money items still working (Repels, Flutes, Mail, Apricorns, Coupons...; see core/mapItems.ts):
    * wild battles, ball throws or other uses left, or the stage it lasts for ("next" until the next stage starts).

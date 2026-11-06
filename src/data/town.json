@@ -2879,7 +2879,9 @@
      "options": [
       {"id": "sponsor-trail", "label": "Trail Co.", "desc": "Clear 1 region: 40 credits.", "say": "Trail Co. will watch your progress.", "once": false, "reward": {"stuff": {"sponsor-trail": 1}}},
       {"id": "sponsor-gear", "label": "Gym Gear", "desc": "Earn 4 badges: 70 credits.", "say": "Gym Gear counts your badges.", "once": false, "reward": {"stuff": {"sponsor-gear": 1}}},
-      {"id": "sponsor-drinks", "label": "Champion Drinks", "desc": "Win the run: 130 credits.", "say": "Champion Drinks bets on a win.", "once": false, "reward": {"stuff": {"sponsor-drinks": 1}}}
+      {"id": "sponsor-drinks", "label": "Champion Drinks", "desc": "Win the run: 130 credits.", "say": "Champion Drinks bets on a win.", "once": false, "reward": {"stuff": {"sponsor-drinks": 1}}},
+      {"id": "sponsor-rival-trail", "label": "Rival Rush (Trail Co. rival)", "desc": "A faction-backed rival team races your best pace. Clear more regions than your best run: 110 credits.", "say": "Trail Co.'s rivals are already warming up.", "once": false, "reward": {"stuff": {"sponsor-rival-trail": 1}}},
+      {"id": "sponsor-rival-gear", "label": "Rival Rush (Gym Gear rival)", "desc": "A Gym Gear-backed rival team challenges you. Earn more badges than in any earlier run: 150 credits.", "say": "Gym Gear's rival team is training hard.", "once": false, "reward": {"stuff": {"sponsor-rival-gear": 1}}}
      ]
     },
     {
@@ -2893,6 +2895,29 @@
      "set": "boon",
      "goods": [
       {"id": "harbor-ticket", "label": "Boat ticket", "desc": "One guaranteed expedition gate next run.", "set": "boon", "cost": {"credits": 80}, "reward": {"stuff": {"harbor-ticket": 1}}}
+     ]
+    },
+    {
+     "id": "hall-market",
+     "name": "Market board",
+     "desc": "Town prices move between runs: a sale after a win, higher when supplies are short.",
+     "kind": "view",
+     "rows": [
+      "S347"
+     ],
+     "view": "market"
+    },
+    {
+     "id": "hall-airship",
+     "name": "Airship Hangar",
+     "desc": "Buy an Airship Pass. Next run you can fly two columns ahead to any stop, once per pass.",
+     "kind": "buy",
+     "rows": [
+      "S367"
+     ],
+     "set": "boon",
+     "goods": [
+      {"id": "airship-pass", "label": "Airship Pass", "desc": "One flight over the next column.", "set": "boon", "cost": {"credits": 120}, "reward": {"items": {"airship-pass": 1}}}
      ]
     },
     {
@@ -4295,7 +4320,9 @@
  "sponsors": [
   { "id": "sponsor-trail", "goal": { "regions": 1 }, "credits": 40 },
   { "id": "sponsor-gear", "goal": { "badges": 4 }, "credits": 70 },
-  { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 }
+  { "id": "sponsor-drinks", "goal": { "victory": true }, "credits": 130 },
+  { "id": "sponsor-rival-trail", "goal": { "outpaceRegions": true }, "credits": 110, "rival": "Trail Co." },
+  { "id": "sponsor-rival-gear", "goal": { "outpaceBadges": true }, "credits": 150, "rival": "Gym Gear" }
  ],
  "economy": { "discountPerTier": 0.05 },
  "fanClub": [

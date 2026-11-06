@@ -690,7 +690,11 @@ export function recordTownRun(content: Content, profile: Profile, run: { runId: 
   for (const sp of TOWN.sponsors) {
     if ((run.camp?.stuff?.[sp.id] ?? 0) < 1) continue;
     const g = sp.goal;
-    const met = (g.victory ? run.victory : true) && (g.regions === undefined || (run.regionIndex ?? 0) + (run.victory ? 1 : 0) >= g.regions) && (g.badges === undefined || (run.badges?.length ?? 0) >= g.badges);
+    // Rival Sponsors (S360): a rival team backed by a faction runs your best pace; beat it.
+    const earlier = profile.runHistory.filter((r) => r.runId !== run.runId);
+    const cleared = (run.regionIndex ?? 0) + (run.victory ? 1 : 0);
+    const rivalMet = (!g.outpaceRegions || cleared > Math.max(0, ...earlier.map((r) => r.regionsCleared))) && (!g.outpaceBadges || (run.badges?.length ?? 0) > Math.max(0, ...earlier.map((r) => r.badges)));
+    const met = rivalMet && (g.victory ? run.victory : true) && (g.regions === undefined || (run.regionIndex ?? 0) + (run.victory ? 1 : 0) >= g.regions) && (g.badges === undefined || (run.badges?.length ?? 0) >= g.badges);
     if (met) { profile.bankCredits += sp.credits; profile.lifetimeBankCredits += sp.credits; }
   }
   // Memorial Wall: Nuzlocke losses, and aces that fell in any run.

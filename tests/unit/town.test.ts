@@ -342,6 +342,21 @@ describe('Relic Vault (S464)', () => {
   });
 });
 
+describe('Rival Sponsors (S360)', () => {
+  it('a rival sponsor pays only when you beat your earlier best', () => {
+    const p = ok(rich(), 'hall-sponsor', { choice: 'sponsor-rival-trail' }).profile;
+    const old = { regionsCleared: 2, regions: 3, badges: 1, encounters: 5, victory: false, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x', runId: 'old' };
+    p.runHistory = [old] as never;
+    const run = { runId: 'r', seed: 's', victory: false, inventory: {}, camp: { relics: [], stuff: { 'sponsor-rival-trail': 1 } } };
+    const slow = structuredClone(p);
+    recordRun(content, slow, { ...run, regionIndex: 2 });
+    expect(slow.bankCredits).toBe(p.bankCredits);
+    const fast = structuredClone(p);
+    recordRun(content, fast, { ...run, regionIndex: 3 });
+    expect(fast.bankCredits).toBe(p.bankCredits + 110);
+  });
+});
+
 describe('Sponsor Deals (S359)', () => {
   it('a signed sponsor pays at run end only when its goal was met', () => {
     let p = rich();
@@ -361,17 +376,31 @@ describe('Sponsor Deals (S359)', () => {
 
 describe('Town Economy (S347)', () => {
   it('Fan Club tiers cut credit prices in the town shops', async () => {
-    const { townDiscount, townPrice } = await import('../../src/core/town');
+    const { townDiscount, townPrice, marketSwing } = await import('../../src/core/town');
     const p = rich();
     expect(townDiscount(p)).toBe(0);
     expect(townPrice(p, 60)).toBe(60);
     const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = Array.from({ length: 2 }, () => ({ ...run, victory: false })) as never; // 12 fans: no tier yet
+    expect(townDiscount(p)).toBe(0);
     p.runHistory = Array.from({ length: 2 }, () => run) as never; // 26 fans = tier 1
     expect(townDiscount(p)).toBeCloseTo(0.05);
-    expect(townPrice(p, 60)).toBe(57);
+    const price = Math.max(1, Math.round(60 * 0.95 * (1 + marketSwing(p).pct)));
+    expect(townPrice(p, 60)).toBe(price);
     const before = p.bankCredits;
     const q = ok(p, 'hall-guild', { choice: 'guild-medic' }).profile;
-    expect(q.bankCredits).toBe(before - 57);
+    expect(q.bankCredits).toBe(before - townPrice(p, 60));
     expect(townPrice(p, 0)).toBe(0);
+  });
+  it('Market swings (S347): steady with no runs, a sale after a win, same inputs same price', async () => {
+    const { marketSwing } = await import('../../src/core/town');
+    const p = rich();
+    expect(marketSwing(p).pct).toBe(0);
+    const run = { regionsCleared: 1, regions: 3, badges: 1, encounters: 5, victory: true, party: [], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x' };
+    p.runHistory = [run, run, run] as never;
+    const won = marketSwing(p).pct;
+    p.runHistory = [{ ...run, victory: false }, run, run] as never;
+    expect(Math.round((marketSwing(p).pct - won) * 100)).toBe(5);
+    expect(marketSwing(p)).toEqual(marketSwing(p));
   });
 });

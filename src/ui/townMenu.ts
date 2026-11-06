@@ -4,7 +4,7 @@
 import type Phaser from 'phaser';
 import { contractBoard, contractDone } from '../core/contracts';
 import { promptById } from '../core/interaction/prompt';
-import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
+import { basementCode, buildingProblem, currentSeason, dummyHit, dummyMoves, elevatorFloors, fanClub, townPrice, townDiscount, marketSwing, forecast, getBuilding, guestbook, hallRecords, jukeboxTracks, lastTeam, ledger, LEDGER_FILTERS, LEDGER_SORTS, collections, optionsOf, ownedSet, quizQuestion, rosterOpen, statueTarget, theatreList, TOWN, todaysQuests, townOf, townProblem, townStats, townWeather, trackView, trophies, localDay, type LedgerFilter, type LedgerSort, type TownAction, type TownBuilding } from '../core/town';
 import { services } from '../game/services';
 import { pokemonAssetIds } from '../assets/catalog';
 import { playCry, playMusicLazy } from './audio';
@@ -339,6 +339,10 @@ function view(host: TownHost, a: TownAction, done: (m: string) => void, again: (
     case 'fans': {
       const f = fanClub(p);
       return show(host, `Fan Club · ${f.fans} followers · +₽${f.money} each run`, f.tiers.map((t) => ({ label: `${t.label} (${t.need} fans)`, desc: `${t.reached ? 'Reached' : 'Locked'} · +₽${t.money} starting money` })), again);
+    }
+    case 'market': {
+      const m = marketSwing(p);
+      return show(host, 'Market board', [{ label: `Town prices ${m.pct > 0 ? '+' : ''}${Math.round(m.pct * 100)}% today`, desc: m.why }, { label: `Fan Club discount -${Math.round(townDiscount(p) * 100)}%`, desc: 'Earned from your followers.' }], again);
     }
     case 'ledger': return openLedger(host, 'all', 'newest', again);
     case 'roster': return show(host, 'Townsfolk', rosterOpen(p).map((n) => ({ label: n.open ? `${n.name} · ${n.role}` : '???', desc: n.open ? `"${n.line}"` : `Moves in at ${n.need} achievements` })), again);
