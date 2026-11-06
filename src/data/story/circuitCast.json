@@ -1,0 +1,2135 @@
+{
+ "v": 1,
+ "source": "Story_Overhaul_Design_v2.md Parts IV-A to IV-D (2026-11-06)",
+ "towns": [
+  {
+   "region": 0,
+   "stage": 1,
+   "town": "Kestrel Cross",
+   "regionGate": false,
+   "act": 1,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 0,
+   "stage": 2,
+   "town": "Ashby Tarn",
+   "regionGate": false,
+   "act": 1,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 0,
+   "stage": 3,
+   "town": "Hallow Marrow",
+   "regionGate": false,
+   "act": 1,
+   "authored": [
+    "Wick Aldersey",
+    "Vesper Lindgren"
+   ],
+   "pool": false
+  },
+  {
+   "region": 0,
+   "stage": 4,
+   "town": "Brackenfold",
+   "regionGate": false,
+   "act": 1,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 0,
+   "stage": 5,
+   "town": "Dunmere",
+   "regionGate": false,
+   "act": 1,
+   "authored": [
+    "Odette Marr",
+    "Sigrid Holloway"
+   ],
+   "pool": false
+  },
+  {
+   "region": 0,
+   "stage": 6,
+   "town": "Stonewick",
+   "regionGate": false,
+   "act": 2,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 0,
+   "stage": 7,
+   "town": "Greywick",
+   "regionGate": false,
+   "act": 2,
+   "authored": [
+    "Tam Rourke",
+    "Dunstan Kell"
+   ],
+   "pool": false
+  },
+  {
+   "region": 0,
+   "stage": 8,
+   "town": "Cairnhold Gate",
+   "regionGate": true,
+   "act": 2,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 1,
+   "stage": 1,
+   "town": "Saltmere",
+   "regionGate": false,
+   "act": 2,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 1,
+   "stage": 2,
+   "town": "Gullcombe",
+   "regionGate": false,
+   "act": 2,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 1,
+   "stage": 3,
+   "town": "Port Lathe",
+   "regionGate": false,
+   "act": 2,
+   "authored": [
+    "Tolliver Brisk",
+    "Perpetua Ashby"
+   ],
+   "pool": false
+  },
+  {
+   "region": 1,
+   "stage": 4,
+   "town": "Wrack Landing",
+   "regionGate": false,
+   "act": 3,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 1,
+   "stage": 5,
+   "town": "Brineholt",
+   "regionGate": false,
+   "act": 3,
+   "authored": [
+    "Anneliese Kroll",
+    "Mirabel Quince"
+   ],
+   "pool": false
+  },
+  {
+   "region": 1,
+   "stage": 6,
+   "town": "Reedhaven",
+   "regionGate": false,
+   "act": 3,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 1,
+   "stage": 7,
+   "town": "Lanternreach",
+   "regionGate": false,
+   "act": 3,
+   "authored": [
+    "Lark Ostrander",
+    "Rhodri Vale"
+   ],
+   "pool": false
+  },
+  {
+   "region": 1,
+   "stage": 8,
+   "town": "Tideturn",
+   "regionGate": true,
+   "act": 3,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 2,
+   "stage": 1,
+   "town": "Spindle End",
+   "regionGate": false,
+   "act": 3,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 2,
+   "stage": 2,
+   "town": "Lensford",
+   "regionGate": false,
+   "act": 3,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 2,
+   "stage": 3,
+   "town": "Cogwell",
+   "regionGate": false,
+   "act": 4,
+   "authored": [
+    "Ottilie Brandt",
+    "Maren Ashcroft"
+   ],
+   "pool": false
+  },
+  {
+   "region": 2,
+   "stage": 4,
+   "town": "Gearhallow",
+   "regionGate": false,
+   "act": 4,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 2,
+   "stage": 5,
+   "town": "Halvard Row",
+   "regionGate": false,
+   "act": 4,
+   "authored": [
+    "Hesper Dunmore",
+    "Bramble Quisby"
+   ],
+   "pool": false
+  },
+  {
+   "region": 2,
+   "stage": 6,
+   "town": "Parallax Rise",
+   "regionGate": false,
+   "act": 4,
+   "authored": [],
+   "pool": true
+  },
+  {
+   "region": 2,
+   "stage": 7,
+   "town": "Meridian",
+   "regionGate": false,
+   "act": 4,
+   "authored": [
+    "Dr. Linnea Oyelaran",
+    "Gaspard Orme"
+   ],
+   "pool": false
+  },
+  {
+   "region": 2,
+   "stage": 8,
+   "town": "Zenith Court",
+   "regionGate": true,
+   "act": 4,
+   "authored": [],
+   "pool": true
+  }
+ ],
+ "leaders": [
+  {
+   "id": "odette",
+   "name": "Odette Marr",
+   "region": 0,
+   "type": "rock",
+   "town": "Dunmere",
+   "badge": "Quarry Mark Badge",
+   "badgeIcon": "Gym Badge - Rock (32x32).png",
+   "scene": {
+    "id": "sc_gl_odette",
+    "title": "A Name to Live Up To",
+    "setting": "the Dunmere quarry gate at dusk, the work horn sounding over a flooded pit. Odette checks a ledger with a lantern.",
+    "lines": [
+     "\"Hold this. No, the other way up. Nobody reads that ledger the right way up and lives.\"",
+     "\"My family cut this hill for three generations. The name is on every wall in town.\"",
+     "\"You carry a name too. People look at you and see Hartwell, or Aurelian, or whoever they need.\"",
+     "\"I left with one Rhyhorn and a bad attitude. It worked out. Mostly.\"",
+     "\"Do I tell you the name is a weight, or a tool?\""
+    ],
+    "choices": [
+     {
+      "label": "Both.",
+      "outcome": "Trust +8, Affection +6. She turns mentor: ally flag `odette_mentor`; Reluctant Hero event (quarry Alpha) becomes eligible"
+     },
+     {
+      "label": "Hand back the ledger without a word",
+      "outcome": "Respect +6"
+     },
+     {
+      "label": "A name is only a name.",
+      "outcome": "Respect -5, Suspicion +10; she gets curt for the Gym fight"
+     }
+    ]
+   },
+   "pre": "Show me the person, not the family.",
+   "mid": "Hm. That was not inherited.",
+   "win": "Take the badge. Don't hang it where people can read it.",
+   "lose": "Names make people careless. Come back when you aren't.",
+   "likes": [
+    "stonework",
+    "honest ledgers",
+    "strong tea"
+   ],
+   "dislikes": [
+    "being called \"Heir\"",
+    "flattery"
+   ],
+   "badgeStory": "the Quarry Mark is the unsigned chisel mark she cut into the first block she quarried alone.",
+   "age": 51,
+   "persona": "Skeptic of inherited names; tired",
+   "ace": "rhyperior",
+   "conflict": "Walked away from a mining dynasty and sees it in the player",
+   "hook": "A Name to Live Up To; The Reluctant Hero (a quarry Alpha)",
+   "sprite": "boss.drive/alolan-usum-veteran-woman",
+   "signature": [
+    "rhyperior",
+    "golem",
+    "tyranitar",
+    "terrakion"
+   ]
+  },
+  {
+   "id": "wick",
+   "name": "Wick Aldersey",
+   "region": 0,
+   "type": "ghost",
+   "town": "Hallow Marrow",
+   "badge": "Vigil Lamp Badge",
+   "badgeIcon": "Gym Badge - Ghost (32x32).png",
+   "scene": {
+    "id": "sc_gl_wick",
+    "title": "The Lantern Vigil",
+    "setting": "the empty square of Hallow Marrow after the last tour, one lantern still unlit by the well.",
+    "lines": [
+     "\"Tour is over. You can stay, if you can stay quiet.\"",
+     "\"Every night one lantern stays lit for whoever the well took. I never asked the name.\"",
+     "\"Dusknoir keeps me company. It is a good listener. It has to be, it cannot talk.\"",
+     "\"Nobody asks me to dinner. They ask me to light things.\""
+    ],
+    "choices": [
+     {
+      "label": "Hold the lantern until dawn",
+      "outcome": "Trust +10 (kept a promise to stay), Affection +6; unlocks the Duskull Remembrance flag"
+     },
+     {
+      "label": "Ask whose name it is",
+      "outcome": "Trust +8, Affection +6; he shares a Lore entry on the Long Night"
+     },
+     {
+      "label": "Leave quickly",
+      "outcome": "Trust -3, no flag"
+     }
+    ]
+   },
+   "pre": "Welcome to the show. It's quieter than I make it sound.",
+   "mid": "Oh. You're good company, even in here.",
+   "win": "Take the lamp. It means someone stayed.",
+   "lose": "Another quiet night. Come back and stay a while.",
+   "likes": [
+    "late tea",
+    "ghost stories told badly",
+    "company at night"
+   ],
+   "dislikes": [
+    "being called \"spooky\"",
+    "loud crowds"
+   ],
+   "badgeStory": "the Vigil Lamp is the lantern he lit the first night he stayed.",
+   "age": 36,
+   "persona": "Popular but lonely",
+   "ace": "dusknoir",
+   "conflict": "Runs lantern tours and goes home to an empty house",
+   "hook": "The Lantern Vigil arc (unlocks the Duskull Remembrance)",
+   "sprite": "boss.drive/alolan-usum-veteran-man",
+   "signature": [
+    "dusknoir",
+    "mismagius",
+    "chandelure",
+    "gengar"
+   ]
+  },
+  {
+   "id": "sigrid",
+   "name": "Sigrid Holloway",
+   "region": 0,
+   "type": "ice",
+   "town": "Dunmere",
+   "badge": "First Ice Badge",
+   "badgeIcon": "Gym Badge - Ice (32x32).png",
+   "scene": {
+    "id": "sc_gl_sigrid",
+    "title": "The Unexpected Mentor",
+    "setting": "Dunmere Lake at dawn, ice thick enough to stand a drill on. Sigrid is already there, over-prepared.",
+    "lines": [
+     "\"I was going to practice alone. Not because I'm nervous. Because the ice is exclusive.\"",
+     "\"You hesitate on the switch. It costs you two turns. I counted. Do you want the drill?\"",
+     "\"Mamoswine does the work. The cold does the work. I just stand here and look prepared.\""
+    ],
+    "choices": [
+     {
+      "label": "Take the 3-turn drill",
+      "outcome": "Scripted drill; a one-battle bonus (+1 first-switch speed); Respect +8"
+     },
+     {
+      "label": "Say \"You're better than the cold.",
+      "outcome": "Trust +8, Affection +6; she loses her pre-battle overexplaining"
+     },
+     {
+      "label": "Decline",
+      "outcome": "No change"
+     }
+    ]
+   },
+   "pre": "Don't take it personally if I'm good.",
+   "mid": "I counted. You're ahead, and I'm not counting anymore.",
+   "win": "Okay. That was good. I'll say it once.",
+   "lose": "I told you. It wasn't the cold. Or was it.",
+   "likes": [
+    "skating",
+    "clean notes",
+    "being told the plan"
+   ],
+   "dislikes": [
+    "\"natural talent\"",
+    "being second"
+   ],
+   "badgeStory": "the First Ice is the thin ice on the lake that held her weight at age eight.",
+   "age": 29,
+   "persona": "Young prodigy, insecure",
+   "ace": "mamoswine",
+   "conflict": "Believes the cold makes her good, not her",
+   "hook": "The Unexpected Mentor",
+   "sprite": "trainer.pr/snow_worker_f",
+   "signature": [
+    "mamoswine",
+    "glaceon",
+    "weavile",
+    "abomasnow"
+   ]
+  },
+  {
+   "id": "tam",
+   "name": "Tam Rourke",
+   "region": 0,
+   "type": "fighting",
+   "town": "Greywick",
+   "badge": "Standing Stone Badge",
+   "badgeIcon": "Gym Badge - Fighting (32x32).png",
+   "scene": {
+    "id": "sc_gl_tam",
+    "title": "The Training Yard",
+    "setting": "the Greywick training yard. Tam, reading a pamphlet on modern mechanics, hides it under a mat.",
+    "lines": [
+     "\"Stance first. Everything else is fashion.\"",
+     "\"That pamphlet? A student left it. I confiscated it. I have read it twice.\"",
+     "\"Machop don't care about fashion. They care about whether you show up.\"",
+     "\"Tell anyone, and the next drill is a hundred of the same kick.\""
+    ],
+    "choices": [
+     {
+      "label": "Ask about the pamphlet",
+      "outcome": "Trust +8; he teaches a modern move lesson; the Machop Remembrance becomes eligible"
+     },
+     {
+      "label": "Pretend you did not see",
+      "outcome": "Affection +5"
+     },
+     {
+      "label": "Tease him",
+      "outcome": "Respect -5; he does extra drills in the Gym"
+     }
+    ]
+   },
+   "pre": "Stand properly or do not stand at all.",
+   "mid": "Hm. Newer than my teaching. Still good.",
+   "win": "Take the badge. And never mention the pamphlet.",
+   "lose": "Stance. Again.",
+   "likes": [
+    "early mornings",
+    "disciplined students",
+    "simple rice"
+   ],
+   "dislikes": [
+    "gadgets that \"think for you\"",
+    "gloating"
+   ],
+   "badgeStory": "the Standing Stone is a stone from Greywick moor, because standing still is a move.",
+   "age": 58,
+   "persona": "Traditionalist",
+   "ace": "machamp",
+   "conflict": "Dismisses new mechanics but is secretly fascinated",
+   "hook": "Training Yard (Machop Remembrance)",
+   "sprite": "boss.drive/kantoian-lgpe-gambler",
+   "signature": [
+    "machamp",
+    "hitmontop",
+    "lucario",
+    "conkeldurr"
+   ]
+  },
+  {
+   "id": "vesper",
+   "name": "Vesper Lindgren",
+   "region": 0,
+   "type": "dark",
+   "town": "Hallow Marrow",
+   "badge": "Duskpetal Badge",
+   "badgeIcon": "Gym Badge - Dark (32x32).png",
+   "scene": {
+    "id": "sc_gl_vesper",
+    "title": "The Trade",
+    "setting": "the Hallow Marrow night market, a ribbon stall under pale lanterns. Vesper holds a pink ribbon too long.",
+    "lines": [
+     "\"Don't look at the ribbon. Look at the weasels. They're terrifying.\"",
+     "\"Dark is what I am good at. It is not what I like.\"",
+     "\"There is a Fairy Pokémon I raised in secret. Nobody in town knows.\"",
+     "\"If I trusted you, I might trade it to you. Just so it has a home that says yes.\""
+    ],
+    "choices": [
+     {
+      "label": "Buy her the matching ribbon (Affection 60 or higher: she offers the trade)",
+      "outcome": "Affection +5; a permanent or temporary trade of a Fairy Pokémon"
+     },
+     {
+      "label": "Keep her secret",
+      "outcome": "Trust +8, Affection +6; ask again at Affection 60"
+     },
+     {
+      "label": "Tease her",
+      "outcome": "Affection -5, Trust -3"
+     }
+    ]
+   },
+   "pre": "I'm good. I'll be unpleasant about it.",
+   "mid": "I smiled. Don't write it down.",
+   "win": "Take the badge. Don't ask what the petal is.",
+   "lose": "Dark wins. Don't look so sad. It's what I'm good at.",
+   "likes": [
+    "pale ribbons",
+    "night markets",
+    "weasel Pokémon"
+   ],
+   "dislikes": [
+    "\"spooky\" jokes",
+    "being predictable"
+   ],
+   "badgeStory": "the Duskpetal is a black petal edged in pink, her own design.",
+   "age": 33,
+   "persona": "Secretly dislikes their type",
+   "ace": "weavile",
+   "conflict": "Wants to be a Fairy specialist",
+   "hook": "The Trade (a secret Fairy Pokémon)",
+   "sprite": "boss.drive/fan-calvin",
+   "signature": [
+    "weavile",
+    "umbreon",
+    "sneasel",
+    "honchkrow"
+   ]
+  },
+  {
+   "id": "dunstan",
+   "name": "Dunstan Kell",
+   "region": 0,
+   "type": "ground",
+   "town": "Greywick",
+   "badge": "Deep Seam Badge",
+   "badgeIcon": "Gym Badge - Ground (32x32).png",
+   "scene": {
+    "id": "sc_gl_dunstan",
+    "title": "The Leader's Request",
+    "setting": "a Greywick dig camp, a cage door open and empty.",
+    "lines": [
+     "\"Drilbur is gone. A young one. It left a hole behind, so at least it's tidy.\"",
+     "\"I lost four matches in a row. I think it left because it expected a win.\"",
+     "\"Can you help? It's two nodes of the moor. I'd go, but if I fail again I'd rather not be seen.\""
+    ],
+    "choices": [
+     {
+      "label": "Accept the 2-node quest",
+      "outcome": "Complete: Trust +15 (saved them from worry), Affection +10; Drilbur is an ally; a key item"
+     },
+     {
+      "label": "Promise to look \"when you can",
+      "outcome": "Trust +10 if kept, Trust -20 if broken"
+     },
+     {
+      "label": "Tell him to rest",
+      "outcome": "Affection +5"
+     }
+    ]
+   },
+   "pre": "I used to win these.",
+   "mid": "I felt that. I remember that feeling.",
+   "win": "I'll take it. Drilbur will be pleased.",
+   "lose": "Maybe I'm still good. Maybe.",
+   "likes": [
+    "sunrise digs",
+    "plain bread",
+    "steady Pokémon"
+   ],
+   "dislikes": [
+    "pity",
+    "\"washed up\" jokes"
+   ],
+   "badgeStory": "the Deep Seam is a vein he struck on the last dig he led.",
+   "age": 44,
+   "persona": "Long losing streak",
+   "ace": "excadrill",
+   "conflict": "Fears he is no longer good enough",
+   "hook": "The Leader's Request (a missing digger Pokémon)",
+   "sprite": "boss.drive/rancher",
+   "signature": [
+    "excadrill",
+    "garchomp",
+    "donphan",
+    "gliscor"
+   ]
+  },
+  {
+   "id": "tolliver",
+   "name": "Captain Tolliver Brisk",
+   "region": 1,
+   "type": "water",
+   "town": "Port Lathe",
+   "badge": "Ferry Knot Badge",
+   "badgeIcon": "Gym Badge - Water (32x32).png",
+   "scene": {
+    "id": "sc_gl_tolliver",
+    "title": "The Storm Crossing",
+    "setting": "the ferry deck in a squall, rope knots whipping. Tolliver ties a knot with his teeth.",
+    "lines": [
+     "\"Hold the line. Not the rope. The line. The rope is for panic.\"",
+     "\"Sixty-six years. Three offers of a successor. Three no's, and all three good people.\"",
+     "\"There is a friend in Halvard Row who has promised to retire when I do. We play chess by mail. I keep losing.\""
+    ],
+    "choices": [
+     {
+      "label": "Hold the line through the storm",
+      "outcome": "Trust +10 (a promise kept), Respect +8; ally flag `tolliver_crossing`"
+     },
+     {
+      "label": "Ask about a successor",
+      "outcome": "Trust +8, Affection +6; unlocks Bramble's chess pact scene"
+     },
+     {
+      "label": "Step back from the wheel",
+      "outcome": "Trust -3"
+     }
+    ]
+   },
+   "pre": "Anchor down. Let's see what holds.",
+   "mid": "Hm. That was a clean knot.",
+   "win": "Take the knot, then. Don't tie it too tight.",
+   "lose": "Sea has no mercy. Neither do I. Try again.",
+   "likes": [
+    "tight knots",
+    "chess by mail",
+    "strong coffee"
+   ],
+   "dislikes": [
+    "rushed crossings",
+    "being called \"old\""
+   ],
+   "badgeStory": "the Ferry Knot is the guild knot meaning \"this crossing is safe\".",
+   "age": 66,
+   "persona": "Considering retirement",
+   "ace": "gyarados",
+   "conflict": "Needs a successor and has refused three",
+   "hook": "A storm crossing; the retirement chess pact with Bramble",
+   "sprite": "boss.drive/galarian-swsh-post-man",
+   "signature": [
+    "gyarados",
+    "pelipper",
+    "milotic",
+    "kingdra"
+   ]
+  },
+  {
+   "id": "lark",
+   "name": "Lark Ostrander",
+   "region": 1,
+   "type": "flying",
+   "town": "Lanternreach",
+   "badge": "Signal Flag Badge",
+   "badgeIcon": "Gym Badge - Flying (32x32).png",
+   "scene": {
+    "id": "sc_gl_lark",
+    "title": "The Ace Arc",
+    "setting": "the Lanternreach rooftop at wind-up, signal flags snapping. Tempestwing perches on a mast far from Lark.",
+    "lines": [
+     "\"It sits over there. It has always sat over there lately.\"",
+     "\"It has outgrown me. I am the weather forecast it ignores.\"",
+     "\"If I ask it to stay, I make it a cage. If I don't, I make it a goodbye.\""
+    ],
+    "choices": [
+     {
+      "label": "Tell her to ask it directly",
+      "outcome": "Trust +8, Affection +6; the storm flight event unlocks"
+     },
+     {
+      "label": "Offer to fly with her",
+      "outcome": "Affection +10; an event where she flies the player over the Reach"
+     },
+     {
+      "label": "Tell her it is only a bird",
+      "outcome": "Affection -5, Trust -3"
+     }
+    ]
+   },
+   "pre": "It's not that I don't trust her. It's that she doesn't need me.",
+   "mid": "It stayed. It stayed for this. I'm going to cry.",
+   "win": "You earned the flag. Fly it well.",
+   "lose": "Not this time. It was a good gust though.",
+   "likes": [
+    "updrafts",
+    "cousins",
+    "bright flags"
+   ],
+   "dislikes": [
+    "pity",
+    "cages"
+   ],
+   "badgeStory": "the Signal Flag is the flag for \"come home\", flown from Lanternreach in storms.",
+   "age": 27,
+   "persona": "Complicated with their Ace",
+   "ace": "altaria",
+   "conflict": "Her Ace has outgrown her and she fears being left",
+   "hook": "Ace arc; storm flight event",
+   "sprite": "boss.drive/skytrainer-f",
+   "signature": [
+    "altaria",
+    "staraptor",
+    "skarmory",
+    "pidgeot"
+   ]
+  },
+  {
+   "id": "anneliese",
+   "name": "Anneliese Kroll",
+   "region": 1,
+   "type": "electric",
+   "town": "Brineholt",
+   "badge": "Open Circuit Badge",
+   "badgeIcon": "Gym Badge - Electric (32x32).png",
+   "scene": {
+    "id": "sc_gl_anneliese",
+    "title": "The Sealed Envelope",
+    "setting": "a Brineholt generator shed, a sealed envelope under a wrench.",
+    "lines": [
+     "\"A nurse once said I should find someone I can trust. I said I'd start with the wrench.\"",
+     "\"Inside is evidence. League things. It can't go to the League.\"",
+     "\"Take it to the drop in Meridian. A woman named Halima Fenn. Don't read it. I know you want to.\""
+    ],
+    "choices": [
+     {
+      "label": "Deliver it unopened",
+      "outcome": "Trust +15, Loyalty +10; opens the Integrity Bureau questline"
+     },
+     {
+      "label": "Read it first and tell her",
+      "outcome": "Trust -3; she respects the honesty (Respect +6)"
+     },
+     {
+      "label": "Read it and hide it",
+      "outcome": "Caught: Trust -25, Suspicion +20"
+     }
+    ]
+   },
+   "pre": "I would tell you what I know, but you wouldn't believe it.",
+   "mid": "Hm. Your Pokémon are not following orders. They're making them.",
+   "win": "Take the badge. Keep your head down.",
+   "lose": "The grid holds. Now go home and think.",
+   "likes": [
+    "quiet",
+    "good insulation",
+    "unsigned notes"
+   ],
+   "dislikes": [
+    "rumors",
+    "loud cheering"
+   ],
+   "badgeStory": "the Open Circuit has a gap, a promise to close it when the truth is public.",
+   "age": 40,
+   "persona": "Believes the League is corrupt",
+   "ace": "magnezone",
+   "conflict": "Has evidence and no one to trust",
+   "hook": "The Leader's Request (gather evidence for the Integrity Bureau)",
+   "sprite": "boss.drive/galarian-swsh-doctor-woman",
+   "signature": [
+    "magnezone",
+    "electivire",
+    "rotom",
+    "luxray"
+   ]
+  },
+  {
+   "id": "mirabel",
+   "name": "Mirabel Quince",
+   "region": 1,
+   "type": "poison",
+   "town": "Brineholt",
+   "badge": "Curtain Call Badge",
+   "badgeIcon": "Gym Badge - Poison (32x32).png",
+   "scene": {
+    "id": "sc_gl_mirabel",
+    "title": "Press Day",
+    "setting": "the Brineholt quay at noon, a live cooking show under a striped awning, cameras up.",
+    "lines": [
+     "\"Ladies and gentlemen, and one Trainer. Tonight, a dish that bites back!\"",
+     "(backstage) Mirabel: \"The smile is armor. The armor is my best dish.\"",
+     "\"I haven't eaten alone in years. A crowd is not company. It's a wall.\""
+    ],
+    "choices": [
+     {
+      "label": "Play along on stage",
+      "outcome": "Respect +6; a World News headline names the player"
+     },
+     {
+      "label": "Skip the show and meet her backstage",
+      "outcome": "Trust +8, Affection +6; she drops her act"
+     },
+     {
+      "label": "Mock the show",
+      "outcome": "Respect -5, Affection -5"
+     }
+    ]
+   },
+   "pre": "Everyone wants a photo. Nobody asks my name.",
+   "mid": "Oh, you're quick. That's good television.",
+   "win": "A standing ovation for you. I mean it.",
+   "lose": "Curtain. Applause. Ow.",
+   "likes": [
+    "stage lights",
+    "salted fish",
+    "a real name"
+   ],
+   "dislikes": [
+    "being called \"toxic\"",
+    "empty applause"
+   ],
+   "badgeStory": "the Curtain Call is the pin she wears the night the lights go out.",
+   "age": 55,
+   "persona": "Showman",
+   "ace": "toxapex",
+   "conflict": "Performance is her armor",
+   "hook": "A public cooking show; the Press Day",
+   "sprite": "boss.drive/alolan-usum-madame",
+   "signature": [
+    "toxapex",
+    "gengar",
+    "crobat",
+    "drapion"
+   ]
+  },
+  {
+   "id": "rhodri",
+   "name": "Rhodri Vale",
+   "region": 1,
+   "type": "dragon",
+   "town": "Lanternreach",
+   "badge": "Scale Oath Badge",
+   "badgeIcon": "Gym Badge - Dragon (32x32).png",
+   "scene": {
+    "id": "sc_gl_rhodri",
+    "title": "The Dragonair Rescue",
+    "setting": "a Lanternreach sea cave, a Dragonair caught in a snare knotted a way Rhodri knows.",
+    "lines": [
+     "\"This knot is a Vale knot. I taught it to one student.\"",
+     "\"Keep the Dragonair still. It will not bite. It will only wish to.\"",
+     "\"If it is her, I will have to decide what kind of teacher I was.\""
+    ],
+    "choices": [
+     {
+      "label": "Hold the Dragonair while he cuts",
+      "outcome": "Trust +15, Affection +10 (saved them); at Trust 70 the Dratini Remembrance unlocks"
+     },
+     {
+      "label": "Offer to look into the student",
+      "outcome": "Trust +8; unlocks a poaching arc"
+     },
+     {
+      "label": "Suggest it was an accident",
+      "outcome": "Respect -5"
+     }
+    ]
+   },
+   "pre": "Dragons are older than your regret. They don't hold grudges, but they keep count.",
+   "mid": "Good. You see it too.",
+   "win": "The oath is yours. Don't make it lighter.",
+   "lose": "Not yet. Dragons wait.",
+   "likes": [
+    "old scrolls",
+    "cousins",
+    "quiet caves"
+   ],
+   "dislikes": [
+    "hurried capture",
+    "boasting"
+   ],
+   "badgeStory": "the Scale Oath is a scale given only to those who hold a promise.",
+   "age": 37,
+   "persona": "Reserved guardian of Dragon lore",
+   "ace": "dragonite",
+   "conflict": "Suspects a former student of poaching",
+   "hook": "A Dragonair rescue (Dratini Remembrance at Trust 70)",
+   "sprite": "boss.drive/paldean-sv-dragon-tamer",
+   "signature": [
+    "dragonite",
+    "haxorus",
+    "kingdra",
+    "goodra"
+   ]
+  },
+  {
+   "id": "perpetua",
+   "name": "Perpetua Ashby",
+   "region": 1,
+   "type": "fairy",
+   "town": "Port Lathe",
+   "badge": "Thistle Seal Badge",
+   "badgeIcon": "Gym Badge - Fairy (32x32).png",
+   "scene": {
+    "id": "sc_gl_perpetua",
+    "title": "The Family Confrontation",
+    "setting": "the Port Lathe quay, a black carriage with a family crest. Perpetua pulls up her hood.",
+    "lines": [
+     "\"That crest is mine. I mean, it was. I'd rather you didn't look at it.\"",
+     "\"I left everything to be here. Please don't waste my time.\"",
+     "(her brother steps out) Brother: \"Perpetua. Father is asking.\"",
+     "\"Tell Father the name was Ashby. The person is Perpetua.\""
+    ],
+    "choices": [
+     {
+      "label": "Stand beside her",
+      "outcome": "Respect +6, Loyalty +6 (defended in public)"
+     },
+     {
+      "label": "Step between them and say she is a Leader here",
+      "outcome": "Trust +8, Affection +6; the family backs off for now"
+     },
+     {
+      "label": "Stay out of it",
+      "outcome": "No change"
+     }
+    ]
+   },
+   "pre": "I left everything to be here. Please don't waste my time.",
+   "mid": "My family would say I'm too gentle. Watch.",
+   "win": "Take the thistle. It holds when roses don't.",
+   "lose": "Not today. But I'm still here.",
+   "likes": [
+    "thistles",
+    "plain tea",
+    "Gardevoir's hum"
+   ],
+   "dislikes": [
+    "crests",
+    "being called \"my lady\""
+   ],
+   "badgeStory": "the Thistle Seal replaces the family rose she gave up.",
+   "age": 31,
+   "persona": "Runaway",
+   "ace": "gardevoir",
+   "conflict": "Left a noble family and is hiding it",
+   "hook": "A family confrontation event",
+   "sprite": "boss.drive/lady2",
+   "signature": [
+    "gardevoir",
+    "togekiss",
+    "clefable",
+    "sylveon"
+   ]
+  },
+  {
+   "id": "linnea",
+   "name": "Dr. Linnea Oyelaran",
+   "region": 2,
+   "type": "psychic",
+   "town": "Meridian",
+   "badge": "Hypothesis Badge",
+   "badgeIcon": "Gym Badge - Psychic (32x32).png",
+   "scene": {
+    "id": "sc_gl_linnea",
+    "title": "The Strategy Lesson",
+    "setting": "a Meridian lecture hall after hours, a whiteboard of battle diagrams.",
+    "lines": [
+     "\"This is going to be a very informative loss. For you.\"",
+     "\"May I log your next battle? For science. Every turn, every choice.\"",
+     "\"I do not ask what the experiment costs. I should. I have decided to start with you.\""
+    ],
+    "choices": [
+     {
+      "label": "Consent to the log",
+      "outcome": "Trust +8; a strategy lesson (a small battle bonus); a research log in the Journal"
+     },
+     {
+      "label": "Ask about cost",
+      "outcome": "Affection +6, Respect +6; she begins to see the cost"
+     },
+     {
+      "label": "Refuse",
+      "outcome": "Trust -3; the Gym team is unchanged"
+     }
+    ]
+   },
+   "pre": "This is going to be a very informative loss. For you.",
+   "mid": "Interesting. That was outside the model.",
+   "win": "Reported. The hypothesis was wrong. I am pleased.",
+   "lose": "Data point recorded. Thank you.",
+   "likes": [
+    "clean notes",
+    "tea",
+    "honest questions"
+   ],
+   "dislikes": [
+    "gloating",
+    "rushed answers"
+   ],
+   "badgeStory": "the Hypothesis is a badge awarded for an idea that failed well.",
+   "age": 45,
+   "persona": "Academic",
+   "ace": "alakazam",
+   "conflict": "Treats every battle as an experiment and ignores what it costs",
+   "hook": "The Unexpected Mentor (a strategy lesson); research events",
+   "sprite": "boss.drive/kaloian-xy-scientist-woman",
+   "signature": [
+    "alakazam",
+    "espeon",
+    "reuniclus",
+    "bronzong"
+   ]
+  },
+  {
+   "id": "gaspard",
+   "name": "Gaspard Orme",
+   "region": 2,
+   "type": "normal",
+   "town": "Meridian",
+   "badge": "Plain Seal Badge",
+   "badgeIcon": "Gym Badge - Normal (32x32).png",
+   "scene": {
+    "id": "sc_gl_gaspard",
+    "title": "The Quiet Admission",
+    "setting": "his Meridian office, a League seal on the desk and a ledger he keeps closing.",
+    "lines": [
+     "\"The League has its reasons. I say that a great deal.\"",
+     "\"Blissey heals people. I have not healed this.\"",
+     "\"Three matches I have refereed felt wrong. I have asked nobody. I am asking you. Is that wrong?\""
+    ],
+    "choices": [
+     {
+      "label": "Offer to look at the ledger",
+      "outcome": "Trust +10; the Gilt Circle hint unlocks; ally flag `gaspard_doubt`"
+     },
+     {
+      "label": "Tell him to go to the Bureau",
+      "outcome": "Respect +6"
+     },
+     {
+      "label": "Say it is not your business",
+      "outcome": "Trust -3"
+     }
+    ]
+   },
+   "pre": "The League has its reasons.",
+   "mid": "Please. Do not make this easier for me.",
+   "win": "Take the seal. I will think about what it signs.",
+   "lose": "Normal is a fine thing to be. Remember that.",
+   "likes": [
+    "neat desks",
+    "honest losers",
+    "plain biscuits"
+   ],
+   "dislikes": [
+    "gossip",
+    "\"official statements\""
+   ],
+   "badgeStory": "the Plain Seal is the League stamp with no flourish, as a reminder.",
+   "age": 50,
+   "persona": "League loyalist",
+   "ace": "blissey",
+   "conflict": "Is the League's public face and suspects the Gilt Circle",
+   "hook": "League Meeting; a quiet admission late in the run",
+   "sprite": "boss.drive/kaloian-xy-owner",
+   "signature": [
+    "blissey",
+    "snorlax",
+    "tauros",
+    "ambipom"
+   ]
+  },
+  {
+   "id": "ottilie",
+   "name": "Ottilie Brandt",
+   "region": 2,
+   "type": "steel",
+   "town": "Cogwell",
+   "badge": "Tithe Gear Badge",
+   "badgeIcon": "Gym Badge - Steel (32x32).png",
+   "scene": {
+    "id": "sc_gl_ottilie",
+    "title": "The Price of Power",
+    "setting": "a Cogwell turbine hall, brass pipes ringing, a locked door marked \"Combine\".",
+    "lines": [
+     "\"Progress costs something. I decided early that it was somebody else's something.\"",
+     "\"I consult for people you don't like. I tell myself it's research.\"",
+     "\"Look at the turbine. Beautiful. It cools with the Veinheart seam. Does that bother you?\""
+    ],
+    "choices": [
+     {
+      "label": "Say yes, it bothers you",
+      "outcome": "Respect +6; she asks to see the mine; the Price of Power theme advances"
+     },
+     {
+      "label": "Ask who she consults for",
+      "outcome": "Trust +8; she names Director Pym"
+     },
+     {
+      "label": "Admire the turbine",
+      "outcome": "Affection +5; you hear only the surface"
+     }
+    ]
+   },
+   "pre": "Progress requires sacrifice. I volunteer other people.",
+   "mid": "That was not a sacrifice. That was a gift.",
+   "win": "Take the gear. Count what it cost.",
+   "lose": "The system holds. Don't mistake it for kind.",
+   "likes": [
+    "precision",
+    "clean welds",
+    "silence"
+   ],
+   "dislikes": [
+    "waste",
+    "wishful thinking"
+   ],
+   "badgeStory": "the Tithe Gear is the gear she keeps for what each machine costs.",
+   "age": 38,
+   "persona": "Believes progress requires sacrifice",
+   "ace": "empoleon",
+   "conflict": "Quietly consults for the Ironvein Combine",
+   "hook": "A factory event; The Price of Power themes",
+   "sprite": "boss.drive/kaloian-xy-technical-worker",
+   "signature": [
+    "empoleon",
+    "bastiodon",
+    "scizor",
+    "magnezone"
+   ]
+  },
+  {
+   "id": "maren",
+   "name": "Maren Ashcroft",
+   "region": 2,
+   "type": "fire",
+   "town": "Cogwell",
+   "badge": "Ember Rule Badge",
+   "badgeIcon": "Gym Badge - Fire (32x32).png",
+   "scene": {
+    "id": "sc_gl_maren",
+    "title": "The Rivalry Between Leaders",
+    "setting": "a Cogwell forge yard, a letter in her fist, steam rising.",
+    "lines": [
+     "\"Tolliver. Always Tolliver. We had the same teacher and he thinks I stole the lesson.\"",
+     "\"I'm not angry. I'm precise. Ask Magmortar.\"",
+     "\"Carry this to him? Or tell him I said he can stop pretending.\""
+    ],
+    "choices": [
+     {
+      "label": "Carry the letter",
+      "outcome": "Trust +10 kept; Tolliver reacts later (ripple)"
+     },
+     {
+      "label": "Mediate: soften the letter",
+      "outcome": "Respect +6; Maren's feud softens a notch"
+     },
+     {
+      "label": "Refuse",
+      "outcome": "Trust -3"
+     }
+    ]
+   },
+   "pre": "I trained under the same hand as Tolliver. I do it better.",
+   "mid": "Oh. You can take a hit. Good.",
+   "win": "Take the badge. Don't tell Tolliver I said you were good.",
+   "lose": "Burn, then. And come back warmer.",
+   "likes": [
+    "forge-hot tea",
+    "honest rivals",
+    "bright colors"
+   ],
+   "dislikes": [
+    "lectures",
+    "being called \"the young one\""
+   ],
+   "badgeStory": "the Ember Rule is a coal that never goes out, because her teacher said so.",
+   "age": 24,
+   "persona": "Young prodigy with a feud",
+   "ace": "magmortar",
+   "conflict": "Trained under the same teacher as Tolliver and resents his approach",
+   "hook": "The Rivalry Between Leaders",
+   "sprite": "trainer.pr/mela",
+   "signature": [
+    "magmortar",
+    "arcanine",
+    "typhlosion",
+    "rapidash"
+   ]
+  },
+  {
+   "id": "hesper",
+   "name": "Hesper Dunmore",
+   "region": 2,
+   "type": "bug",
+   "town": "Halvard Row",
+   "badge": "Chrysalis Badge",
+   "badgeIcon": "Gym Badge - Bug (32x32).png",
+   "scene": {
+    "id": "sc_gl_hesper",
+    "title": "The Unusual Migration",
+    "setting": "a Halvard Row garden at dusk, a moth swarm drifting the wrong way.",
+    "lines": [
+     "\"Volcarona leads them. It has never come this way.\"",
+     "\"The forests are thinner. They are looking for a new home.\"",
+     "\"I would hold them. I would hold all of them. I can't.\""
+    ],
+    "choices": [
+     {
+      "label": "Walk the migration with her",
+      "outcome": "Trust +10, Affection +6; a Viridian theme tie-in event"
+     },
+     {
+      "label": "Take notes for the Lore Archive",
+      "outcome": "Respect +6; a Lore entry"
+     },
+     {
+      "label": "Ignore it",
+      "outcome": "Trust -3"
+     }
+    ]
+   },
+   "pre": "Be gentle. They are listening.",
+   "mid": "Wings first. Always wings.",
+   "win": "A chrysalis for you. It means a change is coming.",
+   "lose": "Rest. They will remember you.",
+   "likes": [
+    "dusk",
+    "moths",
+    "handwritten labels"
+   ],
+   "dislikes": [
+    "logging",
+    "bright lamps"
+   ],
+   "badgeStory": "the Chrysalis is a husk she kept from the first moth she raised.",
+   "age": 29,
+   "persona": "Gentle naturalist",
+   "ace": "volcarona",
+   "conflict": "Watches forests disappear",
+   "hook": "The Unusual Migration (Viridian theme tie-in)",
+   "sprite": "boss.drive/hubian-pokengine-gardener",
+   "signature": [
+    "volcarona",
+    "scizor",
+    "heracross",
+    "butterfree"
+   ]
+  },
+  {
+   "id": "bramble",
+   "name": "Bramble Quisby",
+   "region": 2,
+   "type": "grass",
+   "town": "Halvard Row",
+   "badge": "Heartwood Badge",
+   "badgeIcon": "Gym Badge - Grass (32x32).png",
+   "scene": {
+    "id": "sc_gl_bramble",
+    "title": "The Succession",
+    "setting": "a Halvard Row greenhouse, a chessboard by the window, a letter from Tolliver.",
+    "lines": [
+     "\"Check. He plays chess like he sails. Rudely.\"",
+     "\"I want an heir who loves plants more than winning. They are rarer than Legendaries.\"",
+     "\"Plant this seed. If it lives, I'll consider you.\""
+    ],
+    "choices": [
+     {
+      "label": "Plant the seed and promise to check on it",
+      "outcome": "Trust +10 kept; the seed grows into an item later"
+     },
+     {
+      "label": "Ask about Tolliver",
+      "outcome": "Trust +8; the chess pact is revealed"
+     },
+     {
+      "label": "Decline",
+      "outcome": "No change"
+     }
+    ]
+   },
+   "pre": "Roots first, leaves later.",
+   "mid": "Hm. A patient hand.",
+   "win": "Take the heartwood. It is slow. So is everything good.",
+   "lose": "Grass wins. Slowly. Come back.",
+   "likes": [
+    "patient students",
+    "chess",
+    "damp soil"
+   ],
+   "dislikes": [
+    "hurry",
+    "trampling"
+   ],
+   "badgeStory": "the Heartwood is a cut of Torterra's oldest branch.",
+   "age": 62,
+   "persona": "Considering retirement",
+   "ace": "torterra",
+   "conflict": "Wants an heir who loves plants more than winning",
+   "hook": "Succession event; chess pact with Tolliver",
+   "sprite": "boss.drive/gardener",
+   "signature": [
+    "torterra",
+    "venusaur",
+    "roserade",
+    "ludicolo"
+   ]
+  }
+ ],
+ "elite": [
+  {
+   "id": "isadora",
+   "name": "Isadora Voll",
+   "role": "elite",
+   "slot": 1,
+   "epithet": "Archivist",
+   "age": 52,
+   "types": [
+    "ghost"
+   ],
+   "visual": "Tall, stooped; dusk-violet robe with silver index tabs; a chained book; a faded blue ribbon",
+   "personality": "Dry, gentle, exact. Habit: ends with \"for the record\"",
+   "motivation": "Now: collect every challenger's story. Underneath: finish her sister's, lost in the Cairnmoor mist",
+   "strategy": "Status and stall: Will-O-Wisp, Toxic, Substitute, Pain Split",
+   "ace": "Ace Spiritomb \"Index\", rumored to hold 108 names",
+   "relationships": "Prosper Lund (borrows his maps), Brigid Tamsin (shares a table), Maelis Ravenscar (was once her reader)",
+   "history": "Librarian at the League; her sister vanished in the mist 20 years ago; she became an Elite 11 years ago",
+   "conflict": "Writes everyone else's story, cannot write her own",
+   "arc": "Start: shelves. End: tells the story of the ribbon",
+   "scenes": [
+    "Reading Room",
+    "The Stamped Page",
+    "Borrowed Map",
+    "The Blue Ribbon",
+    "Closing Hours"
+   ],
+   "independent": "Writes one challenger's story into the Lore Archive each night, win or lose",
+   "sprite": "boss.drive/fennel",
+   "signature": [
+    "spiritomb",
+    "dusknoir",
+    "froslass",
+    "banette"
+   ]
+  },
+  {
+   "id": "kofi",
+   "name": "Kofi Adeyemi",
+   "role": "elite",
+   "slot": 2,
+   "epithet": "Drillmaster",
+   "age": 47,
+   "types": [
+    "fighting"
+   ],
+   "visual": "Broad, compact; slate vest; wrapped forearms; stopwatch and rolled chart",
+   "personality": "Calm, hard, fair. Habit: counts out loud",
+   "motivation": "Now: finish the teaching he started with Hale. Underneath: be forgiven for a student he pushed too far",
+   "strategy": "Hyper offense; first-turn pressure",
+   "ace": "Ace Lucario \"Tempo\", who learned patience before speed",
+   "relationships": "Hale Brightwater (former pupil), Tam Rourke (old sparring partner), Selene (respects her calm)",
+   "history": "Coached Hale at 12; trained under Tam; became an Elite after 4 Gym titles",
+   "conflict": "Believes in discipline but fears he broke someone with it",
+   "arc": "Start: drills. End: he lets someone win a drill",
+   "scenes": [
+    "Stopwatch Test",
+    "Hale's Name",
+    "Rest Day",
+    "The Rolled Chart",
+    "Last Drill"
+   ],
+   "independent": "Posts a daily training chart on the League board",
+   "sprite": "boss.drive/paldean-sv-black-belt",
+   "signature": [
+    "lucario",
+    "machamp",
+    "hitmonlee",
+    "conkeldurr"
+   ]
+  },
+  {
+   "id": "brigid",
+   "name": "Brigid Tamsin",
+   "role": "elite",
+   "slot": 3,
+   "epithet": "Tidewatcher",
+   "age": 39,
+   "types": [
+    "ice",
+    "water"
+   ],
+   "visual": "Tall; silver braid to the waist; pale-blue oilskin; seal-fur collar",
+   "personality": "Quiet, unflappable, patient. Habit: speaks in tide times",
+   "motivation": "Now: keep the storm flags honest. Underneath: hear Brinecrown speak once more",
+   "strategy": "Weather: snow then rain, with Ice and Water pairs",
+   "ace": "Ace Lapras \"Halyard\", who carried her out of a wreck",
+   "relationships": "Captain Tolliver Brisk (taught her knots), Isadora Voll, Aurelio Santos",
+   "history": "Born on Tidewrack; her father drowned in a storm of broken oaths; she joined the League at 22",
+   "conflict": "Hates storms and calls herself their guardian",
+   "arc": "Start: watching the sea. End: she leaves the flag lowered for a day",
+   "scenes": [
+    "Tide Table",
+    "The Oath Story",
+    "Halyard",
+    "A Flag Lowered",
+    "Salt Tea"
+   ],
+   "independent": "Walks the quay at every low tide and logs the weather",
+   "sprite": "boss.drive/kaloian-xy-veteran-woman",
+   "signature": [
+    "lapras",
+    "glaceon",
+    "vaporeon",
+    "walrein"
+   ]
+  },
+  {
+   "id": "aurelio",
+   "name": "Aurelio Santos",
+   "role": "elite",
+   "slot": 4,
+   "epithet": "Last Gate",
+   "age": 41,
+   "types": [
+    "dragon"
+   ],
+   "visual": "Dragon-tamer coat, formal collar; a scale pin; neat gloves",
+   "personality": "Reserved, formal, courteous. Habit: bows slightly before every sentence",
+   "motivation": "Now: guard the last gate fairly. Underneath: avoid answering what he knows about Equinar",
+   "strategy": "Setup sweep: Dragon Dance, then sweep",
+   "ace": "Ace Salamence \"Garrote\"",
+   "relationships": "Rhodri Vale (shared dragon lore), Selene Aurelian (his Champion), Gideon Hartwell (old friend)",
+   "history": "Dragon-tamer family; saw Equinar's tremor in the hills; joined the League 10 years ago",
+   "conflict": "Sworn to honesty, bound to silence",
+   "arc": "Start: formal. End: can be a story ally if Trust is 75 or higher",
+   "scenes": [
+    "The Courteous Bow",
+    "Gate Duty",
+    "A Dragon Letter",
+    "The Silence",
+    "Equinar's Hinge"
+   ],
+   "independent": "Checks the League's last gate each dusk, in person",
+   "sprite": "boss.drive/hoennian-oras-dragon-tamer",
+   "signature": [
+    "salamence",
+    "garchomp",
+    "dragonite",
+    "haxorus"
+   ]
+  }
+ ],
+ "champion": {
+  "id": "selene",
+  "name": "Selene Aurelian",
+  "role": "champion",
+  "slot": 0,
+  "epithet": "",
+  "age": 34,
+  "types": [
+   "fairy"
+  ],
+  "visual": "Poised; high braided crown with a copper clasp; cream half-cape; star-ring collar",
+  "personality": "Calm, precise, kind. Habit: pauses before answering",
+  "motivation": "Now: hold the title honestly. Underneath: be more than Gideon's student",
+  "strategy": "Counters the player's recent types; adapts one slot after 3 fights",
+  "ace": "Ace Togekiss \"Halo\"",
+  "relationships": "Gideon Hartwell (mentor), Kofi (respect), Cornelius Ashdown (the title's history)",
+  "history": "Student of Gideon; won the title at 27; has defended it for 7 years",
+  "conflict": "Wants to be a Champion who is chosen, not inherited",
+  "arc": "Start: guarded. End: names the player's Starter in her intro (Bond Level 6)",
+  "scenes": [
+   "The Champion Notices",
+   "Tea at the Hall",
+   "A Shared Spar",
+   "The Finals Eve",
+   "The Handshake"
+  ],
+  "independent": "Reviews every Gym result each week and writes a note to each Leader",
+  "sprite": "boss.drive/champion-f",
+  "signature": [
+   "togekiss",
+   "gardevoir",
+   "lucario",
+   "milotic",
+   "garchomp",
+   "snorlax"
+  ]
+ },
+ "ashdown": {
+  "id": "cornelius",
+  "name": "Cornelius Ashdown",
+  "role": "villain",
+  "slot": 0,
+  "epithet": "",
+  "age": 63,
+  "types": [
+   "fire"
+  ],
+  "visual": "Gaunt, gold-trimmed navy suit; cracked-laurel pin; old half-cape re-cut as a scarf",
+  "personality": "Bitter, brilliant, proud. Habit: \"once upon a time\" before every threat",
+  "motivation": "Now: control Championship outcomes. Underneath: be written back into the lobby",
+  "strategy": "Showy, high pressure, with items and legal-edge tactics",
+  "ace": "Ace Arcanine \"Gilt\"",
+  "relationships": "Gideon Hartwell (rival who replaced him), Piers Dunne (fixer), Gaspard Orme (once his protege)",
+  "history": "Champion for 12 years; removed from the lobby wall; founded the Gilt Circle",
+  "conflict": "Wants honest greatness and cheats to get it",
+  "arc": "Start: polite. End: a recognition scene or a public exposure",
+  "scenes": [
+   "The Club Invite",
+   "The Empty Wall",
+   "A Rigged Match",
+   "The Cracked Laurel",
+   "Final Bow"
+  ],
+  "independent": "Pays for one rigged bracket each season",
+  "sprite": "boss.drive/butler",
+  "signature": [
+   "arcanine",
+   "persian",
+   "weavile",
+   "tyranitar"
+  ]
+ },
+ "teams": [
+  {
+   "id": "mm",
+   "name": "Mythic Marauders"
+  },
+  {
+   "id": "hc",
+   "name": "Hollow Choir"
+  },
+  {
+   "id": "ic",
+   "name": "Ironvein Combine"
+  },
+  {
+   "id": "pc",
+   "name": "Pale Cartographers"
+  },
+  {
+   "id": "wa",
+   "name": "Wildfire Accord"
+  },
+  {
+   "id": "gc",
+   "name": "Gilt Circle"
+  }
+ ],
+ "teamLeaders": [
+  {
+   "id": "tm_hc_maelis",
+   "name": "Maelis Ravenscar",
+   "team": "hc",
+   "kind": "leader",
+   "title": "Cantor",
+   "motivation": "Silence; she misses her voice",
+   "signature": {
+    "species": "mismagius",
+    "nickname": "Hush"
+   },
+   "scene": "The Silent Bell: she lifts the muffled clapper",
+   "turn": "Rare",
+   "sprite": "boss.drive/johtoian-hgss-sage"
+  },
+  {
+   "id": "tm_ic_leocadia",
+   "name": "Leocadia Strand",
+   "team": "ic",
+   "kind": "leader",
+   "title": "Chairwoman",
+   "motivation": "Growth saves lives; honest doubt",
+   "signature": {
+    "species": "aggron",
+    "nickname": "Strand"
+   },
+   "scene": "The Boardroom: she prices a Pokémon",
+   "turn": "No, but a leak ends her",
+   "sprite": "boss.drive/paldean-sv-ace-trainer-woman"
+  },
+  {
+   "id": "tm_pc_anselm",
+   "name": "Anselm Rook",
+   "team": "pc",
+   "kind": "leader",
+   "title": "Surveyor",
+   "motivation": "Chart the last unclaimed place",
+   "signature": {
+    "species": "slowking",
+    "nickname": "Atlas"
+   },
+   "scene": "The Unfound: a tour of the ship",
+   "turn": "No",
+   "sprite": "boss.drive/paldean-sv-scientist"
+  },
+  {
+   "id": "tm_wa_thessaly",
+   "name": "Thessaly Greaves",
+   "team": "wa",
+   "kind": "leader",
+   "title": "",
+   "motivation": "Burn the grid; save wildlife",
+   "signature": {
+    "species": "ninetales",
+    "nickname": "Ember"
+   },
+   "scene": "The Manifesto: she reads one burn-edged page",
+   "turn": "Maybe",
+   "sprite": "boss.drive/oerrian-colo-mirrorb-peon-folly"
+  },
+  {
+   "id": "tm_gc_cornelius",
+   "name": "Cornelius Ashdown",
+   "team": "gc",
+   "kind": "leader",
+   "title": "",
+   "motivation": "See Part IV-B",
+   "signature": {
+    "species": "arcanine",
+    "nickname": "Gilt"
+   },
+   "scene": "The Empty Wall",
+   "turn": "Recognition",
+   "sprite": "boss.drive/butler"
+  }
+ ],
+ "lieutenants": [
+  {
+   "id": "tm_hc_cull",
+   "name": "Brother Cull",
+   "team": "hc",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Protect the Cantor; afraid of loud places",
+   "signature": {
+    "species": "dusclops",
+    "nickname": "Mallet"
+   },
+   "scene": "Mallet Night: he rings a muffled bell for a lost friend",
+   "turn": "Never, unless Pennant leaves",
+   "sprite": "trainer.pr/zinzolin"
+  },
+  {
+   "id": "tm_hc_pennant",
+   "name": "Sister Pennant",
+   "team": "hc",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Quiet, so the world heals; she misses the patients",
+   "signature": {
+    "species": "chansey",
+    "nickname": "Pennant"
+   },
+   "scene": "The Cloth Bell: she shows what silence costs",
+   "turn": "Yes, if shown the cost",
+   "sprite": "boss.drive/kaloian-xy-maid"
+  },
+  {
+   "id": "tm_ic_alaric",
+   "name": "Alaric Pym",
+   "team": "ic",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Meet quota; a safe pension",
+   "signature": {
+    "species": "magnezone",
+    "nickname": "Quota"
+   },
+   "scene": "Quarterly Review: he reads a memo aloud",
+   "turn": "Yes, to a leaked memo",
+   "sprite": "trainer.drive/clerk2-m"
+  },
+  {
+   "id": "tm_ic_brook",
+   "name": "Brook Ealing",
+   "team": "ic",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Keep a job; miss the forest in the photo",
+   "signature": {
+    "species": "ferrothorn",
+    "nickname": "Brook"
+   },
+   "scene": "The Photo: he shows the cap-band forest",
+   "turn": "Yes, if the player speaks for the forest",
+   "sprite": "boss.drive/galarian-swsh-worker-man"
+  },
+  {
+   "id": "tm_pc_bettina",
+   "name": "Bettina Quay",
+   "team": "pc",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "The thrill of a find; guilt about relics",
+   "signature": {
+    "species": "weavile",
+    "nickname": "Quay"
+   },
+   "scene": "Relic Return: she is asked to return a stolen tablet",
+   "turn": "Yes, if returned right",
+   "sprite": "boss.drive/fan-chelsea"
+  },
+  {
+   "id": "tm_pc_corwin",
+   "name": "Corwin Tace",
+   "team": "pc",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Sail free; owes Rook",
+   "signature": {
+    "species": "pelipper",
+    "nickname": "Sextant"
+   },
+   "scene": "The Sextant: he teaches the player to read a chart",
+   "turn": "Maybe, if freed of debt",
+   "sprite": "boss.drive/hoennian-oras-fisher-man"
+  },
+  {
+   "id": "tm_wa_joss",
+   "name": "Joss Marden",
+   "team": "wa",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Break the pylons; find belonging",
+   "signature": {
+    "species": "rotom",
+    "nickname": "Wire"
+   },
+   "scene": "Short Circuit: a sabotage run on a pylon",
+   "turn": "Yes, if civilians are at risk",
+   "sprite": "boss.drive/alolan-usum-punk-guy"
+  },
+  {
+   "id": "tm_wa_pilar",
+   "name": "Pilar Okafor",
+   "team": "wa",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Free Pokémon; keep people safe",
+   "signature": {
+    "species": "sylveon",
+    "nickname": "Armband"
+   },
+   "scene": "The Armband: she treats a hurt grunt",
+   "turn": "Yes, if methods turn violent",
+   "sprite": "boss.drive/fan-naomi"
+  },
+  {
+   "id": "tm_gc_lucia",
+   "name": "Lucia Ferrante",
+   "team": "gc",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Win clean in her own books",
+   "signature": {
+    "species": "alakazam",
+    "nickname": "Ledger"
+   },
+   "scene": "The Odds: she offers odds on the player",
+   "turn": "Maybe, if the fix is exposed",
+   "sprite": "boss.drive/paldean-sv-office-worker-woman"
+  },
+  {
+   "id": "tm_gc_piers",
+   "name": "Piers Dunne",
+   "team": "gc",
+   "kind": "lieutenant",
+   "title": "",
+   "motivation": "Believes in rules; breaks them",
+   "signature": {
+    "species": "sableye",
+    "nickname": "Coin"
+   },
+   "scene": "The Coin: he flips it when he lies",
+   "turn": "Yes, to Gaspard Orme",
+   "sprite": "boss.drive/kantoian-lgpe-gym-guide"
+  }
+ ],
+ "grunts": [
+  {
+   "id": "mm_g1",
+   "team": "mm",
+   "key": "bs_ex_criminal",
+   "line": "You wore a coat like this once. Do not pretend otherwise."
+  },
+  {
+   "id": "mm_g2",
+   "team": "mm",
+   "key": "bs_champion_heir",
+   "line": "The Architect says a Champion's heir is just a very polite subject."
+  },
+  {
+   "id": "mm_g3",
+   "team": "mm",
+   "key": "bs_viridian",
+   "line": "You hear them, don't you? The Ascension needs someone who hears."
+  },
+  {
+   "id": "mm_g4",
+   "team": "mm",
+   "key": "bs_aether",
+   "line": "Subject, there is a number on your wrist. We have the same number."
+  },
+  {
+   "id": "mm_g5",
+   "team": "mm",
+   "key": "bs_hisui",
+   "line": "Old history, new coat. We would rather borrow your past than ask."
+  },
+  {
+   "id": "mm_g6",
+   "team": "mm",
+   "key": "ev_badge_recent",
+   "line": "A new badge. The Hounds will have your Dratini by evening."
+  },
+  {
+   "id": "mm_g7",
+   "team": "mm",
+   "key": "ev_party_hurt",
+   "line": "Rest if you like. The Chalk will take notes on how you rest."
+  },
+  {
+   "id": "mm_g8",
+   "team": "mm",
+   "key": "ev_met_before",
+   "line": "You met a coat of ours. We heard. You were polite. We noticed."
+  },
+  {
+   "id": "hc_g1",
+   "team": "hc",
+   "key": "bs_ex_criminal",
+   "line": "You know the quiet of a hideout. Come, listen again."
+  },
+  {
+   "id": "hc_g2",
+   "team": "hc",
+   "key": "bs_champion_heir",
+   "line": "A Champion shouts. We have stopped shouting."
+  },
+  {
+   "id": "hc_g3",
+   "team": "hc",
+   "key": "bs_viridian",
+   "line": "The forest does not shout either. You already know."
+  },
+  {
+   "id": "hc_g4",
+   "team": "hc",
+   "key": "bs_aether",
+   "line": "You were made in a loud room. Come, we will be quiet."
+  },
+  {
+   "id": "hc_g5",
+   "team": "hc",
+   "key": "bs_hisui",
+   "line": "You have walked in the long night. You remember it."
+  },
+  {
+   "id": "hc_g6",
+   "team": "hc",
+   "key": "ev_badge_recent",
+   "line": "A badge rings. Quiet it."
+  },
+  {
+   "id": "hc_g7",
+   "team": "hc",
+   "key": "ev_party_hurt",
+   "line": "Your friends are tired. Rest here, in the bell's shadow."
+  },
+  {
+   "id": "hc_g8",
+   "team": "hc",
+   "key": "ev_met_before",
+   "line": "Sister Pennant spoke of you. She was gentle. I am not."
+  },
+  {
+   "id": "ic_g1",
+   "team": "ic",
+   "key": "bs_ex_criminal",
+   "line": "Used to run for a living? We pay overtime."
+  },
+  {
+   "id": "ic_g2",
+   "team": "ic",
+   "key": "bs_champion_heir",
+   "line": "A famous name looks good on a pay stub."
+  },
+  {
+   "id": "ic_g3",
+   "team": "ic",
+   "key": "bs_viridian",
+   "line": "Greenwall is a tidy job, kid. Trees fall, jobs grow."
+  },
+  {
+   "id": "ic_g4",
+   "team": "ic",
+   "key": "bs_aether",
+   "line": "You are a prototype. We love prototypes."
+  },
+  {
+   "id": "ic_g5",
+   "team": "ic",
+   "key": "bs_hisui",
+   "line": "Old relics, old mines. We bring them up to date."
+  },
+  {
+   "id": "ic_g6",
+   "team": "ic",
+   "key": "ev_badge_recent",
+   "line": "Another badge? The Chairwoman prices badges too."
+  },
+  {
+   "id": "ic_g7",
+   "team": "ic",
+   "key": "ev_party_hurt",
+   "line": "Your team's low. That is a procurement issue."
+  },
+  {
+   "id": "ic_g8",
+   "team": "ic",
+   "key": "ev_met_before",
+   "line": "Pym says you read memos. Please don't read this one."
+  },
+  {
+   "id": "pc_g1",
+   "team": "pc",
+   "key": "bs_ex_criminal",
+   "line": "A thief sees a map and thinks of a vault. Good instinct."
+  },
+  {
+   "id": "pc_g2",
+   "team": "pc",
+   "key": "bs_champion_heir",
+   "line": "A name, like a coastline, is only useful once charted."
+  },
+  {
+   "id": "pc_g3",
+   "team": "pc",
+   "key": "bs_viridian",
+   "line": "Your forest is on the survey. Do not take it personally."
+  },
+  {
+   "id": "pc_g4",
+   "team": "pc",
+   "key": "bs_aether",
+   "line": "You are an uncharted subject. The Surveyor will be thrilled."
+  },
+  {
+   "id": "pc_g5",
+   "team": "pc",
+   "key": "bs_hisui",
+   "line": "The Survey Corps maps are ours now. We are honoring them."
+  },
+  {
+   "id": "pc_g6",
+   "team": "pc",
+   "key": "ev_badge_recent",
+   "line": "Another badge. Another pin on the map."
+  },
+  {
+   "id": "pc_g7",
+   "team": "pc",
+   "key": "ev_party_hurt",
+   "line": "Do rest. We can chart your route while you do."
+  },
+  {
+   "id": "pc_g8",
+   "team": "pc",
+   "key": "ev_met_before",
+   "line": "Bettina said you were polite. We take that as a bearing."
+  },
+  {
+   "id": "wa_g1",
+   "team": "wa",
+   "key": "bs_ex_criminal",
+   "line": "We know. Everyone in the grid knows. We still want you."
+  },
+  {
+   "id": "wa_g2",
+   "team": "wa",
+   "key": "bs_champion_heir",
+   "line": "A Champion's heir? Then you know the cage best."
+  },
+  {
+   "id": "wa_g3",
+   "team": "wa",
+   "key": "bs_viridian",
+   "line": "You hear the forest! Help us burn the pylons that choke it!"
+  },
+  {
+   "id": "wa_g4",
+   "team": "wa",
+   "key": "bs_aether",
+   "line": "They kept you in a cage. We open cages."
+  },
+  {
+   "id": "wa_g5",
+   "team": "wa",
+   "key": "bs_hisui",
+   "line": "In your day there was no grid. We want that day back."
+  },
+  {
+   "id": "wa_g6",
+   "team": "wa",
+   "key": "ev_badge_recent",
+   "line": "More badges means more lamps. More lamps means more wire."
+  },
+  {
+   "id": "wa_g7",
+   "team": "wa",
+   "key": "ev_party_hurt",
+   "line": "Pilar's tent is open. Patch up, then fight."
+  },
+  {
+   "id": "wa_g8",
+   "team": "wa",
+   "key": "ev_met_before",
+   "line": "Joss said you were fun. He lies. Let's find out."
+  },
+  {
+   "id": "gc_g1",
+   "team": "gc",
+   "key": "bs_ex_criminal",
+   "line": "You know how a fix works. Join the ledger."
+  },
+  {
+   "id": "gc_g2",
+   "team": "gc",
+   "key": "bs_champion_heir",
+   "line": "Mr. Ashdown remembers Hartwell. He will remember you."
+  },
+  {
+   "id": "gc_g3",
+   "team": "gc",
+   "key": "bs_viridian",
+   "line": "Nice forest. Hope it isn't on the bracket."
+  },
+  {
+   "id": "gc_g4",
+   "team": "gc",
+   "key": "bs_aether",
+   "line": "The League measures talent. We simply measure it better."
+  },
+  {
+   "id": "gc_g5",
+   "team": "gc",
+   "key": "bs_hisui",
+   "line": "Old rules, new odds. We keep the books honest. Mostly."
+  },
+  {
+   "id": "gc_g6",
+   "team": "gc",
+   "key": "ev_badge_recent",
+   "line": "A new badge? The odds just shifted."
+  },
+  {
+   "id": "gc_g7",
+   "team": "gc",
+   "key": "ev_party_hurt",
+   "line": "A tired team makes a poor bet. We'll cover it."
+  },
+  {
+   "id": "gc_g8",
+   "team": "gc",
+   "key": "ev_met_before",
+   "line": "Lucia has you at three to one. She's rarely wrong."
+  }
+ ],
+ "overlays": [
+  {
+   "id": "brock",
+   "name": "Brock",
+   "region": "Kanto",
+   "persona": "Traditionalist",
+   "conflict": "Dismisses new mechanics but leaves for medicine; out-of-Gym: The Unexpected Mentor",
+   "linked": "Misty",
+   "line": "Rocks wait. I did not."
+  },
+  {
+   "id": "misty",
+   "name": "Misty",
+   "region": "Kanto",
+   "persona": "Showman",
+   "conflict": "Her water show hides a fear of being second; out-of-Gym: Press Day",
+   "linked": "Brock",
+   "line": "Ladies and gentlemen, one Trainer."
+  },
+  {
+   "id": "lt-surge",
+   "name": "Lt. Surge",
+   "region": "Kanto",
+   "persona": "Considering retirement",
+   "conflict": "Wants a successor; out-of-Gym: Succession",
+   "linked": "Sabrina",
+   "line": "I have one more good season."
+  },
+  {
+   "id": "sabrina",
+   "name": "Sabrina",
+   "region": "Kanto",
+   "persona": "Popular but lonely",
+   "conflict": "Everyone watches; no one asks her name; out-of-Gym: Rainy Day",
+   "linked": "Lt. Surge",
+   "line": "Nobody asks my name."
+  },
+  {
+   "id": "falkner",
+   "name": "Falkner",
+   "region": "Johto",
+   "persona": "Young prodigy, insecure",
+   "conflict": "His father's gym; out-of-Gym: Student of the Leader",
+   "linked": "Whitney",
+   "line": "Don't take it personally."
+  },
+  {
+   "id": "whitney",
+   "name": "Whitney",
+   "region": "Johto",
+   "persona": "Secretly dislikes their type",
+   "conflict": "Wants to be known for something other than Normal; out-of-Gym: The Trade",
+   "linked": "Falkner",
+   "line": "Yes, yes. I love it."
+  }
+ ]
+}

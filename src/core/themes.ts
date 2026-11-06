@@ -152,7 +152,7 @@ export function trainerClassesFor(content: Content, theme: Theme): TrainerClass[
  * empty means the region has no leaders of its own.
  */
 export function pickGymLeader(content: Content, theme: Theme, used: readonly string[], rng: Rng, regionPool: readonly string[] = []): Boss {
-  const all = [...content.bosses.values()];
+  const all = [...content.bosses.values()].filter((b) => !b.story);
   const fresh = all.filter((l) => !used.includes(l.id));
   const local = fresh.filter((l) => regionPool.includes(l.id));
   const matches = (list: Boss[]) => list.filter((l) => sharesType(l.types, theme.types));

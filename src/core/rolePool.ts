@@ -8,6 +8,8 @@ import type { Boss, Campaign, Content, Theme } from './contentSchema';
 import { withStream, type Rng } from './rng';
 import type { RunState } from './state';
 
+/** Every boss the role pool may cast: the original Circuit cast (story: true) is placed by core/campaign/circuitCast.ts instead. */
+const pooled = (content: Content): Boss[] => [...content.bosses.values()].filter((b) => !b.story);
 const sharesType = (a: readonly string[], b: readonly string[]) => a.some((t) => b.includes(t));
 
 export type CastRole = 'gym' | 'elite' | 'champion';
@@ -23,7 +25,7 @@ export function bossTier(content: Content, id: string): CastTier {
 }
 
 /** Trainers that may not take a league role in this run: its rivals and its evil team's leader. */
-function excludedIds(content: Content, run: RunState): Set<string> {
+export function excludedIds(content: Content, run: RunState): Set<string> {
   const out = new Set<string>();
   const teamId = run.story.evil?.teamId;
   for (const id of (teamId ? content.balance.rolePool.teamLeaders[teamId] : undefined) ?? []) out.add(id);
@@ -45,7 +47,7 @@ function candidates(content: Content, run: RunState, role: CastRole, regionIndex
     role === 'gym' ? wildCount(run, 'gym', regionIndex) < cfg.wildCardMax.gymPerRegion
     : role === 'elite' ? wildCount(run, 'elite') + taken.filter((id) => !core.has(id)).length < cfg.wildCardMax.elitePerRun
     : wildCount(run, 'champion') < cfg.wildCardMax.championPerRun;
-  return [...content.bosses.values()].filter((b) => !run.usedLeaders.includes(b.id) && !taken.includes(b.id) && !out.has(b.id) && (core.has(b.id) || wildOk));
+  return pooled(content).filter((b) => !run.usedLeaders.includes(b.id) && !taken.includes(b.id) && !out.has(b.id) && (core.has(b.id) || wildOk));
 }
 
 function draw(content: Content, pool: Boss[], rng: Rng): Boss {
@@ -57,8 +59,8 @@ function draw(content: Content, pool: Boss[], rng: Rng): Boss {
 /** The stage's gym leader: prefers one whose type matches the theme (any region), else anyone allowed. */
 export function castGymLeader(content: Content, run: RunState, theme: Theme, regionIndex: number, slot: number): Boss {
   let pool = candidates(content, run, 'gym', regionIndex, []);
-  if (pool.length === 0) pool = [...content.bosses.values()].filter((b) => !run.usedLeaders.includes(b.id));
-  if (pool.length === 0) pool = [...content.bosses.values()];
+  if (pool.length === 0) pool = pooled(content).filter((b) => !run.usedLeaders.includes(b.id));
+  if (pool.length === 0) pool = pooled(content);
   const matches = pool.filter((b) => sharesType(b.types, theme.types));
   const boss = withStream(run.rng, 'roleCast', (r) => draw(content, matches.length > 0 ? matches : pool, r));
   record(content, run, 'gym', regionIndex, slot, boss.id);
@@ -72,7 +74,7 @@ export function castLeague(content: Content, run: RunState, campaign: Campaign, 
   withStream(run.rng, 'roleCast', (r) => {
     for (let i = 0; i < campaign.eliteFourSize; i++) {
       let pool = candidates(content, run, 'elite', regionIndex, eliteFour);
-      if (pool.length === 0) pool = [...content.bosses.values()].filter((b) => !eliteFour.includes(b.id));
+      if (pool.length === 0) pool = pooled(content).filter((b) => !eliteFour.includes(b.id));
       const distinct = pool.filter((b) => !types.has(b.types[0] ?? ''));
       const boss = draw(content, distinct.length > 0 ? distinct : pool, r);
       eliteFour.push(boss.id);
@@ -81,12 +83,12 @@ export function castLeague(content: Content, run: RunState, campaign: Campaign, 
   });
   eliteFour.forEach((id, i) => record(content, run, 'elite', regionIndex, i, id));
   let pool = candidates(content, run, 'champion', regionIndex, eliteFour);
-  if (pool.length === 0) pool = [...content.bosses.values()].filter((b) => !eliteFour.includes(b.id));
+  if (pool.length === 0) pool = pooled(content).filter((b) => !eliteFour.includes(b.id));
   const champion = withStream(run.rng, 'roleCast', (r) => draw(content, pool, r));
   record(content, run, 'champion', regionIndex, 0, champion.id);
   return { eliteFour, champion: champion.id };
 }
 
-function record(content: Content, run: RunState, role: CastRole, regionIndex: number, slot: number, id: string): void {
+export function record(content: Content, run: RunState, role: CastRole, regionIndex: number, slot: number, id: string): void {
   run.roleCast.push({ role, regionIndex, slot, id, tier: bossTier(content, id) });
 }

@@ -438,7 +438,7 @@ function clubBattleOf(content: Content, run: RunState, f: ClubFormat, theme: str
   let name = f.trainerName ?? `Club trainer${f.rounds > 1 ? ` (round ${round + 1})` : ''}`;
   let bossId: string | undefined;
   if (f.boss) {
-    const ids = [...content.bosses.keys()].sort().filter((id) => id !== run.stage!.leaderId);
+    const ids = [...content.bosses.values()].filter((b) => !b.story).map((b) => b.id).sort().filter((id) => id !== run.stage!.leaderId);
     bossId = rng.pick(ids);
     name = content.bosses.get(bossId)?.name ?? name;
   }

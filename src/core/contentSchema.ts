@@ -1713,6 +1713,8 @@ export const BossProfileSchema = z.object({
   sprites: z.object({ default: z.string(), gym: z.string().optional(), elite: z.string().optional(), champion: z.string().optional() }),
   /** The boss's signature Pokémon, ace first. tools/build-boss-teams.ts builds their teams from these. */
   signature: z.array(z.string()).min(1),
+  /** Story Overhaul S9: an original Circuit character (Gym Leader, Elite Four, Selene). Placed by the Circuit roster only, never drawn from the Classic pools. */
+  story: z.boolean().optional(),
 });
 export type BossProfile = z.infer<typeof BossProfileSchema>;
 

@@ -238,7 +238,8 @@ import { memoryPick } from './memories/encounters';
 import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart } from './evil/teams';
-import { leagueAfterRegion } from './campaign/circuit';
+import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
+import { castAuthoredLeague, circuitLeader, noteGymWin } from './campaign/circuitCast';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
@@ -608,7 +609,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
     const { theme, line } = pickPlannedTheme(content, run, signals, r);
     // The old region-locked pick is still rolled (and dropped) so every other 'map' roll stays where it was; the cast itself comes from 'roleCast'.
     pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
-    const leader = castGymLeader(content, run, theme, run.regionIndex, index);
+    const leader = circuitLeader(content, run, run.regionIndex, index) ?? castGymLeader(content, run, theme, run.regionIndex, index);
     return { theme, leader, map: generateStageMap(content, campaign, r), themeLine: line };
   });
   forceFirstRivalColumn(content, run, index, map);
@@ -670,7 +671,7 @@ function enterLeague(content: Content, run: RunState): void {
   const campaign = getCampaign(content, run.campaignId);
   const region = currentRegion(content, run);
   withStream(run.rng, 'map', (r) => pickLeague(content, region, campaign, run.usedLeaders, r)); // rolled and dropped: keeps the 'map' stream where it was
-  const league = castLeague(content, run, campaign, run.regionIndex);
+  const league = isStoryCampaign(content, run.campaignId) ? castAuthoredLeague(content, run, run.regionIndex) : castLeague(content, run, campaign, run.regionIndex);
   const map = generateLeagueMap(campaign.eliteFourSize);
   const problems = validateLeagueMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid league map: ${problems.join('; ')}`);
@@ -3034,6 +3035,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (won) recordAftermath(run, won);
   if (badge) {
     run.badges.push(badge);
+    noteGymWin(content, run, badge);
     mentorBadgeWon(content, run);
     // Coin Case: interest on the money held; Fashion Case: Charisma per stage cleared.
     const interest = Math.floor((run.money * passivePercent(content, run, 'gymInterest')) / 100);
