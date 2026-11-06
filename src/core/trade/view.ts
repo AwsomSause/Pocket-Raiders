@@ -5,7 +5,8 @@ import type { Content } from '../contentSchema';
 import { getSpecies } from '../pokemon';
 import { PLAZA } from '../plaza/schema';
 import { sectionView, traderGift } from '../plaza/flow';
-import { serviceView } from '../services/flow';
+import { generateTradeOffer, serviceView, tradeArrivalLevel } from '../services/flow';
+import { TRADES } from '../tradePools';
 import type { RunState } from '../state';
 
 export type TradeSource = 'service' | 'plaza';
@@ -82,7 +83,8 @@ export function tradeView(content: Content, run: RunState, source: TradeSource, 
       const [, uid, to] = o.id.split(':');
       const mon = run.party.find((m) => m.uid === uid);
       if (!mon || !to) continue;
-      offers.push({ id: o.id, trader: CLERK, give: side(content, mon.speciesId, mon.level), get: side(content, to, mon.level), cost: o.cost, problem: o.problem, note: `Base total ${bst(content, mon.speciesId)} > ${bst(content, to)} · moves and friendship start fresh` });
+      const gen = generateTradeOffer(content, run, sideId, mon);
+      offers.push({ id: o.id, trader: CLERK, give: side(content, mon.speciesId, mon.level), get: side(content, to, tradeArrivalLevel(content, run, sideId, mon, to)), cost: o.cost, problem: o.problem, note: `${gen && gen.speciesId === to ? `${TRADES.pools[gen.pool].name} · ` : ''}Base total ${bst(content, mon.speciesId)} > ${bst(content, to)} · moves and friendship start fresh` });
     }
   } else {
     for (const o of sectionView(content, run, sideId, 'traders').options) {
