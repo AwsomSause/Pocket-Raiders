@@ -1,0 +1,1 @@
+- **Dynamax zoom-out** (2026-11-06): after a Dynamax or Gigantamax reveal the camera pulls back to 78% for about a second so the giant and the other Pokémon both fit, then returns (full motion only; presentation only, `BattleScene.dynamaxZoomOut`).

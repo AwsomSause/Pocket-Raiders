@@ -799,6 +799,28 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /**
+   * After a Dynamax the camera pulls back so the giant fits and the size gap between the two Pokémon shows,
+   * holds a moment, then returns. Presentation only; full motion only.
+   */
+  private async dynamaxZoomOut(): Promise<void> {
+    const cam = this.cameras.main;
+    const scale = 1 / animationTimeScale(services().session.settings);
+    this.camBusy = true;
+    try {
+      await new Promise<void>((done) => {
+        cam.zoomTo(0.78, 520 / scale, 'Cubic.easeOut', true, (_c: Phaser.Cameras.Scene2D.Camera, t: number) => t >= 1 && done());
+      });
+      await new Promise<void>((done) => this.time.delayedCall(1100 / scale, done));
+      await new Promise<void>((done) => {
+        cam.zoomTo(1, 600 / scale, 'Sine.easeInOut', true, (_c: Phaser.Cameras.Scene2D.Camera, t: number) => t >= 1 && done());
+      });
+    } finally {
+      cam.setZoom(1);
+      this.camBusy = false;
+    }
+  }
+
+  /**
    * The player's trainer throws out the first Pokémon (Gen 4/5 back sprite, Pokémon Memories), then slides away.
    * Presentation only: skipped when motion is off or the trainer has no back sprite.
    */
@@ -3185,6 +3207,7 @@ export class BattleScene extends Phaser.Scene {
               }),
             );
             if (e.kind === 'tera' || e.kind === 'zmove') playSfx(this, 'se.level_up');
+            if ((e.kind === 'dynamax' || e.kind === 'gigantamax') && this.motion === 'full') await this.dynamaxZoomOut();
           } else {
             if (e.kind !== 'illusion') await burstReveal(this, at.x, at.y - 80, glowColor, this.motion).done;
             swapForm();
