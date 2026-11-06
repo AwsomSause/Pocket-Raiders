@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { eventRuleEnd, switchProblem } from '../../src/core/battle/engine';
+import { eventRuleEnd, itemProblem, switchProblem } from '../../src/core/battle/engine';
 import { moveBlockReason } from '../../src/core/battle/moveBlock';
 import { EventBattleSchema, EventRuleSchema } from '../../src/core/contentSchema';
 import { chooseEvent, eventBattleWon } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
+import b4 from '../../src/data/events/trainer-b4.json';
 import b3 from '../../src/data/events/trainer-b3.json';
 
 const battle = (rule: object, turn = 1) => ({ eventRule: rule, outcome: null, turn, needsSwitch: false, activeIndex: 0, kind: 'trainer' }) as never;
@@ -82,5 +83,16 @@ describe('event fight rules (run events B batch 3)', () => {
     const m2 = fast.money;
     eventBattleWon(content, fast, fast.battle!.event!, 5);
     expect(fast.money - m2).toBe(700);
+  });
+  it('batch 4: every event is in the content, its fights parse, and the exam bans bag items', () => {
+    const events = (b4 as { events: { id: string; choices: { success: { battle?: unknown }; failure?: { battle?: unknown } }[] }[] }).events;
+    expect(events).toHaveLength(14);
+    for (const e of events) {
+      expect(content.events.get(e.id), e.id).toBeDefined();
+      for (const c of e.choices) for (const b of [c.success.battle, c.failure?.battle]) if (b) expect(EventBattleSchema.safeParse(b).success, e.id).toBe(true);
+    }
+    const run = start('mentors-examination');
+    expect(run.battle?.eventRule?.noItems).toBe(true);
+    expect(itemProblem({ content, battle: run.battle!, party: run.party, inventory: { potion: 1 } as never }, 'potion')).toMatch(/forbids/);
   });
 });

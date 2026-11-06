@@ -14,6 +14,7 @@
 
 import { companionSupport } from './companionSupport';
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
+import { gimmickContext } from './gimmicks';
 import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
@@ -178,6 +179,7 @@ import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlo
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { noteBountyKills } from './bounties';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -336,6 +338,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     totems: { entered: 0, won: 0, lost: 0, done: [], unlocks: [], research: 0 },
     expedition: null,
     expeditions: { completed: [], failed: [], unlocked: [], last: [] },
+    gimmicks: { uses: {} },
     minigame: null,
     minigames: { stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0, contest: {} },
   };
@@ -2223,6 +2226,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: archetype.modifiers,
+    gimmicks: gimmickContext(content, run),
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,
@@ -2771,6 +2775,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (dropped) itemsFound.push(dropped);
   const streakGift = outcome === 'win' ? advanceStreak(content, run) : null;
   if (streakGift) itemsFound.push(streakGift.item);
+  const bountyItem = outcome === 'win' ? noteBountyKills(content, run, battle.enemyTeam) : null;
+  if (bountyItem) itemsFound.push(bountyItem);
   for (const id of itemsFound) addItem(run.inventory, id, 1);
   if (outcome === 'win') {
     count(run, 'battlesWon');

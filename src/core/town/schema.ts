@@ -76,7 +76,7 @@ const Action = z.object({
   rewards: GradeRewards.optional(),
   options: z.array(Option).default([]),
   /** Options built from the profile instead of the list: lastTeam, history, trophies, relics, pets, items. */
-  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial', 'regions', 'visitors', 'labSpecies']).optional(),
+  dynamic: z.enum(['lastTeam', 'history', 'trophies', 'relics', 'pets', 'museum', 'vault', 'contracts', 'ghosts', 'mail', 'items', 'memorial', 'regions', 'visitors', 'labSpecies', 'rivals']).optional(),
   /** What a dynamic option pays; "{name}" in `say` is the option's name. */
   template: Option.optional(),
   goods: z.array(Good).default([]),
@@ -118,7 +118,8 @@ export const TownDataSchema = z.object({
   seasons: z.array(z.object({ id: z.string(), name: z.string(), months: z.array(z.number().int().min(1).max(12)), prop: z.string(), tap: z.string(), reward: RewardSchema })),
   track: z.array(z.object({ xp: Count, label: z.string(), reward: RewardSchema })),
   dailyGifts: z.array(RewardSchema),
-  dailyQuests: z.array(z.object({ id: z.string(), text: z.string(), action: z.string(), reward: RewardSchema })),
+  /** `season` quests (S471) only appear while that season is on, as the board's third notice. */
+  dailyQuests: z.array(z.object({ id: z.string(), text: z.string(), action: z.string(), reward: RewardSchema, season: z.string().optional() })),
   badgePerks: z.record(z.string(), RewardSchema),
   pets: z.object({ chatter: z.array(z.string()), bondAt: Count }),
   gacha: z.object({ cost: Cost, pity: Count, pools: z.array(z.object({ rarity: z.enum(['common', 'rare', 'epic']), weight: Count, goods: z.array(z.object({ set: z.string(), id: z.string(), label: z.string() })) })), dupe: RewardSchema }),

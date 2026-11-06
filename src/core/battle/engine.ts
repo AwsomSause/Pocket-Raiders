@@ -298,6 +298,8 @@ export interface BattleContext {
   enemyHyperUsed?: boolean;
   /** Transformations switched off for this run (a challenge). */
   disabledMechanics?: readonly TransformKind[];
+  /** Gimmick progression: use counts and type hits this run (core/gimmicks). */
+  gimmicks?: import('../gimmicks').GimmickContext;
   /**
    * Set during a turn: the side that loses if both sides run out of Pokémon at
    * once (the user of Explosion loses; the user of a recoil move wins).
@@ -1269,6 +1271,7 @@ function useCheer(ctx: BattleContext, cheer: Cheer, events: BattleEvent[]): void
 export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'party' | 'inventory' | 'noBattleItems'> & Partial<Pick<BattleContext, 'catchBlocked'>>, itemId: string, targetIndex?: number): string | null {
   const item = ctx.content.items.get(itemId);
   if (!item) return `Unknown item "${itemId}".`;
+  if (ctx.battle.eventRule?.noItems && item.category !== 'ball') return "The examiner forbids bag items in this fight!";
   if (ctx.noBattleItems && item.category !== 'ball') return 'Your Empty Bag contract allows only Poké Balls in battle.';
   if (itemCount(ctx.inventory, itemId) <= 0) return `You have no ${item.name} left.`;
   if (!item.usableInBattle) return `${item.name} can't be used in battle.`;
