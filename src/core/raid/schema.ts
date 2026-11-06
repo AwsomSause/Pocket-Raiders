@@ -36,6 +36,12 @@ export const RaidModifiersSchema = z.object({
   /** S397 Boss Weak Spots: the exposed zone swaps every `everyTurns` turns between the body (physical hits do `boost` times the damage) and the core (special hits do). */
   weakSpots: z.object({ everyTurns: z.number().int().min(2).max(6), boost: z.number().min(1.1).max(1.6) }).optional(),
   rotatingWeakness: z.object({ types: z.array(TypeNameSchema).min(2).max(6), everyTurns: z.number().int().min(2).max(6), boost: z.number().min(1.1).max(2) }).optional(),
+  /** S412 Boss Arenas: a hazard unique to this boss's arena. Each turn end your Pokémon in front loses `percent` of its max HP (never to 0), unless it is one of the `immune` types. */
+  hazard: z.object({ type: TypeNameSchema, percent: z.number().min(0.03).max(0.15), text: z.string().min(1), immune: z.array(TypeNameSchema).default([]) }).optional(),
+  /** S406 Titan Mode: no single hit takes more than `hitCapPercent` of the boss's max HP while it is braced. A status in `openedBy`, or its Defense at -`defDrop`, topples it and lifts the cap. */
+  titan: z.object({ hitCapPercent: z.number().int().min(5).max(30), openedBy: z.array(z.enum(['slp', 'par', 'frz'])).default(['slp', 'par', 'frz']), defDrop: z.number().int().min(1).max(3).default(2), text: z.string().min(1) }).optional(),
+  /** S411 Boss Puzzles: the boss's defence takes `guard` times the damage until you hit it with a pattern of `steps` types in order (a wrong damaging hit starts over). The pattern comes from `pool`, the same every time for one fight. */
+  puzzle: z.object({ steps: z.number().int().min(2).max(4), pool: z.array(TypeNameSchema).min(3).max(8), guard: z.number().min(0.2).max(0.9), text: z.string().min(1) }).optional(),
 });
 export type RaidModifiers = z.infer<typeof RaidModifiersSchema>;
 
@@ -128,6 +134,12 @@ export const RaidDefSchema = z.object({
   }).optional(),
   /** The finale of a Legendary world event (core/legendary): never drawn for a den or an ordinary expedition. */
   legendary: z.boolean().default(false),
+  /** S407 Gauntlet Bosses: when the boss would faint it rises in the next form (full HP, new moves); it falls for good after the last. */
+  gauntlet: z.object({ forms: z.array(z.object({ species: z.string(), text: z.string().min(1) })).min(1).max(4) }).optional(),
+  /** S409 Boss Pokémon Capture: a Poké Ball works once the boss is at or below this share of its HP; the catch ends the raid as a win. */
+  capture: Fraction.optional(),
+  /** Special dens (titan, gauntlet, mini-boss) are never drawn for an ordinary den: the world places them on their own (core/raid/raid.ts placeSpecialDens). */
+  special: z.enum(['titan', 'gauntlet', 'mini']).optional(),
   /** The Grand-Enemy's own fights (core/story/grandEnemy): placed by the campaign, never in the random den pool. */
   grand: z.enum(['contact', 'reckoning']).optional(),
 });
@@ -195,6 +207,55 @@ export const DenTriggerSchema = z.object({
 });
 export type DenTrigger = z.infer<typeof DenTriggerSchema>;
 
+const StageChanges = z.partialRecord(BoostStatSchema, z.number().int().min(-6).max(6));
+
+/** S401 Boss Gimmick Cards: a card turns on an extra rule for the boss; the prize grows with it. */
+export const GimmickCardSchema = z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  label: z.string().min(1),
+  text: z.string().min(1),
+  hpDeltaPercent: z.number().int().min(0).max(100).default(0),
+  rewardPercent: z.number().int().min(100).max(250).default(100),
+  draftDelta: z.number().int().min(0).max(2).default(0),
+  modifiers: RaidModifiersSchema.optional(),
+  enrage: z.object({ afterTurn: z.number().int().min(3).max(40), everyTurns: z.number().int().min(2).max(10), boostPercent: z.number().int().min(5).max(50), maxStacks: z.number().int().min(1).max(5) }).optional(),
+});
+export type GimmickCard = z.infer<typeof GimmickCardSchema>;
+
+/** S402 Boss Dialogue Trees: lines you can say before the fight. Each shifts stat stages (and a little boss HP); a line may lead to a second set of lines. */
+export interface TalkChoice {
+  id: string;
+  label: string;
+  reply: string;
+  boss?: Partial<Record<z.infer<typeof BoostStatSchema>, number>>;
+  player?: Partial<Record<z.infer<typeof BoostStatSchema>, number>>;
+  hpPercent?: number;
+  next?: TalkChoice[];
+}
+const TalkChoiceSchema: z.ZodType<TalkChoice> = z.lazy(() => z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  label: z.string().min(1),
+  reply: z.string().min(1),
+  boss: StageChanges.optional(),
+  player: StageChanges.optional(),
+  hpPercent: z.number().int().min(-30).max(30).optional(),
+  next: z.array(TalkChoiceSchema).max(3).optional(),
+}));
+export const RaidTalkSchema = z.object({ prompt: z.string().min(1), choices: z.array(TalkChoiceSchema).min(2).max(4) });
+export type RaidTalk = z.infer<typeof RaidTalkSchema>;
+
+/** S393 Raid Lobby Bots: an AI ally with a personality. striker hits the boss each turn, guard softens its blows, medic mends your lead. */
+export const RaidBotSchema = z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  label: z.string().min(1),
+  text: z.string().min(1),
+  kind: z.enum(['striker', 'guard', 'medic']),
+  /** striker: share of the boss's max HP per turn; guard: share of the boss's damage absorbed; medic: share of your lead's max HP mended per turn. */
+  power: z.number().min(0.02).max(0.5),
+  cost: z.number().int().min(0).default(0),
+});
+export type RaidBot = z.infer<typeof RaidBotSchema>;
+
 export const RaidFileSchema = z.object({
   badgeScaling: BadgeScalingSchema,
   denTriggers: z.array(DenTriggerSchema).default([]),
@@ -214,6 +275,18 @@ export const RaidFileSchema = z.object({
     tankDamageTaken: z.number().min(0.5).max(1).default(0.9),
     supportHeal: z.number().min(0).max(0.25).default(0.0625),
   }).default({ strikerDamage: 1.1, tankDamageTaken: 0.9, supportHeal: 0.0625 }),
+  /** S403 Raid Cheering: the crowd meter (0 to 100) grows each turn and with every cheer; at `roused` your lead gets +1 Attack and Sp. Atk, at 100 the crowd mends it and the meter starts over. */
+  crowd: z.object({ perTurn: z.number().min(0).max(30).default(6), perCheer: z.number().min(0).max(60).default(20), roused: z.number().int().min(10).max(90).default(50), roarHeal: z.number().min(0).max(0.5).default(0.25) }).default({ perTurn: 6, perCheer: 20, roused: 50, roarHeal: 0.25 }),
+  /** S401 cards, S402 talk and S393 bots offered at ordinary dens (story raids and practice have none). */
+  gimmickCards: z.array(GimmickCardSchema).default([]),
+  talk: RaidTalkSchema.nullable().default(null),
+  bots: z.array(RaidBotSchema).default([]),
+  /** S405 Raid Dens Map: dens without their own weather take one of these by stage (rotating with the run's stage index and region). */
+  denWeathers: z.array(WeatherSchema).default([]),
+  /** S394 Raid Weekly Rotation: the featured raid of the week pays more; `extraDenChance` is the chance a stage also holds a den for it. */
+  weekly: z.object({ rewardPercent: z.number().int().min(100).max(300).default(150), draftDelta: z.number().int().min(0).max(2).default(1), extraDenChance: z.number().min(0).max(0.5).default(0.2) }).default({ rewardPercent: 150, draftDelta: 1, extraDenChance: 0.2 }),
+  /** Chance per stage of a special den (titan, gauntlet or mini-boss), from the region where each unlocks. */
+  specialDenChance: z.number().min(0).max(0.5).default(0.2),
   raids: z.array(RaidDefSchema).min(1),
 });
 export type RaidFile = z.infer<typeof RaidFileSchema>;

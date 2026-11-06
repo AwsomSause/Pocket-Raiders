@@ -168,10 +168,11 @@
       "levelBonus": 2,
       "hpBoostPercent": 200,
       "aura": {
-        "text": "A bubble shell wraps it (Special Defense up).",
+        "text": "A bubble shell wraps it (Special Defense up). Its bubbles slowly mend it unless it has a status condition.",
         "boost": {
           "spd": 1
-        }
+        },
+        "regen": 0.04
       },
       "environment": {
         "text": "Home field: rain.",
@@ -337,11 +338,18 @@
       "levelBonus": 3,
       "hpBoostPercent": 260,
       "aura": {
-        "text": "A chill sets in: Special Defense up, and the ground is poisoned.",
+        "text": "A chill sets in: Special Defense up, and the ground is poisoned. The chill saps your lead each turn (Ghost and Dark are safe).",
         "boost": {
           "spd": 1
         },
-        "hazard": "toxicSpikes"
+        "hazard": "toxicSpikes",
+        "sap": {
+          "percent": 0.05,
+          "immune": [
+            "ghost",
+            "dark"
+          ]
+        }
       },
       "ally": {
         "species": "gengar",
@@ -487,10 +495,11 @@
       "levelBonus": 1,
       "hpBoostPercent": 130,
       "aura": {
-        "text": "Its bone glows (Attack up).",
+        "text": "Its bone glows (Attack up). Thorns line its bone: physical hits hurt you, so use special moves.",
         "boost": {
           "atk": 1
-        }
+        },
+        "thorns": 0.06
       },
       "phases": [],
       "rewards": {
@@ -537,10 +546,11 @@
       "levelBonus": 2,
       "hpBoostPercent": 190,
       "aura": {
-        "text": "Static crackles (Speed up).",
+        "text": "Static crackles (Speed up). Its quills prick every physical hit you land.",
         "boost": {
           "spe": 1
-        }
+        },
+        "thorns": 0.05
       },
       "phases": [
         {
@@ -585,10 +595,11 @@
       "levelBonus": 3,
       "hpBoostPercent": 250,
       "aura": {
-        "text": "Pollen thickens the air (Special Defense up).",
+        "text": "Pollen thickens the air (Special Defense up). It mends itself every turn unless it has a status condition.",
         "boost": {
           "spd": 1
-        }
+        },
+        "regen": 0.06
       },
       "phases": [
         {

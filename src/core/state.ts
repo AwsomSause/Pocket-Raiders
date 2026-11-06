@@ -508,6 +508,23 @@ export const RaidBattleSchema = z.object({
   /** S404 Raid Medals: damage dealt to the boss and HP mended by Supports, by Pokémon uid. */
   damageBy: z.record(z.string(), z.number().int().min(0)).default({}),
   healedBy: z.record(z.string(), z.number().int().min(0)).default({}),
+  /** S403 crowd meter (0 to 100) and whether the "roused" bonus was already given at this fill. */
+  crowd: z.number().min(0).max(100).default(0),
+  roused: z.boolean().default(false),
+  /** S393 the lobby bot beside you (a raids.json bot id), S401 the gimmick card in play (card id). */
+  bot: z.string().nullable().default(null),
+  gimmick: z.string().nullable().default(null),
+  /** S411 Boss Puzzles: how many steps of the pattern you have hit in order, and whether the defence is broken. */
+  puzzleStep: z.number().int().min(0).default(0),
+  puzzleSolved: z.boolean().default(false),
+  /** S407 Gauntlet: how many forms the boss has already shown after the first. */
+  formIndex: z.number().int().min(0).default(0),
+  /** S397: the zone you aim at ('body' or 'core'); null = hit whichever suits the move (the older rule). */
+  aim: z.enum(['body', 'core']).nullable().default(null),
+  /** S394: this den was the featured raid of the week. */
+  featured: z.boolean().default(false),
+  /** S407: the form change that just happened (the engine turns it into events at the end of the turn). */
+  formNote: z.object({ from: z.string(), to: z.string(), text: z.string() }).nullable().default(null),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 
@@ -792,6 +809,8 @@ export const SideStopSchema = z.object({
   raidId: z.string().optional(),
   /** A raid boss that escaped earlier and is back, stronger. */
   returning: z.boolean().optional(),
+  /** S394: the raid of the week (pays more). */
+  featured: z.boolean().optional(),
   /** A raid den placed because of what the world was doing (raids.json denTriggers): the trigger ids. */
   triggers: z.array(z.string()).optional(),
   /** A Totem's territory: which Totem (totems.json) lives here. */

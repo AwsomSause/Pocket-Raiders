@@ -129,7 +129,8 @@
         ],
         "draftExtra": 0,
         "joinChance": 0.5
-      }
+      },
+      "capture": 0.3
     },
     {
       "id": "den-arcanine",
@@ -163,7 +164,8 @@
         ],
         "draftExtra": 1,
         "joinChance": 0.5
-      }
+      },
+      "capture": 0.3
     },
     {
       "id": "storm-gyarados",
@@ -218,8 +220,18 @@
           "type": "water",
           "boost": 1.25,
           "text": "The rain surges! Water moves hit harder!"
+        },
+        "hazard": {
+          "type": "water",
+          "percent": 0.05,
+          "text": "Crashing waves batter your Pokémon!",
+          "immune": [
+            "water",
+            "flying"
+          ]
         }
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "crystal-golem",
@@ -269,8 +281,19 @@
           ],
           "everyTurns": 3,
           "boost": 1.5
+        },
+        "hazard": {
+          "type": "rock",
+          "percent": 0.05,
+          "text": "Falling crystals graze your Pokémon!",
+          "immune": [
+            "rock",
+            "steel",
+            "flying"
+          ]
         }
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "sandstorm-tyranitar",
@@ -340,6 +363,16 @@
         "weakSpots": {
           "everyTurns": 3,
           "boost": 1.25
+        },
+        "hazard": {
+          "type": "rock",
+          "percent": 0.06,
+          "text": "The sandstorm's grit tears at your Pokémon!",
+          "immune": [
+            "rock",
+            "ground",
+            "steel"
+          ]
         }
       },
       "enrage": {
@@ -347,7 +380,8 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 3
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "dragon-ascent",
@@ -402,6 +436,15 @@
         "weakSpots": {
           "everyTurns": 3,
           "boost": 1.25
+        },
+        "hazard": {
+          "type": "dragon",
+          "percent": 0.04,
+          "text": "The thin air saps your Pokémon!",
+          "immune": [
+            "flying",
+            "dragon"
+          ]
         }
       },
       "extraMoves": [
@@ -413,7 +456,8 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 3
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "steel-mind",
@@ -492,7 +536,8 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 4
-      }
+      },
+      "capture": 0.12
     },
     {
       "id": "sky-pillar-apex",
@@ -595,7 +640,8 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 5
-      }
+      },
+      "capture": 0.12
     },
     {
       "id": "garden-guardian",
@@ -630,7 +676,22 @@
         "draftExtra": 0,
         "joinChance": 0.5
       },
-      "weather": "sun"
+      "weather": "sun",
+      "modifiers": {
+        "puzzle": {
+          "steps": 2,
+          "pool": [
+            "fire",
+            "ice",
+            "flying",
+            "poison",
+            "bug"
+          ],
+          "guard": 0.7,
+          "text": "Its thorny guard only breaks to the right pattern of types."
+        }
+      },
+      "capture": 0.3
     },
     {
       "id": "venom-reef",
@@ -672,7 +733,8 @@
         ],
         "draftExtra": 1,
         "joinChance": 0.45
-      }
+      },
+      "capture": 0.3
     },
     {
       "id": "midnight-haunt",
@@ -723,8 +785,18 @@
           "type": "ghost",
           "boost": 1.2,
           "text": "The dark surges! Ghost moves hit harder!"
+        },
+        "hazard": {
+          "type": "ghost",
+          "percent": 0.05,
+          "text": "Cold shadows drain your Pokémon!",
+          "immune": [
+            "ghost",
+            "dark"
+          ]
         }
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "sand-sovereign",
@@ -793,7 +865,8 @@
           "everyTurns": 3,
           "boost": 1.25
         }
-      }
+      },
+      "capture": 0.12
     },
     {
       "id": "mind-zenith",
@@ -880,6 +953,18 @@
         "weakSpots": {
           "everyTurns": 3,
           "boost": 1.25
+        },
+        "puzzle": {
+          "steps": 3,
+          "pool": [
+            "fire",
+            "fighting",
+            "ground",
+            "electric",
+            "water"
+          ],
+          "guard": 0.65,
+          "text": "It calculates every blow. Hit it with the pattern it cannot predict."
         }
       },
       "extraMoves": [
@@ -891,7 +976,8 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 5
-      }
+      },
+      "capture": 0.12
     },
     {
       "id": "storm-sovereign-contact",
@@ -1082,7 +1168,8 @@
           "everyTurns": 3,
           "boost": 1.25
         }
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "harbor-storm",
@@ -1143,6 +1230,15 @@
         "weakSpots": {
           "everyTurns": 3,
           "boost": 1.25
+        },
+        "hazard": {
+          "type": "water",
+          "percent": 0.05,
+          "text": "A heavy swell crashes over your Pokémon!",
+          "immune": [
+            "water",
+            "flying"
+          ]
         }
       },
       "rewards": {
@@ -1162,7 +1258,8 @@
         "everyTurns": 3,
         "boostPercent": 10,
         "maxStacks": 3
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "rival-den",
@@ -1225,7 +1322,8 @@
         ],
         "draftExtra": 1,
         "joinChance": 0.4
-      }
+      },
+      "capture": 0.3
     },
     {
       "id": "rival-summit",
@@ -1285,7 +1383,8 @@
         ],
         "draftExtra": 1,
         "joinChance": 0.4
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "anomaly-mirror",
@@ -1340,7 +1439,8 @@
         "draftExtra": 2,
         "joinChance": 0.4,
         "rareEncounters": 1
-      }
+      },
+      "capture": 0.2
     },
     {
       "id": "anomaly-static",
@@ -1384,7 +1484,19 @@
           "text": "The sky surges! Flying moves hit harder!"
         },
         "terrain": "electric",
-        "noHealing": true
+        "noHealing": true,
+        "puzzle": {
+          "steps": 3,
+          "pool": [
+            "ground",
+            "rock",
+            "ice",
+            "steel",
+            "dark"
+          ],
+          "guard": 0.7,
+          "text": "The static hides a pattern. Hit it in order to break the defence."
+        }
       },
       "rewards": {
         "moneyPerLevel": 170,
@@ -1398,7 +1510,8 @@
         "joinChance": 0.5,
         "rareEncounters": 2,
         "megaStones": 1
-      }
+      },
+      "capture": 0.12
     },
     {
       "id": "umbra-lab",
@@ -1754,6 +1867,443 @@
         "joinChance": 1
       },
       "timerTurns": 24
+    },
+    {
+      "id": "titan-steelix",
+      "name": "Titan Steelix",
+      "tier": 3,
+      "blurb": "A mountain of iron rises out of the ground. Quick strikes barely scratch it.",
+      "species": [
+        "steelix"
+      ],
+      "levelBonus": 2,
+      "hpBoostPercent": 450,
+      "entryCost": 0,
+      "shield": null,
+      "phases": [
+        {
+          "atHp": 0.4,
+          "text": "The titan rears up and the ground shakes!",
+          "boost": {
+            "atk": 1
+          }
+        }
+      ],
+      "telegraph": null,
+      "extraActions": null,
+      "timerTurns": 35,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {
+        "titan": {
+          "hitCapPercent": 10,
+          "openedBy": [
+            "slp",
+            "par",
+            "frz"
+          ],
+          "defDrop": 2,
+          "text": "The titan shrugs off most of the blow! Topple it: sleep, paralysis, freeze, or lower its Defense."
+        }
+      },
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 100,
+        "items": [
+          {
+            "item": "hyper-potion",
+            "chance": 1
+          },
+          {
+            "item": "ultra-ball",
+            "chance": 0.4
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0.2
+      },
+      "capture": 0.2,
+      "special": "titan"
+    },
+    {
+      "id": "titan-wailord",
+      "name": "Titan Wailord",
+      "tier": 4,
+      "blurb": "A living island rolls in the surf. Only a toppled titan takes real damage.",
+      "species": [
+        "wailord"
+      ],
+      "levelBonus": 2,
+      "hpBoostPercent": 600,
+      "entryCost": 0,
+      "shield": null,
+      "phases": [],
+      "telegraph": {
+        "everyTurns": 4,
+        "boost": 1.4,
+        "text": "The titan gathers a mighty wave!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": null,
+      "timerTurns": 40,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {
+        "titan": {
+          "hitCapPercent": 8,
+          "openedBy": [
+            "slp",
+            "par",
+            "frz"
+          ],
+          "defDrop": 2,
+          "text": "The titan is too vast to hurt! Topple it first."
+        },
+        "hazard": {
+          "type": "water",
+          "percent": 0.04,
+          "text": "Waves from the titan slosh over your Pokémon!",
+          "immune": [
+            "water",
+            "flying"
+          ]
+        }
+      },
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 130,
+        "items": [
+          {
+            "item": "full-restore",
+            "chance": 0.6
+          },
+          {
+            "item": "ultra-ball",
+            "chance": 0.5
+          }
+        ],
+        "draftExtra": 2,
+        "joinChance": 0.2
+      },
+      "capture": 0.2,
+      "special": "titan"
+    },
+    {
+      "id": "titan-rhyperior",
+      "name": "Titan Rhyperior",
+      "tier": 5,
+      "blurb": "A walking cliff. It only feels a hit when it is off balance.",
+      "species": [
+        "rhyperior"
+      ],
+      "levelBonus": 3,
+      "hpBoostPercent": 600,
+      "entryCost": 0,
+      "shield": null,
+      "phases": [
+        {
+          "atHp": 0.5,
+          "text": "The titan stomps and rock rains down!",
+          "boost": {
+            "def": 1
+          }
+        }
+      ],
+      "telegraph": {
+        "everyTurns": 4,
+        "boost": 1.5,
+        "text": "The titan winds up a crushing blow!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": {
+        "belowHp": 0.35,
+        "max": 1
+      },
+      "timerTurns": 40,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {
+        "titan": {
+          "hitCapPercent": 12,
+          "openedBy": [
+            "slp",
+            "par",
+            "frz"
+          ],
+          "defDrop": 1,
+          "text": "The titan barely feels it! Topple it: sleep, paralysis, freeze, or lower its Defense."
+        }
+      },
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 170,
+        "items": [
+          {
+            "item": "full-restore",
+            "chance": 1
+          },
+          {
+            "item": "ultra-ball",
+            "chance": 0.6
+          }
+        ],
+        "draftExtra": 2,
+        "joinChance": 0.2
+      },
+      "capture": 0.12,
+      "special": "titan"
+    },
+    {
+      "id": "eevee-gauntlet",
+      "name": "Eevee's Gauntlet",
+      "tier": 3,
+      "blurb": "It starts small, then changes again and again. Five forms, one after the other.",
+      "species": [
+        "eevee"
+      ],
+      "levelBonus": 2,
+      "hpBoostPercent": 180,
+      "entryCost": 100,
+      "shield": null,
+      "phases": [],
+      "telegraph": null,
+      "extraActions": null,
+      "timerTurns": 60,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {},
+      "extraMoves": [],
+      "gauntlet": {
+        "forms": [
+          {
+            "species": "vaporeon",
+            "text": "Eevee shines and becomes Vaporeon!"
+          },
+          {
+            "species": "jolteon",
+            "text": "The light flares again: Jolteon!"
+          },
+          {
+            "species": "flareon",
+            "text": "Another change: Flareon!"
+          },
+          {
+            "species": "umbreon",
+            "text": "The final form rises: Umbreon!"
+          }
+        ]
+      },
+      "rewards": {
+        "moneyPerLevel": 100,
+        "items": [
+          {
+            "item": "hyper-potion",
+            "chance": 1
+          },
+          {
+            "item": "revive",
+            "chance": 0.5
+          }
+        ],
+        "draftExtra": 2,
+        "joinChance": 0.5
+      },
+      "capture": 0.2,
+      "special": "gauntlet"
+    },
+    {
+      "id": "mini-ursaring",
+      "name": "Trail Warden",
+      "tier": 1,
+      "blurb": "An elite Ursaring guards the middle of the path. It loses its temper quickly.",
+      "species": [
+        "ursaring"
+      ],
+      "levelBonus": 1,
+      "hpBoostPercent": 120,
+      "entryCost": 0,
+      "shield": null,
+      "phases": [],
+      "telegraph": null,
+      "extraActions": null,
+      "timerTurns": null,
+      "enrage": {
+        "afterTurn": 5,
+        "everyTurns": 3,
+        "boostPercent": 15,
+        "maxStacks": 3
+      },
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {},
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 60,
+        "items": [
+          {
+            "item": "super-potion",
+            "chance": 1
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0.3
+      },
+      "capture": 0.3,
+      "special": "mini"
+    },
+    {
+      "id": "mini-magmar",
+      "name": "Furnace Keeper",
+      "tier": 2,
+      "blurb": "An elite Magmar heats the whole clearing.",
+      "species": [
+        "magmar"
+      ],
+      "levelBonus": 1,
+      "hpBoostPercent": 130,
+      "entryCost": 0,
+      "shield": null,
+      "phases": [],
+      "telegraph": null,
+      "extraActions": null,
+      "timerTurns": null,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {
+        "hazard": {
+          "type": "fire",
+          "percent": 0.06,
+          "text": "The scorching floor burns your Pokémon!",
+          "immune": [
+            "fire"
+          ]
+        }
+      },
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 80,
+        "items": [
+          {
+            "item": "super-potion",
+            "chance": 1
+          },
+          {
+            "item": "great-ball",
+            "chance": 0.5
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0.2
+      },
+      "capture": 0.3,
+      "special": "mini"
+    },
+    {
+      "id": "mini-golurk",
+      "name": "Riddle Golem",
+      "tier": 2,
+      "blurb": "An elite Golurk blocks the way. Only the right pattern of types gets through.",
+      "species": [
+        "golurk"
+      ],
+      "levelBonus": 1,
+      "hpBoostPercent": 130,
+      "entryCost": 0,
+      "shield": null,
+      "phases": [],
+      "telegraph": null,
+      "extraActions": null,
+      "timerTurns": null,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {
+        "puzzle": {
+          "steps": 2,
+          "pool": [
+            "ghost",
+            "dark",
+            "water",
+            "grass",
+            "ice"
+          ],
+          "guard": 0.6,
+          "text": "Runes cover the golem. Hit it with the right types, in order."
+        }
+      },
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 80,
+        "items": [
+          {
+            "item": "super-potion",
+            "chance": 1
+          },
+          {
+            "item": "ether",
+            "chance": 0.5
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0.2
+      },
+      "capture": 0.3,
+      "special": "mini"
+    },
+    {
+      "id": "mini-probopass",
+      "name": "Magnet Sentry",
+      "tier": 3,
+      "blurb": "An elite Probopass raises a magnetic shield mid-fight.",
+      "species": [
+        "probopass"
+      ],
+      "levelBonus": 2,
+      "hpBoostPercent": 150,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.5
+        ],
+        "points": 0.2
+      },
+      "phases": [],
+      "telegraph": {
+        "everyTurns": 4,
+        "boost": 1.4,
+        "text": "The sentry draws power for a heavy hit!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": null,
+      "timerTurns": null,
+      "kind": "wild",
+      "approaches": [],
+      "modifiers": {},
+      "extraMoves": [],
+      "rewards": {
+        "moneyPerLevel": 100,
+        "items": [
+          {
+            "item": "hyper-potion",
+            "chance": 1
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0.2
+      },
+      "capture": 0.2,
+      "special": "mini"
     }
   ],
   "denTriggers": [
@@ -1819,5 +2369,161 @@
       "prefer": "rival"
     }
   ],
-  "maxTriggerBonus": 0.3
+  "maxTriggerBonus": 0.3,
+  "crowd": {
+    "perTurn": 6,
+    "perCheer": 20,
+    "roused": 50,
+    "roarHeal": 0.25
+  },
+  "gimmickCards": [
+    {
+      "id": "iron-hide",
+      "label": "Iron Hide",
+      "text": "The boss is armoured: 40% more HP. The prize grows by 30%.",
+      "hpDeltaPercent": 40,
+      "rewardPercent": 130
+    },
+    {
+      "id": "frenzy",
+      "label": "Frenzy",
+      "text": "It enrages early and keeps growing angrier. The prize grows by 35%.",
+      "rewardPercent": 135,
+      "enrage": {
+        "afterTurn": 4,
+        "everyTurns": 3,
+        "boostPercent": 12,
+        "maxStacks": 4
+      }
+    },
+    {
+      "id": "no-mercy",
+      "label": "No Mercy",
+      "text": "No healing for either side, but one more draft choice. The prize grows by 25%.",
+      "rewardPercent": 125,
+      "draftDelta": 1,
+      "modifiers": {
+        "noHealing": true
+      }
+    },
+    {
+      "id": "open-wounds",
+      "label": "Open Wounds",
+      "text": "Weak spots open up (body and core) for a small 10% bonus prize.",
+      "rewardPercent": 110,
+      "modifiers": {
+        "weakSpots": {
+          "everyTurns": 3,
+          "boost": 1.25
+        }
+      }
+    }
+  ],
+  "talk": {
+    "prompt": "The boss eyes you. What do you say?",
+    "choices": [
+      {
+        "id": "calm",
+        "label": "Speak calmly",
+        "reply": "It tilts its head. Its guard lowers a little.",
+        "boss": {
+          "def": -1
+        },
+        "next": [
+          {
+            "id": "berry",
+            "label": "Offer a berry",
+            "reply": "It sniffs the berry and relaxes. Your team feels light on its feet.",
+            "boss": {
+              "atk": -1
+            },
+            "player": {
+              "spe": 1
+            }
+          },
+          {
+            "id": "fair",
+            "label": "Ask for a fair fight",
+            "reply": "It nods. Both sides stand taller.",
+            "boss": {
+              "atk": 1
+            },
+            "player": {
+              "atk": 1,
+              "spa": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "taunt",
+        "label": "Taunt it",
+        "reply": "It roars with fury! Your team is fired up too.",
+        "boss": {
+          "atk": 1,
+          "spe": 1
+        },
+        "player": {
+          "atk": 2
+        }
+      },
+      {
+        "id": "bow",
+        "label": "Bow to it",
+        "reply": "It grunts, almost approving. It looks tougher, and so do you.",
+        "player": {
+          "def": 1,
+          "spd": 1
+        },
+        "hpPercent": 10
+      },
+      {
+        "id": "rally",
+        "label": "Rally your team",
+        "reply": "Your team shouts back. The boss waits.",
+        "player": {
+          "atk": 1,
+          "spe": 1
+        }
+      }
+    ]
+  },
+  "bots": [
+    {
+      "id": "bruiser",
+      "label": "Rex the Bruiser (bold)",
+      "text": "Charges in and hits the boss for 4% of its HP every turn.",
+      "kind": "striker",
+      "power": 0.04,
+      "cost": 150
+    },
+    {
+      "id": "guard",
+      "label": "Shelly the Guard (careful)",
+      "text": "Stands in front and softens the boss's hits by 15%.",
+      "kind": "guard",
+      "power": 0.15,
+      "cost": 150
+    },
+    {
+      "id": "medic",
+      "label": "Joy the Medic (kind)",
+      "text": "Mends 8% of your lead's HP every turn.",
+      "kind": "medic",
+      "power": 0.08,
+      "cost": 150
+    }
+  ],
+  "denWeathers": [
+    "sun",
+    "rain",
+    "sand",
+    "snow"
+  ],
+  "weekly": {
+    "rewardPercent": 150,
+    "draftDelta": 1,
+    "extraDenChance": 0.2
+  },
+  "specialDenChance": 0.2
 }
