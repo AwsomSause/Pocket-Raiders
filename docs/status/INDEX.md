@@ -332,4 +332,5 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `polish-sweep-p9.md`: Overhaul P9: asset audit counts down, Phaser chunk, content baseline raised.
 - `player-trainer-battle-p2.md`: player trainer on the battle field (Overhaul P2).
 - [item-held-hooks](item-held-hooks.md): P5, 15 held hooks, Ability Shield/Capsule/Patch
+- [item-balls](item-balls.md): P6, 25 Nature Balls, 6 Training Balls, 3 Tera Jewels; species Z and fan Megas not built
 - 2026-11-06 role-pool-casting: any boss fills any league role, seeded roleCast stream, wild-card caps (docs/status/role-pool-casting.md)

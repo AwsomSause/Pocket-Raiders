@@ -1084,6 +1084,10 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
     multiplier: z.number().positive(),
     rule: z.enum(['level', 'lure', 'dive', 'net', 'moon', 'love', 'heavy', 'fast', 'nest', 'repeat', 'timer', 'quick', 'dusk', 'dream', 'beast', 'safari', 'sport', 'flyer', 'weight100', 'weight300', 'snag', 'bless']).optional(),
     after: z.enum(['friend', 'luxury', 'heal']).optional(),
+    /** Nature Balls: the caught Pokémon has this nature. */
+    nature: z.enum(NATURE_IDS).optional(),
+    /** Training Balls: the caught Pokémon starts with this permanent percent on one stat (like a vitamin). */
+    stat: z.object({ stat: StatNameSchema, percent: z.number().positive() }).optional(),
     /** Capture Styles (S224): this item is a befriend / negotiate / trap attempt with its own odds, not a ball throw. */
     style: z.enum(['befriend', 'negotiate', 'trap']).optional(),
   }),
@@ -1530,6 +1534,8 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('ppUp'), ups: z.number().int().min(1).max(3) }),
   /** Changes one Pokémon's nature (Mints). */
   z.object({ kind: z.literal('nature'), nature: z.enum(NATURE_IDS), /** S418 temporary mint: the nature only lasts this many won battles, then the real one returns. */ battles: z.number().int().min(1).max(10).optional() }),
+  /** Tera Jewels: change a Pokémon's Tera Type to a random type, its first type or its second (first when it has one). */
+  z.object({ kind: z.literal('teraType'), mode: z.enum(['random', 'primary', 'secondary']) }),
   /** Ability Capsule (swap between its normal abilities) and Ability Patch (switch to its hidden ability). */
   z.object({ kind: z.literal('ability'), mode: z.enum(['swap', 'hidden']) }),
   /** Tuning Dust: nudges a nature one step so the named stat is the raised one (the lowered stat stays). */

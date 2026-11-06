@@ -15,7 +15,7 @@ import { natureEffectText, natureName, nudgeNature } from './natures';
 import { runPerks } from './archetypes';
 import { itemSlotLimit } from './trainerPerks';
 import { addRunAttribute, attributeText, runAttributeEffects } from './attributes';
-import type { AttributeKey, CatalogEffect, CatalogEntry, Content } from './contentSchema';
+import { TYPE_NAMES, type AttributeKey, type CatalogEffect, type CatalogEntry, type Content } from './contentSchema';
 import { changeFriendship } from './friendship';
 import { addItem } from './items';
 import { abilityOf, createPokemon, getSpecies, MAX_PP_UPS, maxHp, maxPp } from './pokemon';
@@ -99,6 +99,10 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
     }
     case 'nature':
       return (effect.battles ? mon.tempNature?.nature : mon.nature) === effect.nature ? `That Pokémon is already ${natureName(effect.nature)}.` : null;
+    case 'teraType': {
+      const types = getSpecies(content, mon.speciesId).types;
+      return effect.mode !== 'random' && mon.teraType === (effect.mode === 'secondary' ? types[1] ?? types[0] : types[0]) ? 'That is already its Tera Type.' : null;
+    }
     case 'ability': {
       const abilities = getSpecies(content, mon.speciesId).abilities;
       if (effect.mode === 'hidden') return !abilities.hidden ? 'That Pokémon has no hidden ability.' : mon.abilitySlot === -1 ? 'That Pokémon already has its hidden ability.' : null;
@@ -258,6 +262,13 @@ export function applyCatalog(
       applyChanges(effect.changes);
       const blocks = passivePercent(content, run, 'feedCharisma');
       if (blocks > 0 && entry.family.startsWith('Berries')) applyChanges({ charisma: blocks });
+      break;
+    }
+    case 'teraType': {
+      const mon = target!;
+      const types = getSpecies(content, mon.speciesId).types;
+      mon.teraType = effect.mode === 'random' ? TYPE_NAMES[opts.rng.int(0, TYPE_NAMES.length - 1)]! : effect.mode === 'secondary' ? types[1] ?? types[0]! : types[0]!;
+      messages.push(`${name(mon)}'s Tera Type became ${mon.teraType}.`);
       break;
     }
     case 'ability': {

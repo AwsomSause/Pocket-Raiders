@@ -2007,5 +2007,488 @@
   "usableOutside": false,
   "target": "enemy",
   "effect": { "kind": "catch", "multiplier": 1, "style": "trap" }
+ },
+ {
+  "id": "adamant-ball",
+  "name": "Adamant Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Adamant nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/adamantball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "adamant"
+  }
+ },
+{
+  "id": "bashful-ball",
+  "name": "Bashful Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Bashful nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/bashfulball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "bashful"
+  }
+ },
+{
+  "id": "bold-ball",
+  "name": "Bold Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Bold nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/boldball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "bold"
+  }
+ },
+{
+  "id": "brave-ball",
+  "name": "Brave Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Brave nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/braveball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "brave"
+  }
+ },
+{
+  "id": "calm-ball",
+  "name": "Calm Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Calm nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/calmball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "calm"
+  }
+ },
+{
+  "id": "careful-ball",
+  "name": "Careful Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Careful nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/carefulball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "careful"
+  }
+ },
+{
+  "id": "docile-ball",
+  "name": "Docile Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Docile nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/docileball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "docile"
+  }
+ },
+{
+  "id": "gentle-ball",
+  "name": "Gentle Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Gentle nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/gentleball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "gentle"
+  }
+ },
+{
+  "id": "hardy-ball",
+  "name": "Hardy Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Hardy nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/hardyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "hardy"
+  }
+ },
+{
+  "id": "hasty-ball",
+  "name": "Hasty Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Hasty nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/hastyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "hasty"
+  }
+ },
+{
+  "id": "impish-ball",
+  "name": "Impish Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Impish nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/impishball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "impish"
+  }
+ },
+{
+  "id": "jolly-ball",
+  "name": "Jolly Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Jolly nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/jollyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "jolly"
+  }
+ },
+{
+  "id": "lax-ball",
+  "name": "Lax Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Lax nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/laxball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "lax"
+  }
+ },
+{
+  "id": "lonely-ball",
+  "name": "Lonely Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Lonely nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/lonelyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "lonely"
+  }
+ },
+{
+  "id": "mild-ball",
+  "name": "Mild Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Mild nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/mildball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "mild"
+  }
+ },
+{
+  "id": "modest-ball",
+  "name": "Modest Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Modest nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/modestball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "modest"
+  }
+ },
+{
+  "id": "naive-ball",
+  "name": "Naive Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Naive nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/naiveball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "naive"
+  }
+ },
+{
+  "id": "naughty-ball",
+  "name": "Naughty Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Naughty nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/naughtyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "naughty"
+  }
+ },
+{
+  "id": "quiet-ball",
+  "name": "Quiet Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Quiet nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/quietball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "quiet"
+  }
+ },
+{
+  "id": "quirky-ball",
+  "name": "Quirky Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Quirky nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/quirkyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "quirky"
+  }
+ },
+{
+  "id": "rash-ball",
+  "name": "Rash Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Rash nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/rashball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "rash"
+  }
+ },
+{
+  "id": "relaxed-ball",
+  "name": "Relaxed Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Relaxed nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/relaxedball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "relaxed"
+  }
+ },
+{
+  "id": "sassy-ball",
+  "name": "Sassy Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Sassy nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/sassyball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "sassy"
+  }
+ },
+{
+  "id": "serious-ball",
+  "name": "Serious Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Serious nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/seriousball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "serious"
+  }
+ },
+{
+  "id": "timid-ball",
+  "name": "Timid Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon has the Timid nature.",
+  "category": "ball",
+  "iconAssetId": "item.library/timidball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "nature": "timid"
+  }
+ },
+{
+  "id": "hp-training-ball",
+  "name": "HP Training Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon starts with +5% HP.",
+  "category": "ball",
+  "iconAssetId": "item.library/hpevball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "stat": {
+    "stat": "hp",
+    "percent": 5
+   }
+  }
+ },
+{
+  "id": "atk-training-ball",
+  "name": "Attack Training Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon starts with +5% Attack.",
+  "category": "ball",
+  "iconAssetId": "item.library/atkevball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "stat": {
+    "stat": "atk",
+    "percent": 5
+   }
+  }
+ },
+{
+  "id": "def-training-ball",
+  "name": "Defense Training Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon starts with +5% Defense.",
+  "category": "ball",
+  "iconAssetId": "item.library/defevball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "stat": {
+    "stat": "def",
+    "percent": 5
+   }
+  }
+ },
+{
+  "id": "spa-training-ball",
+  "name": "Sp. Atk Training Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon starts with +5% Sp. Atk.",
+  "category": "ball",
+  "iconAssetId": "item.library/spaevball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "stat": {
+    "stat": "spa",
+    "percent": 5
+   }
+  }
+ },
+{
+  "id": "spd-training-ball",
+  "name": "Sp. Def Training Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon starts with +5% Sp. Def.",
+  "category": "ball",
+  "iconAssetId": "item.library/spdevball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "stat": {
+    "stat": "spd",
+    "percent": 5
+   }
+  }
+ },
+{
+  "id": "spe-training-ball",
+  "name": "Speed Training Ball",
+  "description": "Catches like a Great Ball; the caught Pokémon starts with +5% Speed.",
+  "category": "ball",
+  "iconAssetId": "item.library/speevball",
+  "usableInBattle": true,
+  "usableOutside": false,
+  "target": "enemy",
+  "effect": {
+   "kind": "catch",
+   "multiplier": 1.2,
+   "stat": {
+    "stat": "spe",
+    "percent": 5
+   }
+  }
  }
 ]
