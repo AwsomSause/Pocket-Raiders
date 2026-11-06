@@ -71,6 +71,10 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
+  /** S171 condition evolutions: uses of the moves a route counts (core/conditionEvolution.ts). */
+  moveCounts: z.record(z.string(), z.number().int().min(0)).optional(),
+  /** S158 Ability Awakening: times it showed its ability in battle (see battle/growthStats.ts). */
+  abilityUses: z.number().int().min(0).optional(),
   /** S168 weather tolerance: sandstorm/hail chip turns it has endured, per weather (see weatherTolerance). */
   weatherEndured: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Held items (catalog id → copies). A Pokémon can hold many items, each up to its catalog max (director, Q1). */

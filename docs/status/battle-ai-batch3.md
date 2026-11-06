@@ -1,0 +1,8 @@
+- Battle/AI batch 3, moves and growth (rundown §9):
+  - **S155 Move Fusion:** at a Move Tutor stop, a Pokémon knowing damaging moves of two fusing types (13 pairs, e.g. Fighting+Flying → Flying Press, Water+Fire → Steam Eruption) can fuse them into one hybrid for 2x the tutor price (`core/moveFusion.ts`).
+  - **S175 Tera Shard Crafting:** the Workshop forges any type's Tera Shard from 5 of that type's material + ₽500 (1 badge needed). Only affordable types are listed.
+  - **S157 Focus:** a fourth stat layer, 0-100 from friendship; at 100 it gives +10% accuracy and +4% crit chance (`balance.growthStats.focus`). Shown in the battle info panel.
+  - **S158 Ability Awakening:** every time your Pokémon shows its ability it counts a use (`abilityUses`, optional); 10/30/60 uses = Awakening 1/2/3, +4% damage each, with a battle line.
+  - **S159 Signature Passives:** each of the 28 ordinary trainer classes gives its team one trait (power for its types, less damage taken, or more crits), told at battle start (`core/battle/classPassives.ts`). Bosses keep their own perks. Line not shown in double battles (the trait still works).
+  - **S171 Evolution by Condition:** 12 early routes checked after a won battle: Sliggoo in rain, 9 "knows a move" routes (Aipom/Double Hit, Yanma/Ancient Power, ...), and 2 "use a move 20 times" routes (Primeape/Rage Fist, Stantler/Psyshield Bash, counted in `moveCounts`). Bond evolution already existed (Bond Engine).
+  - Tests `tests/unit/battleAiBatch3.test.ts`. No save version bump (new fields optional). Limited: routes are not listed on the Dex page yet.

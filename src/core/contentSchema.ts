@@ -8,6 +8,8 @@ import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
 import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
+import { OpponentAiSchema, DEFAULT_OPPONENT_AI } from './battle/opponentAiConfig';
+import { GrowthStatsSchema, DEFAULT_GROWTH_STATS } from './battle/growthConfig';
 import type { StoryConfig } from './story/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
@@ -1928,6 +1930,10 @@ export const BalanceSchema = z.object({
   typeRules: TypeRulesSchema.default(DEFAULT_TYPE_RULES),
   /** S174 Z-Crystal Bonding: a Pokémon needs this bond score (0-100, trust + affection) before it can use a Z-Move (0 = off). */
   zBond: z.object({ minBond: z.number().int().min(0).max(100) }).default({ minBond: 30 }),
+  /** Battle/AI batch 2 (S269 taunts, S272 team roles, S273 fatigue, S280 trap setting): battle/opponentAi.ts. */
+  opponentAi: OpponentAiSchema.default(DEFAULT_OPPONENT_AI),
+  /** Battle/AI batch 3 (S157 Focus, S158 Ability Awakening): battle/growthStats.ts. */
+  growthStats: GrowthStatsSchema.default(DEFAULT_GROWTH_STATS),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z
