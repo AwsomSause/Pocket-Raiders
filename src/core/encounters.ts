@@ -1,6 +1,7 @@
 // The difficulty model, and planning wild, trainer, gym leader,
 // Elite Four and champion encounters.
 
+import { pickTemplate, templateFit } from './teamTemplates';
 import { enemyLevelOffset } from './archetypes';
 import type { Archetype, ArchetypeModifier, BossTeam, Campaign, Content, StatName, Theme, TrainerClass } from './contentSchema';
 import { createPokemon, getSpecies, maxHp } from './pokemon';
@@ -201,6 +202,8 @@ export interface PlannedMember {
 }
 
 export interface TrainerPlan {
+  /** Overhaul slice 16: the team template an ordinary trainer's team followed (core/teamTemplates.ts). */
+  templateId?: string;
   /** Overhaul slice 17: the boss's named strategy id (balance.bossStrategy), for bosses only. */
   strategy?: string;
   classId: string;
@@ -262,15 +265,18 @@ export function pickTrainerClass(content: Content, classes: readonly TrainerClas
  * A trainer whose class fits the theme, with a team drawn from the theme.
  * `stageNumber` counts stages from the start of the run (teams grow with it).
  */
-export function planTrainer(content: Content, archetype: Archetype, theme: Theme, stageNumber: number, scale: LevelScale, rng: Rng, regionId?: string): TrainerPlan {
+export function planTrainer(content: Content, archetype: Archetype, theme: Theme, stageNumber: number, scale: LevelScale, rng: Rng, regionId?: string, templateSeed?: string, recentTemplates: readonly string[] = []): TrainerPlan {
   const trainerClass = pickTrainerClass(content, trainerClassesFor(content, theme), rng);
   const name = rng.pick(trainerClass.names);
   const size = teamSize(content.balance.trainerTeam, stageNumber, rng);
-  const team = buildTeam(content, archetype, scale, size, content.balance.difficulty.trainerBonus, 0, () => pickThemeSpecies(content, theme, rng, trainerClass.types, regionId, undefined, curveLevel(content, scale)), rng);
-  return { classId: trainerClass.id, name, leaderId: null, ai: 0, ...team };
+  // Overhaul slice 16: the team follows a template (roles, monotype, weather...), picked from its own hash stream.
+  const template = templateSeed !== undefined && content.balance.teamTemplates.enabled ? pickTemplate(stageNumber, templateSeed, recentTemplates) : undefined;
+  const picked: string[] = [];
+  const weightMod = template ? (id: string) => templateFit(content, template, id, { picked, types: trainerClass.types.length > 0 ? trainerClass.types : theme.types, regionId }) : undefined;
+  const team = buildTeam(content, archetype, scale, size, content.balance.difficulty.trainerBonus, 0, () => { const id = pickThemeSpecies(content, theme, rng, trainerClass.types, regionId, weightMod, curveLevel(content, scale)); picked.push(id); return id; }, rng);
+  return { classId: trainerClass.id, name, leaderId: null, ai: 0, ...(template ? { templateId: template.id } : {}), ...team };
 }
 
-/** The first rival: one starter-line Pokémon at balance.rival.level, a different one for each run (its own seed). */
 export function planFirstRival(content: Content, seed: string): TrainerPlan {
   const cfg = content.balance.rival;
   const r = new Rng(hashSeed(`${seed}::first-rival`));
