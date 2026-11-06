@@ -62,7 +62,7 @@ describe('Repels', () => {
 
   it('at their max, another Repel is a free re-roll', () => {
     const run = take(newRun(), 'repel', 5);
-    expect(isFreeReroll(run, getCatalogEntry(content, 'repel'))).toBe(true);
+    expect(isFreeReroll(content, run, getCatalogEntry(content, 'repel'))).toBe(true);
   });
 });
 

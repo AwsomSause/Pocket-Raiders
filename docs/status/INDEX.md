@@ -249,3 +249,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `raid-coop.md`: Raids & bosses slice 7: S410 co-op raids (hot-seat, 2 players share the party, own cheers, tougher boss, bigger prize).
 - `growth-form-shift.md`: Growth slice 8: Regional Form Shifts (swap to a regional variant for a Moon Stone).
 - `growth-capsule-quests.md`: Growth slice 9: Ability Capsule Quests (six trials pay ability swaps).
+- `beta44-economy.md`: Beta 4.4 part 2: attribute nerf, resale cap, item caps + No Item Caps, rarer legendaries, themed trades.

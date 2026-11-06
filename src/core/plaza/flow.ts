@@ -14,11 +14,11 @@ import { addRunAttribute, effectiveAttributes, runAttributeEffects } from '../at
 import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import { isHostile } from '../rivals/outcome';
-import { continueAfterDecisions, healParty, newMon, sellPrice } from '../run';
+import { continueAfterDecisions, healParty, newMon, resaleCap, sellPrice } from '../run';
 import { stageKey } from '../mapItems';
 import { getSpecies, maxHp, maxPp } from '../pokemon';
 import { layEgg } from '../eggs';
-import { wildEligibleSpecies } from '../themes';
+import { baseStatTotal, wildEligibleSpecies } from '../themes';
 import { typeEffectiveness } from '../battle/damage';
 import { recordTraded } from '../story/hooks';
 import { mentorPathOf, pathName } from '../story/mentorship';
@@ -294,7 +294,7 @@ function stallStock(content: Content, run: RunState, stallId: string): StockItem
       .map((i) => ({ id: i.id, name: i.name, rarity: rarityOf(content, i.id), description: i.description, price: price(content.shop.find((e) => e.item === i.id)?.price ?? B.ballPrice) }));
   } else {
     pool = [...content.catalog.values()]
-      .filter((e) => e.status === 'supported' && stall.families.includes(e.family) && !isFreeReroll(run, e) && (e.stacksOn !== 'pokemon' || run.party.some((m) => catalogTargetProblem(content, run, e, m) === null)))
+      .filter((e) => e.status === 'supported' && stall.families.includes(e.family) && !isFreeReroll(content, run, e) && (e.stacksOn !== 'pokemon' || run.party.some((m) => catalogTargetProblem(content, run, e, m) === null)))
       .sort((a, b) => a.id.localeCompare(b.id))
       .map((e) => ({ id: e.id, name: e.name, rarity: e.rarity as Rarity, description: e.description, price: price(B.rarityPrice[e.rarity as Rarity]) }));
   }
@@ -324,14 +324,23 @@ function tradersHere(run: RunState): PlazaData['traders'] {
   return shuffled(rng, open).slice(0, B.traderCount);
 }
 
-function traderSpecies(run: RunState, t: PlazaData['traders'][number]): string {
-  return rngFor(run, `tr:${t.id}`).pick(t.give.species);
+function traderSpecies(content: Content, run: RunState, t: PlazaData['traders'][number]): string {
+  return rngFor(run, `tr:${t.id}`).pick(traderPool(content, t));
+}
+
+/** Everything a trader may give: the listed species plus, for a themed trader, any wild Pokémon of its types that is no stronger than the list allows. */
+export function traderPool(content: Content, t: PlazaData['traders'][number]): string[] {
+  if (t.give.types.length === 0) return t.give.species;
+  const listed = t.give.species.flatMap((id) => (content.species.has(id) ? [baseStatTotal(getSpecies(content, id))] : []));
+  const cap = (listed.length > 0 ? Math.max(...listed) : 400) + t.give.bstSlack;
+  const themed = wildEligibleSpecies(content).filter((s) => s.types.some((ty) => t.give.types.includes(ty)) && baseStatTotal(s) <= cap).map((s) => s.id);
+  return [...new Set([...t.give.species, ...themed])].sort();
 }
 
 /** What a Plaza trader gives for one party member (the same species and level `usePlaza` hands over). Read-only. */
 export function traderGift(content: Content, run: RunState, traderId: string, level: number): { speciesId: string; level: number } {
   const t = PLAZA.traders.find((x) => x.id === traderId)!;
-  return { speciesId: traderSpecies(run, t), level: Math.max(1, Math.min(runLevelCap(content, run), level + t.give.levelBonus)) };
+  return { speciesId: traderSpecies(content, run, t), level: Math.max(1, Math.min(runLevelCap(content, run), level + t.give.levelBonus)) };
 }
 
 // ---------- the board, rumours ----------
@@ -587,7 +596,7 @@ export function sectionView(content: Content, run: RunState, sideId: string, sec
     case 'traders': {
       for (const t of tradersHere(run)) {
         notes.push(`${t.name}: "${t.line}" Wants ${t.want.label}; offers ${t.give.label}.`);
-        const species = getSpecies(content, traderSpecies(run, t));
+        const species = getSpecies(content, traderSpecies(content, run, t));
         for (const m of tradeCandidates(content, run, t.want)) {
           const sp = getSpecies(content, m.speciesId);
           add(`trade:${t.id}:${m.uid}`, `${t.name}: ${sp.name} Lv${m.level} for ${species.name}`, `You get ${species.name} (${species.types.join('/')}), Lv${Math.min(runLevelCap(content, run), m.level + t.give.levelBonus)}. ${sp.name} leaves for good; the new Pokémon starts fresh.`, 0, usedN(run, `trade:${t.id}`) > 0 ? 'Already traded today.' : null);
@@ -665,7 +674,7 @@ export function sectionView(content: Content, run: RunState, sideId: string, sec
         const left = usedN(run, `svc:${s.id}`) >= s.limit ? `The ${s.name.toLowerCase()} is closed for today.` : s.minRep > run.plaza.rep ? `Needs reputation ${s.minRep}` : null;
         if (s.id === 'appraise') {
           const items = Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0 && sellPrice(content, run, id) !== null).sort();
-          for (const id of items.slice(0, 10)) add(`svc:appraise:${id}`, `${s.name}: ${itemName(content, id)}`, `${regularName(s.keeper)} values it at double the usual price (₽${(sellPrice(content, run, id) ?? 0) * 2}).`, cost, left);
+          for (const id of items.slice(0, 10)) add(`svc:appraise:${id}`, `${s.name}: ${itemName(content, id)}`, `${regularName(s.keeper)} values it at double the usual price (₽${appraisal(content, run, id)}).`, cost, left);
           if (items.length === 0) add('svc:appraise:none', s.name, s.text, cost, 'You have nothing to value.');
         } else if (s.id === 'heal') {
           const hurt = run.party.some((m) => m.hp < maxHp(content, m) || m.status || m.moves.some((mv) => mv.pp < maxPp(content, mv)));
@@ -799,7 +808,7 @@ export function usePlaza(content: Content, current: RunState, sideId: string, se
     case 'trade': {
       const t = PLAZA.traders.find((x) => x.id === a)!;
       const mon = run.party.find((m) => m.uid === b)!;
-      const speciesId = traderSpecies(run, t);
+      const speciesId = traderSpecies(content, run, t);
       const next = newMon(content, run, speciesId, Math.max(1, Math.min(runLevelCap(content, run), mon.level + t.give.levelBonus)), 'p');
       recordTraded(content, run, mon, speciesId);
       run.party[run.party.indexOf(mon)] = next;
@@ -914,7 +923,7 @@ export function usePlaza(content: Content, current: RunState, sideId: string, se
         for (const m of run.party) changeFriendship(content, m, 3);
         words.push('Everyone is groomed and glowing. Friendship rose.');
       } else if (a === 'appraise') {
-        const price = (sellPrice(content, run, b!) ?? 0) * 2;
+        const price = appraisal(content, run, b!);
         run.inventory[b!] = (run.inventory[b!] ?? 0) - 1;
         if ((run.inventory[b!] ?? 0) <= 0) delete run.inventory[b!];
         run.money += price;
@@ -1070,4 +1079,11 @@ export function usePlaza(content: Content, current: RunState, sideId: string, se
     }
   }
   return { run, message: words.filter(Boolean).join(' '), battle };
+}
+
+/** The appraiser pays double the sell price, but never close to what the shop charges for it now. */
+function appraisal(content: Content, run: RunState, itemId: string): number {
+  const price = (sellPrice(content, run, itemId) ?? 0) * 2;
+  const cap = resaleCap(content, run, itemId, content.balance.resale.appraiseShare);
+  return cap === null ? price : Math.min(price, cap);
 }

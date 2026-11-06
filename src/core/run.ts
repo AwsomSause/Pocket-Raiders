@@ -75,7 +75,7 @@ import { weatherSpawnWeight } from './spawnLocks';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
-import { passivePercent } from './catalog';
+import { effectiveMax, passivePercent } from './catalog';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
 import { wildLuck } from './wildLuck';
@@ -2004,7 +2004,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     spendUse(run, voucher.itemId);
     const entry = content.catalog.get(voucher.item)!;
     const owned = run.passives?.[voucher.item] ?? 0;
-    if (entry.max === null || owned < entry.max) {
+    const max = effectiveMax(content, run, entry);
+    if (max === null || owned < max) {
       run.passives = { ...run.passives, [voucher.item]: owned + 1 };
       return { run, message: `Welcome to the shop! You traded your voucher for a ${entry.name}.` };
     }
@@ -2102,9 +2103,19 @@ const RARITY_VALUE: Record<string, number> = { common: 60, uncommon: 120, rare: 
 export function sellPrice(content: Content, run: RunState, itemId: string): number | null {
   const item = content.items.get(itemId);
   if (!item || item.category === 'key' || item.category === 'transformation' || item.category === 'attribute') return null;
-  const listed = content.shop.find((e) => e.item === itemId)?.price;
-  const base = listed ?? RARITY_VALUE[content.catalog.get(itemId)?.rarity ?? 'common'] ?? 60;
-  return Math.max(1, Math.floor(hasPerk(content, run, 'fullSell') ? base : base / 2));
+  const entry = content.shop.find((e) => e.item === itemId);
+  const base = entry?.price ?? RARITY_VALUE[content.catalog.get(itemId)?.rarity ?? 'common'] ?? 60;
+  const fullSell = hasPerk(content, run, 'fullSell');
+  const price = Math.max(1, Math.floor(fullSell ? base : base / 2));
+  // Never more than a share of what the shop charges now, so discounts can't be sold back at a profit.
+  const cap = resaleCap(content, run, itemId, fullSell ? content.balance.resale.fullSellShare : content.balance.resale.share);
+  return cap === null ? price : Math.min(price, cap);
+}
+
+/** The most a sale (or appraisal) of an item may pay: `share` of the shop's current price, or null when no shop sells it. */
+export function resaleCap(content: Content, run: RunState, itemId: string, share: number): number | null {
+  const entry = content.shop.find((e) => e.item === itemId);
+  return entry ? Math.floor(shopPrice(content, run, entry) * share) : null;
 }
 
 /** Sells one of an item to the shop. */

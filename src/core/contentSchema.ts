@@ -1956,6 +1956,8 @@ export const BalanceSchema = z.object({
   /** Ideas W1 rules: Type Resonance, Bleed, Curse Tags, Hazard burst, Underdog XP (core/battle/w1Rules.ts). */
   w1: W1ConfigSchema,
   /** The shop puts one item on sale: it changes every this many stages, and takes this share off the price. */
+  /** Selling never pays more than this share of what the shop charges right now (stops buy-cheap, sell-back loops). */
+  resale: z.object({ share: z.number().min(0).max(1), fullSellShare: z.number().min(0).max(1), appraiseShare: z.number().min(0).max(1) }).default({ share: 0.5, fullSellShare: 0.9, appraiseShare: 0.95 }),
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
   /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
   priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
@@ -2308,6 +2310,8 @@ export const BalanceSchema = z.object({
   legendaryMinRegion: z.number().int().min(0),
   /** How many different items one Pokémon can hold (trainer perks change it). */
   heldItemSlots: z.number().int().positive(),
+  /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
+  itemCaps: z.object({ bonusMax: z.number().int().min(1) }).default({ bonusMax: 3 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
