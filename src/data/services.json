@@ -200,6 +200,15 @@
       "minBadges": 0,
       "reusable": true,
       "blurb": "Craft potions, balls, Revives, rare-encounter tokens and Mega Stones from battle materials."
+    },
+    {
+      "id": "mining",
+      "name": "Mining Spot",
+      "status": "supported",
+      "weight": 1,
+      "minBadges": 0,
+      "reusable": false,
+      "blurb": "Dig once for gems, evolution stones or fossils: a free shallow dig, or a deeper one for ₽300."
     }
   ],
   "costs": {
