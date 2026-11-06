@@ -15,7 +15,7 @@ import { addRunAttribute, effectiveAttributes, runAttributeEffects } from '../at
 import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import { isHostile } from '../rivals/outcome';
-import { continueAfterDecisions, healParty, newMon, resaleCap, sellPrice } from '../run';
+import { continueAfterDecisions, healParty, newMon } from '../run';
 import { stageKey } from '../mapItems';
 import { getSpecies, maxHp, maxPp } from '../pokemon';
 import { layEgg } from '../eggs';
@@ -674,9 +674,7 @@ export function sectionView(content: Content, run: RunState, sideId: string, sec
         const cost = Math.round(regionPrice(run, s.cost) * ev.serviceScale);
         const left = usedN(run, `svc:${s.id}`) >= s.limit ? `The ${s.name.toLowerCase()} is closed for today.` : s.minRep > run.plaza.rep ? `Needs reputation ${s.minRep}` : null;
         if (s.id === 'appraise') {
-          const items = Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0 && sellPrice(content, run, id) !== null).sort();
-          for (const id of items.slice(0, 10)) add(`svc:appraise:${id}`, `${s.name}: ${itemName(content, id)}`, `${regularName(s.keeper)} values it at double the usual price (₽${appraisal(content, run, id)}).`, cost, left);
-          if (items.length === 0) add('svc:appraise:none', s.name, s.text, cost, 'You have nothing to value.');
+          continue; // Selling is off, so the appraiser has nothing to buy.
         } else if (s.id === 'heal') {
           const hurt = run.party.some((m) => m.hp < maxHp(content, m) || m.status || m.moves.some((mv) => mv.pp < maxPp(content, mv)));
           add('svc:heal', s.name, `${s.text} (${regularName(s.keeper)})`, cost, left ?? (hurt ? null : 'Your party is already in top shape.'));
@@ -924,12 +922,7 @@ export function usePlaza(content: Content, current: RunState, sideId: string, se
         for (const m of run.party) changeFriendship(content, m, 3);
         words.push('Everyone is groomed and glowing. Friendship rose.');
       } else if (a === 'appraise') {
-        const price = appraisal(content, run, b!);
-        run.inventory[b!] = (run.inventory[b!] ?? 0) - 1;
-        if ((run.inventory[b!] ?? 0) <= 0) delete run.inventory[b!];
-        run.money += price;
-        count(run, 'moneyEarned', price);
-        words.push(`${itemName(content, b!)} appraised: +₽${price}.`);
+        throw new Error('The appraiser no longer buys items.');
       } else {
         const boss = bossInfo(content, 'gym', run.stage!.leaderId);
         const lines = run.party.slice(0, 6).map((m) => {
@@ -1082,9 +1075,3 @@ export function usePlaza(content: Content, current: RunState, sideId: string, se
   return { run, message: words.filter(Boolean).join(' '), battle };
 }
 
-/** The appraiser pays double the sell price, but never close to what the shop charges for it now. */
-function appraisal(content: Content, run: RunState, itemId: string): number {
-  const price = (sellPrice(content, run, itemId) ?? 0) * 2;
-  const cap = resaleCap(content, run, itemId, content.balance.resale.appraiseShare);
-  return cap === null ? price : Math.min(price, cap);
-}

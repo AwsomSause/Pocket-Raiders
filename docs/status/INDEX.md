@@ -360,3 +360,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `mythical-chains.md`: 12 Mythical quest chains (clue, trial, wild Mythical battle), one per run, from stage 9.
 - `battle-move-menu-fit.md`: Battle move menu fit: rows squeeze to stay on screen when a Pokémon has 6+ moves (`Menu` in widgets.ts); test moveOverflow.spec.ts.
 - `story-s6-heartbond.md`: Story S6 part 1: Heartbond score/latches/pay ledger, 16 Core Temperaments map (not yet wired into battles or menus).
+- shop-item-limits: no selling, stacks cap 100, 6 revives per battle
