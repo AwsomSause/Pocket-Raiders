@@ -1768,6 +1768,8 @@ export const SettingsSchema = z.object({
   mapDayNight: z.boolean().default(false),
   /** S257 Cutscene skip with recap: skipping a cutscene shows a one-line text summary of it (off by default). */
   skipRecap: z.boolean().default(false),
+  /** Beta 4.4 skip guard: a held key, or a press in the first moment of a new screen, never confirms or skips (on by default). */
+  skipGuard: z.boolean().default(true),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */

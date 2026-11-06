@@ -207,6 +207,21 @@ describe('map previews', () => {
     expect(mapPreviews(content, newRun('scope-b'))).toEqual({});
   });
 
+  it('the Devon Scope stays right all the way along a stage, as the clock moves (Beta 4.4)', () => {
+    for (const seed of ['scope2', 'scope-c', 'scope-d']) {
+      let run = take(newRun(seed), 'devon-scope');
+      for (let step = 0; step < 6 && run.phase === 'map'; step++) {
+        const previews = mapPreviews(content, run);
+        const node = nextChoices(run.stage!).find((n) => n.kind === 'wild');
+        if (!node) break;
+        const moved = chooseNode(content, run, node.id);
+        const met = moved.battle!.enemyTeam[0]!;
+        expect(previews[node.id]!.team, `${seed} step ${step}`).toEqual([{ speciesId: met.speciesId, level: met.level }]);
+        run = { ...moved, phase: 'map', battle: null } as typeof run;
+      }
+    }
+  });
+
   it("the Town Map shows the next trainers' teams", () => {
     const run = take(newRun('town'), 'town-map');
     const trainer = run.stage!.map.nodes.find((n) => n.kind === 'trainer')!;

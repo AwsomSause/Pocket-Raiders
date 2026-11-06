@@ -26,6 +26,12 @@ describe('boss mechanics list', () => {
   it('the Elite Four get Z-Moves and the champion gets Dynamax, on top of Mega and Tera; gym leaders get neither', () => {
     expect(bossMechanics(content, 'elite', 1, [])).toEqual(['mega', 'tera', 'zmove']);
     expect(bossMechanics(content, 'champion', 1, [])).toEqual(['mega', 'tera', 'dynamax']);
+    // Beta 4.4: a later gym leader has one signature gimmick, always the same one, after a Mega.
+    const picks = ['brock', 'misty', 'lt-surge', 'erika', 'koga', 'sabrina', 'blaine', 'giovanni'].map((id) => bossMechanics(content, 'gym', 5, [], id));
+    for (const p of picks) expect(p[0]).toBe('mega');
+    expect(new Set(picks.map((p) => p[1])).size).toBeGreaterThan(1);
+    expect(bossMechanics(content, 'gym', 5, [], 'brock')).toEqual(bossMechanics(content, 'gym', 9, [], 'brock'));
+    expect(bossMechanics(content, 'gym', 4, [], 'brock')).toEqual([]);
     expect(bossMechanics(content, 'gym', 9, [])).toEqual(['mega', 'tera']);
     expect(bossMechanics(content, 'elite', 1, ['zmove'])).toEqual(['mega', 'tera']);
     expect(bossMechanics(content, 'champion', 1, ['dynamax'])).toEqual(['mega', 'tera']);

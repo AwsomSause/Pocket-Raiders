@@ -14,6 +14,12 @@ describe('catch summary', () => {
     expect(text).toContain('Ivysaur (Lv16)');
     expect(text).toContain('vs Pikachu Lv12');
   });
+  it('shows the nature and what it changes, in full and compact mode (Beta 4.4)', () => {
+    const mon = { ...createPokemon(content, 'pikachu', 10, 'n1'), nature: 'adamant' as const };
+    expect(catchSummary(content, mon).join('\n')).toContain('Nature: Adamant (+Attack, −Sp. Atk)');
+    expect(catchSummary(content, mon, undefined, { compact: true }).join('\n')).toContain('Nature: Adamant');
+  });
+
   it('says so when a Pokémon does not evolve', () => {
     expect(catchSummary(content, createPokemon(content, 'tauros', 20, 'c')).join('\n')).toContain('Does not evolve');
   });

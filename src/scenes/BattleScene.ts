@@ -80,7 +80,7 @@ import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
 import { autoBattleProblem, autoProfile, chooseAutoAction, STANCES, STANCE_INFO, stanceOf, type Stance } from '../core/battle/autoBattle';
 import { battleConditions } from '../core/battle/conditions';
-import { moveDescription, moveFlagLabels } from '../core/battle/moveText';
+import { moveFlagLabels, moveFullDescription } from '../core/battle/moveText';
 import { BattleTabs, type BattlePage, type TabsPlace } from '../ui/battleTabs';
 import { animChoice, presentationFor } from '../core/presentation/moveAnims';
 import { moveAnims } from '../data/presentation';
@@ -1681,19 +1681,21 @@ export class BattleScene extends Phaser.Scene {
     // Bosses and rivals get a title card: who they are and what they specialise in.
     const boss = this.boss();
     const title = this.trainerTitle();
+    const cinematic = !!boss && !!battle.trainer && this.motion !== 'off' && !services().session.settings.skippedIntros.includes(boss.title);
     if (boss && battle.trainer && !services().session.settings.skippedIntros.includes(boss.title)) {
       // A genuine boss entrance; skipping it once remembers the choice for this boss.
       const aceId = battle.enemyTeam[battle.enemyTeam.length - 1]?.speciesId;
       await bossCinematic(
         this,
-        { name: boss.title, subtitle: boss.types.length ? `${boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')} specialist` : '', ace: aceId ? getSpecies(services().session.content, aceId).name : '', at: { x: ENEMY_POS.x, y: ENEMY_POS.y }, motion: this.motion },
+        { name: boss.title, subtitle: boss.types.length ? `${boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')} specialist` : '', ace: aceId ? getSpecies(services().session.content, aceId).name : '', at: { x: ENEMY_POS.x, y: ENEMY_POS.y }, motion: this.motion, figure: art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined },
         () => {
           const s = services().session.settings;
           if (!s.skippedIntros.includes(boss.title)) services().session.saveSettings({ ...s, skippedIntros: [...s.skippedIntros, boss.title] });
         },
       );
     }
-    if (boss) {
+    // The entrance already named the boss; the title card is for when it was skipped.
+    if (boss && !cinematic) {
       const types = boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
       await this.playBeat(titleCard(this, boss.title, types ? `${types} specialist` : '', ROLE_RIMS[boss.role], this.motion));
     } else if (title && isUltimateBattle(this.run)) {
@@ -2081,7 +2083,7 @@ export class BattleScene extends Phaser.Scene {
         const power = move.power ?? fixedDamageLabel(move.effects.fixedDamage);
         this.openPanel([
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
-          { head: 'What it does', text: moveDescription(move) },
+          { head: 'What it does', text: moveFullDescription(move) },
           { head: 'Notes', text: `${flags.length ? flags.join('\n') : 'No special properties.'}${this.transformChoice ? `\nSpecial action ready: ${this.transformChoice.kind}` : ''}` },
         ]);
         return;

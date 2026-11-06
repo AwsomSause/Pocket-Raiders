@@ -1063,11 +1063,12 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
   for (const node of mapChoices(content, run)) {
     const from = node.kind === 'wild' ? wildFrom : node.kind === 'trainer' ? trainerFrom : null;
     if (!from) continue;
-    const copy = structuredClone(run);
     // A preview never stops the map: with no Pokémon able to battle there is nothing to show.
-    if (!copy.party.some((p) => p.hp > 0)) break;
-    startEncounter(content, copy, node);
-    const battle = copy.battle!;
+    if (!run.party.some((p) => p.hp > 0)) break;
+    // Walk to the node on a copy exactly as choosing it would (the clock ticks, roamers move, ...), so the
+    // preview is the battle the player gets (Beta 4.4: a tick of the clock could change the Pokémon).
+    const battle = moveToNode(content, run, node.id, () => undefined).battle;
+    if (!battle) continue;
     out[node.id] = { ...from, team: battle.enemyTeam.map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer?.name ?? null };
   }
   const gym = stage.map.nodes.find((n) => n.kind === 'gym');
@@ -1929,7 +1930,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Bosses hold items, from their own generator so no other roll changes.
     if (role) giveBossItems(content, team, role, run.regionIndex, new Rng(hashSeed(`${run.seed}::boss-items::${run.regionIndex}::${stage.index}::${node.id}`)));
     // Gym number counted from the start of the run (1 = the first gym).
-    run.battle.transform.enemyMechanics = bossMechanics(content, role, run.badges.length + 1, run.disabledMechanics);
+    run.battle.transform.enemyMechanics = bossMechanics(content, role, run.badges.length + 1, run.disabledMechanics, run.battle.trainer?.leaderId ?? undefined);
     // Meteor's Prophecy: every third boss also gains a random second type (its own seed, so no other roll changes).
     if (role && thirdBossLevels(runPerks(content, run)) > 0) {
       const c = run.log.counters;

@@ -2277,6 +2277,8 @@ export const BalanceSchema = z.object({
   /** Regular enemies (wild and trainer) may not exceed base + perLevel × level total base stats; up to `retries` re-draws, keeping the weakest. */
   levelBst: z.object({ base: z.number().int().positive(), perLevel: z.number().positive(), retries: z.number().int().min(0) }),
   /** Boss teams past level 100 (core/bossBands.ts), chosen by the team's top level. */
+  /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
+  competitiveGyms: z.object({ fromStage: z.number().int().min(0), training: z.number().int().min(0), ai: z.number().min(0).max(1), items: z.array(z.string()) }).default({ fromStage: 4, training: 1, ai: 0.1, items: ['leftovers', 'life-orb', 'sitrus-berry', 'expert-belt'] }),
   bossBands: z.array(z.object({ minLevel: z.number().int().min(101), training: z.number().int().min(0), ai: z.number().min(0).max(1), signatureSwaps: z.number().int().min(0), items: z.array(z.string()) })).default([]),
   /** Combat Threat Rating (core/threat.ts) and the Encounter Director (core/encounterDirector.ts). 100 = all-70 base stats with a 60-power same-type attack. */
   threat: z.object({
