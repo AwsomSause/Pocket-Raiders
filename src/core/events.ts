@@ -1129,7 +1129,8 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): n
 }
 
 function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
-  const activeIndex = run.party.findIndex((p) => p.hp > 0);
+  const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
+  const activeIndex = lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = eventLevel(content, run, node, rng) + b.levelBonus;
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
@@ -1171,6 +1172,14 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.name, leaderId: null });
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
+    if (b.rule) {
+      run.battle.eventRule = b.rule;
+      if (b.rule.foeAsleep) for (const mon of team) mon.status = { id: 'slp', turns: 3 };
+      for (const [stat, n] of Object.entries(b.rule.stages ?? {})) {
+        run.battle.playerStages[stat as 'atk'] = n;
+        run.battle.enemyStages[stat as 'atk'] = n;
+      }
+    }
     if (b.ally && content.species.has(b.ally) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
       const ally = newMon(content, run, b.ally, Math.max(1, base), 'p');
@@ -1226,11 +1235,12 @@ export function startClubBattle(content: Content, run: RunState, b: EventBattle,
 }
 
 /** After an event battle you won: its `win` effects (mutates `run`). Returns the changes in words. */
-export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef): string[] {
+export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef, turns = 0): string[] {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-win::${stageKey(run)}::${event.sideId}`));
   if (battle.kind === 'trainer') evilBattleWon(run, battle);
-  return battle.win.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
+  const slow = battle.kind === 'trainer' && battle.rule?.turnLimit !== undefined && turns > battle.rule.turnLimit && battle.slowWin;
+  return (slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }

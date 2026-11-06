@@ -16,7 +16,7 @@ import type { GameSession } from '../game/GameSession';
 import { queueAsset } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { buildLoading, LOADING_LOOKS, type LoadingLook } from '../ui/loadingLooks';
-import { loadingTip } from '../core/presentation/uiPrefs';
+import { loadingTip, loadingTipFor } from '../core/presentation/uiPrefs';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
 export class BootScene extends Phaser.Scene {
@@ -72,13 +72,21 @@ export class BootScene extends Phaser.Scene {
     );
   }
 
+  /** S258: what the loading tip may say about a run in progress. */
+  private runTipContext(session: GameSession): { lead?: string; badges: number; money: number } | null {
+    const run = session.run;
+    const lead = run?.party[0];
+    if (!run) return null;
+    return { lead: lead ? session.content.species.get(lead.speciesId)?.name : undefined, badges: run.badges.length, money: run.money };
+  }
+
   private loadAssets(assets: AssetRegistry): void {
     // Screens redesign: the loading look (stable per visit: the tip counter), drawn before anything else.
     const session = this.registry.get('session') as GameSession;
     const visit = this.tipVisit();
     const styleId = screenStyleOf('loading', session.settings.screenStyles, visit);
     const look = (LOADING_LOOKS as readonly string[]).includes(styleId) ? (styleId as LoadingLook) : null;
-    const view = look ? buildLoading(this, look, session.settings.battleAnimations, loadingTip(visit), 'your next adventure') : null;
+    const view = look ? buildLoading(this, look, session.settings.battleAnimations, loadingTipFor(visit, this.runTipContext(session)), 'your next adventure') : null;
     let bar: Phaser.GameObjects.Rectangle | null = null;
     if (!view) {
       bar = this.add.rectangle(GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2, 0, 16, COLORS.hpGreen).setOrigin(0, 0.5);

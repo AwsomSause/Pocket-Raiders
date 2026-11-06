@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { companionSupport } from './companionSupport';
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
 import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
@@ -2246,6 +2247,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     }
   }
 
+  const helped = companionSupport(content, run);
+  if (helped) engineEvents.push({ type: 'heal', side: 'player', amount: helped.amount, hpAfter: helped.hpAfter });
   const events = awardExperience(content, run, engineEvents);
   // A rival's training Pokémon may evolve now that the turn is over (Battle Drama Engine, Phase 5).
   const evolved = midBattleEvolution(content, run);
@@ -2757,7 +2760,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
-  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event)) : [];
+  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : [];
   // A fished Pokémon is an extra catch, and an event battle has its own rewards: no reward draft after them.
   run.afterDecisions = chained ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
   continueAfterDecisions(content, run);

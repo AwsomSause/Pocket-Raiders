@@ -12,7 +12,8 @@ import type { Content } from '../contentSchema';
 import { abilityAnimId, impliedAbility } from './abilityAnims';
 import { hyperAnimId } from './storyAnims';
 import { SPECTACLE_ANIM } from './spectacleAnims';
-import { animChoice, commonChoice, presentationFor, type MoveAnims } from './moveAnims';
+import { commonChoice, presentationFor, type MoveAnims } from './moveAnims';
+import { packSource, type MoveAnimPack } from './moveAnimPack';
 
 export type AnimationMode = 'full' | 'reduced' | 'off';
 
@@ -23,6 +24,8 @@ export interface PresentationSettings {
   intensity: number;
   /** 0–1: strength of screen shake alone; defaults to `intensity`. */
   shake?: number;
+  /** S253: which animation set moves play (default mixed). */
+  animPack?: MoveAnimPack;
 }
 
 export type EffectivenessBadge = 'super' | 'weak' | 'immune';
@@ -102,7 +105,7 @@ export function planCues(
         cues.push({ kind: 'telegraph', side: e.side, color, style: look.telegraph });
         if (!connects) break;
         const target = move.target === 'self' ? e.side : other(e.side);
-        if (full) cues.push({ kind: 'moveAnim', user: e.side, target, ...animChoice(look), ...(look.script ? { script: look.script } : {}), color, family: moveFamily(move, look), moveType: move.type, moveId: e.moveId });
+        if (full) cues.push({ kind: 'moveAnim', user: e.side, target, ...packSource(settings.animPack ?? 'mixed', look), color, family: moveFamily(move, look), moveType: move.type, moveId: e.moveId });
         else cues.push({ kind: 'pulse', side: target, color });
         break;
       }

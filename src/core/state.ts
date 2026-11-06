@@ -10,7 +10,7 @@ import { DramaBattleSchema, freshDrama } from './drama/schema';
 import { z } from 'zod';
 import { CampProfileSchema, CampStateSchema } from './camp/schema';
 import { TownProfileSchema } from './town/schema';
-import { ArchetypeModifierSchema, ATTRIBUTE_KEYS, BattleBoostSchema, BoostStatSchema, SemiSchema, StatNameSchema, StatusIdSchema, TerrainSchema, TransformKindSchema, TypeNameSchema, WeatherSchema } from './contentSchema';
+import { ArchetypeModifierSchema, EventRuleSchema, ATTRIBUTE_KEYS, BattleBoostSchema, BoostStatSchema, SemiSchema, StatNameSchema, StatusIdSchema, TerrainSchema, TransformKindSchema, TypeNameSchema, WeatherSchema } from './contentSchema';
 import { LineageSchema, BattleReplaySchema, MemoriesSchema, PastDigestSchema, WorldMemorySchema } from './memories/schema';
 import { STREAM_NAMES, type StreamName } from './rng';
 import { ArchivedRivalSchema, StoryStateSchema } from './story/schema';
@@ -702,6 +702,8 @@ export const BattleStateSchema = z.object({
   memory: z.object({ kind: z.enum(['ghost', 'gauntlet', 'echo']), id: z.string(), note: z.string() }).optional(),
   /** A raid boss fight: shield, phases, telegraph and timer (core/raid/raid.ts). */
   raid: RaidBattleSchema.optional(),
+  /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
+  eventRule: EventRuleSchema.optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */
   event: z.object({ eventId: z.string(), choiceIndex: z.number().int().min(0), sideId: z.string(), success: z.boolean(), step: z.number().int().min(0).optional() }).optional(),
   /** Battle Drama Engine: what the trainer has already said (see core/drama). */
@@ -1731,6 +1733,14 @@ export const SettingsSchema = z.object({
   victoryPoses: z.boolean().default(false),
   /** S254 Trainer portrait expressions: a portrait of the foe trainer reacts to the fight (off by default). */
   trainerExpressions: z.boolean().default(false),
+  /** S240 Dynamic battle camera: pans and zooms toward big moments (off by default). */
+  battleCamera: z.enum(['off', 'subtle', 'cinematic']).default('off'),
+  /** S242 Parallax map layers: the map's layers slide at different speeds with the pointer (off by default). */
+  mapParallax: z.boolean().default(false),
+  /** S253 Move animation packs: which animation set moves play (mixed = today's look). */
+  moveAnimPack: z.enum(['mixed', 'pokerogue', 'essentials']).default('mixed'),
+  /** S256 Sticker reactions: a row of emote stickers in battle (off by default). */
+  stickers: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

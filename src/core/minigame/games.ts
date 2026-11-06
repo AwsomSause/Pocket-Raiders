@@ -7,6 +7,7 @@ import { TYPE_NAMES, type Content } from '../contentSchema';
 import { Rng, type RngState } from '../rng';
 import { FRONTIER_GAMES } from './frontier';
 import { MINIGAMES_2 } from './games2';
+import { MINIGAMES_3 } from './games3';
 
 export interface Cell {
   id: string;
@@ -847,6 +848,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   'treasure-hunt': hunt as never,
   'reaction-challenge': reaction as never,
   ...MINIGAMES_2,
+  ...MINIGAMES_3,
   ...FRONTIER_GAMES,
 };
 

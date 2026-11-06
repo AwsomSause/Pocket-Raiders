@@ -1,0 +1,529 @@
+{
+ "events": [
+  {
+   "id": "backwards-battle",
+   "name": "Backwards Battle",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#241f33",
+    "effect": "none"
+   },
+   "intro": "A trainer in a back-to-front jacket grins. \"We fight backwards today. Your last Pokémon leads.\"",
+   "choices": [
+    {
+     "label": "Fight backwards",
+     "success": {
+      "text": "\"Left is right, last is first!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Backwards Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "reversed": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Walk forwards, away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "handicap-match",
+   "name": "Handicap Match",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "\"One Pokémon each way: you may not switch, and I get a friend. Win and the prize is doubled.\"",
+   "choices": [
+    {
+     "label": "Take the handicap",
+     "success": {
+      "text": "\"No switching. No excuses.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Handicap Challenger",
+       "classId": "black-belt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1000
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sudden-death-duel",
+   "name": "Sudden Death Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "intro": "\"First Pokémon to faint ends it. The winner keeps a held item from the loser.\"",
+   "choices": [
+    {
+     "label": "Accept the duel",
+     "success": {
+      "text": "A single Poké Ball is thrown. So is yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sudden Death Rival",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sleepwalker-brawl",
+   "name": "Sleepwalker Brawl",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1f2233",
+    "effect": "none"
+   },
+   "intro": "A trainer is sleepwalking, and so are their Pokémon. \"Strike first, or lose the edge!\" they mumble.",
+   "choices": [
+    {
+     "label": "Take advantage",
+     "success": {
+      "text": "Their Pokémon snooze on the spot, and then stir.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sleepwalker",
+       "classId": "psychic",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 450
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ],
+       "rule": {
+        "foeAsleep": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Let them sleep",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pizza-delivery-duel",
+   "name": "Pizza Delivery Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2518",
+    "effect": "none"
+   },
+   "intro": "\"Win in 5 turns or the pizza goes cold and so does the tip!\"",
+   "choices": [
+    {
+     "label": "Fight fast",
+     "success": {
+      "text": "The delivery rider checks their watch. \"Go!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pizza Rider",
+       "classId": "biker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "turnLimit": 5
+       },
+       "slowWin": [
+        {
+         "kind": "money",
+         "amount": 350
+        },
+        {
+         "kind": "research",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not hungry",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bodybuilder-beach",
+   "name": "Bodybuilder Beach",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2e2a14",
+    "effect": "none"
+   },
+   "intro": "Sun, sand and a Pokémon gym on the shore. \"Everyone here is pumped. Both sides start with Attack raised!\"",
+   "choices": [
+    {
+     "label": "Flex and fight",
+     "success": {
+      "text": "The beach crowd cheers as Attack surges on both sides.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Beach Bodybuilder",
+       "classId": "black-belt",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 550
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "stages": {
+         "atk": 2
+        }
+       }
+      }
+     }
+    },
+    {
+     "label": "Just tan",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pacifist-challenge",
+   "name": "Pacifist Challenge",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1f2e24",
+    "effect": "none"
+   },
+   "intro": "\"Win without striking. Use only status moves and last eight turns without falling.\"",
+   "choices": [
+    {
+     "label": "Take the vow",
+     "success": {
+      "text": "The monk bows. \"Only calm moves count.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pacifist Monk",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "noAttacks": true,
+        "surviveTurns": 8
+       }
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "speedrun-trial",
+   "name": "Speedrun Trial",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#232a2a",
+    "effect": "none"
+   },
+   "intro": "\"Beat my three Pokémon in 10 turns. A slow win pays half.\"",
+   "choices": [
+    {
+     "label": "Start the clock",
+     "success": {
+      "text": "A stopwatch clicks.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Speedrun Judge",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "turnLimit": 10
+       },
+       "slowWin": [
+        {
+         "kind": "money",
+         "amount": 450
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "honor-duel",
+   "name": "Honor Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "\"An honorable duel: nobody switches out. The victor earns a pride perk.\"",
+   "choices": [
+    {
+     "label": "Fight with honor",
+     "success": {
+      "text": "Both trainers salute.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Honor Duelist",
+       "classId": "veteran",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Bow out",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

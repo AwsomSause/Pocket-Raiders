@@ -1,0 +1,86 @@
+import { describe, expect, it } from 'vitest';
+import { eventRuleEnd, switchProblem } from '../../src/core/battle/engine';
+import { moveBlockReason } from '../../src/core/battle/moveBlock';
+import { EventBattleSchema, EventRuleSchema } from '../../src/core/contentSchema';
+import { chooseEvent, eventBattleWon } from '../../src/core/events';
+import { chooseStarter, createRun } from '../../src/core/run';
+import { RunStateSchema } from '../../src/core/state';
+import { content } from './helpers';
+import b3 from '../../src/data/events/trainer-b3.json';
+
+const battle = (rule: object, turn = 1) => ({ eventRule: rule, outcome: null, turn, needsSwitch: false, activeIndex: 0, kind: 'trainer' }) as never;
+const party = [{ hp: 10 }, { hp: 10 }] as never;
+
+describe('event fight rules (run events B batch 3)', () => {
+  it('accepts every rule field and rejects unknown stages', () => {
+    expect(EventRuleSchema.safeParse({ noSwitch: true, stages: { atk: 2 } }).success).toBe(true);
+    expect(EventRuleSchema.safeParse({ stages: { acc: 1 } }).success).toBe(false);
+    expect(EventRuleSchema.safeParse({ turnLimit: 0 }).success).toBe(false);
+  });
+  it('the batch 3 events parse and use only valid battle data', () => {
+    const fights = (b3 as { events: { choices: { success: { battle?: unknown } }[] }[] }).events.flatMap((e) => e.choices.flatMap((c) => (c.success.battle ? [c.success.battle] : [])));
+    expect(fights.length).toBe(9);
+    for (const f of fights) expect(EventBattleSchema.safeParse(f).success).toBe(true);
+  });
+  it('noSwitch blocks a voluntary switch but not a forced one', () => {
+    const b = battle({ noSwitch: true });
+    expect(switchProblem({ battle: b, party }, 1)).toMatch(/no switching/);
+    (b as { needsSwitch: boolean }).needsSwitch = true;
+    expect(switchProblem({ battle: b, party }, 1)).toBeNull();
+    expect(switchProblem({ battle: battle({}), party }, 1)).toBeNull();
+  });
+  it('surviveTurns wins once the turns have passed, not before', () => {
+    const early = battle({ surviveTurns: 8 }, 8);
+    eventRuleEnd(early, []);
+    expect((early as { outcome: unknown }).outcome).toBeNull();
+    const done = battle({ surviveTurns: 8 }, 9);
+    eventRuleEnd(done, []);
+    expect((done as { outcome: unknown }).outcome).toBe('win');
+  });
+  it('suddenDeath: the first faint decides, a foe faint wins', () => {
+    const foe = battle({ suddenDeath: true });
+    eventRuleEnd(foe, [{ type: 'faint', side: 'enemy', uid: 'x', participants: [] }]);
+    expect((foe as { outcome: unknown }).outcome).toBe('win');
+    const you = battle({ suddenDeath: true });
+    eventRuleEnd(you, [{ type: 'faint', side: 'player', uid: 'y', participants: [] }]);
+    expect((you as { outcome: unknown }).outcome).toBe('lose');
+    const none = battle({ suddenDeath: true });
+    eventRuleEnd(none, []);
+    expect((none as { outcome: unknown }).outcome).toBeNull();
+  });
+  it('noAttacks blocks attacks only while a status move has PP', () => {
+    const content = { moves: new Map([['tackle', { id: 'tackle', category: 'physical', flags: [] }], ['growl', { id: 'growl', category: 'status', flags: [] }]]) } as never;
+    const b = { ...(battle({ noAttacks: true }) as object), playerVolatile: { taunt: 0, throat: 0, disabled: null, torment: false } } as never;
+    const mon = (pp: number) => ({ moves: [{ id: 'tackle', pp: 5 }, { id: 'growl', pp }] }) as never;
+    expect(moveBlockReason(content, b, mon(5), 0)).toMatch(/Pacifist/);
+    expect(moveBlockReason(content, b, mon(5), 1)).toBeNull();
+    expect(moveBlockReason(content, b, mon(0), 0)).toBeNull();
+  });
+  const start = (eventId: string) => {
+    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'r', seed: 'rb3', archetypeId: 'red' }), 0));
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id;
+    run.stage!.visited = [node.id];
+    node.sides.push({ id: 'duel', kind: 'event', used: false, eventId });
+    return chooseEvent(content, run, 'duel', 0).run;
+  };
+  it('starting each fight puts its rule on the battle, and it survives a save round trip', () => {
+    for (const id of ['backwards-battle', 'handicap-match', 'sudden-death-duel', 'sleepwalker-brawl', 'pizza-delivery-duel', 'bodybuilder-beach', 'pacifist-challenge', 'speedrun-trial', 'honor-duel']) {
+      const run = start(id);
+      expect(run.battle?.eventRule, id).toBeDefined();
+      expect(RunStateSchema.parse(JSON.parse(JSON.stringify(run))).battle?.eventRule).toEqual(run.battle?.eventRule);
+    }
+    expect(start('sleepwalker-brawl').battle!.enemyTeam.every((m) => m.status?.id === 'slp')).toBe(true);
+    expect(start('bodybuilder-beach').battle).toMatchObject({ playerStages: { atk: 2 }, enemyStages: { atk: 2 } });
+  });
+  it('a slow win pays the slowWin effects', () => {
+    const run = start('pizza-delivery-duel');
+    const money = run.money;
+    eventBattleWon(content, run, run.battle!.event!, 6);
+    expect(run.money - money).toBe(350);
+    const fast = start('pizza-delivery-duel');
+    const m2 = fast.money;
+    eventBattleWon(content, fast, fast.battle!.event!, 5);
+    expect(fast.money - m2).toBe(700);
+  });
+});
