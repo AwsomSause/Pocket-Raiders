@@ -358,3 +358,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and signature wilds
 - `story-s13-chronicle.md`: Story S13 part 4: Run Chronicle (record written at run end, Memories section).
 - `mythical-chains.md`: 12 Mythical quest chains (clue, trial, wild Mythical battle), one per run, from stage 9.
+- `battle-move-menu-fit.md`: Battle move menu fit: rows squeeze to stay on screen when a Pokémon has 6+ moves (`Menu` in widgets.ts); test moveOverflow.spec.ts.
