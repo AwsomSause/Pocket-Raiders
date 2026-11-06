@@ -334,5 +334,213 @@
     "when": []
    }
   ]
+ },
+ {
+  "id": "bs_aether",
+  "nameKey": "bs.aether.name",
+  "signatureProp": "prop_zero_stitch",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_subject_zero",
+   "ev_familiar_voice",
+   "ev_humanitys_question",
+   "ev_proto_1",
+   "ev_calibration",
+   "ev_subject_four",
+   "ev_audio_log_1",
+   "ev_decommission"
+  ],
+  "echoEvents": [
+   "ev_echo_aether_01",
+   "ev_echo_aether_02",
+   "ev_echo_aether_03"
+  ],
+  "encounterPools": [
+   "enc_gene_spliced",
+   "enc_containment_squad"
+  ],
+  "remembranceUnlocks": [
+   "rm_ralts",
+   "rm_porygon"
+  ],
+  "exclusiveItem": "item_concordance_core",
+  "endings": [
+   "end_own_choice",
+   "end_proof",
+   "end_integration",
+   "end_dissolve"
+  ],
+  "catchAllEnding": "end_dissolve",
+  "endingGrid": [
+   {
+    "ending": "end_own_choice",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 70
+     }
+    ]
+   },
+   {
+    "ending": "end_proof",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "false"
+     },
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "ending": "end_proof",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "premise",
+      "op": "==",
+      "value": "inverted"
+     },
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "ending": "end_integration",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "humanity",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   },
+   {
+    "ending": "end_dissolve",
+    "when": []
+   }
+  ]
+ },
+ {
+  "id": "bs_hisui",
+  "nameKey": "bs.hisui.name",
+  "signatureProp": "prop_hisuian_satchel",
+  "parity": [
+   "intro_scene",
+   "event_pool",
+   "unique_encounters",
+   "modifiers",
+   "endings",
+   "starter_hooks"
+  ],
+  "events": [
+   "ev_world_reborn",
+   "ev_familiar_stranger",
+   "ev_old_method",
+   "ev_temporal_1",
+   "ev_lost_vocabulary",
+   "ev_old_road",
+   "ev_museum_piece",
+   "ev_return_window"
+  ],
+  "echoEvents": [
+   "ev_echo_hisui_01",
+   "ev_echo_hisui_02",
+   "ev_echo_hisui_03"
+  ],
+  "encounterPools": [
+   "enc_hisuian_alpha",
+   "enc_time_slip",
+   "enc_ancient_trainers"
+  ],
+  "remembranceUnlocks": [
+   "rm_rowlet",
+   "rm_cyndaquil",
+   "rm_oshawott"
+  ],
+  "exclusiveItem": "item_hisuian_satchel",
+  "endings": [
+   "end_home",
+   "end_bridge",
+   "end_present",
+   "end_lost"
+  ],
+  "catchAllEnding": "end_lost",
+  "endingGrid": [
+   {
+    "ending": "end_home",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "return_choice",
+      "op": "==",
+      "value": "home"
+     }
+    ]
+   },
+   {
+    "ending": "end_bridge",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "window_state",
+      "op": "==",
+      "value": "open"
+     }
+    ]
+   },
+   {
+    "ending": "end_present",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "return_choice",
+      "op": "==",
+      "value": "stay"
+     },
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": "<",
+      "value": 4
+     }
+    ]
+   },
+   {
+    "ending": "end_present",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "return_choice",
+      "op": "==",
+      "value": "stay"
+     }
+    ]
+   },
+   {
+    "ending": "end_lost",
+    "when": []
+   }
+  ]
  }
 ]

@@ -135,5 +135,98 @@
     "oncePerAct": true
    }
   ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "id": "int_research_terminal",
+  "verbs": [
+   "use",
+   "read"
+  ],
+  "icon": "tone",
+  "outputs": [
+   {
+    "id": "int_research_terminal_1",
+    "kind": "free_hint",
+    "oncePerFacility": true
+   },
+   {
+    "id": "int_research_terminal_2",
+    "kind": "unlock_lore",
+    "lore": "lore_concordance",
+    "state": "known"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_aether"
+   }
+  ],
+  "id": "int_scan_gate",
+  "verbs": [
+   "use"
+  ],
+  "outputs": [
+   {
+    "id": "int_scan_gate_1",
+    "kind": "add_counter",
+    "counter": "telemetry",
+    "amount": 1
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "id": "int_dig_puzzle_door",
+  "verbs": [
+   "use",
+   "look"
+  ],
+  "icon": "tone",
+  "outputs": [
+   {
+    "id": "int_dig_puzzle_door_1",
+    "kind": "puzzle_door",
+    "site": "archaeological"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_hisui"
+   }
+  ],
+  "id": "int_time_slip_wild",
+  "verbs": [
+   "look",
+   "talk"
+  ],
+  "outputs": [
+   {
+    "id": "int_time_slip_wild_1",
+    "kind": "start_battle",
+    "character": "ch_tin",
+    "timeSlip": true
+   }
+  ]
  }
 ]

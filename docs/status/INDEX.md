@@ -343,3 +343,5 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `story-s18-settings.md`: Story S18: Story section in Settings (intensity, dramatic moments, autonomy, romance greyed, activities, reduce motion shortcut, subtitles, spoiler guard, journal voice).
 - [story-s1-bs-champion-heir](story-s1-bs-champion-heir.md): S1 backstory 2, Champion to Be content, gates 0
 - [story-s1-bs-viridian](story-s1-bs-viridian.md): S1 backstory 3, Viridian Virtuoso content, gates 0
+- [story-s1-bs-aether](story-s1-bs-aether.md): S1 backstory 4, Aether Experiment content, gates 0
+- [story-s1-bs-hisui](story-s1-bs-hisui.md): S1 backstory 5, Remains of the Past content, gates 0
