@@ -324,6 +324,10 @@ const HANDLERS: Record<string, Handler> = {
     c.camp.launcher = !c.camp.launcher;
     return c.camp.launcher ? 'Skill throws on: balls are a timing shot now.' : 'Skill throws off.';
   },
+  follow: (c) => {
+    c.camp.follow = !c.camp.follow;
+    return c.camp.follow ? 'Follow mode on: your lead walks beside you.' : 'Follow mode off: your lead goes back in the ball.';
+  },
   pot: (c) => {
     const ids = c.args.items ?? [];
     if (ids.length < 1 || ids.length > CAMP.pot.maxBerries) fail(`Cook 1 to ${CAMP.pot.maxBerries} berries.`);

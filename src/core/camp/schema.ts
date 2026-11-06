@@ -103,6 +103,8 @@ export const CampStateSchema = z.object({
   hat: z.string().default('none'),
   photos: z.array(z.string()).default([]),
   launcher: z.boolean().default(false),
+  /** Follow mode (S501): the lead walks beside you. */
+  follow: z.boolean().default(false),
   /** A parcel being carried (opened = false): who it is for is the next stall customer. */
   parcel: z.object({ item: z.string(), sealed: z.boolean(), style: z.string() }).nullable().default(null),
   /** Skill-throw grade for the next ball throw (set by the screen, cleared by the engine call). */

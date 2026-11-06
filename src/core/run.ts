@@ -58,6 +58,7 @@ import {
 } from './encounters';
 import { evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
+import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
 import { bankShopEntries, runLicenses } from './bank';
@@ -791,7 +792,9 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const tremor = tremorStep(content, run);
   // S281: a rival may filch an item on the way.
   const sabotage = sabotageStep(content, run);
-  const notes = [crossed, tremor, sabotage].filter(Boolean).join(' ');
+  // S501: the lead Pokémon walks beside you.
+  const follow = followStep(content, run);
+  const notes = [crossed, tremor, sabotage, follow].filter(Boolean).join(' ');
   if (notes) onCross(notes);
   // A trainer tailing you steps out after a few nodes (ideas W4, wandering trainer).
   wandererStep(content, run);
