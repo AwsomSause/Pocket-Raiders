@@ -8,7 +8,7 @@ import { nextChoices } from '../../src/core/map';
 import { afterTrainerWin, mapItemSummary, pointsOf, regionMoneyFromItems, startStageEffects } from '../../src/core/mapItems';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { buyItem, chooseNode, chooseStarter, createRun, debugJumpToColumn, leaveShop, shopPrice, shopStock, takeTurn, visitSide, type TurnResult } from '../../src/core/run';
+import { buyItem, chooseNode, chooseStarter, createRun, debugJumpToColumn, leaveShop, shopPrice, shopStock, takeTurn, useItemOutsideBattle, visitSide, type TurnResult } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
@@ -173,5 +173,22 @@ describe('Loot Sack and Blue Card', () => {
     expect(pointsOf(run, 'blue-card')).toBe(0);
     const prices = stock.map((s) => s.price).sort((a, b) => a - b);
     expect(stock.find((s) => s.item === found[0])!.price).toBeGreaterThanOrEqual(prices[prices.length - Math.ceil(prices.length / 3)]!);
+  });
+});
+
+describe('Tuning Dust in the shop', () => {
+  it('all five dusts are sold from two badges', () => {
+    for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {
+      const entry = content.shop.find((e) => e.item === `tuning-dust-${stat}`);
+      expect(entry?.minBadges).toBe(2);
+    }
+  });
+
+  it('a bought dust nudges the nature and is used up', () => {
+    const run = newRun();
+    run.inventory['tuning-dust-spe'] = 1;
+    const out = useItemOutsideBattle(content, run, 'tuning-dust-spe', 0);
+    expect(out.run.party[0]!.nature).not.toBe(run.party[0]!.nature);
+    expect(out.run.inventory['tuning-dust-spe'] ?? 0).toBe(0);
   });
 });

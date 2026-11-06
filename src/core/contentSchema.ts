@@ -1085,6 +1085,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('lastStand') }),
   /** Evolves a Pokémon that has an evolution using this item (stones, Linking Cord, Soothe Bell, ...). */
   z.object({ kind: z.literal('evolve') }),
+  /** Tuning Dust sold in shops: nudges a Pokémon's nature so this stat is raised (used up). */
+  z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Raises a run attribute as soon as it's bought (shop attribute items; never goes in the Bag). */
   z.object({ kind: z.literal('attribute'), attribute: AttributeKeySchema, amount: z.number().int() }),
   /** A key item that unlocks a battle transformation (Mega Ring, ...). Kept for the whole run, never used up. */
@@ -1109,7 +1111,7 @@ export const ItemSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   description: z.string(),
-  category: z.enum(['ball', 'healing', 'revive', 'pp', 'charm', 'evolution', 'attribute', 'key', 'transformation']),
+  category: z.enum(['ball', 'healing', 'revive', 'pp', 'charm', 'evolution', 'attribute', 'key', 'transformation', 'nature']),
   iconAssetId: z.string(),
   usableInBattle: z.boolean(),
   usableOutside: z.boolean(),
