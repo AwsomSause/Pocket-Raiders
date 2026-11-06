@@ -1,0 +1,10 @@
+{
+  "note": "Habitat Ecosystem (S219): beating a wild predator (any Pokémon of its evolution line) takes it out of the stage's food chain, so its prey turn up more often in the stage's later wild encounters. Species ids are base forms; evolutions count.",
+  "factor": 2,
+  "chains": [
+    { "id": "snakes", "predators": ["ekans"], "prey": ["rattata", "sentret", "pidgey", "spearow"] },
+    { "id": "hounds", "predators": ["houndour", "poochyena"], "prey": ["rattata", "zigzagoon", "sentret"] },
+    { "id": "raptors", "predators": ["spearow"], "prey": ["caterpie", "weedle", "wurmple", "kricketot"] },
+    { "id": "reef-hunters", "predators": ["carvanha"], "prey": ["magikarp", "goldeen", "remoraid", "luvdisc"] }
+  ]
+}
