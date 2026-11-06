@@ -54,4 +54,22 @@ describe('lost rival fights', () => {
     r.party.forEach((p) => (p.level = 1));
     expect(playOut(r).phase).toBe('over');
   });
+  it('story fights inside events (rival, evil team, ghost) never end the run; a plain event fight still does', () => {
+    const fight = (eventId: string, seed: string): RunState => {
+      const r = debugReplaceEnemy(content, toBattle(start(seed)), 'mewtwo', 100);
+      r.battle!.event = { eventId, choiceIndex: 0, sideId: 'x', success: true };
+      r.party.forEach((p) => (p.level = 1));
+      return r;
+    };
+    for (const id of ['living-rival-clash', 'champion-defense']) {
+      const after = playOut(fight(id, `sl-${id}`));
+      expect(after.phase, id).not.toBe('over');
+      expect(after.party.every((p) => p.hp > 0), id).toBe(true);
+      expect(RunStateSchema.safeParse(after).success, id).toBe(true);
+    }
+    const evilEvent = [...content.events.values()].find((e) => e.choices[0]?.success.battle?.kind === 'trainer' && (e.choices[0]!.success.battle as { evil?: string }).evil);
+    if (evilEvent) expect(playOut(fight(evilEvent.id, 'sl-evil')).phase).not.toBe('over');
+    const plain = [...content.events.values()].find((e) => { const b = e.choices[0]?.success.battle; return b?.kind === 'trainer' && !b.rival && !b.evil && !b.ghost && !b.retired && !b.pseudo && !b.apprentice; });
+    if (plain) expect(playOut(fight(plain.id, 'sl-plain')).phase).toBe('over');
+  });
 });
