@@ -430,6 +430,31 @@ describe('Guide tips, rank upgrades, mastery prestige (S469, S460, S461)', () =>
   });
 });
 
+describe('Seasonal quests, card backgrounds, rival dojo (S471, S472, S474)', () => {
+  it('the season adds its own third notice, and the board is stable per day', () => {
+    const nov = todaysQuests(townOf(rich()), '2026-11-03');
+    expect(nov).toHaveLength(3);
+    expect(nov[2]!.id).toBe('dq-autumn');
+    expect(todaysQuests(townOf(rich()), '2026-10-31')[2]!.id).toBe('dq-halloween');
+    expect(todaysQuests(townOf(rich()), '2026-12-25')[2]!.id).toBe('dq-winter');
+    expect(todaysQuests(townOf(rich()), '2026-11-03')).toEqual(nov);
+  });
+  it('card backgrounds are equipped only once unlocked', () => {
+    const p = rich();
+    expect(act(p, 'hall-cardbg', { choice: 'cb-sunrise' }).ok).toBe(false);
+    p.town = { ...townOf(p), sets: { ...townOf(p).sets, cardbg: ['cb-sunrise'] } };
+    expect(townOf(ok(p, 'hall-cardbg', { choice: 'cb-sunrise' }).profile).equipped.cardbg).toBe('cb-sunrise');
+  });
+  it('rival sparring needs a finished run and pays once a day', () => {
+    const p = rich();
+    expect(act(p, 'dojo-rival', { choice: 'Blue' }).ok).toBe(false);
+    p.runHistory = [{ runId: 'r1', victory: true, regionsCleared: 1, regions: 3, badges: 1, encounters: 5, defeatedBy: null, party: [{ speciesId: 'charizard', level: 60, shiny: false }], bankCredits: 0, researchPoints: 0, achievements: [], seed: 's', endedAt: 'x', archetypeId: 'red', campaignId: 'c' }] as never;
+    const r = ok(p, 'dojo-rival', { choice: 'Blue' });
+    expect(r.message).toMatch(/Blue/);
+    expect(act(r.profile, 'dojo-rival', { choice: 'Blue' }).ok).toBe(false); // once a day
+  });
+});
+
 describe('Berry Orchard', () => {
   it('one tree a day pays berries into the next run', () => {
     const p = ok(rich(), 'orchard-pick', { choice: 'tree-oran' }).profile;

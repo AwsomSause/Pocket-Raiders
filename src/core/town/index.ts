@@ -6,7 +6,10 @@
 import { CAMP } from '../camp/schema';
 import type { Content } from '../contentSchema';
 import { GRADES, type Grade } from '../interaction/prompt';
+import rivalData from '../../data/majorRivals.json';
 import { hashSeed, Rng } from '../rng';
+
+const RIVAL_CHARACTERS = (rivalData as { characters: Record<string, { home: string; personality: string; pool: string[] }> }).characters;
 import type { Profile } from '../state';
 import { TOWN, freshTown, type Reward, type TownAction, type TownBuilding, type TownOption, type TownProfile } from './schema';
 import { bestMove, curseKnown, fanClub, townPrice, lastTeam, memorialList, miniBattle, ownedSet, pedestalBonus, pets as petList, primaryType, relicList, trophies as trophyList } from './views';
@@ -169,6 +172,8 @@ export function optionsOf(content: Content, p: Profile, a: TownAction, now: Date
     case 'visitors': return gardenVisitors(content, now).map((id) => ({ id: `${id}@${localDay(now)}`, label: content.species.get(id)?.name ?? id, desc: 'A wild visitor today', say: `${content.species.get(id)?.name ?? id} nibbles a berry, then trots off. It left a gift.`, once: true, reward: tpl?.reward }));
     // Lab Research (S462): caught species you have not studied yet; the study costs Research Points.
     case 'labSpecies': return p.speciesCaught.filter((id) => !(t.sets.research ?? []).includes(id) && content.species.has(id)).slice(0, 40).map((id) => from(id, content.species.get(id)!.name, 'Not studied yet'));
+    // Rival Training Dojo (S474): the major rivals' characters, each with their own pool.
+    case 'rivals': return Object.entries(RIVAL_CHARACTERS).map(([name, ch]) => from(name, name, `${ch.personality} · ${ch.home}`));
     default: return a.options.map(base);
   }
 }
@@ -344,6 +349,16 @@ function runPick(c: Ctx): string {
     const res = miniBattle(c.content, { speciesId: lead.speciesId, level: lead.level }, ghost, rngFor(c.t, key));
     const tag = `${c.content.species.get(lead.speciesId)?.name} Lv${lead.level} vs the ghost ${c.content.species.get(ghost.speciesId)?.name} Lv${ghost.level}.`;
     return res.win ? `${tag} ${res.log.slice(-2).join(' ')} Practice win in ${res.rounds} rounds! ${reward(c, r)}` : `${tag} ${res.log.slice(-2).join(' ')} The ghost wins this time. Try again next run.`;
+  }
+  if (id === 'dojo-rival') {
+    const rival = RIVAL_CHARACTERS[o.id];
+    const mon = lastTeam(c.content, c.p)[0];
+    if (!rival || !mon) return fail(mon ? 'That rival is away.' : 'Finish a run first: the dojo needs a team to train with.');
+    const rng = rngFor(c.t, key);
+    const foe = rng.pick(rival.pool.filter((sp) => c.content.species.has(sp)));
+    const res = miniBattle(c.content, { speciesId: mon!.speciesId, level: mon!.level }, { speciesId: foe, level: mon!.level }, rng);
+    const tag = `${mon!.name} Lv${mon!.level} spars with ${o.id}'s ${c.content.species.get(foe)?.name}.`;
+    return res.win ? `${tag} ${res.log.slice(-2).join(' ')} Practice win in ${res.rounds} rounds! ${reward(c, r)}` : `${tag} ${res.log.slice(-2).join(' ')} ${o.id} wins this round. No harm done.`;
   }
   if (id === 'lab-research') {
     const sp = c.content.species.get(o.id);
@@ -560,8 +575,13 @@ function runDaily(c: Ctx): string {
 export function todaysQuests(t: TownProfile, today: string): (typeof TOWN.dailyQuests)[number][] {
   void t;
   const rng = new Rng(hashSeed(`town::quests::${today}`));
-  const pool = [...TOWN.dailyQuests];
-  return Array.from({ length: 3 }, () => pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+  const pool = TOWN.dailyQuests.filter((q) => !q.season);
+  const month = Number(today.split('-')[1]);
+  const season = TOWN.seasons.find((s) => s.months.includes(month)) ?? TOWN.seasons[0]!;
+  // Time-limited quests (S471): the season's own notice takes the third slot while that season lasts.
+  const seasonal = TOWN.dailyQuests.find((q) => q.season === season.id);
+  const base = Array.from({ length: seasonal ? 2 : 3 }, () => pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+  return seasonal ? [...base, seasonal] : base;
 }
 
 function runPlace(c: Ctx): string {
