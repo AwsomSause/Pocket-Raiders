@@ -644,6 +644,8 @@
   "discount": 0.2
  },
  "priceSwing": { "range": 0.1, "repeat": 0.05, "repeatCap": 0.25 },
+ "omen": { "partySample": 3, "perExtraFoe": 2, "calmAtMost": -2, "direAtLeast": 4 },
+ "lastChance": { "share": 0.25 },
  "wealthTax": { "base": 4000, "perRegion": 2500, "rate": 0.15 },
  "shopTypes": {
   "boutique": { "categories": ["charm", "attribute", "evolution", "transformation"], "priceFactor": 1.1, "earlyRare": 3 },
@@ -817,6 +819,16 @@
    "lowTypes": ["rock", "ground", "steel"],
    "highHeal": 0.9,
    "lowBall": 0.9
+  },
+  "migration": {
+   "factor": 2,
+   "awayFactor": 0.5,
+   "seasons": {
+    "Spring": ["flying", "bug", "grass"],
+    "Summer": ["fire", "water", "electric"],
+    "Autumn": ["normal", "ghost", "fighting"],
+    "Winter": ["ice", "steel", "dark"]
+   }
   },
   "milestoneDays": [
    7,

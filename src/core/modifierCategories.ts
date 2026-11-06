@@ -12,10 +12,10 @@ export interface ModifierCategory {
 }
 
 export const MODIFIER_CATEGORIES: readonly ModifierCategory[] = [
-  { id: 'party', label: 'Party', groups: ['party', 'draft'] },
+  { id: 'party', label: 'Party', groups: ['party', 'draft', 'tag-team'] },
   { id: 'economy', label: 'Economy', groups: ['economy', 'economy-stakes', 'supplies'] },
   { id: 'contracts', label: 'Contracts', groups: ['contract-bag', 'contract-rest', 'contract-evolution', 'rules'] },
-  { id: 'battle', label: 'Battle', groups: ['type-chart', 'level-cap', 'speed-clear', 'boss-remix', 'doubles', 'pacifist', 'time-attack', 'random-encounters', 'random-moves', 'luck'] },
+  { id: 'battle', label: 'Battle', groups: ['type-chart', 'level-cap', 'speed-clear', 'boss-remix', 'doubles', 'pacifist', 'time-attack', 'random-encounters', 'random-moves', 'luck', 'tag-team'] },
   { id: 'world', label: 'World', groups: ['campaign', 'dex', 'info', 'events'] },
 ];
 const OTHER: ModifierCategory = { id: 'other', label: 'Other', groups: [] };

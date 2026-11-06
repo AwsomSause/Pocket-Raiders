@@ -1,0 +1,110 @@
+{
+ "events": [
+  {
+   "id": "weather-rival",
+   "name": "Weather Rival",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#233040",
+    "effect": "none"
+   },
+   "intro": "A trainer with a barometer on their hat grins. \"The sky changes every turn. Adapt or get soaked!\"",
+   "choices": [
+    {
+     "label": "Battle the changing sky",
+     "success": {
+      "text": "Rain, sun, hail: the weather turns with every move.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Weather Rival",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "weatherCycle": [
+         "rain",
+         "sun",
+         "hail"
+        ]
+       }
+      }
+     }
+    },
+    {
+     "label": "Wait for a clear day",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "underground-duel",
+   "name": "Underground Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A trainer waits in a dusty tunnel. \"Down here the sand never settles.\"",
+   "choices": [
+    {
+     "label": "Duel underground",
+     "success": {
+      "text": "Grit swirls through the tunnel.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Tunnel Trainer",
+       "classId": "hiker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 550
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "weather": "sand"
+      }
+     }
+    },
+    {
+     "label": "Back out of the tunnel",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
