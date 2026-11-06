@@ -2843,6 +2843,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (ball?.kind === 'catch' && ball.after === 'friend') caught.friendship = Math.max(caught.friendship, 200);
     if (ball?.kind === 'catch' && ball.after === 'luxury') caught.friendship = Math.min(255, caught.friendship + 40);
     if (ball?.kind === 'catch' && ball.after === 'heal') caught.hp = maxHp(content, caught);
+    if (ball?.kind === 'catch' && ball.nature) caught.nature = ball.nature;
+    if (ball?.kind === 'catch' && ball.stat) caught.statBoosts = { ...caught.statBoosts, [ball.stat.stat]: (caught.statBoosts?.[ball.stat.stat] ?? 0) + ball.stat.percent };
     caughtSpeciesId = caught.speciesId;
     count(run, 'pokemonCaught');
     // Photo Album: a species caught for the first time this run gives Love.

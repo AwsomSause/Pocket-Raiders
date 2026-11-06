@@ -21331,5 +21331,580 @@
    "kind": "ability",
    "mode": "hidden"
   }
+ },
+ {
+  "id": "adamant-ball-pack",
+  "name": "Adamant Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Adamant Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Adamant nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/adamantball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "adamant-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "bashful-ball-pack",
+  "name": "Bashful Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Bashful Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Bashful nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/bashfulball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "bashful-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "bold-ball-pack",
+  "name": "Bold Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Bold Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Bold nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/boldball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "bold-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "brave-ball-pack",
+  "name": "Brave Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Brave Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Brave nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/braveball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "brave-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "calm-ball-pack",
+  "name": "Calm Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Calm Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Calm nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/calmball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "calm-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "careful-ball-pack",
+  "name": "Careful Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Careful Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Careful nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/carefulball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "careful-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "docile-ball-pack",
+  "name": "Docile Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Docile Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Docile nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/docileball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "docile-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "gentle-ball-pack",
+  "name": "Gentle Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Gentle Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Gentle nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/gentleball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "gentle-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "hardy-ball-pack",
+  "name": "Hardy Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Hardy Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Hardy nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hardyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "hardy-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "hasty-ball-pack",
+  "name": "Hasty Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Hasty Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Hasty nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hastyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "hasty-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "impish-ball-pack",
+  "name": "Impish Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Impish Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Impish nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/impishball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "impish-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "jolly-ball-pack",
+  "name": "Jolly Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Jolly Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Jolly nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/jollyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "jolly-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "lax-ball-pack",
+  "name": "Lax Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Lax Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Lax nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/laxball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "lax-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "lonely-ball-pack",
+  "name": "Lonely Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Lonely Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Lonely nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/lonelyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "lonely-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "mild-ball-pack",
+  "name": "Mild Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Mild Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Mild nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/mildball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "mild-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "modest-ball-pack",
+  "name": "Modest Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Modest Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Modest nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/modestball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "modest-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "naive-ball-pack",
+  "name": "Naive Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Naive Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Naive nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/naiveball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "naive-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "naughty-ball-pack",
+  "name": "Naughty Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Naughty Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Naughty nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/naughtyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "naughty-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "quiet-ball-pack",
+  "name": "Quiet Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Quiet Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Quiet nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/quietball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "quiet-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "quirky-ball-pack",
+  "name": "Quirky Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Quirky Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Quirky nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/quirkyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "quirky-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "rash-ball-pack",
+  "name": "Rash Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Rash Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Rash nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/rashball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "rash-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "relaxed-ball-pack",
+  "name": "Relaxed Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Relaxed Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Relaxed nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/relaxedball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "relaxed-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "sassy-ball-pack",
+  "name": "Sassy Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Sassy Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Sassy nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/sassyball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "sassy-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "serious-ball-pack",
+  "name": "Serious Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Serious Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Serious nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/seriousball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "serious-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "timid-ball-pack",
+  "name": "Timid Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Timid Balls for your Bag. Catches like a Great Ball; the caught Pokémon has the Timid nature.",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/timidball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "timid-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "hp-training-ball-pack",
+  "name": "HP Training Ball x3",
+  "family": "Capture and party items",
+  "description": "Three HP Training Balls for your Bag. Catches like a Great Ball; the caught Pokémon starts with +5% HP.",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hpevball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "hp-training-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "atk-training-ball-pack",
+  "name": "Attack Training Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Attack Training Balls for your Bag. Catches like a Great Ball; the caught Pokémon starts with +5% Attack.",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/atkevball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "atk-training-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "def-training-ball-pack",
+  "name": "Defense Training Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Defense Training Balls for your Bag. Catches like a Great Ball; the caught Pokémon starts with +5% Defense.",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/defevball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "def-training-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "spa-training-ball-pack",
+  "name": "Sp. Atk Training Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Sp. Atk Training Balls for your Bag. Catches like a Great Ball; the caught Pokémon starts with +5% Sp. Atk.",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/spaevball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "spa-training-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "spd-training-ball-pack",
+  "name": "Sp. Def Training Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Sp. Def Training Balls for your Bag. Catches like a Great Ball; the caught Pokémon starts with +5% Sp. Def.",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/spdevball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "spd-training-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "spe-training-ball-pack",
+  "name": "Speed Training Ball x3",
+  "family": "Capture and party items",
+  "description": "Three Speed Training Balls for your Bag. Catches like a Great Ball; the caught Pokémon starts with +5% Speed.",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/speevball",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "spe-training-ball",
+   "count": 3
+  }
+ },
+{
+  "id": "master-tera-jewel",
+  "name": "Master Tera Jewel",
+  "family": "Tera Jewels",
+  "description": "Changes a Pokémon's Tera Type to its second type (its first if it has one type)",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/masterterajewel",
+  "status": "supported",
+  "effect": {
+   "kind": "teraType",
+   "mode": "secondary"
+  }
+ },
+{
+  "id": "radiant-tera-jewel",
+  "name": "Radiant Tera Jewel",
+  "family": "Tera Jewels",
+  "description": "Changes a Pokémon's Tera Type to its first type",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/radiantterajewel",
+  "status": "supported",
+  "effect": {
+   "kind": "teraType",
+   "mode": "primary"
+  }
+ },
+{
+  "id": "mystery-tera-jewel",
+  "name": "Mystery Tera Jewel",
+  "family": "Tera Jewels",
+  "description": "Changes a Pokémon's Tera Type to a random type",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mysteryterajewel",
+  "status": "supported",
+  "effect": {
+   "kind": "teraType",
+   "mode": "random"
+  }
  }
 ]
