@@ -350,3 +350,5 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `story-s14-news-lore.md`: Story S14: 40 news headlines, Chronicle text templates, 6 Field Notes, token gate (text only; screens come later).
 - `story-s13-relationships.md`: Story S13 part 1: Relationships page (view model, map menu button).
 - `dev-console-moments-events.md`: Dev console moment viewer and force-an-event tool (dev/?debug=1 only).
+- `moment-sprite-poses.md`: Moments with sprite poses: story moments pose the Pokémon and pop an emote bubble (`core/presentation/poses.ts`, `ui/dialogue/poseMoment.ts`).
+- `story-s13-lore-archive.md`: Story S13 part 2: Lore Archive (view model, Hub Tales & News row).

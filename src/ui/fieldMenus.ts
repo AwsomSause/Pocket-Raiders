@@ -10,6 +10,7 @@ import { BAG_POCKETS, bagEntries, bagEntryText, giveHeldProblem, POCKET_NAMES, t
 import type { RunState } from '../core/state';
 import { itemUseProblem } from '../core/items';
 import { rivalChronicle } from '../core/rivals/chronicle';
+import { rivalNotebook } from '../core/rivals/notebook';
 import { monRivalLines } from '../core/rivals/monRivals';
 import { playerFame, protagonistTitle, worldBoards } from '../core/rivals/recognition';
 import { pastUltimateRivals } from '../core/rivals/legacy';
@@ -74,6 +75,24 @@ export function openBoxMenu(host: FieldMenuHost): void {
     },
     onBack: () => close(host, picker),
   });
+  host.setPicker(picker);
+}
+
+/** The rival Notebook: one row per rival met this run, showing only what that rival has recorded about you. */
+export function openRivalNotebook(host: FieldMenuHost): void {
+  const { session } = services();
+  const entries = rivalNotebook(session.content, session.run!);
+  const rows = entries.length > 0
+    ? entries.map((e) => ({
+      problem: null,
+      hint: e.lines.join('  '),
+      draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
+        box.add(scene.add.text(14, 8, `${e.major ? '★ ' : ''}${e.title} (${e.state})`, textStyle(20, '#f0c028', { fixedWidth: w - 28 })));
+        box.add(scene.add.text(14, 36, e.lines.slice(0, 2).join(' '), textStyle(14, '#cfefff', { wordWrap: { width: w - 28 } })));
+      },
+    }))
+    : [{ problem: null, hint: 'Rivals you meet will be written up here.', draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => { box.add(scene.add.text(14, 8, 'No rivals met yet', textStyle(20, '#cfefff', { fixedWidth: w - 28 }))); } }];
+  const picker: Picker = new Picker(host.scene, { glass: true, title: 'Rival Notebook', columns: 1, rowHeight: 76, rows, onSelect: () => undefined, onBack: () => close(host, picker) });
   host.setPicker(picker);
 }
 

@@ -86,8 +86,10 @@ import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, 
 import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
+import { modifierBanner, modifierWildWeight } from './runModifiers';
 import { quirkReaction } from './overhaul/personality';
-import { countedScene, finisherScene, partyNarration } from './overhaul/partyNarration';
+import { momentAllowed, noteMoments } from './story/momentDirector';
+import { closeWinScene, countedScene, finisherScene, partyNarration } from './overhaul/partyNarration';
 import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
@@ -834,7 +836,16 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   bumpEventCounters(runPerks(content, run), run, 'nodeEnter');
   // The pack's party narration for the place and hour (a boss ahead, night, a bright day): one quiet line on about a third of stops.
   const nodeKey = `${run.runId}:${run.regionIndex}:${stage.index}:${nodeId}`;
-  if (fnvNarr(nodeKey) % 3 === 0) {
+  // A region landmark beside this stop is a landmark-tier moment (Moment Director: 3 a run, 5 battles apart): the party reacts to the ruins.
+  const landmarkHere = node.sides.some((x) => x.id.startsWith('landmark-') && !x.used);
+  if (landmarkHere && momentAllowed(content, run, 'landmark')) {
+    const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
+    const line = partyNarration(run.party, 'ruins', nodeKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
+    if (line) {
+      onCross(line);
+      noteMoments(run, 'landmark');
+    }
+  } else if (fnvNarr(nodeKey) % 3 === 0) {
     const tod = timeOfDay(run.seed, stage.index);
     const when = node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? 'boss_intro' : tod === 'night' ? 'night' : tod === 'day' ? 'sunny' : null;
     const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
@@ -1770,7 +1781,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -1818,6 +1829,10 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     else {
       const echo = sacrificeEcho(content, run, enemy.speciesId, activeUid);
       if (echo) run.battle.rivalNote = echo;
+      else if (!legendary) {
+        const banner = modifierBanner(content, run, enemy.speciesId);
+        if (banner) run.battle.rivalNote = banner;
+      }
     }
     claimArea(run);
     rememberPick(content, run, 'wild', familyId(content, enemy.speciesId));
@@ -2569,7 +2584,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);
   // A species scene that needs a count (tenth use of a move, first miss, first ability trigger): one quiet line, text only.
-  const counted = countedScene(run.log.counters, run.party[battle.activeIndex], engineEvents as BattleEvent[], (kind, id) => (kind === 'move' ? (content.moves.get(id)?.name ?? id) : id.replaceAll('-', ' ')));
+  const counted = countedScene(run.log.counters, run.party[battle.activeIndex], engineEvents as BattleEvent[], (kind, id) => (kind === 'move' ? (content.moves.get(id)?.name ?? id) : id.replaceAll('-', ' ')), run.encountersCompleted + 1);
   if (counted) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: counted });
   if (battle.outcome === 'win' && !counted) {
     const winKey = `${run.runId}:${run.encountersCompleted}`;
@@ -2579,7 +2594,9 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     const lastMove = [...(events as BattleEvent[])].reverse().find((e) => e.type === 'move' && e.side === 'player');
     const finisher = battle.trainer?.leaderId && lastMove?.type === 'move' ? finisherScene(run.party[battle.activeIndex]?.speciesId ?? '', content.moves.get(lastMove.moveId)?.name ?? '') : null;
     const badgeWon = battle.trainer?.classId === GYM_LEADER_CLASS && Boolean(battle.trainer.leaderId);
-    const cheer = finisher ?? quirkReaction(run.party, 'battle_win', winKey, winName) ?? (badgeWon ? partyNarration(run.party, 'badge', winKey, winName, typesOf) : null) ?? partyNarration(run.party, 'battle_win', winKey, winName, typesOf);
+    const lead = run.party[battle.activeIndex];
+    const close = lead && lead.hp > 0 ? closeWinScene(run.log.counters, lead, lead.hp / maxHp(content, lead), run.encountersCompleted + 1, (id) => id.replaceAll('-', ' ')) : null;
+    const cheer = finisher ?? close ?? quirkReaction(run.party, 'battle_win', winKey, winName) ?? (badgeWon ? partyNarration(run.party, 'badge', winKey, winName, typesOf) : null) ?? partyNarration(run.party, 'battle_win', winKey, winName, typesOf);
     if (cheer) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: cheer });
   }
   if (battle.outcome === 'win') careVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));

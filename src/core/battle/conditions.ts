@@ -115,7 +115,13 @@ export function battleConditions(content: Content, run: RunState, reveals: FoeRe
     if (ownAbility) out.yours.push(`Ability: ${content.abilities.get(ownAbility)?.name ?? ownAbility}`);
     out.yours.push(...transformLines(battle, mon, 'player'));
     const hyperMove = mon.moves.find((m) => m.hyper);
-    if (hyperMove) out.yours.push(`Hyper move ready: ${content.moves.get(hyperMove.id)?.name ?? hyperMove.id}`);
+    if (hyperMove) {
+      // What the extra slot is: found in a Hyper or Overdrive moment, +power, few PP, this battle only (kept or released after a win).
+      const hm = content.moves.get(hyperMove.id);
+      const power = hm?.power ? ` · power ${hm.power + content.balance.hyperMove.powerBonus}` : '';
+      out.yours.push(`Hyper move ready: ${hm?.name ?? hyperMove.id}${power} · ${hyperMove.pp} PP left`);
+      out.yours.push(`Found in a Hyper or Overdrive moment (+${content.balance.hyperMove.powerBonus} power). It fades when the battle ends; after a win you choose to keep it.`);
+    }
     // S157 Focus and S158 Ability Awakening.
     const awake = awakeningLevel(content, mon.abilityUses);
     out.yours.push(`Focus ${focusOf(mon)}/100${awake > 0 ? ` · Ability Awakening ${awake}` : ''}`);
