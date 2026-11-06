@@ -11,7 +11,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BUILT_BATCH = Number(process.env.MEGA_BATCH ?? 2);
+const BUILT_BATCH = Number(process.env.MEGA_BATCH ?? 3);
 
 const root = join(import.meta.dirname, '..');
 const STATS: Record<string, string> = { Atk: 'atk', Def: 'def', SpA: 'spa', SpD: 'spd', Spe: 'spe' };

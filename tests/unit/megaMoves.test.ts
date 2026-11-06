@@ -192,14 +192,14 @@ describe('batch 1 moves in battle', () => {
   });
 });
 
-describe('batch 2 moves in battle', () => {
+describe('batch 2-3 moves in battle', () => {
   /** A Pokémon carrying the move as an ordinary slot (the engine does not care how it got it), fought on new seeds until it lands. */
-  function carry(species: string, moveId: string, hp?: number) {
+  function carry(species: string, moveId: string, hp?: number, foeSpecies = 'chansey') {
     for (let i = 0; i < 8; i++) {
       const user = createPokemon(content, species, 60, 'p9');
       user.moves = [{ id: moveId, pp: content.moves.get(moveId)!.pp }];
       if (hp) user.hp = hp;
-      const foe = createPokemon(content, 'chansey', 60, 'e9');
+      const foe = createPokemon(content, foeSpecies, 60, 'e9');
       foe.moves = [{ id: 'splash', pp: 40 }];
       const battle = createBattle('wild', [foe], 0, user.uid);
       const ctx: BattleContext = { content, battle, party: [user], inventory: {}, rng: new Rng(hashSeed(`c${i}`)), captureRng: new Rng(hashSeed(`cc${i}`)), catchMultiplier: 1 };
@@ -219,5 +219,14 @@ describe('batch 2 moves in battle', () => {
     const r = carry('snorlax', 'celestial-drake-rush');
     expect(r.events.some((e) => e.type === 'stat' && e.side === 'player' && e.stat === 'atk' && e.change > 0)).toBe(true);
     expect(r.events.some((e) => e.type === 'stat' && e.side === 'player' && e.stat === 'def' && e.change < 0)).toBe(true);
+  });
+  it('Sandstorm Fang sets a sandstorm and Crystal Toxin Bloom lays Toxic Spikes on the foe side', () => {
+    expect(carry('snorlax', 'sandstorm-fang').battle.weather?.id).toBe('sand');
+    const r = carry('snorlax', 'crystal-toxin-bloom');
+    expect(JSON.stringify(r.battle.sideEffects.enemy)).toMatch(/toxic/i);
+  });
+  it('Hexed Mirage traps its target', () => {
+    const r = carry('snorlax', 'hexed-mirage', undefined, 'bulbasaur');
+    expect(r.events.some((e) => e.type === 'bound' && e.side === 'enemy' && e.moveId === 'hexed-mirage')).toBe(true);
   });
 });
