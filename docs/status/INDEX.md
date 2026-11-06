@@ -364,4 +364,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - story-s12-backstory-parity.md: S12 ending-grid check and parity audit for all five backstories.
 - `story-s20-acceptance.md`: Story S20 (partial): `sim:story` per-backstory Story Run sim, acceptance test, report in `docs/qa/story-acceptance-s20.md`.
 - `story-s10-rivals.md`: Story S10: seven rivals data (teams, scenes, lines, packs), Kael/Soren clue ledgers, theme role table, fair-play audit gate (not yet wired into runs).
-- `story-s19-sim-harness.md`: Story S19: six bots, 10,000-blueprint nightly sim (`npm run sim:story`), pacing and ending checks; fixed Finale/Epilogue Stops never playing on victory.
+- `story-s11-themes.md`: Story S11: four theme cards (Viridian, Rival's Promise, Champion's Legacy, Mythic Equation), ending sim, audit gate.

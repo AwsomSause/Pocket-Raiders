@@ -310,7 +310,7 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
 
 /** What the Power column shows for a move with fixed damage: Lv, a number, or ? (Psywave). */
 export function fixedDamageLabel(fixed: 'level' | 'psywave' | number | undefined): string {
-  return fixed === undefined ? '—' : fixed === 'level' ? 'Lv' : fixed === 'psywave' ? '?' : String(fixed);
+  return fixed === undefined ? '-' : fixed === 'level' ? 'Lv' : fixed === 'psywave' ? '?' : String(fixed);
 }
 
 const SIDE_ON: Record<string, string> = {

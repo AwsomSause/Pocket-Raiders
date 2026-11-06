@@ -11,7 +11,7 @@ const FLOOR = 0xf0f4f8;
 const tiles = (size: number) => (n: number) => {
   const perRow = n <= 4 ? 4 : Math.min(5, Math.ceil(n / 2));
   const w = (912 - (perRow - 1) * 16) / perRow;
-  return menuOf(size, w, 48, (i) => [24 + (i % perRow) * (w + 16), 408 + Math.floor(i / perRow) * 62], { columns: perRow });
+  return menuOf(size, w, 42, (i) => [24 + (i % perRow) * (w + 16), 404 + Math.floor(i / perRow) * 50], { columns: perRow });
 };
 
 /** The channel grid: the moves on the top row, the other commands on the row below (as in the mock-up). */
@@ -20,7 +20,7 @@ const grid = (size: number) => (n: number, moves: number) => {
   const rest = n - moves;
   const per = Math.max(4, moves, rest);
   const w = (912 - (per - 1) * 16) / per;
-  return menuOf(size, w, 48, (i) => (i < moves ? [24 + i * (w + 16), 408] : [24 + (i - moves) * (w + 16), 470]), { columns: per });
+  return menuOf(size, w, 42, (i) => (i < moves ? [24 + i * (w + 16), 404] : [24 + (i - moves) * (w + 16), 454]), { columns: per });
 };
 
 export const wii: BattleSkin = {
@@ -29,11 +29,12 @@ export const wii: BattleSkin = {
   layout: {
     foe: { x: 20, y: 20, panel: [0, 0, 290, 58], name: [14, 7, 20], level: [276, 7, 18], hp: [14, 42, 262, 10], status: [4, 66] },
     player: { x: 620, y: 250, panel: [0, 0, 310, 92], name: [14, 7, 20], level: [296, 7, 18], hp: [14, 42, 282, 10], hpText: { at: [296, 54, 18] }, xp: [14, 84, 282], status: [4, 100] },
-    bar: [24, 362, 640, 36],
-    message: { x: 40, y: 370, w: 610, size: 18 },
+    // The channel strip runs below the tiles (as in the mock-up), clear of your Pokémon's feet.
+    bar: [24, 502, 640, 32],
+    message: { x: 40, y: 508, w: 610, size: 18 },
     command: null,
-    tabs: { x: 668, y: 368 },
-    moveInfo: { x: 40, y: 370, inline: true },
+    tabs: { x: 668, y: 506 },
+    moveInfo: { x: 40, y: 508, inline: true },
     combined: true,
     root: grid(18),
     moves: (n) => ({ ...tiles(20)(n), bare: false }),

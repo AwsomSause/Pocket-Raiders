@@ -849,7 +849,8 @@ export class BattleScene extends Phaser.Scene {
     this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
       const actor = new PlayerTrainerActor(this, look, PLAYER_POS.x - 175, PLAYER_POS.y - 4, 190, this.motion, throwTint(art));
-      actor.sprite.setDepth(4);
+      // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
+      this.field.addAt(actor.sprite, this.fieldBase);
       actor.idle();
       this.trainerActor = actor;
     });
@@ -2620,6 +2621,7 @@ export class BattleScene extends Phaser.Scene {
           const bx = at ? (at.inline ? at.x + this.moveInfo.width + 16 : at.x - 2) : COMMAND_X + 28;
           const by = at ? (at.inline ? at.y + 10 : at.y + 16) : MESSAGE_Y + 40;
           this.moveBadges = this.add.container(bx, by, [...art, ...this.moveExtras(move, !!at?.inline)]);
+          if (at?.inline) this.fitInlineHint(this.moveBadges, at);
           bounceIn(this, this.moveBadges, this.motion);
         } else art.forEach((o) => o.destroy());
         this.moveInfo.setColor(this.panelText);
@@ -2677,6 +2679,24 @@ export class BattleScene extends Phaser.Scene {
    * types, as a tag plus words. Only what the player can already see.
    */
   /** `inline`: the badges sit on the message bar's own row, so the effectiveness hint goes above them instead of down onto the party icons. */
+  /**
+   * An inline style's effectiveness hint that would run past its message bar drops to a second row inside the bar;
+   * when the bar has no room for that, only the icon stays (the words show in the plain styles).
+   */
+  private fitInlineHint(box: Phaser.GameObjects.Container, at: { x: number; y: number }): void {
+    const bar = this.skin?.layout.bar;
+    const parts = box.list.filter((o) => o.getData('hint')) as (Phaser.GameObjects.Image | Phaser.GameObjects.Text)[];
+    const text = parts.find((o) => o.getData('hint') === 'text') as Phaser.GameObjects.Text | undefined;
+    if (!bar || !text) return;
+    const right = bar[0] + bar[2] - 8;
+    if (box.x + text.x + text.width <= right) return;
+    const rowY = 30;
+    if (box.y + rowY + 12 <= bar[1] + bar[3]) {
+      const shift = at.x - box.x - (parts[0]?.x ?? 0);
+      parts.forEach((o) => o.setPosition(o.x + shift, rowY));
+    } else text.setVisible(false);
+  }
+
   private moveExtras(move: Move, inline = false): Phaser.GameObjects.GameObject[] {
     const out: Phaser.GameObjects.GameObject[] = [];
     const flags = moveFlagNames(move);
@@ -2690,10 +2710,12 @@ export class BattleScene extends Phaser.Scene {
     const tera = this.run.battle?.transform.teraTypes[foe.uid];
     const types = (tera ? [tera] : getSpecies(content, foe.speciesId).types) as TypeName[];
     const hint = effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, types));
-    const hy = inline ? -38 : 72;
-    const icon = effectivenessIcon(this, 0, hy, hint.frame, 0.36);
-    if (icon) out.push(icon);
-    out.push(this.add.text(icon ? 32 : 0, hy, hint.text, textStyle(20, COLORS.textLight, inline ? { stroke: '#181818', strokeThickness: 4 } : {})).setOrigin(0, 0.5));
+    // Inline styles keep the hint on the badge row (after the flags), so it never floats over the field.
+    const hx = inline ? 192 + Math.min(flags.length, 4) * 32 + 8 : 0;
+    const hy = inline ? 0 : 72;
+    const icon = effectivenessIcon(this, hx, hy, hint.frame, 0.36);
+    if (icon) out.push(icon.setData('hint', 'icon'));
+    out.push(this.add.text(hx + (icon ? 32 : 0), hy, hint.text, this.skinText(inline ? 18 : 20, this.panelText)).setOrigin(0, 0.5).setData('hint', 'text'));
     return out;
   }
 

@@ -51,7 +51,7 @@ export const cyber: BattleSkin = {
     if (s.on) g.fillStyle(MAGENTA, 1).fillRect(x + w - 16, y + h - 3, 16, 3);
   },
   rootTints: [0xff4a5a, 0xffc040, 0x40ff9a, 0xc060ff, 0x40a8ff, 0x40e8e8, 0xffd040, 0x8ab0c0],
-  moveText: (m) => ({ label: up(m.name), detail: `${up(m.type)} · ${up(m.category).slice(0, 4)} · ${m.power} · PP${m.pp}` }),
+  moveText: (m) => ({ label: up(m.name), detail: `${up(m.type)} · ${up(m.category).slice(0, 4)}${m.power === '-' ? '' : ` · ${m.power}`} · PP${m.pp}` }),
   backdrop: (scene, field) => field.add(scene.add.rectangle(0, 0, 960, 540, 0x000a28, 0.45).setOrigin(0)),
   frame: (scene) => {
     // The scanline sheen over the whole screen.

@@ -14887,5 +14887,2549 @@
   "cost": 0,
   "tier": "B",
   "moment": "minor"
+ },
+ {
+  "id": "ev_vi_line_of_leaving",
+  "v": 1,
+  "tags": [
+   "narrative",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_line_of_leaving_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_line_of_leaving.b1"
+   },
+   {
+    "id": "ev_vi_line_of_leaving_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_line_of_leaving.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "walk_with_it",
+    "textKey": "ev_vi_line_of_leaving.c.walk_with_it",
+    "effects": [
+     {
+      "id": "ev_vi_line_of_leaving_walk_with_it_1",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "follow_tracks",
+    "textKey": "ev_vi_line_of_leaving.c.follow_tracks",
+    "effects": [
+     {
+      "id": "ev_vi_line_of_leaving_follow_tracks_1",
+      "kind": "set_flag",
+      "key": "vi_followed_line",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "note_it",
+    "textKey": "ev_vi_line_of_leaving.c.note_it",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_stake_and_string",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_stake_and_string_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_stake_and_string.b1"
+   },
+   {
+    "id": "ev_vi_stake_and_string_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_stake_and_string.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "pull_stakes",
+    "textKey": "ev_vi_stake_and_string.c.pull_stakes",
+    "effects": [
+     {
+      "id": "ev_vi_stake_and_string_pull_stakes_1",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 1
+     },
+     {
+      "id": "ev_vi_stake_and_string_pull_stakes_2",
+      "kind": "set_flag",
+      "key": "vi_pulled_stakes",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "photograph",
+    "textKey": "ev_vi_stake_and_string.c.photograph",
+    "effects": [
+     {
+      "id": "ev_vi_stake_and_string_photograph_1",
+      "kind": "set_flag",
+      "key": "clue_paint",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "follow_string",
+    "textKey": "ev_vi_stake_and_string.c.follow_string",
+    "effects": [
+     {
+      "id": "ev_vi_stake_and_string_follow_string_1",
+      "kind": "set_flag",
+      "key": "clue_courier",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_pilars_clinic",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_pilars_clinic_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_pilars_clinic.b1"
+   },
+   {
+    "id": "ev_vi_pilars_clinic_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_pilars_clinic.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "haul_water",
+    "textKey": "ev_vi_pilars_clinic.c.haul_water",
+    "effects": [
+     {
+      "id": "ev_vi_pilars_clinic_haul_water_1",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 1
+     },
+     {
+      "id": "ev_vi_pilars_clinic_haul_water_2",
+      "kind": "set_flag",
+      "key": "vi_accord_trust",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "ask_nothing",
+    "textKey": "ev_vi_pilars_clinic.c.ask_nothing",
+    "effects": [
+     {
+      "id": "ev_vi_pilars_clinic_ask_nothing_1",
+      "kind": "set_flag",
+      "key": "clue_pilar_silence",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "keep_walking",
+    "textKey": "ev_vi_pilars_clinic.c.keep_walking",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_the_other_pamphlet",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_the_other_pamphlet_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_the_other_pamphlet.b1"
+   },
+   {
+    "id": "ev_vi_the_other_pamphlet_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_the_other_pamphlet.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "compare",
+    "textKey": "ev_vi_the_other_pamphlet.c.compare",
+    "effects": [
+     {
+      "id": "ev_vi_the_other_pamphlet_compare_1",
+      "kind": "set_flag",
+      "key": "clue_paint",
+      "value": true
+     },
+     {
+      "id": "ev_vi_the_other_pamphlet_compare_2",
+      "kind": "set_flag",
+      "key": "clue_memo_date",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "keep_both",
+    "textKey": "ev_vi_the_other_pamphlet.c.keep_both",
+    "effects": [
+     {
+      "id": "ev_vi_the_other_pamphlet_keep_both_1",
+      "kind": "set_flag",
+      "key": "vi_both_pamphlets",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "confront",
+    "textKey": "ev_vi_the_other_pamphlet.c.confront",
+    "effects": [
+     {
+      "id": "ev_vi_the_other_pamphlet_confront_1",
+      "kind": "set_flag",
+      "key": "vi_told_ranger",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_brook_at_dusk",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_brook_at_dusk_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_brook_at_dusk.b1"
+   },
+   {
+    "id": "ev_vi_brook_at_dusk_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_brook_at_dusk.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "not_for_anything",
+    "textKey": "ev_vi_brook_at_dusk.c.not_for_anything",
+    "effects": [
+     {
+      "id": "ev_vi_brook_at_dusk_not_for_anything_1",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 1
+     },
+     {
+      "id": "ev_vi_brook_at_dusk_not_for_anything_2",
+      "kind": "set_flag",
+      "key": "vi_brook_heard",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "for_everyone",
+    "textKey": "ev_vi_brook_at_dusk.c.for_everyone",
+    "effects": [
+     {
+      "id": "ev_vi_brook_at_dusk_for_everyone_1",
+      "kind": "set_flag",
+      "key": "vi_brook_heard",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "for_the_town",
+    "textKey": "ev_vi_brook_at_dusk.c.for_the_town",
+    "effects": [
+     {
+      "id": "ev_vi_brook_at_dusk_for_the_town_1",
+      "kind": "set_flag",
+      "key": "vi_brook_pushed",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_burn_that_isnt",
+  "v": 1,
+  "tags": [
+   "conflict",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_burn_that_isnt_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_burn_that_isnt.b1"
+   },
+   {
+    "id": "ev_vi_burn_that_isnt_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_burn_that_isnt.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "fight_fire",
+    "textKey": "ev_vi_burn_that_isnt.c.fight_fire",
+    "effects": [
+     {
+      "id": "ev_vi_burn_that_isnt_fight_fire_1",
+      "kind": "add_counter",
+      "counter": "vi_saved_stands",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "chase_lighter",
+    "textKey": "ev_vi_burn_that_isnt.c.chase_lighter",
+    "effects": [
+     {
+      "id": "ev_vi_burn_that_isnt_chase_lighter_1",
+      "kind": "add_counter",
+      "counter": "vi_burned_stands",
+      "amount": 2
+     },
+     {
+      "id": "ev_vi_burn_that_isnt_chase_lighter_2",
+      "kind": "set_flag",
+      "key": "clue_courier",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "split_up",
+    "textKey": "ev_vi_burn_that_isnt.c.split_up",
+    "effects": [
+     {
+      "id": "ev_vi_burn_that_isnt_split_up_1",
+      "kind": "add_counter",
+      "counter": "vi_saved_stands",
+      "amount": 1
+     },
+     {
+      "id": "ev_vi_burn_that_isnt_split_up_2",
+      "kind": "add_counter",
+      "counter": "vi_burned_stands",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_hollis_map",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_hollis_map_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_hollis_map.b1"
+   },
+   {
+    "id": "ev_vi_hollis_map_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_hollis_map.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "ask_him",
+    "textKey": "ev_vi_hollis_map.c.ask_him",
+    "effects": [
+     {
+      "id": "ev_vi_hollis_map_ask_him_1",
+      "kind": "set_flag",
+      "key": "vi_hollis_hint",
+      "value": true
+     },
+     {
+      "id": "ev_vi_hollis_map_ask_him_2",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "trace_it",
+    "textKey": "ev_vi_hollis_map.c.trace_it",
+    "effects": [
+     {
+      "id": "ev_vi_hollis_map_trace_it_1",
+      "kind": "set_flag",
+      "key": "clue_missing_trail",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "let_it_go",
+    "textKey": "ev_vi_hollis_map.c.let_it_go",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_verdelis_shadow",
+  "v": 1,
+  "tags": [
+   "narrative",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_verdelis_shadow_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_verdelis_shadow.b1"
+   },
+   {
+    "id": "ev_vi_verdelis_shadow_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_verdelis_shadow.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "bow",
+    "textKey": "ev_vi_verdelis_shadow.c.bow",
+    "effects": [
+     {
+      "id": "ev_vi_verdelis_shadow_bow_1",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "hold_still",
+    "textKey": "ev_vi_verdelis_shadow.c.hold_still",
+    "effects": [
+     {
+      "id": "ev_vi_verdelis_shadow_hold_still_1",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "raise_camera",
+    "textKey": "ev_vi_verdelis_shadow.c.raise_camera",
+    "effects": [
+     {
+      "id": "ev_vi_verdelis_shadow_raise_camera_1",
+      "kind": "set_flag",
+      "key": "vi_camera_up",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_grove_census",
+  "v": 1,
+  "tags": [
+   "conflict",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_grove_census_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_grove_census.b1"
+   },
+   {
+    "id": "ev_vi_grove_census_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_grove_census.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "hold_census",
+    "textKey": "ev_vi_grove_census.c.hold_census",
+    "effects": [
+     {
+      "id": "ev_vi_grove_census_hold_census_1",
+      "kind": "set_flag",
+      "key": "vi_census_held",
+      "value": true
+     },
+     {
+      "id": "ev_vi_grove_census_hold_census_2",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "counter_count",
+    "textKey": "ev_vi_grove_census.c.counter_count",
+    "effects": [
+     {
+      "id": "ev_vi_grove_census_counter_count_1",
+      "kind": "set_flag",
+      "key": "vi_census_held",
+      "value": true
+     },
+     {
+      "id": "ev_vi_grove_census_counter_count_2",
+      "kind": "set_flag",
+      "key": "clue_courier",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "let_it_fail",
+    "textKey": "ev_vi_grove_census.c.let_it_fail",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_vi_the_choice",
+  "v": 1,
+  "tags": [
+   "branch",
+   "theme_th_shadows_viridian"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_vi_the_choice_b1",
+    "kind": "narration",
+    "textKey": "ev_vi_the_choice.b1"
+   },
+   {
+    "id": "ev_vi_the_choice_b2",
+    "kind": "narration",
+    "textKey": "ev_vi_the_choice.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "expose",
+    "textKey": "ev_vi_the_choice.c.expose",
+    "effects": [
+     {
+      "id": "ev_vi_the_choice_expose_1",
+      "kind": "set_flag",
+      "key": "vi_verdelis_truth",
+      "value": true
+     },
+     {
+      "id": "ev_vi_the_choice_expose_2",
+      "kind": "add_counter",
+      "counter": "vi_exposed",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "sabotage",
+    "textKey": "ev_vi_the_choice.c.sabotage",
+    "effects": [
+     {
+      "id": "ev_vi_the_choice_sabotage_1",
+      "kind": "set_flag",
+      "key": "vi_verdelis_truth",
+      "value": true
+     },
+     {
+      "id": "ev_vi_the_choice_sabotage_2",
+      "kind": "add_counter",
+      "counter": "vi_exposed",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "negotiate",
+    "textKey": "ev_vi_the_choice.c.negotiate",
+    "effects": [
+     {
+      "id": "ev_vi_the_choice_negotiate_1",
+      "kind": "set_flag",
+      "key": "vi_negotiated",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "sit_with_forest",
+    "textKey": "ev_vi_the_choice.c.sit_with_forest",
+    "effects": [
+     {
+      "id": "ev_vi_the_choice_sit_with_forest_1",
+      "kind": "set_flag",
+      "key": "vi_verdelis_truth",
+      "value": true
+     },
+     {
+      "id": "ev_vi_the_choice_sit_with_forest_2",
+      "kind": "add_counter",
+      "counter": "vi_rapport",
+      "amount": 3
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_dock_words",
+  "v": 1,
+  "tags": [
+   "narrative",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_dock_words_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_dock_words.b1"
+   },
+   {
+    "id": "ev_rp_dock_words_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_dock_words.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "say_it_back",
+    "textKey": "ev_rp_dock_words.c.say_it_back",
+    "effects": [
+     {
+      "id": "ev_rp_dock_words_say_it_back_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "stay_quiet",
+    "textKey": "ev_rp_dock_words.c.stay_quiet",
+    "effects": []
+   },
+   {
+    "id": "ask_who",
+    "textKey": "ev_rp_dock_words.c.ask_who",
+    "effects": [
+     {
+      "id": "ev_rp_dock_words_ask_who_1",
+      "kind": "set_flag",
+      "key": "clue_sentence",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_one_umbrella",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_one_umbrella_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_one_umbrella.b1"
+   },
+   {
+    "id": "ev_rp_one_umbrella_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_one_umbrella.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "listen",
+    "textKey": "ev_rp_one_umbrella.c.listen",
+    "effects": [
+     {
+      "id": "ev_rp_one_umbrella_listen_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "mention_it",
+    "textKey": "ev_rp_one_umbrella.c.mention_it",
+    "effects": [
+     {
+      "id": "ev_rp_one_umbrella_mention_it_1",
+      "kind": "set_flag",
+      "key": "clue_sentence",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "share_snack",
+    "textKey": "ev_rp_one_umbrella.c.share_snack",
+    "effects": [
+     {
+      "id": "ev_rp_one_umbrella_share_snack_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_ledger_page",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_ledger_page_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_ledger_page.b1"
+   },
+   {
+    "id": "ev_rp_ledger_page_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_ledger_page.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "keep_page",
+    "textKey": "ev_rp_ledger_page.c.keep_page",
+    "effects": [
+     {
+      "id": "ev_rp_ledger_page_keep_page_1",
+      "kind": "set_flag",
+      "key": "clue_cargo_log",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "show_rival",
+    "textKey": "ev_rp_ledger_page.c.show_rival",
+    "effects": [
+     {
+      "id": "ev_rp_ledger_page_show_rival_1",
+      "kind": "set_flag",
+      "key": "clue_cargo_log",
+      "value": true
+     },
+     {
+      "id": "ev_rp_ledger_page_show_rival_2",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "burn_page",
+    "textKey": "ev_rp_ledger_page.c.burn_page",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_unsent_letter",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_unsent_letter_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_unsent_letter.b1"
+   },
+   {
+    "id": "ev_rp_unsent_letter_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_unsent_letter.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "read_it",
+    "textKey": "ev_rp_unsent_letter.c.read_it",
+    "effects": [
+     {
+      "id": "ev_rp_unsent_letter_read_it_1",
+      "kind": "set_flag",
+      "key": "clue_letter",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "return_it",
+    "textKey": "ev_rp_unsent_letter.c.return_it",
+    "effects": [
+     {
+      "id": "ev_rp_unsent_letter_return_it_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "burn_it",
+    "textKey": "ev_rp_unsent_letter.c.burn_it",
+    "effects": [
+     {
+      "id": "ev_rp_unsent_letter_burn_it_1",
+      "kind": "set_flag",
+      "key": "rp_letter_burned",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_training_reps",
+  "v": 1,
+  "tags": [
+   "character",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_training_reps_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_training_reps.b1"
+   },
+   {
+    "id": "ev_rp_training_reps_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_training_reps.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "join_in",
+    "textKey": "ev_rp_training_reps.c.join_in",
+    "effects": [
+     {
+      "id": "ev_rp_training_reps_join_in_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "pace_them",
+    "textKey": "ev_rp_training_reps.c.pace_them",
+    "effects": []
+   },
+   {
+    "id": "call_it_off",
+    "textKey": "ev_rp_training_reps.c.call_it_off",
+    "effects": [
+     {
+      "id": "ev_rp_training_reps_call_it_off_1",
+      "kind": "set_flag",
+      "key": "rp_called_off",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_cup_draw",
+  "v": 1,
+  "tags": [
+   "conflict",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_cup_draw_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_cup_draw.b1"
+   },
+   {
+    "id": "ev_rp_cup_draw_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_cup_draw.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "swap",
+    "textKey": "ev_rp_cup_draw.c.swap",
+    "effects": [
+     {
+      "id": "ev_rp_cup_draw_swap_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "refuse",
+    "textKey": "ev_rp_cup_draw.c.refuse",
+    "effects": [
+     {
+      "id": "ev_rp_cup_draw_refuse_1",
+      "kind": "set_flag",
+      "key": "rp_rival_left",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "leave_it",
+    "textKey": "ev_rp_cup_draw.c.leave_it",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_wrong_ferry",
+  "v": 1,
+  "tags": [
+   "branch",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_wrong_ferry_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_wrong_ferry.b1"
+   },
+   {
+    "id": "ev_rp_wrong_ferry_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_wrong_ferry.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "follow",
+    "textKey": "ev_rp_wrong_ferry.c.follow",
+    "effects": [
+     {
+      "id": "ev_rp_wrong_ferry_follow_1",
+      "kind": "set_flag",
+      "key": "clue_ace_cry",
+      "value": true
+     },
+     {
+      "id": "ev_rp_wrong_ferry_follow_2",
+      "kind": "set_flag",
+      "key": "rp_followed_ferry",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "warn",
+    "textKey": "ev_rp_wrong_ferry.c.warn",
+    "effects": [
+     {
+      "id": "ev_rp_wrong_ferry_warn_1",
+      "kind": "set_flag",
+      "key": "clue_ace_cry",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "let_go",
+    "textKey": "ev_rp_wrong_ferry.c.let_go",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_lantern_toast",
+  "v": 1,
+  "tags": [
+   "resolution",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_lantern_toast_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_lantern_toast.b1"
+   },
+   {
+    "id": "ev_rp_lantern_toast_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_lantern_toast.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "light_it",
+    "textKey": "ev_rp_lantern_toast.c.light_it",
+    "effects": [
+     {
+      "id": "ev_rp_lantern_toast_light_it_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "hand_it_over",
+    "textKey": "ev_rp_lantern_toast.c.hand_it_over",
+    "effects": [
+     {
+      "id": "ev_rp_lantern_toast_hand_it_over_1",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "step_back",
+    "textKey": "ev_rp_lantern_toast.c.step_back",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_ribbon",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_ribbon_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_ribbon.b1"
+   },
+   {
+    "id": "ev_rp_ribbon_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_ribbon.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "pocket_ribbon",
+    "textKey": "ev_rp_ribbon.c.pocket_ribbon",
+    "effects": [
+     {
+      "id": "ev_rp_ribbon_pocket_ribbon_1",
+      "kind": "set_flag",
+      "key": "clue_ribbon",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "ask_dockhand",
+    "textKey": "ev_rp_ribbon.c.ask_dockhand",
+    "effects": [
+     {
+      "id": "ev_rp_ribbon_ask_dockhand_1",
+      "kind": "set_flag",
+      "key": "clue_ribbon",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rp_the_choice",
+  "v": 1,
+  "tags": [
+   "branch",
+   "theme_th_rivals_promise"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_rp_the_choice_b1",
+    "kind": "narration",
+    "textKey": "ev_rp_the_choice.b1"
+   },
+   {
+    "id": "ev_rp_the_choice_b2",
+    "kind": "narration",
+    "textKey": "ev_rp_the_choice.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "keep",
+    "textKey": "ev_rp_the_choice.c.keep",
+    "effects": []
+   },
+   {
+    "id": "break",
+    "textKey": "ev_rp_the_choice.c.break",
+    "effects": [
+     {
+      "id": "ev_rp_the_choice_break_1",
+      "kind": "set_flag",
+      "key": "rp_broken",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "renegotiate",
+    "textKey": "ev_rp_the_choice.c.renegotiate",
+    "effects": [
+     {
+      "id": "ev_rp_the_choice_renegotiate_1",
+      "kind": "set_flag",
+      "key": "rp_renegotiated",
+      "value": true
+     },
+     {
+      "id": "ev_rp_the_choice_renegotiate_2",
+      "kind": "add_counter",
+      "counter": "rp_bond",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_gilt_pin",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_gilt_pin_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_gilt_pin.b1"
+   },
+   {
+    "id": "ev_cl_gilt_pin_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_gilt_pin.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "note_pin",
+    "textKey": "ev_cl_gilt_pin.c.note_pin",
+    "effects": [
+     {
+      "id": "ev_cl_gilt_pin_note_pin_1",
+      "kind": "set_flag",
+      "key": "clue_pin",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "ask_about_it",
+    "textKey": "ev_cl_gilt_pin.c.ask_about_it",
+    "effects": [
+     {
+      "id": "ev_cl_gilt_pin_ask_about_it_1",
+      "kind": "set_flag",
+      "key": "clue_pin",
+      "value": true
+     },
+     {
+      "id": "ev_cl_gilt_pin_ask_about_it_2",
+      "kind": "add_counter",
+      "counter": "cl_press_wary",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "ignore_it",
+    "textKey": "ev_cl_gilt_pin.c.ignore_it",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_press_pit",
+  "v": 1,
+  "tags": [
+   "character",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_press_pit_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_press_pit.b1"
+   },
+   {
+    "id": "ev_cl_press_pit_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_press_pit.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "answer_once",
+    "textKey": "ev_cl_press_pit.c.answer_once",
+    "effects": [
+     {
+      "id": "ev_cl_press_pit_answer_once_1",
+      "kind": "add_counter",
+      "counter": "cl_fame",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "decline",
+    "textKey": "ev_cl_press_pit.c.decline",
+    "effects": []
+   },
+   {
+    "id": "name_hale",
+    "textKey": "ev_cl_press_pit.c.name_hale",
+    "effects": [
+     {
+      "id": "ev_cl_press_pit_name_hale_1",
+      "kind": "add_counter",
+      "counter": "cl_hale_bond",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_odds_board",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_odds_board_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_odds_board.b1"
+   },
+   {
+    "id": "ev_cl_odds_board_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_odds_board.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "follow_money",
+    "textKey": "ev_cl_odds_board.c.follow_money",
+    "effects": [
+     {
+      "id": "ev_cl_odds_board_follow_money_1",
+      "kind": "set_flag",
+      "key": "clue_odds",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "bet_nothing",
+    "textKey": "ev_cl_odds_board.c.bet_nothing",
+    "effects": [
+     {
+      "id": "ev_cl_odds_board_bet_nothing_1",
+      "kind": "set_flag",
+      "key": "clue_odds",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "tell_hale",
+    "textKey": "ev_cl_odds_board.c.tell_hale",
+    "effects": [
+     {
+      "id": "ev_cl_odds_board_tell_hale_1",
+      "kind": "add_counter",
+      "counter": "cl_hale_bond",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_referee_tell",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_referee_tell_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_referee_tell.b1"
+   },
+   {
+    "id": "ev_cl_referee_tell_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_referee_tell.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "count_it",
+    "textKey": "ev_cl_referee_tell.c.count_it",
+    "effects": [
+     {
+      "id": "ev_cl_referee_tell_count_it_1",
+      "kind": "set_flag",
+      "key": "clue_whistle",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "record_it",
+    "textKey": "ev_cl_referee_tell.c.record_it",
+    "effects": [
+     {
+      "id": "ev_cl_referee_tell_record_it_1",
+      "kind": "set_flag",
+      "key": "clue_whistle",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "confront_him",
+    "textKey": "ev_cl_referee_tell.c.confront_him",
+    "effects": [
+     {
+      "id": "ev_cl_referee_tell_confront_him_1",
+      "kind": "add_counter",
+      "counter": "cl_press_wary",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_locker_talk",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_locker_talk_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_locker_talk.b1"
+   },
+   {
+    "id": "ev_cl_locker_talk_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_locker_talk.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "listen",
+    "textKey": "ev_cl_locker_talk.c.listen",
+    "effects": [
+     {
+      "id": "ev_cl_locker_talk_listen_1",
+      "kind": "add_counter",
+      "counter": "cl_hale_bond",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "share_back",
+    "textKey": "ev_cl_locker_talk.c.share_back",
+    "effects": [
+     {
+      "id": "ev_cl_locker_talk_share_back_1",
+      "kind": "add_counter",
+      "counter": "cl_hale_bond",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "joke",
+    "textKey": "ev_cl_locker_talk.c.joke",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_empty_wall",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_empty_wall_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_empty_wall.b1"
+   },
+   {
+    "id": "ev_cl_empty_wall_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_empty_wall.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "ask_more",
+    "textKey": "ev_cl_empty_wall.c.ask_more",
+    "effects": [
+     {
+      "id": "ev_cl_empty_wall_ask_more_1",
+      "kind": "add_counter",
+      "counter": "cl_selene_trust",
+      "amount": 1
+     },
+     {
+      "id": "ev_cl_empty_wall_ask_more_2",
+      "kind": "set_flag",
+      "key": "clue_selene_silence",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "let_her_stop",
+    "textKey": "ev_cl_empty_wall.c.let_her_stop",
+    "effects": [
+     {
+      "id": "ev_cl_empty_wall_let_her_stop_1",
+      "kind": "add_counter",
+      "counter": "cl_selene_trust",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "guess_name",
+    "textKey": "ev_cl_empty_wall.c.guess_name",
+    "effects": [
+     {
+      "id": "ev_cl_empty_wall_guess_name_1",
+      "kind": "set_flag",
+      "key": "clue_selene_silence",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_ashdown_letter",
+  "v": 1,
+  "tags": [
+   "narrative",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_ashdown_letter_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_ashdown_letter.b1"
+   },
+   {
+    "id": "ev_cl_ashdown_letter_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_ashdown_letter.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "keep_letter",
+    "textKey": "ev_cl_ashdown_letter.c.keep_letter",
+    "effects": [
+     {
+      "id": "ev_cl_ashdown_letter_keep_letter_1",
+      "kind": "set_flag",
+      "key": "clue_letter_fragment",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "show_selene",
+    "textKey": "ev_cl_ashdown_letter.c.show_selene",
+    "effects": [
+     {
+      "id": "ev_cl_ashdown_letter_show_selene_1",
+      "kind": "add_counter",
+      "counter": "cl_selene_trust",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "burn_letter",
+    "textKey": "ev_cl_ashdown_letter.c.burn_letter",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_last_clean_match",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_last_clean_match_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_last_clean_match.b1"
+   },
+   {
+    "id": "ev_cl_last_clean_match_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_last_clean_match.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "spar",
+    "textKey": "ev_cl_last_clean_match.c.spar",
+    "effects": [
+     {
+      "id": "ev_cl_last_clean_match_spar_1",
+      "kind": "add_counter",
+      "counter": "cl_selene_trust",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "spar_hard",
+    "textKey": "ev_cl_last_clean_match.c.spar_hard",
+    "effects": [
+     {
+      "id": "ev_cl_last_clean_match_spar_hard_1",
+      "kind": "add_counter",
+      "counter": "cl_selene_trust",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "decline",
+    "textKey": "ev_cl_last_clean_match.c.decline",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_sealed_file",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_sealed_file_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_sealed_file.b1"
+   },
+   {
+    "id": "ev_cl_sealed_file_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_sealed_file.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "read_file",
+    "textKey": "ev_cl_sealed_file.c.read_file",
+    "effects": [
+     {
+      "id": "ev_cl_sealed_file_read_file_1",
+      "kind": "set_flag",
+      "key": "clue_sealed_file",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "photograph_file",
+    "textKey": "ev_cl_sealed_file.c.photograph_file",
+    "effects": [
+     {
+      "id": "ev_cl_sealed_file_photograph_file_1",
+      "kind": "set_flag",
+      "key": "clue_sealed_file",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_cl_the_choice",
+  "v": 1,
+  "tags": [
+   "branch",
+   "theme_th_champions_legacy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_cl_the_choice_b1",
+    "kind": "narration",
+    "textKey": "ev_cl_the_choice.b1"
+   },
+   {
+    "id": "ev_cl_the_choice_b2",
+    "kind": "narration",
+    "textKey": "ev_cl_the_choice.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "win_clean",
+    "textKey": "ev_cl_the_choice.c.win_clean",
+    "effects": [
+     {
+      "id": "ev_cl_the_choice_win_clean_1",
+      "kind": "set_flag",
+      "key": "cl_won_clean",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "expose",
+    "textKey": "ev_cl_the_choice.c.expose",
+    "effects": [
+     {
+      "id": "ev_cl_the_choice_expose_1",
+      "kind": "set_flag",
+      "key": "cl_circle_exposed",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "forfeit",
+    "textKey": "ev_cl_the_choice.c.forfeit",
+    "effects": [
+     {
+      "id": "ev_cl_the_choice_forfeit_1",
+      "kind": "set_flag",
+      "key": "cl_forfeit",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "share",
+    "textKey": "ev_cl_the_choice.c.share",
+    "effects": [
+     {
+      "id": "ev_cl_the_choice_share_1",
+      "kind": "set_flag",
+      "key": "cl_shared_title",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_cage_cave",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_cage_cave_b1",
+    "kind": "narration",
+    "textKey": "ev_me_cage_cave.b1"
+   },
+   {
+    "id": "ev_me_cage_cave_b2",
+    "kind": "narration",
+    "textKey": "ev_me_cage_cave.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "search_cave",
+    "textKey": "ev_me_cage_cave.c.search_cave",
+    "effects": [
+     {
+      "id": "ev_me_cage_cave_search_cave_1",
+      "kind": "set_flag",
+      "key": "clue_cage",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "photograph_wire",
+    "textKey": "ev_me_cage_cave.c.photograph_wire",
+    "effects": [
+     {
+      "id": "ev_me_cage_cave_photograph_wire_1",
+      "kind": "set_flag",
+      "key": "clue_cage",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "leave_it",
+    "textKey": "ev_me_cage_cave.c.leave_it",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_mover_coats",
+  "v": 1,
+  "tags": [
+   "conflict",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_mover_coats_b1",
+    "kind": "narration",
+    "textKey": "ev_me_mover_coats.b1"
+   },
+   {
+    "id": "ev_me_mover_coats_b2",
+    "kind": "narration",
+    "textKey": "ev_me_mover_coats.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "stop_them",
+    "textKey": "ev_me_mover_coats.c.stop_them",
+    "effects": [
+     {
+      "id": "ev_me_mover_coats_stop_them_1",
+      "kind": "set_flag",
+      "key": "clue_mover_coats",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "tail_them",
+    "textKey": "ev_me_mover_coats.c.tail_them",
+    "effects": [
+     {
+      "id": "ev_me_mover_coats_tail_them_1",
+      "kind": "set_flag",
+      "key": "clue_mover_coats",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "let_pass",
+    "textKey": "ev_me_mover_coats.c.let_pass",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_stolen_case",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_stolen_case_b1",
+    "kind": "narration",
+    "textKey": "ev_me_stolen_case.b1"
+   },
+   {
+    "id": "ev_me_stolen_case_b2",
+    "kind": "narration",
+    "textKey": "ev_me_stolen_case.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "inspect_case",
+    "textKey": "ev_me_stolen_case.c.inspect_case",
+    "effects": [
+     {
+      "id": "ev_me_stolen_case_inspect_case_1",
+      "kind": "set_flag",
+      "key": "clue_case",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "tell_guards",
+    "textKey": "ev_me_stolen_case.c.tell_guards",
+    "effects": [
+     {
+      "id": "ev_me_stolen_case_tell_guards_1",
+      "kind": "set_flag",
+      "key": "clue_case",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "pocket_note",
+    "textKey": "ev_me_stolen_case.c.pocket_note",
+    "effects": [
+     {
+      "id": "ev_me_stolen_case_pocket_note_1",
+      "kind": "set_flag",
+      "key": "clue_case",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_banquet",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_banquet_b1",
+    "kind": "narration",
+    "textKey": "ev_me_banquet.b1"
+   },
+   {
+    "id": "ev_me_banquet_b2",
+    "kind": "narration",
+    "textKey": "ev_me_banquet.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "talk_with_cass",
+    "textKey": "ev_me_banquet.c.talk_with_cass",
+    "effects": [
+     {
+      "id": "ev_me_banquet_talk_with_cass_1",
+      "kind": "add_counter",
+      "counter": "me_cass_warm",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "be_polite",
+    "textKey": "ev_me_banquet.c.be_polite",
+    "effects": []
+   },
+   {
+    "id": "walk_away",
+    "textKey": "ev_me_banquet.c.walk_away",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_empty_vault",
+  "v": 1,
+  "tags": [
+   "narrative",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_empty_vault_b1",
+    "kind": "narration",
+    "textKey": "ev_me_empty_vault.b1"
+   },
+   {
+    "id": "ev_me_empty_vault_b2",
+    "kind": "narration",
+    "textKey": "ev_me_empty_vault.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "examine_vault",
+    "textKey": "ev_me_empty_vault.c.examine_vault",
+    "effects": [
+     {
+      "id": "ev_me_empty_vault_examine_vault_1",
+      "kind": "set_flag",
+      "key": "clue_vault",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "ask_guard",
+    "textKey": "ev_me_empty_vault.c.ask_guard",
+    "effects": [
+     {
+      "id": "ev_me_empty_vault_ask_guard_1",
+      "kind": "set_flag",
+      "key": "clue_vault",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "call_vance",
+    "textKey": "ev_me_empty_vault.c.call_vance",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_quill_sign_off",
+  "v": 1,
+  "tags": [
+   "conflict",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_quill_sign_off_b1",
+    "kind": "narration",
+    "textKey": "ev_me_quill_sign_off.b1"
+   },
+   {
+    "id": "ev_me_quill_sign_off_b2",
+    "kind": "narration",
+    "textKey": "ev_me_quill_sign_off.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "read_form",
+    "textKey": "ev_me_quill_sign_off.c.read_form",
+    "effects": [
+     {
+      "id": "ev_me_quill_sign_off_read_form_1",
+      "kind": "set_flag",
+      "key": "clue_sign_off",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "take_photo",
+    "textKey": "ev_me_quill_sign_off.c.take_photo",
+    "effects": [
+     {
+      "id": "ev_me_quill_sign_off_take_photo_1",
+      "kind": "set_flag",
+      "key": "clue_sign_off",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "confront",
+    "textKey": "ev_me_quill_sign_off.c.confront",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_coded_sheet",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_coded_sheet_b1",
+    "kind": "narration",
+    "textKey": "ev_me_coded_sheet.b1"
+   },
+   {
+    "id": "ev_me_coded_sheet_b2",
+    "kind": "narration",
+    "textKey": "ev_me_coded_sheet.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "decode",
+    "textKey": "ev_me_coded_sheet.c.decode",
+    "effects": [
+     {
+      "id": "ev_me_coded_sheet_decode_1",
+      "kind": "set_flag",
+      "key": "clue_tracker",
+      "value": true
+     },
+     {
+      "id": "ev_me_coded_sheet_decode_2",
+      "kind": "set_flag",
+      "key": "clue_ledger_name",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "pocket_tracker",
+    "textKey": "ev_me_coded_sheet.c.pocket_tracker",
+    "effects": [
+     {
+      "id": "ev_me_coded_sheet_pocket_tracker_1",
+      "kind": "set_flag",
+      "key": "clue_tracker",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "leave_it",
+    "textKey": "ev_me_coded_sheet.c.leave_it",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_rival_secret",
+  "v": 1,
+  "tags": [
+   "climax",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_rival_secret_b1",
+    "kind": "narration",
+    "textKey": "ev_me_rival_secret.b1"
+   },
+   {
+    "id": "ev_me_rival_secret_b2",
+    "kind": "narration",
+    "textKey": "ev_me_rival_secret.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "help_from_inside",
+    "textKey": "ev_me_rival_secret.c.help_from_inside",
+    "effects": [
+     {
+      "id": "ev_me_rival_secret_help_from_inside_1",
+      "kind": "set_flag",
+      "key": "me_rival_helps",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "let_them_run",
+    "textKey": "ev_me_rival_secret.c.let_them_run",
+    "effects": []
+   },
+   {
+    "id": "stand_together",
+    "textKey": "ev_me_rival_secret.c.stand_together",
+    "effects": [
+     {
+      "id": "ev_me_rival_secret_stand_together_1",
+      "kind": "set_flag",
+      "key": "me_rival_helps",
+      "value": true
+     },
+     {
+      "id": "ev_me_rival_secret_stand_together_2",
+      "kind": "set_flag",
+      "key": "me_rival_loyal",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_me_consent",
+  "v": 1,
+  "tags": [
+   "relationship",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_consent_b1",
+    "kind": "narration",
+    "textKey": "ev_me_consent.b1"
+   },
+   {
+    "id": "ev_me_consent_b2",
+    "kind": "narration",
+    "textKey": "ev_me_consent.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "give_consent",
+    "textKey": "ev_me_consent.c.give_consent",
+    "effects": [
+     {
+      "id": "ev_me_consent_give_consent_1",
+      "kind": "set_flag",
+      "key": "me_consent",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "withhold",
+    "textKey": "ev_me_consent.c.withhold",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_me_the_choice",
+  "v": 1,
+  "tags": [
+   "branch",
+   "theme_th_marauder_conspiracy"
+  ],
+  "requires": [],
+  "roles": {},
+  "beats": [
+   {
+    "id": "ev_me_the_choice_b1",
+    "kind": "narration",
+    "textKey": "ev_me_the_choice.b1"
+   },
+   {
+    "id": "ev_me_the_choice_b2",
+    "kind": "narration",
+    "textKey": "ev_me_the_choice.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "destroy",
+    "textKey": "ev_me_the_choice.c.destroy",
+    "effects": [
+     {
+      "id": "ev_me_the_choice_destroy_1",
+      "kind": "set_flag",
+      "key": "me_engine_destroyed",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "stabilize",
+    "textKey": "ev_me_the_choice.c.stabilize",
+    "effects": [
+     {
+      "id": "ev_me_the_choice_stabilize_1",
+      "kind": "set_flag",
+      "key": "me_choice_calm",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "trust_legend",
+    "textKey": "ev_me_the_choice.c.trust_legend",
+    "effects": [
+     {
+      "id": "ev_me_the_choice_trust_legend_1",
+      "kind": "set_flag",
+      "key": "me_choice_calm",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "rescue_first",
+    "textKey": "ev_me_the_choice.c.rescue_first",
+    "effects": [
+     {
+      "id": "ev_me_the_choice_rescue_first_1",
+      "kind": "set_flag",
+      "key": "me_legend_rescued",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "confront_ashgrove",
+    "textKey": "ev_me_the_choice.c.confront_ashgrove",
+    "effects": []
+   }
+  ],
+  "outputs": [],
+  "variants": [],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor"
  }
 ]

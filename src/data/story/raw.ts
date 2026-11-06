@@ -15,7 +15,8 @@ import blueprintRules from './blueprintRules.json';
 import rivals from './rivals.json';
 import rivalThemes from './rivalThemes.json';
 import text from './text/en.json';
+import textThemes from './text/themes.json';
 import rivalsText from './text/rivals.en.json';
 import hash from './hash.json';
 
-export const RAW_STORY: Record<string, unknown> = { characters, events, arcs, themes, remembrances, moveMoments, dialogue, lore, news, interactables, backstories, quiz, blueprintRules, rivals, rivalThemes, text: { ...text, ...rivalsText }, hash: hash.hash };
+export const RAW_STORY: Record<string, unknown> = { characters, events, arcs, themes, remembrances, moveMoments, dialogue, lore, news, interactables, backstories, quiz, blueprintRules, rivals, rivalThemes, text: { ...text, ...rivalsText, ...textThemes }, hash: hash.hash };
