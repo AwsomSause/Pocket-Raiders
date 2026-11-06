@@ -162,3 +162,11 @@ export function heartbondCare(run: RunState, uid: string, source: string, key: s
   refreshHeartbond(run);
   return r;
 }
+
+/** The display line for the partner's Heartbond ("Heartbond 6 · Temperament"), or null for anyone else or a Classic run. */
+export function heartbondLabel(run: RunState, uid: string): string | null {
+  if (run.story.v2?.heartbond.partner !== uid) return null;
+  const level = heartbondLevel(heartbondScore(bondOf(run, uid)));
+  const peak = Math.max(level, ...run.story.v2.heartbond.latched);
+  return level < peak ? `Heartbond ${level} (best ${peak})` : `Heartbond ${level}`;
+}
