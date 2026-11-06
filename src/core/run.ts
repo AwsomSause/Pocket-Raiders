@@ -3343,6 +3343,11 @@ export function chooseReward(content: Content, current: RunState, draftIndex: nu
   return { run, reward };
 }
 
+/** How much a healing item restores for this run (trainer passive times attribute healing); the item screen previews with the same number. */
+export function runHealMultiplier(content: Content, run: RunState): number {
+  return healingMultiplier(runArchetype(content, run)) * runAttributeEffects(content, run).healing;
+}
+
 /** Uses a Bag item on a party member between battles. */
 export function useItemOutsideBattle(content: Content, current: RunState, itemId: string, partyIndex: number, evolveTo?: string): { run: RunState; message: string } {
   assertPhase(current, 'reward', 'decision', 'map', 'shop');
@@ -3359,7 +3364,7 @@ export function useItemOutsideBattle(content: Content, current: RunState, itemId
   const message = applyItemToPokemon(content, item, run.party[partyIndex]!, {
     regionId,
     evolveTo,
-    healMultiplier: healingMultiplier(runArchetype(content, run)) * runAttributeEffects(content, run).healing,
+    healMultiplier: runHealMultiplier(content, run),
   });
   if (item.effect.kind === 'evolve') count(run, 'evolutions');
   consumeItem(run.inventory, itemId);
