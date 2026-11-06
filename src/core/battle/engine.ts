@@ -298,6 +298,8 @@ export interface BattleContext {
   enemyHyperUsed?: boolean;
   /** Transformations switched off for this run (a challenge). */
   disabledMechanics?: readonly TransformKind[];
+  /** Gimmick progression: use counts and type hits this run (core/gimmicks). */
+  gimmicks?: import('../gimmicks').GimmickContext;
   /**
    * Set during a turn: the side that loses if both sides run out of Pokémon at
    * once (the user of Explosion loses; the user of a recoil move wins).

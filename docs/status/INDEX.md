@@ -239,5 +239,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
 - `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
+- `gimmick-levels.md`: Mega Stone levels, Dynamax Band levels and Z-Ring attunement (S479, S480, S482), run v38.
 - `growth-mentor.md`: Growth slice 6: Pokémon Mentor lessons in the Camp menu (S48).
 - `run-events-b-batch4.md`: Run events B batch 4: 14 more trainer events (dance-off, mentor exam with no bag items, type roulette, mirror trainer, twins, underdogs, charity match, chef cook-off...).
+- [meta-hub-11-seasonal-dojo-cards](meta-hub-11-seasonal-dojo-cards.md): seasonal quests, card backgrounds, rival dojo.

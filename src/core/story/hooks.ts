@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
 import { applyMastery } from '../mastery';
 import type { Content } from '../contentSchema';
@@ -272,6 +273,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
       case 'transform':
         if (e.side === 'player') active.player = e.uid;
         if (e.kind === 'ability' || e.kind === 'illusion') break;
+        if (e.side === 'player' && (e.kind === 'mega' || e.kind === 'dynamax' || e.kind === 'tera' || e.kind === 'zmove')) noteGimmickUse(run, e.kind, e.itemId);
         emit(content, run, 'transformed', {
           where,
           actors: [e.uid],

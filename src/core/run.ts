@@ -14,6 +14,7 @@
 
 import { companionSupport } from './companionSupport';
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
+import { gimmickContext } from './gimmicks';
 import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
@@ -337,6 +338,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     totems: { entered: 0, won: 0, lost: 0, done: [], unlocks: [], research: 0 },
     expedition: null,
     expeditions: { completed: [], failed: [], unlocked: [], last: [] },
+    gimmicks: { uses: {} },
     minigame: null,
     minigames: { stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0, contest: {} },
   };
@@ -2224,6 +2226,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: archetype.modifiers,
+    gimmicks: gimmickContext(content, run),
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,

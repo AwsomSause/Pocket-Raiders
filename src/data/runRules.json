@@ -324,6 +324,15 @@
       "blurb": "Randomizer: every Pokémon you start with and every wild or ordinary trainer Pokémon gets a random moveset (two of its own types, two of any).",
       "group": "random-moves",
       "randomMoves": true
+    },
+    {
+      "id": "tag-team",
+      "name": "Tag Team",
+      "status": "supported",
+      "bonus": 0.1,
+      "blurb": "Two players share one party at one screen. Pokémon in slots 1, 3 and 5 are Player 1's, slots 2, 4 and 6 are Player 2's; the battle prompt says whose turn it is and the other player keeps their hands off.",
+      "group": "tag-team",
+      "tagTeam": true
     }
   ],
   "modes": [
