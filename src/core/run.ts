@@ -83,6 +83,7 @@ import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, 
 import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
+import { quirkReaction } from './overhaul/personality';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -2051,7 +2052,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // A Blissful Pokémon's aura calms the Shadow Pokémon resting beside it.
     const calmed = blissfulAtRest(content, run);
     takeCheckpoint(run);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}` };
+    const camp = quirkReaction(run.party, 'rest_node', `${run.runId}:${run.encountersCompleted}:${sideId}`, (m) => content.species.get(m.speciesId)?.name ?? m.speciesId);
+    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}` };
   }
   run.phase = 'shop';
   // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
@@ -2484,6 +2486,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);
+  if (battle.outcome === 'win') {
+    const cheer = quirkReaction(run.party, 'battle_win', `${run.runId}:${run.encountersCompleted}`, (m) => content.species.get(m.speciesId)?.name ?? m.speciesId);
+    if (cheer) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: cheer });
+  }
   if (battle.outcome === 'win') careVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   const cues = recordBattleTurn(content, current, run, events);
   // Trainer dialogue for what just happened (presentation only: it never changes the battle).

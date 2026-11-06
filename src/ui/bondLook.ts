@@ -29,7 +29,7 @@ export function bondHint(content: Content, run: RunState, mon: PokemonInstance):
   const mood = MOOD_LOOK[bondMood(bond)];
   const partners = run.party.filter((m) => m.uid !== mon.uid && practicedPair(run, mon.uid, m.uid)).map((m) => content.species.get(m.speciesId)?.name ?? m.speciesId);
   const me = personalityOf(run, mon);
-  const parts = [mood.hint, `${me.label}: ${me.blurb} It ${me.quirk}.`];
+  const parts = [mood.hint, `${me.label}: ${me.blurb} It ${me.quirk}. ${me.identity}`];
   if (partners.length > 0) parts.push(`Practiced partner: ${partners.join(', ')}.`);
   const friends = relationLines(content, run, mon).slice(0, 3);
   if (friends.length > 0) parts.push(friends.join('; ') + '.');

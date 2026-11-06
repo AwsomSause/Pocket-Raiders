@@ -144,7 +144,7 @@ export function bondView(content: Content, run: RunState, mon: PokemonInstance):
     mood,
     values: (['trust', 'affection', 'respect', 'synchronization', 'confidence', 'autonomy', 'strain'] as const).map((key) => ({ key, value: bond[key] })),
     trait: bond.trait,
-    personality: `${p.label}: ${p.blurb} It ${p.quirk}.`,
+    personality: `${p.label}: ${p.blurb} It ${p.quirk}. ${p.identity}`,
     relations: [...bondLevelLines(content, run, mon), ...relationLines(content, run, mon)].slice(0, 3).join('  ·  '),
     hearts: friendshipHearts(content, mon),
     emotion: emotion ? { name: emotion.name, color: emotion.color } : null,
