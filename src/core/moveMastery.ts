@@ -3,6 +3,7 @@
 
 import type { Content } from './contentSchema';
 import { claim } from './quests';
+import { overhaulCatalogs } from './overhaul/catalogs';
 import type { Profile, RunState } from './state';
 
 export const MOVE_RANKS = ['none', 'bronze', 'silver', 'gold'] as const;
@@ -31,6 +32,9 @@ export function moveLore(content: Content, moveId: string, rank: MoveRank): stri
   const lines = [`${m.name}: a ${m.type} ${m.category} move.`];
   if (rank === 'silver' || rank === 'gold') lines.push(`Power ${m.power ?? '-'}, accuracy ${m.accuracy ?? '-'}, PP ${m.pp}.`);
   if (rank === 'gold') lines.push(`Aims at ${m.target}${m.priority ? `, priority ${m.priority > 0 ? '+' : ''}${m.priority}` : ''}${m.flags.length > 0 ? `; traits: ${m.flags.join(', ')}` : ''}.`);
+  // Overhaul slice 25: the pack's flavour for 123 moves. Bronze and silver show the "experienced" line, gold the "mastered" one.
+  const flavour = overhaulCatalogs().move_mastery_ideas.entries.find((e) => e.moveId === moveId);
+  if (flavour) lines.push(flavour[rank === 'gold' ? 'mastered' : 'experienced'].replaceAll('{name}', 'Your Pokémon'));
   return lines;
 }
 
