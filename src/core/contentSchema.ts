@@ -2353,6 +2353,7 @@ export const BalanceSchema = z.object({
   /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
   /** Beta 4.4: a Hyper/Overdrive moment unlocks a move in an extra slot for the battle: this much more power, this many PP. */
   /** Overhaul slice 20: battle environments and conditions (core/overhaul/field.ts). */
+  overhaulRivalRoles: z.object({ enabled: z.boolean(), additionalCounters: z.number().int().min(0) }).default({ enabled: true, additionalCounters: 1 }),
   overhaulGrowth: z.object({ enabled: z.boolean(), bonus: z.number().min(0).max(0.3), minKos: z.number().int().min(1), minCloseCalls: z.number().int().min(1) }).default({ enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2 }),
   overhaulChains: z.object({ enabled: z.boolean(), legendaryMinStage: z.number().int().min(1) }).default({ enabled: true, legendaryMinStage: 7 }),
   overhaulField: z.object({ powerCap: z.number().min(0).max(1), envChance: z.number().min(0).max(1), conditionChance: z.object({ mid: z.number().min(0).max(1), late: z.number().min(0).max(1), boss: z.number().min(0).max(1) }) }).default({ powerCap: 0.3, envChance: 0.6, conditionChance: { mid: 0.15, late: 0.25, boss: 0.35 } }),

@@ -3,6 +3,7 @@
 // It remembers its team, comes back stronger, and swaps ONE member for a Pokémon from the
 // planned team that resists the type of attack you use most; the player is told which.
 
+import { counterCap, rivalRoleOf, SPAR_NOTE } from '../overhaul/rivalRoles';
 import { focusIs, RIVAL_FOCUS_GAP_CUT } from '../campaign/focus';
 import { runPerks } from '../archetypes';
 import { rivalCounterBonus, rivalLevelOffset, rivalTeamTypes } from '../trainerPerks';
@@ -122,7 +123,10 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   const seen = bondNote(rival);
   // A trainer perk (Blue, Gen 3): the rival always carries a Pokémon of some type (Blaine: Water).
   const planned = withTeamTypes(content, revised, [...rivalTeamTypes(perks), ...advisedTypes(run)]);
-  if (!type || !mods.canAdapt || rival.adaptations.length >= mods.adaptCap) return { plan: planned, note: seen };
+  const rolesCfg = content.balance.overhaulRivalRoles;
+  const role = rivalRoleOf(run, rolesCfg, rival);
+  if (role === 'friendly' && mods.canAdapt) return { plan: planned, note: [seen, SPAR_NOTE(rival.name)].filter(Boolean).join(' ') };
+  if (!type || !mods.canAdapt || rival.adaptations.length >= counterCap(rolesCfg, role, mods.adaptCap)) return { plan: planned, note: seen };
   const bias = (speciesId: string) => mods.statBias.reduce((sum, stat) => sum + (getSpecies(content, speciesId).baseStats[stat as 'hp'] ?? 0), 0);
   // One counter-pick for the type you use most; a trainer perk adds a counter for the next most used types.
   const types = usedTypes(content, run).slice(0, 1 + rivalCounterBonus(perks));
