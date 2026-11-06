@@ -507,8 +507,11 @@ export class HubScene extends Phaser.Scene {
   }
 
   /** A place with several rooms opens its own full page: one card per room, with a Back button. */
-  private openSection(place: { name: string; rooms: Room[] }, focus: number): void {
+  private openSection(section: { name: string; rooms: Room[] }, focus: number): void {
     this.section?.close();
+    // Rooms switched off by content (e.g. the Starter Laboratory while starter sets are archived) are left out.
+    const place = { name: section.name, rooms: section.rooms.filter((room) => ROOMS.some((r) => r.room === room)) };
+    focus = Math.max(0, place.rooms.indexOf(section.rooms[focus]!));
     this.place = place;
     const rows: PickerRow[] = place.rooms.map((room) => {
       const info = ROOMS.find((r) => r.room === room)!;
