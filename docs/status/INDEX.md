@@ -338,3 +338,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - [story-s1-bs-ex-criminal](story-s1-bs-ex-criminal.md): S1 backstory 1, Ex-Criminal content + Vance, gates 0
 - story-audio: story music, stinger and SFX id list with reuse sounds, cross-fade plan, audio budget gate (S17)
 - `hubtown-garden-village.md`: Hub Town v4 Garden Village layout (Kice's pick of 6 mockups)
+- [story-s1-bs-champion-heir](story-s1-bs-champion-heir.md): S1 backstory 2, Champion to Be content, gates 0

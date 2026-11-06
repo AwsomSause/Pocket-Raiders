@@ -42,5 +42,50 @@
     "character": "ch_marek_voss"
    }
   ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "id": "int_family_name_door",
+  "verbs": [
+   "talk",
+   "use"
+  ],
+  "icon": "badge",
+  "outputs": [
+   {
+    "id": "int_family_name_door_1",
+    "kind": "start_battle",
+    "character": "ch_silas_crane",
+    "speak": "family_name"
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "id": "int_fan_autograph",
+  "verbs": [
+   "talk",
+   "look"
+  ],
+  "outputs": [
+   {
+    "id": "int_fan_autograph_1",
+    "kind": "add_counter",
+    "counter": "legacy",
+    "amount": 1
+   }
+  ]
  }
 ]

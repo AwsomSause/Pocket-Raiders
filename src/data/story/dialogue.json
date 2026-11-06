@@ -70,5 +70,86 @@
   "tags": [
    "ex_criminal"
   ]
+ },
+ {
+  "id": "dlg_ev_intro_champion_heir_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_champion_heir.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_name_to_live_up_to_b1",
+  "speaker": "ch_odette_marr",
+  "when": [],
+  "textKey": "ev_name_to_live_up_to.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_fathers_shadow_b1",
+  "speaker": "ch_silas_crane",
+  "when": [],
+  "textKey": "ev_fathers_shadow.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_1_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_1.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_2_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_2.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_3_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_3.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_hartwell_call_4_b1",
+  "speaker": "ch_gideon_hartwell",
+  "when": [],
+  "textKey": "ev_hartwell_call_4.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_press_pit_b1",
+  "speaker": "ch_tavi_marsh",
+  "when": [],
+  "textKey": "ev_press_pit.b1",
+  "tags": [
+   "champion_heir"
+  ]
+ },
+ {
+  "id": "dlg_ev_the_sponsor_b1",
+  "speaker": "ch_the_examiner",
+  "when": [],
+  "textKey": "ev_the_sponsor.b1",
+  "tags": [
+   "champion_heir"
+  ]
  }
 ]
