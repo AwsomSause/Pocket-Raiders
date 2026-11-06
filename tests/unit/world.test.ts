@@ -12,7 +12,6 @@ import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { chooseStarter, chooseNode, createRun } from '../../src/core/run';
 import { StageStateSchema, type RunState } from '../../src/core/state';
 import { advanceRoamers, applyFrontWeather, convoyStep, healConvoy, forecast, foggedAt, frontAt, isFogged, placeCamp, roamerOn, scoutAhead, sightRange, spawnRoamers, stageFronts, stageHasCamp, visibleColumn } from '../../src/core/world';
-import { PSEUDO, pseudoGateId } from '../../src/core/dungeon/pseudo';
 import { content } from './helpers';
 
 const withWorld = (patch: Partial<Content['balance']['world']>): Content => ({ ...content, balance: { ...content.balance, world: { ...content.balance.world, ...patch } } });
@@ -299,10 +298,6 @@ describe('landmarks and dungeons', () => {
     // Ideas W4: rooms opened by a traversal obstacle, and stops the code places (wanderer, treasure map, landmarks).
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
     for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
-    // W7 pseudo stages whose entry is not a map event (a service, the evil schedule, an item or a dungeon clear) open their gate from that system.
-    // An 'event:' entry whose event is still disabled (Dimensional Collision) has no way in yet either.
-    const disabledNames = new Set([...content.events.values()].filter((e) => e.disabled).map((e) => e.name));
-    for (const r of PSEUDO.records) if (!r.entry.startsWith('event:') || disabledNames.has(r.entry.slice(6).trim())) opened.add(pseudoGateId(r));
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     for (const e of content.events.values()) if (e.room) expect(opened.has(e.id), e.id).toBe(true);
