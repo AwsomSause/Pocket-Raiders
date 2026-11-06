@@ -44,6 +44,7 @@ import * as Mini from '../core/minigame/flow';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
+import { toggleCamp } from '../core/trainingCamp';
 import { cycleXpPolicy, XP_POLICY_RULES } from '../core/teamPolicy';
 import * as PartyLife from '../core/partyLife';
 type PartyScene = PartyLife.Scene;
@@ -598,6 +599,15 @@ export class GameSession {
     this.run = run;
     this.persistRun();
     return `Experience share: ${XP_POLICY_RULES[policy].name}. ${XP_POLICY_RULES[policy].blurb}`;
+  }
+
+  /** Camp > Training camp: sends a Box Pokémon to camp or calls it back (ideas S46). */
+  toggleTrainingCamp(uid: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = toggleCamp(run, uid);
+    this.run = run;
+    this.persistRun();
+    return message;
   }
 
   useItem(itemId: string, partyIndex: number, evolveTo?: string): string {
