@@ -273,3 +273,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `habitat-ecosystem.md`: Habitat Ecosystem S219 (`core/ecosystem.ts`); notes on S222/S232 coverage.
 - `z-trials.md`: 18 island Z-Trial events, a Z-Crystal per type (S502).
 - [hub-town-ambient-birds](hub-town-ambient-birds.md): real birdsong in the Hub Town morning and afternoon.
+- `beta44-battle-moves.md`: Beta 4.4 follow-up: moves found mid-battle go in the Hyper slot, keep-or-skip after the fight.

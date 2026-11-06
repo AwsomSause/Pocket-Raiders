@@ -40,7 +40,8 @@ export function endHyperMoves(run: RunState, offer: boolean): void {
     const slots = mon.moves.filter((m) => m.hyper);
     if (slots.length === 0) continue;
     mon.moves = mon.moves.filter((m) => !m.hyper);
-    if (!offer || mon.hp <= 0) continue;
+    // Offered even if it fainted later in the fight: the move was found, the choice is still yours.
+    if (!offer) continue;
     for (const s of slots) {
       if (mon.moves.some((m) => m.id === s.id) || run.pending.some((p) => p.kind === 'learnMove' && p.uid === mon.uid && p.moveId === s.id)) continue;
       run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId: s.id });

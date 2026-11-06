@@ -175,7 +175,9 @@ export class DecisionScene extends Phaser.Scene {
     const name = getSpecies(content, mon.speciesId).name;
     pokemonVisual(this, getSpecies(content, mon.speciesId), 'front', 150, 260, 3, mon.shiny);
     this.add.text(300, 40, `${name} wants to learn ${newMove.name}!`, textStyle(34, COLORS.textLight));
-    this.add.text(300, 86, 'But it already knows four moves. Forget one to make room?', textStyle(22, '#d8d0e0'));
+    // A free move slot (a move found in battle by a Pokémon with fewer than four): learning it forgets nothing.
+    const room = mon.moves.length < 4 ? 1 : 0;
+    this.add.text(300, 86, room ? 'It has room for another move. Learn it?' : 'But it already knows four moves. Forget one to make room?', textStyle(22, '#d8d0e0'));
     const describe = (id: string, pp?: number, slot?: MoveSlot) => {
       const m = content.moves.get(id)!;
       const power = m.power ?? fixedDamageLabel(m.effects.fixedDamage);
@@ -186,13 +188,14 @@ export class DecisionScene extends Phaser.Scene {
     this.add.text(320, 162, describe(moveId), textStyle(18, '#d8d0e0'));
 
     const options = [
+      ...(room ? [{ label: `Learn ${newMove.name}`, detail: 'Fills a free move slot. No move is forgotten.' }] : []),
       ...mon.moves.map((slot) => ({ label: content.moves.get(slot.id)!.name, detail: describe(slot.id, slot.pp, slot) })),
       { label: `Don't learn ${newMove.name}` },
     ];
     drawPanel(this, 300, 210, 620, 310);
     // Beta 4.4: the full description of the focused move (the new one on "Don't learn").
     const full = (i: number) => {
-      const slot = mon.moves[i];
+      const slot = mon.moves[i - room];
       const m = content.moves.get(slot ? slot.id : moveId)!;
       return `${slot ? m.name : `NEW: ${m.name}`}: ${moveFullDescription(m)}`;
     };
@@ -205,7 +208,12 @@ export class DecisionScene extends Phaser.Scene {
       itemWidth: 600,
       fontSize: 24,
       onFocus: (i) => about.setText(full(i)),
-      onSelect: (i) => {
+      onSelect: (pick) => {
+        if (room && pick === 0) {
+          this.resolve({ kind: 'forgetMove', moveIndex: mon.moves.length });
+          return;
+        }
+        const i = pick - room;
         if (i >= mon.moves.length) {
           this.confirm(`Give up on learning ${newMove.name}?`, () => this.resolve({ kind: 'skipMove' }));
           return;

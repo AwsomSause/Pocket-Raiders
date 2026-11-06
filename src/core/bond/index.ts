@@ -203,8 +203,8 @@ export function playerCombo(content: Content, run: RunState, fainted: string, in
 
 // ---------- New Move: a valid learnset move, revealed under pressure ----------
 
-/** The strongest move this species learns by this level that the Pokémon doesn't know (and the move it would replace when full). */
-export function revealableMove(content: Content, mon: PokemonInstance): { moveId: string; replaces: string | null } | null {
+/** The strongest move this species learns by this level that the Pokémon doesn't know (and the move it would replace when full; never with `extraSlot`, the player's Hyper slot). */
+export function revealableMove(content: Content, mon: PokemonInstance, extraSlot = false): { moveId: string; replaces: string | null } | null {
   const known = new Set(mon.moves.map((m) => m.id));
   let best: { id: string; power: number } | null = null;
   for (const e of getSpecies(content, mon.speciesId).learnset) {
@@ -213,7 +213,7 @@ export function revealableMove(content: Content, mon: PokemonInstance): { moveId
     if (power > 0 && (!best || power > best.power || (power === best.power && e.move < best.id))) best = { id: e.move, power };
   }
   if (!best) return null;
-  if (mon.moves.length < 4) return { moveId: best.id, replaces: null };
+  if (mon.moves.length < 4 || extraSlot) return { moveId: best.id, replaces: null };
   const weakest = mon.moves.reduce((w, m) => ((content.moves.get(m.id)?.power ?? 0) < (content.moves.get(w.id)?.power ?? 0) ? m : w));
   return (content.moves.get(weakest.id)?.power ?? 0) < best.power ? { moveId: best.id, replaces: weakest.id } : null;
 }
@@ -232,12 +232,18 @@ export function revealMove(content: Content, run: RunState, side: 'player' | 'en
     const b = bondOf(run, mon.uid);
     if (b.trust < BOND_RULES.reveal.minTrust || b.synchronization < BOND_RULES.reveal.minSynchronization) return null;
   } else if (!confident) return null;
-  const pick = revealableMove(content, mon);
+  const pick = revealableMove(content, mon, side === 'player');
   if (!pick) return null;
   const def = content.moves.get(pick.moveId)!;
+  battle.drama.revealed.push(mon.uid);
+  if (side === 'player') {
+    // Beta 4.4 (Kice): your Pokémon's new move goes in the extra Hyper slot for this battle (+power, few PP), and
+    // the keep-or-skip screen comes after the fight (battle/hyperMove.ts endHyperMoves). Nothing is replaced now.
+    mon.moves.push({ id: pick.moveId, pp: Math.min(def.pp, content.balance.hyperMove.pp), hyper: true });
+    return { type: 'newMove', side, uid: mon.uid, moveId: pick.moveId, replaced: null };
+  }
   if (pick.replaces) mon.moves = mon.moves.map((m) => (m.id === pick.replaces ? { id: pick.moveId, pp: def.pp } : m));
   else mon.moves.push({ id: pick.moveId, pp: def.pp });
-  battle.drama.revealed.push(mon.uid);
   return { type: 'newMove', side, uid: mon.uid, moveId: pick.moveId, replaced: pick.replaces };
 }
 
