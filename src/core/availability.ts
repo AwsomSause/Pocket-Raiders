@@ -7,6 +7,7 @@
 
 import { z } from 'zod';
 import availabilityJson from '../data/availability.json';
+import storySpeciesJson from '../data/storySpecies.json';
 import type { Content } from './contentSchema';
 import { wildRarityWeight } from './rarity';
 import type { PoolEntry } from './themes';
@@ -24,7 +25,7 @@ export const AvailabilityRowSchema = z.object({
 export type AvailabilityRow = z.infer<typeof AvailabilityRowSchema>;
 export const AvailabilityFileSchema = z.object({ status: z.literal('suggested'), source: z.string(), species: z.record(z.string(), AvailabilityRowSchema) });
 
-const FILE = AvailabilityFileSchema.parse(availabilityJson);
+const FILE = AvailabilityFileSchema.parse({ ...availabilityJson, species: { ...availabilityJson.species, ...storySpeciesJson.availability } }); // + Story Overhaul S15 rows
 
 const rowCache = new WeakMap<Content, Map<string, AvailabilityRow | null>>();
 
