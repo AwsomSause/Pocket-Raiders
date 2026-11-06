@@ -1,0 +1,172 @@
+{
+ "events": [
+  {
+   "id": "the-contrarian",
+   "name": "The Contrarian",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f33",
+    "effect": "none"
+   },
+   "intro": "\"Up is down and down is up,\" says a trainer with a backwards cap. \"Every stat change in our fight is inverted.\"",
+   "choices": [
+    {
+     "label": "Fight the Contrarian",
+     "success": {
+      "text": "Boosts become drops, and drops become boosts.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Contrarian",
+       "classId": "psychic",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "contrary": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Leave them to it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pinch-hitter",
+   "name": "Pinch Hitter",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "\"Bottom of the ninth! Here every Pokémon that goes down gets back up once. Both sides are tough tonight.\"",
+   "choices": [
+    {
+     "label": "Step up to the plate",
+     "success": {
+      "text": "Your team gets a second wind each.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pinch Hitter",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 750
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "pinchHitter": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Stay in the dugout",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cursed-hat-trainer",
+   "name": "Trainer with a Cursed Hat",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2e1a2e",
+    "effect": "none"
+   },
+   "intro": "A trainer's tall hat twitches. \"It flips every status condition between our Pokémon, every single turn.\"",
+   "choices": [
+    {
+     "label": "Fight the hat",
+     "success": {
+      "text": "The hat hums as the battle starts.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Cursed Hat Trainer",
+       "classId": "psychic",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "cursedHat": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Back away from the hat",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

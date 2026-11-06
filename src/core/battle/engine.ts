@@ -854,7 +854,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
   battle.turn += 1;
-  eventRuleEnd(battle, events);
+  eventRuleEnd(battle, events, ctx.party);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
@@ -863,14 +863,23 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 }
 
 /** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
-export function eventRuleEnd(battle: BattleState, events: BattleEvent[]): void {
+export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?: PokemonInstance[]): void {
   const rule = battle.eventRule;
   if (!rule || battle.outcome) return;
+  const mine = party?.[battle.activeIndex];
+  if (rule.cursedHat && mine && mine.hp > 0) {
+    const foe = currentEnemy(battle);
+    if (foe.hp > 0 && (mine.status || foe.status)) {
+      [mine.status, foe.status] = [foe.status, mine.status];
+      events.push({ type: 'raid', tone: 'info', text: 'The cursed hat flips every status condition!' });
+    }
+  }
   if (rule.suddenDeath) {
     const fell = events.filter((e) => e.type === 'faint');
     if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
+  if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
 }
 
 /** Encore!: after a turn, critical hits build Hype, a miss or failed move costs some, and full Hype starts the damage boost. */
@@ -5263,6 +5272,7 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
     return false;
   }
   if (ability === 'contrary') stages = -stages;
+  if (ctx.battle.eventRule?.contrary) stages = -stages;
   if (ability === 'simple') stages *= 2;
   if (source && stages < 0 && ability) {
     const guard = DROP_GUARD[ability];
@@ -5570,6 +5580,12 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     battle.pendingEntry = [...(battle.pendingEntry ?? []).filter((side) => side !== 'enemy'), 'enemy'];
   }
   const active = ctx.party[battle.activeIndex]!;
+  if (active.hp <= 0 && battle.eventRule?.pinchHitter && !battle.storyEffects.includes(`pinch@${active.uid}`)) {
+    battle.storyEffects.push(`pinch@${active.uid}`);
+    active.hp = Math.max(1, Math.ceil(calcStats(ctx.content, active).hp / 4));
+    active.status = null;
+    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} gets back up! Pinch hitter!` });
+  }
   if (active.hp <= 0) {
     if (ctx.party.some((p) => p.hp > 0)) battle.needsSwitch = true;
     else battle.outcome = 'lose';
