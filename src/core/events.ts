@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO } from './dungeon/pseudo';
 import { repAtLeast } from './rivals/reputation';
@@ -396,7 +397,8 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
       weight:
         (cfg.rarityWeights[e.rarity] ?? 0) *
         (theme && e.types.some((t) => theme.types.includes(t)) ? cfg.themeWeight : 1) *
-        (featured.has(e.id) || e.gameEvent || e.mode ? cfg.gameEventWeight : 1),
+        (featured.has(e.id) || e.gameEvent || e.mode ? cfg.gameEventWeight : 1) *
+        modifierEventWeight(content, run, e.types),
     }))
     .filter((p) => p.weight > 0);
   if (pool.length === 0) return null;

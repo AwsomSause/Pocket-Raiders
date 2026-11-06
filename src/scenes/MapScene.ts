@@ -43,6 +43,7 @@ import { bossInfo, currentRegion, getCampaign, runLevelCap } from '../core/regio
 import { blindMap } from '../core/rules';
 import { regionRules } from '../core/battle/typeRules';
 import { arenaFor, getTheme } from '../core/themes';
+import { stageModifier } from '../core/runModifiers';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
 import { device } from '../game/deviceTools';
@@ -351,6 +352,8 @@ export class MapScene extends Phaser.Scene {
     } else {
       const blind = blindMap(run.rules);
       this.add.text(24, 12, `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
+      const stageMod = stageModifier(run);
+      if (stageMod) this.add.text(24 + 560, 14, stageMod.name, textStyle(18, hSub));
       let bx = 26;
       for (const type of blind ? [] : theme.types) {
         const b = badge(this, bx, 44, type, TYPE_COLORS[type] ?? 0x808080, 14);

@@ -3,6 +3,7 @@
 // laid an egg for turns up less. Eligibility (wild-eligible, legendary caps) is checked first. No save changes:
 // what was laid recently lives in the shared variety history (pool 'egg', core/variety.ts).
 
+import { modifierWildWeight } from './runModifiers';
 import { z } from 'zod';
 import eggsJson from '../data/eggs.json';
 import type { Content, Species } from './contentSchema';
@@ -51,7 +52,7 @@ export function nextEggTier(run: Pick<RunState, 'seed' | 'itemCounters'>, origin
 }
 
 /** Candidate first-stage species with weights for an Egg of this tier. Never empty (falls back to every wild-eligible first stage). */
-export function eggPool(content: Content, run: Pick<RunState, 'itemCounters' | 'regionOrder' | 'regionIndex' | 'history'>, tierId: string): { speciesId: string; weight: number }[] {
+export function eggPool(content: Content, run: Pick<RunState, 'seed' | 'stage' | 'itemCounters' | 'regionOrder' | 'regionIndex' | 'history'>, tierId: string): { speciesId: string; weight: number }[] {
   const rule = EGG_POOLS.tiers[eggTier(tierId).id] ?? EGG_POOLS.tiers.ordinary!;
   const region = run.regionOrder?.[run.regionIndex ?? 0];
   const ok = (s: Species) => s.evolutionStage === 1 && isWildEligible(content, s, rule.allowSpecialForms);
@@ -59,12 +60,12 @@ export function eggPool(content: Content, run: Pick<RunState, 'itemCounters' | '
   const strong = all.filter((s) => familyTopBst(content, familyId(content, s.id)) >= rule.minFinalBst);
   const recent = varietyWeight(content, run, 'egg');
   return (strong.length > 0 ? strong : all).map((s) => {
-    return { speciesId: s.id, weight: (isNative(content, s, region) ? rule.nativeWeight : 1) * recent(familyId(content, s.id)) * eggRarityWeight(content, s.id) };
+    return { speciesId: s.id, weight: (isNative(content, s, region) ? rule.nativeWeight : 1) * recent(familyId(content, s.id)) * eggRarityWeight(content, s.id) * modifierWildWeight(content, run, s.id) };
   });
 }
 
 /** Picks the species of the next Mystery-style Egg from its tier's pool. */
-export function pickEggFamily(content: Content, run: Pick<RunState, 'seed' | 'itemCounters' | 'regionOrder' | 'regionIndex' | 'history'>, origin: string, rng: Rng): string {
+export function pickEggFamily(content: Content, run: Pick<RunState, 'seed' | 'stage' | 'itemCounters' | 'regionOrder' | 'regionIndex' | 'history'>, origin: string, rng: Rng): string {
   const pool = eggPool(content, run, nextEggTier(run, origin));
   const live = pool.filter((p) => p.weight > 0);
   return rng.weighted((live.length > 0 ? live : pool.map((p) => ({ ...p, weight: 1 }))).map((p) => ({ item: p.speciesId, weight: p.weight })));

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { RUN_MODIFIERS, modifierFor, modifierWildWeight, stageModifier } from '../../src/core/runModifiers';
+import { RUN_MODIFIERS, modifierEventWeight, modifierFor, modifierWildWeight, stageModifier } from '../../src/core/runModifiers';
+import { eggPool } from '../../src/core/eggPools';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { content, toBattle } from './helpers';
 
@@ -33,5 +34,21 @@ describe('run modifiers', () => {
       return;
     }
     throw new Error('no stage with a modifier found in 200 seeds');
+  });
+  it('also weights eggs and events by the stage modifier', () => {
+    for (let i = 0; i < 200; i++) {
+      const run = structuredClone(toBattle(chooseStarter(content, createRun(content, { runId: `e${i}`, seed: `e${i}`, archetypeId: 'red' }), 0)));
+      run.stage = { ...run.stage!, index: 3 };
+      const mod = stageModifier(run);
+      if (!mod) continue;
+      const plain = eggPool(content, { ...run, stage: null }, 'ordinary');
+      const boosted = eggPool(content, run, 'ordinary');
+      for (const [k, b] of boosted.entries()) expect(b.weight).toBeCloseTo(plain[k]!.weight * modifierWildWeight(content, run, b.speciesId));
+      expect(modifierEventWeight(content, run, [mod.types[0]!])).toBe(mod.factor);
+      expect(modifierEventWeight(content, run, [])).toBe(1);
+      expect(modifierEventWeight(content, { ...run, stage: null }, [mod.types[0]!])).toBe(1);
+      return;
+    }
+    throw new Error('no stage with a modifier found');
   });
 });

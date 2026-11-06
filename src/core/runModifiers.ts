@@ -53,3 +53,9 @@ export function modifierBanner(content: Content, run: Pick<RunState, 'seed' | 's
   const mod = stageModifier(run);
   return mod && modifierWildWeight(content, run, speciesId) > 1 ? mod.banner : null;
 }
+
+/** Event odds multiplier: the modifier's factor if the event shares one of its types (events carry types too). */
+export function modifierEventWeight(content: Content, run: Pick<RunState, 'seed' | 'stage' | 'regionIndex'>, eventTypes: readonly string[]): number {
+  const mod = content.balance.runModifiers.enabled ? stageModifier(run) : null;
+  return mod && eventTypes.some((t) => (mod.types as string[]).includes(t)) ? mod.factor : 1;
+}
