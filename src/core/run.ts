@@ -2369,8 +2369,11 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
   if (!run.battle!.hypeLoaded) {
     run.battle!.hype = run.hype;
     run.battle!.hypeLoaded = true;
+    run.battle!.firstOfDay = run.clock.lastBattleDay !== run.clock.day;
+    run.clock.lastBattleDay = run.clock.day;
   }
   return {
+    period: periodOf(run),
     content: battleContent(content, run.rules, run.regionOrder[run.regionIndex]),
     battle: run.battle!,
     party: run.party,

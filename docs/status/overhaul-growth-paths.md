@@ -33,3 +33,12 @@ New counters in the same `growth` record (no save change). Node events credit th
 - Pathfinder (10 battles won with no one fainting), Frontline Pet (4 shops visited), Egg Warm (2 eggs hatched), Treasure Nose (5 field items from wild nodes: hidden item or catch drop), Move Collector (3 TM/tutor moves taught, credited to the learner), Caretaker (5 berries fed to it, credited to the fed Pokémon).
 - Read from what the run already keeps: Shiny Glint (shiny, 10+ battles), Elder (most battles, 20+), Late Bloomer (most evolutions, 2+), Trainer Pet (top trust+affection, 200+), Prodigy (first to reach level 30).
 Still unplayed (61): Free Spirit (no wandering mechanic), Cheerleader (no morale boost), Fast Learner (profile mastery, not per run), time of day, in-battle turns/healing. Tests: `tests/unit/overhaulGrowth.test.ts`.
+
+## Batch 5: time of day and weather (7 more, 52 of 106 play)
+Uses the run clock's period (`periodOf`, passed to the battle as `ctx.period`) and the battle's weather and Tailwind. Counters in `story/hooks.ts`; once-per-battle marks in `battle.growthMarks`, first battle of a clock day in `battle.firstOfDay` and `clock.lastBattleDay` (all optional, no save bump):
+- Night Owl (3 wins at night): +5% damage in night battles. Sunbather (3 wins in the morning or afternoon): +5% damage by day. Evening counts as neither.
+- Moonlit (Fairy type, 6 Fairy attacks at night): +5% Fairy damage at night.
+- Dawn Runner (2 wins that were the first battle of a clock day): +3% Speed in the first battle of a day.
+- Weather-Wise (3 battles with weather up): +3% accuracy in any weather. Storm Chaser (3 battles where the weather was set twice or more): +3% Speed in rain and snow.
+- Windrunner (Flying type, 5 turns it moved first under its own Tailwind): +3% Speed under its own Tailwind. The game has no gale weather, so only Tailwind counts.
+Each needs the single top count in the party. Tests: `tests/unit/overhaulGrowth.test.ts`.

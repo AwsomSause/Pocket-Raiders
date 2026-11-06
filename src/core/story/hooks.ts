@@ -3,7 +3,8 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
-import { bumpGrowth, hitCounters, moveCounters, noteGrowthKo } from '../overhaul/growth';
+import { periodOf } from '../clock';
+import { bumpGrowth, bumpGrowthOnce, hitCounters, moveCounters, noteGrowthKo } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
@@ -138,6 +139,10 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
     triggers.push({ ...makeTrigger(run, def, at, triggers.length, { name: speciesOf(a.uid), other: speciesOf(b.uid) }, null, a.uid), combat: false });
   };
 
+  // Windrunner: the player's Pokémon moved before the foe this turn while its own Tailwind was up.
+  const firstMove = events.find((e) => e.type === 'move');
+  if (firstMove?.type === 'move' && firstMove.side === 'player' && active.player && prior.sideEffects.player.tailwind > 0) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['turnTailwind']);
+
   events.forEach((e, i) => {
     switch (e.type) {
       case 'move':
@@ -145,12 +150,22 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         if (e.side === 'player' && active.player) {
           const mv = content.moves.get(e.moveId);
           const me = mon(active.player);
-          if (mv && me) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveCounters({ accuracy: mv.accuracy, category: mv.category, type: mv.type, flags: mv.flags, hpFrac: me.hp / Math.max(1, maxHp(content, me)) }));
+          if (mv && me) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveCounters({ accuracy: mv.accuracy, category: mv.category, type: mv.type, flags: mv.flags, hpFrac: me.hp / Math.max(1, maxHp(content, me)), night: periodOf(run) === 'night' }));
         }
         emit(content, run, 'moveUsed', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, moveId: e.moveId } });
         if (e.side === 'player' && active.player) {
           const t = signatureMove(content, run, active.player, e.moveId, i, triggers.length);
           if (t) triggers.push(t);
+        }
+        break;
+      case 'weather':
+        // Weather-Wise and Storm Chaser: the battle had weather; a second weather event means it changed (once per battle each).
+        if (active.player && run.story.histories[active.player]) {
+          const cfg = content.balance.overhaulGrowth;
+          const marks = (battle.growthMarks ??= []);
+          bumpGrowthOnce(cfg, run.story.histories[active.player], marks, active.player, 'battleWeather');
+          marks.push('weatherEvent');
+          if (marks.filter((m) => m === 'weatherEvent').length >= 2) bumpGrowthOnce(cfg, run.story.histories[active.player], marks, active.player, 'battleChange');
         }
         break;
       case 'switchIn':
@@ -516,6 +531,14 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const totalHp = run.party.reduce((sum, m) => sum + maxHp(content, m), 0);
   const hpLeft = run.party.reduce((sum, m) => sum + m.hp, 0);
   const result = battle.outcome!;
+  // Night Owl, Sunbather, Dawn Runner: every Pokémon that fought in a won battle counts it.
+  if (result === 'win') {
+    const period = periodOf(run);
+    for (const uid of fought) {
+      const counters = [period === 'night' ? 'winNight' : period === 'evening' ? '' : 'winDay', battle.firstOfDay ? 'winFirst' : ''].filter(Boolean);
+      bumpGrowth(content.balance.overhaulGrowth, run.story.histories[uid], counters);
+    }
+  }
   // Heated Rivalry counts the battles each of your Pokémon fought each opposing species.
   for (const [uid, species] of Object.entries(battle.hyper.met ?? {})) {
     const history = run.story.histories[uid];
