@@ -2595,6 +2595,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('rivalPath'), path: z.enum(['friend', 'rival', 'between']) }),
   /** Living Rival: a rival you beat in your last meeting (it has something to prove). */
   z.object({ kind: z.literal('rivalBeaten') }),
+  /** W5: reputation of a category at this level or higher (rivals/reputation.ts). */
+  z.object({ kind: z.literal('rep'), category: z.enum(['champion', 'rival', 'bond', 'villain', 'strategy', 'exploration', 'legendary']), atLeast: z.enum(['noted', 'known', 'renowned']) }),
+  /** W5: badges won so far this run. */
+  z.object({ kind: z.literal('badges'), atLeast: z.number().int().min(1) }),
   /** §11/§29: a Pokémon rival is still out there (`open`), rides with a trainer rival (`carried`), or gave itself up (`sacrificed`), or any of these (`any`). */
   z.object({ kind: z.literal('monRival'), state: z.enum(['open', 'carried', 'sacrificed', 'any']) }),
   /** Event Director: a party member with a species tag (legendary, mythical, delta, zform...). */
@@ -3042,6 +3046,14 @@ export const EventDefSchema = z.object({
   /** The map stop it shows as (each has its own icon): event, merchant, shrine, treasure... */
   stop: z.string().default('event'),
   rarity: z.enum(EVENT_RARITIES).default('common'),
+  /** W5: tags (events/priority.ts EVENT_TAGS); empty means the defaults for its group. */
+  tags: z.array(z.enum(['Combat', 'Exploration', 'Trainer', 'Rival', 'Pokémon', 'Shop', 'Story', 'Mystery', 'Dungeon', 'Relationship', 'Region', 'Legendary', 'Evil Team', 'Survival', 'Treasure', 'Recovery'])).default([]),
+  /** W5: a Critical (forced) event: never random, always placed (queued if the map is full). */
+  forced: z.boolean().default(false),
+  /** W5: overrides the base priority (forced events 70 to 100). */
+  priority: z.number().int().min(0).max(100).optional(),
+  /** W5: off until the system it needs exists (dungeons, pseudo stages). Never drawn, never queued. */
+  disabled: z.boolean().default(false),
   /** Stages themed with these types see it more often. */
   types: z.array(TypeNameSchema).default([]),
   /** Not before this stage of the run (1 = the first). */
