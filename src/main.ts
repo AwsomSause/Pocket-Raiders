@@ -60,6 +60,7 @@ import { installOverlays } from './ui/overlays';
 import { enterTransition } from './ui/transitions';
 import { installErrorLog, packStore, registerOffline, watchForUpdates } from './game/deviceTools';
 import { loadStoredPacks } from './core/tools/modPacks';
+import { hookNames, registerCueHook, unregisterCueHook } from './core/presentation/hooks';
 import './style.css';
 import { installPortraitRotate } from './ui/portraitRotate';
 
@@ -89,7 +90,7 @@ function openStorage(): { storage: StorageProvider; warning?: string } {
 
 function start(): void {
   installErrorLog();
-  const packs = loadStoredPacks(packStore);
+  const packs = loadStoredPacks(packStore, getContent());
   for (const p of packs.problems) console.warn(`A stored mod pack was skipped: ${p}`);
   let session: GameSession;
   try {
@@ -100,6 +101,9 @@ function start(): void {
     showFatalError(err instanceof Error ? err.message : String(err));
     return;
   }
+
+  // Plugin API (S344): `pkrPlugins.onCues(name, fn)` lets a script reshape battle presentation cues; it can never change an outcome.
+  (window as unknown as { pkrPlugins: unknown }).pkrPlugins = { onCues: registerCueHook, remove: unregisterCueHook, list: hookNames };
 
   installTouchControls();
   const game = new Phaser.Game({
