@@ -4,6 +4,7 @@
 // `run.encountersCompleted`. Numbers live in data/care.json.
 
 import { adjustBond, bondOf } from '../bond';
+import { heartbondCare } from '../story2/heartbond';
 import type { Content } from '../contentSchema';
 import { seasonOf } from '../clock';
 import { warmEggs } from '../eggs';
@@ -365,6 +366,7 @@ export function careAction(content: Content, current: RunState, partyIndex: numb
       message = care.ace ? `${name} is now your ace.` : `${name} is no longer your ace.`;
       break;
   }
+  heartbondCare(run, mon.uid, 'care_touch', `care${run.encountersCompleted}`, Object.values(care.done).reduce((a, n) => a + n, 0));
   return { run, message };
 }
 
@@ -420,6 +422,8 @@ export function careRest(run: RunState, content?: Content): string[] {
   const out: string[] = [];
   if (content?.balance.careEffects) swapForms(content, run);
   for (const m of run.party) if (m.care?.holdEvolve) { delete m.care.holdEvolve; out.push(m.uid); }
+  const partner = run.story.v2?.heartbond.partner;
+  if (partner) heartbondCare(run, partner, 'rest_together', `rest${run.encountersCompleted}`, 0);
   return out;
 }
 

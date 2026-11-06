@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adjustBond, bondOf } from '../../src/core/bond';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
+import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
 import { content } from './helpers';
@@ -136,5 +136,15 @@ describe('battle hooks', () => {
     const { run } = setup();
     run.story.v2 = undefined;
     expect(heartbondTurn(run, 'b', 1, [{ type: 'hyper', side: 'player', uid: 'x' }]).paid).toEqual([]);
+  });
+});
+
+describe('care hooks', () => {
+  it('care and rest pay the partner only, capped per stop', () => {
+    const { run, uid } = setup();
+    expect(heartbondCare(run, uid, 'care_touch', 'c1', 1).paid).toEqual(['care_touch']);
+    expect(heartbondCare(run, uid, 'care_touch', 'c1', 1).paid).toEqual([]);
+    expect(heartbondCare(run, 'other', 'care_touch', 'c1', 2).paid).toEqual([]);
+    expect(heartbondCare(run, uid, 'rest_together', 'r1', 0).paid).toEqual(['rest_together']);
   });
 });
