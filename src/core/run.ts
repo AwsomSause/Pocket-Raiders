@@ -337,7 +337,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     attributeModifiers: withTokenAttribute(content, prep, { ...zeroAttributes(), ...startingAttributes(archetype.modifiers) }),
     rng,
     nextUid: 1,
-    log: { rewardsTaken: [], battlesWon: 0, counters: {}, speciesSeen: [], speciesCaught: [], speciesShiny: [], charmUsedInRegion: false, defeatedBy: null, starterUid: null },
+    log: { rewardsTaken: [], battlesWon: 0, counters: {}, speciesSeen: [], speciesCaught: [], speciesShiny: [], dexTally: {}, charmUsedInRegion: false, defeatedBy: null, starterUid: null },
     story: seedTreasureHunt(seedNpcMemory(withChampionTeam(createStoryState(), opts.runHistory ?? []), opts.npcMemory), opts.treasureHunt),
     partyLife: createPartyLife(),
     clock: freshClock(),
