@@ -1274,6 +1274,13 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
   return battle?.kind === "trainer" && battle.apprentice === true;
 }
 
+/** A story fight inside an event: against a rival, an evil team member, a ghost or retired champion. Losing it never ends a run. */
+export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
+  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  return battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired);
+}
+
 /** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
 export function isPseudoBattle(content: Content, event: EventBattleRef): boolean {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
