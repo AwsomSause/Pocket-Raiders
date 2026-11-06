@@ -101,8 +101,9 @@ describe('minigame payouts', () => {
         expect(money / 30, `${def.id} tier ${tier + 1}`).toBeLessThanOrEqual(best);
       }
     }
+    // Grows with every minigame added (about 95 s alone on a fast box), so the old 120 s limit timed out on loaded CI runners.
     report.push('');
-  }, 120000);
+  }, 400000);
 
   it('writes the report when asked', () => {
     if (process.env.BALANCE_REPORT) writeFileSync('docs/plans/balance-report.md', `${report.join('\n')}\n`);
