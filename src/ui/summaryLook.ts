@@ -1,7 +1,7 @@
 // What the Pokémon summary (summaryMenu.ts) shows, worked out without Phaser so
 // it can be tested: types, ability, held items, stats, moves, its story this run.
 
-import { natureEffectText, natureName } from '../core/natures';
+import { effectiveNature, natureEffectText, natureName } from '../core/natures';
 import { abilityStatus } from '../core/battle/abilities';
 import type { Content, StatName } from '../core/contentSchema';
 import { abilityOf, calcStats, getSpecies, maxPp } from '../core/pokemon';
@@ -46,7 +46,7 @@ export function summaryInfo(content: Content, run: RunState | null, mon: Pokemon
     name: species.name,
     level: mon.level,
     types: [...species.types],
-    nature: mon.nature ? `${natureName(mon.nature)} (${natureEffectText(mon.nature)})` : null,
+    nature: effectiveNature(mon) ? `${natureName(effectiveNature(mon)!)} (${natureEffectText(effectiveNature(mon)!)})${mon.tempNature && mon.tempNature.battles > 0 ? ` · fleeting, ${mon.tempNature.battles} battle${mon.tempNature.battles === 1 ? '' : 's'} left` : ''}` : null,
     ability: ability ? { name: ability.name, text: `${ability.description}${abilityStatus(ability.id) === 'pending' ? ' (not working in battle yet)' : ''}` } : null,
     held: Object.entries(mon.held ?? {}).map(([id, count]) => ({ id, name: content.catalog.get(id)?.name ?? id, icon: content.items.get(id)?.iconAssetId ?? null, count })),
     stats: (Object.keys(STAT_LABELS) as StatName[]).map((key) => ({ key, label: STAT_LABELS[key], value: stats[key], base: species.baseStats[key], boosted: (mon.vitamins[key] ?? 0) > 0 || (mon.statBoosts?.[key] ?? 0) > 0 })),

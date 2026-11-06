@@ -2835,6 +2835,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     for (const mon of run.party) {
       if (mon.hp > 0 && battle.participants.includes(mon.uid)) changeFriendship(content, mon, boss ? perBossWon : perBattleWon, gainMultiplier);
     }
+    // A temporary mint wears off after the set number of won battles (S418).
+    for (const mon of run.party) {
+      if (mon.tempNature && battle.participants.includes(mon.uid)) {
+        if (mon.tempNature.battles <= 1) delete mon.tempNature;
+        else mon.tempNature = { ...mon.tempNature, battles: mon.tempNature.battles - 1 };
+      }
+    }
     // Shadow Pokémon that fought are soothed; at 0 the haze lifts.
     shadowPurified = soothePartyAfterBattle(content, run, battle.participants, shadowStages);
     // Freeing a Pokémon from the haze is a kindness the world remembers.
