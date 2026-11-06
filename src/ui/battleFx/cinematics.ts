@@ -21,7 +21,7 @@ import { evolveLook } from './evolveStyles';
 import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { Beat } from './spectacle';
-import { CINE_ASSETS, CINE_MS, DYNAMAX_SCALE, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
+import { CINE_ASSETS, CINE_MS, DYNAMAX_SCALE, DYNAMAX_LONG_MS, DYNAMAX_LONG_SWAP_AT, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
 import { FORM_LOOK_ASSETS } from './formLook';
 import shards from './primegaShards.json';
 
@@ -50,6 +50,12 @@ export interface CineOptions {
   shake?: number;
   /** Shows the new form; may return its sprite (an evolution fades it in from white). */
   onSwap: () => Visual | void;
+  /** Dynamax: makes the trainer's sprite for the ball-throw intro (nothing for a wild or enemy side). */
+  trainer?: () => Visual | null;
+  /** Dynamax (full version): the trainer's front-facing sprite, who turns to face the player and raises the Dynamax Band. */
+  trainerFront?: () => Visual | null;
+  /** "Fast Dynamax": play the short cutscene instead of the full one. */
+  fast?: boolean;
   depth?: number;
 }
 
@@ -83,7 +89,8 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];
   const reduced = o.motion === 'reduced';
-  const total = (reduced ? 700 : CINE_MS[o.kind]) / o.speed;
+  const longDx = (o.kind === 'dynamax' || o.kind === 'gigantamax') && !o.fast;
+  const total = (reduced ? 700 : longDx ? DYNAMAX_LONG_MS : CINE_MS[o.kind]) / o.speed;
   const at = (ms: number, fn: () => void) => timers.push(scene.time.delayedCall(ms / o.speed, fn));
   const has = (k: string) => scene.textures.exists(k);
   const add = <T extends Phaser.GameObjects.GameObject>(obj: T): T => {
@@ -162,7 +169,8 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   } else if (o.kind === 'tera') {
     teraCrystal();
   } else if (o.kind === 'dynamax' || o.kind === 'gigantamax') {
-    giantBall();
+    if (longDx) giantBallLong();
+    else giantBall();
   } else if (o.kind === 'evolve') {
     evolve();
   } else if (o.kind === 'dynamaxEnd') {
@@ -434,6 +442,120 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: g, alpha: 0, duration: 450, delay: 450 });
   }
 
+  // The full Dynamax scene, beat for beat after the reference: the Pokémon is
+  // recalled into its ball, the trainer turns to face the player and raises the
+  // Dynamax Band, the ball swells pink, is thrown up and slams down (the screen
+  // shakes), and the giant Pokémon bursts out as a silhouette on pink rays,
+  // flashing red as it roars.
+  function giantBallLong(): void {
+    const grow = o.kind === 'gigantamax' ? 1.3 : DYNAMAX_SCALE;
+    const swapAt = DYNAMAX_LONG_SWAP_AT;
+    const ballKey = 'pack.ebdx.tr.ball';
+    const ground = o.y + 70;
+    bars();
+    sound('ess-flash2', 0.5);
+    // 0-700: the ball opens and the Pokémon, flushed pale pink, is called back into it.
+    const ball = has(ballKey)
+      ? add(scene.add.image(o.x - 20, ground, ballKey).setDepth(depth + 5).setScale(0.3).setAlpha(0))
+      : add(scene.add.circle(o.x - 20, ground, 14, 0xff3060).setDepth(depth + 5).setAlpha(0));
+    tw({ targets: ball, alpha: 1, duration: 120, delay: 200 });
+    if (oldSprite?.active) {
+      at(0, () => oldSprite.active && oldSprite.setTint(0xf8b0f0));
+      tw({ targets: oldSprite, scale: 0, y: ground, duration: 300, delay: 400, ease: 'Cubic.easeIn' });
+      at(300, () => sound('ess-refresh', 0.7));
+    }
+    // 700-1100: the trainer slides in from the side, facing the player.
+    const trainer = o.trainerFront?.() ?? o.trainer?.() ?? null;
+    if (trainer) {
+      const tx = o.x - 190;
+      add(trainer).setDepth(depth + 4).setPosition(-120, ground + 40).setScale(trainer.scale * 0.9).setAlpha(1);
+      tw({ targets: trainer, x: tx, duration: 400, delay: 700, ease: 'Sine.easeOut' });
+      tw({ targets: ball, x: o.x - 130, duration: 400, delay: 700, ease: 'Sine.easeOut' });
+      // 1900-2300: …and leaves again as the scene floods pink.
+      tw({ targets: trainer, x: tx - 500, scale: trainer.scale * 2, alpha: 0, duration: 450, delay: 2300, ease: 'Cubic.easeIn' });
+    }
+    // 1200-1900: the Dynamax Band rises above the trainer with a white outline.
+    const bandKey = keyItemFor(o.kind, o.crystal);
+    if (bandKey && has(bandKey)) {
+      const bx = o.x - 190;
+      const by = ground - 150;
+      const halo = add(scene.add.image(bx, by, bandKey).setDepth(depth + 6).setAlpha(0));
+      halo.setTintFill(0xffffff).setScale(60 / Math.max(halo.width, halo.height) * 1.18);
+      const band = add(scene.add.image(bx, by, bandKey).setDepth(depth + 7).setAlpha(0));
+      band.setScale(60 / Math.max(band.width, band.height));
+      tw({ targets: [halo, band], y: by - 24, alpha: 1, duration: 450, delay: 1200, ease: 'Back.easeOut' });
+      tw({ targets: [halo, band], alpha: 0, duration: 200, delay: 2000 });
+      at(1250, () => sound('ess-twine', 0.6));
+    }
+    // 1900-2300: the ball swells and turns pink.
+    at(2000, () => sound('ess-flash2', 0.8));
+    tw({ targets: ball, scale: has(ballKey) ? 0.45 : 1.5, duration: 300, delay: 2000, ease: 'Back.easeOut' });
+    at(2000, () => (ball as Phaser.GameObjects.Image).setTint?.(0xff3399));
+    // The pink field, rays and the darkness it fades back from.
+    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0xe83a8c, 0).setDepth(depth));
+    tw({ targets: pink, fillAlpha: 1, duration: 380, delay: 2300 });
+    at(2300, () => {
+      whiteFlash(0.6);
+      if (has('cine.raid.transitions.impact')) {
+        const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
+        rays.setScale(rays.scaleX * 1.6);
+        tw({ targets: rays, angle: 30, duration: swapAt - 2300 + 1200 });
+        tw({ targets: rays, alpha: 0, duration: 900, delay: swapAt - 2300 + 400 });
+      }
+    });
+    // 2700-3300: the ball falls from above and slams down; the screen shakes four times.
+    at(2700, () => {
+      ball.setPosition(o.x, -80).setScale(has(ballKey) ? 0.45 : 1.5).setAlpha(1);
+      tw({ targets: ball, y: ground - 10, duration: 260, ease: 'Quad.easeIn' });
+    });
+    for (const [i, t] of [2960, 3060, 3160, 3240].entries()) {
+      at(t, () => {
+        if (i === 0) sound('ess-explosion', 0.9);
+        if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(90 / o.speed, (0.014 - i * 0.003) * (o.shake ?? o.intensity));
+      });
+    }
+    at(3300, () => sound('ess-refresh', 0.8));
+    // 3300-4100: the Pokémon swells out of the ball as a white silhouette, then turns Max red.
+    let ghost: Phaser.GameObjects.Image | null = null;
+    if (oldSprite?.texture && oldSprite.texture.key !== '__MISSING') {
+      // The Pokémon's own frame, drawn above the pink at its resting place.
+      const m = oldSprite.getWorldTransformMatrix();
+      const bs = Math.abs(m.scaleX) > 0.01 ? Math.abs(m.scaleX) : 1;
+      at(3300, () => {
+        ghost = add(scene.add.image(o.x, ground, oldSprite.texture.key, oldSprite.frame?.name).setOrigin(oldSprite.originX, oldSprite.originY).setDepth(depth + 3).setScale(bs * 0.1));
+        ghost.setTintFill(0xffffff);
+        tw({ targets: ghost, scale: bs * grow, duration: 800, ease: 'Cubic.easeOut' });
+        tw({ targets: ghost, y: m.ty, duration: 800, ease: 'Cubic.easeOut' });
+        ghost.setX(m.tx);
+      });
+      at(3700, () => {
+        if (!ghost?.active) return;
+        ghost.clearTint();
+        ghost.setTint(0xfa3960);
+      });
+    }
+    at(3300, () => tw({ targets: ball, alpha: 0, scale: 0.9, duration: 260 }));
+    if (has('pack.dbk.burst')) {
+      const glow = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3).setAlpha(0));
+      tw({ targets: glow, scale: 2.4, alpha: 0.8, duration: 800, delay: 3300, yoyo: true });
+    }
+    // 4100: the giant Pokémon is there; it roars with the pulse, flashing and shaking.
+    at(swapAt, () => {
+      ghost?.setVisible(false);
+      swap();
+      sound('ess-explosion', 0.9);
+      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(420 / o.speed, 0.014 * (o.shake ?? o.intensity));
+      if (has('cine.dbk.tera.pulse')) {
+        const ring = add(scene.add.image(o.x, o.y, 'cine.dbk.tera.pulse').setTint(0xfa3960).setBlendMode('ADD').setDepth(depth + 4).setScale(0.3));
+        tw({ targets: ring, scale: 5, alpha: 0, duration: 800, ease: 'Quad.easeOut' });
+      }
+    });
+    for (const t of [swapAt + 120, swapAt + 320, swapAt + 560]) at(t, () => whiteFlash(0.3));
+    // The pink lifts and the battle returns.
+    tw({ targets: pink, fillAlpha: 0, duration: 1000, delay: swapAt + 500 });
+    fadeAll();
+  }
+
   // The Dynamax scene, after the reference footage: the screen floods pink with
   // light rays, the Pokémon is a white silhouette that swells to giant size,
   // takes on red Max energy, then the scene fades to dark and the battle
@@ -445,13 +567,30 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     bars();
     // The pink field and slowly turning rays.
     const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0xe83a8c, 0).setDepth(depth));
-    tw({ targets: pink, fillAlpha: 1, duration: 320 });
-    if (has('cine.raid.transitions.impact')) {
-      const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
-      rays.setScale(rays.scaleX * 1.6);
-      tw({ targets: rays, angle: 25, duration: swapAt });
+    // First the trainer's throw (the reference's opening): the ball flies to the Pokémon, which is called back into it.
+    const trainer = o.trainer?.() ?? null;
+    if (trainer) {
+      add(trainer).setDepth(depth + 4).setScale(trainer.scale * 0.45).setPosition(o.x - 170, o.y + 90).setAlpha(0);
+      tw({ targets: trainer, alpha: 1, duration: 140 });
+      tw({ targets: trainer, alpha: 0, duration: 200, delay: 560 });
+      if (has('pack.ebdx.tr.ball')) {
+        const ball = add(scene.add.image(o.x - 150, o.y + 30, 'pack.ebdx.tr.ball').setDepth(depth + 5).setScale(0.22).setTint(0xff6080).setAlpha(0));
+        tw({ targets: ball, alpha: 1, duration: 60, delay: 160 });
+        tw({ targets: ball, x: o.x, duration: 300, delay: 160, ease: 'Sine.easeOut' });
+        tw({ targets: ball, y: o.y - 60, duration: 150, delay: 160, ease: 'Quad.easeOut' });
+        tw({ targets: ball, y: o.y, duration: 150, delay: 310, ease: 'Quad.easeIn' });
+        tw({ targets: ball, alpha: 0, scale: 0.6, duration: 160, delay: 480 });
+      }
     }
-    if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.35, depth + 1);
+    tw({ targets: pink, fillAlpha: 1, duration: 260, delay: 480 });
+    at(480, () => {
+      if (has('cine.raid.transitions.impact')) {
+        const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
+        rays.setScale(rays.scaleX * 1.6);
+        tw({ targets: rays, angle: 25, duration: swapAt });
+      }
+      if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.35, depth + 1);
+    });
     // The darkness the scene fades into just before the battle comes back.
     const dark = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x14060e, 0).setDepth(depth + 6));
     tw({ targets: dark, fillAlpha: 1, duration: 420, delay: swapAt - 520 });
@@ -464,7 +603,10 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       ghost = add(scene.add.image(m.tx, m.ty, oldSprite.texture.key, oldSprite.frame?.name).setOrigin(oldSprite.originX, oldSprite.originY).setScale(base).setDepth(depth + 3));
       ghost.setTintFill(0xffffff);
       oldSprite.setAlpha(0);
-      tw({ targets: ghost, scale: base * grow, duration: 1150, delay: 350, ease: 'Cubic.easeOut' });
+      // Called back into the ball, then it reappears on the pink and swells.
+      tw({ targets: ghost, scale: base * 0.05, duration: 220, delay: 300, ease: 'Cubic.easeIn' });
+      at(780, () => ghost?.active && ghost.setScale(base * 0.4));
+      tw({ targets: ghost, scale: base * grow, duration: 850, delay: 800, ease: 'Cubic.easeOut' });
       // White turns to red Max energy as it reaches full size.
       at(1450, () => {
         if (!ghost?.active) return;
@@ -474,10 +616,10 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       });
     } else if (oldSprite?.active) {
       oldSprite.setTintFill(0xffffff);
-      tw({ targets: oldSprite, scale: oldSprite.scale * grow, duration: 1150, delay: 350, ease: 'Cubic.easeOut' });
+      tw({ targets: oldSprite, scale: oldSprite.scale * grow, duration: 1000, delay: 800, ease: 'Cubic.easeOut' });
     }
     const glow = has('pack.dbk.burst') ? add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3).setAlpha(0)) : null;
-    if (glow) tw({ targets: glow, scale: 2.2, alpha: 0.8, duration: 1000, delay: 450, yoyo: true });
+    if (glow) tw({ targets: glow, scale: 2.2, alpha: 0.8, duration: 900, delay: 700, yoyo: true });
     at(1450, () => {
       sound('ess-explosion', 0.9);
       if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(380 / o.speed, 0.012 * (o.shake ?? o.intensity));

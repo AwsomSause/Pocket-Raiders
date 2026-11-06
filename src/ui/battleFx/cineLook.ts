@@ -36,3 +36,7 @@ export const SWAP_AT: Record<CineKind, number> = { mega: 2900, primal: 1350, dyn
 
 /** How much larger a Dynamaxed Pokémon is drawn than normal (after the reference footage: it towers over the field). */
 export const DYNAMAX_SCALE = 2.1;
+
+/** The full Dynamax scene's length and the moment the giant Pokémon appears (the short "Fast Dynamax" scene uses CINE_MS / SWAP_AT). */
+export const DYNAMAX_LONG_MS = 5600;
+export const DYNAMAX_LONG_SWAP_AT = 4100;
