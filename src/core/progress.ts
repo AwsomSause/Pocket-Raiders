@@ -22,7 +22,7 @@ import type { Payout, Profile, RunState } from './state';
 import { topMoments } from './story/record';
 import { awardContracts, type ContractPayout } from './contracts';
 import { awardGameEvents, type GameEventPayout } from './gameEvents';
-import { awardModeRewards, type ModeRewardPaid } from './modeRewards';
+import { awardModeRewards, awardMilestoneChests, type ModeRewardPaid } from './modeRewards';
 import { recordMoveMastery } from './moveMastery';
 import { relationshipCounters } from './relationships';
 import { hasPerk } from './mapItems';
@@ -335,7 +335,7 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
     profile.stamps ??= {};
     for (const stamp of runStamps(run)) profile.stamps[stamp] = (profile.stamps[stamp] ?? 0) + 1;
   }
-  const modeRewards = counts ? awardModeRewards(profile, run, now) : [];
+  const modeRewards = counts ? [...awardModeRewards(profile, run, now), ...awardMilestoneChests(content, profile, run, now)] : [];
   const gameEvents = counts ? awardGameEvents(content, profile, run, { ...run.log.counters, runsFinished: 1, runsWon: run.victory ? 1 : 0 }, now) : [];
 
   const contracts = counts ? awardContracts(profile, { ...run.log.counters, runsWon: run.victory ? 1 : 0 }, new Date(now), now) : [];
