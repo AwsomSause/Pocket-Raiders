@@ -1023,7 +1023,8 @@ export class MapScene extends Phaser.Scene {
           this.scene.restart({ notice: 'The Repel kept wild Pokémon away!', focus: 0 });
           break;
         }
-        let delay = this.travel(option.node);
+        // The Circuit's Fork Gate stops the walk at the gym door: the player has not moved yet.
+        let delay = run.phase === 'decision' && run.pending[0]?.kind === 'circuit' ? 0 : this.travel(option.node);
         // An obstacle crossed (or gone round) on the way: say what happened before the battle (ideas W4).
         if (session.lastCrossing) {
           if (this.notice) fitBlock(this.notice, 300, 48, session.lastCrossing);
