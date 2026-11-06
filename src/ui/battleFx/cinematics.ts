@@ -21,7 +21,7 @@ import { evolveLook } from './evolveStyles';
 import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { Beat } from './spectacle';
-import { CINE_ASSETS, CINE_MS, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
+import { CINE_ASSETS, CINE_MS, DYNAMAX_SCALE, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
 import { FORM_LOOK_ASSETS } from './formLook';
 import shards from './primegaShards.json';
 
@@ -312,58 +312,60 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     tw({ targets: g, alpha: 0, duration: 450, delay: 450 });
   }
 
-  // Deluxe Battle Kit's Dynamax scene: the Pokémon is called back into its
-  // ball, the ball swells with red Max energy, flies up, slams down onto the
-  // field and bursts open on the giant Pokémon.
+  // The Dynamax scene, after the reference footage: the screen floods pink with
+  // light rays, the Pokémon is a white silhouette that swells to giant size,
+  // takes on red Max energy, then the scene fades to dark and the battle
+  // returns with the giant Pokémon standing in it.
   function giantBall(): void {
+    const grow = o.kind === 'gigantamax' ? 1.3 : DYNAMAX_SCALE;
+    const ms = CINE_MS[o.kind];
+    const swapAt = SWAP_AT[o.kind];
     bars();
-    if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.8);
-    for (const [k, dir, size] of [['spiral', 1, 1.1], ['spiral2', -1, 1.4]] as const) {
-      const key = `cine.raid.max.${k}`;
-      if (!has(key)) continue;
-      const sp = add(scene.add.image(o.x, o.y, key).setBlendMode('ADD').setDepth(depth + 1).setScale(0.2).setAlpha(0.8));
-      tw({ targets: sp, scale: size * 0.6, angle: dir * 360, duration: CINE_MS[o.kind] - 300, ease: 'Sine.easeInOut' });
+    // The pink field and slowly turning rays.
+    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0xe83a8c, 0).setDepth(depth));
+    tw({ targets: pink, fillAlpha: 1, duration: 320 });
+    if (has('cine.raid.transitions.impact')) {
+      const rays = cover('cine.raid.transitions.impact', 0.55, depth + 1);
+      rays.setScale(rays.scaleX * 1.6);
+      tw({ targets: rays, angle: 25, duration: swapAt });
     }
-    // Recalled: the Pokémon turns red and shrinks into the ball.
-    if (oldSprite?.active) {
-      oldSprite.setTintFill(0xff3060);
-      tw({ targets: oldSprite, scale: 0, alpha: 0.4, duration: 320, ease: 'Cubic.easeIn' });
-    }
+    if (has('cine.raid.max.bg')) cover('cine.raid.max.bg', 0.35, depth + 1);
+    // The darkness the scene fades into just before the battle comes back.
+    const dark = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x14060e, 0).setDepth(depth + 6));
+    tw({ targets: dark, fillAlpha: 1, duration: 420, delay: swapAt - 520 });
     sound('ess-flash2', 0.7);
-    const ball = has('pack.ebdx.tr.ball')
-      ? add(scene.add.image(o.x, o.y, 'pack.ebdx.tr.ball').setDepth(depth + 4).setScale(0.05).setAlpha(0))
-      : add(scene.add.circle(o.x, o.y, 120, 0xff3060).setDepth(depth + 4).setScale(0.05).setAlpha(0));
-    tw({ targets: ball, alpha: 1, duration: 120, delay: 300 });
-    // It swells with Max energy…
-    tw({ targets: ball, scale: 0.9, duration: 550, delay: 350, ease: 'Back.easeOut' });
-    at(450, () => (ball as Phaser.GameObjects.Image).setTint?.(0xff6080));
-    const glow = has('pack.dbk.burst') ? add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 3).setScale(0.2).setAlpha(0)) : null;
-    if (glow) tw({ targets: glow, scale: 1.2, alpha: 0.9, duration: 500, delay: 400, yoyo: true, hold: 200 });
-    // …rises off the top of the screen…
-    tw({ targets: [ball, ...(glow ? [glow] : [])], y: -200, duration: 360, delay: 950, ease: 'Back.easeIn' });
-    // …and slams down onto the field.
-    at(1350, () => {
-      ball.setPosition(o.x, -200).setScale(1.4);
-      tw({ targets: ball, y: o.y + 40, duration: 220, ease: 'Quad.easeIn' });
-    });
-    at(1580, () => {
+    // The silhouette: a copy of the Pokémon's own art, filled white.
+    let ghost: Phaser.GameObjects.Image | null = null;
+    if (oldSprite?.active && oldSprite.texture && oldSprite.texture.key !== '__MISSING') {
+      const m = oldSprite.getWorldTransformMatrix();
+      const base = Math.abs(m.scaleX) || 1;
+      ghost = add(scene.add.image(m.tx, m.ty, oldSprite.texture.key, oldSprite.frame?.name).setOrigin(oldSprite.originX, oldSprite.originY).setScale(base).setDepth(depth + 3));
+      ghost.setTintFill(0xffffff);
+      oldSprite.setAlpha(0);
+      tw({ targets: ghost, scale: base * grow, duration: 1150, delay: 350, ease: 'Cubic.easeOut' });
+      // White turns to red Max energy as it reaches full size.
+      at(1450, () => {
+        if (!ghost?.active) return;
+        ghost.clearTint();
+        ghost.setTint(0xff5a78);
+        whiteFlash(0.4);
+      });
+    } else if (oldSprite?.active) {
+      oldSprite.setTintFill(0xffffff);
+      tw({ targets: oldSprite, scale: oldSprite.scale * grow, duration: 1150, delay: 350, ease: 'Cubic.easeOut' });
+    }
+    const glow = has('pack.dbk.burst') ? add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3).setAlpha(0)) : null;
+    if (glow) tw({ targets: glow, scale: 2.2, alpha: 0.8, duration: 1000, delay: 450, yoyo: true });
+    at(1450, () => {
       sound('ess-explosion', 0.9);
-      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(380 / o.speed, 0.016 * (o.shake ?? o.intensity));
-      jiggle(ball as Phaser.GameObjects.Image, 0, 3);
+      if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(380 / o.speed, 0.012 * (o.shake ?? o.intensity));
     });
-    at(SWAP_AT[o.kind], () => {
-      ball.setVisible(false);
+    at(swapAt, () => {
+      ghost?.setVisible(false);
       swap();
-      whiteFlash(0.7);
-      if (has('pack.dbk.burst')) {
-        const b = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 3).setScale(0.4));
-        tw({ targets: b, scale: 2.2, alpha: 0, duration: 650, ease: 'Cubic.easeOut' });
-      }
-      if (has('cine.raid.max.icon')) {
-        const icon = add(scene.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'cine.raid.max.icon').setDepth(depth + 5).setScale(1.2).setAlpha(0));
-        tw({ targets: icon, scale: 0.7, alpha: 1, duration: 260, ease: 'Back.easeOut' });
-      }
     });
+    // The new (giant) sprite is already there when the dark lifts.
+    tw({ targets: dark, fillAlpha: 0, duration: Math.max(200, ms - swapAt), delay: swapAt });
     fadeAll();
   }
 

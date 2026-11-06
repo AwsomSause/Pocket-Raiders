@@ -33,3 +33,6 @@ export const CINE_SOUNDS = ['ess-harden', 'ess-twine', 'ess-refresh', 'ess-shell
 export const CINE_MS: Record<CineKind, number> = TRANSFORM_MS;
 /** When the new form appears, in ms from the start. */
 export const SWAP_AT: Record<CineKind, number> = { mega: 1350, primal: 1350, dynamax: 1700, gigantamax: 1700, dynamaxEnd: 250, zmove: 1900, tera: 1300, evolve: 1900 };
+
+/** How much larger a Dynamaxed Pokémon is drawn than normal (after the reference footage: it towers over the field). */
+export const DYNAMAX_SCALE = 2.1;
