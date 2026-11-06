@@ -1479,8 +1479,12 @@
     {
      "label": "Run for it (Speed)",
      "success": {
-      "text": "You duck past and leave them in the grass.",
-      "effects": []
+      "text": "You duck past and leave them in the grass. The shortcut saves you a step: your next move skips a column.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
      },
      "requires": [
       {
