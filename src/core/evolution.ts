@@ -38,6 +38,12 @@ export function applicableBranches(content: Content, mon: PokemonInstance, branc
   return list;
 }
 
+/** Held-item evolution path: holding the evolution item from the set level on is enough (the item is used up on evolving). */
+function heldReady(content: Content, mon: PokemonInstance, e: Evolution): boolean {
+  const cfg = content.balance.heldEvolution;
+  return cfg.enabled && e.item !== undefined && e.item !== content.balance.friendship.evolutionItem && mon.level >= cfg.level && (mon.held?.[e.item] ?? 0) > 0;
+}
+
 /**
  * The species this Pokémon would evolve into on its own right now (by level,
  * or by friendship once it is high enough), if any.
@@ -50,7 +56,7 @@ export function evolutionTarget(content: Content, mon: PokemonInstance, regionId
   // A devoted bond (Bond Engine) can stand in for the last part of the friendship climb.
   const byFriendship = friendshipReady(content, mon) || bondReady;
   const friendshipItem = content.balance.friendship.evolutionItem;
-  const ready = species.evolutions.filter((e) => (e.level !== undefined && mon.level >= e.level + levelOffset) || (byFriendship && e.item === friendshipItem));
+  const ready = species.evolutions.filter((e) => (e.level !== undefined && mon.level >= e.level + levelOffset) || (byFriendship && e.item === friendshipItem) || heldReady(content, mon, e));
   const branches = applicableBranches(content, mon, ready, regionId);
   if (branches.length === 0) return null;
   return branches[uidHash(mon.uid) % branches.length]!.to;
@@ -105,7 +111,14 @@ export function evolveFully(content: Content, mon: PokemonInstance, regionId?: s
   for (let guard = 0; guard < 3; guard++) {
     const to = evolutionTarget(content, mon, regionId, levelOffset, bondReady);
     if (!to) break;
+    // Evolving through a held item uses that item up (a level or friendship evolution keeps it).
+    const heldItem = getSpecies(content, mon.speciesId).evolutions.find((e) => e.to === to && heldReady(content, mon, e) && !(e.level !== undefined && mon.level >= e.level + levelOffset))?.item;
     results.push(evolve(content, mon, to));
+    if (heldItem && mon.held) {
+      const left = (mon.held[heldItem] ?? 0) - 1;
+      if (left > 0) mon.held[heldItem] = left;
+      else delete mon.held[heldItem];
+    }
   }
   return results;
 }

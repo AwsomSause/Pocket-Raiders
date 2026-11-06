@@ -1965,6 +1965,8 @@ export const BalanceSchema = z.object({
   careEffects: z.boolean().default(true),
   /** Gym, Elite Four and champion aces may start a stage lower and evolve mid-battle (Battle Drama P5). */
   bossEvolution: z.boolean().default(true),
+  /** Held-item evolution paths (S413): a Pokémon holding its evolution item evolves by itself from this level, using the item up. */
+  heldEvolution: z.object({ enabled: z.boolean(), level: z.number().int().min(2).max(100) }).default({ enabled: true, level: 28 }),
   /** Rival battle styles (berserker, revenge-striker, last-stand) do something in the fight (Living Rivalry §3). */
   styleTricks: z.boolean().default(true),
   /** Gym Leader Personalities (S126): a leader's mood of the day nudges the opening order and lead level. */
