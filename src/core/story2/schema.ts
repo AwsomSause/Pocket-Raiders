@@ -178,6 +178,23 @@ export const freshProfileStory = (): ProfileStory => ProfileStoryObject.parse({}
 /** A damaged `story` object falls back to the defaults; the rest of the profile survives. */
 export const ProfileStorySchema = ProfileStoryObject.catch(() => freshProfileStory()).default(freshProfileStory());
 
+/** S9: the Orrery Circuit's cast and badge rules (inside run v40's `story.v2`). `cast[i]` is gym stage i+1 (24 in all): the town's two doors. */
+export const CircuitStateSchema = z.object({
+  cast: z.array(z.object({ doors: z.tuple([z.string(), z.string()]) })).default([]),
+  /** Door chosen per gym stage (0-based global stage as a string); an unset stage takes the first door. */
+  chosen: z.record(z.string(), z.string()).default({}),
+  /** Towns passed (global stage as a string), at most 2 per region. */
+  passed: z.array(z.string()).default([]),
+  passedOver: z.array(z.string()).default([]),
+  met: z.array(z.string()).default([]),
+  badges: z.array(z.object({ leaderId: z.string(), regionId: z.number().int().min(0), counted: z.boolean(), source: z.enum(['gym', 'guest']) })).default([]),
+  seals: z.array(z.number().int().min(0)).default([]),
+  /** Guest Match taken per region (leader id), and the Circuit Merit it earned. */
+  guest: z.record(z.string(), z.string()).default({}),
+  merit: z.number().int().min(0).default(0),
+});
+export type CircuitState = z.infer<typeof CircuitStateSchema>;
+
 export const StoryV2Schema = z.object({
   mode: z.literal('story_run'),
   protagonist: z.object({ look: z.string(), name: z.string(), pronouns: z.union([z.string(), PronounsSchema]), backstory: z.string().optional(), signatureProp: z.string().optional() }).optional(),
@@ -187,6 +204,7 @@ export const StoryV2Schema = z.object({
   quiz: z.object({ traitVector: z.record(z.string(), z.number()), picks: z.array(z.string()) }).optional(),
   starter: z.object({ lineId: z.string(), temperament: z.string(), twist: z.string().optional(), keystone: z.array(z.string()).default([]) }).optional(),
   heartbondOverrides: z.number().int().min(0).default(0),
+  circuit: CircuitStateSchema.optional(),
   /** S6: the partner's uid, levels already latched (unlocks never fall), latches waiting for a safe moment to play, the Keystone flag, and the pay ledger. */
   heartbond: z.object({
     partner: z.string().optional(),

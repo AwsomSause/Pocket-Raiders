@@ -82,7 +82,7 @@ function pickFresh<T extends { id: string }>(all: T[], local: readonly string[],
 export function pickLeague(content: Content, region: Region, campaign: Campaign, used: readonly string[], rng: Rng): { eliteFour: string[]; champion: string } {
   const taken = new Set(used);
   const eliteFour: string[] = [];
-  const all: Boss[] = [...content.bosses.values()];
+  const all: Boss[] = [...content.bosses.values()].filter((b) => !b.story);
   for (let i = 0; i < campaign.eliteFourSize; i++) {
     const member = pickFresh(all, region.eliteFour, taken, rng);
     taken.add(member.id);

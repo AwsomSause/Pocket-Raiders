@@ -362,3 +362,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-s6-heartbond.md`: Story S6 part 1: Heartbond score/latches/pay ledger, 16 Core Temperaments map (not yet wired into battles or menus).
 - shop-item-limits: no selling, stacks cap 100, 6 revives per battle
 - story-s12-backstory-parity.md: S12 ending-grid check and parity audit for all five backstories.
+- `story-s9-original-cast.md`: Story S9: original cast data (18 leaders, Elite Four, Selene, teams), Circuit roster and six-of-eight rules.
