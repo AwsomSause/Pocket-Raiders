@@ -3,6 +3,7 @@
 
 import type Phaser from 'phaser';
 import { benchList, bagBerryChoices, campOf, campProblem, CAMP, comboList, cursedRelics, gadgetUses, getAction, hasGadget, marketLeft, marketSlots, mysteryOdds, shelfMoves, shelfTypes, slotChoices, usedHere, type CampArgs } from '../core/camp';
+import { campers, campProblem as boxCampProblem, CAMP_RULES } from '../core/trainingCamp';
 import { promptById } from '../core/interaction/prompt';
 import { services } from '../game/services';
 import { Picker, type PickerRow } from './partyPanel';
@@ -19,6 +20,7 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:album': { name: 'Photo Album', desc: 'Species you have photographed (kept across runs).', group: 'gadgets' },
   'view:journal': { name: 'Item Journal', desc: 'The first time you used each item.', group: 'workshop' },
   'view:xp': { name: 'Experience share', desc: 'Choose how experience is split: Even, Focus on the lead, or Catch-up.', group: 'camp' },
+  'view:training': { name: 'Training camp', desc: 'Send up to two Box Pokémon to train: they gain experience after every win.', group: 'camp' },
   'view:stuff': { name: 'Camp Pack', desc: 'Oil, keys, bottles, scraps, pages, tokens, luck and relics.', group: 'camp' },
 };
 
@@ -127,6 +129,13 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
   }
   if (id === 'view:album') { const album = session.profile.camp?.album ?? []; return choose(host, `Photo Album (${album.length})`, album.map((s) => ({ label: content.species.get(s)?.name ?? s })), again, again); }
   if (id === 'view:journal') { const j = session.profile.camp?.journal ?? []; return choose(host, `Item Journal (${j.length})`, j.map((s) => ({ label: content.items.get(s)?.name ?? content.catalog.get(s)?.name ?? s })), again, again); }
+  if (id === 'view:training') {
+    const crew = campers(run).map((m) => m.uid);
+    const box = run.box;
+    const again2 = () => runAction(host, id, group, back);
+    if (box.length === 0) return back('Nobody is waiting in the Box. Pokémon you box can train here.');
+    return choose(host, `Training camp (${crew.length}/${CAMP_RULES.slots})`, box.map((m) => ({ label: content.species.get(m.speciesId)?.name ?? m.speciesId, desc: `Lv${m.level} · ${crew.includes(m.uid) ? 'in camp (pick to call back)' : 'free (pick to send)'}`, problem: boxCampProblem(run, m.uid) })), (i) => { try { session.toggleTrainingCamp(box[i]!.uid); } catch { /* shown as the row's problem */ } again2(); }, again);
+  }
   if (id === 'view:xp') return back(session.cycleXpShare());
   if (id === 'view:stuff') {
     const camp = campOf(run);

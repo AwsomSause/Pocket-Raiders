@@ -233,5 +233,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `raid-bosses-slice6.md`: Raids & bosses slice 6: S393 bots, S394 weekly raid, S395 Totem auras, S397 aim picker, S398 loot preview, S399 mini-bosses, S401 cards, S402 talk, S403 crowd, S405 den weather, S406 titans, S407 gauntlet, S408 revenge, S409 capture, S411 puzzle, S412 hazards, role badge. S410 co-op not built.
 - `growth-paired-moves.md`: Growth slice 4: Bond Level 2+ pairs get a named paired-move bonus on the faint hand-over.
 - `lures-weather-spawns.md`: Lure Crafting S223, Lure Towers S237, Weather-Locked Spawns S234 (`core/spawnLocks.ts`, `crafting.json` lure recipes).
+- `growth-training-camp.md`: Growth slice 5: Training Camps (two Box Pokémon gain XP after each win).
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
+- `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
