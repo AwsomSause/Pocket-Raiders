@@ -26,13 +26,80 @@ export function ensureAtlasAnimation(scene: Phaser.Scene, key: string, frameRate
   return animKey;
 }
 
-function atlasSprite(scene: Phaser.Scene, key: string, x: number, y: number, scale: number): Phaser.GameObjects.Sprite | null {
+const feetCache = new Map<string, { ox: number; oy: number }>();
+
+/**
+ * Where a Pokémon's feet are inside its frame, as an origin (0..1): bottom edge and horizontal middle of the opaque pixels
+ * over every frame. Art is padded differently per species, so anchoring on the frame edge floated or shifted many of them
+ * off their platform. Cached per texture; falls back to bottom-centre when the pixels can't be read.
+ */
+export function feetOrigin(scene: Phaser.Scene, key: string): { ox: number; oy: number } {
+  const hit = feetCache.get(key);
+  if (hit) return hit;
+  let out = { ox: 0.5, oy: 1 };
+  try {
+    const tex = scene.textures.get(key);
+    const names = tex.getFrameNames().sort();
+    const first = tex.get(names[0]);
+    const img = tex.getSourceImage() as CanvasImageSource & { width: number; height: number };
+    const cv = document.createElement('canvas');
+    cv.width = img.width;
+    cv.height = img.height;
+    const ctx = cv.getContext('2d', { willReadFrequently: true });
+    if (ctx && first.realWidth > 0 && first.realHeight > 0) {
+      ctx.drawImage(img, 0, 0);
+      let bottom = -1;
+      let left = Infinity;
+      let right = -Infinity;
+      for (const n of names) {
+        const f = tex.get(n);
+        if (f.cutWidth <= 0 || f.cutHeight <= 0) continue;
+        const d = ctx.getImageData(f.cutX, f.cutY, f.cutWidth, f.cutHeight).data;
+        const opaque = (xx: number, yy: number) => d[(yy * f.cutWidth + xx) * 4 + 3]! > 20;
+        let top = -1;
+        let low = -1;
+        for (let yy = 0; yy < f.cutHeight; yy++) {
+          for (let xx = 0; xx < f.cutWidth; xx++) {
+            if (!opaque(xx, yy)) continue;
+            if (top < 0) top = yy;
+            low = yy;
+            break;
+          }
+        }
+        if (low < 0) continue;
+        bottom = Math.max(bottom, f.y + low + 1);
+        // Horizontal anchor: the middle of the feet (lowest fifth of the first frame), so tails, beaks and wings don't drag it.
+        if (f === first) {
+          const band = Math.max(1, Math.round((low - top + 1) * 0.2));
+          for (let yy = low - band + 1; yy <= low; yy++) {
+            for (let xx = 0; xx < f.cutWidth; xx++) {
+              if (!opaque(xx, yy)) continue;
+              left = Math.min(left, f.x + xx);
+              right = Math.max(right, f.x + xx + 1);
+            }
+          }
+        }
+      }
+      if (bottom > 0 && right > left) out = { ox: (left + right) / 2 / first.realWidth, oy: bottom / first.realHeight };
+    }
+  } catch {
+    // keep the default
+  }
+  feetCache.set(key, out);
+  return out;
+}
+
+function atlasSprite(scene: Phaser.Scene, key: string, x: number, y: number, scale: number, feet = false): Phaser.GameObjects.Sprite | null {
   if (!services().assets.has(key) || !scene.textures.exists(key)) return null;
   // A texture whose atlas could not be read has no frames at all; show the placeholder instead.
   if (scene.textures.get(key).frameTotal === 0) return null;
   // Atlases have named frames; a single picture (e.g. a boss portrait) has none.
   const frames = scene.textures.get(key).getFrameNames().sort();
   const sprite = scene.add.sprite(x, y, key, frames[0]).setOrigin(0.5, 1).setScale(scale);
+  if (feet && frames.length > 0) {
+    const f = feetOrigin(scene, key);
+    sprite.setOrigin(f.ox, f.oy);
+  }
   const anim = ensureAtlasAnimation(scene, key);
   if (anim && spritesAnimate()) sprite.play(anim);
   return sprite;
@@ -63,7 +130,7 @@ export function pokemonVisual(scene: Phaser.Scene, species: Species, side: 'fron
   const key = side === 'front' ? ids.front : ids.back;
   const shinyKey = side === 'front' ? ids.shinyFront : ids.shinyBack;
   const wanted = shiny ? [shinyKey, key] : [key];
-  const ready = (shiny ? atlasSprite(scene, shinyKey, x, y, scale) : null) ?? atlasSprite(scene, key, x, y, scale);
+  const ready = (shiny ? atlasSprite(scene, shinyKey, x, y, scale, true) : null) ?? atlasSprite(scene, key, x, y, scale, true);
   if (ready && !(shiny && notLoadedYet(scene, shinyKey))) return ready;
   ready?.destroy();
   const color = TYPE_COLORS[species.types[0] ?? 'normal'] ?? 0x888888;
@@ -71,7 +138,7 @@ export function pokemonVisual(scene: Phaser.Scene, species: Species, side: 'fron
   if (wanted.some((k) => notLoadedYet(scene, k))) {
     void loadAssets(scene, wanted).then(() => {
       if (!holder.active) return;
-      const sprite = (shiny ? atlasSprite(scene, shinyKey, 0, 0, scale) : null) ?? atlasSprite(scene, key, 0, 0, scale);
+      const sprite = (shiny ? atlasSprite(scene, shinyKey, 0, 0, scale, true) : null) ?? atlasSprite(scene, key, 0, 0, scale, true);
       if (!sprite) return;
       holder.removeAll(true);
       holder.add(sprite);

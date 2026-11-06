@@ -137,15 +137,15 @@ const EXPLAIN_LOCK_MS = 1200;
 const COMMAND_X = 588;
 /** How long Auto-Battle's chosen action stays on screen before it is played (Back cancels). */
 const AUTO_PICK_MS = 1100;
-/** Double battles: where each spot stands (left, right) and the databox spots. */
+/** Double battles: where each spot stands (left, right) and the databox spots. Both spots sit on their side's one platform (centred on ENEMY_POS / PLAYER_POS, the back one a little higher). */
 const DUO_POS = {
   player: [
-    { x: 176, y: 414 },
-    { x: 392, y: 404 },
+    { x: PLAYER_POS.x - 72, y: PLAYER_POS.y - 6 },
+    { x: PLAYER_POS.x + 72, y: PLAYER_POS.y + 4 },
   ],
   enemy: [
-    { x: 500, y: 212 },
-    { x: 668, y: 228 },
+    { x: ENEMY_POS.x - 62, y: ENEMY_POS.y - 6 },
+    { x: ENEMY_POS.x + 62, y: ENEMY_POS.y + 4 },
   ],
 } as const;
 const DUO_SCALE = { player: 0.72, enemy: 0.85 } as const;
