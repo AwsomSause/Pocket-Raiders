@@ -239,3 +239,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
 - `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
+- `beta44-battle.md`: Beta 4.4 part 1: Choice lock, Refused to go down, sleep 2-4, one Mega, set aces, binding-move art, Melony, rival characters/sparks, first rival on Stage 1 level 5, battle freeze fixes.

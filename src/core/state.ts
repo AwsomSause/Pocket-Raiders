@@ -141,6 +141,8 @@ export const VolatileSchema = z.object({
   protectChain: z.number().int().min(0).default(0),
   /** Turns left of being bound (Wrap); it can't switch out meanwhile. */
   bound: z.number().int().min(0).default(0),
+  /** The move that bound it (Fire Spin, Whirlpool...), so each turn's squeeze shows that move's art. */
+  boundBy: z.string().optional(),
   /** Seeded by Leech Seed. */
   seeded: z.boolean().default(false),
   /** The two-turn move it is charging (it uses it next turn). */

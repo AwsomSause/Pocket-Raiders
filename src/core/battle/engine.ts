@@ -125,7 +125,7 @@ export type BattleEvent =
   /** The user fainted from its own move (Explosion). */
   | { type: 'selfKo'; side: Side }
   | { type: 'bound'; side: Side; moveId: string }
-  | { type: 'bindDamage'; side: Side; amount: number; hpAfter: number }
+  | { type: 'bindDamage'; side: Side; amount: number; hpAfter: number; moveId?: string }
   | { type: 'bindEnd'; side: Side }
   | { type: 'seeded'; side: Side }
   | { type: 'seedDamage'; side: Side; amount: number; hpAfter: number }
@@ -3601,6 +3601,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
     target.vol.bound = rng.int(4, 5);
+    target.vol.boundBy = move.id;
     events.push({ type: 'bound', side: target.side, moveId: move.id });
   }
   // Changes that share a chance are rolled together (Ancient Power raises all five stats or none).
@@ -5469,7 +5470,7 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
       events.push({ type: 'bindEnd', side: c.side });
     } else {
       const { lost, lastStand } = hurt((1 / 8) * Held.bindMultiplier(ctx, other.mon, other.side));
-      events.push({ type: 'bindDamage', side: c.side, amount: lost, hpAfter: c.mon.hp });
+      events.push({ type: 'bindDamage', side: c.side, amount: lost, hpAfter: c.mon.hp, ...(c.vol.boundBy ? { moveId: c.vol.boundBy } : {}) });
       if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
     }
   }

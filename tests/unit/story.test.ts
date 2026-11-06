@@ -58,15 +58,15 @@ describe('story foundation: random streams', () => {
   // the story layer has changed a gameplay roll. Re-pinned after M8.75 item
   // effects slices 2 to 3b-3b (held, map, shop, money, map-movement, map-stop and draft items in drafts, bosses
   // holding items) M8.75 part C3 (every Pokémon has an ability) and the C2c move batch, which change
-  // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts.
+  // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts, and for the Beta 4.4 battle fixes (sleep 2-4 turns, the first rival on Stage 1 level 5, set boss aces, one Mega per battle, Choice locks only the move).
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': '6526be2ff64f3ab8',
-    'STORY2/0': 'c514b1c4c32df7b4',
+    'STORY1/0': 'e9f4d3681392929d',
+    'STORY2/0': '442b017c06a27d6f',
     'STORY4/0': '723fa1f26d1cf54d',
-    'STORY5/0': '46e9cc623a94d750',
-    'STORY6/0': 'c7062ed148176f46',
-    'STORY7/0': 'b54ccadfcac4022d',
-    'STORY8/0': '65a2b5b1a05765e7',
+    'STORY5/0': '0d6d20a91ab82efe',
+    'STORY6/0': '4fc39f6b1d8e33de',
+    'STORY7/0': 'c3534ee20e04f847',
+    'STORY8/0': 'aa6e497383e1337e',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.

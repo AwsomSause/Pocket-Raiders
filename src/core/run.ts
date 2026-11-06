@@ -143,7 +143,7 @@ import { allyLevel, applyTotemHp, describeAlly, describeTotemRewards, freshTotem
 import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase } from './priceSwing';
-import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, freshPlaza } from './state';
+import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { getTheme, pickGymLeader, pickTheme, typesPool, wildEligibleSpecies } from './themes';
@@ -532,6 +532,29 @@ export function hatchEggs(content: Content, run: RunState): void {
   growGarden(run);
 }
 
+/**
+ * Beta 4.4: the first rival is a forced meeting on Stage 1, Level `balance.rival.column`: every node of that column is a
+ * trainer, so every route meets it. Changes kinds only after the map is rolled, so no other roll moves.
+ */
+function forceFirstRivalColumn(content: Content, run: RunState, index: number, map: StageMap): void {
+  const cfg = content.balance.rival;
+  if (run.regionIndex !== 0 || index !== cfg.stage || run.story.flags[FIRST_RIVAL_FLAG] !== undefined || cfg.column >= map.columns) return;
+  if (map.trainerColumns.includes(cfg.column)) return;
+  // The stage's first trainer level moves to the rival's level (a map keeps exactly two trainer levels).
+  const moved = map.trainerColumns[0]!;
+  for (const node of map.nodes) {
+    if (node.column === moved) {
+      node.kind = 'wild';
+      node.note = `wild, column ${moved} (its trainers moved to column ${cfg.column} for the first rival)`;
+    } else if (node.column === cfg.column) {
+      node.kind = 'trainer';
+      node.harder = false;
+      node.note = `trainer column ${cfg.column} (the first rival waits here)`;
+    }
+  }
+  map.trainerColumns = [cfg.column, ...map.trainerColumns.slice(1)].sort((a, b) => a - b);
+}
+
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
   fillRegionOrder(content, run);
@@ -542,6 +565,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
     const leader = pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
     return { theme, leader, map: generateStageMap(content, campaign, r) };
   });
+  forceFirstRivalColumn(content, run, index, map);
   const problems = validateStageMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid stage map: ${problems.join('; ')}`);
   noteSkips(content, run);
@@ -1707,7 +1731,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       markTakeover(run, takeover);
     }
     // The first rival: the first ordinary trainer of balance.rival.stage is scripted (one starter-line Pokémon).
-    const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
+    const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
       plan = planFirstRival(content, run.seed);
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
@@ -1743,7 +1767,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       }
       const said = majorNote(content, rivalBack, ret.plan.members.find((m) => familyId(content, m.speciesId) === rivalBack.ace)?.speciesId ?? null);
       if (said) ret.note = [said, ret.note].filter(Boolean).join(' ');
-      const trained = withTrainingEvolution(content, ret.plan.members);
+      // Beta 4.4: once a rival's Pokémon evolved mid-battle it stays evolved; only an unevolved rival is brought in a stage lower.
+      const evolvedBefore = run.story.flags[`drama:rival:${rivalBack.id}:midBattleEvolution`] !== undefined;
+      const trained = evolvedBefore ? { members: ret.plan.members, index: -1 } : withTrainingEvolution(content, ret.plan.members);
       plan = { ...ret.plan, members: trained.members };
       trainingIndex = trained.index;
       const finale = finalRivalLine(content, run, rivalBack.id, ultimateRival(run)?.id === rivalBack.id);

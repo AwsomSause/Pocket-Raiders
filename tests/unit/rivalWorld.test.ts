@@ -8,6 +8,10 @@ import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { StoryStateSchema } from '../../src/core/story/schema';
 import { content } from './helpers';
+import { RIVAL_CONFIG } from '../../src/core/rivals/schema';
+
+// These tests make rivals from early fights on purpose; the Beta 4.4 spark gate (later stage, 1 in 3) is tested in beta44.test.ts.
+Object.assign(RIVAL_CONFIG.spark, { minStage: 0, chance: 1 });
 
 const where = { region: 1, stage: 1, level: 1, node: null, battle: 1, turn: null };
 const baseRun = (seed: string): RunState => structuredClone(chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0));

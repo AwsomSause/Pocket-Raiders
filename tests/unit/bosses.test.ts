@@ -19,6 +19,7 @@ import {
   planChampion,
   planEliteFour,
   planGymLeader,
+  withSetAce,
 } from '../../src/core/encounters';
 import { createPokemon } from '../../src/core/pokemon';
 import { bossInfo, pickLeague } from '../../src/core/regions';
@@ -69,7 +70,8 @@ describe('boss teams', () => {
     const boss = content.bosses.get('brock')!;
     for (const stageNumber of [0, 5, 12]) {
       const plan = planGymLeader(content, RED, 'brock', stageNumber, scaleAt(stageNumber % 8, FULL.columns, Math.floor(stageNumber / 8)), new Rng(hashSeed(`gym-${stageNumber}`)));
-      const team = boss.teams.gym[Math.min(stageNumber, 15)]!;
+      // Beta 4.4: the boss's set ace (its first signature family) always goes last.
+      const team = { ...boss.teams.gym[Math.min(stageNumber, 15)]!, members: withSetAce(content, boss, 'gym', Math.min(stageNumber, 15), [...boss.teams.gym[Math.min(stageNumber, 15)]!.members]) };
       expect(plan.members.map((m) => m.speciesId)).toEqual(team.members.map((m) => m.speciesId));
       expect(plan.members.map((m) => m.moves)).toEqual(team.members.map((m) => m.moves));
       expect(plan.ai).toBe(team.ai);
@@ -186,10 +188,12 @@ describe('Elite Four and champion battles', () => {
   it('use the team for the region', () => {
     const scale = leagueScale(content, 1);
     const e4 = planEliteFour(content, RED, 'karen', 1, scale, new Rng(hashSeed("1")));
-    expect(e4.members.map((m) => m.speciesId)).toEqual(content.bosses.get('karen')!.teams.elite[1]!.members.map((m) => m.speciesId));
+    const karen = content.bosses.get('karen')!;
+    expect(e4.members.map((m) => m.speciesId)).toEqual(withSetAce(content, karen, 'elite', 1, [...karen.teams.elite[1]!.members]).map((m) => m.speciesId));
     const champ = planChampion(content, RED, 'brock', 1, scale, new Rng(hashSeed("1")));
     expect(champ.classId).toBe('champion');
-    expect(champ.members.map((m) => m.speciesId)).toEqual(content.bosses.get('brock')!.teams.champion[1]!.members.map((m) => m.speciesId));
+    const brock = content.bosses.get('brock')!;
+    expect(champ.members.map((m) => m.speciesId)).toEqual(withSetAce(content, brock, 'champion', 1, [...brock.teams.champion[1]!.members]).map((m) => m.speciesId));
   });
 });
 

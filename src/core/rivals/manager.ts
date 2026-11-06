@@ -41,6 +41,9 @@ export function maybeSpark(run: RunState, input: SparkInput): Rival | null {
   if (rivals.length >= RIVAL_CONFIG.maxRivals || rivals.some((r) => r.id === id)) return null;
   const gain = sparkGain(input);
   if (gain < RIVAL_CONFIG.spark.threshold) return null;
+  // Beta 4.4: the first few trainers of a run don't all become rivals; a rivalry starts later and only sometimes.
+  if (input.where.region === 0 && (input.where.stage ?? 0) < RIVAL_CONFIG.spark.minStage) return null;
+  if (RIVAL_CONFIG.spark.chance < 1 && !new Rng(hashSeed(`${run.seed}::rival-spark::${id}`)).chance(RIVAL_CONFIG.spark.chance)) return null;
   // Its own seeded stream: never touches the gameplay streams.
   const rng = new Rng(hashSeed(`${run.seed}::rival::${id}`));
   const personalityId = rng.pick(Object.keys(RIVAL_PROFILES.personalities).sort());
