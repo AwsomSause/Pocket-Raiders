@@ -131,7 +131,7 @@ describe('forms revert', () => {
 });
 
 describe('Z-Move and Max Move data', () => {
-  const TYPES = Object.keys(content.zMoves.byType);
+  const TYPES = Object.keys(content.zMoves.byType) as (keyof typeof content.zMoves.byType)[];
 
   it('has one Z-Crystal per type, named and typed alike, and one Z-Move per type of that type', () => {
     expect(TYPES).toHaveLength(18);
@@ -140,8 +140,8 @@ describe('Z-Move and Max Move data', () => {
       expect(crystals, type).toHaveLength(1);
       expect(crystals[0]!.description, crystals[0]!.id).not.toMatch(/ a [AEIOU]/);
       expect(content.moves.get(content.zMoves.byType[type]!)!.type, type).toBe(type);
-      expect(ownedZCrystal(content, { [crystals[0]!.id]: 1 }, type as never), type).toBe(crystals[0]!.id);
-      expect(ownedZCrystal(content, {}, type as never)).toBeNull();
+      expect(ownedZCrystal(content, { [crystals[0]!.id]: 1 }, type), type).toBe(crystals[0]!.id);
+      expect(ownedZCrystal(content, {}, type)).toBeNull();
     }
   });
 
