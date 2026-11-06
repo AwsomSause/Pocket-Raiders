@@ -279,5 +279,6 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `alpha-nobles.md`: 8 frenzied noble events, calm one to recruit it (S498).
 - capture-styles.md: Capture Styles (S224): befriend/negotiate/trap items, off by default behind a balance switch.
 - `drive-trainers.md`: every Google Drive trainer added: 739 classes, 75 named bosses, 17 bosses animated, lazy art.
+- `overhaul-cross-system.md`: Overhaul slice 2, one test checks every species across battle, evolution, eggs, trades, forms, sprites and saves.
 - `overhaul-pack-import.md`: Overhaul slice 1, pack import (no gameplay change): the director's Overhaul content pack is in `src/data/overh
 - `tera-reference-look.md`: Tera matches the reference GIFs: ACTION tab, ray burst, jewel over head, "-type!" text.

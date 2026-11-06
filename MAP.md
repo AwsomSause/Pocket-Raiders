@@ -58,7 +58,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `src/save/` | `saveManager.ts` versioned save records and migrations; `storage.ts` where bytes live. |
 | `src/scenes/` | Phaser screens: Boot, MainMenu, Hub (**big**, 710), RunPrep, Briefing, TrainerSelect, StarterSelect, Map, Battle (**big**, 940), Reward, Shop, Decision, GameOver; `routing.ts` picks the screen for a run phase. |
 | `src/ui/` | Shared UI: `widgets`, `theme`, `input`, `sprites`, `lazyAssets`, `audio`, `battleText`, `partyPanel`, `fieldMenus`, `showcase`, `battleFx/` (animation player). |
-| `src/quality/` | `supportStatus.ts` (content statuses), `contentReport.ts`, `balanceSim.ts`, `knownLimits.json`. |
+| `src/quality/` | `supportStatus.ts` (content statuses), `contentReport.ts`, `balanceSim.ts`, `crossSystem.ts` (every species checked across battle, evolution, eggs, trades, forms, sprites), `knownLimits.json`. |
 | `src/assets/catalog.ts` | The one place asset file names and folders are defined. |
 | `src/debug/debugPanel.ts` | F2 developer panel. |
 
