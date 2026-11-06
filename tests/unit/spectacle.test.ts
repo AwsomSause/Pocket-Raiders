@@ -11,6 +11,7 @@ import type { PokemonInstance } from '../../src/core/state';
 import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
 import { bossRematchPlan, dueBossRematch, recordBossDefeat } from '../../src/core/story/bossRematch';
 import { planGymLeader } from '../../src/core/encounters';
+import { BATTLE_FLAIR_OFF } from '../../src/core/battle/battleFlairConfig';
 import { content, scaleAt, toBattle } from './helpers';
 
 const withSpectacle = (patch: Record<string, unknown>): Content => {
@@ -132,7 +133,8 @@ describe('boss phases', () => {
 
 describe('switching spectacle off', () => {
   it('changes nothing in the fight', () => {
-    const off = withSpectacle({ enabled: false });
+    // Batch 4 arena rules (Surf floods the floor) are game rules, not spectacle: switched off here too.
+    const off = { ...withSpectacle({ enabled: false }), balance: { ...withSpectacle({ enabled: false }).balance, battleFlair: BATTLE_FLAIR_OFF } } as typeof content;
     const f = fight({ c: off });
     const ev = f.turn({ kind: 'move', index: 0 });
     expect(kinds(ev)).toEqual([]);

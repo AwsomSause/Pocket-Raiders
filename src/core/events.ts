@@ -1151,8 +1151,13 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     const rivalTeam = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
     const evil = evilBattle(content, run, b);
     const fellow = b.apprentice ? run.mentor?.fellow ?? null : null;
-    const mirrorLead = b.mirror ? run.party[activeIndex] : undefined;
-    const team = mirrorLead ? [newMon(content, run, mirrorLead.speciesId, Math.min(cap, Math.max(1, mirrorLead.level + b.levelBonus)), 'e')] : fellow ? Array.from({ length: b.size }, (_, i) => {
+    // S274 Mirror Match: a copy of your team (your lead first, then the others still standing, up to the fight's size), with your moves.
+    const mirrored = b.mirror ? [run.party[activeIndex]!, ...run.party.filter((p, i) => i !== activeIndex && p.hp > 0)].slice(0, Math.max(1, b.kind === 'trainer' ? b.size : 1)) : [];
+    const team = mirrored.length > 0 ? mirrored.map((src) => {
+      const copy = newMon(content, run, src.speciesId, Math.min(cap, Math.max(1, src.level + b.levelBonus)), 'e');
+      copy.moves = src.moves.map((s) => ({ id: s.id, pp: content.moves.get(s.id)?.pp ?? s.pp }));
+      return copy;
+    }) : fellow ? Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + apprenticeLevelBonus(fellow) + (i === b.size - 1 ? 1 : 0)));
       const type = fellow.types[i % Math.max(1, fellow.types.length)];
       return newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, [], type ? [type] : [], rng), level, rng), level, 'e');
