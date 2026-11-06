@@ -46,6 +46,7 @@ import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
+import { useCapsule } from '../core/capsuleQuests';
 import { toggleCamp } from '../core/trainingCamp';
 import { applyMentorLesson, type MentorLesson } from '../core/mentorLesson';
 import { cycleXpPolicy, XP_POLICY_RULES } from '../core/teamPolicy';
@@ -639,6 +640,15 @@ export class GameSession {
   formShift(uid: string, target: string): string {
     const run = structuredClone(this.requireRun());
     const message = applyFormShift(this.content, run, uid, target);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Ability capsule: moves a Pokémon to another ability for one capsule (ideas S55). */
+  abilityCapsule(uid: string, slot: number): string {
+    const run = structuredClone(this.requireRun());
+    const message = useCapsule(this.content, run, uid, slot);
     this.run = run;
     this.persistRun();
     return message;

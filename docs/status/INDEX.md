@@ -246,3 +246,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `run-events-b-batch4.md`: Run events B batch 4: 14 more trainer events (dance-off, mentor exam with no bag items, type roulette, mirror trainer, twins, underdogs, charity match, chef cook-off...).
 - [meta-hub-11-seasonal-dojo-cards](meta-hub-11-seasonal-dojo-cards.md): seasonal quests, card backgrounds, rival dojo.
 - `growth-form-shift.md`: Growth slice 8: Regional Form Shifts (swap to a regional variant for a Moon Stone).
+- `growth-capsule-quests.md`: Growth slice 9: Ability Capsule Quests (six trials pay ability swaps).

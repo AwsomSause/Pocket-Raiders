@@ -7,6 +7,7 @@ import { campers, campProblem as boxCampProblem, CAMP_RULES } from '../core/trai
 import { mentorLessons } from '../core/mentorLesson';
 import { nurseryChoices } from '../core/nursery';
 import { formShiftProblem, formShiftTargets } from '../core/formShift';
+import { capsuleCount, capsuleSlots, questViews } from '../core/capsuleQuests';
 import { promptById } from '../core/interaction/prompt';
 import { services } from '../game/services';
 import { Picker, type PickerRow } from './partyPanel';
@@ -25,6 +26,7 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:mentor': { name: 'Mentor lesson', desc: 'A more evolved teammate teaches a younger one a move (once each).', group: 'camp' },
   'view:nursery': { name: 'Nursery', desc: 'Before an Egg hatches: a parent passes on one move, or you pick its ability.', group: 'camp' },
   'view:formshift': { name: 'Form shift', desc: 'Swap a Pokémon with its regional variant (costs a Moon Stone; swap back any time).', group: 'camp' },
+  'view:capsule': { name: 'Ability capsule', desc: 'Clear themed trials to earn capsules, then swap a Pokémon to another of its abilities.', group: 'camp' },
   'view:xp': { name: 'Experience share', desc: 'Choose how experience is split: Even, Focus on the lead, or Catch-up.', group: 'camp' },
   'view:training': { name: 'Training camp', desc: 'Send up to two Box Pokémon to train: they gain experience after every win.', group: 'camp' },
   'view:stuff': { name: 'Camp Pack', desc: 'Oil, keys, bottles, scraps, pages, tokens, luck and relics.', group: 'camp' },
@@ -135,6 +137,15 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
   }
   if (id === 'view:album') { const album = session.profile.camp?.album ?? []; return choose(host, `Photo Album (${album.length})`, album.map((s) => ({ label: content.species.get(s)?.name ?? s })), again, again); }
   if (id === 'view:journal') { const j = session.profile.camp?.journal ?? []; return choose(host, `Item Journal (${j.length})`, j.map((s) => ({ label: content.items.get(s)?.name ?? content.catalog.get(s)?.name ?? s })), again, again); }
+  if (id === 'view:capsule') {
+    const have = capsuleCount(run);
+    const nm = (id2: string) => content.species.get(id2)?.name ?? id2;
+    const rows: Choice[] = [
+      ...questViews(run).map((q) => ({ label: q.name, desc: q.done ? 'Done: capsule earned' : `Win battles with a ${q.type[0]!.toUpperCase()}${q.type.slice(1)} Pokémon fighting: ${q.progress}/${q.need}` })),
+      ...(have > 0 ? run.party.flatMap((m) => capsuleSlots(content, m).map((a) => ({ label: `${nm(m.speciesId)}: ${content.abilities.get(a.name)?.name ?? a.name}`, desc: `Use a capsule (${have} left)`, uid: m.uid, slot: a.slot }))) : []),
+    ];
+    return choose(host, `Ability capsule (${have})`, rows, (i) => { const r = rows[i] as Choice & { uid?: string; slot?: number }; if (r.uid !== undefined) back(session.abilityCapsule(r.uid, r.slot!)); else again(); }, again);
+  }
   if (id === 'view:formshift') {
     const rows = run.party.flatMap((m) => formShiftTargets(content, m).map((t) => ({ m, t })));
     if (rows.length === 0) return back('Nobody in your party has a regional variant.');
