@@ -228,3 +228,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `growth-xp-share.md`: Growth slice 2: Camp "Experience share" (Even/Focus/Catch-up) and capped XP paying Hyper Potions.
 - wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)
 - `presentation-ash.md`: ash particles in Fire arenas (S251).
+- `growth-synergy-tags.md`: Growth slice 3: Team Synergy Tags (Sun/Rain/Sand/Snow/Trick Room teams open with a +1 lift).

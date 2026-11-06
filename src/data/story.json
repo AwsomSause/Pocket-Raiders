@@ -4118,6 +4118,196 @@
       "variants": {}
     },
     {
+      "id": "team-sun",
+      "displayName": "Sun Team",
+      "messagePool": [
+        "{name} basks in the Sun Team and feels its power rising."
+      ],
+      "category": "rivalry",
+      "triggerConditions": {
+        "trigger": "teamSun"
+      },
+      "chance": null,
+      "effect": {
+        "kind": "statStage",
+        "stat": "spa",
+        "stages": 1
+      },
+      "duration": "battle",
+      "cooldown": "oncePerBattlePerPokemon",
+      "memoryRecord": {
+        "importance": 65,
+        "text": "Fought as part of the Sun Team"
+      },
+      "followUpEvents": [],
+      "visualCue": {
+        "major": false,
+        "color": "#52d18b",
+        "sound": "se.shiny",
+        "music": null,
+        "cutIn": false,
+        "shake": false
+      },
+      "priority": "emotionalOverdrive",
+      "eligibilityTags": [],
+      "emotions": [
+        "kindness"
+      ],
+      "variants": {}
+    },
+    {
+      "id": "team-rain",
+      "displayName": "Rain Team",
+      "messagePool": [
+        "{name} moves with the Rain Team, quick as the downpour."
+      ],
+      "category": "rivalry",
+      "triggerConditions": {
+        "trigger": "teamRain"
+      },
+      "chance": null,
+      "effect": {
+        "kind": "statStage",
+        "stat": "spe",
+        "stages": 1
+      },
+      "duration": "battle",
+      "cooldown": "oncePerBattlePerPokemon",
+      "memoryRecord": {
+        "importance": 65,
+        "text": "Fought as part of the Rain Team"
+      },
+      "followUpEvents": [],
+      "visualCue": {
+        "major": false,
+        "color": "#52d18b",
+        "sound": "se.shiny",
+        "music": null,
+        "cutIn": false,
+        "shake": false
+      },
+      "priority": "emotionalOverdrive",
+      "eligibilityTags": [],
+      "emotions": [
+        "kindness"
+      ],
+      "variants": {}
+    },
+    {
+      "id": "team-sand",
+      "displayName": "Sand Team",
+      "messagePool": [
+        "{name} hunkers down with the Sand Team, hard as stone."
+      ],
+      "category": "rivalry",
+      "triggerConditions": {
+        "trigger": "teamSand"
+      },
+      "chance": null,
+      "effect": {
+        "kind": "statStage",
+        "stat": "def",
+        "stages": 1
+      },
+      "duration": "battle",
+      "cooldown": "oncePerBattlePerPokemon",
+      "memoryRecord": {
+        "importance": 65,
+        "text": "Fought as part of the Sand Team"
+      },
+      "followUpEvents": [],
+      "visualCue": {
+        "major": false,
+        "color": "#52d18b",
+        "sound": "se.shiny",
+        "music": null,
+        "cutIn": false,
+        "shake": false
+      },
+      "priority": "emotionalOverdrive",
+      "eligibilityTags": [],
+      "emotions": [
+        "kindness"
+      ],
+      "variants": {}
+    },
+    {
+      "id": "team-snow",
+      "displayName": "Snow Team",
+      "messagePool": [
+        "{name} stays cool beside the Snow Team and steels its mind."
+      ],
+      "category": "rivalry",
+      "triggerConditions": {
+        "trigger": "teamSnow"
+      },
+      "chance": null,
+      "effect": {
+        "kind": "statStage",
+        "stat": "spd",
+        "stages": 1
+      },
+      "duration": "battle",
+      "cooldown": "oncePerBattlePerPokemon",
+      "memoryRecord": {
+        "importance": 65,
+        "text": "Fought as part of the Snow Team"
+      },
+      "followUpEvents": [],
+      "visualCue": {
+        "major": false,
+        "color": "#52d18b",
+        "sound": "se.shiny",
+        "music": null,
+        "cutIn": false,
+        "shake": false
+      },
+      "priority": "emotionalOverdrive",
+      "eligibilityTags": [],
+      "emotions": [
+        "kindness"
+      ],
+      "variants": {}
+    },
+    {
+      "id": "team-trickroom",
+      "displayName": "Trick Room Team",
+      "messagePool": [
+        "{name} leads the Trick Room Team and hits harder."
+      ],
+      "category": "rivalry",
+      "triggerConditions": {
+        "trigger": "teamTrickRoom"
+      },
+      "chance": null,
+      "effect": {
+        "kind": "statStage",
+        "stat": "atk",
+        "stages": 1
+      },
+      "duration": "battle",
+      "cooldown": "oncePerBattlePerPokemon",
+      "memoryRecord": {
+        "importance": 65,
+        "text": "Fought as part of the Trick Room Team"
+      },
+      "followUpEvents": [],
+      "visualCue": {
+        "major": false,
+        "color": "#52d18b",
+        "sound": "se.shiny",
+        "music": null,
+        "cutIn": false,
+        "shake": false
+      },
+      "priority": "emotionalOverdrive",
+      "eligibilityTags": [],
+      "emotions": [
+        "kindness"
+      ],
+      "variants": {}
+    },
+    {
       "cooldown": "oncePerBattlePerPokemon",
       "duration": "battle",
       "followUpEvents": [],
@@ -4654,6 +4844,11 @@
     "cooldownBattles": 2,
     "hyperScale": 0.4,
     "exempt": [
+      "teamSun",
+      "teamRain",
+      "teamSand",
+      "teamSnow",
+      "teamTrickRoom",
       "notUntilOver",
       "overdriveExhaustion",
       "megaOverdrive",
