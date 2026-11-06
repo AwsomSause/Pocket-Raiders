@@ -30,6 +30,11 @@ export function repeatSurcharge(content: Content, run: PriceRun, item: string): 
   return 1 + Math.min(repeatCap, recent * repeat);
 }
 
+/** Copies of an item bought since the shelves last restocked (this stage). */
+export function recentCopies(run: PriceRun, item: string): number {
+  return run.itemCounters?.[RECENT + item] ?? 0;
+}
+
 /** The whole dynamic-price factor, as a number to multiply a price by. */
 export function dynamicPriceFactor(content: Content, run: PriceRun, item: string): number {
   return supplySwing(content, run, item) * repeatSurcharge(content, run, item);

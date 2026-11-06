@@ -1,0 +1,1 @@
+- Money and buy caps: money stops at ₽999,999 (`capMoney`, applied on every run save in GameSession); one shop item sells out after 25 copies per stage (`balance.itemCaps.buysPerStage`, counted with the existing recent-purchase counters). No save bump.

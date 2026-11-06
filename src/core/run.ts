@@ -163,7 +163,7 @@ import { allyLevel, applyTotemHp, describeAlly, describeTotemRewards, freshTotem
 import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
-import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase } from './priceSwing';
+import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
@@ -2277,6 +2277,11 @@ export function sellItem(content: Content, current: RunState, itemId: string): {
   return { run, message: `You sold a ${item.name} for ₽${price}.` };
 }
 
+/** Money never goes above balance.itemCaps.moneyMax (mutates `run`). */
+export function capMoney(content: Content, run: Pick<RunState, 'money'>): void {
+  run.money = Math.min(run.money, content.balance.itemCaps.moneyMax);
+}
+
 /** Buys one of an item at the shop. */
 export function buyItem(content: Content, current: RunState, itemId: string): { run: RunState; message: string } {
   assertPhase(current, 'shop');
@@ -2285,6 +2290,7 @@ export function buyItem(content: Content, current: RunState, itemId: string): { 
   const item = getItem(content, itemId);
   if (ownsKeepsake(content, current.inventory, itemId)) throw new Error(`You already have the ${item.name}.`);
   if (item.effect.kind !== 'attribute' && itemCount(current.inventory, itemId) >= STACK_MAX) throw new Error(`You can't carry more than ${STACK_MAX} ${item.name}.`);
+  if (recentCopies(current, itemId) >= content.balance.itemCaps.buysPerStage) throw new Error(`The shop is sold out of ${item.name} until the next stage.`);
   const badges = shopBadgesNeeded(content, current, entry);
   if (!shopStock(content, current).some((e) => e.item === entry.item)) throw new Error(`The shop sells ${item.name} once you have ${badges} badges.`);
   const price = shopPrice(content, current, entry);
