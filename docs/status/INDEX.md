@@ -296,3 +296,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-item-preview.md`: Overhaul slice 7: item target list shows who an item works on, the exact effect, and an I quick summary.
 - `overhaul-wild-biomes.md`: Overhaul slice 13, wild biome pools (see file).
 - `overhaul-battle-info.md`: Overhaul slice 8: battle Info panel adds move matchups, transformations, revealed abilities/items; hidden foes stay hidden.
+- `overhaul-egg-pools.md`: Overhaul slice 14, egg pools per tier and region (see file).
