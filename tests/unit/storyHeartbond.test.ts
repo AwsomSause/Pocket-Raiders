@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adjustBond, bondOf } from '../../src/core/bond';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
+import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
 import { content } from './helpers';
@@ -158,6 +158,18 @@ describe('clutch hook', () => {
     const { run, uid } = setup();
     expect(heartbondTurn(run, 'b1', 1, [{ type: 'clutch', side: 'player', uid }]).paid).toEqual(['clutch_survive']);
     expect(heartbondTurn(run, 'b1', 2, [{ type: 'clutch', side: 'player', uid }]).paid).toEqual([]);
+  });
+});
+
+describe('heartbond label', () => {
+  it('shows for the partner only, and notes the best level when strain pulls it down', () => {
+    const { run, uid } = setup();
+    expect(heartbondLabel(run, uid)).toBe('Heartbond 1');
+    expect(heartbondLabel(run, 'other')).toBeNull();
+    run.story.v2!.heartbond.latched.push(3);
+    expect(heartbondLabel(run, uid)).toBe('Heartbond 1 (best 3)');
+    run.story.v2 = undefined;
+    expect(heartbondLabel(run, uid)).toBeNull();
   });
 });
 

@@ -6,6 +6,7 @@
 import { fitLine } from './fitText';
 import type Phaser from 'phaser';
 import { bondMood, bondOf } from '../core/bond';
+import { heartbondLabel } from '../core/story2/heartbond';
 import { partyRoles } from '../core/partyRoles';
 import { cultureLine } from './partyLifeUi';
 import { teamTags } from '../core/synergyTags';
@@ -32,7 +33,7 @@ function bondRow(content: Content, run: RunState, mon: PokemonInstance, motion: 
       const icon = pokemonIcon(scene, species, 32, 34, 1.4);
       box.add(icon);
       box.add(fitLine(scene.add.text(64, 10, species.name, textStyle(22)), w - 64 - 124));
-      box.add(scene.add.text(64, 36, `${cap(bond.trait)} · Lv${mon.level} · ${partyRoles(content, mon).join(' / ')}`, textStyle(15, '#bfe9ff')));
+      box.add(scene.add.text(64, 36, [cap(bond.trait), `Lv${mon.level}`, heartbondLabel(run, mon.uid), partyRoles(content, mon).join(' / ')].filter(Boolean).join(' · '), textStyle(15, '#bfe9ff')));
       // Mood bubble: a glossy pill that floats.
       const pill = scene.add.container(w - 62, 22);
       const g = scene.add.graphics();
