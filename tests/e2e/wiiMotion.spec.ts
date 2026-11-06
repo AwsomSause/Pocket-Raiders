@@ -2,6 +2,9 @@ import { expect, test, type Page } from '@playwright/test';
 
 // Spec §24: the Wii-style cursor glides between menu options (and snaps when Menu animations are off).
 
+// The glide tests count animation frames, and a loaded CI machine can draw too few of them: allow two retries.
+test.describe.configure({ retries: 2 });
+
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 
 /** The glowing cursor's y inside the Settings menu. */

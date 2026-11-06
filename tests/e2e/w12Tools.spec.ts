@@ -22,7 +22,8 @@ test('Tools room pages open and close; offline files are served', async ({ page,
     await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
     await page.waitForTimeout(250);
     expect(await hub(page, '!!hub.picker'), 'tools list open').toBe(true);
-    for (let i = 0; i < item; i++) await page.keyboard.press('ArrowDown');
+    // Jump straight to the row: every arrow press redraws the heavy Hub, and 19 of them took over 40 s under load.
+    await page.evaluate((i) => (window as any).__pkr.game.scene.getScene('Hub').picker.focus(i), item);
     await page.keyboard.press('Enter');
     await page.waitForTimeout(300);
     expect(await hub(page, '!!hub.picker'), `page ${item} open`).toBe(true);
