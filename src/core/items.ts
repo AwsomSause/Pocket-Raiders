@@ -18,8 +18,13 @@ export function itemCount(inventory: Record<string, number>, id: string): number
   return inventory[id] ?? 0;
 }
 
+/** Most copies of one Bag item you can carry . */
+export const STACK_MAX = 100;
+
 export function addItem(inventory: Record<string, number>, id: string, quantity: number): void {
-  inventory[id] = itemCount(inventory, id) + quantity;
+  const next = itemCount(inventory, id) + quantity;
+  // Gains stop at the cap; a stack already over it (older saves) is left alone.
+  inventory[id] = quantity > 0 ? Math.min(next, Math.max(STACK_MAX, itemCount(inventory, id))) : next;
 }
 
 export function consumeItem(inventory: Record<string, number>, id: string): void {

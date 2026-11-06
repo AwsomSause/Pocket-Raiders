@@ -88,23 +88,14 @@ describe('berries and Pal Pad', () => {
   });
 });
 
-describe('selling and the Seal Bag', () => {
-  it('sells for half the shop price, all of it with a Seal Bag, and refuses key items', async () => {
-    const { sellPrice, sellItem, shopPrice } = await import('../../src/core/run');
+describe('selling is off', () => {
+  it('shops pay nothing for anything and refuse sales', async () => {
+    const { sellPrice, sellItem } = await import('../../src/core/run');
     const run = newRun('sell');
-    const price = content.shop.find((e) => e.item === 'potion')!.price;
-    // Never more than a share of today's shop price (Beta 4.4 money glitch).
-    const now = shopPrice(content, run, content.shop.find((e) => e.item === 'potion')!);
-    expect(sellPrice(content, run, 'potion')).toBe(Math.min(Math.floor(price / 2), Math.floor(now * content.balance.resale.share)));
-    take(run, 'seal-bag');
-    expect(sellPrice(content, run, 'potion')).toBe(Math.min(price, Math.floor(now * content.balance.resale.fullSellShare)));
-    expect(sellPrice(content, run, 'mega-bracelet')).toBeNull();
+    expect(sellPrice(content, run, 'potion')).toBeNull();
     run.phase = 'shop';
     run.inventory.potion = 2;
-    const before = run.money;
-    const sold = sellItem(content, run, 'potion');
-    expect(sold.run.money).toBe(before + sellPrice(content, run, 'potion')!);
-    expect(sold.run.inventory.potion).toBe(1);
+    expect(() => sellItem(content, run, 'potion')).toThrow();
   });
   it('urge items are drafted into the Bag', () => {
     const run = newRun('urge-bag');

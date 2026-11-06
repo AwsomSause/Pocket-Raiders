@@ -63,7 +63,7 @@ import {
 import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
 import { followStep } from './followMode';
-import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
+import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
 import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
@@ -2255,23 +2255,9 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
 const RARITY_VALUE: Record<string, number> = { common: 60, uncommon: 120, rare: 240, epic: 480 };
 
-/** What the shop pays for one of an item, or null when it can't be sold (keys, Mega gear, ...). Half the price, or all of it with a Seal Bag. */
-export function sellPrice(content: Content, run: RunState, itemId: string): number | null {
-  const item = content.items.get(itemId);
-  if (!item || item.category === 'key' || item.category === 'transformation' || item.category === 'attribute') return null;
-  const entry = content.shop.find((e) => e.item === itemId);
-  const base = entry?.price ?? RARITY_VALUE[content.catalog.get(itemId)?.rarity ?? 'common'] ?? 60;
-  const fullSell = hasPerk(content, run, 'fullSell');
-  const price = Math.max(1, Math.floor(fullSell ? base : base / 2));
-  // Never more than a share of what the shop charges now, so discounts can't be sold back at a profit.
-  const cap = resaleCap(content, run, itemId, fullSell ? content.balance.resale.fullSellShare : content.balance.resale.share);
-  return cap === null ? price : Math.min(price, cap);
-}
-
-/** The most a sale (or appraisal) of an item may pay: `share` of the shop's current price, or null when no shop sells it. */
-export function resaleCap(content: Content, run: RunState, itemId: string, share: number): number | null {
-  const entry = content.shop.find((e) => e.item === itemId);
-  return entry ? Math.floor(shopPrice(content, run, entry) * share) : null;
+/** Selling is off: shops only sell, so no item has a sell price (no resale money exploits). */
+export function sellPrice(_content: Content, _run: RunState, _itemId: string): number | null {
+  return null;
 }
 
 /** Sells one of an item to the shop. */
@@ -2295,6 +2281,7 @@ export function buyItem(content: Content, current: RunState, itemId: string): { 
   if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
   const item = getItem(content, itemId);
   if (ownsKeepsake(content, current.inventory, itemId)) throw new Error(`You already have the ${item.name}.`);
+  if (item.effect.kind !== 'attribute' && itemCount(current.inventory, itemId) >= STACK_MAX) throw new Error(`You can't carry more than ${STACK_MAX} ${item.name}.`);
   const badges = shopBadgesNeeded(content, current, entry);
   if (!shopStock(content, current).some((e) => e.item === entry.item)) throw new Error(`The shop sells ${item.name} once you have ${badges} badges.`);
   const price = shopPrice(content, current, entry);

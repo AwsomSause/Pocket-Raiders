@@ -344,6 +344,7 @@ export function createBattle(
     kind,
     turn: 1,
     hype: 0,
+    revivesUsed: 0,
     hypeTurns: 0,
     hypeLoaded: false,
     activeIndex,
@@ -1365,6 +1366,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   if (ctx.noBattleItems && item.category !== 'ball') return 'Your Empty Bag contract allows only Poké Balls in battle.';
   if (itemCount(ctx.inventory, itemId) <= 0) return `You have no ${item.name} left.`;
   if (!item.usableInBattle) return `${item.name} can't be used in battle.`;
+  if (item.category === 'revive' && (ctx.battle.revivesUsed ?? 0) >= ctx.content.balance.itemCaps.revivesPerBattle) return `You've already used ${ctx.content.balance.itemCaps.revivesPerBattle} revives this battle.`;
   const noHeal = raidItemProblem(ctx.content, ctx.battle, item.category === 'healing' || item.category === 'revive');
   if (noHeal) return noHeal;
   if (item.effect.kind === 'catch') {
@@ -1457,6 +1459,7 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
   const { content, battle } = ctx;
   const item = getItem(content, itemId);
   consumeItem(ctx.inventory, itemId);
+  if (item.category === 'revive') battle.revivesUsed = (battle.revivesUsed ?? 0) + 1;
   if (item.effect.kind === 'catch' && item.effect.rule === 'snag') {
     // Snagging never fails. The Pokémon leaves the trainer's team and joins you when the battle is won.
     const foe = currentEnemy(battle);

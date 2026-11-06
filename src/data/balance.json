@@ -227,7 +227,7 @@
  "legendaryWildChance": 0.0025,
  "legendaryMinRegion": 2,
  "heldItemSlots": 8,
- "itemCaps": { "bonusMax": 3 },
+ "itemCaps": { "bonusMax": 3, "revivesPerBattle": 6 },
  "rareEncounterBst": 480,
  "evolution": {
   "trainerItemLevel": 30,
@@ -700,7 +700,6 @@
   ]
  },
  "frugalRunMaxSpent": 300,
- "resale": { "share": 0.5, "fullSellShare": 0.9, "appraiseShare": 0.95 },
  "shopSale": {
   "everyStages": 3,
   "discount": 0.2
