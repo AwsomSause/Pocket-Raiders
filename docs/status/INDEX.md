@@ -363,4 +363,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - shop-item-limits: no selling, stacks cap 100, 6 revives per battle
 - story-s12-backstory-parity.md: S12 ending-grid check and parity audit for all five backstories.
 - `story-s20-acceptance.md`: Story S20 (partial): `sim:story` per-backstory Story Run sim, acceptance test, report in `docs/qa/story-acceptance-s20.md`.
-- [S2 identity and prologue shell](story-s2-identity-prologue.md)
+- `story-s10-rivals.md`: Story S10: seven rivals data (teams, scenes, lines, packs), Kael/Soren clue ledgers, theme role table, fair-play audit gate (not yet wired into runs).

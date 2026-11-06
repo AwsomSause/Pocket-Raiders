@@ -120,6 +120,50 @@ export const StoryBlueprintSchema = z.object({
 });
 export type StoryBlueprint = z.infer<typeof StoryBlueprintSchema>;
 
+// ---------- S10: the seven story rivals (design Part IV-R). Data only; the engine reads these through story2/storyRivals.ts ----------
+
+export const RIVAL_ROLES = ['primary', 'secondary', 'friendly'] as const;
+export const CLUE_TYPES = ['behavioral', 'verbal', 'material', 'pokemon', 'third_party'] as const;
+const Species = z.string().regex(/^[a-z][a-z0-9-]*$/);
+const RivalSlot = z.object({ species: Species, nick: z.string().max(16).optional(), ace: z.boolean().optional(), move: Id.or(z.string().regex(/^[a-z][a-z0-9-]*$/)).optional(), item: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), freedOnly: z.boolean().optional() });
+const RivalCounter = z.object({ slot: z.number().int().min(0).max(6), species: Species.optional(), vs: z.array(Id), freedOnly: z.boolean().optional(), draw: z.boolean().optional() });
+export const RivalTeamSchema = z.object({
+  act: z.number().int().min(1).max(6), slots: z.array(RivalSlot).min(2).max(6),
+  /** Pip only: extra slots drawn from the character's `drawPool`. */
+  draws: z.number().int().min(0).max(6).optional(),
+  /** Marisol: the slot that is a different species when Bastion is not freed. */
+  fallbackSlot: z.object({ slot: z.number().int().min(1).max(6), species: Species }).optional(),
+  counter: RivalCounter.nullable(), note: Id.optional(),
+});
+export const RivalClueSchema = z.object({
+  id: Id, act: z.number().int().min(1).max(6), place: Id, type: z.enum(CLUE_TYPES), textKey: Key,
+  /** Fair-play audit fields (design 4): on a stop the player must pass, plainly visible, an innocent reading shown with it, the Journal line after the reveal, the eye icon. */
+  mandatory: z.boolean(), visible: z.boolean(), cover: z.boolean(), coverKey: Key, retroKey: Key, icon: Id,
+});
+export const StoryRivalSchema = z.object({
+  id: Id, v: Ver, character: Id, archetype: z.enum(['friendly', 'competitive', 'reluctant', 'unpredictable', 'secret', 'turned_villain', 'fallen']),
+  types: z.array(Id).min(1), roles: z.array(z.enum(RIVAL_ROLES)).min(2), defaultFriendly: z.boolean().default(false), status: z.enum(['supported', 'limited', 'disabled']),
+  /** Which key scenes (beats 2, 4, 6, 8) each role plays, and the Acts of a Friendly rival's three friendly spars. */
+  sceneBeats: z.object({ primary: z.array(z.number().int().min(1).max(8)), secondary: z.array(z.number().int().min(1).max(8)), friendly: z.array(z.number().int().min(1).max(8)).optional() }), sparActs: z.array(z.number().int().min(1).max(6)).default([]),
+  /** A Secondary Secret/Villain/Fallen rival runs a compressed arc: these clue ids, a reveal after `revealNeeds`, and only these outcomes. */
+  compressed: z.object({ clueIds: z.array(Id), revealNeeds: z.number().int().min(0), outcomes: z.array(Id).min(2) }).optional(),
+  teams: z.array(RivalTeamSchema).length(6), drawPool: z.array(Species).default([]),
+  lines: z.object({ intro: Key, mid: Key, win: Key, lose: Key, aceOut: Key, rematch: Key, rematchAfter: Key.optional() }),
+  friendlyLineKey: Key, hostileLineKey: Key, likes: z.array(Id), dislikes: z.array(Id),
+  packKind: z.enum(['secret', 'tone', 'faith_break']), packs: z.array(z.object({ id: Id, nameKey: Key, vars: z.record(Id, z.string()), payoffKey: Key })).min(1),
+  endings: z.array(Id).min(1), scenes: z.array(z.object({ beat: z.number().int().min(1).max(8), act: z.number().int().min(1).max(8), place: Id, event: Id })),
+  ledger: z.array(RivalClueSchema).default([]), dossier: z.record(Id, z.string()).optional(),
+});
+export type StoryRival = z.infer<typeof StoryRivalSchema>;
+export type RivalRole = (typeof RIVAL_ROLES)[number];
+
+/** One row of the theme table: who fills which role, the pack the row names, and the original Preferred/Allowed/Avoid archetypes. */
+export const RivalThemeSchema = z.object({
+  theme: Id, primary: Id, secondary: Id, friendly: Id, pack: z.object({ rival: Id, pack: Id }),
+  preferred: z.array(Id), allowed: z.array(Id), avoid: z.array(Id),
+});
+export type RivalThemeRow = z.infer<typeof RivalThemeSchema>;
+
 export const SLOT_RULES_PLACEHOLDER = z.object({ weights: z.record(Id, z.number()).default({}) });
 
 /** Everything `src/data/story/*.json` holds, parsed. Empty arrays are valid (F0 ships no content). */
@@ -128,6 +172,7 @@ export const StoryDataSchema = z.object({
   remembrances: z.array(RemembranceSchema), moveMoments: z.array(MoveMomentSchema), dialogue: z.array(DialogueLineSchema),
   lore: z.array(LoreEntrySchema), news: z.array(NewsTemplateSchema), interactables: z.array(InteractableSchema),
   backstories: z.array(BackstorySchema), quiz: z.array(QuizQuestionSchema), blueprintRules: SLOT_RULES_PLACEHOLDER,
+  rivals: z.array(StoryRivalSchema).default([]), rivalThemes: z.array(RivalThemeSchema).default([]),
   text: z.record(Key, z.string()),
   hash: z.string(),
 });

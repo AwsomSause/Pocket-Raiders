@@ -1,0 +1,2154 @@
+[
+ {
+  "id": "rv_dara",
+  "v": 1,
+  "character": "ch_dara_quinlan",
+  "archetype": "friendly",
+  "types": [
+   "water",
+   "flying"
+  ],
+  "roles": [
+   "primary",
+   "secondary",
+   "friendly"
+  ],
+  "defaultFriendly": true,
+  "status": "supported",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ],
+   "friendly": [
+    2
+   ]
+  },
+  "sparActs": [
+   2,
+   4,
+   6
+  ],
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "quaxly",
+      "nick": "Skiff"
+     },
+     {
+      "species": "starly",
+      "nick": "Postmark",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 2,
+     "species": "pidove",
+     "vs": [
+      "grass",
+      "bug"
+     ]
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "quaxwell"
+     },
+     {
+      "species": "staravia",
+      "ace": true
+     },
+     {
+      "species": "wingull"
+     }
+    ],
+    "counter": {
+     "slot": 3,
+     "species": "pachirisu",
+     "vs": [
+      "water",
+      "flying"
+     ]
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "quaxwell"
+     },
+     {
+      "species": "staravia",
+      "ace": true
+     },
+     {
+      "species": "pelipper"
+     },
+     {
+      "species": "buizel"
+     }
+    ],
+    "counter": {
+     "slot": 4,
+     "species": "tropius",
+     "vs": [
+      "ground"
+     ]
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "quaquaval"
+     },
+     {
+      "species": "staraptor",
+      "ace": true
+     },
+     {
+      "species": "pelipper"
+     },
+     {
+      "species": "floatzel"
+     },
+     {
+      "species": "mantine"
+     }
+    ],
+    "counter": {
+     "slot": 5,
+     "species": "rotom",
+     "vs": [
+      "water"
+     ]
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "quaquaval"
+     },
+     {
+      "species": "staraptor",
+      "ace": true
+     },
+     {
+      "species": "pelipper"
+     },
+     {
+      "species": "floatzel"
+     },
+     {
+      "species": "mantine"
+     },
+     {
+      "species": "gyarados"
+     }
+    ],
+    "counter": {
+     "slot": 6,
+     "species": "tentacruel",
+     "vs": [
+      "fire",
+      "ice"
+     ]
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "quaquaval"
+     },
+     {
+      "species": "staraptor",
+      "ace": true,
+      "move": "brave-bird"
+     },
+     {
+      "species": "pelipper"
+     },
+     {
+      "species": "floatzel"
+     },
+     {
+      "species": "mantine"
+     },
+     {
+      "species": "gyarados"
+     }
+    ],
+    "note": "held_items_from_brineholt_market",
+    "counter": {
+     "slot": 6,
+     "species": "tentacruel",
+     "vs": [
+      "fire",
+      "ice"
+     ]
+    }
+   }
+  ],
+  "drawPool": [],
+  "lines": {
+   "intro": "rv.dara.line.intro",
+   "mid": "rv.dara.line.mid",
+   "win": "rv.dara.line.win",
+   "lose": "rv.dara.line.lose",
+   "aceOut": "rv.dara.line.ace_out",
+   "rematch": "rv.dara.line.rematch"
+  },
+  "friendlyLineKey": "rv.dara.friendly",
+  "hostileLineKey": "rv.dara.hostile",
+  "likes": [
+   "ferry_stamps",
+   "sweet_snacks",
+   "one_on_one_fights"
+  ],
+  "dislikes": [
+   "pity_after_loss",
+   "being_rushed"
+  ],
+  "packKind": "secret",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.dara.pack.a.name",
+    "vars": {
+     "cargo": "smuggled_pokemon",
+     "handler": "drowned_light_ring"
+    },
+    "payoffKey": "rv.dara.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.dara.pack.b.name",
+    "vars": {
+     "cargo": "antagonist_crates",
+     "handler": "run_antagonist"
+    },
+    "payoffKey": "rv.dara.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.dara.pack.c.name",
+    "vars": {
+     "cargo": "medicine_for_hidden_relative",
+     "handler": "family"
+    },
+    "payoffKey": "rv.dara.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "ally",
+   "estranged",
+   "reconciled"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "cairnmoor_ferry_landing",
+    "event": "ev_rv_dara_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "tidewrack_gym_town",
+    "event": "ev_rv_dara_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "meridian_ferry_dock",
+    "event": "ev_rv_dara_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "port_lathe_quay",
+    "event": "ev_rv_dara_b8"
+   }
+  ],
+  "ledger": []
+ },
+ {
+  "id": "rv_hale",
+  "v": 1,
+  "character": "ch_hale_brightwater",
+  "archetype": "competitive",
+  "types": [
+   "fighting",
+   "fire",
+   "dragon"
+  ],
+  "roles": [
+   "primary",
+   "secondary",
+   "friendly"
+  ],
+  "defaultFriendly": false,
+  "status": "supported",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ],
+   "friendly": [
+    2
+   ]
+  },
+  "sparActs": [
+   2,
+   4,
+   6
+  ],
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "chimchar"
+     },
+     {
+      "species": "jangmo-o",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 1,
+     "species": "mankey",
+     "vs": [
+      "normal",
+      "dark"
+     ]
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "monferno"
+     },
+     {
+      "species": "mankey"
+     },
+     {
+      "species": "jangmo-o",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 3,
+     "species": "gible",
+     "vs": [
+      "electric",
+      "fire"
+     ]
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "monferno"
+     },
+     {
+      "species": "primeape"
+     },
+     {
+      "species": "hakamo-o",
+      "ace": true
+     },
+     {
+      "species": "machoke"
+     }
+    ],
+    "counter": {
+     "slot": 4,
+     "species": "hitmontop",
+     "vs": [
+      "steel",
+      "rock"
+     ]
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "infernape"
+     },
+     {
+      "species": "primeape"
+     },
+     {
+      "species": "hakamo-o",
+      "ace": true
+     },
+     {
+      "species": "machamp"
+     },
+     {
+      "species": "arcanine"
+     }
+    ],
+    "counter": {
+     "slot": 5,
+     "species": "sceptile",
+     "vs": [
+      "water",
+      "ground"
+     ]
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "infernape"
+     },
+     {
+      "species": "annihilape"
+     },
+     {
+      "species": "kommo-o",
+      "nick": "Tremor",
+      "ace": true
+     },
+     {
+      "species": "machamp"
+     },
+     {
+      "species": "arcanine"
+     },
+     {
+      "species": "haxorus"
+     }
+    ],
+    "counter": {
+     "slot": 6,
+     "species": "garchomp",
+     "vs": [
+      "ice",
+      "dragon"
+     ]
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "infernape"
+     },
+     {
+      "species": "annihilape"
+     },
+     {
+      "species": "kommo-o",
+      "nick": "Tremor",
+      "ace": true,
+      "move": "clanging-scales",
+      "item": "focus-sash"
+     },
+     {
+      "species": "machamp"
+     },
+     {
+      "species": "arcanine"
+     },
+     {
+      "species": "haxorus"
+     }
+    ],
+    "counter": {
+     "slot": 6,
+     "species": "garchomp",
+     "vs": [
+      "ice",
+      "dragon"
+     ]
+    }
+   }
+  ],
+  "drawPool": [],
+  "lines": {
+   "intro": "rv.hale.line.intro",
+   "mid": "rv.hale.line.mid",
+   "win": "rv.hale.line.win",
+   "lose": "rv.hale.line.lose",
+   "aceOut": "rv.hale.line.ace_out",
+   "rematch": "rv.hale.line.rematch"
+  },
+  "friendlyLineKey": "rv.hale.friendly",
+  "hostileLineKey": "rv.hale.hostile",
+  "likes": [
+   "training_logs",
+   "protein_snacks",
+   "honest_talk"
+  ],
+  "dislikes": [
+   "shortcuts",
+   "praise_for_impossible_feats"
+  ],
+  "packKind": "tone",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.hale.pack.a.name",
+    "vars": {
+     "tone": "rivalry"
+    },
+    "payoffKey": "rv.hale.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.hale.pack.b.name",
+    "vars": {
+     "tone": "mentor_student"
+    },
+    "payoffKey": "rv.hale.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.hale.pack.c.name",
+    "vars": {
+     "tone": "reluctant_teammate"
+    },
+    "payoffKey": "rv.hale.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "respected_friend",
+   "eternal_rival",
+   "coach"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "greywick_training_yard",
+    "event": "ev_rv_hale_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "tidewrack_gym_courtyard",
+    "event": "ev_rv_hale_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "meridian_exhibition",
+    "event": "ev_rv_hale_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "meridian_arena",
+    "event": "ev_rv_hale_b8"
+   }
+  ],
+  "ledger": []
+ },
+ {
+  "id": "rv_ines",
+  "v": 1,
+  "character": "ch_ines_calloway",
+  "archetype": "reluctant",
+  "types": [
+   "bug",
+   "ground",
+   "grass"
+  ],
+  "roles": [
+   "primary",
+   "secondary",
+   "friendly"
+  ],
+  "defaultFriendly": false,
+  "status": "supported",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ],
+   "friendly": [
+    2
+   ]
+  },
+  "sparActs": [
+   2,
+   4,
+   6
+  ],
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "grubbin"
+     },
+     {
+      "species": "trapinch",
+      "nick": "Mellow",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 1,
+     "species": "wurmple",
+     "vs": [
+      "fire",
+      "flying"
+     ]
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "charjabug"
+     },
+     {
+      "species": "trapinch",
+      "ace": true
+     },
+     {
+      "species": "bounsweet"
+     }
+    ],
+    "counter": {
+     "slot": 3,
+     "species": "sandile",
+     "vs": [
+      "electric"
+     ]
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "charjabug"
+     },
+     {
+      "species": "vibrava",
+      "ace": true
+     },
+     {
+      "species": "steenee"
+     },
+     {
+      "species": "sandile"
+     }
+    ],
+    "counter": {
+     "slot": 4,
+     "species": "shroomish",
+     "vs": [
+      "water",
+      "ground"
+     ]
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "vikavolt"
+     },
+     {
+      "species": "flygon",
+      "ace": true
+     },
+     {
+      "species": "tsareena"
+     },
+     {
+      "species": "krokorok"
+     },
+     {
+      "species": "leavanny"
+     }
+    ],
+    "counter": {
+     "slot": 5,
+     "species": "foongus",
+     "vs": [
+      "ground"
+     ]
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "vikavolt"
+     },
+     {
+      "species": "flygon",
+      "ace": true
+     },
+     {
+      "species": "tsareena"
+     },
+     {
+      "species": "krookodile"
+     },
+     {
+      "species": "leavanny"
+     },
+     {
+      "species": "roserade"
+     }
+    ],
+    "counter": {
+     "slot": 6,
+     "species": "ferrothorn",
+     "vs": [
+      "fire",
+      "flying"
+     ]
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "vikavolt"
+     },
+     {
+      "species": "flygon",
+      "ace": true,
+      "move": "earth-power"
+     },
+     {
+      "species": "tsareena"
+     },
+     {
+      "species": "krookodile"
+     },
+     {
+      "species": "leavanny"
+     },
+     {
+      "species": "roserade"
+     }
+    ],
+    "note": "ines_own_berry_blends",
+    "counter": {
+     "slot": 6,
+     "species": "ferrothorn",
+     "vs": [
+      "fire",
+      "flying"
+     ]
+    }
+   }
+  ],
+  "drawPool": [],
+  "lines": {
+   "intro": "rv.ines.line.intro",
+   "mid": "rv.ines.line.mid",
+   "win": "rv.ines.line.win",
+   "lose": "rv.ines.line.lose",
+   "aceOut": "rv.ines.line.ace_out",
+   "rematch": "rv.ines.line.rematch"
+  },
+  "friendlyLineKey": "rv.ines.friendly",
+  "hostileLineKey": "rv.ines.hostile",
+  "likes": [
+   "herbs_and_jars",
+   "handwritten_orders",
+   "being_thanked"
+  ],
+  "dislikes": [
+   "being_called_lucky",
+   "follow_your_dream"
+  ],
+  "packKind": "secret",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.ines.pack.a.name",
+    "vars": {
+     "recruiter": "quiet_league_scout",
+     "wants": "scout_for_elite_four"
+    },
+    "payoffKey": "rv.ines.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.ines.pack.b.name",
+    "vars": {
+     "recruiter": "pale_cartographer_buyer",
+     "wants": "family_route_maps"
+    },
+    "payoffKey": "rv.ines.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.ines.pack.c.name",
+    "vars": {
+     "recruiter": "ironvein_combine_buyer",
+     "wants": "shop_land"
+    },
+    "payoffKey": "rv.ines.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "owner",
+   "traveler",
+   "sidekick"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "greywick_road",
+    "event": "ev_rv_ines_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "tidewrack_harbor",
+    "event": "ev_rv_ines_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "cogwell",
+    "event": "ev_rv_ines_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "greywick_shop",
+    "event": "ev_rv_ines_b8"
+   }
+  ],
+  "ledger": []
+ },
+ {
+  "id": "rv_pip",
+  "v": 1,
+  "character": "ch_pip_marchetti",
+  "archetype": "unpredictable",
+  "types": [
+   "ghost",
+   "flying"
+  ],
+  "roles": [
+   "primary",
+   "secondary",
+   "friendly"
+  ],
+  "defaultFriendly": false,
+  "status": "supported",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ],
+   "friendly": [
+    2
+   ]
+  },
+  "sparActs": [
+   2,
+   4,
+   6
+  ],
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "pikipek",
+      "nick": "Chirp"
+     },
+     {
+      "species": "gastly",
+      "nick": "Understudy",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 0,
+     "vs": [],
+     "draw": true
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "trumbeak"
+     },
+     {
+      "species": "haunter",
+      "ace": true
+     }
+    ],
+    "draws": 1,
+    "counter": {
+     "slot": 0,
+     "vs": [],
+     "draw": true
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "trumbeak"
+     },
+     {
+      "species": "haunter",
+      "ace": true
+     }
+    ],
+    "draws": 2,
+    "counter": {
+     "slot": 0,
+     "vs": [],
+     "draw": true
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "toucannon"
+     },
+     {
+      "species": "gengar",
+      "ace": true
+     }
+    ],
+    "draws": 3,
+    "counter": {
+     "slot": 0,
+     "vs": [],
+     "draw": true
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "toucannon"
+     },
+     {
+      "species": "gengar",
+      "ace": true
+     }
+    ],
+    "draws": 4,
+    "counter": {
+     "slot": 0,
+     "vs": [],
+     "draw": true
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "toucannon"
+     },
+     {
+      "species": "gengar",
+      "ace": true,
+      "move": "shadow-ball"
+     }
+    ],
+    "draws": 4,
+    "note": "one_trade_back_item",
+    "counter": {
+     "slot": 0,
+     "vs": [],
+     "draw": true
+    }
+   }
+  ],
+  "drawPool": [
+   "zorua",
+   "mimikyu",
+   "sableye",
+   "pachirisu",
+   "rotom",
+   "oricorio",
+   "morpeko",
+   "indeedee",
+   "wobbuffet",
+   "ditto"
+  ],
+  "lines": {
+   "intro": "rv.pip.line.intro",
+   "mid": "rv.pip.line.mid",
+   "win": "rv.pip.line.win",
+   "lose": "rv.pip.line.lose",
+   "aceOut": "rv.pip.line.ace_out",
+   "rematch": "rv.pip.line.rematch"
+  },
+  "friendlyLineKey": "rv.pip.friendly",
+  "hostileLineKey": "rv.pip.hostile",
+  "likes": [
+   "stories",
+   "music",
+   "trades_with_a_story"
+  ],
+  "dislikes": [
+   "promises",
+   "being_tied_down"
+  ],
+  "packKind": "secret",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.pip.pack.a.name",
+    "vars": {
+     "buyers": "gilt_circle_and_integrity_bureau"
+    },
+    "payoffKey": "rv.pip.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.pip.pack.b.name",
+    "vars": {
+     "buyers": "marauders_and_cartographers"
+    },
+    "payoffKey": "rv.pip.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.pip.pack.c.name",
+    "vars": {
+     "buyers": "one_faction_false_info_to_other"
+    },
+    "payoffKey": "rv.pip.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "wild_card_ally",
+   "mercenary",
+   "vanished"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "hallow_marrow_lantern_tour",
+    "event": "ev_rv_pip_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "lanternreach",
+    "event": "ev_rv_pip_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "cogwell_faction_party",
+    "event": "ev_rv_pip_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "champion_banquet",
+    "event": "ev_rv_pip_b8"
+   }
+  ],
+  "ledger": []
+ },
+ {
+  "id": "rv_soren",
+  "v": 1,
+  "character": "ch_soren_lindqvist",
+  "archetype": "secret",
+  "types": [
+   "psychic",
+   "steel"
+  ],
+  "roles": [
+   "primary",
+   "secondary"
+  ],
+  "defaultFriendly": false,
+  "status": "supported",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ]
+  },
+  "sparActs": [],
+  "compressed": {
+   "clueIds": [
+    "s2",
+    "s3",
+    "s5"
+   ],
+   "revealNeeds": 3,
+   "outcomes": [
+    "abandons",
+    "disappears",
+    "continues_independently"
+   ]
+  },
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "abra"
+     },
+     {
+      "species": "beldum",
+      "nick": "Axiom",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 1,
+     "species": "gastly",
+     "vs": [
+      "fighting"
+     ]
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "kadabra"
+     },
+     {
+      "species": "beldum",
+      "ace": true
+     },
+     {
+      "species": "magnemite"
+     }
+    ],
+    "counter": {
+     "slot": 3,
+     "species": "ducklett",
+     "vs": [
+      "ground"
+     ]
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "kadabra"
+     },
+     {
+      "species": "metang",
+      "ace": true
+     },
+     {
+      "species": "magneton"
+     },
+     {
+      "species": "bronzor"
+     }
+    ],
+    "counter": {
+     "slot": 4,
+     "species": "sableye",
+     "vs": [
+      "fairy",
+      "psychic"
+     ]
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "alakazam"
+     },
+     {
+      "species": "metagross",
+      "ace": true
+     },
+     {
+      "species": "bronzong"
+     },
+     {
+      "species": "reuniclus"
+     },
+     {
+      "species": "magnezone"
+     }
+    ],
+    "counter": {
+     "slot": 5,
+     "species": "heatran",
+     "vs": [
+      "ice",
+      "fairy"
+     ]
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "alakazam"
+     },
+     {
+      "species": "metagross",
+      "ace": true
+     },
+     {
+      "species": "bronzong"
+     },
+     {
+      "species": "reuniclus"
+     },
+     {
+      "species": "magnezone"
+     },
+     {
+      "species": "lucario"
+     }
+    ],
+    "counter": {
+     "slot": 6,
+     "species": "garchomp",
+     "vs": [
+      "fire",
+      "fighting"
+     ]
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "alakazam"
+     },
+     {
+      "species": "metagross",
+      "ace": true,
+      "move": "meteor-mash"
+     },
+     {
+      "species": "bronzong"
+     },
+     {
+      "species": "reuniclus"
+     },
+     {
+      "species": "magnezone"
+     },
+     {
+      "species": "lucario"
+     }
+    ],
+    "note": "held_item_from_secret_pack",
+    "counter": {
+     "slot": 6,
+     "species": "garchomp",
+     "vs": [
+      "fire",
+      "fighting"
+     ]
+    }
+   }
+  ],
+  "drawPool": [],
+  "lines": {
+   "intro": "rv.soren.line.intro",
+   "mid": "rv.soren.line.mid",
+   "win": "rv.soren.line.win",
+   "lose": "rv.soren.line.lose",
+   "aceOut": "rv.soren.line.ace_out",
+   "rematch": "rv.soren.line.rematch"
+  },
+  "friendlyLineKey": "rv.soren.friendly",
+  "hostileLineKey": "rv.soren.hostile",
+  "likes": [
+   "tabbed_notebooks",
+   "tea",
+   "rare_facts"
+  ],
+  "dislikes": [
+   "being_thanked_for_what_he_knew",
+   "being_asked_who_told_him"
+  ],
+  "packKind": "secret",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.soren.pack.a.name",
+    "vars": {
+     "holder": "marauders",
+     "leverage": "sibling_held"
+    },
+    "payoffKey": "rv.soren.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.soren.pack.b.name",
+    "vars": {
+     "holder": "integrity_bureau",
+     "target": "gilt_circle"
+    },
+    "payoffKey": "rv.soren.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.soren.pack.c.name",
+    "vars": {
+     "holder": "ironvein_combine",
+     "secret": "what_the_mines_do_to_veinheart"
+    },
+    "payoffKey": "rv.soren.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "redeemed",
+   "unrepentant",
+   "departed"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "hallow_marrow_ruins",
+    "event": "ev_rv_soren_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "tidewrack_harbor",
+    "event": "ev_rv_soren_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "orrery_basin_exhibition",
+    "event": "ev_rv_soren_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "the_real_story",
+    "event": "ev_rv_soren_b8"
+   }
+  ],
+  "ledger": [
+   {
+    "id": "s1",
+    "act": 1,
+    "place": "hallow_marrow_ruins",
+    "type": "verbal",
+    "textKey": "rv.soren.clue.s1.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.soren.clue.s1.cover",
+    "retroKey": "rv.soren.clue.s1.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "s2",
+    "act": 2,
+    "place": "tidewrack_harbor",
+    "type": "material",
+    "textKey": "rv.soren.clue.s2.text",
+    "mandatory": false,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.soren.clue.s2.cover",
+    "retroKey": "rv.soren.clue.s2.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "s3",
+    "act": 3,
+    "place": "tidewrack_route",
+    "type": "pokemon",
+    "textKey": "rv.soren.clue.s3.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.soren.clue.s3.cover",
+    "retroKey": "rv.soren.clue.s3.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "s4",
+    "act": 3,
+    "place": "orrery_basin",
+    "type": "third_party",
+    "textKey": "rv.soren.clue.s4.text",
+    "mandatory": false,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.soren.clue.s4.cover",
+    "retroKey": "rv.soren.clue.s4.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "s5",
+    "act": 4,
+    "place": "exhibition_guard_post",
+    "type": "behavioral",
+    "textKey": "rv.soren.clue.s5.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.soren.clue.s5.cover",
+    "retroKey": "rv.soren.clue.s5.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "s6",
+    "act": 4,
+    "place": "reveal_eve",
+    "type": "verbal",
+    "textKey": "rv.soren.clue.s6.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.soren.clue.s6.cover",
+    "retroKey": "rv.soren.clue.s6.retro",
+    "icon": "eye"
+   }
+  ],
+  "dossier": {
+   "drawn": "he_investigated_it",
+   "believes": "find_a_missing_person",
+   "faith_broken": "never_loyal",
+   "genuine": "manipulated",
+   "betray": "yes",
+   "comes_back": "a_person_and_a_truth"
+  }
+ },
+ {
+  "id": "rv_kael",
+  "v": 1,
+  "character": "ch_kael_verhoeven",
+  "archetype": "turned_villain",
+  "types": [
+   "steel",
+   "dark",
+   "fighting"
+  ],
+  "roles": [
+   "primary",
+   "secondary"
+  ],
+  "defaultFriendly": false,
+  "status": "supported",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ]
+  },
+  "sparActs": [],
+  "compressed": {
+   "clueIds": [
+    "k3",
+    "k4",
+    "k5"
+   ],
+   "revealNeeds": 3,
+   "outcomes": [
+    "abandons",
+    "disappears",
+    "continues_independently"
+   ]
+  },
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "aron"
+     },
+     {
+      "species": "pawniard",
+      "nick": "Warrant",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 1,
+     "species": "scraggy",
+     "vs": [
+      "psychic",
+      "ghost"
+     ]
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "aron"
+     },
+     {
+      "species": "pawniard",
+      "ace": true
+     },
+     {
+      "species": "riolu"
+     }
+    ],
+    "counter": {
+     "slot": 3,
+     "species": "murkrow",
+     "vs": [
+      "grass",
+      "bug"
+     ]
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "lairon"
+     },
+     {
+      "species": "bisharp",
+      "ace": true
+     },
+     {
+      "species": "riolu"
+     },
+     {
+      "species": "absol"
+     }
+    ],
+    "counter": {
+     "slot": 4,
+     "species": "rhydon",
+     "vs": [
+      "electric",
+      "fire"
+     ]
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "aggron"
+     },
+     {
+      "species": "bisharp",
+      "ace": true
+     },
+     {
+      "species": "lucario"
+     },
+     {
+      "species": "absol"
+     },
+     {
+      "species": "scrafty"
+     }
+    ],
+    "counter": {
+     "slot": 5,
+     "species": "mawile",
+     "vs": [
+      "fairy",
+      "dragon"
+     ]
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "aggron"
+     },
+     {
+      "species": "kingambit",
+      "ace": true
+     },
+     {
+      "species": "lucario"
+     },
+     {
+      "species": "absol"
+     },
+     {
+      "species": "scrafty"
+     },
+     {
+      "species": "mawile"
+     }
+    ],
+    "counter": {
+     "slot": 6,
+     "species": "weavile",
+     "vs": [
+      "psychic",
+      "dragon"
+     ]
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "aggron"
+     },
+     {
+      "species": "kingambit",
+      "ace": true,
+      "move": "sucker-punch"
+     },
+     {
+      "species": "lucario"
+     },
+     {
+      "species": "absol"
+     },
+     {
+      "species": "scrafty"
+     },
+     {
+      "species": "mawile"
+     }
+    ],
+    "note": "marauder_issued_item_fate_dependent",
+    "counter": {
+     "slot": 6,
+     "species": "weavile",
+     "vs": [
+      "psychic",
+      "dragon"
+     ]
+    }
+   }
+  ],
+  "drawPool": [],
+  "lines": {
+   "intro": "rv.kael.line.intro",
+   "mid": "rv.kael.line.mid",
+   "win": "rv.kael.line.win",
+   "lose": "rv.kael.line.lose",
+   "aceOut": "rv.kael.line.ace_out",
+   "rematch": "rv.kael.line.rematch",
+   "rematchAfter": "rv.kael.line.rematch_after"
+  },
+  "friendlyLineKey": "rv.kael.friendly",
+  "hostileLineKey": "rv.kael.hostile",
+  "likes": [
+   "wool_and_home_keepsakes",
+   "plain_gear_repair",
+   "straight_answers"
+  ],
+  "dislikes": [
+   "gifts_that_need_repaying",
+   "public_praise"
+  ],
+  "packKind": "faith_break",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.kael.pack.a.name",
+    "vars": {
+     "event": "player_sided_with_gilt_examiner",
+     "proof": "gilt_ledger_entry"
+    },
+    "payoffKey": "rv.kael.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.kael.pack.b.name",
+    "vars": {
+     "event": "player_left_him_in_danger_stop",
+     "proof": "stop_record"
+    },
+    "payoffKey": "rv.kael.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.kael.pack.c.name",
+    "vars": {
+     "event": "player_took_credit_for_his_gym_win",
+     "proof": "headline"
+    },
+    "payoffKey": "rv.kael.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "reluctant_ally",
+   "abandons",
+   "rebuilds_gym"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "dunmere_road",
+    "event": "ev_rv_kael_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "tidewrack_gym_lobby",
+    "event": "ev_rv_kael_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "orrery_basin_exhibition",
+    "event": "ev_rv_kael_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "dunmere_gym",
+    "event": "ev_rv_kael_b8"
+   }
+  ],
+  "ledger": [
+   {
+    "id": "k1",
+    "act": 1,
+    "place": "dunmere_road",
+    "type": "verbal",
+    "textKey": "rv.kael.clue.k1.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.kael.clue.k1.cover",
+    "retroKey": "rv.kael.clue.k1.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "k2",
+    "act": 2,
+    "place": "tidewrack_gym_lobby",
+    "type": "material",
+    "textKey": "rv.kael.clue.k2.text",
+    "mandatory": false,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.kael.clue.k2.cover",
+    "retroKey": "rv.kael.clue.k2.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "k3",
+    "act": 2,
+    "place": "lanternreach",
+    "type": "behavioral",
+    "textKey": "rv.kael.clue.k3.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.kael.clue.k3.cover",
+    "retroKey": "rv.kael.clue.k3.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "k4",
+    "act": 3,
+    "place": "tidewrack_route",
+    "type": "pokemon",
+    "textKey": "rv.kael.clue.k4.text",
+    "mandatory": false,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.kael.clue.k4.cover",
+    "retroKey": "rv.kael.clue.k4.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "k5",
+    "act": 4,
+    "place": "exhibition_floor",
+    "type": "third_party",
+    "textKey": "rv.kael.clue.k5.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.kael.clue.k5.cover",
+    "retroKey": "rv.kael.clue.k5.retro",
+    "icon": "eye"
+   },
+   {
+    "id": "k6",
+    "act": 4,
+    "place": "exhibition_floor",
+    "type": "verbal",
+    "textKey": "rv.kael.clue.k6.text",
+    "mandatory": true,
+    "visible": true,
+    "cover": true,
+    "coverKey": "rv.kael.clue.k6.cover",
+    "retroKey": "rv.kael.clue.k6.retro",
+    "icon": "eye"
+   }
+  ],
+  "dossier": {
+   "drawn": "he_was_recruited",
+   "believes": "reform_the_league",
+   "faith_broken": "pack_variant",
+   "genuine": "genuine",
+   "betray": "maybe",
+   "comes_back": "an_apology_and_a_truth"
+  }
+ },
+ {
+  "id": "rv_marisol",
+  "v": 1,
+  "character": "ch_marisol_teague",
+  "archetype": "fallen",
+  "types": [
+   "ghost",
+   "ice",
+   "grass"
+  ],
+  "roles": [
+   "primary",
+   "secondary"
+  ],
+  "defaultFriendly": false,
+  "status": "limited",
+  "sceneBeats": {
+   "primary": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "secondary": [
+    2,
+    4,
+    6
+   ]
+  },
+  "sparActs": [],
+  "compressed": {
+   "clueIds": [],
+   "revealNeeds": 0,
+   "outcomes": [
+    "abandons",
+    "disappears",
+    "continues_independently"
+   ]
+  },
+  "teams": [
+   {
+    "act": 1,
+    "slots": [
+     {
+      "species": "pidove"
+     },
+     {
+      "species": "duskull",
+      "nick": "Candle",
+      "ace": true
+     }
+    ],
+    "counter": {
+     "slot": 1,
+     "species": "swinub",
+     "vs": [
+      "ground",
+      "grass"
+     ]
+    }
+   },
+   {
+    "act": 2,
+    "slots": [
+     {
+      "species": "tranquill"
+     },
+     {
+      "species": "duskull",
+      "ace": true
+     },
+     {
+      "species": "swinub"
+     }
+    ],
+    "counter": {
+     "slot": 3,
+     "species": "zubat",
+     "vs": [
+      "fighting"
+     ]
+    }
+   },
+   {
+    "act": 3,
+    "slots": [
+     {
+      "species": "tranquill"
+     },
+     {
+      "species": "dusclops",
+      "ace": true
+     },
+     {
+      "species": "piloswine"
+     },
+     {
+      "species": "shuppet"
+     }
+    ],
+    "counter": {
+     "slot": 4,
+     "species": "skarmory",
+     "vs": [
+      "rock",
+      "ice"
+     ]
+    }
+   },
+   {
+    "act": 4,
+    "slots": [
+     {
+      "species": "unfezant"
+     },
+     {
+      "species": "dusclops",
+      "ace": true
+     },
+     {
+      "species": "piloswine"
+     },
+     {
+      "species": "drifblim"
+     },
+     {
+      "species": "lampent"
+     }
+    ],
+    "counter": {
+     "slot": 5,
+     "species": "rotom",
+     "vs": [
+      "water",
+      "flying"
+     ]
+    }
+   },
+   {
+    "act": 5,
+    "slots": [
+     {
+      "species": "unfezant"
+     },
+     {
+      "species": "chandelure"
+     },
+     {
+      "species": "mamoswine"
+     },
+     {
+      "species": "drifblim"
+     },
+     {
+      "species": "dusclops",
+      "ace": true
+     },
+     {
+      "species": "chesnaught",
+      "nick": "Bastion",
+      "freedOnly": true
+     }
+    ],
+    "fallbackSlot": {
+     "slot": 6,
+     "species": "gothorita"
+    },
+    "counter": {
+     "slot": 6,
+     "species": "chesnaught",
+     "vs": [],
+     "freedOnly": true
+    }
+   },
+   {
+    "act": 6,
+    "slots": [
+     {
+      "species": "unfezant"
+     },
+     {
+      "species": "chandelure"
+     },
+     {
+      "species": "mamoswine"
+     },
+     {
+      "species": "drifblim"
+     },
+     {
+      "species": "dusclops"
+     },
+     {
+      "species": "chesnaught",
+      "nick": "Bastion",
+      "ace": true,
+      "freedOnly": true
+     }
+    ],
+    "fallbackSlot": {
+     "slot": 6,
+     "species": "gothorita"
+    },
+    "note": "bastion_is_ace_in_reunited_and_redeemed",
+    "counter": {
+     "slot": 6,
+     "species": "chesnaught",
+     "vs": [],
+     "freedOnly": true
+    }
+   }
+  ],
+  "drawPool": [],
+  "lines": {
+   "intro": "rv.marisol.line.intro",
+   "mid": "rv.marisol.line.mid",
+   "win": "rv.marisol.line.win",
+   "lose": "rv.marisol.line.lose",
+   "aceOut": "rv.marisol.line.ace_out",
+   "rematch": "rv.marisol.line.rematch"
+  },
+  "friendlyLineKey": "rv.marisol.friendly",
+  "hostileLineKey": "rv.marisol.hostile",
+  "likes": [
+   "ribbons",
+   "quiet_company",
+   "being_asked_nothing"
+  ],
+  "dislikes": [
+   "it_was_not_your_fault",
+   "being_pushed_to_talk"
+  ],
+  "packKind": "secret",
+  "packs": [
+   {
+    "id": "a",
+    "nameKey": "rv.marisol.pack.a.name",
+    "vars": {
+     "holder": "gilt_circle",
+     "use": "showpiece_pokemon"
+    },
+    "payoffKey": "rv.marisol.pack.a.payoff"
+   },
+   {
+    "id": "b",
+    "nameKey": "rv.marisol.pack.b.name",
+    "vars": {
+     "holder": "wildfire_accord",
+     "use": "brawler_for_sabotage"
+    },
+    "payoffKey": "rv.marisol.pack.b.payoff"
+   },
+   {
+    "id": "c",
+    "nameKey": "rv.marisol.pack.c.name",
+    "vars": {
+     "holder": "hollow_choir",
+     "use": "guardian_for_the_ritual"
+    },
+    "payoffKey": "rv.marisol.pack.c.payoff"
+   }
+  ],
+  "endings": [
+   "reunited",
+   "redeemed",
+   "retired"
+  ],
+  "scenes": [
+   {
+    "beat": 2,
+    "act": 1,
+    "place": "dunmere_quarry_edge",
+    "event": "ev_rv_marisol_b2"
+   },
+   {
+    "beat": 4,
+    "act": 2,
+    "place": "tidewrack_harbor_bench",
+    "event": "ev_rv_marisol_b4"
+   },
+   {
+    "beat": 6,
+    "act": 4,
+    "place": "enemy_facility",
+    "event": "ev_rv_marisol_b6"
+   },
+   {
+    "beat": 8,
+    "act": 8,
+    "place": "dunmere",
+    "event": "ev_rv_marisol_b8"
+   }
+  ],
+  "ledger": []
+ }
+]
