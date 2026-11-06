@@ -1421,6 +1421,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   /** Pal Pad: the first Pokémon caught each stage joins with this many extra levels. */
   /** X-Transceiver: once per stage, from the Items menu, call home and heal the whole team by a share. */
   z.object({ perk: z.literal('transceiver'), heal: z.number().positive().max(1) }),
+  /** TM Deck: once per stage, from the Items menu, your lead picks a TM move of its own types (3 choices, plus TM Case). */
+  z.object({ perk: z.literal('tmDeck') }),
   /** Wailmer Pail, Sprayduck: once per stage, from the Items menu, tend a Pokémon (friendship) or cool one down (Peace). */
   z.object({ perk: z.literal('pail'), friendship: z.number().int().positive() }),
   z.object({ perk: z.literal('sprayduck'), peace: z.number().int().positive() }),
@@ -2778,6 +2780,10 @@ export const EventRuleSchema = z.object({
   beginnersLuck: z.boolean().optional(),
   /** The crowd backs the side that scored the latest KO: that side's active Pokémon gets +1 Attack (Fan Club Tournament). */
   fanClub: z.boolean().optional(),
+  /** The foe is a silhouette named "???" until it has used a move (Blindfold Bout). Display only. */
+  hiddenFoe: z.boolean().optional(),
+  /** The foe's name shows as this species until it has used a move (Magician's Misdirection). Display only. */
+  decoyFoe: z.string().optional(),
   /** Every stat change is inverted for both sides (The Contrarian). */
   contrary: z.boolean().optional(),
   /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */

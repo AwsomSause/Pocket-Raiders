@@ -124,6 +124,33 @@ export function pickRunQuest(content: Content, seed: string): string | null {
   return new Rng(hashSeed(`${seed}::run-quest`)).pick(all).id;
 }
 
+/** Reroll Points: what the next Run Quest reroll costs. It rises ₽100 each time, so rerolls are a choice, not a loop. */
+export function questRerollCost(run: RunState): number {
+  return 100 * ((run.log.counters.questRerolls ?? 0) + 1);
+}
+
+/**
+ * Swap this run's Run Quest for another one that is not already done, paying the cost. Own seeded stream per reroll count, so
+ * nothing else's rolls move. Returns a line to show, or null (with a reason in `why`) when it cannot be done.
+ */
+export function rerollRunQuest(content: Content, run: RunState): { ok: boolean; line: string } {
+  const cur = runQuestOf(content, run);
+  if (!cur) return { ok: false, line: 'There is no Run Quest to reroll.' };
+  if (runQuestProgress(content, run)?.met) return { ok: false, line: 'That quest is already done.' };
+  const cost = questRerollCost(run);
+  if (run.money < cost) return { ok: false, line: `A reroll costs ₽${cost}.` };
+  const n = run.log.counters.questRerolls ?? 0;
+  const pool = [...content.runQuests.values()].filter((q) => q.id !== cur.id);
+  const trial = (id: string): boolean => !runQuestProgress(content, { ...run, runQuest: id })?.met;
+  const open = pool.filter((q) => trial(q.id));
+  if (open.length === 0) return { ok: false, line: 'No other quest is open right now.' };
+  const next = new Rng(hashSeed(`${run.seed}::run-quest-reroll::${n}`)).pick(open);
+  run.money -= cost;
+  run.runQuest = next.id;
+  run.log.counters = { ...run.log.counters, questRerolls: n + 1 };
+  return { ok: true, line: `New quest: ${next.text} (₽${cost})` };
+}
+
 export function runQuestOf(content: Content, run: RunState): RunQuest | null {
   return run.runQuest ? (content.runQuests.get(run.runQuest) ?? null) : null;
 }

@@ -15763,5 +15763,28 @@
     }
    ]
   }
+ },
+ {
+  "id": "tm-deck",
+  "name": "TM Deck",
+  "family": "Key items: gadgets",
+  "description": "Once per stage, your lead picks a TM move of its own types",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "tm-case",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "tmDeck"
+    }
+   ]
+  }
  }
 ]

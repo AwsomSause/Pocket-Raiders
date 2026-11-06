@@ -62,6 +62,7 @@
     "data:rb5-events": "node tools/build-rb5-events.ts",
     "data:rb6-events": "node tools/build-rb6-events.ts",
     "data:rb7-events": "node tools/build-rb7-events.ts",
+    "data:rb8-events": "node tools/build-rb8-events.ts",
     "data:w10-events": "node tools/build-w10-events.ts",
     "data:rk-events": "node tools/build-rk-events.ts",
     "data:merchant-events": "node tools/build-merchant-events.ts",
