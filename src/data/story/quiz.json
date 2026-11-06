@@ -1,1 +1,965 @@
-[]
+[
+ {
+  "id": "q01",
+  "quick": false,
+  "textKey": "quiz.q01",
+  "answers": [
+   {
+    "id": "q01_a",
+    "textKey": "quiz.q01_a",
+    "weights": {
+     "instinct": 1,
+     "courage": 1
+    },
+    "tag": "healer"
+   },
+   {
+    "id": "q01_b",
+    "textKey": "quiz.q01_b",
+    "weights": {
+     "adaptability": 1,
+     "intelligence": 2
+    },
+    "tag": "analyst"
+   },
+   {
+    "id": "q01_c",
+    "textKey": "quiz.q01_c",
+    "weights": {
+     "compassion": 1,
+     "loyalty": 1,
+     "instinct": 1
+    },
+    "tag": "gentle"
+   },
+   {
+    "id": "q01_d",
+    "textKey": "quiz.q01_d",
+    "weights": {
+     "resolve": 1,
+     "courage": 1,
+     "intelligence": 1,
+     "curiosity": 1
+    },
+    "tag": "tracker"
+   },
+   {
+    "id": "q01_e",
+    "textKey": "quiz.q01_e",
+    "weights": {
+     "independence": 1,
+     "instinct": 2,
+     "compassion": 1
+    },
+    "tag": "patient"
+   }
+  ]
+ },
+ {
+  "id": "q02",
+  "quick": false,
+  "textKey": "quiz.q02",
+  "answers": [
+   {
+    "id": "q02_a",
+    "textKey": "quiz.q02_a",
+    "weights": {
+     "courage": 2,
+     "ambition": 1
+    },
+    "tag": "daredevil"
+   },
+   {
+    "id": "q02_b",
+    "textKey": "quiz.q02_b",
+    "weights": {
+     "curiosity": 2,
+     "adaptability": 1
+    },
+    "tag": "student"
+   },
+   {
+    "id": "q02_c",
+    "textKey": "quiz.q02_c",
+    "weights": {
+     "intelligence": 1,
+     "ambition": 1
+    },
+    "tag": "tactician"
+   },
+   {
+    "id": "q02_d",
+    "textKey": "quiz.q02_d",
+    "weights": {
+     "resolve": 2,
+     "courage": 1
+    },
+    "tag": "stubborn"
+   },
+   {
+    "id": "q02_e",
+    "textKey": "quiz.q02_e",
+    "weights": {
+     "curiosity": 1,
+     "intelligence": 1,
+     "adaptability": 1
+    },
+    "tag": "observer"
+   }
+  ]
+ },
+ {
+  "id": "q03",
+  "quick": false,
+  "textKey": "quiz.q03",
+  "answers": [
+   {
+    "id": "q03_a",
+    "textKey": "quiz.q03_a",
+    "weights": {
+     "ambition": 1,
+     "instinct": 1,
+     "independence": 1
+    },
+    "tag": "pure"
+   },
+   {
+    "id": "q03_b",
+    "textKey": "quiz.q03_b",
+    "weights": {
+     "loyalty": 2
+    },
+    "tag": "bonded"
+   },
+   {
+    "id": "q03_c",
+    "textKey": "quiz.q03_c",
+    "weights": {
+     "adaptability": 2,
+     "intelligence": 1
+    },
+    "tag": "flexible"
+   },
+   {
+    "id": "q03_d",
+    "textKey": "quiz.q03_d",
+    "weights": {
+     "resolve": 2,
+     "courage": 1
+    },
+    "tag": "grit"
+   },
+   {
+    "id": "q03_e",
+    "textKey": "quiz.q03_e",
+    "weights": {
+     "loyalty": 1,
+     "compassion": 1
+    },
+    "tag": "guardian"
+   }
+  ]
+ },
+ {
+  "id": "q04",
+  "quick": false,
+  "textKey": "quiz.q04",
+  "answers": [
+   {
+    "id": "q04_a",
+    "textKey": "quiz.q04_a",
+    "weights": {
+     "ambition": 1,
+     "resolve": 1,
+     "intelligence": 1,
+     "courage": 1
+    },
+    "tag": "prover"
+   },
+   {
+    "id": "q04_b",
+    "textKey": "quiz.q04_b",
+    "weights": {
+     "curiosity": 2,
+     "intelligence": 1
+    },
+    "tag": "investigator"
+   },
+   {
+    "id": "q04_c",
+    "textKey": "quiz.q04_c",
+    "weights": {
+     "compassion": 1,
+     "adaptability": 1,
+     "loyalty": 1
+    },
+    "tag": "networker"
+   },
+   {
+    "id": "q04_d",
+    "textKey": "quiz.q04_d",
+    "weights": {
+     "intelligence": 1,
+     "independence": 2
+    },
+    "tag": "secretive"
+   },
+   {
+    "id": "q04_e",
+    "textKey": "quiz.q04_e",
+    "weights": {
+     "loyalty": 1,
+     "instinct": 1,
+     "compassion": 1
+    },
+    "tag": "partnered"
+   }
+  ]
+ },
+ {
+  "id": "q05",
+  "quick": false,
+  "textKey": "quiz.q05",
+  "answers": [
+   {
+    "id": "q05_a",
+    "textKey": "quiz.q05_a",
+    "weights": {
+     "instinct": 1,
+     "independence": 1,
+     "loyalty": 1,
+     "compassion": 1
+    },
+    "tag": "respectful"
+   },
+   {
+    "id": "q05_b",
+    "textKey": "quiz.q05_b",
+    "weights": {
+     "courage": 1,
+     "resolve": 1,
+     "ambition": 1
+    },
+    "tag": "motivator"
+   },
+   {
+    "id": "q05_c",
+    "textKey": "quiz.q05_c",
+    "weights": {
+     "curiosity": 1,
+     "compassion": 2
+    },
+    "tag": "listener"
+   },
+   {
+    "id": "q05_d",
+    "textKey": "quiz.q05_d",
+    "weights": {
+     "loyalty": 1,
+     "resolve": 1,
+     "adaptability": 1
+    },
+    "tag": "steady"
+   },
+   {
+    "id": "q05_e",
+    "textKey": "quiz.q05_e",
+    "weights": {
+     "curiosity": 1,
+     "intelligence": 2
+    },
+    "tag": "diagnostician"
+   }
+  ]
+ },
+ {
+  "id": "q06",
+  "quick": false,
+  "textKey": "quiz.q06",
+  "answers": [
+   {
+    "id": "q06_a",
+    "textKey": "quiz.q06_a",
+    "weights": {
+     "resolve": 1,
+     "intelligence": 2
+    },
+    "tag": "reviewer"
+   },
+   {
+    "id": "q06_b",
+    "textKey": "quiz.q06_b",
+    "weights": {
+     "ambition": 1,
+     "resolve": 2,
+     "courage": 1
+    },
+    "tag": "relentless"
+   },
+   {
+    "id": "q06_c",
+    "textKey": "quiz.q06_c",
+    "weights": {
+     "loyalty": 1,
+     "compassion": 2
+    },
+    "tag": "caretaker"
+   },
+   {
+    "id": "q06_d",
+    "textKey": "quiz.q06_d",
+    "weights": {
+     "independence": 2,
+     "instinct": 1
+    },
+    "tag": "loner"
+   },
+   {
+    "id": "q06_e",
+    "textKey": "quiz.q06_e",
+    "weights": {
+     "instinct": 1,
+     "adaptability": 2
+    },
+    "tag": "easygoing"
+   }
+  ]
+ },
+ {
+  "id": "q07",
+  "quick": false,
+  "textKey": "quiz.q07",
+  "answers": [
+   {
+    "id": "q07_a",
+    "textKey": "quiz.q07_a",
+    "weights": {
+     "compassion": 1,
+     "instinct": 2
+    },
+    "tag": "woodland"
+   },
+   {
+    "id": "q07_b",
+    "textKey": "quiz.q07_b",
+    "weights": {
+     "ambition": 2,
+     "courage": 1
+    },
+    "tag": "arena"
+   },
+   {
+    "id": "q07_c",
+    "textKey": "quiz.q07_c",
+    "weights": {
+     "curiosity": 2,
+     "intelligence": 1
+    },
+    "tag": "lab"
+   },
+   {
+    "id": "q07_d",
+    "textKey": "quiz.q07_d",
+    "weights": {
+     "adaptability": 1,
+     "curiosity": 1,
+     "loyalty": 1,
+     "ambition": 1
+    },
+    "tag": "harbor"
+   },
+   {
+    "id": "q07_e",
+    "textKey": "quiz.q07_e",
+    "weights": {
+     "resolve": 1,
+     "independence": 2
+    },
+    "tag": "highland"
+   }
+  ]
+ },
+ {
+  "id": "q08",
+  "quick": false,
+  "textKey": "quiz.q08",
+  "answers": [
+   {
+    "id": "q08_a",
+    "textKey": "quiz.q08_a",
+    "weights": {
+     "instinct": 2,
+     "compassion": 1,
+     "courage": 1
+    },
+    "tag": "open_handed"
+   },
+   {
+    "id": "q08_b",
+    "textKey": "quiz.q08_b",
+    "weights": {
+     "curiosity": 2,
+     "intelligence": 1
+    },
+    "tag": "cataloguer"
+   },
+   {
+    "id": "q08_c",
+    "textKey": "quiz.q08_c",
+    "weights": {
+     "instinct": 1,
+     "independence": 1,
+     "adaptability": 1
+    },
+    "tag": "cautious"
+   },
+   {
+    "id": "q08_d",
+    "textKey": "quiz.q08_d",
+    "weights": {
+     "courage": 1,
+     "ambition": 2
+    },
+    "tag": "challenger"
+   },
+   {
+    "id": "q08_e",
+    "textKey": "quiz.q08_e",
+    "weights": {
+     "instinct": 1,
+     "loyalty": 2
+    },
+    "tag": "trusting_partner"
+   }
+  ]
+ },
+ {
+  "id": "q09",
+  "quick": false,
+  "textKey": "quiz.q09",
+  "answers": [
+   {
+    "id": "q09_a",
+    "textKey": "quiz.q09_a",
+    "weights": {
+     "courage": 2,
+     "instinct": 1
+    },
+    "tag": "first_mover"
+   },
+   {
+    "id": "q09_b",
+    "textKey": "quiz.q09_b",
+    "weights": {
+     "intelligence": 1,
+     "independence": 1,
+     "adaptability": 1
+    },
+    "tag": "planner"
+   },
+   {
+    "id": "q09_c",
+    "textKey": "quiz.q09_c",
+    "weights": {
+     "compassion": 2,
+     "courage": 1
+    },
+    "tag": "steadier"
+   },
+   {
+    "id": "q09_d",
+    "textKey": "quiz.q09_d",
+    "weights": {
+     "courage": 1,
+     "independence": 2
+    },
+    "tag": "scout"
+   },
+   {
+    "id": "q09_e",
+    "textKey": "quiz.q09_e",
+    "weights": {
+     "resolve": 1,
+     "adaptability": 1
+    },
+    "tag": "stone_reader"
+   }
+  ]
+ },
+ {
+  "id": "q10",
+  "quick": false,
+  "textKey": "quiz.q10",
+  "answers": [
+   {
+    "id": "q10_a",
+    "textKey": "quiz.q10_a",
+    "weights": {
+     "ambition": 2,
+     "resolve": 1
+    },
+    "tag": "winner"
+   },
+   {
+    "id": "q10_b",
+    "textKey": "quiz.q10_b",
+    "weights": {
+     "instinct": 1,
+     "loyalty": 2,
+     "compassion": 1
+    },
+    "tag": "trusted"
+   },
+   {
+    "id": "q10_c",
+    "textKey": "quiz.q10_c",
+    "weights": {
+     "intelligence": 1,
+     "adaptability": 1,
+     "curiosity": 1
+    },
+    "tag": "learner"
+   },
+   {
+    "id": "q10_d",
+    "textKey": "quiz.q10_d",
+    "weights": {
+     "courage": 1,
+     "independence": 2
+    },
+    "tag": "self_reliant"
+   },
+   {
+    "id": "q10_e",
+    "textKey": "quiz.q10_e",
+    "weights": {
+     "intelligence": 1,
+     "adaptability": 1,
+     "compassion": 1
+    },
+    "tag": "wise"
+   }
+  ]
+ },
+ {
+  "id": "q11",
+  "quick": false,
+  "textKey": "quiz.q11",
+  "answers": [
+   {
+    "id": "q11_a",
+    "textKey": "quiz.q11_a",
+    "weights": {
+     "resolve": 1,
+     "independence": 1,
+     "courage": 1
+    },
+    "tag": "honest"
+   },
+   {
+    "id": "q11_b",
+    "textKey": "quiz.q11_b",
+    "weights": {
+     "loyalty": 2,
+     "resolve": 1
+    },
+    "tag": "reliable"
+   },
+   {
+    "id": "q11_c",
+    "textKey": "quiz.q11_c",
+    "weights": {
+     "ambition": 2,
+     "resolve": 1
+    },
+    "tag": "driven"
+   },
+   {
+    "id": "q11_d",
+    "textKey": "quiz.q11_d",
+    "weights": {
+     "independence": 1,
+     "adaptability": 1,
+     "compassion": 1
+    },
+    "tag": "accepting"
+   },
+   {
+    "id": "q11_e",
+    "textKey": "quiz.q11_e",
+    "weights": {
+     "curiosity": 2,
+     "loyalty": 1
+    },
+    "tag": "kindred"
+   }
+  ]
+ },
+ {
+  "id": "q12",
+  "quick": false,
+  "textKey": "quiz.q12",
+  "answers": [
+   {
+    "id": "q12_a",
+    "textKey": "quiz.q12_a",
+    "weights": {
+     "ambition": 2
+    },
+    "tag": "ambitious"
+   },
+   {
+    "id": "q12_b",
+    "textKey": "quiz.q12_b",
+    "weights": {
+     "loyalty": 2,
+     "resolve": 1
+    },
+    "tag": "faithful"
+   },
+   {
+    "id": "q12_c",
+    "textKey": "quiz.q12_c",
+    "weights": {
+     "adaptability": 2,
+     "intelligence": 1
+    },
+    "tag": "resourceful"
+   },
+   {
+    "id": "q12_d",
+    "textKey": "quiz.q12_d",
+    "weights": {
+     "curiosity": 1,
+     "compassion": 2
+    },
+    "tag": "considerate"
+   },
+   {
+    "id": "q12_e",
+    "textKey": "quiz.q12_e",
+    "weights": {
+     "instinct": 2,
+     "courage": 1
+    },
+    "tag": "instinctive"
+   }
+  ]
+ },
+ {
+  "id": "alt01",
+  "quick": true,
+  "textKey": "quiz.alt01",
+  "answers": [
+   {
+    "id": "alt01_a",
+    "textKey": "quiz.alt01_a",
+    "weights": {
+     "curiosity": 2,
+     "courage": 1
+    },
+    "tag": "wanderer"
+   },
+   {
+    "id": "alt01_b",
+    "textKey": "quiz.alt01_b",
+    "weights": {
+     "intelligence": 2,
+     "resolve": 1
+    },
+    "tag": "tinkerer"
+   },
+   {
+    "id": "alt01_c",
+    "textKey": "quiz.alt01_c",
+    "weights": {
+     "compassion": 2,
+     "loyalty": 1
+    },
+    "tag": "carer"
+   },
+   {
+    "id": "alt01_d",
+    "textKey": "quiz.alt01_d",
+    "weights": {
+     "independence": 2,
+     "instinct": 1
+    },
+    "tag": "dreamer"
+   },
+   {
+    "id": "alt01_e",
+    "textKey": "quiz.alt01_e",
+    "weights": {
+     "adaptability": 2,
+     "instinct": 1
+    },
+    "tag": "player"
+   }
+  ]
+ },
+ {
+  "id": "alt02",
+  "quick": true,
+  "textKey": "quiz.alt02",
+  "answers": [
+   {
+    "id": "alt02_a",
+    "textKey": "quiz.alt02_a",
+    "weights": {
+     "loyalty": 1,
+     "compassion": 1,
+     "courage": 1
+    },
+    "tag": "escort"
+   },
+   {
+    "id": "alt02_b",
+    "textKey": "quiz.alt02_b",
+    "weights": {
+     "intelligence": 2,
+     "resolve": 1
+    },
+    "tag": "mapmaker"
+   },
+   {
+    "id": "alt02_c",
+    "textKey": "quiz.alt02_c",
+    "weights": {
+     "independence": 1,
+     "adaptability": 1,
+     "resolve": 1
+    },
+    "tag": "honest_guide"
+   },
+   {
+    "id": "alt02_d",
+    "textKey": "quiz.alt02_d",
+    "weights": {
+     "curiosity": 2,
+     "adaptability": 1
+    },
+    "tag": "asker"
+   },
+   {
+    "id": "alt02_e",
+    "textKey": "quiz.alt02_e",
+    "weights": {
+     "instinct": 2,
+     "courage": 1
+    },
+    "tag": "gut_guide"
+   }
+  ]
+ },
+ {
+  "id": "alt03",
+  "quick": true,
+  "textKey": "quiz.alt03",
+  "answers": [
+   {
+    "id": "alt03_a",
+    "textKey": "quiz.alt03_a",
+    "weights": {
+     "courage": 1,
+     "curiosity": 1,
+     "instinct": 1
+    },
+    "tag": "eager"
+   },
+   {
+    "id": "alt03_b",
+    "textKey": "quiz.alt03_b",
+    "weights": {
+     "intelligence": 2,
+     "curiosity": 1
+    },
+    "tag": "reader"
+   },
+   {
+    "id": "alt03_c",
+    "textKey": "quiz.alt03_c",
+    "weights": {
+     "loyalty": 2,
+     "compassion": 1
+    },
+    "tag": "grateful"
+   },
+   {
+    "id": "alt03_d",
+    "textKey": "quiz.alt03_d",
+    "weights": {
+     "ambition": 2,
+     "courage": 1
+    },
+    "tag": "competitor"
+   },
+   {
+    "id": "alt03_e",
+    "textKey": "quiz.alt03_e",
+    "weights": {
+     "independence": 1,
+     "resolve": 2
+    },
+    "tag": "guarded"
+   }
+  ]
+ },
+ {
+  "id": "alt04",
+  "quick": true,
+  "textKey": "quiz.alt04",
+  "answers": [
+   {
+    "id": "alt04_a",
+    "textKey": "quiz.alt04_a",
+    "weights": {
+     "courage": 2,
+     "curiosity": 1
+    },
+    "tag": "investigator"
+   },
+   {
+    "id": "alt04_b",
+    "textKey": "quiz.alt04_b",
+    "weights": {
+     "compassion": 1,
+     "loyalty": 2
+    },
+    "tag": "guardian"
+   },
+   {
+    "id": "alt04_c",
+    "textKey": "quiz.alt04_c",
+    "weights": {
+     "instinct": 2,
+     "intelligence": 1
+    },
+    "tag": "listener"
+   },
+   {
+    "id": "alt04_d",
+    "textKey": "quiz.alt04_d",
+    "weights": {
+     "resolve": 2,
+     "adaptability": 1
+    },
+    "tag": "steady"
+   },
+   {
+    "id": "alt04_e",
+    "textKey": "quiz.alt04_e",
+    "weights": {
+     "independence": 2,
+     "adaptability": 1
+    },
+    "tag": "slipper"
+   }
+  ]
+ },
+ {
+  "id": "alt05",
+  "quick": true,
+  "textKey": "quiz.alt05",
+  "answers": [
+   {
+    "id": "alt05_a",
+    "textKey": "quiz.alt05_a",
+    "weights": {
+     "intelligence": 2,
+     "resolve": 1
+    },
+    "tag": "solver"
+   },
+   {
+    "id": "alt05_b",
+    "textKey": "quiz.alt05_b",
+    "weights": {
+     "adaptability": 2,
+     "curiosity": 1
+    },
+    "tag": "trier"
+   },
+   {
+    "id": "alt05_c",
+    "textKey": "quiz.alt05_c",
+    "weights": {
+     "loyalty": 1,
+     "curiosity": 1,
+     "compassion": 1
+    },
+    "tag": "asker"
+   },
+   {
+    "id": "alt05_d",
+    "textKey": "quiz.alt05_d",
+    "weights": {
+     "ambition": 2,
+     "resolve": 1
+    },
+    "tag": "finisher"
+   },
+   {
+    "id": "alt05_e",
+    "textKey": "quiz.alt05_e",
+    "weights": {
+     "independence": 2,
+     "instinct": 1
+    },
+    "tag": "leaver"
+   }
+  ]
+ },
+ {
+  "id": "alt06",
+  "quick": true,
+  "textKey": "quiz.alt06",
+  "answers": [
+   {
+    "id": "alt06_a",
+    "textKey": "quiz.alt06_a",
+    "weights": {
+     "ambition": 1,
+     "courage": 2
+    },
+    "tag": "pusher"
+   },
+   {
+    "id": "alt06_b",
+    "textKey": "quiz.alt06_b",
+    "weights": {
+     "intelligence": 2,
+     "adaptability": 1
+    },
+    "tag": "forecaster"
+   },
+   {
+    "id": "alt06_c",
+    "textKey": "quiz.alt06_c",
+    "weights": {
+     "compassion": 2,
+     "loyalty": 1
+    },
+    "tag": "sheltering"
+   },
+   {
+    "id": "alt06_d",
+    "textKey": "quiz.alt06_d",
+    "weights": {
+     "instinct": 2,
+     "resolve": 1
+    },
+    "tag": "waiter"
+   },
+   {
+    "id": "alt06_e",
+    "textKey": "quiz.alt06_e",
+    "weights": {
+     "independence": 2,
+     "courage": 1
+    },
+    "tag": "ranger"
+   }
+  ]
+ }
+]

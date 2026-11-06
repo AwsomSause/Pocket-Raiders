@@ -72,15 +72,20 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
   const quizBad: string[] = [];
   const full = data.quiz.filter((q) => !q.quick);
   if (full.length > 0) {
+    // Every trait's total weight over all answers is 18 +/- 1, and the most a player can score in each trait (best answer per question)
+    // is within 10 percent of every other trait.
     const totals: Record<string, number> = {};
+    const maxes: Record<string, number> = {};
     for (const q of full) {
-      const perAnswer = q.answers.map((a) => Object.values(a.weights).reduce((x, y) => x + y, 0));
-      if (Math.abs(Math.max(...perAnswer) - 14) > 1) quizBad.push(`question ${q.id}: max answer weight ${Math.max(...perAnswer)}`);
+      const traits = new Set(q.answers.flatMap((a) => Object.keys(a.weights)));
+      for (const t of traits) maxes[t] = (maxes[t] ?? 0) + Math.max(...q.answers.map((a) => a.weights[t] ?? 0));
       for (const a of q.answers) for (const [t, w] of Object.entries(a.weights)) totals[t] = (totals[t] ?? 0) + w;
     }
-    for (const [t, total] of Object.entries(totals)) if (Math.abs(total - 18) > 1) quizBad.push(`trait ${t}: total ${total}`);
+    for (const [t, total] of Object.entries(totals)) if (Math.abs(total - 18) > 1) quizBad.push(`trait ${t}: total weight ${total}`);
+    const hi = Math.max(...Object.values(maxes)), lo = Math.min(...Object.values(maxes));
+    if (hi > lo * 1.1) quizBad.push(`most-available weight per trait ranges ${lo} to ${hi} (more than 10 percent apart)`);
   }
-  add('story-quiz-balance', 'Quiz weights out of balance', 'Traits whose total weight is outside 18 +/- 1, and questions whose heaviest answer is outside 14 +/- 1.', quizBad);
+  add('story-quiz-balance', 'Quiz weights out of balance', 'Traits whose total weight is outside 18 +/- 1, or whose best-case score is more than 10 percent from another trait\'s.', quizBad);
 
   add('story-remembrance-unlock', 'Remembrances nobody can unlock', 'Remembrances whose unlock route needs an event or backstory that does not exist.',
     data.remembrances.filter((r) => (r.unlock.kind === 'event' && !events.has(r.unlock.arg ?? '')) || (r.unlock.kind === 'backstory' && !backstories.has(r.unlock.arg ?? '')) || (r.unlock.kind === 'quiz' && !r.unlock.arg)).map((r) => `${r.id}: ${r.unlock.kind} ${r.unlock.arg ?? '(none)'}`));
