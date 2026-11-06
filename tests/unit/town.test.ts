@@ -403,6 +403,33 @@ describe('Lab research, trading cards, notice filters (S462, S357, S478)', () =>
   });
 });
 
+describe('Guide tips, rank upgrades, mastery prestige (S469, S460, S461)', () => {
+  it('tips fit the profile and never exceed four', () => {
+    const fresh = structuredClone(createProfile(content, 'tips'));
+    expect(townApi.hubTips(fresh)[0]).toMatch(/first run/);
+    const p = rich();
+    p.stats.runsStarted = 3;
+    p.bankCredits = 500;
+    p.researchPoints = 40;
+    const tips = townApi.hubTips(p);
+    expect(tips.length).toBeGreaterThan(1);
+    expect(tips.length).toBeLessThanOrEqual(4);
+  });
+  it('rank upgrades list what is still locked', () => {
+    const p = structuredClone(createProfile(content, 'rank'));
+    const r = townApi.rankUpgrades(p, TOWN.buildings, (b) => { const bd = TOWN.buildings.find((x) => x.id === b.id)!; return townApi.buildingProblem(p, bd); });
+    expect(r.rank).toBe(0);
+    expect(r.open + r.locked.length).toBe(TOWN.buildings.length);
+  });
+  it('prestige stars come from mastery and cap at five', () => {
+    const p = structuredClone(createProfile(content, 'prestige'));
+    expect(townApi.prestigeCosmetics(content, p)).toEqual([]);
+    p.mastery.pikachu = { seen: 5, caught: 5, battles: 50, bossWins: 40, evolved: 3, flawless: 10, regions: 8 } as never;
+    const [top] = townApi.prestigeCosmetics(content, p);
+    expect(top).toMatchObject({ speciesId: 'pikachu', stars: 5, title: 'Legend' });
+  });
+});
+
 describe('Berry Orchard', () => {
   it('one tree a day pays berries into the next run', () => {
     const p = ok(rich(), 'orchard-pick', { choice: 'tree-oran' }).profile;

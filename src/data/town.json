@@ -2975,6 +2975,36 @@
      "view": "cards"
     },
     {
+     "id": "hall-tips",
+     "name": "Guide Pip",
+     "desc": "Adaptive tips that fit where you are in the game.",
+     "kind": "view",
+     "rows": [
+      "S469"
+     ],
+     "view": "tips"
+    },
+    {
+     "id": "hall-rank",
+     "name": "Social rank",
+     "desc": "Your rank and which buildings are still locked.",
+     "kind": "view",
+     "rows": [
+      "S460"
+     ],
+     "view": "rank"
+    },
+    {
+     "id": "hall-prestige",
+     "name": "Mastery prestige",
+     "desc": "Species you have mastered, shown as stars on your card.",
+     "kind": "view",
+     "rows": [
+      "S461"
+     ],
+     "view": "prestige"
+    },
+    {
      "id": "hall-market",
      "name": "Market board",
      "desc": "Town prices move between runs: a sale after a win, higher when supplies are short.",

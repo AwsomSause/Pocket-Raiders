@@ -322,3 +322,37 @@ export function noticeBoard(t: TownProfile, today: string, quests: { id: string;
   }));
   return notices.filter((n) => filter === 'all' || n.state === filter).sort((a, b) => rank[a.state] - rank[b.state] || b.value - a.value || a.id.localeCompare(b.id));
 }
+
+// ---------- Hub tips (S469), rank upgrades (S460), mastery prestige (S461) ----------
+
+/** The Hub Tutorial NPC (S469): up to 4 tips that fit where you are now. Read-only. */
+export function hubTips(p: Profile): string[] {
+  const t = townOf(p);
+  const tips: string[] = [];
+  if (p.stats.runsStarted === 0) tips.push('Walk to the Run Prep Center and start your first run. Everything else opens up from there.');
+  if (p.bankCredits >= 100) tips.push(`You are holding ${p.bankCredits} credits. The Town Hall sells Airship Passes, boat tickets and guild hires.`);
+  if (p.researchPoints >= 15) tips.push('You have Research Points to spend: the Library studies species, and the Institute sells field notes.');
+  if (!(t.counts.coins ?? 0) && p.stats.runsStarted > 0) tips.push('Do a chore at the Cafe for coins, then try the capsule machine.');
+  if (p.runHistory.length > 0 && !p.runHistory[0]!.victory) tips.push('Lost your last run? The Training Dojo and the Time Machine are good places to study what went wrong.');
+  if ((t.boon.stuff['harbor-ticket'] ?? 0) + (t.boon.items['airship-pass'] ?? 0) > 0) tips.push('You have a ticket waiting: it is used in your next run (boat gates on the map, airship from the Items menu).');
+  if (tips.length === 0) tips.push('Talk to the townsfolk: they repeat what you have been up to, and sometimes hint at what to try next.');
+  return tips.slice(0, 4);
+}
+
+/** Rank-based upgrades (S460): your social rank (Fan Club tiers) and which locked buildings you still need to open. */
+export function rankUpgrades(p: Profile, buildings: { id: string; name: string; needs?: { text?: string } }[], problem: (b: { id: string }) => string | null): { rank: number; locked: { name: string; need: string }[]; open: number } {
+  const rank = fanClub(p).tiers.filter((x) => x.reached).length;
+  const locked = buildings.flatMap((b) => { const why = problem(b); return why ? [{ name: b.name, need: why }] : []; });
+  return { rank, locked, open: buildings.length - locked.length };
+}
+
+/** Mastery prestige (S461): a species' prestige is its mastery stars; the best show on your trainer card. */
+export function prestigeCosmetics(content: Content, p: Profile): { speciesId: string; name: string; stars: number; title: string }[] {
+  const titles = ['', 'Novice', 'Adept', 'Expert', 'Master', 'Legend'];
+  return Object.entries(p.mastery)
+    .map(([speciesId, m]) => ({ speciesId, name: content.species.get(speciesId)?.name ?? speciesId, stars: Math.min(5, Math.floor((m.bossWins + m.flawless * 3 + m.evolved + m.regions) / 3)) }))
+    .filter((x) => x.stars > 0)
+    .sort((a, b) => b.stars - a.stars || a.name.localeCompare(b.name))
+    .slice(0, 6)
+    .map((x) => ({ ...x, title: titles[x.stars]! }));
+}
