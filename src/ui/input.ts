@@ -3,6 +3,24 @@
 
 import type Phaser from 'phaser';
 import { InputBuffer } from '../core/inputBuffer';
+import { services } from '../game/services';
+
+/** Beta 4.4 skip guard: how long a new screen ignores confirm/back presses (ms). */
+export const SKIP_GUARD_MS = 250;
+
+function guardOn(): boolean {
+  try {
+    return services().session.settings.skipGuard !== false;
+  } catch {
+    return true;
+  }
+}
+
+/** Whether the skip guard swallows this press: a held (repeating) key or a press right after the screen opened. Pure. */
+export function guarded(action: InputAction, repeat: boolean, sinceOpenMs: number, on: boolean): boolean {
+  if (!on || (action !== 'confirm' && action !== 'back')) return false;
+  return repeat || sinceOpenMs < SKIP_GUARD_MS;
+}
 
 export type InputAction = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'back';
 
@@ -48,12 +66,15 @@ export function onInputAction(scene: Phaser.Scene, handler: (action: InputAction
     const action = KEY_MAP[event.code];
     if (action) {
       handled = true;
+      if (guarded(action, event.repeat, performance.now() - opened, guardOn())) return;
       handler(action);
     }
   };
+  const opened = performance.now();
   watchDroppedKeys();
   keyboard.on('keydown', listener);
   const kept = buffer.take(performance.now());
-  if (kept) setTimeout(() => handler(kept), 0);
+  // A confirm/back pressed during the change of screen is not replayed into the new one while the guard is on.
+  if (kept && !guarded(kept, false, 0, guardOn())) setTimeout(() => handler(kept), 0);
   scene.events.once('shutdown', () => keyboard.off('keydown', listener));
 }

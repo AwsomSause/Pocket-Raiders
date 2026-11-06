@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
 import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
@@ -151,6 +152,7 @@ export class MapScene extends Phaser.Scene {
   private picker: PickerLike | null = null;
   private info: Phaser.GameObjects.Text | null = null;
   private notice: Phaser.GameObjects.Text | null = null;
+  private omens: Record<string, Omen> = {};
   private endArmed = false;
   private busy = false;
   private colSpacing = COL_SPACING;
@@ -187,6 +189,7 @@ export class MapScene extends Phaser.Scene {
   preload(): void {
     const { session } = services();
     this.previews = session.run?.phase === 'map' ? mapPreviews(session.content, session.run) : {};
+    this.omens = session.run?.phase === 'map' ? mapOmens(session.content, session.run) : {};
     const shown = Object.values(this.previews).flatMap((p) => p.team.flatMap((m) => session.content.species.get(m.speciesId) ?? []));
     // Fishing spots beside the current node: their Pokémon are shown in the picker.
     const run = session.run;
@@ -408,7 +411,9 @@ export class MapScene extends Phaser.Scene {
     if (chatter) this.add.text(GAME_WIDTH / 2, 105, chatter, textStyle(12, '#e8e0c8', { stroke: '#2a2418', strokeThickness: 3 })).setOrigin(0.5, 0).setName('lead-chatter');
     const bounty = league ? null : bountyObjective(content, run);
     const objectives = [...modeObjectives(run), ...(bounty ? [bounty] : [])];
-    if (objectives.length > 0) this.add.text(GAME_WIDTH - 24, 68, objectivesLine(objectives), textStyle(14, '#f0e0a0')).setOrigin(1, 0);
+    // The pinned quest line sits at y=66 on the right, so the objectives (mode steps and the stage bounty) go one row lower when it is shown.
+    const pinned = pinnedObjective(content, run);
+    if (objectives.length > 0) this.add.text(GAME_WIDTH - 24, pinned ? 86 : 68, objectivesLine(objectives), textStyle(14, '#f0e0a0')).setOrigin(1, 0).setName('objectives-line');
 
     // Revisit This Timeline: the False Protagonist's title, and who is ahead of you now.
     if (isFalseProtagonist(run)) {
@@ -417,7 +422,6 @@ export class MapScene extends Phaser.Scene {
       const tag = this.add.text(26, 68, `${TIMELINE.title}${ahead}`, textStyle(14, '#ff9fe0', { stroke: '#2a0a2a', strokeThickness: 4 }));
       if (services().session.settings.battleAnimations === 'full') this.tweens.add({ targets: tag, alpha: 0.55, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     }
-    const pinned = pinnedObjective(content, run);
     if (pinned) this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0);
 
     // ---------- the map (scrolls sideways) ----------
@@ -565,6 +569,8 @@ export class MapScene extends Phaser.Scene {
       // Itemfinder: the stop hiding an item.
       if (n.id === hidden && !visited) mapLayer.add(this.add.text(x - r + 2, y - r + 2, '✦', textStyle(22, '#f8e070', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       if (!fog) this.drawPreview(mapLayer, n, x, y, r);
+      const omen = fog ? null : this.omens[n.id];
+      if (omen) mapLayer.add(this.add.text(x - r + 2, y + r - 12, '●', textStyle(20, OMEN_COLOR[omen.tier], { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       // A weather front over this node: a small badge in the front's colour.
       const front = fog ? null : frontAt(content, run, n);
       if (front) {
@@ -749,7 +755,7 @@ export class MapScene extends Phaser.Scene {
       } else if (stage.index === 0) {
         this.showBanner(`Region ${run.regionIndex + 1} of ${regions}  ·  ${identity.motif}`, region.name, `Level cap ${cap}  ·  Stage 1: ${blindMap(run.rules) ? '???' : theme.name}  ·  ${leader.title}`);
       } else {
-        this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`);
+        this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
   }
@@ -889,7 +895,7 @@ export class MapScene extends Phaser.Scene {
         const kind = boss ? `${boss.title}${types}` : KIND_STYLE[n.kind].label;
         const risk = n.harder ? '  ·  Risk: high (better rewards)' : boss ? '  ·  Risk: boss' : '';
         const sides = n.sides.map((s) => (s.kind === 'heal' ? 'healing spot' : s.kind === 'fish' ? 'fishing spot' : s.kind === 'raid' ? 'raid den' : s.kind === 'totem' ? 'Totem territory' : s.kind === 'expedition' ? 'expedition gate' : s.kind === 'service' ? (SERVICES.services.find((x) => x.id === s.serviceId)?.name ?? 'service') : s.kind === 'event' ? (stopIsHidden(content, services().session.run!, n, s) ? 'mystery "?" stop' : `${content.events.get(s.eventId ?? '')?.name ?? 'event'} stop`) : s.kind === 'plaza' ? 'Trainer Plaza' : 'shop'));
-        const seen = this.previewText(n) || (n.kind === 'wild' ? `Habitat: likely ${habitatList(services().session.content, services().session.run!).join(', ')}` : '');
+        const seen = this.previewText(n) || this.omens[n.id]?.text || (n.kind === 'wild' ? `Habitat: likely ${habitatList(services().session.content, services().session.run!).join(', ')}` : '');
         const route = routeKind(services().session.run!, n);
         const anomaly = stageAnomaly(services().session.content, services().session.run!);
         return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${seen ? `\n${seen}` : ''}`;
@@ -1141,8 +1147,10 @@ export class MapScene extends Phaser.Scene {
     const leaders = nextGymLeaders(content, run);
     if (leaders.length > 0) {
       const text = leaders.map((l) => `${bossInfo(content, 'gym', l.leaderId).name} (${l.types.map((t) => t.toUpperCase()).join('/')})`).join(', ');
-      rows.push({ action: null, itemId: 'fame-checker', title: 'Fame Checker', text: `Next gym leaders: ${text}`, problem: `Next gym leaders: ${text}` });
+      rows.push({ action: null, itemId: 'fame-checker', title: 'Fame Checker', text: `Gym leaders still in this region: ${text}`, problem: `Gym leaders still in this region: ${text}` });
     }
+    const plan = run.stagePlan?.lines ?? [];
+    if (plan.length > 0) rows.push({ action: null, itemId: '', title: 'Route plan', text: plan.join(' '), problem: plan.join(' ') });
     const licenseText = licenseNote(content, run);
     if (licenseText) rows.push({ action: null, itemId: '', title: `${run.prep.license ? 'Field License' : 'Intel'}: ${licenseName(fieldHintId(content, run)!)}`, text: licenseText, problem: licenseText });
     const gym = run.stage!.map.nodes.find((n) => n.kind === 'gym');
@@ -1602,7 +1610,7 @@ export class MapScene extends Phaser.Scene {
     this.busy = true;
   }
 
-  private showBanner(top: string, title: string, sub: string): void {
+  private showBanner(top: string, title: string, sub: string, plan: readonly string[] = []): void {
     const layer = this.add.container(0, 0).setDepth(80);
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0));
     // A banner band across the screen, like a Pokémon game's location sign.
@@ -1613,10 +1621,16 @@ export class MapScene extends Phaser.Scene {
     layer.add(this.add.text(GAME_WIDTH / 2, 208, top, textStyle(26, COLORS.gold)).setOrigin(0.5));
     layer.add(this.add.text(GAME_WIDTH / 2, 254, title, textStyle(56, COLORS.textLight)).setOrigin(0.5));
     layer.add(this.add.text(GAME_WIDTH / 2, 302, sub, textStyle(20, '#d8d0e0')).setOrigin(0.5));
+    // Beta 4.4: why this stage was built the way it was (core/stagePlan.ts).
+    if (plan.length > 0) {
+      const box = this.add.text(GAME_WIDTH / 2, 346, `Built from your last stage:\n${plan.join('\n')}`, { ...textStyle(18, COLORS.textLight), align: 'center', wordWrap: { width: GAME_WIDTH - 80 } }).setOrigin(0.5, 0);
+      layer.add(this.add.rectangle(GAME_WIDTH / 2, 338, box.width + 32, box.height + 16, 0x181818, 0.92).setOrigin(0.5, 0));
+      layer.add(box);
+    }
     band.x = -GAME_WIDTH;
     this.tweens.add({ targets: band, x: 0, duration: 260, ease: 'Cubic.easeOut' });
     this.busy = true;
-    this.tweens.add({ targets: layer, alpha: 0, delay: 1400, duration: 400, onComplete: () => {
+    this.tweens.add({ targets: layer, alpha: 0, delay: plan.length > 0 ? 3200 : 1400, duration: 400, onComplete: () => {
       layer.destroy();
       this.busy = false;
     } });
@@ -1624,6 +1638,8 @@ export class MapScene extends Phaser.Scene {
 }
 
 /** The newest rival headline for the map's notice corner (world recognition), or ''. */
+const OMEN_COLOR: Record<OmenTier, string> = { calm: '#70e070', uneasy: '#f0d060', dire: '#f06060' };
+
 function newsLine(content: Parameters<typeof topHeadline>[0], run: Parameters<typeof topHeadline>[1]): string {
   const h = topHeadline(content, run);
   return h ? `News: ${h}` : '';

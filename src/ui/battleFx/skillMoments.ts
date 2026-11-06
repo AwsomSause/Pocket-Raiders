@@ -166,6 +166,8 @@ export interface BossCinematic {
   /** The boss sprite to push the camera in on. */
   at: { x: number; y: number };
   motion: MotionLevel;
+  /** Draws the boss at a point for the push-in (the battle hasn't drawn it yet). */
+  figure?: (x: number, y: number) => Phaser.GameObjects.GameObject & { setDepth(d: number): unknown; setAlpha(a: number): unknown };
 }
 
 /**
@@ -181,29 +183,37 @@ export function bossCinematic(scene: Phaser.Scene, c: BossCinematic, onSkip: () 
     const sub = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 40, c.subtitle, textStyle(22, '#bfe9ff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setDepth(1810).setAlpha(0);
     const ace = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 70, c.ace ? `Their ace: ${c.ace}` : '', textStyle(20, '#ff9ac8', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setDepth(1810).setAlpha(0);
     const hint = scene.add.text(GAME_WIDTH - 14, 14, 'any key: skip (remembered)', textStyle(14, COLORS.textMuted)).setOrigin(1, 0).setDepth(1810);
-    const all = [...bars, name, sub, ace, hint];
+    // The overlay stays put while the camera zooms (it used to pan off-screen, leaving a black edge and hiding the bottom bar).
+    for (const o of [...bars, name, sub, ace, hint]) o.setScrollFactor(0);
+    const figure = c.figure?.(c.at.x, c.at.y);
+    figure?.setDepth(1805);
+    figure?.setAlpha(0);
+    const all: Phaser.GameObjects.GameObject[] = [...bars, name, sub, ace, hint, ...(figure ? [figure] : [])];
     let over = false;
+    // Presses in the first moment belong to the screen before (mashing through the VS card must not skip this for good).
+    const openedAt = scene.time.now;
     const cam = scene.cameras.main;
     const finish = () => {
       if (over) return;
       over = true;
       scene.input.keyboard?.off('keydown', skip);
       scene.input.off('pointerdown', skip);
-      cam.zoomTo(1, 200);
-      cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, 200);
-      scene.tweens.add({ targets: all, alpha: 0, duration: 220, onComplete: () => { all.forEach((o) => o.destroy()); resolve(); } });
+      cam.zoomTo(1, 200, 'Linear', true);
+      scene.tweens.add({ targets: all, alpha: 0, duration: 220, onComplete: () => { all.forEach((o) => o.destroy()); resolve(); }, onStop: () => resolve() });
+      scene.time.delayedCall(600, resolve);
     };
     const skip = () => {
+      if (scene.time.now - openedAt < 450) return;
       onSkip();
       finish();
     };
     scene.input.keyboard?.on('keydown', skip);
-    scene.input.once('pointerdown', skip);
+    scene.input.on('pointerdown', skip);
     const d = fast ? 0.5 : 1;
     scene.tweens.add({ targets: bars[0], y: 40, duration: 380 * d });
     scene.tweens.add({ targets: bars[1], y: GAME_HEIGHT - 40, duration: 380 * d });
-    cam.pan(c.at.x, c.at.y, 900 * d, 'Sine.easeInOut');
-    cam.zoomTo(fast ? 1 : 1.18, 900 * d);
+    if (figure) scene.tweens.add({ targets: figure, alpha: 1, duration: 300 * d });
+    cam.zoomTo(fast ? 1 : 1.12, 900 * d, 'Sine.easeInOut');
     scene.tweens.add({ targets: name, alpha: 1, scale: 1, duration: 320 * d, delay: 500 * d, ease: 'Back.easeOut' });
     scene.tweens.add({ targets: sub, alpha: 1, duration: 300 * d, delay: 900 * d });
     scene.tweens.add({ targets: ace, alpha: 1, duration: 300 * d, delay: 1250 * d });

@@ -10,7 +10,7 @@ Written by `tests/unit/encounterDirector.test.ts` (part of `npm run check`): 100
 | 2 | trainer | 9–11 | 10, 11, 12 | 4000 | 266 | 57.781 / 112 (budget 118.506) | 0.6% | 0 | 0 | 0 | 0.00% |
 | 3 | wild | 14–16 | 14, 15, 16 | 10000 | 329 | 61.658 / 104 (budget 103.994) | 0.6% | 0 | 0 | 0 | 0.00% |
 | 3 | trainer | 14–16 | 15, 16, 17 | 6000 | 343 | 65.418 / 134 (budget 131.615) | 0.9% | 0 | 0 | 0 | 0.00% |
-| 4 | wild | 19–21 | 19, 20, 21 | 10000 | 354 | 66.032 / 113 (budget 111.993) | 1.4% | 0 | 0 | 0 | 0.00% |
-| 4 | trainer | 19–21 | 20, 21, 22 | 6000 | 362 | 75.312 / 140 (budget 144.632) | 0.9% | 0 | 0 | 0 | 0.00% |
+| 4 | wild | 19–21 | 19, 20, 21 | 10000 | 353 | 65.97 / 113 (budget 111.993) | 1.4% | 0 | 0 | 0 | 0.00% |
+| 4 | trainer | 19–21 | 20, 21, 22 | 6000 | 363 | 75.317 / 140 (budget 144.632) | 0.9% | 0 | 0 | 0 | 0.00% |
 
 One-hit KO = the foe's best attack at a max roll, neutral type, no crit, beats an all-70 Pokémon of the same level. Party loss and win rates are measured by the playtest bot (`node tools/playtest.ts`, `docs/quality/playtest/`), not here.

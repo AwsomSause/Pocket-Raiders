@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isFreeReroll, passivePercent, teachableMoves } from '../../src/core/catalog';
+import { effectiveMax, isFreeReroll, passivePercent, teachableMoves } from '../../src/core/catalog';
 import { calcStats, maxPp } from '../../src/core/pokemon';
 import { generateDraft, isRewardEligible, rewardFamily } from '../../src/core/rewards';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -148,16 +148,25 @@ describe('catalog effects', () => {
 describe('stacking and the free re-roll', () => {
   it('team items stack up to their max, then picking one re-rolls the draft for free', () => {
     let run = newRun();
-    for (let i = 0; i < 5; i++) run = pick(offering(run, 'amulet-coin', 'pearl', 'stardust', 'heart-scale', 'red-shard'), 'amulet-coin').run;
-    expect(run.passives?.['amulet-coin']).toBe(5);
-    expect(passivePercent(content, run, 'money')).toBe(75);
-    expect(isFreeReroll(run, content.catalog.get('amulet-coin')!)).toBe(true);
+    for (let i = 0; i < 3; i++) run = pick(offering(run, 'amulet-coin', 'pearl', 'stardust', 'heart-scale', 'red-shard'), 'amulet-coin').run;
+    expect(run.passives?.['amulet-coin']).toBe(3);
+    expect(passivePercent(content, run, 'money')).toBe(45);
+    expect(isFreeReroll(content, run, content.catalog.get('amulet-coin')!)).toBe(true);
     const before = offering(run, 'amulet-coin', 'pearl', 'stardust', 'heart-scale', 'red-shard');
     const result = pick(before, 'amulet-coin');
     expect(result.reward.reroll).toBe(true);
     expect(result.run.phase).toBe('reward');
     expect(result.run.draft).toHaveLength(content.balance.draftSize);
-    expect(result.run.passives?.['amulet-coin']).toBe(5);
+    expect(result.run.passives?.['amulet-coin']).toBe(3);
+  });
+
+  it('No Item Caps lifts bonus items back to their catalog limit; map charges never change', () => {
+    let run = newRun();
+    run = { ...run, rules: { ...run.rules, modifierIds: ['no-item-caps'] } };
+    for (let i = 0; i < 5; i++) run = pick(offering(run, 'amulet-coin', 'pearl', 'stardust', 'heart-scale', 'red-shard'), 'amulet-coin').run;
+    expect(run.passives?.['amulet-coin']).toBe(5);
+    expect(isFreeReroll(content, run, content.catalog.get('amulet-coin')!)).toBe(true);
+    expect(effectiveMax(content, newRun(), content.catalog.get('repel')!)).toBe(content.catalog.get('repel')!.max);
   });
 });
 

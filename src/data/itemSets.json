@@ -1,0 +1,14 @@
+{
+ "sets": [
+  { "id": "iron-wall", "name": "Iron Wall Set", "items": ["eviolite", "assault-vest", "rocky-helmet"], "hooks": [{ "hook": "stat", "stat": "def", "multiplier": 1.15 }, { "hook": "stat", "stat": "spd", "multiplier": 1.15 }] },
+  { "id": "sharpshooter", "name": "Sharpshooter Set", "items": ["scope-lens", "wide-lens", "zoom-lens"], "hooks": [{ "hook": "crit", "stages": 1 }, { "hook": "accuracy", "percent": 10 }] },
+  { "id": "bruiser", "name": "Bruiser Set", "items": ["muscle-band", "black-belt"], "hooks": [{ "hook": "categoryPower", "category": "physical", "percent": 10 }, { "hook": "stat", "stat": "atk", "multiplier": 1.05 }] },
+  { "id": "scholar", "name": "Scholar Set", "items": ["expert-belt", "spell-tag"], "hooks": [{ "hook": "categoryPower", "category": "special", "percent": 10 }, { "hook": "stat", "stat": "spa", "multiplier": 1.05 }] },
+  { "id": "blaze-kit", "name": "Blaze Kit", "items": ["charcoal", "flame-orb", "heat-rock"], "hooks": [{ "hook": "typePower", "types": ["fire"], "percent": 20 }] },
+  { "id": "tide-kit", "name": "Tide Kit", "items": ["mystic-water", "damp-rock"], "hooks": [{ "hook": "typePower", "types": ["water"], "percent": 20 }] },
+  { "id": "grove-kit", "name": "Grove Kit", "items": ["miracle-seed", "big-root", "grassy-seed"], "hooks": [{ "hook": "typePower", "types": ["grass"], "percent": 20 }] },
+  { "id": "storm-kit", "name": "Storm Kit", "items": ["magnet", "electric-seed", "light-clay"], "hooks": [{ "hook": "typePower", "types": ["electric"], "percent": 20 }] },
+  { "id": "swift-wind", "name": "Swift Wind Set", "items": ["choice-scarf", "air-balloon"], "hooks": [{ "hook": "stat", "stat": "spe", "multiplier": 1.1 }] },
+  { "id": "all-rounder", "name": "All-Rounder Set", "items": ["leftovers", "life-orb", "focus-sash"], "hooks": [{ "hook": "stat", "stat": "all", "multiplier": 1.05 }] }
+ ]
+}

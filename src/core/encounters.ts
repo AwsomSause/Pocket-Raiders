@@ -362,7 +362,7 @@ function planBoss(content: Content, archetype: Archetype, role: BossRole, bossId
     return { speciesId: m.speciesId, level: info.level, moves: m.moves, training: m.training } as PlannedMember;
   });
   // Past level 100 the team is upgraded for its band (stronger species, moves, items, training, AI).
-  const banded = applyBossBand(content, authored, boss.signature, team.ai);
+  const banded = applyBossBand(content, authored, boss.signature, team.ai, role === 'gym' && number >= content.balance.competitiveGyms.fromStage);
   const members = banded.members;
   // Authored teams are checked against the role's threat budget and logged, never re-rolled (Balancing Phase 8).
   members.forEach((m, i) => auditEncounter(content, role, createPlannedPokemon(content, m, `audit:${bossId}:${i}`), 'authored-boss-team'));

@@ -56,6 +56,21 @@ export function tideWildWeight(content: Content, run: Pick<RunState, 'clock'>, s
   return types.some((x) => liked.includes(x)) ? t.wildFactor : 1;
 }
 
+/**
+ * Migration Seasons (S135): each season brings some types through (more of them in the wild) and the same
+ * types are scarcer in the opposite season. Read from the run clock only (no saved state, no gameplay RNG).
+ */
+export function migrationWildWeight(content: Content, run: Pick<RunState, 'clock'>, speciesId: string): number {
+  const m = content.balance.clock.migration;
+  if (!m) return 1;
+  const types = content.species.get(speciesId)?.types ?? [];
+  const season = seasonOf(content, run);
+  const away = SEASONS[(SEASONS.indexOf(season) + 2) % SEASONS.length]!;
+  if (types.some((t) => m.seasons[season].includes(t))) return m.factor;
+  if (types.some((t) => m.seasons[away].includes(t))) return m.awayFactor;
+  return 1;
+}
+
 /** Shop prices at this tide: healing items are cheaper at high tide, Poké Balls at low tide (washed-up stock). */
 export function tideShopMultiplier(content: Content, run: Pick<RunState, 'clock'>, category: string | undefined): number {
   const t = content.balance.clock.tide;

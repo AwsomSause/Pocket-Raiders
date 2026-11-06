@@ -29,6 +29,8 @@ export const MoveSlotSchema = z.object({
   pp: z.number().int().min(0),
   /** PP Ups used on this move (each +20% max PP, at most 3; see pokemon.ts maxPp). */
   ppUps: z.number().int().min(0).max(3).optional(),
+  /** Beta 4.4: a move a Hyper/Overdrive moment unlocked for this battle only (the extra slot; +power). Removed when the battle ends. */
+  hyper: z.literal(true).optional(),
   /** Times this Pokémon used the move this run, and the mastery star it earned (core/care: +1 PP, +5% accuracy). */
   uses: z.number().int().min(0).optional(),
   star: z.boolean().optional(),
@@ -716,6 +718,8 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
+  /** Beta 4.4: your Pokémon that already got a Hyper slot this battle (once each). */
+  hyperMoved: z.array(z.string()).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
   narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60), /** The rival's last Pokémon already held on once; the next knockout sticks. */ refused: z.boolean().optional() }).optional(),
   /** Nemesis system: the nemesis back for its Return or Reckoning, and the telegraphed change told in the intro. */
@@ -1251,6 +1255,8 @@ export const RunStateSchema = z.object({
   mastery: z.record(z.string(), MasteryPerkSchema).default({}),
   /** Game event editions on when the run started ("rivalry-week@2026-W44"): their rules apply and the run counts for them. */
   gameEvents: z.array(z.string()).default([]),
+  /** Beta 4.4: counters when this stage began, and why it was built the way it was (core/stagePlan.ts). */
+  stagePlan: z.object({ counters: z.record(z.string(), z.number().int().min(0)), wipes: z.number().int().min(0), lines: z.array(z.string()) }).optional(),
   /** Permanent attributes when the run started (the profile's, copied so the rules stay pure). */
   baseAttributes: z.record(z.string(), z.number()),
   /** Run-only additions to the attributes (from rewards). */
@@ -1768,6 +1774,8 @@ export const SettingsSchema = z.object({
   mapDayNight: z.boolean().default(false),
   /** S257 Cutscene skip with recap: skipping a cutscene shows a one-line text summary of it (off by default). */
   skipRecap: z.boolean().default(false),
+  /** Beta 4.4 skip guard: a held key, or a press in the first moment of a new screen, never confirms or skips (on by default). */
+  skipGuard: z.boolean().default(true),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */

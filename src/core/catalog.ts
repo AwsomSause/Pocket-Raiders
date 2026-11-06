@@ -25,6 +25,7 @@ import { runLevelCap } from './regions';
 import { eggStatus, layEgg } from './eggs';
 import { isNative, wildEligibleSpecies } from './themes';
 import { hashSeed, Rng } from './rng';
+import { noItemCaps } from './rules';
 import type { PendingDecision, PokemonInstance, RunState } from './state';
 
 /** How many random moves a TM offers (an HM offers every one). */
@@ -45,8 +46,19 @@ export function ownedCopies(run: RunState, entry: CatalogEntry): number {
 }
 
 /** A team or player item already at its max: picking it re-rolls the draft instead. */
-export function isFreeReroll(run: RunState, entry: CatalogEntry): boolean {
-  return entry.stacksOn !== 'pokemon' && entry.max !== null && ownedCopies(run, entry) >= entry.max;
+export function isFreeReroll(content: Content, run: RunState, entry: CatalogEntry): boolean {
+  const max = effectiveMax(content, run, entry);
+  return entry.stacksOn !== 'pokemon' && max !== null && ownedCopies(run, entry) >= max;
+}
+
+/** Kinds of item that give a lasting bonus; these stack only to `balance.itemCaps.bonusMax`. */
+const BONUS_KINDS = new Set(['held', 'passive', 'statBoost', 'perk']);
+
+/** How many of an item can stack this run: the catalog limit, lowered to the bonus cap unless No Item Caps is on. Map charges (repels) are not bonuses. */
+export function effectiveMax(content: Content, run: Pick<RunState, 'rules'>, entry: CatalogEntry): number | null {
+  if (entry.max === null) return null;
+  if (!BONUS_KINDS.has(entry.effect?.kind ?? '') || (run.rules && noItemCaps(run.rules))) return entry.max;
+  return Math.min(entry.max, content.balance.itemCaps.bonusMax);
 }
 
 /** The run-long bonus from every copy of every item with this passive, in percent. */
@@ -81,7 +93,8 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
   switch (effect.kind) {
     case 'statBoost': {
       const copies = Math.round((mon.statBoosts?.[effect.stat] ?? 0) / effect.percent);
-      return entry.max !== null && copies >= entry.max ? 'That Pokémon has already had the maximum.' : null;
+      const max = effectiveMax(content, run, entry);
+      return max !== null && copies >= max ? 'That Pokémon has already had the maximum.' : null;
     }
     case 'nature':
       return mon.nature === effect.nature ? `That Pokémon is already ${natureName(effect.nature)}.` : null;
@@ -102,7 +115,8 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
       const copies = mon.held?.[entry.id] ?? 0;
       // A trainer perk (Bill) can shrink how many different items one Pokémon holds.
       if (copies === 0 && Object.keys(mon.held ?? {}).length >= itemSlotLimit(content.balance.heldItemSlots, runPerks(content, run))) return 'That Pokémon has no free item slot.';
-      return entry.max !== null && copies >= entry.max ? `That Pokémon already holds ${copies === 1 ? 'one' : 'the most'}.` : null;
+      const max = effectiveMax(content, run, entry);
+      return max !== null && copies >= max ? `That Pokémon already holds ${copies === 1 ? 'one' : 'the most'}.` : null;
     }
     case 'battleBoost': {
       const stats = effect.boosts.map((b) => (b.kind === 'stage' ? b.stat : b.kind));

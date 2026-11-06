@@ -55,7 +55,7 @@ export const TraderSchema = z.object({
   name: z.string(),
   line: z.string(),
   want: TradeWantSchema,
-  give: z.object({ label: z.string(), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0) }),
+  give: z.object({ label: z.string(), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), /** With types: wild Pokémon of those types up to this much stronger (base stat total) than the strongest listed one. */ bstSlack: z.number().int().min(0).default(40) }),
   minRep: z.number().int().min(0).default(0),
   minBadges: z.number().int().min(0).default(0),
 });

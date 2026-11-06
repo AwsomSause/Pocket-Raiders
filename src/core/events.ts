@@ -797,7 +797,7 @@ export function giveItem(content: Content, run: RunState, id: string, times: num
       continue;
     }
     const entry = content.catalog.get(id);
-    if (!entry || entry.status !== 'supported' || isFreeReroll(run, entry)) { words.push(sold()); continue; }
+    if (!entry || entry.status !== 'supported' || isFreeReroll(content, run, entry)) { words.push(sold()); continue; }
     const target = entry.stacksOn === 'pokemon' ? run.party.find((m) => catalogTargetProblem(content, run, entry, m) === null) : undefined;
     if (entry.stacksOn === 'pokemon' && !target) { words.push(sold()); continue; }
     const result = applyCatalog(content, run, entry, target, { moneyMultiplier: 1, rng });
@@ -1174,6 +1174,7 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
     if (b.rule) {
       run.battle.eventRule = b.rule;
+      if (b.rule.weatherCycle) run.battle.weather = { id: b.rule.weatherCycle[0]!, turns: 5 };
       if (b.rule.foeAsleep) for (const mon of team) mon.status = { id: 'slp', turns: 3 };
       for (const [stat, n] of Object.entries(b.rule.stages ?? {})) {
         run.battle.playerStages[stat as 'atk'] = n;

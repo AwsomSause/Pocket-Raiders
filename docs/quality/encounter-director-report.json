@@ -405,7 +405,7 @@
      "20": 3330,
      "21": 3313
     },
-    "species": 354,
+    "species": 353,
     "topSpecies": [
      [
       "applin",
@@ -413,23 +413,23 @@
      ],
      [
       "aron",
-      75
+      76
      ],
      [
       "stunky",
-      74
+      75
      ],
      [
       "spheal",
-      69
-     ],
-     [
-      "scraggy",
-      69
+      68
      ],
      [
       "nincada",
       68
+     ],
+     [
+      "scraggy",
+      67
      ],
      [
       "sandile",
@@ -437,19 +437,19 @@
      ],
      [
       "cutiefly",
-      65
+      67
      ]
     ],
     "rarity": {
-     "uncommon": 1250,
-     "common": 7716,
-     "veryRare": 738,
-     "rare": 296
+     "uncommon": 1246,
+     "common": 7727,
+     "veryRare": 732,
+     "rare": 295
     },
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 66.032,
+    "threatAvg": 65.97,
     "threatMax": 113,
     "budgetAvg": 111.993,
     "rejectionRate": 0.014,
@@ -465,7 +465,7 @@
      "21": 2041,
      "22": 2017
     },
-    "species": 362,
+    "species": 363,
     "topSpecies": [
      [
       "applin",
@@ -503,15 +503,15 @@
     "rarity": {
      "veryRare": 668,
      "common": 3659,
-     "uncommon": 1240,
-     "rare": 433
+     "uncommon": 1239,
+     "rare": 434
     },
     "evolutionStage": {
-     "1": 4990,
-     "2": 965,
+     "1": 4987,
+     "2": 968,
      "3": 45
     },
-    "threatAvg": 75.312,
+    "threatAvg": 75.317,
     "threatMax": 140,
     "budgetAvg": 144.632,
     "rejectionRate": 0.009,

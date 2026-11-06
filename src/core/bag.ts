@@ -10,7 +10,10 @@
 
 import { itemScenario, labelOf, sortKey } from './camp';
 import type { CatalogEntry, Content, Rarity } from './contentSchema';
-import { catalogTargetProblem } from './catalog';
+import { catalogTargetProblem, effectiveMax } from './catalog';
+
+/** "Up to N <where>. " when the stack limit is above `above`, else nothing. */
+const capText = (max: number | null, where: string, above: number): string => (max !== null && max > above ? `Up to ${max} ${where}. ` : '');
 import { mapItemCopies } from './mapItems';
 import type { RunState } from './state';
 
@@ -129,11 +132,11 @@ export function bagEntries(content: Content, run: RunState): BagEntry[] {
       description: entry.description,
       rarity: entry.rarity,
       quantity: holders.reduce((n, h) => n + h.copies, 0),
-      max: entry.max,
+      max: effectiveMax(content, run, entry),
       holders,
       equipped: true,
       use: 'passive',
-      restriction: `${entry.max !== null ? `Up to ${entry.max} per Pokémon. ` : ''}Choose it to take it off a holder.`,
+      restriction: `${capText(effectiveMax(content, run, entry), 'per Pokémon', 0)}Choose it to take it off a holder.`,
       iconAssetId: catalogIcon(content, id),
     });
   }
@@ -149,7 +152,7 @@ export function bagEntries(content: Content, run: RunState): BagEntry[] {
       description: entry.description,
       rarity: entry.rarity,
       quantity: copies,
-      max: entry.max,
+      max: effectiveMax(content, run, entry),
       holders: [],
       equipped: false,
       use: 'use',
@@ -169,11 +172,11 @@ export function bagEntries(content: Content, run: RunState): BagEntry[] {
       description: entry.description,
       rarity: entry.rarity,
       quantity: copies,
-      max: entry.max,
+      max: effectiveMax(content, run, entry),
       holders: [],
       equipped: true,
       use: entry.how === 'use' ? 'use' : 'passive',
-      restriction: entry.max !== null && entry.max > 1 ? `Up to ${entry.max} for the run.` : '',
+      restriction: capText(effectiveMax(content, run, entry), 'for the run', 1).trim(),
       iconAssetId: catalogIcon(content, id),
     });
   }
@@ -193,7 +196,7 @@ export function bagEntries(content: Content, run: RunState): BagEntry[] {
       description: entry.description,
       rarity: entry.rarity,
       quantity: copies,
-      max: entry.max,
+      max: effectiveMax(content, run, entry),
       holders: [],
       equipped: true,
       use: 'passive',
