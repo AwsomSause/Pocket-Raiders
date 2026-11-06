@@ -1,0 +1,981 @@
+{
+ "events": [
+  {
+   "id": "dance-off-duel",
+   "name": "Dance-Off Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1f33",
+    "effect": "none"
+   },
+   "intro": "A trainer cranks up the music. \"Win the dance-off and you move first in our battle!\"",
+   "choices": [
+    {
+     "label": "Dance!",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You nail the moves. \"Fine, you go first.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Won the dance-off: you strike first",
+        "effects": [
+         {
+          "kind": "firstStrike"
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dance Rival",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You stumble over your own feet. \"Now we fight.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dance Rival",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip the dancing",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentors-examination",
+   "name": "Mentor's Examination",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "\"A veteran sets a rule: no bag items. Pass my examination and take a reward.\"",
+   "choices": [
+    {
+     "label": "Sit the exam",
+     "success": {
+      "text": "The mentor folds their arms. \"Your Pokémon only.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Examining Mentor",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ],
+       "rule": {
+        "noItems": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Not ready",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "type-roulette-duel",
+   "name": "Type Roulette Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gambler"
+    ],
+    "tint": "#2a2a10",
+    "effect": "none"
+   },
+   "intro": "A giant wheel of types stands by the road. \"Spin it. Whatever it lands on is the theme of our fight!\"",
+   "choices": [
+    {
+     "label": "Spin the wheel",
+     "chance": 0.34,
+     "success": {
+      "text": "The wheel clicks to a stop.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Roulette Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The wheel clicks to a different stop.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Roulette Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Spin it a second time",
+     "chance": 0.5,
+     "success": {
+      "text": "The needle settles on a fresh type.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Roulette Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "grass"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Different theme again.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Roulette Trainer",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "electric"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk past the wheel",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mirror-image-trainer",
+   "name": "Mirror Image Trainer",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#202033",
+    "effect": "none"
+   },
+   "intro": "A trainer holds up a mirror. \"Beat your own build.\"",
+   "choices": [
+    {
+     "label": "Face your reflection",
+     "success": {
+      "text": "Your lead stares back at you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Mirror Trainer",
+       "classId": "psychic",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "mirror": true
+      }
+     }
+    },
+    {
+     "label": "Turn the mirror away",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gym-janitor-challenge",
+   "name": "Gym Janitor Challenge",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2518",
+    "effect": "none"
+   },
+   "intro": "The arena floor is filthy. \"Sweep it for me and the leader's apprentice will give you a fair fight.\"",
+   "choices": [
+    {
+     "label": "Sweep the arena",
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The floor gleams. The apprentice nods.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Clean arena: you strike first",
+        "effects": [
+         {
+          "kind": "firstStrike"
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Leader's Apprentice",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 650
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You leave smears. The apprentice sighs.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Leader's Apprentice",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 450
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just fight",
+     "success": {
+      "text": "\"Fine, dirty floor and all.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Leader's Apprentice",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "moot-court-showdown",
+   "name": "Moot Court Showdown",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "none"
+   },
+   "intro": "Two trainers argue a case. \"Out-argue me, then we enforce the verdict in battle.\"",
+   "choices": [
+    {
+     "label": "Argue your case",
+     "check": "intelligence",
+     "success": {
+      "text": "The judge sides with you. \"You choose who moves first.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Won the debate: you strike first",
+        "effects": [
+         {
+          "kind": "firstStrike"
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Opposing Counsel",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The judge rules against you. \"Battle it out.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Opposing Counsel",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Plead no contest",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "twin-trainers",
+   "name": "Trainer Pair of Twins",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "Two twins finish each other's sentences. \"We fight as one!\"",
+   "choices": [
+    {
+     "label": "Fight the twins",
+     "success": {
+      "text": "They stand shoulder to shoulder, one big wall of Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Twins",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 5,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Say goodbye to both",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "veterans-vengeance",
+   "name": "Veteran's Vengeance",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "intro": "A scarred trainer blocks the road. \"I remember a run that fell short. I have trained since.\"",
+   "choices": [
+    {
+     "label": "Fight them again",
+     "success": {
+      "text": "Their team is a shadow of an old run, only stronger.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Returning Veteran",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1200
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ],
+       "retired": true
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "underdog-union",
+   "name": "Underdog Union",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#222a2a",
+    "effect": "none"
+   },
+   "intro": "A club of weak-looking trainers grins. \"Every one of us carries a rare held item. Underestimate us!\"",
+   "choices": [
+    {
+     "label": "Take on the union",
+     "success": {
+      "text": "They look small. Their items are not.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Underdog Union",
+       "classId": "youngster",
+       "size": 4,
+       "types": [],
+       "levelBonus": -3,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "charity-match",
+   "name": "Charity Match",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "common",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1f2e24",
+    "effect": "none"
+   },
+   "intro": "A banner reads: ALL PRIZES GO TO THE TOWN FUND. A friendly trainer waves you over.",
+   "choices": [
+    {
+     "label": "Fight for charity",
+     "success": {
+      "text": "The crowd cheers. The prize money goes to the town.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Charity Trainer",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "charity",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Keep walking",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "camp-counselor-contest",
+   "name": "Camp Counselor Contest",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#233023",
+    "effect": "none"
+   },
+   "intro": "\"Three-legged battle! You get a partner you did not pick.\"",
+   "choices": [
+    {
+     "label": "Pair up",
+     "success": {
+      "text": "A camper's Pokémon joins you for this fight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Camp Counselors",
+       "classId": "hiker",
+       "ally": "pikachu",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 450
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sit this one out",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "chefs-cook-off-battle",
+   "name": "Chef's Cook-Off Battle",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "A chef flips a pan. \"Beat me and my winning meal heals your whole team!\"",
+   "choices": [
+    {
+     "label": "Take the cook-off",
+     "success": {
+      "text": "Steam rises over the arena.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Battle Chef",
+       "classId": "worker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip the meal",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "time-trial-gate",
+   "name": "Time Trial Gate",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#232a2a",
+    "effect": "none"
+   },
+   "intro": "A gate stays shut until you finish a quiz in 15 seconds. A guard waits behind it.",
+   "choices": [
+    {
+     "label": "Race the quiz",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The gate swings open and the guard steps out.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Beat the clock: you strike first",
+        "effects": [
+         {
+          "kind": "firstStrike"
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gate Guard",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Time runs out. The gate stays shut and the guard shrugs.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Skip the gate",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stage-fright-challenge",
+   "name": "Stage Fright Challenge",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1f33",
+    "effect": "none"
+   },
+   "intro": "\"A packed crowd is watching. Everyone is nervous: all Speed drops at the start!\"",
+   "choices": [
+    {
+     "label": "Step on stage",
+     "success": {
+      "text": "The crowd roars and nerves bite.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stage Rival",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 550
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "stages": {
+         "spe": -1
+        }
+       }
+      }
+     }
+    },
+    {
+     "label": "Stay backstage",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
