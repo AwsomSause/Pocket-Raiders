@@ -2706,6 +2706,11 @@ export class BattleScene extends Phaser.Scene {
           if (this.duo && move && needsTarget(move)) this.openTargetPicker(chosen, move);
           else this.submit(chosen);
         };
+        // Story Run: a Pokémon that would refuse offers a choice first. Insisting always works and costs Heartbond.
+        if (slot && this.run.story.v2 && wouldRefuse(content, this.run, mon, slot.id)) {
+          this.openRefusalOffer(action, mon, slot.id, () => void withSkill());
+          return;
+        }
         void withSkill();
       },
       onBack: () => this.showRootMenu(),
@@ -2713,6 +2718,31 @@ export class BattleScene extends Phaser.Scene {
     this.moveInfo.setVisible(true);
     this.showTabs('attack');
     this.showActionTab();
+  }
+
+  /** A Story Run offer: the Pokémon is unsure about a reckless move. Insist (costs Heartbond), let it decline, or pick again. */
+  private openRefusalOffer(action: Extract<PlayerAction, { kind: 'move' }>, mon: PokemonInstance, moveId: string, goOn: () => void): void {
+    const content = services().session.content;
+    const name = mon.care?.nickname || (content.species.get(mon.speciesId)?.name ?? mon.speciesId);
+    const moveName = content.moves.get(moveId)?.name ?? moveId;
+    this.menu?.destroy();
+    this.message.setVisible(true).setText(`${name} is not sure about ${moveName}. Insisting will cost some Heartbond.`);
+    this.commandWindow.setVisible(true);
+    const choices = ['Insist', 'Let it decline', 'Pick another move'];
+    this.menu = new Menu(this, {
+      x: COMMAND_X + 24,
+      y: MESSAGE_Y + 26,
+      options: choices.map((label) => ({ label })),
+      columns: 1,
+      itemWidth: 340,
+      itemHeight: 46,
+      fontSize: 26,
+      color: this.btnText,
+      onSelect: (i) => {
+        if (i === 0) { Object.assign(action, { override: true }); goOn(); } else if (i === 1) goOn(); else this.showMoveMenu();
+      },
+      onBack: () => this.showMoveMenu(),
+    });
   }
 
   /** The ACTION tab over the move menu: click to cycle Mega / Tera / Z-Move / Dynamax on and off; red-orange while one is on. */

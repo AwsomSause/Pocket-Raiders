@@ -272,6 +272,8 @@ export const StoryV2Schema = z.object({
   quiz: z.object({ traitVector: z.record(z.string(), z.number()), picks: z.array(z.string()) }).optional(),
   starter: z.object({ lineId: z.string(), temperament: z.string(), twist: z.string().optional(), keystone: z.array(z.string()).default([]) }).optional(),
   heartbondOverrides: z.number().int().min(0).default(0),
+  /** S6: the Personality Autonomy setting, copied here each turn (off and flavor: no refusal offers; full: offers the player may override at a Heartbond cost). */
+  autonomy: z.enum(['off', 'flavor', 'full']).default('full'),
   circuit: CircuitStateSchema.optional(),
   /** S6: the partner's uid, levels already latched (unlocks never fall), latches waiting for a safe moment to play, the Keystone flag, and the pay ledger. */
   heartbond: z.object({
