@@ -2020,6 +2020,7 @@ export const BalanceSchema = z.object({
   spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   /** Habitat Ecosystem (S219): off in the old-seed story check. */
   ecosystem: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
+  biomes: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   /** Capture Styles (S224): befriend / negotiate / trap items with their own odds. Off by default; the ball catch flow stays the default. */
   captureStyles: z
     .object({
