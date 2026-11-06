@@ -122,7 +122,9 @@ import { cameraShot } from '../core/presentation/camera';
 import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
-import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
+import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner } from '../ui/battleFx/spectacle';
+import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui/dialogue/storyDialogue';
+import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
 import { typeEffectiveness } from '../core/battle/damage';
 import type { Move, TypeName } from '../core/contentSchema';
@@ -130,7 +132,7 @@ import type { Move, TypeName } from '../core/contentSchema';
 const MESSAGE_AUTO_ADVANCE_MS = 1400;
 const MESSAGE_DELAYS = { short: 700, normal: 1400, long: 2400 } as const;
 /** Milliseconds per character for the typewriter text speeds. */
-const TEXT_MS = { fast: 12, normal: 28, slow: 50 } as const;
+const TEXT_MS = { faster: 6, fast: 12, normal: 28, slow: 50 } as const;
 /** Battle events whose lines advance on their own; everything else waits for a confirm press. */
 const AUTO_EVENTS = new Set<string>(['move', 'noPp', 'miss', 'damage', 'noEffect', 'fail']);
 // Where the Pokémon stand: on the arena's ground patches (PokeRogue's layout).
@@ -201,6 +203,8 @@ const tween = tweenDone;
 
 export class BattleScene extends Phaser.Scene {
   private message!: Phaser.GameObjects.Text;
+  /** The Story Portrait message bar (default look only): its stripe and type tag follow the move being used. */
+  private storyBar: StoryBar | null = null;
   /** Battle log (catalog #115): the last lines said, reopened with the H key. Presentation only. */
   private weatherLayer: WeatherLayer | null = null;
   private history: string[] = [];
@@ -221,7 +225,7 @@ export class BattleScene extends Phaser.Scene {
   private picker: Picker | null = null;
   private moveInfo!: Phaser.GameObjects.Text;
   /** The focused move's type label and category icon (Essentials art). */
-  private typing: Phaser.Time.TimerEvent | null = null;
+  private typing: { stop(): boolean; typing(): boolean } | null = null;
   private moveBadges: Phaser.GameObjects.Container | null = null;
   private commandWindow!: Phaser.GameObjects.Graphics;
   /** Screens redesign: the battle style for this battle (null = the original look). Presentation only. */
@@ -479,14 +483,19 @@ export class BattleScene extends Phaser.Scene {
     // PokeRogue's message bar along the bottom, with the command window on its right.
     // A glossy glass message bar (Aero), with the command window on its right.
     const L = this.skin?.layout;
-    const barRect: Rect | null = L ? L.bar : [8, MESSAGE_Y + 8, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 16];
-    if (barRect) {
+    const barRect: Rect | null = L ? L.bar : null;
+    this.storyBar = null;
+    if (!L) {
+      // Kice's pick (text box mockup #5): the Story Portrait bar, full width along the bottom.
+      this.storyBar = storyBar(this, 0, MESSAGE_Y + 6, GAME_WIDTH, GAME_HEIGHT - MESSAGE_Y - 6, this.motion);
+      slideIn(this, this.storyBar.container, 0, 60, this.motion);
+    } else if (barRect) {
       const bar = this.skin?.messageBar ? (this.skin.messageBar(this, barRect) as Phaser.GameObjects.Graphics) : drawGlass(this, barRect[0], barRect[1], barRect[2], barRect[3], { radius: 22 });
       slideIn(this, bar, 0, 60, this.motion);
     }
     const cw: Rect | null = L ? L.command : [COMMAND_X, MESSAGE_Y + 14, GAME_WIDTH - COMMAND_X - 16, GAME_HEIGHT - MESSAGE_Y - 28];
     this.commandWindow = (cw && this.skin?.commandWindow ? this.skin.commandWindow(this, cw) : cw && !this.skin ? drawGlass(this, cw[0], cw[1], cw[2], cw[3], { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 18 }) : this.add.graphics()).setVisible(false);
-    const msg = L?.message ?? { x: 36, y: MESSAGE_Y + 24, w: 520, size: 30 };
+    const msg = L?.message ?? { x: 36, y: MESSAGE_Y + 40, w: 520, size: 30 };
     this.message = this.add.text(msg.align === 'center' ? msg.x + msg.w / 2 : msg.x, msg.y, '', this.skinText(msg.size, this.panelText, { wordWrap: { width: msg.w }, lineSpacing: 6, align: msg.align ?? 'left' })).setOrigin(msg.align === 'center' ? 0.5 : 0, 0);
     const info = L?.moveInfo ?? { x: COMMAND_X + 30, y: MESSAGE_Y + 24 };
     this.moveInfo = this.add.text(info.x, info.y, '', this.skinText(L ? Math.min(20, msg.size) : 24, this.panelText, { lineSpacing: 8 })).setVisible(false);
@@ -1457,11 +1466,11 @@ export class BattleScene extends Phaser.Scene {
     // Only move and damage lines advance by themselves, unless Settings > Auto-advance is on.
     const auto = autoLine || settings.autoAdvance;
     const delay = settings.autoAdvance ? MESSAGE_DELAYS[settings.messageDelay] : MESSAGE_AUTO_ADVANCE_MS;
-    this.typeText(auto ? text : `${text} ▼`, settings.textSpeed);
+    const typingMs = this.typeText(auto ? text : `${text} ▼`, settings.textSpeed);
     this.history.push(text);
     if (this.history.length > 60) this.history.shift();
     return new Promise((resolve) => {
-      const timer = auto ? this.time.delayedCall(delay, () => done()) : null;
+      const timer = auto ? this.time.delayedCall(delay + typingMs, () => done()) : null;
       const done = () => {
         timer?.remove(false);
         this.advance = null;
@@ -1551,36 +1560,32 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.add({ targets: text, y: text.y - 36, alpha: 0, duration: this.motion === 'full' ? 900 : 500, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
   }
 
-  private typingFull = '';
 
   /** Completes a message that is still being typed. Returns true when it was (the press is used up). */
   private finishTyping(): boolean {
-    if (!this.typing) return false;
-    this.typing.remove(false);
+    const t = this.typing;
     this.typing = null;
-    this.message.setText(this.typingFull);
-    return true;
+    return t ? t.stop() : false;
   }
 
-  /** Shows a message at once, or types it out (Settings > Text speed); the full text is always the message's text. */
-  private typeText(text: string, speed: 'instant' | 'fast' | 'normal' | 'slow'): void {
-    this.typing?.remove(false);
+  /**
+   * Shows a message at once, or types it out (Settings > Text speed) with speech pacing: short
+   * pauses at commas and full stops, a drag on "...". Returns the typing time in ms. The full
+   * text is always the message's text.
+   */
+  private typeText(text: string, speed: 'instant' | 'faster' | 'fast' | 'normal' | 'slow'): number {
+    this.typing?.stop();
     this.typing = null;
-    this.typingFull = text;
     if (speed === 'instant' || this.motion === 'off') {
       this.message.setText(text);
-      return;
+      return 0;
     }
-    let n = 0;
-    this.message.setText('');
-    this.typing = this.time.addEvent({
-      delay: TEXT_MS[speed],
-      repeat: text.length - 1,
-      callback: () => {
-        this.message.setText(text.slice(0, ++n));
-        if (n >= text.length) this.typing = null;
-      },
-    });
+    const plan = planSpeech(text, TEXT_MS[speed]);
+    const handle = typeSpeech(this, this.message, { ...plan, shakeAt: [] }, { speed: 'normal', motion: this.motion, onDone: () => {
+      if (this.typing && !this.typing.typing()) this.typing = null;
+    } });
+    this.typing = handle.typing() ? handle : null;
+    return plan.total;
   }
 
   /** H: show or hide the last battle messages, with filter tabs (ideas W1 F3). */
@@ -1697,6 +1702,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private clearMenus(): void {
+    this.storyBar?.accent(null);
     this.tweens.killTweensOf(this.reticle ?? []);
     this.reticle?.destroy();
     this.reticle = null;
@@ -1731,7 +1737,7 @@ export class BattleScene extends Phaser.Scene {
         const trainerSprite = trainerVisual(this, art.assetId, art.label, ENEMY_POS.x, ENEMY_POS.y, 2.5);
         await this.say(isUltimateBattle(this.run) ? `${title}, your Ultimate Rival, blocks the way!` : battle.rivalId ? `${title} is back to beat you!` : battle.returning ? `${title} is back for a rematch!` : battle.nemesis ? `${title} is back, and so is your nemesis!` : battle.hunted ? `${title} came hunting for you!` : battle.rival ? `${title} challenges you to a rival battle!` : `${title} would like to battle!`);
         const classLine = !battle.rival && !battle.rivalId && !battle.returning && !battle.nemesis && !battle.hunted ? services().session.content.trainers.get(battle.trainer?.classId ?? '')?.lines?.intro : undefined;
-        if (classLine) await this.say(`"${classLine}"`);
+        if (classLine) await this.speak(battle.trainer?.name ?? title, classLine);
         await tween(this, { targets: trainerSprite, x: GAME_WIDTH + 120, duration: 350 });
         trainerSprite.destroy();
         if (this.duo) {
@@ -3010,12 +3016,56 @@ export class BattleScene extends Phaser.Scene {
     if (title && battleAnimations !== 'off') {
       this.showMoment({ at: -1, side: 'enemy', title, messages: [], color: line.category === 'signature' ? '#ffb020' : '#7a5cff', sound: 'se.shiny', music: null, major: true, cutIn: false, shake: false }, battleAnimations === 'full' && effectIntensity > 0);
     }
-    // A speech bubble by the foe while the line is up (the message box still has it).
-    const at = this.enemySprite ?? { x: ENEMY_POS.x, y: ENEMY_POS.y };
-    const bubble = speechBubble(this, at.x, at.y, line.speaker, line.text, this.foeRim(), battleAnimations);
-    await this.say(`${line.speaker}: “${line.text}”`);
-    this.tweens.killTweensOf(bubble);
-    bubble.destroy();
+    await this.speak(line.speaker, line.text, line.voice, line.category === 'signature');
+  }
+
+  /**
+   * A trainer talks (text box mockup #5): the screen dims, the trainer slides in big with the
+   * Story Portrait box, and the line types like speech. A shouted line shakes the box, the trainer
+   * jumps and their Pokémon cries. Presentation only; the line also goes to the battle log.
+   */
+  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false): Promise<void> {
+    const settings = services().session.settings;
+    const content = services().session.content;
+    const trainer = this.run.battle?.trainer;
+    const art = this.trainerArt();
+    const isFoe = Boolean(trainer && (speaker === trainer.name || speaker === art?.label || this.trainerTitle()?.endsWith(speaker)));
+    const boss = this.boss();
+    const role = !isFoe ? undefined : boss ? (boss.title.replace(boss.name, '').trim() || undefined) : content.trainers.get(trainer?.classId ?? '')?.name;
+    const plain = stripSpeechTags(text);
+    this.history.push(`${speaker}: “${plain}”`);
+    if (this.history.length > 60) this.history.shift();
+    const cry = (): void => {
+      const mon = this.shown.enemy;
+      const species = mon ? content.species.get(mon.speciesId) : undefined;
+      if (!isFoe || !this.enemySprite) return;
+      if (species) playCry(this, species);
+      void hop(this, this.enemySprite, this.motion);
+    };
+    const line = storyLine(this, {
+      speaker,
+      role,
+      text: shout && !/\[shake\]/.test(text) ? `[shake]${text}[/shake]` : text,
+      voice,
+      artId: isFoe ? art?.assetId ?? null : null,
+      rim: this.foeRim(),
+      motion: this.motion,
+      speed: settings.speechSpeed,
+      onShout: cry,
+    });
+    // The bar keeps the line too while the cut-in is up, then gets its own text back.
+    const before = this.message.text;
+    this.message.setText('');
+    await new Promise<void>((resolve) => {
+      const auto = settings.autoAdvance ? this.time.delayedCall(MESSAGE_DELAYS[settings.messageDelay] + plain.length * LETTER_MS[settings.speechSpeed] * 1.4, () => line.advance()) : null;
+      this.time.delayedCall(120, () => (this.advance = () => line.advance()));
+      void line.done.then(() => {
+        auto?.remove(false);
+        this.advance = null;
+        if (this.message.active) this.message.setText(before);
+        resolve();
+      });
+    });
   }
 
   private async playEvents(events: RunEvent[], before: RunState, trainer: string | null, storyCues: PresentationCue[] = [], drama: DramaLine[] = []): Promise<void> {
@@ -3033,6 +3083,7 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'move') {
         this.message.setText(eventText(content, this.names(trainer), e) ?? '');
         this.lastMoveType = content.moves.get(e.moveId)?.type ?? 'normal';
+        this.storyBar?.accent(this.lastMoveType);
       }
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
