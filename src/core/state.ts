@@ -1233,6 +1233,8 @@ export const RunStateSchema = z.object({
   recorder: z.record(z.string(), z.unknown()).optional(),
   /** Journal: one line per finished stage (the stops passed), kept for the run history. */
   journal: z.array(z.string()).default([]),
+  /** Times each gimmick was used this run, by kind (mega:<stone>, dynamax, tera, zmove): drives Mega Stone and Dynamax Band levels (run v38). */
+  gimmicks: z.object({ uses: z.record(z.string(), z.number().int().min(0)).default({}) }).default({ uses: {} }),
   /** This run's Run Quest (trainerQuests.json runQuests), or null when none was offered. */
   runQuest: z.string().nullable().default(null),
   /** This run's mentorship, or null when none was chosen on the Preparation Desk. */

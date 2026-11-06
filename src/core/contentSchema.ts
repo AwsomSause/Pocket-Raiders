@@ -2057,6 +2057,8 @@ export const BalanceSchema = z.object({
     league: z.boolean(),
     /** Turns a Dynamax lasts, counting the turn it starts. */
     dynamaxTurns: z.number().int().min(1).default(3),
+    /** Gimmick progression (S479 to S482): uses needed for levels 1, 2, 3; Mega heal per stone level (percent); hits with a type before its Z-Crystal attunes. */
+    gimmick: z.object({ levels: z.array(z.number().int().min(1)).length(3), megaHealPerLevel: z.number().int().min(0), zAttuneUses: z.number().int().min(0) }).default({ levels: [2, 5, 9], megaHealPerLevel: 10, zAttuneUses: 5 }),
   }),
   /** Friendship (M8.75 part B): how it grows and when friendship evolutions happen. */
   friendship: z.object({
