@@ -58,6 +58,12 @@ describe('overhaul party narration', () => {
     // the enemy's moves are never counted
     expect(countedScene({}, mon, use.map((e) => ({ ...e, side: 'enemy' })), names)).toBeNull();
   });
+  it('evolution, hatch and new member reactions exist', async () => {
+    await ensureNarration();
+    for (const c of ['evolution', 'hatch', 'new_member']) {
+      expect(Array.from({ length: 30 }, (_, i) => partyNarration(party, c, `k${i}`, nameOf, typesOf)).some(Boolean), c).toBe(true);
+    }
+  });
   it('an empty party has nothing to say', async () => {
     await ensureNarration();
     expect(partyNarration([], 'rest_node', 'k', nameOf, typesOf)).toBeNull();
