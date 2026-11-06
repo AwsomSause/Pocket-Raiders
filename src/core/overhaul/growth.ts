@@ -86,6 +86,13 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   'grudge-keeper': { counter: 'koGrudge', words: 'damage against foes that knocked out one of your Pokémon before' },
   'silk-spinner': { counter: 'dropSpe', words: 'accuracy with moves that lower the foe\'s Speed', min: 4, type: 'bug' },
   'haunt-keeper': { counter: 'hauntMove', words: 'accuracy with Ghost status moves (curses, hauntings)', min: 4, type: 'ghost' },
+  medic: { counter: 'healAlly', words: 'more HP restored by healing moves', min: 3, },
+  bodyguard: { counter: 'guardAlly', words: 'success chance on repeated Protect-type moves (once per battle)', min: 3 },
+  trapper: { counter: 'useTrap', words: 'turns bound by its binding moves (once per battle)', min: 3 },
+  'berry-friend': { counter: 'berryEaten', words: 'more HP restored by the Berries it holds', min: 4 },
+  vanguard: { counter: 'vanguardHit', words: 'Defense and Sp. Def on the turn it switches in', min: 4 },
+  lucky: { counter: 'critLucky', words: 'critical-hit chance', min: 3, cap: 0.01 },
+  'scale-guard': { counter: 'resistHit', words: 'less damage from Dragon, Ice and Fairy moves', min: 8, cap: 0.03, type: 'dragon' },
   trickster: { counter: 'useTrick', words: 'accuracy with Taunt, Torment and Fake Out', min: 4, type: 'dark' },
 
 };
@@ -160,13 +167,21 @@ export function growthDefenseMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInst
   if (mon.growthPath === 'bruiser' && hpFrac >= 1) return 1 + Math.min(cfg.bonus, 0.03);
   return 1;
 }
+/** Held Berries restore a little more for Berry Friend. */
+export const growthBerryMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>): number => (cfg.enabled && mon.growthPath === 'berry-friend' ? 1 + cfg.bonus : 1);
+/** Vanguard: Defense and Sp. Def on the turn it switches in. */
+export const growthVanguardMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, turnsOut: number): number => (cfg.enabled && mon.growthPath === 'vanguard' && turnsOut === 0 ? 1 + cfg.bonus : 1);
+/** Damage taken from a move of this type: Scale Guard shrugs off 3% of Dragon, Ice and Fairy moves. */
+export const growthIncomingMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string): number => (cfg.enabled && mon.growthPath === 'scale-guard' && ['dragon', 'ice', 'fairy'].includes(moveType.toLowerCase()) ? 1 - Math.min(cfg.bonus, 0.03) : 1);
+/** Lucky: a flat extra critical-hit chance. */
+export const growthCritBonus = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>): number => (cfg.enabled && mon.growthPath === 'lucky' ? Math.min(cfg.bonus, 0.01) : 0);
 /** Evasion multiplier (>1 makes foes miss more): Dodger above 75% HP. */
 export function growthEvasionMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, hpFrac: number): number {
   return cfg.enabled && mon.growthPath === 'dodger' && hpFrac > 0.75 ? 1 + Math.min(cfg.bonus, 0.03) : 1;
 }
 /** Healing multiplier (Anchor: held-item and move healing restore a little more). */
 export function growthHealMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>): number {
-  return cfg.enabled && mon.growthPath === 'anchor' ? 1 + cfg.bonus : 1;
+  return cfg.enabled && (mon.growthPath === 'anchor' || mon.growthPath === 'medic') ? 1 + cfg.bonus : 1;
 }
 
 /** Run-map counter paths whose edge is a flat bonus on every hit. */
@@ -185,7 +200,7 @@ export function noteMapGrowth(content: Content, run: { story: { histories: Recor
 /** What one move use tells the growth counters. `hpFrac` is the user's HP share before it moved. */
 export interface MoveFacts { accuracy: number | null; category: string; type: string; flags: readonly string[]; hpFrac: number; night?: boolean }
 /** What the move itself is, for the setup-move paths. */
-export interface MoveRoleFacts { id: string; category: string; type?: string; weather?: unknown; terrain?: unknown; field?: string; wonderRoom?: unknown; sideMove?: string; clearHazards?: unknown; statChanges?: readonly { stages: number; target: string; stat?: string }[] }
+export interface MoveRoleFacts { id: string; category: string; type?: string; bind?: unknown; trap?: unknown; weather?: unknown; terrain?: unknown; field?: string; wonderRoom?: unknown; sideMove?: string; clearHazards?: unknown; statChanges?: readonly { stages: number; target: string; stat?: string }[] }
 export function moveRoleCounters(m: MoveRoleFacts): string[] {
   const out: string[] = [];
   if (m.weather) out.push('setWeather');
@@ -199,6 +214,7 @@ export function moveRoleCounters(m: MoveRoleFacts): string[] {
   if (m.category === 'status' && m.statChanges?.some((c) => c.target === 'self' && c.stages > 0)) out.push('raiseSelf');
   if (m.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) out.push('dropSpe');
   if (m.category === 'status' && m.type?.toLowerCase() === 'ghost') out.push('hauntMove');
+  if (m.bind || m.trap) out.push('useTrap');
   if (m.id === 'taunt' || m.id === 'torment' || m.id === 'fake-out') out.push('useTrick');
   return out;
 }
@@ -209,7 +225,7 @@ export function growthOnce(marks: string[], key: string): boolean {
   return true;
 }
 /** Paths whose edge is not damage (status chances, durations, healing, accuracy, Protect). */
-const NON_DAMAGE: ReadonlySet<string> = new Set(['speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
+const NON_DAMAGE: ReadonlySet<string> = new Set(['medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');

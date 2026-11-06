@@ -23,7 +23,7 @@ import { freshHeldState } from '../state';
 import type { BattleState, HeldState, PokemonInstance, Stages, Volatile } from '../state';
 import { clampStage } from './damage';
 import { setHooks } from '../itemSets';
-import { growthHealMultiplier } from '../overhaul/growth';
+import { growthBerryMultiplier, growthHealMultiplier } from '../overhaul/growth';
 
 export type Side = 'player' | 'enemy';
 
@@ -708,7 +708,7 @@ export function checkBerries(ctx: HeldContext, holder: Holder, events: HeldEvent
   for (const { itemId, hook } of hooks(all, 'berryHeal')) {
     if (!below(hook.below) || mon.hp >= max) continue;
     eatBerry(ctx, holder, itemId);
-    const amount = (hook.flat ?? max * (hook.fraction ?? 0)) * healingMultiplier(ctx, mon, holder.side) * (1 + teamBerryPercent(ctx, holder.side, 'berryHeal') / 100);
+    const amount = (hook.flat ?? max * (hook.fraction ?? 0)) * healingMultiplier(ctx, mon, holder.side) * (1 + teamBerryPercent(ctx, holder.side, 'berryHeal') / 100) * (holder.side === 'player' ? growthBerryMultiplier(content.balance.overhaulGrowth, mon) : 1);
     heal(content, mon, amount);
     events.push({ type: 'held', side: holder.side, itemId, what: 'heal', hpAfter: mon.hp });
     if (holder.side === 'player') {

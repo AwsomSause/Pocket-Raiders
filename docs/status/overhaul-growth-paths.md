@@ -71,3 +71,11 @@ KO situations are read in `story/hooks.ts` (`koSituation`) and the engine reads 
 - Legend Hunter (100% of a Legendary's max HP dealt, in total): +5% against Legendary and Mythical-like foes. Rival Mirror (5 battles against a foe sharing a type): +3% against such foes. Grudge Keeper (KOs on a foe whose kind knocked out one of yours earlier, the game's existing grudge list): +5% against such foes.
 - Silk Spinner (Bug, 4 Speed-lowering moves), Haunt Keeper (Ghost, 4 Ghost status moves), Trickster (Dark, 4 uses of Taunt, Torment or Fake Out): +5% accuracy with those moves (Taunt and Fake Out are already 100%, so Trickster mostly helps through accuracy drops).
 Limits: Comeback and Duelist count the field at the end of the turn; Closer was not added (it is the same rule as Loner); Scout, Pivot, Lucky, Vanguard, Tidy, Berry Friend, Medic, Bodyguard, Trapper and the rest of the unplayed list are next. Tests: `tests/unit/growthBattleFacts.test.ts`.
+
+## Batch 8: ally, trap and defence paths (7 more, 94 of 106 play)
+Counters in `story/hooks.ts`, effects in `engine.ts`/`held.ts`. Each needs the single top count:
+- Medic (3 heals of a teammate by its healing moves, doubles): its healing moves restore 5% more (also Anchor's rule). Bodyguard (3 uses of Follow Me, Rage Powder, Wide Guard or Quick Guard in doubles, or a hit taken for a teammate by Protective Instinct): +5% Protect chain success, once per battle.
+- Trapper (3 uses of binding or trapping moves): its binding moves bind one turn longer, once per battle (the engine does have a bind count; Mean Look style trapping has none, so only binds benefit).
+- Berry Friend (4 Berries eaten that did something): held healing Berries restore 5% more. Vanguard (4 switch-ins that took a hit from the foe's move the same turn): +5% Defense and Sp. Def on the turn it switches in.
+- Lucky (3 critical hits from moves with no crit boost): +1% crit chance. Scale Guard (Dragon, 8 resisted hits taken): takes 3% less from Dragon, Ice and Fairy moves.
+Left off on purpose: Fossil Memory (Rock types are immune to sandstorm, so its edge would do nothing). Still unplayed (12): Scout, Pivot, Tidy, Thorn Warden, Dojo Student, Burrower (no charge-interrupt mechanic), Shield Sibling, Closer (same as Loner), Free Spirit, Cheerleader, Fast Learner, Fossil Memory. Tests: `tests/unit/growthAllyPaths.test.ts`.
