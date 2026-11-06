@@ -61,7 +61,7 @@ export function pseudoEvents(records: readonly PseudoRecord[] = PSEUDO.records):
     const def = roomDef(r);
     const first = `${r.id.replace(/_/g, '-')}-${r.nodes[0]!.id}`;
     const gate = {
-      id: gateId(r), name: r.name, group: 'Pseudo Stages', stop: 'dungeon', rarity: 'rare', tags: ['Dungeon', 'Exploration'], minStage: 1, room: true,
+      id: gateId(r), name: r.name, group: 'Pseudo Stages', stop: 'delve', rarity: 'rare', tags: ['Dungeon', 'Exploration'], minStage: 1, room: true,
       types: [], requires: [], scene: { cast: [], effect: 'none', tint: r.tint }, intro: `${r.intro} (${r.mood}.) Ends: ${r.exit}.`,
       choices: [
         { label: `Enter ${r.name}`, success: { text: 'You step in.', effects: [{ kind: 'addEvent', eventId: first }] } },
