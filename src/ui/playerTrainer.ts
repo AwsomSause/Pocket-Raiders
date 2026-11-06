@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { playerAnimDef, playerAnimId, playerFrameNames, type PlayerAnimDef, type PlayerLook } from '../assets/playerArt';
-import { itemVisual } from './sprites';
+import { playSfx } from './audio';
 import { loadAssets } from './lazyAssets';
 import type { MotionLevel } from './aero';
 
@@ -25,8 +25,12 @@ export const preloadPlayerTrainer = (scene: Phaser.Scene, look: PlayerLook): Pro
 export interface PlayMoment {
   /** Where the thrown ball lands (sendOut only). */
   target?: { x: number; y: number };
-  /** Ball picture id (P3 passes the caught ball); defaults to the Poké Ball. */
-  ballAssetId?: string;
+  /** Draws the ball in the hand (P3 passes the caught ball's picture); without it no ball is drawn. */
+  makeBall?: (x: number, y: number) => Phaser.GameObjects.Image;
+  /** Called on the release frame with the hand's position (the capture throw starts its own ball from there). */
+  onRelease?: (hand: { x: number; y: number }) => void;
+  /** Called when the thrown ball reaches the target, e.g. to show the ball-opening effect. */
+  onLand?: (at: { x: number; y: number }) => void;
 }
 
 /**
@@ -131,15 +135,29 @@ export class PlayerTrainerActor {
 
   /** The ball flies from the hand to the target in an arc (decoration; it is gone when the moment ends). */
   private releaseBall(opts: PlayMoment): void {
-    const target = opts.target;
-    if (!target) return;
     const from = { x: this.sprite.x + HAND.dx * this.height, y: this.sprite.y + HAND.dy * this.height };
-    const ball = itemVisual(this.scene, opts.ballAssetId ?? 'ball.pb', from.x, from.y, 3) as Phaser.GameObjects.Image;
+    opts.onRelease?.(from);
+    const target = opts.target;
+    if (!target || !opts.makeBall) return;
+    playSfx(this.scene, 'se.ball_throw');
+    const ball = opts.makeBall(from.x, from.y);
     ball.setDepth(this.sprite.depth + 1);
     this.ball = ball;
     const dur = this.motion === 'full' ? 320 : 160;
     this.scene.tweens.add({ targets: ball, x: target.x, duration: dur, ease: 'Linear' });
-    this.scene.tweens.add({ targets: ball, y: { from: from.y, to: target.y }, duration: dur, ease: 'Sine.easeOut' });
+    this.scene.tweens.add({
+      targets: ball,
+      y: { from: from.y, to: target.y },
+      duration: dur,
+      ease: 'Sine.easeOut',
+      onComplete: () => {
+        opts.onLand?.({ x: target.x, y: target.y });
+        if (this.ball === ball) {
+          ball.destroy();
+          this.ball = null;
+        }
+      },
+    });
   }
 
   destroy(): void {

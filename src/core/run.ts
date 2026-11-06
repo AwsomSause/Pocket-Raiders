@@ -2840,6 +2840,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.outcome === 'caught') {
     const caught = structuredClone(currentEnemy(battle));
     caught.uid = nextUid(run, 'p');
+    if (battle.ball) caught.caughtBall = battle.ball;
     // A raid boss's extra HP pool belongs to the fight, not to the Pokémon you take home.
     if (battle.raid) delete caught.statBoosts;
     shiftLevel(content, run, caught, catchLevelOffset(runPerks(content, run)) + palPadLevels(content, run));

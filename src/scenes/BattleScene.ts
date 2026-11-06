@@ -72,6 +72,8 @@ import { zMoveScene } from '../ui/battleFx/zMoveScene';
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
+import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
+import { DEFAULT_BALL } from '../core/ballLook';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
@@ -810,6 +812,17 @@ export class BattleScene extends Phaser.Scene {
     return services().session.content.archetypes.get(this.run.archetypeId)?.spriteAssetId ?? null;
   }
 
+  /** The throw for sending a Pokémon out: its own caught ball flies to its spot and opens there. */
+  private sendOutMoment(mon: PokemonInstance): Promise<void> {
+    const ball = mon.caughtBall ?? DEFAULT_BALL;
+    const at = this.spotXY('player');
+    return this.trainerActor!.play('sendOut', {
+      target: { x: at.x, y: at.y - 50 },
+      makeBall: (x, y) => ballVisual(this, ball, x, y),
+      onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+    });
+  }
+
   /**
    * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform. Trainers with their own
    * throwing sprite keep the older opening throw; doubles have no trainer on the field. Skip: Enter, Space or a tap.
@@ -821,7 +834,7 @@ export class BattleScene extends Phaser.Scene {
     const art = this.playerArt();
     if (art && bossBackId(art)) return;
     const look = playerLookForBattle();
-    this.trainerReady = preloadPlayerTrainer(this, look).then(() => {
+    this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
       const actor = new PlayerTrainerActor(this, look, PLAYER_POS.x - 175, PLAYER_POS.y - 4, 190, this.motion);
       actor.sprite.setDepth(4);
@@ -846,7 +859,7 @@ export class BattleScene extends Phaser.Scene {
   private async throwPose(): Promise<void> {
     if (this.trainerReady) await this.trainerReady;
     if (this.trainerActor) {
-      await this.trainerActor.play('sendOut', { target: this.spotXY('player') });
+      await this.sendOutMoment(this.shown.player);
       return;
     }
     const art = this.playerArt();
@@ -3173,7 +3186,7 @@ export class BattleScene extends Phaser.Scene {
           const incoming = this.findMon(before, e.uid);
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
-            if (e.side === 'player' && this.trainerActor) await this.trainerActor.play('sendOut', { target: this.spotXY('player') });
+            if (e.side === 'player' && this.trainerActor) await this.sendOutMoment(this.shown.player);
             this.showSprite(e.side, this.shown[e.side]);
             this.applyTeraTint(e.side, this.shown[e.side]);
             await this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, this.shown[e.side], false);
@@ -3446,7 +3459,16 @@ export class BattleScene extends Phaser.Scene {
   /** Throw, wobble, and either click shut or burst open. */
   private async animateBall(itemId: string, shakes: number, caught: boolean): Promise<void> {
     const item = services().session.content.items.get(itemId);
-    const ball = itemVisual(this, item?.iconAssetId ?? 'ball.pb', 200, 380, 3) as Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
+    // The trainer throws it (Overhaul P2/P3): the ball leaves the hand on the release frame; without a trainer it starts at the left edge.
+    let hand = { x: 200, y: 380 };
+    const actor = this.trainerActor;
+    if (actor) {
+      let release: (() => void) | undefined;
+      const released = new Promise<void>((resolve) => (release = resolve));
+      const played = actor.play('sendOut', { onRelease: (h) => { hand = h; release?.(); } });
+      await Promise.race([released, played]);
+    }
+    const ball = ballVisual(this, itemId, hand.x, hand.y, 3);
     playSfx(this, 'se.ball_throw');
     const targetY = ENEMY_POS.y - 60;
     await tween(this, { targets: ball, x: ENEMY_POS.x, y: targetY, duration: 450, ease: 'Quad.easeOut' });
