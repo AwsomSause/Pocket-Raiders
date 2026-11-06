@@ -36,7 +36,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 17, run: 34, settings: 31, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 17, run: 35, settings: 31, meta: 1, timeline: 1 };
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -321,6 +321,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       const run = data as Json & { stage?: Json | null };
       return run.stage && typeof run.stage === 'object' && run.stage.obstacles === undefined ? { ...run, stage: { ...run.stage, obstacles: {} } } : run;
     },
+    // v35 (Streak Bonuses and Pity Counters): older runs start with an empty streak and no missed rare drafts.
+    34: (data) => ({ ...(data as Json), streaks: { wins: 0, best: 0, faintedSeen: 0, rareMisses: 0 } }),
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.

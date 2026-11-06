@@ -2284,6 +2284,8 @@ export const BalanceSchema = z.object({
     rarityWeights: z.object({ common: z.number().positive(), uncommon: z.number().positive(), rare: z.number().positive(), veryRare: z.number().positive(), legendary: z.number().positive(), mythical: z.number().positive() }),
   }),
   /** The gentle opening: for the first `encounters` fights of a run, wild Pokémon above `maxBaseStats` are swapped for weaker ones and are `levelOffset` levels lower (never below `minLevel`). */
+  /** Streak Bonuses (S313): a gift each time the win streak reaches a milestone (it repeats every `wins` wins). Pity Counters (S321): after this many reward drafts with no rare or better reward, the next draft carries one. */
+  luck: z.object({ streakRewards: z.array(z.object({ wins: z.number().int().min(2), item: z.string() })).min(1), pityRareAfter: z.number().int().min(1) }),
   opening: z.object({ encounters: z.number().int().min(0), maxBaseStats: z.number().int().positive(), levelOffset: z.number().int().min(0), minLevel: z.number().int().min(1), softMovesUntilLevel: z.number().int().min(0), maxLevel: z.number().int().min(1) }),
   /** Chance that a wild encounter is a Legendary, Mythical or Ultra Beast (trainer perks scale it). */
   legendaryWildChance: z.number().min(0).max(1),
