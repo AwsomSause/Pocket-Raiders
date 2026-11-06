@@ -31,6 +31,7 @@ import {
   ThemesFileSchema,
   TrainerClassSchema,
   TypeChartSchema,
+  catalogIconId,
   type CatalogEntry,
   type Content,
   type Requirement,
@@ -846,7 +847,7 @@ export function catalogReward(entry: CatalogEntry): Reward {
 export const catalogRewardId = (entryId: string) => `item:${entryId}`;
 
 /** Catalog items use the director's icon pack (images/items/gen5); 0.png is its blank icon. */
-export const catalogIconAssetId = (entry: CatalogEntry) => `item.gen5/${entry.icon ?? '0'}`;
+export const catalogIconAssetId = (entry: CatalogEntry) => catalogIconId(entry.icon);
 
 /** Adds draft cards for the working catalog items, cash-in values to Bag items, and checks the catalog. */
 function addCatalog(content: Content, problems: string[]): void {

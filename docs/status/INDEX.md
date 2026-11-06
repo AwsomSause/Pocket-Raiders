@@ -321,3 +321,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-final-checks.md`: Overhaul slices 29-30: 100-run simulation (`npm run sim:overhaul`) vs the pre-Overhaul game, and the THE OVERHAUL.md §18 acceptance checklist with test evidence.
 - `player-art-p1.md`: player trainer art registry and strips (Overhaul P1).
 - `story-foundation-f0.md`: Story Overhaul F0: profile v20 / run v40 / settings v39 containers, `data:story` + `src/data/story/`, Zod schemas, the 19 story gates. Later story slices add fields inside the containers; no more bumps.
+- [item-library-wiring](item-library-wiring.md): P4, 97 library pictures wired (91 items + 6 candies)

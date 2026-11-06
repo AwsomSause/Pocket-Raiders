@@ -19045,5 +19045,1913 @@
    "nature": "calm",
    "battles": 3
   }
+ },
+ {
+  "id": "tm-fairy",
+  "name": "TM (Fairy)",
+  "family": "TMs and HMs",
+  "description": "Teach 1 of 3 random Fairy moves the Pokémon can learn",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/tm-fairy",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "fairy",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "hm-fairy",
+  "name": "HM (Fairy)",
+  "family": "TMs and HMs",
+  "description": "Teach any Fairy move the Pokémon can learn",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/machine-fairy",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "fairy",
+   "mode": "hm"
+  }
+ },
+ {
+  "id": "temp-mint-atk",
+  "name": "Fresh Attack Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Adamant nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mint-atk",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "adamant",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mint-def",
+  "name": "Fresh Defense Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Bold nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mint-def",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "bold",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mint-spatk",
+  "name": "Fresh Sp. Atk Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Modest nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mint-spatk",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "modest",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mint-spd",
+  "name": "Fresh Speed Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Timid nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mint-spd",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "timid",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mint-spdef",
+  "name": "Fresh Sp. Def Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Calm nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mint-spdef",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "calm",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mint-neutral",
+  "name": "Fresh Neutral Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Hardy nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mint-neutral",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "hardy",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mintblue",
+  "name": "Fresh Blue Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Careful nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mintblue",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "careful",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mintcyan",
+  "name": "Fresh Cyan Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Impish nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mintcyan",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "impish",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mintgreen",
+  "name": "Fresh Green Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Jolly nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mintgreen",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "jolly",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mintpink",
+  "name": "Fresh Pink Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Gentle nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mintpink",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "gentle",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mintred",
+  "name": "Fresh Red Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Brave nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mintred",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "brave",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mintyellow",
+  "name": "Fresh Yellow Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Hasty nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mintyellow",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "hasty",
+   "battles": 3
+  }
+ },
+ {
+  "id": "temp-mystic-mint",
+  "name": "Fresh Mystic Mint",
+  "family": "Natures and Mints",
+  "description": "Changes a Pokémon to the Quiet nature for its next 3 won battles, then its own nature returns",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mystic-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "quiet",
+   "battles": 3
+  }
+ },
+ {
+  "id": "hyper-aspear-berry",
+  "name": "Hyper Aspear Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures freeze, then heals 20% (below 50% HP once cured)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hyperaspearberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "frz"
+     ]
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-cheri-berry",
+  "name": "Hyper Cheri Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures paralysis, then heals 20% (below 50% HP once cured)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hypercheriberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "par"
+     ]
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-chesto-berry",
+  "name": "Hyper Chesto Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures sleep, then heals 20% (below 50% HP once cured)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hyperchestoberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "slp"
+     ]
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-pecha-berry",
+  "name": "Hyper Pecha Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures poison, then heals 20% (below 50% HP once cured)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hyperpechaberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "psn"
+     ]
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-rawst-berry",
+  "name": "Hyper Rawst Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures burn, then heals 20% (below 50% HP once cured)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hyperrawstberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "brn"
+     ]
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-persim-berry",
+  "name": "Hyper Persim Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures confusion and heals 20% below 50% HP",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hyperpersimberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [],
+     "confusion": true
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-lum-berry",
+  "name": "Hyper Lum Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Cures any status or confusion and heals 20% below 50% HP",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hyperlumberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "par",
+      "slp",
+      "psn",
+      "brn",
+      "frz"
+     ],
+     "confusion": true
+    },
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-oran-berry",
+  "name": "Hyper Oran Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Below 50% HP: heals 30 HP",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "held",
+  "icon": "library/hyperoranberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "flat": 30
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-sitrus-berry",
+  "name": "Hyper Sitrus Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Below 50% HP: heals 50% max HP",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/hypersitrusberry",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryHeal",
+     "below": 0.5,
+     "fraction": 0.5
+    }
+   ]
+  }
+ },
+ {
+  "id": "hyper-pomeg-berry",
+  "name": "Hyper Pomeg Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Feed to a Pokémon: huge friendship boost, +2 Love",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hyperpomegberry",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 40,
+   "changes": {
+    "love": 2
+   }
+  }
+ },
+ {
+  "id": "hyper-kelpsy-berry",
+  "name": "Hyper Kelpsy Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Feed to a Pokémon: huge friendship boost, +2 toward Peace",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hyperkelpsyberry",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 30,
+   "changes": {
+    "ragePeace": 2
+   }
+  }
+ },
+ {
+  "id": "hyper-qualot-berry",
+  "name": "Hyper Qualot Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Feed to a Pokémon: huge friendship boost, +2 Good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hyperqualotberry",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 30,
+   "changes": {
+    "goodEvil": 2
+   }
+  }
+ },
+ {
+  "id": "hyper-hondew-berry",
+  "name": "Hyper Hondew Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Feed to a Pokémon: huge friendship boost, +2 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hyperhondewberry",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 30,
+   "changes": {
+    "intelligence": 2
+   }
+  }
+ },
+ {
+  "id": "hyper-grepa-berry",
+  "name": "Hyper Grepa Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Feed to a Pokémon: huge friendship boost, +2 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hypergrepaberry",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 30,
+   "changes": {
+    "charisma": 2
+   }
+  }
+ },
+ {
+  "id": "hyper-tamato-berry",
+  "name": "Hyper Tamato Berry",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Feed to a Pokémon: huge friendship boost, +2 Strength",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hypertamatoberry",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 30,
+   "changes": {
+    "strength": 2
+   }
+  }
+ },
+ {
+  "id": "razz-tart",
+  "name": "Razz Tart",
+  "family": "Berries (held, eaten in battle)",
+  "description": "Next wild Pokémon is 2x easier to catch",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/razztart",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "black-apricorn",
+  "name": "Black Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at Dark or Poison Pokémon x2.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/blackapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2.5,
+     "types": [
+      "dark",
+      "poison"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "blue-apricorn",
+  "name": "Blue Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at Water or Ice Pokémon x2.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/blueapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2.5,
+     "types": [
+      "water",
+      "ice"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "green-apricorn",
+  "name": "Green Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at Grass or Bug Pokémon x2.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/greenapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2.5,
+     "types": [
+      "grass",
+      "bug"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "pink-apricorn",
+  "name": "Pink Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at Fairy or Psychic Pokémon x2.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/pinkapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2.5,
+     "types": [
+      "fairy",
+      "psychic"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "yellow-apricorn",
+  "name": "Yellow Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at Electric or Ground Pokémon x2.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/yellowapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2.5,
+     "types": [
+      "electric",
+      "ground"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "hisuian-apricorn",
+  "name": "Hisuian Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at Rock or Steel Pokémon x2.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/hisuianapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2.5,
+     "types": [
+      "rock",
+      "steel"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "white-apricorn",
+  "name": "White Apricorn",
+  "family": "Capture and party items",
+  "description": "Next 3 throws at shiny Pokémon x3 catch rate",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "library/whiteapricorn",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 3,
+     "shiny": true
+    }
+   ]
+  }
+ },
+ {
+  "id": "berry-sweet",
+  "name": "Berry Sweet",
+  "family": "Sweets",
+  "description": "Feed to a Pokémon: friendship boost, +1 Love",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/berrysweet",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 10,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "clover-sweet",
+  "name": "Clover Sweet",
+  "family": "Sweets",
+  "description": "Feed to a Pokémon: friendship boost, +1 Luck",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/cloversweet",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 10,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "flower-sweet",
+  "name": "Flower Sweet",
+  "family": "Sweets",
+  "description": "Feed to a Pokémon: friendship boost, +1 toward Peace",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/flowersweet",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 10,
+   "changes": {
+    "ragePeace": 1
+   }
+  }
+ },
+ {
+  "id": "ribbon-sweet",
+  "name": "Ribbon Sweet",
+  "family": "Sweets",
+  "description": "Feed to a Pokémon: friendship boost, +1 Charisma",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/ribbonsweet",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 10,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "star-sweet",
+  "name": "Star Sweet",
+  "family": "Sweets",
+  "description": "Feed to a Pokémon: friendship boost, +1 Good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/starsweet",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 15,
+   "changes": {
+    "goodEvil": 1
+   }
+  }
+ },
+ {
+  "id": "cracked-pearl",
+  "name": "Cracked Pearl",
+  "family": "Valuables",
+  "description": "Worth 150 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/crackedpearl",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 150,
+   "changes": {}
+  }
+ },
+ {
+  "id": "cracked-diamond",
+  "name": "Cracked Diamond",
+  "family": "Valuables",
+  "description": "Worth 500 money",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/crackeddiamond",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 500,
+   "changes": {}
+  }
+ },
+ {
+  "id": "tiempas-diamond",
+  "name": "Tiempa's Diamond",
+  "family": "Valuables",
+  "description": "Worth 1500 money; +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/tiempasdiamond",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1500,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "aquamarine-ore",
+  "name": "Aquamarine Ore",
+  "family": "Valuables",
+  "description": "Worth 400 money",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/aquamarineore",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 400,
+   "changes": {}
+  }
+ },
+ {
+  "id": "black-shard",
+  "name": "Black Shard",
+  "family": "Valuables",
+  "description": "Worth 300 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/blackshard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {}
+  }
+ },
+ {
+  "id": "blackshard-2",
+  "name": "Dark Shard",
+  "family": "Valuables",
+  "description": "Worth 600 money",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/blackshard2",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 600,
+   "changes": {}
+  }
+ },
+ {
+  "id": "crystal-shard",
+  "name": "Crystal Shard",
+  "family": "Valuables",
+  "description": "Worth 800 money",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/crystalshard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 800,
+   "changes": {}
+  }
+ },
+ {
+  "id": "umbral-shard",
+  "name": "Umbral Shard",
+  "family": "Valuables",
+  "description": "Worth 1000 money",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/umbralshard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1000,
+   "changes": {}
+  }
+ },
+ {
+  "id": "mega-shard",
+  "name": "Mega Shard",
+  "family": "Valuables",
+  "description": "Worth 1200 money",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/megashard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1200,
+   "changes": {}
+  }
+ },
+ {
+  "id": "meteorite-shard",
+  "name": "Meteorite Shard",
+  "family": "Valuables",
+  "description": "Worth 700 money",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/meteoriteshard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 700,
+   "changes": {}
+  }
+ },
+ {
+  "id": "buster-shard",
+  "name": "Buster Shard",
+  "family": "Valuables",
+  "description": "Worth 500 money",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/bustershard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 500,
+   "changes": {}
+  }
+ },
+ {
+  "id": "star-shard1",
+  "name": "Star Shard (Red)",
+  "family": "Valuables",
+  "description": "Worth 250 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/starshard1",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 250,
+   "changes": {}
+  }
+ },
+ {
+  "id": "star-shard2",
+  "name": "Star Shard (Blue)",
+  "family": "Valuables",
+  "description": "Worth 250 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/starshard2",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 250,
+   "changes": {}
+  }
+ },
+ {
+  "id": "star-shard3",
+  "name": "Star Shard (Yellow)",
+  "family": "Valuables",
+  "description": "Worth 250 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/starshard3",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 250,
+   "changes": {}
+  }
+ },
+ {
+  "id": "star-shard4",
+  "name": "Star Shard (Green)",
+  "family": "Valuables",
+  "description": "Worth 250 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/starshard4",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 250,
+   "changes": {}
+  }
+ },
+ {
+  "id": "red-gem",
+  "name": "Red Gem",
+  "family": "Valuables",
+  "description": "Worth 900 money",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/redgem",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 900,
+   "changes": {}
+  }
+ },
+ {
+  "id": "jewel-of-life",
+  "name": "Jewel of Life",
+  "family": "Valuables",
+  "description": "Worth 2000 money; +2 Love",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/jeweloflife",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 2000,
+   "changes": {
+    "love": 2
+   }
+  }
+ },
+ {
+  "id": "bug-ribbon",
+  "name": "Bug Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Bug moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-bug",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "dark-ribbon",
+  "name": "Dark Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Dark moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-dark",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "dark"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "dragon-ribbon",
+  "name": "Dragon Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Dragon moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-dragon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "dragon"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "electric-ribbon",
+  "name": "Electric Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Electric moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-electric",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "electric"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "fairy-ribbon",
+  "name": "Fairy Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Fairy moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-fairy",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fairy"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "fighting-ribbon",
+  "name": "Fighting Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Fighting moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-fighting",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fighting"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "fire-ribbon",
+  "name": "Fire Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Fire moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-fire",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fire"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "flying-ribbon",
+  "name": "Flying Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Flying moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-flying",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "flying"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "ghost-ribbon",
+  "name": "Ghost Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Ghost moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-ghost",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "grass-ribbon",
+  "name": "Grass Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Grass moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-grass",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "grass"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "ground-ribbon",
+  "name": "Ground Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Ground moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-ground",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ground"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "ice-ribbon",
+  "name": "Ice Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Ice moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-ice",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ice"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "normal-ribbon",
+  "name": "Normal Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Normal moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-normal",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "normal"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "poison-ribbon",
+  "name": "Poison Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Poison moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-poison",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "poison"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "psychic-ribbon",
+  "name": "Psychic Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Psychic moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-psychic",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "psychic"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "rock-ribbon",
+  "name": "Rock Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Rock moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-rock",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "rock"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "steel-ribbon",
+  "name": "Steel Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Steel moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-steel",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "steel"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "water-ribbon",
+  "name": "Water Ribbon",
+  "family": "Ribbons (held, one type)",
+  "description": "Water moves of the holder do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/ribbon-water",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "water"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "berry-charm",
+  "name": "Berry Charm",
+  "family": "Charms",
+  "description": "Berries heal 20% more",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/berrycharm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryHeal",
+   "percent": 20
+  }
+ },
+ {
+  "id": "safari-charm",
+  "name": "Safari Charm",
+  "family": "Charms",
+  "description": "Every wild Pokémon is 1.15x easier to catch",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/safaricharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 1.15
+    }
+   ]
+  }
+ },
+ {
+  "id": "wishing-charm",
+  "name": "Wishing Charm",
+  "family": "Charms",
+  "description": "Next 5 wild battles: the strongest of three Pokémon appears",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/wishingcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    }
+   ]
+  }
+ },
+ {
+  "id": "repel-charm",
+  "name": "Repel Charm",
+  "family": "Charms",
+  "description": "Skips the next 3 wild battles",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/repelcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "repel"
+    }
+   ]
+  }
+ },
+ {
+  "id": "frugal-charm",
+  "name": "Frugal Charm",
+  "family": "Charms",
+  "description": "Prize money from trainers +10% per copy",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 5,
+  "how": "passive",
+  "icon": "library/frugalcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "trainerMoney",
+   "percent": 10
+  }
+ },
+ {
+  "id": "heritage-charm",
+  "name": "Heritage Charm",
+  "family": "Charms",
+  "description": "Pokémon far below the team level catch up faster",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/heritagecharm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "catchUpExp",
+   "percent": 25
+  }
+ },
+ {
+  "id": "spirit-charm",
+  "name": "Spirit Charm",
+  "family": "Charms",
+  "description": "+3 Love and +2 toward Peace",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/spiritcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 3,
+    "ragePeace": 2
+   }
+  }
+ },
+ {
+  "id": "purify-charm",
+  "name": "Purify Charm",
+  "family": "Charms",
+  "description": "+5 Good",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/purifycharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "goodEvil": 5
+   }
+  }
+ },
+ {
+  "id": "corrupt-charm",
+  "name": "Corrupt Charm",
+  "family": "Charms",
+  "description": "+5 Evil",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/corruptcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "goodEvil": -5
+   }
+  }
+ },
+ {
+  "id": "smart-charm",
+  "name": "Smart Charm",
+  "family": "Charms",
+  "description": "+4 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/smartcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 4
+   }
+  }
+ },
+ {
+  "id": "hard-charm",
+  "name": "Hard Charm",
+  "family": "Charms",
+  "description": "+4 Strength",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hardcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "strength": 4
+   }
+  }
+ },
+ {
+  "id": "easy-charm",
+  "name": "Easy Charm",
+  "family": "Charms",
+  "description": "+4 toward Peace",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/easycharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "ragePeace": 4
+   }
+  }
+ },
+ {
+  "id": "contest-charm",
+  "name": "Contest Charm",
+  "family": "Charms",
+  "description": "+4 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/contestcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 4
+   }
+  }
  }
 ]
