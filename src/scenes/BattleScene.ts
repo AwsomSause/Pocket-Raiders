@@ -15,7 +15,7 @@ import { filterLog, LOG_TABS, type LogTab } from '../ui/logFilter';
 import { modeBattleLine } from '../core/modeObjectives';
 import { isUltimateBattle, ULTIMATE_EMBLEM } from '../core/rivals/ultimate';
 import { buildEpilogue } from '../core/ending';
-import { ensureNarration } from '../core/overhaul/partyNarration';
+import { battleStartContext, ensureNarration, partyNarration } from '../core/overhaul/partyNarration';
 import { ensureTrainerLines } from '../core/overhaul/trainerLines';
 import { materialName } from '../core/crafting';
 import { genderSign } from '../core/gender';
@@ -1750,6 +1750,16 @@ export class BattleScene extends Phaser.Scene {
     if (framing) {
       await this.say(framing.sign);
       await this.say(framing.line);
+    }
+    // The pack's party narration for a shiny, a legend or the weather at the start of a wild fight (text only).
+    if (battle.kind === 'wild' && battle.turn === 1) {
+      const foe = currentEnemy(battle);
+      const sp = session.content.species.get(foe.speciesId);
+      const ctx = battleStartContext({ shiny: foe.shiny, tags: sp?.tags ?? [] }, battle.weather?.id);
+      const party = session.run!.party;
+      const nameOf = (m: { speciesId: string }) => session.content.species.get(m.speciesId)?.name ?? m.speciesId;
+      const line = ctx ? partyNarration(party, ctx, `${session.run!.runId}:${session.run!.encountersCompleted}:${ctx}`, nameOf, (m) => session.content.species.get(m.speciesId)?.types ?? []) : null;
+      if (line) await this.say(line);
     }
     void ensureNarration().catch(() => undefined);
     if (battle.kind === 'trainer') await ensureTrainerLines().catch(() => undefined);

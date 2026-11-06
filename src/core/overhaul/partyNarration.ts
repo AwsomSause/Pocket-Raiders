@@ -134,3 +134,13 @@ export function countedScene(counters: Record<string, number>, mon: Pick<Pokemon
   }
   return line;
 }
+
+/** The pack context for a wild battle's opening: a shiny, a legendary sighting, or the weather it starts in. Shiny wins, then legend, then weather. */
+export function battleStartContext(enemy: { shiny: boolean; tags: readonly string[] }, weather: string | null | undefined): string | null {
+  if (enemy.shiny) return 'shiny_encounter';
+  if (enemy.tags.includes('legendary') || enemy.tags.includes('mythical')) return 'legend_sighting';
+  if (weather === 'rain') return 'rain';
+  if (weather === 'snow' || weather === 'hail') return 'snow';
+  if (weather === 'sun') return 'sunny';
+  return null;
+}

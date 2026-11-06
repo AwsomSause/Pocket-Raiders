@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { countedScene, ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
+import { battleStartContext, countedScene, ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
 import { content } from './helpers';
 
 const party = ['bulbasaur', 'charmander', 'squirtle', 'pikachu'].map((speciesId, i) => ({ uid: `m${i}`, nature: 'hardy' as const, speciesId }));
@@ -61,6 +61,16 @@ describe('overhaul party narration', () => {
   it('evolution, hatch and new member reactions exist', async () => {
     await ensureNarration();
     for (const c of ['evolution', 'hatch', 'new_member']) {
+      expect(Array.from({ length: 30 }, (_, i) => partyNarration(party, c, `k${i}`, nameOf, typesOf)).some(Boolean), c).toBe(true);
+    }
+  });
+  it('battle-start context: shiny, then legend, then weather', async () => {
+    expect(battleStartContext({ shiny: true, tags: ['legendary'] }, 'rain')).toBe('shiny_encounter');
+    expect(battleStartContext({ shiny: false, tags: ['mythical'] }, 'rain')).toBe('legend_sighting');
+    expect(battleStartContext({ shiny: false, tags: [] }, 'hail')).toBe('snow');
+    expect(battleStartContext({ shiny: false, tags: [] }, 'sand')).toBeNull();
+    await ensureNarration();
+    for (const c of ['shiny_encounter', 'legend_sighting', 'rain', 'snow', 'sunny', 'trade']) {
       expect(Array.from({ length: 30 }, (_, i) => partyNarration(party, c, `k${i}`, nameOf, typesOf)).some(Boolean), c).toBe(true);
     }
   });
