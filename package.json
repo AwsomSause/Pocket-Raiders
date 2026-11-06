@@ -66,6 +66,7 @@
     "data:rb9-events": "node tools/build-rb9-events.ts",
     "data:rb10-events": "node tools/build-rb10-events.ts",
     "data:w10-events": "node tools/build-w10-events.ts",
+    "data:nobles": "node tools/build-nobles.ts",
     "data:z-trials": "node tools/build-z-trials.ts",
     "data:rk-events": "node tools/build-rk-events.ts",
     "data:merchant-events": "node tools/build-merchant-events.ts",
