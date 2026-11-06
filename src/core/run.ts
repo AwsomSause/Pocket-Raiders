@@ -82,6 +82,7 @@ import { arenaFor } from './battle/w1Play';
 import { underdogXpMultiplier } from './battle/w1Rules';
 import { expShareUnlocked, FIRST_RIVAL_FLAG } from './firstRival';
 import { bankOverflowXp, xpPolicyMultiplier } from './teamPolicy';
+import { trainCampers } from './trainingCamp';
 import { canonPlan, characterOf, majorNote, withAceProgress } from './rivals/major';
 import { beginMonRivalBattle, carriedMonRival, dueMonRival, monRivalMember, rivalCatchesMonRival } from './rivals/monRivals';
 import { armSacrifice, sacrificeEcho } from './rivals/sacrifice';
@@ -2337,6 +2338,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
+  if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') partyLifeVictory(content, run);
   if (battle.outcome === 'win') careVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   const cues = recordBattleTurn(content, current, run, events);
