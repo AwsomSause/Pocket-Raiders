@@ -86,6 +86,7 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
+import { recordAftermath } from './overhaul/aftermath';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -2908,6 +2909,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
   const won = outcome === 'win' && battle.trainer?.leaderId ? battle.trainer.leaderId : null;
   const badge = won && classId === GYM_LEADER_CLASS ? won : null;
+  if (won) recordAftermath(run, won);
   if (badge) {
     run.badges.push(badge);
     mentorBadgeWon(content, run);
