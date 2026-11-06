@@ -98,7 +98,7 @@ export function gameSummary(content: Content): SummaryTopic[] {
     id: b.id, name: b.name, short: `${b.types.map(cap).join('/') || 'Mixed'} · ace ${name(content.species, b.signature[0] ?? '')}`, text: `${b.name}: ${b.types.length > 0 ? `${b.types.map(cap).join('/')} specialist` : 'uses a mixed team'}. Signature Pokémon: ${list(b.signature.map((id) => name(content.species, id)))}.`,
   })));
 
-  add('regions', 'Regions', 'The places a run passes through.', [...content.regions.values()].map((r) => ({
+  add('regions', 'Regions', 'The places a run passes through.', [...content.regions.values()].filter((r) => !r.story).map((r) => ({
     id: r.id, name: r.name, short: `${r.gymLeaders.length} gym leaders · ${r.eliteFour.length} Elite Four`, text: `${r.name}${r.grand ? ' (the Grand Region, always last)' : ''}: gym leaders ${list(r.gymLeaders.map((id) => name(content.bosses, id)), 10) || 'anyone'}; Elite Four ${list(r.eliteFour.map((id) => name(content.bosses, id)), 6) || 'anyone'}; Champions ${list(r.champions.map((id) => name(content.bosses, id)), 6) || 'anyone'}.`,
   })));
 

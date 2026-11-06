@@ -28,6 +28,10 @@ const IDENTITY: Record<string, RegionIdentity> = {
   torren: { sky: 0x3a2a5a, accent: 0x9a60f0, motif: 'Delta', key: -1 },
   'frontier-isles': { sky: 0x2a6a8a, accent: 0xf0c040, motif: 'Frontier', key: 6 },
   'trial-archipelago': { sky: 0x20a8a0, accent: 0xf07050, motif: 'Trials', key: -4 },
+  // Story Run (Orrery Circuit) regions.
+  cairnmoor: { sky: 0x4a6a4a, accent: 0xc0a070, motif: 'Moorland', key: 8 },
+  'tidewrack-reaches': { sky: 0x2a5a78, accent: 0x70d0c0, motif: 'Salvage', key: -6 },
+  'orrery-basin': { sky: 0x3a3a68, accent: 0xe0c060, motif: 'Clockwork', key: 9 },
   grand: { sky: 0x2a2f6a, accent: 0xf8e080, motif: 'Legend', key: -5 },
 };
 

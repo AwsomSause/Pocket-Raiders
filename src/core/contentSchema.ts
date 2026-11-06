@@ -1778,6 +1778,8 @@ export const RegionSchema = z.object({
   specialWilds: z.array(z.string()).default([]),
   /** The generations of Pokémon native to this region (empty = every generation is native). */
   generations: z.array(z.number().int().min(1).max(9)).default([]),
+  /** Story Run only (Story Overhaul S4): never drawn into a Classic region order or listed in Classic pickers. */
+  story: z.boolean().default(false),
 });
 export type Region = z.infer<typeof RegionSchema>;
 
@@ -1797,6 +1799,14 @@ export const CampaignSchema = z.object({
   /** Each range is [first, last] column; one trainer column is picked from each. */
   trainerColumns: z.array(z.tuple([z.number().int().min(1), z.number().int().min(1)])),
   eliteFourSize: z.number().int().min(1),
+  /** Story Overhaul S4: 'story' campaigns start a Story Run (run.story.v2) with a Narrative Director blueprint. */
+  mode: z.enum(['classic', 'story']).default('classic'),
+  /** A fixed region order (no shuffle). */
+  regions: z.array(z.string().min(1)).optional(),
+  /** Region indexes (0-based) that end in a Pokémon League; absent = every region (Appendix S.7: the Circuit has one League, after region 3). */
+  leagueRegions: z.array(z.number().int().min(0)).optional(),
+  /** Evil Team storyline override for this campaign (Appendix S.7 A). `hideoutAtLeague`: beat 7 waits for League entry and sits on its first step. */
+  evil: z.object({ beatEvery: z.number().int().min(1), firstStage: z.number().int().min(1), hideoutAtLeague: z.boolean().default(false) }).optional(),
 });
 export type Campaign = z.infer<typeof CampaignSchema>;
 
@@ -2479,6 +2489,29 @@ export const BalanceSchema = z.object({
     wildCardMax: z.object({ gymPerRegion: z.number().int().min(0), elitePerRun: z.number().int().min(0), championPerRun: z.number().int().min(0) }),
     teamLeaders: z.record(z.string(), z.array(z.string())),
   }).default({ wildCardWeight: 0.2, wildCardMax: { gymPerRegion: 1, elitePerRun: 1, championPerRun: 1 }, teamLeaders: {} }),
+  /** Story Overhaul S4: Narrative Director knobs (design Part V-B). Rules that need story content are checked by later slices (S11, S19). */
+  story: z.object({
+    stopsTotal: z.number().int().min(1),
+    /** The last stage number of Acts 1 to 6 (Act 1 starts at stage 1). */
+    actEndStages: z.array(z.number().int().min(1)).length(6),
+    /** Stops per Act: Acts 1 to 6, then the Finale and the Epilogue (scene stops). */
+    actBudgets: z.array(z.number().int().min(0)).length(8),
+    stopsPerStageMin: z.number().int().min(0),
+    stopsPerStageMax: z.number().int().min(1),
+    minColumnGap: z.number().int().min(1),
+    maxMainStopsPerStage: z.number().int().min(1),
+    /** A stage with two or more Stops has its first one at or before this column (rule 5). */
+    firstStopMaxColumn: z.number().int().min(2),
+    /** Climax and reveal Stops sit in these columns (rule 8); authored leader scenes in `leaderSceneColumns` (rule 9). */
+    climaxColumns: z.tuple([z.number().int().min(2), z.number().int().min(2)]),
+    leaderSceneColumns: z.tuple([z.number().int().min(2), z.number().int().min(2)]),
+    /** An unlocked Stop may move this many columns either way from its table column. */
+    columnJitter: z.number().int().min(0),
+    replanWindowStops: z.number().int().min(1),
+    maxConsecutiveHighIntensity: z.number().int().min(1),
+    sameEventGapStops: z.number().int().min(0),
+    sameEventMaxPerRun: z.number().int().min(1),
+  }),
   rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
   candies: z.object({ perRelease: z.number().int().min(0), perLevels: z.number().int().min(1) }),

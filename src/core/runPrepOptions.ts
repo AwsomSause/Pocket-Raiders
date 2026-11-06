@@ -113,7 +113,7 @@ export function optionsFor(row: OptionRow, content: Content, profile: Profile, s
       return { options, chosen: s.rules.modeId, enabled: true };
     }
     case 'region': {
-      const options = [{ id: NONE, label: 'By seed', detail: 'The seed picks the region.', ok: true }, ...[...content.regions.values()].filter((r) => !r.grand).map((r) => ({ id: r.id, label: r.name, detail: `Run the ${r.name} circuit.`, ok: true }))];
+      const options = [{ id: NONE, label: 'By seed', detail: 'The seed picks the region.', ok: true }, ...[...content.regions.values()].filter((r) => !r.grand && !r.story).map((r) => ({ id: r.id, label: r.name, detail: `Run the ${r.name} circuit.`, ok: true }))];
       return { options, chosen: s.rules.regionId ?? NONE, enabled: getMode(s.rules.modeId)?.campaignId === 'regional-circuit' };
     }
     case 'difficulty': {

@@ -100,11 +100,23 @@ export const QuizQuestionSchema = z.object({
   answers: z.array(z.object({ id: Id, textKey: Key, weights: z.record(Id, z.number()), tag: Id.optional() })).min(2),
 });
 
+/** S4: one Story Stop's contract (design Part V-B). `col` is the map column (League: the corridor step); null for a Region Gate or a Finale/Epilogue scene. */
+export const STOP_CATEGORIES = ['narrative', 'character', 'conflict', 'discovery', 'relationship', 'branch', 'climax', 'resolution', 'recovery'] as const;
+export const StopContractSchema = z.object({
+  id: Id, stage: z.number().int().min(1), act: z.number().int().min(1).max(8), col: z.number().int().min(1).nullable(),
+  category: z.enum(STOP_CATEGORIES), weight: z.enum(['main', 'side']), slotTags: z.array(Id), intensity: z.number().int().min(1).max(5),
+  cinematic: z.boolean(), fallback: Id, locked: z.boolean(), lane: z.number().int().min(0), beat: z.number().int().min(1).max(7).optional(),
+});
+export type StopContract = z.infer<typeof StopContractSchema>;
+
 export const StoryBlueprintSchema = z.object({
   id: Id, seed: z.string(), contentHash: z.string(), theme: Id, antagonist: Id,
   rivals: z.object({ primary: Id, secondary: Id, friendly: Id }), observer: Id.optional(),
   slots: z.array(z.object({ slot: Id, stop: z.number(), event: Id, fallbacks: z.array(Id) })),
   locks: z.array(Id), replans: z.array(z.object({ at: z.number(), reason: Id })),
+  /** S4: the 44 Stop contracts in play order, and a checksum over the whole blueprint (a mismatch on load re-tells the story). */
+  stops: z.array(StopContractSchema).default([]),
+  checksum: z.string().default(''),
 });
 export type StoryBlueprint = z.infer<typeof StoryBlueprintSchema>;
 
