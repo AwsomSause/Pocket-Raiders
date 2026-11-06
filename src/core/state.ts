@@ -1789,6 +1789,8 @@ export const SettingsSchema = z.object({
   skipGuard: z.boolean().default(true),
   /** Overhaul slice 6: the move menu starts on the move each Pokémon used last (on by default). */
   rememberChoices: z.boolean().default(true),
+  /** Fast Z-Move: the short Z-Move cinematic instead of the full reference scene (off by default). */
+  fastZMove: z.boolean().default(false),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
