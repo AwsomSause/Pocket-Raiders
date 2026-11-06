@@ -56,6 +56,10 @@ export interface CineOptions {
   trainerFront?: () => Visual | null;
   /** "Fast Dynamax": play the short cutscene instead of the full one. */
   fast?: boolean;
+  /** The Pokémon is the foe's: the trainer comes in from the right and the scene mirrors. */
+  enemySide?: boolean;
+  /** Calyrex's riders: the scene runs teal instead of pink, as in the reference. */
+  calyrex?: boolean;
   depth?: number;
 }
 
@@ -89,7 +93,12 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];
   const reduced = o.motion === 'reduced';
-  const longDx = (o.kind === 'dynamax' || o.kind === 'gigantamax') && !o.fast;
+  // Wild Pokémon have no trainer, so they use the short opening (as in the reference's wild scene).
+  const hasTrainer = !!(o.trainerFront || o.trainer);
+  const longDx = (o.kind === 'dynamax' || o.kind === 'gigantamax') && !o.fast && hasTrainer;
+  const fieldColor = o.calyrex ? 0x00cccc : 0xe83a8c;
+  const outlineColor = o.calyrex ? 0x24f3f3 : 0xfa3960;
+  const sideX = o.enemySide ? 1 : -1;
   const total = (reduced ? 700 : longDx ? DYNAMAX_LONG_MS : CINE_MS[o.kind]) / o.speed;
   const at = (ms: number, fn: () => void) => timers.push(scene.time.delayedCall(ms / o.speed, fn));
   const has = (k: string) => scene.textures.exists(k);
@@ -456,8 +465,8 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     sound('ess-flash2', 0.5);
     // 0-700: the ball opens and the Pokémon, flushed pale pink, is called back into it.
     const ball = has(ballKey)
-      ? add(scene.add.image(o.x - 20, ground, ballKey).setDepth(depth + 5).setScale(0.3).setAlpha(0))
-      : add(scene.add.circle(o.x - 20, ground, 14, 0xff3060).setDepth(depth + 5).setAlpha(0));
+      ? add(scene.add.image(o.x + sideX * 20, ground, ballKey).setDepth(depth + 5).setScale(0.3).setAlpha(0))
+      : add(scene.add.circle(o.x + sideX * 20, ground, 14, 0xff3060).setDepth(depth + 5).setAlpha(0));
     tw({ targets: ball, alpha: 1, duration: 120, delay: 200 });
     if (oldSprite?.active) {
       at(0, () => oldSprite.active && oldSprite.setTint(0xf8b0f0));
@@ -467,17 +476,17 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     // 700-1100: the trainer slides in from the side, facing the player.
     const trainer = o.trainerFront?.() ?? o.trainer?.() ?? null;
     if (trainer) {
-      const tx = o.x - 190;
-      add(trainer).setDepth(depth + 4).setPosition(-120, ground + 40).setScale(trainer.scale * 0.9).setAlpha(1);
+      const tx = o.x + sideX * 190;
+      add(trainer).setDepth(depth + 4).setPosition(o.enemySide ? GAME_WIDTH + 120 : -120, ground + 40).setScale(trainer.scale * 0.9).setAlpha(1);
       tw({ targets: trainer, x: tx, duration: 400, delay: 700, ease: 'Sine.easeOut' });
-      tw({ targets: ball, x: o.x - 130, duration: 400, delay: 700, ease: 'Sine.easeOut' });
+      tw({ targets: ball, x: o.x + sideX * 130, duration: 400, delay: 700, ease: 'Sine.easeOut' });
       // 1900-2300: …and leaves again as the scene floods pink.
-      tw({ targets: trainer, x: tx - 500, scale: trainer.scale * 2, alpha: 0, duration: 450, delay: 2300, ease: 'Cubic.easeIn' });
+      tw({ targets: trainer, x: tx + sideX * 500, scale: trainer.scale * 2, alpha: 0, duration: 450, delay: 2300, ease: 'Cubic.easeIn' });
     }
     // 1200-1900: the Dynamax Band rises above the trainer with a white outline.
     const bandKey = keyItemFor(o.kind, o.crystal);
     if (bandKey && has(bandKey)) {
-      const bx = o.x - 190;
+      const bx = o.x + sideX * 190;
       const by = ground - 150;
       const halo = add(scene.add.image(bx, by, bandKey).setDepth(depth + 6).setAlpha(0));
       halo.setTintFill(0xffffff).setScale(60 / Math.max(halo.width, halo.height) * 1.18);
@@ -490,9 +499,9 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     // 1900-2300: the ball swells and turns pink.
     at(2000, () => sound('ess-flash2', 0.8));
     tw({ targets: ball, scale: has(ballKey) ? 0.45 : 1.5, duration: 300, delay: 2000, ease: 'Back.easeOut' });
-    at(2000, () => (ball as Phaser.GameObjects.Image).setTint?.(0xff3399));
+    at(2000, () => (ball as Phaser.GameObjects.Image).setTint?.(o.calyrex ? 0x00cccc : 0xff3399));
     // The pink field, rays and the darkness it fades back from.
-    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0xe83a8c, 0).setDepth(depth));
+    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, fieldColor, 0).setDepth(depth));
     tw({ targets: pink, fillAlpha: 1, duration: 380, delay: 2300 });
     at(2300, () => {
       whiteFlash(0.6);
@@ -531,7 +540,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       at(3700, () => {
         if (!ghost?.active) return;
         ghost.clearTint();
-        ghost.setTint(0xfa3960);
+        ghost.setTint(outlineColor);
       });
     }
     at(3300, () => tw({ targets: ball, alpha: 0, scale: 0.9, duration: 260 }));
@@ -546,7 +555,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       sound('ess-explosion', 0.9);
       if ((o.shake ?? o.intensity) > 0) scene.cameras.main.shake(420 / o.speed, 0.014 * (o.shake ?? o.intensity));
       if (has('cine.dbk.tera.pulse')) {
-        const ring = add(scene.add.image(o.x, o.y, 'cine.dbk.tera.pulse').setTint(0xfa3960).setBlendMode('ADD').setDepth(depth + 4).setScale(0.3));
+        const ring = add(scene.add.image(o.x, o.y, 'cine.dbk.tera.pulse').setTint(outlineColor).setBlendMode('ADD').setDepth(depth + 4).setScale(0.3));
         tw({ targets: ring, scale: 5, alpha: 0, duration: 800, ease: 'Quad.easeOut' });
       }
     });
@@ -566,7 +575,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     const swapAt = SWAP_AT[o.kind];
     bars();
     // The pink field and slowly turning rays.
-    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0xe83a8c, 0).setDepth(depth));
+    const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, fieldColor, 0).setDepth(depth));
     // First the trainer's throw (the reference's opening): the ball flies to the Pokémon, which is called back into it.
     const trainer = o.trainer?.() ?? null;
     if (trainer) {
@@ -611,7 +620,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
       at(1450, () => {
         if (!ghost?.active) return;
         ghost.clearTint();
-        ghost.setTint(0xff5a78);
+        ghost.setTint(o.calyrex ? 0x70f0f0 : 0xff5a78);
         whiteFlash(0.4);
       });
     } else if (oldSprite?.active) {

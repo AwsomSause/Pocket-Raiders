@@ -3147,7 +3147,13 @@ export class BattleScene extends Phaser.Scene {
                 ...this.cineFeel(cine),
                 trainer: e.side === 'player' ? () => { const art = this.playerArt(); return art ? trainerBackVisual(this, art, at.x - 170, at.y + 10, 260) : null; } : undefined,
                 fast: services().session.settings.fastDynamax,
-                trainerFront: e.side === 'player' ? () => { const art = this.playerArt(); return art ? trainerVisual(this, art, 'Trainer', at.x - 190, at.y + 10, 2) : null; } : undefined,
+                enemySide: e.side === 'enemy',
+                calyrex: mon!.speciesId.startsWith('calyrex'),
+                trainerFront: e.side === 'player'
+                  ? () => { const art = this.playerArt(); return art ? trainerVisual(this, art, 'Trainer', at.x - 190, at.y + 10, 2) : null; }
+                  : !this.run.battle?.trainer
+                    ? undefined
+                    : () => { const art = this.trainerArt(); return art ? trainerVisual(this, art.assetId, art.label, at.x + 190, at.y + 10, 2) : null; },
                 onSwap: swapForm,
               }),
             );
