@@ -212,6 +212,7 @@ import { finalRivalLine, tellCampfire } from './story/highHype';
 import { ultimateRival } from './rivals/ultimate';
 import { applyGrandInfluence, endGrandBattle, grandNotes, startGrandBattle } from './story/grandEnemy';
 import { simulateRivalWorld } from './rivals/world';
+import { worldTick } from './worldSim/tick';
 import { noteProtagonistTitle, rivalSighting } from './rivals/recognition';
 import { rivalRivalries, rivalTeamUp } from './rivals/rivalries';
 import { ensureAce, withSignatureAce } from './rivals/signatureTeam';
@@ -620,6 +621,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   tellAct(content, run);
   worldStageStart(content, run);
   evilStageStart(content, run);
+  worldTick(content, run);
   applyGrandInfluence(content, run);
   growCrisis(content, run);
   grandGauntlet(content, run);

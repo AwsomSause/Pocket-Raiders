@@ -7,6 +7,7 @@
 // happen in this run (saved with the run).
 
 import { StoryV2Schema } from '../story2/schema';
+import { WorldSimSchema } from '../worldSim/schema';
 import { z } from 'zod';
 import { AttributeKeySchema, BoostStatSchema } from '../contentSchema';
 import { BattleReplaySchema, WorldMemorySchema } from '../memories/schema';
@@ -451,6 +452,8 @@ export const StoryStateSchema = z.object({
   v2: StoryV2Schema.optional(),
   /** W5: forced or high-priority events waiting for a stop (max 4); `since` is the stage number they were queued at. Optional, so no save bump. */
   eventQueue: z.array(z.object({ id: z.string(), since: z.number().int().min(0) })).max(4).optional(),
+  /** W8: the world simulation's own records (core/worldSim/tick.ts). Optional, so no save bump. */
+  sim: WorldSimSchema.optional(),
 });
 export type StoryState = z.infer<typeof StoryStateSchema>;
 

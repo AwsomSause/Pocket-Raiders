@@ -62,6 +62,7 @@ import type { MapNode, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
+import { noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
 import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
@@ -628,6 +629,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   if (runSide.roamer) endRoamer(run, runSide.roamer);
   run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}), ...(event.pseudo ? { [`pseudo-seen:${run.regionIndex}`]: (run.itemCounters?.[`pseudo-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
   if (event.keyItem) useUpKeyItem(run, event.keyItem);
+  const found = noteDungeonEntered(run, event.id);
+  if (found) emit(content, run, 'storyMoment', { actors: [], data: { def: 'rival-living', suppressed: false }, importance: 40, text: found });
   const insight = perkItem(content, run, 'eventInsight');
   if (insight) spendUse(run, insight);
   count(run, 'eventsCompleted');
