@@ -12,6 +12,7 @@ import eggsJson from '../data/eggs.json';
 import { abilityOf } from './pokemon';
 import { makeBlissful } from './shadowWorld/blissful';
 import { CareSchema } from './care/mods';
+import { hasPerk, type MapItemRun } from './mapItems';
 import { hatchLevelOffset } from './trainerPerks';
 import { runPerks } from './archetypes';
 
@@ -168,9 +169,11 @@ export function tickEggs(content: Content, run: RunState, unit: Egg['unit']): Po
   return hatched;
 }
 
-/** Party Pokémon that keep Eggs warm (Flame Body and friends): each adds one warmth per step, two warmth make an extra step. Capped at 3. */
-export function eggWarmth(content: Content, run: Pick<RunState, 'party'>): number {
-  return Math.min(3, run.party.filter((m) => m.hp > 0 && EGGS.warmAbilities.includes(abilityOf(content, m) ?? '')).length);
+/** Party Pokémon that keep Eggs warm (Flame Body and friends): each adds one warmth per step, two warmth make an extra step. Capped at 3 (an Oval Charm adds a whole extra step on top). */
+export function eggWarmth(content: Content, run: Pick<RunState, 'party'> & MapItemRun): number {
+  const warm = Math.min(3, run.party.filter((m) => m.hp > 0 && EGGS.warmAbilities.includes(abilityOf(content, m) ?? '')).length);
+  // Oval Charm: two more warmth per step, which is one extra step.
+  return warm + (hasPerk(content, run, 'ovalCharm') ? EGGS.warmPerStep : 0);
 }
 
 /** A night at camp (or any warm spot): every Egg gets `steps` closer to hatching, but never hatches by it (it keeps at least 1 left). Returns how many Eggs moved. */

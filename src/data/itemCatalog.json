@@ -15299,5 +15299,310 @@
     }
    ]
   }
+ },
+ {
+  "id": "oval-charm",
+  "name": "Oval Charm",
+  "family": "Map and encounter items",
+  "description": "Eggs hatch faster: every Egg gets one extra step toward hatching each time",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "oval-stone",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "ovalCharm"
+    }
+   ]
+  }
+ },
+ {
+  "id": "glass-cannon-band",
+  "name": "Glass Cannon Band",
+  "family": "Battle held items",
+  "description": "Attack x1.4, but Defense and Sp. Def x0.75",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "muscle-band",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.4
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 0.75
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 0.75
+    }
+   ]
+  }
+ },
+ {
+  "id": "glass-cannon-lens",
+  "name": "Glass Cannon Lens",
+  "family": "Battle held items",
+  "description": "Sp. Atk x1.4, but Defense and Sp. Def x0.75",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "wide-lens",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.4
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 0.75
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 0.75
+    }
+   ]
+  }
+ },
+ {
+  "id": "sunny-idol",
+  "name": "Sunny Idol",
+  "family": "Map and encounter items",
+  "description": "Next wild battle starts in harsh sunlight",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "heat-rock",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "weather",
+     "weather": "sun"
+    }
+   ]
+  }
+ },
+ {
+  "id": "rain-idol",
+  "name": "Rain Idol",
+  "family": "Map and encounter items",
+  "description": "Next wild battle starts in rain",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "damp-rock",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "weather",
+     "weather": "rain"
+    }
+   ]
+  }
+ },
+ {
+  "id": "sand-idol",
+  "name": "Sandstorm Idol",
+  "family": "Map and encounter items",
+  "description": "Next wild battle starts in a sandstorm",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "smooth-rock",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "weather",
+     "weather": "sand"
+    }
+   ]
+  }
+ },
+ {
+  "id": "snow-idol",
+  "name": "Snowglobe Idol",
+  "family": "Map and encounter items",
+  "description": "Next wild battle starts in snow",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 5,
+  "how": "use",
+  "icon": "icy-rock",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "weather",
+     "weather": "snow"
+    }
+   ]
+  }
+ },
+ {
+  "id": "hp-up-plus",
+  "name": "HP Up+",
+  "family": "Vitamins, Wings and level items",
+  "description": "Strong vitamin: permanent +6% HP per copy (costly)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "hp-up",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "hp",
+   "percent": 6
+  }
+ },
+ {
+  "id": "protein-plus",
+  "name": "Protein+",
+  "family": "Vitamins, Wings and level items",
+  "description": "Strong vitamin: permanent +6% ATK per copy (costly)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "protein",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "atk",
+   "percent": 6
+  }
+ },
+ {
+  "id": "iron-plus",
+  "name": "Iron+",
+  "family": "Vitamins, Wings and level items",
+  "description": "Strong vitamin: permanent +6% DEF per copy (costly)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "iron",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "def",
+   "percent": 6
+  }
+ },
+ {
+  "id": "calcium-plus",
+  "name": "Calcium+",
+  "family": "Vitamins, Wings and level items",
+  "description": "Strong vitamin: permanent +6% SPA per copy (costly)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "calcium",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spa",
+   "percent": 6
+  }
+ },
+ {
+  "id": "zinc-plus",
+  "name": "Zinc+",
+  "family": "Vitamins, Wings and level items",
+  "description": "Strong vitamin: permanent +6% SPD per copy (costly)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "zinc",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spd",
+   "percent": 6
+  }
+ },
+ {
+  "id": "carbos-plus",
+  "name": "Carbos+",
+  "family": "Vitamins, Wings and level items",
+  "description": "Strong vitamin: permanent +6% SPE per copy (costly)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "carbos",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spe",
+   "percent": 6
+  }
+ },
+ {
+  "id": "mild-revive",
+  "name": "Mild Revive",
+  "family": "Healing and status items",
+  "description": "Revives at 25% HP",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "revive",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 0.25
+  }
  }
 ]

@@ -1331,6 +1331,8 @@ export const EncounterModSchema = z.discriminatedUnion('mod', [
   /** A chance (percent per copy) that the wild Pokémon is this species. */
   z.object({ mod: z.literal('species'), species: z.string(), percent: z.number().positive().max(100) }),
   /** The wild Pokémon loses its first turn. */
+  /** Weather Idols (S427): the next wild battle starts in this weather. */
+  z.object({ mod: z.literal('weather'), weather: WeatherSchema }),
   z.object({ mod: z.literal('freeTurn') }),
   /** Catching the wild Pokémon also drops a cheap Bag item (Pinap Berry). */
   z.object({ mod: z.literal('drop') }),
@@ -1429,6 +1431,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('gbSounds') }),
   /** Journal: the run's full map is recorded with the run history. */
   z.object({ perk: z.literal('journal') }),
+  /** Oval Charm (S432): every Egg gets one extra step toward hatching each time it would tick. */
+  z.object({ perk: z.literal('ovalCharm') }),
   /** Seal Case: catching a Pokémon shows a special effect and gives Luck. */
   z.object({ perk: z.literal('sealCase'), luck: z.number().int().positive() }),
   /** Seal Bag: items sell for their full shop price instead of half. */
