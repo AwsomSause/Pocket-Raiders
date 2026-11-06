@@ -44,7 +44,7 @@ import { arenaFor, getTheme } from '../core/themes';
 import { shinyCatchBurst, targetReticle } from '../ui/battleFx/arenaLife';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
-import { bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
+import { pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
 import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
@@ -67,6 +67,7 @@ import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
 import { teraScene } from '../ui/battleFx/teraScene';
+import { megaScene } from '../ui/battleFx/megaScene';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -3163,6 +3164,31 @@ export class BattleScene extends Phaser.Scene {
               }),
             );
             playSfx(this, 'se.level_up');
+          } else if (cine === 'mega' && this.motion === 'full' && !services().session.settings.fastMega && mon) {
+            // The full reference scene (Fast Mega off): Pokémon turned to face you, trainer and Mega Ring, Mega Stone, white ball, crystal, blue rays.
+            const from = content.species.get(mon.speciesId)!;
+            const to = content.species.get(e.to) ?? from;
+            const mine = e.side === 'player';
+            const art = mine ? this.playerArt() : (this.trainerArt()?.assetId ?? null);
+            const feel = this.cineFeel('mega');
+            // Both front pictures must be loaded before the scene measures them.
+            const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
+            await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
+            await this.playBeat(
+              megaScene(this, {
+                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
+                stoneKey: (e.itemId ? content.items.get(e.itemId)?.iconAssetId : null) ?? null,
+                ringKey: 'cine.key.mega',
+                backdropKey: this.arenaBgKey,
+                opposes: !mine,
+                onSwap: () => void swapForm(),
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
           } else if (cine) {
             const zMove = zBase ? zMoveFor(content, zBase) : null;
             await this.playBeat(
