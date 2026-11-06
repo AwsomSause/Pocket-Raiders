@@ -313,13 +313,26 @@
      }
     },
     {
+     "label": "Follow the carvings deeper",
+     "success": {
+      "text": "The carvings lead you down a path that feels older than the hills.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-ancient-wilds-gate"
+       }
+      ]
+     }
+    },
+    {
      "label": "Walk on",
      "success": {
       "text": "You let it pass and keep to the road.",
       "effects": []
      }
     }
-   ]
+   ],
+   "pseudo": true
   },
   {
    "id": "ev-regional-festival",
@@ -574,19 +587,41 @@
     "Story",
     "Region"
    ],
-   "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: opens ps_league_exhibition (W7).)",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rep",
+     "category": "champion",
+     "atLeast": "known"
+    },
+    {
+     "kind": "badges",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A sealed letter, stamped with the League crest: an invitation to an exhibition hall.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Accept the invitation",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "A page leads you through a side door into the hall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-league-exhibition-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "You let it pass.",
       "effects": []
      }
     }
    ],
-   "disabled": true
+   "pseudo": true
   },
   {
    "id": "ev-abandoned-expedition",
@@ -694,19 +729,37 @@
     "Mystery",
     "Dungeon"
    ],
-   "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: opens ps_distortion_incident (W7).)",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rep",
+     "category": "legendary",
+     "atLeast": "known"
+    }
+   ],
+   "intro": "The air near the cliff folds in on itself like wet paper. Your compass spins.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Step into the rift",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "You step through and the ground turns.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-distortion-incident-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "You let it pass.",
       "effects": []
      }
     }
    ],
-   "disabled": true
+   "pseudo": true
   },
   {
    "id": "ev-rival-emergency",
@@ -743,19 +796,31 @@
     "Combat",
     "Trainer"
    ],
-   "minStage": 1,
+   "minStage": 3,
    "requires": [],
-   "intro": "(Disabled until its system exists: live tournament chain covers it; the 3-round bracket with exhibition spectating is W7.)",
+   "intro": "Banners hang over the arena: Battle Frontier, four rounds, win four or lose one.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Enter the tournament",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "You sign the entry sheet.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-battle-frontier-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "You let it pass.",
       "effects": []
      }
     }
    ],
-   "disabled": true
+   "pseudo": true
   },
   {
    "id": "ev-evil-team-raid",
@@ -916,19 +981,36 @@
     "Story",
     "Legendary"
    ],
-   "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: opens ps_lost_island (W7).)",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "ev-ancient-discovery"
+    }
+   ],
+   "intro": "Your ancient rubbings line up with a coast no map shows. A boat waits, as if it had been waiting a long time.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Sail for the island",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "The boat finds the shore by itself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-lost-island-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "You let it pass.",
       "effects": []
      }
     }
    ],
-   "disabled": true
+   "pseudo": true
   },
   {
    "id": "ev-dimensional-collision",

@@ -76,7 +76,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle } from './events';
+import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -232,6 +232,7 @@ import { evilStageStart } from './evil/teams';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
+import { PSEUDO } from './dungeon/pseudo';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
 import { planReunion, reunionPokemon } from './story/reunion';
@@ -2600,6 +2601,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
+  if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
+    pseudoLost(content, run);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
+  }
   if (battle.outcome === 'lose' && battle.event && isApprenticeBattle(content, battle.event)) {
     apprenticeLost(content, run);
     recordChanges(content, current, run, 'battle');
@@ -3606,4 +3612,15 @@ export function debugGiveItem(content: Content, current: RunState, itemId: strin
 /** Overhaul slice 20: gives the battle just created its environment and (rarely) a condition. Seeded by hash, no RNG stream used. */
 function assignField(content: Content, run: RunState, boss: boolean): void {
   run.battle!.overhaulField = rollField(run.seed, run.encountersCompleted, boss ? 'boss' : run.regionIndex < 2 ? 'mid' : 'late', content.balance.overhaulField);
+}
+
+/** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
+export function pseudoLost(content: Content, run: RunState): void {
+  for (const m of run.party) {
+    const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
+    if (m.hp < floor) m.hp = floor;
+    m.status = null;
+  }
+  run.battle = null;
+  run.phase = 'map';
 }

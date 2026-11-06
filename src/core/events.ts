@@ -10,6 +10,7 @@
 // changes no other roll, and choosing again after a reload gives the same result.
 
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
+import { PSEUDO } from './dungeon/pseudo';
 import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
@@ -339,6 +340,15 @@ function recruitsOwned(run: RunState, e: EventDef): boolean {
   return ids.length > 0 && ids.every((id) => id === run.archetypeId || (run.itemCounters?.[`owned:${id}`] ?? 0) > 0);
 }
 
+/** W7 rule P3: events that open a pseudo stage: 1 per region, 2 per run; never in a League stage or in daily-route, boss-rush and quick-route. */
+function pseudoCapped(run: RunState, e: EventDef): boolean {
+  if (!e.pseudo) return false;
+  if (run.stage?.kind === 'league' || PSEUDO.rules.blockedCampaigns.includes(run.campaignId)) return true;
+  const counters = run.itemCounters ?? {};
+  const inRun = Object.entries(counters).filter(([k]) => k.startsWith('pseudo-seen:')).reduce((sum, [, n]) => sum + n, 0);
+  return (counters[`pseudo-seen:${run.regionIndex}`] ?? 0) >= PSEUDO.rules.perRegion || inRun >= PSEUDO.rules.perRun;
+}
+
 /** W5: Legendary-rank (epic) events are limited to 1 per region and 3 per run. */
 function legendaryCapped(run: RunState, e: EventDef): boolean {
   if (e.rarity !== 'epic') return false;
@@ -357,6 +367,7 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
       !e.keyItem &&
       !e.disabled &&
       !legendaryCapped(run, e) &&
+      !pseudoCapped(run, e) &&
       e.stop !== 'rest' &&
       // A roaming Legendary's stop and the camp are placed by core/world.ts, not drawn.
       e.stop !== 'roamer' &&
@@ -615,7 +626,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   delete runSide.hidden;
   // A roaming Legendary's stop: whatever you do, the chase ends here.
   if (runSide.roamer) endRoamer(run, runSide.roamer);
-  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
+  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}), ...(event.pseudo ? { [`pseudo-seen:${run.regionIndex}`]: (run.itemCounters?.[`pseudo-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
   if (event.keyItem) useUpKeyItem(run, event.keyItem);
   const insight = perkItem(content, run, 'eventInsight');
   if (insight) spendUse(run, insight);
@@ -1258,6 +1269,13 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return battle?.kind === "trainer" && battle.apprentice === true;
+}
+
+/** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
+export function isPseudoBattle(content: Content, event: EventBattleRef): boolean {
+  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  return battle?.pseudo === true;
 }
 
 /** A detour's next battle (`chain`): same stop, no healing in between. Called once decisions from the last fight are done. */
