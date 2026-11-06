@@ -9,6 +9,7 @@
 import { execSync } from 'node:child_process';
 import { readdirSync, readFileSync, statSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { FIXED_ASSETS } from '../src/assets/catalog.ts';
 
 const root = new URL('..', import.meta.url).pathname;
 const assets = join(root, 'public/assets');
@@ -38,7 +39,10 @@ const missing = packFiles.filter((f) => !covered.has(f));
 const everything = walk(assets).filter((f) => !f.endsWith('manifest.json'));
 const oversized = everything.filter((f) => statSync(f).size > OVERSIZED).map((f) => ({ f: relative(assets, f).replaceAll('\\', '/'), kb: Math.round(statSync(f).size / 1024) })).sort((a, b) => b.kb - a.kb);
 const totalMb = (everything.reduce((n, f) => n + statSync(f).size, 0) / 1048576).toFixed(1);
+// Files the catalog loads by path count as used even when their name is built from a list in src (ui.bar.top.<colour>, icon.<group>.<name>).
+const catalogPaths = new Set(FIXED_ASSETS.map((e) => e.path));
 const unused = packFiles.filter((f) => {
+  if (catalogPaths.has(f)) return false;
   const base = f.split('/').pop()!.replace(/\.[^.]+$/, '');
   try {
     execSync(`grep -rqF -- ${JSON.stringify(base)} src`, { cwd: root });

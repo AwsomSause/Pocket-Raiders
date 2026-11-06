@@ -1596,6 +1596,7 @@ function enterField(ctx: BattleContext, holder: Held.Holder): void {
   if (state.used[key]) return;
   state.used[key] = { on: 1 };
   Held.onSwitchIn(ctx, holder);
+  Held.boosterEnergy(ctx, holder, []);
 }
 
 function leaveField(ctx: BattleContext, mon: PokemonInstance): void {
@@ -1672,6 +1673,7 @@ function abilityIn(ctx: BattleContext, c: Combatant): string | null {
 let moveIgnoresAbility = false;
 function targetAbility(ctx: BattleContext, user: Combatant, target: Combatant): string | null {
   if (user === target) return abilityIn(ctx, target);
+  if (Held.hasHook(ctx, target.mon, target.side, 'abilityShield')) return abilityIn(ctx, target);
   if (moveIgnoresAbility) return null;
   const own = abilityIn(ctx, user);
   return own && MOLD_BREAKERS.has(own) ? null : abilityIn(ctx, target);
@@ -1962,7 +1964,7 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
   if (terrain) {
     if (ctx.battle.terrain?.id === terrain) return;
     announce(c, ability, events);
-    ctx.battle.terrain = { id: terrain, turns: 5 };
+    ctx.battle.terrain = { id: terrain, turns: Held.terrainTurns(ctx, c, 5) };
     events.push({ type: 'terrain', terrain });
     return;
   }
@@ -3188,7 +3190,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (ctx.battle.terrain?.id === fx.terrain) {
       events.push({ type: 'fail', side: user.side });
     } else {
-      ctx.battle.terrain = { id: fx.terrain, turns: 5 + growthExtraTurn(ctx, user, 'terrain-master') };
+      ctx.battle.terrain = { id: fx.terrain, turns: Held.terrainTurns(ctx, user, 5) + growthExtraTurn(ctx, user, 'terrain-master') };
       events.push({ type: 'terrain', terrain: fx.terrain });
     }
     return;
@@ -3352,6 +3354,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   if (targetsEnemy && rng.float() >= accuracy) {
     events.push({ type: 'miss', side: user.side });
+    Held.onMiss(ctx, user, events as Held.HeldEvent[]);
     if (fx.crashOnMiss) abilityHurt(ctx, user, Math.max(1, Math.floor(calcStats(content, user.mon).hp / 2)), events);
     return;
   }
@@ -3419,7 +3422,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   const sheerForce = userAbility === 'sheer-force' && hasExtra;
   const parental = userAbility === 'parental-bond' && !fx.hits && !fx.ohko && !fx.fixedDamage && !fx.counter && !fx.halveTarget && !fx.endeavor && !fx.userFaint;
   const beaters = fx.beatUp ? (user.side === 'player' ? ctx.party : ctx.battle.enemyTeam).filter((m) => m.hp > 0 && !m.status) : [];
-  const hits = fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' ? fx.hits[1] : multiHitCount(fx.hits, rng)) : parental ? 2 : 1;
+  const hits = fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : parental ? 2 : 1;
   let dealt = 0;
   let landed = 0;
   let anyCrit = false;
@@ -3580,7 +3583,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         // Guts ignores the burn's Attack cut.
         burned: userStatus === 'brn' && userAbility !== 'guts',
         physical,
-        weather: weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
+        weather: Held.hasHook(ctx, user.mon, user.side, 'utilityUmbrella') || Held.hasHook(ctx, target.mon, target.side, 'utilityUmbrella') ? 1 : weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
@@ -3753,15 +3756,16 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       events.push({ type: 'weather', weather: fx.weather });
     }
     if (fx.terrain && ctx.battle.terrain?.id !== fx.terrain) {
-      ctx.battle.terrain = { id: fx.terrain, turns: 5 + growthExtraTurn(ctx, user, 'terrain-master') };
+      ctx.battle.terrain = { id: fx.terrain, turns: Held.terrainTurns(ctx, user, 5) + growthExtraTurn(ctx, user, 'terrain-master') };
       events.push({ type: 'terrain', terrain: fx.terrain });
     }
   }
+  if (landed > 0) Held.afterSoundMove(ctx, user, move, events as Held.HeldEvent[]);
   if (landed > 0 && fx.clearHazards) { clearHazards(ctx, user, fx.clearHazards, events); if (growthHas(ctx, user, 'cleaner')) healMon(ctx, user, 1 / 16, events); }
 
   // Extra effects only land if the target is still standing. Serene Grace doubles their chances; Shield Dust blocks them.
   const chanceMult = userAbility === 'serene-grace' ? 2 : 1;
-  const shielded = foeAbility === 'shield-dust';
+  const shielded = foeAbility === 'shield-dust' || Held.hasHook(ctx, target.mon, target.side, 'covertCloak');
   const userTypes = getSpecies(ctx.content, user.mon.speciesId).types;
   const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1) + (user.side === 'player' ? growthStatusChance(ctx.content.balance.overhaulGrowth, user.mon, statusId) : 0)) / 100);
   if (target.mon.hp > 0 && !sheerForce && !shielded) {
@@ -3797,7 +3801,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   const maxTerrain = move.flags.includes('max') && dealt > 0 ? maxMoveTerrain(content, move.id) : null;
   if (maxTerrain && ctx.battle.terrain?.id !== maxTerrain) {
-    ctx.battle.terrain = { id: maxTerrain, turns: 5 };
+    ctx.battle.terrain = { id: maxTerrain, turns: Held.terrainTurns(ctx, user, 5) };
     events.push({ type: 'terrain', terrain: maxTerrain });
   }
   // G-Max Finale heals, Sweetness cures, Stun Shock and Befuddle inflict a random status.
@@ -3911,7 +3915,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
   }
   if (target.mon.hp > 0 && holder === 'seed-sower' && ctx.battle.terrain?.id !== 'grassy') {
     announce(target, holder, events);
-    ctx.battle.terrain = { id: 'grassy', turns: 5 };
+    ctx.battle.terrain = { id: 'grassy', turns: Held.terrainTurns(ctx, target, 5) };
     events.push({ type: 'terrain', terrain: 'grassy' });
   }
   if (userAbility === 'toxic-chain' && target.mon.hp > 0 && rng.chance(0.3) && canGetStatus(ctx, user, target, 'psn')) {
@@ -4652,7 +4656,7 @@ function content_maxPp(ctx: BattleContext, slot: { id: string; pp: number; ppUps
 /** A Pokémon coming in meets the hazards its side has: Stealth Rock, Spikes, Toxic Spikes, Sticky Web. */
 function applyHazards(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const fx = ctx.battle.sideEffects[c.side];
-  if (c.mon.hp <= 0 || !(fx.spikes || fx.toxicSpikes || fx.stealthRock || fx.stickyWeb)) return;
+  if (c.mon.hp <= 0 || !(fx.spikes || fx.toxicSpikes || fx.stealthRock || fx.stickyWeb) || Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots')) return;
   const max = calcStats(ctx.content, c.mon).hp;
   const types = getSpecies(ctx.content, c.mon.speciesId).types;
   const grounded = isGrounded(ctx, c);
@@ -5027,7 +5031,8 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     const theirs = abilityIn(ctx, target);
     const fixed = (a: string | null) => !a || UNTRACEABLE.has(a) || a === 'wonder-guard';
     const kind = fx.abilityChange;
-    const ok =
+    const shielded = Held.hasHook(ctx, target.mon, target.side, 'abilityShield');
+    const ok = shielded ? false :
       kind === 'rolePlay' ? !fixed(theirs) && !fixed(mine)
       : kind === 'skillSwap' ? !fixed(theirs) && !fixed(mine)
       : kind === 'entrainment' ? !fixed(mine) && !fixed(theirs)
@@ -5408,6 +5413,10 @@ function changeStage(ctx: BattleContext, user: Combatant, recipient: Combatant, 
  */
 function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, stages: number, events: BattleEvent[], source?: Combatant): boolean {
   const ability = source ? targetAbility(ctx, source, c) : abilityIn(ctx, c);
+  if (source && stages < 0 && source.side !== c.side && Held.hasHook(ctx, c.mon, c.side, 'clearAmulet')) {
+    events.push({ type: 'held', side: c.side, itemId: 'clear-amulet', what: 'guard' });
+    return false;
+  }
   if (source && stages < 0 && source.side !== c.side && ctx.battle.sideEffects[c.side].mist > 0 && ability !== 'contrary') {
     events.push({ type: 'fail', side: c.side });
     return false;
@@ -5442,9 +5451,11 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
   c.stages[stat] = after;
   if (stages < 0) c.vol.loweredThisTurn = true;
   events.push({ type: 'stat', side: c.side, stat, change: after - before });
+  if (source && after < before && source.side !== c.side && Held.triggerOnce(ctx, c, 'ejectPack', events as Held.HeldEvent[])) c.vol.pivot = { baton: false };
   if (after > before) {
     const { player, enemy } = activeCombatants(ctx);
     const foe = c.side === 'player' ? enemy : player;
+    Held.mirrorHerb(ctx, foe, stat, after - before, events as Held.HeldEvent[]);
     if (foe.mon.hp > 0 && abilityIn(ctx, foe) === 'opportunist') {
       announce(foe, 'opportunist', events);
       const fb = foe.stages[stat];
@@ -5584,7 +5595,7 @@ function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEven
       if (getSpecies(ctx.content, c.mon.speciesId).types.some((t) => immune.includes(t))) continue;
       const ability = abilityIn(ctx, c);
       if (ability && WEATHER_DAMAGE_IMMUNE[ability]?.includes(weather.id)) continue;
-      if (Held.hooksOf(ctx, c.mon, c.side).some(({ hook }) => hook.hook === 'weatherImmune' && hook.weathers.includes(weather.id))) continue;
+      if (Held.hooksOf(ctx, c.mon, c.side).some(({ hook }) => (hook.hook === 'weatherImmune' && hook.weathers.includes(weather.id)) || hook.hook === 'utilityUmbrella')) continue;
       const chip = Math.max(1, Math.floor((calcStats(ctx.content, c.mon).hp / 16) * (1 - weatherCut(ctx.content, c.mon, weather.id))));
       c.mon.weatherEndured = { ...c.mon.weatherEndured, [weather.id]: (c.mon.weatherEndured?.[weather.id] ?? 0) + 1 };
       const { lost, lastStand } = takeHp(ctx, c, chip);
