@@ -76,7 +76,24 @@ test('menu → trainer → starter → map → battle → reward → map → nex
   expect((await run(page))!.party[0]!.speciesId).toBe(choices[1]);
   const startXp = (await run(page))!.party[0]!.xp;
 
-  expect(await fightUntilOver(page)).toBe('Reward');
+  // A level-up can offer a move to learn first. Decline it: Esc closes any confirm, Up wraps to the last row
+  // ("Don't learn"), Enter picks it, Left focuses Yes, Enter confirms. Then the Reward draft follows.
+  let over = await fightUntilOver(page);
+  if (over === 'Decision') {
+    await page.waitForTimeout(600);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    await page.keyboard.press('ArrowUp');
+    await page.waitForTimeout(200);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(400);
+    await page.keyboard.press('ArrowLeft');
+    await page.waitForTimeout(200);
+    await page.keyboard.press('Enter');
+    await waitForScene(page, 'Reward');
+    over = 'Reward';
+  }
+  expect(over).toBe('Reward');
   const afterWin = (await run(page))!;
   expect(afterWin.phase).toBe('reward');
   expect(afterWin.draft).toHaveLength(5);
