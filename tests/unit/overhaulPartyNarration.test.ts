@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { battleStartContext, countedScene, ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
+import { battleStartContext, closeWinScene, countedScene, ensureNarration, finisherScene, partyNarration, resetNarration } from '../../src/core/overhaul/partyNarration';
 import { content } from './helpers';
 
 const party = ['bulbasaur', 'charmander', 'squirtle', 'pikachu'].map((speciesId, i) => ({ uid: `m${i}`, nature: 'hardy' as const, speciesId }));
@@ -68,11 +68,29 @@ describe('overhaul party narration', () => {
     expect(battleStartContext({ shiny: true, tags: ['legendary'] }, 'rain')).toBe('shiny_encounter');
     expect(battleStartContext({ shiny: false, tags: ['mythical'] }, 'rain')).toBe('legend_sighting');
     expect(battleStartContext({ shiny: false, tags: [] }, 'hail')).toBe('snow');
-    expect(battleStartContext({ shiny: false, tags: [] }, 'sand')).toBeNull();
+    expect(battleStartContext({ shiny: false, tags: [] }, 'sand')).toBe('storm');
     await ensureNarration();
-    for (const c of ['shiny_encounter', 'legend_sighting', 'rain', 'snow', 'sunny', 'trade']) {
+    for (const c of ['shiny_encounter', 'storm', 'legend_sighting', 'rain', 'snow', 'sunny', 'trade']) {
       expect(Array.from({ length: 30 }, (_, i) => partyNarration(party, c, `k${i}`, nameOf, typesOf)).some(Boolean), c).toBe(true);
     }
+  });
+  it('idle ability scenes can show at a rest stop', async () => {
+    await ensureNarration();
+    const mons = [{ uid: 'c', nature: 'hardy' as const, speciesId: 'caterpie' }];
+    const lines = Array.from({ length: 40 }, (_, i) => partyNarration(mons, 'rest_node', `r${i}`, nameOf, typesOf));
+    expect(lines.some((l) => l && /^During a rest node, Caterpie/.test(l))).toBe(true);
+  });
+  it('close-win scene needs low HP and an ability that fired this battle', async () => {
+    const mon = { uid: 'u1', speciesId: 'ivysaur' };
+    const counters: Record<string, number> = {};
+    const ev = [{ type: 'ability', side: 'player', ability: 'overgrow' }];
+    const names = (k: string, id: string) => id;
+    expect(closeWinScene(counters, mon, 0.1, 5, (id) => id)).toBeNull(); // not loaded
+    await ensureNarration();
+    countedScene(counters, mon, ev, names, 5);
+    expect(closeWinScene(counters, mon, 0.1, 5, (id) => id)).toMatch(/close win where Overgrow mattered, Ivysaur/);
+    expect(closeWinScene(counters, mon, 0.6, 5, (id) => id)).toBeNull();
+    expect(closeWinScene(counters, mon, 0.1, 6, (id) => id)).toBeNull();
   });
   it('an empty party has nothing to say', async () => {
     await ensureNarration();
