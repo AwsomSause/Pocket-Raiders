@@ -282,3 +282,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - zmove-reference-look.md: Z-Move cinematic rebuilt to match the reference clips
 - `overhaul-pack-import.md`: Overhaul slice 1, pack import (no gameplay change): the director's Overhaul content pack is in `src/data/overh
 - `tera-reference-look.md`: Tera matches the reference GIFs: ACTION tab, ray burst, jewel over head, "-type!" text.
+- `overhaul-remember-choice.md`: Overhaul slice 6: the move menu starts on the move each Pokémon used last (setting on by default, settings v34).
