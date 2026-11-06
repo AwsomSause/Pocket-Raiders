@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier, growthSpeedMultiplier } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthSpeedMultiplier, turnFacts, waitedTurn } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -872,6 +872,12 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
   // A Pokémon that switched in this turn still gets its "first turn" next turn (Fake Out).
   if (action.kind !== 'switch') playerC.vol.turnsOut += 1;
+  // Growth paths: remember whether it only waited / was not hit this turn (Patient, Quiet Strength).
+  if (action.kind !== 'switch') {
+    const tf = turnFacts(events);
+    playerC.vol.waited = waitedTurn(tf);
+    playerC.vol.unhit = !tf.tookHit;
+  }
   enemy.vol.turnsOut += 1;
 
   // Dynamax turns run down (and a fainted Dynamax Pokémon shrinks back).
@@ -2257,7 +2263,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), period: ctx.period }) : 1);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, period: ctx.period }) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3310,14 +3316,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
-      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null);
+      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type);
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
-      if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types);
+      if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
       // S157 Focus: a focused Pokémon aims a little better.
       accuracy *= focusAccuracy(content, user.mon);
@@ -3516,6 +3522,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (!hitsDefense && foeAbility === 'flower-gift' && weather === 'sun') defense = Math.floor(defense * 1.5);
       if (userAbility && RUINS[userAbility] === (hitsDefense ? 'def' : 'spd')) defense = Math.floor(defense * 0.75);
       if (hitsDefense && foeAbility === 'grass-pelt' && ctx.battle.terrain?.id === 'grassy') defense = Math.floor(defense * 1.5);
+      if (hitsDefense && target.side === 'player') defense = Math.floor(defense * growthDefenseMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, targetStats.hp)));
       // Abilities that change the final damage.
       let final = 1;
       if (target.vol.exposed) final *= 2;
@@ -5218,7 +5225,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     let fraction = fx.heal;
     if (fx.healWeather && weather) fraction = weather === 'sun' ? 2 / 3 : 1 / 4;
     if (fx.healSand && weather === 'sand') fraction = 2 / 3;
-    const amount = Math.min(max - user.mon.hp, Math.max(1, Math.floor(max * fraction * (user.side === 'player' ? healingMoveMultiplier(ctx.perks) : 1))));
+    const amount = Math.min(max - user.mon.hp, Math.max(1, Math.floor(max * fraction * (user.side === 'player' ? healingMoveMultiplier(ctx.perks) * growthHealMultiplier(content.balance.overhaulGrowth, user.mon) : 1))));
     if (amount > 0) {
       user.mon.hp += amount;
       events.push({ type: 'heal', side: user.side, amount, hpAfter: user.mon.hp });

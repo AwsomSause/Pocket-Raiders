@@ -4,7 +4,7 @@
 // decided by the battle engine; this file only tells their story).
 
 import { periodOf } from '../clock';
-import { bumpGrowth, bumpGrowthOnce, hitCounters, moveCounters, noteGrowthKo } from '../overhaul/growth';
+import { addGrowth, bumpGrowth, bumpGrowthOnce, hitCounters, moveCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
@@ -143,6 +143,16 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   const firstMove = events.find((e) => e.type === 'move');
   if (firstMove?.type === 'move' && firstMove.side === 'player' && active.player && prior.sideEffects.player.tailwind > 0) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['turnTailwind']);
 
+  // Growth paths: what this turn tells the counters of the Pokémon that started it (turns, hits, misses).
+  if (active.player) {
+    const me = mon(active.player);
+    const trainerClass = battle.trainer?.classId ?? null;
+    if (me) addGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], turnCounters(turnFacts(events), {
+      turn: prior.turn, lead: prior.activeIndex === 0, boss: Boolean(battle.rival || battle.rivalId) || trainerClass === 'gym-leader' || trainerClass === 'elite-four' || trainerClass === 'champion',
+      maxHp: maxHp(content, me), hpAfter: me.hp,
+    }));
+  }
+
   events.forEach((e, i) => {
     switch (e.type) {
       case 'move':
@@ -279,7 +289,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         if (e.side === 'enemy' && by) {
           noteFinisher(by, i);
           const winner = run.party.find((m) => m.uid === by);
-          if (winner) noteGrowthKo(content.balance.overhaulGrowth, run.story.histories[by], { by: content.species.get(winner.speciesId)?.types ?? [], foe: content.species.get(mon(e.uid)?.speciesId ?? '')?.types ?? [], rival: Boolean(battle.rival || battle.rivalId), trainerClass: battle.trainer?.classId ?? null, solo: run.party.filter((m) => m.hp > 0).length === 1 });
+          if (winner) noteGrowthKo(content.balance.overhaulGrowth, run.story.histories[by], { by: content.species.get(winner.speciesId)?.types ?? [], foe: content.species.get(mon(e.uid)?.speciesId ?? '')?.types ?? [], rival: Boolean(battle.rival || battle.rivalId), trainerClass: battle.trainer?.classId ?? null, solo: run.party.filter((m) => m.hp > 0).length === 1, firstTurn: prior.turn === 1 });
         }
         noteNemesisFaint(run, e.side, e.uid, by);
         // Rivalry kinds (left-out 5.4): a loss may start a Bitter or One-Sided rivalry; a win may make one Mutual.
