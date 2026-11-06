@@ -876,6 +876,12 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       events.push({ type: 'raid', tone: 'info', text: 'The cursed hat flips every status condition!' });
     }
   }
+  if (rule.mimic) {
+    const id = battle.playerVolatile?.lastMove;
+    const foe = currentEnemy(battle);
+    if (id && foe.hp > 0 && foe.moves[0]?.id !== id) foe.moves = [{ id, pp: 10 }];
+  }
+  if (rule.spare && !battle.outcome && battle.enemyTeam.every((m) => m.hp <= 1 || m.status?.id === 'slp')) battle.outcome = 'win';
   if (rule.fanClub) {
     for (const e of events) {
       if (e.type !== 'faint') continue;
@@ -3500,7 +3506,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
-    if (fx.leaveOne || target.vol.endure || (ctx.battle.pacifist && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
+    if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;
