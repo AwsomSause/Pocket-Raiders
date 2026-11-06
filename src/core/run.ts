@@ -144,6 +144,7 @@ import { noteFoe, plazaClubLost, plazaClubWon } from './plaza/flow';
 import { allyLevel, applyTotemHp, describeAlly, describeTotemRewards, freshTotemBattle, getTotem, placeTotem, totemLevel, totemSpecies, type TotemPreview } from './totem/totem';
 import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
+import { lastChanceRevive } from './lastChance';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase } from './priceSwing';
 import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
@@ -2611,6 +2612,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     run.party = run.party.filter((m) => m.uid !== battle.loaner);
     battle.participants = battle.participants.filter((u) => u !== battle.loaner);
   }
+  // Last Chance Charm: one fallen Pokémon gets back up before anyone is buried.
+  if (battle.outcome !== 'lose') lastChanceRevive(content, run);
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);

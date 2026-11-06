@@ -15604,5 +15604,51 @@
    "kind": "care",
    "revive": 0.25
   }
+ },
+ {
+  "id": "augurs-bell",
+  "name": "Augur's Bell",
+  "family": "Key items: gadgets",
+  "description": "The map shows an omen for each fight you can walk to: calm, uneasy or dire",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "clear-bell",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "omen"
+    }
+   ]
+  }
+ },
+ {
+  "id": "last-chance-charm",
+  "name": "Last Chance Charm",
+  "family": "Key items: gadgets",
+  "description": "After each won fight, one fallen Pokémon gets back up with 25% HP (one revive per stop)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "revival-herb",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "lastChance"
+    }
+   ]
+  }
  }
 ]

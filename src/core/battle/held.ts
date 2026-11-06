@@ -22,6 +22,7 @@ import type { Rng } from '../rng';
 import { freshHeldState } from '../state';
 import type { BattleState, HeldState, PokemonInstance, Stages, Volatile } from '../state';
 import { clampStage } from './damage';
+import { setHooks } from '../itemSets';
 
 export type Side = 'player' | 'enemy';
 
@@ -160,8 +161,11 @@ export function hooksOf(ctx: Pick<HeldContext, 'content' | 'teamItems'> & { batt
       }
     }
   };
-  add(effectiveHeld(ctx, mon), false);
+  const held = effectiveHeld(ctx, mon);
+  add(held, false);
   if (side === 'player') add(ctx.teamItems, true);
+  // Item Sets (S79): a full set on this Pokémon adds its bonus hooks.
+  out.push(...setHooks(held));
   return out;
 }
 
