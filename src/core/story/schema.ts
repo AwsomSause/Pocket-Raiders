@@ -133,6 +133,8 @@ export const PokemonHistorySchema = z.object({
   hyper: z.record(z.string(), z.number().int().min(0)).default({}),
   /** Battles it has fought each opposing species in this run (Heated Rivalry). */
   foes: z.record(z.string(), z.number().int().min(0)).default({}),
+  /** Overhaul growth-path counters (core/overhaul/growth.ts): KOs by kind this run. Optional so older saves load as they are. */
+  growth: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Times it used each damaging move in trainer fights this run (Signature Move Awakening). */
   moves: z.record(z.string(), z.number().int().min(0)).default({}),
   /** Times it and each teammate (by uid) took turns landing finishing blows (Friendly Competition). */

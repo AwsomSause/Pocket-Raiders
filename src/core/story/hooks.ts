@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { noteGrowthKo } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import type { Side } from '../battle/engine';
@@ -251,7 +252,11 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
           importance: avenged ? content.story.importance.closeCall : undefined,
           emotions: avenged ? ['justice'] : undefined,
         });
-        if (e.side === 'enemy' && by) noteFinisher(by, i);
+        if (e.side === 'enemy' && by) {
+          noteFinisher(by, i);
+          const winner = run.party.find((m) => m.uid === by);
+          if (winner) noteGrowthKo(content.balance.overhaulGrowth, run.story.histories[by], { by: content.species.get(winner.speciesId)?.types ?? [], foe: content.species.get(mon(e.uid)?.speciesId ?? '')?.types ?? [], rival: Boolean(battle.rival || battle.rivalId), trainerClass: battle.trainer?.classId ?? null, solo: run.party.filter((m) => m.hp > 0).length === 1 });
+        }
         noteNemesisFaint(run, e.side, e.uid, by);
         // Rivalry kinds (left-out 5.4): a loss may start a Bitter or One-Sided rivalry; a win may make one Mutual.
         if (e.side === 'player' && by) {

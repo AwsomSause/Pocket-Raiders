@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildContent } from '../../src/data';
 import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
-import { assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId } from '../../src/core/overhaul/growth';
+import { COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId } from '../../src/core/overhaul/growth';
 import type { PokemonInstance } from '../../src/core/state';
 
 const content = buildContent();
@@ -57,5 +57,47 @@ describe('growth paths (first cut)', () => {
   it('describes a path in plain words', () => {
     expect(growthLine({ growthPath: 'striker' }, CFG)).toMatch(/Striker: \+5% on super-effective/);
     expect(growthLine({}, CFG)).toBeNull();
+  });
+
+  it('counts KOs by kind from the facts of one KO', () => {
+    const base = { by: ['water'], foe: ['fire'], rival: false, trainerClass: null, solo: false };
+    expect(koCounters(base)).toEqual(['koWaterVsFRG']);
+    expect(koCounters({ ...base, by: ['steel'], foe: ['fairy'], trainerClass: 'gym-leader', rival: true, solo: true })).toEqual(['koRival', 'koGym', 'koSolo', 'koSteelVsIRF']);
+    expect(koCounters({ ...base, trainerClass: 'elite-four' })).toContain('koElite');
+    expect(koCounters({ ...base, trainerClass: 'champion' })).toContain('koChampion');
+    expect(koCounters({ by: ['normal'], foe: ['normal'], rival: false, trainerClass: 'youngster', solo: false })).toEqual([]);
+  });
+
+  it('adds to the history only when switched on, and has a real pack path for each counter path', () => {
+    const h: { growth?: Record<string, number> } = {};
+    const facts = { by: ['normal'], foe: ['normal'], rival: true, trainerClass: null, solo: false };
+    noteGrowthKo({ ...CFG, enabled: false }, h, facts);
+    expect(h.growth).toBeUndefined();
+    noteGrowthKo(CFG, h, facts); noteGrowthKo(CFG, h, facts);
+    expect(h.growth).toEqual({ koRival: 2 });
+    noteGrowthKo(CFG, undefined, facts);
+    const ids = new Set(overhaulCatalogs().growth_paths.entries.map((p) => p.id));
+    for (const id of Object.keys(COUNTER_PATHS)) expect(ids.has(id)).toBe(true);
+  });
+
+  it('a counter path needs enough KOs and the most in the party', () => {
+    const mk = (uid: string, n: number) => ({ uid, knockoutsDealt: 0, closeCalls: 0, growth: { koGym: n } });
+    const party = [mk('a', 5), mk('b', 3)];
+    expect(pathFor(CFG, party[0]!, ['normal'], party)).toBe('gym-slayer');
+    expect(pathFor(CFG, party[1]!, ['normal'], party)).toBeNull();
+    expect(pathFor(CFG, mk('c', 3), ['normal'], [mk('c', 3)])).toBeNull();
+    expect(pathFor(CFG, mk('a', 5), ['normal'], [mk('a', 5), mk('b', 5)])).toBeNull();
+  });
+
+  it('boosts counter paths only in their case', () => {
+    const m = (p: string) => ({ growthPath: p });
+    expect(growthDamageMultiplier(CFG, m('gym-slayer'), 'fire', 1, 1, [], { trainerClass: 'gym-leader' })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('gym-slayer'), 'fire', 1, 1, [], { trainerClass: 'champion' })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('loner'), 'fire', 1, 1, [], { solo: true })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('loner'), 'fire', 1, 1, [], { solo: false })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('deep-swimmer'), 'water', 1, 1, [], { foeTypes: ['Fire'] })).toBeCloseTo(1.05);
+    expect(growthDamageMultiplier(CFG, m('deep-swimmer'), 'fire', 1, 1, [], { foeTypes: ['Fire'] })).toBe(1);
+    expect(growthDamageMultiplier(CFG, m('rival-breaker'), 'fire', 1, 1, [], { rival: true })).toBeCloseTo(1.05);
+    expect(growthLine(m('forge-born'), CFG)).toMatch(/Steel damage against Ice/);
   });
 });
