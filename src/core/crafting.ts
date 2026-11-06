@@ -6,7 +6,7 @@ import json from '../data/crafting.json';
 import { hashSeed, Rng } from './rng';
 import { addItem, itemCount } from './items';
 import { pickStones } from './expedition/flow';
-import type { ArchetypeModifier, Content } from './contentSchema';
+import type { ArchetypeModifier, Content, TypeName } from './contentSchema';
 import type { RunState } from './state';
 import { runPerks } from './archetypes';
 import { megaCraftCost } from './trainerPerks';
@@ -16,6 +16,8 @@ const Gives = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('item'), item: z.string(), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('rareToken'), battles: z.number().int().positive() }),
   z.object({ kind: z.literal('megaStone') }),
+  // Lure (S223) / Lure Tower (S237): the next `battles` wild encounters favour one type; a tower runs for the rest of the run and is weaker, one at a time per type.
+  z.object({ kind: z.literal('lure'), type: z.string(), battles: z.number().int().positive(), value: z.number().gt(1), tower: z.boolean().optional() }),
 ]);
 const Drop = z.object({ chance: z.number().min(0).max(1), amount: z.number().int().min(0) });
 
@@ -67,6 +69,7 @@ export function recipeCost(content: Content, run: RunState, r: Recipe): Record<s
 
 export function recipeProblem(content: Content, run: RunState, r: Recipe): string | null {
   if (run.badges.length < r.minBadges) return `Needs ${r.minBadges} badge${r.minBadges === 1 ? '' : 's'}.`;
+  if (r.gives.kind === 'lure' && r.gives.tower && run.tempEffects.some((t) => t.effects.some((m) => m.kind === 'typeEncounterWeight' && m.type === (r.gives as { type: string }).type && m.value === (r.gives as { value: number }).value))) return `A ${r.gives.type} Lure Tower already stands.`;
   for (const [id, n] of Object.entries(recipeCost(content, run, r))) if ((run.materials[id] ?? 0) < n) return `Needs ${n} ${materialName(id)} (you have ${run.materials[id] ?? 0}).`;
   if (run.money < r.money) return `You need ₽${r.money}.`;
   if (r.gives.kind === 'megaStone' && pickStones(content, run, 1, new Rng(hashSeed(`${run.seed}::craft-stone`))).length === 0) return 'No one in your party can use a Mega Stone you do not own.';
@@ -89,6 +92,12 @@ export function applyRecipe(content: Content, run: RunState, r: Recipe): string 
     run.perkEffects.push(...RARE_TOKEN_EFFECTS);
     run.tempEffects.push({ effects: RARE_TOKEN_EFFECTS, battles: g.battles, until: 'wild' });
     return `Rare-encounter token: the next ${g.battles} wild encounters are far likelier to be rare.`;
+  }
+  if (g.kind === 'lure') {
+    const effects: ArchetypeModifier[] = [{ kind: 'typeEncounterWeight', type: g.type as TypeName, value: g.value }];
+    run.perkEffects.push(...effects);
+    run.tempEffects.push({ effects, battles: g.battles, until: 'wild' });
+    return g.tower ? `A ${g.type} Lure Tower stands: ${g.type}-type wild Pokémon turn up more for the rest of the run.` : `Lure ready: the next ${g.battles} wild encounters favour ${g.type}-type Pokémon.`;
   }
   const [stone] = pickStones(content, run, 1, new Rng(hashSeed(`${run.seed}::craft-stone::${run.nextUid}:${run.encountersCompleted}:${Object.keys(run.inventory).length}`)));
   addItem(run.inventory, stone!.id, 1);
