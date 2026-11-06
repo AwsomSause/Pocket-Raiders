@@ -2455,6 +2455,7 @@ export class BattleScene extends Phaser.Scene {
         tints: options.map((_, i) => {
           const slot = mon.moves[i];
           const move = slot ? (zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)) : undefined;
+          if (maxMoves?.[i]) return maxMoves[i]!.name.startsWith('G-Max') ? 0x3f9bbd : 0x6a5c9e;
           return move ? mixColor(TYPE_COLORS[move.type] ?? 0x888888, 0x000000, 0.35) : undefined;
         }),
         motion: this.motion,
@@ -3144,6 +3145,15 @@ export class BattleScene extends Phaser.Scene {
                 title: zMove?.name,
                 titleId: zMove?.id,
                 ...this.cineFeel(cine),
+                trainer: e.side === 'player' ? () => { const art = this.playerArt(); return art ? trainerBackVisual(this, art, at.x - 170, at.y + 10, 260) : null; } : undefined,
+                fast: services().session.settings.fastDynamax,
+                enemySide: e.side === 'enemy',
+                calyrex: mon!.speciesId.startsWith('calyrex'),
+                trainerFront: e.side === 'player'
+                  ? () => { const art = this.playerArt(); return art ? trainerVisual(this, art, 'Trainer', at.x - 190, at.y + 10, 2) : null; }
+                  : !this.run.battle?.trainer
+                    ? undefined
+                    : () => { const art = this.trainerArt(); return art ? trainerVisual(this, art.assetId, art.label, at.x + 190, at.y + 10, 2) : null; },
                 onSwap: swapForm,
               }),
             );
