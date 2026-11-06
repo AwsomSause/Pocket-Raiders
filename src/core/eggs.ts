@@ -16,6 +16,7 @@ import { CareSchema } from './care/mods';
 import { hasPerk, type MapItemRun } from './mapItems';
 import { hatchLevelOffset } from './trainerPerks';
 import { runPerks } from './archetypes';
+import { rememberPick } from './variety';
 
 // Eggs: found at events or from a Mystery Egg, carried until enough battles (or stages) pass, then hatched.
 // Everything about the Egg (species, shiny, egg moves) is rolled when it is laid, so reloading never changes it.
@@ -73,7 +74,8 @@ export function layEgg(content: Content, run: RunState, speciesId: string, opts:
   const usable = eggMoveOptions(content, family).filter((o) => o.active).map((o) => o.id);
   const eggMoves: string[] = [];
   while (eggMoves.length < tier.eggMoveCap && usable.length > 0) eggMoves.push(usable.splice(rng.int(0, usable.length - 1), 1)[0]!);
-  run.itemCounters = { ...run.itemCounters, 'eggs-laid': n, [`egg-fam:${family}`]: (run.itemCounters?.[`egg-fam:${family}`] ?? 0) + 1 };
+  run.itemCounters = { ...run.itemCounters, 'eggs-laid': n };
+  rememberPick(content, run, 'egg', family);
   const left = Math.max(1, opts.left) + tier.extraDistance;
   const egg: Egg = {
     uid: `egg${n}`,

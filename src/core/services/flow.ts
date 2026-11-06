@@ -16,6 +16,7 @@ import { evolveFully } from '../evolution';
 import { abilityOf, addLevels, createPokemon, maxHp, maxPp, usableLearnset, getSpecies } from '../pokemon';
 import { specialFamily } from '../specialForms';
 import { rarityOf } from '../rarity';
+import { rememberPick, varietyWeight } from '../variety';
 import { pickTrade, TRADES, type GeneratedTrade } from '../tradePools';
 import { applyCatalog, catalogTargetProblem, getCatalogEntry } from '../catalog';
 import { addItem, itemUseProblem } from '../items';
@@ -122,13 +123,14 @@ export function generateTradeOffer(content: Content, run: RunState, sideId: stri
   const wild = wildEligibleSpecies(content);
   const normal = wild.filter(fits(C.tradeBstSpread));
   const ids = (list: { id: string }[]) => list.map((s) => s.id);
+  const recent = varietyWeight(content, run, 'trade');
   return pickTrade(rng, {
     fair: ids(normal),
     regional: ids([...content.species.values()].filter((s) => open.includes(specialFamily(s) ?? '') && fits(C.tradeBstSpread * 2)(s))),
     rare: ids(wild.filter(fits(C.tradeBstSpread * 1.5)).filter((s) => ['rare', 'veryRare', 'epic'].includes(rarityOf(content, s.id)))),
     themed: ids(normal.filter((s) => s.types.some((t) => own.types.includes(t)))),
     risky: ids(wild.filter(within(bst * (1 + C.tradeBstSpread), bst * (1 + TRADES.riskySpread)))),
-  });
+  }, (id) => recent(familyId(content, id)));
 }
 
 /** The Trade Post's offer for one party member: similar strength, sometimes a regional form (only reachable this way or by events). */
@@ -433,6 +435,7 @@ export function useService(content: Content, current: RunState, sideId: string, 
     case 'trade': {
       const next = newMon(content, run, arg!, tradeArrivalLevel(content, run, sideId, mon!, arg!), 'p');
       recordTraded(content, run, mon!, arg!);
+      rememberPick(content, run, 'trade', familyId(content, arg!));
       run.party[run.party.indexOf(mon!)] = next;
       discover(run, arg!, false);
       count(run, 'tradesMade');

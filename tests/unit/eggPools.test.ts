@@ -32,9 +32,18 @@ describe('egg pools', () => {
     const run = fresh('ep4');
     const first = eggPool(content, run, 'ordinary')[0]!;
     const base = first.weight;
-    run.itemCounters = { ...run.itemCounters, [`egg-fam:${familyId(content, first.speciesId)}`]: 3 };
+    run.history = { ...run.history, egg: [familyId(content, first.speciesId)] };
     const after = eggPool(content, run, 'ordinary').find((p) => p.speciesId === first.speciesId)!.weight;
     expect(after).toBeLessThan(base);
     expect(after).toBeGreaterThan(0);
+  });
+});
+
+describe('egg variety history', () => {
+  it('remembers each laid family in the shared history', () => {
+    const run = fresh('ep5');
+    const sp = eggPool(content, run, 'ordinary')[0]!.speciesId;
+    layEgg(content, run, sp, { level: 5, left: 3, unit: 'stage', source: 'Mystery Egg' }, new Rng(hashSeed('h')));
+    expect(run.history.egg).toEqual([familyId(content, sp)]);
   });
 });

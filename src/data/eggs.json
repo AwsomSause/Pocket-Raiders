@@ -155,8 +155,6 @@
  "revealAt": 0.5,
  "pools": {
   "note": "Overhaul slice 14. Which first-stage species an Egg of each tier can hold. minFinalBst = the best base stat total in the species' family. Legendary caps and wild eligibility still apply.",
-  "repeatPenalty": 0.35,
-  "minWeight": 0.05,
   "tiers": {
    "ordinary": {
     "minFinalBst": 0,

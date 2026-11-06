@@ -617,7 +617,11 @@
  "variety": {
   "penalty": 0.35,
   "window": {
-   "wild": 5
+   "wild": 5,
+   "egg": 3,
+   "trade": 3,
+   "trainer": 3,
+   "trainerSpecies": 6
   }
  },
  "doubles": {

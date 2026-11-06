@@ -25,10 +25,11 @@ export interface GeneratedTrade {
 }
 
 /** Picks a pool by weight among those with candidates, then a species inside it; null when no pool has a candidate. */
-export function pickTrade(rng: Rng, candidates: Partial<Record<TradePoolId, readonly string[]>>): GeneratedTrade | null {
+export function pickTrade(rng: Rng, candidates: Partial<Record<TradePoolId, readonly string[]>>, weightOf: (speciesId: string) => number = () => 1): GeneratedTrade | null {
   const live = TRADE_POOL_IDS.filter((id) => (candidates[id]?.length ?? 0) > 0);
   if (live.length === 0) return null;
   const pool = rng.weighted(live.map((id) => ({ item: id, weight: TRADES.pools[id].weight })));
   const list = candidates[pool]!;
-  return { speciesId: list[rng.int(0, list.length - 1)]!, pool, levelOffset: TRADES.pools[pool].levelOffset };
+  const speciesId = rng.weighted(list.map((id) => ({ item: id, weight: weightOf(id) })));
+  return { speciesId, pool, levelOffset: TRADES.pools[pool].levelOffset };
 }

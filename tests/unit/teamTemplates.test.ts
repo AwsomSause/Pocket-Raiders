@@ -30,12 +30,12 @@ describe('trainer team templates', () => {
     for (let i = 0; i < 400; i++) if (pickTemplate(9, `s${i}`).id === base.id) free++;
     expect(hits).toBeLessThan(free);
   });
-  it('remembers recent templates oldest first', () => {
-    const run: { itemCounters?: Record<string, number> } = {};
-    rememberTemplate(run, 'stall');
-    rememberTemplate(run, 'weather');
-    rememberTemplate(run, 'stall');
-    expect(recentTemplates(run)).toEqual(['weather', 'stall']);
+  it('remembers recent templates in order (shared variety history)', () => {
+    const run = { history: {} as Record<string, string[]> };
+    rememberTemplate(content, run, 'stall');
+    rememberTemplate(content, run, 'weather');
+    rememberTemplate(content, run, 'stall');
+    expect(recentTemplates(run)).toEqual(['stall', 'weather', 'stall']);
   });
   it('keeps every fit above zero and monotype leans on the type', () => {
     const mono = TEAM_TEMPLATES.templates.find((t) => t.id === 'monotype')!;

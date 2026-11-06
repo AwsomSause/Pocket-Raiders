@@ -265,14 +265,16 @@ export function pickTrainerClass(content: Content, classes: readonly TrainerClas
  * A trainer whose class fits the theme, with a team drawn from the theme.
  * `stageNumber` counts stages from the start of the run (teams grow with it).
  */
-export function planTrainer(content: Content, archetype: Archetype, theme: Theme, stageNumber: number, scale: LevelScale, rng: Rng, regionId?: string, templateSeed?: string, recentTemplates: readonly string[] = []): TrainerPlan {
+export function planTrainer(content: Content, archetype: Archetype, theme: Theme, stageNumber: number, scale: LevelScale, rng: Rng, regionId?: string, templateSeed?: string, recentTemplates: readonly string[] = [], speciesVariety?: (speciesId: string) => number): TrainerPlan {
   const trainerClass = pickTrainerClass(content, trainerClassesFor(content, theme), rng);
   const name = rng.pick(trainerClass.names);
   const size = teamSize(content.balance.trainerTeam, stageNumber, rng);
   // Overhaul slice 16: the team follows a template (roles, monotype, weather...), picked from its own hash stream.
   const template = templateSeed !== undefined && content.balance.teamTemplates.enabled ? pickTemplate(stageNumber, templateSeed, recentTemplates) : undefined;
   const picked: string[] = [];
-  const weightMod = template ? (id: string) => templateFit(content, template, id, { picked, types: trainerClass.types.length > 0 ? trainerClass.types : theme.types, regionId }) : undefined;
+  const fit = template ? (id: string) => templateFit(content, template, id, { picked, types: trainerClass.types.length > 0 ? trainerClass.types : theme.types, regionId }) : undefined;
+  // Anti-repetition (shared generator): families fielded by the last few trainers turn up less.
+  const weightMod = fit || speciesVariety ? (id: string) => (fit?.(id) ?? 1) * (speciesVariety?.(id) ?? 1) : undefined;
   const team = buildTeam(content, archetype, scale, size, content.balance.difficulty.trainerBonus, 0, () => { const id = pickThemeSpecies(content, theme, rng, trainerClass.types, regionId, weightMod, curveLevel(content, scale)); picked.push(id); return id; }, rng);
   return { classId: trainerClass.id, name, leaderId: null, ai: 0, ...(template ? { templateId: template.id } : {}), ...team };
 }
