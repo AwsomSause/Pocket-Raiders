@@ -233,8 +233,18 @@ export class Menu {
   constructor(private readonly scene: Phaser.Scene, private readonly config: MenuConfig) {
     this.columns = config.columns ?? 1;
     this.itemWidth = config.itemWidth ?? 260;
-    this.itemHeight = config.itemHeight ?? 44;
-    const size = config.fontSize ?? 28;
+    let itemHeight = config.itemHeight ?? 44;
+    let size = config.fontSize ?? 28;
+    // Too many options for the screen (a Pokémon with 6 or 7 moves): squeeze the rows so the last one stays on screen.
+    if (!config.place) {
+      const rows = Math.ceil(config.options.length / this.columns);
+      const room = scene.scale.gameSize.height - 6 - config.y;
+      if (rows * itemHeight > room && room > 0) {
+        itemHeight = Math.max(22, Math.floor(room / rows));
+        size = Math.min(size, Math.max(12, itemHeight - 12));
+      }
+    }
+    this.itemHeight = itemHeight;
     this.container = scene.add.container(config.x, config.y);
     if (config.glass) {
       config.options.forEach((_, i) => {
