@@ -2792,6 +2792,12 @@ export const EventRuleSchema = z.object({
   spare: z.boolean().optional(),
   /** The battle text is silent: every line shows as "..." (Library Duel Silence). Display only. */
   silent: z.boolean().optional(),
+  /** In a double battle every foe move hits your lowest-defense Pokémon (Sniper Trainer). */
+  sniper: z.boolean().optional(),
+  /** Both sides fly: Ground-type moves can't hit anyone, and nobody counts as grounded (Sky Duel). */
+  sky: z.boolean().optional(),
+  /** A no-KO contest: damage leaves the foe at 1 HP and you win after using this many different moves (Contest Judge's Challenge). */
+  contest: z.number().int().min(2).max(6).optional(),
   /** Every stat change is inverted for both sides (The Contrarian). */
   contrary: z.boolean().optional(),
   /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */

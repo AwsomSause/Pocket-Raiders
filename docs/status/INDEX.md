@@ -272,3 +272,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `run-events-b-batch9.md`: Run events B batch 9: Rooftop Rumble, Library Duel Silence (silent text), Eco Ranger Test (no-KO win) and Mimic Mayhem (foe copies your move).
 - `habitat-ecosystem.md`: Habitat Ecosystem S219 (`core/ecosystem.ts`); notes on S222/S232 coverage.
 - `z-trials.md`: 18 island Z-Trial events, a Z-Crystal per type (S502).
+- `run-events-b-batch10.md`: Sky Duel, Sniper Ambush, Contest Judge, Dream Team Draft events (sky/sniper/contest rules).

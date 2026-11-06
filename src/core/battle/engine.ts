@@ -881,6 +881,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     const foe = currentEnemy(battle);
     if (id && foe.hp > 0 && foe.moves[0]?.id !== id) foe.moves = [{ id, pp: 10 }];
   }
+  if (rule.contest && !battle.outcome) {
+    const id = battle.playerVolatile?.lastMove;
+    if (id && !battle.storyEffects.includes(`style:${id}`)) battle.storyEffects.push(`style:${id}`);
+    if (battle.storyEffects.filter((s) => s.startsWith('style:')).length >= rule.contest) battle.outcome = 'win';
+  }
   if (rule.spare && !battle.outcome && battle.enemyTeam.every((m) => m.hp <= 1 || m.status?.id === 'slp')) battle.outcome = 'win';
   if (rule.fanClub) {
     for (const e of events) {
@@ -1991,6 +1996,7 @@ function abilityBlocksMove(ctx: BattleContext, user: Combatant, target: Combatan
     return true;
   }
   if (damaging && (ability === 'levitate' || ability === 'eelevate') && moveType === 'ground' && !move.effects.hitsSemi) blocked = true;
+  if (damaging && ctx.battle.eventRule?.sky && moveType === 'ground' && !move.effects.hitsSemi) blocked = true;
   if (damaging && ability === 'wonder-guard' && effectiveness <= 1 && !move.flags.includes('typeless')) blocked = true;
   if (ability === 'soundproof' && move.flags.includes('sound')) blocked = true;
   if (ability === 'good-as-gold' && !damaging) blocked = true;
@@ -3506,7 +3512,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
-    if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
+    if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare || ctx.battle.eventRule?.contest) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;
@@ -5378,6 +5384,7 @@ export function weatherMultiplier(weather: Weather | null, type: TypeName): numb
 /** On the ground: not a Flying type and without Levitate (and not hiding in the air or underground). */
 function isGrounded(ctx: BattleContext, c: Combatant): boolean {
   if (c.vol.semi === 'air' || c.vol.semi === 'underground' || c.vol.semi === 'underwater') return false;
+  if (ctx.battle.eventRule?.sky) return false;
   if (ctx.battle.field.gravity > 0 || c.vol.smackedDown) return true;
   if (abilityIn(ctx, c) === 'levitate' || abilityIn(ctx, c) === 'eelevate' || c.vol.magnetRise > 0) return false;
   return !getSpecies(ctx.content, c.mon.speciesId).types.includes('flying');
