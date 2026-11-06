@@ -3232,7 +3232,7 @@
     },
     "unlockText": "Defeat 580 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "boss.dawn",
+    "spriteAssetId": "boss.dawn-gen4pt",
     "modifiers": [
       {
         "kind": "groupXpMultiplier",
@@ -4604,7 +4604,7 @@
     },
     "unlockText": "Defeat 2010 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.tateandliza-gen6",
     "modifiers": [
       {
         "kind": "damageMultiplier",
@@ -4828,7 +4828,7 @@
     },
     "unlockText": "Defeat 2060 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.toddsnap",
     "modifiers": [
       {
         "kind": "encounterWeightMultiplier",
@@ -6093,7 +6093,7 @@
     },
     "unlockText": "Defeat 1920 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.Spr_HGSS_Ethan",
     "modifiers": [
       {
         "kind": "groupXpMultiplier",
@@ -6135,7 +6135,7 @@
     },
     "unlockText": "Defeat 1930 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.Spr_HGSS_Silver",
     "modifiers": [
       {
         "kind": "levelGapDamageMultiplier",
@@ -6172,7 +6172,7 @@
     },
     "unlockText": "Defeat 1940 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.Spr_Pt_Barry",
     "modifiers": [
       {
         "kind": "statMultiplier",
@@ -6215,7 +6215,7 @@
     },
     "unlockText": "Defeat 1950 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.Spr_Pt_Dawn",
     "modifiers": [
       {
         "kind": "groupXpMultiplier",
@@ -6257,7 +6257,7 @@
     },
     "unlockText": "Defeat 1960 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.Spr_Pt_Looker",
     "modifiers": [
       {
         "kind": "rareItemWeight",
@@ -6301,7 +6301,7 @@
     },
     "unlockText": "Defeat 1970 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.Spr_Pt_Lucas",
     "modifiers": [
       {
         "kind": "xpMultiplier",
@@ -8662,7 +8662,7 @@
     },
     "unlockText": "Defeat 1590 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "trainer.red",
+    "spriteAssetId": "boss.oak",
     "modifiers": [
       {
         "kind": "xpMultiplier",
@@ -10176,7 +10176,7 @@
     },
     "unlockText": "Defeat 1290 trainers in total across your runs",
     "unlockCost": 300,
-    "spriteAssetId": "boss.lucas",
+    "spriteAssetId": "boss.lucas-gen4pt",
     "modifiers": [
       {
         "kind": "groupXpMultiplier",
