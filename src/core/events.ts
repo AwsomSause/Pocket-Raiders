@@ -100,6 +100,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return milestoneToday(content, run);
     case 'partySpecies':
       return run.party.some((m) => m.speciesId === c.species);
+    case 'partyMove':
+      return run.party.some((m) => m.hp > 0 && m.moves.some((mv) => mv.id === c.move));
     case 'starter': {
       const starter = run.party.find((m) => m.uid === run.log.starterUid);
       const species = starter ? content.species.get(starter.speciesId) : undefined;
@@ -237,6 +239,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a milestone day';
     case 'partyType':
       return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+    case 'partyMove':
+      return `Needs a Pokémon that knows ${content.moves.get(c.move)?.name ?? c.move}`;
     case 'partySpecies':
       return `Needs ${content.species.get(c.species)?.name ?? c.species} in your party`;
     case 'emotion':

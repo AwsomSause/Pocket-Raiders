@@ -2546,6 +2546,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('milestone') }),
   /** A species in the party. */
   z.object({ kind: z.literal('partySpecies'), species: z.string() }),
+  /** Field moves (S416): a party member knows this move (Cut, Surf, Flash ...). */
+  z.object({ kind: z.literal('partyMove'), move: z.string() }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
   z.object({ kind: z.literal('emotion'), id: z.enum(['determination', 'bravery', 'justice', 'kindness', 'patience', 'integrity', 'perseverance']) }),
   /** An event that has already been played this run. */
