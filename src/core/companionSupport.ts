@@ -14,13 +14,15 @@ export const hasCompanion = (run: RunState): boolean => companionLeft(run) > 0 |
 /** After a turn of a single battle (mutates `run`): the companion heals the active Pokémon once per fight. Returns the heal, or null. */
 export function companionSupport(content: Content, run: RunState): { amount: number; hpAfter: number; uid: string } | null {
   const battle = run.battle;
-  if (!battle || battle.outcome || battle.doubles || !hasCompanion(run)) return null;
+  if (!battle || battle.outcome || !hasCompanion(run)) return null;
   const mark = run.encountersCompleted + 1;
   if ((run.itemCounters?.[CAST] ?? 0) === mark) return null;
-  const mon = run.party[battle.activeIndex];
-  if (!mon || mon.hp <= 0) return null;
+  // Double battles: both Pokémon on the field are candidates; the one in the worst shape is helped.
+  const onField = [battle.activeIndex, battle.doubles?.player.index ?? -1].flatMap((i) => (i >= 0 && run.party[i] ? [run.party[i]!] : []));
+  const hurt = onField.filter((m) => m.hp > 0 && m.hp * 2 < maxHp(content, m)).sort((a, b) => a.hp / maxHp(content, a) - b.hp / maxHp(content, b))[0];
+  if (!hurt) return null;
+  const mon = hurt;
   const top = maxHp(content, mon);
-  if (mon.hp * 2 >= top) return null;
   const amount = Math.min(top - mon.hp, Math.max(1, Math.floor(top / 4)));
   mon.hp += amount;
   run.itemCounters = { ...run.itemCounters, [CAST]: mark };
