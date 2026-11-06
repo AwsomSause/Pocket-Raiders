@@ -65,6 +65,8 @@ export const RunRulesDataSchema = z.object({
       doublesOnly: z.boolean().optional(),
       /** Pacifist (S300): wild Pokémon can't be knocked out; win by catching or running. */
       pacifist: z.boolean().optional(),
+      /** Tag Team (S302): two players share one party at the same screen; the Pokémon in even party slots belong to Player 1, odd slots to Player 2. */
+      tagTeam: z.boolean().optional(),
       /** Time Attack (S303): each trainer win in `turns` or fewer turns scores `(turns - taken + 1) * perTurn` points. */
       timeAttack: z.object({ turns: z.number().int().min(1), perTurn: z.number().int().min(1) }).optional(),
       /** Level 50 Cup (S290): the party's level cap for the whole run. */
@@ -272,6 +274,8 @@ export const gauntlet = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(r
 /** Doubles Only (S292): every fight that can be a double battle is one. */
 export const doublesOnly = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.doublesOnly);
 /** Pacifist (S300): wild Pokémon are never knocked out by damage. */
+/** Tag Team (S302): who commands the Pokémon in party slot `index` ("Player 1" for slots 1, 3, 5; "Player 2" for 2, 4, 6), or null when the rule is off. */
+export const tagPilot = (rules: Pick<RunRules, 'modifierIds'>, index: number): string | null => (has(rules, (m) => m.tagTeam) ? `Player ${(index % 2) + 1}` : null);
 export const pacifist = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.pacifist);
 export const noHealStops = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noHealStops || m.gauntlet);
 export const battleMoneyScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.battleMoney);

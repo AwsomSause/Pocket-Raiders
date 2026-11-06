@@ -33,7 +33,7 @@ import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
 import { bossInfo, currentRegion, type BossInfo } from '../core/regions';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
-import { battleContent, noBattleItems } from '../core/rules';
+import { battleContent, noBattleItems, tagPilot } from '../core/rules';
 import { isHardcore, nuzlockeCatchProblem } from '../core/nuzlocke';
 import type { PresentationCue } from '../core/story/queue';
 import { currentEnemy, type BattleState, type PokemonInstance, type RunState } from '../core/state';
@@ -570,6 +570,12 @@ export class BattleScene extends Phaser.Scene {
 
   private get run(): RunState {
     return services().session.run!;
+  }
+
+  /** Tag Team: "Player 1: " in front of the prompt, or nothing. */
+  private pilotTag(mon: PokemonInstance): string {
+    const pilot = tagPilot(this.run.rules, this.run.party.indexOf(mon));
+    return pilot ? `${pilot}: ` : '';
   }
 
   private activeMon(): PokemonInstance {
@@ -2176,7 +2182,7 @@ export class BattleScene extends Phaser.Scene {
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
     const shadow = this.activeMon().shadow;
-    this.message.setText(`${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax' })[c.kind];
@@ -2312,7 +2318,7 @@ export class BattleScene extends Phaser.Scene {
     const mon = this.activeMon();
     const anyPp = mon.moves.some((m) => m.pp > 0);
     this.clearMenus();
-    this.message.setText(`What will ${this.speciesName(mon)} do?`);
+    this.message.setText(`${this.pilotTag(mon)}What will ${this.speciesName(mon)} do?`);
     // With Z-Move on, each move shows the Z-Move it becomes; moves without one can't be picked.
     const zMoves = this.transformChoice?.kind === 'zmove' ? zMoveOptions(this.battleCtx()) : null;
     // Dynamaxed (or about to): every move shows the Max Move it becomes.
