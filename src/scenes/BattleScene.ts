@@ -84,7 +84,7 @@ import { applyCueHooks } from '../core/presentation/hooks';
 import { DRAMA_LIBRARY, type DramaLine } from '../core/drama';
 import { wouldRefuse } from '../core/bond';
 import { autoBattleProblem, autoProfile, chooseAutoAction, STANCES, STANCE_INFO, stanceOf, type Stance } from '../core/battle/autoBattle';
-import { battleConditions } from '../core/battle/conditions';
+import { battleConditions, type FoeReveals } from '../core/battle/conditions';
 import { moveFlagLabels, moveFullDescription } from '../core/battle/moveText';
 import { BattleTabs, type BattlePage, type TabsPlace } from '../ui/battleTabs';
 import { animChoice, presentationFor } from '../core/presentation/moveAnims';
@@ -722,6 +722,16 @@ export class BattleScene extends Phaser.Scene {
       this.showSprite(side, this.shown[side], cry);
       await this.refreshInfoBox(side === 'player' ? this.playerBox : this.enemyBox, this.shown[side], false);
     }
+  }
+
+  /** Remembers what the foe has shown (display only; no battle state is touched). */
+  private noteFoeReveal(what: { ability?: string; item?: string }): void {
+    const uid = this.run.battle ? currentEnemy(this.run.battle).uid : null;
+    if (!uid) return;
+    const r = this.foeReveals.get(uid) ?? {};
+    if (what.ability) r.ability = what.ability;
+    if (what.item) r.items = [...new Set([...(r.items ?? []), what.item])];
+    this.foeReveals.set(uid, r);
   }
 
   /** Illusion: the shown copy keeps looking like the species it copies until the disguise breaks. */
@@ -1417,6 +1427,8 @@ export class BattleScene extends Phaser.Scene {
   private lastMoveType = 'normal';
   /** Overhaul slice 6: the move each of your Pokémon used last this battle (uid -> move id), for the menu cursor. */
   private readonly lastMoves = new Map<string, string>();
+  /** Overhaul slice 8: what you have seen each foe show (an ability that triggered, a held item that acted), by foe uid. The Info panel tells nothing else. */
+  private readonly foeReveals = new Map<string, FoeReveals>();
 
   /** Presentation only: a short vibration pattern by move type (Settings > Haptic buzz), and a camera push-in on a KO. */
   private buzz(type: string, strong = false): void {
@@ -2109,16 +2121,20 @@ export class BattleScene extends Phaser.Scene {
   private openPanel(columns: { head: string; text: string }[], onClose?: () => void): void {
     this.panelClose = onClose ?? null;
     this.infoPanel?.destroy();
-    // An opaque backing, so the menu underneath never shows through the text.
-    const backing = this.add.graphics().fillStyle(0x061528, 1).fillRoundedRect(8, MESSAGE_Y + 6, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 12, 18);
-    const items: Phaser.GameObjects.GameObject[] = [backing, drawGlass(this, 8, MESSAGE_Y + 6, GAME_WIDTH - 16, GAME_HEIGHT - MESSAGE_Y - 12, { tint: AERO.glassLow, rim: AERO.sky, radius: 18 })];
     const w = (GAME_WIDTH - 56) / columns.length;
+    // The panel grows upwards over the arena when a column has more lines than the bar holds (Info stays readable).
+    const texts = columns.map((c) => this.add.text(0, 0, c.text, textStyle(15, COLORS.textLight, { wordWrap: { width: w - 20 }, lineSpacing: 3 })));
+    const need = Math.max(...texts.map((t) => t.height)) + 70;
+    const top = Math.max(60, Math.min(MESSAGE_Y + 6, GAME_HEIGHT - 6 - need));
+    // An opaque backing, so the menu underneath never shows through the text.
+    const backing = this.add.graphics().fillStyle(0x061528, 1).fillRoundedRect(8, top, GAME_WIDTH - 16, GAME_HEIGHT - top - 6, 18);
+    const items: Phaser.GameObjects.GameObject[] = [backing, drawGlass(this, 8, top, GAME_WIDTH - 16, GAME_HEIGHT - top - 6, { tint: AERO.glassLow, rim: AERO.sky, radius: 18 })];
     columns.forEach((c, i) => {
       const x = 24 + i * w;
-      items.push(this.add.text(x, MESSAGE_Y + 30, c.head, textStyle(16, COLORS.gold)));
-      items.push(this.add.text(x, MESSAGE_Y + 52, c.text, textStyle(15, COLORS.textLight, { wordWrap: { width: w - 20 }, lineSpacing: 3 })));
+      items.push(this.add.text(x, top + 24, c.head, textStyle(16, COLORS.gold)));
+      items.push(texts[i]!.setPosition(x, top + 46));
     });
-    items.push(this.add.text(GAME_WIDTH - 20, MESSAGE_Y + 12, 'Esc / I: close', textStyle(13, COLORS.textMuted)).setOrigin(1, 0));
+    items.push(this.add.text(GAME_WIDTH - 20, top + 6, 'Esc / I: close', textStyle(13, COLORS.textMuted)).setOrigin(1, 0));
     this.infoPanel = this.add.container(0, 0, items).setDepth(125);
     bounceIn(this, this.infoPanel, this.motion);
   }
@@ -2156,11 +2172,12 @@ export class BattleScene extends Phaser.Scene {
         return;
       }
     }
-    const c = battleConditions(content, this.run);
+    const c = battleConditions(content, this.run, this.foeReveals.get(currentEnemy(this.run.battle!).uid));
     this.openPanel([
       { head: 'Battlefield', text: c.field.join('\n') },
       { head: 'Your Pokémon', text: c.yours.join('\n') },
       { head: 'Opposing Pokémon', text: c.foe.join('\n') },
+      ...(c.moves.length ? [{ head: 'Your moves vs the foe', text: c.moves.join('\n') }] : []),
     ]);
   }
 
@@ -2890,6 +2907,7 @@ export class BattleScene extends Phaser.Scene {
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
       const side = 'side' in e ? e.side : null;
+      if (side === 'enemy' && (e.type === 'ability' || (e.type === 'held' && e.itemId !== 'poke-doll'))) this.noteFoeReveal(e.type === 'ability' ? { ability: e.ability } : { item: e.itemId });
       const box = side === 'enemy' ? this.enemyBox : this.playerBox;
       const sprite = side === 'enemy' ? this.enemySprite : this.playerSprite;
       const mon = side ? this.shown[side] : null;
