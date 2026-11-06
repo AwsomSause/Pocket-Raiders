@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildContent } from '../../src/data';
 import { overhaulCatalogs } from '../../src/core/overhaul/catalogs';
-import { bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId } from '../../src/core/overhaul/growth';
+import { bumpGrowth, growthAccuracyMultiplier, hitCounters, moveCounters, COUNTER_PATHS, koCounters, noteGrowthKo, assignGrowthPaths, DEFAULT_GROWTH_CONFIG as CFG, growthDamageMultiplier, growthLine, pathFor, typePathId, noteMapGrowth } from '../../src/core/overhaul/growth';
 import type { PokemonInstance } from '../../src/core/state';
 
 const content = buildContent();
@@ -144,5 +144,52 @@ describe('growth paths (first cut)', () => {
     expect(growthAccuracyMultiplier(CFG, m('support'), 90, 'physical')).toBe(1);
     expect(growthAccuracyMultiplier(CFG, {}, 50, 'status')).toBe(1);
     expect(growthLine(m('steady'), CFG)).toMatch(/\+3% damage with 100%-accuracy moves/);
+  });
+});
+
+describe('growth paths: run-map counters and run-stat paths', () => {
+  const hist = (uid: string, extra: Record<string, unknown> = {}) => ({ uid, knockoutsDealt: 0, closeCalls: 0, battles: 0, evolutions: [], ...extra }) as never;
+  it('counts map events on the right Pokémon and only when switched on', () => {
+    const run = { story: { histories: { a: hist('a') } } } as never;
+    noteMapGrowth(content, run, 'a', 'shopVisit');
+    noteMapGrowth(content, run, 'a', 'shopVisit');
+    noteMapGrowth(content, run, 'zzz', 'shopVisit');
+    noteMapGrowth(content, run, undefined, 'shopVisit');
+    expect((run as never as { story: { histories: Record<string, { growth: Record<string, number> }> } }).story.histories.a!.growth.shopVisit).toBe(2);
+    const off = { ...content, balance: { ...content.balance, overhaulGrowth: { ...CFG, enabled: false } } };
+    noteMapGrowth(off, run, 'a', 'eggHatch');
+    expect((run as never as { story: { histories: Record<string, { growth: Record<string, number> }> } }).story.histories.a!.growth.eggHatch).toBeUndefined();
+  });
+  it('earns map paths from enough of the counter, most in the party', () => {
+    const lead = hist('a', { growth: { nodeClean: 10, berryFeed: 5 } });
+    const other = hist('b', { growth: { nodeClean: 4 } });
+    expect(pathFor(CFG, lead, ['water'], [lead, other])).toBe('pathfinder');
+    expect(pathFor(CFG, hist('c', { growth: { nodeClean: 9 } }), ['water'], [lead])).toBeNull();
+    expect(pathFor(CFG, hist('d', { growth: { berryFeed: 5 } }), ['water'], [hist('d', { growth: { berryFeed: 5 } })])).toBe('caretaker');
+    expect(pathFor(CFG, hist('e', { growth: { eggHatch: 2 } }), [], [hist('e', { growth: { eggHatch: 2 } })])).toBe('egg-warm');
+    expect(pathFor(CFG, hist('f', { growth: { fieldItem: 5 } }), [], [hist('f', { growth: { fieldItem: 5 } })])).toBe('treasure-nose');
+    expect(pathFor(CFG, hist('g', { growth: { tmLearned: 3 } }), [], [hist('g', { growth: { tmLearned: 3 } })])).toBe('move-collector');
+  });
+  it('earns run-stat paths: shiny, elder, late bloomer, trainer pet, prodigy', () => {
+    const a = hist('a', { battles: 12 });
+    expect(pathFor(CFG, a, [], [a], true)).toBe('shiny-glint');
+    expect(pathFor(CFG, a, [], [a], false)).toBeNull();
+    const old = hist('o', { battles: 25 });
+    expect(pathFor(CFG, old, [], [old, hist('y', { battles: 5 })])).toBe('elder');
+    expect(pathFor(CFG, old, [], [old, hist('y', { battles: 25 })])).toBeNull();
+    const evo = hist('e', { evolutions: [1, 2] });
+    expect(pathFor(CFG, evo, [], [evo, hist('n')])).toBe('late-bloomer');
+    const pet = hist('p', { bond: { trust: 120, affection: 90 } });
+    expect(pathFor(CFG, pet, [], [pet, hist('q', { bond: { trust: 60, affection: 40 } })])).toBe('trainer-pet');
+    const fast = hist('f', { growth: { lv30: 10 } });
+    expect(pathFor(CFG, fast, [], [fast, hist('s', { growth: { lv30: 14 } }), hist('t')])).toBe('prodigy');
+    expect(pathFor(CFG, hist('s', { growth: { lv30: 14 } }), [], [fast, hist('s', { growth: { lv30: 14 } })])).toBeNull();
+  });
+  it('gives the flat edge and a plain-words line', () => {
+    for (const id of ['pathfinder', 'frontline-pet', 'egg-warm', 'caretaker', 'treasure-nose', 'move-collector', 'shiny-glint', 'elder', 'late-bloomer', 'trainer-pet', 'prodigy']) {
+      const m = mon('x', 'pikachu', id);
+      expect(growthDamageMultiplier(CFG, m, 'normal', 1, 1, ['electric'])).toBeCloseTo(1.05);
+      expect(growthLine(m, CFG)).toContain('+5%');
+    }
   });
 });

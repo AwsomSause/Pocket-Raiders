@@ -26,6 +26,7 @@ import { eggStatus, layEgg } from './eggs';
 import { isNative, wildEligibleSpecies } from './themes';
 import { hashSeed, Rng } from './rng';
 import { noItemCaps } from './rules';
+import { noteMapGrowth } from './overhaul/growth';
 import type { PendingDecision, PokemonInstance, RunState } from './state';
 
 /** How many random moves a TM offers (an HM offers every one). */
@@ -248,6 +249,7 @@ export function applyCatalog(
       // Poffin Case doubles friendship from Berries; Pokéblock Case adds Charisma.
       const doubled = effect.friendship > 0 && passivePercent(content, run, 'feedFriendship') > 0;
       if (mon) befriend(mon, effect.friendship * (doubled ? 2 : 1));
+      if (mon && entry.family.startsWith('Berries')) noteMapGrowth(content, run, mon.uid, 'berryFeed');
       applyChanges(effect.changes);
       const blocks = passivePercent(content, run, 'feedCharisma');
       if (blocks > 0 && entry.family.startsWith('Berries')) applyChanges({ charisma: blocks });

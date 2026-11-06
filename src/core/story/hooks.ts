@@ -283,6 +283,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         if (!e.caught && active.enemy) noteNemesisBreakFree(run, active.enemy);
         break;
       case 'levelUp':
+        { const h = run.story.histories[e.uid]; if (h && content.balance.overhaulGrowth.enabled && e.level >= 30 && h.growth?.['lv30'] === undefined) { h.growth ??= {}; h.growth['lv30'] = h.battles; } }
         emit(content, run, 'levelUp', { where, actors: [e.uid], data: { level: e.level } });
         break;
       case 'transform':

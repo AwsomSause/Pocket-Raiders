@@ -14,7 +14,7 @@ import type { Content } from '../contentSchema';
 export interface GrowthConfig { enabled: boolean; bonus: number; minKos: number; minCloseCalls: number; minRoleKos: number }
 export const DEFAULT_GROWTH_CONFIG: GrowthConfig = { enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2, minRoleKos: 4 };
 
-interface History { uid: string; knockoutsDealt: number; closeCalls: number; growth?: Record<string, number> | undefined }
+interface History { uid: string; knockoutsDealt: number; closeCalls: number; battles?: number; evolutions?: readonly unknown[]; bond?: { trust?: number; affection?: number } | undefined; growth?: Record<string, number> | undefined }
 
 /** Counter-based paths: pack id, the counter it reads, and the plain-words bonus. All give +bonus damage in the stated case. */
 export const COUNTER_PATHS: Record<string, { counter: string; words: string; min?: number }> = {
@@ -33,8 +33,29 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   'tank-buster': { counter: 'hitHigh', words: 'damage against foes above 75% HP', min: 12 },
   'bond-breaker': { counter: 'koFull', words: 'damage against foes at full HP' },
   'ember-heart': { counter: 'useFireLow', words: 'Fire damage while under 50% HP', min: 6 },
+  // Run-map paths: counted where the run happens (nodes, shops, eggs, berries, field items). The lead Pokémon is credited
+  // for node events. They give a flat +bonus damage, since the pack's own bonuses (XP, shop prices) are not battle rules.
+  pathfinder: { counter: 'nodeClean', words: 'damage (it has led the party through nodes with no one fainting)', min: 10 },
+  'frontline-pet': { counter: 'shopVisit', words: 'damage (it has been to many shops with you)', min: 4 },
+  'egg-warm': { counter: 'eggHatch', words: 'damage (it was in front when eggs hatched)', min: 2 },
+  caretaker: { counter: 'berryFeed', words: 'damage (it has been fed many berries)', min: 5 },
+  'treasure-nose': { counter: 'fieldItem', words: 'damage (it was in front when field items turned up)', min: 5 },
+  'move-collector': { counter: 'tmLearned', words: 'damage (it has learned many TM and tutor moves)', min: 3 },
 
 };
+
+/** Run-map counter paths whose edge is a flat bonus on every hit. */
+export const STAT_FLAT: ReadonlySet<string> = new Set(['shiny-glint', 'elder', 'late-bloomer', 'trainer-pet', 'prodigy']);
+export const FLAT_PATHS: ReadonlySet<string> = new Set(['pathfinder', 'frontline-pet', 'egg-warm', 'caretaker', 'treasure-nose', 'move-collector']);
+
+/** Credit one run-map event (a node, shop, hatch, berry, item, TM) to a Pokémon's growth counter. Does nothing when the switch is off. */
+export function noteMapGrowth(content: Content, run: { story: { histories: Record<string, { growth?: Record<string, number> | undefined } | undefined> } }, uid: string | undefined, counter: string, by = 1): void {
+  if (!uid || !content.balance.overhaulGrowth.enabled) return;
+  const h = run.story.histories[uid];
+  if (!h) return;
+  h.growth ??= {};
+  h.growth[counter] = (h.growth[counter] ?? 0) + by;
+}
 
 /** What one move use tells the growth counters. `hpFrac` is the user's HP share before it moved. */
 export interface MoveFacts { accuracy: number | null; category: string; type: string; flags: readonly string[]; hpFrac: number }
@@ -90,8 +111,27 @@ export function typePathId(type: string): string | null {
   return overhaulCatalogs().growth_paths.entries.find((p) => p.gate === gate)?.id ?? null;
 }
 
+const bondScore = (h: History): number => (h.bond?.trust ?? 0) + (h.bond?.affection ?? 0);
+const onlyTop = (party: readonly History[], score: (h: History) => number, mon: History, min: number): boolean => {
+  const n = score(mon);
+  const top = Math.max(...party.map(score));
+  return n >= min && n === top && party.filter((h) => score(h) === top).length === 1;
+};
+
+/** Paths read straight from what the run already keeps per Pokémon (no new counter needed). */
+function statPath(cfg: GrowthConfig, mon: History, party: readonly History[], shiny: boolean): string | null {
+  if (shiny && (mon.battles ?? 0) >= 10) return 'shiny-glint';
+  if (onlyTop(party, (h) => h.battles ?? 0, mon, 20)) return 'elder';
+  if (onlyTop(party, (h) => h.evolutions?.length ?? 0, mon, 2)) return 'late-bloomer';
+  if (onlyTop(party, bondScore, mon, 200)) return 'trainer-pet';
+  // Prodigy: the lowest battle count at level 30 (`lv30`), alone in the party.
+  const at = mon.growth?.['lv30'];
+  if (at !== undefined && party.every((h) => h === mon || h.growth?.['lv30'] === undefined || h.growth['lv30'] > at) && !party.some((h) => h !== mon && h.growth?.['lv30'] === at)) return 'prodigy';
+  return null;
+}
+
 /** The path this Pokémon qualifies for now, or null. `party` are the histories of the whole party (for "most KOs"). */
-export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[], party: readonly History[]): string | null {
+export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[], party: readonly History[], shiny = false): string | null {
   // A counter path needs enough of its kind of KO, and the most of it in the party (a tie goes to nobody).
   let best: { id: string; n: number } | null = null;
   for (const [id, def] of Object.entries(COUNTER_PATHS)) {
@@ -101,6 +141,8 @@ export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[
     if (n === top && party.filter((h) => (h.growth?.[def.counter] ?? 0) === top).length === 1 && (!best || n > best.n)) best = { id, n };
   }
   if (best) return best.id;
+  const stat = statPath(cfg, mon, party, shiny);
+  if (stat) return stat;
   if (mon.closeCalls >= cfg.minCloseCalls) return 'last-stand';
   const top = Math.max(0, ...party.map((h) => h.knockoutsDealt));
   if (mon.knockoutsDealt >= cfg.minKos && mon.knockoutsDealt === top && party.filter((h) => h.knockoutsDealt === top).length === 1) return 'striker';
@@ -119,7 +161,7 @@ export function assignGrowthPaths(content: Content, party: PokemonInstance[], hi
     if (mon.growthPath) continue;
     const h = histories[mon.uid];
     if (!h) continue;
-    const id = pathFor(cfg, h, content.species.get(mon.speciesId)?.types ?? [], hs);
+    const id = pathFor(cfg, h, content.species.get(mon.speciesId)?.types ?? [], hs, mon.shiny);
     if (!id || !names.has(id)) continue;
     mon.growthPath = id;
     out.push(`${content.species.get(mon.speciesId)?.name ?? mon.speciesId} found its way: ${names.get(id)}.`);
@@ -132,6 +174,7 @@ export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; train
 export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string, effectiveness: number, hpFrac: number, monTypes: readonly string[], hit: HitFacts = {}): number {
   const id = mon.growthPath;
   if (!cfg.enabled || !id) return 1;
+  if (STAT_FLAT.has(id)) return 1 + cfg.bonus;
   if (id === 'last-stand') return hpFrac < 0.25 ? 1 + cfg.bonus : 1;
   if (id === 'striker') return effectiveness > 1 ? 1 + cfg.bonus : 1;
   if (id in COUNTER_PATHS) {
@@ -147,6 +190,7 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
       : id === 'bond-breaker' ? (hit.foeHpFrac ?? 0) >= 1
       : id === 'ember-heart' ? moveType.toLowerCase() === 'fire' && hpFrac < 0.5
       : id === 'gambler' || id === 'support' ? false
+      : FLAT_PATHS.has(id) ? true
       : id === 'deep-swimmer' ? moveType.toLowerCase() === 'water' && foe.some((t) => ['fire', 'rock', 'ground'].includes(t))
       : moveType.toLowerCase() === 'steel' && foe.some((t) => ['ice', 'rock', 'fairy'].includes(t));
     const amount = id === 'steady' || id === 'chorus-lead' ? Math.min(cfg.bonus, 0.03) : cfg.bonus;
@@ -175,6 +219,6 @@ export function growthLine(mon: Pick<PokemonInstance, 'growthPath'>, cfg: Growth
   if (!p) return null;
   const pct = Math.round(cfg.bonus * 100);
   const counter = COUNTER_PATHS[p.id];
-  const effect = counter ? `+${p.id === 'steady' || p.id === 'chorus-lead' ? Math.min(pct, 3) : pct}% ${counter.words}` : p.id === 'last-stand' ? `+${pct}% damage under a quarter HP` : p.id === 'striker' ? `+${pct}% on super-effective hits` : `+${pct}% damage with its own type`;
+  const effect = STAT_FLAT.has(p.id) ? `+${pct}% damage (earned over the run)` : counter ? `+${p.id === 'steady' || p.id === 'chorus-lead' ? Math.min(pct, 3) : pct}% ${counter.words}` : p.id === 'last-stand' ? `+${pct}% damage under a quarter HP` : p.id === 'striker' ? `+${pct}% on super-effective hits` : `+${pct}% damage with its own type`;
   return `Growth path, ${p.name}: ${effect}. ${p.flavor}`;
 }
