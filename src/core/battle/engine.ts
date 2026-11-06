@@ -537,10 +537,19 @@ export function forcedMoveId(vol: Volatile | undefined): string | null {
   return vol?.charging ?? vol?.locked?.moveId ?? null;
 }
 
-/** The move slot the player's Pokémon must use this turn (a two-turn move, Thrash, or a Choice item's lock), or null if it can choose. */
+/** The move slot the player's Pokémon must use this turn (a two-turn move, Thrash), or null if it can choose. A Choice lock is not forced: the player may still switch or use an item (see `choiceLockIndex`). */
 export function forcedMoveIndex(battle: BattleState, party: PokemonInstance[]): number | null {
   const mon = party[battle.activeIndex];
-  const id = forcedMoveId(battle.playerVolatile) ?? choiceLock(battle, mon);
+  const id = forcedMoveId(battle.playerVolatile);
+  if (!id) return null;
+  const index = mon?.moves.findIndex((m) => m.id === id) ?? -1;
+  return index >= 0 ? index : null;
+}
+
+/** The move slot a Choice item (or Gorilla Tactics) holds the player's active Pokémon to, or null. Only moves are restricted. */
+export function choiceLockIndex(battle: BattleState, party: PokemonInstance[]): number | null {
+  const mon = party[battle.activeIndex];
+  const id = choiceLock(battle, mon);
   if (!id) return null;
   const index = mon?.moves.findIndex((m) => m.id === id) ?? -1;
   return index >= 0 ? index : null;
@@ -630,6 +639,9 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     action = { kind: 'move', index: forced };
   } else {
     if (forcedMoveId(battle.playerVolatile)) battle.playerVolatile = freshVolatileKeeping(battle.playerVolatile);
+    // A Choice item locks the move, not the Pokémon: switching and items stay open, another move becomes the locked one.
+    const locked = choiceLockIndex(battle, ctx.party);
+    if (locked !== null && action.kind === 'move' && action.index !== -1 && action.index !== locked) action = { ...action, index: locked };
     validateAction(ctx, action);
   }
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
@@ -5511,8 +5523,10 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     if (next < 0) {
       // Both sides out at once: the user of Explosion loses, the user of a recoil move wins; otherwise the player wins.
       const playerOut = !ctx.party.some((p) => p.hp > 0);
-      // A narrative rival fight (M12) cannot be won: the rival's last Pokémon holds on until the story loss plays.
-      if (battle.narrative && !playerOut) {
+      // A narrative rival fight (M12): the rival's last Pokémon refuses to go down once (holds at 1 HP).
+      // Knock it out again and it falls for real: the player wins anyway (narrativeWon), it never stalls.
+      if (battle.narrative && !playerOut && !battle.narrative.refused) {
+        battle.narrative.refused = true;
         enemy.hp = 1;
         events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.speciesId).name} refuses to go down!` });
         return;

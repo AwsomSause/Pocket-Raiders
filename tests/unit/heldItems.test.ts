@@ -2,7 +2,7 @@
 // held items, and the held items that work outside battle (EXP, evolution).
 
 import { describe, expect, it } from 'vitest';
-import { createBattle, forcedMoveIndex, resolveTurn, type BattleContext, type BattleEvent } from '../../src/core/battle/engine';
+import { choiceLockIndex, createBattle, forcedMoveIndex, resolveTurn, type BattleContext, type BattleEvent } from '../../src/core/battle/engine';
 import { blocksEvolution, expMultiplier, giveBossItems } from '../../src/core/battle/held';
 import { applyCatalog, catalogTargetProblem, getCatalogEntry } from '../../src/core/catalog';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -63,9 +63,22 @@ describe('Choice items', () => {
   it('Choice Band locks the holder into the first move it uses', () => {
     const p = mon('machop', 50, 'p1', ['tackle', 'splash'], { 'choice-band': 1 });
     const { battle, ctx } = setup(p, mon('snorlax', 100, 'e1', ['splash']));
-    expect(forcedMoveIndex(battle, ctx.party)).toBeNull();
+    expect(choiceLockIndex(battle, ctx.party)).toBeNull();
     resolveTurn(ctx, { kind: 'move', index: 0 });
-    expect(forcedMoveIndex(battle, ctx.party)).toBe(0);
+    expect(choiceLockIndex(battle, ctx.party)).toBe(0);
+    // The lock holds the move, not the Pokémon: it is not a forced turn, so switching and items stay open.
+    expect(forcedMoveIndex(battle, ctx.party)).toBeNull();
+  });
+
+  it('picking another move while Choice-locked uses the locked move', () => {
+    const p = mon('machop', 50, 'p1', ['tackle', 'splash'], { 'choice-band': 1 });
+    const { battle, ctx } = setup(p, mon('snorlax', 100, 'e1', ['splash']));
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    const tackle = p.moves[0]!.pp;
+    const splash = p.moves[1]!.pp;
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(p.moves[0]!.pp).toBe(tackle - 1);
+    expect(p.moves[1]!.pp).toBe(splash);
   });
 
   it('without the Band there is no lock', () => {
