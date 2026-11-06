@@ -349,3 +349,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `story-s8-relationships.md`: Story S8: relationship stages, attributes, ripples, memories, consequences (core only, not wired into events yet).
 - `story-s14-news-lore.md`: Story S14: 40 news headlines, Chronicle text templates, 6 Field Notes, token gate (text only; screens come later).
 - `story-s13-relationships.md`: Story S13 part 1: Relationships page (view model, map menu button).
+- rival-notebook.md: map 'Rivals' button, what each rival learned about you this run.
