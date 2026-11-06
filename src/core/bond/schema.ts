@@ -26,6 +26,19 @@ export const BOND_RULES = {
   evolve: { minFriendshipShare: 0.6 },
   /** Bond Levels (ideas S47): wins fought side by side raise a pair's level; a higher level makes the hand-over after a faint stronger (+1 stage per level, max 2). */
   pairLevels: { wins: [3, 8, 15], maxStages: 2 },
+  /** Paired moves (Growth S26 follow-up): at Bond Level 2+, a fainted Pokémon's damaging move and its partner's damaging move of these types make a paired move; the hand-over gains one more stage. */
+  pairedMoves: [
+    { types: ['fire', 'water'], name: 'Steam Burst' },
+    { types: ['fire', 'grass'], name: 'Wildfire' },
+    { types: ['water', 'electric'], name: 'Storm Surge' },
+    { types: ['water', 'grass'], name: 'Rain Bloom' },
+    { types: ['ice', 'fire'], name: 'Thaw Strike' },
+    { types: ['fighting', 'psychic'], name: 'Mind and Body' },
+    { types: ['ghost', 'dark'], name: 'Night Pact' },
+    { types: ['rock', 'ground'], name: 'Earthbreaker' },
+    { types: ['electric', 'steel'], name: 'Magnet Rush' },
+  ],
+  minPairedLevel: 2,
   /** Bond lessons: a devoted Pokémon with a free move slot learns a move it was ready for after a win. */
   lesson: { maxPerBattle: 1 },
 } as const;
