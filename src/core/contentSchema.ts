@@ -1776,6 +1776,12 @@ export const RegionSchema = z.object({
   custom: z.boolean().default(false),
   /** Special-form tags whose first stages roam this region's routes (e.g. "delta": Torren's Delta Pokémon). */
   specialWilds: z.array(z.string()).default([]),
+  /** One line that sums the region up, shown in its map banner. */
+  tagline: z.string().optional(),
+  /** Two or three sentences of flavour for the region (lore pages). */
+  lore: z.string().optional(),
+  /** First-stage wild Pokémon that define the region: extra wild weight there (balance.signatureWeight). Must be wild-eligible. */
+  signature: z.array(z.string()).default([]),
   /** The generations of Pokémon native to this region (empty = every generation is native). */
   generations: z.array(z.number().int().min(1).max(9)).default([]),
   /** Story Run only (Story Overhaul S4): never drawn into a Classic region order or listed in Classic pickers. */
@@ -2398,6 +2404,8 @@ export const BalanceSchema = z.object({
    * generation(s) are this many times as likely as others (still themed).
    */
   nativeWeight: z.number().min(1),
+  /** Extra wild odds for a region's signature Pokémon (regions.json `signature`), on top of nativeWeight. */
+  signatureWeight: z.number().min(1).default(2),
   /** Wild Pokémon have a base stat total no higher than this (keeps Ultra Beasts and Paradox Pokémon out). */
   wildMaxBaseStats: z.number().int().positive(),
   /** Regular enemies (wild and trainer) may not exceed base + perLevel × level total base stats; up to `retries` re-draws, keeping the weakest. */
@@ -2512,7 +2520,7 @@ export const BalanceSchema = z.object({
     sameEventGapStops: z.number().int().min(0),
     sameEventMaxPerRun: z.number().int().min(1),
   }),
-  rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
+  rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), /** Harder rivals: the opener is the player level + this; the ace is the player level + aceOffset. */ openerOffset: z.number().int().default(0), aceOffset: z.number().int().default(2), /** 1 keeps the old single-Pokémon first rival (used to pin old-seed tests). */ members: z.number().int().min(1).max(2).default(2), /** False restores the old rule: a rival loss ends a non-Story run (used to pin old-seed tests). */ softLoss: z.boolean().default(true), /** False keeps the fixed level instead of following the player's level (old-seed tests). */ followPlayer: z.boolean().default(true), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
   candies: z.object({ perRelease: z.number().int().min(0), perLevels: z.number().int().min(1) }),
   /** Run-end payout into the Bank (GAME_DESIGN.md §14.2). */

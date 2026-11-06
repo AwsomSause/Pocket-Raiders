@@ -43,10 +43,10 @@ describe('the first rival and the Exp. Share', () => {
     run.stage!.current = run.stage!.map.nodes.find((n) => n.next.includes(node.id))!.id;
     return { run, node };
   };
-  it('is a single level 5 starter-line Pokémon', () => {
+  it('is two starter-line Pokémon: an opener at level 5 and an ace at level 7 (player level + 2)', () => {
     const plan = planFirstRival(content, 'x');
-    expect(plan.members).toHaveLength(1);
-    expect(plan.members[0]!.level).toBe(5);
+    expect(plan.members).toHaveLength(2);
+    expect(plan.members.map((m) => m.level)).toEqual([5, 7]);
     expect(content.balance.rival.starters).toContain(plan.members[0]!.speciesId);
     expect(plan.classId).toBe('rival');
   });
@@ -55,8 +55,8 @@ describe('the first rival and the Exp. Share', () => {
     const started = chooseNode(content, run, node.id);
     expect(started.battle?.firstRival).toBe(true);
     expect(started.battle?.trainer?.classId).toBe('rival');
-    expect(started.battle?.enemyTeam).toHaveLength(1);
-    expect(started.battle?.enemyTeam[0]!.level).toBe(5);
+    expect(started.battle?.enemyTeam).toHaveLength(2);
+    expect(started.battle?.enemyTeam.map((m) => m.level)).toEqual([5, 7]);
     expect(started.story.flags[FIRST_RIVAL_FLAG]).toBe('fighting');
   });
   it('keeps the Exp. Share off until the rival has been fought', () => {
@@ -69,5 +69,23 @@ describe('the first rival and the Exp. Share', () => {
     const { run } = rivalRun('rival-3');
     run.stage!.index = content.balance.rival.stage + 2;
     expect(expShareUnlocked(content, run)).toBe(true);
+  });
+});
+
+describe('harder first rival', () => {
+  it('has two Pokémon and its ace is the player level + 2, whatever the player level is', () => {
+    for (const lvl of [5, 9, 20]) {
+      const plan = planFirstRival(content, 'x', lvl);
+      expect(plan.members).toHaveLength(2);
+      expect(plan.members[0]!.level).toBe(lvl);
+      expect(plan.members[1]!.level).toBe(lvl + 2);
+      expect(plan.members[0]!.speciesId).not.toBe(plan.members[1]!.speciesId);
+    }
+  });
+  it('keeps the same name and ace species for a seed as before (the extra draw comes last)', () => {
+    const a = planFirstRival(content, 'seed-1', 5);
+    const b = planFirstRival(content, 'seed-1', 12);
+    expect(a.name).toBe(b.name);
+    expect(a.members[1]!.speciesId).toBe(b.members[1]!.speciesId);
   });
 });

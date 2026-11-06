@@ -15,6 +15,7 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 - M8.75 still open: D Bank tiers/licenses/challenges, E Pokédex extras, G levels to 500 + custom regions, H later hub systems. M8.5: regional forms as a mechanic (if wanted). M9: built.
 - M10 visuals (Visual Bible V1-V5): next = level-up/reward reveal transitions, per-region palettes, perf pass.
 - Mega signature moves (Overhaul 27-28): all 142 built (92 core + 50 Delta/Z-Mega); note `docs/status/mega-signature-moves.md`. Limit: Elder Gale is single-target.
+- Harder rivals (`harder-rivals.md`): first rival has two Pokémon, ace at your level +2; rival losses never end a run (all modes except Adventure and Death-Block).
 - Story Overhaul Track W: W0, W1, W3, W5, W6, W7, W8, W9 done (`story-w9-shiny-egg.md`, `story-w8-world-sim.md`, `story-w7-pseudo-stages.md`, `story-w6-dungeons.md`, `story-w5-run-events.md`, `docs/status/story-w0-rival-observed.md`, `story-w1-rival-foundations.md`, `story-w3-dialogue-consequences.md`); W2 and W4 in other threads, Track W complete.
 - Pocket Town v2 (Woodland Hamlets, Kice's pick of 9) done: `docs/status/pocket-town-v2.md`; both towns now share one atlas built by `tools/hubtown/build.py`.
 - CI: `.github/workflows` runs `check` on every PR; branch protection is still off.
