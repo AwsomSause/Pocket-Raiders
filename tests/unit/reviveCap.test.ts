@@ -26,3 +26,24 @@ describe('revive cap per battle', () => {
     expect(BattleStateSchema.parse(rest).revivesUsed).toBe(0);
   });
 });
+
+describe('money cap and shop purchase limit', () => {
+  it('capMoney stops at 999,999', async () => {
+    const { capMoney } = await import('../../src/core/run');
+    const r = { money: 2_000_000 };
+    capMoney(content, r);
+    expect(r.money).toBe(999_999);
+    const small = { money: 500 };
+    capMoney(content, small);
+    expect(small.money).toBe(500);
+  });
+  it('a shop item sells out after 25 copies in a stage', async () => {
+    const { chooseStarter, createRun, buyItem } = await import('../../src/core/run');
+    const { noteRecentPurchase } = await import('../../src/core/priceSwing');
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'cap', archetypeId: 'red' }), 0);
+    run.phase = 'shop';
+    run.money = 100000;
+    noteRecentPurchase(run, 'potion', 25);
+    expect(() => buyItem(content, run, 'potion')).toThrow(/sold out/);
+  });
+});
