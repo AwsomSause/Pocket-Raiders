@@ -19,6 +19,12 @@ interface Tables {
   lore: Map<string, string[]>;
   /** `${speciesId}|${move name lowercased}` -> the scene for finishing a boss battle with that move. */
   finishers: Map<string, string>;
+  /** `${speciesId}|${move}` -> "The tenth time X uses M..." scene. */
+  tenth: Map<string, string>;
+  /** `${speciesId}|${move}` -> "When M misses, X..." scene. */
+  misses: Map<string, string>;
+  /** `${speciesId}|${ability name}` -> "The first time A triggers in a battle..." scene. */
+  firstAbility: Map<string, string>;
 }
 let tables: Tables | null = null;
 let loading: Promise<void> | null = null;
@@ -47,12 +53,23 @@ export function ensureNarration(): Promise<void> {
     const lore = new Map<string, string[]>();
     for (const e of s.entries) if (e.kind === 'lore' && /^(night )?rest node|^sun rest node/.test(e.trigger)) push(lore, e.speciesId, e.scene);
     const finishers = new Map<string, string>();
+    const tenth = new Map<string, string>();
+    const misses = new Map<string, string>();
+    const firstAbility = new Map<string, string>();
     for (const e of s.entries) {
-      if (e.kind !== 'move' || !/ finishes a boss battle/.test(e.scene)) continue;
-      const mv = /^When (.+) finishes a boss battle/.exec(e.scene)?.[1];
-      if (mv) finishers.set(`${e.speciesId}|${mv.toLowerCase()}`, e.scene);
+      if (e.kind === 'move') {
+        const fin = /^When (.+) finishes a boss battle/.exec(e.scene)?.[1];
+        const ten = /^The tenth time \S+ uses (.+?),/.exec(e.scene)?.[1];
+        const mis = /^When (.+) misses,/.exec(e.scene)?.[1];
+        if (fin) finishers.set(`${e.speciesId}|${fin.toLowerCase()}`, e.scene);
+        else if (ten) tenth.set(`${e.speciesId}|${ten.toLowerCase()}`, e.scene);
+        else if (mis) misses.set(`${e.speciesId}|${mis.toLowerCase()}`, e.scene);
+      } else if (e.kind === 'ability') {
+        const ab = /^The first time (.+?) triggers in a battle/.exec(e.scene)?.[1];
+        if (ab) firstAbility.set(`${e.speciesId}|${ab.toLowerCase()}`, e.scene);
+      }
     }
-    tables = { reactions, lore, finishers };
+    tables = { reactions, lore, finishers, tenth, misses, firstAbility };
   });
   return loading;
 }
@@ -80,4 +97,40 @@ export function partyNarration(party: readonly Mon[], when: NarrationContext, ke
 /** The species scene for ending a boss battle with this move ("Frenzy Plant finishes a boss battle..."), or null. */
 export function finisherScene(speciesId: string, moveName: string): string | null {
   return tables?.finishers.get(`${speciesId}|${moveName.toLowerCase()}`) ?? null;
+}
+
+interface SceneEvent {
+  type: string;
+  side?: string;
+  moveId?: string | null;
+  ability?: string;
+}
+
+/**
+ * Species scenes that need a count: the tenth use of a move, a move's first miss, an ability's first trigger. Counts live
+ * in the run's free-form counters (`pack.*`, so no save shape changes), count your active Pokémon only, and each scene
+ * fires once. Returns at most one line (the first that fits). `nameOf` turns a move or ability id into its display name.
+ */
+export function countedScene(counters: Record<string, number>, mon: Pick<PokemonInstance, 'uid' | 'speciesId'> | undefined, events: readonly SceneEvent[], nameOf: (kind: 'move' | 'ability', id: string) => string): string | null {
+  if (!tables || !mon) return null;
+  let line: string | null = null;
+  let lastMove: string | null = null;
+  for (const e of events) {
+    if (e.side !== 'player') continue;
+    if (e.type === 'move' && e.moveId) {
+      lastMove = e.moveId;
+      const key = `pack.use.${mon.uid}.${e.moveId}`;
+      counters[key] = (counters[key] ?? 0) + 1;
+      if (counters[key] === 10) line ??= tables.tenth.get(`${mon.speciesId}|${nameOf('move', e.moveId).toLowerCase()}`) ?? null;
+    } else if (e.type === 'miss' && lastMove) {
+      const key = `pack.miss.${mon.uid}.${lastMove}`;
+      counters[key] = (counters[key] ?? 0) + 1;
+      if (counters[key] === 1) line ??= tables.misses.get(`${mon.speciesId}|${nameOf('move', lastMove).toLowerCase()}`) ?? null;
+    } else if (e.type === 'ability' && e.ability) {
+      const key = `pack.ability.${mon.uid}.${e.ability}`;
+      counters[key] = (counters[key] ?? 0) + 1;
+      if (counters[key] === 1) line ??= tables.firstAbility.get(`${mon.speciesId}|${nameOf('ability', e.ability).toLowerCase()}`) ?? null;
+    }
+  }
+  return line;
 }
