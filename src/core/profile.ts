@@ -33,6 +33,7 @@ export function createProfile(content: Content, profileId: string): Profile {
     speciesSeen: [],
     speciesCaught: [],
     speciesShiny: [],
+    dexResearch: {},
     achievements: {},
     titles: [],
     activeTitle: null,

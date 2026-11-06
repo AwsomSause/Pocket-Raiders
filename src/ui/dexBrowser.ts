@@ -124,7 +124,7 @@ export class DexBrowser {
     const ty = look.layout === 'list' ? 100 : 360;
     add(fitLine(scene.add.text(tx, ty, page.title, textStyle(22, ink)), dw - 30));
     add(fitLine(scene.add.text(tx, ty + 28, page.types, textStyle(16, look.layout === 'list' ? '#8a6a40' : '#4a6a8a')), dw - 30));
-    if (look.layout !== 'list') add(fitBlock(scene.add.text(tx, ty + 52, `${page.note}\n${page.stats.slice(0, 3).join('  ')}`, textStyle(14, '#33475e', { wordWrap: { width: dw - 40 } })), dw - 40, 64));
+    if (look.layout !== 'list') add(fitBlock(scene.add.text(tx, ty + 52, `${page.note}\n${page.research ? `${page.research}\n` : ""}${page.stats.slice(0, 3).join("  ")}`, textStyle(14, '#33475e', { wordWrap: { width: dw - 40 } })), dw - 40, 64));
 
     // The grid or list.
     if (look.layout === 'list') {
