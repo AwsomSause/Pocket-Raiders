@@ -65,6 +65,10 @@ export const RunRulesDataSchema = z.object({
       timeAttack: z.object({ turns: z.number().int().min(1), perTurn: z.number().int().min(1) }).optional(),
       /** Level 50 Cup (S290): the party's level cap for the whole run. */
       levelCap: z.number().int().min(1).optional(),
+      /** Randomizer (S298): wild and ordinary trainer Pokémon are replaced by a random species (seeded; bosses keep theirs). */
+      randomEncounters: z.boolean().optional(),
+      /** Randomizer (S298): every Pokémon but boss teams gets a seeded random moveset (two of its own types, two of any). */
+      randomMoves: z.boolean().optional(),
     }),
   ),
   /** What an unlock that is already owned (a set, a trainer, a title) pays instead (Untitled doc §8.3). */
@@ -303,12 +307,38 @@ export function pickGeneration(content: Content, seed: string): number {
 /** A species outside the locked generation is swapped for one of the same type from inside it (seeded by `key`, never a gameplay stream). */
 export function lockSpecies(content: Content, run: Pick<RunState, 'rules' | 'seed'>, speciesId: string, key: string): string {
   const gen = run.rules.lockGeneration;
+  if (has(run.rules, (m) => m.randomEncounters)) return randomSpecies(content, run, key);
   const species = getSpecies(content, speciesId);
   if (!gen || species.generation === gen) return speciesId;
   const inside = wildEligibleSpecies(content).filter((s) => s.generation === gen);
   const same = inside.filter((s) => s.types.some((t) => species.types.includes(t)));
   const pool = same.length > 0 ? same : inside;
   return pool[new Rng(hashSeed(`${run.seed}::genlock::${key}`)).int(0, pool.length - 1)]!.id;
+}
+
+/** Randomizer (S298): any wild-eligible species (inside the locked generation, if any), seeded by the run and `key` (never a gameplay stream). */
+export function randomSpecies(content: Content, run: Pick<RunState, 'rules' | 'seed'>, key: string): string {
+  const gen = run.rules.lockGeneration;
+  const all = wildEligibleSpecies(content);
+  const pool = gen ? all.filter((s) => s.generation === gen) : all;
+  return pool[new Rng(hashSeed(`${run.seed}::random-enc::${key}`)).int(0, pool.length - 1)]!.id;
+}
+
+/** Randomizer (S298): a random moveset for `mon` (two damaging moves of its own types when any exist, then two of any type). Mutates `mon`. */
+export function randomizeMoves(content: Content, run: Pick<RunState, 'rules' | 'seed'>, mon: PokemonInstance): void {
+  if (!has(run.rules, (m) => m.randomMoves)) return;
+  const usable = [...content.moves.values()].filter((m) => m.supported && m.power !== null && m.power >= 30 && m.power <= 95 && !m.flags.some((f) => f === 'zmove' || f === 'max')).sort((a, b) => a.id.localeCompare(b.id));
+  if (usable.length < 4) return;
+  const rng = new Rng(hashSeed(`${run.seed}::random-moves::${mon.uid}`));
+  const own = getSpecies(content, mon.speciesId).types;
+  const stab = usable.filter((m) => own.includes(m.type));
+  const picked: string[] = [];
+  const take = (list: typeof usable) => {
+    const left = list.filter((m) => !picked.includes(m.id));
+    if (left.length > 0) picked.push(left[rng.int(0, left.length - 1)]!.id);
+  };
+  take(stab); take(stab); take(usable); take(usable);
+  mon.moves = picked.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
 }
 
 /** Random Draft: a draft rule with no license, picked from the seed (a Type Focus rule also gets a type from the pool). */

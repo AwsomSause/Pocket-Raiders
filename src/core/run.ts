@@ -170,7 +170,7 @@ import { diaryLine, seedNpcMemory } from './npcMemory';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -405,6 +405,7 @@ export function newMon(content: Content, run: RunState, speciesId: string, level
   // Difficulty: every enemy's level (the rules were fixed when the run started).
   const shown = prefix === 'e' ? Math.max(1, Math.min(cap, level + run.rules.enemyLevelBonus)) : level;
   const mon = createPokemon(content, speciesId, shown, uid, `${run.seed}:${uid}`);
+  randomizeMoves(content, run, mon);
   if (prefix === 'e') softenOpeningMoves(content, mon);
   return mon;
 }
@@ -1727,7 +1728,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
       const speciesId = plan.leaderId ? m.speciesId : lockSpecies(content, run, m.speciesId, `${node.id}:${i}`);
       const level = Math.max(1, Math.min(content.balance.difficulty.maxLevel, m.level + run.rules.enemyLevelBonus));
-      return createPlannedPokemon(content, { ...m, speciesId, level }, uid, `${run.seed}:${uid}`);
+      const mon = createPlannedPokemon(content, { ...m, speciesId, level }, uid, `${run.seed}:${uid}`);
+      if (!plan.leaderId) randomizeMoves(content, run, mon);
+      return mon;
     });
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     run.battle.ai = plan.ai;
