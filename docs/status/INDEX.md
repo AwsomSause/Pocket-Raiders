@@ -260,3 +260,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `run-events-b-batch6.md`: Run events B batch 6: The Contrarian (stat changes inverted), Pinch Hitter (fainted Pokémon get up once), Cursed Hat (statuses swap each turn).
 - migration-seasons.md: Migration Seasons, seasonal wild weights (S135)
 - `capture-dex-guides.md`: Hidden Ability Hunts S229, Egg Group Chart S238 (Species Mastery rows).
+- `balance-test-scales.md`: minigame balance test split into one test per game.
