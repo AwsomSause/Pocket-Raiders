@@ -613,6 +613,12 @@
  "sos": {
   "enabled": true
  },
+ "variety": {
+  "penalty": 0.35,
+  "window": {
+   "wild": 5
+  }
+ },
  "doubles": {
   "chance": 0.3,
   "fromStage": 1,

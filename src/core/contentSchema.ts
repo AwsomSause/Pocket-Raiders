@@ -1955,6 +1955,8 @@ export const BalanceSchema = z.object({
   battleFlair: BattleFlairSchema.default(DEFAULT_BATTLE_FLAIR),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
+  /** Overhaul slice 3 (core/variety.ts): picks within `window[pool]` of the same pool get weight × `penalty`. A pool with no window keeps no history. */
+  variety: z.object({ penalty: z.number().gt(0).max(1), window: z.record(z.string(), z.number().int().min(0).max(50)) }).default({ penalty: 1, window: {} }),
   doubles: z
     .object({ chance: z.number().min(0).max(1), fromStage: z.number().int().min(0), wildChance: z.number().min(0).max(1).default(0), bossIds: z.array(z.string()).default([]) })
     .default({ chance: 0.3, fromStage: 1, wildChance: 0, bossIds: [] }),

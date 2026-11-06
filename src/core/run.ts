@@ -68,6 +68,7 @@ import { withTokenAttribute } from './runPrep';
 import { applyReward, generateDraft, rewardTargetProblem, type RewardResult } from './rewards';
 import { pickRunQuest } from './quests';
 import { familyId, masteredStarters, runMasteryPerks } from './mastery';
+import { rememberPick, varietyWeight } from './variety';
 import { gameEventModifiers } from './gameEvents';
 import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
@@ -300,6 +301,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     prep: { ...prep, campaignId: campaign.id, note: draft.note },
     party: [],
     eggs: [],
+    history: {},
     garden: [],
     past: null,
     money: Math.floor(resources.money * scale),
@@ -1704,11 +1706,13 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
   if (node.kind === 'wild') {
     // Map items (Flutes, Incense, Mail, Poké Radar...) change the wild Pokémon; their own rolls use a generator of their own.
     const mods = activeMods(content, run);
+    // Overhaul slice 3: families met in the last few wild battles are less likely (core/variety.ts).
+    const recentWild = varietyWeight(content, run, 'wild');
     const plan = withStream(run.rng, 'encounter', (r) => {
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -1758,6 +1762,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (echo) run.battle.rivalNote = echo;
     }
     claimArea(run);
+    rememberPick(content, run, 'wild', familyId(content, enemy.speciesId));
     const setup = wildBattleSetup(content, run, mods);
     if (setup.weather) run.battle.weather = { id: setup.weather, turns: 999 };
     if (setup.drop) run.itemCounters = { ...run.itemCounters, 'pinap-drop': 1 };
@@ -1768,11 +1773,12 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
     if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && (doublesOnly(run.rules) || pairRng.chance(doublesCfg.wildChance))) {
-      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id));
+      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
       if (partner.shiny) countShiny(run, partner.speciesId);
       run.battle.enemyTeam.push(partner);
+      rememberPick(content, run, 'wild', familyId(content, partner.speciesId));
       run.battle.levelInfo = [...(run.battle.levelInfo ?? []), second.levelInfo];
       makeDoubles(run.battle, run.party);
     }

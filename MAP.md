@@ -52,6 +52,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `src/core/minigame/` | Minigames: `schema`, `games` (14 pure game modules + registry), `flow` (start, act, tick, rewards, leave), `gate` (map stops). Screen: `src/scenes/MinigameScene.ts`. Data: `src/data/minigames.json`. |
 | `src/core/expedition/` | Mega-Expeditions: `schema`, `graph` (route generation and validation), `flow` (begin, stops, choices, extract, fail), `gate` (map gates). Screen: `src/scenes/ExpeditionScene.ts`. |
 | `src/core/overhaul/` | Overhaul content pack (slice 1, data only): `schema` (Zod shapes), `catalogs` (load + cross-check; the 4 big line files load on request). Data: `src/data/overhaul/` (+ `lines/`), built by `npm run data:overhaul`; import report `docs/quality/overhaul-import.md`. |
+| `src/core/variety.ts` | Shared generator (Overhaul slice 3): eligibility then diversity, recent picks per pool in `run.history` (balance `variety`). |
 | `src/core/*.ts` (rest) | One system each: `archetypes`, `attributes`, `capture`, `catalog` (item effects), `encounters` (difficulty, enemy planning), `evolution`, `friendship`, `items` (bag use), `map` (stage graph), `mapItems` (repels, shop, money), `pokemon` (stats, XP), `profile`, `progress` (permanent), `regions`, `rewards` (five-choice draft), `runPrep`, `themes`. |
 | `src/data/` | Game content JSON + `index.ts` (loads and validates it). See the data index below. |
 | `src/game/` | `GameSession.ts` connects rules to saving (screens call it); `services.ts` shared objects. |

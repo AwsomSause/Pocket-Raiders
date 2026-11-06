@@ -1160,6 +1160,8 @@ export const RunStateSchema = z.object({
   looseHeld: z.record(z.string(), z.number().int().min(1)).optional(),
   /** Camp, gadgets and crafting (core/camp, W3): gadget wear, stuff, relics, luck, market buys. Optional: older saves load without it. */
   camp: CampStateSchema.optional(),
+  /** Overhaul slice 3 (core/variety.ts): recent picks per pool ('wild' = species families), newest last (run v39). */
+  history: z.record(z.string(), z.array(z.string())).default({}),
   /** Running totals some items need across a run (a Scarf's knockout bonus so far). */
   itemCounters: z.record(z.string(), z.number().int().min(0)).optional(),
   /** A bike chosen from the map's Items menu for the next move (see core/mapItems.ts). */
