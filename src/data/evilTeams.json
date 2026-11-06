@@ -1151,7 +1151,7 @@
     },
     "executive": {
      "name": "Branch Chief Faba",
-     "sprite": "boss.npc_gentleman",
+     "sprite": "trainer.pr/faba",
      "species": [
       "hypno",
       "claydol",
@@ -1257,7 +1257,7 @@
     },
     "specialist": {
      "name": "Cheer Captain",
-     "sprite": "boss.npc_crushgirl",
+     "sprite": "boss.marnie-masters4",
      "species": [
       "impidimp",
       "morgrem",
@@ -1381,7 +1381,7 @@
     },
     "specialist": {
      "name": "Star Mechanic",
-     "sprite": "boss.npc_engineer",
+     "sprite": "trainer.pr/mela",
      "species": [
       "varoom",
       "magnemite",
