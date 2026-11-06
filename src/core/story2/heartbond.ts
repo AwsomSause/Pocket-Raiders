@@ -200,3 +200,23 @@ export function takeBeat(run: RunState, text: Readonly<Record<string, string>>, 
   if (!line) return null;
   return renderTemplate(line, { pokemon: nameOf(mon) });
 }
+
+/**
+ * A Recovery stop (a healing stop): marks the Keystone Memory ready when level 10 is latched and returns its scene line, once.
+ * Also plays a waiting Temperament beat when the player did not just win a battle. Returns the lines to show, in order.
+ */
+export function recoveryScenes(run: RunState, text: Readonly<Record<string, string>>, nameOf: (mon: RunState['party'][number]) => string): string[] {
+  const v2 = run.story.v2;
+  const partner = v2?.heartbond.partner;
+  const mon = partner ? run.party.find((m) => m.uid === partner) : undefined;
+  if (!v2 || !mon) return [];
+  const out: string[] = [];
+  const beat = takeBeat(run, text, nameOf);
+  if (beat) out.push(beat);
+  if (markRecovery(v2)) {
+    const tm = temperamentOf(personalityOfMon(mon).id);
+    const line = tm ? text[`hb.keystone.${tm}`] : undefined;
+    if (line) out.push(renderTemplate(line, { pokemon: nameOf(mon) }));
+  }
+  return out;
+}
