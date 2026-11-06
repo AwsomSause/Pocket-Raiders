@@ -74,6 +74,8 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
+  /** S418 temporary mint: this nature counts instead of `nature` until `battles` more won battles have passed. */
+  tempNature: z.object({ nature: z.enum(NATURE_IDS), battles: z.number().int().min(1) }).optional(),
   /** S171 condition evolutions: uses of the moves a route counts (core/conditionEvolution.ts). */
   moveCounts: z.record(z.string(), z.number().int().min(0)).optional(),
   /** S158 Ability Awakening: times it showed its ability in battle (see battle/growthStats.ts). */
@@ -738,6 +740,8 @@ export const BattleStateSchema = z.object({
   raid: RaidBattleSchema.optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
+  strategy: z.string().optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */
   event: z.object({ eventId: z.string(), choiceIndex: z.number().int().min(0), sideId: z.string(), success: z.boolean(), step: z.number().int().min(0).optional() }).optional(),
   /** Battle Drama Engine: what the trainer has already said (see core/drama). */
@@ -1793,6 +1797,9 @@ export const SettingsSchema = z.object({
   rememberChoices: z.boolean().default(true),
   /** Fast Z-Move: the short Z-Move cinematic instead of the full reference scene (off by default). */
   fastZMove: z.boolean().default(false),
+  /** Fast Dynamax: the short Dynamax cutscene instead of the full reference scene (off by default). */
+  fastDynamax: z.boolean().default(false),
+  fastTera: z.boolean().default(false),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */

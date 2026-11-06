@@ -26,6 +26,11 @@ export function rollNature(key: string): NatureId {
   return NATURE_IDS[new Rng(hashSeed(`nature:${key}`)).int(0, NATURE_IDS.length - 1)]!;
 }
 
+/** The nature that counts right now: a temporary mint's, if one is active, otherwise its own. */
+export function effectiveNature(mon: { nature?: NatureId; tempNature?: { nature: NatureId; battles: number } }): NatureId | undefined {
+  return mon.tempNature && mon.tempNature.battles > 0 ? mon.tempNature.nature : mon.nature;
+}
+
 /** 1.1, 0.9 or 1 for this stat. */
 export function natureMultiplier(nature: NatureId | undefined, stat: string): number {
   if (!nature) return 1;

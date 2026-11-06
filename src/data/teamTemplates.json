@@ -1,0 +1,345 @@
+{
+ "note": "Overhaul slice 16. 17 team templates (THE OVERHAUL.md 14.3) and the role rules (14.4) for ordinary trainers. Gym Leaders, Elite Four, Champions and rivals keep their fixed teams. `from` = the earliest scaling band: early (stage 1-3), mid (4-8), late (9+).",
+ "bands": {
+  "midFrom": 4,
+  "lateFrom": 9
+ },
+ "repeatWindow": 3,
+ "repeatPenalty": 0.25,
+ "matchMultiplier": 3,
+ "focusMultiplier": 4,
+ "roles": {
+  "physicalAttacker": {
+   "all": {
+    "atk": 90
+   },
+   "beats": "spa"
+  },
+  "specialAttacker": {
+   "all": {
+    "spa": 90
+   },
+   "beats": "atk"
+  },
+  "wall": {
+   "anyOf": [
+    {
+     "def": 95
+    },
+    {
+     "hp": 90,
+     "def": 80
+    }
+   ]
+  },
+  "specialWall": {
+   "anyOf": [
+    {
+     "spd": 95
+    },
+    {
+     "hp": 90,
+     "spd": 80
+    }
+   ]
+  },
+  "sweeper": {
+   "all": {
+    "spe": 95
+   },
+   "offense": 85
+  },
+  "revengeKiller": {
+   "all": {
+    "spe": 100
+   },
+   "offense": 70
+  },
+  "support": {
+   "bulk": 270,
+   "maxOffense": 89
+  },
+  "pivot": {
+   "moves": [
+    "u-turn",
+    "volt-switch",
+    "flip-turn",
+    "parting-shot",
+    "teleport",
+    "baton-pass"
+   ]
+  },
+  "setupSweeper": {
+   "moves": [
+    "swords-dance",
+    "nasty-plot",
+    "calm-mind",
+    "dragon-dance",
+    "quiver-dance",
+    "bulk-up",
+    "shell-smash",
+    "agility",
+    "work-up"
+   ],
+   "offense": 80
+  },
+  "statusSpreader": {
+   "moves": [
+    "toxic",
+    "thunder-wave",
+    "will-o-wisp",
+    "spore",
+    "sleep-powder",
+    "stun-spore",
+    "hypnosis",
+    "glare"
+   ]
+  },
+  "hazardSetter": {
+   "moves": [
+    "stealth-rock",
+    "spikes",
+    "toxic-spikes",
+    "sticky-web"
+   ]
+  },
+  "hazardRemover": {
+   "moves": [
+    "rapid-spin",
+    "defog",
+    "mortal-spin"
+   ]
+  },
+  "speedControl": {
+   "moves": [
+    "tailwind",
+    "icy-wind",
+    "electroweb",
+    "thunder-wave",
+    "trick-room",
+    "string-shot",
+    "bulldoze"
+   ]
+  }
+ },
+ "tags": {
+  "weather": [
+   "rain-dance",
+   "sunny-day",
+   "sandstorm",
+   "snowscape",
+   "hail"
+  ],
+  "terrain": [
+   "electric-terrain",
+   "grassy-terrain",
+   "misty-terrain",
+   "psychic-terrain"
+  ],
+  "trickRoom": [
+   "trick-room"
+  ],
+  "setup": [
+   "swords-dance",
+   "nasty-plot",
+   "calm-mind",
+   "dragon-dance",
+   "quiver-dance",
+   "bulk-up",
+   "shell-smash"
+  ],
+  "status": [
+   "toxic",
+   "thunder-wave",
+   "will-o-wisp",
+   "spore",
+   "sleep-powder",
+   "stun-spore",
+   "hypnosis",
+   "glare"
+  ],
+  "hazard": [
+   "stealth-rock",
+   "spikes",
+   "toxic-spikes",
+   "sticky-web"
+  ],
+  "speed": [
+   "tailwind",
+   "icy-wind",
+   "electroweb",
+   "thunder-wave",
+   "trick-room"
+  ]
+ },
+ "templates": [
+  {
+   "id": "balanced",
+   "name": "Balanced",
+   "weight": 14,
+   "from": "early",
+   "roles": {}
+  },
+  {
+   "id": "offensive",
+   "name": "Offensive",
+   "weight": 12,
+   "from": "early",
+   "roles": {
+    "physicalAttacker": 2,
+    "specialAttacker": 2,
+    "sweeper": 1.5
+   }
+  },
+  {
+   "id": "defensive",
+   "name": "Defensive",
+   "weight": 10,
+   "from": "early",
+   "roles": {
+    "wall": 2.5,
+    "specialWall": 2.5,
+    "support": 1.5
+   }
+  },
+  {
+   "id": "hyper-offensive",
+   "name": "Hyper-offensive",
+   "weight": 6,
+   "from": "mid",
+   "roles": {
+    "sweeper": 3,
+    "revengeKiller": 2.5,
+    "physicalAttacker": 1.5,
+    "specialAttacker": 1.5,
+    "wall": 0.4
+   }
+  },
+  {
+   "id": "stall",
+   "name": "Stall",
+   "weight": 5,
+   "from": "mid",
+   "roles": {
+    "wall": 3,
+    "specialWall": 3,
+    "statusSpreader": 2.5,
+    "hazardSetter": 1.5,
+    "sweeper": 0.4
+   },
+   "tag": "status"
+  },
+  {
+   "id": "weather",
+   "name": "Weather",
+   "weight": 6,
+   "from": "mid",
+   "roles": {},
+   "tag": "weather"
+  },
+  {
+   "id": "terrain",
+   "name": "Terrain",
+   "weight": 5,
+   "from": "mid",
+   "roles": {},
+   "tag": "terrain"
+  },
+  {
+   "id": "trick-room",
+   "name": "Trick Room",
+   "weight": 4,
+   "from": "mid",
+   "roles": {
+    "wall": 1.5,
+    "sweeper": 0.3,
+    "revengeKiller": 0.3
+   },
+   "tag": "trickRoom"
+  },
+  {
+   "id": "setup",
+   "name": "Setup",
+   "weight": 7,
+   "from": "mid",
+   "roles": {
+    "setupSweeper": 3,
+    "support": 1.5
+   },
+   "tag": "setup"
+  },
+  {
+   "id": "status",
+   "name": "Status",
+   "weight": 6,
+   "from": "early",
+   "roles": {
+    "statusSpreader": 3
+   },
+   "tag": "status"
+  },
+  {
+   "id": "hazard",
+   "name": "Hazard",
+   "weight": 5,
+   "from": "mid",
+   "roles": {
+    "hazardSetter": 3,
+    "hazardRemover": 1.5,
+    "pivot": 1.5
+   },
+   "tag": "hazard"
+  },
+  {
+   "id": "speed-control",
+   "name": "Speed control",
+   "weight": 6,
+   "from": "mid",
+   "roles": {
+    "speedControl": 3,
+    "revengeKiller": 1.5
+   },
+   "tag": "speed"
+  },
+  {
+   "id": "monotype",
+   "name": "Monotype",
+   "weight": 7,
+   "from": "early",
+   "roles": {},
+   "focus": "monotype"
+  },
+  {
+   "id": "mixed-specialist",
+   "name": "Mixed-type specialist",
+   "weight": 7,
+   "from": "early",
+   "roles": {},
+   "focus": "mixed"
+  },
+  {
+   "id": "evolutionary-line",
+   "name": "Evolutionary line",
+   "weight": 4,
+   "from": "early",
+   "roles": {},
+   "focus": "line"
+  },
+  {
+   "id": "regional",
+   "name": "Regional",
+   "weight": 6,
+   "from": "early",
+   "roles": {},
+   "focus": "regional"
+  },
+  {
+   "id": "rare",
+   "name": "Rare Pokémon",
+   "weight": 3,
+   "from": "mid",
+   "roles": {},
+   "focus": "rare"
+  }
+ ]
+}

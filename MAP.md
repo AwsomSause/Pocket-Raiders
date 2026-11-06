@@ -15,6 +15,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `IMPLEMENTATION_PLAN.md` | Architecture, folder plan, every milestone's scope (341 lines). |
 | `CHECKLIST.md` | Per-milestone done/known-limits list from M7 on (165 lines). M0–M6 in `docs/archive/checklist-m0-m6.md`. |
 | `QUALITY_GATES.md` | Content support statuses, report tools, baseline workflow. |
+| `OVERHAUL_REPOSITORY_AUDIT.md` | The Overhaul P0 baseline (2026-11-06): test/fuzz/playtest results, bugs fixed, Pokémon database vs official data, dependency map. |
 | `SYSTEMS_AUDIT.md` | M8.6 audit of each system and its gaps. |
 | `FEATURE_INTERACTION_MATRIX.md` | Which systems touch which (items × battle × saves …). |
 | `package.json` | npm scripts: `dev`, `check`, `test`, `test:e2e`, `data:*` builders, `report:*`. |
@@ -59,7 +60,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `src/save/` | `saveManager.ts` versioned save records and migrations; `storage.ts` where bytes live. |
 | `src/scenes/` | Phaser screens: Boot, MainMenu, Hub (**big**, 710), RunPrep, Briefing, TrainerSelect, StarterSelect, Map, Battle (**big**, 940), Reward, Shop, Decision, GameOver; `routing.ts` picks the screen for a run phase. |
 | `src/ui/` | Shared UI: `widgets`, `theme`, `input`, `sprites`, `lazyAssets`, `audio`, `battleText`, `partyPanel`, `fieldMenus`, `showcase`, `battleFx/` (animation player). |
-| `src/quality/` | `supportStatus.ts` (content statuses), `contentReport.ts`, `balanceSim.ts`, `crossSystem.ts` (every species checked across battle, evolution, eggs, trades, forms, sprites), `knownLimits.json`. |
+| `src/quality/` | `supportStatus.ts` (content statuses), `contentReport.ts`, `balanceSim.ts`, `crossSystem.ts` (every species checked across battle, evolution, eggs, trades, forms, sprites), `speciesAudit.ts` (Pokémon database checks; `npm run data:validate`), `knownLimits.json`. |
 | `src/assets/catalog.ts` | The one place asset file names and folders are defined. |
 | `src/debug/debugPanel.ts` | F2 developer panel. |
 
@@ -78,7 +79,7 @@ Generated files: never hand-edit, never read whole. Rebuild with the npm script.
 | `megaStones.json` | 120 KB | `npm run data:megas` |
 | `zMoves.json` | 40 KB | `npm run data:zmoves` |
 
-Hand-edited (small): `balance.json` (all balance numbers), `itemCatalog.json` (**big**, 220 KB, item effects), `items.json`, `rewards.json`, `shop.json`, `bosses.json` (boss profiles), `trainers.json`, `archetypes.json`, `regions.json`, `themes.json` (153 type-pair stage themes), `typeChart.json`, `ruleset.json`, `runPrep.json`, `achievements.json`, `story.json`.
+Hand-edited (small): `speciesFixes.json` (checked corrections on top of species.json), `balance.json` (all balance numbers), `itemCatalog.json` (**big**, 220 KB, item effects), `items.json`, `rewards.json`, `shop.json`, `bosses.json` (boss profiles), `trainers.json`, `archetypes.json`, `regions.json`, `themes.json` (153 type-pair stage themes), `typeChart.json`, `ruleset.json`, `runPrep.json`, `achievements.json`, `story.json`.
 
 To look something up: `grep -n '"id": "pikachu"' src/data/species.json` then read ~40 lines around it, or use `node -e` with `JSON.parse` to print one entry.
 

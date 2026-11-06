@@ -228,6 +228,37 @@ export function aaiSurvivesKo(v: AaiView): boolean {
  * The value of a status move after the AAI reads, or null when no AAI rule covers it
  * (the engine's own rule then decides). 0 means "don't".
  */
+/**
+ * Overhaul slice 18: a boss plays the key moves of its named strategy (balance.bossStrategy) when they would do something:
+ * weather not already up, the hazard not already laid, Tailwind or Trick Room not running, set-up not already stacked.
+ * Returns a score (measured against the best attack), 0 when the move would do nothing, or null to score it normally.
+ */
+export function aaiStrategyValue(v: AaiView, move: Move): number | null {
+  const id = v.battle?.strategy;
+  if (!id || v.side !== 'enemy' || !v.battle) return null;
+  const def = v.content.balance.bossStrategy.strategies[id];
+  if (!def || !def.keyMoves.includes(move.id)) return null;
+  // About to be knocked out: no time for set-up.
+  if (v.threat() >= v.user.hp) return null;
+  const fx = move.effects;
+  const factor = v.content.balance.battleRisk.keyMoveFactor;
+  const targetSide = sideOf(v, 'target');
+  const userSide = sideOf(v, 'user');
+  if (fx.weather) return v.battle.weather?.id === fx.weather ? 0 : v.best * factor;
+  if (fx.sideMove === 'stealthRock') return targetSide?.stealthRock ? 0 : v.best * factor;
+  if (fx.sideMove === 'spikes') return (targetSide?.spikes ?? 0) >= 3 ? 0 : v.best * factor;
+  if (fx.sideMove === 'toxicSpikes') return (targetSide?.toxicSpikes ?? 0) >= 2 ? 0 : v.best * factor;
+  if (fx.sideMove === 'stickyWeb') return targetSide?.stickyWeb ? 0 : v.best * factor;
+  if (fx.sideMove === 'tailwind') return (userSide?.tailwind ?? 0) > 0 ? 0 : v.best * factor;
+  if (move.id === 'trick-room') return v.battle.field.trickRoom > 0 ? 0 : v.best * factor;
+  const boost = (fx.statChanges ?? []).some((c) => c.target === 'self' && c.stages > 0);
+  if (boost) {
+    const stacked = Object.values(v.stages).reduce((a, n) => a + Math.max(0, n ?? 0), 0);
+    return stacked >= 2 ? 0 : v.best * factor;
+  }
+  return null;
+}
+
 export function aaiStatusValue(v: AaiView, move: Move): number | null {
   const cfg = v.content.balance.trainerAi.aai;
   const fx = move.effects;
@@ -243,6 +274,8 @@ export function aaiStatusValue(v: AaiView, move: Move): number | null {
     if (v.targetAbility === 'magic-bounce' || v.targetAbility === 'good-as-gold') return 0;
     if (v.userAbility === 'prankster' && v.targetTypes.includes('dark')) return 0;
   }
+  const planned = cfg.strategy ? aaiStrategyValue(v, move) : null;
+  if (planned !== null) return planned;
   if (cfg.itemReads && fx.status && hitsFoe) {
     const shield = hooksOf({ content: v.content, battle: v.battle }, v.target, foeSideOf(v)).some(({ hook }) => hook.hook === 'statusImmune' && hook.statuses.includes(fx.status!.id));
     if (shield) return 0;

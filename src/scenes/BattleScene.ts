@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitLine } from '../ui/fitText';
@@ -65,6 +66,7 @@ import { resolveAnim } from '../core/presentation/animRegistry';
 import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { teraScene } from '../ui/battleFx/teraScene';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -1676,6 +1678,8 @@ export class BattleScene extends Phaser.Scene {
           this.showSprite('enemy', this.shown.enemy);
           await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
           if (battle.rivalNote) await this.say(battle.rivalNote);
+          const riskText = riskLine(services().session.content, battle, this.run.party);
+          if (riskText) await this.say(riskText);
           if (battle.nemesisNote) await this.say(battle.nemesisNote);
           if (battle.memory?.note) await this.say(battle.memory.note);
           if (battle.memoryNote) await this.say(battle.memoryNote);
@@ -2455,6 +2459,7 @@ export class BattleScene extends Phaser.Scene {
         tints: options.map((_, i) => {
           const slot = mon.moves[i];
           const move = slot ? (zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)) : undefined;
+          if (maxMoves?.[i]) return maxMoves[i]!.name.startsWith('G-Max') ? 0x3f9bbd : 0x6a5c9e;
           return move ? mixColor(TYPE_COLORS[move.type] ?? 0x888888, 0x000000, 0.35) : undefined;
         }),
         motion: this.motion,
@@ -3131,6 +3136,29 @@ export class BattleScene extends Phaser.Scene {
               }),
             );
             playSfx(this, 'se.level_up');
+          } else if (cine === 'tera' && this.motion === 'full' && !services().session.settings.fastTera && mon && teraType) {
+            // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
+            const sp = content.species.get(mon.speciesId)!;
+            const mine = e.side === 'player';
+            const playerArt = mine ? this.playerArt() : null;
+            const feel = this.cineFeel('tera');
+            const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
+            await this.playBeat(
+              teraScene(this, {
+                makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                backdropKey: this.arenaBgKey,
+                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
+                decorate: (v) => wearPattern(this, v, teraPatternKey(patternType), this.motion, () => undefined),
+                makeTrainer: playerArt ? (x, y) => trainerVisual(this, playerArt, '', x, y, 3.2) : null,
+                orbKey: 'cine.key.tera',
+                tint: glowColor,
+                opposes: !mine,
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
+            playSfx(this, 'se.level_up');
           } else if (cine) {
             const zMove = zBase ? zMoveFor(content, zBase) : null;
             await this.playBeat(
@@ -3144,6 +3172,15 @@ export class BattleScene extends Phaser.Scene {
                 title: zMove?.name,
                 titleId: zMove?.id,
                 ...this.cineFeel(cine),
+                trainer: e.side === 'player' ? () => { const art = this.playerArt(); return art ? trainerBackVisual(this, art, at.x - 170, at.y + 10, 260) : null; } : undefined,
+                fast: services().session.settings.fastDynamax,
+                enemySide: e.side === 'enemy',
+                calyrex: mon!.speciesId.startsWith('calyrex'),
+                trainerFront: e.side === 'player'
+                  ? () => { const art = this.playerArt(); return art ? trainerVisual(this, art, 'Trainer', at.x - 190, at.y + 10, 2) : null; }
+                  : !this.run.battle?.trainer
+                    ? undefined
+                    : () => { const art = this.trainerArt(); return art ? trainerVisual(this, art.assetId, art.label, at.x + 190, at.y + 10, 2) : null; },
                 onSwap: swapForm,
               }),
             );

@@ -14,6 +14,7 @@
 
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
+import { recentTemplates, rememberTemplate } from './teamTemplates';
 import { companionSupport } from './companionSupport';
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
 import { gimmickContext } from './gimmicks';
@@ -58,7 +59,7 @@ import {
   rollLegendaryWild,
   withPartyStrength,
 } from './encounters';
-import { evolve, evolveFully, type EvolutionResult } from './evolution';
+import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
@@ -1796,7 +1797,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         case 'champion':
           return planChampion(content, archetype, stage.leaderId, run.regionIndex, scale, r, bossRemix(run.rules) || run.story.flags[FINALE_FLAG] === 'pending', isFinalBoss(content, run));
         default:
-          return planTrainer(content, archetype, theme, stageNumber, scale, r, run.regionOrder[run.regionIndex]);
+          return planTrainer(content, archetype, theme, stageNumber, scale, r, run.regionOrder[run.regionIndex], `${run.seed}::${run.regionIndex}::${node.id}`, recentTemplates(run));
       }
     });
     // Trainer tiers: an ordinary trainer's team grows more skilled with progress (its own seed, so no roll changes).
@@ -1810,6 +1811,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const c = run.log.counters;
       if (((c.gymLeadersDefeated ?? 0) + (c.eliteFourDefeated ?? 0) + (c.championsDefeated ?? 0) + 1) % 3 === 0) plan = { ...plan, members: plan.members.map((m) => ({ ...m, level: m.level + bossLevels })) };
     }
+    if (node.kind === 'trainer' && plan.templateId) rememberTemplate(run, plan.templateId);
     // Gym Leader Personalities (S126): the leader's mood of the day shapes the opening (own hash, no roll moves).
     if (node.kind === 'gym' && content.balance.leaderMoods) plan = applyLeaderMood(plan, leaderMood(run.seed, stage.leaderId, `${run.regionIndex}:${stage.index}`));
     // The Rival Who Wins Without You (left-out 5.5): a rival that took over a Gym, reached the finals or became
@@ -1936,6 +1938,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
+    if (plan.strategy) run.battle.strategy = plan.strategy;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
     if (back) run.battle.returning = back.id;
@@ -2841,6 +2844,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     for (const mon of run.party) {
       if (mon.hp > 0 && battle.participants.includes(mon.uid)) changeFriendship(content, mon, boss ? perBossWon : perBattleWon, gainMultiplier);
     }
+    // A temporary mint wears off after the set number of won battles (S418).
+    for (const mon of run.party) {
+      if (mon.tempNature && battle.participants.includes(mon.uid)) {
+        if (mon.tempNature.battles <= 1) delete mon.tempNature;
+        else mon.tempNature = { ...mon.tempNature, battles: mon.tempNature.battles - 1 };
+      }
+    }
     // Shadow Pokémon that fought are soothed; at 0 the haze lifts.
     shadowPurified = soothePartyAfterBattle(content, run, battle.participants, shadowStages);
     // Freeing a Pokémon from the haze is a kindness the world remembers.
@@ -2855,6 +2865,12 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
       emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, content.species.get(evo.from)?.name ?? evo.from, content.species.get(evo.to)?.name ?? evo.to) });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+      const gift = evolutionGift(content, run, mon, evo);
+      if (gift) {
+        discover(run, gift.speciesId, true);
+        count(run, 'pokemonCaught');
+        caughtPending.push({ kind: 'caught', mon: gift });
+      }
     }
     // S171: a route by weather, a known move or a move used often enough.
     const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;

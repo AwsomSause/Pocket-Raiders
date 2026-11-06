@@ -18943,5 +18943,107 @@
    "passive": "expShare",
    "percent": 100
   }
+ },
+ {
+  "id": "fleeting-adamant-mint",
+  "name": "Fleeting Adamant Mint",
+  "family": "Natures and Mints",
+  "description": "Gives a Pokémon the Adamant nature (+Attack, −Sp. Atk) for 3 won battles, then its real nature returns.",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "adamant-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "adamant",
+   "battles": 3
+  }
+ },
+ {
+  "id": "fleeting-modest-mint",
+  "name": "Fleeting Modest Mint",
+  "family": "Natures and Mints",
+  "description": "Gives a Pokémon the Modest nature (+Sp. Atk, −Attack) for 3 won battles, then its real nature returns.",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "modest-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "modest",
+   "battles": 3
+  }
+ },
+ {
+  "id": "fleeting-jolly-mint",
+  "name": "Fleeting Jolly Mint",
+  "family": "Natures and Mints",
+  "description": "Gives a Pokémon the Jolly nature (+Speed, −Sp. Atk) for 3 won battles, then its real nature returns.",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "jolly-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "jolly",
+   "battles": 3
+  }
+ },
+ {
+  "id": "fleeting-timid-mint",
+  "name": "Fleeting Timid Mint",
+  "family": "Natures and Mints",
+  "description": "Gives a Pokémon the Timid nature (+Speed, −Attack) for 3 won battles, then its real nature returns.",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "timid-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "timid",
+   "battles": 3
+  }
+ },
+ {
+  "id": "fleeting-bold-mint",
+  "name": "Fleeting Bold Mint",
+  "family": "Natures and Mints",
+  "description": "Gives a Pokémon the Bold nature (+Defense, −Attack) for 3 won battles, then its real nature returns.",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "bold-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "bold",
+   "battles": 3
+  }
+ },
+ {
+  "id": "fleeting-calm-mint",
+  "name": "Fleeting Calm Mint",
+  "family": "Natures and Mints",
+  "description": "Gives a Pokémon the Calm nature (+Sp. Def, −Attack) for 3 won battles, then its real nature returns.",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "calm-mint",
+  "status": "supported",
+  "effect": {
+   "kind": "nature",
+   "nature": "calm",
+   "battles": 3
+  }
  }
 ]
