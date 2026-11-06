@@ -161,6 +161,21 @@ export const LOADING_TIPS: readonly string[] = [
   'Pin a Pokémon in the party screen to compare it with another.',
 ];
 /** Deterministic pick (no gameplay RNG): the tip for a counter such as the number of times the screen has loaded. */
+/** What a loading screen may say about the run in progress (S258). Names only; nothing here changes the run. */
+export interface RunTipContext { lead?: string; badges: number; money?: number }
+
+/** Every third loading screen of a run in progress talks about that run; the rest are the general tips. */
+export function loadingTipFor(counter: number, run: RunTipContext | null | undefined): string {
+  const n = ((counter % 3) + 3) % 3;
+  if (!run || n !== 2) return loadingTip(counter);
+  const lines = [
+    run.lead ? `${run.lead} is waiting at the front of your team.` : '',
+    run.badges > 0 ? `${run.badges} badge${run.badges === 1 ? '' : 's'} earned so far. Keep going!` : 'No badges yet. Every great run starts here.',
+    run.money !== undefined ? `You are carrying ₽${run.money}. Spend it before it spends you.` : '',
+  ].filter(Boolean);
+  return lines[Math.floor(counter / 3) % lines.length]!;
+}
+
 export const loadingTip = (counter: number): string => LOADING_TIPS[((counter % LOADING_TIPS.length) + LOADING_TIPS.length) % LOADING_TIPS.length]!;
 
 // --- Hold-to-confirm ----------------------------------------------------------------------------------------------

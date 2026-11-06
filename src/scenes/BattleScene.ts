@@ -98,6 +98,8 @@ import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
 import { portraitChip, type PortraitChip } from '../ui/battleFx/portrait';
 import { expressionFor } from '../core/presentation/expressions';
+import { cameraShot } from '../core/presentation/camera';
+import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
 import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
@@ -327,6 +329,8 @@ export class BattleScene extends Phaser.Scene {
       }),
     );
     this.startProceduralAudio(battle);
+    // S256: emote stickers (Settings > Sticker reactions).
+    if (services().session.settings.stickers) addStickerRow(this, () => PLAYER_POS, this.motion);
     this.menu = null;
     this.picker = null;
     this.advance = null;
@@ -1325,9 +1329,38 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  private camBusy = false;
+
+  /** S240: a short push-in toward the target of a big moment, then back. Presentation only; one shot at a time. */
+  private cameraMove(e: RunEvent): boolean {
+    try {
+      const st = services().session.settings;
+      if (st.battleCamera === 'off' || st.disableAllAnimations || !st.battleScreenEffects || this.camBusy) return false;
+      const side = 'side' in e ? e.side : undefined;
+      const bossAce = Boolean(this.boss()) && side === 'enemy' && e.type === 'faint' && this.run.battle ? this.run.battle.enemyIndex >= this.run.battle.enemyTeam.length - 1 : false;
+      const shot = cameraShot(st.battleCamera, { type: e.type, side, crit: e.type === 'damage' ? e.crit : undefined, effectiveness: e.type === 'damage' ? e.effectiveness : undefined, bossAce }, this.motion);
+      if (!shot || !side) return false;
+      const at = side === 'enemy' ? ENEMY_POS : PLAYER_POS;
+      const cam = this.cameras.main;
+      this.camBusy = true;
+      cam.pan(at.x, at.y - shot.lift, shot.moveMs, 'Sine.easeInOut');
+      cam.zoomTo(shot.zoom, shot.moveMs);
+      this.time.delayedCall(shot.moveMs + shot.holdMs, () => {
+        cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, shot.moveMs, 'Sine.easeInOut');
+        cam.zoomTo(1, shot.moveMs);
+        this.time.delayedCall(shot.moveMs, () => { this.camBusy = false; });
+      });
+      return true;
+    } catch {
+      this.camBusy = false;
+      return false;
+    }
+  }
+
   private focusPush(kind: 'ko' | 'phase'): void {
     const st = services().session.settings;
     if (this.motion !== 'full' || st.disableAllAnimations || !st.battleScreenEffects) return;
+    if (kind === 'ko' && st.battleCamera !== 'off') return;
     const f = cameraFocus(kind, animationStrength(st));
     const cam = this.cameras.main;
     this.tweens.add({ targets: cam, zoom: 1 + f.zoom, duration: f.ms / 2, yoyo: true, ease: 'Sine.easeInOut' });
@@ -2701,7 +2734,7 @@ export class BattleScene extends Phaser.Scene {
     const { battleAnimations } = session.settings;
     const effectIntensity = capFlash(session.settings.effectIntensity, session.settings.reducedFlash);
     // What the screen shows for each event; worked out from the finished turn, so it can't change it.
-    const cues = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
+    const cues = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
 
     for (const [index, e] of events.entries()) {
       // "Charmander used Ember!" goes up before its animation; other messages follow theirs.
@@ -2745,6 +2778,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
+          if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && e.side === 'enemy' && session.settings.skillPrompts)) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
           mon!.hp = e.hpAfter;
           if (e.type !== 'drain' && e.type !== 'heal') {
@@ -2801,7 +2835,7 @@ export class BattleScene extends Phaser.Scene {
         case 'faint':
           mon!.hp = 0;
           playSfx(this, 'se.faint');
-          this.focusPush('ko');
+          if (!this.cameraMove(e)) this.focusPush('ko');
           if (sprite) this.tweens.killTweensOf(sprite);
           if (sprite) await tween(this, { targets: sprite, alpha: 0, y: sprite.y + 30, duration: 400 });
           break;
