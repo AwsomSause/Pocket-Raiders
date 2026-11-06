@@ -11,6 +11,7 @@ import { isUsableMove } from './pokemon';
 import { eliteLevelOffset, isLegendaryLike, wildWeightPerk } from './trainerPerks';
 import { auditEncounter, directSpecies } from './encounterDirector';
 import { applyBossBand } from './bossBands';
+import { applyBossStrategy } from './bossStrategy';
 import { baseStatTotal, pickThemeSpecies, RIVAL_CLASS, trainerClassesFor } from './themes';
 
 export type EnemyLevelBreakdown = LevelBreakdown;
@@ -200,6 +201,8 @@ export interface PlannedMember {
 }
 
 export interface TrainerPlan {
+  /** Overhaul slice 17: the boss's named strategy id (balance.bossStrategy), for bosses only. */
+  strategy?: string;
   classId: string;
   name: string;
   /** Set for gym leaders, Elite Four members and champions. */
@@ -374,10 +377,13 @@ function planBoss(content: Content, archetype: Archetype, role: BossRole, bossId
   });
   // Past level 100 the team is upgraded for its band (stronger species, moves, items, training, AI).
   const banded = applyBossBand(content, authored, boss.signature, team.ai, role === 'gym' && number >= content.balance.competitiveGyms.fromStage);
-  const members = banded.members;
+  // Overhaul slice 17: the boss's named strategy sets the opener, the ace's item and a sharper AI.
+  const shaped = applyBossStrategy(content, bossId, role, number, banded.members, banded.ai);
+  const members = shaped.members;
+  const shapedInfo = shaped.order.map((i) => levelInfo[i]!);
   // Authored teams are checked against the role's threat budget and logged, never re-rolled (Balancing Phase 8).
   members.forEach((m, i) => auditEncounter(content, role, createPlannedPokemon(content, m, `audit:${bossId}:${i}`), 'authored-boss-team'));
-  return { classId, name: boss.name, leaderId: bossId, members, levelInfo, ai: banded.ai };
+  return { classId, name: boss.name, leaderId: bossId, members, levelInfo: shapedInfo, ai: shaped.ai, ...(shaped.strategy ? { strategy: shaped.strategy.id } : {}) };
 }
 
 /** The gym leader's team for the run's `stageNumber`-th stage (0-based). */

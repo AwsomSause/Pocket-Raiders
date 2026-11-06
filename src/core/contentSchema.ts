@@ -2336,6 +2336,18 @@ export const BalanceSchema = z.object({
   hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
   /** Beta 4.4: the next stage is built from what the player did on the last (core/stagePlan.ts). Thresholds per stage. */
   stagePlan: z.object({ catcher: z.number().int().min(1), fighter: z.number().int().min(1), explorer: z.number().int().min(1), shopper: z.number().int().min(1), heals: z.number().int().min(1), wipes: z.number().int().min(1), themeBonus: z.number().min(0), maxSignals: z.number().int().min(0) }).default({ catcher: 2, fighter: 5, explorer: 2, shopper: 3000, heals: 2, wipes: 1, themeBonus: 3, maxSignals: 2 }),
+  /** Overhaul slice 17: every Gym Leader, Elite Four member and Champion has a named strategy (opener, ace item, sharper AI). */
+  bossStrategy: z
+    .object({
+      enabled: z.boolean(),
+      aiBonus: z.object({ gym: z.number().min(0).max(1), elite: z.number().min(0).max(1), champion: z.number().min(0).max(1) }),
+      aceItemFromStage: z.number().int().min(0),
+      fallback: z.string(),
+      strategies: z.record(z.string(), z.object({ name: z.string().min(1), summary: z.string().min(1), keyMoves: z.array(z.string()), aceItem: z.string() })),
+      byType: z.record(z.string(), z.string()),
+      byBoss: z.record(z.string(), z.string()),
+    })
+    .default({ enabled: false, aiBonus: { gym: 0, elite: 0, champion: 0 }, aceItemFromStage: 0, fallback: 'balanced', strategies: {}, byType: {}, byBoss: {} }),
   competitiveGyms: z.object({ fromStage: z.number().int().min(0), training: z.number().int().min(0), ai: z.number().min(0).max(1), items: z.array(z.string()) }).default({ fromStage: 4, training: 1, ai: 0.1, items: ['leftovers', 'life-orb', 'sitrus-berry', 'expert-belt'] }),
   bossBands: z.array(z.object({ minLevel: z.number().int().min(101), training: z.number().int().min(0), ai: z.number().min(0).max(1), signatureSwaps: z.number().int().min(0), items: z.array(z.string()) })).default([]),
   /** Combat Threat Rating (core/threat.ts) and the Encounter Director (core/encounterDirector.ts). 100 = all-70 base stats with a 60-power same-type attack. */
