@@ -16,6 +16,7 @@ import type { PokemonInstance, RunState } from '../state';
 import { PARTY_LIFE, createPartyLife, type Pair, type PartyLifeState, type Personality, type Scene, type SceneEffect, type Vignette } from './schema';
 
 export * from './schema';
+import { identityLine } from '../overhaul/personality';
 const RULES = PARTY_LIFE.rules;
 const BOSS_KINDS = ['gym', 'elite', 'champion'];
 
@@ -38,6 +39,8 @@ export interface PersonalityView {
   quirk: string;
   /** What it says about being left in the box (used by the sulk scene). */
   sulk: string;
+  /** Overhaul slice 21: the pack's personality and quirk for this Pokémon (core/overhaul/personality.ts). */
+  identity: string;
 }
 
 export const personalityData = (trait: string): Personality => PARTY_LIFE.personalities[trait] ?? PARTY_LIFE.personalities.patient!;
@@ -46,7 +49,7 @@ export const personalityData = (trait: string): Personality => PARTY_LIFE.person
 export function personalityOf(run: RunState, mon: PokemonInstance): PersonalityView {
   const trait = bondOf(run, mon.uid).trait;
   const p = personalityData(trait);
-  return { trait, label: p.label, blurb: p.blurb, quirk: PARTY_LIFE.quirks[fnv(`${mon.uid}:quirk`) % PARTY_LIFE.quirks.length]!, sulk: p.sulk };
+  return { trait, label: p.label, blurb: p.blurb, quirk: PARTY_LIFE.quirks[fnv(`${mon.uid}:quirk`) % PARTY_LIFE.quirks.length]!, sulk: p.sulk, identity: identityLine(mon) };
 }
 
 const traitOf = (run: RunState, uid: string): string => bondOf(run, uid).trait;

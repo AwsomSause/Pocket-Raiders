@@ -117,7 +117,7 @@ export function openScrapbook(host: FieldMenuHost): void {
 export function personalityLines(content: Content, run: RunState, mon: PokemonInstance): { header: string; relations: string } {
   const p = personalityOf(run, mon);
   const relations = relationLines(content, run, mon).slice(0, 3).join('  ·  ');
-  return { header: `${p.label}: ${p.blurb} It ${p.quirk}.`, relations };
+  return { header: `${p.label}: ${p.blurb} It ${p.quirk}. ${p.identity}`, relations };
 }
 
 /** The party's atmosphere for the Bonds screen title. */
