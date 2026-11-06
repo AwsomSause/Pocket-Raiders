@@ -18,6 +18,7 @@ import Phaser from 'phaser';
 import { availableMentors, bondOf, categoryName, mentorUnlocked, MENTORS, tierName } from '../core/mentors';
 import { taleEntries } from '../core/npcMemory';
 import { loreArchiveSummary, openLoreArchive } from '../ui/loreArchiveMenu';
+import { castSummary, openCastDatabase } from '../ui/castMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
 import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, STARTER_POOL_CATEGORIES, type Achievement, type Archetype, type QuestReward, type Species, type StarterPoolCategory } from '../core/contentSchema';
 import { claimProblem, requirementParts, requirementProgress, trainerStatus, type TrainerStatus } from '../core/progress';
@@ -1948,25 +1949,23 @@ export class HubScene extends Phaser.Scene {
       },
     }));
     const lore = loreArchiveSummary();
-    if (lore.total > 0) {
-      rows.unshift({
-        problem: null,
-        hint: 'The story archive: people, places, teams and mysteries you have found in your runs.',
-        draw: (scene, box, w, h) => {
-          box.add(scene.add.text(12, h / 2, 'Lore Archive', textStyle(16, COLORS.text)).setOrigin(0, 0.5));
-          box.add(scene.add.text(w - 12, h / 2, `${lore.found}/${lore.total}`, textStyle(13, COLORS.textMuted)).setOrigin(1, 0.5));
-        },
-      });
-    }
-    const hasLore = lore.total > 0;
+    const cast = castSummary();
+    const host = { open: (c: Parameters<typeof this.openPicker>[0]) => { this.picker?.close(); this.openPicker(c); }, close: () => this.closePicker() };
+    const backToTales = () => { this.picker?.close(); this.openTales(); };
+    const extras: { label: string; right: string; hint: string; go: () => void }[] = [];
+    if (lore.total > 0) extras.push({ label: 'Lore Archive', right: `${lore.found}/${lore.total}`, hint: 'The story archive: people, places, teams and mysteries you have found in your runs.', go: () => openLoreArchive(host, backToTales) });
+    if (cast.total > 0) extras.push({ label: 'Character Database', right: `${cast.met}/${cast.total}`, hint: 'Everyone you have met in the story: who they are, your record against them, and the tellings you have seen.', go: () => openCastDatabase(host, backToTales) });
+    rows.unshift(...extras.map((x) => ({
+      problem: null,
+      hint: x.hint,
+      draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number, h: number) => {
+        box.add(scene.add.text(12, h / 2, x.label, textStyle(16, COLORS.text)).setOrigin(0, 0.5));
+        box.add(scene.add.text(w - 12, h / 2, x.right, textStyle(13, COLORS.textMuted)).setOrigin(1, 0.5));
+      },
+    })));
     this.openPicker({
       title: 'Tales & News', rows, columns: 2, rowHeight: 40,
-      onSelect: (i) => {
-        if (hasLore && i === 0) {
-          this.picker?.close();
-          openLoreArchive({ open: (c) => { this.picker?.close(); this.openPicker(c); }, close: () => this.closePicker() }, () => { this.picker?.close(); this.openTales(); });
-        }
-      },
+      onSelect: (i) => extras[i]?.go(),
       onBack: () => this.closePicker(),
     });
   }

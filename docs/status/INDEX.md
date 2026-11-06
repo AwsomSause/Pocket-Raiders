@@ -350,3 +350,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `story-s14-news-lore.md`: Story S14: 40 news headlines, Chronicle text templates, 6 Field Notes, token gate (text only; screens come later).
 - `story-s13-relationships.md`: Story S13 part 1: Relationships page (view model, map menu button).
 - `story-s13-lore-archive.md`: Story S13 part 2: Lore Archive (view model, Hub Tales & News row).
+- `story-s13-cast.md`: Story S13 part 3: Character Database (view model, Hub Tales & News row).
