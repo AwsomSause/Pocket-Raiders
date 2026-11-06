@@ -9,7 +9,8 @@ import type { HyperAttribute, HyperContext } from '../battle/hyper';
 import type { Content } from '../contentSchema';
 import { currentEmotion } from './emotions';
 import { Rng } from '../rng';
-import { bonusFriendship, hyperChancePerk } from '../trainerPerks';
+import { bonusFriendship, hyperChancePerk, isBossClass } from '../trainerPerks';
+import { activationFactor, previousUses, turnsOnField } from './hyperRules';
 import type { RunState } from '../state';
 import type { HyperChance, PokemonHistory, StoryEffectSpec, StoryTriggerKind } from './schema';
 
@@ -90,7 +91,11 @@ export function buildHyperContext(content: Content, run: RunState, rng: Rng): Hy
       if (cond.minFriendship !== undefined && (bonusFriendship(perks, mon.friendship) < cond.minFriendship || friendshipOff)) return null;
       if (cond.needsMemory && !cond.needsMemory.some((m) => hasMemory(history, m))) return null;
       const again = (history?.hyper[def.id] ?? 0) > 0 && def.variants.again !== undefined;
-      return { def, chance: def.chance ? Math.min(1, hyperChance(def.chance, attrs, again) * hyperChancePerk(perks) * content.story.rarity.hyperScale) : 1, variant: again ? 'again' : null };
+      // Overhaul slice 9: Hyper/Overdrive rules (too fresh, repeats, big fights) only scale the chance; the roll itself is unchanged.
+      const family = def.family;
+      const factor = family && run.battle ? activationFactor(content, def, { turnsOnField: turnsOnField(run, mon.uid), previousUses: previousUses(content, run, mon.uid, family, def.id), intense: intenseBattle(run) }) : 1;
+      if (factor === 0) return null;
+      return { def, chance: def.chance ? Math.min(1, hyperChance(def.chance, attrs, again) * hyperChancePerk(perks) * content.story.rarity.hyperScale * factor) : 1, variant: again ? 'again' : null };
     },
     attributeShare(attribute) {
       return Math.min(1, attributePoints(attrs, attribute) / content.balance.attributeMax);
@@ -105,6 +110,12 @@ export function buildHyperContext(content: Content, run: RunState, rng: Rng): Hy
       return friendlyRivalsOf(run, uid);
     },
   };
+}
+
+/** A boss, rival or raid fight (the battles where Hyper and Overdrive are most likely). */
+export function intenseBattle(run: RunState): boolean {
+  const b = run.battle;
+  return Boolean(b && (b.raid || b.rivalId || (b.trainer && isBossClass(b.trainer.classId))));
 }
 
 /** The teammates a Pokémon has a Friendly Competition with (open rivalries between two of your Pokémon still in the party). */

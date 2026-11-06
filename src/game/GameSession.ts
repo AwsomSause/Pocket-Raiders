@@ -887,6 +887,14 @@ export class GameSession {
     this.changed();
   }
 
+  /** Overhaul slice 9: remembers that a Hyper/Overdrive explanation was read, so it shows only once. */
+  markHyperExplained(keys: readonly string[]): void {
+    const fresh = keys.filter((k) => !this.profile.hyperExplained.includes(k));
+    if (fresh.length === 0) return;
+    this.profile = { ...this.profile, hyperExplained: [...this.profile.hyperExplained, ...fresh] };
+    this.checkSave(this.saves.saveProfile(this.profile));
+  }
+
   /** Claims a trainer in the Trainer Archive (its requirement must be met; may cost Bank Credits). */
   claimTrainer(archetypeId: string): void {
     this.profile = claimTrainer(this.content, this.profile, archetypeId);

@@ -1642,6 +1642,8 @@ export const ProfileSchema = z.object({
   legacy: LegacySchema.optional(),
   /** Hyper moment codex (core/story/codex.ts): times each story moment (story.json id) was seen, over all runs. */
   momentCodex: z.record(z.string(), z.number().int().min(0)).default({}),
+  /** Overhaul slice 9: the Hyper/Overdrive explanations you have read ("family:hyper", "kind:defy"...), so each full explanation shows once (profile v19). */
+  hyperExplained: z.array(z.string()).default([]),
   /** Lasting bonds with mentors, by mentor id (core/mentors). */
   mentorBonds: z.record(z.string(), MentorBondSchema).default({}),
   /** Legacy runs (core/legacyRuns.ts): every finished run's immutable record, newest first (profile v14). */

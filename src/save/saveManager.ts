@@ -36,7 +36,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 18, run: 38, settings: 38, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 19, run: 38, settings: 38, meta: 1, timeline: 1 };
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -126,6 +126,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     16: (data) => ({ ...(data as Json), hubTown: { pokemon: null, merchantDay: '', bought: [] } }),
     // v18 (Treasure Hunt Season): older profiles hold no map pieces yet.
     17: (data) => ({ ...(data as Json), treasureHunt: { pieces: [], claimed: false } }),
+    // v19 (Overhaul slice 9): no Hyper/Overdrive explanation has been read yet.
+    18: (data) => ({ ...(data as Json), hyperExplained: [] }),
   },
   run: {
     // v2 (Milestone 2): Bag, candies, pending decisions, and battles against
