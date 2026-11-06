@@ -17,6 +17,7 @@ import { contractBoard, contractDone, contractRewardText } from '../core/contrac
 import Phaser from 'phaser';
 import { availableMentors, bondOf, categoryName, mentorUnlocked, MENTORS, tierName } from '../core/mentors';
 import { taleEntries } from '../core/npcMemory';
+import { loreArchiveSummary, openLoreArchive } from '../ui/loreArchiveMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
 import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, STARTER_POOL_CATEGORIES, type Achievement, type Archetype, type QuestReward, type Species, type StarterPoolCategory } from '../core/contentSchema';
 import { claimProblem, requirementParts, requirementProgress, trainerStatus, type TrainerStatus } from '../core/progress';
@@ -1946,7 +1947,28 @@ export class HubScene extends Phaser.Scene {
         box.add(scene.add.text(w - 12, h / 2, e.right, textStyle(13, COLORS.textMuted)).setOrigin(1, 0.5));
       },
     }));
-    this.openPicker({ title: 'Tales & News', rows, columns: 2, rowHeight: 40, onSelect: () => undefined, onBack: () => this.closePicker() });
+    const lore = loreArchiveSummary();
+    if (lore.total > 0) {
+      rows.unshift({
+        problem: null,
+        hint: 'The story archive: people, places, teams and mysteries you have found in your runs.',
+        draw: (scene, box, w, h) => {
+          box.add(scene.add.text(12, h / 2, 'Lore Archive', textStyle(16, COLORS.text)).setOrigin(0, 0.5));
+          box.add(scene.add.text(w - 12, h / 2, `${lore.found}/${lore.total}`, textStyle(13, COLORS.textMuted)).setOrigin(1, 0.5));
+        },
+      });
+    }
+    const hasLore = lore.total > 0;
+    this.openPicker({
+      title: 'Tales & News', rows, columns: 2, rowHeight: 40,
+      onSelect: (i) => {
+        if (hasLore && i === 0) {
+          this.picker?.close();
+          openLoreArchive({ open: (c) => { this.picker?.close(); this.openPicker(c); }, close: () => this.closePicker() }, () => { this.picker?.close(); this.openTales(); });
+        }
+      },
+      onBack: () => this.closePicker(),
+    });
   }
 
   private openCodex(): void {
