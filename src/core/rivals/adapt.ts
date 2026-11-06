@@ -85,6 +85,8 @@ export interface RivalReturn {
   plan: TrainerPlan;
   /** What the rival learned, shown before the battle (null if nothing in its team helps). */
   note: string | null;
+  /** W2: the resist swap (trigger #6) changed the team, so this meeting's hard counter is used. */
+  countered?: boolean;
 }
 
 /** The rival's team for its return: its old Pokémon at the new levels, with one counter-pick. */
@@ -100,7 +102,7 @@ export function rivalReturn(content: Content, run: RunState, rival: Rival, plan:
   const ally = allianceHelp(content, run, rival, { ...base.plan, members });
   members = ally.plan.members;
   const note = [base.note, sub?.note, shifted.note, ally.note, legacyNote(rival), legacyLine(rival)].filter(Boolean).join(' ') || null;
-  return { plan: { ...base.plan, members }, note };
+  return { plan: { ...base.plan, members }, note, ...(base.countered ? { countered: true } : {}) };
 }
 
 function baseReturn(content: Content, run: RunState, rival: Rival, plan: TrainerPlan, effect: RematchEffect): RivalReturn {
@@ -141,7 +143,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
     notes.push(`${rival.name} studied your ${t} moves and brought ${getSpecies(content, counter).name}.`);
   });
   if (notes.length === 0) return { plan: planned, note: seen };
-  return { plan: { ...planned, members }, note: `${notes.join(' ')}${seen ? ` ${seen}` : ''}` };
+  return { plan: { ...planned, members }, note: `${notes.join(' ')}${seen ? ` ${seen}` : ''}`, countered: true };
 }
 
 /** Makes sure the team has a Pokémon of each type, swapping in a species of similar strength for the last members. */

@@ -1,0 +1,668 @@
+{
+ "note": "Story Overhaul W2 (design 14.6): ace development ladders. One row per rival and phase (early, mid, late, champion); each step adds exactly one change (a move, a held item, a gimmick, or nothing new). Phases start at the regions in balance.rivalCoverage.phaseStarts. Gimmick rows are limited: rival Mega Evolution is not built, so they only give the stone when it exists. Story-only rivals (Dara to Marisol) wait for Story Run.",
+ "ladders": [
+  {
+   "rival": "Blue",
+   "phase": "early",
+   "species": "pidgeotto",
+   "change": {
+    "kind": "move",
+    "text": "{ace} leads with Quick Attack.",
+    "id": "quick-attack"
+   }
+  },
+  {
+   "rival": "Blue",
+   "phase": "mid",
+   "species": "pidgeot",
+   "change": {
+    "kind": "move",
+    "text": "{ace} has a surprise Heat Wave.",
+    "id": "heat-wave"
+   }
+  },
+  {
+   "rival": "Blue",
+   "phase": "late",
+   "species": "pidgeot",
+   "change": {
+    "kind": "item",
+    "text": "{ace} holds a Pidgeotite.",
+    "id": "pidgeotite"
+   }
+  },
+  {
+   "rival": "Blue",
+   "phase": "champion",
+   "species": "pidgeot",
+   "change": {
+    "kind": "gimmick",
+    "text": "{ace} is ready to Mega Evolve.",
+    "id": "pidgeotite"
+   }
+  },
+  {
+   "rival": "Silver",
+   "phase": "early",
+   "species": "sneasel",
+   "change": {
+    "kind": "move",
+    "text": "{ace} strikes first with Ice Shard.",
+    "id": "ice-shard"
+   }
+  },
+  {
+   "rival": "Silver",
+   "phase": "mid",
+   "species": "weavile",
+   "change": {
+    "kind": "move",
+    "text": "{ace} hunts anything that runs with Pursuit.",
+    "id": "pursuit"
+   }
+  },
+  {
+   "rival": "Silver",
+   "phase": "late",
+   "species": "weavile",
+   "change": {
+    "kind": "item",
+    "text": "{ace} holds a Focus Sash.",
+    "id": "focus-sash"
+   }
+  },
+  {
+   "rival": "Silver",
+   "phase": "champion",
+   "species": "weavile",
+   "change": {
+    "kind": "item",
+    "text": "{ace} holds a Razor Claw.",
+    "id": "razor-claw"
+   }
+  },
+  {
+   "rival": "N",
+   "phase": "early",
+   "species": "zorua",
+   "change": {
+    "kind": "none",
+    "text": "{ace} fights plainly, for now."
+   }
+  },
+  {
+   "rival": "N",
+   "phase": "mid",
+   "species": "zoroark",
+   "change": {
+    "kind": "none",
+    "text": "Something about {ace} feels hidden."
+   }
+  },
+  {
+   "rival": "N",
+   "phase": "late",
+   "species": "zoroark",
+   "change": {
+    "kind": "none",
+    "text": "{ace} could be anyone on that team."
+   }
+  },
+  {
+   "rival": "N",
+   "phase": "champion",
+   "species": "zoroark",
+   "change": {
+    "kind": "none",
+    "text": "Something is wrong with the roster."
+   }
+  },
+  {
+   "rival": "Wally",
+   "phase": "early",
+   "species": "ralts",
+   "change": {
+    "kind": "move",
+    "text": "{ace} meditates with Calm Mind.",
+    "id": "calm-mind"
+   }
+  },
+  {
+   "rival": "Wally",
+   "phase": "mid",
+   "species": "kirlia",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Wally",
+   "phase": "late",
+   "species": "gardevoir",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Mystical Fire.",
+    "id": "mystical-fire"
+   }
+  },
+  {
+   "rival": "Wally",
+   "phase": "champion",
+   "species": "gardevoir",
+   "change": {
+    "kind": "gimmick",
+    "text": "{ace} is ready to Mega Evolve.",
+    "id": "gardevoirite"
+   }
+  },
+  {
+   "rival": "Hugh",
+   "phase": "early",
+   "species": "tepig",
+   "change": {
+    "kind": "move",
+    "text": "{ace} charges in with Tackle.",
+    "id": "tackle"
+   }
+  },
+  {
+   "rival": "Hugh",
+   "phase": "mid",
+   "species": "pignite",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned the recoil lesson of Flare Blitz.",
+    "id": "flare-blitz"
+   }
+  },
+  {
+   "rival": "Hugh",
+   "phase": "late",
+   "species": "emboar",
+   "change": {
+    "kind": "item",
+    "text": "{ace} holds a Choice Band.",
+    "id": "choice-band"
+   }
+  },
+  {
+   "rival": "Hugh",
+   "phase": "champion",
+   "species": "emboar",
+   "change": {
+    "kind": "move",
+    "text": "{ace} fights hardest when cornered with Reversal.",
+    "id": "reversal"
+   }
+  },
+  {
+   "rival": "Gladion",
+   "phase": "early",
+   "species": "type-null",
+   "change": {
+    "kind": "none",
+    "text": "{ace} is held back by its helmet."
+   }
+  },
+  {
+   "rival": "Gladion",
+   "phase": "mid",
+   "species": "silvally",
+   "change": {
+    "kind": "none",
+    "text": "{ace} carries a Memory."
+   }
+  },
+  {
+   "rival": "Gladion",
+   "phase": "late",
+   "species": "silvally",
+   "change": {
+    "kind": "none",
+    "text": "{ace} changes its Memory for you."
+   }
+  },
+  {
+   "rival": "Gladion",
+   "phase": "champion",
+   "species": "silvally",
+   "change": {
+    "kind": "none",
+    "text": "{ace} brings two Memories."
+   }
+  },
+  {
+   "rival": "Bede",
+   "phase": "early",
+   "species": "hatenna",
+   "change": {
+    "kind": "move",
+    "text": "{ace} uses Fairy Wind.",
+    "id": "fairy-wind"
+   }
+  },
+  {
+   "rival": "Bede",
+   "phase": "mid",
+   "species": "hattrem",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Bede",
+   "phase": "late",
+   "species": "hatterene",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Dazzling Gleam.",
+    "id": "dazzling-gleam"
+   }
+  },
+  {
+   "rival": "Bede",
+   "phase": "champion",
+   "species": "hatterene",
+   "change": {
+    "kind": "gimmick",
+    "text": "{ace} is ready for its big moment."
+   }
+  },
+  {
+   "rival": "Hop",
+   "phase": "early",
+   "species": "wooloo",
+   "change": {
+    "kind": "none",
+    "text": "{ace} is eager to battle."
+   }
+  },
+  {
+   "rival": "Hop",
+   "phase": "mid",
+   "species": "dubwool",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Cotton Guard.",
+    "id": "cotton-guard"
+   }
+  },
+  {
+   "rival": "Hop",
+   "phase": "late",
+   "species": "dubwool",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Body Press.",
+    "id": "body-press"
+   }
+  },
+  {
+   "rival": "Hop",
+   "phase": "champion",
+   "species": "dubwool",
+   "change": {
+    "kind": "item",
+    "text": "{ace} holds a Choice Scarf.",
+    "id": "choice-scarf"
+   }
+  },
+  {
+   "rival": "Nemona",
+   "phase": "early",
+   "species": "lycanroc",
+   "change": {
+    "kind": "move",
+    "text": "{ace} opens with Accelerock.",
+    "id": "accelerock"
+   }
+  },
+  {
+   "rival": "Nemona",
+   "phase": "mid",
+   "species": "lycanroc",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Stone Edge.",
+    "id": "stone-edge"
+   }
+  },
+  {
+   "rival": "Nemona",
+   "phase": "late",
+   "species": "lycanroc-midnight",
+   "change": {
+    "kind": "move",
+    "text": "{ace} waits to Counter.",
+    "id": "counter"
+   }
+  },
+  {
+   "rival": "Nemona",
+   "phase": "champion",
+   "species": "lycanroc-dusk",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Close Combat.",
+    "id": "close-combat"
+   }
+  },
+  {
+   "rival": "Kieran",
+   "phase": "early",
+   "species": "poliwhirl",
+   "change": {
+    "kind": "none",
+    "text": "{ace} is eager to prove itself."
+   }
+  },
+  {
+   "rival": "Kieran",
+   "phase": "mid",
+   "species": "poliwrath",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Close Combat.",
+    "id": "close-combat"
+   }
+  },
+  {
+   "rival": "Kieran",
+   "phase": "late",
+   "species": "poliwrath",
+   "change": {
+    "kind": "move",
+    "text": "{ace} is charging a Focus Punch.",
+    "id": "focus-punch"
+   }
+  },
+  {
+   "rival": "Kieran",
+   "phase": "champion",
+   "species": "poliwrath",
+   "change": {
+    "kind": "none",
+    "text": "{ace} wants this rematch."
+   }
+  },
+  {
+   "rival": "Dara",
+   "phase": "early",
+   "species": "starly",
+   "change": {
+    "kind": "move",
+    "text": "{ace} darts in with Quick Attack.",
+    "id": "quick-attack"
+   },
+   "nickname": "Postmark"
+  },
+  {
+   "rival": "Dara",
+   "phase": "mid",
+   "species": "staravia",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Aerial Ace.",
+    "id": "aerial-ace"
+   }
+  },
+  {
+   "rival": "Dara",
+   "phase": "late",
+   "species": "staraptor",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Close Combat.",
+    "id": "close-combat"
+   }
+  },
+  {
+   "rival": "Dara",
+   "phase": "champion",
+   "species": "staraptor",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Brave Bird.",
+    "id": "brave-bird"
+   }
+  },
+  {
+   "rival": "Hale",
+   "phase": "early",
+   "species": "jangmo-o",
+   "change": {
+    "kind": "move",
+    "text": "{ace} dances with Dragon Dance.",
+    "id": "dragon-dance"
+   }
+  },
+  {
+   "rival": "Hale",
+   "phase": "mid",
+   "species": "hakamo-o",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Hale",
+   "phase": "late",
+   "species": "kommo-o",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Clanging Scales.",
+    "id": "clanging-scales"
+   }
+  },
+  {
+   "rival": "Hale",
+   "phase": "champion",
+   "species": "kommo-o",
+   "change": {
+    "kind": "item",
+    "text": "{ace} holds a Focus Sash.",
+    "id": "focus-sash"
+   }
+  },
+  {
+   "rival": "Ines",
+   "phase": "early",
+   "species": "trapinch",
+   "change": {
+    "kind": "move",
+    "text": "{ace} kicks up Sand Attack.",
+    "id": "sand-attack"
+   },
+   "nickname": "Mellow"
+  },
+  {
+   "rival": "Ines",
+   "phase": "mid",
+   "species": "vibrava",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Ines",
+   "phase": "late",
+   "species": "flygon",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Earth Power.",
+    "id": "earth-power"
+   }
+  },
+  {
+   "rival": "Ines",
+   "phase": "champion",
+   "species": "flygon",
+   "change": {
+    "kind": "move",
+    "text": "{ace} brings a Sandstorm.",
+    "id": "sandstorm"
+   }
+  },
+  {
+   "rival": "Pip",
+   "phase": "early",
+   "species": "gastly",
+   "change": {
+    "kind": "move",
+    "text": "{ace} uses Lick.",
+    "id": "lick"
+   }
+  },
+  {
+   "rival": "Pip",
+   "phase": "mid",
+   "species": "haunter",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Pip",
+   "phase": "late",
+   "species": "gengar",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Shadow Ball.",
+    "id": "shadow-ball"
+   }
+  },
+  {
+   "rival": "Pip",
+   "phase": "champion",
+   "species": "gengar",
+   "change": {
+    "kind": "move",
+    "text": "{ace} hides a Focus Blast.",
+    "id": "focus-blast"
+   }
+  },
+  {
+   "rival": "Soren",
+   "phase": "early",
+   "species": "beldum",
+   "change": {
+    "kind": "move",
+    "text": "{ace} rams with Take Down.",
+    "id": "take-down"
+   },
+   "nickname": "Axiom"
+  },
+  {
+   "rival": "Soren",
+   "phase": "mid",
+   "species": "metang",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Soren",
+   "phase": "late",
+   "species": "metagross",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Meteor Mash.",
+    "id": "meteor-mash"
+   }
+  },
+  {
+   "rival": "Soren",
+   "phase": "champion",
+   "species": "metagross",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Ice Punch.",
+    "id": "ice-punch"
+   }
+  },
+  {
+   "rival": "Kael",
+   "phase": "early",
+   "species": "pawniard",
+   "change": {
+    "kind": "move",
+    "text": "{ace} uses Fury Cutter.",
+    "id": "fury-cutter"
+   },
+   "nickname": "Warrant"
+  },
+  {
+   "rival": "Kael",
+   "phase": "mid",
+   "species": "bisharp",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Sucker Punch.",
+    "id": "sucker-punch"
+   }
+  },
+  {
+   "rival": "Kael",
+   "phase": "late",
+   "species": "kingambit",
+   "change": {
+    "kind": "move",
+    "text": "{ace} learned Swords Dance.",
+    "id": "swords-dance"
+   }
+  },
+  {
+   "rival": "Kael",
+   "phase": "champion",
+   "species": "kingambit",
+   "change": {
+    "kind": "none",
+    "text": "{ace} leads the charge."
+   }
+  },
+  {
+   "rival": "Marisol",
+   "phase": "early",
+   "species": "duskull",
+   "change": {
+    "kind": "move",
+    "text": "{ace} uses Will-O-Wisp.",
+    "id": "will-o-wisp"
+   },
+   "nickname": "Candle"
+  },
+  {
+   "rival": "Marisol",
+   "phase": "mid",
+   "species": "dusclops",
+   "change": {
+    "kind": "none",
+    "text": "{ace} has grown."
+   }
+  },
+  {
+   "rival": "Marisol",
+   "phase": "late",
+   "species": "dusclops",
+   "change": {
+    "kind": "none",
+    "text": "{ace} stands guard."
+   }
+  },
+  {
+   "rival": "Marisol",
+   "phase": "champion",
+   "species": "dusclops",
+   "change": {
+    "kind": "none",
+    "text": "{ace} waits for its friend."
+   }
+  }
+ ]
+}

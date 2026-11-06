@@ -9,11 +9,13 @@ import { familyId } from '../mastery';
 import type { TrainerPlan } from '../encounters';
 import type { Rival } from '../story/schema';
 import { fillLine, RECOGNITION } from './recognition';
+import { ladderFamily } from './aces';
 
-/** The ace's family (its first stage). Fixed the first time it is asked for. Mutates `rival`. */
+/** The ace's family (its first stage). Fixed the first time it is asked for: a rival with an ace ladder (W2, rivalAces.json) takes the ladder's line, others their first Pokémon. Mutates `rival`. */
 export function ensureAce(content: Content, rival: Rival): string | null {
   const first = rival.memory.lastBattle.team[0];
-  if (!rival.ace && first) rival.ace = familyId(content, first);
+  const ladder = ladderFamily(content, rival);
+  if (!rival.ace && (ladder || first)) rival.ace = ladder ?? familyId(content, first!);
   return rival.ace ?? null;
 }
 

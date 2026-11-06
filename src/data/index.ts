@@ -381,10 +381,12 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
   // Story Overhaul W6: dungeons become room events (validated: every branch reaches the exit).
   for (const p of validateAllDungeons()) problems.push(`dungeons.json ${p}`);
-  gamesEvents.push(...dungeonEvents());
+  // They give catalog items, so a stripped-down test content (empty catalog) leaves them out.
+  const hasCatalog = ((raw.itemCatalog as unknown[] | undefined) ?? []).length > 0;
+  if (hasCatalog) gamesEvents.push(...dungeonEvents());
   // Story Overhaul W7: pseudo stages and regions (gate + rooms).
   for (const p of validateAllPseudo()) problems.push(`pseudoStages.json ${p}`);
-  gamesEvents.push(...pseudoEvents());
+  if (hasCatalog) gamesEvents.push(...pseudoEvents());
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
