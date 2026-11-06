@@ -2740,6 +2740,12 @@ export const EventRuleSchema = z.object({
   noItems: z.boolean().optional(),
   /** The weather changes every turn, in this order (Weather Rival). */
   weatherCycle: z.array(WeatherSchema).min(2).max(4).optional(),
+  /** Every stat change is inverted for both sides (The Contrarian). */
+  contrary: z.boolean().optional(),
+  /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */
+  cursedHat: z.boolean().optional(),
+  /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
+  pinchHitter: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),

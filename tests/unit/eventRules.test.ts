@@ -105,4 +105,17 @@ describe('event fight rules (run events B batch 3)', () => {
     expect(start('weather-rival').battle?.weather?.id).toBe('rain');
     expect(start('underground-duel').battle?.weather?.id).toBe('sand');
   });
+  it('batch 6: cursed hat swaps statuses, contrary and pinch hitter ride on the battle', () => {
+    const mine = { hp: 10, status: { id: 'brn', turns: 0 } };
+    const foe = { hp: 10, status: null };
+    const b = { ...(battle({ cursedHat: true }) as object), enemyTeam: [foe], enemyIndex: 0 } as never;
+    const ev: never[] = [];
+    eventRuleEnd(b, ev, [mine] as never);
+    expect(mine.status).toBeNull();
+    expect((foe.status as { id: string } | null)?.id).toBe('brn');
+    expect(ev.length).toBe(1);
+    for (const [id, key] of [['the-contrarian', 'contrary'], ['pinch-hitter', 'pinchHitter'], ['cursed-hat-trainer', 'cursedHat']] as const) {
+      expect(start(id).battle?.eventRule?.[key], id).toBe(true);
+    }
+  });
 });
