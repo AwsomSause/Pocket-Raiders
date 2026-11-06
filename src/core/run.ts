@@ -87,7 +87,7 @@ import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './cata
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
 import { recordAftermath } from './overhaul/aftermath';
-import { assignGrowthPaths } from './overhaul/growth';
+import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -2068,6 +2068,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}` };
   }
   run.phase = 'shop';
+  noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
   // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
   const place = `${run.regionIndex}:${stage.index}:${stage.current}`;
   run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
@@ -2959,6 +2960,9 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   const dropped = battle.kind === 'wild' ? catchDrop(run, stock, outcome === 'caught') : null;
   if (dropped) itemsFound.push(dropped);
   const streakGift = outcome === 'win' ? advanceStreak(content, run) : null;
+  // Growth paths (run-map counters): a node won with nobody fainting, and field items found in the wild.
+  if (outcome === 'win' && run.streaks.wins > 0) noteMapGrowth(content, run, run.party[0]?.uid, 'nodeClean');
+  if (battle.kind === 'wild') noteMapGrowth(content, run, run.party[0]?.uid, 'fieldItem', (hidden ? 1 : 0) + (dropped ? 1 : 0));
   if (streakGift) itemsFound.push(streakGift.item);
   const bountyItem = outcome === 'win' ? noteBountyKills(content, run, battle.enemyTeam) : null;
   if (bountyItem) itemsFound.push(bountyItem);
@@ -3282,6 +3286,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       const move = content.moves.get(moveId)!;
       if (mon.moves.length < 4) {
         mon.moves.push({ id: move.id, pp: move.pp });
+        noteMapGrowth(content, run, mon.uid, 'tmLearned');
         message = `${speciesName(content, mon.speciesId)} learned ${move.name}!`;
       } else {
         // Four moves known: ask which to forget, like a level-up move.

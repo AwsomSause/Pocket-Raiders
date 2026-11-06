@@ -27,3 +27,9 @@ New counters filled in `story/hooks.ts` from the moves a Pokémon uses and the h
 - Bond Breaker (4 KOs on foes at full HP, most in the party): +5% damage against foes at full HP.
 - Ember Heart (6 Fire moves used under 50% HP): +5% Fire damage under 50% HP.
 Limits: the pack's exact "earned by" wording is simplified to these counters; 72 paths still need counters (turns, healing, nodes, time of day, items, town visits, eggs).
+
+## Batch 4: run-map counters and run-stat paths (11 more, 45 of 106 play)
+New counters in the same `growth` record (no save change). Node events credit the lead Pokémon; each path needs the most in the party (a tie gives nobody). All give a flat +5% damage, since the pack's own bonuses (XP, shop prices, hatch steps) are not battle rules:
+- Pathfinder (10 battles won with no one fainting), Frontline Pet (4 shops visited), Egg Warm (2 eggs hatched), Treasure Nose (5 field items from wild nodes: hidden item or catch drop), Move Collector (3 TM/tutor moves taught, credited to the learner), Caretaker (5 berries fed to it, credited to the fed Pokémon).
+- Read from what the run already keeps: Shiny Glint (shiny, 10+ battles), Elder (most battles, 20+), Late Bloomer (most evolutions, 2+), Trainer Pet (top trust+affection, 200+), Prodigy (first to reach level 30).
+Still unplayed (61): Free Spirit (no wandering mechanic), Cheerleader (no morale boost), Fast Learner (profile mastery, not per run), time of day, in-battle turns/healing. Tests: `tests/unit/overhaulGrowth.test.ts`.

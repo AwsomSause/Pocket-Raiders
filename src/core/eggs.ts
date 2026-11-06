@@ -17,6 +17,7 @@ import { hasPerk, type MapItemRun } from './mapItems';
 import { hatchLevelOffset } from './trainerPerks';
 import { runPerks } from './archetypes';
 import { rememberPick } from './variety';
+import { noteMapGrowth } from './overhaul/growth';
 
 // Eggs: found at events or from a Mystery Egg, carried until enough battles (or stages) pass, then hatched.
 // Everything about the Egg (species, shiny, egg moves) is rolled when it is laid, so reloading never changes it.
@@ -168,6 +169,7 @@ export function tickEggs(content: Content, run: RunState, unit: Egg['unit']): Po
     if (mon.shiny) countShiny(run, mon.speciesId);
     discover(run, mon.speciesId, true);
     count(run, 'eggsHatched');
+    noteMapGrowth(content, run, run.party[0]?.uid, 'eggHatch');
     run.pending.push({ kind: 'caught', mon });
     hatched.push(mon);
   }
