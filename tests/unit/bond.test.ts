@@ -267,3 +267,17 @@ describe('Bond Levels', () => {
     expect(bondLevelHandover(content, run, a.uid, b.uid)).toBeNull();
   });
 });
+
+describe('Bond level on the party screen', () => {
+  it('lists teammates a Pokémon has won with, highest level first', async () => {
+    const { bondLevelLines } = await import('../../src/ui/pokemonInfo');
+    const run = battleRun();
+    const [a] = run.party;
+    const b = createPokemon(content, 'pidgey', 5, 'b1');
+    run.party.push(b);
+    expect(bondLevelLines(content, run, a!)).toEqual([]);
+    run.itemCounters = { ...run.itemCounters, [`bondwins:${[a!.uid, b.uid].sort().join('+')}`]: 8 };
+    expect(bondLevelLines(content, run, a!)).toEqual([`Bond Lv 2 with ${content.species.get('pidgey')!.name}`]);
+    expect(bondLevelLines(content, run, b)[0]).toMatch(/^Bond Lv 2 with /);
+  });
+});

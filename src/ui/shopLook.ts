@@ -17,6 +17,7 @@ const POCKET_OF: Record<Item['category'], { frame: number; word: string }> = {
   pp: { frame: POCKET.medicine, word: 'Medicine' },
   charm: { frame: POCKET.battle, word: 'Charm' },
   attribute: { frame: POCKET.battle, word: 'Training' },
+  nature: { frame: POCKET.medicine, word: 'Nature' },
   evolution: { frame: POCKET.items, word: 'Evolution' },
   transformation: { frame: POCKET.items, word: 'Form item' },
   key: { frame: POCKET.key, word: 'Key item' },
