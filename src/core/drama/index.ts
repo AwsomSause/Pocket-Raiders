@@ -6,7 +6,7 @@
 // numbers (lines are picked by hashing the battle and event ids), never
 // changes HP/moves/turn order, and reveals only what the trainer could see.
 
-import { packPool } from '../overhaul/trainerLines';
+import { archetypePool, packMomentCandidates, packPool } from '../overhaul/trainerLines';
 import type { BattleEvent, Side } from '../battle/engine';
 import type { Content } from '../contentSchema';
 import type { RunState, BattleState } from '../state';
@@ -172,7 +172,7 @@ export function planDrama(content: Content, run: RunState, prior: BattleState | 
     state.seen.push(habitFresh.id);
     candidates.push({ ev: { id: habitFresh.id, kind: 'playerHabit', turn, at: habitFresh.at, data: {} }, category: 'taunt', tier: 'tactical' });
   }
-  candidates.push(...signatureCandidates(ctx), ...playerDeclarationCandidates(ctx), ...libraryCandidates(ctx), ...afterBattleCandidates(ctx, dramaEvents), ...aceCandidates(ctx), ...monRivalCandidates(ctx));
+  candidates.push(...signatureCandidates(ctx), ...playerDeclarationCandidates(ctx), ...libraryCandidates(ctx), ...afterBattleCandidates(ctx, dramaEvents), ...aceCandidates(ctx), ...monRivalCandidates(ctx), ...packMomentCandidates(ctx));
   // World recognition: an ordinary trainer sometimes brings up a rival's news or your title before the battle.
   if (!prior && cls === 'ordinary' && !rival) {
     const talk = npcWorldLine(content, run, key);
@@ -200,9 +200,11 @@ export function planDrama(content: Content, run: RunState, prior: BattleState | 
     // Bond, arc and trainer type colour half of the plain lines when a fitting set exists.
     const flavored = !c.pool && !c.def && pickIndex(`${key}|${c.ev.id}|flavor`, 2) === 0 ? flavorPool(ctx, c.category as DialogueCategory) : null;
     const packed = !c.pool && !c.def && !flavored ? packPool(battle.trainer?.leaderId, c.category as DialogueCategory) : null;
-    const pool = c.pool ?? flavored?.lines ?? packed ?? DRAMA.lines[c.category as DialogueCategory][voice];
-    const prefix = c.def ? `event/${c.def.id}` : packed ? `pack/${battle.trainer!.leaderId}/${c.category}` : flavored ? `flavor/${flavored.tag}/${c.category}` : c.pool ? `pool/${c.ev.id.split(':').pop()}/${c.category}` : (c.category as string);
-    const fresh = pool.map((_, i) => `${prefix}/${c.pool || flavored || packed ? '' : voice + '/'}${i}`).filter((id) => !state.recent.includes(id));
+    // An ordinary trainer's class lines (youngster, hiker...) replace half of the plain lines when the pack has some.
+    const classed = !c.pool && !c.def && !flavored && !packed && !battle.trainer?.leaderId && pickIndex(`${key}|${c.ev.id}|class`, 2) === 0 ? archetypePool(battle.trainer?.classId, c.category as DialogueCategory) : null;
+    const pool = c.pool ?? flavored?.lines ?? packed ?? classed ?? DRAMA.lines[c.category as DialogueCategory][voice];
+    const prefix = c.def ? `event/${c.def.id}` : packed ? `pack/${battle.trainer!.leaderId}/${c.category}` : classed ? `class/${battle.trainer!.classId}/${c.category}` : flavored ? `flavor/${flavored.tag}/${c.category}` : c.pool ? `pool/${c.ev.id.split(':').pop()}/${c.category}` : (c.category as string);
+    const fresh = pool.map((_, i) => `${prefix}/${c.pool || flavored || packed || classed ? '' : voice + '/'}${i}`).filter((id) => !state.recent.includes(id));
     if (fresh.length === 0) continue;
     const id = fresh[pickIndex(`${key}|${c.ev.id}`, fresh.length)]!;
     const text = fill(pool[Number(id.split('/').pop())]!, {
