@@ -1,1 +1,78 @@
-[]
+[
+ {
+  "id": "lore_marauder_divisions",
+  "category": 3,
+  "nameKey": "lore.lore_marauder_divisions.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_pell_orrin",
+   "ch_cass_verrin"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_marauder_divisions.i1",
+    "sources": [
+     "ch_pell_orrin"
+    ]
+   },
+   {
+    "textKey": "lore.lore_marauder_divisions.i2",
+    "sources": [
+     "ch_cass_verrin"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_tally",
+  "category": 9,
+  "nameKey": "lore.lore_tally.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_tally"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_tally.i1",
+    "sources": [
+     "ch_tally"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_ex_criminal_notoriety",
+  "category": 2,
+  "nameKey": "lore.lore_ex_criminal_notoriety.name",
+  "states": [
+   "rumor",
+   "known"
+  ],
+  "sources": [
+   "ch_halima_fenn",
+   "ch_pell_orrin"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_ex_criminal_notoriety.i1",
+    "sources": [
+     "ch_halima_fenn"
+    ]
+   }
+  ]
+ }
+]

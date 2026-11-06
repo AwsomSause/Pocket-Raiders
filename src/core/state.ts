@@ -738,8 +738,10 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
-  /** W0: damaging moves you used this battle, by move id (the rival's adaptations read only what it saw here). */
+  /** W0/W2: moves you used this battle, by move id (the rival's adaptations read only what it saw here). */
   playerMovesSeen: z.record(z.string(), z.number().int().min(1)).optional(),
+  /** W2: times you chose to switch this battle (rival adaptation trigger #4). */
+  playerSwitches: z.number().int().min(0).optional(),
   /** Beta 4.4: your Pokémon that already got a Hyper slot this battle (once each). */
   hyperMoved: z.array(z.string()).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */

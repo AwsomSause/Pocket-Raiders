@@ -7,6 +7,7 @@
 // happen in this run (saved with the run).
 
 import { StoryV2Schema } from '../story2/schema';
+import { WorldSimSchema } from '../worldSim/schema';
 import { z } from 'zod';
 import { AttributeKeySchema, BoostStatSchema } from '../contentSchema';
 import { BattleReplaySchema, WorldMemorySchema } from '../memories/schema';
@@ -354,8 +355,8 @@ export const RivalSchema = z.object({
   studied: z.array(z.object({ moveId: z.string(), from: z.string(), at: z.string() })).optional(),
   /** W1: one of the 12 voice archetypes (rivalVoices.json); dialogue colour only. Derived from the personality when absent. */
   voice: z.string().optional(),
-  /** W0 observed information: attack types it has watched you use (newest last, max 40). A counter may only read this, never your live party. */
-  seen: z.array(z.object({ signal: z.literal('moveType'), value: z.string(), source: z.enum(['fought', 'witnessed', 'public']), at: z.string(), uses: z.number().int().min(1) })).max(40).optional(),
+  /** W0/W2 observed information: what it has watched you do (attack types, setup, switches, your lead...; newest last, max 40). A counter may only read this, never your live party. */
+  seen: z.array(z.object({ signal: z.enum(['moveType', 'setup', 'priority', 'switches', 'status', 'recovery', 'weather', 'hazards', 'gimmick', 'lead', 'sweep', 'pivot', 'legend']), value: z.string(), source: z.enum(['fought', 'witnessed', 'public']), at: z.string(), uses: z.number().int().min(1) })).max(40).optional(),
   counters: z.array(z.object({ target: z.string(), targetName: z.string(), moveId: z.string(), at: z.string() })).optional(),
   /** §11 the Pokémon rival (story.monRivals id) it caught: always on its team from then on. */
   monRival: z.string().optional(),
@@ -451,6 +452,8 @@ export const StoryStateSchema = z.object({
   v2: StoryV2Schema.optional(),
   /** W5: forced or high-priority events waiting for a stop (max 4); `since` is the stage number they were queued at. Optional, so no save bump. */
   eventQueue: z.array(z.object({ id: z.string(), since: z.number().int().min(0) })).max(4).optional(),
+  /** W8: the world simulation's own records (core/worldSim/tick.ts). Optional, so no save bump. */
+  sim: WorldSimSchema.optional(),
 });
 export type StoryState = z.infer<typeof StoryStateSchema>;
 

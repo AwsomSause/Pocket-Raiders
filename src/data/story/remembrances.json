@@ -1,1 +1,53 @@
-[]
+[
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_sandile",
+  "line": [
+   "sandile",
+   "krokorok",
+   "krookodile"
+  ],
+  "types": [
+   "ground",
+   "dark"
+  ],
+  "temperament": "wary",
+  "moves": [
+   "crunch",
+   "taunt",
+   "leer"
+  ],
+  "keystone": "clipped_scale",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_tally_5"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_pawniard",
+  "line": [
+   "pawniard",
+   "bisharp"
+  ],
+  "types": [
+   "dark",
+   "steel"
+  ],
+  "temperament": "loyal",
+  "moves": [
+   "taunt",
+   "leer",
+   "scratch"
+  ],
+  "keystone": "abandoned_blade",
+  "unlock": {
+   "kind": "backstory",
+   "arg": "bs_ex_criminal"
+  }
+ }
+]

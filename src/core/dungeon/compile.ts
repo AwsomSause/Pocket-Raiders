@@ -5,20 +5,23 @@
 import type { DungeonDef } from './schema';
 import { DUNGEONS } from './schema';
 
+/** What a room needs from its definition (a dungeon, or a pseudo stage mapped to this shape). */
+export interface RoomDef { id: string; name: string; tier: number; wild: string[]; rare?: string[] | undefined; nodes: DungeonDef['nodes']; supply: { item: string; count: number }; reward: { item: string; count: number }; boss?: DungeonDef['boss']; intro: string; pseudo?: { tint: string } }
+
 type Raw = Record<string, unknown>;
-const roomId = (d: DungeonDef, node: string) => `${d.id.replace(/_/g, '-')}-${node}`;
+const roomId = (d: Pick<RoomDef, 'id'>, node: string) => `${d.id.replace(/_/g, '-')}-${node}`;
 /** The first room of a dungeon: the event id a gate opens. */
-export const entranceEventId = (d: DungeonDef): string => roomId(d, d.nodes[0]!.id);
+export const entranceEventId = (d: Pick<RoomDef, 'id' | 'nodes'>): string => roomId(d, d.nodes[0]!.id);
 
 const cfg = DUNGEONS.config;
-const trainerClass = (d: DungeonDef, i: number) => { const list = cfg.trainerClasses[String(d.tier)]!; return list[i % list.length]!; };
+const trainerClass = (d: RoomDef, i: number) => { const list = cfg.trainerClasses[String(d.tier)]!; return list[i % list.length]!; };
 const exitWords: Record<string, string> = {
   wild: 'Take the wild path', trainer: 'Go toward the voices', cache: 'Head for the glint of a chest', rest: 'Look for a quiet corner',
   mystery: 'Follow the strange sound', puzzle: 'Try the carved door', trap: 'Cross the suspicious floor', den: 'Follow the tracks',
   rare: 'Follow the unusual cry', hidden: 'Open the sealed door (needs a Key Charm)', boss: 'Climb toward the deepest room', exit: 'Walk out into the light',
 };
 
-function room(d: DungeonDef, nodeIndex: number): Raw {
+export function room(d: RoomDef, nodeIndex: number): Raw {
   const n = d.nodes[nodeIndex]!;
   const byId = new Map(d.nodes.map((x) => [x.id, x]));
   const lvl = cfg.levelBonus[d.tier - 1]!;
@@ -43,13 +46,13 @@ function room(d: DungeonDef, nodeIndex: number): Raw {
     const base = { label, ...(requires.length > 0 ? { requires } : {}) };
     switch (n.kind) {
       case 'wild': case 'rare': case 'den':
-        choices.push({ ...base, success: fx('You step in.', [], { kind: 'wild', species, levelBonus: lvl + (n.kind === 'den' ? 2 : 0), shinyMultiplier: n.kind === 'rare' ? 2 : 1, chain: n.kind === 'den' ? 2 : 1, win: [{ kind: 'research', amount: n.kind === 'den' ? 2 : 1 }] }) });
+        choices.push({ ...base, success: fx('You step in.', [], { kind: 'wild', ...(d.pseudo ? { pseudo: true } : {}), species, levelBonus: lvl + (n.kind === 'den' ? 2 : 0), shinyMultiplier: n.kind === 'rare' ? 2 : 1, chain: n.kind === 'den' ? 2 : 1, win: [{ kind: 'research', amount: n.kind === 'den' ? 2 : 1 }] }) });
         break;
       case 'trainer':
-        choices.push({ ...base, success: fx('"You came all this way. Show me why."', [], { kind: 'trainer', classId: trainerClass(d, nodeIndex), name: 'Dungeon Trainer', size: Math.min(3, 1 + d.tier), levelBonus: lvl, win: [{ kind: 'money', amount: cfg.moneyPerTier * d.tier }] }) });
+        choices.push({ ...base, success: fx('"You came all this way. Show me why."', [], { kind: 'trainer', ...(d.pseudo ? { pseudo: true } : {}), classId: trainerClass(d, nodeIndex), name: 'Dungeon Trainer', size: Math.min(3, 1 + d.tier), levelBonus: lvl, win: [{ kind: 'money', amount: cfg.moneyPerTier * d.tier }] }) });
         break;
       case 'boss':
-        choices.push({ ...base, success: fx('"This is as far as you go."', [], { kind: 'trainer', classId: d.boss!.classId, name: d.boss!.name, size: d.boss!.size, levelBonus: lvl + 2, win: [{ kind: 'money', amount: cfg.moneyPerTier * d.tier * 2 }, { kind: 'item', id: d.reward.item, count: d.reward.count }, { kind: 'moment', text: `You beat ${d.boss!.name} in ${d.name}.`, importance: 55 }] }) });
+        choices.push({ ...base, success: fx('"This is as far as you go."', [], { kind: 'trainer', ...(d.pseudo ? { pseudo: true } : {}), classId: d.boss!.classId, name: d.boss!.name, size: d.boss!.size, levelBonus: lvl + 2, win: [{ kind: 'money', amount: cfg.moneyPerTier * d.tier * 2 }, ...(d.pseudo ? [] : [{ kind: 'item', id: d.reward.item, count: d.reward.count }]), { kind: 'moment', text: `You beat ${d.boss!.name} in ${d.name}.`, importance: 55 }] }) });
         break;
       case 'cache':
         choices.push({ ...base, success: fx('Inside: supplies someone left behind.', [{ kind: 'item', id: cfg.potion[String(d.tier)]!, count: 1 }, { kind: 'item', id: d.supply.item, count: d.supply.count }]) });
@@ -81,7 +84,7 @@ function room(d: DungeonDef, nodeIndex: number): Raw {
   }
   return {
     id: roomId(d, n.id), name: nodeIndex === 0 ? d.name : `${d.name}: ${n.kind}`, group: 'Dungeons', stop: 'dungeon', rarity: 'rare', tags: ['Dungeon', 'Exploration'],
-    minStage: 1, room: true, types: [], requires: [], scene: { cast: [], effect: 'none' }, intro: first, choices,
+    minStage: 1, room: true, types: [], requires: [], scene: { cast: [], effect: 'none', ...(d.pseudo ? { tint: d.pseudo.tint } : {}) }, intro: first, choices,
   };
 }
 

@@ -336,3 +336,6 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - 2026-11-06 role-pool-casting: any boss fills any league role, seeded roleCast stream, wild-card caps (docs/status/role-pool-casting.md)
 - `caught-ball-p3.md`: caught ball tracking and ball throws (Overhaul P3).
 - `trainer-throw-fallback-p8.md`: every archetype has a send-out throw (Overhaul P8).
+- [story-s1-bs-ex-criminal](story-s1-bs-ex-criminal.md): S1 backstory 1, Ex-Criminal content + Vance, gates 0
+- story-audio: story music, stinger and SFX id list with reuse sounds, cross-fade plan, audio budget gate (S17)
+- `hubtown-garden-village.md`: Hub Town v4 Garden Village layout (Kice's pick of 6 mockups)

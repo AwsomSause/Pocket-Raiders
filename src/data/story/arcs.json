@@ -1,1 +1,115 @@
-[]
+[
+ {
+  "id": "arc_tally",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_tally_1"
+   },
+   {
+    "event": "ev_tally_2"
+   },
+   {
+    "event": "ev_tally_3"
+   },
+   {
+    "event": "ev_tally_4"
+   },
+   {
+    "event": "ev_tally_5",
+    "onFail": "ev_echo_ex_crim_03"
+   }
+  ],
+  "nodeCost": 5,
+  "branches": [
+   {
+    "id": "follow",
+    "exit": "tally_trusted",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "tally_trust",
+      "op": ">=",
+      "value": 7
+     }
+    ]
+   },
+   {
+    "id": "let_go",
+    "exit": "tally_lost"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_tally_fx_1",
+    "kind": "unlock",
+    "what": "remembrance",
+    "target": "rm_sandile"
+   }
+  ],
+  "exits": [
+   "tally_trusted",
+   "tally_lost"
+  ]
+ },
+ {
+  "id": "arc_pell_defection",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_pell_defection_1"
+   },
+   {
+    "event": "ev_pell_defection_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "done",
+    "exit": "pell_defected"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_pell_defection_fx_1",
+    "kind": "set_flag",
+    "key": "pell_state",
+    "value": "defected"
+   }
+  ],
+  "exits": [
+   "pell_defected"
+  ]
+ },
+ {
+  "id": "arc_nell_rescue",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_nell_rescue_1"
+   },
+   {
+    "event": "ev_nell_rescue_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "done",
+    "exit": "nell_rescued"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_nell_rescue_fx_1",
+    "kind": "add_counter",
+    "counter": "redemption",
+    "amount": 8
+   }
+  ],
+  "exits": [
+   "nell_rescued"
+  ]
+ }
+]
