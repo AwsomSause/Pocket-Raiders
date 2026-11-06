@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitLine } from '../ui/fitText';
@@ -1676,6 +1677,8 @@ export class BattleScene extends Phaser.Scene {
           this.showSprite('enemy', this.shown.enemy);
           await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
           if (battle.rivalNote) await this.say(battle.rivalNote);
+          const riskText = riskLine(services().session.content, battle, this.run.party);
+          if (riskText) await this.say(riskText);
           if (battle.nemesisNote) await this.say(battle.nemesisNote);
           if (battle.memory?.note) await this.say(battle.memory.note);
           if (battle.memoryNote) await this.say(battle.memoryNote);

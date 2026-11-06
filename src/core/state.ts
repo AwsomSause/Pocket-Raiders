@@ -740,6 +740,8 @@ export const BattleStateSchema = z.object({
   raid: RaidBattleSchema.optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
+  strategy: z.string().optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */
   event: z.object({ eventId: z.string(), choiceIndex: z.number().int().min(0), sideId: z.string(), success: z.boolean(), step: z.number().int().min(0).optional() }).optional(),
   /** Battle Drama Engine: what the trainer has already said (see core/drama). */
