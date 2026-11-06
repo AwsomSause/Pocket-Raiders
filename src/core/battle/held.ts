@@ -322,6 +322,7 @@ export function attackMultiplier(
   for (const { hook, copies } of hooks(all, 'typePower')) if (hook.types.includes(moveType)) m *= 1 + (hook.percent * copies) / 100;
   for (const { hook, copies } of hooks(all, 'categoryPower')) if (hook.category === move.category) m *= 1 + (hook.percent * copies) / 100;
   for (const { hook } of hooks(all, 'power')) m *= 1 + hook.percent / 100;
+  for (const { hook } of hooks(all, 'punchingGlove')) if (move.flags.includes('punch')) m *= 1 + hook.percent / 100;
   for (const { hook } of hooks(all, 'superPower')) if (effectiveness > 1) m *= 1 + hook.percent / 100;
   for (const { hook } of hooks(all, 'drive')) if (move.type === 'normal') m *= 1 + hook.percent / 100;
   for (const { hook } of hooks(all, 'selfStatus')) if (hook.type === moveType) m *= 1 + hook.percent / 100;
@@ -502,7 +503,10 @@ export function afterHit(
   if (dealt <= 0) return;
   const userHooks = hooksOf(ctx, user.mon, user.side);
   const targetHooks = hooksOf(ctx, target.mon, target.side);
-  const physical = move.category === 'physical';
+  // Protective Pads and the Punching Glove (on punches) stop the holder's moves from making contact.
+  const noContact = hooks(userHooks, 'protectivePads').length > 0 || (move.flags.includes('punch') && hooks(userHooks, 'punchingGlove').length > 0);
+  const physical = move.category === 'physical' && !noContact;
+  const covered = hooks(targetHooks, 'covertCloak').length > 0;
   const state = stateOf(ctx.battle);
   const hurt = (who: Holder, fraction: number, itemId: string, what: HeldWhat) => {
     if (who.mon.hp <= 0) return;
@@ -518,13 +522,13 @@ export function afterHit(
   if (physical) {
     for (const { itemId, hook, copies } of hooks(targetHooks, 'contactDamage')) hurt(user, hook.fraction * copies, itemId, 'helmet');
     for (const { itemId, hook, copies } of hooks(userHooks, 'contactStatus')) {
-      if (target.mon.hp > 0 && !target.mon.status && rng.chance((hook.percent * copies) / 100) && !statusBlocked(ctx, target, hook.status)) {
+      if (!covered && target.mon.hp > 0 && !target.mon.status && rng.chance((hook.percent * copies) / 100) && !statusBlocked(ctx, target, hook.status)) {
         target.mon.status = { id: hook.status, ...(hook.status === 'slp' ? { turns: 2 } : {}) };
         events.push({ type: 'held', side: target.side, itemId, what: 'orb', stat: undefined });
       }
     }
     for (const { hook, copies } of hooks(userHooks, 'flinch')) {
-      if (movedFirst && target.mon.hp > 0 && rng.chance(Math.min(1, (hook.percent * copies) / 100))) target.flinched = true;
+      if (!covered && movedFirst && target.mon.hp > 0 && rng.chance(Math.min(1, (hook.percent * copies) / 100))) target.flinched = true;
     }
     const barb = hooks(targetHooks, 'stickyBarb')[0];
     if (barb && user.mon.hp > 0 && !(user.mon.held?.[barb.itemId] ?? 0)) {
@@ -547,6 +551,14 @@ export function afterHit(
       heal(content, target.mon, maxHpOf(content, target.mon) * hook.fraction * healingMultiplier(ctx, target.mon, target.side));
       events.push({ type: 'held', side: target.side, itemId, what: 'heal', hpAfter: target.mon.hp });
       break;
+    }
+    if (effectiveness > 1) {
+      for (const { itemId } of hooks(targetHooks, 'weaknessPolicy')) {
+        if (timesUsed(ctx, target.mon.uid, itemId) > 0) continue;
+        markUsed(ctx, target.mon.uid, itemId);
+        raiseStage(target, 'atk', 2, itemId, events);
+        raiseStage(target, 'spa', 2, itemId, events);
+      }
     }
     for (const { itemId, hook } of hooks(targetHooks, 'absorb')) {
       if (hook.type !== moveType || timesUsed(ctx, target.mon.uid, itemId) > 0) continue;
@@ -581,13 +593,75 @@ export function statusBlocked(ctx: Pick<HeldContext, 'content' | 'teamItems'> & 
   return status !== 'confusion' && status !== 'infatuation' && hooks(hooksOf(ctx, holder.mon, holder.side), 'statusImmune').some(({ hook }) => hook.statuses.includes(status));
 }
 
+/** Whether the holder carries an item with this hook (Covert Cloak, Clear Amulet, Heavy-Duty Boots, Utility Umbrella...). */
+export function hasHook(ctx: Pick<HeldContext, 'content' | 'teamItems'> & { battle?: BattleState }, mon: PokemonInstance, side: Side, kind: HeldHook['hook']): boolean {
+  return hooksOf(ctx, mon, side).some(({ hook }) => hook.hook === kind);
+}
+
+/** Loaded Dice: a multi-hit move (up to `max` hits) hits at least 4 times. */
+export function loadedDiceHits(ctx: Pick<HeldContext, 'content' | 'teamItems'> & { battle?: BattleState }, user: Pick<Holder, 'mon' | 'side'>, rolled: number, max: number): number {
+  return hasHook(ctx, user.mon, user.side, 'loadedDice') ? Math.max(rolled, Math.min(4, max)) : rolled;
+}
+
+/** Terrain Extender: extra turns for a terrain the holder sets. */
+export function terrainTurns(ctx: Pick<HeldContext, 'content' | 'teamItems'> & { battle?: BattleState }, user: Pick<Holder, 'mon' | 'side'>, base: number): number {
+  return base + hooks(hooksOf(ctx, user.mon, user.side), 'terrainExtender').reduce((n, { hook }) => n + hook.turns, 0);
+}
+
+/** One of the holder's once-per-battle stat items fires: the first unused item with this hook raises these stats. */
+function statOnce(ctx: HeldContext, holder: Holder, kind: 'blunderPolicy' | 'throatSpray' | 'roomService', stat: BoostStat, stages: number, events: HeldEvent[]): void {
+  if (holder.mon.hp <= 0) return;
+  for (const { itemId } of hooks(hooksOf(ctx, holder.mon, holder.side), kind)) {
+    if (timesUsed(ctx, holder.mon.uid, itemId) > 0) continue;
+    markUsed(ctx, holder.mon.uid, itemId);
+    raiseStage(holder, stat, stages, itemId, events);
+    return;
+  }
+}
+
+/** Blunder Policy: one of the holder's moves missed. */
+export const onMiss = (ctx: HeldContext, user: Holder, events: HeldEvent[]): void => statOnce(ctx, user, 'blunderPolicy', 'spe', 2, events);
+
+/** Throat Spray: the holder used a sound move. */
+export function afterSoundMove(ctx: HeldContext, user: Holder, move: Pick<Move, 'flags'>, events: HeldEvent[]): void {
+  if (move.flags.includes('sound')) statOnce(ctx, user, 'throatSpray', 'spa', 1, events);
+}
+
+/** Room Service: lowers Speed once while Trick Room is up. */
+export function roomService(ctx: HeldContext, holder: Holder, events: HeldEvent[]): void {
+  if ((ctx.battle.field?.trickRoom ?? 0) > 0) statOnce(ctx, holder, 'roomService', 'spe', -1, events);
+}
+
+/** Booster Energy: a Paradox holder coming in raises its highest stat (the one with the biggest base value). */
+export function boosterEnergy(ctx: HeldContext, holder: Holder, events: HeldEvent[]): void {
+  for (const { itemId, hook } of hooks(hooksOf(ctx, holder.mon, holder.side), 'boosterEnergy')) {
+    if (timesUsed(ctx, holder.mon.uid, itemId) > 0 || !hook.species.includes(holder.mon.speciesId)) continue;
+    markUsed(ctx, holder.mon.uid, itemId);
+    const base = getSpecies(ctx.content, holder.mon.speciesId).baseStats;
+    const stat = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce<'atk' | 'def' | 'spa' | 'spd' | 'spe'>((best, s) => (base[s] > base[best] ? s : best), 'atk');
+    raiseStage(holder, stat, 1, itemId, events);
+    return;
+  }
+}
+
+/** Mirror Herb: the opposing Pokémon just got stat boosts; the holder copies them, once per battle. */
+export function mirrorHerb(ctx: HeldContext, holder: Holder, stat: BoostStat, stages: number, events: HeldEvent[]): void {
+  if (holder.mon.hp <= 0 || stages <= 0) return;
+  for (const { itemId } of hooks(hooksOf(ctx, holder.mon, holder.side), 'mirrorHerb')) {
+    if (timesUsed(ctx, holder.mon.uid, itemId) > 0) continue;
+    markUsed(ctx, holder.mon.uid, itemId);
+    raiseStage(holder, stat, stages, itemId, events);
+    return;
+  }
+}
+
 /** Guard Spec.: the opponent can't lower this Pokémon's stats. */
 export function statsGuarded(holder: Pick<Holder, 'mon'>): boolean {
   return (holder.mon.boosts ?? []).some((b) => b.kind === 'guard');
 }
 
 /** The item (if any) the holder carries with this hook that hasn't been used up this battle; `use` spends it. */
-export function triggerOnce(ctx: HeldContext, holder: Holder, kind: 'redCard' | 'ejectButton' | 'mentalHerb', events: HeldEvent[]): boolean {
+export function triggerOnce(ctx: HeldContext, holder: Holder, kind: 'redCard' | 'ejectButton' | 'ejectPack' | 'mentalHerb', events: HeldEvent[]): boolean {
   if (holder.mon.hp <= 0) return false;
   for (const { itemId } of hooks(hooksOf(ctx, holder.mon, holder.side), kind)) {
     if (timesUsed(ctx, holder.mon.uid, itemId) > 0) continue;
@@ -748,6 +822,7 @@ export function endOfTurn(ctx: HeldContext, holder: Holder, events: HeldEvent[])
   const all = hooksOf(ctx, mon, holder.side);
   const max = maxHpOf(content, mon);
   const types = getSpecies(content, mon.speciesId).types;
+  roomService(ctx, holder, events);
   for (const { itemId, hook, copies } of hooks(all, 'endTurn')) {
     const fraction = hook.typed && !types.includes(hook.typed) ? (hook.otherwise ?? 0) : hook.fraction * copies;
     if (fraction > 0 && mon.hp < max) {
