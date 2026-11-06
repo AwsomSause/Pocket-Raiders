@@ -1,5 +1,5 @@
 // Pocket Town (W7, walkable since Appendix S.5): the Hub's second town. It runs on the Hub Town engine (ui/hubTown/townView.ts
-// with the map in data/pocketTown.json, built by tools/hubtown/pocket.py): you walk your Pokémon to a building door and press Z.
+// with the map in data/pocketTown.json, built by tools/hubtown/pocket_layout.py via build.py): you walk your Pokémon to a building door and press Z.
 // The last run's weather and the time of day lie over the map as the sky and lighting; furniture, pets and the cursor trail stay.
 // The old building list is the Town directory (Esc). Every rule is in core/town; presentation only: nothing here changes a result.
 
