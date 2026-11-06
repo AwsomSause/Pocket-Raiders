@@ -28,6 +28,7 @@ test('Toughened It Out shows as a story moment, the Story Log shows it, and the 
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
     session.profile.attributes = { ...session.profile.attributes, love: 100 };
+    session.markHyperExplained(['family:hyper', 'family:overdrive', 'kind:endure', 'kind:endureOrCure', 'kind:revive', 'kind:boost', 'kind:intercept', 'kind:awaken', 'kind:defy', 'kind:limitBreak', 'kind:rivalry']); // these tests are about the short banners, not the first-time explanation
     session.newRun('red', 'e2e-hyper-16');
     session.chooseStarter(0);
     const stage = session.run.stage;
@@ -80,6 +81,7 @@ test('The Enemy Is Getting Riled Up: a banner a turn ahead and a "Riled up!" bad
   await waitForScene(page, 'MainMenu');
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
+    session.markHyperExplained(['family:hyper', 'family:overdrive', 'kind:endure', 'kind:endureOrCure', 'kind:revive', 'kind:boost', 'kind:intercept', 'kind:awaken', 'kind:defy', 'kind:limitBreak', 'kind:rivalry']); // these tests are about the short banners, not the first-time explanation
     session.newRun('red', 'e2e-rage-1');
     session.chooseStarter(0);
     const stage = session.run.stage;
@@ -126,6 +128,7 @@ test('The Two Pokémon Feel a Heated Rivalry: a banner when your Pokémon meets 
   await waitForScene(page, 'MainMenu');
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
+    session.markHyperExplained(['family:hyper', 'family:overdrive', 'kind:endure', 'kind:endureOrCure', 'kind:revive', 'kind:boost', 'kind:intercept', 'kind:awaken', 'kind:defy', 'kind:limitBreak', 'kind:rivalry']); // these tests are about the short banners, not the first-time explanation
     session.newRun('red', 'e2e-rivalry-1');
     session.chooseStarter(0);
     const stage = session.run.stage;
@@ -164,6 +167,7 @@ test('This Trainer Will Return: a trainer that vowed to return comes back for a 
   await waitForScene(page, 'MainMenu');
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
+    session.markHyperExplained(['family:hyper', 'family:overdrive', 'kind:endure', 'kind:endureOrCure', 'kind:revive', 'kind:boost', 'kind:intercept', 'kind:awaken', 'kind:defy', 'kind:limitBreak', 'kind:rivalry']); // these tests are about the short banners, not the first-time explanation
     session.newRun('red', 'e2e-return-1');
     session.chooseStarter(0);
     const run = session.run;
@@ -202,6 +206,7 @@ test('The Seven Emotions: a coloured heart on the party screen and the Story scr
   await waitForScene(page, 'MainMenu');
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
+    session.markHyperExplained(['family:hyper', 'family:overdrive', 'kind:endure', 'kind:endureOrCure', 'kind:revive', 'kind:boost', 'kind:intercept', 'kind:awaken', 'kind:defy', 'kind:limitBreak', 'kind:rivalry']); // these tests are about the short banners, not the first-time explanation
     session.newRun('red', 'e2e-emotions-1');
     session.chooseStarter(0);
     const run = session.run;
@@ -256,6 +261,7 @@ test('A Past Pokémon Wants to Join: it offers to join, and a keepsake gives can
   await waitForScene(page, 'MainMenu');
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
+    session.markHyperExplained(['family:hyper', 'family:overdrive', 'kind:endure', 'kind:endureOrCure', 'kind:revive', 'kind:boost', 'kind:intercept', 'kind:awaken', 'kind:defy', 'kind:limitBreak', 'kind:rivalry']); // these tests are about the short banners, not the first-time explanation
     session.newRun('red', 'e2e-reunion-1');
     session.chooseStarter(0);
     const run = session.run;

@@ -1,0 +1,11 @@
+# Overhaul slice 9: Hyper and Overdrive overhaul
+
+**Two identities.** `family` on 9 story moments in `story.json`: Hyper = bond and defence (Toughened It Out, Felt a Bond, Pushed Back Up, Hung In There, Protective Instinct, Emotional Awakening: they save and shield, no cost for the plain saves); Overdrive = aggressive and volatile (Defiance, Pushed Beyond Limits, Heated Rivalry: they hit harder or back, always with a cost). Ordinary story moments have no family and are untouched.
+
+**Conditions that add up** (`story.rarity.hyperRules`, Zod-checked, `src/core/story/hyperRules.ts`): an Overdrive moment needs the Pokémon on the field 3 turns (a fresh switch-in never starts one; uses the battle's `turnsOut` counter); each earlier moment of the same family for that Pokémon this run multiplies the chance by 0.5 (floor 0.25; a repeat of the same moment keeps its existing "again" halving only); boss, rival and raid fights multiply by 1.25. It only scales the chance the engine already rolls on the "hyper" stream, so same seed + actions = same result.
+
+**First-time explanation.** The first time each family and each kind of effect (endure, revive, defy, limitBreak...) happens to your Pokémon, the battle stops on a panel: the identity line, why it happened (the real trigger and its numbers), what it does, the cost, and the limits. Enter or a click on Continue only works after a 1.2 s read lock; Esc and held or rapid keys do nothing; no battle action works behind it. Read keys are saved in profile `hyperExplained` (profile v18 -> v19, migration test). Later activations use the short banner. The text is built from the moment's own data, so it names only effects the engine applies.
+
+Tests: `tests/unit/hyperOverdrive.test.ts` (families, rules, engine eligibility, explanation vs data, v19 migration, session save), `tests/e2e/hyperExplain.spec.ts`; `milestone8_9.spec.ts` pre-marks the explanations read so it keeps testing the short banners.
+
+Limits: the explanation covers the 9 engine moments (not the flavour "overdrive-*" story lines, which have no mechanical effect); doubles partners and bench teammates skip the field-turn rule; the Info panel still shows only "Hyper move ready" (a full Hyper/Overdrive state line can follow once slice 8 merges); no 100-run rarity simulation yet (Stage 8).
