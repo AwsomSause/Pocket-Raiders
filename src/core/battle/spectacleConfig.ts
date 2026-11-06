@@ -52,7 +52,7 @@ export const SpectacleConfigSchema = z.object({
       /** Share of max HP it hurts itself each berserk turn (never knocks it out). */
       recoil: z.number().min(0).max(0.5),
     })
-    .default({ species: ['primeape', 'annihilape', 'tyranitar', 'pangoro', 'vigoroth'], hpBelow: 0.34, turns: 3, damage: 1.5, recoil: 0.0625 }),
+    .default({ species: ['primeape', 'annihilape', 'tyranitar', 'pangoro', 'vigoroth', 'aggron', 'fearow', 'gyarados', 'tauros', 'machamp', 'hariyama', 'salamence', 'garchomp', 'krookodile', 'bisharp', 'haxorus', 'incineroar', 'houndoom', 'ursaring', 'rampardos', 'rhyperior', 'sharpedo', 'braviary', 'zangoose', 'darmanitan', 'mightyena'], hpBelow: 0.34, turns: 3, damage: 1.5, recoil: 0.0625 }),
   /** Phases at HP lines for a boss's last Pokémon, per trainer class (a final boss also gets `final`). */
   phases: z.object({
     classes: z.record(z.string(), z.array(BossPhaseCfgSchema)),

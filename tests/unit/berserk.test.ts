@@ -29,6 +29,7 @@ const moves = (ev: BattleEvent[]) => ev.filter((e) => e.type === 'move' && e.sid
 describe('Berserk Mode', () => {
   it('only the listed species are berserkers', () => {
     for (const id of ['primeape', 'annihilape', 'tyranitar', 'pangoro', 'vigoroth']) expect(isBerserker(content, createPokemon(content, id, 30, 'x')), id).toBe(true);
+    for (const id of ['aggron', 'fearow', 'gyarados', 'garchomp', 'houndoom']) expect(isBerserker(content, createPokemon(content, id, 30, 'x')), id).toBe(true);
     expect(isBerserker(content, createPokemon(content, 'blastoise', 30, 'x'))).toBe(false);
     expect(isBerserker(content, createPokemon(content, 'mankey', 30, 'x'))).toBe(false);
   });
