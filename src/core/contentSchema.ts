@@ -1080,6 +1080,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
     multiplier: z.number().positive(),
     rule: z.enum(['level', 'lure', 'dive', 'net', 'moon', 'love', 'heavy', 'fast', 'nest', 'repeat', 'timer', 'quick', 'dusk', 'dream', 'beast', 'safari', 'sport', 'flyer', 'weight100', 'weight300', 'snag', 'bless']).optional(),
     after: z.enum(['friend', 'luxury', 'heal']).optional(),
+    /** Capture Styles (S224): this item is a befriend / negotiate / trap attempt with its own odds, not a ball throw. */
+    style: z.enum(['befriend', 'negotiate', 'trap']).optional(),
   }),
   z.object({ kind: z.literal('healHp'), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('cureStatus') }),
@@ -2010,6 +2012,22 @@ export const BalanceSchema = z.object({
   spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   /** Habitat Ecosystem (S219): off in the old-seed story check. */
   ecosystem: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
+  /** Capture Styles (S224): befriend / negotiate / trap items with their own odds. Off by default; the ball catch flow stays the default. */
+  captureStyles: z
+    .object({
+      enabled: z.boolean().default(false),
+      befriendBase: z.number().default(0.15),
+      befriendCatchRate: z.number().default(0.45),
+      befriendCalm: z.number().default(0.25),
+      negotiateBase: z.number().default(0.4),
+      negotiatePerLevel: z.number().default(0.03),
+      negotiateMin: z.number().default(0.1),
+      negotiateMax: z.number().default(0.85),
+      trapHpLine: z.number().default(0.5),
+      trapChance: z.number().default(0.6),
+      trapStatusBonus: z.number().default(0.2),
+    })
+    .default({ enabled: false, befriendBase: 0.15, befriendCatchRate: 0.45, befriendCalm: 0.25, negotiateBase: 0.4, negotiatePerLevel: 0.03, negotiateMin: 0.1, negotiateMax: 0.85, trapHpLine: 0.5, trapChance: 0.6, trapStatusBonus: 0.2 }),
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
@@ -2792,6 +2810,12 @@ export const EventRuleSchema = z.object({
   spare: z.boolean().optional(),
   /** The battle text is silent: every line shows as "..." (Library Duel Silence). Display only. */
   silent: z.boolean().optional(),
+  /** In a double battle every foe move hits your lowest-defense Pokémon (Sniper Trainer). */
+  sniper: z.boolean().optional(),
+  /** Both sides fly: Ground-type moves can't hit anyone, and nobody counts as grounded (Sky Duel). */
+  sky: z.boolean().optional(),
+  /** A no-KO contest: damage leaves the foe at 1 HP and you win after using this many different moves (Contest Judge's Challenge). */
+  contest: z.number().int().min(2).max(6).optional(),
   /** Every stat change is inverted for both sides (The Contrarian). */
   contrary: z.boolean().optional(),
   /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */

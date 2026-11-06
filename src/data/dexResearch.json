@@ -1,0 +1,9 @@
+{
+  "note": "Species research (S497, Legends Arceus style): each species has two tasks. Every threshold reached is one research level. Each new level pays Research Points; a species at its top level counts as Perfect research and pays a bonus once.",
+  "tasks": [
+    { "id": "seen", "label": "Meet it in the wild", "thresholds": [1, 3, 8, 20] },
+    { "id": "caught", "label": "Catch it", "thresholds": [1, 3, 6, 12] }
+  ],
+  "pointsPerLevel": 1,
+  "perfectBonus": 10
+}

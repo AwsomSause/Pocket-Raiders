@@ -26,6 +26,7 @@ import type { AttributeEffects } from '../attributes';
 import { TYPE_NAMES } from '../contentSchema';
 import type { BoostStat, Content, ItemEffect, Move, PowerRule, Semi, SideMove, Species, StatusId, Terrain, TransformKind, TypeName, Weather } from '../contentSchema';
 import { catchProbability, resolveCatchRoll } from '../capture';
+import { styleProbability, styleProblem, type StyleInput } from '../captureStyles';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
@@ -881,6 +882,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     const foe = currentEnemy(battle);
     if (id && foe.hp > 0 && foe.moves[0]?.id !== id) foe.moves = [{ id, pp: 10 }];
   }
+  if (rule.contest && !battle.outcome) {
+    const id = battle.playerVolatile?.lastMove;
+    if (id && !battle.storyEffects.includes(`style:${id}`)) battle.storyEffects.push(`style:${id}`);
+    if (battle.storyEffects.filter((s) => s.startsWith('style:')).length >= rule.contest) battle.outcome = 'win';
+  }
   if (rule.spare && !battle.outcome && battle.enemyTeam.every((m) => m.hp <= 1 || m.status?.id === 'slp')) battle.outcome = 'win';
   if (rule.fanClub) {
     for (const e of events) {
@@ -1326,6 +1332,11 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   const noHeal = raidItemProblem(ctx.content, ctx.battle, item.category === 'healing' || item.category === 'revive');
   if (noHeal) return noHeal;
   if (item.effect.kind === 'catch') {
+    if (item.effect.style) {
+      const foe = (ctx.battle.enemyTeam as BattleState['enemyTeam'] | undefined)?.[ctx.battle.enemyIndex];
+      const early = styleProblem(ctx.content, item.effect.style, styleInput(ctx, foe));
+      if (early) return early;
+    }
     const special = ballRuleProblem(ctx, item.effect.rule);
     if (special !== undefined) return special;
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
@@ -1352,6 +1363,16 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   if (!target) return 'Choose a Pokémon to use it on.';
   if (item.effect.kind === 'urge') return urgeProblem(ctx, item.effect.what, target, targetIndex!);
   return itemUseProblem(ctx.content, item, target);
+}
+
+/** What a capture style needs to know about the foe and your lead. */
+function styleInput(ctx: Pick<BattleContext, 'content' | 'battle' | 'party'>, foe: PokemonInstance | undefined): StyleInput {
+  const lead = ctx.party[ctx.battle.activeIndex];
+  const species = foe ? getSpecies(ctx.content, foe.speciesId) : undefined;
+  return {
+    foe: { level: foe?.level ?? 1, hp: foe?.hp ?? 0, maxHp: foe ? calcStats(ctx.content, foe).hp : 1, catchRate: species?.catchRate ?? 45, asleepOrParalysed: foe?.status?.id === 'slp' || foe?.status?.id === 'par', hasStatus: !!foe?.status },
+    leadLevel: lead?.level ?? 1,
+  };
 }
 
 /**
@@ -1408,6 +1429,17 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
     (battle.snagged ??= []).push(taken);
     foe.hp = 0;
     events.push({ type: 'ball', itemId, shakes: 3, caught: true });
+    return;
+  }
+  if (item.effect.kind === 'catch' && item.effect.style) {
+    const enemy = currentEnemy(battle);
+    const probability = Math.min(1, styleProbability(content, item.effect.style, styleInput(ctx, enemy)) * ctx.catchMultiplier * skillThrowFactor(skill));
+    const roll = resolveCatchRoll(probability, ctx.captureRng.float());
+    events.push({ type: 'ball', itemId, shakes: roll.shakes, caught: roll.caught });
+    if (roll.caught) {
+      battle.outcome = 'caught';
+      battle.ball = itemId;
+    }
     return;
   }
   if (item.effect.kind === 'catch') {
@@ -1991,6 +2023,7 @@ function abilityBlocksMove(ctx: BattleContext, user: Combatant, target: Combatan
     return true;
   }
   if (damaging && (ability === 'levitate' || ability === 'eelevate') && moveType === 'ground' && !move.effects.hitsSemi) blocked = true;
+  if (damaging && ctx.battle.eventRule?.sky && moveType === 'ground' && !move.effects.hitsSemi) blocked = true;
   if (damaging && ability === 'wonder-guard' && effectiveness <= 1 && !move.flags.includes('typeless')) blocked = true;
   if (ability === 'soundproof' && move.flags.includes('sound')) blocked = true;
   if (ability === 'good-as-gold' && !damaging) blocked = true;
@@ -3506,7 +3539,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
-    if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
+    if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare || ctx.battle.eventRule?.contest) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;
@@ -5378,6 +5411,7 @@ export function weatherMultiplier(weather: Weather | null, type: TypeName): numb
 /** On the ground: not a Flying type and without Levitate (and not hiding in the air or underground). */
 function isGrounded(ctx: BattleContext, c: Combatant): boolean {
   if (c.vol.semi === 'air' || c.vol.semi === 'underground' || c.vol.semi === 'underwater') return false;
+  if (ctx.battle.eventRule?.sky) return false;
   if (ctx.battle.field.gravity > 0 || c.vol.smackedDown) return true;
   if (abilityIn(ctx, c) === 'levitate' || abilityIn(ctx, c) === 'eelevate' || c.vol.magnetRise > 0) return false;
   return !getSpecies(ctx.content, c.mon.speciesId).types.includes('flying');

@@ -1,0 +1,276 @@
+{
+ "events": [
+  {
+   "id": "sky-duel",
+   "name": "Sky Duel",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#1f2a3a",
+    "effect": "none"
+   },
+   "intro": "A pilot challenges you on a floating platform. \"Up here the ground is a long way down. Ground moves will miss.\"",
+   "choices": [
+    {
+     "label": "Duel in the sky",
+     "success": {
+      "text": "Clouds drift under your feet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sky Pilot",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "sky": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Keep your feet down",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sniper-ambush",
+   "name": "Sniper Ambush",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a1f",
+    "effect": "none"
+   },
+   "intro": "A sharpshooter picks off your weakest partner. \"I always aim for the soft spot.\" A friend lends you a hand.",
+   "choices": [
+    {
+     "label": "Fight back together",
+     "success": {
+      "text": "Two on two, and they are aiming for the weak one.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sharpshooter",
+       "classId": "ace-trainer",
+       "ally": "machop",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "research",
+         "amount": 4
+        }
+       ],
+       "rule": {
+        "sniper": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Run for cover",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "contest-judges-challenge",
+   "name": "Contest Judge's Challenge",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#33241f",
+    "effect": "none"
+   },
+   "intro": "\"Show me style, not just strength. Four different moves and the judges will be impressed.\" Nobody faints in a contest.",
+   "choices": [
+    {
+     "label": "Enter the contest",
+     "success": {
+      "text": "The judges take their seats.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Contest Judge",
+       "classId": "psychic",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ],
+       "rule": {
+        "contest": 4
+       }
+      }
+     }
+    },
+    {
+     "label": "Watch from the crowd",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dream-team-draft",
+   "name": "Dream Team Draft",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1f33",
+    "effect": "none"
+   },
+   "intro": "A scout offers a loaner Pokémon for one fight. \"Draft one of three, and show me your dream team.\"",
+   "choices": [
+    {
+     "label": "Draft Pikachu",
+     "success": {
+      "text": "The scout hands you a loaner pikachu.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Draft Scout",
+       "classId": "ace-trainer",
+       "ally": "pikachu",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Draft Machop",
+     "success": {
+      "text": "The scout hands you a loaner machop.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Draft Scout",
+       "classId": "ace-trainer",
+       "ally": "machop",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Draft Gastly",
+     "success": {
+      "text": "The scout hands you a loaner gastly.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Draft Scout",
+       "classId": "ace-trainer",
+       "ally": "gastly",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pass",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
