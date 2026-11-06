@@ -322,3 +322,5 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `player-art-p1.md`: player trainer art registry and strips (Overhaul P1).
 - `story-foundation-f0.md`: Story Overhaul F0: profile v20 / run v40 / settings v39 containers, `data:story` + `src/data/story/`, Zod schemas, the 19 story gates. Later story slices add fields inside the containers; no more bumps.
 - `walkable-pocket-town.md`: Pocket Town is a walkable second map on the Hub Town engine (data/pocketTown.json, tools/hubtown/pocket.py); Esc is the Town directory. Panels are slice 2.
+- story-icons-p7.md: P7 pack icon wiring (107 icons, lazy catalog ids, debug gallery)
+- 2026-11-06 ui-fixes-fonts: font slimming and battle/hub layout fixes (docs/status/ui-fixes-fonts.md)
