@@ -1,6 +1,7 @@
 // Move Mastery (catalog #107): every damaging move counts its uses in trainer fights over all finished runs.
 // Ranks unlock move-page lore and pay Research Points once (claim ledger). They never add damage or any other power.
 
+import { masteryCredit } from './overhaul/growth';
 import type { Content } from './contentSchema';
 import { claim } from './quests';
 import { overhaulCatalogs } from './overhaul/catalogs';
@@ -50,7 +51,7 @@ export function recordMoveMastery(content: Content, profile: Profile, run: RunSt
   for (const h of Object.values(run.story?.histories ?? {})) {
     for (const [id, n] of Object.entries(h.moves)) {
       if (!content.moves.has(id) || n <= 0) continue;
-      uses[id] = (uses[id] ?? 0) + n;
+      uses[id] = (uses[id] ?? 0) + masteryCredit(content.balance.overhaulGrowth, run.party.find((m) => m.uid === h.uid), n);
       touched.add(id);
     }
   }

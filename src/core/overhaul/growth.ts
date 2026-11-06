@@ -14,7 +14,7 @@ import type { Content } from '../contentSchema';
 export interface GrowthConfig { enabled: boolean; bonus: number; minKos: number; minCloseCalls: number; minRoleKos: number }
 export const DEFAULT_GROWTH_CONFIG: GrowthConfig = { enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2, minRoleKos: 4 };
 
-interface History { uid: string; knockoutsDealt: number; closeCalls: number; battles?: number; evolutions?: readonly unknown[]; bond?: { trust?: number; affection?: number } | undefined; growth?: Record<string, number> | undefined }
+interface History { uid: string; moves?: Record<string, number>; knockoutsDealt: number; closeCalls: number; battles?: number; evolutions?: readonly unknown[]; bond?: { trust?: number; affection?: number } | undefined; growth?: Record<string, number> | undefined }
 
 /** Counter-based paths: pack id, the counter it reads, and the plain-words bonus. All give +bonus damage in the stated case. */
 export const COUNTER_PATHS: Record<string, { counter: string; words: string; min?: number; cap?: number; type?: string }> = {
@@ -225,7 +225,7 @@ export function growthOnce(marks: string[], key: string): boolean {
   return true;
 }
 /** Paths whose edge is not damage (status chances, durations, healing, accuracy, Protect). */
-const NON_DAMAGE: ReadonlySet<string> = new Set(['medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
+const NON_DAMAGE: ReadonlySet<string> = new Set(['dojo-student', 'fast-learner', 'medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');
@@ -313,8 +313,25 @@ function statPath(cfg: GrowthConfig, mon: History, party: readonly History[], sh
   return null;
 }
 
+/** Uses of one move in this run that count as a mastery (the Bronze rank of Move Mastery). */
+export const MASTERY_USES = 10;
+/** How many of a Pokémon's moves it has used often enough to master this run. */
+export const masteriesOf = (h: Pick<History, 'moves'>): number => Object.values(h.moves ?? {}).filter((n) => n >= MASTERY_USES).length;
+/** Dojo Student: its most-used Fighting move and how often it used it. */
+export function topFightingMove(h: Pick<History, 'moves'>, isFighting: (moveId: string) => boolean): { id: string; uses: number } | null {
+  let best: { id: string; uses: number } | null = null;
+  for (const [id, uses] of Object.entries(h.moves ?? {})) if (isFighting(id) && (!best || uses > best.uses || (uses === best.uses && id < best.id))) best = { id, uses };
+  return best;
+}
+/** Paths read from the per-move use counts the run already keeps. */
+function moveHistoryPath(mon: History, types: readonly string[], party: readonly History[], isFighting: (moveId: string) => boolean): string | null {
+  if (onlyTop(party, masteriesOf, mon, 2)) return 'fast-learner';
+  if (types.some((t) => t.toLowerCase() === 'fighting') && onlyTop(party, (h) => topFightingMove(h, isFighting)?.uses ?? 0, mon, 15)) return 'dojo-student';
+  return null;
+}
+
 /** The path this Pokémon qualifies for now, or null. `party` are the histories of the whole party (for "most KOs"). */
-export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[], party: readonly History[], shiny = false): string | null {
+export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[], party: readonly History[], shiny = false, isFighting: (moveId: string) => boolean = () => false): string | null {
   // A counter path needs enough of its kind of KO, and the most of it in the party (a tie goes to nobody).
   let best: { id: string; n: number } | null = null;
   for (const [id, def] of Object.entries(COUNTER_PATHS)) {
@@ -327,6 +344,8 @@ export function pathFor(cfg: GrowthConfig, mon: History, types: readonly string[
   if (best) return best.id;
   const stat = statPath(cfg, mon, party, shiny);
   if (stat) return stat;
+  const moved = moveHistoryPath(mon, types, party, isFighting);
+  if (moved) return moved;
   if (mon.closeCalls >= cfg.minCloseCalls) return 'last-stand';
   const top = Math.max(0, ...party.map((h) => h.knockoutsDealt));
   if (mon.knockoutsDealt >= cfg.minKos && mon.knockoutsDealt === top && party.filter((h) => h.knockoutsDealt === top).length === 1) return 'striker';
@@ -345,7 +364,8 @@ export function assignGrowthPaths(content: Content, party: PokemonInstance[], hi
     if (mon.growthPath) continue;
     const h = histories[mon.uid];
     if (!h) continue;
-    const id = pathFor(cfg, h, content.species.get(mon.speciesId)?.types ?? [], hs, mon.shiny);
+    const id = pathFor(cfg, h, content.species.get(mon.speciesId)?.types ?? [], hs, mon.shiny, (m) => content.moves.get(m)?.type === 'fighting');
+    if (id === 'dojo-student') mon.growthMove = topFightingMove(h, (m) => content.moves.get(m)?.type === 'fighting')?.id;
     if (!id || !names.has(id)) continue;
     mon.growthPath = id;
     out.push(`${content.species.get(mon.speciesId)?.name ?? mon.speciesId} found its way: ${names.get(id)}.`);
@@ -408,13 +428,14 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
 
 const TRICKS: ReadonlySet<string> = new Set(['taunt', 'torment', 'fake-out']);
 /** Accuracy multiplier for the two accuracy paths (Gambler: moves under 80%; Support: status moves). */
-export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false, extra: { moveId?: string; lowersSpe?: boolean } = {}): number {
+export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false, extra: { moveId?: string; lowersSpe?: boolean; growthMove?: string } = {}): number {
   if (!cfg.enabled || accuracy === null) return 1;
   if (mon.growthPath === 'steady-hand' && moveType.toLowerCase() === 'normal') return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'weather-wise' && weather) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'disruptor' && lowersFoe) return 1 + cfg.bonus;
   if (mon.growthPath === 'silk-spinner' && extra.lowersSpe) return 1 + cfg.bonus;
   if (mon.growthPath === 'haunt-keeper' && category === 'status' && moveType.toLowerCase() === 'ghost') return 1 + cfg.bonus;
+  if (mon.growthPath === 'dojo-student' && extra.moveId !== undefined && extra.moveId === extra.growthMove) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'trickster' && TRICKS.has(extra.moveId ?? '')) return 1 + cfg.bonus;
   if (mon.growthPath === 'gambler' && accuracy < 80) return 1 + cfg.bonus;
   if (mon.growthPath === 'support' && category === 'status') return 1 + cfg.bonus;
@@ -453,3 +474,6 @@ export function growthLine(mon: Pick<PokemonInstance, 'growthPath'>, cfg: Growth
   const effect = STAT_FLAT.has(p.id) ? `+${pct}% damage (earned over the run)` : counter ? `+${Math.min(pct, Math.round((counter.cap ?? cfg.bonus) * 100))}% ${counter.words}` : p.id === 'last-stand' ? `+${pct}% damage under a quarter HP` : p.id === 'striker' ? `+${pct}% on super-effective hits` : `+${pct}% damage with its own type`;
   return `Growth path, ${p.name}: ${effect}. ${p.flavor}`;
 }
+
+/** Fast Learner: Move Mastery needs 5% fewer uses, so each use counts a little more (rounded up). */
+export const masteryCredit = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'> | undefined, uses: number): number => (cfg.enabled && mon?.growthPath === 'fast-learner' ? Math.ceil(uses / (1 - Math.min(cfg.bonus, 0.05))) : uses);
