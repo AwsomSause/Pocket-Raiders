@@ -26,7 +26,7 @@ export const CraftingSchema = z.object({
   materials: z.array(z.object({ id: z.string(), name: z.string(), blurb: z.string() })).min(1),
   typeMaterial: z.record(z.string(), z.string()),
   drops: z.object({ wild: Drop, trainer: Drop, boss: Drop.extend({ starCores: z.number().int().min(0) }), raidPerTier: z.number().int().min(0), raidCoreMinTier: z.number().int().min(1), raidCores: z.number().int().min(0) }),
-  recipes: z.array(z.object({ id: z.string(), name: z.string(), cost: Cost, money: z.number().int().min(0), minBadges: z.number().int().min(0), gives: Gives })).min(1),
+  recipes: z.array(z.object({ id: z.string(), name: z.string(), cost: Cost, money: z.number().int().min(0), minBadges: z.number().int().min(0), gives: Gives, /** Only offered while this balance switch is on. */ needs: z.literal('captureStyles').optional() })).min(1),
 });
 export type Recipe = z.infer<typeof CraftingSchema>['recipes'][number];
 export const CRAFTING = CraftingSchema.parse(json);
@@ -68,6 +68,7 @@ export function recipeCost(content: Content, run: RunState, r: Recipe): Record<s
 }
 
 export function recipeProblem(content: Content, run: RunState, r: Recipe): string | null {
+  if (r.needs && !content.balance[r.needs].enabled) return 'Capture styles are switched off.';
   if (run.badges.length < r.minBadges) return `Needs ${r.minBadges} badge${r.minBadges === 1 ? '' : 's'}.`;
   if (r.gives.kind === 'lure' && r.gives.tower && run.tempEffects.some((t) => t.effects.some((m) => m.kind === 'typeEncounterWeight' && m.type === (r.gives as { type: string }).type && m.value === (r.gives as { value: number }).value))) return `A ${r.gives.type} Lure Tower already stands.`;
   for (const [id, n] of Object.entries(recipeCost(content, run, r))) if ((run.materials[id] ?? 0) < n) return `Needs ${n} ${materialName(id)} (you have ${run.materials[id] ?? 0}).`;
