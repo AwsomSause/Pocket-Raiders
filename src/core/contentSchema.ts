@@ -2520,7 +2520,7 @@ export const BalanceSchema = z.object({
     sameEventGapStops: z.number().int().min(0),
     sameEventMaxPerRun: z.number().int().min(1),
   }),
-  rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
+  rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), /** Harder rivals: the opener is the player level + this; the ace is the player level + aceOffset. */ openerOffset: z.number().int().default(0), aceOffset: z.number().int().default(2), /** 1 keeps the old single-Pokémon first rival (used to pin old-seed tests). */ members: z.number().int().min(1).max(2).default(2), /** False restores the old rule: a rival loss ends a non-Story run (used to pin old-seed tests). */ softLoss: z.boolean().default(true), /** False keeps the fixed level instead of following the player's level (old-seed tests). */ followPlayer: z.boolean().default(true), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */
   candies: z.object({ perRelease: z.number().int().min(0), perLevels: z.number().int().min(1) }),
   /** Run-end payout into the Bank (GAME_DESIGN.md §14.2). */

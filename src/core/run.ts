@@ -1612,6 +1612,8 @@ function softLossEnd(content: Content, run: RunState): void {
   run.encountersCompleted += 1;
   count(run, 'encountersCompleted');
   tickEggs(content, run, 'battle');
+  // Modifier Run: the offer comes every few encounters, and a survived loss counts as one.
+  if (!run.victory && mutatorDue(getMode(run.rules.modeId)?.mutatorEvery, run.encountersCompleted)) run.pending.push({ kind: 'mutator', choices: mutatorOffer(run, (run.mutators ?? []).length) });
   run.afterDecisions = 'map';
   continueAfterDecisions(content, run);
 }
@@ -1898,7 +1900,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // The first rival: the first ordinary trainer of balance.rival.stage is scripted (one starter-line Pokémon).
     const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
-      plan = planFirstRival(content, run.seed);
+      plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))));
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
     }
     // A trainer that vowed to return takes the place of the first ordinary trainer of a later stage.
@@ -2667,7 +2669,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, narrativeDefeat: { id: def.id, defeatLine: def.defeatLine, victoryLine: def.victoryLine } };
   }
-  if (battle.outcome === 'lose' && storyLossApplies(run, battle)) {
+  if (battle.outcome === 'lose' && storyLossApplies(run, battle, content)) {
     storyLossEnd(content, run);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama };

@@ -290,13 +290,26 @@ export function planTrainer(content: Content, archetype: Archetype, theme: Theme
   return { classId: trainerClass.id, name, leaderId: null, ai: 0, ...(template ? { templateId: template.id } : {}), ...team };
 }
 
-export function planFirstRival(content: Content, seed: string): TrainerPlan {
+/**
+ * The scripted first rival: two Pokémon, and the last one is their ace at `playerLevel` + `rival.aceOffset`
+ * (Kice, 2026-11-06: harder rivals). The opener is a second starter-line Pokémon at the player's level. Both
+ * come from the same seeded stream as before, with the extra draw last, so the name and ace species never move.
+ */
+export function planFirstRival(content: Content, seed: string, playerLevel: number = content.balance.rival.level): TrainerPlan {
   const cfg = content.balance.rival;
   const r = new Rng(hashSeed(`${seed}::first-rival`));
-  const species = cfg.starters[r.int(0, cfg.starters.length - 1)]!;
+  const ace = cfg.starters[r.int(0, cfg.starters.length - 1)]!;
   const name = r.pick(content.trainers.get(RIVAL_CLASS)!.names);
-  const info: EnemyLevelBreakdown = { base: cfg.level, progress: 0, variance: 0, archetypeOffset: 0, bonus: 0, unclamped: cfg.level, level: cfg.level };
-  return { classId: RIVAL_CLASS, name, leaderId: null, ai: 0.5, members: [{ speciesId: species, level: cfg.level }], levelInfo: [info] };
+  const others = cfg.starters.filter((id) => id !== ace);
+  const opener = others[r.int(0, others.length - 1)]!;
+  playerLevel = cfg.followPlayer ? playerLevel : cfg.level;
+  const cap = content.balance.difficulty.maxLevel;
+  const level = (n: number): number => Math.max(1, Math.min(cap, n));
+  const info = (n: number): EnemyLevelBreakdown => ({ base: cfg.level, progress: 0, variance: 0, archetypeOffset: 0, bonus: n - cfg.level, unclamped: n, level: n });
+  const openerLevel = level(playerLevel + cfg.openerOffset);
+  const aceLevel = level(playerLevel + cfg.aceOffset);
+  if (cfg.members < 2) return { classId: RIVAL_CLASS, name, leaderId: null, ai: 0.5, members: [{ speciesId: ace, level: aceLevel }], levelInfo: [info(aceLevel)] };
+  return { classId: RIVAL_CLASS, name, leaderId: null, ai: 0.5, members: [{ speciesId: opener, level: openerLevel }, { speciesId: ace, level: aceLevel }], levelInfo: [info(openerLevel), info(aceLevel)] };
 }
 
 /** The class ids used for boss battles (they aren't trainer classes in trainers.json). */
