@@ -338,6 +338,19 @@ const HANDLERS: Record<string, Handler> = {
     giveToParty(c, (m) => { let d = CAMP.pot.mood; for (const id of ids) { const r = berryReaction(m, id); if (r === 'hated') d -= 1; } clampMood(m, d); });
     return `${meal.name}! The whole team eats: ${Math.round(s * 100)}% buff for ${CAMP.pot.battles} battles.`;
   },
+  sandwich: (c) => {
+    const ids = c.args.items ?? [];
+    if (ids.length !== CAMP.sandwich.berries) fail(`A sandwich takes exactly ${CAMP.sandwich.berries} berries.`);
+    const tally: Record<string, number> = {};
+    for (const id of ids) { takeSlot(c.run, { kind: 'held', id }); if (!isBerry(c.content, id)) fail('Only berries go in a sandwich.'); const f = berryFlavor(id); tally[f] = (tally[f] ?? 0) + 1; }
+    const [flavor, same] = Object.entries(tally).sort((a, b) => b[1] - a[1])[0]!;
+    const types = CAMP.sandwich.types[flavor]!;
+    const value = CAMP.sandwich.value + CAMP.sandwich.perSame * (same - 1);
+    addTemp(c.run, types.map((type) => ({ kind: 'typeEncounterWeight', type, value }) as ArchetypeModifier), CAMP.sandwich.battles, 'wild');
+    const healed = partyHeal(c, CAMP.sandwich.heal);
+    giveToParty(c, (m) => { let d = CAMP.sandwich.mood; for (const id of ids) { if (berryReaction(m, id) === 'hated') d -= 1; } clampMood(m, d); });
+    return `${CAMP.sandwich.names[flavor]}! The team heals ${healed} HP and the next ${CAMP.sandwich.battles} wild encounters favour ${types.join(' and ')} Pokémon.`;
+  },
   combine: (c) => {
     const a = parseSlot(c.args.item);
     const b = parseSlot(c.args.item2);

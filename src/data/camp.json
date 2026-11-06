@@ -382,6 +382,14 @@
       "args": "berries"
     },
     {
+      "id": "sandwich",
+      "group": "kitchen",
+      "name": "Picnic Sandwich",
+      "desc": "Make a sandwich from two berries. The team heals a little and the next wild encounters favour two types.",
+      "limit": "stop",
+      "args": "berries"
+    },
+    {
       "id": "combine",
       "group": "kitchen",
       "name": "Combine",
@@ -832,6 +840,44 @@
       }
     },
     "note": "Meal strength = 1 +/- perBerry x berries, with more of the same flavor counting double. Damage taken goes down, not up."
+  },
+  "sandwich": {
+    "berries": 2,
+    "battles": 3,
+    "value": 3,
+    "perSame": 1,
+    "heal": 0.15,
+    "mood": 1,
+    "types": {
+      "spicy": [
+        "fire",
+        "fighting"
+      ],
+      "dry": [
+        "ground",
+        "rock"
+      ],
+      "sweet": [
+        "fairy",
+        "grass"
+      ],
+      "bitter": [
+        "dark",
+        "poison"
+      ],
+      "sour": [
+        "bug",
+        "electric"
+      ]
+    },
+    "names": {
+      "spicy": "Hot Pepper Sandwich",
+      "dry": "Crispy Dust Sandwich",
+      "sweet": "Jam Sandwich",
+      "bitter": "Dark Herb Sandwich",
+      "sour": "Tangy Pickle Sandwich"
+    },
+    "note": "Two berries make a sandwich. The more flavour they share, the stronger the lure (value + perSame when both match). Heals the team and lifts mood."
   },
   "radio": {
     "battles": 3,

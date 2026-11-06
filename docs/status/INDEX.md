@@ -262,3 +262,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - treasure-hunt.md: Treasure Hunt Season, 5 map pieces over runs, profile v18 (S150)
 - `capture-dex-guides.md`: Hidden Ability Hunts S229, Egg Group Chart S238 (Species Mastery rows).
 - `balance-test-scales.md`: minigame balance test split into one test per game.
+- `picnic-sandwiches.md`: Picnic sandwiches, berry lure + heal at camp (S500).
