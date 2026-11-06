@@ -294,3 +294,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-transform-check.md`: Overhaul slice 11, transformation rules table + data audit; no save change.
 - `overhaul-remember-choice.md`: Overhaul slice 6: the move menu starts on the move each Pokémon used last (setting on by default, settings v34).
 - `overhaul-item-preview.md`: Overhaul slice 7: item target list shows who an item works on, the exact effect, and an I quick summary.
+- `overhaul-wild-biomes.md`: Overhaul slice 13, wild biome pools (see file).
