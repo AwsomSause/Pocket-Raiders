@@ -86,6 +86,7 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
+import { partyNarration } from './overhaul/partyNarration';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths } from './overhaul/growth';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
@@ -2064,7 +2065,10 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // A Blissful Pokémon's aura calms the Shadow Pokémon resting beside it.
     const calmed = blissfulAtRest(content, run);
     takeCheckpoint(run);
-    const camp = quirkReaction(run.party, 'rest_node', `${run.runId}:${run.encountersCompleted}:${sideId}`, (m) => content.species.get(m.speciesId)?.name ?? m.speciesId);
+    const campKey = `${run.runId}:${run.encountersCompleted}:${sideId}`;
+    const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
+    // One line only: a quirk reaction first, else the pack's party narration (personality, type, species lore).
+    const camp = quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}` };
   }
   run.phase = 'shop';
@@ -2500,7 +2504,9 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);
   if (battle.outcome === 'win') {
-    const cheer = quirkReaction(run.party, 'battle_win', `${run.runId}:${run.encountersCompleted}`, (m) => content.species.get(m.speciesId)?.name ?? m.speciesId);
+    const winKey = `${run.runId}:${run.encountersCompleted}`;
+    const winName = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
+    const cheer = quirkReaction(run.party, 'battle_win', winKey, winName) ?? partyNarration(run.party, 'battle_win', winKey, winName, (m) => content.species.get(m.speciesId)?.types ?? []);
     if (cheer) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: cheer });
   }
   if (battle.outcome === 'win') careVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));

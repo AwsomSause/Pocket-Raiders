@@ -80,6 +80,7 @@ import { HUB_LIGHT, hubPeriod } from '../core/hubTown/daylight';
 import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
+import { ensureNarration } from '../core/overhaul/partyNarration';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -205,6 +206,7 @@ export class MapScene extends Phaser.Scene {
   create(data: { notice?: string; focus?: number } = {}): void {
     this.endArmed = false;
     this.legend = null;
+    void ensureNarration().catch(() => undefined);
     const { session } = services();
     const run = session.run!;
     // W10 (I496/I507/I497): C hears a cry, H holds the lead's paw, N names the node. Keys and touch buttons share one handler each.
