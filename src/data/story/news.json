@@ -1,1 +1,708 @@
-[]
+[
+ {
+  "id": "news_reserves_missing",
+  "category": "region",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.reserves_missing.reaches_herald",
+   "the_wire": "news.reserves_missing.the_wire"
+  }
+ },
+ {
+  "id": "news_quiet_season",
+  "category": "league",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.quiet_season.meridian_courier"
+  }
+ },
+ {
+  "id": "news_new_trainer_town",
+  "category": "human",
+  "tokens": [
+   "player",
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.new_trainer_town.reaches_herald",
+   "meridian_courier": "news.new_trainer_town.meridian_courier"
+  }
+ },
+ {
+  "id": "news_trainer_talk",
+  "category": "rumor",
+  "tokens": [
+   "player"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.trainer_talk.the_wire",
+   "reaches_herald": "news.trainer_talk.reaches_herald"
+  }
+ },
+ {
+  "id": "news_exhibition_record",
+  "category": "event",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.exhibition_record.meridian_courier"
+  }
+ },
+ {
+  "id": "news_vault_empty",
+  "category": "event",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.vault_empty.reaches_herald",
+   "the_wire": "news.vault_empty.the_wire"
+  }
+ },
+ {
+  "id": "news_no_comment",
+  "category": "league",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.no_comment.meridian_courier"
+  }
+ },
+ {
+  "id": "news_rival_docks",
+  "category": "rival",
+  "tokens": [
+   "rival",
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 4
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.rival_docks.the_wire",
+   "reaches_herald": "news.rival_docks.reaches_herald"
+  }
+ },
+ {
+  "id": "news_marauders_larger",
+  "category": "evil",
+  "tokens": [
+   "team"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 5
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.marauders_larger.reaches_herald",
+   "meridian_courier": "news.marauders_larger.meridian_courier"
+  }
+ },
+ {
+  "id": "news_orrery_lights",
+  "category": "region",
+  "tokens": [
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 6
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.orrery_lights.meridian_courier",
+   "reaches_herald": "news.orrery_lights.reaches_herald"
+  }
+ },
+ {
+  "id": "news_quiet_morning",
+  "category": "human",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 7
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.quiet_morning.meridian_courier"
+  }
+ },
+ {
+  "id": "news_gym_opens",
+  "category": "league",
+  "tokens": [
+   "leader",
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.gym_opens.meridian_courier",
+   "reaches_herald": "news.gym_opens.reaches_herald"
+  }
+ },
+ {
+  "id": "news_gym_streak",
+  "category": "ranking",
+  "tokens": [
+   "leader"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.gym_streak.meridian_courier",
+   "the_wire": "news.gym_streak.the_wire"
+  }
+ },
+ {
+  "id": "news_leader_press",
+  "category": "leader",
+  "tokens": [
+   "leader",
+   "player"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.leader_press.reaches_herald",
+   "meridian_courier": "news.leader_press.meridian_courier"
+  }
+ },
+ {
+  "id": "news_press_day",
+  "category": "leader",
+  "tokens": [
+   "leader",
+   "player"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.press_day.meridian_courier",
+   "reaches_herald": "news.press_day.reaches_herald"
+  }
+ },
+ {
+  "id": "news_rival_win",
+  "category": "rival",
+  "tokens": [
+   "rival"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.rival_win.reaches_herald",
+   "the_wire": "news.rival_win.the_wire"
+  }
+ },
+ {
+  "id": "news_rival_loss",
+  "category": "rival",
+  "tokens": [
+   "rival"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.rival_loss.reaches_herald",
+   "the_wire": "news.rival_loss.the_wire"
+  }
+ },
+ {
+  "id": "news_team_sighting",
+  "category": "evil",
+  "tokens": [
+   "team",
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.team_sighting.the_wire",
+   "reaches_herald": "news.team_sighting.reaches_herald"
+  }
+ },
+ {
+  "id": "news_team_raid",
+  "category": "evil",
+  "tokens": [
+   "team",
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 4
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.team_raid.meridian_courier",
+   "reaches_herald": "news.team_raid.reaches_herald"
+  }
+ },
+ {
+  "id": "news_team_retreat",
+  "category": "evil",
+  "tokens": [
+   "team"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 5
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.team_retreat.meridian_courier",
+   "the_wire": "news.team_retreat.the_wire"
+  }
+ },
+ {
+  "id": "news_legend_tremor",
+  "category": "legend",
+  "tokens": [
+   "legend",
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.legend_tremor.reaches_herald",
+   "the_wire": "news.legend_tremor.the_wire"
+  }
+ },
+ {
+  "id": "news_legend_sighting",
+  "category": "legend",
+  "tokens": [
+   "legend"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 4
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.legend_sighting.the_wire",
+   "meridian_courier": "news.legend_sighting.meridian_courier"
+  }
+ },
+ {
+  "id": "news_legend_calm",
+  "category": "legend",
+  "tokens": [
+   "legend",
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 6
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.legend_calm.meridian_courier",
+   "reaches_herald": "news.legend_calm.reaches_herald"
+  }
+ },
+ {
+  "id": "news_storm_warning",
+  "category": "weather",
+  "tokens": [
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.storm_warning.meridian_courier",
+   "reaches_herald": "news.storm_warning.reaches_herald"
+  }
+ },
+ {
+  "id": "news_heat_wave",
+  "category": "weather",
+  "tokens": [
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.heat_wave.reaches_herald",
+   "meridian_courier": "news.heat_wave.meridian_courier"
+  }
+ },
+ {
+  "id": "news_fog_ferry",
+  "category": "weather",
+  "tokens": [
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.fog_ferry.reaches_herald",
+   "the_wire": "news.fog_ferry.the_wire"
+  }
+ },
+ {
+  "id": "news_ranking_climb",
+  "category": "ranking",
+  "tokens": [
+   "player"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.ranking_climb.meridian_courier",
+   "the_wire": "news.ranking_climb.the_wire"
+  }
+ },
+ {
+  "id": "news_ranking_drop",
+  "category": "ranking",
+  "tokens": [
+   "player"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 3
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.ranking_drop.meridian_courier",
+   "reaches_herald": "news.ranking_drop.reaches_herald"
+  }
+ },
+ {
+  "id": "news_festival",
+  "category": "human",
+  "tokens": [
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.festival.reaches_herald",
+   "meridian_courier": "news.festival.meridian_courier"
+  }
+ },
+ {
+  "id": "news_lost_pokemon",
+  "category": "human",
+  "tokens": [
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "reaches_herald": "news.lost_pokemon.reaches_herald"
+  }
+ },
+ {
+  "id": "news_market_prices",
+  "category": "region",
+  "tokens": [
+   "region"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.market_prices.meridian_courier",
+   "reaches_herald": "news.market_prices.reaches_herald"
+  }
+ },
+ {
+  "id": "news_professor_lecture",
+  "category": "event",
+  "tokens": [
+   "professor"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 2
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.professor_lecture.meridian_courier",
+   "reaches_herald": "news.professor_lecture.reaches_herald"
+  }
+ },
+ {
+  "id": "news_professor_missing",
+  "category": "rumor",
+  "tokens": [
+   "professor"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 5
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.professor_missing.the_wire",
+   "reaches_herald": "news.professor_missing.reaches_herald"
+  }
+ },
+ {
+  "id": "news_station_open",
+  "category": "event",
+  "tokens": [
+   "professor"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 1
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.station_open.meridian_courier",
+   "reaches_herald": "news.station_open.reaches_herald"
+  }
+ },
+ {
+  "id": "news_tournament_call",
+  "category": "event",
+  "tokens": [
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 4
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.tournament_call.meridian_courier",
+   "reaches_herald": "news.tournament_call.reaches_herald"
+  }
+ },
+ {
+  "id": "news_tournament_result",
+  "category": "event",
+  "tokens": [
+   "player",
+   "town"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 5
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.tournament_result.meridian_courier",
+   "the_wire": "news.tournament_result.the_wire"
+  }
+ },
+ {
+  "id": "news_league_scandal",
+  "category": "league",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 5
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.league_scandal.the_wire",
+   "reaches_herald": "news.league_scandal.reaches_herald"
+  }
+ },
+ {
+  "id": "news_league_statement",
+  "category": "league",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 5
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.league_statement.meridian_courier"
+  }
+ },
+ {
+  "id": "news_clipping_followup",
+  "category": "rumor",
+  "tokens": [],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 6
+   }
+  ],
+  "outlets": {
+   "the_wire": "news.clipping_followup.the_wire",
+   "reaches_herald": "news.clipping_followup.reaches_herald"
+  }
+ },
+ {
+  "id": "news_epilogue_front",
+  "category": "human",
+  "tokens": [
+   "player"
+  ],
+  "when": [
+   {
+    "kind": "act",
+    "op": "==",
+    "value": 7
+   }
+  ],
+  "outlets": {
+   "meridian_courier": "news.epilogue_front.meridian_courier",
+   "reaches_herald": "news.epilogue_front.reaches_herald"
+  }
+ }
+]

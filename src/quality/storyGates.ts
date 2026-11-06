@@ -1,8 +1,9 @@
-// Story Overhaul v2: the 19 named content gates over src/data/story/*.json. Each returns the offending records, so
+// Story Overhaul v2: the 20 named content gates over src/data/story/*.json. Each returns the offending records, so
 // `npm run report:check` shows a count and tests/unit/storyGates.test.ts can seed one bad record per gate.
 // Empty story data passes every gate.
 import type { Content } from '../core/contentSchema';
 import type { StoryData } from '../core/story2/schema';
+import { TEMPLATE_TOKENS, tokensIn } from '../core/story2/templates';
 
 export interface StoryGateContext {
   fileExists?: (path: string) => boolean;
@@ -114,6 +115,16 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
     }
   });
   add('story-string-keys', 'Story text keys with no text', 'Text keys used in story data but missing from text/en.json.', [...used].filter((k) => !(k in data.text)).map((k) => `missing text key "${k}"`));
+
+  const tokenBad: string[] = [];
+  const known = new Set<string>(TEMPLATE_TOKENS);
+  for (const [k, v] of Object.entries(data.text)) for (const t of tokensIn(v)) if (!known.has(t)) tokenBad.push(`${k}: unknown token {${t}}`);
+  for (const n of data.news) {
+    const declared = new Set(n.tokens);
+    for (const key of Object.values(n.outlets)) for (const t of tokensIn(data.text[key] ?? '')) if (!declared.has(t)) tokenBad.push(`${n.id}: ${key} uses {${t}} but does not declare it`);
+    for (const t of n.tokens) if (!known.has(t)) tokenBad.push(`${n.id}: declares unknown token {${t}}`);
+  }
+  add('story-template-tokens', 'Story text with unresolvable tokens', 'A {token} in story text that is not on the known list, or a news template that uses a token it does not declare.', tokenBad);
 
   add('story-pose-set', 'Characters missing poses', 'Characters with fewer poses than their tier needs (Tier 1: 4, Tier 2: 2, Tier 3: 1).', data.characters.filter((c) => Object.keys(c.poses).length < POSES_FOR_TIER[c.tier]!).map((c) => `${c.id}: ${Object.keys(c.poses).length} of ${POSES_FOR_TIER[c.tier]}`));
 
