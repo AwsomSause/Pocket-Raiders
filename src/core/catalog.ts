@@ -97,7 +97,7 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
       return max !== null && copies >= max ? 'That Pokémon has already had the maximum.' : null;
     }
     case 'nature':
-      return mon.nature === effect.nature ? `That Pokémon is already ${natureName(effect.nature)}.` : null;
+      return (effect.battles ? mon.tempNature?.nature : mon.nature) === effect.nature ? `That Pokémon is already ${natureName(effect.nature)}.` : null;
     case 'natureNudge':
       return nudgeNature(mon.nature, effect.stat) === (mon.nature ?? 'hardy') ? 'That Pokémon is already tuned that way.' : null;
     case 'ppUp':
@@ -263,8 +263,13 @@ export function applyCatalog(
     case 'nature': {
       const mon = target!;
       const before = maxHp(content, mon);
-      mon.nature = effect.nature;
-      messages.push(`${name(mon)} became ${natureName(effect.nature)} (${natureEffectText(effect.nature)}).`);
+      if (effect.battles) {
+        mon.tempNature = { nature: effect.nature, battles: effect.battles };
+        messages.push(`${name(mon)} felt ${natureName(effect.nature)} (${natureEffectText(effect.nature)}) for ${effect.battles} battles.`);
+      } else {
+        mon.nature = effect.nature;
+        messages.push(`${name(mon)} became ${natureName(effect.nature)} (${natureEffectText(effect.nature)}).`);
+      }
       mon.hp = Math.min(mon.hp, maxHp(content, mon));
       void before;
       break;

@@ -47,7 +47,7 @@ describe('Mints', () => {
   };
 
   it('there are 21 Mints, one per nature that has a Mint icon', () => {
-    const mints = [...content.catalog.values()].filter((e) => e.effect?.kind === 'nature');
+    const mints = [...content.catalog.values()].filter((e) => e.effect?.kind === 'nature' && !e.effect.battles);
     expect(mints).toHaveLength(21);
   });
 
