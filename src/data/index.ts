@@ -64,6 +64,7 @@ import shopJson from './shop.json';
 import speciesJson from './species.json';
 import customSpeciesJson from './customSpecies.json';
 import formTraitsJson from './formTraits.json';
+import speciesFixesJson from './speciesFixes.json';
 import customEvolutionsJson from './customEvolutions.json';
 import themesJson from './themes.json';
 import trainersJson from './trainers.json';
@@ -193,8 +194,42 @@ export function mergeSpecies(base: unknown[], custom: unknown[], evolutions: { f
   return [...merged, ...custom];
 }
 
+interface SpeciesFixes {
+  learnsets: Record<string, { level: number; move: string }[]>;
+  replaceMoves: Record<string, Record<string, string>>;
+  evolutionGifts: { from: string; to: string; species: string; needsItem: string }[];
+}
+
+/**
+ * Applies the hand-checked corrections in speciesFixes.json (Overhaul database audit) on top of
+ * the generated species. Throws when a fix no longer matches the data (e.g. after a rebuild fixed
+ * it at the source), so a stale fix is noticed instead of silently doing nothing.
+ */
+export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unknown[] {
+  type Entry = { id: string; learnset: { level: number; move: string }[]; evolutions?: { to: string }[] };
+  const byId = new Map((species as Entry[]).map((s) => [s.id, s]));
+  const need = (id: string) => {
+    const s = byId.get(id);
+    if (!s) throw new Error(`speciesFixes.json: unknown species "${id}"`);
+    return s;
+  };
+  const changed = new Map<string, Entry>();
+  for (const [id, learnset] of Object.entries(fixes.learnsets)) changed.set(id, { ...need(id), learnset });
+  for (const [id, swaps] of Object.entries(fixes.replaceMoves)) {
+    const s = changed.get(id) ?? need(id);
+    for (const from of Object.keys(swaps)) if (!s.learnset.some((e) => e.move === from)) throw new Error(`speciesFixes.json: "${id}" does not learn "${from}" any more; remove the fix`);
+    changed.set(id, { ...s, learnset: s.learnset.map((e) => ({ ...e, move: swaps[e.move] ?? e.move })) });
+  }
+  for (const g of fixes.evolutionGifts) {
+    const s = changed.get(g.from) ?? need(g.from);
+    if (!s.evolutions?.some((e) => e.to === g.to)) throw new Error(`speciesFixes.json: "${g.from}" does not evolve into "${g.to}"`);
+    changed.set(g.from, { ...s, evolutions: s.evolutions.map((e) => (e.to === g.to ? { ...e, gives: { species: g.species, needsItem: g.needsItem } } : e)) });
+  }
+  return (species as Entry[]).map((s) => changed.get(s.id) ?? s);
+}
+
 export const RAW_CONTENT: RawContent = {
-  species: mergeSpecies(speciesJson, customSpeciesJson, customEvolutionsJson),
+  species: applySpeciesFixes(mergeSpecies(speciesJson, customSpeciesJson, customEvolutionsJson), speciesFixesJson),
   moves: movesJson,
   abilities: abilitiesJson,
   typeChart: typeChartJson,
@@ -391,6 +426,15 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     }
   }
 
+  // Species with no TM/tutor/egg list of their own (custom evolutions such as Bruticate, and forms)
+  // use the list of the species they are a form of, or else evolve from, so TMs and tutors work on them.
+  for (const s of content.species.values()) {
+    if (content.learnables.has(s.id)) continue;
+    let from = content.species.get(s.form?.base ?? s.evolvesFrom ?? '');
+    for (let guard = 0; from && !content.learnables.has(from.id) && guard < 5; guard++) from = content.species.get(from.form?.base ?? from.evolvesFrom ?? '');
+    if (from && content.learnables.has(from.id)) content.learnables.set(s.id, content.learnables.get(from.id)!);
+  }
+
   // Cross-reference checks.
   for (const s of content.species.values()) {
     for (const a of [...s.abilities.normal, ...(s.abilities.hidden ? [s.abilities.hidden] : [])]) {
@@ -403,6 +447,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       if (!content.species.has(evo.to)) problems.push(`species "${s.id}" evolves into unknown species "${evo.to}"`);
       if (evo.item && content.items.get(evo.item)?.effect.kind !== 'evolve') problems.push(`species "${s.id}" evolves with "${evo.item}", which is not an evolution item`);
       if (evo.region && !content.regions.has(evo.region)) problems.push(`species "${s.id}" has an evolution for unknown region "${evo.region}"`);
+      if (evo.gives && !content.species.has(evo.gives.species)) problems.push(`species "${s.id}" evolution gives unknown species "${evo.gives.species}"`);
+      if (evo.gives && !content.items.has(evo.gives.needsItem)) problems.push(`species "${s.id}" evolution needs unknown item "${evo.gives.needsItem}"`);
     }
     if (s.evolvesFrom && !content.species.has(s.evolvesFrom)) problems.push(`species "${s.id}" evolves from unknown species "${s.evolvesFrom}"`);
     if (s.form && !content.species.has(s.form.base)) problems.push(`species "${s.id}" is a form of unknown species "${s.form.base}"`);

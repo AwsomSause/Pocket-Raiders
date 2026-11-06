@@ -1,0 +1,35 @@
+{
+  "about": "Hand-checked corrections applied on top of the generated species.json (Overhaul P0 database audit, 2026-11-06). species.json is rebuilt from the director's move dataset, which has a few typos; fixing them here keeps them when it is rebuilt. Every entry was checked against PokeAPI's open data (github.com/PokeAPI/pokeapi, data/v2/csv). `npm run data:validate` lists anything still different.",
+  "learnsets": {
+    "tympole": [
+      { "level": 1, "move": "growl" },
+      { "level": 1, "move": "echoed-voice" },
+      { "level": 4, "move": "acid" },
+      { "level": 8, "move": "supersonic" },
+      { "level": 12, "move": "mud-shot" },
+      { "level": 16, "move": "round" },
+      { "level": 20, "move": "bubble-beam" },
+      { "level": 24, "move": "flail" },
+      { "level": 28, "move": "uproar" },
+      { "level": 32, "move": "aqua-ring" },
+      { "level": 36, "move": "hyper-voice" },
+      { "level": 40, "move": "muddy-water" },
+      { "level": 44, "move": "rain-dance" },
+      { "level": 48, "move": "hydro-pump" }
+    ]
+  },
+  "replaceMoves": {
+    "moltres-galar": { "growl": "after-you", "fiery-dance": "fiery-wrath" },
+    "torkoal": { "infernal-parade": "inferno" },
+    "buneary": { "ally-switch": "swift" },
+    "toucannon": { "fury-cutter": "fury-attack" },
+    "crabominable": { "dynamax-cannon": "dynamic-punch" },
+    "appletun": { "acid-armor": "apple-acid" },
+    "toxtricity": { "disable": "discharge" },
+    "toxtricity-low-key": { "disable": "discharge" },
+    "poltchageist": { "strength-sap": "giga-drain" }
+  },
+  "evolutionGifts": [
+    { "from": "nincada", "to": "ninjask", "species": "shedinja", "needsItem": "poke-ball" }
+  ]
+}

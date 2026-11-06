@@ -44,6 +44,7 @@
     "report:check": "node tools/report-content.ts --check",
     "report:balance": "node tools/report-balance.ts",
     "fuzz:battle": "node tools/fuzz-battles.ts",
+    "data:validate": "node tools/validate-species.ts",
     "report:assets": "node tools/report-assets.ts",
     "report:economy": "node tools/report-economy.ts",
     "report:anims": "node tools/report-anims.ts",

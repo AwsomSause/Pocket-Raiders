@@ -81,6 +81,8 @@ export const EvolutionSchema = z
     condition: z.enum(['atkGtDef', 'atkLtDef', 'atkEqDef']).optional(),
     /** Only a male or only a female Pokémon takes this branch (Kirlia to Gallade, Burmy to Mothim). */
     gender: z.enum(['male', 'female']).optional(),
+    /** A second Pokémon this evolution also gives, if the player has the item (Nincada to Ninjask also gives Shedinja for a Poké Ball). */
+    gives: z.object({ species: z.string(), needsItem: z.string() }).optional(),
   })
   .refine((e) => (e.level === undefined) !== (e.item === undefined), { message: 'an evolution needs exactly one of level or item' });
 export type Evolution = z.infer<typeof EvolutionSchema>;
