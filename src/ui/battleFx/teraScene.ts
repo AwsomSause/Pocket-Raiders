@@ -207,7 +207,7 @@ export function teraScene(scene: Phaser.Scene, o: TeraSceneOptions): Beat {
       trainerBase?.setVisible(true);
     });
     tw({ targets: tr, x: trainerX, duration: 8 * F, delay: t + 4 * F, ease: 'Quad.easeOut' });
-    if (trainerBase) tw({ targets: trainerBase, x: trainerX, duration: 8 * F, delay: t + 4 * F, ease: 'Quad.easeOut' });
+    if (trainerBase) tw({ targets: trainerBase, x: `+=${trainerX - trainerStartX}`, duration: 8 * F, delay: t + 4 * F, ease: 'Quad.easeOut' });
     t += 13 * F;
     if (orb) {
       const r = orb;

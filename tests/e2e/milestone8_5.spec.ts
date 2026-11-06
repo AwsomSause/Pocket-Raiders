@@ -44,7 +44,7 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test('Mega Evolution happens by itself in battle', async ({ page }) => {
+test('Mega Evolution from the battle menu (Action button)', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, 'e2e-mega');
@@ -65,14 +65,18 @@ test('Mega Evolution happens by itself in battle', async ({ page }) => {
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
   await expect.poll(() => textureOf(page), { timeout: 10_000 }).toBe('pokemon.back.3');
-  // PokeRogue style: no Mega button; it Mega Evolves before its first move.
-  await expect.poll(() => menuLabels(page), { timeout: 15_000 }).toEqual(['Fight', 'Bag', 'Pokémon']);
+  // The Action button offers Mega when the Mega Ring and stone are in the Bag.
+  await expect.poll(() => menuLabels(page), { timeout: 15_000 }).toEqual(['Fight', 'Bag', 'Pokémon', 'Mega: OFF']);
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => menuLabels(page)).toEqual(['Fight', 'Bag', 'Pokémon', 'Mega Evolution: ON']);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(250);
   await page.keyboard.press('Enter');
-  // The EBDX crystal builds around Venusaur and shatters into the new form.
-  await seeCinematic(page, 'mega', 'm8_5-mega-crystal', 1000);
-  await expect.poll(() => textureOf(page), { timeout: 15_000 }).toBe('pokemon.back.3-mega');
+  // The full scene: Venusaur turns to face you, the trainer raises the Ring, white ball, crystal, blue rays, Mega form.
+  await seeCinematic(page, 'mega', 'm8_5-mega-scene', 1000);
+  await expect.poll(() => textureOf(page), { timeout: 30_000 }).toBe('pokemon.back.3-mega');
   await page.screenshot({ path: 'test-results/m8_5-mega-venusaur.png' });
   expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('venusaur-mega');
   expect(errors).toEqual([]);

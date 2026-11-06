@@ -2358,6 +2358,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,
+    manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),

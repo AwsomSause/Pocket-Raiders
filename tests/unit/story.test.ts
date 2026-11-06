@@ -107,7 +107,7 @@ describe('story foundation: random streams', () => {
     // The draft deals (bundles, bargains, a risk) join the reward pool, which would change old seeds' drafts.
     rewards: (RAW_CONTENT.rewards as { id: string }[]).filter((r) => !r.id.startsWith('deal-')),
     // The Camp Council (one more rest spot) the Relic Shrine and the world events (milestones, rare sites, callbacks, legendary route, the exploration events, weather fronts, roamers and camps) would shift what an old seed meets, so they are left out too.
-    events: { events: (RAW_CONTENT.events as { events: { id: string; group?: string }[] }).events.filter((e) => !['camp-council', 'relic-shrine', 'a-quiet-hello', 'borrowed-ally', 'reward-wheel', 'field-overgrowth', 'field-hidden-cave', 'key-item-workshop-rod', 'key-item-workshop-bike', 'relic-tree-roots', 'relic-tree-ember-bough', 'relic-tree-ember-crown', 'relic-tree-tide-bough', 'relic-tree-tide-crown', 'relic-tree-leaf-bough', 'relic-tree-leaf-crown'].includes(e.id) && !['Run Milestones', 'World Sites', 'World Callbacks', 'Legendary Route', 'Habitats', 'Routes', 'Emergent Stories', 'Roaming Legendaries', 'Checkpoint Camps', 'Exploration', 'Secret Paths', 'Landmarks', 'Mystery Dungeon', 'Tower of Legends', 'Hidden Paths', 'Legendary Beasts Chase', 'Campfire Tales', 'Plasma Operation'].includes(e.group ?? '') && !eventItemIds.some((id) => JSON.stringify(e).includes(id))) },
+    events: { events: (RAW_CONTENT.events as { events: { id: string; group?: string }[] }).events.filter((e) => !['camp-council', 'relic-shrine', 'a-quiet-hello', 'borrowed-ally', 'reward-wheel', 'relic-fragment-dig', 'relic-fragment-ruins', 'relic-forge', 'field-overgrowth', 'field-hidden-cave', 'key-item-workshop-rod', 'key-item-workshop-bike', 'relic-tree-roots', 'relic-tree-ember-bough', 'relic-tree-ember-crown', 'relic-tree-tide-bough', 'relic-tree-tide-crown', 'relic-tree-leaf-bough', 'relic-tree-leaf-crown'].includes(e.id) && !['Run Milestones', 'World Sites', 'World Callbacks', 'Legendary Route', 'Habitats', 'Routes', 'Emergent Stories', 'Roaming Legendaries', 'Checkpoint Camps', 'Exploration', 'Secret Paths', 'Landmarks', 'Mystery Dungeon', 'Tower of Legends', 'Hidden Paths', 'Legendary Beasts Chase', 'Campfire Tales', 'Plasma Operation'].includes(e.group ?? '') && !eventItemIds.some((id) => JSON.stringify(e).includes(id))) },
     // The exploration weeks (APPROVED.md section 6) and the W9 calendar events came later too.
     gameEvents: { events: (RAW_CONTENT.gameEvents as { events: { id: string; contentTags: string[] }[] }).events.filter((g) => !g.contentTags.includes('w9') && !['legendary-beasts-chase', 'campfire-tales-week', 'plasma-operation', 'hidden-path-week', 'mystery-dungeon-week', 'tower-of-legends'].includes(g.id)) },
     // Wild pairs and Tate & Liza's double battle came later too.
@@ -370,8 +370,8 @@ describe('story foundation: transformations', () => {
     const enemy = createPokemon(content, 'snorlax', 60, 'e900');
     enemy.moves = [{ id: 'splash', pp: 40 }];
     run.battle = createBattle('wild', [enemy], 0, uid);
-    // Mega Evolution happens by itself with the Mega Ring and the stone (PokeRogue style, M8.5).
-    run = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    // Mega Evolution is chosen from the Action button (a `mega` request) with the Mega Ring and the stone.
+    run = takeTurn(content, run, { kind: 'move', index: 0, transform: { kind: 'mega' } }).run;
     expect(run.party[0]!.speciesId).toBe('venusaur-mega');
     let guard = 0;
     while (run.phase === 'battle' && guard++ < 60) run = takeTurn(content, run, { kind: 'move', index: 0 }).run;

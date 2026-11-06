@@ -11,7 +11,7 @@ export const CINE_ASSETS = [
   'cine.raid.max.bg', 'cine.raid.max.icon', 'cine.raid.max.spiral', 'cine.raid.max.spiral2',
   'cine.raid.ultra.bg', 'cine.raid.ultra.icon', 'cine.raid.tera.bg',
   'cine.raid.transitions.black_bars', 'cine.raid.transitions.impact', 'cine.raid.transitions.shine',
-  'cine.dbk.mega.orb_1', 'cine.dbk.mega.shine', 'cine.dbk.primal.icon_groudon', 'cine.dbk.primal.icon_kyogre', 'cine.dbk.zpower.particle',
+  'cine.dbk.mega.orb_1', 'cine.dbk.mega.orb_2', 'cine.dbk.mega.icon', 'cine.dbk.skip_button', 'cine.dbk.mega.shine', 'cine.dbk.primal.icon_groudon', 'cine.dbk.primal.icon_kyogre', 'cine.dbk.zpower.particle',
   'cine.dbk.tera.crystal_1', 'cine.dbk.tera.crystal_2', 'cine.dbk.tera.crystal_3', 'cine.dbk.tera.crystal_4', 'cine.dbk.tera.icon', 'cine.dbk.tera.pulse', 'cine.dbk.tera.shine',
   'cine.key.mega', 'cine.key.zmove', 'cine.key.dynamax', 'cine.key.tera', 'cine.key.alpha', 'cine.key.omega',
   'cine.sfx.mega1', 'cine.sfx.mega2',

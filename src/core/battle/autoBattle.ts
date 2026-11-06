@@ -19,7 +19,7 @@ import { typeEffectiveness } from './damage';
 import { estimateDamage, itemProblem, moveValue, switchProblem, telegraphedAttack, forcedMoveId, type EnemyBrain, type PlayerAction, type SlotAction, type SlotCommand } from './engine';
 import { moveBlockReason } from './moveBlock';
 import { bondScoreOf, rallyProblem } from './spectacle';
-import { canDynamax, teraOption, zMoveOptions, type TransformRequest } from './transform';
+import { canDynamax, megaOption, teraOption, zMoveOptions, type TransformRequest } from './transform';
 
 /** What the trainer has taught a Pokémon to favour in Auto-Battle ("Trainer Instillment"); saved in the Pokémon's bond habits. */
 export const STANCES = ['balanced', 'aggressive', 'cautious', 'protective', 'strategic'] as const;
@@ -483,7 +483,11 @@ function decide(content: Content, run: RunState, opts: DecideOpts = {}): AutoPic
   const zAt = z.reduce<number>((pick, option, i) => (option && option.category !== 'status' && (pick < 0 || (option.power ?? 0) > (z[pick]?.power ?? 0)) ? i : pick), -1);
   const zIndex = zAt >= 0 && scored.some((s) => s.i === zAt) ? zAt : -1;
   let index = best.i;
-  if (zIndex >= 0 && (boss || profile.aggr + profile.risk > 0.3) && foeHp > 0.4) {
+  if (!used.includes('mega') && megaOption(ctx)) {
+    transform = { kind: 'mega' };
+    why = `${name} answers its Mega Stone and Mega Evolves!`;
+    tags.push('mega');
+  } else if (zIndex >= 0 && (boss || profile.aggr + profile.risk > 0.3) && foeHp > 0.4) {
     transform = { kind: 'zmove' };
     index = zIndex;
     why = `${name} unleashes the power it has been saving.`;
