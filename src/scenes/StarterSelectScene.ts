@@ -131,29 +131,35 @@ export class StarterSelectScene extends Phaser.Scene {
     slideIn(this, box, 0, 24 + i * 8, motion);
 
     const compact = L.brief || g.h < 340;
-    const cy = L.shape === 'egg' ? -g.h * 0.12 : L.shape === 'none' ? ly + g.h - 130 : ly + g.h * 0.4;
+    const cy = L.shape === 'egg' ? -g.h * 0.12 : L.shape === 'none' ? ly + g.h - 130 : ly + g.h * (compact ? 0.4 : 0.34);
     if (blind) {
       box.add(this.add.text(0, cy, '?', textStyle(110, L.ink === '#ffffff' ? COLORS.textMuted : L.muted)).setOrigin(0.5));
       box.add(this.add.text(0, cy + 100, 'A hidden starter', textStyle(24, L.ink)).setOrigin(0.5, 0));
     } else {
       const vis = fitHeight(this, pokemonVisual(this, species, 'front', 0, cy, 3.5), 150 * (L.spriteK ?? 1)) as unknown as Phaser.GameObjects.GameObject;
+      // Tall Pokémon (Squirtle) never poke out of the top of a card.
+      const top = (vis as unknown as Phaser.GameObjects.Image).getBounds?.().top;
+      if (L.shape !== 'egg' && L.shape !== 'none' && top !== undefined && top < ly + 8) (vis as unknown as Phaser.GameObjects.Image).y += ly + 8 - top;
       if (L.circle) box.add(this.add.circle(0, cy - 10, 84, [0xffb27a, 0x9ad0ff, 0xb6f0a0][i] ?? 0xffffff, 0.75).setStrokeStyle(3, 0xffffff, 0.9));
       box.add(vis);
       const ty = L.shape === 'egg' ? cy + 100 : L.shape === 'none' ? ly + g.h - 84 : cy + 90;
       box.add(this.add.text(0, ty, species.name, textStyle(compact ? 28 : 32, L.ink)).setOrigin(0.5, 0));
-      let bx = -(species.types.length * 68) / 2;
-      for (const t of species.types) {
-        box.add(badge(this, bx, ty + (compact ? 34 : 40), t, TYPE_COLORS[t] ?? 0x888888));
-        bx += 72;
+      // Type pills sit side by side, centred, each as wide as its word (ELECTRIC no longer runs under STEEL).
+      const pills = species.types.map((t) => badge(this, 0, ty + (compact ? 34 : 40), t, TYPE_COLORS[t] ?? 0x888888));
+      let bx = -(pills.reduce((sum, p) => sum + p.width, 0) + (pills.length - 1) * 6) / 2;
+      for (const p of pills) {
+        p.x = bx + p.width / 2;
+        bx += p.width + 6;
+        box.add(p);
       }
       if (compact) box.add(this.add.text(0, ty + 66, moves, textStyle(14, L.muted, { align: 'center', wordWrap: { width: g.w - 40 } })).setOrigin(0.5, 0));
       else {
         const b = species.baseStats;
-        box.add(this.add.text(lx + 18, ty + 80, `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}\nSpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, textStyle(17, L.muted)));
-        const mv = this.add.text(lx + 18, ty + 136, `Lv ${preview.level} moves:\n${moves}`, textStyle(17, L.ink, { wordWrap: { width: g.w - 36 } }));
+        box.add(this.add.text(lx + 18, ty + 74, `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}\nSpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, textStyle(17, L.muted)));
+        const mv = this.add.text(lx + 18, ty + 118, `Lv ${preview.level} moves: ${moves}`, textStyle(17, L.ink, { wordWrap: { width: g.w - 36 } }));
         box.add(mv);
         // Keep the moves inside the card (and clear of the help line below it).
-        fitBlock(mv, g.w - 36, Math.max(36, ly + g.h - 14 - (ty + 136)));
+        fitBlock(mv, g.w - 36, Math.max(36, ly + g.h - 14 - (ty + 118)));
       }
     }
     const hit = this.add.zone(0, 0, g.w, g.h).setInteractive({ useHandCursor: true });

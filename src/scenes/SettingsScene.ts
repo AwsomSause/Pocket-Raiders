@@ -308,7 +308,7 @@ export class SettingsScene extends Phaser.Scene {
       itemWidth: area.w,
       itemHeight: rowH,
       ...(cols > 1 ? { columns: cols } : {}),
-      fontSize: rowH >= 36 ? 24 : rowH >= 30 ? 20 : 17,
+      fontSize: rowH >= 36 ? 24 : rowH >= 30 ? 20 : rowH >= 24 ? 18 : 17,
       onSelect: (i) => rows[i]!.action(),
       onFocus: (i) => this.hintText?.setText(rows[i]?.hint ?? ''),
       // Options slide in on a new page only, not each time a setting changes.
