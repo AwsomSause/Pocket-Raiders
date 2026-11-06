@@ -3191,7 +3191,8 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     return;
   }
   if (run.victory) {
-    // The last champion is beaten: the run is won.
+    // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
+    playFinaleStops(content, run);
     run.draft = null;
     run.phase = 'over';
     return;
