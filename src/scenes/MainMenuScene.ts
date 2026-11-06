@@ -92,6 +92,7 @@ export class MainMenuScene extends Phaser.Scene {
     }
     options.push({ option: { label: 'Enter the Hub', disabled: damaged }, action: () => this.scene.start('Hub') });
     options.push({ option: { label: 'New Run', disabled: damaged }, action: () => this.newRun() });
+    options.push({ option: { label: 'Story Prologue' }, action: () => this.scene.start('Prologue') });
     options.push({ option: { label: 'Save Slots' }, action: () => this.scene.start('SaveSlots') });
     options.push({ option: { label: 'Settings' }, action: () => this.scene.start('Settings', { from: 'MainMenu' }) });
     // Save Carousel look: Copy puts this slot into the first empty one.

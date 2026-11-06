@@ -206,8 +206,14 @@ export type ChronicleRecord = z.infer<typeof ChronicleRecordSchema>;
 const ProfileStoryObject = z.object({
   protagonist: z.object({
     look: z.enum(['look_a', 'look_b']).default('look_a'), name: z.string().max(16).default(''), pronouns: z.union([z.string(), PronounsSchema]).default('they'), nameSet: z.boolean().default(false),
+    /** S2: the Look the player asked for when it was not ready (Look B); the stored `look` is then look_a. */
+    lookRequested: z.enum(['look_a', 'look_b']).optional(),
   }).default({ look: 'look_a', name: '', pronouns: 'they', nameSet: false }),
-  prologue: z.object({ done: z.boolean().default(false), mode: z.enum(['full', 'quick', 'skipped']).default('full'), beatsSeen: z.array(z.string()).max(12).default([]) }).default({ done: false, mode: 'full', beatsSeen: [] }),
+  prologue: z.object({
+    done: z.boolean().default(false), mode: z.enum(['full', 'quick', 'skipped']).default('full'), beatsSeen: z.array(z.string()).max(12).default([]),
+    /** S2: Vance's Tone (set once per save), the 'getting to it' gag flag, and whether the Look/mode screen was answered. */
+    vanceTone: z.enum(['warm', 'formal', 'playful']).optional(), vanceGettingToIt: z.boolean().default(false), modeChosen: z.boolean().default(false),
+  }).default({ done: false, mode: 'full', beatsSeen: [], vanceGettingToIt: false, modeChosen: false }),
   quiz: z.object({ lastResult: z.object({ traitVector: z.record(z.string(), z.number()), picks: z.array(z.string()).max(3) }).nullable().default(null) }).default({ lastResult: null }),
   remembrance: z.record(z.string(), z.object({ state: z.enum(['locked', 'seen', 'unlocked']), firstSeenRun: z.number().int().nullable().default(null), runs: z.number().int().default(0), mastery: z.number().default(0) })).default({}),
   lore: z.record(z.string(), z.object({ state: z.enum(['rumor', 'known', 'verified', 'contested']), sources: z.array(z.string()).max(4).default([]) })).default({}),
