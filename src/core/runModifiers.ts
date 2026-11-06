@@ -42,7 +42,7 @@ export function stageModifier(run: Pick<RunState, 'seed' | 'stage' | 'regionInde
 
 /** Wild odds multiplier for one species: the modifier's factor if it shares a type, else 1. */
 export function modifierWildWeight(content: Content, run: Pick<RunState, 'seed' | 'stage' | 'regionIndex'>, speciesId: string): number {
-  const mod = stageModifier(run);
+  const mod = content.balance.runModifiers.enabled ? stageModifier(run) : null;
   const s = content.species.get(speciesId);
   if (!mod || !s) return 1;
   return s.types.some((t) => (mod.types as string[]).includes(t)) ? mod.factor : 1;
