@@ -36,7 +36,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 17, run: 34, settings: 30, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 17, run: 37, settings: 31, meta: 1, timeline: 1 };
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -321,6 +321,18 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       const run = data as Json & { stage?: Json | null };
       return run.stage && typeof run.stage === 'object' && run.stage.obstacles === undefined ? { ...run, stage: { ...run.stage, obstacles: {} } } : run;
     },
+    // v35 (Streak Bonuses and Pity Counters): older runs start with an empty streak and no missed rare drafts.
+    34: (data) => ({ ...(data as Json), streaks: { wins: 0, best: 0, faintedSeen: 0, rareMisses: 0 } }),
+    // v36 (Battle Frontier Points): runs started before it have won none.
+    35: (data) => {
+      const run = data as Json & { minigames?: Json };
+      return run.minigames && typeof run.minigames === 'object' ? { ...run, minigames: { frontierPoints: 0, ...run.minigames } } : run;
+    },
+    // v37 (Contest conditions): runs started before it have raised none.
+    36: (data) => {
+      const run = data as Json & { minigames?: Json };
+      return run.minigames && typeof run.minigames === 'object' ? { ...run, minigames: { contest: {}, ...run.minigames } } : run;
+    },
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
@@ -384,6 +396,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     28: (data) => ({ ...(data as Json), hubStyle: 'town' }),
     // v30 (Presentation S254): trainer portrait expressions, off until chosen.
     29: (data) => ({ ...(data as Json), trainerExpressions: false }),
+    // v31 (Presentation S240, S242, S253, S256): battle camera, map parallax, move animation pack and stickers, all off or as before.
+    30: (data) => ({ ...(data as Json), battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false }),
   },
   meta: {},
   timeline: {},
@@ -413,7 +427,7 @@ export interface SlotPeek {
 
 export type SaveResult = { ok: true } | { ok: false; reason: string };
 
-export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high' };
+export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high' };
 
 /** True when the browser asks for less motion (then new players start with reduced battle animations). */
 function prefersReducedMotion(): boolean {

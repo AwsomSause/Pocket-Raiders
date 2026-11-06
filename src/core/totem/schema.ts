@@ -18,6 +18,12 @@ export const TotemAuraSchema = z.object({
   terrain: TerrainSchema.optional(),
   /** A hazard on the player's side of the field. */
   hazard: z.enum(['stealthRock', 'spikes', 'toxicSpikes', 'stickyWeb']).optional(),
+  /** S395 Totem Aura Variety. Thorns: each physical hit you land costs your Pokémon this share of its max HP (counter: use special moves). */
+  thorns: z.number().min(0.03).max(0.15).optional(),
+  /** Regeneration: the Totem mends this share of its max HP each turn while it has no status condition (counter: burn, poison, sleep or paralyse it). */
+  regen: z.number().min(0.03).max(0.12).optional(),
+  /** Sap: each turn your Pokémon in front loses this share of its max HP and the Totem mends half of that (counter: lead with one of the `immune` types). */
+  sap: z.object({ percent: z.number().min(0.03).max(0.1), immune: z.array(TypeNameSchema).default([]) }).optional(),
 });
 
 export const TotemAllySchema = z.object({

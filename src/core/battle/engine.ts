@@ -82,7 +82,7 @@ import { genderOf, oppositeGender, sameGender } from '../gender';
 import * as Held from './held';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
-import { absorbHit, advanceRaid, chargedDamage, cheerProblem, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
+import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
@@ -202,7 +202,7 @@ export type BattleEvent =
   | { type: 'refused'; side: Side; uid: string; moveId: string }
   | { type: 'initiative'; side: Side; uid: string; from: string; to: string }
   | { type: 'teamwork'; side: Side; uid: string; partner: string; name: string; stats: string[] }
-  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number }
+  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number; paired?: string }
   | { type: 'combo'; side: Side; from: string; to: string; stat: 'atk' | 'spa' }
   | { type: 'newMove'; side: Side; uid: string; moveId: string; replaced: string | null }
   | { type: 'turningPoint'; side: Side; uid: string; emotion: string }
@@ -556,6 +556,7 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   const mon = ctx.party[partyIndex];
   if (!mon) return 'There is no Pokémon in that slot.';
   if (partyIndex === ctx.battle.activeIndex && !ctx.battle.needsSwitch) return 'That Pokémon is already in battle.';
+  if (ctx.battle.eventRule?.noSwitch && !ctx.battle.needsSwitch) return 'Honor duel: no switching allowed!';
   if (ctx.setStyle && ctx.battle.kind === 'trainer' && !ctx.battle.needsSwitch) return 'Set style: no switching in trainer battles.';
   if (mon.hp <= 0) return 'That Pokémon has fainted.';
   const active = ctx.party[ctx.battle.activeIndex];
@@ -798,6 +799,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (battle.totem && !battle.outcome) {
     totemPhases(ctx, enemy, events);
     totemFieldEffect(ctx, enemy, [playerC], events);
+    totemAuraTurn(ctx, playerC, enemy, events);
   }
 
   // Held items at the end of the turn (Leftovers, Orbs, berries), then battle boosts count down.
@@ -832,11 +834,23 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
   battle.turn += 1;
+  eventRuleEnd(battle, events);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
   return events;
+}
+
+/** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
+export function eventRuleEnd(battle: BattleState, events: BattleEvent[]): void {
+  const rule = battle.eventRule;
+  if (!rule || battle.outcome) return;
+  if (rule.suddenDeath) {
+    const fell = events.filter((e) => e.type === 'faint');
+    if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
+  }
+  if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
 }
 
 /** Encore!: after a turn, critical hits build Hype, a miss or failed move costs some, and full Hype starts the damage boost. */
@@ -895,6 +909,7 @@ function raidEndOfTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, 
       events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
     }
   }
+  if (!timeout && !battle.outcome && battle.raid) raidExtras(ctx, player, enemy, events);
   // The named rival's strike (no dice): a rival that lands the final blow takes half the prize.
   const rival = battle.raid?.rival;
   if (rival && !timeout && !battle.outcome && !battle.raid!.rivalFinished && player.mon.hp > 0 && enemy.mon.hp > 0) {
@@ -921,6 +936,68 @@ function raidEndOfTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, 
     }
   }
   return timeout;
+}
+
+/**
+ * S393 to S412 at the end of a raid turn: the boss rises in its next form (gauntlet), the arena's hazard bites,
+ * a lobby bot helps, the crowd cheers, and the puzzle counts your hits. No dice; everything follows the turn's events.
+ */
+function raidExtras(ctx: BattleContext, player: Combatant, enemy: Combatant, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const raid = battle.raid!;
+  const def = raidDef(content, raid);
+  if (raid.formNote) {
+    const note = raid.formNote;
+    raid.formNote = null;
+    events.push({ type: 'raid', tone: 'phase', text: note.text });
+    events.push({ type: 'transform', side: 'enemy', uid: enemy.mon.uid, kind: 'ability', from: note.from, to: note.to, itemId: null } as BattleEvent);
+    events.push({ type: 'heal', side: 'enemy', amount: enemy.mon.hp, hpAfter: enemy.mon.hp });
+  }
+  if (player.mon.hp <= 0 || enemy.mon.hp <= 0) return;
+  // S411 Boss Puzzles.
+  if (def.modifiers.puzzle) {
+    for (const text of puzzleProgress(content, battle, playerHits(content, events))) events.push({ type: 'raid', tone: 'info', text });
+  }
+  // S412 Boss Arenas.
+  const hz = def.modifiers.hazard;
+  if (hz) {
+    const lost = hazardDamage(content, battle, player.mon, getSpecies(content, player.mon.speciesId).types);
+    if (lost > 0) {
+      player.mon.hp -= lost;
+      events.push({ type: 'raid', tone: 'info', text: hz.text });
+      events.push({ type: 'recoil', side: 'player', amount: lost, hpAfter: player.mon.hp });
+    }
+  }
+  // S393 Raid Lobby Bots.
+  const bot = raidBot(content, raid);
+  if (bot) {
+    const hit = botStrike(content, battle, enemy.mon);
+    if (hit > 0) {
+      enemy.mon.hp -= hit;
+      events.push({ type: 'raid', tone: 'info', text: `${bot.label} strikes the boss!` });
+      events.push({ type: 'damage', side: 'enemy', amount: hit, hpAfter: enemy.mon.hp, effectiveness: 1, crit: false });
+    }
+    const mend = botMend(content, battle, player.mon);
+    if (mend > 0) {
+      player.mon.hp += mend;
+      events.push({ type: 'raid', tone: 'info', text: `${bot.label} mends your Pokémon.` });
+      events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
+    }
+  }
+  // S403 Raid Cheering: the crowd meter.
+  const crowd = crowdStep(content, battle);
+  if (crowd === 'roused') {
+    for (const stat of ['atk', 'spa'] as const) battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + 1);
+    events.push({ type: 'raid', tone: 'info', text: 'The crowd is on its feet! Your Pokémon feels pumped up.' });
+  } else if (crowd === 'roar') {
+    const mend = def.modifiers.noHealing ? 0 : Math.min(maxHp(content, player.mon) - player.mon.hp, Math.floor(maxHp(content, player.mon) * content.raids.crowd.roarHeal));
+    events.push({ type: 'raid', tone: 'info', text: 'The crowd roars!' + (mend > 0 ? ' Your Pokémon is lifted.' : '') });
+    if (mend > 0) {
+      player.mon.hp += mend;
+      events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
+    }
+  }
+  if (player.mon.hp <= 0 || enemy.mon.hp <= 0) recordFaints(ctx, player, enemy, events);
 }
 
 /** A raid or Totem phase starts: its message, stat boosts, weather, and the optional cleanses. */
@@ -1055,6 +1132,44 @@ function totemPhases(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]
 }
 
 /** The Totem's territory spreads its status: each of your Pokémon without one may catch it (battle stream, once per Pokémon per turn). */
+/** S395 Totem Aura Variety: thorns, regeneration and sap at the end of a turn (each has a counter, see totems.json). No dice. */
+function totemAuraTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const t = battle.totem;
+  if (!t || battle.outcome || player.mon.hp <= 0 || enemy.mon.hp <= 0 || enemy.mon.uid !== t.uid) return;
+  const aura = getTotem(content, t.id).aura;
+  if (aura.thorns) {
+    const hurt = playerHits(content, events).filter((h) => h.physical).length;
+    const lost = Math.min(player.mon.hp - 1, hurt * Math.max(1, Math.floor(maxHp(content, player.mon) * aura.thorns)));
+    if (lost > 0) {
+      player.mon.hp -= lost;
+      events.push({ type: 'raid', tone: 'info', text: 'Its thorny aura pricks your Pokémon!' });
+      events.push({ type: 'recoil', side: 'player', amount: lost, hpAfter: player.mon.hp });
+    }
+  }
+  if (aura.sap && !getSpecies(content, player.mon.speciesId).types.some((ty) => aura.sap!.immune.includes(ty))) {
+    const lost = Math.min(player.mon.hp - 1, Math.max(1, Math.floor(maxHp(content, player.mon) * aura.sap.percent)));
+    if (lost > 0) {
+      player.mon.hp -= lost;
+      events.push({ type: 'raid', tone: 'info', text: 'The aura saps your Pokémon!' });
+      events.push({ type: 'recoil', side: 'player', amount: lost, hpAfter: player.mon.hp });
+      const gain = Math.min(maxHp(content, enemy.mon) - enemy.mon.hp, Math.ceil(lost / 2));
+      if (gain > 0) {
+        enemy.mon.hp += gain;
+        events.push({ type: 'heal', side: 'enemy', amount: gain, hpAfter: enemy.mon.hp });
+      }
+    }
+  }
+  if (aura.regen && !enemy.mon.status) {
+    const gain = Math.min(maxHp(content, enemy.mon) - enemy.mon.hp, Math.max(1, Math.floor(maxHp(content, enemy.mon) * aura.regen)));
+    if (gain > 0) {
+      enemy.mon.hp += gain;
+      events.push({ type: 'raid', tone: 'info', text: 'The aura mends the Totem.' });
+      events.push({ type: 'heal', side: 'enemy', amount: gain, hpAfter: enemy.mon.hp });
+    }
+  }
+}
+
 function totemFieldEffect(ctx: BattleContext, source: Combatant, targets: Combatant[], events: BattleEvent[]): void {
   const t = ctx.battle.totem;
   if (!t || ctx.battle.outcome) return;
@@ -1086,6 +1201,7 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
     const slot = mon.moves[action.index];
     if (!slot) throw new Error(`Invalid move slot ${action.index}`);
     if (slot.pp <= 0) throw new Error(`${slot.id} has no PP left`);
+    if (ctx.battle.eventRule?.noAttacks && ctx.content.moves.get(slot.id)?.category !== 'status' && mon.moves.some((m) => m.pp > 0 && ctx.content.moves.get(m.id)?.category === 'status')) throw new Error('Pacifist challenge: use a status move!');
     if (action.transform) {
       const problem = transformProblem(ctx, action.transform, action.index);
       if (problem) throw new Error(problem);
@@ -1110,6 +1226,7 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
 function useCheer(ctx: BattleContext, cheer: Cheer, events: BattleEvent[]): void {
   const raid = ctx.battle.raid!;
   raid.cheersLeft -= 1;
+  raid.crowd = Math.min(100, raid.crowd + ctx.content.raids.crowd.perCheer);
   const text = { offense: 'Go all-out!', defense: 'Hang tough!', healing: 'Heal up!', counter: 'Turn the tables!' }[cheer];
   events.push({ type: 'raid', tone: 'info', text: `Cheer: ${text}` });
   if (cheer === 'offense') raid.cheerOffense = CHEER_TURNS + 1;
@@ -1162,7 +1279,13 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
-    if (ctx.battle.raid) return "A raid boss can't be caught mid-fight. Beat it and it may join you!";
+    if (ctx.battle.raid) {
+      // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
+      const raid = ctx.battle.raid;
+      const foe = currentEnemy(ctx.battle);
+      const line = raidDef(ctx.content, raid).capture;
+      if (!line || raid.minionUid === foe.uid || foe.hp > maxHp(ctx.content, foe) * line) return line ? `It still has too much fight in it. Wear it down below ${Math.round(line * 100)}% HP first.` : "A raid boss can't be caught mid-fight. Beat it and it may join you!";
+    }
     if (ctx.battle.monRival) return "It won't be caught! It only wants to settle things with its rival.";
     // Wild double battle: the ball has no clear target until only one wild Pokémon is left.
     const partner = ctx.battle.doubles ? ctx.battle.enemyTeam[ctx.battle.doubles.enemy.index] : undefined;
@@ -5525,21 +5648,21 @@ export function w1DoublesStart(ctx: BattleContext, players: Combatant[], foes: C
 }
 
 /** The move an AI-controlled player-side Pokémon would pick (club exhibitions run both sides on the AI). */
-export function exhibitionMove(ctx: Pick<BattleContext, 'content' | 'battle' | 'party'>): number {
+export function exhibitionMove(ctx: Pick<BattleContext, 'content' | 'battle' | 'party'>, allow?: (moveId: string) => boolean): number {
   const { battle, content } = ctx;
   const me = ctx.party[battle.activeIndex]!;
   const brain = { content, ai: 0.7, target: currentEnemy(battle), stages: battle.playerStages, battle, party: battle.enemyTeam };
   let best = -1;
   let bestValue = -Infinity;
   me.moves.forEach((m, i) => {
-    if (m.pp <= 0) return;
+    if (m.pp <= 0 || (allow && !allow(m.id))) return;
     const v = moveValue(brain, me, m.id);
     if (v > bestValue) {
       best = i;
       bestValue = v;
     }
   });
-  return best;
+  return best < 0 && allow ? exhibitionMove(ctx) : best;
 }
 
 /** Start of a turn: a Rally is set. */

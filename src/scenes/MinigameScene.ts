@@ -48,10 +48,15 @@ export class MinigameScene extends Phaser.Scene {
     this.add.text(28, 98, outcome ? outcome.lines.join(' ') : view.prompt, textStyle(20, outcome ? '#a0f0a0' : COLORS.textLight, { wordWrap: { width: GAME_WIDTH - 56 } }));
 
     if (outcome) this.showMedal(outcome.medal, motion);
+    const fr = session.content.minigames.economy.frontier;
+    const prizes = outcome && fr.games.includes(run.minigame.id) ? fr.prizes : [];
     const options = outcome
-      ? [{ label: 'Done', detail: 'back to the map', disabled: false }]
+      ? [
+          { label: 'Done', detail: prizes.length ? `${run.minigames.frontierPoints} Frontier Points` : 'back to the map', disabled: false },
+          ...prizes.map((p) => ({ label: p.name, detail: `${p.cost} FP`, disabled: run.minigames.frontierPoints < p.cost })),
+        ]
       : view.cells.map((c) => ({ label: c.label, detail: c.detail, disabled: c.disabled }));
-    const cols = outcome ? 1 : Math.max(1, view.cols);
+    const cols = outcome ? (prizes.length ? 2 : 1) : Math.max(1, view.cols);
     const rows = Math.ceil(options.length / cols);
     const itemH = Math.min(52, Math.floor((GAME_HEIGHT - 190 - 30) / rows));
     this.menu = new Menu(this, {
@@ -59,7 +64,12 @@ export class MinigameScene extends Phaser.Scene {
       options,
       onSelect: (i) => {
         if (outcome) {
-          this.leave();
+          const prize = prizes[i - 1];
+          if (!prize) return this.leave();
+          if (run.minigames.frontierPoints < prize.cost) return;
+          playSfx(this, 'ui.select');
+          session.buyFrontierPrize(prize.id);
+          this.scene.restart({ focus: i, slow: this.slow, paused: this.paused });
           return;
         }
         const cell = view.cells[i]!;
@@ -71,7 +81,7 @@ export class MinigameScene extends Phaser.Scene {
       },
       onBack: () => this.leave(),
     });
-    if (data?.focus !== undefined && !outcome) this.menu.index = Math.min(data.focus, options.length - 1);
+    if (data?.focus !== undefined) this.menu.index = Math.min(data.focus, options.length - 1);
 
     const tickMs = def.uiConfiguration.tickMs;
     if (!outcome && tickMs > 0 && !view.done) {

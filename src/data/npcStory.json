@@ -99,6 +99,21 @@
    "id": "unwritten-ending",
    "title": "The Unwritten Ending",
    "text": "There is a page at the back of the champion's book that stays blank for everyone. It is for the one who does not need to be remembered."
+  },
+  {
+   "id": "legend-trail-1",
+   "title": "The Carved Stone",
+   "text": "A stone carved with a great bird. The first page of a legend."
+  },
+  {
+   "id": "legend-trail-2",
+   "title": "The Hidden Verse",
+   "text": "A hermit finished the verse from memory. The second page."
+  },
+  {
+   "id": "legend-trail-3",
+   "title": "The Awakening",
+   "text": "The legend ended with a Pokémon that awakened beside you."
   }
  ],
  "backstory": {

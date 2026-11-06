@@ -51,6 +51,14 @@ export const MinigameFileSchema = z.object({
     itemCapPerStage: z.number().int().min(0),
     /** Most heals, research gains and discounts that minigames can give per stage. */
     effectCapPerStage: z.number().int().min(0).default(2),
+    /** Battle Frontier Points (S490): which games pay them, per medal (times 1, 2, 3 by tier) and the prizes they buy. */
+    frontier: z
+      .object({
+        games: z.array(z.string()),
+        points: z.object({ bronze: z.number().int().min(0), silver: z.number().int().min(0), gold: z.number().int().min(0) }),
+        prizes: z.array(z.object({ id: z.string().regex(/^[a-z0-9-]+$/), name: z.string(), item: z.string(), count: z.number().int().min(1), cost: z.number().int().min(1) })),
+      })
+      .default({ games: [], points: { bronze: 0, silver: 0, gold: 0 }, prizes: [] }),
     tierMultipliers: z.array(z.number().min(0)).length(3),
   }),
   games: z.array(MinigameDefSchema).min(1),

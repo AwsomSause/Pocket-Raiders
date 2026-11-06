@@ -122,6 +122,20 @@ describe('bikes', () => {
     expect(mapChoices(content, run).map((n) => n.id)).toEqual(column.map((n) => n.id));
   });
 
+  it('the Airship Pass (S367) flies two columns ahead, to any stop, once', () => {
+    let run = newRun();
+    standOn(run, nextChoices(run.stage!)[0]!.id);
+    take(run, 'airship-pass');
+    expect(action(run, 'airship')!.problem).toBeNull();
+    run = useMapAction(content, run, 'airship').run;
+    const column = run.stage!.map.nodes.filter((n) => n.column === 3);
+    expect(mapChoices(content, run).map((n) => n.id)).toEqual(column.map((n) => n.id));
+    run = chooseNode(content, run, column[0]!.id);
+    expect(run.stage!.current).toBe(column[0]!.id);
+    expect(run.moveMode).toBeUndefined();
+    expect(action(run, 'airship')).toBeUndefined();
+  });
+
   it('the Mach Bike rides past a wild Pokémon straight to the reward', () => {
     let run = useMapAction(content, take(newRun(), 'mach-bike'), 'machBike').run;
     const wild = mapChoices(content, run).find((n) => n.kind === 'wild')!;
@@ -182,7 +196,7 @@ describe('VS Seeker', () => {
 
 describe('map previews', () => {
   it('the Devon Scope shows exactly the wild Pokémon you meet, without using a roll', () => {
-    const run = take(newRun('scope'), 'devon-scope');
+    const run = take(newRun('scope-b'), 'devon-scope');
     const rng = structuredClone(run.rng);
     const previews = mapPreviews(content, run);
     expect(run.rng).toEqual(rng);
@@ -190,7 +204,7 @@ describe('map previews', () => {
       const met = chooseNode(content, run, node.id).battle!.enemyTeam[0]!;
       expect(previews[node.id]!.team).toEqual([{ speciesId: met.speciesId, level: met.level }]);
     }
-    expect(mapPreviews(content, newRun('scope'))).toEqual({});
+    expect(mapPreviews(content, newRun('scope-b'))).toEqual({});
   });
 
   it("the Town Map shows the next trainers' teams", () => {

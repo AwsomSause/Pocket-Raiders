@@ -10,7 +10,7 @@ import { DramaBattleSchema, freshDrama } from './drama/schema';
 import { z } from 'zod';
 import { CampProfileSchema, CampStateSchema } from './camp/schema';
 import { TownProfileSchema } from './town/schema';
-import { ArchetypeModifierSchema, ATTRIBUTE_KEYS, BattleBoostSchema, BoostStatSchema, SemiSchema, StatNameSchema, StatusIdSchema, TerrainSchema, TransformKindSchema, TypeNameSchema, WeatherSchema } from './contentSchema';
+import { ArchetypeModifierSchema, EventRuleSchema, ATTRIBUTE_KEYS, BattleBoostSchema, BoostStatSchema, SemiSchema, StatNameSchema, StatusIdSchema, TerrainSchema, TransformKindSchema, TypeNameSchema, WeatherSchema } from './contentSchema';
 import { LineageSchema, BattleReplaySchema, MemoriesSchema, PastDigestSchema, WorldMemorySchema } from './memories/schema';
 import { STREAM_NAMES, type StreamName } from './rng';
 import { ArchivedRivalSchema, StoryStateSchema } from './story/schema';
@@ -508,6 +508,23 @@ export const RaidBattleSchema = z.object({
   /** S404 Raid Medals: damage dealt to the boss and HP mended by Supports, by Pokémon uid. */
   damageBy: z.record(z.string(), z.number().int().min(0)).default({}),
   healedBy: z.record(z.string(), z.number().int().min(0)).default({}),
+  /** S403 crowd meter (0 to 100) and whether the "roused" bonus was already given at this fill. */
+  crowd: z.number().min(0).max(100).default(0),
+  roused: z.boolean().default(false),
+  /** S393 the lobby bot beside you (a raids.json bot id), S401 the gimmick card in play (card id). */
+  bot: z.string().nullable().default(null),
+  gimmick: z.string().nullable().default(null),
+  /** S411 Boss Puzzles: how many steps of the pattern you have hit in order, and whether the defence is broken. */
+  puzzleStep: z.number().int().min(0).default(0),
+  puzzleSolved: z.boolean().default(false),
+  /** S407 Gauntlet: how many forms the boss has already shown after the first. */
+  formIndex: z.number().int().min(0).default(0),
+  /** S397: the zone you aim at ('body' or 'core'); null = hit whichever suits the move (the older rule). */
+  aim: z.enum(['body', 'core']).nullable().default(null),
+  /** S394: this den was the featured raid of the week. */
+  featured: z.boolean().default(false),
+  /** S407: the form change that just happened (the engine turns it into events at the end of the turn). */
+  formNote: z.object({ from: z.string(), to: z.string(), text: z.string() }).nullable().default(null),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 
@@ -702,6 +719,8 @@ export const BattleStateSchema = z.object({
   memory: z.object({ kind: z.enum(['ghost', 'gauntlet', 'echo']), id: z.string(), note: z.string() }).optional(),
   /** A raid boss fight: shield, phases, telegraph and timer (core/raid/raid.ts). */
   raid: RaidBattleSchema.optional(),
+  /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
+  eventRule: EventRuleSchema.optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */
   event: z.object({ eventId: z.string(), choiceIndex: z.number().int().min(0), sideId: z.string(), success: z.boolean(), step: z.number().int().min(0).optional() }).optional(),
   /** Battle Drama Engine: what the trainer has already said (see core/drama). */
@@ -790,6 +809,8 @@ export const SideStopSchema = z.object({
   raidId: z.string().optional(),
   /** A raid boss that escaped earlier and is back, stronger. */
   returning: z.boolean().optional(),
+  /** S394: the raid of the week (pays more). */
+  featured: z.boolean().optional(),
   /** A raid den placed because of what the world was doing (raids.json denTriggers): the trigger ids. */
   triggers: z.array(z.string()).optional(),
   /** A Totem's territory: which Totem (totems.json) lives here. */
@@ -1121,7 +1142,7 @@ export const RunStateSchema = z.object({
   /** Running totals some items need across a run (a Scarf's knockout bonus so far). */
   itemCounters: z.record(z.string(), z.number().int().min(0)).optional(),
   /** A bike chosen from the map's Items menu for the next move (see core/mapItems.ts). */
-  moveMode: z.enum(['bicycle', 'acroBike', 'machBike']).optional(),
+  moveMode: z.enum(['bicycle', 'acroBike', 'machBike', 'airship']).optional(),
   /**
    * Map, shop and money items still working (Repels, Flutes, Mail, Apricorns, Coupons...; see core/mapItems.ts):
    * wild battles, ball throws or other uses left, or the stage it lasts for ("next" until the next stage starts).
@@ -1265,7 +1286,11 @@ export const RunStateSchema = z.object({
     effects: z.number().int().default(0),
     /** A shop discount won in a minigame, good for the stage it was won in. */
     discount: z.object({ percent: z.number().int(), stage: z.number().int() }).nullable().default(null),
-  }).default(() => ({ stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null })),
+    /** Battle Frontier Points won this run and not yet spent (run v36). */
+    frontierPoints: z.number().int().min(0).default(0),
+    /** Contest conditions per Pokémon uid: Cool, Beauty, Cute, Smart, Tough (S487), raised by Poffins (run v37). */
+    contest: z.record(z.string(), z.array(z.number().int().min(0)).length(5)).default({}),
+  }).default(() => ({ stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0, contest: {} })),
   expeditions: z.object({ completed: z.array(z.string()), failed: z.array(z.string()), unlocked: z.array(z.string()), last: z.array(z.string()).default([]) }).default(() => ({ completed: [], failed: [], unlocked: [], last: [] })),
   /** Legendary world events (core/legendary): gates placed per region, and what happened with each event. Optional: older runs have none. */
   legendary: LegendaryRecordSchema.optional(),
@@ -1279,6 +1304,8 @@ export const RunStateSchema = z.object({
   raids: z.object({ entered: z.number().int().min(0), won: z.number().int().min(0), lost: z.number().int().min(0), bestTier: z.number().int().min(0), done: z.array(z.string()), /** Raids whose boss escaped (the timer ran out); each comes back as a stronger den in a later stage. */ escaped: z.array(z.string()).default([]), /** The best raid tier won in earlier runs (older saves: every tier open). */ unlockedTier: z.number().int().min(0).max(6).default(6) }).default(() => ({ entered: 0, won: 0, lost: 0, bestTier: 0, done: [], unlockedTier: 6, escaped: [] })),
   /** Revisit This Timeline (core/timeline/genesis.ts): set only on a replay of a lost run, which saves in its own slot and never touches the profile. */
   timeline: z.object({ replayId: z.string(), originRunId: z.string(), attempt: z.number().int().min(1) }).optional(),
+  /** Streak Bonuses (S313) and Pity Counters (S321; core/streaks.ts). `wins`: battles won in a row with no new faint; `faintedSeen`: fainted party members after the last win; `rareMisses`: reward drafts in a row with no rare or better reward. */
+  streaks: z.object({ wins: z.number().int().min(0), best: z.number().int().min(0), faintedSeen: z.number().int().min(0), rareMisses: z.number().int().min(0) }).default(() => ({ wins: 0, best: 0, faintedSeen: 0, rareMisses: 0 })),
   /** A past run's Pokémon waiting to meet you after this many battles (story slice 5); unset when none was chosen. */
   reunion: z.object({ mon: PastPokemonSchema, afterEncounters: z.number().int().min(1), done: z.boolean() }).optional(),
 });
@@ -1731,6 +1758,14 @@ export const SettingsSchema = z.object({
   victoryPoses: z.boolean().default(false),
   /** S254 Trainer portrait expressions: a portrait of the foe trainer reacts to the fight (off by default). */
   trainerExpressions: z.boolean().default(false),
+  /** S240 Dynamic battle camera: pans and zooms toward big moments (off by default). */
+  battleCamera: z.enum(['off', 'subtle', 'cinematic']).default('off'),
+  /** S242 Parallax map layers: the map's layers slide at different speeds with the pointer (off by default). */
+  mapParallax: z.boolean().default(false),
+  /** S253 Move animation packs: which animation set moves play (mixed = today's look). */
+  moveAnimPack: z.enum(['mixed', 'pokerogue', 'essentials']).default('mixed'),
+  /** S256 Sticker reactions: a row of emote stickers in battle (off by default). */
+  stickers: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

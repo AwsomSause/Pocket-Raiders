@@ -44,6 +44,8 @@ import * as Mini from '../core/minigame/flow';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
+import { toggleCamp } from '../core/trainingCamp';
+import { cycleXpPolicy, XP_POLICY_RULES } from '../core/teamPolicy';
 import * as PartyLife from '../core/partyLife';
 type PartyScene = PartyLife.Scene;
 import * as Svc from '../core/services/flow';
@@ -355,8 +357,8 @@ export class GameSession {
   }
 
   /** Pays for a raid den and starts the boss fight. */
-  enterRaid(sideId: string, approachId?: string): RunState {
-    this.run = Run.enterRaid(this.content, this.requireRun(), sideId, approachId);
+  enterRaid(sideId: string, approachId?: string, prep?: string): RunState {
+    this.run = Run.enterRaid(this.content, this.requireRun(), sideId, approachId, prep);
     this.persistRun();
     return this.run;
   }
@@ -404,6 +406,10 @@ export class GameSession {
 
   minigameAct(cellId: string): RunState {
     return this.setRun(Mini.minigameAct(this.content, this.requireRun(), cellId));
+  }
+
+  buyFrontierPrize(prizeId: string): RunState {
+    return this.setRun(Mini.buyFrontierPrize(this.content, this.requireRun(), prizeId));
   }
 
   minigameTick(): RunState {
@@ -588,6 +594,24 @@ export class GameSession {
     this.persistRun();
     if (result.run.phase === 'over') this.finishRun(); // the last champion was beaten
     return result;
+  }
+
+  /** Camp > Experience share: steps Even > Focus > Catch-up (ideas S62) and says what it does now. */
+  cycleXpShare(): string {
+    const run = structuredClone(this.requireRun());
+    const policy = cycleXpPolicy(run);
+    this.run = run;
+    this.persistRun();
+    return `Experience share: ${XP_POLICY_RULES[policy].name}. ${XP_POLICY_RULES[policy].blurb}`;
+  }
+
+  /** Camp > Training camp: sends a Box Pokémon to camp or calls it back (ideas S46). */
+  toggleTrainingCamp(uid: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = toggleCamp(run, uid);
+    this.run = run;
+    this.persistRun();
+    return message;
   }
 
   useItem(itemId: string, partyIndex: number, evolveTo?: string): string {

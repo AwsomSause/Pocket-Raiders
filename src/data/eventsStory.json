@@ -397,6 +397,523 @@
      "atMost": 0
     }
    ]
+  },
+  {
+   "id": "companion-recruit",
+   "name": "A Friend for the Road",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "A capable traveler with a first-aid satchel offers to walk with you. \"When your partner is in trouble, I can patch it up once per fight.\"",
+   "choices": [
+    {
+     "label": "Welcome them aboard",
+     "success": {
+      "text": "They fall in step beside you. Once per fight, they will patch up your Pokémon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "companion"
+       },
+       {
+        "kind": "moment",
+        "text": "A human companion joined the road.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Travel alone",
+     "success": {
+      "text": "They wish you luck and go their own way.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "companion",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "faction-rangers-low",
+   "name": "Ranger Outpost",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "A Ranger outpost is short-handed and asks for a hand with a stuck gate.",
+   "choices": [
+    {
+     "label": "Help the Rangers",
+     "success": {
+      "text": "The Rangers thank you and note your name in their log.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-rangers"
+       },
+       {
+        "kind": "moment",
+        "text": "Raised standing with the Rangers.",
+        "importance": 35
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You keep your distance.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep-rangers",
+     "atLeast": 0,
+     "atMost": 1
+    }
+   ]
+  },
+  {
+   "id": "faction-rangers-high",
+   "name": "Ranger Outpost: Trusted",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "the Rangers recognise you. \"One of ours, nearly. Take this.\"",
+   "choices": [
+    {
+     "label": "Accept their thanks",
+     "success": {
+      "text": "A Ranger restocks your team.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "rep-rangers"
+       },
+       {
+        "kind": "flag",
+        "key": "rep-rangers-paid"
+       }
+      ]
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep-rangers",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rep-rangers-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "faction-scholars-low",
+   "name": "Scholars at Work",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "A group of Scholars is cataloguing local Pokémon and needs a spare pair of eyes.",
+   "choices": [
+    {
+     "label": "Help the Scholars",
+     "success": {
+      "text": "The Scholars record your help in their journal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-scholars"
+       },
+       {
+        "kind": "moment",
+        "text": "Raised standing with the Scholars.",
+        "importance": 35
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You keep your distance.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep-scholars",
+     "atLeast": 0,
+     "atMost": 1
+    }
+   ]
+  },
+  {
+   "id": "faction-scholars-high",
+   "name": "Scholars at Work: Trusted",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "the Scholars recognise you. \"One of ours, nearly. Take this.\"",
+   "choices": [
+    {
+     "label": "Accept their thanks",
+     "success": {
+      "text": "They share their field notes.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rep-scholars"
+       },
+       {
+        "kind": "flag",
+        "key": "rep-scholars-paid"
+       }
+      ]
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep-scholars",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rep-scholars-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "faction-syndicate-low",
+   "name": "A Back-Alley Favor",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "A shady crew in the alley needs someone to look the other way for a minute.",
+   "choices": [
+    {
+     "label": "Help the Syndicate",
+     "success": {
+      "text": "They slip you a nod and a promise of favors.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-syndicate"
+       },
+       {
+        "kind": "moment",
+        "text": "Raised standing with the Syndicate.",
+        "importance": 35
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You keep your distance.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep-syndicate",
+     "atLeast": 0,
+     "atMost": 1
+    }
+   ]
+  },
+  {
+   "id": "faction-syndicate-high",
+   "name": "A Back-Alley Favor: Trusted",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "the Syndicate recognise you. \"One of ours, nearly. Take this.\"",
+   "choices": [
+    {
+     "label": "Accept their thanks",
+     "success": {
+      "text": "They pay out a favor.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "rep-syndicate"
+       },
+       {
+        "kind": "flag",
+        "key": "rep-syndicate-paid"
+       }
+      ]
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rep-syndicate",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rep-syndicate-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "legend-trail-1",
+   "name": "Legend Trail: The Carved Stone",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "A weathered stone carved with a bird spreading its wings. Locals say it is one page of a story that cannot be read in one sitting.",
+   "choices": [
+    {
+     "label": "Copy the carving",
+     "success": {
+      "text": "You copy it carefully. The first page of a legend.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-legend-trail-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lore-legend-trail-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "legend-trail-2",
+   "name": "Legend Trail: The Hidden Verse",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "An old hermit reads your copied carving aloud and finishes the verse from memory. \"There are two more pages to the song.\"",
+   "choices": [
+    {
+     "label": "Write down the verse",
+     "success": {
+      "text": "The second page of the legend is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-legend-trail-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You move on.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lore-legend-trail-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lore-legend-trail-2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
+  },
+  {
+   "id": "legend-trail-3",
+   "name": "Legend Trail: The Awakening",
+   "group": "Story and characters",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "At a quiet shrine the carving and the verse fit together. The air hums. Something old is listening.",
+   "choices": [
+    {
+     "label": "Sing the verse",
+     "requires": [
+      {
+       "kind": "friendship",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "A Pokémon at your side glows and awakens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-legend-trail-3"
+       },
+       {
+        "kind": "awaken"
+       },
+       {
+        "kind": "moment",
+        "text": "Completed the legend trail and awakened a Pokémon.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet",
+     "success": {
+      "text": "The shrine falls quiet. It will wait for you.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lore-legend-trail-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lore-legend-trail-3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ]
   }
  ]
 }

@@ -3,7 +3,7 @@
 // Pokémon Recognition and the Emotional Turning Point.
 
 import { describe, expect, it } from 'vitest';
-import { adjustBond, bondLevelHandover, bondMood, bondVictory, pairBondLevel, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
+import { adjustBond, bondLevelHandover, bondMood, pairedMoveName, bondVictory, pairBondLevel, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
 import { trackFeelings } from '../../src/core/bond/feelings';
 import { createBattle, type BattleEvent } from '../../src/core/battle/engine';
 import { openingDrama, planDrama } from '../../src/core/drama';
@@ -265,5 +265,33 @@ describe('Bond Levels', () => {
     expect(bondLevelHandover(content, run, a.uid, b.uid)).toMatchObject({ type: 'bondLevel', level: 2 });
     expect(run.battle!.playerStages.atk + run.battle!.playerStages.spa).toBe(2);
     expect(bondLevelHandover(content, run, a.uid, b.uid)).toBeNull();
+  });
+  it('a paired move (fire + water attackers) adds one more stage at Bond Level 2+, not at level 1', () => {
+    const lvl1 = pair();
+    lvl1.a.moves = [{ id: 'ember', pp: 20 }];
+    lvl1.b.moves = [{ id: 'water-gun', pp: 20 }];
+    for (let i = 0; i < 3; i += 1) bondVictory(lvl1.run, [lvl1.a.uid, lvl1.b.uid]);
+    expect(pairedMoveName(content, lvl1.run, lvl1.a.uid, lvl1.b.uid)).toBeNull();
+    const { run, a, b } = pair();
+    a.moves = [{ id: 'ember', pp: 20 }];
+    b.moves = [{ id: 'water-gun', pp: 20 }];
+    for (let i = 0; i < 8; i += 1) bondVictory(run, [a.uid, b.uid]);
+    expect(pairedMoveName(content, run, a.uid, b.uid)).toBe('Steam Burst');
+    expect(bondLevelHandover(content, run, a.uid, b.uid)).toMatchObject({ type: 'bondLevel', level: 2, paired: 'Steam Burst' });
+    expect(run.battle!.playerStages.atk + run.battle!.playerStages.spa).toBe(3);
+  });
+});
+
+describe('Bond level on the party screen', () => {
+  it('lists teammates a Pokémon has won with, highest level first', async () => {
+    const { bondLevelLines } = await import('../../src/ui/pokemonInfo');
+    const run = battleRun();
+    const [a] = run.party;
+    const b = createPokemon(content, 'pidgey', 5, 'b1');
+    run.party.push(b);
+    expect(bondLevelLines(content, run, a!)).toEqual([]);
+    run.itemCounters = { ...run.itemCounters, [`bondwins:${[a!.uid, b.uid].sort().join('+')}`]: 8 };
+    expect(bondLevelLines(content, run, a!)).toEqual([`Bond Lv 2 with ${content.species.get('pidgey')!.name}`]);
+    expect(bondLevelLines(content, run, b)[0]).toMatch(/^Bond Lv 2 with /);
   });
 });

@@ -76,6 +76,12 @@ export function gateAt(at: Tile, map: HubTownData = HUB_TOWN): HubPlace | null {
   return map.places.find((p) => p.kind === 'gate' && p.door.x === at.x && p.door.y === at.y) ?? null;
 }
 
+/** Teleporters (S467): where jumping to a place from the town map puts you (the spot you stand when you come out of it). */
+export function teleportSpot(id: string, map: HubTownData = HUB_TOWN): { x: number; y: number; facing: Facing } | null {
+  const place = placeById(id, map);
+  return place ? { x: place.stand.x, y: place.stand.y, facing: place.stand.facing } : null;
+}
+
 export function placeById(id: string, map: HubTownData = HUB_TOWN): HubPlace | null {
   return map.places.find((p) => p.id === id) ?? null;
 }

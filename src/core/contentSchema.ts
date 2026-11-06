@@ -1085,6 +1085,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('lastStand') }),
   /** Evolves a Pokémon that has an evolution using this item (stones, Linking Cord, Soothe Bell, ...). */
   z.object({ kind: z.literal('evolve') }),
+  /** Tuning Dust sold in shops: nudges a Pokémon's nature so this stat is raised (used up). */
+  z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Raises a run attribute as soon as it's bought (shop attribute items; never goes in the Bag). */
   z.object({ kind: z.literal('attribute'), attribute: AttributeKeySchema, amount: z.number().int() }),
   /** A key item that unlocks a battle transformation (Mega Ring, ...). Kept for the whole run, never used up. */
@@ -1109,7 +1111,7 @@ export const ItemSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   description: z.string(),
-  category: z.enum(['ball', 'healing', 'revive', 'pp', 'charm', 'evolution', 'attribute', 'key', 'transformation']),
+  category: z.enum(['ball', 'healing', 'revive', 'pp', 'charm', 'evolution', 'attribute', 'key', 'transformation', 'nature']),
   iconAssetId: z.string(),
   usableInBattle: z.boolean(),
   usableOutside: z.boolean(),
@@ -1385,6 +1387,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('acroBike') }),
   /** Once per stage, from the Items menu: ride past the next wild Pokémon and still get its reward (Mach Bike). */
   z.object({ perk: z.literal('machBike') }),
+  /** From the Items menu, one trip (S367 Airship Pass): fly to any stop two columns ahead, over the next column. */
+  z.object({ perk: z.literal('airship') }),
   /** At the next shop, turns into this run-long item, or into `refund` money if the player already has it (Bike Voucher). */
   z.object({ perk: z.literal('voucher'), item: z.string(), refund: z.number().int().min(0) }),
   /** From the Items menu: fight a trainer you beat on this stage again, for double money (VS Seeker). */
@@ -1942,6 +1946,10 @@ export const BalanceSchema = z.object({
   w1: W1ConfigSchema,
   /** The shop puts one item on sale: it changes every this many stages, and takes this share off the price. */
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
+  /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
+  priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
+  /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
+  wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */
   shopTypes: z
     .object({
@@ -1968,7 +1976,11 @@ export const BalanceSchema = z.object({
   frugalRunMaxSpent: z.number().int().min(0).default(300),
   /** Badge Powers (idea S483): each Gym badge boosts your Pokémon of the Leader's types and cuts their super-effective damage taken. */
   /** Elite Four Rematches (S127): after this many battles won per region cleared so far, the Elite Four field remixed teams. */
+  /** Weather-Locked Spawns (S234): off in the old-seed story check. */
+  spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
+  /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
+  overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   attributeItemFalloff: z.object({ afterBoosts: z.number().int().min(0), factor: z.number().min(0).max(1) }).default({ afterBoosts: 2, factor: 0.5 }),
   partyMax: z.number().int().positive(),
@@ -2274,6 +2286,8 @@ export const BalanceSchema = z.object({
     rarityWeights: z.object({ common: z.number().positive(), uncommon: z.number().positive(), rare: z.number().positive(), veryRare: z.number().positive(), legendary: z.number().positive(), mythical: z.number().positive() }),
   }),
   /** The gentle opening: for the first `encounters` fights of a run, wild Pokémon above `maxBaseStats` are swapped for weaker ones and are `levelOffset` levels lower (never below `minLevel`). */
+  /** Streak Bonuses (S313): a gift each time the win streak reaches a milestone (it repeats every `wins` wins). Pity Counters (S321): after this many reward drafts with no rare or better reward, the next draft carries one. */
+  luck: z.object({ streakRewards: z.array(z.object({ wins: z.number().int().min(2), item: z.string() })).min(1), pityRareAfter: z.number().int().min(1), /** Milestone Chests (S312): a chest opens, once, when the profile's finished-run count reaches `runs`. */ milestoneChests: z.array(z.object({ runs: z.number().int().min(1), bankCredits: z.number().int().min(0), candies: z.number().int().min(0), researchPoints: z.number().int().min(0) })).min(1) }),
   opening: z.object({ encounters: z.number().int().min(0), maxBaseStats: z.number().int().positive(), levelOffset: z.number().int().min(0), minLevel: z.number().int().min(1), softMovesUntilLevel: z.number().int().min(0), maxLevel: z.number().int().min(1) }),
   /** Chance that a wild encounter is a Legendary, Mythical or Ultra Beast (trainer perks scale it). */
   legendaryWildChance: z.number().min(0).max(1),
@@ -2699,6 +2713,25 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
 export type EventEffect = z.infer<typeof EventEffectSchema>;
 
 /** A battle an outcome starts; `win` effects apply only if you win it. Wild Pokémon can be caught. */
+/**
+ * Run events B: rules for one trainer fight (kept on `battle.eventRule`).
+ * `noSwitch`: no voluntary switching. `noAttacks`: your attack moves are blocked while you have a status move with PP.
+ * `surviveTurns`: you win once this many turns have passed. `suddenDeath`: the first Pokémon to faint ends the fight.
+ * `turnLimit`: a win after more turns than this pays `slowWin` instead of `win`.
+ * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
+ */
+export const EventRuleSchema = z.object({
+  noSwitch: z.boolean().optional(),
+  noAttacks: z.boolean().optional(),
+  surviveTurns: z.number().int().min(1).max(30).optional(),
+  suddenDeath: z.boolean().optional(),
+  turnLimit: z.number().int().min(1).max(30).optional(),
+  foeAsleep: z.boolean().optional(),
+  reversed: z.boolean().optional(),
+  stages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-6).max(6)).optional(),
+});
+export type EventRule = z.infer<typeof EventRuleSchema>;
+
 export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
@@ -2746,6 +2779,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     terrain: TerrainSchema.optional(),
     /** Run events B: share of max HP your party recovers between the fights of a `chain` (Relay Battle). */
     chainHeal: z.number().min(0).max(1).optional(),
+    /** Run events B: special rules for this fight (see EventRuleSchema). */
+    rule: EventRuleSchema.optional(),
+    /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
+    slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
 ]);

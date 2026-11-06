@@ -51,6 +51,8 @@ test('a raid den shows its preview, then starts a raid fight that survives a rel
   await page.waitForTimeout(300);
   expect(await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Map').picker))).toBe(true);
   await page.keyboard.press('Enter'); // challenge
+  await page.waitForTimeout(300);
+  await page.keyboard.press('Enter'); // "Go in as you are" (the preparation step)
   await waitForScene(page, 'Battle');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').status.text), { timeout: 10_000 }).toContain('RAID');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.raids.entered)).toBe(1);

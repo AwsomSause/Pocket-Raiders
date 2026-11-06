@@ -4,6 +4,7 @@
 // them and applies a small effect through the effect ledger. Counters live in
 // run.story.flags under "m:" keys and are cleared when the battle ends.
 
+import { teamTags } from '../synergyTags';
 import { CHEMISTRY, chemistryOf } from './chemistry';
 import { battleLife } from '../partyLife';
 import { lossesTo, noteLoss, promiseDoneFlag, promiseOf } from './promises';
@@ -61,6 +62,11 @@ export const MOMENT_EFFECTS: Partial<Record<StoryTriggerKind, StoryEffectSpec['k
   oldAcquaintance: 'flair',
   revengePact: 'statStage',
   pairSynergy: 'statStage',
+  teamSun: 'statStage',
+  teamRain: 'statStage',
+  teamSand: 'statStage',
+  teamSnow: 'statStage',
+  teamTrickRoom: 'statStage',
   chemistryPerfect: 'statStage',
   overdriveExhaustion: 'statStage',
   notUntilOver: 'flair',
@@ -367,6 +373,8 @@ export function detectMoments(content: Content, before: RunState, run: RunState,
     const pactFor = run.partyLife?.pacts.find((p) => p.uid === lead.uid && p.species === foe.speciesId);
     if (pl.pact && pactFor) fire('revengePact', 'player', lead.uid, -1, { ...leadNames(), other: nameOf(run.party.find((m) => m.uid === pactFor.forUid)?.speciesId ?? run.box.find((m) => m.uid === pactFor.forUid)?.speciesId ?? lead.speciesId) });
     const partner = pl.synergy ? run.party.find((m) => m.uid === pl.synergy) : undefined;
+    // Team Synergy Tags (ideas S65): a party built around one plan opens with a lift for its lead.
+    for (const tag of teamTags(content, run)) fire(tag.trigger, 'player', lead.uid, -1, leadNames());
     if (partner) fire('pairSynergy', 'player', lead.uid, -1, { ...leadNames(), other: nameOf(partner.speciesId) });
     // Nemesis system: a nemesis that beat you before; a rival stung by a decisive loss; a counter-team sent after you.
     const nem = nemesisById(run, battle.nemesis);

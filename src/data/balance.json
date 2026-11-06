@@ -197,6 +197,7 @@
   "budgets": { "easy": { "base": 70, "perLevel": 1.2, "max": 170, "perLevelAbove100": 0.15 }, "standard": { "base": 80, "perLevel": 1.6, "max": 200, "perLevelAbove100": 0.25 }, "challenging": { "base": 90, "perLevel": 2.6, "max": 260, "perLevelAbove100": 0.3 }, "elite": { "base": 120, "perLevel": 3.5, "max": 320, "perLevelAbove100": 0.35 } },
   "sourceTiers": { "wild": "standard", "fishing": "standard", "trainer": "challenging", "event": "standard", "quest": "standard", "reward": "standard", "gym": "challenging", "elite": "elite", "champion": "elite", "raid": "elite" } },
   "availability": { "levelSlack": 6, "rarityWeights": { "common": 1, "uncommon": 0.75, "rare": 0.5, "veryRare": 0.3, "legendary": 0.2, "mythical": 0.1 } },
+ "luck": { "streakRewards": [ { "wins": 3, "item": "super-potion" }, { "wins": 6, "item": "ultra-ball" }, { "wins": 10, "item": "revive" } ], "pityRareAfter": 4, "milestoneChests": [ { "runs": 3, "bankCredits": 150, "candies": 3, "researchPoints": 0 }, { "runs": 10, "bankCredits": 400, "candies": 8, "researchPoints": 10 }, { "runs": 25, "bankCredits": 900, "candies": 15, "researchPoints": 25 }, { "runs": 50, "bankCredits": 2000, "candies": 30, "researchPoints": 50 }, { "runs": 100, "bankCredits": 5000, "candies": 60, "researchPoints": 100 } ] },
  "opening": { "encounters": 4, "maxBaseStats": 340, "levelOffset": 1, "minLevel": 4, "softMovesUntilLevel": 15,
   "maxLevel": 6 },
  "rival": { "stage": 1, "level": 5, "depth": true, "starters": ["bulbasaur", "charmander", "squirtle", "chikorita", "cyndaquil", "totodile", "treecko", "torchic", "mudkip"] },
@@ -641,6 +642,8 @@
   "everyStages": 3,
   "discount": 0.2
  },
+ "priceSwing": { "range": 0.1, "repeat": 0.05, "repeatCap": 0.25 },
+ "wealthTax": { "base": 4000, "perRegion": 2500, "rate": 0.15 },
  "shopTypes": {
   "boutique": { "categories": ["charm", "attribute", "evolution", "transformation"], "priceFactor": 1.1, "earlyRare": 3 },
   "bazaar": { "stockSize": 8, "haggleBase": 0.35, "hagglePerCharisma": 0.005, "haggleMax": 0.8, "haggleDiscount": 0.3, "hagglePenalty": 0.15 },
@@ -821,5 +824,6 @@
    50,
    100
   ]
- }
+ },
+  "overlevel": { "xpPerItem": 400, "item": "hyper-potion" }
 }

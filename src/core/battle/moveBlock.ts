@@ -14,6 +14,7 @@ export function moveBlockReason(content: Content, battle: BattleState, mon: Poke
   if (v.disabled && v.disabled.turns > 0 && v.disabled.moveId === move.id) return `Disabled for ${v.disabled.turns} more turn${v.disabled.turns === 1 ? '' : 's'}`;
   if (v.torment && v.lastMove === move.id) return 'Torment: it cannot repeat';
   if (v.taunt > 0 && move.category === 'status') return 'Taunt: no status moves';
+  if (battle.eventRule?.noAttacks && move.category !== 'status' && mon.moves.some((m) => m.pp > 0 && content.moves.get(m.id)?.category === 'status')) return 'Pacifist challenge: status moves only';
   if (v.throat > 0 && move.flags.includes('sound')) return 'Throat Chop: no sound moves';
   return null;
 }

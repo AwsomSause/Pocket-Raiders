@@ -46,7 +46,7 @@ import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
-import { cheerProblem, raidDef } from '../core/raid/raid';
+import { cheerProblem, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { playCry, playMusic, playSfx, playSfxLazy, setMusicIntensity } from '../ui/audio';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
@@ -98,6 +98,8 @@ import { legendKit, legendLook } from '../core/legendary/visuals';
 import { addLegendLook } from '../ui/legendFx';
 import { portraitChip, type PortraitChip } from '../ui/battleFx/portrait';
 import { expressionFor } from '../core/presentation/expressions';
+import { cameraShot } from '../core/presentation/camera';
+import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
 import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, speechBubble } from '../ui/battleFx/spectacle';
@@ -159,6 +161,8 @@ interface InfoBox {
   statusBadge?: Phaser.GameObjects.Container;
   /** "TERA WATER" while the Pokémon is Terastallized. */
   teraBadge?: Phaser.GameObjects.Container;
+  /** Raid role (Tank / Striker / Support) of your Pokémon in front. */
+  roleBadge?: Phaser.GameObjects.Container;
   rageBadge?: Phaser.GameObjects.Container;
   /** EBDX's Mega / Dynamax symbol beside the name. */
   formIcon?: Phaser.GameObjects.Image;
@@ -327,6 +331,8 @@ export class BattleScene extends Phaser.Scene {
       }),
     );
     this.startProceduralAudio(battle);
+    // S256: emote stickers (Settings > Sticker reactions).
+    if (services().session.settings.stickers) addStickerRow(this, () => PLAYER_POS, this.motion);
     this.menu = null;
     this.picker = null;
     this.advance = null;
@@ -1062,6 +1068,15 @@ export class BattleScene extends Phaser.Scene {
       this.badgeIcon(box.teraBadge, 'ui.dynamax.icon');
       box.container.add(box.teraBadge);
     }
+    // S391: in a raid your Pokémon in front shows its role.
+    box.roleBadge?.destroy();
+    box.roleBadge = undefined;
+    if (box.isPlayer && this.run.battle?.raid) {
+      const role = raidRole(content, mon);
+      const look = { tank: { text: 'TANK', color: 0x2c8ad8 }, striker: { text: 'STRIKER', color: 0xc8303c }, support: { text: 'SUPPORT', color: 0x1f9a52 } }[role];
+      box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, look.text, look.color, 14);
+      box.container.add(box.roleBadge);
+    }
     this.dangerGlow(box, mon.hp / max);
     box.formIcon?.destroy();
     box.formIcon = undefined;
@@ -1209,6 +1224,16 @@ export class BattleScene extends Phaser.Scene {
     if (def && def.phases.length > 0) parts.push(`phase ${raid.phasesDone.length}/${def.phases.length}`);
     if (raid.charging) parts.push('!! CHARGED ATTACK !!');
     if (raid.timerLeft !== null) parts.push(`${raid.timerLeft} turns left`);
+    // S403 crowd, S411 puzzle, S397 weak spot, S393 bot, S407 gauntlet.
+    parts.push(`CROWD ${Math.round(raid.crowd)}%`);
+    const cur = raidDef(content, raid);
+    const puzzle = cur.modifiers.puzzle;
+    if (puzzle) parts.push(raid.puzzleSolved ? 'PUZZLE SOLVED' : `PUZZLE ${raid.puzzleStep}/${puzzlePattern(content, this.run.battle!).length} (${puzzle.pool.join('/')})`);
+    const spot = exposedWeakSpot(content, this.run.battle!);
+    if (spot) parts.push(`${spot.zone.toUpperCase()} EXPOSED${raid.aim ? ` · aiming ${raid.aim}` : ''}`);
+    const bot = raidBot(content, raid);
+    if (bot) parts.push(`ally: ${bot.label.split(' (')[0]}`);
+    if (cur.gauntlet) parts.push(`form ${raid.formIndex + 1}/${cur.gauntlet.forms.length + 1}`);
     this.status.setText(parts.join('  ·  '));
   }
 
@@ -1325,9 +1350,38 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  private camBusy = false;
+
+  /** S240: a short push-in toward the target of a big moment, then back. Presentation only; one shot at a time. */
+  private cameraMove(e: RunEvent): boolean {
+    try {
+      const st = services().session.settings;
+      if (st.battleCamera === 'off' || st.disableAllAnimations || !st.battleScreenEffects || this.camBusy) return false;
+      const side = 'side' in e ? e.side : undefined;
+      const bossAce = Boolean(this.boss()) && side === 'enemy' && e.type === 'faint' && this.run.battle ? this.run.battle.enemyIndex >= this.run.battle.enemyTeam.length - 1 : false;
+      const shot = cameraShot(st.battleCamera, { type: e.type, side, crit: e.type === 'damage' ? e.crit : undefined, effectiveness: e.type === 'damage' ? e.effectiveness : undefined, bossAce }, this.motion);
+      if (!shot || !side) return false;
+      const at = side === 'enemy' ? ENEMY_POS : PLAYER_POS;
+      const cam = this.cameras.main;
+      this.camBusy = true;
+      cam.pan(at.x, at.y - shot.lift, shot.moveMs, 'Sine.easeInOut');
+      cam.zoomTo(shot.zoom, shot.moveMs);
+      this.time.delayedCall(shot.moveMs + shot.holdMs, () => {
+        cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, shot.moveMs, 'Sine.easeInOut');
+        cam.zoomTo(1, shot.moveMs);
+        this.time.delayedCall(shot.moveMs, () => { this.camBusy = false; });
+      });
+      return true;
+    } catch {
+      this.camBusy = false;
+      return false;
+    }
+  }
+
   private focusPush(kind: 'ko' | 'phase'): void {
     const st = services().session.settings;
     if (this.motion !== 'full' || st.disableAllAnimations || !st.battleScreenEffects) return;
+    if (kind === 'ko' && st.battleCamera !== 'off') return;
     const f = cameraFocus(kind, animationStrength(st));
     const cam = this.cameras.main;
     this.tweens.add({ targets: cam, zoom: 1 + f.zoom, duration: f.ms / 2, yoyo: true, ease: 'Sine.easeInOut' });
@@ -2131,6 +2185,9 @@ export class BattleScene extends Phaser.Scene {
     const raid = this.run.battle?.raid;
     const cheerAt = raid && raid.cheersLeft > 0 && !this.duo ? options.length : -1;
     if (cheerAt >= 0) options.push({ label: `Cheer ×${raid!.cheersLeft}` });
+    // S397 Boss Weak Spots: choose where to aim (the exposed zone takes the bonus).
+    const aimAt = raid && !this.duo && raidDef(content, raid).modifiers.weakSpots ? options.length : -1;
+    if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
     const rallyAt = canRally ? options.length : -1;
     if (canRally) options.push({ label: this.rallyChoice ? 'Rally: ON' : 'Rally: OFF' });
     // Ideas W1: a surrender deal, smashing the arena, the Pokédex scan and the item hotbar.
@@ -2174,7 +2231,12 @@ export class BattleScene extends Phaser.Scene {
         }
         const i = k > 0 ? pick - k + 1 : pick;
         if (i === dealAt) this.showDealMenu();
-        else if (i === smashAt) this.submit({ kind: 'arena' });
+        else if (i === aimAt) {
+          const r = this.run.battle!.raid!;
+          r.aim = r.aim === null ? 'body' : r.aim === 'body' ? 'core' : null;
+          this.updateHeader();
+          this.showRootMenu();
+        } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
         else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
@@ -2701,7 +2763,7 @@ export class BattleScene extends Phaser.Scene {
     const { battleAnimations } = session.settings;
     const effectIntensity = capFlash(session.settings.effectIntensity, session.settings.reducedFlash);
     // What the screen shows for each event; worked out from the finished turn, so it can't change it.
-    const cues = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
+    const cues = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
 
     for (const [index, e] of events.entries()) {
       // "Charmander used Ember!" goes up before its animation; other messages follow theirs.
@@ -2745,6 +2807,7 @@ export class BattleScene extends Phaser.Scene {
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
+          if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && e.side === 'enemy' && session.settings.skillPrompts)) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
           mon!.hp = e.hpAfter;
           if (e.type !== 'drain' && e.type !== 'heal') {
@@ -2801,7 +2864,7 @@ export class BattleScene extends Phaser.Scene {
         case 'faint':
           mon!.hp = 0;
           playSfx(this, 'se.faint');
-          this.focusPush('ko');
+          if (!this.cameraMove(e)) this.focusPush('ko');
           if (sprite) this.tweens.killTweensOf(sprite);
           if (sprite) await tween(this, { targets: sprite, alpha: 0, y: sprite.y + 30, duration: 400 });
           break;

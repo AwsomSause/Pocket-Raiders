@@ -5,6 +5,7 @@
 import { grantUnlocks } from './unlocks';
 import { claim } from './quests';
 import { RUN_RULES } from './rules';
+import type { Content } from './contentSchema';
 import type { Profile, RunState } from './state';
 
 export interface ModeRewardPaid {
@@ -34,6 +35,26 @@ export function awardModeRewards(profile: Profile, run: RunState, now: string): 
       profile.candies += r.repeat.candies ?? 0;
       out.push({ id: r.id, first: false, text: r.repeat.text });
     }
+  }
+  return out;
+}
+
+/**
+ * Milestone Chests (S312): when the count of finished runs reaches a chest's `runs`, it opens once (a claim `chest:<runs>`, so a
+ * reload or a second profile write never pays it twice). A chest passed over while earning nothing (Adventure) opens at the next
+ * run that counts. Mutates `profile`.
+ */
+export function awardMilestoneChests(content: Content, profile: Profile, run: RunState, now: string): ModeRewardPaid[] {
+  if (!run.rules.progressionEligible) return [];
+  const out: ModeRewardPaid[] = [];
+  for (const c of [...content.balance.luck.milestoneChests].sort((a, b) => a.runs - b.runs)) {
+    if (profile.stats.runsEnded < c.runs || !claim(profile, `chest:${c.runs}`, now)) continue;
+    profile.bankCredits += c.bankCredits;
+    profile.lifetimeBankCredits += c.bankCredits;
+    profile.candies += c.candies;
+    profile.researchPoints += c.researchPoints;
+    const parts = [`${c.bankCredits} Bank Credits`, `${c.candies} candies`, ...(c.researchPoints > 0 ? [`${c.researchPoints} Research Points`] : [])];
+    out.push({ id: `chest-${c.runs}`, first: true, text: `Milestone Chest (${c.runs} runs): ${parts.join(', ')}` });
   }
   return out;
 }

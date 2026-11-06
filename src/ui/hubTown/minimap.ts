@@ -5,7 +5,7 @@
 
 import Phaser from 'phaser';
 import { HUB_TOWN } from '../../core/hubTown/schema';
-import { districtAt, type HubDistrict } from '../../core/hubTown/world';
+import { districtAt, teleportSpot, type HubDistrict } from '../../core/hubTown/world';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { HubTownView } from './townView';
 
@@ -59,9 +59,13 @@ export class HubMinimap {
     this.large.add(scene.add.text(0, -28, 'Hub Town', textStyle(18, '#ffe08a')));
     this.large.add(this.paint(l, true));
     for (const pl of HUB_TOWN.places) {
-      this.large.add(
-        scene.add.text(pl.door.x * l + l / 2, pl.door.y * l - (pl.kind === 'building' ? 10 : 2), SHORT[pl.id] ?? pl.name, textStyle(11, '#ffffff', { stroke: '#10203a', strokeThickness: 3, align: 'center' })).setOrigin(0.5, 1),
-      );
+      // Teleporters (S467): click a place name on the large map to jump to its door.
+      const label = scene.add.text(pl.door.x * l + l / 2, pl.door.y * l - (pl.kind === 'building' ? 10 : 2), SHORT[pl.id] ?? pl.name, textStyle(11, '#ffffff', { stroke: '#10203a', strokeThickness: 3, align: 'center' })).setOrigin(0.5, 1);
+      label.setInteractive({ useHandCursor: true }).setName(`hubtown-teleport-${pl.id}`);
+      label.on('pointerover', () => label.setColor('#ffe08a'));
+      label.on('pointerout', () => label.setColor('#ffffff'));
+      label.on('pointerdown', () => this.teleport(pl.id));
+      this.large.add(label);
     }
     HUB_TOWN.districts.forEach((d, i) => {
       const y = 8 + i * 64;
@@ -93,6 +97,16 @@ export class HubMinimap {
     this.mode = sessionMode = NEXT[this.mode];
     this.update();
     return this.mode;
+  }
+
+  /** Jump to a place's door from the large map, then close the map. */
+  teleport(placeId: string): void {
+    if (this.opts.busy() || this.mode !== 'large') return;
+    const spot = teleportSpot(placeId);
+    if (!spot) return;
+    this.town.moveTo(spot);
+    this.mode = sessionMode = 'small';
+    this.update();
   }
 
   private readonly onKey = (): void => {

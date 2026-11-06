@@ -89,6 +89,8 @@ test('Blueprint screens render at three sizes without console errors', async ({ 
   await page.waitForTimeout(300);
   await shots(page, 'raid-preview');
   await page.keyboard.press('Enter');
+  await page.waitForTimeout(300);
+  await page.keyboard.press('Enter'); // "Go in as you are" (the preparation step)
   await waitForScene(page, 'Battle');
   await page.waitForTimeout(1500);
   await shots(page, 'raid-battle');

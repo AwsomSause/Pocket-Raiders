@@ -298,5 +298,30 @@
   "item": "gigaton-ball",
   "price": 900,
   "minBadges": 4
+ },
+ {
+  "item": "tuning-dust-atk",
+  "price": 2500,
+  "minBadges": 2
+ },
+ {
+  "item": "tuning-dust-def",
+  "price": 2500,
+  "minBadges": 2
+ },
+ {
+  "item": "tuning-dust-spa",
+  "price": 2500,
+  "minBadges": 2
+ },
+ {
+  "item": "tuning-dust-spd",
+  "price": 2500,
+  "minBadges": 2
+ },
+ {
+  "item": "tuning-dust-spe",
+  "price": 2500,
+  "minBadges": 2
  }
 ]

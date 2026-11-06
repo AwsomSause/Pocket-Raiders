@@ -4,7 +4,7 @@ import { calcDamage, typeEffectiveness } from '../battle/damage';
 import { CAMP } from '../camp/schema';
 import type { Content } from '../contentSchema';
 import { calcStats, createPokemon } from '../pokemon';
-import { Rng } from '../rng';
+import { hashSeed, Rng } from '../rng';
 import type { Profile } from '../state';
 import { TOWN, freshTown, type TownProfile } from './schema';
 
@@ -132,9 +132,23 @@ export function fanClub(p: Profile): { fans: number; tiers: { label: string; nee
 
 /** Town Economy (S347): the town's share off credit prices, earned by your deeds (Fan Club tiers). 0 to 0.2. */
 export const townDiscount = (p: Profile): number => fanClub(p).tiers.filter((t) => t.reached).length * TOWN.economy.discountPerTier;
-/** A credit price after the town's discount (never below 1 credit when it was not free). */
+/**
+ * Market swings (S347): the town's prices drift between runs. A seeded wobble by how many runs you have finished,
+ * and a sale after a victory. Derived from history (no save change); 0 until your first run ends.
+ */
+export function marketSwing(p: Profile): { pct: number; why: string } {
+  const runs = p.runHistory.length;
+  if (runs === 0) return { pct: 0, why: 'Prices are steady.' };
+  const wobble = [-0.06, -0.03, 0, 0.03, 0.06, 0.09][new Rng(hashSeed(`town::market::${runs}`)).int(0, 5)]!;
+  const sale = p.runHistory[0]?.victory ? -0.05 : 0;
+  const pct = Math.round((wobble + sale) * 100) / 100;
+  const why = sale < 0 ? 'Your last victory has the town in a sale mood.' : wobble < 0 ? 'A good harvest keeps prices down.' : wobble > 0 ? 'Supplies are short, so prices are up.' : 'Prices are steady.';
+  return { pct, why };
+}
+
+/** A credit price after the town's discount and the market's swing (never below 1 credit when it was not free). */
 export function townPrice(p: Profile, credits: number): number {
-  return credits <= 0 ? credits : Math.max(1, Math.round(credits * (1 - townDiscount(p))));
+  return credits <= 0 ? credits : Math.max(1, Math.round(credits * (1 - townDiscount(p)) * (1 + marketSwing(p).pct)));
 }
 
 export type LedgerFilter = 'all' | 'wins' | 'losses';
@@ -270,4 +284,41 @@ export function miniBattle(content: Content, a: Duelist, b: Duelist, rng: Rng): 
     if (firstIsA) { hit(x, y, 0); if (hp[1]! > 0) hit(y, x, 1); } else { hit(y, x, 1); if (hp[0]! > 0) hit(x, y, 0); }
   }
   return { win: hp[0]! > 0 && hp[1]! <= 0, log, rounds };
+}
+
+// ---------- Trading Cards (S357), Notice filters (S478) ----------
+
+export interface TradingCard { id: string; kind: 'species' | 'trainer'; name: string; rarity: 'common' | 'uncommon' | 'rare' | 'holo' }
+
+/** Cards you hold: one per species you have caught (rarity from its base stats) and one per Trainer you have run as. Derived, no save. */
+export function tradingCards(content: Content, p: Profile): TradingCard[] {
+  const out: TradingCard[] = [];
+  for (const id of [...new Set(p.speciesCaught)].sort()) {
+    const sp = content.species.get(id);
+    if (!sp) continue;
+    const total = Object.values(sp.baseStats).reduce((n, v) => n + v, 0);
+    out.push({ id, kind: 'species', name: sp.name, rarity: total < 320 ? 'common' : total < 440 ? 'uncommon' : total < 540 ? 'rare' : 'holo' });
+  }
+  const seen = new Set<string>();
+  for (const r of p.legacyRuns) {
+    if (seen.has(r.archetypeId)) continue;
+    seen.add(r.archetypeId);
+    out.push({ id: r.archetypeId, kind: 'trainer', name: content.archetypes.get(r.archetypeId)?.name ?? r.archetypeId, rarity: r.outcome === 'victory' ? 'holo' : 'rare' });
+  }
+  return out;
+}
+
+export const NOTICE_FILTERS = ['all', 'claim', 'open', 'done'] as const;
+export type NoticeFilter = (typeof NOTICE_FILTERS)[number];
+export interface Notice { id: string; text: string; action: string; state: 'claim' | 'open' | 'done'; value: number }
+
+/** The daily quest board sorted by priority (S478): ready-to-claim first, then open ones by size of reward, claimed last. */
+export function noticeBoard(t: TownProfile, today: string, quests: { id: string; text: string; action: string; reward: { credits?: number; coins?: number; xp?: number; rp?: number } }[], filter: NoticeFilter): Notice[] {
+  const rank = { claim: 0, open: 1, done: 2 } as const;
+  const notices = quests.map((q): Notice => ({
+    id: q.id, text: q.text, action: q.action,
+    state: t.daily[`claim:${q.id}`] === today ? 'done' : t.daily[`used:${q.action}`] === today ? 'claim' : 'open',
+    value: (q.reward.credits ?? 0) + (q.reward.coins ?? 0) * 2 + (q.reward.rp ?? 0) * 5 + (q.reward.xp ?? 0),
+  }));
+  return notices.filter((n) => filter === 'all' || n.state === filter).sort((a, b) => rank[a.state] - rank[b.state] || b.value - a.value || a.id.localeCompare(b.id));
 }

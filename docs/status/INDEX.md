@@ -221,3 +221,19 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `zip-z6i-dex.md`: Z6i: Research Room dex sets open a member list (icon, number, name, caught/seen mark); Enter opens a species p
 - `zip-z6j-bag-layout.md`: Z6j: the Bag menu sits on the pack's Bag backdrop (orange grid, BAG plate, dark list area); the Picker skips i
 - story-endings-mysteries.md: S115 betrayal, S120 ending variations, S122 secret endings, S125 mystery, S129 lead chatter
+- `presentation-pack-2.md`: Presentation pack 2 (S240 battle camera, S242 map parallax, S253 move anim packs, S256 stickers, S258 run tips; settings v31).
+- `run-events-b-batch3.md`: Run events B batch 3: 9 trainer fights with new fight rules (no switch, no attacks, sudden death, turn limit, sleeping foes, reversed lead, start stages).
+- `minigames-more-games.md`: seven new minigames (Pokéathlon course, Bug Contest, Puzzle Slots, Dance Battle, Pinball, Styler, Snap Photo; S437, S445, S446, S451, S453, S486, S493, S494) and Battle Palace nature move rules.
+- `growth-shop-fossils.md`: Growth slice 1: Tuning Dust sold in shops, Bond Lv on the party Personality tab, 10 evolved Hisuian fossils.
+- dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)
+- `growth-xp-share.md`: Growth slice 2: Camp "Experience share" (Even/Focus/Catch-up) and capped XP paying Hyper Potions.
+- wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)
+- [meta-hub-9-remaining](meta-hub-9-remaining.md): Airship, market swings, rival sponsors, Dream Tower, garden visitors, lab, cards, notice filters, orchard, NPC schedules, gossip, teleporters.
+- `presentation-ash.md`: ash particles in Fire arenas (S251).
+- `growth-synergy-tags.md`: Growth slice 3: Team Synergy Tags (Sun/Rain/Sand/Snow/Trick Room teams open with a +1 lift).
+- `raid-bosses-slice6.md`: Raids & bosses slice 6: S393 bots, S394 weekly raid, S395 Totem auras, S397 aim picker, S398 loot preview, S399 mini-bosses, S401 cards, S402 talk, S403 crowd, S405 den weather, S406 titans, S407 gauntlet, S408 revenge, S409 capture, S411 puzzle, S412 hazards, role badge. S410 co-op not built.
+- `growth-paired-moves.md`: Growth slice 4: Bond Level 2+ pairs get a named paired-move bonus on the faint hand-over.
+- `lures-weather-spawns.md`: Lure Crafting S223, Lure Towers S237, Weather-Locked Spawns S234 (`core/spawnLocks.ts`, `crafting.json` lure recipes).
+- `growth-training-camp.md`: Growth slice 5: Training Camps (two Box Pokémon gain XP after each win).
+- `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
+- `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.

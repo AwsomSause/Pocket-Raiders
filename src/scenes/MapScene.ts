@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { wealthTaxNotice } from '../core/priceSwing';
 import { nookOf, renameNode } from '../core/hubNook';
 import { habitatList } from '../core/habitat';
 import { crossingHint, obstacleAt, towerClimb, TRAVERSAL } from '../core/traversal';
@@ -65,6 +66,7 @@ import { fitBlock, fitLine } from '../ui/fitText';
 import { AERO, drawGlass, floatIdle, glassPanel as drawPanel, typeLabel, type MotionLevel } from '../ui/aero';
 import { uiTiming } from '../ui/wiiMotion';
 import { addAmbience } from '../ui/battleFx/ambience';
+import { PARALLAX_RANGE, parallaxOffset, pointerShare, type ParallaxLayer } from '../core/presentation/parallax';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
@@ -268,10 +270,12 @@ export class MapScene extends Phaser.Scene {
     // ---------- backdrop: the stage's own arena, dimmed ----------
     const arena = league ? undefined : arenaFor(content, theme);
     const bg = arena && this.textures.exists(arena) ? arena : this.textures.exists('bg.battle') ? 'bg.battle' : null;
+    let backImg: Phaser.GameObjects.Image | undefined;
     if (bg) {
       const back = this.add.image(0, 0, bg).setOrigin(0).setScale(PIXEL_SCALE).setDepth(-60);
+      backImg = back;
       // Parallax: the scenery drifts slowly behind the map (presentation only).
-      if (this.motion === 'full' && back.displayWidth > GAME_WIDTH) {
+      if (this.motion === 'full' && back.displayWidth > GAME_WIDTH && !session.settings.mapParallax) {
         this.tweens.add({ targets: back, x: GAME_WIDTH - back.displayWidth, duration: 40_000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       }
       this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, regionDim(identity.sky), 0.58).setOrigin(0).setDepth(-55);
@@ -298,7 +302,25 @@ export class MapScene extends Phaser.Scene {
     const ground = this.add.graphics().setDepth(-49);
     for (let i = 0; i < 8; i++) {
       ground.fillStyle(0x0a0a18, 0.05 + i * 0.03);
-      ground.fillRect(0, GAME_HEIGHT - 120 + i * 15, GAME_WIDTH, 15);
+      ground.fillRect(-PARALLAX_RANGE, GAME_HEIGHT - 120 + i * 15, GAME_WIDTH + PARALLAX_RANGE * 2, 15);
+    }
+    // S242: the layers slide at different speeds with the pointer (Settings > Map parallax). Presentation only.
+    if (session.settings.mapParallax && this.motion === 'full') {
+      const layers: { obj: Phaser.GameObjects.Components.Transform; layer: ParallaxLayer; x0: number }[] = [
+        { obj: air, layer: 'air', x0: air.x },
+        { obj: ground, layer: 'ground', x0: ground.x },
+      ];
+      {
+        const back = backImg;
+        if (back && back.displayWidth > GAME_WIDTH + PARALLAX_RANGE * 2) {
+          back.x = -(back.displayWidth - GAME_WIDTH) / 2;
+          layers.push({ obj: back, layer: 'scenery', x0: back.x });
+        }
+      }
+      this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
+        const share = pointerShare(p.x, GAME_WIDTH);
+        for (const l of layers) this.tweens.add({ targets: l.obj, x: l.x0 + parallaxOffset(true, this.motion, share, l.layer), duration: 180, ease: 'Sine.easeOut' });
+      });
     }
 
     // ---------- header ----------
@@ -664,7 +686,7 @@ export class MapScene extends Phaser.Scene {
     const riding = run.moveMode ? mapActions(content, run).find((a) => a.on) : undefined;
     const working = [riding ? `Riding the ${content.catalog.get(riding.itemId)!.name}` : '', mapItemSummary(content, run)].filter(Boolean).join(' · ');
     this.notice = this.add
-      .text(GAME_WIDTH - 24, 482, data.notice ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
+      .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
       .setOrigin(1, 0);
     fitBlock(this.notice, 300, 48);
     this.focus(Math.min(data.focus ?? 0, this.options.length - 1), false);
@@ -1193,12 +1215,13 @@ export class MapScene extends Phaser.Scene {
     const pv = totemPreview(content, session.run!, sideId);
     const species = content.species.get(pv.speciesId)!;
     // Screens redesign: the Ink Ruler look draws the totem card like its mock-up.
-    if (screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`) === 'ink') {
+    const totemLook = screenStyleOf('totem', session.settings.screenStyles, `${session.run!.seed}:${sideId}`);
+    if (totemLook !== 'original') {
       const leave = (): void => {
         this.picker?.close();
         this.picker = null;
       };
-      this.picker = new StopCard(this, 'ink', {
+      this.picker = new StopCard(this, totemLook as StopLook, {
         kicker: 'TOTEM',
         title: `${pv.name} · ${pv.tier}`,
         species,
@@ -1287,11 +1310,7 @@ export class MapScene extends Phaser.Scene {
         onSelect: (i) => {
           const choice = choices[i]!;
           leave();
-          this.busy = true;
-          playSfx(this, 'ui.select');
-          const run = session.enterRaid(sideId, choice.id || undefined);
-          this.cameras.main.fadeOut(250);
-          this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+          this.startRaid(sideId, choice, pv);
         },
         onBack: leave,
       }, );
@@ -1321,11 +1340,91 @@ export class MapScene extends Phaser.Scene {
         const choice = choices[i]!;
         picker.close();
         this.picker = null;
-        this.busy = true;
-        playSfx(this, 'ui.select');
-        const run = session.enterRaid(sideId, choice.id || undefined);
-        this.cameras.main.fadeOut(250);
-        this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+        this.startRaid(sideId, choice, pv);
+      },
+      onBack: () => {
+        picker.close();
+        this.picker = null;
+      },
+    });
+    this.picker = picker;
+  }
+
+  /** After the approach: offer the preparations (S401 cards, S393 bots, S402 talk) when the den has any, else go in. */
+  private startRaid(sideId: string, choice: { id: string; leave: boolean }, pv: ReturnType<typeof raidPreview>): void {
+    const prepable = !choice.leave && choice.id !== 'practice' && (pv.cards.length > 0 || pv.bots.length > 0 || pv.talk !== null);
+    if (!prepable) this.enterRaidNow(sideId, choice.id || undefined);
+    else this.openRaidPrep(sideId, choice.id || undefined, pv);
+  }
+
+  private enterRaidNow(sideId: string, approachId: string | undefined, prep?: string): void {
+    const { session } = services();
+    this.busy = true;
+    playSfx(this, 'ui.select');
+    const run = session.enterRaid(sideId, approachId, prep);
+    this.cameras.main.fadeOut(250);
+    this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** "Before you go in": a gimmick card, a lobby bot, or a talk with the boss (one of them), or none. */
+  private openRaidPrep(sideId: string, approachId: string | undefined, pv: ReturnType<typeof raidPreview>): void {
+    const { session } = services();
+    const money = session.run!.money;
+    const approachCost = approachId ? pv.approaches.find((a) => a.id === approachId)?.cost ?? 0 : pv.approaches[0]?.cost ?? 0;
+    const base = pv.entryCost + approachCost;
+    type Row = { label: string; hint: string; cost: number; go: () => void };
+    const rows: Row[] = [{ label: 'Go in as you are', hint: 'No extra rules, no help.', cost: 0, go: () => this.enterRaidNow(sideId, approachId) }];
+    for (const c of pv.cards) rows.push({ label: `Card: ${c.label}`, hint: c.text, cost: 0, go: () => this.enterRaidNow(sideId, approachId, `card:${c.id}`) });
+    for (const b of pv.bots) rows.push({ label: `Ally: ${b.label} · ₽${b.cost}`, hint: b.text, cost: b.cost, go: () => this.enterRaidNow(sideId, approachId, `bot:${b.id}`) });
+    if (pv.talk) rows.push({ label: 'Talk to it first...', hint: 'What you say changes how both sides start the fight.', cost: 0, go: () => this.openRaidTalk(sideId, approachId, pv.talk!.prompt, pv.talk!.choices, []) });
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: `Before you go in: ${pv.name}`,
+      columns: 1,
+      rowHeight: 74,
+      rows: rows.map((r) => ({
+        problem: money < base + r.cost ? `You need ₽${base + r.cost} to enter.` : null,
+        hint: r.hint,
+        draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
+          box.add(scene.add.text(16, 8, r.label, textStyle(22)));
+          box.add(scene.add.text(16, 38, r.hint, textStyle(16, '#ffe0a0', { wordWrap: { width: w - 32 } })));
+        },
+      })),
+      onSelect: (i) => {
+        picker.close();
+        this.picker = null;
+        rows[i]!.go();
+      },
+      onBack: () => {
+        picker.close();
+        this.picker = null;
+      },
+    });
+    this.picker = picker;
+  }
+
+  /** S402 Boss Dialogue Trees: pick a line; some lead to a second set of lines. */
+  private openRaidTalk(sideId: string, approachId: string | undefined, prompt: string, choices: { id: string; label: string; reply: string; next?: unknown[] }[], path: string[]): void {
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: prompt,
+      columns: 1,
+      rowHeight: 74,
+      rows: choices.map((c) => ({
+        problem: null,
+        hint: c.reply,
+        draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
+          box.add(scene.add.text(16, 8, c.label, textStyle(22)));
+          box.add(scene.add.text(16, 38, c.next ? 'It may answer back...' : 'Say it and go in.', textStyle(16, '#ffe0a0', { wordWrap: { width: w - 32 } })));
+        },
+      })),
+      onSelect: (i) => {
+        const c = choices[i]!;
+        picker.close();
+        this.picker = null;
+        const next = [...path, c.id];
+        if (c.next && c.next.length > 0) this.openRaidTalk(sideId, approachId, c.reply, c.next as typeof choices, next);
+        else this.enterRaidNow(sideId, approachId, `talk:${next.join('>')}`);
       },
       onBack: () => {
         picker.close();

@@ -10,7 +10,71 @@
       1.5,
       2
     ],
-    "effectCapPerStage": 2
+    "effectCapPerStage": 2,
+    "frontier": {
+      "games": [
+        "battle-factory",
+        "battle-palace",
+        "battle-arcade",
+        "battle-pyramid"
+      ],
+      "points": {
+        "bronze": 1,
+        "silver": 3,
+        "gold": 6
+      },
+      "prizes": [
+        {
+          "id": "revive-pair",
+          "name": "2 Revives",
+          "item": "revive",
+          "count": 2,
+          "cost": 2
+        },
+        {
+          "id": "ultra-balls",
+          "name": "3 Ultra Balls",
+          "item": "ultra-ball",
+          "count": 3,
+          "cost": 3
+        },
+        {
+          "id": "full-restore",
+          "name": "Full Restore",
+          "item": "full-restore",
+          "count": 1,
+          "cost": 4
+        },
+        {
+          "id": "speed-dust",
+          "name": "Tuning Dust (Spe)",
+          "item": "tuning-dust-spe",
+          "count": 1,
+          "cost": 6
+        },
+        {
+          "id": "lucky-egg",
+          "name": "Lucky Egg",
+          "item": "lucky-egg",
+          "count": 1,
+          "cost": 8
+        },
+        {
+          "id": "kings-rock",
+          "name": "King's Rock",
+          "item": "kings-rock",
+          "count": 1,
+          "cost": 10
+        },
+        {
+          "id": "master-ball",
+          "name": "Master Ball",
+          "item": "master-ball",
+          "count": 1,
+          "cost": 25
+        }
+      ]
+    }
   },
   "games": [
     {
@@ -1648,7 +1712,7 @@
       "id": "berry-blending",
       "name": "Berry Blending",
       "category": "resource",
-      "blurb": "Mix flavours for the order.",
+      "blurb": "Blend Poffins; the main flavour raises a contest condition.",
       "instructions": "Add berries to match the wanted flavours. Too much counts against you as much as too little.",
       "unlockRequirements": {
         "badges": 0,
@@ -1734,7 +1798,7 @@
       "id": "camp-cooking",
       "name": "Camp Cooking",
       "category": "resource",
-      "blurb": "Cook for the camp.",
+      "blurb": "Cook curry and sandwiches; the party heals.",
       "instructions": "Add ingredients so the pot matches the order. Serve when it looks right.",
       "unlockRequirements": {
         "badges": 0,
@@ -1787,9 +1851,9 @@
             "chance": 0.5
           },
           "effect": {
-            "kind": "research",
-            "amount": 1,
-            "chance": 0.5
+            "kind": "heal",
+            "amount": 25,
+            "chance": 1.0
           }
         },
         "gold": {
@@ -1799,9 +1863,9 @@
             "chance": 0.6
           },
           "effect": {
-            "kind": "discount",
-            "amount": 10,
-            "chance": 0.8
+            "kind": "heal",
+            "amount": 40,
+            "chance": 1.0
           }
         }
       },
@@ -2162,6 +2226,694 @@
       "replayRules": "One try per stop; each repeat in the same stage pays less.",
       "uiConfiguration": {
         "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "obstacle-course",
+      "name": "Pokéathlon Course",
+      "category": "skill",
+      "blurb": "Run the obstacle course.",
+      "instructions": "Each obstacle likes one stat. Pick a stat to try it (1 energy). Your five stats are random but fair. Rest twice to recover.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "length": 8,
+            "energy": 8
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "length": 10,
+            "energy": 9
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "length": 12,
+            "energy": 10
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per obstacle cleared.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.6,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "bug-contest",
+      "name": "Bug Contest",
+      "category": "knowledge",
+      "blurb": "Bring the judges your best bug.",
+      "instructions": "Search spots for bugs. Keep one in your cage or release it. The judges score size, rarity and health of the best.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "turns": 6
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "turns": 5
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "turns": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "Points of the best bug in the cage (25 is perfect).",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.6,
+        "gold": 0.8
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "puzzle-slots",
+      "name": "Puzzle Slots",
+      "category": "puzzle",
+      "blurb": "A slot machine with no luck.",
+      "instructions": "Turn the reels so each row shows one symbol. You have just enough turns.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "slack": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "slack": 1
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "slack": 0
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "3 per matched row, 1 per pair, 12 at most.",
+      "medals": {
+        "bronze": 0.34,
+        "silver": 0.67,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "dance-battle",
+      "name": "Dance Battle",
+      "category": "timing",
+      "blurb": "Copy the rival's routine.",
+      "instructions": "Watch the rival's steps, then repeat them. Each round adds a step. Wrong steps cost a life.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "rounds": 4,
+            "lives": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "rounds": 5,
+            "lives": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "rounds": 6,
+            "lives": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per routine matched.",
+      "medals": {
+        "bronze": 0.34,
+        "silver": 0.6,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 900
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": true
+      }
+    },
+    {
+      "id": "pinball-bonus",
+      "name": "Pinball Bonus",
+      "category": "timing",
+      "blurb": "A bonus round for lucky stops.",
+      "instructions": "Move the flipper under the ball with a tap. Bumpers score. Lose all balls and it ends.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "balls": 3,
+            "ticks": 50,
+            "target": 24
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "balls": 3,
+            "ticks": 60,
+            "target": 30
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "balls": 2,
+            "ticks": 70,
+            "target": 36
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "Points scored (bumpers 2, saves 1).",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 80,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 130,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 200,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": true
+      }
+    },
+    {
+      "id": "ranger-styler",
+      "name": "Ranger Styler",
+      "category": "skill",
+      "blurb": "Draw capture loops.",
+      "instructions": "Tap the points around the Pokémon in order to close a loop. A wrong tap breaks the line. When it dashes, start again.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "loops": 2,
+            "hp": 4,
+            "ticks": 24
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "loops": 3,
+            "hp": 3,
+            "ticks": 28
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "loops": 4,
+            "hp": 3,
+            "ticks": 32
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 point per loop closed.",
+      "medals": {
+        "bronze": 0.34,
+        "silver": 0.67,
+        "gold": 1.0
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 900
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": true
+      }
+    },
+    {
+      "id": "snap-photo",
+      "name": "Snap Photo",
+      "category": "knowledge",
+      "blurb": "Dex photo challenge.",
+      "instructions": "Each shot the dex asks for one type. Shoot the right frame; the centre scores most. Limited film.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "film": 6
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "film": 7
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "film": 8
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "2 per right shot, 3 for the centre frame.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.5,
+        "gold": 0.75
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 60,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 100,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 160,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "pokemon-contest",
+      "name": "Pokémon Contest",
+      "category": "skill",
+      "blurb": "Show off your lead's conditions.",
+      "instructions": "Each round the judges want one condition. Appeal in it for a big bonus. Your lead's conditions (raised by Poffins from Berry Blending) add to every appeal.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "rounds": 3,
+            "base": 2,
+            "bonus": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "rounds": 4,
+            "base": 2,
+            "bonus": 5
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "rounds": 5,
+            "base": 2,
+            "bonus": 6
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "Appeal points: 2 + condition + flair, +6 for the judged condition, halved when repeated.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.6,
+        "gold": 0.8
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 110,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 170,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "One entry per stop; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
         "tickMs": 0
       },
       "accessibilityOptions": {

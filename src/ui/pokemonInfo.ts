@@ -2,7 +2,7 @@
 // works out: battle readiness, a stat comparison, move effect lines, the bond and the
 // battle history. Pure (no Phaser, no RNG) so tests can read it.
 
-import { bondMood, bondOf } from '../core/bond';
+import { bondMood, bondOf, pairBondLevel } from '../core/bond';
 import type { Content, MoveSchema, StatName } from '../core/contentSchema';
 import type { z } from 'zod';
 import { friendshipHearts } from '../core/friendship';
@@ -124,6 +124,16 @@ export interface BondView {
   roles: string[];
 }
 
+/** "Bond Lv 2 with Pikachu" for every teammate this Pokémon has won enough battles beside (Bond Levels, S47). */
+export function bondLevelLines(content: Content, run: RunState, mon: PokemonInstance): string[] {
+  return run.party
+    .filter((m) => m.uid !== mon.uid)
+    .map((m) => ({ m, level: pairBondLevel(run, mon.uid, m.uid) }))
+    .filter((x) => x.level > 0)
+    .sort((a, b) => b.level - a.level)
+    .map((x) => `Bond Lv ${x.level} with ${content.species.get(x.m.speciesId)?.name ?? x.m.speciesId}`);
+}
+
 /** The Personality and relationships tab: bond, mood, personality, teammates, emotion. */
 export function bondView(content: Content, run: RunState, mon: PokemonInstance): BondView {
   const bond = bondOf(run, mon.uid);
@@ -135,7 +145,7 @@ export function bondView(content: Content, run: RunState, mon: PokemonInstance):
     values: (['trust', 'affection', 'respect', 'synchronization', 'confidence', 'autonomy', 'strain'] as const).map((key) => ({ key, value: bond[key] })),
     trait: bond.trait,
     personality: `${p.label}: ${p.blurb} It ${p.quirk}.`,
-    relations: relationLines(content, run, mon).slice(0, 3).join('  ·  '),
+    relations: [...bondLevelLines(content, run, mon), ...relationLines(content, run, mon)].slice(0, 3).join('  ·  '),
     hearts: friendshipHearts(content, mon),
     emotion: emotion ? { name: emotion.name, color: emotion.color } : null,
     roles: partyRoles(content, mon),
