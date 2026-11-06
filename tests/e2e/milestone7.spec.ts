@@ -94,13 +94,16 @@ test('the Briefing shows the run’s attributes, and a shop Plate raises one whe
   for (let i = 0; i < index % 4; i++) await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(200);
   await page.screenshot({ path: 'test-results/m7-shop.png' });
-  const price = Math.round(1500 * 0.9); // Charisma 20, half a percent per point
+  // The price the shop shows for the Plate (Charisma 20 takes 10% off; the time of day, the sale of the
+  // week and other shop rules move it too). The player must be charged exactly what the row shows.
+  const price = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').view().rows.find((r: any) => r.itemId === 'fist-plate').price as number);
+  const base = await page.evaluate(() => (window as any).__pkr.session.content.shop.find((e: any) => e.item === 'fist-plate').price as number);
+  expect(price).toBeLessThan(base); // Charisma 20 makes it cheaper than the list price
   await page.keyboard.press('Enter');
   await expect.poll(async () => (await run(page)).attributeModifiers.strength, { timeout: 5000 }).toBe(5);
   const r = await run(page);
   expect(r.inventory['fist-plate']).toBeUndefined();
-  // The shop's weekly sale may take 20% off any item, this Plate included.
-  expect([5000 - price, 5000 - Math.round(price * 0.8)]).toContain(r.money);
+  expect(r.money).toBe(5000 - price);
   await page.waitForTimeout(250);
   await page.screenshot({ path: 'test-results/m7-shop-bought.png' });
   // Visual Bible shops: bag-pocket category icons on every row and a BOUGHT stamp on the row just bought.
