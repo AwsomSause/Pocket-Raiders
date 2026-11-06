@@ -87,5 +87,53 @@
     "amount": 1
    }
   ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   },
+   {
+    "kind": "flag",
+    "key": "rapport",
+    "op": ">=",
+    "value": 6
+   }
+  ],
+  "id": "int_walk_up_wild",
+  "verbs": [
+   "talk",
+   "look"
+  ],
+  "icon": "bandana",
+  "outputs": [
+   {
+    "id": "int_walk_up_wild_1",
+    "kind": "walk_up_join",
+    "nodes": 1
+   }
+  ]
+ },
+ {
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "id": "int_ranger_shortcut",
+  "verbs": [
+   "use"
+  ],
+  "outputs": [
+   {
+    "id": "int_ranger_shortcut_1",
+    "kind": "skip_node",
+    "oncePerAct": true
+   }
+  ]
  }
 ]

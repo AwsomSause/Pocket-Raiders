@@ -151,5 +151,41 @@
   "tags": [
    "champion_heir"
   ]
+ },
+ {
+  "id": "dlg_ev_intro_viridian_b1",
+  "speaker": "ch_vance",
+  "when": [],
+  "textKey": "ev_intro_viridian.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_old_friend_b1",
+  "speaker": "ch_odessa_fennimore",
+  "when": [],
+  "textKey": "ev_old_friend.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_old_friend_2_b1",
+  "speaker": "ch_odessa_fennimore",
+  "when": [],
+  "textKey": "ev_old_friend_2.b1",
+  "tags": [
+   "viridian"
+  ]
+ },
+ {
+  "id": "dlg_ev_researchers_offer_b1",
+  "speaker": "ch_ilya_santangelo",
+  "when": [],
+  "textKey": "ev_researchers_offer.b1",
+  "tags": [
+   "viridian"
+  ]
  }
 ]

@@ -158,5 +158,111 @@
     ]
    }
   ]
+ },
+ {
+  "id": "lore_weedle_two_readings",
+  "category": 9,
+  "nameKey": "lore.lore_weedle_two_readings.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_odessa_fennimore"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_weedle_two_readings.i1",
+    "sources": [
+     "ch_odessa_fennimore"
+    ]
+   },
+   {
+    "textKey": "lore.lore_weedle_two_readings.i2",
+    "sources": [
+     "ch_odessa_fennimore"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_viridian_gift",
+  "category": 9,
+  "nameKey": "lore.lore_viridian_gift.name",
+  "states": [
+   "rumor",
+   "known",
+   "contested"
+  ],
+  "sources": [
+   "ch_ilya_santangelo",
+   "ch_hollis_wren"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_viridian_gift.i1",
+    "sources": [
+     "ch_hollis_wren"
+    ]
+   },
+   {
+    "textKey": "lore.lore_viridian_gift.i2",
+    "sources": [
+     "ch_ilya_santangelo"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_the_hush",
+  "category": 6,
+  "nameKey": "lore.lore_the_hush.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_elder_butterfree"
+  ],
+  "related": [],
+  "spoiler": true,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_the_hush.i1",
+    "sources": [
+     "ch_elder_butterfree"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lore_greenwall_holdings",
+  "category": 2,
+  "nameKey": "lore.lore_greenwall_holdings.name",
+  "states": [
+   "rumor",
+   "known",
+   "verified"
+  ],
+  "sources": [
+   "ch_greenwall_manager",
+   "ch_hollis_wren"
+  ],
+  "related": [],
+  "spoiler": false,
+  "interpretations": [
+   {
+    "textKey": "lore.lore_greenwall_holdings.i1",
+    "sources": [
+     "ch_hollis_wren"
+    ]
+   }
+  ]
  }
 ]
