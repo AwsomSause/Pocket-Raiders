@@ -249,3 +249,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `raid-coop.md`: Raids & bosses slice 7: S410 co-op raids (hot-seat, 2 players share the party, own cheers, tougher boss, bigger prize).
 - `growth-form-shift.md`: Growth slice 8: Regional Form Shifts (swap to a regional variant for a Moon Stone).
 - `growth-capsule-quests.md`: Growth slice 9: Ability Capsule Quests (six trials pay ability swaps).
+- `growth-diaries.md`: Pokémon Diaries (S64): Hall of Fame notes per remembered Pokémon, derived from Legacy Cards, no save change.

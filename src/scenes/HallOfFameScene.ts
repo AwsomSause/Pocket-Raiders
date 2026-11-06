@@ -34,7 +34,7 @@ export class HallOfFameScene extends Phaser.Scene {
     const { session } = services();
     const content = session.content;
     const motion: MotionLevel = session.settings.battleAnimations;
-    const hof = hallOfFame(session.profile);
+    const hof = hallOfFame(session.profile, (id) => content.species.get(id)?.name ?? id);
     const name = (id: string) => content.species.get(id)?.name ?? id;
     const trainer = (r: RunRecord) => content.archetypes.get(r.archetypeId)?.name ?? r.archetypeId;
     const date = (r: RunRecord) => r.endedAt.slice(0, 10);
@@ -113,6 +113,18 @@ export class HallOfFameScene extends Phaser.Scene {
           const badges = [...card.titles.map((t) => `“${t}”`), ...card.tags, ...(card.mentor ? [`Carried ${name(card.mentor)}'s legacy`] : [])].join('  ·  ');
           box.add(this.add.text(70, 38, badges, textStyle(15, GOLD, { wordWrap: { width: w - 90 } })));
           if (card.signature) box.add(this.add.text(70, 64, card.signature, textStyle(14, '#cfefff', { wordWrap: { width: w - 90 } })));
+        },
+      });
+    }
+    // Pokémon Diaries (S64): what a remembered Pokémon wrote down.
+    for (const [i, d] of hof.diaries.entries()) {
+      rows.push({
+        problem: null,
+        hint: `Diary of ${name(d.card.speciesId)}: ${d.text}`,
+        draw: (_scene, box, w) => {
+          heading(box, `✎ Diary · ${name(d.card.speciesId)}`, '#ffe9a8');
+          icon(box, d.card.speciesId, 40, 64, 1.8, d.card.shiny, i);
+          box.add(this.add.text(80, 40, d.text, textStyle(15, '#ffffff', { wordWrap: { width: w - 100 } })));
         },
       });
     }
