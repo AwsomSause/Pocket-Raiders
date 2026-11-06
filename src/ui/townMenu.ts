@@ -14,7 +14,18 @@ import { Picker, type PickerRow } from './partyPanel';
 import { COLORS, textStyle } from './theme';
 
 interface Choice { label: string; desc?: string; problem?: string | null }
-export interface TownHost { scene: Phaser.Scene; setPicker(p: Picker | null): void; refresh(note: string): void; setDecorMode?(on: boolean): void; enter?(b: TownBuilding): void; /** Where Esc from a building goes (the street); defaults to the building list. */ home?: () => void }
+export interface TownHost { scene: Phaser.Scene; setPicker(p: Picker | null): void; refresh(note: string): void; setDecorMode?(on: boolean): void; enter?(b: TownBuilding): void; /** Where Esc from a building goes (the street); defaults to the building list. */ home?: () => void; /** Walkable Pocket Town: jump to a building's door and open it (the Town directory's fast travel). */ travel?(b: TownBuilding): void; /** Walkable Pocket Town: leave for the Hub (a row at the top of the directory). */ toHub?(): void }
+
+/** Above zero while a mini game or prompt runs over the town (the walkable town stands still). */
+export const townBusy = { n: 0 };
+async function withBusy<T>(job: Promise<T>): Promise<T> {
+  townBusy.n++;
+  try {
+    return await job;
+  } finally {
+    townBusy.n--;
+  }
+}
 
 const motion = () => services().session.settings.battleAnimations as 'full' | 'reduced' | 'off';
 
@@ -58,10 +69,16 @@ export function openTown(host: TownHost, leave: () => void, note = ''): void {
   const p = session.profile;
   const list = TOWN.buildings.filter((b) => !b.hidden || !buildingProblem(p, b));
   const t = townOf(p);
-  choose(host, `Pocket Town${note ? ` · ${note.slice(0, 80)}` : ''}${t.pins.length ? ` · ${t.pins.length} pinned` : ''}`, list.map((b) => ({ label: b.name, desc: b.blurb })), (i) => {
-    session.visitTown(list[i]!.id);
-    host.enter?.(list[i]!);
-    openBuilding(host, list[i]!, () => openTown(host, leave), leave);
+  // The Town directory (Appendix S.5): the whole list with fast travel; the first row goes back to the Hub where walking.
+  const hub = host.toHub ? 1 : 0;
+  const rows: Choice[] = [...(hub ? [{ label: 'Back to Hub Town', desc: 'Leave Pocket Town (the south gate does the same).' }] : []), ...list.map((b) => ({ label: b.name, desc: b.blurb }))];
+  choose(host, `${hub ? 'Town directory' : 'Pocket Town'}${note ? ` · ${note.slice(0, 80)}` : ''}${t.pins.length ? ` · ${t.pins.length} pinned` : ''}`, rows, (i) => {
+    if (hub && i === 0) return host.toHub!();
+    const b = list[i - hub]!;
+    if (host.travel) return host.travel(b);
+    session.visitTown(b.id);
+    host.enter?.(b);
+    openBuilding(host, b, () => openTown(host, leave), leave);
   }, leave, { columns: 2 });
 }
 
@@ -87,7 +104,7 @@ function runAction(host: TownHost, b: TownBuilding, a: TownAction, done: (msg: s
   const p = session.profile;
   const again = () => openBuilding(host, b, host.home ?? (() => openTown(host, () => host.refresh(''))), () => host.refresh(''));
   const grade = async (choice?: string): Promise<void> => {
-    const g = a.prompt ? (await runInteractionPrompt(host.scene, promptById(a.prompt), { motion: motion() })).grade : 'ok';
+    const g = a.prompt ? (await withBusy(runInteractionPrompt(host.scene, promptById(a.prompt), { motion: motion() }))).grade : 'ok';
     call(a, { grade: g, ...(choice ? { choice } : {}) }, done);
   };
   switch (a.kind) {
