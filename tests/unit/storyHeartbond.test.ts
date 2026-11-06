@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adjustBond, bondOf } from '../../src/core/bond';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
+import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
 import { content } from './helpers';
@@ -180,5 +180,27 @@ describe('care hooks', () => {
     expect(heartbondCare(run, uid, 'care_touch', 'c1', 1).paid).toEqual([]);
     expect(heartbondCare(run, 'other', 'care_touch', 'c1', 2).paid).toEqual([]);
     expect(heartbondCare(run, uid, 'rest_together', 'r1', 0).paid).toEqual(['rest_together']);
+  });
+});
+
+describe('temperament beats', () => {
+  it('every Temperament has a line for levels 3, 6 and 9', () => {
+    const text = content.storyData.text;
+    for (const tm of Object.keys(TEMPERAMENTS)) for (const lv of BEAT_LEVELS) expect(text[`hb.beat.${tm}.${lv}`], `${tm} ${lv}`).toContain('{pokemon}');
+  });
+  it('plays the oldest waiting 3/6/9 beat once, leaves other latches waiting, and skips Classic runs', () => {
+    const { run, uid, v2 } = setup();
+    v2.heartbond.pending = [5, 3, 6];
+    const name = () => 'Pika';
+    const first = takeBeat(run, content.storyData.text, name)!;
+    expect(first).toContain('Pika');
+    expect(v2.heartbond.pending).toEqual([5, 6]);
+    expect(takeBeat(run, content.storyData.text, name)).not.toBeNull();
+    expect(v2.heartbond.pending).toEqual([5]);
+    expect(takeBeat(run, content.storyData.text, name)).toBeNull();
+    expect(v2.heartbond.pending).toEqual([5]);
+    run.story.v2 = undefined;
+    expect(takeBeat(run, content.storyData.text, name)).toBeNull();
+    expect(uid).toBeTruthy();
   });
 });
