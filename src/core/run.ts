@@ -58,7 +58,7 @@ import {
   rollLegendaryWild,
   withPartyStrength,
 } from './encounters';
-import { evolve, evolveFully, type EvolutionResult } from './evolution';
+import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
@@ -2849,6 +2849,12 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
       emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, content.species.get(evo.from)?.name ?? evo.from, content.species.get(evo.to)?.name ?? evo.to) });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+      const gift = evolutionGift(content, run, mon, evo);
+      if (gift) {
+        discover(run, gift.speciesId, true);
+        count(run, 'pokemonCaught');
+        caughtPending.push({ kind: 'caught', mon: gift });
+      }
     }
     // S171: a route by weather, a known move or a move used often enough.
     const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;

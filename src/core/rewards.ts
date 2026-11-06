@@ -25,12 +25,12 @@ import type { Archetype, Content, Rarity, Reward } from './contentSchema';
 import { RARITIES } from './contentSchema';
 import { applyCatalog, catalogTargetProblem, getCatalogEntry, isCatalogUseful, isFreeReroll } from './catalog';
 import { bondEvolves } from './bond';
-import { evolveFully } from './evolution';
+import { evolutionGift, evolveFully } from './evolution';
 import { changeFriendship } from './friendship';
 import { addItem, itemCount, itemUseProblem } from './items';
 import { hasKeyItem } from './battle/transform';
 import { addLevels, maxHp } from './pokemon';
-import { count } from './progress';
+import { count, discover } from './progress';
 import { runLevelCap } from './regions';
 import { hashSeed, Rng } from './rng';
 import type { PendingDecision, RunState } from './state';
@@ -238,6 +238,13 @@ export function applyReward(content: Content, run: RunState, archetype: Archetyp
         messages.push(`${nameOf(content, evo.from)} evolved into ${nameOf(content, evo.to)}!`);
         for (const m of evo.learnedMoves) messages.push(`${nameOf(content, evo.to)} learned ${content.moves.get(m)!.name}!`);
         for (const m of evo.wantsToLearn) pending.push({ kind: 'learnMove', uid: mon.uid, moveId: m });
+        const gift = evolutionGift(content, run, mon, evo);
+        if (gift) {
+          discover(run, gift.speciesId, true);
+          count(run, 'pokemonCaught');
+          messages.push(`${nameOf(content, gift.speciesId)} appeared in a spare Poké Ball!`);
+          pending.push({ kind: 'caught', mon: gift });
+        }
       }
       break;
     }
