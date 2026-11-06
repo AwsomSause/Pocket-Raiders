@@ -1,0 +1,367 @@
+{
+ "events": [
+  {
+   "id": "th-map-1",
+   "name": "Treasure Map: Torn Corner",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "th-piece-1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "th-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "Wedged in a crack in the rocks is a scrap of old paper: the torn corner of a treasure map. Four more pieces are out there, somewhere on other roads. It will keep for your next run.",
+   "choices": [
+    {
+     "label": "Take the piece",
+     "success": {
+      "text": "You fold the torn corner into your pack. Piece 1 of 5 is yours, and it stays with you in later runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "th-piece-1",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it. It may turn up again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-2",
+   "name": "Treasure Map: Faded Edge",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "th-piece-2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "th-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "Wedged in a crack in the rocks is a scrap of old paper: the faded edge of a treasure map. Four more pieces are out there, somewhere on other roads. It will keep for your next run.",
+   "choices": [
+    {
+     "label": "Take the piece",
+     "success": {
+      "text": "You fold the faded edge into your pack. Piece 2 of 5 is yours, and it stays with you in later runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "th-piece-2",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it. It may turn up again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-3",
+   "name": "Treasure Map: Inked Middle",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "th-piece-3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "th-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "Wedged in a crack in the rocks is a scrap of old paper: the inked middle of a treasure map. Four more pieces are out there, somewhere on other roads. It will keep for your next run.",
+   "choices": [
+    {
+     "label": "Take the piece",
+     "success": {
+      "text": "You fold the inked middle into your pack. Piece 3 of 5 is yours, and it stays with you in later runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "th-piece-3",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it. It may turn up again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-4",
+   "name": "Treasure Map: Coastline Strip",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "th-piece-4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "th-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "Wedged in a crack in the rocks is a scrap of old paper: the coastline strip of a treasure map. Four more pieces are out there, somewhere on other roads. It will keep for your next run.",
+   "choices": [
+    {
+     "label": "Take the piece",
+     "success": {
+      "text": "You fold the coastline strip into your pack. Piece 4 of 5 is yours, and it stays with you in later runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "th-piece-4",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it. It may turn up again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-5",
+   "name": "Treasure Map: Compass Rose",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "th-piece-5",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "th-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "Wedged in a crack in the rocks is a scrap of old paper: the compass rose of a treasure map. Four more pieces are out there, somewhere on other roads. It will keep for your next run.",
+   "choices": [
+    {
+     "label": "Take the piece",
+     "success": {
+      "text": "You fold the compass rose into your pack. Piece 5 of 5 is yours, and it stays with you in later runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "th-piece-5",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it. It may turn up again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-treasure",
+   "name": "The Treasure at X",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "th-piece-1",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "th-piece-2",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "th-piece-3",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "th-piece-4",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "th-piece-5",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "th-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a14",
+    "effect": "sparkle"
+   },
+   "intro": "All five pieces of the map fit together at last. An X marks this exact spot, and the ground here is soft.",
+   "choices": [
+    {
+     "label": "Dig",
+     "success": {
+      "text": "Under the sand is an old chest, stuffed with treasure. The map crumbles to dust in your hands: the hunt is over.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "comet-shard",
+         "star-piece",
+         "big-pearl",
+         "nugget"
+        ],
+        "count": 3
+       },
+       {
+        "kind": "money",
+        "amount": 1500
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "flag",
+        "key": "th-claimed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later",
+     "success": {
+      "text": "You mark the spot and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

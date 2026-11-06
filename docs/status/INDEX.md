@@ -258,3 +258,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `run-events-b-batch5.md`: Run events B batch 5: Weather Rival (weather changes every turn) and Underground Duel; the games and training lists were already built.
 - `run-events-b-batch6.md`: Run events B batch 6: The Contrarian (stat changes inverted), Pinch Hitter (fainted Pokémon get up once), Cursed Hat (statuses swap each turn).
 - migration-seasons.md: Migration Seasons, seasonal wild weights (S135)
+- treasure-hunt.md: Treasure Hunt Season, 5 map pieces over runs, profile v18 (S150)

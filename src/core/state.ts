@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { TreasureHuntSchema } from './treasureHunt';
 import { EVENT_STYLE_IDS } from './presentation/eventStyles';
 import { PLAZA_STYLE_IDS } from './presentation/plazaStyles';
 import { NATURE_IDS } from './natures';
@@ -1653,6 +1654,8 @@ export const ProfileSchema = z.object({
   npcMemory: NpcMemorySchema.default({ npcs: {}, lore: [], epilogues: [], news: [], ngPlus: 0, hintsSeen: [], seenEvents: [] }),
   /** Hub Town (profile v17): the Pokémon you walk the town as (null: your most-used one) and the Strange Merchant's day and sales. */
   hubTown: HubTownProfileSchema.default({ pokemon: null, merchantDay: '', bought: [] }),
+  /** Treasure Hunt Season (S150, profile v18): the map pieces found over several runs (core/treasureHunt.ts). */
+  treasureHunt: TreasureHuntSchema.default({ pieces: [], claimed: false }),
 });
 export type Profile = z.infer<typeof ProfileSchema>;
 

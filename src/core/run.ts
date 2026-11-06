@@ -178,6 +178,7 @@ import { chainGivesTalent, chainShiny, extendChain, shinyCharmTiers } from './ca
 import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift, careOf } from './care';
 import { createPartyLife, partyLifeCamp, partyLifeTurn, partyLifeVictory } from './partyLife';
 import { diaryLine, seedNpcMemory } from './npcMemory';
+import { seedTreasureHunt } from './treasureHunt';
 import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
@@ -258,6 +259,8 @@ export interface NewRunOptions {
   mentorBonds?: Profile['mentorBonds'];
   /** Ideas W5: what NPCs remember (core/npcMemory.ts); it seeds the run's `remembers-*` flags. */
   npcMemory?: Profile['npcMemory'];
+  /** Treasure Hunt Season (S150): the map pieces already found; they seed the run's `th-piece-*` flags. */
+  treasureHunt?: Profile['treasureHunt'];
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -333,7 +336,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     rng,
     nextUid: 1,
     log: { rewardsTaken: [], battlesWon: 0, counters: {}, speciesSeen: [], speciesCaught: [], speciesShiny: [], charmUsedInRegion: false, defeatedBy: null, starterUid: null },
-    story: seedNpcMemory(withChampionTeam(createStoryState(), opts.runHistory ?? []), opts.npcMemory),
+    story: seedTreasureHunt(seedNpcMemory(withChampionTeam(createStoryState(), opts.runHistory ?? []), opts.npcMemory), opts.treasureHunt),
     partyLife: createPartyLife(),
     clock: freshClock(),
     calendar: { today: null, startedOn: null },
