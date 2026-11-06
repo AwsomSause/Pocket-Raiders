@@ -3102,6 +3102,7 @@ export class BattleScene extends Phaser.Scene {
                 crystalKey: (crystalId ? content.items.get(crystalId)?.iconAssetId : null) ?? null,
                 ringKey: 'cine.key.zmove',
                 backdropKey: this.arenaBgKey,
+                baseKey: this.arenaBgKey && this.textures.exists(`${this.arenaBgKey}.enemy`) ? `${this.arenaBgKey}.enemy` : null,
                 tint: glowColor,
                 title: zMove?.name,
                 titleId: zMove?.id,
