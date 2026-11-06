@@ -51,6 +51,10 @@ import {
   isStatusImmune,
   typeEffectiveness,
 } from './damage';
+import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './growthStats';
+import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
+import { countMoveUse } from '../conditionEvolution';
+import { fatiguedAi, isFatigued, preBattleTrap } from './opponentAi';
 import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
   ABSORB,
@@ -589,6 +593,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (battle.outcome) throw new Error('Battle is already over');
   if (action.kind === 'double' || battle.doubles) throw new Error('A double battle takes its turn in battle/doubles.ts');
   const events: BattleEvent[] = [];
+  announceContent = content;
 
   if (battle.needsSwitch) {
     if (action.kind !== 'switch') throw new Error('Choose a Pokémon to send out');
@@ -655,12 +660,14 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   else sosCall(ctx, events);
   const enemy: Combatant = { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false, protected: false };
   const spec = spectacleStart(ctx, action, events);
+  // S273: a long fight wears the foe's judgement down (said once, on the first tired turn).
+  if (battle.ai > 0 && battle.turn === content.balance.opponentAi.fatigue.fromTurn && isFatigued(content, battle)) events.push(say('enemy', 'arena', `${battle.trainer?.name ?? 'The foe'} is getting tired. Its choices are slipping!`));
   const enemyForced = forcedMoveId(enemy.vol);
   const enemyForcedIndex = enemyForced ? enemy.mon.moves.findIndex((m) => m.id === enemyForced) : -1;
   const enemyChoice = choiceLock(battle, enemy.mon);
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
   let enemyMoveIndex =
-    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: fatiguedAi(content, battle), target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
   ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
 
@@ -1555,7 +1562,14 @@ function targetAbility(ctx: BattleContext, user: Combatant, target: Combatant): 
 
 function announce(c: Combatant, ability: string, events: BattleEvent[]): void {
   events.push({ type: 'ability', side: c.side, ability });
+  // S158 Ability Awakening: your Pokémon's ability grows with use.
+  if (c.side === 'player' && announceContent) {
+    const level = countAbilityUse(announceContent, c.mon);
+    if (level) events.push(say('player', 'signature', `${getSpecies(announceContent, c.mon.speciesId).name}'s ability awakened! (Awakening ${level})`, c.mon.uid));
+  }
 }
+/** Set at the start of each turn so `announce` (which has no context) can read the balance. */
+let announceContent: Content | null = null;
 
 /** Builds the two Pokémon in battle (for steps outside a turn's moves). */
 function activeCombatants(ctx: BattleContext): { player: Combatant; enemy: Combatant } {
@@ -2698,6 +2712,7 @@ function executeMove(
   user.vol.destinyBond = false;
   user.vol.exposed = false;
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
+  if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
   if (!move.effects.rage) user.vol.raging = false;
   if (!move.effects.protect) user.vol.protectChain = 0;
   if (slot !== -1) Held.noteMoveUsed(ctx, user, move.id);
@@ -3186,6 +3201,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types);
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
+      // S157 Focus: a focused Pokémon aims a little better.
+      accuracy *= focusAccuracy(content, user.mon);
     }
     accuracy = Math.min(1, accuracy);
   }
@@ -3287,7 +3304,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + focusCrit(content, user.mon) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
@@ -3321,6 +3338,12 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'orichalcum-pulse' && physical && weather === 'sun') attackBoost *= 4 / 3;
       if (userAbility === 'hadron-engine' && !physical && ctx.battle.terrain?.id === 'electric') attackBoost *= 4 / 3;
       if (sheerForce) powerMult *= 1.3;
+      // S158 Ability Awakening.
+      powerMult *= awakeningPower(content, user.mon);
+      // S159 trainer class passives: the enemy team's signature-type power or guard.
+      const passive = classPassiveOf(content, ctx.battle);
+      if (passive?.kind === 'power' && user.side === 'enemy' && passiveTypes(content, ctx.battle.trainer!.classId, passive).includes(moveType)) powerMult *= 1 + passive.amount;
+      if (passive?.kind === 'guard' && target.side === 'enemy' && user.side === 'player') powerMult *= 1 - passive.amount;
       // S170 counter types: Song beats Aura, Aura beats Trap, Trap beats Song (against the target's last move).
       const myClass = counterClassOf(move);
       const theirMove = target.vol.lastMove ? content.moves.get(target.vol.lastMove) : undefined;
@@ -5548,11 +5571,26 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
  */
 export function startBattle(ctx: BattleContext): BattleEvent[] {
   const events: BattleEvent[] = [];
+  announceContent = ctx.content;
   resolveEntries(ctx, events);
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
   eventStartRules(ctx, events);
+  trapBeforeBattle(ctx, events);
+  const passive = classPassiveOf(ctx.content, ctx.battle);
+  if (passive) events.push(say('enemy', 'arena', passiveLine(ctx.battle.trainer!.name, passive)));
   return events;
+}
+
+/** S280: a smart trainer whose team knows an entry hazard has laid one on your side before the battle. */
+function trapBeforeBattle(ctx: BattleContext, events: BattleEvent[]): void {
+  const trap = preBattleTrap(ctx.content, ctx.battle);
+  if (!trap) return;
+  const side = ctx.battle.sideEffects.player;
+  if (trap.hazard === 'spikes' || trap.hazard === 'toxicSpikes') side[trap.hazard] = Math.max(side[trap.hazard], 1);
+  else side[trap.hazard] = true;
+  const owner = ctx.battle.enemyTeam.find((m) => m.uid === trap.uid)!;
+  events.push(say('enemy', 'hazardBurst', `${ctx.battle.trainer!.name} set a trap before the battle: ${nameOf(ctx, owner)}'s ${ctx.content.moves.get(trap.moveId)?.name ?? 'hazard'} is on your side!`, owner.uid));
 }
 
 /** Event toolkit `battleStart` rules (Ice Week hail, Gravity Week...): set once at the start of each battle. */
@@ -5585,6 +5623,11 @@ function championsAura(ctx: BattleContext, events: BattleEvent[]): void {
 }
 
 /** Engine steps the double-battle turn (battle/doubles.ts) drives. Not meant for other callers. */
+/** Double battles set the content `announce` reads (S158 Ability Awakening). */
+export const setAnnounceContent = (content: Content): void => {
+  announceContent = content;
+};
+
 export const doublesSteps = {
   w1DoublesStart,
   dealTurn,

@@ -18,7 +18,7 @@ import { genderSign } from '../core/gender';
 import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
-import { enemyIntent } from '../core/battle/intent';
+import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
@@ -2177,7 +2177,7 @@ export class BattleScene extends Phaser.Scene {
               ? ' It will Dynamax!'
               : '';
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
-    const intent = this.run.battle && !this.run.battle.doubles ? enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) : null;
+    const intent = this.run.battle && !this.run.battle.doubles ? (enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
     const battleNow = this.run.battle!;
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;

@@ -22,7 +22,8 @@ import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { freshStages, freshVolatile, type BattleState, type DoublesState, type PokemonInstance, type Stages, type Volatile } from '../state';
 import { firstStrikeBonus } from '../trainerEvolution';
 import { compareTurnOrder } from './damage';
-import { doublesSteps as S, forcedMoveId, hasUsableMove, type BattleContext, type BattleEvent, type Combatant, type PlayerAction, type Side, type SlotCommand } from './engine';
+import { fatiguedAi } from './opponentAi';
+import { setAnnounceContent, doublesSteps as S, forcedMoveId, hasUsableMove, type BattleContext, type BattleEvent, type Combatant, type PlayerAction, type Side, type SlotCommand } from './engine';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
 
@@ -230,6 +231,7 @@ export function doublesSwitchProblem(ctx: Pick<BattleContext, 'battle' | 'party'
 /** Battle start: the entry abilities of all four Pokémon, fastest first. Uses no random numbers. */
 export function startDoubles(ctx: BattleContext): BattleEvent[] {
   const events: BattleEvent[] = [];
+  setAnnounceContent(ctx.content);
   const { battle } = ctx;
   if ((battle.pendingEntry ?? []).length === 0) return events;
   battle.pendingEntry = [];
@@ -277,6 +279,7 @@ interface TurnState {
  * player spot, left then right) or, while a spot waits for a replacement, `{ kind: 'switch' }`.
  */
 export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): BattleEvent[] {
+  setAnnounceContent(ctx.content);
   const { battle, content, rng } = ctx;
   if (battle.outcome) throw new Error('Battle is already over');
   const d = battle.doubles;
@@ -630,7 +633,7 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
   let slot: number;
   if (lockedIndex >= 0) slot = lockedIndex;
   else if (usable.length === 0) slot = -1;
-  else if (battle.ai > 0 && rng.chance(battle.ai)) {
+  else if (battle.ai > 0 && rng.chance(fatiguedAi(content, battle))) {
     const scored = usable.map((x) => ({ i: x.i, score: worth(S.resolveMove(content, foe.mon, x.i)).score }));
     slot = scored.reduce((b, x) => (x.score > b.score ? x : b)).i;
   } else slot = rng.pick(usable).i;
