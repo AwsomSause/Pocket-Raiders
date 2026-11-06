@@ -13926,7 +13926,7 @@
       "battle": {
        "kind": "trainer",
        "name": "Mirror Trainer",
-           "mirror": true,
+       "mirror": true,
        "size": 3,
        "types": [],
        "levelBonus": 2,
@@ -68613,6 +68613,1284 @@
     },
     {
      "label": "Wave and move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-normal",
+   "name": "Island Trial: Normal",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Yuri waits at a grassy shrine. \"You carry a Z-Ring. Beat the Totem of the Plains and the normal Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Plains rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Plains",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "normalium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about normal moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-fighting",
+   "name": "Island Trial: Fighting",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Gaku waits at a dojo of stone. \"You carry a Z-Ring. Beat the Totem of the Fist and the fighting Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Fist rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Fist",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fightinium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about fighting moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-flying",
+   "name": "Island Trial: Flying",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Sora waits at a cliff above the clouds. \"You carry a Z-Ring. Beat the Totem of the Wind and the flying Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Wind rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Wind",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "flying"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "flyinium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about flying moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-poison",
+   "name": "Island Trial: Poison",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Mire waits at a swamp of green mist. \"You carry a Z-Ring. Beat the Totem of the Bog and the poison Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Bog rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Bog",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poisonium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about poison moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-ground",
+   "name": "Island Trial: Ground",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Dune waits at a canyon of red dust. \"You carry a Z-Ring. Beat the Totem of the Dust and the ground Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Dust rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Dust",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "ground"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "groundium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about ground moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-rock",
+   "name": "Island Trial: Rock",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Flint waits at a quarry of glittering stone. \"You carry a Z-Ring. Beat the Totem of the Quarry and the rock Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Quarry rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Quarry",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rockium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about rock moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-bug",
+   "name": "Island Trial: Bug",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Fern waits at a hollow tree alive with hum. \"You carry a Z-Ring. Beat the Totem of the Swarm and the bug Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Swarm rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Swarm",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "buginium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about bug moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-ghost",
+   "name": "Island Trial: Ghost",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Hollow waits at a lantern-lit graveyard. \"You carry a Z-Ring. Beat the Totem of the Lantern and the ghost Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Lantern rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Lantern",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "ghostium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about ghost moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-steel",
+   "name": "Island Trial: Steel",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Anvil waits at a forge under the hill. \"You carry a Z-Ring. Beat the Totem of the Forge and the steel Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Forge rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Forge",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "steel"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "steelium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about steel moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-fire",
+   "name": "Island Trial: Fire",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Kiawe waits at a caldera of embers. \"You carry a Z-Ring. Beat the Totem of the Caldera and the fire Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Caldera rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Caldera",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "firium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about fire moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-water",
+   "name": "Island Trial: Water",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Lana waits at a lagoon of clear tide. \"You carry a Z-Ring. Beat the Totem of the Lagoon and the water Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Lagoon rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Lagoon",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "waterium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about water moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-grass",
+   "name": "Island Trial: Grass",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Mallow waits at a jungle clearing. \"You carry a Z-Ring. Beat the Totem of the Canopy and the grass Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Canopy rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Canopy",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "grass"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "grassium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about grass moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-electric",
+   "name": "Island Trial: Electric",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Volkner Jr. waits at a power plant humming with sparks. \"You carry a Z-Ring. Beat the Totem of the Storm and the electric Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Storm rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Storm",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "electric"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "electrium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about electric moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-psychic",
+   "name": "Island Trial: Psychic",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Olivia waits at a moonlit observatory. \"You carry a Z-Ring. Beat the Totem of the Mind and the psychic Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Mind rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Mind",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "psychic"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "psychium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about psychic moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-ice",
+   "name": "Island Trial: Ice",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Frost waits at a glacier cave. \"You carry a Z-Ring. Beat the Totem of the Glacier and the ice Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Glacier rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Glacier",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "ice"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "icium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about ice moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-dragon",
+   "name": "Island Trial: Dragon",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "dragon"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Drake waits at a ridge where wings once nested. \"You carry a Z-Ring. Beat the Totem of the Ridge and the dragon Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Ridge rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Ridge",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "dragon"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "dragonium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about dragon moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-dark",
+   "name": "Island Trial: Dark",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Nyx waits at a ruin that never sees the sun. \"You carry a Z-Ring. Beat the Totem of the Dusk and the dark Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Dusk rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Dusk",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "darkinium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about dark moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-fairy",
+   "name": "Island Trial: Fairy",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [
+    "fairy"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Trial Captain Lillie waits at a meadow of soft light. \"You carry a Z-Ring. Beat the Totem of the Meadow and the fairy Z-Crystal is yours.\"",
+   "choices": [
+    {
+     "label": "Take the trial",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "z-ring"
+      }
+     ],
+     "success": {
+      "text": "The Totem of the Meadow rises, huge and glowing, and the trial begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Totem of the Meadow",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "fairy"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fairium-z",
+         "count": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the trial and take notes",
+     "success": {
+      "text": "You watch a local try the trial. You learn a lot about fairy moves.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
      "success": {
       "text": "You leave it be and walk on.",
       "effects": []
