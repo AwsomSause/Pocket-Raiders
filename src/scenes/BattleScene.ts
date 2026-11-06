@@ -3048,7 +3048,7 @@ export class BattleScene extends Phaser.Scene {
             if (e.kind === 'dynamaxEnd') delete mon!.dynamaxed;
             else if (isMax) mon!.dynamaxed = true;
             if ((isMax || e.kind === 'ability') && mon!.hp > 0) mon!.hp = Math.max(1, Math.round((mon!.hp * calcStats(content, mon!).hp) / before));
-            this.showSprite(e.side, mon!, e.kind !== 'dynamaxEnd');
+            return this.showSprite(e.side, mon!, e.kind !== 'dynamaxEnd');
           };
           const at = this.spotXY(e.side);
           const cine: CineKind | null = e.kind === 'mega' || e.kind === 'primal' || e.kind === 'dynamax' || e.kind === 'gigantamax' || e.kind === 'dynamaxEnd' || e.kind === 'zmove' || e.kind === 'tera' ? e.kind : null;

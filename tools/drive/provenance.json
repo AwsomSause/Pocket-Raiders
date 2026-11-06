@@ -4443,5 +4443,735 @@
   "file": "images/trainer/pr/zinzolin.png|json",
   "source": "pokerogue-assets-beta (images/trainer)",
   "original": "zinzolin.png"
+ },
+ {
+  "file": "images/items/gen5/snowball.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SNOWBALL.png"
+ },
+ {
+  "file": "images/items/gen5/luminous-moss.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "LUMINOUSMOSS.png"
+ },
+ {
+  "file": "images/items/gen5/adamant-crystal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "ADAMANTCRYSTAL.png"
+ },
+ {
+  "file": "images/items/gen5/lustrous-globe.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "LUSTROUSGLOBE.png"
+ },
+ {
+  "file": "images/items/gen5/griseous-core.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GRISEOUSCORE.png"
+ },
+ {
+  "file": "images/items/gen5/rusted-sword.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "RUSTEDSWORD.png"
+ },
+ {
+  "file": "images/items/gen5/rusted-shield.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "RUSTEDSHIELD.png"
+ },
+ {
+  "file": "images/items/gen5/wellspring-mask.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "WELLSPRINGMASK.png"
+ },
+ {
+  "file": "images/items/gen5/hearthflame-mask.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "HEARTHFLAMEMASK.png"
+ },
+ {
+  "file": "images/items/gen5/cornerstone-mask.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "CORNERSTONEMASK.png"
+ },
+ {
+  "file": "images/items/gen5/teal-mask.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "TEALMASK.png"
+ },
+ {
+  "file": "images/items/gen5/prison-bottle.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "PRISONBOTTLE.png"
+ },
+ {
+  "file": "images/items/gen5/reveal-glass.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "REVEALGLASS.png"
+ },
+ {
+  "file": "images/items/gen5/n-solarizer.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "NSOLARIZER.png"
+ },
+ {
+  "file": "images/items/gen5/n-lunarizer.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "NLUNARIZER.png"
+ },
+ {
+  "file": "images/items/gen5/zygarde-cube.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "ZYGARDECUBE.png"
+ },
+ {
+  "file": "images/items/gen5/meteorite-attack.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/METEORITE_1.png"
+ },
+ {
+  "file": "images/items/gen5/meteorite-defense.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/METEORITE_2.png"
+ },
+ {
+  "file": "images/items/gen5/meteorite-speed.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/METEORITE_3.png"
+ },
+ {
+  "file": "images/items/gen5/pink-nectar.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "PINKNECTAR.png"
+ },
+ {
+  "file": "images/items/gen5/yellow-nectar.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "YELLOWNECTAR.png"
+ },
+ {
+  "file": "images/items/gen5/purple-nectar.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "PURPLENECTAR.png"
+ },
+ {
+  "file": "images/items/gen5/conkeldurr-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "CONKELDURRGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/drifblim-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "DRIFBLIMGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/dugtrio-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "DUGTRIOGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/eevee-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "EEVEEGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/fearow-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FEAROWGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/linoone-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "LINOONEGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/parasect-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "PARASECTGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/raticate-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "RATICATEGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/simi-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SIMIGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/skuntank-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SKUNTANKGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/trevenant-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "TREVENANTGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/unfezant-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "UNFEZANTGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/wurmple-gauntlet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "WURMPLEGAUNTLET.PNG"
+ },
+ {
+  "file": "images/items/gen5/blazing-orb.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "BLAZINGORB.png"
+ },
+ {
+  "file": "images/items/gen5/freezing-orb.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FREEZINGORB.png"
+ },
+ {
+  "file": "images/items/gen5/wicked-orb.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "WICKEDORB.png"
+ },
+ {
+  "file": "images/items/gen5/mental-scarf.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "MENTALSCARF.png"
+ },
+ {
+  "file": "images/items/gen5/static-scarf.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "STATICSCARF.png"
+ },
+ {
+  "file": "images/items/gen5/toxic-scarf.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "TOXICSCARF.png"
+ },
+ {
+  "file": "images/items/gen5/coin-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "COINCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/gold-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GOLDCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/color-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "COLORCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/glimmering-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GLIMMERINGCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/friendship-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FRIENDSHIPCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/healing-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "HEALINGCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/step-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "STEPCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/mercy-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "MERCYCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/mining-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "MININGCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/lure-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "LURECHARM.png"
+ },
+ {
+  "file": "images/items/gen5/key-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "KEYCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/clover-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "CLOVERCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/heart-charm.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "HEARTCHARM.png"
+ },
+ {
+  "file": "images/items/gen5/roto-bargain.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOBARGAIN.png"
+ },
+ {
+  "file": "images/items/gen5/roto-boost.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOBOOST.png"
+ },
+ {
+  "file": "images/items/gen5/roto-catch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOCATCH.png"
+ },
+ {
+  "file": "images/items/gen5/roto-encounter.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOENCOUNTER.png"
+ },
+ {
+  "file": "images/items/gen5/roto-exp-points.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOEXPPOINTS.png"
+ },
+ {
+  "file": "images/items/gen5/roto-friendship.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOFRIENDSHIP.png"
+ },
+ {
+  "file": "images/items/gen5/roto-hatch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOHATCH.png"
+ },
+ {
+  "file": "images/items/gen5/roto-hp-restore.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOHPRESTORE.png"
+ },
+ {
+  "file": "images/items/gen5/roto-pp-restore.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOPPRESTORE.png"
+ },
+ {
+  "file": "images/items/gen5/roto-prize-money.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOPRIZEMONEY.png"
+ },
+ {
+  "file": "images/items/gen5/roto-stealth.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ROTOSTEALTH.png"
+ },
+ {
+  "file": "images/items/gen5/bread.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/BREAD.png"
+ },
+ {
+  "file": "images/items/gen5/boiled-egg.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/BOILEDEGG.png"
+ },
+ {
+  "file": "images/items/gen5/coconut-milk.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/COCONUTMILK.png"
+ },
+ {
+  "file": "images/items/gen5/fruit-bunch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/FRUITBUNCH.png"
+ },
+ {
+  "file": "images/items/gen5/instant-noodles.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/INSTANTNOODLES.png"
+ },
+ {
+  "file": "images/items/gen5/moomoo-cheese.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/MOOMOOCHEESE.png"
+ },
+ {
+  "file": "images/items/gen5/pack-of-potatoes.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PACKOFPOTATOES.png"
+ },
+ {
+  "file": "images/items/gen5/pasta.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PASTA.png"
+ },
+ {
+  "file": "images/items/gen5/precooked-burger.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PRECOOKEDBURGER.png"
+ },
+ {
+  "file": "images/items/gen5/salad-mix.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/SALADMIX.png"
+ },
+ {
+  "file": "images/items/gen5/sausages.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/SAUSAGES.png"
+ },
+ {
+  "file": "images/items/gen5/tin-of-beans.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/TINOFBEANS.png"
+ },
+ {
+  "file": "images/items/gen5/mixed-mushrooms.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/MIXEDMUSHROOMS.png"
+ },
+ {
+  "file": "images/items/gen5/shalour-sable.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SHALOURSABLE.png"
+ },
+ {
+  "file": "images/items/gen5/max-honey.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "MAXHONEY.png"
+ },
+ {
+  "file": "images/items/gen5/fancy-apple.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/FANCYAPPLE.png"
+ },
+ {
+  "file": "images/items/gen5/fresh-cream.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/FRESHCREAM.png"
+ },
+ {
+  "file": "images/items/gen5/large-leek.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/LARGELEEK.png"
+ },
+ {
+  "file": "images/items/gen5/smoke-poke-tail.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/SMOKEPOKETAIL.png"
+ },
+ {
+  "file": "images/items/gen5/spice-mix.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/SPICEMIX.png"
+ },
+ {
+  "file": "images/items/gen5/pungent-root.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PUNGENTROOT.png"
+ },
+ {
+  "file": "images/items/gen5/rainbow-flower.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/RAINBOWFLOWER.png"
+ },
+ {
+  "file": "images/items/gen5/packaged-curry.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PACKAGEDCURRY.png"
+ },
+ {
+  "file": "images/items/gen5/gigantamix.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/GIGANTAMIX.png"
+ },
+ {
+  "file": "images/items/gen5/max-mushrooms.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "MAXMUSHROOMS.png"
+ },
+ {
+  "file": "images/items/gen5/big-bamboo-shoot.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "BIGBAMBOOSHOOT.png"
+ },
+ {
+  "file": "images/items/gen5/tiny-bamboo-shoot.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "TINYBAMBOOSHOOT.png"
+ },
+ {
+  "file": "images/items/gen5/sweet-herba-mystica.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SWEETHERBAMYSTICA.png"
+ },
+ {
+  "file": "images/items/gen5/spicy-herba-mystica.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SPICYHERBAMYSTICA.png"
+ },
+ {
+  "file": "images/items/gen5/salty-herba-mystica.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SALTYHERBAMYSTICA.png"
+ },
+ {
+  "file": "images/items/gen5/bitter-herba-mystica.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "BITTERHERBAMYSTICA.png"
+ },
+ {
+  "file": "images/items/gen5/sour-herba-mystica.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SOURHERBAMYSTICA.png"
+ },
+ {
+  "file": "images/items/gen5/health-mochi.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "HEALTHMOCHI.png"
+ },
+ {
+  "file": "images/items/gen5/muscle-mochi.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "MUSCLEMOCHI.png"
+ },
+ {
+  "file": "images/items/gen5/resist-mochi.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "RESISTMOCHI.png"
+ },
+ {
+  "file": "images/items/gen5/genius-mochi.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GENIUSMOCHI.png"
+ },
+ {
+  "file": "images/items/gen5/clever-mochi.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "CLEVERMOCHI.png"
+ },
+ {
+  "file": "images/items/gen5/swift-mochi.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SWIFTMOCHI.png"
+ },
+ {
+  "file": "images/items/gen5/stamina-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "STAMINA_GUMMY.png"
+ },
+ {
+  "file": "images/items/gen5/strength-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "STRENGTH_GUMMY.png"
+ },
+ {
+  "file": "images/items/gen5/toughness-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "TOUGHNESS_GUMMY.png"
+ },
+ {
+  "file": "images/items/gen5/sanity-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SANITY_GUMMY.png"
+ },
+ {
+  "file": "images/items/gen5/will-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "WILL_GUMMY.png"
+ },
+ {
+  "file": "images/items/gen5/reaction-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "REACTION_GUMMY.png"
+ },
+ {
+  "file": "images/items/gen5/red-gummy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "REDGUMMY.PNG"
+ },
+ {
+  "file": "images/items/gen5/amaze-mulch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/AMAZEMULCH.png"
+ },
+ {
+  "file": "images/items/gen5/boost-mulch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/BOOSTMULCH.png"
+ },
+ {
+  "file": "images/items/gen5/rich-mulch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/RICHMULCH.png"
+ },
+ {
+  "file": "images/items/gen5/surprise-mulch.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/SURPRISEMULCH.png"
+ },
+ {
+  "file": "images/items/gen5/red-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/REDPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/orange-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/ORANGEPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/yellow-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/YELLOWPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/green-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/GREENPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/blue-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/BLUEPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/purple-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PURPLEPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/pink-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/PINKPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/radiant-petal.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/RADIANTPETAL.png"
+ },
+ {
+  "file": "images/items/gen5/jaw-fossil.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "JAWFOSSIL.png"
+ },
+ {
+  "file": "images/items/gen5/sail-fossil.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SAILFOSSIL.png"
+ },
+ {
+  "file": "images/items/gen5/fossilized-bird.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FOSSILIZEDBIRD.png"
+ },
+ {
+  "file": "images/items/gen5/fossilized-dino.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FOSSILIZEDDINO.png"
+ },
+ {
+  "file": "images/items/gen5/fossilized-drake.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FOSSILIZEDDRAKE.png"
+ },
+ {
+  "file": "images/items/gen5/fossilized-fish.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "FOSSILIZEDFISH.png"
+ },
+ {
+  "file": "images/items/gen5/eon-flute.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/EONFLUTE.png"
+ },
+ {
+  "file": "images/items/gen5/sun-flute.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/SUNFLUTE.png"
+ },
+ {
+  "file": "images/items/gen5/moon-flute.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/MOONFLUTE.png"
+ },
+ {
+  "file": "images/items/gen5/dry-incense.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "DRYINCENSE.png"
+ },
+ {
+  "file": "images/items/gen5/spark-incense.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "SPARKINCENSE.png"
+ },
+ {
+  "file": "images/items/gen5/infinite-repel.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "INFIREPEL.png"
+ },
+ {
+  "file": "images/items/gen5/wishing-piece.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/WISHINGPIECE.png"
+ },
+ {
+  "file": "images/items/gen5/wishing-star.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "WISHINGSTAR.png"
+ },
+ {
+  "file": "images/items/gen5/decoy.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "DECOY.png"
+ },
+ {
+  "file": "images/items/gen5/gift-box.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GIFTBOX.png"
+ },
+ {
+  "file": "images/items/gen5/gift-box-balls.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GIFTBOXPOKEBALL.png"
+ },
+ {
+  "file": "images/items/gen5/gift-box-support.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GIFTBOXSUPPORT.png"
+ },
+ {
+  "file": "images/items/gen5/gift-box-rare.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GIFTBOXRARE.png"
+ },
+ {
+  "file": "images/items/gen5/gimmighoul-coin.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "GIMMIGHOULCOIN.png"
+ },
+ {
+  "file": "images/items/gen5/strange-souvenir.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/STRANGESOUVENIR.png"
+ },
+ {
+  "file": "images/items/gen5/kofus-wallet.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "KOFUSWALLET.png"
+ },
+ {
+  "file": "images/items/gen5/honor-of-kalos.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "Not in PBS/HONOROFKALOS.png"
+ },
+ {
+  "file": "images/items/gen5/exp-all.png",
+  "source": "Pokémon fan-game Graphics pack (Graphics/Items)",
+  "original": "EXPALL.png"
  }
 ]

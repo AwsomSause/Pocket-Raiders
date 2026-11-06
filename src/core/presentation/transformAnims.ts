@@ -11,7 +11,7 @@ import { registerAnims } from './animRegistry';
 export type TransformKind = 'mega' | 'primal' | 'dynamax' | 'gigantamax' | 'dynamaxEnd' | 'zmove' | 'tera' | 'evolve';
 
 /** How long each cinematic runs at normal speed, in ms (full motion). */
-export const TRANSFORM_MS: Record<TransformKind, number> = { mega: 2500, primal: 2500, dynamax: 2400, gigantamax: 2400, dynamaxEnd: 650, zmove: 1900, tera: 2200, evolve: 2700 };
+export const TRANSFORM_MS: Record<TransformKind, number> = { mega: 4300, primal: 2500, dynamax: 2400, gigantamax: 2400, dynamaxEnd: 650, zmove: 1900, tera: 2200, evolve: 2700 };
 
 export const transformAnimId = (kind: TransformKind): string => (kind === 'evolve' ? 'evolution.evolve' : `transform.${kind}`);
 

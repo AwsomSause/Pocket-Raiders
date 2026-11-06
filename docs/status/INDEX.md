@@ -283,3 +283,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-pack-import.md`: Overhaul slice 1, pack import (no gameplay change): the director's Overhaul content pack is in `src/data/overh
 - `tera-reference-look.md`: Tera matches the reference GIFs: ACTION tab, ray burst, jewel over head, "-type!" text.
 - `overhaul-rarity.md`: Overhaul slice 10, 8-tier rarity config + wild/egg weights; no save change.
+- `drive-items.md`: 146 Google Drive item pictures added as working items (held, charms, Roto Powers, food, fossils…).
