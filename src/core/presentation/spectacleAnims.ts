@@ -13,6 +13,7 @@ export const SPECTACLE_ANIM: Partial<Record<SpectacleKind, string>> = {
   revenge: 'bond.enter',
   signature: 'bond.signature',
   rally: 'drama.rally',
+  berserk: 'drama.rally',
   momentumFull: 'drama.momentum',
 };
 

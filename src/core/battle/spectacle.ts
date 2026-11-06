@@ -9,7 +9,7 @@ import type { BattleState, PokemonInstance } from '../state';
 import type { Content } from '../contentSchema';
 import type { SpectacleConfig } from './spectacleConfig';
 
-export const SpectacleKindSchema = z.enum(['lastStand', 'rally', 'momentumFull', 'revenge', 'signature', 'bleed', 'curseTag', 'benchShout', 'hazardBurst', 'shout', 'deal', 'mindRead', 'grudge', 'spectator', 'arena', 'combo']);
+export const SpectacleKindSchema = z.enum(['lastStand', 'rally', 'momentumFull', 'revenge', 'signature', 'bleed', 'curseTag', 'benchShout', 'hazardBurst', 'shout', 'deal', 'mindRead', 'grudge', 'spectator', 'arena', 'combo', 'berserk']);
 export type SpectacleKind = z.infer<typeof SpectacleKindSchema>;
 
 export const SpectacleBattleSchema = z.object({
@@ -31,6 +31,9 @@ export const SpectacleBattleSchema = z.object({
   phases: z.array(z.number().int().min(0)).default([]),
   /** A Boss Revenge Rematch: the beaten boss's id. Treated as a boss for telegraphs. */
   rematch: z.string().optional(),
+  /** Berserk Mode (battle/berserk.ts): who is berserk now, the turns left, and who already was this battle. */
+  berserk: z.object({ uid: z.string(), turns: z.number().int().min(0) }).nullable().default(null),
+  berserked: z.array(z.string()).default([]),
   /** The run's final boss fight (an extra phase). */
   final: z.boolean().default(false),
 });

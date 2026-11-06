@@ -589,6 +589,7 @@
   "momentum": { "max": 100, "superEffective": 12, "streak": 8, "knockout": 25, "faintKeeps": 0.5, "ralliesPerBattle": 2, "rallyDamage": 1.5 },
   "lastStand": { "chance": 0.3, "minBond": 60, "lastMonBonus": 20, "perBattle": 1, "boost": { "atk": 1, "spa": 1, "spe": 1 } },
   "revenge": { "chance": 0.35, "minBond": 55, "boost": { "atk": 1, "spa": 1 } },
+  "berserk": { "species": ["primeape", "annihilape", "tyranitar", "pangoro", "vigoroth"], "hpBelow": 0.34, "turns": 3, "damage": 1.5, "recoil": 0.0625 },
   "phases": {
    "classes": {
     "gym-leader": [ { "atHp": 0.4, "text": "The Gym Leader grits their teeth: this is their ace's last stand!", "boost": { "atk": 1, "spa": 1 } } ],
