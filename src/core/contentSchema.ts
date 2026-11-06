@@ -1216,6 +1216,38 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('whiteHerb') }),
   /** Reflect, Light Screen and Aurora Veil the holder sets last longer (Light Clay). */
   z.object({ hook: z.literal('lightClay'), turns: z.number().int().positive() }),
+  /** Hit by a super-effective move: +2 Attack and Sp. Atk, once per battle (Weakness Policy). */
+  z.object({ hook: z.literal('weaknessPolicy') }),
+  /** After one of its moves misses: +2 Speed, once per battle (Blunder Policy). */
+  z.object({ hook: z.literal('blunderPolicy') }),
+  /** After it uses a sound move: +1 Sp. Atk, once per battle (Throat Spray). */
+  z.object({ hook: z.literal('throatSpray') }),
+  /** When an opponent lowers its stats, it switches out, once per battle (Eject Pack). */
+  z.object({ hook: z.literal('ejectPack') }),
+  /** While Trick Room is up: -1 Speed, once per battle (Room Service). */
+  z.object({ hook: z.literal('roomService') }),
+  /** On coming in: +1 to its highest stat, once per battle; only for these (Paradox) species (Booster Energy). */
+  z.object({ hook: z.literal('boosterEnergy'), species: z.array(z.string()).min(1) }),
+  /** Copies the stat boosts an opponent just got, once per battle (Mirror Herb). */
+  z.object({ hook: z.literal('mirrorHerb') }),
+  /** Immune to the added effects of moves that hit it (Covert Cloak). */
+  z.object({ hook: z.literal('covertCloak') }),
+  /** Opponents can't lower its stats (Clear Amulet). */
+  z.object({ hook: z.literal('clearAmulet') }),
+  /** Multi-hit moves hit at least 4 times (Loaded Dice). */
+  z.object({ hook: z.literal('loadedDice') }),
+  /** Punching moves do more damage and don't make contact (Punching Glove). */
+  z.object({ hook: z.literal('punchingGlove'), percent: z.number().positive() }),
+  /** Its moves never make contact (Protective Pads). */
+  z.object({ hook: z.literal('protectivePads') }),
+  /** Entry hazards don't hurt it (Heavy-Duty Boots). */
+  z.object({ hook: z.literal('heavyDutyBoots') }),
+  /** Weather doesn't boost, weaken or hurt it or its moves (Utility Umbrella). */
+  z.object({ hook: z.literal('utilityUmbrella') }),
+  /** Its ability can't be ignored, swapped, copied or suppressed by opponents (Ability Shield). */
+  z.object({ hook: z.literal('abilityShield') }),
+  /** Terrain it sets lasts longer (Terrain Extender). */
+  z.object({ hook: z.literal('terrainExtender'), turns: z.number().int().positive() }),
   /** When hit, the attacker is forced out, once per battle (Red Card). */
   z.object({ hook: z.literal('redCard') }),
   /** When hit, the holder switches out, once per battle (Eject Button). */
@@ -1498,6 +1530,8 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('ppUp'), ups: z.number().int().min(1).max(3) }),
   /** Changes one Pokémon's nature (Mints). */
   z.object({ kind: z.literal('nature'), nature: z.enum(NATURE_IDS), /** S418 temporary mint: the nature only lasts this many won battles, then the real one returns. */ battles: z.number().int().min(1).max(10).optional() }),
+  /** Ability Capsule (swap between its normal abilities) and Ability Patch (switch to its hidden ability). */
+  z.object({ kind: z.literal('ability'), mode: z.enum(['swap', 'hidden']) }),
   /** Tuning Dust: nudges a nature one step so the named stat is the raised one (the lowered stat stays). */
   z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Care for one Pokémon: heal HP, revive, cure status, restore one move's PP; friendship and attribute side effects. */
