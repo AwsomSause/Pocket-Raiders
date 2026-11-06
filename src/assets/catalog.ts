@@ -12,6 +12,8 @@ import { allPlayerAnims, playerAnimBase, playerAnimId } from './playerArt.ts';
 
 /** Plaza walk sheets copied from Pokemon Memories (tools/build-plaza-map.py); core/presentation/plazaStyles.ts places them. */
 
+import { STORY_ICONS } from './storyIcons.ts';
+
 export type AssetKind = 'image' | 'atlas' | 'audio' | 'font' | 'spritesheet' | 'json';
 export type AssetCategory = 'pokemon' | 'trainer' | 'item' | 'background' | 'ui' | 'music' | 'sound' | 'font' | 'animation';
 
@@ -269,6 +271,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...[1, 2].map((n): AssetEntry => ({ id: `cine.sfx.mega${n}`, kind: 'audio', category: 'sound', path: `audio/cine/mega_evolution${n}.m4a`, lazy: true })),
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
+  // Story Overhaul icon pack (P7, src/assets/storyIcons.ts): emotes, hearts, snacks, keepsakes, badges, tokens, ball-exit effects.
+  ...STORY_ICONS.map((i): AssetEntry => ({ id: i.id, kind: 'image', category: 'ui', path: i.path, lazy: true })),
   { id: 'bgm.menu', kind: 'audio', category: 'music', path: 'audio/bgm/menu.mp3' },
   { id: 'bgm.battle', kind: 'audio', category: 'music', path: 'audio/bgm/battle_wild.mp3' },
   ...['ultra', 'max', 'tera'].map((n): AssetEntry => ({ id: `bgm.raid.${n}`, kind: 'audio', category: 'music', path: `audio/bgm/raid_${n}.mp3` })),
@@ -348,9 +352,9 @@ export const FIXED_ASSETS: AssetEntry[] = [
   { id: 'se.egg_get', kind: 'audio', category: 'sound', path: 'audio/se/egg_get.ogg' },
   { id: 'ui.select', kind: 'audio', category: 'sound', path: 'audio/se/ui_decision.ogg' },
   { id: 'ui.error', kind: 'audio', category: 'sound', path: 'audio/se/ui_buzzer.ogg' },
-  { id: 'font.main', kind: 'font', category: 'font', path: 'fonts/pokemon-emerald-pro.ttf' },
+  { id: 'font.main', kind: 'font', category: 'font', path: 'fonts/pokemon-emerald-pro.woff2' },
   // The Gen 3 battle font: chunky pixel text for everything but fine print.
-  { id: 'font.bold', kind: 'font', category: 'font', path: 'fonts/pkmnems.ttf' },
+  { id: 'font.bold', kind: 'font', category: 'font', path: 'fonts/pkmnems.woff2' },
 ];
 
 /**

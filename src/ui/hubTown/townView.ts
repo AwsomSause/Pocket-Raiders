@@ -7,7 +7,7 @@
 
 import Phaser from 'phaser';
 import { overworldAssetIds } from '../../assets/catalog';
-import { HUB_TOWN, type Facing, type HubPlace } from '../../core/hubTown/schema';
+import { HUB_TOWN, type Facing, type HubPlace, type HubTownData } from '../../core/hubTown/schema';
 import { ahead, facingOf, gateAt, placeAhead, STEP, WalkGrid, type Tile } from '../../core/hubTown/world';
 import { playSfx } from '../audio';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
@@ -44,9 +44,10 @@ export interface Talker {
 }
 
 /** Remembered between Hub visits in this session: where you were, so leaving a room puts you back by its door. */
-let lastSpot: TownStart | null = null;
-export function rememberSpot(spot: TownStart | null): void {
-  lastSpot = spot;
+const lastSpots = new Map<string, TownStart>();
+export function rememberSpot(spot: TownStart | null, mapId = 'hub'): void {
+  if (spot) lastSpots.set(mapId, spot);
+  else lastSpots.delete(mapId);
 }
 
 /** Frames of a 4x4 walk sheet as Phaser animations (made once per texture). */
@@ -60,7 +61,8 @@ export function ensureWalkAnims(scene: Phaser.Scene, key: string, frameRate = 7)
 }
 
 export class HubTownView {
-  readonly grid = new WalkGrid();
+  readonly map: HubTownData;
+  readonly grid: WalkGrid;
   readonly worldCam: Phaser.Cameras.Scene2D.Camera;
   readonly player: Phaser.GameObjects.Sprite;
   private readonly shadow: Phaser.GameObjects.Ellipse;
@@ -84,9 +86,11 @@ export class HubTownView {
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly hooks: TownHooks,
-    private readonly opts: { follower: string; motion: 'full' | 'reduced' | 'off'; start?: TownStart },
+    private readonly opts: { follower: string; motion: 'full' | 'reduced' | 'off'; start?: TownStart; /** Another town map (Pocket Town); Hub Town when left out. */ map?: HubTownData; mapId?: string },
   ) {
-    const [W, H] = HUB_TOWN.size;
+    this.map = opts.map ?? HUB_TOWN;
+    this.grid = new WalkGrid(this.map);
+    const [W, H] = this.map.size;
     // The world camera goes under the main one; anything made outside buildWorld() stays off it.
     this.worldCam = scene.cameras.add(0, 0, GAME_WIDTH, GAME_HEIGHT, false, 'hubTownWorld');
     const list = scene.cameras.cameras;
@@ -103,7 +107,7 @@ export class HubTownView {
     // Everything already in the scene belongs to the screen, not the world.
     for (const go of scene.children.list) this.worldCam.ignore(go);
 
-    const start = opts.start ?? lastSpot ?? { x: HUB_TOWN.spawn.x, y: HUB_TOWN.spawn.y, facing: HUB_TOWN.spawn.facing };
+    const start = opts.start ?? lastSpots.get(opts.mapId ?? 'hub') ?? { x: this.map.spawn.x, y: this.map.spawn.y, facing: this.map.spawn.facing };
     this.at = { x: start.x, y: start.y };
     this.facing = start.facing;
 
@@ -195,9 +199,9 @@ export class HubTownView {
   }
 
   private drawGround(): void {
-    const [W, H] = HUB_TOWN.size;
+    const [W, H] = this.map.size;
     const rows = (layer: number[]) => Array.from({ length: H }, (_, y) => layer.slice(y * W, y * W + W));
-    for (const [i, layer] of [HUB_TOWN.ground, HUB_TOWN.overlay].entries()) {
+    for (const [i, layer] of [this.map.ground, this.map.overlay].entries()) {
       const map = this.scene.make.tilemap({ data: rows(layer), tileWidth: T, tileHeight: T });
       const tiles = map.addTilesetImage('hubtown', overworldAssetIds.tiles, T, T, 0, 0);
       if (!tiles) continue;
@@ -210,7 +214,7 @@ export class HubTownView {
   private cullTick = 0;
 
   private drawProps(): void {
-    for (const [frame, x, y, depth] of HUB_TOWN.props) {
+    for (const [frame, x, y, depth] of this.map.props) {
       this.props.push(this.scene.add.image(x, y, overworldAssetIds.props, frame).setOrigin(0, 0).setDepth(DEPTH_WORLD + depth));
     }
   }
@@ -263,7 +267,7 @@ export class HubTownView {
     if (!this.grid.canEnter(next.x, next.y, 'player')) {
       this.idle();
       // Walking into a door opens it, like any Pokémon town.
-      const place = placeAhead(this.at, dir);
+      const place = placeAhead(this.at, dir, this.map);
       if (place && place.kind === 'building') {
         this.hooks.onPlace(place);
         return false;
@@ -286,7 +290,7 @@ export class HubTownView {
       onComplete: () => {
         this.moving = false;
         this.syncShadow();
-        const gate = gateAt(this.at);
+        const gate = gateAt(this.at, this.map);
         if (gate) {
           this.idle();
           this.hooks.onGate(gate);
@@ -311,7 +315,7 @@ export class HubTownView {
   /** Confirm pressed: open whatever is in front of you. */
   interact(): boolean {
     if (this.moving) return false;
-    const place = placeAhead(this.at, this.facing);
+    const place = placeAhead(this.at, this.facing, this.map);
     if (place) {
       this.hooks.onPlace(place);
       return true;
@@ -347,11 +351,11 @@ export class HubTownView {
     if (this.holdLock && !dir) this.holdLock = false;
     if (!busy && !this.holdLock && dir && !this.moving) this.step(dir, Boolean(this.keys?.shift.isDown));
     this.updatePrompt(busy);
-    lastSpot = this.spot();
+    lastSpots.set(this.opts.mapId ?? 'hub', this.spot());
   }
 
   private updatePrompt(busy: boolean): void {
-    const found = busy || this.moving ? null : placeAhead(this.at, this.facing);
+    const found = busy || this.moving ? null : placeAhead(this.at, this.facing, this.map);
     const talker = found || busy || this.moving ? null : this.talkerAhead();
     const place = found ? { id: found.id, name: found.name, verb: found.kind === 'sign' ? 'Read' : 'Enter', door: found.door } : talker ? { id: `talk:${talker.id}`, name: talker.name, verb: talker.verb, door: ahead(this.at, this.facing) } : null;
     if (!place) {

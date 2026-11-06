@@ -55,9 +55,9 @@ export const TYPE_COLORS: Record<string, number> = {
 };
 
 /** Fine print: Pokémon Emerald Pro, drawn on a 16-px grid. */
-export const FONT_FAMILY = '"PokemonMain", "Courier New", monospace';
+export const FONT_FAMILY = '"PokemonMain", "Courier New", sans-serif';
 /** Everything else: the chunky Gen 3 battle font, drawn on an 8-px grid (falls back to FONT_FAMILY for symbols it lacks). */
-export const BOLD_FONT_FAMILY = '"PokemonBold", "PokemonMain", "Courier New", monospace';
+export const BOLD_FONT_FAMILY = '"PokemonBold", "PokemonMain", "Courier New", sans-serif';
 
 /** Sizes below this use the fine-print font; this size and up use the bold one. */
 const BOLD_FROM = 18;

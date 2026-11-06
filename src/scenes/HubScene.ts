@@ -370,7 +370,7 @@ export class HubScene extends Phaser.Scene {
     const motion = session.settings.battleAnimations;
     // The screen layer: logo, currencies and the card line stay put over the town.
     const top = this.add.graphics();
-    for (let i = 0; i < 12; i++) top.fillStyle(0x0e0b12, 0.45 * (1 - i / 12)).fillRect(0, i * 8, GAME_WIDTH, 8);
+    for (let i = 0; i < 12; i++) top.fillStyle(0x0e0b12, 0.7 * (1 - i / 12)).fillRect(0, i * 8, GAME_WIDTH, 8);
     drawLogo(this, 20, 8, 34, 0, motion);
     let right = GAME_WIDTH - 16;
     right -= currencyChip(this, right, 32, 'item.candy', p.candies, 'Candies') + 8;

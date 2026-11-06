@@ -74,7 +74,7 @@ export const stadium: BattleSkin = {
     const ticker = scene.add.text(W, 507, line + line, { fontFamily: 'Arial, sans-serif', fontSize: '16px', color: '#04153a', fontStyle: 'bold' }).setOrigin(0, 0.5).setDepth(6);
     if (info.motion === 'off') ticker.setX(8);
     else scene.tweens.add({ targets: ticker, x: -ticker.width / 2, duration: 26000, repeat: -1, onRepeat: () => ticker.setX(W) });
-    const update = (i: typeof info) => channel.setText(`GALAR LEAGUE TV · ${i.region ? `${i.region.toUpperCase()} STADIUM` : 'POKé STADIUM CHANNEL'} · TURN ${i.turn}`);
+    const update = (i: typeof info) => channel.setText(`${i.region ? `${i.region.toUpperCase()} LEAGUE TV · ${i.region.toUpperCase()} STADIUM` : 'GALAR LEAGUE TV · POKé STADIUM CHANNEL'} · TURN ${i.turn}`);
     update(info);
     return { update };
   },

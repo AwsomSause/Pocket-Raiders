@@ -3,6 +3,7 @@
 
 import { z } from 'zod';
 import json from '../../data/hubTown.json';
+import pocketJson from '../../data/pocketTown.json';
 import overworldJson from '../../data/overworld.json';
 
 const Int = z.number().int();
@@ -55,6 +56,8 @@ export const HubTownSchema = z.object({
 export type HubTownData = z.infer<typeof HubTownSchema>;
 
 export const HUB_TOWN: HubTownData = HubTownSchema.parse(json);
+/** Pocket Town (Appendix S.5): the second map on the same engine, built by tools/hubtown/pocket.py. */
+export const POCKET_TOWN: HubTownData = HubTownSchema.parse(pocketJson);
 
 export const OverworldSchema = z.object({
   /** Trainer walk sheets in images/overworld/trainers (4x4 frames of 64 px). */

@@ -14,6 +14,9 @@ import { startFpsMeter } from '../game/deviceTools';
 import { STREAM_NAMES } from '../core/rng';
 import { isAssisted } from '../core/tools/assisted';
 import { runDigest } from '../core/tools/replay';
+import { STORY_ICONS, storyIconScale } from '../assets/storyIcons';
+
+let iconGalleryOpen = false;
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> = {}, children: (Node | string)[] = []): HTMLElementTagNameMap[K] {
   const node = Object.assign(document.createElement(tag), props);
@@ -163,6 +166,20 @@ export function installDebugPanel(game: Phaser.Game, session: GameSession): void
       textContent: 'Start',
       onclick: () => { session.newRun(archetypeSelect.value, seedInput.value.trim() || undefined, campaignSelect.value); goTo('StarterSelect'); render(); },
     }));
+
+    // --- story icon gallery (slice P7): every pack icon at 2x, named by catalog id
+    panel.append(el('button', { textContent: iconGalleryOpen ? 'Hide icon gallery' : `Icon gallery (${STORY_ICONS.length})`, onclick: () => { iconGalleryOpen = !iconGalleryOpen; render(); } }));
+    if (iconGalleryOpen) {
+      const grid = el('div', { id: 'icon-gallery' });
+      grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;max-height:260px;overflow:auto';
+      for (const i of STORY_ICONS) {
+        const img = el('img', { src: `${import.meta.env.BASE_URL}assets/${i.path}`, title: i.id, alt: i.id });
+        const k = storyIconScale(64, i.size);
+        img.style.cssText = `image-rendering:pixelated;width:${i.size * k}px;height:${i.size * k}px;background:#444`;
+        grid.append(img);
+      }
+      panel.append(grid);
+    }
 
     // --- assets
     const { assets } = services();

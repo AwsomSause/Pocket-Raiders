@@ -4,7 +4,6 @@
 // the screen camera, read the town's tile, and hide while a page is open.
 
 import Phaser from 'phaser';
-import { HUB_TOWN } from '../../core/hubTown/schema';
 import { districtAt, teleportSpot, type HubDistrict } from '../../core/hubTown/world';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import type { HubTownView } from './townView';
@@ -33,13 +32,15 @@ export class HubMinimap {
   private readonly dotLarge: Phaser.GameObjects.Arc;
   private readonly banner: DistrictBanner;
   private district: string | null = null;
+  private readonly map;
 
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly town: HubTownView,
-    private readonly opts: { busy(): boolean; motion: 'full' | 'reduced' | 'off' },
+    private readonly opts: { busy(): boolean; motion: 'full' | 'reduced' | 'off'; title?: string },
   ) {
-    const [W, H] = HUB_TOWN.size;
+    this.map = town.map;
+    const [W, H] = this.map.size;
     // Small: 2 px a tile in the bottom-right corner.
     const s = 2;
     const sx = GAME_WIDTH - W * s - 14;
@@ -56,9 +57,9 @@ export class HubMinimap {
     const ly = Math.round((GAME_HEIGHT - H * l) / 2) + 6;
     this.large = scene.add.container(lx, ly).setDepth(DEPTH + 1).setName('hubtown-minimap-large');
     this.large.add(scene.add.rectangle(-10, -34, W * l + 20 + 170, H * l + 44, 0x10203a, 0.9).setOrigin(0).setStrokeStyle(3, 0xffffff, 0.85));
-    this.large.add(scene.add.text(0, -28, 'Hub Town', textStyle(18, '#ffe08a')));
+    this.large.add(scene.add.text(0, -28, opts.title ?? 'Hub Town', textStyle(18, '#ffe08a')));
     this.large.add(this.paint(l, true));
-    for (const pl of HUB_TOWN.places) {
+    for (const pl of this.map.places) {
       // Teleporters (S467): click a place name on the large map to jump to its door.
       const label = scene.add.text(pl.door.x * l + l / 2, pl.door.y * l - (pl.kind === 'building' ? 10 : 2), SHORT[pl.id] ?? pl.name, textStyle(11, '#ffffff', { stroke: '#10203a', strokeThickness: 3, align: 'center' })).setOrigin(0.5, 1);
       label.setInteractive({ useHandCursor: true }).setName(`hubtown-teleport-${pl.id}`);
@@ -67,7 +68,7 @@ export class HubMinimap {
       label.on('pointerdown', () => this.teleport(pl.id));
       this.large.add(label);
     }
-    HUB_TOWN.districts.forEach((d, i) => {
+    this.map.districts.forEach((d, i) => {
       const y = 8 + i * 64;
       this.large.add(scene.add.rectangle(W * l + 18, y, 14, 14, hex(d.color)).setOrigin(0).setStrokeStyle(1, 0xffffff));
       this.large.add(scene.add.text(W * l + 38, y - 3, d.name, textStyle(13, '#ffffff')));
@@ -102,7 +103,7 @@ export class HubMinimap {
   /** Jump to a place's door from the large map, then close the map. */
   teleport(placeId: string): void {
     if (this.opts.busy() || this.mode !== 'large') return;
-    const spot = teleportSpot(placeId);
+    const spot = teleportSpot(placeId, this.map);
     if (!spot) return;
     this.town.moveTo(spot);
     this.mode = sessionMode = 'small';
@@ -116,11 +117,11 @@ export class HubMinimap {
   /** One rectangle per tile, then each district's edge in its colour. */
   private paint(size: number, outlines: boolean): Phaser.GameObjects.Graphics {
     const g = this.scene.add.graphics();
-    HUB_TOWN.minimap.forEach((row, y) => {
+    this.map.minimap.forEach((row, y) => {
       for (let x = 0; x < row.length; x++) g.fillStyle(COLOR[row[x]!] ?? COLOR['.']!, 1).fillRect(x * size, y * size, size, size);
     });
     if (outlines)
-      for (const d of HUB_TOWN.districts) {
+      for (const d of this.map.districts) {
         const [x, y, w, h] = d.rect;
         g.fillStyle(hex(d.color), 0.14).fillRect(x * size, y * size, w * size, h * size);
         g.lineStyle(2, hex(d.color), 0.95).strokeRect(x * size, y * size, w * size, h * size);
@@ -135,7 +136,7 @@ export class HubMinimap {
     const t = this.town.tile();
     this.dotSmall.setPosition(t.x * 2 + 1, t.y * 2 + 1);
     this.dotLarge.setPosition(t.x * 7 + 3.5, t.y * 7 + 3.5);
-    const d = districtAt(t);
+    const d = districtAt(t, this.map);
     if (this.mode === 'large' || busy) this.banner.hide();
     else if (d && d.id !== this.district) this.banner.show(d);
     if (d) this.district = d.id;

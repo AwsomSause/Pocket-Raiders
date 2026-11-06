@@ -22,7 +22,7 @@ export const cinematic: BattleSkin = {
     bar: null,
     message: { x: 180, y: 458, w: 600, size: 20, align: 'center' },
     command: null,
-    tabs: { x: 716, y: 44 },
+    tabs: { x: 640, y: 96 },
     moveInfo: { x: 200, y: 462, inline: true },
     root: filmMenu(20),
     moves: filmMenu(20),

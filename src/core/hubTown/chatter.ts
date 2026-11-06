@@ -84,3 +84,23 @@ export function chatterFor(c: Content, p: Profile, who: string, window: string):
   const pool = [...history, ...history, ...SMALL_TALK];
   return pool[hash(`${who}::${window}`) % pool.length]!;
 }
+
+/** Small talk in Pocket Town (Appendix S.5): the buildings, the districts and the plaza. */
+const POCKET_TALK = [
+  'Training Grounds are north-west: the dojo, the gym replica and the arcade.',
+  'The Culture Quarter has the library and the shrine. Quiet, mostly.',
+  'Home Gardens in the south-west grow the best berries in town.',
+  'Play Street never sleeps. The capsule machine is by the stage.',
+  'Face a door and press Z. Esc opens the Town directory if you get lost.',
+  'Press M for the map. The south gate leads back to Hub Town.',
+  'The fountain in the plaza is the middle of everything.',
+];
+
+/** What one Pocket Town person says: reacts to your last run first, then your history, then small talk. */
+export function pocketChatterFor(c: Content, p: Profile, who: string, window: string): string {
+  const last = townOf(p).last;
+  const reaction = last ? [last.victory ? 'The sun came out the day you won. Everybody noticed.' : `A storm followed your last run, ${last.cleared} regions in. It will pass.`] : [];
+  const history = HISTORY.map((l) => l(c, p)).filter((t): t is string => Boolean(t));
+  const pool = [...reaction, ...reaction, ...history, ...POCKET_TALK];
+  return pool[hash(`${who}::${window}`) % pool.length]!;
+}

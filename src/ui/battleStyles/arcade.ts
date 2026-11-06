@@ -33,7 +33,7 @@ export const arcade: BattleSkin = {
     moveInfo: { x: 40, y: 416, inline: true },
     root: slashes(22),
     moves: slashes(20),
-    header: { x: 940, y: 100 },
+    header: { x: 940, y: 72 },
   },
   databox: (scene, isPlayer, [x, y, w]) => {
     const g = scene.add.graphics();
