@@ -33,7 +33,7 @@
   },
   "potion": {
    "1": "potion",
-   "2": "super-potion",
+   "2": "potion",
    "3": "hyper-potion",
    "4": "max-potion"
   },

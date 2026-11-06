@@ -58,6 +58,8 @@ for (let i = 0; i < RUNS; i++) {
   const archetypeId = archetypes[i % archetypes.length]!;
   const row: RunStats = { i, archetypeId, steps: 0, battles: 0, regions: 0, phase: '', victory: false, wild: 0, wildRepeats: 0, legendary: 0, mythical: 0, specialForms: 0, hyper: 0, overdrive: 0, cinematic: 0, landmark: 0, eggs: 0, trades: 0, rival: { early: { won: 0, fought: 0 }, mid: { won: 0, fought: 0 }, late: { won: 0, fought: 0 } } };
   let rivalOpen = false;
+  let lossesAtOpen = 0;
+  const softLosses = (r: { story: { flags: Record<string, unknown>; v2?: { facts: Record<string, unknown> } } }): number => Number(r.story.flags['story:losses'] ?? 0) + Number(r.story.v2?.facts.story_losses ?? 0);
   const recent: string[] = [];
   // The run is a fresh object every step, so a battle starts on the first step with a battle after a step without one.
   let lastBattle: unknown = null;
@@ -89,10 +91,12 @@ for (let i = 0; i < RUNS; i++) {
         if (ended) {
           const tally = row.rival[stageOf(r.regionsCleared.length)];
           tally.fought++;
-          if (b?.outcome ? b.outcome === 'win' : r.phase !== 'over') tally.won++;
+          // A survived loss (the run goes on healed) is not a win: it shows in the loss counters.
+          const losses = softLosses(r);
+          if ((b?.outcome ? b.outcome === 'win' : r.phase !== 'over') && losses === lossesAtOpen) tally.won++;
           rivalOpen = false;
         }
-        if (b && !lastBattle && isRival(b) && !b.outcome) rivalOpen = true;
+        if (b && !lastBattle && isRival(b) && !b.outcome) { rivalOpen = true; lossesAtOpen = softLosses(r); }
         lastBattle = b;
       },
     });
