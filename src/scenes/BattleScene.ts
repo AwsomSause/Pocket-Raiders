@@ -24,7 +24,7 @@ import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
-import { canDynamax, maxMoveOptions, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
+import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
@@ -44,7 +44,7 @@ import { arenaFor, getTheme } from '../core/themes';
 import { shinyCatchBurst, targetReticle } from '../ui/battleFx/arenaLife';
 import { addContactShadows, addParallax, addVignette, ArenaLight, dressArena, type ShadowTarget } from '../ui/battleFx/arenaLife';
 import { pickUieArena } from '../core/arenaStyle';
-import { bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
+import { pokemonAssetIds, bossAnimId, bossBackId, uieArenaId, VS_SHARED, vsCardFor } from '../assets/catalog';
 import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
@@ -67,6 +67,7 @@ import '../core/presentation/storyAnims';
 import { rivalIntro } from '../ui/battleFx/storyFx';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
 import { teraScene } from '../ui/battleFx/teraScene';
+import { megaScene } from '../ui/battleFx/megaScene';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -2251,12 +2252,13 @@ export class BattleScene extends Phaser.Scene {
   private showRootMenu(): void {
     this.clearMenus();
     const content = services().session.content;
-    // Transformations: a fourth option that cycles off -> Tera -> Z-Move -> Dynamax -> off. (Mega and Gigantamax happen by themselves.)
+    // Transformations: a fourth option that cycles off -> Mega -> Tera -> Z-Move -> Dynamax -> off. (Gigantamax happens by itself.)
     const ctx = this.battleCtx();
     // In a double battle either Pokémon can transform (the context looks at the one being commanded).
     const tera = teraOption(ctx);
     const zMove = zMoveOptions(ctx).some((z) => z !== null);
     const choices: TransformRequest[] = [
+      ...(megaOption(ctx) ? [{ kind: 'mega' as const }] : []),
       ...(tera ? [{ kind: 'tera' as const }] : []),
       ...(zMove ? [{ kind: 'zmove' as const }] : []),
       ...(canDynamax(ctx) ? [{ kind: 'dynamax' as const }] : []),
@@ -2271,7 +2273,9 @@ export class BattleScene extends Phaser.Scene {
             ? ' Pick a move to unleash as a Z-Move!'
             : choice?.kind === 'dynamax'
               ? ' It will Dynamax!'
-              : '';
+              : choice?.kind === 'mega'
+                ? ' It will Mega Evolve!'
+                : '';
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
     const intent = this.run.battle && !this.run.battle.doubles ? (enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
     const battleNow = this.run.battle!;
@@ -2281,8 +2285,8 @@ export class BattleScene extends Phaser.Scene {
     const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
     this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
-    const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max' })[c.kind];
-    const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax' })[c.kind];
+    const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
+    const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];
     const kinds = [...new Set(choices.map(label))];
     if (choices.length > 0) options.push({ label: choice ? `${onLabel(choice)}: ON` : `${kinds.join('/')}: OFF` });
     // Raid cheers (Raid Battles pack) sit after the transformation toggle.
@@ -2520,10 +2524,11 @@ export class BattleScene extends Phaser.Scene {
     this.showActionTab();
   }
 
-  /** The ACTION tab over the move menu: click to cycle Tera / Z-Move / Dynamax on and off; red-orange while one is on. */
+  /** The ACTION tab over the move menu: click to cycle Mega / Tera / Z-Move / Dynamax on and off; red-orange while one is on. */
   private showActionTab(): void {
     const ctx = this.battleCtx();
     const choices: TransformRequest[] = [
+      ...(megaOption(ctx) ? [{ kind: 'mega' as const }] : []),
       ...(teraOption(ctx) ? [{ kind: 'tera' as const }] : []),
       ...(zMoveOptions(ctx).some((z) => z !== null) ? [{ kind: 'zmove' as const }] : []),
       ...(canDynamax(ctx) ? [{ kind: 'dynamax' as const }] : []),
@@ -2532,7 +2537,7 @@ export class BattleScene extends Phaser.Scene {
     const on = this.transformChoice;
     this.actionTabUi = actionTab(this, 20, MESSAGE_Y - 26, {
       on: !!on,
-      icon: on?.kind === 'dynamax' ? { key: 'ui.dynamax.icon' } : { key: 'ui.tera.types', frame: TERA_ICON_ROW[teraOption(ctx) ?? 'normal'] },
+      icon: on?.kind === 'dynamax' ? { key: 'ui.dynamax.icon' } : on?.kind === 'mega' ? { key: 'pack.ebdx.symMega' } : { key: 'ui.tera.types', frame: TERA_ICON_ROW[teraOption(ctx) ?? 'normal'] },
       onClick: () => {
         const at = choices.findIndex((c) => c.kind === this.transformChoice?.kind);
         this.transformChoice = choices[at + 1] ?? null;
@@ -3159,6 +3164,31 @@ export class BattleScene extends Phaser.Scene {
               }),
             );
             playSfx(this, 'se.level_up');
+          } else if (cine === 'mega' && this.motion === 'full' && !services().session.settings.fastMega && mon) {
+            // The full reference scene (Fast Mega off): Pokémon turned to face you, trainer and Mega Ring, Mega Stone, white ball, crystal, blue rays.
+            const from = content.species.get(mon.speciesId)!;
+            const to = content.species.get(e.to) ?? from;
+            const mine = e.side === 'player';
+            const art = mine ? this.playerArt() : (this.trainerArt()?.assetId ?? null);
+            const feel = this.cineFeel('mega');
+            // Both front pictures must be loaded before the scene measures them.
+            const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
+            await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
+            await this.playBeat(
+              megaScene(this, {
+                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
+                stoneKey: (e.itemId ? content.items.get(e.itemId)?.iconAssetId : null) ?? null,
+                ringKey: 'cine.key.mega',
+                backdropKey: this.arenaBgKey,
+                opposes: !mine,
+                onSwap: () => void swapForm(),
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
           } else if (cine) {
             const zMove = zBase ? zMoveFor(content, zBase) : null;
             await this.playBeat(

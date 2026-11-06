@@ -290,6 +290,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-legendary.md`: Overhaul slice 12, Legendary/Mythical roles, rare-chain and boss-phase checks; no save change.
 - `overhaul-environments.md`: Overhaul slice 20: seeded battle environments (±10% type power) and rare battlefield conditions, total capped at ±30%.
 - zmove-reference-look.md: full reference Z-Move scene; Fast Z-Move setting (settings v35)
+- mega-reference-look.md: full reference Mega scene; Fast Mega setting (settings v38); Mega from the Action button
 - `ci-green-p0.md`: 11 failing browser tests fixed (skip guard off in automated browsers; tests read prices, dates and texts from the game).
 - `overhaul-transform-check.md`: Overhaul slice 11, transformation rules table + data audit; no save change.
 - `overhaul-remember-choice.md`: Overhaul slice 6: the move menu starts on the move each Pokémon used last (setting on by default, settings v34).

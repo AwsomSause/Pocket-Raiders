@@ -1798,6 +1798,8 @@ export const SettingsSchema = z.object({
   /** Fast Dynamax: the short Dynamax cutscene instead of the full reference scene (off by default). */
   fastDynamax: z.boolean().default(false),
   fastTera: z.boolean().default(false),
+  /** Fast Mega: the short Mega Evolution cinematic instead of the full reference scene (off by default). */
+  fastMega: z.boolean().default(false),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */
