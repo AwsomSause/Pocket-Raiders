@@ -188,7 +188,7 @@ import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, reco
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
-import { heartbondTurn, heartbondVictory } from './story2/heartbond';
+import { clutchSurvived, heartbondTurn, heartbondVictory } from './story2/heartbond';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
@@ -2520,6 +2520,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;
   const enemyBefore = battle.enemyIndex;
+  const partnerUid = run.story.v2?.heartbond.partner;
+  const partnerBefore = partnerUid ? run.party.find((m) => m.uid === partnerUid)?.hp ?? 0 : 0;
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
   const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
@@ -2541,7 +2543,9 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const enemyCombo_ = enemyCombo(content, run, enemyBefore);
   if (enemyCombo_) engineEvents.push(enemyCombo_);
   updateBondsTurn(run, engineEvents);
-  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, engineEvents as { type: string; side?: string; uid?: string }[]);
+  const partnerMon = partnerUid ? run.party.find((m) => m.uid === partnerUid) : undefined;
+  const clutch = partnerMon && clutchSurvived(partnerBefore, partnerMon.hp, maxHp(content, partnerMon)) ? [{ type: 'clutch', side: 'player', uid: partnerMon.uid }] : [];
+  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, [...(engineEvents as { type: string; side?: string; uid?: string }[]), ...clutch]);
   partyLifeTurn(content, run, engineEvents);
   run.rng.battle = rng.state;
   run.rng.capture = captureRng.state;

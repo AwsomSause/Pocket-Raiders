@@ -362,4 +362,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-s6-heartbond.md`: Story S6 part 1: Heartbond score/latches/pay ledger, 16 Core Temperaments map (not yet wired into battles or menus).
 - shop-item-limits: no selling, stacks cap 100, 6 revives per battle
 - story-s12-backstory-parity.md: S12 ending-grid check and parity audit for all five backstories.
-- money-and-buy-caps: money cap 999,999, 10 buys per item per stage
+- `story-s20-acceptance.md`: Story S20 (partial): `sim:story` per-backstory Story Run sim, acceptance test, report in `docs/qa/story-acceptance-s20.md`.
