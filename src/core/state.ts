@@ -1715,7 +1715,9 @@ export const SettingsSchema = z.object({
   /** Skip the drifting ambience particles (clouds, fog and rays stay). */
   reduceParticles: z.boolean().default(false),
   /** Battle text speed: all at once, a quick typewriter, or a slower one. */
-  textSpeed: z.enum(['instant', 'fast', 'normal', 'slow']).default('instant'),
+  textSpeed: z.enum(['instant', 'faster', 'fast', 'normal', 'slow']).default('instant'),
+  /** How fast spoken lines (trainers talking) type out; they always type like speech unless 'instant'. */
+  speechSpeed: z.enum(['slow', 'normal', 'fast', 'faster', 'instant']).default('normal'),
   /** Battle messages move on by themselves after `messageDelay` (otherwise only move and damage lines do). */
   autoAdvance: z.boolean().default(false),
   messageDelay: z.enum(['short', 'normal', 'long']).default('normal'),

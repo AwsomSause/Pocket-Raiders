@@ -49,5 +49,135 @@
    "kind": "backstory",
    "arg": "bs_ex_criminal"
   }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_larvitar",
+  "line": [
+   "larvitar",
+   "pupitar",
+   "tyranitar"
+  ],
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "temperament": "stubborn",
+  "moves": [
+   "crunch",
+   "leer",
+   "bite"
+  ],
+  "keystone": "bedrocks_heir",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_bedrock_4"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_caterpie",
+  "line": [
+   "caterpie",
+   "metapod",
+   "butterfree"
+  ],
+  "types": [
+   "bug",
+   "flying"
+  ],
+  "temperament": "regal",
+  "moves": [
+   "tackle",
+   "gust",
+   "harden"
+  ],
+  "keystone": "elder_butterfree",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_forest_remembers"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_weedle",
+  "line": [
+   "weedle",
+   "kakuna",
+   "beedrill"
+  ],
+  "types": [
+   "bug",
+   "poison"
+  ],
+  "temperament": "loyal",
+  "moves": [
+   "harden",
+   "tackle",
+   "leer"
+  ],
+  "keystone": "saved_weedle",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_old_friend_2"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_oddish",
+  "line": [
+   "oddish",
+   "gloom",
+   "vileplume"
+  ],
+  "types": [
+   "grass",
+   "poison"
+  ],
+  "temperament": "calm",
+  "moves": [
+   "absorb",
+   "acid",
+   "growl"
+  ],
+  "keystone": "saved_roots",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_migration_5"
+  }
+ },
+ {
+  "v": 1,
+  "affinity": {},
+  "status": "limited",
+  "id": "rm_poliwag",
+  "line": [
+   "poliwag",
+   "poliwhirl",
+   "poliwrath"
+  ],
+  "types": [
+   "water",
+   "fighting"
+  ],
+  "temperament": "playful",
+  "moves": [
+   "bubble",
+   "growl",
+   "tackle"
+  ],
+  "keystone": "pond_tune",
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_map_pond"
+  }
  }
 ]

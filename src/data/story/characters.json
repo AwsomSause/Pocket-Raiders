@@ -245,5 +245,372 @@
     "spoiler": false
    }
   ]
+ },
+ {
+  "id": "ch_gideon_hartwell",
+  "v": 1,
+  "nameKey": "ch.ch_gideon_hartwell.name",
+  "age": 52,
+  "role": "family",
+  "poses": {
+   "neutral": "public/assets/images/trainer/blue.png",
+   "happy": "public/assets/images/trainer/blue.png",
+   "angry": "public/assets/images/trainer/blue.png",
+   "sad": "public/assets/images/trainer/blue.png"
+  },
+  "tier": 1,
+  "home": "hartwell_house",
+  "party": [
+   "tyranitar"
+  ],
+  "relationClass": "family",
+  "romanceable": false,
+  "tellings": [
+   "stiff_two_sentences"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_gideon_hartwell.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_gideon_hartwell.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_gideon_hartwell.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_bedrock",
+  "v": 1,
+  "nameKey": "ch.ch_bedrock.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/248.png",
+   "happy": "public/assets/images/pokemon/248.png"
+  },
+  "tier": 2,
+  "party": [
+   "tyranitar"
+  ],
+  "relationClass": "family",
+  "romanceable": false,
+  "tellings": [
+   "scarred_watcher"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_bedrock.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_bedrock.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_odette_marr",
+  "v": 1,
+  "nameKey": "ch.ch_odette_marr.name",
+  "age": 46,
+  "role": "leader",
+  "poses": {
+   "neutral": "public/assets/images/trainer/lenora.png",
+   "happy": "public/assets/images/trainer/lenora.png",
+   "angry": "public/assets/images/trainer/lenora.png",
+   "sad": "public/assets/images/trainer/lenora.png"
+  },
+  "tier": 1,
+  "home": "marr_gym",
+  "party": [],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_odette_marr.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_odette_marr.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_odette_marr.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_silas_crane",
+  "v": 1,
+  "nameKey": "ch.ch_silas_crane.name",
+  "age": 50,
+  "role": "rival",
+  "poses": {
+   "neutral": "public/assets/images/trainer/roark.png",
+   "happy": "public/assets/images/trainer/roark.png"
+  },
+  "tier": 2,
+  "home": "crane_dojo",
+  "party": [],
+  "relationClass": "rival",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_silas_crane.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_silas_crane.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_tavi_marsh",
+  "v": 1,
+  "nameKey": "ch.ch_tavi_marsh.name",
+  "age": 33,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/penny.png",
+   "happy": "public/assets/images/trainer/penny.png"
+  },
+  "tier": 2,
+  "home": "league_press",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_tavi_marsh.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_tavi_marsh.bio2",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_the_examiner",
+  "v": 1,
+  "nameKey": "ch.ch_the_examiner.name",
+  "age": 58,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/wikstrom.png"
+  },
+  "tier": 3,
+  "home": "league_office",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_the_examiner.bio1",
+    "spoiler": false
+   }
+  ]
+ },
+ {
+  "id": "ch_hollis_wren",
+  "v": 1,
+  "nameKey": "ch.ch_hollis_wren.name",
+  "age": 67,
+  "role": "mentor",
+  "poses": {
+   "neutral": "public/assets/images/trainer/hiker.png",
+   "happy": "public/assets/images/trainer/hiker.png",
+   "angry": "public/assets/images/trainer/hiker.png",
+   "sad": "public/assets/images/trainer/hiker.png"
+  },
+  "tier": 1,
+  "home": "viridian_forest",
+  "party": [
+   "arcanine"
+  ],
+  "relationClass": "mentor",
+  "romanceable": false,
+  "tellings": [
+   "reads_tracks"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_hollis_wren.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_hollis_wren.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_hollis_wren.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_odessa_fennimore",
+  "v": 1,
+  "nameKey": "ch.ch_odessa_fennimore.name",
+  "age": 29,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/aroma_lady.png",
+   "happy": "public/assets/images/trainer/aroma_lady.png",
+   "angry": "public/assets/images/trainer/aroma_lady.png",
+   "sad": "public/assets/images/trainer/aroma_lady.png"
+  },
+  "tier": 1,
+  "home": "berry_farm",
+  "party": [],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_odessa_fennimore.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_odessa_fennimore.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_odessa_fennimore.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_ilya_santangelo",
+  "v": 1,
+  "nameKey": "ch.ch_ilya_santangelo.name",
+  "age": 44,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/will.png",
+   "happy": "public/assets/images/trainer/will.png",
+   "angry": "public/assets/images/trainer/will.png",
+   "sad": "public/assets/images/trainer/will.png"
+  },
+  "tier": 1,
+  "home": "field_lab",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_ilya_santangelo.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_ilya_santangelo.bio2",
+    "spoiler": false
+   },
+   {
+    "tier": 3,
+    "textKey": "ch.ch_ilya_santangelo.bio3",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_elder_butterfree",
+  "v": 1,
+  "nameKey": "ch.ch_elder_butterfree.name",
+  "age": 0,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/pokemon/12.png",
+   "happy": "public/assets/images/pokemon/12.png"
+  },
+  "tier": 2,
+  "party": [
+   "butterfree"
+  ],
+  "relationClass": "friend",
+  "romanceable": false,
+  "tellings": [
+   "regal_bearing"
+  ],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_elder_butterfree.bio1",
+    "spoiler": false
+   },
+   {
+    "tier": 2,
+    "textKey": "ch.ch_elder_butterfree.bio2",
+    "spoiler": true
+   }
+  ]
+ },
+ {
+  "id": "ch_greenwall_manager",
+  "v": 1,
+  "nameKey": "ch.ch_greenwall_manager.name",
+  "age": 39,
+  "role": "npc",
+  "poses": {
+   "neutral": "public/assets/images/trainer/worker_m.png"
+  },
+  "tier": 3,
+  "home": "greenwall_holdings",
+  "party": [],
+  "relationClass": "stranger",
+  "romanceable": false,
+  "tellings": [],
+  "flags": [],
+  "bio": [
+   {
+    "tier": 1,
+    "textKey": "ch.ch_greenwall_manager.bio1",
+    "spoiler": false
+   }
+  ]
  }
 ]

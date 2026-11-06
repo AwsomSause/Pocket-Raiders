@@ -111,5 +111,152 @@
   "exits": [
    "nell_rescued"
   ]
+ },
+ {
+  "id": "arc_bedrock",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_bedrock_1"
+   },
+   {
+    "event": "ev_bedrock_2"
+   },
+   {
+    "event": "ev_bedrock_3"
+   },
+   {
+    "event": "ev_bedrock_4"
+   }
+  ],
+  "nodeCost": 4,
+  "branches": [
+   {
+    "id": "pass",
+    "exit": "bedrock_ally"
+   },
+   {
+    "id": "fall_short",
+    "exit": "bedrock_distant"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_bedrock_fx_1",
+    "kind": "unlock",
+    "what": "remembrance",
+    "target": "rm_larvitar"
+   }
+  ],
+  "exits": [
+   "bedrock_ally",
+   "bedrock_distant"
+  ]
+ },
+ {
+  "id": "arc_hartwell_calls",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_hartwell_call_1"
+   },
+   {
+    "event": "ev_hartwell_call_2"
+   },
+   {
+    "event": "ev_hartwell_call_3"
+   },
+   {
+    "event": "ev_hartwell_call_4"
+   }
+  ],
+  "nodeCost": 0,
+  "branches": [
+   {
+    "id": "warm",
+    "exit": "call_warm"
+   },
+   {
+    "id": "stilted",
+    "exit": "call_stilted"
+   },
+   {
+    "id": "argument",
+    "exit": "call_argument"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "call_warm",
+   "call_stilted",
+   "call_argument"
+  ]
+ },
+ {
+  "id": "arc_old_friend",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_old_friend"
+   },
+   {
+    "event": "ev_old_friend_2"
+   }
+  ],
+  "nodeCost": 2,
+  "branches": [
+   {
+    "id": "done",
+    "exit": "weedle_remembered"
+   }
+  ],
+  "effects": [
+   {
+    "id": "arc_old_friend_fx_1",
+    "kind": "unlock",
+    "what": "remembrance",
+    "target": "rm_weedle"
+   }
+  ],
+  "exits": [
+   "weedle_remembered"
+  ]
+ },
+ {
+  "id": "arc_migration",
+  "v": 1,
+  "steps": [
+   {
+    "event": "ev_migration_1"
+   },
+   {
+    "event": "ev_migration_2"
+   },
+   {
+    "event": "ev_migration_3"
+   },
+   {
+    "event": "ev_migration_4"
+   },
+   {
+    "event": "ev_migration_5"
+   }
+  ],
+  "nodeCost": 5,
+  "branches": [
+   {
+    "id": "solved",
+    "exit": "migration_solved"
+   },
+   {
+    "id": "failed",
+    "exit": "migration_failed"
+   }
+  ],
+  "effects": [],
+  "exits": [
+   "migration_solved",
+   "migration_failed"
+  ]
  }
 ]

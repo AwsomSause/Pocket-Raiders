@@ -2341,5 +2341,4544 @@
   "tier": "A",
   "moment": "landmark",
   "backstory": "bs_ex_criminal"
+ },
+ {
+  "id": "ev_intro_champion_heir",
+  "v": 1,
+  "tags": [
+   "intro"
+  ],
+  "requires": [],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_intro_champion_heir_b1",
+    "kind": "line",
+    "line": "dlg_ev_intro_champion_heir_b1"
+   },
+   {
+    "id": "ev_intro_champion_heir_b2",
+    "kind": "narration",
+    "textKey": "ev_intro_champion_heir.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "know_him",
+    "textKey": "ev_intro_champion_heir.c.know_him",
+    "effects": [
+     {
+      "id": "ev_intro_champion_heir_know_him_1",
+      "kind": "add_counter",
+      "counter": "loyalty",
+      "amount": 1
+     },
+     {
+      "id": "ev_intro_champion_heir_know_him_2",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "not_for_him",
+    "textKey": "ev_intro_champion_heir.c.not_for_him",
+    "effects": [
+     {
+      "id": "ev_intro_champion_heir_not_for_him_1",
+      "kind": "add_counter",
+      "counter": "independence",
+      "amount": 1
+     },
+     {
+      "id": "ev_intro_champion_heir_not_for_him_2",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "beat_him",
+    "textKey": "ev_intro_champion_heir.c.beat_him",
+    "effects": [
+     {
+      "id": "ev_intro_champion_heir_beat_him_1",
+      "kind": "add_counter",
+      "counter": "ambition",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_intro_champion_heir_out_1",
+    "kind": "set_flag",
+    "key": "bs_champion_heir_intro",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_intro_champion_heir_vance_v1",
+    "textKey": "ev_intro_champion_heir.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_champion_heir_vance_v2",
+    "textKey": "ev_intro_champion_heir.vance.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_champion_heir_vance_v3",
+    "textKey": "ev_intro_champion_heir.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 1
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_name_to_live_up_to",
+  "v": 1,
+  "tags": [
+   "gym",
+   "act1",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "marr": {
+    "character": "ch_odette_marr"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_name_to_live_up_to_b1",
+    "kind": "line",
+    "line": "dlg_ev_name_to_live_up_to_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "challenge",
+    "textKey": "ev_name_to_live_up_to.c.challenge",
+    "effects": [
+     {
+      "id": "ev_name_to_live_up_to_challenge_1",
+      "kind": "set_flag",
+      "key": "marr_state",
+      "value": "hard"
+     },
+     {
+      "id": "ev_name_to_live_up_to_challenge_2",
+      "kind": "add_counter",
+      "counter": "respect_marr",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "ignore",
+    "textKey": "ev_name_to_live_up_to.c.ignore",
+    "effects": [
+     {
+      "id": "ev_name_to_live_up_to_ignore_1",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 2
+     },
+     {
+      "id": "ev_name_to_live_up_to_ignore_2",
+      "kind": "add_relationship",
+      "character": "ch_odette_marr",
+      "attr": "trust",
+      "amount": -10
+     }
+    ]
+   },
+   {
+    "id": "trial",
+    "textKey": "ev_name_to_live_up_to.c.trial",
+    "effects": [
+     {
+      "id": "ev_name_to_live_up_to_trial_1",
+      "kind": "add_relationship",
+      "character": "ch_odette_marr",
+      "attr": "trust",
+      "amount": 15
+     },
+     {
+      "id": "ev_name_to_live_up_to_trial_2",
+      "kind": "give_item",
+      "item": "item_marr_token"
+     }
+    ]
+   },
+   {
+    "id": "ask_why",
+    "textKey": "ev_name_to_live_up_to.c.ask_why",
+    "effects": [
+     {
+      "id": "ev_name_to_live_up_to_ask_why_1",
+      "kind": "set_flag",
+      "key": "marr_state",
+      "value": "mentor"
+     },
+     {
+      "id": "ev_name_to_live_up_to_ask_why_2",
+      "kind": "unlock_lore",
+      "lore": "lore_marr_heir",
+      "state": "known"
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_name_to_live_up_to_out_1",
+    "kind": "set_flag",
+    "key": "met_marr",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "marr",
+    "id": "ev_name_to_live_up_to_marr_v1",
+    "textKey": "ev_name_to_live_up_to.marr.v1",
+    "when": []
+   },
+   {
+    "role": "marr",
+    "id": "ev_name_to_live_up_to_marr_v2",
+    "textKey": "ev_name_to_live_up_to.marr.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "marr",
+    "id": "ev_name_to_live_up_to_marr_v3",
+    "textKey": "ev_name_to_live_up_to.marr.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_bedrock_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_bedrock"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "bedrock": {
+    "character": "ch_bedrock"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_bedrock_1_b1",
+    "kind": "narration",
+    "textKey": "ev_bedrock_1.b1"
+   },
+   {
+    "id": "ev_bedrock_1_b2",
+    "kind": "narration",
+    "textKey": "ev_bedrock_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_bedrock_1_out_1",
+    "kind": "add_counter",
+    "counter": "bedrock_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_1_bedrock_v1",
+    "textKey": "ev_bedrock_1.bedrock.v1",
+    "when": []
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_1_bedrock_v2",
+    "textKey": "ev_bedrock_1.bedrock.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_1_bedrock_v3",
+    "textKey": "ev_bedrock_1.bedrock.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bedrock_trust",
+      "op": ">=",
+      "value": 2
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_bedrock_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_bedrock"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "bedrock": {
+    "character": "ch_bedrock"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_bedrock_2_b1",
+    "kind": "narration",
+    "textKey": "ev_bedrock_2.b1"
+   },
+   {
+    "id": "ev_bedrock_2_b2",
+    "kind": "narration",
+    "textKey": "ev_bedrock_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_bedrock_2_out_1",
+    "kind": "add_counter",
+    "counter": "bedrock_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_2_bedrock_v1",
+    "textKey": "ev_bedrock_2.bedrock.v1",
+    "when": []
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_2_bedrock_v2",
+    "textKey": "ev_bedrock_2.bedrock.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_2_bedrock_v3",
+    "textKey": "ev_bedrock_2.bedrock.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bedrock_trust",
+      "op": ">=",
+      "value": 2
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_bedrock_3",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_bedrock"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "bedrock": {
+    "character": "ch_bedrock"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_bedrock_3_b1",
+    "kind": "narration",
+    "textKey": "ev_bedrock_3.b1"
+   },
+   {
+    "id": "ev_bedrock_3_b2",
+    "kind": "narration",
+    "textKey": "ev_bedrock_3.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_bedrock_3_out_1",
+    "kind": "add_counter",
+    "counter": "bedrock_trust",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_3_bedrock_v1",
+    "textKey": "ev_bedrock_3.bedrock.v1",
+    "when": []
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_3_bedrock_v2",
+    "textKey": "ev_bedrock_3.bedrock.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_3_bedrock_v3",
+    "textKey": "ev_bedrock_3.bedrock.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bedrock_trust",
+      "op": ">=",
+      "value": 2
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_bedrock_4",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_bedrock"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "bedrock": {
+    "character": "ch_bedrock"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_bedrock_4_b1",
+    "kind": "narration",
+    "textKey": "ev_bedrock_4.b1"
+   },
+   {
+    "id": "ev_bedrock_4_b2",
+    "kind": "narration",
+    "textKey": "ev_bedrock_4.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "test",
+    "textKey": "ev_bedrock_4.c.test",
+    "effects": [
+     {
+      "id": "ev_bedrock_4_test_1",
+      "kind": "add_counter",
+      "counter": "bedrock_trust",
+      "amount": 2
+     },
+     {
+      "id": "ev_bedrock_4_test_2",
+      "kind": "unlock_lore",
+      "lore": "lore_bedrock",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "fail",
+    "textKey": "ev_bedrock_4.c.fail",
+    "effects": []
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_bedrock_4_out_1",
+    "kind": "chronicle",
+    "entry": "chr_bedrock"
+   }
+  ],
+  "variants": [
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_4_bedrock_v1",
+    "textKey": "ev_bedrock_4.bedrock.v1",
+    "when": []
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_4_bedrock_v2",
+    "textKey": "ev_bedrock_4.bedrock.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "bedrock",
+    "id": "ev_bedrock_4_bedrock_v3",
+    "textKey": "ev_bedrock_4.bedrock.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bedrock_trust",
+      "op": ">=",
+      "value": 2
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "major",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_unfinished_final",
+  "v": 1,
+  "tags": [
+   "reveal",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   },
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 3
+   }
+  ],
+  "roles": {
+   "gideon": {
+    "character": "ch_gideon_hartwell"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_unfinished_final_b1",
+    "kind": "narration",
+    "textKey": "ev_unfinished_final.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "seek",
+    "textKey": "ev_unfinished_final.c.seek",
+    "effects": [
+     {
+      "id": "ev_unfinished_final_seek_1",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": 2
+     },
+     {
+      "id": "ev_unfinished_final_seek_2",
+      "kind": "set_flag",
+      "key": "final_resolved",
+      "value": "rematch"
+     }
+    ]
+   },
+   {
+    "id": "reject",
+    "textKey": "ev_unfinished_final.c.reject",
+    "effects": [
+     {
+      "id": "ev_unfinished_final_reject_1",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 2
+     },
+     {
+      "id": "ev_unfinished_final_reject_2",
+      "kind": "set_flag",
+      "key": "final_resolved",
+      "value": "rejected"
+     }
+    ]
+   },
+   {
+    "id": "forgive",
+    "textKey": "ev_unfinished_final.c.forgive",
+    "effects": [
+     {
+      "id": "ev_unfinished_final_forgive_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "affection",
+      "amount": 20
+     },
+     {
+      "id": "ev_unfinished_final_forgive_2",
+      "kind": "set_flag",
+      "key": "final_resolved",
+      "value": "forgiven"
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_unfinished_final_out_1",
+    "kind": "set_flag",
+    "key": "final_known",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "gideon",
+    "id": "ev_unfinished_final_gideon_v1",
+    "textKey": "ev_unfinished_final.gideon.v1",
+    "when": []
+   },
+   {
+    "role": "gideon",
+    "id": "ev_unfinished_final_gideon_v2",
+    "textKey": "ev_unfinished_final.gideon.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "gideon",
+    "id": "ev_unfinished_final_gideon_v3",
+    "textKey": "ev_unfinished_final.gideon.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "affection",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_fathers_shadow",
+  "v": 1,
+  "tags": [
+   "rival",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "crane": {
+    "character": "ch_silas_crane"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_fathers_shadow_b1",
+    "kind": "line",
+    "line": "dlg_ev_fathers_shadow_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "gracious",
+    "textKey": "ev_fathers_shadow.c.gracious",
+    "effects": [
+     {
+      "id": "ev_fathers_shadow_gracious_1",
+      "kind": "set_flag",
+      "key": "crane_state",
+      "value": "gracious"
+     },
+     {
+      "id": "ev_fathers_shadow_gracious_2",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "gloat",
+    "textKey": "ev_fathers_shadow.c.gloat",
+    "effects": [
+     {
+      "id": "ev_fathers_shadow_gloat_1",
+      "kind": "set_flag",
+      "key": "crane_state",
+      "value": "enemy"
+     },
+     {
+      "id": "ev_fathers_shadow_gloat_2",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "refuse",
+    "textKey": "ev_fathers_shadow.c.refuse",
+    "effects": [
+     {
+      "id": "ev_fathers_shadow_refuse_1",
+      "kind": "add_relationship",
+      "character": "ch_silas_crane",
+      "attr": "rivalry",
+      "amount": 15
+     }
+    ]
+   },
+   {
+    "id": "listen",
+    "textKey": "ev_fathers_shadow.c.listen",
+    "effects": [
+     {
+      "id": "ev_fathers_shadow_listen_1",
+      "kind": "add_relationship",
+      "character": "ch_silas_crane",
+      "attr": "respect",
+      "amount": 10
+     }
+    ]
+   },
+   {
+    "id": "own_terms",
+    "textKey": "ev_fathers_shadow.c.own_terms",
+    "effects": [
+     {
+      "id": "ev_fathers_shadow_own_terms_1",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 2
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_fathers_shadow_out_1",
+    "kind": "start_battle",
+    "character": "ch_silas_crane"
+   }
+  ],
+  "variants": [
+   {
+    "role": "crane",
+    "id": "ev_fathers_shadow_crane_v1",
+    "textKey": "ev_fathers_shadow.crane.v1",
+    "when": []
+   },
+   {
+    "role": "crane",
+    "id": "ev_fathers_shadow_crane_v2",
+    "textKey": "ev_fathers_shadow.crane.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "crane",
+    "id": "ev_fathers_shadow_crane_v3",
+    "textKey": "ev_fathers_shadow.crane.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "crane_state",
+      "op": "==",
+      "value": "gracious"
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_hartwell_call_1",
+  "v": 1,
+  "tags": [
+   "call",
+   "arc",
+   "arc_hartwell_calls"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "gideon": {
+    "character": "ch_gideon_hartwell"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_hartwell_call_1_b1",
+    "kind": "line",
+    "line": "dlg_ev_hartwell_call_1_b1"
+   },
+   {
+    "id": "ev_hartwell_call_1_b2",
+    "kind": "narration",
+    "textKey": "ev_hartwell_call_1.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "warm",
+    "textKey": "ev_hartwell_call_1.c.warm",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_1_warm_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "affection",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "stiff",
+    "textKey": "ev_hartwell_call_1.c.stiff",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_1_stiff_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "respect",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "skip",
+    "textKey": "ev_hartwell_call_1.c.skip",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_1_skip_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "trust",
+      "amount": -6
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_1_gideon_v1",
+    "textKey": "ev_hartwell_call_1.gideon.v1",
+    "when": []
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_1_gideon_v2",
+    "textKey": "ev_hartwell_call_1.gideon.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_1_gideon_v3",
+    "textKey": "ev_hartwell_call_1.gideon.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "trust",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_hartwell_call_2",
+  "v": 1,
+  "tags": [
+   "call",
+   "arc",
+   "arc_hartwell_calls"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "gideon": {
+    "character": "ch_gideon_hartwell"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_hartwell_call_2_b1",
+    "kind": "line",
+    "line": "dlg_ev_hartwell_call_2_b1"
+   },
+   {
+    "id": "ev_hartwell_call_2_b2",
+    "kind": "narration",
+    "textKey": "ev_hartwell_call_2.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "warm",
+    "textKey": "ev_hartwell_call_2.c.warm",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_2_warm_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "affection",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "stiff",
+    "textKey": "ev_hartwell_call_2.c.stiff",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_2_stiff_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "respect",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "skip",
+    "textKey": "ev_hartwell_call_2.c.skip",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_2_skip_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "trust",
+      "amount": -6
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_2_gideon_v1",
+    "textKey": "ev_hartwell_call_2.gideon.v1",
+    "when": []
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_2_gideon_v2",
+    "textKey": "ev_hartwell_call_2.gideon.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_2_gideon_v3",
+    "textKey": "ev_hartwell_call_2.gideon.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "respect",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_hartwell_call_3",
+  "v": 1,
+  "tags": [
+   "call",
+   "arc",
+   "arc_hartwell_calls"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "gideon": {
+    "character": "ch_gideon_hartwell"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_hartwell_call_3_b1",
+    "kind": "line",
+    "line": "dlg_ev_hartwell_call_3_b1"
+   },
+   {
+    "id": "ev_hartwell_call_3_b2",
+    "kind": "narration",
+    "textKey": "ev_hartwell_call_3.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "warm",
+    "textKey": "ev_hartwell_call_3.c.warm",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_3_warm_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "affection",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "stiff",
+    "textKey": "ev_hartwell_call_3.c.stiff",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_3_stiff_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "respect",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "skip",
+    "textKey": "ev_hartwell_call_3.c.skip",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_3_skip_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "trust",
+      "amount": -6
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_3_gideon_v1",
+    "textKey": "ev_hartwell_call_3.gideon.v1",
+    "when": []
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_3_gideon_v2",
+    "textKey": "ev_hartwell_call_3.gideon.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_3_gideon_v3",
+    "textKey": "ev_hartwell_call_3.gideon.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "affection",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_hartwell_call_4",
+  "v": 1,
+  "tags": [
+   "call",
+   "arc",
+   "arc_hartwell_calls"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "gideon": {
+    "character": "ch_gideon_hartwell"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_hartwell_call_4_b1",
+    "kind": "line",
+    "line": "dlg_ev_hartwell_call_4_b1"
+   },
+   {
+    "id": "ev_hartwell_call_4_b2",
+    "kind": "narration",
+    "textKey": "ev_hartwell_call_4.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "warm",
+    "textKey": "ev_hartwell_call_4.c.warm",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_4_warm_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "affection",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "stiff",
+    "textKey": "ev_hartwell_call_4.c.stiff",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_4_stiff_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "respect",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "skip",
+    "textKey": "ev_hartwell_call_4.c.skip",
+    "effects": [
+     {
+      "id": "ev_hartwell_call_4_skip_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "trust",
+      "amount": -6
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_4_gideon_v1",
+    "textKey": "ev_hartwell_call_4.gideon.v1",
+    "when": []
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_4_gideon_v2",
+    "textKey": "ev_hartwell_call_4.gideon.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "gideon",
+    "id": "ev_hartwell_call_4_gideon_v3",
+    "textKey": "ev_hartwell_call_4.gideon.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "trust",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_press_pit",
+  "v": 1,
+  "tags": [
+   "press",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "tavi": {
+    "character": "ch_tavi_marsh"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_press_pit_b1",
+    "kind": "line",
+    "line": "dlg_ev_press_pit_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "his_kid",
+    "textKey": "ev_press_pit.c.his_kid",
+    "effects": [
+     {
+      "id": "ev_press_pit_his_kid_1",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": 1
+     },
+     {
+      "id": "ev_press_pit_his_kid_2",
+      "kind": "set_flag",
+      "key": "headline",
+      "value": "the_heir"
+     }
+    ]
+   },
+   {
+    "id": "own_person",
+    "textKey": "ev_press_pit.c.own_person",
+    "effects": [
+     {
+      "id": "ev_press_pit_own_person_1",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 1
+     },
+     {
+      "id": "ev_press_pit_own_person_2",
+      "kind": "set_flag",
+      "key": "headline",
+      "value": "own_name"
+     }
+    ]
+   },
+   {
+    "id": "want_it",
+    "textKey": "ev_press_pit.c.want_it",
+    "effects": [
+     {
+      "id": "ev_press_pit_want_it_1",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "dont_want",
+    "textKey": "ev_press_pit.c.dont_want",
+    "effects": [
+     {
+      "id": "ev_press_pit_dont_want_1",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": -2
+     },
+     {
+      "id": "ev_press_pit_dont_want_2",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "joke",
+    "textKey": "ev_press_pit.c.joke",
+    "effects": []
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_press_pit_out_1",
+    "kind": "set_flag",
+    "key": "press_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "tavi",
+    "id": "ev_press_pit_tavi_v1",
+    "textKey": "ev_press_pit.tavi.v1",
+    "when": []
+   },
+   {
+    "role": "tavi",
+    "id": "ev_press_pit_tavi_v2",
+    "textKey": "ev_press_pit.tavi.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "tavi",
+    "id": "ev_press_pit_tavi_v3",
+    "textKey": "ev_press_pit.tavi.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "own_name",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_trophy_room",
+  "v": 1,
+  "tags": [
+   "recovery",
+   "act3",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "gideon": {
+    "character": "ch_gideon_hartwell"
+   },
+   "housekeeper": {
+    "character": "ch_the_examiner"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_trophy_room_b1",
+    "kind": "narration",
+    "textKey": "ev_trophy_room.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "sit",
+    "textKey": "ev_trophy_room.c.sit",
+    "effects": [
+     {
+      "id": "ev_trophy_room_sit_1",
+      "kind": "add_relationship",
+      "character": "ch_gideon_hartwell",
+      "attr": "affection",
+      "amount": 10
+     }
+    ]
+   },
+   {
+    "id": "browse",
+    "textKey": "ev_trophy_room.c.browse",
+    "effects": [
+     {
+      "id": "ev_trophy_room_browse_1",
+      "kind": "give_item",
+      "item": "item_legacy_keepsake"
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_trophy_room_out_1",
+    "kind": "chronicle",
+    "entry": "chr_trophy_room"
+   }
+  ],
+  "variants": [
+   {
+    "role": "gideon",
+    "id": "ev_trophy_room_gideon_v1",
+    "textKey": "ev_trophy_room.gideon.v1",
+    "when": []
+   },
+   {
+    "role": "gideon",
+    "id": "ev_trophy_room_gideon_v2",
+    "textKey": "ev_trophy_room.gideon.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "gideon",
+    "id": "ev_trophy_room_gideon_v3",
+    "textKey": "ev_trophy_room.gideon.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_gideon_hartwell",
+      "key": "affection",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "housekeeper",
+    "id": "ev_trophy_room_housekeeper_v1",
+    "textKey": "ev_trophy_room.housekeeper.v1",
+    "when": []
+   },
+   {
+    "role": "housekeeper",
+    "id": "ev_trophy_room_housekeeper_v2",
+    "textKey": "ev_trophy_room.housekeeper.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "housekeeper",
+    "id": "ev_trophy_room_housekeeper_v3",
+    "textKey": "ev_trophy_room.housekeeper.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_the_sponsor",
+  "v": 1,
+  "tags": [
+   "sponsor",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "examiner": {
+    "character": "ch_the_examiner"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_the_sponsor_b1",
+    "kind": "line",
+    "line": "dlg_ev_the_sponsor_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "accept",
+    "textKey": "ev_the_sponsor.c.accept",
+    "effects": [
+     {
+      "id": "ev_the_sponsor_accept_1",
+      "kind": "add_counter",
+      "counter": "legacy",
+      "amount": 5
+     },
+     {
+      "id": "ev_the_sponsor_accept_2",
+      "kind": "set_flag",
+      "key": "gilt_circle",
+      "value": "sponsored"
+     },
+     {
+      "id": "ev_the_sponsor_accept_3",
+      "kind": "give_item",
+      "item": "item_sponsor_funds"
+     }
+    ]
+   },
+   {
+    "id": "refuse",
+    "textKey": "ev_the_sponsor.c.refuse",
+    "effects": [
+     {
+      "id": "ev_the_sponsor_refuse_1",
+      "kind": "add_counter",
+      "counter": "own_name",
+      "amount": 2
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_the_sponsor_out_1",
+    "kind": "set_flag",
+    "key": "sponsor_offered",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "examiner",
+    "id": "ev_the_sponsor_examiner_v1",
+    "textKey": "ev_the_sponsor.examiner.v1",
+    "when": []
+   },
+   {
+    "role": "examiner",
+    "id": "ev_the_sponsor_examiner_v2",
+    "textKey": "ev_the_sponsor.examiner.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "examiner",
+    "id": "ev_the_sponsor_examiner_v3",
+    "textKey": "ev_the_sponsor.examiner.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_echo_champion_heir_01",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_tavi_marsh"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_champion_heir_01_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_champion_heir_01.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_01_speaker_v1",
+    "textKey": "ev_echo_champion_heir_01.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_01_speaker_v2",
+    "textKey": "ev_echo_champion_heir_01.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_01_speaker_v3",
+    "textKey": "ev_echo_champion_heir_01.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_echo_champion_heir_02",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_gideon_hartwell"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_champion_heir_02_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_champion_heir_02.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_02_speaker_v1",
+    "textKey": "ev_echo_champion_heir_02.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_02_speaker_v2",
+    "textKey": "ev_echo_champion_heir_02.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_02_speaker_v3",
+    "textKey": "ev_echo_champion_heir_02.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_echo_champion_heir_03",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_silas_crane"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_champion_heir_03_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_champion_heir_03.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_03_speaker_v1",
+    "textKey": "ev_echo_champion_heir_03.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_03_speaker_v2",
+    "textKey": "ev_echo_champion_heir_03.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_champion_heir_03_speaker_v3",
+    "textKey": "ev_echo_champion_heir_03.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "legacy",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_mod_champion_heir",
+  "v": 1,
+  "tags": [
+   "modifier",
+   "system"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_champion_heir"
+   }
+  ],
+  "roles": {},
+  "beats": [],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_mod_champion_heir_out_1",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "respect",
+    "amount": -5
+   },
+   {
+    "id": "ev_mod_champion_heir_out_2",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "rivalry",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_champion_heir_out_3",
+    "kind": "add_relationship",
+    "character": "class_rival",
+    "attr": "rivalry",
+    "amount": 15
+   },
+   {
+    "id": "ev_mod_champion_heir_out_4",
+    "kind": "add_relationship",
+    "character": "class_grunt",
+    "attr": "rivalry",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_champion_heir_out_5",
+    "kind": "add_relationship",
+    "character": "class_elite",
+    "attr": "respect",
+    "amount": -5
+   },
+   {
+    "id": "ev_mod_champion_heir_out_6",
+    "kind": "add_relationship",
+    "character": "class_trainer",
+    "attr": "rivalry",
+    "amount": 5
+   }
+  ],
+  "variants": [],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_end_heir",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_heir_b1",
+    "kind": "narration",
+    "textKey": "ev_end_heir.b1"
+   },
+   {
+    "id": "ev_end_heir_b2",
+    "kind": "narration",
+    "textKey": "ev_end_heir.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_heir_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_heir"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_heir_narrator_v1",
+    "textKey": "ev_end_heir.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_heir_narrator_v2",
+    "textKey": "ev_end_heir.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_heir_narrator_v3",
+    "textKey": "ev_end_heir.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_end_refusal",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_refusal_b1",
+    "kind": "narration",
+    "textKey": "ev_end_refusal.b1"
+   },
+   {
+    "id": "ev_end_refusal_b2",
+    "kind": "narration",
+    "textKey": "ev_end_refusal.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_refusal_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_refusal"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_refusal_narrator_v1",
+    "textKey": "ev_end_refusal.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_refusal_narrator_v2",
+    "textKey": "ev_end_refusal.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_refusal_narrator_v3",
+    "textKey": "ev_end_refusal.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_end_third_way",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_third_way_b1",
+    "kind": "narration",
+    "textKey": "ev_end_third_way.b1"
+   },
+   {
+    "id": "ev_end_third_way_b2",
+    "kind": "narration",
+    "textKey": "ev_end_third_way.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_third_way_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_third_way"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_third_way_narrator_v1",
+    "textKey": "ev_end_third_way.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_third_way_narrator_v2",
+    "textKey": "ev_end_third_way.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_third_way_narrator_v3",
+    "textKey": "ev_end_third_way.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_end_shadow",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_shadow_b1",
+    "kind": "narration",
+    "textKey": "ev_end_shadow.b1"
+   },
+   {
+    "id": "ev_end_shadow_b2",
+    "kind": "narration",
+    "textKey": "ev_end_shadow.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_shadow_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_shadow"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_shadow_narrator_v1",
+    "textKey": "ev_end_shadow.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_shadow_narrator_v2",
+    "textKey": "ev_end_shadow.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_shadow_narrator_v3",
+    "textKey": "ev_end_shadow.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_end_own_name",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_own_name_b1",
+    "kind": "narration",
+    "textKey": "ev_end_own_name.b1"
+   },
+   {
+    "id": "ev_end_own_name_b2",
+    "kind": "narration",
+    "textKey": "ev_end_own_name.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_own_name_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_own_name"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_own_name_narrator_v1",
+    "textKey": "ev_end_own_name.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_own_name_narrator_v2",
+    "textKey": "ev_end_own_name.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_champion_heir"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_own_name_narrator_v3",
+    "textKey": "ev_end_own_name.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_champion_heir"
+ },
+ {
+  "id": "ev_intro_viridian",
+  "v": 1,
+  "tags": [
+   "intro"
+  ],
+  "requires": [],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_intro_viridian_b1",
+    "kind": "line",
+    "line": "dlg_ev_intro_viridian_b1"
+   },
+   {
+    "id": "ev_intro_viridian_b2",
+    "kind": "narration",
+    "textKey": "ev_intro_viridian.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "they_talk",
+    "textKey": "ev_intro_viridian.c.they_talk",
+    "effects": [
+     {
+      "id": "ev_intro_viridian_they_talk_1",
+      "kind": "add_counter",
+      "counter": "instinct",
+      "amount": 1
+     },
+     {
+      "id": "ev_intro_viridian_they_talk_2",
+      "kind": "add_counter",
+      "counter": "compassion",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "i_listen",
+    "textKey": "ev_intro_viridian.c.i_listen",
+    "effects": [
+     {
+      "id": "ev_intro_viridian_i_listen_1",
+      "kind": "add_counter",
+      "counter": "curiosity",
+      "amount": 1
+     },
+     {
+      "id": "ev_intro_viridian_i_listen_2",
+      "kind": "add_counter",
+      "counter": "adaptability",
+      "amount": 1
+     }
+    ]
+   },
+   {
+    "id": "dont_know",
+    "textKey": "ev_intro_viridian.c.dont_know",
+    "effects": [
+     {
+      "id": "ev_intro_viridian_dont_know_1",
+      "kind": "add_counter",
+      "counter": "independence",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_intro_viridian_out_1",
+    "kind": "set_flag",
+    "key": "bs_viridian_intro",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_intro_viridian_vance_v1",
+    "textKey": "ev_intro_viridian.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_viridian_vance_v2",
+    "textKey": "ev_intro_viridian.vance.v2",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "bs.home",
+      "op": "==",
+      "value": "ranger_cabin"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_intro_viridian_vance_v3",
+    "textKey": "ev_intro_viridian.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 1
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "minor",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_forest_remembers",
+  "v": 1,
+  "tags": [
+   "nature",
+   "act1"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "butterfree": {
+    "character": "ch_elder_butterfree"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_forest_remembers_b1",
+    "kind": "narration",
+    "textKey": "ev_forest_remembers.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "follow",
+    "textKey": "ev_forest_remembers.c.follow",
+    "effects": [
+     {
+      "id": "ev_forest_remembers_follow_1",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": 1
+     },
+     {
+      "id": "ev_forest_remembers_follow_2",
+      "kind": "unlock",
+      "what": "remembrance",
+      "target": "rm_caterpie"
+     }
+    ]
+   },
+   {
+    "id": "let_go",
+    "textKey": "ev_forest_remembers.c.let_go",
+    "effects": [
+     {
+      "id": "ev_forest_remembers_let_go_1",
+      "kind": "chronicle",
+      "entry": "chr_butterfree_goes"
+     }
+    ]
+   },
+   {
+    "id": "catch",
+    "textKey": "ev_forest_remembers.c.catch",
+    "effects": [
+     {
+      "id": "ev_forest_remembers_catch_1",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": -1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_forest_remembers_out_1",
+    "kind": "set_flag",
+    "key": "met_butterfree",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "butterfree",
+    "id": "ev_forest_remembers_butterfree_v1",
+    "textKey": "ev_forest_remembers.butterfree.v1",
+    "when": []
+   },
+   {
+    "role": "butterfree",
+    "id": "ev_forest_remembers_butterfree_v2",
+    "textKey": "ev_forest_remembers.butterfree.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "butterfree",
+    "id": "ev_forest_remembers_butterfree_v3",
+    "textKey": "ev_forest_remembers.butterfree.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 3
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_old_friend",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_old_friend",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "odessa": {
+    "character": "ch_odessa_fennimore"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_old_friend_b1",
+    "kind": "line",
+    "line": "dlg_ev_old_friend_b1"
+   },
+   {
+    "id": "ev_old_friend_b2",
+    "kind": "narration",
+    "textKey": "ev_old_friend.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "revisit",
+    "textKey": "ev_old_friend.c.revisit",
+    "effects": [
+     {
+      "id": "ev_old_friend_revisit_1",
+      "kind": "set_flag",
+      "key": "old_friend_visit",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "stay",
+    "textKey": "ev_old_friend.c.stay",
+    "effects": [
+     {
+      "id": "ev_old_friend_stay_1",
+      "kind": "add_relationship",
+      "character": "ch_odessa_fennimore",
+      "attr": "trust",
+      "amount": 5
+     }
+    ]
+   }
+  ],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "odessa",
+    "id": "ev_old_friend_odessa_v1",
+    "textKey": "ev_old_friend.odessa.v1",
+    "when": []
+   },
+   {
+    "role": "odessa",
+    "id": "ev_old_friend_odessa_v2",
+    "textKey": "ev_old_friend.odessa.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "odessa",
+    "id": "ev_old_friend_odessa_v3",
+    "textKey": "ev_old_friend.odessa.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_odessa_fennimore",
+      "key": "trust",
+      "op": ">=",
+      "value": 30
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_old_friend_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_old_friend",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "odessa": {
+    "character": "ch_odessa_fennimore"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_old_friend_2_b1",
+    "kind": "line",
+    "line": "dlg_ev_old_friend_2_b1"
+   },
+   {
+    "id": "ev_old_friend_2_b2",
+    "kind": "narration",
+    "textKey": "ev_old_friend_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_old_friend_2_out_1",
+    "kind": "unlock_lore",
+    "lore": "lore_weedle_two_readings",
+    "state": "known"
+   }
+  ],
+  "variants": [
+   {
+    "role": "odessa",
+    "id": "ev_old_friend_2_odessa_v1",
+    "textKey": "ev_old_friend_2.odessa.v1",
+    "when": []
+   },
+   {
+    "role": "odessa",
+    "id": "ev_old_friend_2_odessa_v2",
+    "textKey": "ev_old_friend_2.odessa.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "odessa",
+    "id": "ev_old_friend_2_odessa_v3",
+    "textKey": "ev_old_friend_2.odessa.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_odessa_fennimore",
+      "key": "trust",
+      "op": ">=",
+      "value": 30
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "major",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_migration_1",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_migration",
+   "nature"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "sighting": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_migration_1_b1",
+    "kind": "narration",
+    "textKey": "ev_migration_1.b1"
+   },
+   {
+    "id": "ev_migration_1_b2",
+    "kind": "narration",
+    "textKey": "ev_migration_1.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_migration_1_out_1",
+    "kind": "add_counter",
+    "counter": "ecology_clock",
+    "amount": -1
+   }
+  ],
+  "variants": [
+   {
+    "role": "sighting",
+    "id": "ev_migration_1_sighting_v1",
+    "textKey": "ev_migration_1.sighting.v1",
+    "when": []
+   },
+   {
+    "role": "sighting",
+    "id": "ev_migration_1_sighting_v2",
+    "textKey": "ev_migration_1.sighting.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "sighting",
+    "id": "ev_migration_1_sighting_v3",
+    "textKey": "ev_migration_1.sighting.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 6
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_migration_2",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_migration",
+   "nature"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "hollis": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_migration_2_b1",
+    "kind": "narration",
+    "textKey": "ev_migration_2.b1"
+   },
+   {
+    "id": "ev_migration_2_b2",
+    "kind": "narration",
+    "textKey": "ev_migration_2.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_migration_2_out_1",
+    "kind": "add_counter",
+    "counter": "ecology_clock",
+    "amount": -1
+   }
+  ],
+  "variants": [
+   {
+    "role": "hollis",
+    "id": "ev_migration_2_hollis_v1",
+    "textKey": "ev_migration_2.hollis.v1",
+    "when": []
+   },
+   {
+    "role": "hollis",
+    "id": "ev_migration_2_hollis_v2",
+    "textKey": "ev_migration_2.hollis.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "hollis",
+    "id": "ev_migration_2_hollis_v3",
+    "textKey": "ev_migration_2.hollis.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 6
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_migration_3",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_migration",
+   "nature"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "allies": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_migration_3_b1",
+    "kind": "narration",
+    "textKey": "ev_migration_3.b1"
+   },
+   {
+    "id": "ev_migration_3_b2",
+    "kind": "narration",
+    "textKey": "ev_migration_3.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_migration_3_out_1",
+    "kind": "add_counter",
+    "counter": "ecology_clock",
+    "amount": -1
+   }
+  ],
+  "variants": [
+   {
+    "role": "allies",
+    "id": "ev_migration_3_allies_v1",
+    "textKey": "ev_migration_3.allies.v1",
+    "when": []
+   },
+   {
+    "role": "allies",
+    "id": "ev_migration_3_allies_v2",
+    "textKey": "ev_migration_3.allies.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "allies",
+    "id": "ev_migration_3_allies_v3",
+    "textKey": "ev_migration_3.allies.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 6
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_migration_4",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_migration",
+   "nature"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "stakes": {
+    "character": "ch_greenwall_manager"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_migration_4_b1",
+    "kind": "narration",
+    "textKey": "ev_migration_4.b1"
+   },
+   {
+    "id": "ev_migration_4_b2",
+    "kind": "narration",
+    "textKey": "ev_migration_4.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_migration_4_out_1",
+    "kind": "add_counter",
+    "counter": "ecology_clock",
+    "amount": -1
+   }
+  ],
+  "variants": [
+   {
+    "role": "stakes",
+    "id": "ev_migration_4_stakes_v1",
+    "textKey": "ev_migration_4.stakes.v1",
+    "when": []
+   },
+   {
+    "role": "stakes",
+    "id": "ev_migration_4_stakes_v2",
+    "textKey": "ev_migration_4.stakes.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "stakes",
+    "id": "ev_migration_4_stakes_v3",
+    "textKey": "ev_migration_4.stakes.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 6
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "minor",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_migration_5",
+  "v": 1,
+  "tags": [
+   "arc",
+   "arc_migration",
+   "nature"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "confront": {
+    "character": "ch_greenwall_manager"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_migration_5_b1",
+    "kind": "narration",
+    "textKey": "ev_migration_5.b1"
+   },
+   {
+    "id": "ev_migration_5_b2",
+    "kind": "narration",
+    "textKey": "ev_migration_5.b2"
+   }
+  ],
+  "choices": [
+   {
+    "id": "expose",
+    "textKey": "ev_migration_5.c.expose",
+    "effects": [
+     {
+      "id": "ev_migration_5_expose_1",
+      "kind": "set_flag",
+      "key": "migration",
+      "value": "exposed"
+     },
+     {
+      "id": "ev_migration_5_expose_2",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": 1
+     },
+     {
+      "id": "ev_migration_5_expose_3",
+      "kind": "unlock",
+      "what": "remembrance",
+      "target": "rm_oddish"
+     }
+    ]
+   },
+   {
+    "id": "sabotage",
+    "textKey": "ev_migration_5.c.sabotage",
+    "effects": [
+     {
+      "id": "ev_migration_5_sabotage_1",
+      "kind": "set_flag",
+      "key": "migration",
+      "value": "sabotaged"
+     },
+     {
+      "id": "ev_migration_5_sabotage_2",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": -1
+     },
+     {
+      "id": "ev_migration_5_sabotage_3",
+      "kind": "add_counter",
+      "counter": "ecology_clock",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "negotiate",
+    "textKey": "ev_migration_5.c.negotiate",
+    "effects": [
+     {
+      "id": "ev_migration_5_negotiate_1",
+      "kind": "set_flag",
+      "key": "migration",
+      "value": "negotiated"
+     },
+     {
+      "id": "ev_migration_5_negotiate_2",
+      "kind": "add_relationship",
+      "character": "ch_greenwall_manager",
+      "attr": "respect",
+      "amount": 10
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_migration_5_out_1",
+    "kind": "chronicle",
+    "entry": "chr_migration"
+   }
+  ],
+  "variants": [
+   {
+    "role": "confront",
+    "id": "ev_migration_5_confront_v1",
+    "textKey": "ev_migration_5.confront.v1",
+    "when": []
+   },
+   {
+    "role": "confront",
+    "id": "ev_migration_5_confront_v2",
+    "textKey": "ev_migration_5.confront.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "confront",
+    "id": "ev_migration_5_confront_v3",
+    "textKey": "ev_migration_5.confront.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 6
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_childhood_map",
+  "v": 1,
+  "tags": [
+   "discovery",
+   "act2",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "odessa": {
+    "character": "ch_odessa_fennimore"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_childhood_map_b1",
+    "kind": "narration",
+    "textKey": "ev_childhood_map.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "pond",
+    "textKey": "ev_childhood_map.c.pond",
+    "effects": [
+     {
+      "id": "ev_childhood_map_pond_1",
+      "kind": "unlock",
+      "what": "remembrance",
+      "target": "rm_poliwag"
+     }
+    ],
+    "goto": "ev_map_pond"
+   },
+   {
+    "id": "sinkhole",
+    "textKey": "ev_childhood_map.c.sinkhole",
+    "effects": [
+     {
+      "id": "ev_childhood_map_sinkhole_1",
+      "kind": "set_flag",
+      "key": "nidoran_pair",
+      "value": true
+     }
+    ],
+    "goto": "ev_map_sinkhole"
+   },
+   {
+    "id": "ridge",
+    "textKey": "ev_childhood_map.c.ridge",
+    "effects": [
+     {
+      "id": "ev_childhood_map_ridge_1",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": 1
+     }
+    ],
+    "goto": "ev_map_ridge"
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_childhood_map_out_1",
+    "kind": "set_flag",
+    "key": "map_found",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "odessa",
+    "id": "ev_childhood_map_odessa_v1",
+    "textKey": "ev_childhood_map.odessa.v1",
+    "when": []
+   },
+   {
+    "role": "odessa",
+    "id": "ev_childhood_map_odessa_v2",
+    "textKey": "ev_childhood_map.odessa.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "odessa",
+    "id": "ev_childhood_map_odessa_v3",
+    "textKey": "ev_childhood_map.odessa.v3",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_odessa_fennimore",
+      "key": "trust",
+      "op": ">=",
+      "value": 20
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_map_pond",
+  "v": 1,
+  "tags": [
+   "micro",
+   "discovery"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "place": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_map_pond_b1",
+    "kind": "narration",
+    "textKey": "ev_map_pond.b1"
+   },
+   {
+    "id": "ev_map_pond_b2",
+    "kind": "narration",
+    "textKey": "ev_map_pond.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_map_pond_out_1",
+    "kind": "add_counter",
+    "counter": "rapport",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "place",
+    "id": "ev_map_pond_place_v1",
+    "textKey": "ev_map_pond.place.v1",
+    "when": []
+   },
+   {
+    "role": "place",
+    "id": "ev_map_pond_place_v2",
+    "textKey": "ev_map_pond.place.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "place",
+    "id": "ev_map_pond_place_v3",
+    "textKey": "ev_map_pond.place.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_map_sinkhole",
+  "v": 1,
+  "tags": [
+   "micro",
+   "discovery"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "place": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_map_sinkhole_b1",
+    "kind": "narration",
+    "textKey": "ev_map_sinkhole.b1"
+   },
+   {
+    "id": "ev_map_sinkhole_b2",
+    "kind": "narration",
+    "textKey": "ev_map_sinkhole.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_map_sinkhole_out_1",
+    "kind": "add_counter",
+    "counter": "rapport",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "place",
+    "id": "ev_map_sinkhole_place_v1",
+    "textKey": "ev_map_sinkhole.place.v1",
+    "when": []
+   },
+   {
+    "role": "place",
+    "id": "ev_map_sinkhole_place_v2",
+    "textKey": "ev_map_sinkhole.place.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "place",
+    "id": "ev_map_sinkhole_place_v3",
+    "textKey": "ev_map_sinkhole.place.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_map_ridge",
+  "v": 1,
+  "tags": [
+   "micro",
+   "discovery"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "place": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_map_ridge_b1",
+    "kind": "narration",
+    "textKey": "ev_map_ridge.b1"
+   },
+   {
+    "id": "ev_map_ridge_b2",
+    "kind": "narration",
+    "textKey": "ev_map_ridge.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_map_ridge_out_1",
+    "kind": "add_counter",
+    "counter": "rapport",
+    "amount": 1
+   }
+  ],
+  "variants": [
+   {
+    "role": "place",
+    "id": "ev_map_ridge_place_v1",
+    "textKey": "ev_map_ridge.place.v1",
+    "when": []
+   },
+   {
+    "role": "place",
+    "id": "ev_map_ridge_place_v2",
+    "textKey": "ev_map_ridge.place.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "place",
+    "id": "ev_map_ridge_place_v3",
+    "textKey": "ev_map_ridge.place.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_first_aid",
+  "v": 1,
+  "tags": [
+   "compassion",
+   "act2"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "hollis": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_first_aid_b1",
+    "kind": "narration",
+    "textKey": "ev_first_aid.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "treat",
+    "textKey": "ev_first_aid.c.treat",
+    "effects": [
+     {
+      "id": "ev_first_aid_treat_1",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": 1
+     },
+     {
+      "id": "ev_first_aid_treat_2",
+      "kind": "give_item",
+      "item": "item_ranger_thanks"
+     }
+    ]
+   },
+   {
+    "id": "sit",
+    "textKey": "ev_first_aid.c.sit",
+    "effects": [
+     {
+      "id": "ev_first_aid_sit_1",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "ranger",
+    "textKey": "ev_first_aid.c.ranger",
+    "effects": [
+     {
+      "id": "ev_first_aid_ranger_1",
+      "kind": "add_relationship",
+      "character": "ch_hollis_wren",
+      "attr": "trust",
+      "amount": 10
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_first_aid_out_1",
+    "kind": "set_flag",
+    "key": "first_aid_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "hollis",
+    "id": "ev_first_aid_hollis_v1",
+    "textKey": "ev_first_aid.hollis.v1",
+    "when": []
+   },
+   {
+    "role": "hollis",
+    "id": "ev_first_aid_hollis_v2",
+    "textKey": "ev_first_aid.hollis.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "hollis",
+    "id": "ev_first_aid_hollis_v3",
+    "textKey": "ev_first_aid.hollis.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_researchers_offer",
+  "v": 1,
+  "tags": [
+   "research",
+   "act3"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "santangelo": {
+    "character": "ch_ilya_santangelo"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_researchers_offer_b1",
+    "kind": "line",
+    "line": "dlg_ev_researchers_offer_b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "cooperate",
+    "textKey": "ev_researchers_offer.c.cooperate",
+    "effects": [
+     {
+      "id": "ev_researchers_offer_cooperate_1",
+      "kind": "set_flag",
+      "key": "santangelo_state",
+      "value": "cooperating"
+     },
+     {
+      "id": "ev_researchers_offer_cooperate_2",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": -1
+     },
+     {
+      "id": "ev_researchers_offer_cooperate_3",
+      "kind": "unlock_lore",
+      "lore": "lore_viridian_gift",
+      "state": "known"
+     }
+    ]
+   },
+   {
+    "id": "decline",
+    "textKey": "ev_researchers_offer.c.decline",
+    "effects": [
+     {
+      "id": "ev_researchers_offer_decline_1",
+      "kind": "set_flag",
+      "key": "santangelo_state",
+      "value": "declined"
+     }
+    ]
+   },
+   {
+    "id": "negotiate",
+    "textKey": "ev_researchers_offer.c.negotiate",
+    "effects": [
+     {
+      "id": "ev_researchers_offer_negotiate_1",
+      "kind": "set_flag",
+      "key": "santangelo_state",
+      "value": "negotiated"
+     },
+     {
+      "id": "ev_researchers_offer_negotiate_2",
+      "kind": "add_relationship",
+      "character": "ch_ilya_santangelo",
+      "attr": "respect",
+      "amount": 20
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_researchers_offer_out_1",
+    "kind": "set_flag",
+    "key": "met_santangelo",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "santangelo",
+    "id": "ev_researchers_offer_santangelo_v1",
+    "textKey": "ev_researchers_offer.santangelo.v1",
+    "when": []
+   },
+   {
+    "role": "santangelo",
+    "id": "ev_researchers_offer_santangelo_v2",
+    "textKey": "ev_researchers_offer.santangelo.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "santangelo",
+    "id": "ev_researchers_offer_santangelo_v3",
+    "textKey": "ev_researchers_offer.santangelo.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "santangelo_state",
+      "op": "==",
+      "value": "negotiated"
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "B",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_the_hush",
+  "v": 1,
+  "tags": [
+   "rare",
+   "act4",
+   "act5"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   },
+   {
+    "kind": "flag",
+    "key": "rapport",
+    "op": ">=",
+    "value": 9
+   }
+  ],
+  "roles": {
+   "forest": {
+    "character": "ch_elder_butterfree"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_the_hush_b1",
+    "kind": "narration",
+    "textKey": "ev_the_hush.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "speak",
+    "textKey": "ev_the_hush.c.speak",
+    "effects": [
+     {
+      "id": "ev_the_hush_speak_1",
+      "kind": "unlock_lore",
+      "lore": "lore_the_hush",
+      "state": "known"
+     },
+     {
+      "id": "ev_the_hush_speak_2",
+      "kind": "set_flag",
+      "key": "hush_secret",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "stay_quiet",
+    "textKey": "ev_the_hush.c.stay_quiet",
+    "effects": [
+     {
+      "id": "ev_the_hush_stay_quiet_1",
+      "kind": "add_counter",
+      "counter": "rapport",
+      "amount": 1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_the_hush_out_1",
+    "kind": "chronicle",
+    "entry": "chr_the_hush"
+   }
+  ],
+  "variants": [
+   {
+    "role": "forest",
+    "id": "ev_the_hush_forest_v1",
+    "textKey": "ev_the_hush.forest.v1",
+    "when": []
+   },
+   {
+    "role": "forest",
+    "id": "ev_the_hush_forest_v2",
+    "textKey": "ev_the_hush.forest.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "forest",
+    "id": "ev_the_hush_forest_v3",
+    "textKey": "ev_the_hush.forest.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport_nature",
+      "op": "==",
+      "value": "resonant"
+     }
+    ]
+   }
+  ],
+  "cost": 2,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_last_summer",
+  "v": 1,
+  "tags": [
+   "recovery",
+   "flashback",
+   "act4"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "vance": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_last_summer_b1",
+    "kind": "narration",
+    "textKey": "ev_last_summer.b1"
+   }
+  ],
+  "choices": [
+   {
+    "id": "remember",
+    "textKey": "ev_last_summer.c.remember",
+    "effects": [
+     {
+      "id": "ev_last_summer_remember_1",
+      "kind": "set_flag",
+      "key": "open_question_hint",
+      "value": "practiced"
+     }
+    ]
+   },
+   {
+    "id": "wonder",
+    "textKey": "ev_last_summer.c.wonder",
+    "effects": [
+     {
+      "id": "ev_last_summer_wonder_1",
+      "kind": "set_flag",
+      "key": "open_question_hint",
+      "value": "resonant"
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_last_summer_out_1",
+    "kind": "add_memory",
+    "memory": "mem_last_summer"
+   }
+  ],
+  "variants": [
+   {
+    "role": "vance",
+    "id": "ev_last_summer_vance_v1",
+    "textKey": "ev_last_summer.vance.v1",
+    "when": []
+   },
+   {
+    "role": "vance",
+    "id": "ev_last_summer_vance_v2",
+    "textKey": "ev_last_summer.vance.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "vance",
+    "id": "ev_last_summer_vance_v3",
+    "textKey": "ev_last_summer.vance.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 4
+     }
+    ]
+   }
+  ],
+  "cost": 1,
+  "tier": "A",
+  "moment": "major",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_echo_viridian_01",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_hollis_wren"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_viridian_01_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_viridian_01.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_01_speaker_v1",
+    "textKey": "ev_echo_viridian_01.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_01_speaker_v2",
+    "textKey": "ev_echo_viridian_01.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_01_speaker_v3",
+    "textKey": "ev_echo_viridian_01.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_echo_viridian_02",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_odessa_fennimore"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_viridian_02_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_viridian_02.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_02_speaker_v1",
+    "textKey": "ev_echo_viridian_02.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_02_speaker_v2",
+    "textKey": "ev_echo_viridian_02.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_02_speaker_v3",
+    "textKey": "ev_echo_viridian_02.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_echo_viridian_03",
+  "v": 1,
+  "tags": [
+   "echo"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {
+   "speaker": {
+    "character": "ch_ilya_santangelo"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_echo_viridian_03_b1",
+    "kind": "narration",
+    "textKey": "ev_echo_viridian_03.b1"
+   }
+  ],
+  "choices": [],
+  "outputs": [],
+  "variants": [
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_03_speaker_v1",
+    "textKey": "ev_echo_viridian_03.speaker.v1",
+    "when": []
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_03_speaker_v2",
+    "textKey": "ev_echo_viridian_03.speaker.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "speaker",
+    "id": "ev_echo_viridian_03_speaker_v3",
+    "textKey": "ev_echo_viridian_03.speaker.v3",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_mod_viridian",
+  "v": 1,
+  "tags": [
+   "modifier",
+   "system"
+  ],
+  "requires": [
+   {
+    "kind": "backstory",
+    "op": "==",
+    "value": "bs_viridian"
+   }
+  ],
+  "roles": {},
+  "beats": [],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_mod_viridian_out_1",
+    "kind": "add_relationship",
+    "character": "class_leader",
+    "attr": "affection",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_viridian_out_2",
+    "kind": "add_relationship",
+    "character": "class_rival",
+    "attr": "affection",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_viridian_out_3",
+    "kind": "add_relationship",
+    "character": "class_researcher",
+    "attr": "trust",
+    "amount": 10
+   },
+   {
+    "id": "ev_mod_viridian_out_4",
+    "kind": "add_relationship",
+    "character": "class_trainer",
+    "attr": "affection",
+    "amount": 5
+   },
+   {
+    "id": "ev_mod_viridian_out_5",
+    "kind": "add_relationship",
+    "character": "class_city_leader",
+    "attr": "respect",
+    "amount": -3
+   }
+  ],
+  "variants": [],
+  "cost": 0,
+  "tier": "C",
+  "moment": "none",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_end_gardener",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_gardener_b1",
+    "kind": "narration",
+    "textKey": "ev_end_gardener.b1"
+   },
+   {
+    "id": "ev_end_gardener_b2",
+    "kind": "narration",
+    "textKey": "ev_end_gardener.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_gardener_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_gardener"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_gardener_narrator_v1",
+    "textKey": "ev_end_gardener.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_gardener_narrator_v2",
+    "textKey": "ev_end_gardener.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_gardener_narrator_v3",
+    "textKey": "ev_end_gardener.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_end_listener",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_listener_b1",
+    "kind": "narration",
+    "textKey": "ev_end_listener.b1"
+   },
+   {
+    "id": "ev_end_listener_b2",
+    "kind": "narration",
+    "textKey": "ev_end_listener.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_listener_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_listener"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_listener_narrator_v1",
+    "textKey": "ev_end_listener.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_listener_narrator_v2",
+    "textKey": "ev_end_listener.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_listener_narrator_v3",
+    "textKey": "ev_end_listener.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_end_echo",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_echo_b1",
+    "kind": "narration",
+    "textKey": "ev_end_echo.b1"
+   },
+   {
+    "id": "ev_end_echo_b2",
+    "kind": "narration",
+    "textKey": "ev_end_echo.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_echo_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_echo"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_echo_narrator_v1",
+    "textKey": "ev_end_echo.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_echo_narrator_v2",
+    "textKey": "ev_end_echo.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_echo_narrator_v3",
+    "textKey": "ev_end_echo.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_viridian"
+ },
+ {
+  "id": "ev_end_reckoning",
+  "v": 1,
+  "tags": [
+   "ending"
+  ],
+  "requires": [],
+  "roles": {
+   "narrator": {
+    "character": "ch_vance"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_end_reckoning_b1",
+    "kind": "narration",
+    "textKey": "ev_end_reckoning.b1"
+   },
+   {
+    "id": "ev_end_reckoning_b2",
+    "kind": "narration",
+    "textKey": "ev_end_reckoning.b2"
+   }
+  ],
+  "choices": [],
+  "outputs": [
+   {
+    "id": "ev_end_reckoning_out_1",
+    "kind": "chronicle",
+    "entry": "chr_end_reckoning"
+   }
+  ],
+  "variants": [
+   {
+    "role": "narrator",
+    "id": "ev_end_reckoning_narrator_v1",
+    "textKey": "ev_end_reckoning.narrator.v1",
+    "when": []
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_reckoning_narrator_v2",
+    "textKey": "ev_end_reckoning.narrator.v2",
+    "when": [
+     {
+      "kind": "backstory",
+      "op": "==",
+      "value": "bs_viridian"
+     }
+    ]
+   },
+   {
+    "role": "narrator",
+    "id": "ev_end_reckoning_narrator_v3",
+    "textKey": "ev_end_reckoning.narrator.v3",
+    "when": [
+     {
+      "kind": "act",
+      "op": ">=",
+      "value": 5
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "A",
+  "moment": "landmark",
+  "backstory": "bs_viridian"
  }
 ]
