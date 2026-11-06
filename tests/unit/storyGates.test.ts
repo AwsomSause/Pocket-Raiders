@@ -1,4 +1,4 @@
-// Story Overhaul F0: each of the 20 story gates passes on empty data and reports a seeded bad record.
+// Story Overhaul F0: each of the story gates passes on empty data and reports a seeded bad record.
 
 import { describe, expect, it } from 'vitest';
 import { PARITY_ITEMS, storyGates, type StoryGateContext } from '../../src/quality/storyGates';
@@ -6,14 +6,14 @@ import { BackstorySchema, RemembranceSchema, type StoryData } from '../../src/co
 import { content } from './helpers';
 
 // A blank StoryData: the shipped story content is authored now, so gate tests start from empty arrays.
-const empty = (): StoryData => ({ ...structuredClone(content.storyData), characters: [], events: [], arcs: [], themes: [], remembrances: [], moveMoments: [], dialogue: [], lore: [], news: [], interactables: [], backstories: [], quiz: [], text: {} });
+const empty = (): StoryData => ({ ...structuredClone(content.storyData), characters: [], events: [], arcs: [], themes: [], remembrances: [], moveMoments: [], dialogue: [], lore: [], news: [], interactables: [], backstories: [], quiz: [], rivals: [], rivalThemes: [], text: {} });
 const count = (data: StoryData, id: string, ctx: StoryGateContext = {}) => storyGates(data, content, ctx).find((g) => g.id === id)!.offenders.length;
 const character = (over: object = {}) => ({ id: 'dara', v: 1, nameKey: 'c.dara', age: 20, role: 'rival' as const, poses: { a: 'x.png', b: 'y.png', c: 'z.png', d: 'w.png' }, tier: 1 as const, party: [], relationClass: 'friend' as const, romanceable: false, tellings: [], bio: [{ tier: 1, textKey: 'c.dara.bio', spoiler: false }], flags: [], ...over });
 const event = (over: object = {}) => ({ id: 'ev', v: 1, tags: [], requires: [], roles: {}, beats: [], choices: [], outputs: [], variants: [], cost: 1, tier: 'A' as const, moment: 'none' as const, ...over });
-const GATES = ['story-unresolved-ids', 'story-event-variants', 'story-branch-no-exit', 'story-unreachable-ending', 'story-canon-write', 'story-backstory-parity', 'story-quiz-balance', 'story-remembrance-unlock', 'story-romance-age', 'story-twist-clues', 'story-movemoment-types', 'story-character-sheet', 'story-string-keys', 'story-template-tokens', 'story-pose-set', 'story-look-lock', 'story-species-budget', 'story-asset-files', 'story-bundle-budget', 'story-hash-stable'];
+const GATES = ['story-unresolved-ids', 'story-event-variants', 'story-branch-no-exit', 'story-unreachable-ending', 'story-canon-write', 'story-backstory-parity', 'story-quiz-balance', 'story-remembrance-unlock', 'story-romance-age', 'story-twist-clues', 'story-movemoment-types', 'story-character-sheet', 'story-string-keys', 'story-template-tokens', 'story-pose-set', 'story-look-lock', 'story-species-budget', 'story-asset-files', 'story-bundle-budget', 'story-rival-audit', 'story-hash-stable'];
 
 describe('story gates', () => {
-  it('there are 20, and empty data passes every one', () => {
+  it('there are 21, and empty data passes every one', () => {
     const gates = storyGates(empty(), content, { fileExists: () => true, overBudgetIds: new Set(), hashFresh: true, fileSizes: {} });
     expect(gates.map((g) => g.id)).toEqual(GATES);
     for (const g of gates) expect(g.offenders, g.id).toEqual([]);
@@ -44,6 +44,7 @@ describe('story gates', () => {
     ['story-species-budget', (d) => { d.remembrances = [RemembranceSchema.parse({ id: 'r', v: 1, line: ['mewtwo'], types: ['psychic'], temperament: 't', affinity: {}, unlock: { kind: 'start' }, moves: [], keystone: 'k', status: 'supported' })]; }, { overBudgetIds: new Set(['mewtwo']) }],
     ['story-asset-files', (d) => { d.characters = [character()]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }, { fileExists: () => false }],
     ['story-bundle-budget', () => {}, { fileSizes: { events: 700_000 } }],
+    ['story-rival-audit', (d) => { d.rivals = structuredClone(content.storyData.rivals); d.rivals[0]!.character = 'nobody'; }],
     ['story-hash-stable', () => {}, { hashFresh: false }],
   ];
   it('gate_each_catches_bad_record: each of the 20 gates reports a seeded bad record', () => {

@@ -11001,5 +11001,3891 @@
   "tier": "A",
   "moment": "landmark",
   "backstory": "bs_hisui"
+ },
+ {
+  "id": "ev_rv_dara_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_dara",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_dara_quinlan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_dara_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_dara_b2.b1"
+   },
+   {
+    "id": "ev_rv_dara_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_dara_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "hug",
+    "textKey": "ev_rv_dara_b2.c.hug",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b2_hug_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "affection",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_dara_b2_hug_2",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "rivalry",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "shake",
+    "textKey": "ev_rv_dara_b2.c.shake",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b2_shake_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "respect",
+      "amount": 4
+     }
+    ]
+   },
+   {
+    "id": "stamps",
+    "textKey": "ev_rv_dara_b2.c.stamps",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b2_stamps_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "trust",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_dara_b2_stamps_2",
+      "kind": "set_flag",
+      "key": "dara_beat3_early",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_dara_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_dara_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b2_rival_v1",
+    "textKey": "ev_rv_dara_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b2_rival_v2",
+    "textKey": "rv.dara.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b2_rival_v3",
+    "textKey": "rv.dara.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_dara_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_dara",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_dara_quinlan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_dara_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_dara_b4.b1"
+   },
+   {
+    "id": "ev_rv_dara_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_dara_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "let_win",
+    "textKey": "ev_rv_dara_b4.c.let_win",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b4_let_win_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "affection",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_dara_b4_let_win_2",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "rivalry",
+      "amount": -3
+     }
+    ]
+   },
+   {
+    "id": "share",
+    "textKey": "ev_rv_dara_b4.c.share",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b4_share_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "trust",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_dara_b4_share_2",
+      "kind": "set_flag",
+      "key": "promised_dara_first",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "match",
+    "textKey": "ev_rv_dara_b4.c.match",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b4_match_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "respect",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_dara_b4_match_2",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "affection",
+      "amount": -6
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_dara_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_dara_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b4_rival_v1",
+    "textKey": "ev_rv_dara_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b4_rival_v2",
+    "textKey": "rv.dara.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b4_rival_v3",
+    "textKey": "rv.dara.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_dara_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_dara",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_dara_quinlan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_dara_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_dara_b6.b1"
+   },
+   {
+    "id": "ev_rv_dara_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_dara_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "report",
+    "textKey": "ev_rv_dara_b6.c.report",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b6_report_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "trust",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_dara_b6_report_2",
+      "kind": "set_flag",
+      "key": "dara_reported",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "cover",
+    "textKey": "ev_rv_dara_b6.c.cover",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b6_cover_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "trust",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_dara_b6_cover_2",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "suspicion",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_dara_b6_cover_3",
+      "kind": "set_flag",
+      "key": "dara_covering",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "aboard",
+    "textKey": "ev_rv_dara_b6.c.aboard",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b6_aboard_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "loyalty",
+      "amount": 10
+     },
+     {
+      "id": "ev_rv_dara_b6_aboard_2",
+      "kind": "set_flag",
+      "key": "dara_risk_scene",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_dara_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_dara_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b6_rival_v1",
+    "textKey": "ev_rv_dara_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b6_rival_v2",
+    "textKey": "rv.dara.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b6_rival_v3",
+    "textKey": "rv.dara.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_dara_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_dara",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_dara_quinlan"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_dara_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_dara_b8.b1"
+   },
+   {
+    "id": "ev_rv_dara_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_dara_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "name_a",
+    "textKey": "ev_rv_dara_b8.c.name_a",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b8_name_a_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_dara_b8_name_a_2",
+      "kind": "set_flag",
+      "key": "dara_hull_a",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "name_b",
+    "textKey": "ev_rv_dara_b8.c.name_b",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b8_name_b_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_dara_b8_name_b_2",
+      "kind": "set_flag",
+      "key": "dara_hull_b",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "name_c",
+    "textKey": "ev_rv_dara_b8.c.name_c",
+    "effects": [
+     {
+      "id": "ev_rv_dara_b8_name_c_1",
+      "kind": "add_relationship",
+      "character": "ch_dara_quinlan",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_dara_b8_name_c_2",
+      "kind": "set_flag",
+      "key": "dara_hull_c",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_dara_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_dara_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b8_rival_v1",
+    "textKey": "ev_rv_dara_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b8_rival_v2",
+    "textKey": "rv.dara.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_dara_b8_rival_v3",
+    "textKey": "rv.dara.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_dara_quinlan",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_hale_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_hale",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_hale_brightwater"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_hale_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_hale_b2.b1"
+   },
+   {
+    "id": "ev_rv_hale_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_hale_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "again_slower",
+    "textKey": "ev_rv_hale_b2.c.again_slower",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b2_again_slower_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "respect",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_hale_b2_again_slower_2",
+      "kind": "set_flag",
+      "key": "hale_nods",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "enjoyed",
+    "textKey": "ev_rv_hale_b2.c.enjoyed",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b2_enjoyed_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_hale_b2_enjoyed_2",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "rivalry",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "rude",
+    "textKey": "ev_rv_hale_b2.c.rude",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b2_rude_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "respect",
+      "amount": -2
+     },
+     {
+      "id": "ev_rv_hale_b2_rude_2",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "rivalry",
+      "amount": 6
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_hale_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_hale_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b2_rival_v1",
+    "textKey": "ev_rv_hale_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b2_rival_v2",
+    "textKey": "rv.hale.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b2_rival_v3",
+    "textKey": "rv.hale.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_hale_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_hale",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_hale_brightwater"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_hale_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_hale_b4.b1"
+   },
+   {
+    "id": "ev_rv_hale_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_hale_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "clean_rematch",
+    "textKey": "ev_rv_hale_b4.c.clean_rematch",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b4_clean_rematch_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "respect",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_hale_b4_clean_rematch_2",
+      "kind": "set_flag",
+      "key": "hale_clean_match",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "what_counts",
+    "textKey": "ev_rv_hale_b4.c.what_counts",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b4_what_counts_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "trust",
+      "amount": 4
+     }
+    ]
+   },
+   {
+    "id": "shrug",
+    "textKey": "ev_rv_hale_b4.c.shrug",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b4_shrug_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "respect",
+      "amount": -4
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_hale_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_hale_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b4_rival_v1",
+    "textKey": "ev_rv_hale_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b4_rival_v2",
+    "textKey": "rv.hale.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b4_rival_v3",
+    "textKey": "rv.hale.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_hale_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_hale",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_hale_brightwater"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_hale_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_hale_b6.b1"
+   },
+   {
+    "id": "ev_rv_hale_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_hale_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "sit",
+    "textKey": "ev_rv_hale_b6.c.sit",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b6_sit_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "trust",
+      "amount": 8
+     }
+    ]
+   },
+   {
+    "id": "train",
+    "textKey": "ev_rv_hale_b6.c.train",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b6_train_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "respect",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_hale_b6_train_2",
+      "kind": "set_flag",
+      "key": "hale_train",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "rigged",
+    "textKey": "ev_rv_hale_b6.c.rigged",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b6_rigged_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "rivalry",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_hale_b6_rigged_2",
+      "kind": "set_flag",
+      "key": "hale_eternal_risk",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_hale_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_hale_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b6_rival_v1",
+    "textKey": "ev_rv_hale_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b6_rival_v2",
+    "textKey": "rv.hale.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b6_rival_v3",
+    "textKey": "rv.hale.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_hale_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_hale",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_hale_brightwater"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_hale_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_hale_b8.b1"
+   },
+   {
+    "id": "ev_rv_hale_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_hale_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "sit_bench",
+    "textKey": "ev_rv_hale_b8.c.sit_bench",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b8_sit_bench_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "trust",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_hale_b8_sit_bench_2",
+      "kind": "set_flag",
+      "key": "hale_bench",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "leave_note",
+    "textKey": "ev_rv_hale_b8.c.leave_note",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b8_leave_note_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "respect",
+      "amount": 2
+     },
+     {
+      "id": "ev_rv_hale_b8_leave_note_2",
+      "kind": "set_flag",
+      "key": "hale_note",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "coach",
+    "textKey": "ev_rv_hale_b8.c.coach",
+    "effects": [
+     {
+      "id": "ev_rv_hale_b8_coach_1",
+      "kind": "add_relationship",
+      "character": "ch_hale_brightwater",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_hale_b8_coach_2",
+      "kind": "set_flag",
+      "key": "hale_coach",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_hale_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_hale_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b8_rival_v1",
+    "textKey": "ev_rv_hale_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b8_rival_v2",
+    "textKey": "rv.hale.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_hale_b8_rival_v3",
+    "textKey": "rv.hale.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_hale_brightwater",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_ines_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_ines",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_ines_calloway"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_ines_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_ines_b2.b1"
+   },
+   {
+    "id": "ev_rv_ines_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_ines_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "move_cart",
+    "textKey": "ev_rv_ines_b2.c.move_cart",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b2_move_cart_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "trust",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_ines_b2_move_cart_2",
+      "kind": "set_flag",
+      "key": "ines_herb_gift",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "fight_first",
+    "textKey": "ev_rv_ines_b2.c.fight_first",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b2_fight_first_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "respect",
+      "amount": 5
+     }
+    ]
+   },
+   {
+    "id": "demand",
+    "textKey": "ev_rv_ines_b2.c.demand",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b2_demand_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "respect",
+      "amount": -3
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_ines_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_ines_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b2_rival_v1",
+    "textKey": "ev_rv_ines_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b2_rival_v2",
+    "textKey": "rv.ines.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b2_rival_v3",
+    "textKey": "rv.ines.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_ines_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_ines",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_ines_calloway"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_ines_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_ines_b4.b1"
+   },
+   {
+    "id": "ev_rv_ines_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_ines_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "pay",
+    "textKey": "ev_rv_ines_b4.c.pay",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b4_pay_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "affection",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_ines_b4_pay_2",
+      "kind": "set_flag",
+      "key": "ines_paid",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "matters",
+    "textKey": "ev_rv_ines_b4.c.matters",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b4_matters_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "respect",
+      "amount": 2
+     },
+     {
+      "id": "ev_rv_ines_b4_matters_2",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "trust",
+      "amount": -6
+     }
+    ]
+   },
+   {
+    "id": "deliver",
+    "textKey": "ev_rv_ines_b4.c.deliver",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b4_deliver_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "loyalty",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_ines_b4_deliver_2",
+      "kind": "set_flag",
+      "key": "ines_delivery_help",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_ines_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_ines_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b4_rival_v1",
+    "textKey": "ev_rv_ines_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b4_rival_v2",
+    "textKey": "rv.ines.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b4_rival_v3",
+    "textKey": "rv.ines.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_ines_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_ines",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_ines_calloway"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_ines_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_ines_b6.b1"
+   },
+   {
+    "id": "ev_rv_ines_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_ines_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "academy",
+    "textKey": "ev_rv_ines_b6.c.academy",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b6_academy_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "affection",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_ines_b6_academy_2",
+      "kind": "set_flag",
+      "key": "ines_traveler",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "save_shop",
+    "textKey": "ev_rv_ines_b6.c.save_shop",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b6_save_shop_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "loyalty",
+      "amount": 10
+     },
+     {
+      "id": "ev_rv_ines_b6_save_shop_2",
+      "kind": "set_flag",
+      "key": "ines_owner",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "silent",
+    "textKey": "ev_rv_ines_b6.c.silent",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b6_silent_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "respect",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_ines_b6_silent_2",
+      "kind": "set_flag",
+      "key": "ines_chooses",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_ines_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_ines_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b6_rival_v1",
+    "textKey": "ev_rv_ines_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b6_rival_v2",
+    "textKey": "rv.ines.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b6_rival_v3",
+    "textKey": "rv.ines.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_ines_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_ines",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_ines_calloway"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_ines_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_ines_b8.b1"
+   },
+   {
+    "id": "ev_rv_ines_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_ines_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "open_jar",
+    "textKey": "ev_rv_ines_b8.c.open_jar",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b8_open_jar_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_ines_b8_open_jar_2",
+      "kind": "set_flag",
+      "key": "ines_jar_open",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "wait_jar",
+    "textKey": "ev_rv_ines_b8.c.wait_jar",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b8_wait_jar_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "trust",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_ines_b8_wait_jar_2",
+      "kind": "set_flag",
+      "key": "ines_jar_wait",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "restock",
+    "textKey": "ev_rv_ines_b8.c.restock",
+    "effects": [
+     {
+      "id": "ev_rv_ines_b8_restock_1",
+      "kind": "add_relationship",
+      "character": "ch_ines_calloway",
+      "attr": "loyalty",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_ines_b8_restock_2",
+      "kind": "set_flag",
+      "key": "ines_jar_restock",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_ines_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_ines_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b8_rival_v1",
+    "textKey": "ev_rv_ines_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b8_rival_v2",
+    "textKey": "rv.ines.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_ines_b8_rival_v3",
+    "textKey": "rv.ines.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_ines_calloway",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_pip_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_pip",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_pip_marchetti"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_pip_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_pip_b2.b1"
+   },
+   {
+    "id": "ev_rv_pip_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_pip_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "why_team",
+    "textKey": "ev_rv_pip_b2.c.why_team",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b2_why_team_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "trust",
+      "amount": 2
+     }
+    ]
+   },
+   {
+    "id": "praise",
+    "textKey": "ev_rv_pip_b2.c.praise",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b2_praise_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "affection",
+      "amount": 4
+     }
+    ]
+   },
+   {
+    "id": "fluke",
+    "textKey": "ev_rv_pip_b2.c.fluke",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b2_fluke_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "respect",
+      "amount": -2
+     },
+     {
+      "id": "ev_rv_pip_b2_fluke_2",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "rivalry",
+      "amount": 4
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_pip_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_pip_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b2_rival_v1",
+    "textKey": "ev_rv_pip_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b2_rival_v2",
+    "textKey": "rv.pip.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b2_rival_v3",
+    "textKey": "rv.pip.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_pip_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_pip",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_pip_marchetti"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_pip_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_pip_b4.b1"
+   },
+   {
+    "id": "ev_rv_pip_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_pip_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "forgive",
+    "textKey": "ev_rv_pip_b4.c.forgive",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b4_forgive_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "trust",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_pip_b4_forgive_2",
+      "kind": "set_flag",
+      "key": "pip_forgave",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "ask_back",
+    "textKey": "ev_rv_pip_b4.c.ask_back",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b4_ask_back_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "respect",
+      "amount": 2
+     },
+     {
+      "id": "ev_rv_pip_b4_ask_back_2",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "trust",
+      "amount": -4
+     }
+    ]
+   },
+   {
+    "id": "trade_back",
+    "textKey": "ev_rv_pip_b4.c.trade_back",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b4_trade_back_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "affection",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_pip_b4_trade_back_2",
+      "kind": "set_flag",
+      "key": "pip_generous_trade",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_pip_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_pip_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b4_rival_v1",
+    "textKey": "ev_rv_pip_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b4_rival_v2",
+    "textKey": "rv.pip.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b4_rival_v3",
+    "textKey": "rv.pip.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_pip_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_pip",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_pip_marchetti"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_pip_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_pip_b6.b1"
+   },
+   {
+    "id": "ev_rv_pip_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_pip_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "expose",
+    "textKey": "ev_rv_pip_b6.c.expose",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b6_expose_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "trust",
+      "amount": -15
+     },
+     {
+      "id": "ev_rv_pip_b6_expose_2",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "respect",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_pip_b6_expose_3",
+      "kind": "set_flag",
+      "key": "pip_mercenary_risk",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "bargain",
+    "textKey": "ev_rv_pip_b6.c.bargain",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b6_bargain_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "trust",
+      "amount": 5
+     }
+    ]
+   },
+   {
+    "id": "side",
+    "textKey": "ev_rv_pip_b6.c.side",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b6_side_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "loyalty",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_pip_b6_side_2",
+      "kind": "set_flag",
+      "key": "pip_side_chosen",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_pip_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_pip_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b6_rival_v1",
+    "textKey": "ev_rv_pip_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b6_rival_v2",
+    "textKey": "rv.pip.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b6_rival_v3",
+    "textKey": "rv.pip.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_pip_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_pip",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_pip_marchetti"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_pip_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_pip_b8.b1"
+   },
+   {
+    "id": "ev_rv_pip_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_pip_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "read_back",
+    "textKey": "ev_rv_pip_b8.c.read_back",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b8_read_back_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_pip_b8_read_back_2",
+      "kind": "set_flag",
+      "key": "pip_postcard_read",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "keep_card",
+    "textKey": "ev_rv_pip_b8.c.keep_card",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b8_keep_card_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "trust",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_pip_b8_keep_card_2",
+      "kind": "set_flag",
+      "key": "pip_postcard_kept",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "save_seat",
+    "textKey": "ev_rv_pip_b8.c.save_seat",
+    "effects": [
+     {
+      "id": "ev_rv_pip_b8_save_seat_1",
+      "kind": "add_relationship",
+      "character": "ch_pip_marchetti",
+      "attr": "loyalty",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_pip_b8_save_seat_2",
+      "kind": "set_flag",
+      "key": "pip_seat_saved",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_pip_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_pip_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b8_rival_v1",
+    "textKey": "ev_rv_pip_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b8_rival_v2",
+    "textKey": "rv.pip.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_pip_b8_rival_v3",
+    "textKey": "rv.pip.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_pip_marchetti",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_soren_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_soren",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_soren_lindqvist"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_soren_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_soren_b2.b1"
+   },
+   {
+    "id": "ev_rv_soren_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_soren_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "thank",
+    "textKey": "ev_rv_soren_b2.c.thank",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b2_thank_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "trust",
+      "amount": 6
+     }
+    ]
+   },
+   {
+    "id": "how_knew",
+    "textKey": "ev_rv_soren_b2.c.how_knew",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b2_how_knew_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "suspicion",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_soren_b2_how_knew_2",
+      "kind": "set_flag",
+      "key": "clue_s1",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "ignore",
+    "textKey": "ev_rv_soren_b2.c.ignore",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b2_ignore_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "respect",
+      "amount": -1
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_soren_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_soren_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b2_rival_v1",
+    "textKey": "ev_rv_soren_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b2_rival_v2",
+    "textKey": "rv.soren.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b2_rival_v3",
+    "textKey": "rv.soren.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_soren_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_soren",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_soren_lindqvist"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_soren_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_soren_b4.b1"
+   },
+   {
+    "id": "ev_rv_soren_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_soren_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "follow",
+    "textKey": "ev_rv_soren_b4.c.follow",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b4_follow_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "trust",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_soren_b4_follow_2",
+      "kind": "set_flag",
+      "key": "soren_redirected",
+      "value": true
+     },
+     {
+      "id": "ev_rv_soren_b4_follow_3",
+      "kind": "set_flag",
+      "key": "soren_clue2_missed",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "own",
+    "textKey": "ev_rv_soren_b4.c.own",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b4_own_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "suspicion",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_soren_b4_own_2",
+      "kind": "set_flag",
+      "key": "soren_redirected",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "why_sure",
+    "textKey": "ev_rv_soren_b4.c.why_sure",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b4_why_sure_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "respect",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_soren_b4_why_sure_2",
+      "kind": "set_flag",
+      "key": "soren_redirected",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_soren_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_soren_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b4_rival_v1",
+    "textKey": "ev_rv_soren_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b4_rival_v2",
+    "textKey": "rv.soren.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b4_rival_v3",
+    "textKey": "rv.soren.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_soren_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_soren",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_soren_lindqvist"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_soren_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_soren_b6.b1"
+   },
+   {
+    "id": "ev_rv_soren_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_soren_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "anger",
+    "textKey": "ev_rv_soren_b6.c.anger",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b6_anger_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "respect",
+      "amount": -4
+     },
+     {
+      "id": "ev_rv_soren_b6_anger_2",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "rivalry",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_soren_b6_anger_3",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "fear",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_soren_b6_anger_4",
+      "kind": "set_flag",
+      "key": "soren_reveal_anger",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "empathy",
+    "textKey": "ev_rv_soren_b6.c.empathy",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b6_empathy_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "trust",
+      "amount": 10
+     },
+     {
+      "id": "ev_rv_soren_b6_empathy_2",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "affection",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_soren_b6_empathy_3",
+      "kind": "set_flag",
+      "key": "soren_reveal_empathy",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "deal",
+    "textKey": "ev_rv_soren_b6.c.deal",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b6_deal_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "respect",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_soren_b6_deal_2",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "loyalty",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_soren_b6_deal_3",
+      "kind": "set_flag",
+      "key": "soren_reveal_deal",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_soren_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_soren_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b6_rival_v1",
+    "textKey": "ev_rv_soren_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b6_rival_v2",
+    "textKey": "rv.soren.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b6_rival_v3",
+    "textKey": "rv.soren.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_soren_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_soren",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_soren_lindqvist"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_soren_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_soren_b8.b1"
+   },
+   {
+    "id": "ev_rv_soren_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_soren_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "read_letter",
+    "textKey": "ev_rv_soren_b8.c.read_letter",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b8_read_letter_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "trust",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_soren_b8_read_letter_2",
+      "kind": "set_flag",
+      "key": "soren_letter_read",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "keep_book",
+    "textKey": "ev_rv_soren_b8.c.keep_book",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b8_keep_book_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "respect",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_soren_b8_keep_book_2",
+      "kind": "set_flag",
+      "key": "soren_book_kept",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "reply",
+    "textKey": "ev_rv_soren_b8.c.reply",
+    "effects": [
+     {
+      "id": "ev_rv_soren_b8_reply_1",
+      "kind": "add_relationship",
+      "character": "ch_soren_lindqvist",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_soren_b8_reply_2",
+      "kind": "set_flag",
+      "key": "soren_replied",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_soren_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_soren_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b8_rival_v1",
+    "textKey": "ev_rv_soren_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b8_rival_v2",
+    "textKey": "rv.soren.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_soren_b8_rival_v3",
+    "textKey": "rv.soren.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_soren_lindqvist",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_kael_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_kael",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_kael_verhoeven"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_kael_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_kael_b2.b1"
+   },
+   {
+    "id": "ev_rv_kael_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_kael_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "bow",
+    "textKey": "ev_rv_kael_b2.c.bow",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b2_bow_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "respect",
+      "amount": 6
+     }
+    ]
+   },
+   {
+    "id": "berry",
+    "textKey": "ev_rv_kael_b2.c.berry",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b2_berry_1",
+      "kind": "set_flag",
+      "key": "clue_k1",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "scarf",
+    "textKey": "ev_rv_kael_b2.c.scarf",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b2_scarf_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "affection",
+      "amount": 3
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_kael_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_kael_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b2_rival_v1",
+    "textKey": "ev_rv_kael_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b2_rival_v2",
+    "textKey": "rv.kael.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b2_rival_v3",
+    "textKey": "rv.kael.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_kael_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_kael",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_kael_verhoeven"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_kael_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_kael_b4.b1"
+   },
+   {
+    "id": "ev_rv_kael_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_kael_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "fix_it",
+    "textKey": "ev_rv_kael_b4.c.fix_it",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b4_fix_it_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "respect",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_kael_b4_fix_it_2",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "rivalry",
+      "amount": 2
+     },
+     {
+      "id": "ev_rv_kael_b4_fix_it_3",
+      "kind": "set_flag",
+      "key": "kael_faith_arm",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "agree",
+    "textKey": "ev_rv_kael_b4.c.agree",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b4_agree_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "trust",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_kael_b4_agree_2",
+      "kind": "set_flag",
+      "key": "kael_faith_arm",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "defend",
+    "textKey": "ev_rv_kael_b4.c.defend",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b4_defend_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "respect",
+      "amount": -4
+     },
+     {
+      "id": "ev_rv_kael_b4_defend_2",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "suspicion",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_kael_b4_defend_3",
+      "kind": "set_flag",
+      "key": "kael_faith_arm",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_kael_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_kael_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b4_rival_v1",
+    "textKey": "ev_rv_kael_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b4_rival_v2",
+    "textKey": "rv.kael.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b4_rival_v3",
+    "textKey": "rv.kael.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_kael_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_kael",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_kael_verhoeven"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_kael_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_kael_b6.b1"
+   },
+   {
+    "id": "ev_rv_kael_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_kael_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "come_back",
+    "textKey": "ev_rv_kael_b6.c.come_back",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b6_come_back_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "affection",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_kael_b6_come_back_2",
+      "kind": "set_flag",
+      "key": "kael_redeem_empathy",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "prove",
+    "textKey": "ev_rv_kael_b6.c.prove",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b6_prove_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "rivalry",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_kael_b6_prove_2",
+      "kind": "set_flag",
+      "key": "kael_redeem_challenge",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "silence",
+    "textKey": "ev_rv_kael_b6.c.silence",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b6_silence_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "trust",
+      "amount": -4
+     },
+     {
+      "id": "ev_rv_kael_b6_silence_2",
+      "kind": "set_flag",
+      "key": "kael_redeem_silence",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "offer",
+    "textKey": "ev_rv_kael_b6.c.offer",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b6_offer_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "respect",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_kael_b6_offer_2",
+      "kind": "set_flag",
+      "key": "kael_mentor_file",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_kael_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_kael_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b6_rival_v1",
+    "textKey": "ev_rv_kael_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b6_rival_v2",
+    "textKey": "rv.kael.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b6_rival_v3",
+    "textKey": "rv.kael.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_kael_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_kael",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_kael_verhoeven"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_kael_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_kael_b8.b1"
+   },
+   {
+    "id": "ev_rv_kael_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_kael_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "stay",
+    "textKey": "ev_rv_kael_b8.c.stay",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b8_stay_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "respect",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_kael_b8_stay_2",
+      "kind": "set_flag",
+      "key": "kael_stay",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "leave",
+    "textKey": "ev_rv_kael_b8.c.leave",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b8_leave_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "trust",
+      "amount": 2
+     },
+     {
+      "id": "ev_rv_kael_b8_leave_2",
+      "kind": "set_flag",
+      "key": "kael_leave",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "scarf_twin",
+    "textKey": "ev_rv_kael_b8.c.scarf_twin",
+    "effects": [
+     {
+      "id": "ev_rv_kael_b8_scarf_twin_1",
+      "kind": "add_relationship",
+      "character": "ch_kael_verhoeven",
+      "attr": "affection",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_kael_b8_scarf_twin_2",
+      "kind": "set_flag",
+      "key": "kael_scarf_twin",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_kael_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_kael_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b8_rival_v1",
+    "textKey": "ev_rv_kael_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b8_rival_v2",
+    "textKey": "rv.kael.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_kael_b8_rival_v3",
+    "textKey": "rv.kael.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_kael_verhoeven",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_marisol_b2",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_marisol",
+   "rv_beat2"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 1
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_marisol_teague"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_marisol_b2_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_marisol_b2.b1"
+   },
+   {
+    "id": "ev_rv_marisol_b2_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_marisol_b2_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "call_out",
+    "textKey": "ev_rv_marisol_b2.c.call_out",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b2_call_out_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "trust",
+      "amount": 4
+     }
+    ]
+   },
+   {
+    "id": "full",
+    "textKey": "ev_rv_marisol_b2.c.full",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b2_full_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "respect",
+      "amount": 6
+     }
+    ]
+   },
+   {
+    "id": "let_lose",
+    "textKey": "ev_rv_marisol_b2.c.let_lose",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b2_let_lose_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "affection",
+      "amount": 2
+     },
+     {
+      "id": "ev_rv_marisol_b2_let_lose_2",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "respect",
+      "amount": -3
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_marisol_b2_out_1",
+    "kind": "set_flag",
+    "key": "rv_marisol_b2_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b2_rival_v1",
+    "textKey": "ev_rv_marisol_b2.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b2_rival_v2",
+    "textKey": "rv.marisol.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b2_rival_v3",
+    "textKey": "rv.marisol.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_marisol_b4",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_marisol",
+   "rv_beat4"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 2
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_marisol_teague"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_marisol_b4_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_marisol_b4.b1"
+   },
+   {
+    "id": "ev_rv_marisol_b4_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_marisol_b4_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "wont",
+    "textKey": "ev_rv_marisol_b4.c.wont",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b4_wont_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "respect",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_marisol_b4_wont_2",
+      "kind": "set_flag",
+      "key": "bastion_backstory",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "what_happened",
+    "textKey": "ev_rv_marisol_b4.c.what_happened",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b4_what_happened_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "trust",
+      "amount": 8
+     },
+     {
+      "id": "ev_rv_marisol_b4_what_happened_2",
+      "kind": "set_flag",
+      "key": "bastion_backstory",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "not_me",
+    "textKey": "ev_rv_marisol_b4.c.not_me",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b4_not_me_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "rivalry",
+      "amount": 4
+     },
+     {
+      "id": "ev_rv_marisol_b4_not_me_2",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "affection",
+      "amount": -4
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_marisol_b4_out_1",
+    "kind": "set_flag",
+    "key": "rv_marisol_b4_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b4_rival_v1",
+    "textKey": "ev_rv_marisol_b4.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b4_rival_v2",
+    "textKey": "rv.marisol.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b4_rival_v3",
+    "textKey": "rv.marisol.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
+ },
+ {
+  "id": "ev_rv_marisol_b6",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_marisol",
+   "rv_beat6"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 4
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_marisol_teague"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_marisol_b6_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_marisol_b6.b1"
+   },
+   {
+    "id": "ev_rv_marisol_b6_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_marisol_b6_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "her_first",
+    "textKey": "ev_rv_marisol_b6.c.her_first",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b6_her_first_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "trust",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_marisol_b6_her_first_2",
+      "kind": "set_flag",
+      "key": "marisol_first",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "together",
+    "textKey": "ev_rv_marisol_b6.c.together",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b6_together_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "loyalty",
+      "amount": 10
+     },
+     {
+      "id": "ev_rv_marisol_b6_together_2",
+      "kind": "set_flag",
+      "key": "bastion_freed",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "distract",
+    "textKey": "ev_rv_marisol_b6.c.distract",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b6_distract_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "respect",
+      "amount": 6
+     },
+     {
+      "id": "ev_rv_marisol_b6_distract_2",
+      "kind": "set_flag",
+      "key": "bastion_freed_risk",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_marisol_b6_out_1",
+    "kind": "set_flag",
+    "key": "rv_marisol_b6_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b6_rival_v1",
+    "textKey": "ev_rv_marisol_b6.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b6_rival_v2",
+    "textKey": "rv.marisol.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b6_rival_v3",
+    "textKey": "rv.marisol.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "major"
+ },
+ {
+  "id": "ev_rv_marisol_b8",
+  "v": 1,
+  "tags": [
+   "rv_story",
+   "rv_marisol",
+   "rv_beat8"
+  ],
+  "requires": [
+   {
+    "kind": "act",
+    "op": ">=",
+    "value": 8
+   }
+  ],
+  "roles": {
+   "rival": {
+    "character": "ch_marisol_teague"
+   }
+  },
+  "beats": [
+   {
+    "id": "ev_rv_marisol_b8_b1",
+    "kind": "narration",
+    "textKey": "ev_rv_marisol_b8.b1"
+   },
+   {
+    "id": "ev_rv_marisol_b8_b2",
+    "kind": "line",
+    "line": "dlg_ev_rv_marisol_b8_open"
+   }
+  ],
+  "choices": [
+   {
+    "id": "walk_road",
+    "textKey": "ev_rv_marisol_b8.c.walk_road",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b8_walk_road_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "affection",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_marisol_b8_walk_road_2",
+      "kind": "set_flag",
+      "key": "marisol_walk",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "circuit",
+    "textKey": "ev_rv_marisol_b8.c.circuit",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b8_circuit_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "respect",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_marisol_b8_circuit_2",
+      "kind": "set_flag",
+      "key": "marisol_circuit",
+      "value": true
+     }
+    ]
+   },
+   {
+    "id": "wall",
+    "textKey": "ev_rv_marisol_b8.c.wall",
+    "effects": [
+     {
+      "id": "ev_rv_marisol_b8_wall_1",
+      "kind": "add_relationship",
+      "character": "ch_marisol_teague",
+      "attr": "trust",
+      "amount": 3
+     },
+     {
+      "id": "ev_rv_marisol_b8_wall_2",
+      "kind": "set_flag",
+      "key": "marisol_wall",
+      "value": true
+     }
+    ]
+   }
+  ],
+  "outputs": [
+   {
+    "id": "ev_rv_marisol_b8_out_1",
+    "kind": "set_flag",
+    "key": "rv_marisol_b8_done",
+    "value": true
+   }
+  ],
+  "variants": [
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b8_rival_v1",
+    "textKey": "ev_rv_marisol_b8.open",
+    "when": []
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b8_rival_v2",
+    "textKey": "rv.marisol.friendly",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "trust",
+      "op": ">=",
+      "value": 50
+     }
+    ]
+   },
+   {
+    "role": "rival",
+    "id": "ev_rv_marisol_b8_rival_v3",
+    "textKey": "rv.marisol.hostile",
+    "when": [
+     {
+      "kind": "relationship",
+      "character": "ch_marisol_teague",
+      "key": "suspicion",
+      "op": ">=",
+      "value": 40
+     }
+    ]
+   }
+  ],
+  "cost": 0,
+  "tier": "B",
+  "moment": "minor"
  }
 ]

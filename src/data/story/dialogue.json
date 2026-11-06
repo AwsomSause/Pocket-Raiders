@@ -250,5 +250,257 @@
   "tags": [
    "hisui"
   ]
+ },
+ {
+  "id": "dlg_ev_rv_dara_b2_open",
+  "speaker": "ch_dara_quinlan",
+  "when": [],
+  "textKey": "ev_rv_dara_b2.open",
+  "tags": [
+   "rv_dara"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_dara_b4_open",
+  "speaker": "ch_dara_quinlan",
+  "when": [],
+  "textKey": "ev_rv_dara_b4.open",
+  "tags": [
+   "rv_dara"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_dara_b6_open",
+  "speaker": "ch_dara_quinlan",
+  "when": [],
+  "textKey": "ev_rv_dara_b6.open",
+  "tags": [
+   "rv_dara"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_dara_b8_open",
+  "speaker": "ch_dara_quinlan",
+  "when": [],
+  "textKey": "ev_rv_dara_b8.open",
+  "tags": [
+   "rv_dara"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_hale_b2_open",
+  "speaker": "ch_hale_brightwater",
+  "when": [],
+  "textKey": "ev_rv_hale_b2.open",
+  "tags": [
+   "rv_hale"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_hale_b4_open",
+  "speaker": "ch_hale_brightwater",
+  "when": [],
+  "textKey": "ev_rv_hale_b4.open",
+  "tags": [
+   "rv_hale"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_hale_b6_open",
+  "speaker": "ch_hale_brightwater",
+  "when": [],
+  "textKey": "ev_rv_hale_b6.open",
+  "tags": [
+   "rv_hale"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_hale_b8_open",
+  "speaker": "ch_hale_brightwater",
+  "when": [],
+  "textKey": "ev_rv_hale_b8.open",
+  "tags": [
+   "rv_hale"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_ines_b2_open",
+  "speaker": "ch_ines_calloway",
+  "when": [],
+  "textKey": "ev_rv_ines_b2.open",
+  "tags": [
+   "rv_ines"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_ines_b4_open",
+  "speaker": "ch_ines_calloway",
+  "when": [],
+  "textKey": "ev_rv_ines_b4.open",
+  "tags": [
+   "rv_ines"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_ines_b6_open",
+  "speaker": "ch_ines_calloway",
+  "when": [],
+  "textKey": "ev_rv_ines_b6.open",
+  "tags": [
+   "rv_ines"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_ines_b8_open",
+  "speaker": "ch_ines_calloway",
+  "when": [],
+  "textKey": "ev_rv_ines_b8.open",
+  "tags": [
+   "rv_ines"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_pip_b2_open",
+  "speaker": "ch_pip_marchetti",
+  "when": [],
+  "textKey": "ev_rv_pip_b2.open",
+  "tags": [
+   "rv_pip"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_pip_b4_open",
+  "speaker": "ch_pip_marchetti",
+  "when": [],
+  "textKey": "ev_rv_pip_b4.open",
+  "tags": [
+   "rv_pip"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_pip_b6_open",
+  "speaker": "ch_pip_marchetti",
+  "when": [],
+  "textKey": "ev_rv_pip_b6.open",
+  "tags": [
+   "rv_pip"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_pip_b8_open",
+  "speaker": "ch_pip_marchetti",
+  "when": [],
+  "textKey": "ev_rv_pip_b8.open",
+  "tags": [
+   "rv_pip"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_soren_b2_open",
+  "speaker": "ch_soren_lindqvist",
+  "when": [],
+  "textKey": "ev_rv_soren_b2.open",
+  "tags": [
+   "rv_soren"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_soren_b4_open",
+  "speaker": "ch_soren_lindqvist",
+  "when": [],
+  "textKey": "ev_rv_soren_b4.open",
+  "tags": [
+   "rv_soren"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_soren_b6_open",
+  "speaker": "ch_soren_lindqvist",
+  "when": [],
+  "textKey": "ev_rv_soren_b6.open",
+  "tags": [
+   "rv_soren"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_soren_b8_open",
+  "speaker": "ch_soren_lindqvist",
+  "when": [],
+  "textKey": "ev_rv_soren_b8.open",
+  "tags": [
+   "rv_soren"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_kael_b2_open",
+  "speaker": "ch_kael_verhoeven",
+  "when": [],
+  "textKey": "ev_rv_kael_b2.open",
+  "tags": [
+   "rv_kael"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_kael_b4_open",
+  "speaker": "ch_kael_verhoeven",
+  "when": [],
+  "textKey": "ev_rv_kael_b4.open",
+  "tags": [
+   "rv_kael"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_kael_b6_open",
+  "speaker": "ch_kael_verhoeven",
+  "when": [],
+  "textKey": "ev_rv_kael_b6.open",
+  "tags": [
+   "rv_kael"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_kael_b8_open",
+  "speaker": "ch_kael_verhoeven",
+  "when": [],
+  "textKey": "ev_rv_kael_b8.open",
+  "tags": [
+   "rv_kael"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_marisol_b2_open",
+  "speaker": "ch_marisol_teague",
+  "when": [],
+  "textKey": "ev_rv_marisol_b2.open",
+  "tags": [
+   "rv_marisol"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_marisol_b4_open",
+  "speaker": "ch_marisol_teague",
+  "when": [],
+  "textKey": "ev_rv_marisol_b4.open",
+  "tags": [
+   "rv_marisol"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_marisol_b6_open",
+  "speaker": "ch_marisol_teague",
+  "when": [],
+  "textKey": "ev_rv_marisol_b6.open",
+  "tags": [
+   "rv_marisol"
+  ]
+ },
+ {
+  "id": "dlg_ev_rv_marisol_b8_open",
+  "speaker": "ch_marisol_teague",
+  "when": [],
+  "textKey": "ev_rv_marisol_b8.open",
+  "tags": [
+   "rv_marisol"
+  ]
  }
 ]
