@@ -13,6 +13,7 @@ import { addRunToCodex } from './story/codex';
 import { recordLegacyRun } from './legacyRuns';
 import { recordHeirloom } from './memories/heirloom';
 import { foldNpcMemory } from './npcMemory';
+import { foldTreasureHunt } from './treasureHunt';
 import { claimPast } from './memories/past';
 import { ATTRIBUTE_NAMES, type Profile, type RunState } from './state';
 
@@ -58,6 +59,7 @@ export function createProfile(content: Content, profileId: string): Profile {
     mentorBonds: {},
     npcMemory: { npcs: {}, lore: [], epilogues: [], news: [], ngPlus: 0, hintsSeen: [], seenEvents: [] },
     hubTown: { pokemon: null, merchantDay: '', bought: [] },
+    treasureHunt: { pieces: [], claimed: false },
     legacyRuns: [],
     nook: { cookieDay: null, cookies: 0, wishDay: null, wishPaid: true, wishes: 0, note: null, noteDelivered: true, codesUsed: [], donated: 0, jokes: 0, stamps: 0, nodeNames: {} },
     memories: { heirlooms: [], claimed: [], cameos: [] },
@@ -107,6 +109,7 @@ export function finalizeRun(
   recordHeirloom(content, next, legacyRecord);
   claimPast(next, run);
   next.npcMemory = foldNpcMemory(content, next.npcMemory, run);
+  next.treasureHunt = foldTreasureHunt(next.treasureHunt, run);
   next.finalizedRunIds = [...next.finalizedRunIds, run.runId].slice(-FINALIZED_HISTORY);
   return { profile: next, applied: true, summary };
 }
