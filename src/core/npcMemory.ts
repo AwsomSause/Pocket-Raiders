@@ -28,6 +28,8 @@ export function seedNpcMemory<S extends Pick<StoryState, 'flags'>>(story: S, mem
   }
   if (mem.ngPlus > 0) story.flags['ev:ng-plus'] = mem.ngPlus;
   if (mem.lore.length > 0) story.flags['ev:lore-known'] = mem.lore.length;
+  // S117: lore from earlier runs stays known, so a multi-run trail can continue where it left off.
+  for (const id of mem.lore) story.flags[`ev:lore-${id}`] = 1;
   return story;
 }
 

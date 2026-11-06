@@ -183,7 +183,7 @@ describe('save migrations', () => {
 
 describe('the new NPC events', () => {
   const w5 = [...content.events.values()].filter((e) => e.group === 'NPC Stories');
-  const effects = w5.flatMap((e) => e.choices.flatMap((c) => [c.success, c.failure].flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])])));
+  const effects = [...w5, ...[...content.events.values()].filter((e) => e.group === 'Story and characters')].flatMap((e) => e.choices.flatMap((c) => [c.success, c.failure].flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])])));
   const setKeys = new Set(effects.flatMap((e) => (e.kind === 'flag' ? [e.key] : [])));
   it('adds a real batch, all valid and uniquely named', () => {
     expect(w5.length).toBeGreaterThanOrEqual(60);
