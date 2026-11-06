@@ -818,6 +818,16 @@
    "highHeal": 0.9,
    "lowBall": 0.9
   },
+  "migration": {
+   "factor": 2,
+   "awayFactor": 0.5,
+   "seasons": {
+    "Spring": ["flying", "bug", "grass"],
+    "Summer": ["fire", "water", "electric"],
+    "Autumn": ["normal", "ghost", "fighting"],
+    "Winter": ["ice", "steel", "dark"]
+   }
+  },
   "milestoneDays": [
    7,
    14,
