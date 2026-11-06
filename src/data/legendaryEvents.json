@@ -33,7 +33,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -165,7 +165,7 @@
         "label": "Track the cry",
         "result": "You find tracks and a stash of supplies.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -213,7 +213,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -389,7 +389,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -516,7 +516,7 @@
         "label": "Follow the grey ash",
         "result": "A safe path leads to a cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -572,7 +572,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -762,7 +762,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -898,7 +898,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -968,7 +968,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -1094,7 +1094,7 @@
         "label": "Collect hailstones",
         "result": "You pocket useful supplies.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -1142,7 +1142,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -1328,7 +1328,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -1502,7 +1502,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -1692,7 +1692,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -1883,7 +1883,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -2022,7 +2022,7 @@
         "label": "Pick a berry",
         "result": "The berry is ripe now.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -2071,7 +2071,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -2202,7 +2202,7 @@
         "label": "Pry open a niche",
         "result": "You find supplies inside.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -2251,7 +2251,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -2420,7 +2420,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -2590,7 +2590,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -2764,7 +2764,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -2942,7 +2942,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -3069,7 +3069,7 @@
         "label": "Leave a bait offering",
         "result": "The water goes still for a moment, and a cache washes up.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -3147,7 +3147,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -3288,7 +3288,7 @@
         "label": "Dig at the ridge",
         "result": "You pull out a bright stone, and burn your hands.",
         "effect": {
-         "item": "hyper-potion",
+         "item": "premier-ball",
          "hurt": 0.08
         }
        },
@@ -3367,7 +3367,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -3530,7 +3530,7 @@
         "label": "Accept a charm",
         "result": "A charm of feathers lifts your spirits.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -3587,7 +3587,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -3713,7 +3713,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -3783,7 +3783,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -3919,7 +3919,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -3989,7 +3989,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -4112,7 +4112,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -4182,7 +4182,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -4305,7 +4305,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -4375,7 +4375,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -4498,7 +4498,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -4568,7 +4568,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -4759,7 +4759,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -4950,7 +4950,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -5079,7 +5079,7 @@
         "label": "Share a pickaxe",
         "result": "You uncover a cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -5134,7 +5134,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -5250,7 +5250,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -5320,7 +5320,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -5496,7 +5496,7 @@
         "label": "Follow your reflection",
         "result": "It leads you to a cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -5553,7 +5553,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -5728,7 +5728,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -5855,7 +5855,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -5925,7 +5925,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -6117,7 +6117,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -6244,7 +6244,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -6314,7 +6314,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -6452,7 +6452,7 @@
         "label": "Take a plate shard",
         "result": "The shard is yours.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -6500,7 +6500,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -6637,7 +6637,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -6707,7 +6707,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -6820,7 +6820,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -6890,7 +6890,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -7007,7 +7007,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -7077,7 +7077,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -7192,7 +7192,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -7262,7 +7262,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -7375,7 +7375,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -7445,7 +7445,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -7560,7 +7560,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -7630,7 +7630,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -7810,7 +7810,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -7996,7 +7996,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -8116,7 +8116,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -8186,7 +8186,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -8304,7 +8304,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -8374,7 +8374,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -8502,7 +8502,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -8572,7 +8572,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -8698,7 +8698,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -8768,7 +8768,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -8897,7 +8897,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -8967,7 +8967,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -9086,7 +9086,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -9156,7 +9156,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -9276,7 +9276,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -9346,7 +9346,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -9460,7 +9460,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -9530,7 +9530,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -9660,7 +9660,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -9730,7 +9730,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -9867,7 +9867,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -9937,7 +9937,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -10069,7 +10069,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -10139,7 +10139,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -10251,7 +10251,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -10321,7 +10321,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -10433,7 +10433,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -10503,7 +10503,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -10618,7 +10618,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -10688,7 +10688,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -10812,7 +10812,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -10882,7 +10882,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -10997,7 +10997,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -11067,7 +11067,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -11182,7 +11182,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -11252,7 +11252,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -11380,7 +11380,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -11450,7 +11450,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -11578,7 +11578,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -11648,7 +11648,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -11771,7 +11771,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -11841,7 +11841,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -11967,7 +11967,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -12037,7 +12037,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -12164,7 +12164,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -12234,7 +12234,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -12361,7 +12361,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -12431,7 +12431,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -12556,7 +12556,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -12626,7 +12626,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -12745,7 +12745,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -12815,7 +12815,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -12932,7 +12932,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -13002,7 +13002,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -13122,7 +13122,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -13192,7 +13192,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -13306,7 +13306,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -13376,7 +13376,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -13505,7 +13505,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -13575,7 +13575,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -13689,7 +13689,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -13759,7 +13759,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -13872,7 +13872,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -13942,7 +13942,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -14057,7 +14057,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -14127,7 +14127,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -14248,7 +14248,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -14318,7 +14318,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -14442,7 +14442,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -14512,7 +14512,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -14628,7 +14628,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -14698,7 +14698,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -14814,7 +14814,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -14884,7 +14884,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -15000,7 +15000,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -15070,7 +15070,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -15186,7 +15186,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -15256,7 +15256,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -15372,7 +15372,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -15442,7 +15442,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -15560,7 +15560,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -15630,7 +15630,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -15749,7 +15749,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -15819,7 +15819,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -15935,7 +15935,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -16005,7 +16005,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -16121,7 +16121,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -16191,7 +16191,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -16307,7 +16307,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -16377,7 +16377,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -16491,7 +16491,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -16561,7 +16561,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -16673,7 +16673,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -16743,7 +16743,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -16872,7 +16872,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -16942,7 +16942,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -17069,7 +17069,7 @@
         "label": "Leave a bait offering",
         "result": "The water goes still for a moment, and a cache washes up.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -17148,7 +17148,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -17289,7 +17289,7 @@
         "label": "Dig at the ridge",
         "result": "You pull out a bright stone, and burn your hands.",
         "effect": {
-         "item": "hyper-potion",
+         "item": "premier-ball",
          "hurt": 0.08
         }
        },
@@ -17369,7 +17369,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -17532,7 +17532,7 @@
         "label": "Accept a charm",
         "result": "A charm of feathers lifts your spirits.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -17590,7 +17590,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -17766,7 +17766,7 @@
         "label": "Follow your reflection",
         "result": "It leads you to a cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        },
        {
@@ -17824,7 +17824,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -18016,7 +18016,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -18208,7 +18208,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -18399,7 +18399,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -18537,7 +18537,7 @@
         "label": "Take a plate shard",
         "result": "The shard is yours.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -18586,7 +18586,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -18767,7 +18767,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -18954,7 +18954,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -19145,7 +19145,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -19337,7 +19337,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -19461,7 +19461,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -19531,7 +19531,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -19653,7 +19653,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -19723,7 +19723,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -19838,7 +19838,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -19908,7 +19908,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -20025,7 +20025,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -20095,7 +20095,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -20224,7 +20224,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]
@@ -20294,7 +20294,7 @@
    "restHeal": 0.4,
    "cache": [
     {
-     "item": "hyper-potion",
+     "item": "premier-ball",
      "chance": 1
     },
     {
@@ -20422,7 +20422,7 @@
         "label": "Share your rations",
         "result": "The witness shares a hidden cache.",
         "effect": {
-         "item": "hyper-potion"
+         "item": "premier-ball"
         }
        }
       ]

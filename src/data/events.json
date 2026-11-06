@@ -168,7 +168,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -986,7 +986,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -1023,7 +1023,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -1534,7 +1534,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -2971,7 +2971,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -4620,7 +4620,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -7042,7 +7042,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -13308,7 +13308,7 @@
          "ids": [
           "potion",
           "super-potion",
-          "hyper-potion",
+          "premier-ball",
           "full-heal",
           "revive"
          ]
@@ -14011,7 +14011,7 @@
          "ids": [
           "potion",
           "super-potion",
-          "hyper-potion",
+          "premier-ball",
           "full-heal",
           "revive"
          ]
@@ -15873,7 +15873,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -15978,7 +15978,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -16045,7 +16045,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -16114,7 +16114,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -16762,7 +16762,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -19239,7 +19239,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -19625,7 +19625,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -20266,7 +20266,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -20346,7 +20346,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -32852,7 +32852,7 @@
         },
         {
          "kind": "item",
-         "id": "hyper-potion",
+         "id": "premier-ball",
          "count": 1
         },
         {
@@ -33987,7 +33987,7 @@
       "effects": [
        {
         "kind": "item",
-        "id": "hyper-potion",
+        "id": "premier-ball",
         "count": 1
        },
        {
@@ -43199,7 +43199,7 @@
         "ids": [
          "potion",
          "super-potion",
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive"
         ]
@@ -47241,7 +47241,7 @@
       "effects": [
        {
         "kind": "item",
-        "id": "hyper-potion",
+        "id": "premier-ball",
         "count": 1
        },
        {
@@ -54556,7 +54556,7 @@
       "effects": [
        {
         "kind": "item",
-        "id": "hyper-potion",
+        "id": "premier-ball",
         "count": 1
        },
        {
@@ -55825,7 +55825,7 @@
        },
        {
         "kind": "item",
-        "id": "hyper-potion",
+        "id": "premier-ball",
         "count": 1
        },
        {

@@ -2941,7 +2941,7 @@
      "set": "boon",
      "goods": [
       {"id": "guild-medic", "label": "Medic", "desc": "4 Super Potions and a Revive.", "set": "boon", "cost": {"credits": 60}, "reward": {"items": {"super-potion": 4, "revive": 1}}},
-      {"id": "guild-cook", "label": "Cook", "desc": "2 Hyper Potions and 2 Full Heals.", "set": "boon", "cost": {"credits": 55}, "reward": {"items": {"hyper-potion": 2, "full-heal": 2}}},
+      {"id": "guild-cook", "label": "Cook", "desc": "2 Premier Balls and 2 Full Heals.", "set": "boon", "cost": {"credits": 55}, "reward": {"items": {"premier-ball": 2, "full-heal": 2}}},
       {"id": "guild-porter", "label": "Porter", "desc": "3 Ethers and a Full Restore.", "set": "boon", "cost": {"credits": 70}, "reward": {"items": {"ether": 3, "full-restore": 1}}},
       {"id": "guild-treasurer", "label": "Treasurer", "desc": "₽500 starting money.", "set": "boon", "cost": {"credits": 45}, "reward": {"money": 500}}
      ]

@@ -41,7 +41,7 @@
       { "id": "ethers", "name": "Move Tonic", "blurb": "Sends an Ether.", "effect": { "kind": "item", "item": "ether", "count": 1 } },
       { "id": "heals", "name": "Full-Heal Pack", "blurb": "Sends a Full Heal.", "effect": { "kind": "item", "item": "full-heal", "count": 1 } },
       { "id": "greats", "name": "Great Crate", "blurb": "Sends 2 Great Balls.", "effect": { "kind": "item", "item": "great-ball", "count": 2 } },
-      { "id": "hypers", "name": "Hyper Parcel", "blurb": "Sends a Hyper Potion.", "effect": { "kind": "item", "item": "hyper-potion", "count": 1 } }
+      { "id": "hypers", "name": "Premier Parcel", "blurb": "Sends a Premier Ball.", "effect": { "kind": "item", "item": "premier-ball", "count": 1 } }
     ]
   },
   "museum": {

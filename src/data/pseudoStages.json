@@ -301,7 +301,7 @@
         }
       ],
       "reward": {
-        "item": "hyper-potion",
+        "item": "premier-ball",
         "count": 3
       },
       "exit": "win the executive or expose",
@@ -499,7 +499,7 @@
         }
       ],
       "reward": {
-        "item": "hyper-potion",
+        "item": "premier-ball",
         "count": 3
       },
       "exit": "find the totem",

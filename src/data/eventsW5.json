@@ -121,7 +121,7 @@
        {
         "kind": "itemFrom",
         "ids": [
-         "hyper-potion",
+         "premier-ball",
          "full-heal",
          "revive",
          "ultra-ball"
@@ -347,7 +347,7 @@
       "effects": [
        {
         "kind": "item",
-        "id": "hyper-potion",
+        "id": "premier-ball",
         "count": 1
        },
        {
@@ -632,7 +632,7 @@
        {
         "kind": "itemFrom",
         "ids": [
-         "hyper-potion"
+         "premier-ball"
         ]
        },
        {
@@ -4271,7 +4271,7 @@
        {
         "kind": "itemFrom",
         "ids": [
-         "hyper-potion",
+         "premier-ball",
          "revive",
          "ultra-ball"
         ]

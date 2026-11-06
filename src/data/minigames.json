@@ -145,7 +145,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -317,7 +317,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.5
           },
           "effect": {
@@ -406,7 +406,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -489,7 +489,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -563,7 +563,7 @@
         "silver": {
           "money": 120,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.5
           },
           "effect": {
@@ -732,7 +732,7 @@
         "silver": {
           "money": 120,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.5
           },
           "effect": {
@@ -830,7 +830,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.5
           },
           "effect": {
@@ -1002,7 +1002,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1082,7 +1082,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1165,7 +1165,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1248,7 +1248,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.5
           },
           "effect": {
@@ -1337,7 +1337,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1426,7 +1426,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1512,7 +1512,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1601,7 +1601,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1687,7 +1687,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1773,7 +1773,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1859,7 +1859,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -1945,7 +1945,7 @@
         "gold": {
           "money": 320,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2031,7 +2031,7 @@
         "gold": {
           "money": 320,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2120,7 +2120,7 @@
         "gold": {
           "money": 320,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2212,7 +2212,7 @@
         "gold": {
           "money": 320,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2298,7 +2298,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2381,7 +2381,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2464,7 +2464,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2550,7 +2550,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2639,7 +2639,7 @@
         "gold": {
           "money": 200,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2728,7 +2728,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2811,7 +2811,7 @@
         "gold": {
           "money": 160,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2900,7 +2900,7 @@
         "gold": {
           "money": 170,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {
@@ -2989,7 +2989,7 @@
         "gold": {
           "money": 190,
           "item": {
-            "item": "hyper-potion",
+            "item": "premier-ball",
             "chance": 0.6
           },
           "effect": {

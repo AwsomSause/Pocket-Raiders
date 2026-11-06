@@ -945,7 +945,7 @@
         "kind": "itemFrom",
         "ids": [
          "super-potion",
-         "hyper-potion"
+         "premier-ball"
         ]
        },
        {
@@ -1661,7 +1661,7 @@
         {
          "kind": "itemFrom",
          "ids": [
-          "hyper-potion",
+          "premier-ball",
           "full-heal"
          ]
         }
@@ -1885,7 +1885,7 @@
        {
         "kind": "itemFrom",
         "ids": [
-         "hyper-potion",
+         "premier-ball",
          "revive"
         ]
        },
@@ -2249,7 +2249,7 @@
          "kind": "itemFrom",
          "ids": [
           "revive",
-          "hyper-potion"
+          "premier-ball"
          ]
         },
         {

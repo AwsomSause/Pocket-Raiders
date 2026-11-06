@@ -31,12 +31,12 @@ describe('draft deals', () => {
     const outcomes = new Set<boolean>();
     for (let i = 0; i < 30; i++) {
       const r = fresh(`gamble-${i}`);
-      const had = r.inventory['hyper-potion'] ?? 0;
+      const had = r.inventory['premier-ball'] ?? 0;
       applyReward(content, r, archetype, 'deal-medic-gamble');
-      outcomes.add((r.inventory['hyper-potion'] ?? 0) > had);
+      outcomes.add((r.inventory['premier-ball'] ?? 0) > had);
       const again = fresh(`gamble-${i}`);
       applyReward(content, again, archetype, 'deal-medic-gamble');
-      expect(again.inventory['hyper-potion'] ?? 0).toBe(r.inventory['hyper-potion'] ?? 0);
+      expect(again.inventory['premier-ball'] ?? 0).toBe(r.inventory['premier-ball'] ?? 0);
     }
     expect(outcomes.size).toBe(2);
   });
