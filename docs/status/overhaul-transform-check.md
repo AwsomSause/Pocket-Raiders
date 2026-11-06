@@ -1,0 +1,6 @@
+# Overhaul slice 11: Mega / Tera / Dynamax / Z check
+
+- The rules now live in one table, `src/data/transformRules.json` (Zod: `src/core/battle/transformRules.ts`): key item, limit, what each mechanic excludes, when it reverts. `tests/unit/transformCheck.test.ts` checks the table against the engine (key item needed, once per side, one of Tera/Z/Dynamax per Pokémon, Mega blocks Dynamax, switched-off mechanics, Mega revert) and checks the data.
+- Data audit results: all 18 Z-Crystals match their type and Z-Move; Z powers and Max/G-Max entries all point at real moves and Gigantamax forms; every Mega/Primal/Gigantamax form has a real base. Fixed: Zygarde-Mega and the three Tatsugiri-Megas had no abilities (they now use their base species' abilities); "a Electric/Ice" in Z-Crystal and other item text now reads "an".
+- Rules kept as they were: Mega and Tera/Z may coexist on one Pokémon; Mega/Primal can't Dynamax. Mega is not a per-battle resource.
+- Limits: Magearna-Original-Mega and the Tatsugiri Mega Droopy/Stretchy have no Mega Stone, so they are never reached. Signature Z-Crystals (Pikanium Z etc.) are not in the game, so signature Z-Moves can't be used yet. No animation code touched. No save change.
