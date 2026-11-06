@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
+import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
 import type { StoryConfig } from './story/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
@@ -1923,6 +1924,10 @@ export const BalanceSchema = z.object({
   weatherTolerance: z.object({ turnsPerLevel: z.number().int().min(1), cutPerLevel: z.number().min(0).max(1), maxLevels: z.number().int().min(0) }).default({ turnsPerLevel: 12, cutPerLevel: 0.15, maxLevels: 4 }),
   /** S164 charge-up: each banked stack adds `perStack` to the next damaging move's power, up to `max` stacks. */
   bankPower: z.object({ perStack: z.number().min(0), max: z.number().int().min(1) }).default({ perStack: 0.5, max: 3 }),
+  /** Battle/AI batch 1 (S156 regional charts, S161 status stacks, S162 reactions, S169 immunity breakers, S170 counter types): battle/typeRules.ts. */
+  typeRules: TypeRulesSchema.default(DEFAULT_TYPE_RULES),
+  /** S174 Z-Crystal Bonding: a Pokémon needs this bond score (0-100, trust + affection) before it can use a Z-Move (0 = off). */
+  zBond: z.object({ minBond: z.number().int().min(0).max(100) }).default({ minBond: 30 }),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z

@@ -51,6 +51,7 @@ import {
   isStatusImmune,
   typeEffectiveness,
 } from './damage';
+import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
   ABSORB,
   AURAS,
@@ -474,7 +475,7 @@ function moveValueBase(brain: EnemyBrain, user: PokemonInstance, moveId: string)
   const targetAbilityId = abilityOf(content, target);
   const attackPower = (m: Move) => {
     if (m.category === 'status') return 0;
-    const effectiveness = m.flags.includes('typeless') ? 1 : typeEffectiveness(content.typeChart, m.type, targetSpecies.types);
+    const effectiveness = m.flags.includes('typeless') ? 1 : typeEffectiveness(content.typeChart, m.type, breakImmunity(content, content.typeChart, m.id, m.type, targetSpecies.types).types);
     // It knows the obvious ability immunities (Levitate, Volt Absorb, Wonder Guard).
     if (targetAbilityId && (ABSORB[targetAbilityId]?.type === m.type || ((targetAbilityId === 'levitate' || targetAbilityId === 'eelevate') && m.type === 'ground') || (targetAbilityId === 'wonder-guard' && effectiveness <= 1))) return 0;
     // A two-turn move is worth about half as much per turn.
@@ -3208,7 +3209,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   // Scrappy: Normal and Fighting moves hit Ghost types.
   const hitTypes = userAbility === 'scrappy' && (moveType === 'normal' || moveType === 'fighting') ? targetTypes.filter((t) => t !== 'ghost') : targetTypes;
   // Foresight / Odor Sleuth / Miracle Eye open the immunities they name.
-  const idHit = target.vol.identified === 'ghost' && (moveType === 'normal' || moveType === 'fighting') ? hitTypes.filter((t) => t !== 'ghost') : target.vol.identified === 'dark' && moveType === 'psychic' ? hitTypes.filter((t) => t !== 'dark') : hitTypes;
+  const seen = target.vol.identified === 'ghost' && (moveType === 'normal' || moveType === 'fighting') ? hitTypes.filter((t) => t !== 'ghost') : target.vol.identified === 'dark' && moveType === 'psychic' ? hitTypes.filter((t) => t !== 'dark') : hitTypes;
+  // S169: a rare move ignores the one immunity it is named for.
+  const breaker = breakImmunity(content, content.typeChart, move.id, moveType, seen);
+  const idHit = breaker.types;
+  if (breaker.broke && targetsEnemy) events.push(say(user.side, 'arena', `${content.moves.get(move.id)?.name ?? 'The move'} breaks through the ${breaker.broke[0]!.toUpperCase()}${breaker.broke.slice(1)} type's immunity!`, user.mon.uid));
   let rawEff = fx.superAgainst ? idHit.reduce((n, t) => n * (t === fx.superAgainst ? 2 : typeEffectiveness(content.typeChart, moveType, [t])), 1) : typeEffectiveness(content.typeChart, moveType, idHit);
   if (fx.secondType) rawEff *= typeEffectiveness(content.typeChart, fx.secondType, idHit);
   if (target.vol.tarred && moveType === 'fire') rawEff *= 2;
@@ -3310,6 +3315,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'orichalcum-pulse' && physical && weather === 'sun') attackBoost *= 4 / 3;
       if (userAbility === 'hadron-engine' && !physical && ctx.battle.terrain?.id === 'electric') attackBoost *= 4 / 3;
       if (sheerForce) powerMult *= 1.3;
+      // S170 counter types: Song beats Aura, Aura beats Trap, Trap beats Song (against the target's last move).
+      const myClass = counterClassOf(move);
+      const theirMove = target.vol.lastMove ? content.moves.get(target.vol.lastMove) : undefined;
+      const theirClass = theirMove ? counterClassOf(theirMove) : null;
+      if (counterBeats(myClass, theirClass) && typeRulesOf(content).counterBonus > 0) {
+        powerMult *= 1 + typeRulesOf(content).counterBonus;
+        if (hit === 0) events.push(say(user.side, 'arena', `${COUNTER_NAMES[myClass!]} beats ${COUNTER_NAMES[theirClass!]}! The move hits harder.`, user.mon.uid));
+      }
       if (hit === 0 && user.vol.bank > 0) {
         powerMult *= 1 + content.balance.bankPower.perStack * user.vol.bank;
         user.vol.bank = 0;
@@ -3474,6 +3487,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       events.push(say(target.side, 'curseTag', `${nameOf(ctx, target.mon)} was tagged by a curse! Ghost and Dark moves will hurt more.`, target.mon.uid));
     }
   }
+  if (landed > 0) elementalReaction(ctx, user, target, moveType, events);
   if (landed > 0 && target.mon.hp > 0) {
     // Smelling Salts and Wake-Up Slap use up the status they punish; Steel Roller and Ice Spinner clear the terrain.
     const cures = (fx.powerRule === 'doubleTargetParalyzed' && target.mon.status?.id === 'par') || (fx.powerRule === 'doubleTargetAsleep' && target.mon.status?.id === 'slp');
@@ -3622,6 +3636,23 @@ function abilityHurt(ctx: BattleContext, c: Combatant, amount: number, events: B
   const { lost, lastStand } = takeHp(ctx, c, amount);
   events.push({ type: 'damage', side: c.side, amount: lost, hpAfter: c.mon.hp, effectiveness: 1, crit: false });
   if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
+}
+
+/** S162: a hit of one type on a target marked by another type's hit can set off a reaction; otherwise the hit marks it. */
+function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatant, moveType: TypeName, events: BattleEvent[]): void {
+  if (target.mon.hp <= 0) return;
+  const reaction = reactionFor(ctx.content, target.vol.element, moveType);
+  if (!reaction) {
+    target.vol.element = moveType;
+    return;
+  }
+  target.vol.element = undefined;
+  events.push(say(user.side, 'arena', `Reaction: ${reaction.name}!`, user.mon.uid));
+  const max = calcStats(ctx.content, target.mon).hp;
+  if (reaction.effect === 'chip') abilityHurt(ctx, target, Math.max(1, Math.floor(max * reaction.amount)), events);
+  else if (reaction.effect === 'burn') tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
+  else if (reaction.effect === 'stat' && reaction.stat) changeStage(ctx, user, target, reaction.stat, reaction.amount, events);
+  else if (reaction.effect === 'heal' && user.mon.hp > 0 && user.mon.hp < calcStats(ctx.content, user.mon).hp) healMon(ctx, user, reaction.amount, events);
 }
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
@@ -5117,6 +5148,18 @@ function tryInflictStatus(
 ): boolean {
   const { content, rng } = ctx;
   const types = getSpecies(content, target.mon.speciesId).types;
+  // S161: a second burn (or plain poison) on a Pokémon that already has it makes it worse instead of failing.
+  if (stackableStatus(target.mon.status, status) && target.mon.hp > 0 && source !== target) {
+    const max = typeRulesOf(content).statusStacks.maxStacks;
+    const now = target.mon.status!.stacks ?? 1;
+    if (now >= max) {
+      if (announceFailure) events.push({ type: 'fail', side: target.side });
+      return false;
+    }
+    target.mon.status!.stacks = now + 1;
+    events.push(say(target.side, 'bleed', `${nameOf(ctx, target.mon)}'s ${status === 'brn' ? 'burn' : 'poison'} got worse! (x${now + 1})`, target.mon.uid));
+    return true;
+  }
   const blocker = target.mon.status ? null : statusAbilityBlock(ctx, source, target, status);
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
   if (target.mon.status || (!corrosive && isStatusImmune(status, types, move)) || blocker || Held.statusBlocked(ctx, target, status) || terrainBlocksStatus(ctx, target, status) || (source.side !== target.side && ctx.battle.sideEffects[target.side].safeguard > 0)) {
@@ -5390,6 +5433,7 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
     fraction = c.mon.status.turns / 16;
   }
   if (status === 'psn' && c.side === 'enemy') fraction *= poisonDamagePerk(ctx.perks);
+  fraction *= stackMultiplier(content, c.mon.status?.stacks);
   if (c.mon.hp > 0 && c.vol.bleed > 0) {
     const { lost, lastStand } = takeHp(ctx, c, bleedDamage(content, max, c.vol.bleed));
     events.push(say(c.side, 'bleed', `${nameOf(ctx, c.mon)} is hurt by bleeding! (-${lost})`, c.mon.uid));

@@ -244,6 +244,15 @@
       "inverseChart": true
     },
     {
+      "id": "elite-duelist",
+      "name": "Elite Duelist",
+      "status": "supported",
+      "bonus": 0.2,
+      "blurb": "Pure skill: no critical hits, no lucky misses or side effects, every damage roll is the middle one. Moves under 50% accuracy always miss.",
+      "group": "luck",
+      "steady": true
+    },
+    {
       "id": "gauntlet",
       "name": "Gauntlet",
       "status": "supported",

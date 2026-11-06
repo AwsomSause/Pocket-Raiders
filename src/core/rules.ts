@@ -1,6 +1,7 @@
 // Game modes, difficulty, modifiers, Death-Block (Untitled doc §13–16, Phase E).
 // The choices are copied into the run (`run.rules`) when it starts and never change; rewards use that snapshot.
 
+import { regionRules, regionalChart } from './battle/typeRules';
 import { z } from 'zod';
 import rulesJson from '../data/runRules.json';
 import type { Content, TypeName } from './contentSchema';
@@ -58,6 +59,8 @@ export const RunRulesDataSchema = z.object({
       quickWin: z.object({ turns: z.number().int().min(1), money: z.number().int().min(1) }).optional(),
       /** Inverse Battle (S291): the type chart is reversed in every battle of the run. */
       inverseChart: z.boolean().optional(),
+      /** Elite Duelist (S275): every battle roll is the middle value (no crits, no lucky misses, fixed damage roll). */
+      steady: z.boolean().optional(),
       gauntlet: z.boolean().optional(),
       doublesOnly: z.boolean().optional(),
       /** Pacifist (S300): wild Pokémon can't be knocked out; win by catching or running. */
@@ -231,23 +234,37 @@ export const timeAttackPoints = (rules: Pick<RunRules, 'modifierIds'>, turnsTake
     return sum + (t && turnsTaken <= t.turns ? (t.turns - Math.max(1, turnsTaken) + 1) * t.perTurn : 0);
   }, 0);
 export const bossRemix = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.bossRemix);
+/** Elite Duelist (S275) is on: battles use a steady roll instead of the battle stream. */
+export const eliteDuelist = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.steady);
 /** Inverse Battle is on. */
 export const inverseChart = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.inverseChart);
 /** The tightest run-wide level cap a modifier sets (Level 50 Cup), or null. */
 export const modifierLevelCap = (rules: Pick<RunRules, 'modifierIds'>): number | null =>
   rules.modifierIds.reduce<number | null>((cap, id) => { const c = getModifier(id)?.levelCap; return c === undefined ? cap : cap === null ? c : Math.min(cap, c); }, null);
-const invertedCharts = new WeakMap<object, Content>();
-/** Content as the battle engine should see it: with Inverse Battle the type chart is reversed (2 -> 0.5, 0.5 and 0 -> 2). Cached, pure. */
-export function battleContent(content: Content, rules: Pick<RunRules, 'modifierIds'>): Content {
-  if (!inverseChart(rules)) return content;
-  const cached = invertedCharts.get(content);
+const battleContents = new WeakMap<object, Map<string, Content>>();
+/**
+ * Content as the battle engine should see it: with Inverse Battle the type chart is reversed (2 -> 0.5, 0.5 and 0 -> 2);
+ * a region with its own type rules (S156, balance `typeRules.regions`) tweaks the chart first. Cached, pure.
+ */
+export function battleContent(content: Content, rules: Pick<RunRules, 'modifierIds'>, regionId?: string | null): Content {
+  const inverse = inverseChart(rules);
+  const local = regionRules(content, regionId);
+  if (!inverse && local.length === 0) return content;
+  const key = `${inverse ? 'inv' : ''}|${local.length ? regionId : ''}`;
+  let cache = battleContents.get(content);
+  if (!cache) battleContents.set(content, (cache = new Map()));
+  const cached = cache.get(key);
   if (cached) return cached;
-  const typeChart: Content['typeChart'] = {} as Content['typeChart'];
-  for (const [atk, row] of Object.entries(content.typeChart)) {
-    typeChart[atk as keyof typeof typeChart] = Object.fromEntries(Object.entries(row ?? {}).map(([def, v]) => [def, v > 1 ? 0.5 : v < 1 ? 2 : v])) as never;
+  let typeChart = regionalChart(content.typeChart, local);
+  if (inverse) {
+    const flipped: Content['typeChart'] = {} as Content['typeChart'];
+    for (const [atk, row] of Object.entries(typeChart)) {
+      flipped[atk as keyof typeof flipped] = Object.fromEntries(Object.entries(row ?? {}).map(([def, v]) => [def, v > 1 ? 0.5 : v < 1 ? 2 : v])) as never;
+    }
+    typeChart = flipped;
   }
   const out = { ...content, typeChart };
-  invertedCharts.set(content, out);
+  cache.set(key, out);
   return out;
 }
 /** Gauntlet (S294): no healing stops, and no free heal at the League gate or between Elite Four fights. */

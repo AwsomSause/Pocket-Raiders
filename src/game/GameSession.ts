@@ -544,7 +544,7 @@ export class GameSession {
    */
   takeAutoTurn(): { result: Run.TurnResult; pick: AutoPick } | null {
     const run = this.requireRun();
-    const pick = chooseAutoAction(this.content, run);
+    const pick = chooseAutoAction(this.content, run, this.settings.autoRules);
     if (!pick) return null;
     const marked = structuredClone(run);
     marked.battle!.autoUsed = true;

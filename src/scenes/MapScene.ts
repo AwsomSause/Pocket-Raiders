@@ -38,6 +38,7 @@ import { StopCard, type StopLook } from '../ui/stopLooks';
 import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
 import { bossInfo, currentRegion, getCampaign, runLevelCap } from '../core/regions';
 import { blindMap } from '../core/rules';
+import { regionRules } from '../core/battle/typeRules';
 import { arenaFor, getTheme } from '../core/themes';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
@@ -350,6 +351,15 @@ export class MapScene extends Phaser.Scene {
     this.add
       .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
+    // S156: this region's own type-chart rules, if it has any.
+    const localRules = regionRules(content, run.regionOrder[run.regionIndex]);
+    if (localRules.length > 0) {
+      const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
+      this.add
+        .text(GAME_WIDTH - 24, 66, `${region.name} type rules: ${localRules.map((r) => `${cap(r.attack)}→${cap(r.defend)} ×${r.mult}`).join('  ·  ')}`, textStyle(14, hSub))
+        .setOrigin(1, 0)
+        .setName('region-type-rules');
+    }
     // Speedrun timer (core/tools/speedrun.ts, off by default; Hub > Tools): splits per badge kept on this device only.
     if (device.speedrunOn()) {
       const now = Date.now();

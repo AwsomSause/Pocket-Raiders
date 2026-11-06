@@ -177,7 +177,7 @@ import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -2211,11 +2211,12 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     run.battle!.hypeLoaded = true;
   }
   return {
-    content: battleContent(content, run.rules),
+    content: battleContent(content, run.rules, run.regionOrder[run.regionIndex]),
     battle: run.battle!,
     party: run.party,
     inventory: run.inventory,
-    rng,
+    // S275 Elite Duelist: battle rolls are always the middle value (the run's battle stream is left as it is).
+    rng: eliteDuelist(run.rules) ? Rng.steady(rng.state) : rng,
     captureRng,
     speciesCaught: run.log.speciesCaught,
     catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run),
