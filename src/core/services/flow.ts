@@ -15,6 +15,8 @@ import { familyId } from '../mastery';
 import { evolveFully } from '../evolution';
 import { abilityOf, addLevels, createPokemon, maxHp, maxPp, usableLearnset, getSpecies } from '../pokemon';
 import { specialFamily } from '../specialForms';
+import { rarityOf } from '../rarity';
+import { pickTrade, TRADES, type GeneratedTrade } from '../tradePools';
 import { applyCatalog, catalogTargetProblem, getCatalogEntry } from '../catalog';
 import { addItem, itemUseProblem } from '../items';
 import { dig, digOptions } from '../mining';
@@ -108,18 +110,36 @@ function reminderMoves(content: Content, mon: PokemonInstance): string[] {
     .map((e) => e.move);
 }
 
-/** The Trade Post's offer for one party member: similar strength, sometimes a regional form (only reachable this way or by events). */
-export function tradeOffer(content: Content, run: RunState, sideId: string, mon: PokemonInstance): string | null {
+/** The Trade Post's generated trade for one party member (see core/tradePools.ts): pool, species and the level change on arrival. */
+export function generateTradeOffer(content: Content, run: RunState, sideId: string, mon: PokemonInstance): GeneratedTrade | null {
   const own = getSpecies(content, mon.speciesId);
   const bst = baseStatTotal(own);
   const rng = new Rng(hashSeed(`${run.seed}::trade::${sideId}:${mon.uid}`));
   const owned = new Set(run.party.map((p) => p.speciesId));
-  const fits = (spread: number) => (s: { id: string; baseStats: typeof own.baseStats }) => !owned.has(s.id) && Math.abs(baseStatTotal(s as typeof own) - bst) <= bst * spread;
+  const within = (lo: number, hi: number) => (s: { id: string; baseStats: typeof own.baseStats }) => !owned.has(s.id) && baseStatTotal(s as typeof own) >= lo && baseStatTotal(s as typeof own) <= hi;
+  const fits = (spread: number) => within(bst * (1 - spread), bst * (1 + spread));
   const open = ['regional', ...openFormFamilies(run)];
-  const special = [...content.species.values()].filter((s) => open.includes(specialFamily(s) ?? '') && fits(C.tradeBstSpread * 2)(s));
-  if (special.length > 0 && rng.chance(C.tradeSpecialChance)) return special[rng.int(0, special.length - 1)]!.id;
-  const normal = wildEligibleSpecies(content).filter(fits(C.tradeBstSpread));
-  return normal.length > 0 ? normal[rng.int(0, normal.length - 1)]!.id : null;
+  const wild = wildEligibleSpecies(content);
+  const normal = wild.filter(fits(C.tradeBstSpread));
+  const ids = (list: { id: string }[]) => list.map((s) => s.id);
+  return pickTrade(rng, {
+    fair: ids(normal),
+    regional: ids([...content.species.values()].filter((s) => open.includes(specialFamily(s) ?? '') && fits(C.tradeBstSpread * 2)(s))),
+    rare: ids(wild.filter(fits(C.tradeBstSpread * 1.5)).filter((s) => ['rare', 'veryRare', 'epic'].includes(rarityOf(content, s.id)))),
+    themed: ids(normal.filter((s) => s.types.some((t) => own.types.includes(t)))),
+    risky: ids(wild.filter(within(bst * (1 + C.tradeBstSpread), bst * (1 + TRADES.riskySpread)))),
+  });
+}
+
+/** The Trade Post's offer for one party member: similar strength, sometimes a regional form (only reachable this way or by events). */
+export function tradeOffer(content: Content, run: RunState, sideId: string, mon: PokemonInstance): string | null {
+  return generateTradeOffer(content, run, sideId, mon)?.speciesId ?? null;
+}
+
+/** The level a traded-for Pokémon arrives at (risky deals arrive lower). */
+export function tradeArrivalLevel(content: Content, run: RunState, sideId: string, mon: PokemonInstance, to: string): number {
+  const g = generateTradeOffer(content, run, sideId, mon);
+  return Math.max(1, mon.level + (g && g.speciesId === to ? g.levelOffset : 0));
 }
 
 
@@ -241,10 +261,11 @@ export function serviceView(content: Content, run: RunState, sideId: string): Se
     }
     case 'trade':
       for (const m of run.party) {
-        const to = tradeOffer(content, run, sideId, m);
-        if (!to) continue;
+        const gen = generateTradeOffer(content, run, sideId, m);
+        if (!gen) continue;
+        const to = gen.speciesId;
         const sp = getSpecies(content, to);
-        add(`trade:${m.uid}:${to}`, `${monName(content, m)} for ${sp.name}`, `Lv${m.level} ${sp.name} (${sp.types.join('/')}, base total ${baseStatTotal(sp)}${specialFamily(sp) ? ', a special form' : ''}). Its moves and friendship start fresh.`, price(run, C.tradeFee), side.used ? 'The trade is done.' : null);
+        add(`trade:${m.uid}:${to}`, `${monName(content, m)} for ${sp.name}`, `${TRADES.pools[gen.pool].name}: ${TRADES.pools[gen.pool].line} Lv${Math.max(1, m.level + gen.levelOffset)} ${sp.name} (${sp.types.join('/')}, base total ${baseStatTotal(sp)}${specialFamily(sp) ? ', a special form' : ''}). Its moves and friendship start fresh.`, price(run, C.tradeFee), side.used ? 'The trade is done.' : null);
       }
       break;
     case 'lookout': {
@@ -410,7 +431,7 @@ export function useService(content: Content, current: RunState, sideId: string, 
       break;
     }
     case 'trade': {
-      const next = newMon(content, run, arg!, mon!.level, 'p');
+      const next = newMon(content, run, arg!, tradeArrivalLevel(content, run, sideId, mon!, arg!), 'p');
       recordTraded(content, run, mon!, arg!);
       run.party[run.party.indexOf(mon!)] = next;
       discover(run, arg!, false);

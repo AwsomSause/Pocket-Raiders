@@ -1,0 +1,11 @@
+{
+  "note": "Overhaul slice 15. Trade Post pools: each offer comes from one pool, chosen by weight among the pools that have a candidate. Fair is the old behaviour.",
+  "riskySpread": 0.3,
+  "pools": {
+    "fair": { "name": "Fair swap", "weight": 50, "levelOffset": 0, "line": "A fair swap." },
+    "regional": { "name": "Regional form", "weight": 14, "levelOffset": 0, "line": "A form from far away." },
+    "rare": { "name": "Rare find", "weight": 12, "levelOffset": 0, "line": "Hard to come by." },
+    "themed": { "name": "Same type", "weight": 18, "levelOffset": 0, "line": "Shares a type with yours." },
+    "risky": { "name": "Risky deal", "weight": 12, "levelOffset": -3, "line": "Much stronger, but it comes in 3 levels lower." }
+  }
+}
