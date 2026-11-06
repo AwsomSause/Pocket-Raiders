@@ -285,6 +285,15 @@ export const RivalWorldRecordSchema = z.object({
   fame: z.number().int().min(0),
   /** Newest last: what happened and where ("region.stage"). */
   milestones: z.array(z.object({ kind: z.string(), at: z.string(), seq: z.number().int().min(0) })),
+  /** W4 (core/rivals/activity.ts), all optional so older saves load: where in the stage it is, what it is after, how it is doing, how fast it travels, whether it knows of you, stages it is stuck, the last stage it was in the news, and recent news ("type:template@stage"). */
+  near: z.enum(['early', 'mid', 'late']).optional(),
+  goal: z.enum(['gym', 'catch', 'explore', 'train', 'champion', 'revenge']).optional(),
+  condition: z.enum(['fine', 'winning', 'losing', 'injured', 'recovering']).optional(),
+  pace: z.enum(['fast', 'steady', 'slow']).optional(),
+  heardOfYou: z.boolean().optional(),
+  stuck: z.number().int().min(0).optional(),
+  newsAt: z.number().int().optional(),
+  news: z.array(z.string()).optional(),
 });
 export type RivalWorldRecord = z.infer<typeof RivalWorldRecordSchema>;
 

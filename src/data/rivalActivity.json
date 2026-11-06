@@ -1,0 +1,548 @@
+{
+ "note": "Rival activity, rumours and race (Story Overhaul W4, design 14.11 to 14.13, 14.23). Update templates and race lines are text; the rules are in core/rivals/activity.ts. Rumour payoffs are tags for later slices (W8/W2); only 'training', 'injured', 'badge', 'recruitment', 'evolution', 'rivalVsRival' and 'friendEdge' change rival state today.",
+ "pacing": {
+  "perStage": 2,
+  "perLeagueStage": 3,
+  "observedPerStage": 1,
+  "rivalGapStages": 2,
+  "templateRepeatStages": 4,
+  "rumorCorrectStages": 2,
+  "personalMinStates": [
+   "recurring",
+   "active",
+   "nemesis",
+   "contender",
+   "ally"
+  ],
+  "trueShare": 0.75
+ },
+ "race": {
+  "fastAmbition": 75,
+  "slowResilience": 35,
+  "gain": {
+   "fast": 0.6,
+   "steady": 0.4,
+   "slow": 0.2
+  },
+  "stuckLosses": 2,
+  "stuckStages": 2,
+  "maxLeadChangePerStage": 1,
+  "nudgeAt": 3
+ },
+ "goals": [
+  "gym",
+  "catch",
+  "explore",
+  "train",
+  "champion",
+  "revenge"
+ ],
+ "updates": [
+  {
+   "id": "progress",
+   "visibility": "observed",
+   "templates": [
+    "{rival} reached {town} ahead of schedule.",
+    "{rival} was seen at the {gym} gate.",
+    "A traveler says {rival} took the mountain road."
+   ]
+  },
+  {
+   "id": "battleReport",
+   "visibility": "rumor",
+   "templates": [
+    "{rival} beat a trainer named {other} at {place}.",
+    "{rival} and {other} traded blows. {rival} won.",
+    "{rival} lost a close one to {other}."
+   ]
+  },
+  {
+   "id": "defeat",
+   "visibility": "rumor",
+   "templates": [
+    "{rival} lost at {gym}. They left quietly.",
+    "{rival} got beat down. They're training now.",
+    "{rival} stormed out of the {gym}."
+   ]
+  },
+  {
+   "id": "recovery",
+   "visibility": "observed",
+   "templates": [
+    "{rival} is resting at a Pokémon Center.",
+    "{rival} healed up and set out again.",
+    "{rival} is still limping, but walking."
+   ]
+  },
+  {
+   "id": "recruitment",
+   "visibility": "rumor",
+   "templates": [
+    "{rival} traded for a new teammate.",
+    "{rival} caught a {species} in {place}.",
+    "{rival} has a new Pokémon, but won't say what."
+   ]
+  },
+  {
+   "id": "evolution",
+   "visibility": "rumor",
+   "templates": [
+    "One of {rival}'s Pokémon evolved.",
+    "{rival}'s {species} grew up last night.",
+    "{rival} showed off a freshly evolved {species}."
+   ]
+  },
+  {
+   "id": "ace",
+   "visibility": "rumor",
+   "templates": [
+    "{rival}'s {ace} learned something new.",
+    "{rival} has been training {ace} alone.",
+    "{ace} looked stronger the last time we saw it."
+   ]
+  },
+  {
+   "id": "champion",
+   "visibility": "observed",
+   "templates": [
+    "{rival} is a Champion candidate.",
+    "{rival} stands at the League gates.",
+    "{rival}'s name is on the Champion board."
+   ]
+  },
+  {
+   "id": "mystery",
+   "visibility": "rumor",
+   "templates": [
+    "{rival} was last seen heading to a cave.",
+    "Nobody has heard from {rival} in days.",
+    "A hooded trainer left {rival}'s letter unopened."
+   ]
+  },
+  {
+   "id": "personal",
+   "visibility": "rumor",
+   "templates": [
+    "{rival} wrote home about you.",
+    "{rival} stopped at a flower stall, and left a note.",
+    "{rival} sat alone, staring at an old photo."
+   ]
+  }
+ ],
+ "rumors": [
+  {
+   "id": "ru_01",
+   "text": "{rival} beat the {gym} leader last night.",
+   "truth": "T",
+   "payoff": "badge"
+  },
+  {
+   "id": "ru_02",
+   "text": "{rival} lost three in a row and quit the road.",
+   "truth": "F",
+   "payoff": "training",
+   "correction": "{rival} was seen training hard again. The quitting story was wrong."
+  },
+  {
+   "id": "ru_03",
+   "text": "A hooded trainer went into the old mine.",
+   "truth": "T",
+   "payoff": "mysteryTrainer"
+  },
+  {
+   "id": "ru_04",
+   "text": "There's a hidden cave behind the waterfall.",
+   "truth": "T",
+   "payoff": "hiddenDungeon"
+  },
+  {
+   "id": "ru_05",
+   "text": "The {team} is rebuilding at the harbor.",
+   "truth": "T",
+   "payoff": "evilHeat"
+  },
+  {
+   "id": "ru_06",
+   "text": "A legendary was seen over {place}.",
+   "truth": "P",
+   "payoff": "roamer"
+  },
+  {
+   "id": "ru_07",
+   "text": "The {gym} leader asked about you.",
+   "truth": "T",
+   "payoff": "leaderHeard"
+  },
+  {
+   "id": "ru_08",
+   "text": "{rival} caught a rare {species}.",
+   "truth": "T",
+   "payoff": "recruitment"
+  },
+  {
+   "id": "ru_09",
+   "text": "{rival} and {other} are feuding.",
+   "truth": "T",
+   "payoff": "rivalVsRival"
+  },
+  {
+   "id": "ru_10",
+   "text": "The Champion is training in secret.",
+   "truth": "F",
+   "payoff": "none",
+   "correction": "The Champion never left the League. That story was wrong."
+  },
+  {
+   "id": "ru_11",
+   "text": "A merchant is selling a treasure map.",
+   "truth": "T",
+   "payoff": "merchantMap"
+  },
+  {
+   "id": "ru_12",
+   "text": "A rift opened near {place}.",
+   "truth": "T",
+   "payoff": "rift"
+  },
+  {
+   "id": "ru_13",
+   "text": "{rival}'s ace evolved.",
+   "truth": "T",
+   "payoff": "evolution"
+  },
+  {
+   "id": "ru_14",
+   "text": "The Elite Four are looking for challengers.",
+   "truth": "P",
+   "payoff": "eliteExhibition"
+  },
+  {
+   "id": "ru_15",
+   "text": "Someone is giving away eggs at the festival.",
+   "truth": "T",
+   "payoff": "festivalEgg"
+  },
+  {
+   "id": "ru_16",
+   "text": "{rival} found a lost civilization.",
+   "truth": "F",
+   "payoff": "none",
+   "correction": "No lost civilization. {rival} found an old map stall."
+  },
+  {
+   "id": "ru_17",
+   "text": "A trainer is looking for you by name.",
+   "truth": "T",
+   "payoff": "recurringTrainer"
+  },
+  {
+   "id": "ru_18",
+   "text": "The old lab has lights on at night.",
+   "truth": "T",
+   "payoff": "oldLab"
+  },
+  {
+   "id": "ru_19",
+   "text": "{rival} is hurt and hiding.",
+   "truth": "T",
+   "payoff": "injured"
+  },
+  {
+   "id": "ru_20",
+   "text": "A tournament will be held next week.",
+   "truth": "T",
+   "payoff": "tournament"
+  },
+  {
+   "id": "ru_21",
+   "text": "A sanctuary healed a whole team here.",
+   "truth": "T",
+   "payoff": "sanctuary"
+  },
+  {
+   "id": "ru_22",
+   "text": "{rival} beat the whole Elite Four!",
+   "truth": "F",
+   "payoff": "none",
+   "correction": "{rival} is only a Champion candidate. The Elite Four story was wrong."
+  },
+  {
+   "id": "ru_23",
+   "text": "The sea is rough. Strange sounds from below.",
+   "truth": "P",
+   "payoff": "deepOcean"
+  },
+  {
+   "id": "ru_24",
+   "text": "{other} is secretly {rival}'s friend.",
+   "truth": "T",
+   "payoff": "friendEdge"
+  }
+ ],
+ "lines": {
+  "competitive": {
+   "ahead": [
+    "I'm already a step in front. Try to catch up.",
+    "Fast is the only way I know to travel.",
+    "Check the scoreboard. I'm winning."
+   ],
+   "behind": [
+    "You're ahead for now. Enjoy it.",
+    "I'll make the time back by the next gym.",
+    "Second place is just first place on loan."
+   ],
+   "even": [
+    "Dead even. I like it.",
+    "We keep landing on the same step. Fine by me.",
+    "One badge decides this. Make it count."
+   ],
+   "champion": [
+    "The seat is mine. Come take it.",
+    "I climbed the whole ladder first.",
+    "Champion. Say it out loud for me."
+   ]
+  },
+  "arrogant": {
+   "ahead": [
+    "Naturally, I'm ahead. Don't take it personally.",
+    "You can watch my back from there.",
+    "Everyone's behind me. You're just closest."
+   ],
+   "behind": [
+    "Your lead is a rounding error.",
+    "I let you have that gym. Generous of me.",
+    "Enjoy the view. It won't last."
+   ],
+   "even": [
+    "Even? That can't last. I'll fix it.",
+    "Side by side. For now.",
+    "We're level, which flatters you."
+   ],
+   "champion": [
+    "Of course I'm Champion. Who else?",
+    "The crown fits better than I imagined.",
+    "Bow, or battle. Your pick."
+   ]
+  },
+  "friendly": {
+   "ahead": [
+    "Hey, I got a bit ahead! Catch up soon, okay?",
+    "I saved you a spot on the road ahead!",
+    "I'm in front, but I'll wait if you need me."
+   ],
+   "behind": [
+    "You're so far ahead! I'm cheering for you.",
+    "I'm a bit behind. You inspire me.",
+    "Go on without me. I'll be right there!"
+   ],
+   "even": [
+    "We're even! That's the best kind of race.",
+    "Look at us, side by side!",
+    "We keep running into each other. I love it."
+   ],
+   "champion": [
+    "I'm Champion! Can you believe it?",
+    "I won, and I still want to battle you.",
+    "The seat is warm. Come sit with me!"
+   ]
+  },
+  "ruthless": {
+   "ahead": [
+    "I am ahead. That is the only fact that matters.",
+    "Every stop I clear is one you can't.",
+    "You're a step behind. I plan to keep it so."
+   ],
+   "behind": [
+    "You are ahead. I am noting how.",
+    "A lead can be removed.",
+    "I will take what you took, and more."
+   ],
+   "even": [
+    "Even. I will correct that.",
+    "We stand level. One of us will not.",
+    "An equal is an obstacle."
+   ],
+   "champion": [
+    "The title is mine. I earned it.",
+    "I'm Champion. Everything else was practice.",
+    "Reach the top and find me waiting."
+   ]
+  },
+  "mysterious": {
+   "ahead": [
+    "...I passed through before you.",
+    "The road remembers me. It will remember you later.",
+    "You will find my footprints there."
+   ],
+   "behind": [
+    "You walk faster than I thought.",
+    "I fell behind. I wasn't listening to the road.",
+    "...Impressive. Go ahead."
+   ],
+   "even": [
+    "We keep arriving together. Odd.",
+    "Not ahead, not behind. Interesting.",
+    "The road put us here for a reason."
+   ],
+   "champion": [
+    "The seat feels... quiet.",
+    "I wear the title like a coat. It doesn't warm me.",
+    "Come. I'll show you what is at the top."
+   ]
+  },
+  "intellectual": {
+   "ahead": [
+    "By my estimate, I lead by one stop.",
+    "My route was more efficient. Data supports it.",
+    "You're behind, but the margin is small."
+   ],
+   "behind": [
+    "You lead. I'm adjusting my model.",
+    "I mispredicted your pace. Won't happen twice.",
+    "Behind, but my notes are thicker."
+   ],
+   "even": [
+    "Statistically, we're tied.",
+    "Level. A fascinating sample.",
+    "Our paths converge. I expected that."
+   ],
+   "champion": [
+    "The seat confirms my hypothesis.",
+    "I am Champion. The method works.",
+    "Come test the conclusion."
+   ]
+  },
+  "insecure": {
+   "ahead": [
+    "Wait, I'm ahead? That can't be right.",
+    "I got further than I thought... don't look at me like that.",
+    "I'm in front, but you'll pass me soon."
+   ],
+   "behind": [
+    "I knew you'd be ahead. You always are.",
+    "I'm behind again. I'm used to it.",
+    "Please don't wait for me."
+   ],
+   "even": [
+    "We're even? Really? Okay...",
+    "I can't believe I kept up.",
+    "Together at the same stop. That means something, right?"
+   ],
+   "champion": [
+    "I'm Champion?! Somebody check that.",
+    "I won. I actually won.",
+    "Don't treat me differently. Treat me like before."
+   ]
+  },
+  "idealistic": {
+   "ahead": [
+    "I'm ahead, but I'm hoping you catch up.",
+    "I reached the next town first. The people were kind.",
+    "A lead means more people to help."
+   ],
+   "behind": [
+    "You lead the way. I'll follow with a clear heart.",
+    "Behind doesn't mean lost.",
+    "I stopped to help someone. Worth it."
+   ],
+   "even": [
+    "Together again. It feels like fate.",
+    "Even steps, even hearts.",
+    "We're walking the same road."
+   ],
+   "champion": [
+    "I'm Champion, so I can finally change things.",
+    "The seat carries a promise, and I'll keep it.",
+    "Come, let's show them what a Champion can be."
+   ]
+  },
+  "reckless": {
+   "ahead": [
+    "Ha! Took a shortcut. Of course I'm ahead!",
+    "I jumped a fence or two. Worth it!",
+    "Catch me if you can!"
+   ],
+   "behind": [
+    "You're ahead? Not for long!",
+    "I got lost. Great scenery though.",
+    "I'll sprint the rest. Watch me!"
+   ],
+   "even": [
+    "Even! Let's break the tie loudly.",
+    "Same spot again? Let's fight!",
+    "We're tied. Chaos is fun!"
+   ],
+   "champion": [
+    "Champion! Didn't see that coming either!",
+    "I beat the lot. No plan needed!",
+    "Let's celebrate with a battle!"
+   ]
+  },
+  "manipulative": {
+   "ahead": [
+    "Oh, am I ahead? How careless of you.",
+    "I made friends along the way. They helped.",
+    "You're behind, sweetheart. It happens."
+   ],
+   "behind": [
+    "Enjoy the lead. I like being underestimated.",
+    "You're ahead. Whose idea was that, I wonder?",
+    "Behind? I'm exactly where I want to be."
+   ],
+   "even": [
+    "Level. How convenient for me.",
+    "We're tied. Shall we make it interesting?",
+    "Same spot. Almost like I planned it."
+   ],
+   "champion": [
+    "Champion. Funny how things work out.",
+    "I smiled and the seat was mine.",
+    "Come visit. I'll set a place for you."
+   ]
+  },
+  "stoic": {
+   "ahead": [
+    "I am ahead. The pace is steady.",
+    "I do not hurry. I arrive.",
+    "The lead is a fact, not a boast."
+   ],
+   "behind": [
+    "You are ahead. Good.",
+    "I am behind. I will correct course.",
+    "A longer road teaches more."
+   ],
+   "even": [
+    "We are even. As expected.",
+    "Level. Neither of us has stumbled.",
+    "Same stop. Same goal."
+   ],
+   "champion": [
+    "I hold the seat. It is heavy.",
+    "Champion. The duty is real.",
+    "If you want it, earn it."
+   ]
+  },
+  "obsessive": {
+   "ahead": [
+    "I'm ahead. I counted every step.",
+    "I cleared the gym three times to be sure.",
+    "I know exactly how far ahead I am."
+   ],
+   "behind": [
+    "You're ahead. I've written down how.",
+    "I'm behind. I'll fix it. I'll fix it.",
+    "I'll study your route until I understand it."
+   ],
+   "even": [
+    "We're tied. I've been tracking it.",
+    "Even. That is not acceptable.",
+    "Same step. I need one more."
+   ],
+   "champion": [
+    "I'm Champion. I checked the board twice.",
+    "Every trophy is catalogued. This is the best.",
+    "The seat is mine. Don't touch the record."
+   ]
+  }
+ }
+}
