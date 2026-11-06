@@ -1776,6 +1776,12 @@ export const RegionSchema = z.object({
   custom: z.boolean().default(false),
   /** Special-form tags whose first stages roam this region's routes (e.g. "delta": Torren's Delta Pokémon). */
   specialWilds: z.array(z.string()).default([]),
+  /** One line that sums the region up, shown in its map banner. */
+  tagline: z.string().optional(),
+  /** Two or three sentences of flavour for the region (lore pages). */
+  lore: z.string().optional(),
+  /** First-stage wild Pokémon that define the region: extra wild weight there (balance.signatureWeight). Must be wild-eligible. */
+  signature: z.array(z.string()).default([]),
   /** The generations of Pokémon native to this region (empty = every generation is native). */
   generations: z.array(z.number().int().min(1).max(9)).default([]),
   /** Story Run only (Story Overhaul S4): never drawn into a Classic region order or listed in Classic pickers. */
@@ -2398,6 +2404,8 @@ export const BalanceSchema = z.object({
    * generation(s) are this many times as likely as others (still themed).
    */
   nativeWeight: z.number().min(1),
+  /** Extra wild odds for a region's signature Pokémon (regions.json `signature`), on top of nativeWeight. */
+  signatureWeight: z.number().min(1).default(2),
   /** Wild Pokémon have a base stat total no higher than this (keeps Ultra Beasts and Paradox Pokémon out). */
   wildMaxBaseStats: z.number().int().positive(),
   /** Regular enemies (wild and trainer) may not exceed base + perLevel × level total base stats; up to `retries` re-draws, keeping the weakest. */

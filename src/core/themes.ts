@@ -97,12 +97,13 @@ export function themePool(content: Content, theme: Theme, regionId?: string, lev
 
 /** Like themePool, for any list of types (an Elite Four member's speciality, for example). With `level`, species not unlocked yet by the spreadsheet are left out (core/availability.ts). */
 export function typesPool(content: Content, types: readonly TypeName[], regionId?: string, level?: number): PoolEntry[] {
-  const { dualTypeWeight, nativeWeight, minThemePool, wildPool } = content.balance;
+  const { dualTypeWeight, nativeWeight, signatureWeight, minThemePool, wildPool } = content.balance;
+  const signature = (regionId && content.regions.get(regionId)?.signature) || [];
   const pool: PoolEntry[] = [...wildEligibleSpecies(content), ...regionSpecialWilds(content, regionId)]
     .filter((s) => sharesType(s.types, types))
     .map((s) => ({
       speciesId: s.id,
-      weight: typeRarityWeight(content, s.types) * (types.length > 1 && types.every((t) => s.types.includes(t)) ? dualTypeWeight : 1) * (isNative(content, s, regionId) ? nativeWeight : 1),
+      weight: typeRarityWeight(content, s.types) * (types.length > 1 && types.every((t) => s.types.includes(t)) ? dualTypeWeight : 1) * (isNative(content, s, regionId) ? nativeWeight : 1) * (signature.includes(s.id) ? signatureWeight : 1),
     }));
   if (pool.length < minThemePool) {
     for (const id of wildPool) if (!pool.some((p) => p.speciesId === id)) pool.push({ speciesId: id, weight: 1 });

@@ -104,6 +104,16 @@
   "grand": false,
   "generations": [
    4
+  ],
+  "tagline": "Myth, and the old Hisui under it.",
+  "lore": "Sinnoh sits on the ruins of Hisui. Hisuian forms still wander the routes, and so do the first stages of its wilderness Pokémon.",
+  "signature": [
+   "stantler",
+   "scyther",
+   "teddiursa",
+   "basculin",
+   "sneasel",
+   "qwilfish"
   ]
  },
  {
@@ -244,6 +254,14 @@
   "grand": false,
   "generations": [
    9
+  ],
+  "tagline": "Treasure hunts, and Kitakami's masks.",
+  "lore": "Paldea's cliffs hide Kitakami's mossy, festival-lit villages, where odd Pokémon wear their masks all year.",
+  "signature": [
+   "poltchageist",
+   "dunsparce",
+   "tinkatink",
+   "bramblin"
   ]
  },
  {
@@ -274,7 +292,17 @@
   ],
   "grand": false,
   "custom": true,
-  "generations": []
+  "generations": [],
+  "tagline": "Cults, shadows and Delta Pokémon.",
+  "lore": "A land of hidden cults where the old stories say the world has a second shape. Dark, ghost and dragon types hide in the ruins, and Delta forms roam the open routes.",
+  "signature": [
+   "honedge",
+   "duskull",
+   "sableye",
+   "absol",
+   "houndour",
+   "deino"
+  ]
  },
  {
   "id": "frontier-isles",
@@ -301,7 +329,17 @@
   ],
   "grand": false,
   "custom": true,
-  "generations": []
+  "generations": [],
+  "tagline": "Battle halls on windswept islands.",
+  "lore": "Frontier Brains built their halls here to test trainers who want proof, not luck. Tough, steady Pokémon that never back down roam these isles.",
+  "signature": [
+   "doduo",
+   "rhyhorn",
+   "skarmory",
+   "baltoy",
+   "horsea",
+   "snorlax"
+  ]
  },
  {
   "id": "trial-archipelago",
@@ -332,6 +370,18 @@
    7,
    8,
    9
+  ],
+  "tagline": "Island trials, one captain at a time.",
+  "lore": "Every island asks for a trial and every trial has a captain. The warm waters are home to odd, playful Pokémon you will meet nowhere else.",
+  "signature": [
+   "wishiwashi",
+   "mimikyu",
+   "bruxish",
+   "pikipek",
+   "fomantis",
+   "crabrawler",
+   "sandygast",
+   "oricorio"
   ]
  },
  {
@@ -363,9 +413,46 @@
    "diantha"
   ],
   "grand": true,
+  "generations": [],
+  "tagline": "Every legend ends here.",
+  "lore": "The last region gathers the strongest Pokémon of every land. Only pseudo-legendary first stages dare to wander the routes.",
+  "signature": [
+   "dratini",
+   "larvitar",
+   "bagon",
+   "beldum",
+   "gible",
+   "deino"
+  ]
+ },
+ {
+  "id": "cairnmoor",
+  "name": "Cairnmoor",
+  "gymLeaders": [],
+  "eliteFour": [],
+  "champions": [],
+  "grand": false,
+  "story": true,
   "generations": []
  },
- { "id": "cairnmoor", "name": "Cairnmoor", "gymLeaders": [], "eliteFour": [], "champions": [], "grand": false, "story": true, "generations": [] },
- { "id": "tidewrack-reaches", "name": "Tidewrack Reaches", "gymLeaders": [], "eliteFour": [], "champions": [], "grand": false, "story": true, "generations": [] },
- { "id": "orrery-basin", "name": "Orrery Basin", "gymLeaders": [], "eliteFour": [], "champions": [], "grand": false, "story": true, "generations": [] }
+ {
+  "id": "tidewrack-reaches",
+  "name": "Tidewrack Reaches",
+  "gymLeaders": [],
+  "eliteFour": [],
+  "champions": [],
+  "grand": false,
+  "story": true,
+  "generations": []
+ },
+ {
+  "id": "orrery-basin",
+  "name": "Orrery Basin",
+  "gymLeaders": [],
+  "eliteFour": [],
+  "champions": [],
+  "grand": false,
+  "story": true,
+  "generations": []
+ }
 ]
