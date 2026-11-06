@@ -86,7 +86,7 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
-import { partyNarration } from './overhaul/partyNarration';
+import { finisherScene, partyNarration } from './overhaul/partyNarration';
 import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
@@ -2523,7 +2523,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win') {
     const winKey = `${run.runId}:${run.encountersCompleted}`;
     const winName = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
-    const cheer = quirkReaction(run.party, 'battle_win', winKey, winName) ?? partyNarration(run.party, 'battle_win', winKey, winName, (m) => content.species.get(m.speciesId)?.types ?? []);
+    const typesOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.types ?? [];
+    // A boss beaten: the species scene for the finishing move if the pack has one, else the badge or victory reaction.
+    const lastMove = [...(events as BattleEvent[])].reverse().find((e) => e.type === 'move' && e.side === 'player');
+    const finisher = battle.trainer?.leaderId && lastMove?.type === 'move' ? finisherScene(run.party[battle.activeIndex]?.speciesId ?? '', content.moves.get(lastMove.moveId)?.name ?? '') : null;
+    const badgeWon = battle.trainer?.classId === GYM_LEADER_CLASS && Boolean(battle.trainer.leaderId);
+    const cheer = finisher ?? quirkReaction(run.party, 'battle_win', winKey, winName) ?? (badgeWon ? partyNarration(run.party, 'badge', winKey, winName, typesOf) : null) ?? partyNarration(run.party, 'battle_win', winKey, winName, typesOf);
     if (cheer) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: cheer });
   }
   if (battle.outcome === 'win') careVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));

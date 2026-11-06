@@ -17,6 +17,8 @@ interface Tables {
   reactions: Map<string, string[]>;
   /** species id -> rest-node lore scenes. */
   lore: Map<string, string[]>;
+  /** `${speciesId}|${move name lowercased}` -> the scene for finishing a boss battle with that move. */
+  finishers: Map<string, string>;
 }
 let tables: Tables | null = null;
 let loading: Promise<void> | null = null;
@@ -44,7 +46,13 @@ export function ensureNarration(): Promise<void> {
     }
     const lore = new Map<string, string[]>();
     for (const e of s.entries) if (e.kind === 'lore' && /^(night )?rest node|^sun rest node/.test(e.trigger)) push(lore, e.speciesId, e.scene);
-    tables = { reactions, lore };
+    const finishers = new Map<string, string>();
+    for (const e of s.entries) {
+      if (e.kind !== 'move' || !/ finishes a boss battle/.test(e.scene)) continue;
+      const mv = /^When (.+) finishes a boss battle/.exec(e.scene)?.[1];
+      if (mv) finishers.set(`${e.speciesId}|${mv.toLowerCase()}`, e.scene);
+    }
+    tables = { reactions, lore, finishers };
   });
   return loading;
 }
@@ -67,4 +75,9 @@ export function partyNarration(party: readonly Mon[], when: NarrationContext, ke
   if (!picks.length) return null;
   const p = picks[fnv(`${key}:${when}:narr`) % picks.length]!;
   return p.lore ? `${nameOf(p.mon)}: ${p.line}` : p.line.replaceAll('{Name}', nameOf(p.mon));
+}
+
+/** The species scene for ending a boss battle with this move ("Frenzy Plant finishes a boss battle..."), or null. */
+export function finisherScene(speciesId: string, moveName: string): string | null {
+  return tables?.finishers.get(`${speciesId}|${moveName.toLowerCase()}`) ?? null;
 }
