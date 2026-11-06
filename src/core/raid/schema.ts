@@ -277,6 +277,8 @@ export const RaidFileSchema = z.object({
   }).default({ strikerDamage: 1.1, tankDamageTaken: 0.9, supportHeal: 0.0625 }),
   /** S403 Raid Cheering: the crowd meter (0 to 100) grows each turn and with every cheer; at `roused` your lead gets +1 Attack and Sp. Atk, at 100 the crowd mends it and the meter starts over. */
   crowd: z.object({ perTurn: z.number().min(0).max(30).default(6), perCheer: z.number().min(0).max(60).default(20), roused: z.number().int().min(10).max(90).default(50), roarHeal: z.number().min(0).max(0.5).default(0.25) }).default({ perTurn: 6, perCheer: 20, roused: 50, roarHeal: 0.25 }),
+  /** S410 Team Co-op Raids: two local players share one raid, taking turns on one device. Your party is split between them (slots 1, 3, 5 and 2, 4, 6); the boss is tougher, the crowd louder and the prize bigger. */
+  coop: z.object({ hpPercent: z.number().int().min(0).max(100).default(40), rewardPercent: z.number().int().min(100).max(250).default(125), draftDelta: z.number().int().min(0).max(2).default(1), cheersEach: z.number().int().min(1).max(5).default(3), crowdBonus: z.number().min(0).max(20).default(4) }).default({ hpPercent: 40, rewardPercent: 125, draftDelta: 1, cheersEach: 3, crowdBonus: 4 }),
   /** S401 cards, S402 talk and S393 bots offered at ordinary dens (story raids and practice have none). */
   gimmickCards: z.array(GimmickCardSchema).default([]),
   talk: RaidTalkSchema.nullable().default(null),

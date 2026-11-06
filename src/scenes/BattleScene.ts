@@ -47,7 +47,7 @@ import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
-import { cheerProblem, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
+import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { playCry, playMusic, playSfx, playSfxLazy, setMusicIntensity } from '../ui/audio';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
@@ -1086,7 +1086,7 @@ export class BattleScene extends Phaser.Scene {
     if (box.isPlayer && this.run.battle?.raid) {
       const role = raidRole(content, mon);
       const look = { tank: { text: 'TANK', color: 0x2c8ad8 }, striker: { text: 'STRIKER', color: 0xc8303c }, support: { text: 'SUPPORT', color: 0x1f9a52 } }[role];
-      box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, look.text, look.color, 14);
+      box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, look.text + (this.run.battle.raid.coop ? ` P${coopOwner(this.run.battle.raid, mon.uid) + 1}` : ''), look.color, 14);
       box.container.add(box.roleBadge);
     }
     this.dangerGlow(box, mon.hp / max);
@@ -1243,6 +1243,7 @@ export class BattleScene extends Phaser.Scene {
     if (puzzle) parts.push(raid.puzzleSolved ? 'PUZZLE SOLVED' : `PUZZLE ${raid.puzzleStep}/${puzzlePattern(content, this.run.battle!).length} (${puzzle.pool.join('/')})`);
     const spot = exposedWeakSpot(content, this.run.battle!);
     if (spot) parts.push(`${spot.zone.toUpperCase()} EXPOSED${raid.aim ? ` · aiming ${raid.aim}` : ''}`);
+    if (raid.coop) parts.push(`CO-OP P1 ${raid.coop.cheers[0]} cheers · P2 ${raid.coop.cheers[1]} cheers`);
     const bot = raidBot(content, raid);
     if (bot) parts.push(`ally: ${bot.label.split(' (')[0]}`);
     if (cur.gauntlet) parts.push(`form ${raid.formIndex + 1}/${cur.gauntlet.forms.length + 1}`);
@@ -2187,7 +2188,8 @@ export class BattleScene extends Phaser.Scene {
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
     const shadow = this.activeMon().shadow;
-    this.message.setText(`${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax' })[c.kind];
@@ -2196,7 +2198,7 @@ export class BattleScene extends Phaser.Scene {
     // Raid cheers (Raid Battles pack) sit after the transformation toggle.
     const raid = this.run.battle?.raid;
     const cheerAt = raid && raid.cheersLeft > 0 && !this.duo ? options.length : -1;
-    if (cheerAt >= 0) options.push({ label: `Cheer ×${raid!.cheersLeft}` });
+    if (cheerAt >= 0) options.push({ label: `Cheer ×${raid!.coop ? raid!.coop.cheers[coopOwner(raid!, this.activeMon().uid)] : raid!.cheersLeft}` });
     // S397 Boss Weak Spots: choose where to aim (the exposed zone takes the bonus).
     const aimAt = raid && !this.duo && raidDef(content, raid).modifiers.weakSpots ? options.length : -1;
     if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
@@ -2289,7 +2291,7 @@ export class BattleScene extends Phaser.Scene {
       { cheer: 'counter', label: 'Turn the tables!', tint: 0x9a2cc8 },
     ] as const;
     this.clearMenus();
-    const blocked = cheers.map((c) => cheerProblem(content, battle, c.cheer));
+    const blocked = cheers.map((c) => cheerProblem(content, battle, c.cheer, this.run.party[battle.activeIndex]?.uid));
     this.message.setText(blocked.find((b) => b) ?? `Cheer Lv.${battle.raid!.cheerLevel}: cheer your team on! Offense and Defense last 3 turns; Heal restores some HP; Turn the tables reverses all stat changes.`);
     this.menu = new Menu(this, {
       x: COMMAND_X + 24,

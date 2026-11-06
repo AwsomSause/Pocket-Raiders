@@ -68,3 +68,35 @@ test('a raid den shows its preview, then starts a raid fight that survives a rel
   expect(saved).toEqual({ raid: 'sleeping-snorlax', entered: 1 });
   expect(errors).toEqual([]);
 });
+
+test('a co-op raid names the player in command and shows both players\' cheers', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.goto('/?seed=raid-coop');
+  await waitForScene(page, 'MainMenu');
+  await toMap(page);
+  await page.evaluate(() => {
+    const { session } = (window as any).__pkr;
+    const run = session.run;
+    const mate = structuredClone(run.party[0]);
+    mate.uid = 'coop-mate';
+    run.party.push(mate);
+    const node = run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.sides.push({ id: 'raid-e2e', kind: 'raid', raidId: 'sleeping-snorlax', used: false });
+    run.stage.current = node.id;
+    session.enterRaid('raid-e2e', undefined, 'coop');
+    (window as any).__pkr.game.scene.getScene('Map').scene.start('Battle');
+  });
+  await waitForScene(page, 'Battle');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').status.text), { timeout: 10_000 }).toContain('CO-OP P1 3 cheers · P2 3 cheers');
+  const msg = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').message.text as string);
+  for (let i = 0; i < 8 && !(await msg()).includes('PLAYER'); i++) {
+    await page.keyboard.press('Enter'); // clear the intro lines until the command menu shows
+    await page.waitForTimeout(700);
+  }
+  expect(await msg()).toContain('PLAYER 1');
+  expect(errors).toEqual([]);
+});

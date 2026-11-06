@@ -87,7 +87,7 @@ import { genderOf, oppositeGender, sameGender } from '../gender';
 import * as Held from './held';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
-import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
+import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
@@ -1239,7 +1239,7 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
     const problem = itemProblem(ctx, action.itemId, action.targetIndex);
     if (problem) throw new Error(problem);
   } else if (action.kind === 'cheer') {
-    const problem = cheerProblem(ctx.content, ctx.battle, action.cheer);
+    const problem = cheerProblem(ctx.content, ctx.battle, action.cheer, ctx.party[ctx.battle.activeIndex]?.uid);
     if (problem) throw new Error(problem);
   }
 }
@@ -1248,6 +1248,7 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
 function useCheer(ctx: BattleContext, cheer: Cheer, events: BattleEvent[]): void {
   const raid = ctx.battle.raid!;
   raid.cheersLeft -= 1;
+  if (raid.coop) raid.coop.cheers[coopOwner(raid, ctx.party[ctx.battle.activeIndex]?.uid ?? '')] -= 1;
   raid.crowd = Math.min(100, raid.crowd + ctx.content.raids.crowd.perCheer);
   const text = { offense: 'Go all-out!', defense: 'Hang tough!', healing: 'Heal up!', counter: 'Turn the tables!' }[cheer];
   events.push({ type: 'raid', tone: 'info', text: `Cheer: ${text}` });
