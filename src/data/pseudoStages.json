@@ -1,0 +1,637 @@
+{
+  "note": "Pseudo stages and regions (Story Overhaul W7, design 14.17): chains of 3 to 6 rooms opened from a map event, run by the dungeon machinery. They never add a stage index, badge or region clear (P1), always offer Leave before the first fight (P2), are capped at 1 per region and 2 per run and never in a League stage, daily-route, boss-rush or quick-route (P3), pay at most one item (P4), and a loss inside ejects to the map with a partial heal (P5).",
+  "rules": {
+    "perRegion": 1,
+    "perRun": 2,
+    "blockedCampaigns": [
+      "daily-route",
+      "boss-rush",
+      "quick-route"
+    ],
+    "failureHeal": 0.5
+  },
+  "records": [
+    {
+      "id": "ps_safari_zone",
+      "name": "Safari Zone",
+      "class": "stage",
+      "tier": 1,
+      "mood": "calm grassland",
+      "tint": "#2a4a1f",
+      "entry": "safari ticket (the Safari Preserve service)",
+      "wild": [
+        "kangaskhan",
+        "tauros",
+        "chansey",
+        "scyther",
+        "nidorina",
+        "exeggcute"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "rare",
+          "next": [
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "wild",
+          "next": [
+            "d"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "ultra-ball",
+        "count": 3
+      },
+      "exit": "step budget used, or leave",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "A fenced preserve. No battles, only careful steps and good throws."
+    },
+    {
+      "id": "ps_battle_frontier",
+      "name": "Battle Frontier",
+      "class": "stage",
+      "tier": 3,
+      "mood": "arena",
+      "tint": "#33281a",
+      "entry": "event: Trainer Tournament",
+      "wild": [
+        "machamp",
+        "starmie",
+        "arcanine",
+        "gengar"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "trainer",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "trainer",
+          "next": [
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "trainer",
+          "next": [
+            "d"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "boss",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "e",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "choice-band",
+        "count": 1
+      },
+      "exit": "win 4 or lose 1",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "ace-trainer",
+      "intro": "Four rounds, one arena, no mercy and no shame.",
+      "boss": {
+        "classId": "ace-trainer",
+        "name": "Frontier Brain",
+        "size": 4
+      }
+    },
+    {
+      "id": "ps_league_exhibition",
+      "name": "League Exhibition",
+      "class": "stage",
+      "tier": 3,
+      "mood": "league hall",
+      "tint": "#1b2638",
+      "entry": "event: Champion's Invitation",
+      "wild": [
+        "staraptor",
+        "garchomp",
+        "gardevoir"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "trainer",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "boss",
+          "next": [
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "max-potion",
+        "count": 2
+      },
+      "exit": "all fights done",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "A hushed hall. Two exhibition matches, no loss cost, no badge.",
+      "boss": {
+        "classId": "veteran",
+        "name": "Elite Four Member",
+        "size": 4
+      }
+    },
+    {
+      "id": "ps_distortion_incident",
+      "name": "Distortion Incident",
+      "class": "stage",
+      "tier": 4,
+      "mood": "warped, low gravity",
+      "tint": "#2b1a3d",
+      "entry": "event: Distortion Rift",
+      "wild": [
+        "gastly",
+        "unown",
+        "bronzor",
+        "chingling",
+        "solosis"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "mystery",
+          "next": [
+            "c",
+            "d"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "rare",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "wild",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "e",
+          "kind": "boss",
+          "next": [
+            "f"
+          ]
+        },
+        {
+          "id": "f",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "max-potion",
+        "count": 2
+      },
+      "exit": "defeat the shade or run",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "Up is sideways. Things that should not be here are.",
+      "boss": {
+        "classId": "psychic",
+        "name": "Distortion Shade",
+        "size": 4
+      }
+    },
+    {
+      "id": "ps_evil_hideout",
+      "name": "Evil Hideout",
+      "class": "stage",
+      "tier": 3,
+      "mood": "dark and cold",
+      "tint": "#161a22",
+      "entry": "evil beat (the Evil Team schedule)",
+      "wild": [
+        "zubat",
+        "koffing",
+        "grimer",
+        "houndour"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "trainer",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "trainer",
+          "next": [
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "trap",
+          "next": [
+            "d"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "boss",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "e",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "hyper-potion",
+        "count": 3
+      },
+      "exit": "win the executive or expose",
+      "countsAsStage": true,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "Cold air, hum of machines, and a lot of guards.",
+      "boss": {
+        "classId": "veteran",
+        "name": "Executive",
+        "size": 4
+      }
+    },
+    {
+      "id": "ps_dreamscape",
+      "name": "Dreamscape",
+      "class": "region",
+      "tier": 2,
+      "mood": "soft clouds",
+      "tint": "#3a2a4a",
+      "entry": "item: Dream Orb, or a sleep event",
+      "wild": [
+        "drowzee",
+        "munna",
+        "cresselia",
+        "gothita",
+        "spoink"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "mystery",
+          "next": [
+            "c",
+            "d"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "trainer",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "wild",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "e",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "max-potion",
+        "count": 1
+      },
+      "exit": "wake at the last node",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "Everything is soft and slightly the wrong size."
+    },
+    {
+      "id": "ps_distortion_world",
+      "name": "Distortion World",
+      "class": "region",
+      "tier": 4,
+      "mood": "inverted",
+      "tint": "#1a1a26",
+      "entry": "event: Dimensional Collision",
+      "wild": [
+        "gastly",
+        "duskull",
+        "spiritomb",
+        "drifloon"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "trap",
+          "next": [
+            "c",
+            "d"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "wild",
+          "next": [
+            "f"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "rare",
+          "next": [
+            "f"
+          ]
+        },
+        {
+          "id": "f",
+          "kind": "boss",
+          "next": [
+            "g"
+          ]
+        },
+        {
+          "id": "g",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "max-potion",
+        "count": 2
+      },
+      "exit": "beat the boss",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "Floors become walls and the way back is somewhere else.",
+      "boss": {
+        "classId": "hex-maniac",
+        "name": "Reverse Keeper",
+        "size": 5
+      }
+    },
+    {
+      "id": "ps_ancient_wilds",
+      "name": "Ancient Wilds",
+      "class": "region",
+      "tier": 3,
+      "mood": "primal",
+      "tint": "#2f3a1a",
+      "entry": "event: Ancient Discovery",
+      "wild": [
+        "tyrunt",
+        "amaura",
+        "kabuto",
+        "omanyte",
+        "aron"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "den",
+          "next": [
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "puzzle",
+          "next": [
+            "d"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "rare",
+          "next": [
+            "e"
+          ]
+        },
+        {
+          "id": "e",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "hyper-potion",
+        "count": 3
+      },
+      "exit": "find the totem",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "Ferns taller than houses. Something very old watches."
+    },
+    {
+      "id": "ps_celestial_expanse",
+      "name": "Celestial Expanse",
+      "class": "region",
+      "tier": 4,
+      "mood": "stars",
+      "tint": "#101a3a",
+      "entry": "dungeon: Celestial Observatory cleared",
+      "wild": [
+        "minior",
+        "clefairy",
+        "elgyem",
+        "munna"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "puzzle",
+          "next": [
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "rare",
+          "next": [
+            "d"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "max-potion",
+        "count": 2
+      },
+      "exit": "follow the star path",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "A stair of light across a sky with no ground."
+    },
+    {
+      "id": "ps_lost_island",
+      "name": "Lost Island",
+      "class": "region",
+      "tier": 3,
+      "mood": "ruins and jungle",
+      "tint": "#1f3a22",
+      "entry": "event: Lost Civilization",
+      "wild": [
+        "tropius",
+        "relicanth",
+        "kabutops",
+        "omastar",
+        "claydol"
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "kind": "wild",
+          "next": [
+            "b"
+          ]
+        },
+        {
+          "id": "b",
+          "kind": "trainer",
+          "next": [
+            "d",
+            "c"
+          ]
+        },
+        {
+          "id": "c",
+          "kind": "hidden",
+          "next": [
+            "g"
+          ]
+        },
+        {
+          "id": "d",
+          "kind": "trap",
+          "next": [
+            "g"
+          ]
+        },
+        {
+          "id": "g",
+          "kind": "boss",
+          "next": [
+            "h"
+          ]
+        },
+        {
+          "id": "h",
+          "kind": "exit",
+          "next": []
+        }
+      ],
+      "reward": {
+        "item": "max-potion",
+        "count": 2
+      },
+      "exit": "beat the island guardian",
+      "countsAsStage": false,
+      "status": "limited",
+      "trainerClass": "veteran",
+      "intro": "Vines over stone faces. A civilization that left in a hurry.",
+      "boss": {
+        "classId": "veteran",
+        "name": "Island Guardian",
+        "size": 5
+      }
+    }
+  ]
+}
