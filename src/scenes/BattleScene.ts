@@ -72,6 +72,7 @@ import { zMoveScene } from '../ui/battleFx/zMoveScene';
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
+import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -236,6 +237,9 @@ export class BattleScene extends Phaser.Scene {
   private arenaBgKey: string | null = null;
   /** Index in `field` just above the arena art. */
   private fieldBase = 0;
+  /** The player's trainer on the field (Overhaul P2): null in doubles and for trainers that keep their own throwing sprite. */
+  private trainerActor: PlayerTrainerActor | null = null;
+  private trainerReady: Promise<void> = Promise.resolve();
   /** The doubles target picker's marker on the highlighted Pokémon. */
   private reticle: Phaser.GameObjects.Graphics | null = null;
   private arenaLight: ArenaLight | null = null;
@@ -425,6 +429,7 @@ export class BattleScene extends Phaser.Scene {
     this.skin?.backdrop?.(this, this.field, this.frameInfo());
     addContactShadows(this, this.field, () => this.shadowTargets());
     this.fieldBase = this.field.length;
+    this.setupTrainerActor(Boolean(battle.doubles));
     addVignette(this);
     this.fx = new BattleFx(this, {
       field: this.field,
@@ -806,10 +811,44 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /**
+   * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform. Trainers with their own
+   * throwing sprite keep the older opening throw; doubles have no trainer on the field. Skip: Enter, Space or a tap.
+   */
+  private setupTrainerActor(doubles: boolean): void {
+    this.trainerActor = null;
+    this.trainerReady = Promise.resolve();
+    if (doubles) return;
+    const art = this.playerArt();
+    if (art && bossBackId(art)) return;
+    const look = playerLookForBattle();
+    this.trainerReady = preloadPlayerTrainer(this, look).then(() => {
+      if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
+      const actor = new PlayerTrainerActor(this, look, PLAYER_POS.x - 175, PLAYER_POS.y - 4, 190, this.motion);
+      actor.sprite.setDepth(4);
+      actor.idle();
+      this.trainerActor = actor;
+    });
+    const skip = (): void => this.trainerActor?.skip();
+    this.input.keyboard?.on('keydown-ENTER', skip);
+    this.input.keyboard?.on('keydown-SPACE', skip);
+    this.input.on('pointerdown', skip);
+    this.events.once('shutdown', () => {
+      this.input.keyboard?.off('keydown-ENTER', skip);
+      this.input.keyboard?.off('keydown-SPACE', skip);
+      this.input.off('pointerdown', skip);
+    });
+  }
+
+  /**
    * The player's trainer throws out the first Pokémon (Gen 4/5 back sprite, Pokémon Memories), then slides away.
    * Presentation only: skipped when motion is off or the trainer has no back sprite.
    */
   private async throwPose(): Promise<void> {
+    if (this.trainerReady) await this.trainerReady;
+    if (this.trainerActor) {
+      await this.trainerActor.play('sendOut', { target: this.spotXY('player') });
+      return;
+    }
     const art = this.playerArt();
     if (!art || this.motion === 'off') return;
     const back = trainerBackVisual(this, art, PLAYER_POS.x - 90, MESSAGE_Y + 4, 260);
@@ -1881,6 +1920,7 @@ export class BattleScene extends Phaser.Scene {
     if (battle.trainer && (isBossClass(battle.trainer.classId) || battle.trainer.classId === 'rival')) playMotif(this, battle.trainer.leaderId ?? battle.trainer.classId);
     this.refreshMusicState();
     this.events.once('shutdown', () => {
+      this.trainerActor = null;
       stopProceduralAudio();
       this.portrait = undefined;
     });
@@ -2807,6 +2847,7 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    if (result.wiped || result.defeated) void this.trainerActor?.play('defeat');
     if (result.wiped) {
       await this.say(result.run.phase === 'battle' ? 'The VS Recorder rewinds the tape... the battle starts again!' : result.run.rules.modeId === 'adventure' ? 'Your party fainted... you return to the start of the stage, healed.' : 'Death-Block! You return to the start of the stage with your party healed.');
       this.scene.start(sceneForRun(result.run));
@@ -2829,6 +2870,7 @@ export class BattleScene extends Phaser.Scene {
       stopProceduralAudio();
       playMusic(this, victoryTrack({ trainer: Boolean(trainer), boss: Boolean(bossWin), role: this.role }));
     }
+    if (end.outcome === 'win') void this.trainerActor?.play('win');
     if (end.outcome === 'win' && this.playerSprite) {
       if (services().session.settings.victoryPoses) {
         const sp = getSpecies(content, this.activeMon().speciesId);
@@ -3015,6 +3057,7 @@ export class BattleScene extends Phaser.Scene {
         case 'weatherDamage':
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
+          if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp) void this.trainerActor?.play('hit');
           if (e.type === 'damage' && e.crit) critLetterbox(this, session.settings.critLetterbox, this.motion);
           if (e.type === 'damage' && (e.crit || e.effectiveness >= 2) && !(e.crit && e.side === 'enemy' && session.settings.skillPrompts)) this.cameraMove(e);
           if (e.type === 'damage' && e.crit && e.side === 'enemy' && session.settings.skillPrompts && sprite) await critFreeze(this, { x: sprite.x, y: sprite.y }, this.motion);
@@ -3097,10 +3140,13 @@ export class BattleScene extends Phaser.Scene {
           }
           break;
         }
-        case 'switchOut':
+        case 'switchOut': {
           if (sprite) this.tweens.killTweensOf(sprite);
+          const recall = e.side === 'player' ? this.trainerActor?.play('recall') : undefined;
           if (sprite) await tween(this, { targets: sprite, alpha: 0, duration: 250 });
+          await recall;
           break;
+        }
         case 'evolved': {
           // The Pokémon evolves between turns: flash, then the new form and its HP.
           const at = this.spotXY(e.side);
@@ -3127,6 +3173,7 @@ export class BattleScene extends Phaser.Scene {
           const incoming = this.findMon(before, e.uid);
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
+            if (e.side === 'player' && this.trainerActor) await this.trainerActor.play('sendOut', { target: this.spotXY('player') });
             this.showSprite(e.side, this.shown[e.side]);
             this.applyTeraTint(e.side, this.shown[e.side]);
             await this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, this.shown[e.side], false);
