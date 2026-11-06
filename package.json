@@ -36,6 +36,7 @@
     "data:megas": "node tools/build-mega-stones.ts",
     "data:zmoves": "node tools/build-z-moves.ts",
     "data:maxmoves": "node tools/build-max-moves.ts",
+    "data:overhaul": "node tools/import-overhaul-pack.ts",
     "assets:z-icons": "node tools/draw-z-icons.ts",
     "report:ideas": "node tools/ideas-report.ts",
     "report:content": "node tools/report-content.ts",

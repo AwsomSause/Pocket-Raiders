@@ -1,0 +1,4757 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/trainer_archetypes.json",
+ "entries": [
+  {
+   "id": "youngster",
+   "name": "Youngster",
+   "category": "Youth",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 1,
+   "things": [
+    "shorts",
+    "my best friend",
+    "shiny rocks"
+   ],
+   "acts": [
+    "racing everyone to the corner",
+    "catching things in the grass"
+   ],
+   "motto": "I'm gonna be the strongest ever."
+  },
+  {
+   "id": "lass",
+   "name": "Lass",
+   "category": "Youth",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "hair ribbons",
+    "my little sister",
+    "picnic baskets"
+   ],
+   "acts": [
+    "picking flowers on the route",
+    "practicing my battle poses"
+   ],
+   "motto": "Pretty can fight too."
+  },
+  {
+   "id": "schoolkid",
+   "name": "Schoolkid",
+   "category": "Youth",
+   "voice": "nervous",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "homework",
+    "my notebook",
+    "after-school clubs"
+   ],
+   "acts": [
+    "studying type charts",
+    "trading cards at lunch"
+   ],
+   "motto": "I read about this in class."
+  },
+  {
+   "id": "preschooler",
+   "name": "Preschooler",
+   "category": "Youth",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 1,
+   "things": [
+    "crayons",
+    "my stuffed toy",
+    "naps"
+   ],
+   "acts": [
+    "drawing on the sidewalk",
+    "chasing butterflies"
+   ],
+   "motto": "Look, look, my Pokémon is strong!"
+  },
+  {
+   "id": "rookie",
+   "name": "Rookie",
+   "category": "Youth",
+   "voice": "nervous",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "my first badge",
+    "trainer school",
+    "a borrowed cap"
+   ],
+   "acts": [
+    "memorizing move lists",
+    "practicing in the yard"
+   ],
+   "motto": "I'm new but I'm trying."
+  },
+  {
+   "id": "prodigy",
+   "name": "Prodigy",
+   "category": "Youth",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my trophies",
+    "perfect scores",
+    "my private tutor"
+   ],
+   "acts": [
+    "winning every school duel",
+    "skipping grades"
+   ],
+   "motto": "I was born ready."
+  },
+  {
+   "id": "bug-catcher",
+   "name": "Bug Catcher",
+   "category": "Outdoors",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "my net",
+    "jars of beetles",
+    "the tall grass"
+   ],
+   "acts": [
+    "chasing cicadas",
+    "collecting beetles"
+   ],
+   "motto": "Bugs are the best, you'll see."
+  },
+  {
+   "id": "hiker",
+   "name": "Hiker",
+   "category": "Outdoors",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "trail mix",
+    "my pack",
+    "sunrise from a ridge"
+   ],
+   "acts": [
+    "climbing at dawn",
+    "mapping new trails"
+   ],
+   "motto": "One step at a time. That's all."
+  },
+  {
+   "id": "camper",
+   "name": "Camper",
+   "category": "Outdoors",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "marshmallows",
+    "my tent",
+    "campfire songs"
+   ],
+   "acts": [
+    "cooking over a fire",
+    "telling ghost stories"
+   ],
+   "motto": "Fresh air's good for battle too."
+  },
+  {
+   "id": "picnicker",
+   "name": "Picnicker",
+   "category": "Outdoors",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "sandwiches",
+    "checkered blankets",
+    "fresh lemonade"
+   ],
+   "acts": [
+    "packing the perfect basket",
+    "finding the nicest meadow"
+   ],
+   "motto": "We've got time. And snacks."
+  },
+  {
+   "id": "ranger",
+   "name": "Ranger",
+   "category": "Outdoors",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "the forest",
+    "my patrol",
+    "old trail markers"
+   ],
+   "acts": [
+    "walking the same route for years",
+    "guarding the woods"
+   ],
+   "motto": "The wild is not a toy."
+  },
+  {
+   "id": "forager",
+   "name": "Forager",
+   "category": "Outdoors",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "wild herbs",
+    "mushroom rings",
+    "a woven basket"
+   ],
+   "acts": [
+    "reading the forest floor",
+    "tasting the seasons"
+   ],
+   "motto": "Everything useful is hiding."
+  },
+  {
+   "id": "birdwatcher",
+   "name": "Birdwatcher",
+   "category": "Outdoors",
+   "voice": "nervous",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "binoculars",
+    "a green notebook",
+    "rare feathers"
+   ],
+   "acts": [
+    "waiting in silence",
+    "logging every song"
+   ],
+   "motto": "Shh. They can hear you."
+  },
+  {
+   "id": "botanist",
+   "name": "Botanist",
+   "category": "Outdoors",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "rare orchids",
+    "my field journal",
+    "greenhouse glass"
+   ],
+   "acts": [
+    "cataloguing every leaf",
+    "crossing fragile seedlings"
+   ],
+   "motto": "Growth rewards patience."
+  },
+  {
+   "id": "gardener",
+   "name": "Gardener",
+   "category": "Outdoors",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "tulips",
+    "watering cans",
+    "warm soil"
+   ],
+   "acts": [
+    "tending the same beds each morning",
+    "pruning the roses"
+   ],
+   "motto": "What you tend, grows."
+  },
+  {
+   "id": "beekeeper",
+   "name": "Beekeeper",
+   "category": "Outdoors",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "honeycomb",
+    "my smoker",
+    "veils"
+   ],
+   "acts": [
+    "calming the hive",
+    "collecting the autumn comb"
+   ],
+   "motto": "Move slowly and nobody gets hurt."
+  },
+  {
+   "id": "shepherd",
+   "name": "Shepherd",
+   "category": "Rural",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my flock",
+    "a crook",
+    "the hill pasture"
+   ],
+   "acts": [
+    "counting sheep at dusk",
+    "whistling the flock home"
+   ],
+   "motto": "I mind my flock. You mind your step."
+  },
+  {
+   "id": "farmer",
+   "name": "Farmer",
+   "category": "Rural",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my fields",
+    "the harvest",
+    "old tractors"
+   ],
+   "acts": [
+    "up at four every morning",
+    "patching fences"
+   ],
+   "motto": "Honest work beats flashy work."
+  },
+  {
+   "id": "rancher",
+   "name": "Rancher",
+   "category": "Rural",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my herd",
+    "wide skies",
+    "boots"
+   ],
+   "acts": [
+    "riding the fence line",
+    "breaking in colts"
+   ],
+   "motto": "Out here, you earn your keep."
+  },
+  {
+   "id": "ace-trainer",
+   "name": "Ace Trainer",
+   "category": "Fighters",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my team plan",
+    "type charts",
+    "badge cases"
+   ],
+   "acts": [
+    "drilling combos",
+    "studying rival rosters"
+   ],
+   "motto": "Everyone's practicing. I'm winning."
+  },
+  {
+   "id": "black-belt",
+   "name": "Black Belt",
+   "category": "Fighters",
+   "voice": "gruff",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my dojo",
+    "morning drills",
+    "a worn belt"
+   ],
+   "acts": [
+    "punching rocks until sunrise",
+    "stretching in the rain"
+   ],
+   "motto": "Discipline is the only shortcut."
+  },
+  {
+   "id": "karate-master",
+   "name": "Karate Master",
+   "category": "Fighters",
+   "voice": "formal",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my students",
+    "a hall of banners",
+    "tradition"
+   ],
+   "acts": [
+    "teaching forms at dawn",
+    "meditating before duels"
+   ],
+   "motto": "Respect first. Then victory."
+  },
+  {
+   "id": "brawler",
+   "name": "Brawler",
+   "category": "Fighters",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my fists",
+    "a ring bell",
+    "sweat"
+   ],
+   "acts": [
+    "training in the alley",
+    "taking on challengers"
+   ],
+   "motto": "Talk is cheap. Fight."
+  },
+  {
+   "id": "wrestler",
+   "name": "Wrestler",
+   "category": "Fighters",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my cape",
+    "crowd noise",
+    "a title belt"
+   ],
+   "acts": [
+    "working the crowd",
+    "practicing big finishes"
+   ],
+   "motto": "Let's give them a show."
+  },
+  {
+   "id": "boxer",
+   "name": "Boxer",
+   "category": "Fighters",
+   "voice": "gruff",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my gloves",
+    "a heavy bag",
+    "ringside lights"
+   ],
+   "acts": [
+    "skipping rope at dawn",
+    "sparring till dusk"
+   ],
+   "motto": "Keep your guard up."
+  },
+  {
+   "id": "duelist",
+   "name": "Duelist",
+   "category": "Fighters",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my blade",
+    "my honor",
+    "a code"
+   ],
+   "acts": [
+    "reciting my vows",
+    "polishing my steel"
+   ],
+   "motto": "I fight cleanly. I lose cleanly."
+  },
+  {
+   "id": "gladiator",
+   "name": "Gladiator",
+   "category": "Fighters",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "the arena",
+    "an old shield",
+    "crowd roar"
+   ],
+   "acts": [
+    "practicing old forms",
+    "entering the sand"
+   ],
+   "motto": "The crowd demands blood. I give them spectacle."
+  },
+  {
+   "id": "veteran",
+   "name": "Veteran",
+   "category": "Fighters",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "old scars",
+    "my medal",
+    "the long road"
+   ],
+   "acts": [
+    "retelling old battles",
+    "mentoring newcomers"
+   ],
+   "motto": "I've seen it all. Twice."
+  },
+  {
+   "id": "cooltrainer",
+   "name": "Cooltrainer",
+   "category": "Fighters",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my sunglasses",
+    "perfect teams",
+    "high ranks"
+   ],
+   "acts": [
+    "climbing the ranks",
+    "outsmarting rookies"
+   ],
+   "motto": "Cool is a fighting style."
+  },
+  {
+   "id": "expert",
+   "name": "Expert",
+   "category": "Fighters",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "type theory",
+    "my archive",
+    "small details"
+   ],
+   "acts": [
+    "collecting data",
+    "running exact tests"
+   ],
+   "motto": "Details win battles."
+  },
+  {
+   "id": "fisherman",
+   "name": "Fisherman",
+   "category": "Sea",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my rod",
+    "morning tide",
+    "a battered boat"
+   ],
+   "acts": [
+    "waiting hours for one tug",
+    "mending nets"
+   ],
+   "motto": "The sea gives and takes."
+  },
+  {
+   "id": "swimmer",
+   "name": "Swimmer",
+   "category": "Sea",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "sunscreen",
+    "my goggles",
+    "the deep end"
+   ],
+   "acts": [
+    "racing the tide",
+    "diving for shells"
+   ],
+   "motto": "Last one in is a Magikarp!"
+  },
+  {
+   "id": "sailor",
+   "name": "Sailor",
+   "category": "Sea",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my ship",
+    "rough seas",
+    "old knots"
+   ],
+   "acts": [
+    "hauling lines at dawn",
+    "singing shanties"
+   ],
+   "motto": "The sea doesn't scare me. You might."
+  },
+  {
+   "id": "captain",
+   "name": "Captain",
+   "category": "Sea",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my crew",
+    "my charts",
+    "the horizon"
+   ],
+   "acts": [
+    "plotting courses",
+    "weathering storms"
+   ],
+   "motto": "A steady hand wins the storm."
+  },
+  {
+   "id": "pirate",
+   "name": "Pirate",
+   "category": "Sea",
+   "voice": "menacing",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "buried treasure",
+    "my map",
+    "a rum cask"
+   ],
+   "acts": [
+    "hunting for lost gold",
+    "looting the shallows"
+   ],
+   "motto": "What's yours is mine after this."
+  },
+  {
+   "id": "diver",
+   "name": "Diver",
+   "category": "Sea",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "air tanks",
+    "the deep blue",
+    "sunken ruins"
+   ],
+   "acts": [
+    "exploring wrecks",
+    "holding my breath"
+   ],
+   "motto": "It's quiet down there. I like quiet."
+  },
+  {
+   "id": "surfer",
+   "name": "Surfer",
+   "category": "Sea",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my board",
+    "big waves",
+    "a sunburn"
+   ],
+   "acts": [
+    "waiting for the perfect swell",
+    "wiping out gloriously"
+   ],
+   "motto": "Catch the wave and ride."
+  },
+  {
+   "id": "lighthouse-keeper",
+   "name": "Lighthouse Keeper",
+   "category": "Sea",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "the lamp",
+    "the long night",
+    "passing ships"
+   ],
+   "acts": [
+    "trimming the wick",
+    "watching for storms"
+   ],
+   "motto": "Someone has to keep the light."
+  },
+  {
+   "id": "mermaid-enthusiast",
+   "name": "Mermaid Enthusiast",
+   "category": "Sea",
+   "voice": "eccentric",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "scale charms",
+    "songs of the sea",
+    "shell horns"
+   ],
+   "acts": [
+    "singing to the waves",
+    "collecting pearls"
+   ],
+   "motto": "The sea sings. I answer."
+  },
+  {
+   "id": "professor-s-aide",
+   "name": "Professor's Aide",
+   "category": "Scholars",
+   "voice": "nervous",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a clipboard",
+    "field samples",
+    "stacks of notes"
+   ],
+   "acts": [
+    "entering data",
+    "carrying heavy crates"
+   ],
+   "motto": "I'm only here to help the research."
+  },
+  {
+   "id": "scientist",
+   "name": "Scientist",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my lab",
+    "test tubes",
+    "hypotheses"
+   ],
+   "acts": [
+    "running experiments",
+    "publishing odd papers"
+   ],
+   "motto": "Observation. Then conclusion."
+  },
+  {
+   "id": "researcher",
+   "name": "Researcher",
+   "category": "Scholars",
+   "voice": "nervous",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "field notes",
+    "rare data",
+    "my grant"
+   ],
+   "acts": [
+    "combing archives",
+    "tracking migrations"
+   ],
+   "motto": "Please don't mess with my data."
+  },
+  {
+   "id": "archaeologist",
+   "name": "Archaeologist",
+   "category": "Scholars",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "old stones",
+    "a trowel",
+    "faded glyphs"
+   ],
+   "acts": [
+    "brushing off dust",
+    "reading ruins"
+   ],
+   "motto": "The past is not finished with us."
+  },
+  {
+   "id": "historian",
+   "name": "Historian",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "ancient texts",
+    "old maps",
+    "family records"
+   ],
+   "acts": [
+    "cataloguing old battles",
+    "writing long footnotes"
+   ],
+   "motto": "You cannot beat what you do not know."
+  },
+  {
+   "id": "librarian",
+   "name": "Librarian",
+   "category": "Scholars",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "quiet rooms",
+    "card catalogs",
+    "dusty shelves"
+   ],
+   "acts": [
+    "shelving at night",
+    "hushing noisy children"
+   ],
+   "motto": "Please keep your voice down."
+  },
+  {
+   "id": "teacher",
+   "name": "Teacher",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my class",
+    "chalk",
+    "gold stars"
+   ],
+   "acts": [
+    "grading papers",
+    "coaching first battles"
+   ],
+   "motto": "Let this be a lesson."
+  },
+  {
+   "id": "student",
+   "name": "Student",
+   "category": "Scholars",
+   "voice": "nervous",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "exam week",
+    "borrowed notes",
+    "coffee"
+   ],
+   "acts": [
+    "cramming all night",
+    "second-guessing answers"
+   ],
+   "motto": "I studied this. I think."
+  },
+  {
+   "id": "collector",
+   "name": "Collector",
+   "category": "Scholars",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "rare cards",
+    "glass cases",
+    "limited prints"
+   ],
+   "acts": [
+    "hunting for rarities",
+    "trading late at night"
+   ],
+   "motto": "Every collection starts with an obsession."
+  },
+  {
+   "id": "trader",
+   "name": "Trader",
+   "category": "Scholars",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "rare items",
+    "a sharp deal",
+    "my ledger"
+   ],
+   "acts": [
+    "haggling at the market",
+    "spotting a bargain"
+   ],
+   "motto": "Everything has a price. Even this match."
+  },
+  {
+   "id": "hex-maniac",
+   "name": "Hex Maniac",
+   "category": "Mystics",
+   "voice": "menacing",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "dark candles",
+    "old curses",
+    "midnight"
+   ],
+   "acts": [
+    "whispering at dusk",
+    "trading spells"
+   ],
+   "motto": "Don't look at the shadows too long."
+  },
+  {
+   "id": "psychic",
+   "name": "Psychic",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my third eye",
+    "quiet minds",
+    "old visions"
+   ],
+   "acts": [
+    "reading the room",
+    "seeing the next move"
+   ],
+   "motto": "I knew you'd come."
+  },
+  {
+   "id": "medium",
+   "name": "Medium",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a crystal ball",
+    "lost voices",
+    "old tea"
+   ],
+   "acts": [
+    "speaking with the quiet",
+    "holding candlelit sessions"
+   ],
+   "motto": "They told me you'd come."
+  },
+  {
+   "id": "fortune-teller",
+   "name": "Fortune Teller",
+   "category": "Mystics",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my tarot",
+    "twisting fate",
+    "a velvet tent"
+   ],
+   "acts": [
+    "pulling a card for each guest",
+    "predicting the weather"
+   ],
+   "motto": "The cards say you lose. Or win."
+  },
+  {
+   "id": "monk",
+   "name": "Monk",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a quiet temple",
+    "morning bells",
+    "incense"
+   ],
+   "acts": [
+    "sweeping the same steps",
+    "meditating by the spring"
+   ],
+   "motto": "Be still, and the path appears."
+  },
+  {
+   "id": "priestess",
+   "name": "Priestess",
+   "category": "Mystics",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a shrine",
+    "old prayers",
+    "white robes"
+   ],
+   "acts": [
+    "offering blessings",
+    "tending the lanterns"
+   ],
+   "motto": "May the old spirits watch over you."
+  },
+  {
+   "id": "shaman",
+   "name": "Shaman",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "spirit drums",
+    "sacred smoke",
+    "old songs"
+   ],
+   "acts": [
+    "speaking to the elders",
+    "burning herbs"
+   ],
+   "motto": "The land speaks. Do you listen?"
+  },
+  {
+   "id": "occultist",
+   "name": "Occultist",
+   "category": "Mystics",
+   "voice": "menacing",
+   "ai": "MadScientist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "forbidden books",
+    "black ink",
+    "hidden rooms"
+   ],
+   "acts": [
+    "reading in the dark",
+    "inscribing sigils"
+   ],
+   "motto": "Some doors should stay shut."
+  },
+  {
+   "id": "dreamer",
+   "name": "Dreamer",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "midnight skies",
+    "sleepy clouds",
+    "a pillow fort"
+   ],
+   "acts": [
+    "napping in the afternoon",
+    "writing down dreams"
+   ],
+   "motto": "I saw this in a dream, you know."
+  },
+  {
+   "id": "idol",
+   "name": "Idol",
+   "category": "Performers",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "fans",
+    "sparkling outfits",
+    "stage lights"
+   ],
+   "acts": [
+    "rehearsing till midnight",
+    "waving to the crowd"
+   ],
+   "motto": "Smile. Then win."
+  },
+  {
+   "id": "singer",
+   "name": "Singer",
+   "category": "Performers",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a soft melody",
+    "my microphone",
+    "midnight blues"
+   ],
+   "acts": [
+    "humming in the shower",
+    "performing in cafes"
+   ],
+   "motto": "Every battle has a rhythm."
+  },
+  {
+   "id": "dancer",
+   "name": "Dancer",
+   "category": "Performers",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "bright shoes",
+    "the beat",
+    "a mirror"
+   ],
+   "acts": [
+    "practicing routines",
+    "spinning in the street"
+   ],
+   "motto": "Move with me. Or lose with me."
+  },
+  {
+   "id": "musician",
+   "name": "Musician",
+   "category": "Performers",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my guitar",
+    "tuning forks",
+    "old records"
+   ],
+   "acts": [
+    "writing songs in the rain",
+    "busking in the square"
+   ],
+   "motto": "Listen. There's a melody here."
+  },
+  {
+   "id": "clown",
+   "name": "Clown",
+   "category": "Performers",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "balloon animals",
+    "a honking nose",
+    "silly hats"
+   ],
+   "acts": [
+    "juggling at birthday parties",
+    "making kids laugh"
+   ],
+   "motto": "Why so serious? It's just a battle!"
+  },
+  {
+   "id": "magician",
+   "name": "Magician",
+   "category": "Performers",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "top hats",
+    "hidden cards",
+    "a trick wand"
+   ],
+   "acts": [
+    "pulling coins from behind ears",
+    "vanishing mid-show"
+   ],
+   "motto": "Pick a card. Any card. Now battle."
+  },
+  {
+   "id": "comedian",
+   "name": "Comedian",
+   "category": "Performers",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "bad puns",
+    "open mics",
+    "rubber chickens"
+   ],
+   "acts": [
+    "tossing out one-liners",
+    "heckling myself"
+   ],
+   "motto": "Take my Pokémon. Please."
+  },
+  {
+   "id": "actor",
+   "name": "Actor",
+   "category": "Performers",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "stage makeup",
+    "old scripts",
+    "applause"
+   ],
+   "acts": [
+    "rehearsing monologues",
+    "making a dramatic entrance"
+   ],
+   "motto": "The stage is my battlefield."
+  },
+  {
+   "id": "model",
+   "name": "Model",
+   "category": "Performers",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "photo shoots",
+    "tidy clothes",
+    "a runway strut"
+   ],
+   "acts": [
+    "posing for cameras",
+    "perfecting my profile"
+   ],
+   "motto": "Look good. Win better."
+  },
+  {
+   "id": "streamer",
+   "name": "Streamer",
+   "category": "Performers",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my viewers",
+    "wild reactions",
+    "ring lights"
+   ],
+   "acts": [
+    "chatting during battles",
+    "taking requests"
+   ],
+   "motto": "Chat, we're about to win!"
+  },
+  {
+   "id": "poet",
+   "name": "Poet",
+   "category": "Performers",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "old rhymes",
+    "blank pages",
+    "rain on glass"
+   ],
+   "acts": [
+    "writing by candlelight",
+    "reading aloud on rooftops"
+   ],
+   "motto": "Words cut deeper than claws."
+  },
+  {
+   "id": "pianist",
+   "name": "Pianist",
+   "category": "Performers",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a grand piano",
+    "a metronome",
+    "silent halls"
+   ],
+   "acts": [
+    "practicing scales",
+    "performing sonatas"
+   ],
+   "motto": "Perfect timing is everything."
+  },
+  {
+   "id": "painter",
+   "name": "Painter",
+   "category": "Crafts",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "bright canvases",
+    "a stained smock",
+    "turpentine"
+   ],
+   "acts": [
+    "sketching Pokémon",
+    "mixing colors"
+   ],
+   "motto": "Battles are paintings. Mine will be a masterpiece."
+  },
+  {
+   "id": "sculptor",
+   "name": "Sculptor",
+   "category": "Crafts",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "clay",
+    "marble dust",
+    "a chisel"
+   ],
+   "acts": [
+    "carving statues",
+    "smoothing rough stone"
+   ],
+   "motto": "I shape things. Patiently."
+  },
+  {
+   "id": "potter",
+   "name": "Potter",
+   "category": "Crafts",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "wet clay",
+    "the wheel",
+    "glazes"
+   ],
+   "acts": [
+    "throwing bowls",
+    "firing the kiln"
+   ],
+   "motto": "Slow hands make strong pots."
+  },
+  {
+   "id": "weaver",
+   "name": "Weaver",
+   "category": "Crafts",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "bright thread",
+    "my loom",
+    "tapestries"
+   ],
+   "acts": [
+    "spinning wool",
+    "weaving patterns"
+   ],
+   "motto": "Everything is connected by thread."
+  },
+  {
+   "id": "blacksmith",
+   "name": "Blacksmith",
+   "category": "Crafts",
+   "voice": "gruff",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a glowing forge",
+    "my anvil",
+    "hot iron"
+   ],
+   "acts": [
+    "hammering blades",
+    "quenching steel"
+   ],
+   "motto": "Good steel is patient steel."
+  },
+  {
+   "id": "carpenter",
+   "name": "Carpenter",
+   "category": "Crafts",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "sawdust",
+    "my chisels",
+    "heavy beams"
+   ],
+   "acts": [
+    "building cabinets",
+    "measuring twice"
+   ],
+   "motto": "Measure twice. Strike once."
+  },
+  {
+   "id": "mechanic",
+   "name": "Mechanic",
+   "category": "Crafts",
+   "voice": "gruff",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "wrenches",
+    "old engines",
+    "oily rags"
+   ],
+   "acts": [
+    "fixing bikes",
+    "tuning engines"
+   ],
+   "motto": "Everything breaks. I fix it."
+  },
+  {
+   "id": "engineer",
+   "name": "Engineer",
+   "category": "Crafts",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "blueprints",
+    "steel bridges",
+    "calculations"
+   ],
+   "acts": [
+    "checking structures",
+    "optimizing systems"
+   ],
+   "motto": "Systems win battles."
+  },
+  {
+   "id": "inventor",
+   "name": "Inventor",
+   "category": "Crafts",
+   "voice": "eccentric",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "odd gadgets",
+    "lab coats",
+    "sparks"
+   ],
+   "acts": [
+    "tinkering at midnight",
+    "testing prototypes"
+   ],
+   "motto": "It might explode. It might not."
+  },
+  {
+   "id": "tailor",
+   "name": "Tailor",
+   "category": "Crafts",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "silk thread",
+    "tape measures",
+    "careful stitches"
+   ],
+   "acts": [
+    "pinning hems",
+    "fitting a jacket"
+   ],
+   "motto": "A good fit makes all the difference."
+  },
+  {
+   "id": "jeweler",
+   "name": "Jeweler",
+   "category": "Crafts",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "cut gems",
+    "loupes",
+    "fine settings"
+   ],
+   "acts": [
+    "polishing diamonds",
+    "appraising stones"
+   ],
+   "motto": "The finest things are cut with care."
+  },
+  {
+   "id": "glassblower",
+   "name": "Glassblower",
+   "category": "Crafts",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "molten glass",
+    "a long pipe",
+    "delicate bowls"
+   ],
+   "acts": [
+    "shaping bright vessels",
+    "breathing life into glass"
+   ],
+   "motto": "Fragile doesn't mean weak."
+  },
+  {
+   "id": "perfumer",
+   "name": "Perfumer",
+   "category": "Crafts",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "rare essences",
+    "tiny bottles",
+    "subtle blends"
+   ],
+   "acts": [
+    "mixing scents",
+    "testing new notes"
+   ],
+   "motto": "A scent can win a heart. Or a battle."
+  },
+  {
+   "id": "chef",
+   "name": "Chef",
+   "category": "Food",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "knives",
+    "a hot kitchen",
+    "secret spices"
+   ],
+   "acts": [
+    "plating dishes",
+    "tasting every sauce"
+   ],
+   "motto": "Everything is about balance. Taste it."
+  },
+  {
+   "id": "baker",
+   "name": "Baker",
+   "category": "Food",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "fresh bread",
+    "warm ovens",
+    "flour"
+   ],
+   "acts": [
+    "rising at four",
+    "decorating cakes"
+   ],
+   "motto": "Fresh is better. So are friends."
+  },
+  {
+   "id": "barista",
+   "name": "Barista",
+   "category": "Food",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "latte art",
+    "coffee beans",
+    "chalk menus"
+   ],
+   "acts": [
+    "pulling shots",
+    "remembering orders"
+   ],
+   "motto": "I'll have your order in a moment."
+  },
+  {
+   "id": "sommelier",
+   "name": "Sommelier",
+   "category": "Food",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "old vintages",
+    "a cellar",
+    "decanters"
+   ],
+   "acts": [
+    "tasting fine wines",
+    "matching flavors"
+   ],
+   "motto": "Patience improves everything."
+  },
+  {
+   "id": "gourmet",
+   "name": "Gourmet",
+   "category": "Food",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "fine dining",
+    "rare ingredients",
+    "bright plates"
+   ],
+   "acts": [
+    "hunting for rare dishes",
+    "reviewing restaurants"
+   ],
+   "motto": "Only the finest will do."
+  },
+  {
+   "id": "street-vendor",
+   "name": "Street Vendor",
+   "category": "Food",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "sizzling grills",
+    "paper bags",
+    "hungry crowds"
+   ],
+   "acts": [
+    "calling out to passersby",
+    "flipping skewers"
+   ],
+   "motto": "Come get it while it's hot!"
+  },
+  {
+   "id": "berry-farmer",
+   "name": "Berry Farmer",
+   "category": "Food",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "ripe berries",
+    "wicker baskets",
+    "jam jars"
+   ],
+   "acts": [
+    "picking at dawn",
+    "sorting by color"
+   ],
+   "motto": "Berries make every Pokémon happy."
+  },
+  {
+   "id": "candy-maker",
+   "name": "Candy Maker",
+   "category": "Food",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "rainbow sweets",
+    "sticky fingers",
+    "sugar rush"
+   ],
+   "acts": [
+    "stirring caramel",
+    "inventing flavors"
+   ],
+   "motto": "Sweet today, sour tomorrow."
+  },
+  {
+   "id": "rich-boy",
+   "name": "Rich Boy",
+   "category": "City",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my allowance",
+    "sports cars",
+    "designer shoes"
+   ],
+   "acts": [
+    "buying out the shop",
+    "driving too fast"
+   ],
+   "motto": "Money can buy anything. Even wins."
+  },
+  {
+   "id": "lady",
+   "name": "Lady",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "silk gloves",
+    "tea parties",
+    "spotless hats"
+   ],
+   "acts": [
+    "sipping tea",
+    "hosting garden parties"
+   ],
+   "motto": "I'm sure this will be quite pleasant."
+  },
+  {
+   "id": "gentleman",
+   "name": "Gentleman",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "fine suits",
+    "leather chairs",
+    "a silver pocket watch"
+   ],
+   "acts": [
+    "reading the paper",
+    "tipping my hat"
+   ],
+   "motto": "Do try to lose with dignity."
+  },
+  {
+   "id": "tycoon",
+   "name": "Tycoon",
+   "category": "City",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my company",
+    "gold watches",
+    "contracts"
+   ],
+   "acts": [
+    "signing deals",
+    "buying everything"
+   ],
+   "motto": "Every move is an investment."
+  },
+  {
+   "id": "businessman",
+   "name": "Businessman",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my briefcase",
+    "quarterly reports",
+    "a long commute"
+   ],
+   "acts": [
+    "working late",
+    "drafting contracts"
+   ],
+   "motto": "Time is money. Let's end this quickly."
+  },
+  {
+   "id": "office-worker",
+   "name": "Office Worker",
+   "category": "City",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "coffee",
+    "my desk",
+    "tired eyes"
+   ],
+   "acts": [
+    "catching the early train",
+    "hiding in the break room"
+   ],
+   "motto": "I just wanted a quiet lunch break."
+  },
+  {
+   "id": "detective",
+   "name": "Detective",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my notebook",
+    "a trench coat",
+    "small clues"
+   ],
+   "acts": [
+    "stalking suspects",
+    "connecting the dots"
+   ],
+   "motto": "Something doesn't add up. Let's find out."
+  },
+  {
+   "id": "reporter",
+   "name": "Reporter",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my notepad",
+    "a press pass",
+    "breaking news"
+   ],
+   "acts": [
+    "chasing leads",
+    "interviewing strangers"
+   ],
+   "motto": "Smile. You're on the record."
+  },
+  {
+   "id": "photographer",
+   "name": "Photographer",
+   "category": "City",
+   "voice": "nervous",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my camera",
+    "film rolls",
+    "golden hour"
+   ],
+   "acts": [
+    "waiting for the light",
+    "framing perfect shots"
+   ],
+   "motto": "Hold still. Perfect."
+  },
+  {
+   "id": "chauffeur",
+   "name": "Chauffeur",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a polished car",
+    "white gloves",
+    "punctual schedules"
+   ],
+   "acts": [
+    "driving through traffic",
+    "opening doors"
+   ],
+   "motto": "I take pride in my driving."
+  },
+  {
+   "id": "bellhop",
+   "name": "Bellhop",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "brass trolleys",
+    "guest bags",
+    "tiny tips"
+   ],
+   "acts": [
+    "carrying heavy cases",
+    "smiling at guests"
+   ],
+   "motto": "Welcome. May I take your bags?"
+  },
+  {
+   "id": "delivery-courier",
+   "name": "Delivery Courier",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "express parcels",
+    "my route",
+    "tight deadlines"
+   ],
+   "acts": [
+    "racing the clock",
+    "cutting corners"
+   ],
+   "motto": "I'm already late, sorry."
+  },
+  {
+   "id": "taxi-driver",
+   "name": "Taxi Driver",
+   "category": "City",
+   "voice": "gruff",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my cab",
+    "backroads",
+    "city lights"
+   ],
+   "acts": [
+    "dodging traffic",
+    "chatting with fares"
+   ],
+   "motto": "Hop in. Where to?"
+  },
+  {
+   "id": "security-guard",
+   "name": "Security Guard",
+   "category": "City",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "night shifts",
+    "my flashlight",
+    "locked doors"
+   ],
+   "acts": [
+    "walking empty halls",
+    "checking IDs"
+   ],
+   "motto": "You can't be in here."
+  },
+  {
+   "id": "police-officer",
+   "name": "Police Officer",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my badge",
+    "a whistle",
+    "crime reports"
+   ],
+   "acts": [
+    "walking the beat",
+    "helping lost children"
+   ],
+   "motto": "Stay where you are."
+  },
+  {
+   "id": "firefighter",
+   "name": "Firefighter",
+   "category": "City",
+   "voice": "gruff",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "hoses",
+    "a long ladder",
+    "old heroes"
+   ],
+   "acts": [
+    "running into flames",
+    "rescuing pets"
+   ],
+   "motto": "When it burns, I run toward it."
+  },
+  {
+   "id": "doctor",
+   "name": "Doctor",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "medical charts",
+    "a stethoscope",
+    "sterile white"
+   ],
+   "acts": [
+    "studying symptoms",
+    "making rounds"
+   ],
+   "motto": "Doctor's orders: stay down."
+  },
+  {
+   "id": "nurse",
+   "name": "Nurse",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "bandages",
+    "quiet wards",
+    "hot tea"
+   ],
+   "acts": [
+    "checking on patients",
+    "soothing frightened children"
+   ],
+   "motto": "I'll take good care of them. And you."
+  },
+  {
+   "id": "vet",
+   "name": "Vet",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "gentle hands",
+    "wet noses",
+    "stuffed animals"
+   ],
+   "acts": [
+    "stitching small wounds",
+    "calming scared Pokémon"
+   ],
+   "motto": "Nobody gets hurt on my watch."
+  },
+  {
+   "id": "trainer-s-coach",
+   "name": "Trainer's Coach",
+   "category": "Fighters",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "whistles",
+    "clipboards",
+    "sweaty drills"
+   ],
+   "acts": [
+    "barking drills",
+    "reviewing tape"
+   ],
+   "motto": "You're not tired. You're warming up."
+  },
+  {
+   "id": "team-grunt",
+   "name": "Team Grunt",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "the boss's orders",
+    "a black uniform",
+    "a shiny badge"
+   ],
+   "acts": [
+    "guarding the base",
+    "running errands"
+   ],
+   "motto": "I'm just following orders."
+  },
+  {
+   "id": "team-admin",
+   "name": "Team Admin",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "schemes",
+    "my superior",
+    "a hidden base"
+   ],
+   "acts": [
+    "planning heists",
+    "briefing grunts"
+   ],
+   "motto": "The boss expects results."
+  },
+  {
+   "id": "team-scientist",
+   "name": "Team Scientist",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "illegal experiments",
+    "black-ops funding",
+    "locked labs"
+   ],
+   "acts": [
+    "splicing genes",
+    "testing machines"
+   ],
+   "motto": "Science doesn't need permission."
+  },
+  {
+   "id": "thug",
+   "name": "Thug",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "knuckles",
+    "back alleys",
+    "borrowed leather"
+   ],
+   "acts": [
+    "shaking down shops",
+    "hanging at street corners"
+   ],
+   "motto": "You picked the wrong alley."
+  },
+  {
+   "id": "burglar",
+   "name": "Burglar",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "lockpicks",
+    "a heavy sack",
+    "dim windows"
+   ],
+   "acts": [
+    "casing homes",
+    "slipping out at night"
+   ],
+   "motto": "I wasn't here. You never saw me."
+  },
+  {
+   "id": "hoodlum",
+   "name": "Hoodlum",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "loud music",
+    "spray paint",
+    "stolen bikes"
+   ],
+   "acts": [
+    "spray-painting walls",
+    "picking fights"
+   ],
+   "motto": "Show me what you've got, tough guy."
+  },
+  {
+   "id": "smuggler",
+   "name": "Smuggler",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "hidden cargo",
+    "fake papers",
+    "dark docks"
+   ],
+   "acts": [
+    "slipping past inspectors",
+    "moving crates"
+   ],
+   "motto": "Everything has a route."
+  },
+  {
+   "id": "con-artist",
+   "name": "Con Artist",
+   "category": "Crime",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "fake smiles",
+    "gold-plated promises",
+    "three cards"
+   ],
+   "acts": [
+    "running shell games",
+    "borrowing identities"
+   ],
+   "motto": "Trust me. Just a little."
+  },
+  {
+   "id": "poacher",
+   "name": "Poacher",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "traps",
+    "rare pelts",
+    "quiet footsteps"
+   ],
+   "acts": [
+    "laying snares",
+    "tracking rare Pokémon"
+   ],
+   "motto": "Rare ones fetch a good price."
+  },
+  {
+   "id": "rocket-style-boss",
+   "name": "Rocket-style Boss",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "an empire",
+    "a cat in my lap",
+    "black suits"
+   ],
+   "acts": [
+    "ordering grunts",
+    "planning conquests"
+   ],
+   "motto": "Power belongs to those who take it."
+  },
+  {
+   "id": "rival-scout",
+   "name": "Rival Scout",
+   "category": "Travelers",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "stats",
+    "sleek notebooks",
+    "secret intel"
+   ],
+   "acts": [
+    "observing from a distance",
+    "scouting arenas"
+   ],
+   "motto": "I've been watching you."
+  },
+  {
+   "id": "traveler",
+   "name": "Traveler",
+   "category": "Travelers",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my backpack",
+    "faraway towns",
+    "souvenirs"
+   ],
+   "acts": [
+    "hopping on trains",
+    "picking up local snacks"
+   ],
+   "motto": "I've been everywhere. Almost."
+  },
+  {
+   "id": "backpacker",
+   "name": "Backpacker",
+   "category": "Travelers",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a worn pack",
+    "hostels",
+    "paper maps"
+   ],
+   "acts": [
+    "sleeping under stars",
+    "sharing stories"
+   ],
+   "motto": "The road is the best teacher."
+  },
+  {
+   "id": "wanderer",
+   "name": "Wanderer",
+   "category": "Travelers",
+   "voice": "poetic",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a long road",
+    "tattered cloak",
+    "unnamed towns"
+   ],
+   "acts": [
+    "walking without a map",
+    "sleeping in barns"
+   ],
+   "motto": "I'm headed nowhere in particular."
+  },
+  {
+   "id": "pilgrim",
+   "name": "Pilgrim",
+   "category": "Travelers",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "sacred places",
+    "worn sandals",
+    "small prayers"
+   ],
+   "acts": [
+    "walking old trails",
+    "lighting incense"
+   ],
+   "motto": "The road is its own prayer."
+  },
+  {
+   "id": "nomad",
+   "name": "Nomad",
+   "category": "Travelers",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my tent",
+    "desert winds",
+    "moving camps"
+   ],
+   "acts": [
+    "crossing open plains",
+    "trading at oases"
+   ],
+   "motto": "Home is wherever the wind is."
+  },
+  {
+   "id": "explorer",
+   "name": "Explorer",
+   "category": "Travelers",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a pith helmet",
+    "unknown lands",
+    "glorious discoveries"
+   ],
+   "acts": [
+    "mapping caves",
+    "naming new places"
+   ],
+   "motto": "Nobody's been here yet. Except me."
+  },
+  {
+   "id": "cave-delver",
+   "name": "Cave Delver",
+   "category": "Travelers",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "headlamps",
+    "rope",
+    "echoes"
+   ],
+   "acts": [
+    "crawling through tunnels",
+    "tapping the walls"
+   ],
+   "motto": "It's cramped. But the stones are lovely."
+  },
+  {
+   "id": "mountaineer",
+   "name": "Mountaineer",
+   "category": "Travelers",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "ice axes",
+    "thin air",
+    "snowy peaks"
+   ],
+   "acts": [
+    "summiting at dawn",
+    "testing ropes"
+   ],
+   "motto": "The mountain demands respect."
+  },
+  {
+   "id": "skier",
+   "name": "Skier",
+   "category": "Travelers",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "fresh powder",
+    "my skis",
+    "hot cocoa"
+   ],
+   "acts": [
+    "carving down slopes",
+    "doing a daring jump"
+   ],
+   "motto": "Race you to the lodge!"
+  },
+  {
+   "id": "ice-fisher",
+   "name": "Ice Fisher",
+   "category": "Travelers",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a hole in the ice",
+    "thermos",
+    "long silences"
+   ],
+   "acts": [
+    "waiting for a bite",
+    "drilling holes"
+   ],
+   "motto": "Quiet. You'll scare them."
+  },
+  {
+   "id": "skater",
+   "name": "Skater",
+   "category": "Sports",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "rolling wheels",
+    "half-pipes",
+    "scraped knees"
+   ],
+   "acts": [
+    "grinding rails",
+    "landing tricks"
+   ],
+   "motto": "Wipeouts are part of the style."
+  },
+  {
+   "id": "cyclist",
+   "name": "Cyclist",
+   "category": "Sports",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my bike",
+    "steep hills",
+    "the wind"
+   ],
+   "acts": [
+    "racing downhill",
+    "fixing flats"
+   ],
+   "motto": "Keep pedaling. Don't stop."
+  },
+  {
+   "id": "runner",
+   "name": "Runner",
+   "category": "Sports",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "running shoes",
+    "morning dew",
+    "a stopwatch"
+   ],
+   "acts": [
+    "jogging at dawn",
+    "beating my personal best"
+   ],
+   "motto": "The finish line's just up ahead."
+  },
+  {
+   "id": "marathoner",
+   "name": "Marathoner",
+   "category": "Sports",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "long miles",
+    "hydration packs",
+    "a steady pace"
+   ],
+   "acts": [
+    "pushing through the wall",
+    "pacing myself"
+   ],
+   "motto": "I outlast everyone."
+  },
+  {
+   "id": "swimmer-coach",
+   "name": "Swimmer Coach",
+   "category": "Sports",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "stopwatches",
+    "chlorine",
+    "laps"
+   ],
+   "acts": [
+    "timing every lap",
+    "yelling from the pool deck"
+   ],
+   "motto": "Kick harder!"
+  },
+  {
+   "id": "tennis-player",
+   "name": "Tennis Player",
+   "category": "Sports",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "racquets",
+    "a clean serve",
+    "white attire"
+   ],
+   "acts": [
+    "serving aces",
+    "reading the court"
+   ],
+   "motto": "Fifteen-love. Let's begin."
+  },
+  {
+   "id": "baseball-player",
+   "name": "Baseball Player",
+   "category": "Sports",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "my bat",
+    "sunflower seeds",
+    "ballpark lights"
+   ],
+   "acts": [
+    "taking batting practice",
+    "chasing fly balls"
+   ],
+   "motto": "Step up to the plate."
+  },
+  {
+   "id": "soccer-player",
+   "name": "Soccer Player",
+   "category": "Sports",
+   "voice": "cheerful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a leather ball",
+    "cleats",
+    "crowd chants"
+   ],
+   "acts": [
+    "scoring penalty kicks",
+    "training in the rain"
+   ],
+   "motto": "Pass it and win it!"
+  },
+  {
+   "id": "basketball-player",
+   "name": "Basketball Player",
+   "category": "Sports",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a hoop",
+    "sneakers",
+    "clutch shots"
+   ],
+   "acts": [
+    "sinking threes",
+    "dunking over friends"
+   ],
+   "motto": "Nothing but net."
+  },
+  {
+   "id": "golfer",
+   "name": "Golfer",
+   "category": "Sports",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a putter",
+    "quiet greens",
+    "a sunny afternoon"
+   ],
+   "acts": [
+    "lining up a putt",
+    "reading the grass"
+   ],
+   "motto": "Mind the hazard."
+  },
+  {
+   "id": "gymnast",
+   "name": "Gymnast",
+   "category": "Sports",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "balance beams",
+    "chalk",
+    "perfect landings"
+   ],
+   "acts": [
+    "nailing a dismount",
+    "holding a handstand"
+   ],
+   "motto": "Stick the landing!"
+  },
+  {
+   "id": "archer",
+   "name": "Archer",
+   "category": "Sports",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a taut bow",
+    "still air",
+    "a bullseye"
+   ],
+   "acts": [
+    "sighting a target",
+    "loosing arrows"
+   ],
+   "motto": "Aim. Breathe. Release."
+  },
+  {
+   "id": "fencer",
+   "name": "Fencer",
+   "category": "Sports",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a slim foil",
+    "white jackets",
+    "mask"
+   ],
+   "acts": [
+    "parrying and thrusting",
+    "saluting opponents"
+   ],
+   "motto": "En garde."
+  },
+  {
+   "id": "judoka",
+   "name": "Judoka",
+   "category": "Sports",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a worn gi",
+    "mats",
+    "throws"
+   ],
+   "acts": [
+    "practicing falls",
+    "bowing to every partner"
+   ],
+   "motto": "Use their strength against them."
+  },
+  {
+   "id": "racer",
+   "name": "Racer",
+   "category": "Sports",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "screaming engines",
+    "checkered flags",
+    "pit crews"
+   ],
+   "acts": [
+    "drifting corners",
+    "pushing limits"
+   ],
+   "motto": "Speed's the only thing that matters."
+  },
+  {
+   "id": "biker",
+   "name": "Biker",
+   "category": "Sports",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a growling bike",
+    "leather jackets",
+    "open roads"
+   ],
+   "acts": [
+    "revving at lights",
+    "racing at midnight"
+   ],
+   "motto": "Out of my way, kid."
+  },
+  {
+   "id": "rodeo-rider",
+   "name": "Rodeo Rider",
+   "category": "Sports",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a stubborn bull",
+    "a flat hat",
+    "dust"
+   ],
+   "acts": [
+    "holding on for eight seconds",
+    "roping steers"
+   ],
+   "motto": "Hold on tight, partner."
+  },
+  {
+   "id": "pit-boss",
+   "name": "Pit Boss",
+   "category": "Sports",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "spanners",
+    "tire stacks",
+    "stopwatches"
+   ],
+   "acts": [
+    "timing pit stops",
+    "roaring at crew"
+   ],
+   "motto": "Every second counts."
+  },
+  {
+   "id": "gambler",
+   "name": "Gambler",
+   "category": "Eccentrics",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "loaded dice",
+    "casino nights",
+    "a lucky coin"
+   ],
+   "acts": [
+    "rolling dice on the street",
+    "betting on anything"
+   ],
+   "motto": "Let's make this interesting."
+  },
+  {
+   "id": "card-shark",
+   "name": "Card Shark",
+   "category": "Eccentrics",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "marked decks",
+    "poker chips",
+    "a straight face"
+   ],
+   "acts": [
+    "bluffing",
+    "counting cards"
+   ],
+   "motto": "I never lose. Not for long."
+  },
+  {
+   "id": "fortune-hunter",
+   "name": "Fortune Hunter",
+   "category": "Eccentrics",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "buried treasure",
+    "glittering coins",
+    "old maps"
+   ],
+   "acts": [
+    "chasing legends",
+    "digging in caves"
+   ],
+   "motto": "Fortune favors the bold."
+  },
+  {
+   "id": "eccentric",
+   "name": "Eccentric",
+   "category": "Eccentrics",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "strange hats",
+    "odd riddles",
+    "purple socks"
+   ],
+   "acts": [
+    "talking to myself",
+    "rearranging furniture"
+   ],
+   "motto": "You'll never guess what I did today."
+  },
+  {
+   "id": "hermit",
+   "name": "Hermit",
+   "category": "Eccentrics",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a quiet cabin",
+    "candlelight",
+    "old books"
+   ],
+   "acts": [
+    "living far from town",
+    "avoiding visitors"
+   ],
+   "motto": "I don't get many visitors. I like it that way."
+  },
+  {
+   "id": "mad-hatter",
+   "name": "Mad Hatter",
+   "category": "Eccentrics",
+   "voice": "eccentric",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "teapots",
+    "stacks of hats",
+    "odd riddles"
+   ],
+   "acts": [
+    "hosting tea at midnight",
+    "sewing impossible hats"
+   ],
+   "motto": "Why is a Pokémon like a writing desk?"
+  },
+  {
+   "id": "puzzle-master",
+   "name": "Puzzle Master",
+   "category": "Eccentrics",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "riddles",
+    "locked boxes",
+    "tricky mazes"
+   ],
+   "acts": [
+    "inventing puzzles",
+    "hiding keys"
+   ],
+   "motto": "Solve me, if you can."
+  },
+  {
+   "id": "mime",
+   "name": "Mime",
+   "category": "Eccentrics",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "invisible walls",
+    "white gloves",
+    "silence"
+   ],
+   "acts": [
+    "trapping myself in a box",
+    "acting out stories"
+   ],
+   "motto": "..."
+  },
+  {
+   "id": "drama-queen",
+   "name": "Drama Queen",
+   "category": "Eccentrics",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "gasps",
+    "a flowing scarf",
+    "center stage"
+   ],
+   "acts": [
+    "making dramatic entrances",
+    "fainting at spiders"
+   ],
+   "motto": "You will regret this! Probably!"
+  },
+  {
+   "id": "conspiracy-theorist",
+   "name": "Conspiracy Theorist",
+   "category": "Eccentrics",
+   "voice": "nervous",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "bulletin boards",
+    "red string",
+    "tinfoil hats"
+   ],
+   "acts": [
+    "connecting dots",
+    "watching the skies"
+   ],
+   "motto": "They don't want you to know this."
+  },
+  {
+   "id": "time-traveler",
+   "name": "Time Traveler",
+   "category": "Eccentrics",
+   "voice": "eccentric",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "an odd watch",
+    "future memories",
+    "dusty gadgets"
+   ],
+   "acts": [
+    "checking my watch",
+    "warning strangers"
+   ],
+   "motto": "I've seen how this ends."
+  },
+  {
+   "id": "ghost-hunter",
+   "name": "Ghost Hunter",
+   "category": "Mystics",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "EMF meters",
+    "cold spots",
+    "old houses"
+   ],
+   "acts": [
+    "investigating attics",
+    "recording static"
+   ],
+   "motto": "Did you hear that?"
+  },
+  {
+   "id": "exorcist",
+   "name": "Exorcist",
+   "category": "Mystics",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "holy water",
+    "old rites",
+    "a heavy book"
+   ],
+   "acts": [
+    "chanting at midnight",
+    "sealing restless spirits"
+   ],
+   "motto": "Leave this place. Now."
+  },
+  {
+   "id": "spirit-caller",
+   "name": "Spirit Caller",
+   "category": "Mystics",
+   "voice": "menacing",
+   "ai": "MadScientist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "spirit charms",
+    "a dark robe",
+    "hollow chants"
+   ],
+   "acts": [
+    "calling on old spirits",
+    "poring over black tomes"
+   ],
+   "motto": "The spirits owe me favors."
+  },
+  {
+   "id": "witch",
+   "name": "Witch",
+   "category": "Mystics",
+   "voice": "eccentric",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "bubbling cauldrons",
+    "pointed hats",
+    "black cats"
+   ],
+   "acts": [
+    "brewing odd potions",
+    "casting small curses"
+   ],
+   "motto": "Double, double, toil and trouble."
+  },
+  {
+   "id": "alchemist",
+   "name": "Alchemist",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "MadScientist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "flasks",
+    "gold dust",
+    "strange formulas"
+   ],
+   "acts": [
+    "transmuting metal",
+    "mixing volatile liquids"
+   ],
+   "motto": "Everything can become something else."
+  },
+  {
+   "id": "chemist",
+   "name": "Chemist",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "beakers",
+    "labeled jars",
+    "safety goggles"
+   ],
+   "acts": [
+    "measuring compounds",
+    "warning about fumes"
+   ],
+   "motto": "Careful. Some reactions are volatile."
+  },
+  {
+   "id": "astronomer",
+   "name": "Astronomer",
+   "category": "Scholars",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "telescopes",
+    "star charts",
+    "cold rooftops"
+   ],
+   "acts": [
+    "watching the sky",
+    "naming new stars"
+   ],
+   "motto": "The stars rarely lie."
+  },
+  {
+   "id": "meteorologist",
+   "name": "Meteorologist",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "barometers",
+    "weather maps",
+    "cloud logs"
+   ],
+   "acts": [
+    "forecasting storms",
+    "chasing lightning"
+   ],
+   "motto": "Rain is coming. I'm rarely wrong."
+  },
+  {
+   "id": "geologist",
+   "name": "Geologist",
+   "category": "Scholars",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "rock hammers",
+    "strata",
+    "odd minerals"
+   ],
+   "acts": [
+    "cracking open rocks",
+    "reading cliff faces"
+   ],
+   "motto": "Every stone tells a story."
+  },
+  {
+   "id": "marine-biologist",
+   "name": "Marine Biologist",
+   "category": "Scholars",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "tide pools",
+    "diving gear",
+    "sea journals"
+   ],
+   "acts": [
+    "diving for samples",
+    "logging sea life"
+   ],
+   "motto": "The sea is full of surprises."
+  },
+  {
+   "id": "entomologist",
+   "name": "Entomologist",
+   "category": "Scholars",
+   "voice": "nervous",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "pinned specimens",
+    "magnifying glasses",
+    "glass cases"
+   ],
+   "acts": [
+    "collecting beetles",
+    "sketching wing patterns"
+   ],
+   "motto": "They're lovelier than people say."
+  },
+  {
+   "id": "linguist",
+   "name": "Linguist",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "dead languages",
+    "rune stones",
+    "faded scrolls"
+   ],
+   "acts": [
+    "decoding glyphs",
+    "translating old songs"
+   ],
+   "motto": "Words survive when nothing else does."
+  },
+  {
+   "id": "philosopher",
+   "name": "Philosopher",
+   "category": "Scholars",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "big questions",
+    "long walks",
+    "stale tea"
+   ],
+   "acts": [
+    "debating the meaning of battle",
+    "staring at clouds"
+   ],
+   "motto": "Why do we fight? Why do we win?"
+  },
+  {
+   "id": "monk-of-the-mountain",
+   "name": "Monk of the Mountain",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "silent peaks",
+    "a wooden staff",
+    "crisp air"
+   ],
+   "acts": [
+    "climbing for answers",
+    "meditating in snow"
+   ],
+   "motto": "The mountain taught me patience."
+  },
+  {
+   "id": "gym-trainer",
+   "name": "Gym Trainer",
+   "category": "Specialists",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "my leader",
+    "gym badges",
+    "sweat towels"
+   ],
+   "acts": [
+    "keeping the gym spotless",
+    "covering for the boss"
+   ],
+   "motto": "Beat me and you might meet the leader."
+  },
+  {
+   "id": "gym-guide",
+   "name": "Gym Guide",
+   "category": "Specialists",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "a clipboard",
+    "helpful signs",
+    "sticky notes"
+   ],
+   "acts": [
+    "pointing the way",
+    "warming up challengers"
+   ],
+   "motto": "The leader's tough. Take notes!"
+  },
+  {
+   "id": "fire-specialist",
+   "name": "Fire Specialist",
+   "category": "Specialists",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "burning embers",
+    "hot summers",
+    "red-hot spice"
+   ],
+   "acts": [
+    "stoking forges",
+    "roasting everything"
+   ],
+   "motto": "Feel the heat!"
+  },
+  {
+   "id": "water-specialist",
+   "name": "Water Specialist",
+   "category": "Specialists",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "tidal charts",
+    "cool rain",
+    "flowing rivers"
+   ],
+   "acts": [
+    "fishing off docks",
+    "studying tides"
+   ],
+   "motto": "Go with the flow."
+  },
+  {
+   "id": "grass-specialist",
+   "name": "Grass Specialist",
+   "category": "Specialists",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "bright leaves",
+    "deep roots",
+    "soft moss"
+   ],
+   "acts": [
+    "tending groves",
+    "reading growth rings"
+   ],
+   "motto": "Roots run deeper than you think."
+  },
+  {
+   "id": "electric-specialist",
+   "name": "Electric Specialist",
+   "category": "Specialists",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "crackling coils",
+    "power lines",
+    "static"
+   ],
+   "acts": [
+    "rewiring circuits",
+    "chasing storms"
+   ],
+   "motto": "Shock and awe!"
+  },
+  {
+   "id": "psychic-specialist",
+   "name": "Psychic Specialist",
+   "category": "Specialists",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "silent focus",
+    "mind games",
+    "spoons"
+   ],
+   "acts": [
+    "bending silverware",
+    "reading thoughts"
+   ],
+   "motto": "I know your next move."
+  },
+  {
+   "id": "ice-specialist",
+   "name": "Ice Specialist",
+   "category": "Specialists",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "frost",
+    "glittering ice",
+    "cold winds"
+   ],
+   "acts": [
+    "carving sculptures",
+    "skating at dawn"
+   ],
+   "motto": "Stay cool. Or freeze."
+  },
+  {
+   "id": "rock-specialist",
+   "name": "Rock Specialist",
+   "category": "Specialists",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "boulders",
+    "old fossils",
+    "quarries"
+   ],
+   "acts": [
+    "cracking stones",
+    "naming strata"
+   ],
+   "motto": "I'm as steady as rock."
+  },
+  {
+   "id": "ground-specialist",
+   "name": "Ground Specialist",
+   "category": "Specialists",
+   "voice": "gruff",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "sandy dunes",
+    "deep burrows",
+    "heavy earth"
+   ],
+   "acts": [
+    "digging pits",
+    "reading the soil"
+   ],
+   "motto": "Plant your feet or fall."
+  },
+  {
+   "id": "flying-specialist",
+   "name": "Flying Specialist",
+   "category": "Specialists",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "open skies",
+    "tailwinds",
+    "feathers"
+   ],
+   "acts": [
+    "watching clouds",
+    "flying kites"
+   ],
+   "motto": "Look up. We're in the clouds!"
+  },
+  {
+   "id": "poison-specialist",
+   "name": "Poison Specialist",
+   "category": "Specialists",
+   "voice": "menacing",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "vials",
+    "toxic mists",
+    "violet smoke"
+   ],
+   "acts": [
+    "brewing toxins",
+    "sniffing bubbling vats"
+   ],
+   "motto": "A little poison goes a long way."
+  },
+  {
+   "id": "bug-specialist",
+   "name": "Bug Specialist",
+   "category": "Specialists",
+   "voice": "eccentric",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "cocoons",
+    "silk",
+    "buzzing swarms"
+   ],
+   "acts": [
+    "breeding rare beetles",
+    "studying molts"
+   ],
+   "motto": "Never underestimate a bug."
+  },
+  {
+   "id": "ghost-specialist",
+   "name": "Ghost Specialist",
+   "category": "Specialists",
+   "voice": "menacing",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "midnight mists",
+    "empty rooms",
+    "pale lanterns"
+   ],
+   "acts": [
+    "haunting hallways",
+    "whispering at night"
+   ],
+   "motto": "Boo. Did I scare you?"
+  },
+  {
+   "id": "dragon-specialist",
+   "name": "Dragon Specialist",
+   "category": "Specialists",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "ancient scales",
+    "legends",
+    "heavy roars"
+   ],
+   "acts": [
+    "summoning proud beasts",
+    "studying old myths"
+   ],
+   "motto": "Dragons answer to no one."
+  },
+  {
+   "id": "dark-specialist",
+   "name": "Dark Specialist",
+   "category": "Specialists",
+   "voice": "menacing",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "midnight",
+    "shadows",
+    "moonless skies"
+   ],
+   "acts": [
+    "moving in shadows",
+    "stealing light"
+   ],
+   "motto": "Even darkness has rules."
+  },
+  {
+   "id": "steel-specialist",
+   "name": "Steel Specialist",
+   "category": "Specialists",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "polished plates",
+    "gears",
+    "clanging forges"
+   ],
+   "acts": [
+    "testing armor",
+    "polishing steel"
+   ],
+   "motto": "Hard work makes hard steel."
+  },
+  {
+   "id": "fairy-specialist",
+   "name": "Fairy Specialist",
+   "category": "Specialists",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "petal showers",
+    "glitter",
+    "moonlight"
+   ],
+   "acts": [
+    "dancing in rings",
+    "sewing tiny hats"
+   ],
+   "motto": "Believe in magic. It helps."
+  },
+  {
+   "id": "fighting-specialist",
+   "name": "Fighting Specialist",
+   "category": "Specialists",
+   "voice": "gruff",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "sweat",
+    "dojo mats",
+    "sore knuckles"
+   ],
+   "acts": [
+    "training at dawn",
+    "clapping fists"
+   ],
+   "motto": "Muscles don't lie."
+  },
+  {
+   "id": "normal-specialist",
+   "name": "Normal Specialist",
+   "category": "Specialists",
+   "voice": "cheerful",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "everyday life",
+    "simple tools",
+    "familiar faces"
+   ],
+   "acts": [
+    "doing my daily rounds",
+    "keeping it simple"
+   ],
+   "motto": "Don't underestimate the ordinary."
+  },
+  {
+   "id": "elite-candidate",
+   "name": "Elite Candidate",
+   "category": "Elite-minded",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my record",
+    "a champion's cape",
+    "the Hall"
+   ],
+   "acts": [
+    "training twice a day",
+    "studying champions"
+   ],
+   "motto": "The Hall of Fame is mine."
+  },
+  {
+   "id": "champion-s-student",
+   "name": "Champion's Student",
+   "category": "Elite-minded",
+   "voice": "nervous",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my mentor",
+    "rigorous drills",
+    "pressure"
+   ],
+   "acts": [
+    "carrying the champion's bags",
+    "training in secret"
+   ],
+   "motto": "I won't let my mentor down."
+  },
+  {
+   "id": "title-contender",
+   "name": "Title Contender",
+   "category": "Elite-minded",
+   "voice": "boastful",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my last chance",
+    "old rivalries",
+    "glory"
+   ],
+   "acts": [
+    "chasing the crown",
+    "training past midnight"
+   ],
+   "motto": "One more win and it's mine."
+  },
+  {
+   "id": "retired-champion",
+   "name": "Retired Champion",
+   "category": "Elite-minded",
+   "voice": "gruff",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "old trophies",
+    "aching joints",
+    "fond memories"
+   ],
+   "acts": [
+    "telling old stories",
+    "sipping tea on the porch"
+   ],
+   "motto": "I was something once, you know."
+  },
+  {
+   "id": "hall-guard",
+   "name": "Hall Guard",
+   "category": "Elite-minded",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "polished marble",
+    "the sacred hall",
+    "stern posture"
+   ],
+   "acts": [
+    "standing silent at the gate",
+    "watching the doors"
+   ],
+   "motto": "None shall pass unready."
+  },
+  {
+   "id": "league-official",
+   "name": "League Official",
+   "category": "Elite-minded",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "rule books",
+    "clipboards",
+    "whistles"
+   ],
+   "acts": [
+    "enforcing rules",
+    "refereeing duels"
+   ],
+   "motto": "Rules are rules."
+  },
+  {
+   "id": "battle-judge",
+   "name": "Battle Judge",
+   "category": "Elite-minded",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "score cards",
+    "a whistle",
+    "fair play"
+   ],
+   "acts": [
+    "scoring battles",
+    "declaring winners"
+   ],
+   "motto": "I judge fairly. Always."
+  },
+  {
+   "id": "tower-tycoon",
+   "name": "Tower Tycoon",
+   "category": "Elite-minded",
+   "voice": "boastful",
+   "ai": "Gambler",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "a tall tower",
+    "streak counts",
+    "a flashy suit"
+   ],
+   "acts": [
+    "extending win streaks",
+    "smiling for cameras"
+   ],
+   "motto": "Every floor is a new test."
+  },
+  {
+   "id": "frontier-brain",
+   "name": "Frontier Brain",
+   "category": "Elite-minded",
+   "voice": "formal",
+   "ai": "MadScientist",
+   "tierMin": 4,
+   "tierMax": 4,
+   "things": [
+    "a custom arena",
+    "odd rules",
+    "rare setups"
+   ],
+   "acts": [
+    "inventing new formats",
+    "punishing predictability"
+   ],
+   "motto": "Predictable? Not here."
+  },
+  {
+   "id": "subway-conductor",
+   "name": "Subway Conductor",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "train schedules",
+    "whistles",
+    "multi-battle tickets"
+   ],
+   "acts": [
+    "running trains on time",
+    "announcing stops"
+   ],
+   "motto": "All aboard. Battle in progress."
+  },
+  {
+   "id": "arcade-regular",
+   "name": "Arcade Regular",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "high scores",
+    "tokens",
+    "flashing lights"
+   ],
+   "acts": [
+    "feeding coins to machines",
+    "chasing a record"
+   ],
+   "motto": "One more round, then I quit."
+  },
+  {
+   "id": "fashion-designer",
+   "name": "Fashion Designer",
+   "category": "Crafts",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "new collections",
+    "silk",
+    "fashion week"
+   ],
+   "acts": [
+    "sketching dresses",
+    "styling Pokémon"
+   ],
+   "motto": "Style first. Strategy second."
+  },
+  {
+   "id": "hairdresser",
+   "name": "Hairdresser",
+   "category": "Crafts",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "sharp scissors",
+    "hot tools",
+    "fresh styles"
+   ],
+   "acts": [
+    "trimming ends",
+    "trading gossip"
+   ],
+   "motto": "You look great. Almost as good as me."
+  },
+  {
+   "id": "florist",
+   "name": "Florist",
+   "category": "Crafts",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "fresh cuttings",
+    "wrapping ribbon",
+    "soft petals"
+   ],
+   "acts": [
+    "arranging bouquets",
+    "watering buckets"
+   ],
+   "motto": "Say it with flowers."
+  },
+  {
+   "id": "toy-maker",
+   "name": "Toy Maker",
+   "category": "Crafts",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "wooden blocks",
+    "tiny wheels",
+    "paint pots"
+   ],
+   "acts": [
+    "carving small toys",
+    "winding springs"
+   ],
+   "motto": "Playtime is serious business."
+  },
+  {
+   "id": "clockmaker",
+   "name": "Clockmaker",
+   "category": "Crafts",
+   "voice": "formal",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "tiny gears",
+    "springs",
+    "ticking silence"
+   ],
+   "acts": [
+    "assembling movements",
+    "winding tower clocks"
+   ],
+   "motto": "Time is precise. So am I."
+  },
+  {
+   "id": "cartographer",
+   "name": "Cartographer",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "detailed maps",
+    "inked coasts",
+    "a steady compass"
+   ],
+   "acts": [
+    "surveying unknown ground",
+    "coloring borders"
+   ],
+   "motto": "Know the terrain. Own the battle."
+  },
+  {
+   "id": "bard",
+   "name": "Bard",
+   "category": "Performers",
+   "voice": "poetic",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "old ballads",
+    "a lute",
+    "tavern fires"
+   ],
+   "acts": [
+    "composing epics",
+    "singing in markets"
+   ],
+   "motto": "I'll sing your defeat. Or your triumph."
+  },
+  {
+   "id": "storyteller",
+   "name": "Storyteller",
+   "category": "Performers",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "campfire tales",
+    "wide-eyed children",
+    "dusty books"
+   ],
+   "acts": [
+    "telling old legends",
+    "whispering endings"
+   ],
+   "motto": "Every battle is a story. Let's see yours."
+  },
+  {
+   "id": "puppeteer",
+   "name": "Puppeteer",
+   "category": "Performers",
+   "voice": "eccentric",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "wooden puppets",
+    "hidden strings",
+    "painted faces"
+   ],
+   "acts": [
+    "making dolls dance",
+    "pulling every string"
+   ],
+   "motto": "I decide who dances."
+  },
+  {
+   "id": "ringmaster",
+   "name": "Ringmaster",
+   "category": "Performers",
+   "voice": "boastful",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "a top hat",
+    "the big top",
+    "roaring crowds"
+   ],
+   "acts": [
+    "calling the acts",
+    "cracking my whip"
+   ],
+   "motto": "Ladies and gentlemen, the main event!"
+  },
+  {
+   "id": "street-performer",
+   "name": "Street Performer",
+   "category": "Performers",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a hat on the pavement",
+    "small coins",
+    "passersby"
+   ],
+   "acts": [
+    "juggling flaming torches",
+    "singing off-key"
+   ],
+   "motto": "Tip generously. I'll battle for tips."
+  },
+  {
+   "id": "poke-mon-breeder",
+   "name": "Pokémon Breeder",
+   "category": "Rural",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "warm eggs",
+    "soft nests",
+    "tiny clothes"
+   ],
+   "acts": [
+    "hatching eggs",
+    "checking IVs"
+   ],
+   "motto": "They grow up so fast."
+  },
+  {
+   "id": "poke-mon-ranger",
+   "name": "Pokémon Ranger",
+   "category": "Rural",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "capture stylers",
+    "patrol routes",
+    "wild friends"
+   ],
+   "acts": [
+    "calming wild Pokémon",
+    "patrolling the region"
+   ],
+   "motto": "I protect Pokémon. And people."
+  },
+  {
+   "id": "daycare-owner",
+   "name": "Daycare Owner",
+   "category": "Rural",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "a green yard",
+    "fresh eggs",
+    "soft blankets"
+   ],
+   "acts": [
+    "watching over Pokémon",
+    "cleaning the pens"
+   ],
+   "motto": "Don't worry. I'll watch them."
+  },
+  {
+   "id": "poke-mon-collector",
+   "name": "Pokémon Collector",
+   "category": "Scholars",
+   "voice": "eccentric",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "rare finds",
+    "pristine cards",
+    "a glittering display"
+   ],
+   "acts": [
+    "filing species",
+    "hunting shinies"
+   ],
+   "motto": "I'll complete the set. Eventually."
+  },
+  {
+   "id": "fossil-maniac",
+   "name": "Fossil Maniac",
+   "category": "Scholars",
+   "voice": "eccentric",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "fossils",
+    "dig sites",
+    "scraping brushes"
+   ],
+   "acts": [
+    "digging in dust",
+    "naming old bones"
+   ],
+   "motto": "Old bones, new friends."
+  },
+  {
+   "id": "ruin-maniac",
+   "name": "Ruin Maniac",
+   "category": "Scholars",
+   "voice": "eccentric",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "crumbling arches",
+    "cryptic runes",
+    "moss"
+   ],
+   "acts": [
+    "exploring old temples",
+    "photographing stones"
+   ],
+   "motto": "Ruins have the best stories."
+  },
+  {
+   "id": "cave-maniac",
+   "name": "Cave Maniac",
+   "category": "Scholars",
+   "voice": "eccentric",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "dark tunnels",
+    "stalactites",
+    "echoes"
+   ],
+   "acts": [
+    "exploring unknown caves",
+    "sleeping in stone"
+   ],
+   "motto": "The deeper, the better."
+  },
+  {
+   "id": "poke-mon-fan",
+   "name": "Pokémon Fan",
+   "category": "Youth",
+   "voice": "cheerful",
+   "ai": "Gambler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "fan clubs",
+    "posters",
+    "collectible badges"
+   ],
+   "acts": [
+    "trading fan art",
+    "memorizing dex entries"
+   ],
+   "motto": "My favorite Pokémon is the best!"
+  },
+  {
+   "id": "rival-fan",
+   "name": "Rival Fan",
+   "category": "Youth",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "signed posters",
+    "my idol",
+    "fan letters"
+   ],
+   "acts": [
+    "following rival news",
+    "copying their style"
+   ],
+   "motto": "I'm training to be just like them!"
+  },
+  {
+   "id": "policy-maker",
+   "name": "Policy Maker",
+   "category": "City",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "policies",
+    "government funds",
+    "thick paperwork"
+   ],
+   "acts": [
+    "drafting regulations",
+    "hosting committees"
+   ],
+   "motto": "Order must prevail."
+  },
+  {
+   "id": "tournament-organizer",
+   "name": "Tournament Organizer",
+   "category": "City",
+   "voice": "boastful",
+   "ai": "Strategist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "tournament brackets",
+    "banners",
+    "sponsors"
+   ],
+   "acts": [
+    "managing the bracket",
+    "announcing winners"
+   ],
+   "motto": "The match must go on!"
+  },
+  {
+   "id": "matchmaker",
+   "name": "Matchmaker",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "romantic dinners",
+    "lucky charms",
+    "old gossip"
+   ],
+   "acts": [
+    "setting up friends",
+    "writing love letters"
+   ],
+   "motto": "Pairs are important, you know."
+  },
+  {
+   "id": "postman",
+   "name": "Postman",
+   "category": "City",
+   "voice": "cheerful",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "stamps",
+    "heavy sacks",
+    "a rusty bike"
+   ],
+   "acts": [
+    "delivering mail",
+    "petting dogs"
+   ],
+   "motto": "Special delivery. Battle included."
+  },
+  {
+   "id": "janitor",
+   "name": "Janitor",
+   "category": "City",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "mop buckets",
+    "keys",
+    "empty halls"
+   ],
+   "acts": [
+    "cleaning after hours",
+    "finding odd things"
+   ],
+   "motto": "Mind the wet floor."
+  },
+  {
+   "id": "night-shift-worker",
+   "name": "Night Shift Worker",
+   "category": "City",
+   "voice": "nervous",
+   "ai": "Wall",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "an energy drink",
+    "neon signs",
+    "quiet streets"
+   ],
+   "acts": [
+    "working until dawn",
+    "napping on lunch"
+   ],
+   "motto": "Please. It's three in the morning."
+  },
+  {
+   "id": "delinquent",
+   "name": "Delinquent",
+   "category": "Youth",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 2,
+   "things": [
+    "a torn jacket",
+    "loud music",
+    "skipped classes"
+   ],
+   "acts": [
+    "ditching school",
+    "hanging out at night"
+   ],
+   "motto": "Got a problem, kid?"
+  },
+  {
+   "id": "class-president",
+   "name": "Class President",
+   "category": "Youth",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "meeting minutes",
+    "hall passes",
+    "my armband"
+   ],
+   "acts": [
+    "organizing events",
+    "taking attendance"
+   ],
+   "motto": "I'll keep this orderly."
+  },
+  {
+   "id": "club-captain",
+   "name": "Club Captain",
+   "category": "Youth",
+   "voice": "boastful",
+   "ai": "Brawler",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "team jerseys",
+    "trophies",
+    "morning drills"
+   ],
+   "acts": [
+    "rallying my club",
+    "leading warm-ups"
+   ],
+   "motto": "Follow me, team!"
+  },
+  {
+   "id": "tutor",
+   "name": "Tutor",
+   "category": "Scholars",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "chalkboards",
+    "practice tests",
+    "tidy notes"
+   ],
+   "acts": [
+    "reviewing exam answers",
+    "helping with homework"
+   ],
+   "motto": "Pay attention. This is on the test."
+  },
+  {
+   "id": "hacker",
+   "name": "Hacker",
+   "category": "City",
+   "voice": "nervous",
+   "ai": "MadScientist",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "dual monitors",
+    "coffee cups",
+    "tangled cables"
+   ],
+   "acts": [
+    "breaking passwords",
+    "watching the net"
+   ],
+   "motto": "I have access to everything."
+  },
+  {
+   "id": "spy",
+   "name": "Spy",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "false names",
+    "a hidden camera",
+    "dead drops"
+   ],
+   "acts": [
+    "infiltrating bases",
+    "swapping files"
+   ],
+   "motto": "I'm not here. I'm never here."
+  },
+  {
+   "id": "shadow-agent",
+   "name": "Shadow Agent",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Gambler",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "quiet steps",
+    "a hidden blade",
+    "contracts"
+   ],
+   "acts": [
+    "striking from shadows",
+    "vanishing in crowds"
+   ],
+   "motto": "You won't see it coming."
+  },
+  {
+   "id": "warlord",
+   "name": "Warlord",
+   "category": "Crime",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "a conquered land",
+    "scarred soldiers",
+    "a black banner"
+   ],
+   "acts": [
+    "marching armies",
+    "razing fortresses"
+   ],
+   "motto": "Kneel. Or be broken."
+  },
+  {
+   "id": "mercenary",
+   "name": "Mercenary",
+   "category": "Crime",
+   "voice": "gruff",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "my contract",
+    "my sword",
+    "gold coins"
+   ],
+   "acts": [
+    "fighting for the highest bidder",
+    "switching sides"
+   ],
+   "motto": "Pay me, and I fight for you."
+  },
+  {
+   "id": "guard-captain",
+   "name": "Guard Captain",
+   "category": "Crime",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my squad",
+    "locked gates",
+    "a watchful eye"
+   ],
+   "acts": [
+    "patrolling the walls",
+    "drilling recruits"
+   ],
+   "motto": "You'll go no further."
+  },
+  {
+   "id": "knight",
+   "name": "Knight",
+   "category": "Elite-minded",
+   "voice": "formal",
+   "ai": "Veteran",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my oath",
+    "a silver shield",
+    "ancient banners"
+   ],
+   "acts": [
+    "guarding the keep",
+    "riding at dawn"
+   ],
+   "motto": "I serve with honor."
+  },
+  {
+   "id": "samurai",
+   "name": "Samurai",
+   "category": "Elite-minded",
+   "voice": "formal",
+   "ai": "Strategist",
+   "tierMin": 3,
+   "tierMax": 4,
+   "things": [
+    "my katana",
+    "old traditions",
+    "cherry blossoms"
+   ],
+   "acts": [
+    "polishing my blade",
+    "meditating before duels"
+   ],
+   "motto": "A single strike. A single truth."
+  },
+  {
+   "id": "ninja",
+   "name": "Ninja",
+   "category": "Crime",
+   "voice": "nervous",
+   "ai": "Gambler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "shuriken",
+    "rooftop shadows",
+    "smoke bombs"
+   ],
+   "acts": [
+    "vanishing in smoke",
+    "leaping across roofs"
+   ],
+   "motto": "You never saw me. I was never here."
+  },
+  {
+   "id": "oni-mask-wearer",
+   "name": "Oni Mask Wearer",
+   "category": "Mystics",
+   "voice": "menacing",
+   "ai": "Brawler",
+   "tierMin": 2,
+   "tierMax": 4,
+   "things": [
+    "a horned mask",
+    "festival drums",
+    "red lanterns"
+   ],
+   "acts": [
+    "dancing at festivals",
+    "scaring children"
+   ],
+   "motto": "Fear the mask, not the man."
+  },
+  {
+   "id": "lantern-bearer",
+   "name": "Lantern Bearer",
+   "category": "Mystics",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a paper lantern",
+    "dark paths",
+    "small flames"
+   ],
+   "acts": [
+    "guiding lost travelers",
+    "whispering to moths"
+   ],
+   "motto": "Follow the light. Don't stray."
+  },
+  {
+   "id": "ferryman",
+   "name": "Ferryman",
+   "category": "Sea",
+   "voice": "gruff",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "a flat boat",
+    "gray rivers",
+    "silent passengers"
+   ],
+   "acts": [
+    "poling across the water",
+    "counting coins"
+   ],
+   "motto": "I carry anyone who pays."
+  },
+  {
+   "id": "lighthouse-poet",
+   "name": "Lighthouse Poet",
+   "category": "Sea",
+   "voice": "poetic",
+   "ai": "Wall",
+   "tierMin": 2,
+   "tierMax": 3,
+   "things": [
+    "storm lanterns",
+    "rolling sea",
+    "salt air"
+   ],
+   "acts": [
+    "writing on the cliff",
+    "lighting the lamp"
+   ],
+   "motto": "Even storms must pass."
+  },
+  {
+   "id": "gondolier",
+   "name": "Gondolier",
+   "category": "Sea",
+   "voice": "cheerful",
+   "ai": "Strategist",
+   "tierMin": 1,
+   "tierMax": 3,
+   "things": [
+    "polished oars",
+    "canal bridges",
+    "romantic songs"
+   ],
+   "acts": [
+    "singing as I row",
+    "carrying couples"
+   ],
+   "motto": "Sit back and relax."
+  }
+ ]
+}

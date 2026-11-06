@@ -1,0 +1,855 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/growth_paths.json",
+ "entries": [
+  {
+   "id": "vanguard",
+   "name": "Vanguard",
+   "gate": "any",
+   "earnedBy": "Most switch-ins that absorbed a hit",
+   "bonus": "+5% Defense and Sp. Def on the turn it switches in",
+   "flavor": "It steps in front without thinking about it."
+  },
+  {
+   "id": "striker",
+   "name": "Striker",
+   "gate": "any",
+   "earnedBy": "Most damage dealt across the run",
+   "bonus": "+5% damage on super-effective hits",
+   "flavor": "It saves its best for the right opening."
+  },
+  {
+   "id": "hunter",
+   "name": "Hunter",
+   "gate": "any",
+   "earnedBy": "Most KOs on targets under 50% HP",
+   "bonus": "+5% damage vs. targets below 50% HP",
+   "flavor": "It smells weakness and goes for it."
+  },
+  {
+   "id": "support",
+   "name": "Support",
+   "gate": "any",
+   "earnedBy": "Most status or support moves used",
+   "bonus": "Status moves +5% accuracy",
+   "flavor": "It keeps the team in one piece."
+  },
+  {
+   "id": "anchor",
+   "name": "Anchor",
+   "gate": "any",
+   "earnedBy": "Most turns spent on the field in boss fights",
+   "bonus": "+5% max HP restored by held-item or move healing",
+   "flavor": "It outlasts everyone else."
+  },
+  {
+   "id": "opener",
+   "name": "Opener",
+   "gate": "any",
+   "earnedBy": "Most KOs on the first turn of battle",
+   "bonus": "+5% damage on its first turn out",
+   "flavor": "It never wastes a first move."
+  },
+  {
+   "id": "closer",
+   "name": "Closer",
+   "gate": "any",
+   "earnedBy": "Most KOs as the last Pokémon in the party",
+   "bonus": "+5% damage while it is the last party member",
+   "flavor": "It saves its best for last."
+  },
+  {
+   "id": "scout",
+   "name": "Scout",
+   "gate": "any",
+   "earnedBy": "Most first-strikes against faster-looking foes",
+   "bonus": "+5% accuracy on its first move vs. an unseen foe",
+   "flavor": "It reads an opponent in a glance."
+  },
+  {
+   "id": "sweeper",
+   "name": "Sweeper",
+   "gate": "any",
+   "earnedBy": "Most consecutive KOs in a single battle",
+   "bonus": "+5% damage after scoring a KO this battle",
+   "flavor": "One KO makes the next one easier."
+  },
+  {
+   "id": "wall",
+   "name": "Wall",
+   "gate": "any",
+   "earnedBy": "Most damage absorbed without fainting",
+   "bonus": "+5% Defense while above 50% HP",
+   "flavor": "Hits just bounce off."
+  },
+  {
+   "id": "dodger",
+   "name": "Dodger",
+   "gate": "any",
+   "earnedBy": "Most evasions or misses forced",
+   "bonus": "+3% evasion while above 75% HP",
+   "flavor": "It's never quite where you aimed."
+  },
+  {
+   "id": "medic",
+   "name": "Medic",
+   "gate": "any",
+   "earnedBy": "Most healing given to teammates",
+   "bonus": "Healing moves restore +5% more",
+   "flavor": "It turns every injury into a mild inconvenience."
+  },
+  {
+   "id": "pivot",
+   "name": "Pivot",
+   "gate": "any",
+   "earnedBy": "Most voluntary switches out after dealing damage",
+   "bonus": "After a U-turn-style move, +5% damage on the next switch-in",
+   "flavor": "It never stays in one place."
+  },
+  {
+   "id": "trapper",
+   "name": "Trapper",
+   "gate": "any",
+   "earnedBy": "Most uses of trapping or binding moves",
+   "bonus": "Trapping moves last +1 turn at most once per battle",
+   "flavor": "Once it holds on, it holds on."
+  },
+  {
+   "id": "disruptor",
+   "name": "Disruptor",
+   "gate": "any",
+   "earnedBy": "Most opposing stat drops inflicted",
+   "bonus": "Stat-lowering moves +5% accuracy",
+   "flavor": "It knocks its foes off balance."
+  },
+  {
+   "id": "buffer",
+   "name": "Buffer",
+   "gate": "any",
+   "earnedBy": "Most own stat boosts used",
+   "bonus": "Stat-raising moves also restore 1/32 max HP",
+   "flavor": "It builds itself up before it strikes."
+  },
+  {
+   "id": "gambler",
+   "name": "Gambler",
+   "gate": "any",
+   "earnedBy": "Most uses of low-accuracy, high-reward moves",
+   "bonus": "Moves under 80% accuracy gain +5% accuracy",
+   "flavor": "It likes a long shot."
+  },
+  {
+   "id": "steady",
+   "name": "Steady",
+   "gate": "any",
+   "earnedBy": "Most uses of moves at 100% accuracy",
+   "bonus": "Moves with 100% accuracy deal +3% damage",
+   "flavor": "No flair, just results."
+  },
+  {
+   "id": "last-stand",
+   "name": "Last Stander",
+   "gate": "any",
+   "earnedBy": "Most survivals at 1 HP (Sturdy, Focus Sash, Endure)",
+   "bonus": "+5% damage when below 25% HP",
+   "flavor": "It gets dangerous when cornered."
+  },
+  {
+   "id": "comeback",
+   "name": "Comeback",
+   "gate": "any",
+   "earnedBy": "Most wins from behind (fewer healthy teammates than foe)",
+   "bonus": "+5% damage when party has fewer alive Pokémon than foe",
+   "flavor": "It thrives when outnumbered."
+  },
+  {
+   "id": "duelist",
+   "name": "Duelist",
+   "gate": "any",
+   "earnedBy": "Most 1-vs-1 wins as final Pokémon on both sides",
+   "bonus": "+5% damage in the last 1v1 of a battle",
+   "flavor": "Duels bring out its best."
+  },
+  {
+   "id": "bruiser",
+   "name": "Bruiser",
+   "gate": "any",
+   "earnedBy": "Most damage taken and dealt in the same battle",
+   "bonus": "+3% Attack and +3% Defense while at full HP",
+   "flavor": "It enjoys a fair fight."
+  },
+  {
+   "id": "speedster",
+   "name": "Speedster",
+   "gate": "any",
+   "earnedBy": "Most turns in which it moved first",
+   "bonus": "+3% Speed on the turn after its first KO",
+   "flavor": "It's always gone before you blink."
+  },
+  {
+   "id": "tank-buster",
+   "name": "Tank Buster",
+   "gate": "any",
+   "earnedBy": "Most damage dealt to high-HP foes",
+   "bonus": "+5% damage vs. foes above 75% HP",
+   "flavor": "Big targets are its favorite."
+  },
+  {
+   "id": "glass-cannon",
+   "name": "Glass Cannon",
+   "gate": "any",
+   "earnedBy": "Most KOs while taking little damage",
+   "bonus": "+5% damage while at full HP, −3% Defense",
+   "flavor": "Style over safety."
+  },
+  {
+   "id": "bodyguard",
+   "name": "Bodyguard",
+   "gate": "any",
+   "earnedBy": "Most protective moves used for allies",
+   "bonus": "Protection moves have +5% success chance at most once per battle",
+   "flavor": "It takes the hit for others."
+  },
+  {
+   "id": "pathfinder",
+   "name": "Pathfinder",
+   "gate": "any",
+   "earnedBy": "Most nodes cleared without a Pokémon fainting",
+   "bonus": "+5% XP gain from wild nodes",
+   "flavor": "It always knows where the trail goes."
+  },
+  {
+   "id": "treasure-nose",
+   "name": "Treasure Nose",
+   "gate": "any",
+   "earnedBy": "Most items found in the field",
+   "bonus": "+3% chance of an extra item from field nodes",
+   "flavor": "It finds things."
+  },
+  {
+   "id": "berry-friend",
+   "name": "Berry Friend",
+   "gate": "any",
+   "earnedBy": "Most berries eaten in battle",
+   "bonus": "Berries it holds restore +5% more HP",
+   "flavor": "It never turns down a snack."
+  },
+  {
+   "id": "tidy",
+   "name": "Tidy",
+   "gate": "any",
+   "earnedBy": "Most hazards cleared or avoided",
+   "bonus": "Entry-hazard damage taken −5%",
+   "flavor": "It keeps the field clean."
+  },
+  {
+   "id": "lucky",
+   "name": "Lucky",
+   "gate": "any",
+   "earnedBy": "Most crits landed at 1-in-24 odds or less",
+   "bonus": "Crit chance +1% flat",
+   "flavor": "Odd things happen near it."
+  },
+  {
+   "id": "patient",
+   "name": "Patient",
+   "gate": "any",
+   "earnedBy": "Most turns waiting before attacking",
+   "bonus": "+5% damage when attacking after a non-attacking turn",
+   "flavor": "Good things come to those who wait."
+  },
+  {
+   "id": "fire-forged",
+   "name": "Fire-Forged",
+   "gate": "type:Fire",
+   "earnedBy": "Most Fire-type KOs",
+   "bonus": "+5% damage with Fire moves while burning foe present",
+   "flavor": "It has been through the flames."
+  },
+  {
+   "id": "ember-heart",
+   "name": "Ember Heart",
+   "gate": "type:Fire",
+   "earnedBy": "Most turns at below 50% HP with a Fire move used",
+   "bonus": "+5% Fire damage under 50% HP",
+   "flavor": "It burns brightest when it's hurting."
+  },
+  {
+   "id": "tide-caller",
+   "name": "Tide Caller",
+   "gate": "type:Water",
+   "earnedBy": "Most Water KOs in the rain",
+   "bonus": "+5% Water damage in rain",
+   "flavor": "It carries the weather in its pocket."
+  },
+  {
+   "id": "deep-swimmer",
+   "name": "Deep Swimmer",
+   "gate": "type:Water",
+   "earnedBy": "Most Water-type KOs on Fire/Rock/Ground foes",
+   "bonus": "+5% Water damage vs. Fire/Rock/Ground",
+   "flavor": "It knows the depth of the sea."
+  },
+  {
+   "id": "leaf-keeper",
+   "name": "Leaf Keeper",
+   "gate": "type:Grass",
+   "earnedBy": "Most healing from Grass-type drain moves",
+   "bonus": "Drain moves heal +5% more",
+   "flavor": "It heals by growing."
+  },
+  {
+   "id": "thorn-warden",
+   "name": "Thorn Warden",
+   "gate": "type:Grass",
+   "earnedBy": "Most contact-penalty triggers inflicted",
+   "bonus": "+5% damage to foes that made contact last turn",
+   "flavor": "Touch it and learn."
+  },
+  {
+   "id": "storm-rider",
+   "name": "Storm Rider",
+   "gate": "type:Electric",
+   "earnedBy": "Most Electric KOs under rain or Electric Terrain",
+   "bonus": "+5% Electric damage in rain",
+   "flavor": "It lives for the storm."
+  },
+  {
+   "id": "live-wire",
+   "name": "Live Wire",
+   "gate": "type:Electric",
+   "earnedBy": "Most paralysis inflicted",
+   "bonus": "Paralysis chance +5% on its moves",
+   "flavor": "It makes everyone around it twitchy."
+  },
+  {
+   "id": "frostbound",
+   "name": "Frostbound",
+   "gate": "type:Ice",
+   "earnedBy": "Most Ice KOs in snow or hail",
+   "bonus": "+5% Ice damage in snow",
+   "flavor": "It was made for cold weather."
+  },
+  {
+   "id": "glacial-mind",
+   "name": "Glacial Mind",
+   "gate": "type:Ice",
+   "earnedBy": "Most freeze or snowy-speed-lowering moves landed",
+   "bonus": "Freeze chance +3% on its moves",
+   "flavor": "Calm, cold and precise."
+  },
+  {
+   "id": "iron-fist-path",
+   "name": "Iron Fist",
+   "gate": "type:Fighting",
+   "earnedBy": "Most punches or kicks landed on resisted targets",
+   "bonus": "+5% damage vs. foes that resist its type",
+   "flavor": "It breaks through where others can't."
+  },
+  {
+   "id": "dojo-student",
+   "name": "Dojo Student",
+   "gate": "type:Fighting",
+   "earnedBy": "Most use of the same Fighting move",
+   "bonus": "Its most-used Fighting move gains +3% accuracy",
+   "flavor": "Practice makes it better."
+  },
+  {
+   "id": "venom-touched",
+   "name": "Venom-Touched",
+   "gate": "type:Poison",
+   "earnedBy": "Most poison statuses inflicted",
+   "bonus": "Poison damage on foes +1/32",
+   "flavor": "A little goes a long way."
+  },
+  {
+   "id": "toxic-weaver",
+   "name": "Toxic Weaver",
+   "gate": "type:Poison",
+   "earnedBy": "Most Toxic or Poison Spikes uses",
+   "bonus": "Toxic counter ticks start +1",
+   "flavor": "It plans its poisons carefully."
+  },
+  {
+   "id": "earth-shaper",
+   "name": "Earth Shaper",
+   "gate": "type:Ground",
+   "earnedBy": "Most Ground KOs on Electric/Steel foes",
+   "bonus": "+5% Ground damage vs. Electric/Steel",
+   "flavor": "It knows where the weak ground is."
+  },
+  {
+   "id": "burrower",
+   "name": "Burrower",
+   "gate": "type:Ground",
+   "earnedBy": "Most turns spent underground",
+   "bonus": "Two-turn moves have −5% to charge chance of being interrupted",
+   "flavor": "It prefers to stay below."
+  },
+  {
+   "id": "sky-warden",
+   "name": "Sky Warden",
+   "gate": "type:Flying",
+   "earnedBy": "Most Flying KOs on Fighting/Bug/Grass foes",
+   "bonus": "+5% Flying damage vs. Fighting/Bug/Grass",
+   "flavor": "It watches from overhead."
+  },
+  {
+   "id": "windrunner",
+   "name": "Windrunner",
+   "gate": "type:Flying",
+   "earnedBy": "Most turns outspeeding foes in gale or tailwind",
+   "bonus": "+3% Speed in gale/tailwind",
+   "flavor": "The wind is on its side."
+  },
+  {
+   "id": "mind-reader",
+   "name": "Mind Reader",
+   "gate": "type:Psychic",
+   "earnedBy": "Most Psychic KOs on Fighting/Poison foes",
+   "bonus": "+5% Psychic damage vs. Fighting/Poison",
+   "flavor": "It knows what comes next."
+  },
+  {
+   "id": "dream-weaver",
+   "name": "Dream Weaver",
+   "gate": "type:Psychic",
+   "earnedBy": "Most sleep or confusion inflicted",
+   "bonus": "Confusion and sleep chance +3%",
+   "flavor": "It talks to the half-asleep."
+  },
+  {
+   "id": "hive-mind",
+   "name": "Hive Mind",
+   "gate": "type:Bug",
+   "earnedBy": "Most Bug-type KOs on Grass/Psychic/Dark foes",
+   "bonus": "+5% Bug damage vs. Grass/Psychic/Dark",
+   "flavor": "It moves like part of something bigger."
+  },
+  {
+   "id": "silk-spinner",
+   "name": "Silk Spinner",
+   "gate": "type:Bug",
+   "earnedBy": "Most String Shot-style moves used",
+   "bonus": "Speed-lowering moves +5% accuracy",
+   "flavor": "It ties up the field."
+  },
+  {
+   "id": "stone-heart",
+   "name": "Stone Heart",
+   "gate": "type:Rock",
+   "earnedBy": "Most Rock KOs on Fire/Flying/Bug foes",
+   "bonus": "+5% Rock damage vs. Fire/Flying/Bug",
+   "flavor": "Immovable and calm."
+  },
+  {
+   "id": "fossil-memory",
+   "name": "Fossil Memory",
+   "gate": "type:Rock",
+   "earnedBy": "Most survival at 1 HP",
+   "bonus": "Sandstorm chip on it −5%",
+   "flavor": "Old things know how to endure."
+  },
+  {
+   "id": "night-walker",
+   "name": "Night Walker",
+   "gate": "type:Ghost",
+   "earnedBy": "Most Ghost KOs in night nodes",
+   "bonus": "+5% Ghost damage in night battles",
+   "flavor": "It prefers the dark."
+  },
+  {
+   "id": "haunt-keeper",
+   "name": "Haunt Keeper",
+   "gate": "type:Ghost",
+   "earnedBy": "Most curses or haunting moves used",
+   "bonus": "Curse and haunting effects +5% accuracy",
+   "flavor": "It sticks to its targets."
+  },
+  {
+   "id": "dragon-blood",
+   "name": "Dragon Blood",
+   "gate": "type:Dragon",
+   "earnedBy": "Most Dragon KOs on boss trainers",
+   "bonus": "+5% Dragon damage vs. boss trainers' Pokémon",
+   "flavor": "Ancient confidence runs in it."
+  },
+  {
+   "id": "scale-guard",
+   "name": "Scale Guard",
+   "gate": "type:Dragon",
+   "earnedBy": "Most hits resisted by Dragon-type scales",
+   "bonus": "Takes −3% damage from Dragon/Ice/Fairy moves",
+   "flavor": "Its scales turn aside what others take."
+  },
+  {
+   "id": "shadow-hand",
+   "name": "Shadow Hand",
+   "gate": "type:Dark",
+   "earnedBy": "Most Dark KOs on Psychic/Ghost foes",
+   "bonus": "+5% Dark damage vs. Psychic/Ghost",
+   "flavor": "It never stands in the light if it can help it."
+  },
+  {
+   "id": "trickster",
+   "name": "Trickster",
+   "gate": "type:Dark",
+   "earnedBy": "Most use of Taunt, Torment or Fake Out",
+   "bonus": "Fake Out/Taunt +5% accuracy",
+   "flavor": "It plays dirty, and likes it."
+  },
+  {
+   "id": "iron-will",
+   "name": "Iron Will",
+   "gate": "type:Steel",
+   "earnedBy": "Most hits resisted by Steel typing",
+   "bonus": "Takes −3% damage from resisted types",
+   "flavor": "Hard as its name suggests."
+  },
+  {
+   "id": "forge-born",
+   "name": "Forge-Born",
+   "gate": "type:Steel",
+   "earnedBy": "Most Steel KOs on Ice/Rock/Fairy foes",
+   "bonus": "+5% Steel damage vs. Ice/Rock/Fairy",
+   "flavor": "Tempered under pressure."
+  },
+  {
+   "id": "fairy-charm",
+   "name": "Fairy Charm",
+   "gate": "type:Fairy",
+   "earnedBy": "Most Fairy KOs on Dragon/Dark/Fighting foes",
+   "bonus": "+5% Fairy damage vs. Dragon/Dark/Fighting",
+   "flavor": "It wins hearts and then fights."
+  },
+  {
+   "id": "moonlit",
+   "name": "Moonlit",
+   "gate": "type:Fairy",
+   "earnedBy": "Most Fairy moves used at night",
+   "bonus": "+5% Fairy damage in night battles",
+   "flavor": "It's brightest after dark."
+  },
+  {
+   "id": "everyman",
+   "name": "Everyman",
+   "gate": "type:Normal",
+   "earnedBy": "Most KOs with plain Normal-type attacks",
+   "bonus": "+5% Normal damage vs. foes without resistance",
+   "flavor": "Anything can be a weapon."
+  },
+  {
+   "id": "steady-hand",
+   "name": "Steady Hand",
+   "gate": "type:Normal",
+   "earnedBy": "Most turns surviving at above 50% HP",
+   "bonus": "Normal moves +3% accuracy",
+   "flavor": "Always dependable."
+  },
+  {
+   "id": "rain-dancer",
+   "name": "Rain Dancer",
+   "gate": "role:weather",
+   "earnedBy": "Most weather set per run",
+   "bonus": "Weather it sets lasts +1 turn at most once per battle",
+   "flavor": "It brings the sky with it."
+  },
+  {
+   "id": "terrain-master",
+   "name": "Terrain Master",
+   "gate": "role:terrain",
+   "earnedBy": "Most terrain set per run",
+   "bonus": "Terrain lasts +1 turn at most once per battle",
+   "flavor": "It shapes the battlefield."
+  },
+  {
+   "id": "trick-roomer",
+   "name": "Trick Roomer",
+   "gate": "role:room",
+   "earnedBy": "Most Trick Room or Room-style moves used",
+   "bonus": "Room moves last +1 turn at most once per battle",
+   "flavor": "It plays with the order of things."
+  },
+  {
+   "id": "hazard-setter",
+   "name": "Hazard Setter",
+   "gate": "role:hazards",
+   "earnedBy": "Most hazards set",
+   "bonus": "Hazards set deal +1/32 max HP extra",
+   "flavor": "It decorates the field with unfriendly things."
+  },
+  {
+   "id": "cleaner",
+   "name": "Cleaner",
+   "gate": "role:cleaning",
+   "earnedBy": "Most hazards or screens removed",
+   "bonus": "Removal moves also restore 1/16 max HP",
+   "flavor": "It tidies up and feels good about it."
+  },
+  {
+   "id": "screen-keeper",
+   "name": "Screen Keeper",
+   "gate": "role:screens",
+   "earnedBy": "Most Reflect/Light Screen uses",
+   "bonus": "Screens last +1 turn at most once per battle",
+   "flavor": "It's a shield maker."
+  },
+  {
+   "id": "scarfer",
+   "name": "Scarfer",
+   "gate": "role:speed",
+   "earnedBy": "Most KOs while outspeeding with a Choice item",
+   "bonus": "+3% Speed after a KO",
+   "flavor": "It always arrives first."
+  },
+  {
+   "id": "lead-out",
+   "name": "Lead-Out",
+   "gate": "role:lead",
+   "earnedBy": "Most battles started as the lead",
+   "bonus": "+5% damage in the first two turns of a battle",
+   "flavor": "It makes entrances count."
+  },
+  {
+   "id": "trainer-pet",
+   "name": "Trainer's Pet",
+   "gate": "role:bond",
+   "earnedBy": "Highest bond score on the team",
+   "bonus": "Bond bonus (§2) +2 on top of its own",
+   "flavor": "It wants nothing more than to be with you."
+  },
+  {
+   "id": "rival-breaker",
+   "name": "Rival Breaker",
+   "gate": "role:rival",
+   "earnedBy": "Most KOs on rival's Pokémon",
+   "bonus": "+5% damage vs. rival Pokémon",
+   "flavor": "It has history with them."
+  },
+  {
+   "id": "gym-slayer",
+   "name": "Gym Slayer",
+   "gate": "role:gym",
+   "earnedBy": "Most KOs in Gym battles",
+   "bonus": "+5% damage vs. Gym Leader Pokémon",
+   "flavor": "Gym leaders dread to see it."
+  },
+  {
+   "id": "elite-slayer",
+   "name": "Elite Slayer",
+   "gate": "role:elite",
+   "earnedBy": "Most KOs in Elite Four battles",
+   "bonus": "+5% damage vs. Elite Four Pokémon",
+   "flavor": "It performs when the stakes are highest."
+  },
+  {
+   "id": "champion-slayer",
+   "name": "Champion Slayer",
+   "gate": "role:champion",
+   "earnedBy": "Most KOs on Champion's team",
+   "bonus": "+5% damage vs. Champion Pokémon",
+   "flavor": "It loves the biggest stage."
+  },
+  {
+   "id": "legend-hunter",
+   "name": "Legend Hunter",
+   "gate": "role:legend",
+   "earnedBy": "Most damage dealt to Legendary encounters",
+   "bonus": "+5% damage vs. Legendary Pokémon",
+   "flavor": "It dares what others won't."
+  },
+  {
+   "id": "shiny-glint",
+   "name": "Shiny Glint",
+   "gate": "role:shiny",
+   "earnedBy": "Shiny Pokémon with 10+ battles",
+   "bonus": "+1% crit chance",
+   "flavor": "It just has a certain spark."
+  },
+  {
+   "id": "elder",
+   "name": "Elder",
+   "gate": "role:elder",
+   "earnedBy": "Longest-surviving Pokémon in the run",
+   "bonus": "+3% XP gain for others on the team",
+   "flavor": "It remembers how things were done."
+  },
+  {
+   "id": "prodigy",
+   "name": "Prodigy",
+   "gate": "role:young",
+   "earnedBy": "Fastest to reach level 30 on its team",
+   "bonus": "+3% XP gain for itself",
+   "flavor": "It learns faster than it should."
+  },
+  {
+   "id": "late-bloomer",
+   "name": "Late Bloomer",
+   "gate": "role:slow",
+   "earnedBy": "Latest evolution on the team",
+   "bonus": "Stat gain at evolution +2 total",
+   "flavor": "Worth the wait."
+  },
+  {
+   "id": "free-spirit",
+   "name": "Free Spirit",
+   "gate": "role:wander",
+   "earnedBy": "Most nodes where it wandered off",
+   "bonus": "+3% encounter rate of rare wild Pokémon",
+   "flavor": "It follows its nose."
+  },
+  {
+   "id": "night-owl-path",
+   "name": "Night Owl",
+   "gate": "role:night",
+   "earnedBy": "Most battle wins at night",
+   "bonus": "+5% damage in night battles",
+   "flavor": "It's wide awake after dark."
+  },
+  {
+   "id": "sunbather",
+   "name": "Sunbather",
+   "gate": "role:day",
+   "earnedBy": "Most battle wins in daytime",
+   "bonus": "+5% damage in daytime battles",
+   "flavor": "It loves a bright sky."
+  },
+  {
+   "id": "storm-chaser",
+   "name": "Storm Chaser",
+   "gate": "role:weather-chase",
+   "earnedBy": "Most battles fought under changing weather",
+   "bonus": "+3% Speed in rain/snow",
+   "flavor": "It never minds bad weather."
+  },
+  {
+   "id": "shield-sibling",
+   "name": "Shield Sibling",
+   "gate": "role:pair",
+   "earnedBy": "Most cooperative KOs with a bonded teammate",
+   "bonus": "+3% damage when its best friend is alive",
+   "flavor": "It fights better with company."
+  },
+  {
+   "id": "rival-mirror",
+   "name": "Rival Mirror",
+   "gate": "role:mirror",
+   "earnedBy": "Most battles vs. same-type opponents",
+   "bonus": "+3% damage vs. same-type opponents",
+   "flavor": "It sees itself in its foes."
+  },
+  {
+   "id": "loner",
+   "name": "Loner",
+   "gate": "role:solo",
+   "earnedBy": "Most KOs while team has no other fighter alive",
+   "bonus": "+5% damage when last alive",
+   "flavor": "It works best alone."
+  },
+  {
+   "id": "cheerleader",
+   "name": "Cheerleader",
+   "gate": "role:morale",
+   "earnedBy": "Most morale boosts given",
+   "bonus": "Team morale gain +1 once per battle",
+   "flavor": "It lifts everyone's spirits."
+  },
+  {
+   "id": "grudge-keeper",
+   "name": "Grudge Keeper",
+   "gate": "role:grudge",
+   "earnedBy": "Most KOs on a foe that previously KO'd it",
+   "bonus": "+5% damage vs. foes that previously KO'd it",
+   "flavor": "It doesn't forget."
+  },
+  {
+   "id": "fast-learner",
+   "name": "Fast Learner",
+   "gate": "role:mastery",
+   "earnedBy": "Most move masteries on the team",
+   "bonus": "Move mastery uses needed −5% (rounded up)",
+   "flavor": "It practices at every opportunity."
+  },
+  {
+   "id": "move-collector",
+   "name": "Move Collector",
+   "gate": "role:tutor",
+   "earnedBy": "Most move tutor / TM moves learned",
+   "bonus": "+1 free move slot preview in rest nodes",
+   "flavor": "It knows a bit of everything."
+  },
+  {
+   "id": "egg-warm",
+   "name": "Egg Warm",
+   "gate": "role:hatch",
+   "earnedBy": "Most eggs hatched in party",
+   "bonus": "Hatching steps −5%",
+   "flavor": "The eggs love being near it."
+  },
+  {
+   "id": "frontline-pet",
+   "name": "Frontline Pet",
+   "gate": "role:town",
+   "earnedBy": "Most town visits with the player",
+   "bonus": "Shops give an extra 3% discount at most once per run",
+   "flavor": "Everyone in town knows it."
+  },
+  {
+   "id": "chorus-lead",
+   "name": "Chorus Lead",
+   "gate": "role:sound",
+   "earnedBy": "Most sound-based moves used",
+   "bonus": "Sound moves +3% damage",
+   "flavor": "It sets the key for everyone."
+  },
+  {
+   "id": "tricky-feet",
+   "name": "Tricky Feet",
+   "gate": "role:footwork",
+   "earnedBy": "Most moves dodged via Protect/Detect",
+   "bonus": "Protect-style moves +3% success chance (once per battle)",
+   "flavor": "It's always one step ahead."
+  },
+  {
+   "id": "weather-wise",
+   "name": "Weather-Wise",
+   "gate": "role:forecast",
+   "earnedBy": "Most battles in non-clear weather",
+   "bonus": "+3% accuracy in any weather",
+   "flavor": "It reads the sky."
+  },
+  {
+   "id": "bond-breaker",
+   "name": "Bond Breaker",
+   "gate": "role:pressure",
+   "earnedBy": "Most KOs on foes at full HP",
+   "bonus": "+5% damage vs. foes at full HP",
+   "flavor": "It breaks through first impressions."
+  },
+  {
+   "id": "quiet-strength",
+   "name": "Quiet Strength",
+   "gate": "role:calm",
+   "earnedBy": "Most turns spent without being targeted",
+   "bonus": "+3% damage after a turn where it was not targeted",
+   "flavor": "It doesn't need the spotlight."
+  },
+  {
+   "id": "dawn-runner",
+   "name": "Dawn Runner",
+   "gate": "role:dawn",
+   "earnedBy": "Most wins in the first battle of a day",
+   "bonus": "+3% Speed in the first battle of a day",
+   "flavor": "It's out before the sun."
+  },
+  {
+   "id": "caretaker",
+   "name": "Caretaker",
+   "gate": "role:berry",
+   "earnedBy": "Most berry feedings",
+   "bonus": "Feeding berries gives +1 friendship",
+   "flavor": "It enjoys looking after people."
+  }
+ ]
+}

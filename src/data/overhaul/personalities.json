@@ -1,0 +1,1225 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/personalities.json",
+ "entries": [
+  {
+   "id": "brave",
+   "name": "Brave",
+   "voice": "firm and forward",
+   "natures": [
+    "Brave",
+    "Adamant",
+    "Hardy"
+   ],
+   "summary": "Steps up first and doesn't flinch.",
+   "phrases": {
+    "joy": "lets out a booming cheer",
+    "concern": "steps between you and the trouble",
+    "fear": "trembles once, then plants its feet",
+    "resolve": "squares up without a hint of doubt",
+    "curious": "strides straight toward the unknown",
+    "annoyed": "snorts and stamps the ground",
+    "rest": "sits upright, watching the dark",
+    "pride": "puffs out its chest"
+   }
+  },
+  {
+   "id": "timid",
+   "name": "Timid",
+   "voice": "quiet and hesitant",
+   "natures": [
+    "Timid",
+    "Bashful",
+    "Docile"
+   ],
+   "summary": "Startles easily but warms up with patience.",
+   "phrases": {
+    "joy": "hops in place, then hides the smile",
+    "concern": "peeks out anxiously at the others",
+    "fear": "dives behind your legs",
+    "resolve": "swallows hard and stays put anyway",
+    "curious": "creeps closer one careful step at a time",
+    "annoyed": "shrinks and looks away",
+    "rest": "curls up small and close to you",
+    "pride": "looks surprised it did so well"
+   }
+  },
+  {
+   "id": "curious",
+   "name": "Curious",
+   "voice": "excited and wandering",
+   "natures": [
+    "Naive",
+    "Hasty",
+    "Quirky"
+   ],
+   "summary": "Pokes at everything and wants to know why.",
+   "phrases": {
+    "joy": "bounces around asking questions with its eyes",
+    "concern": "tilts its head, trying to understand",
+    "fear": "freezes, eyes wide but still looking",
+    "resolve": "inspects the problem from every angle",
+    "curious": "presses its nose to the nearest strange thing",
+    "annoyed": "loses interest and wanders off",
+    "rest": "lies down but keeps an eye on everything",
+    "pride": "shows you what it found"
+   }
+  },
+  {
+   "id": "playful",
+   "name": "Playful",
+   "voice": "bouncy",
+   "natures": [
+    "Jolly",
+    "Naive",
+    "Hasty"
+   ],
+   "summary": "Treats the whole journey like a game.",
+   "phrases": {
+    "joy": "rolls over and tosses leaves in the air",
+    "concern": "nudges a teammate with a goofy grin",
+    "fear": "pretends it isn't scared and makes a face",
+    "resolve": "grins like this is the best part",
+    "curious": "chases its own tail, delighted",
+    "annoyed": "blows a raspberry",
+    "rest": "flops onto its back",
+    "pride": "does a victory lap"
+   }
+  },
+  {
+   "id": "proud",
+   "name": "Proud",
+   "voice": "aloof and poised",
+   "natures": [
+    "Serious",
+    "Quirky",
+    "Lax"
+   ],
+   "summary": "Holds its head high and expects the same of others.",
+   "phrases": {
+    "joy": "strikes a pose and waits for praise",
+    "concern": "clears its throat, as if it didn't care",
+    "fear": "stiffens and refuses to show it",
+    "resolve": "lifts its chin and takes the field",
+    "curious": "glances down its nose at the new thing",
+    "annoyed": "turns away in a huff",
+    "rest": "stretches out like royalty",
+    "pride": "accepts the applause as its due"
+   }
+  },
+  {
+   "id": "protective",
+   "name": "Protective",
+   "voice": "watchful",
+   "natures": [
+    "Impish",
+    "Bold",
+    "Careful"
+   ],
+   "summary": "Always counting heads and watching exits.",
+   "phrases": {
+    "joy": "settles once everyone is safe",
+    "concern": "keeps a close eye on the weakest one",
+    "fear": "puts itself in front of the group",
+    "resolve": "plants itself as the last line of defense",
+    "curious": "sniffs the air before anyone moves",
+    "annoyed": "growls at anything that gets too close",
+    "rest": "sleeps in front of the others",
+    "pride": "nods once, satisfied everyone is safe"
+   }
+  },
+  {
+   "id": "stubborn",
+   "name": "Stubborn",
+   "voice": "grumbly",
+   "natures": [
+    "Lax",
+    "Hardy",
+    "Quirky"
+   ],
+   "summary": "Doesn't back down and doesn't change its mind.",
+   "phrases": {
+    "joy": "grunts, pleased but pretending not to be",
+    "concern": "refuses to leave a hurt friend's side",
+    "fear": "digs in its heels and glares",
+    "resolve": "will not be moved",
+    "curious": "refuses to admit it's interested",
+    "annoyed": "glares until you give in",
+    "rest": "sits down and won't be moved",
+    "pride": "crosses its arms as if it expected it"
+   }
+  },
+  {
+   "id": "gentle",
+   "name": "Gentle",
+   "voice": "warm and soft",
+   "natures": [
+    "Gentle",
+    "Calm",
+    "Docile"
+   ],
+   "summary": "Soft-spoken and tender with everyone.",
+   "phrases": {
+    "joy": "hums softly and nuzzles you",
+    "concern": "nuzzles the one who got hurt",
+    "fear": "whimpers but stays calm for the others",
+    "resolve": "breathes in and steadies itself",
+    "curious": "sniffs a flower with great care",
+    "annoyed": "sighs quietly and lets it go",
+    "rest": "curls around a teammate",
+    "pride": "blushes and looks at its feet"
+   }
+  },
+  {
+   "id": "mischievous",
+   "name": "Mischievous",
+   "voice": "sly and giggly",
+   "natures": [
+    "Impish",
+    "Naughty",
+    "Jolly"
+   ],
+   "summary": "Always has a trick up its sleeve.",
+   "phrases": {
+    "joy": "snickers and pulls a prank",
+    "concern": "pretends not to care, but keeps close",
+    "fear": "hides behind someone, pretending it was planned",
+    "resolve": "smirks and cooks up a plan",
+    "curious": "pokes at the one thing it shouldn't",
+    "annoyed": "sticks its tongue out",
+    "rest": "pretends to sleep, one eye open",
+    "pride": "takes a bow like it planned everything"
+   }
+  },
+  {
+   "id": "competitive",
+   "name": "Competitive",
+   "voice": "intense",
+   "natures": [
+    "Brave",
+    "Naughty",
+    "Rash"
+   ],
+   "summary": "Measures itself against everyone and wants to win.",
+   "phrases": {
+    "joy": "pumps a fist and looks for the next challenge",
+    "concern": "wants to know who did it so it can fix it",
+    "fear": "clenches up and pushes harder",
+    "resolve": "stares down the rival and squares up",
+    "curious": "sizes up the competition",
+    "annoyed": "growls and demands a rematch",
+    "rest": "trains in place instead of resting",
+    "pride": "shoots a look at its rival, grinning"
+   }
+  },
+  {
+   "id": "loyal",
+   "name": "Loyal",
+   "voice": "devoted",
+   "natures": [
+    "Docile",
+    "Gentle",
+    "Calm"
+   ],
+   "summary": "Follows you anywhere, no questions asked.",
+   "phrases": {
+    "joy": "leans against you, tail wagging",
+    "concern": "checks on you before anyone else",
+    "fear": "presses close to your side",
+    "resolve": "looks to you, then charges ahead",
+    "curious": "waits for you to look first",
+    "annoyed": "stays quiet, but doesn't look away",
+    "rest": "dozes at your feet",
+    "pride": "gazes up at you like you hung the moon"
+   }
+  },
+  {
+   "id": "independent",
+   "name": "Independent",
+   "voice": "cool",
+   "natures": [
+    "Lonely",
+    "Serious",
+    "Hardy"
+   ],
+   "summary": "Does things its own way, in its own time.",
+   "phrases": {
+    "joy": "nods once, and that's a lot",
+    "concern": "glances over, then goes back to what it was doing",
+    "fear": "keeps its fear to itself",
+    "resolve": "decides on its own and does it",
+    "curious": "looks around, unbothered",
+    "annoyed": "sighs and walks off alone",
+    "rest": "finds its own corner",
+    "pride": "accepts it quietly"
+   }
+  },
+  {
+   "id": "aggressive",
+   "name": "Aggressive",
+   "voice": "fierce",
+   "natures": [
+    "Adamant",
+    "Naughty",
+    "Rash"
+   ],
+   "summary": "Shows its teeth first and asks questions later.",
+   "phrases": {
+    "joy": "roars with joy",
+    "concern": "bristles, ready to fight whatever hurt them",
+    "fear": "snaps harder because it's scared",
+    "resolve": "charges forward without waiting",
+    "curious": "bares its teeth at the unfamiliar",
+    "annoyed": "lashes out at the air",
+    "rest": "sleeps with its claws out",
+    "pride": "slams the ground in triumph"
+   }
+  },
+  {
+   "id": "anxious",
+   "name": "Anxious",
+   "voice": "worried",
+   "natures": [
+    "Timid",
+    "Bashful",
+    "Modest"
+   ],
+   "summary": "Worries about every little thing.",
+   "phrases": {
+    "joy": "lets out a shaky laugh of relief",
+    "concern": "frets and checks again that everyone's okay",
+    "fear": "shakes all over",
+    "resolve": "takes a deep breath and goes anyway",
+    "curious": "peeks at the thing from far away",
+    "annoyed": "fidgets and can't stand still",
+    "rest": "can't settle until everyone is accounted for",
+    "pride": "can't quite believe it worked"
+   }
+  },
+  {
+   "id": "affectionate",
+   "name": "Affectionate",
+   "voice": "warm and cuddly",
+   "natures": [
+    "Gentle",
+    "Docile",
+    "Careful"
+   ],
+   "summary": "Shows love with every touch.",
+   "phrases": {
+    "joy": "nuzzles whoever's nearest",
+    "concern": "presses against the one who's hurting",
+    "fear": "clings to whoever's closest",
+    "resolve": "holds on tighter and stays near",
+    "curious": "follows you around with big eyes",
+    "annoyed": "pouts until you give it attention",
+    "rest": "snuggles in beside you",
+    "pride": "beams at you for the praise"
+   }
+  },
+  {
+   "id": "friendly",
+   "name": "Friendly",
+   "voice": "outgoing",
+   "natures": [
+    "Jolly",
+    "Naive",
+    "Gentle"
+   ],
+   "summary": "Makes friends with anyone.",
+   "phrases": {
+    "joy": "waves at everyone",
+    "concern": "checks if everyone's alright",
+    "fear": "looks to its friends for comfort",
+    "resolve": "rallies the others with a grin",
+    "curious": "walks up to the stranger and says hello",
+    "annoyed": "puffs its cheeks, then forgives",
+    "rest": "chats happily with its neighbors",
+    "pride": "shares the credit with the team"
+   }
+  },
+  {
+   "id": "dreamy",
+   "name": "Dreamy",
+   "voice": "drifting",
+   "natures": [
+    "Quiet",
+    "Mild",
+    "Calm"
+   ],
+   "summary": "Often miles away, lost in a thought.",
+   "phrases": {
+    "joy": "floats for a moment, smiling",
+    "concern": "drifts closer without saying why",
+    "fear": "goes still, staring into the distance",
+    "resolve": "comes back to the moment",
+    "curious": "stares at the clouds",
+    "annoyed": "yawns, barely noticing",
+    "rest": "falls asleep standing up",
+    "pride": "hums quietly to itself"
+   }
+  },
+  {
+   "id": "stoic",
+   "name": "Stoic",
+   "voice": "silent and steady",
+   "natures": [
+    "Quiet",
+    "Serious",
+    "Calm"
+   ],
+   "summary": "Doesn't show feelings, but feels them deeply.",
+   "phrases": {
+    "joy": "allows itself the smallest smile",
+    "concern": "stands guard, silent",
+    "fear": "goes quiet and keeps its composure",
+    "resolve": "takes its place",
+    "curious": "watches without comment",
+    "annoyed": "breathes out through its nose",
+    "rest": "meditates in silence",
+    "pride": "nods and says nothing"
+   }
+  },
+  {
+   "id": "cheerful",
+   "name": "Cheerful",
+   "voice": "sunny",
+   "natures": [
+    "Jolly",
+    "Naive",
+    "Hasty"
+   ],
+   "summary": "Sees the bright side of everything.",
+   "phrases": {
+    "joy": "beams and twirls",
+    "concern": "cheers up the one who looks sad",
+    "fear": "laughs nervously and keeps smiling",
+    "resolve": "grins and gives a thumbs up",
+    "curious": "claps its paws together",
+    "annoyed": "sighs, but only a little",
+    "rest": "hums a happy tune",
+    "pride": "beams so wide it can't speak"
+   }
+  },
+  {
+   "id": "grumpy",
+   "name": "Grumpy",
+   "voice": "grumbling",
+   "natures": [
+    "Lax",
+    "Sassy",
+    "Rash"
+   ],
+   "summary": "Complains about everything, but secretly cares.",
+   "phrases": {
+    "joy": "huffs, then smiles when it thinks nobody's looking",
+    "concern": "grumbles, but stays close",
+    "fear": "grumbles louder to cover the fear",
+    "resolve": "mutters and starts moving",
+    "curious": "grumbles at the new thing, then looks again",
+    "annoyed": "grumbles about everything",
+    "rest": "snores loudly while complaining",
+    "pride": "smirks and denies it"
+   }
+  },
+  {
+   "id": "dramatic",
+   "name": "Dramatic",
+   "voice": "theatrical",
+   "natures": [
+    "Rash",
+    "Naughty",
+    "Quirky"
+   ],
+   "summary": "Everything is the biggest deal in the world.",
+   "phrases": {
+    "joy": "leaps up, flinging its arms wide",
+    "concern": "clutches its chest as if wounded",
+    "fear": "collapses theatrically",
+    "resolve": "rises as if lit by a spotlight",
+    "curious": "gasps at the very idea",
+    "annoyed": "throws its head back and sighs",
+    "rest": "drapes over a rock",
+    "pride": "takes a bow to a crowd of no one"
+   }
+  },
+  {
+   "id": "scholarly",
+   "name": "Scholarly",
+   "voice": "thoughtful",
+   "natures": [
+    "Modest",
+    "Calm",
+    "Mild"
+   ],
+   "summary": "Studies everything and remembers it all.",
+   "phrases": {
+    "joy": "nods approvingly and takes notes",
+    "concern": "studies the problem with a furrowed brow",
+    "fear": "retreats into a calculation",
+    "resolve": "adjusts its stance and thinks aloud",
+    "curious": "examines the thing with great focus",
+    "annoyed": "tuts at sloppy technique",
+    "rest": "studies the stars",
+    "pride": "explains what just happened to nobody in particular"
+   }
+  },
+  {
+   "id": "adventurous",
+   "name": "Adventurous",
+   "voice": "eager for the horizon",
+   "natures": [
+    "Hasty",
+    "Jolly",
+    "Brave"
+   ],
+   "summary": "Wants to see over the next hill.",
+   "phrases": {
+    "joy": "yips and runs ahead",
+    "concern": "stays close for once",
+    "fear": "trembles but looks eager anyway",
+    "resolve": "points toward the horizon",
+    "curious": "dashes off to see what's there",
+    "annoyed": "paws at the ground, restless",
+    "rest": "can't sit still, even asleep",
+    "pride": "plants a flag in its mind"
+   }
+  },
+  {
+   "id": "lazy",
+   "name": "Lazy",
+   "voice": "sleepy",
+   "natures": [
+    "Relaxed",
+    "Lax",
+    "Docile"
+   ],
+   "summary": "Sleeps through everything it can.",
+   "phrases": {
+    "joy": "stretches and yawns contentedly",
+    "concern": "wakes up long enough to check",
+    "fear": "goes limp, hoping it will go away",
+    "resolve": "gets up with a groan",
+    "curious": "opens one eye",
+    "annoyed": "rolls over and ignores it",
+    "rest": "is already asleep",
+    "pride": "looks surprised it did anything"
+   }
+  },
+  {
+   "id": "hot-headed",
+   "name": "Hot-headed",
+   "voice": "explosive",
+   "natures": [
+    "Rash",
+    "Naughty",
+    "Hasty"
+   ],
+   "summary": "Gets angry fast and calms down slowly.",
+   "phrases": {
+    "joy": "lets out a whoop",
+    "concern": "bristles at whatever hurt them",
+    "fear": "lashes out wildly",
+    "resolve": "is already charging",
+    "curious": "stomps right up to it",
+    "annoyed": "steams and glares",
+    "rest": "can't settle down",
+    "pride": "flames up with satisfaction"
+   }
+  },
+  {
+   "id": "calm",
+   "name": "Calm",
+   "voice": "serene",
+   "natures": [
+    "Calm",
+    "Gentle",
+    "Relaxed"
+   ],
+   "summary": "Stays steady no matter what.",
+   "phrases": {
+    "joy": "closes its eyes in quiet joy",
+    "concern": "moves slowly toward the one in need",
+    "fear": "breathes slowly and stays steady",
+    "resolve": "waits for the right moment",
+    "curious": "watches with quiet interest",
+    "annoyed": "lets it pass",
+    "rest": "rests easily",
+    "pride": "lets a quiet smile appear"
+   }
+  },
+  {
+   "id": "serious",
+   "name": "Serious",
+   "voice": "focused",
+   "natures": [
+    "Serious",
+    "Hardy",
+    "Bold"
+   ],
+   "summary": "Takes every task as if it mattered most.",
+   "phrases": {
+    "joy": "allows a short nod",
+    "concern": "studies the situation carefully",
+    "fear": "stiffens and focuses",
+    "resolve": "sets its jaw and gets to work",
+    "curious": "studies it with full attention",
+    "annoyed": "frowns at the interruption",
+    "rest": "stays alert even at rest",
+    "pride": "accepts it with dignity"
+   }
+  },
+  {
+   "id": "shy",
+   "name": "Shy",
+   "voice": "bashful",
+   "natures": [
+    "Quiet",
+    "Bashful",
+    "Timid"
+   ],
+   "summary": "Wants to be noticed, but not too much.",
+   "phrases": {
+    "joy": "blushes and looks at the ground",
+    "concern": "checks on others from afar",
+    "fear": "hides behind whatever's closest",
+    "resolve": "steps forward, one shaky paw at a time",
+    "curious": "peeks around a corner",
+    "annoyed": "looks away and sighs",
+    "rest": "curls up in a corner",
+    "pride": "hides its face but is secretly delighted"
+   }
+  },
+  {
+   "id": "bold",
+   "name": "Bold",
+   "voice": "confident",
+   "natures": [
+    "Bold",
+    "Brave",
+    "Adamant"
+   ],
+   "summary": "Takes up space and means it.",
+   "phrases": {
+    "joy": "laughs loudly",
+    "concern": "steps forward to help",
+    "fear": "squares up even though it's afraid",
+    "resolve": "takes center stage",
+    "curious": "walks right up to it",
+    "annoyed": "crosses its arms",
+    "rest": "lounges like it owns the place",
+    "pride": "grins like it knew all along"
+   }
+  },
+  {
+   "id": "sly",
+   "name": "Sly",
+   "voice": "cunning",
+   "natures": [
+    "Naughty",
+    "Sassy",
+    "Hasty"
+   ],
+   "summary": "Always thinking two steps ahead.",
+   "phrases": {
+    "joy": "grins slyly",
+    "concern": "watches carefully from the corner",
+    "fear": "slides out of sight",
+    "resolve": "narrows its eyes and smiles",
+    "curious": "circles it slowly, thinking",
+    "annoyed": "rolls its eyes",
+    "rest": "keeps one eye open at all times",
+    "pride": "smirks as if it planned it"
+   }
+  },
+  {
+   "id": "noble",
+   "name": "Noble",
+   "voice": "dignified",
+   "natures": [
+    "Serious",
+    "Modest",
+    "Calm"
+   ],
+   "summary": "Carries itself like it was born to lead.",
+   "phrases": {
+    "joy": "bows its head with grace",
+    "concern": "steps forward to shield the others",
+    "fear": "holds still, dignified even in fear",
+    "resolve": "lifts its head and takes its place",
+    "curious": "studies it with grave interest",
+    "annoyed": "looks away coldly",
+    "rest": "sleeps with perfect posture",
+    "pride": "accepts honors with quiet grace"
+   }
+  },
+  {
+   "id": "wild",
+   "name": "Wild",
+   "voice": "untamed",
+   "natures": [
+    "Hasty",
+    "Naughty",
+    "Adamant"
+   ],
+   "summary": "Still remembers the wilderness.",
+   "phrases": {
+    "joy": "howls at the sky",
+    "concern": "growls low at anything near the group",
+    "fear": "bolts, then thinks better of it",
+    "resolve": "bares its teeth and charges",
+    "curious": "sniffs at the new thing, hackles up",
+    "annoyed": "snaps at the air",
+    "rest": "sleeps with one ear alert",
+    "pride": "beats its chest"
+   }
+  },
+  {
+   "id": "soft-hearted",
+   "name": "Soft-hearted",
+   "voice": "tender",
+   "natures": [
+    "Gentle",
+    "Careful",
+    "Docile"
+   ],
+   "summary": "Cries at sad things and loves hard.",
+   "phrases": {
+    "joy": "tears up with joy",
+    "concern": "hurries to the one who's hurt",
+    "fear": "cries and hides",
+    "resolve": "wipes its eyes and carries on",
+    "curious": "coos at the thing",
+    "annoyed": "sniffles",
+    "rest": "curls around the smallest one",
+    "pride": "sniffles, overwhelmed"
+   }
+  },
+  {
+   "id": "clingy",
+   "name": "Clingy",
+   "voice": "attached",
+   "natures": [
+    "Docile",
+    "Careful",
+    "Bashful"
+   ],
+   "summary": "Doesn't like to be left alone.",
+   "phrases": {
+    "joy": "clings to you tighter",
+    "concern": "won't leave a hurt friend's side",
+    "fear": "wraps around your leg",
+    "resolve": "stays attached to you",
+    "curious": "follows you everywhere",
+    "annoyed": "whines at being left out",
+    "rest": "sleeps on you",
+    "pride": "beams that it's near you"
+   }
+  },
+  {
+   "id": "aloof",
+   "name": "Aloof",
+   "voice": "distant",
+   "natures": [
+    "Lonely",
+    "Serious",
+    "Quiet"
+   ],
+   "summary": "Keeps its distance and prefers it that way.",
+   "phrases": {
+    "joy": "gives the barest nod",
+    "concern": "watches from a distance",
+    "fear": "steps back",
+    "resolve": "walks alone",
+    "curious": "glances over, then away",
+    "annoyed": "ignores it",
+    "rest": "naps by itself",
+    "pride": "nods curtly"
+   }
+  },
+  {
+   "id": "mysterious",
+   "name": "Mysterious",
+   "voice": "enigmatic",
+   "natures": [
+    "Quiet",
+    "Quirky",
+    "Calm"
+   ],
+   "summary": "Seems to know something the others don't.",
+   "phrases": {
+    "joy": "smiles at nothing",
+    "concern": "looks at the unseen",
+    "fear": "stares at a point that isn't there",
+    "resolve": "nods to itself",
+    "curious": "stares at something no one else sees",
+    "annoyed": "vanishes",
+    "rest": "sleeps in places no one can find",
+    "pride": "looks like it knew all along"
+   }
+  },
+  {
+   "id": "sensitive",
+   "name": "Sensitive",
+   "voice": "feeling",
+   "natures": [
+    "Gentle",
+    "Timid",
+    "Careful"
+   ],
+   "summary": "Feels the mood of the room as if it were its own.",
+   "phrases": {
+    "joy": "glows with the team's joy",
+    "concern": "absorbs the team's distress",
+    "fear": "trembles with the others' fear",
+    "resolve": "draws strength from the team",
+    "curious": "picks up on something subtle",
+    "annoyed": "winces at sharp words",
+    "rest": "rests only when the team does",
+    "pride": "tears up at the praise"
+   }
+  },
+  {
+   "id": "honorable",
+   "name": "Honorable",
+   "voice": "principled",
+   "natures": [
+    "Serious",
+    "Bold",
+    "Calm"
+   ],
+   "summary": "Cares about doing things the right way.",
+   "phrases": {
+    "joy": "bows to the defeated",
+    "concern": "takes responsibility for the loss",
+    "fear": "holds its ground out of principle",
+    "resolve": "bows and takes its place",
+    "curious": "studies the code of the fight",
+    "annoyed": "looks away from foul play",
+    "rest": "rests only after duty is done",
+    "pride": "accepts with a formal bow"
+   }
+  },
+  {
+   "id": "reckless",
+   "name": "Reckless",
+   "voice": "heedless",
+   "natures": [
+    "Rash",
+    "Hasty",
+    "Naughty"
+   ],
+   "summary": "Rushes in and thinks about it later.",
+   "phrases": {
+    "joy": "jumps up and down",
+    "concern": "throws itself at the problem",
+    "fear": "bolts forward, eyes closed",
+    "resolve": "launches itself forward",
+    "curious": "grabs the thing and runs",
+    "annoyed": "pounds its paws",
+    "rest": "falls asleep mid-motion",
+    "pride": "grins with scrapes all over"
+   }
+  },
+  {
+   "id": "patient",
+   "name": "Patient",
+   "voice": "steady and waiting",
+   "natures": [
+    "Calm",
+    "Relaxed",
+    "Gentle"
+   ],
+   "summary": "Believes things come to those who wait.",
+   "phrases": {
+    "joy": "smiles slowly",
+    "concern": "waits beside the one who's hurting",
+    "fear": "breathes slowly and waits",
+    "resolve": "stays still until the right moment",
+    "curious": "watches the thing for a long time",
+    "annoyed": "lets it slide",
+    "rest": "rests easily",
+    "pride": "waits for you to notice"
+   }
+  },
+  {
+   "id": "perfectionist",
+   "name": "Perfectionist",
+   "voice": "exacting",
+   "natures": [
+    "Serious",
+    "Modest",
+    "Careful"
+   ],
+   "summary": "Wants everything done just right.",
+   "phrases": {
+    "joy": "straightens up and nods once",
+    "concern": "checks everyone's work again",
+    "fear": "can't stop checking",
+    "resolve": "adjusts and tries again",
+    "curious": "examines the details",
+    "annoyed": "fixes the mess",
+    "rest": "tidies before sleeping",
+    "pride": "critiques its own performance"
+   }
+  },
+  {
+   "id": "goofy",
+   "name": "Goofy",
+   "voice": "silly",
+   "natures": [
+    "Jolly",
+    "Naive",
+    "Quirky"
+   ],
+   "summary": "Laughs at itself and makes others laugh too.",
+   "phrases": {
+    "joy": "falls over laughing",
+    "concern": "does a silly face to cheer someone up",
+    "fear": "trips over its own feet",
+    "resolve": "makes a goofy face, then charges",
+    "curious": "pokes itself in the face",
+    "annoyed": "blows a raspberry",
+    "rest": "snores in a silly way",
+    "pride": "takes a deep, ridiculous bow"
+   }
+  },
+  {
+   "id": "daring",
+   "name": "Daring",
+   "voice": "fearless",
+   "natures": [
+    "Brave",
+    "Bold",
+    "Hasty"
+   ],
+   "summary": "Dares itself to do the impossible.",
+   "phrases": {
+    "joy": "laughs in the face of danger",
+    "concern": "dives in front of the blow",
+    "fear": "dares itself again",
+    "resolve": "charges the biggest foe",
+    "curious": "dares the unknown to show itself",
+    "annoyed": "scoffs at the warning",
+    "rest": "dozes on the cliff's edge",
+    "pride": "pumps a fist"
+   }
+  },
+  {
+   "id": "wise",
+   "name": "Wise",
+   "voice": "old soul",
+   "natures": [
+    "Calm",
+    "Gentle",
+    "Modest"
+   ],
+   "summary": "Acts like it's lived a thousand years.",
+   "phrases": {
+    "joy": "smiles knowingly",
+    "concern": "offers a quiet word",
+    "fear": "breathes slowly and shows no fear",
+    "resolve": "nods as if the outcome were foretold",
+    "curious": "asks a question instead of answering",
+    "annoyed": "sighs like an elder",
+    "rest": "dozes with perfect peace",
+    "pride": "accepts quiet pride"
+   }
+  },
+  {
+   "id": "superstitious",
+   "name": "Superstitious",
+   "voice": "wary of omens",
+   "natures": [
+    "Careful",
+    "Timid",
+    "Quirky"
+   ],
+   "summary": "Believes in signs, and sees them everywhere.",
+   "phrases": {
+    "joy": "knocks on a rock three times",
+    "concern": "makes a ward against bad luck",
+    "fear": "jumps at a black cat",
+    "resolve": "touches its lucky charm and goes",
+    "curious": "studies the omen",
+    "annoyed": "refuses to step on the crack",
+    "rest": "turns three times and lies down",
+    "pride": "touches its charm and smiles"
+   }
+  },
+  {
+   "id": "romantic",
+   "name": "Romantic",
+   "voice": "dreamy and tender",
+   "natures": [
+    "Gentle",
+    "Mild",
+    "Naive"
+   ],
+   "summary": "Sees beauty in everything.",
+   "phrases": {
+    "joy": "sighs happily",
+    "concern": "gazes tenderly at the one who's hurt",
+    "fear": "clings to a keepsake",
+    "resolve": "raises its head like a hero",
+    "curious": "stops to admire a view",
+    "annoyed": "rolls its eyes at the unromantic",
+    "rest": "watches the stars with someone",
+    "pride": "blushes at the praise"
+   }
+  },
+  {
+   "id": "fussy",
+   "name": "Fussy",
+   "voice": "particular",
+   "natures": [
+    "Impish",
+    "Careful",
+    "Quirky"
+   ],
+   "summary": "Has opinions about everything.",
+   "phrases": {
+    "joy": "nods with satisfaction",
+    "concern": "fusses over the hurt one",
+    "fear": "flaps in distress",
+    "resolve": "smooths itself and goes",
+    "curious": "inspects the thing critically",
+    "annoyed": "complains with great detail",
+    "rest": "rearranges its bedding",
+    "pride": "tuts at the standards"
+   }
+  },
+  {
+   "id": "foodie",
+   "name": "Foodie",
+   "voice": "food-motivated",
+   "natures": [
+    "Relaxed",
+    "Jolly",
+    "Naive"
+   ],
+   "summary": "Judges every place by its berries.",
+   "phrases": {
+    "joy": "drools happily",
+    "concern": "offers its snack to the hurt one",
+    "fear": "clutches its food",
+    "resolve": "bites down and goes",
+    "curious": "sniffs the air for berries",
+    "annoyed": "growls at an empty stomach",
+    "rest": "dreams of a feast",
+    "pride": "burps in satisfaction"
+   }
+  },
+  {
+   "id": "nostalgic",
+   "name": "Nostalgic",
+   "voice": "reminiscent",
+   "natures": [
+    "Gentle",
+    "Mild",
+    "Calm"
+   ],
+   "summary": "Remembers everything and misses it a little.",
+   "phrases": {
+    "joy": "smiles at an old memory",
+    "concern": "watches over the hurt one wistfully",
+    "fear": "clings to a memory",
+    "resolve": "remembers who it's fighting for",
+    "curious": "stops at a familiar thing",
+    "annoyed": "sighs at the way things were",
+    "rest": "looks back at the road",
+    "pride": "smiles at the old days"
+   }
+  },
+  {
+   "id": "tough",
+   "name": "Tough",
+   "voice": "rugged",
+   "natures": [
+    "Hardy",
+    "Adamant",
+    "Brave"
+   ],
+   "summary": "Takes it on the chin and shrugs.",
+   "phrases": {
+    "joy": "grins and flexes",
+    "concern": "nudges the hurt one with a gruff nod",
+    "fear": "grits its teeth and holds",
+    "resolve": "cracks its knuckles",
+    "curious": "glares at the thing",
+    "annoyed": "spits and stalks off",
+    "rest": "rests with one eye open",
+    "pride": "flexes and grins"
+   }
+  },
+  {
+   "id": "sunny",
+   "name": "Sunny",
+   "voice": "bright",
+   "natures": [
+    "Jolly",
+    "Naive",
+    "Hasty"
+   ],
+   "summary": "Brings a little sunlight everywhere it goes.",
+   "phrases": {
+    "joy": "glows",
+    "concern": "brightens the mood for the hurt one",
+    "fear": "glows a little dimmer",
+    "resolve": "lights up and charges",
+    "curious": "follows the light",
+    "annoyed": "dims a little, then recovers",
+    "rest": "warms up the whole camp",
+    "pride": "shines"
+   }
+  },
+  {
+   "id": "moody",
+   "name": "Moody",
+   "voice": "changeable",
+   "natures": [
+    "Lonely",
+    "Rash",
+    "Sassy"
+   ],
+   "summary": "Its feelings change with the weather.",
+   "phrases": {
+    "joy": "laughs, then goes quiet",
+    "concern": "snaps, then softens",
+    "fear": "swings from bold to hidden",
+    "resolve": "swings from sullen to fierce",
+    "curious": "stares at the thing, then loses interest",
+    "annoyed": "storms off, then returns",
+    "rest": "sulks, then sleeps",
+    "pride": "flushes with pride, then shrugs"
+   }
+  },
+  {
+   "id": "showy",
+   "name": "Showy",
+   "voice": "flamboyant",
+   "natures": [
+    "Naughty",
+    "Sassy",
+    "Rash"
+   ],
+   "summary": "Wants an audience.",
+   "phrases": {
+    "joy": "strikes a dramatic pose",
+    "concern": "checks if anyone's watching",
+    "fear": "faints dramatically",
+    "resolve": "flourishes and takes the stage",
+    "curious": "admires itself in a puddle",
+    "annoyed": "huffs when nobody notices",
+    "rest": "poses even while asleep",
+    "pride": "takes a spotlight pose"
+   }
+  },
+  {
+   "id": "humble",
+   "name": "Humble",
+   "voice": "modest",
+   "natures": [
+    "Impish",
+    "Modest",
+    "Gentle"
+   ],
+   "summary": "Credits everyone but itself.",
+   "phrases": {
+    "joy": "looks away and smiles",
+    "concern": "offers its help without being asked",
+    "fear": "stands with the group",
+    "resolve": "steps up quietly",
+    "curious": "asks quietly about the thing",
+    "annoyed": "keeps its complaints to itself",
+    "rest": "sleeps at the edge of the group",
+    "pride": "gives the credit to the team"
+   }
+  },
+  {
+   "id": "scheming",
+   "name": "Scheming",
+   "voice": "calculating",
+   "natures": [
+    "Sassy",
+    "Naughty",
+    "Serious"
+   ],
+   "summary": "Always working an angle.",
+   "phrases": {
+    "joy": "rubs its paws together",
+    "concern": "calculates who needs help",
+    "fear": "slips away while no one's looking",
+    "resolve": "reveals its plan",
+    "curious": "studies the thing for opportunities",
+    "annoyed": "plots in silence",
+    "rest": "plans in its sleep",
+    "pride": "grins like the plan worked"
+   }
+  },
+  {
+   "id": "zen",
+   "name": "Zen",
+   "voice": "at peace",
+   "natures": [
+    "Calm",
+    "Relaxed",
+    "Gentle"
+   ],
+   "summary": "Finds balance in everything.",
+   "phrases": {
+    "joy": "breathes out in perfect peace",
+    "concern": "offers a calm presence",
+    "fear": "breathes and finds the center",
+    "resolve": "settles into stillness and acts",
+    "curious": "observes the thing without judgment",
+    "annoyed": "lets it go",
+    "rest": "sits in meditation",
+    "pride": "bows to the moment"
+   }
+  },
+  {
+   "id": "rebellious",
+   "name": "Rebellious",
+   "voice": "defiant",
+   "natures": [
+    "Naughty",
+    "Rash",
+    "Lax"
+   ],
+   "summary": "Does the opposite of what it's told.",
+   "phrases": {
+    "joy": "whoops at breaking the rules",
+    "concern": "grumbles but stays close",
+    "fear": "defiantly refuses to flinch",
+    "resolve": "does the opposite of what the enemy expects",
+    "curious": "goes where it was told not to",
+    "annoyed": "folds its arms and refuses",
+    "rest": "sleeps where it shouldn't",
+    "pride": "smirks and breaks the rules again"
+   }
+  },
+  {
+   "id": "earnest",
+   "name": "Earnest",
+   "voice": "sincere",
+   "natures": [
+    "Docile",
+    "Gentle",
+    "Serious"
+   ],
+   "summary": "Gives everything it has, every time.",
+   "phrases": {
+    "joy": "beams with sincere joy",
+    "concern": "stays beside the one who's hurt",
+    "fear": "trembles but gives its all",
+    "resolve": "gives everything",
+    "curious": "asks sincerely about the thing",
+    "annoyed": "lowers its head and apologizes",
+    "rest": "sleeps with a clear conscience",
+    "pride": "tears up with pride"
+   }
+  }
+ ]
+}

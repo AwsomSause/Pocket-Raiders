@@ -1,0 +1,5883 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/item_synergies.json",
+ "entries": [
+  {
+   "id": "cur-0",
+   "item": "Heat Rock",
+   "partner": {
+    "kind": "ability",
+    "value": "Drought"
+   },
+   "text": "Sun lasts 8 turns instead of 5 when the holder sets it.",
+   "source": "curated",
+   "itemId": "heat-rock",
+   "partnerId": "drought",
+   "usable": true
+  },
+  {
+   "id": "cur-1",
+   "item": "Damp Rock",
+   "partner": {
+    "kind": "ability",
+    "value": "Drizzle"
+   },
+   "text": "Rain lasts 8 turns instead of 5 when the holder sets it.",
+   "source": "curated",
+   "itemId": "damp-rock",
+   "partnerId": "drizzle",
+   "usable": true
+  },
+  {
+   "id": "cur-2",
+   "item": "Smooth Rock",
+   "partner": {
+    "kind": "ability",
+    "value": "Sand Stream"
+   },
+   "text": "Sandstorm lasts 8 turns instead of 5 when the holder sets it.",
+   "source": "curated",
+   "itemId": "smooth-rock",
+   "partnerId": "sand-stream",
+   "usable": true
+  },
+  {
+   "id": "cur-3",
+   "item": "Icy Rock",
+   "partner": {
+    "kind": "ability",
+    "value": "Snow Warning"
+   },
+   "text": "Snow lasts 8 turns instead of 5 when the holder sets it.",
+   "source": "curated",
+   "itemId": "icy-rock",
+   "partnerId": "snow-warning",
+   "usable": true
+  },
+  {
+   "id": "cur-4",
+   "item": "Terrain Extender",
+   "partner": {
+    "kind": "move",
+    "value": "Electric Terrain"
+   },
+   "text": "Electric Terrain lasts 8 turns instead of 5.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "electric-terrain",
+   "usable": false
+  },
+  {
+   "id": "cur-5",
+   "item": "Terrain Extender",
+   "partner": {
+    "kind": "ability",
+    "value": "Grassy Surge"
+   },
+   "text": "Grassy Terrain lasts 8 turns instead of 5.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "grassy-surge",
+   "usable": false
+  },
+  {
+   "id": "cur-6",
+   "item": "Light Clay",
+   "partner": {
+    "kind": "move",
+    "value": "Reflect"
+   },
+   "text": "Reflect lasts 8 turns instead of 5.",
+   "source": "curated",
+   "itemId": "light-clay",
+   "partnerId": "reflect",
+   "usable": true
+  },
+  {
+   "id": "cur-7",
+   "item": "Light Clay",
+   "partner": {
+    "kind": "move",
+    "value": "Light Screen"
+   },
+   "text": "Light Screen lasts 8 turns instead of 5.",
+   "source": "curated",
+   "itemId": "light-clay",
+   "partnerId": "light-screen",
+   "usable": true
+  },
+  {
+   "id": "cur-8",
+   "item": "Light Clay",
+   "partner": {
+    "kind": "move",
+    "value": "Aurora Veil"
+   },
+   "text": "Aurora Veil lasts 8 turns instead of 5.",
+   "source": "curated",
+   "itemId": "light-clay",
+   "partnerId": "aurora-veil",
+   "usable": true
+  },
+  {
+   "id": "cur-9",
+   "item": "Leftovers",
+   "partner": {
+    "kind": "move",
+    "value": "Protect"
+   },
+   "text": "Protect users stall on recovery: healing 1/16 each turn adds up.",
+   "source": "curated",
+   "itemId": "leftovers",
+   "partnerId": "protect",
+   "usable": true
+  },
+  {
+   "id": "cur-10",
+   "item": "Leftovers",
+   "partner": {
+    "kind": "move",
+    "value": "Substitute"
+   },
+   "text": "Substitute users spend HP and Leftovers pays it back.",
+   "source": "curated",
+   "itemId": "leftovers",
+   "partnerId": "substitute",
+   "usable": true
+  },
+  {
+   "id": "cur-11",
+   "item": "Black Sludge",
+   "partner": {
+    "kind": "type",
+    "value": "Poison"
+   },
+   "text": "Poison-type holders recover 1/16 each turn; others lose 1/8.",
+   "source": "curated",
+   "itemId": "black-sludge",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-12",
+   "item": "Life Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Sheer Force"
+   },
+   "text": "Sheer Force removes Life Orb recoil on boosted moves.",
+   "source": "curated",
+   "itemId": "life-orb",
+   "partnerId": "sheer-force",
+   "usable": true
+  },
+  {
+   "id": "cur-13",
+   "item": "Life Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Magic Guard"
+   },
+   "text": "Magic Guard blocks Life Orb recoil entirely.",
+   "source": "curated",
+   "itemId": "life-orb",
+   "partnerId": "magic-guard",
+   "usable": true
+  },
+  {
+   "id": "cur-14",
+   "item": "Choice Scarf",
+   "partner": {
+    "kind": "role",
+    "value": "revenge killer"
+   },
+   "text": "Choice Scarf lets a slower attacker move first, locked into one move.",
+   "source": "curated",
+   "itemId": "choice-scarf",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-15",
+   "item": "Choice Band",
+   "partner": {
+    "kind": "move",
+    "value": "Return"
+   },
+   "text": "A locked physical move gains the full benefit of Choice Band.",
+   "source": "curated",
+   "itemId": "choice-band",
+   "partnerId": "return",
+   "usable": true
+  },
+  {
+   "id": "cur-16",
+   "item": "Choice Specs",
+   "partner": {
+    "kind": "move",
+    "value": "Draco Meteor"
+   },
+   "text": "A locked special move gains the full benefit of Choice Specs.",
+   "source": "curated",
+   "itemId": "choice-specs",
+   "partnerId": "draco-meteor",
+   "usable": true
+  },
+  {
+   "id": "cur-17",
+   "item": "Assault Vest",
+   "partner": {
+    "kind": "role",
+    "value": "special tank"
+   },
+   "text": "Assault Vest boosts Sp. Def; the holder cannot use status moves.",
+   "source": "curated",
+   "itemId": "assault-vest",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-18",
+   "item": "Focus Sash",
+   "partner": {
+    "kind": "ability",
+    "value": "Sturdy"
+   },
+   "text": "Both protect from one-hit KO at full HP; redundant, so choose one.",
+   "source": "curated",
+   "itemId": "focus-sash",
+   "partnerId": "sturdy",
+   "usable": true
+  },
+  {
+   "id": "cur-19",
+   "item": "Focus Sash",
+   "partner": {
+    "kind": "move",
+    "value": "Endeavor"
+   },
+   "text": "Focus Sash keeps an Endeavor user alive to use the move.",
+   "source": "curated",
+   "itemId": "focus-sash",
+   "partnerId": "endeavor",
+   "usable": true
+  },
+  {
+   "id": "cur-20",
+   "item": "Focus Sash",
+   "partner": {
+    "kind": "move",
+    "value": "Fake Out"
+   },
+   "text": "Focus Sash survives the opening hit so Fake Out users can scout.",
+   "source": "curated",
+   "itemId": "focus-sash",
+   "partnerId": "fake-out",
+   "usable": true
+  },
+  {
+   "id": "cur-21",
+   "item": "Eviolite",
+   "partner": {
+    "kind": "role",
+    "value": "not fully evolved"
+   },
+   "text": "Eviolite boosts both defenses of Pokémon that can still evolve.",
+   "source": "curated",
+   "itemId": "eviolite",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-22",
+   "item": "Rocky Helmet",
+   "partner": {
+    "kind": "role",
+    "value": "physical wall"
+   },
+   "text": "Rocky Helmet punishes contact moves with 1/6 max HP.",
+   "source": "curated",
+   "itemId": "rocky-helmet",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-23",
+   "item": "Sitrus Berry",
+   "partner": {
+    "kind": "ability",
+    "value": "Gluttony"
+   },
+   "text": "Gluttony eats the berry at 50% HP instead of 25%.",
+   "source": "curated",
+   "itemId": "sitrus-berry",
+   "partnerId": "gluttony",
+   "usable": true
+  },
+  {
+   "id": "cur-24",
+   "item": "Sitrus Berry",
+   "partner": {
+    "kind": "move",
+    "value": "Belly Drum"
+   },
+   "text": "Belly Drum drops HP to 50%, so a Sitrus Berry restores 25% back.",
+   "source": "curated",
+   "itemId": "sitrus-berry",
+   "partnerId": "belly-drum",
+   "usable": true
+  },
+  {
+   "id": "cur-25",
+   "item": "Salac Berry",
+   "partner": {
+    "kind": "move",
+    "value": "Substitute"
+   },
+   "text": "Substitute lowers HP into pinch range for a speed boost.",
+   "source": "curated",
+   "itemId": "salac-berry",
+   "partnerId": "substitute",
+   "usable": true
+  },
+  {
+   "id": "cur-26",
+   "item": "Liechi Berry",
+   "partner": {
+    "kind": "move",
+    "value": "Belly Drum"
+   },
+   "text": "Belly Drum triggers a berry at low HP.",
+   "source": "curated",
+   "itemId": "liechi-berry",
+   "partnerId": "belly-drum",
+   "usable": true
+  },
+  {
+   "id": "cur-27",
+   "item": "Weakness Policy",
+   "partner": {
+    "kind": "role",
+    "value": "bulky attacker"
+   },
+   "text": "Weakness Policy rewards surviving a super-effective hit with +2 Atk/SpA.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "cur-28",
+   "item": "Toxic Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Poison Heal"
+   },
+   "text": "Poison Heal turns the poison into recovery.",
+   "source": "curated",
+   "itemId": "toxic-orb",
+   "partnerId": "poison-heal",
+   "usable": true
+  },
+  {
+   "id": "cur-29",
+   "item": "Toxic Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Guts"
+   },
+   "text": "Guts boosts Attack when poisoned.",
+   "source": "curated",
+   "itemId": "toxic-orb",
+   "partnerId": "guts",
+   "usable": true
+  },
+  {
+   "id": "cur-30",
+   "item": "Toxic Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Magic Guard"
+   },
+   "text": "Magic Guard stops all poison damage.",
+   "source": "curated",
+   "itemId": "toxic-orb",
+   "partnerId": "magic-guard",
+   "usable": true
+  },
+  {
+   "id": "cur-31",
+   "item": "Flame Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Guts"
+   },
+   "text": "Guts boosts Attack when burned; the burn cost is paid back.",
+   "source": "curated",
+   "itemId": "flame-orb",
+   "partnerId": "guts",
+   "usable": true
+  },
+  {
+   "id": "cur-32",
+   "item": "Flame Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Quick Feet"
+   },
+   "text": "Quick Feet boosts Speed when statused.",
+   "source": "curated",
+   "itemId": "flame-orb",
+   "partnerId": "quick-feet",
+   "usable": true
+  },
+  {
+   "id": "cur-33",
+   "item": "Flame Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Marvel Scale"
+   },
+   "text": "Marvel Scale boosts Defense when statused.",
+   "source": "curated",
+   "itemId": "flame-orb",
+   "partnerId": "marvel-scale",
+   "usable": true
+  },
+  {
+   "id": "cur-34",
+   "item": "Flame Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Magic Guard"
+   },
+   "text": "Magic Guard blocks burn damage.",
+   "source": "curated",
+   "itemId": "flame-orb",
+   "partnerId": "magic-guard",
+   "usable": true
+  },
+  {
+   "id": "cur-35",
+   "item": "Sticky Barb",
+   "partner": {
+    "kind": "move",
+    "value": "Trick"
+   },
+   "text": "Trick passes a Sticky Barb to a foe, damaging them each turn.",
+   "source": "curated",
+   "itemId": "sticky-barb",
+   "partnerId": "trick",
+   "usable": true
+  },
+  {
+   "id": "cur-36",
+   "item": "Iron Ball",
+   "partner": {
+    "kind": "move",
+    "value": "Trick"
+   },
+   "text": "Iron Ball halves Speed; Trick it onto an opponent.",
+   "source": "curated",
+   "itemId": "iron-ball",
+   "partnerId": "trick",
+   "usable": true
+  },
+  {
+   "id": "cur-37",
+   "item": "Lagging Tail",
+   "partner": {
+    "kind": "move",
+    "value": "Trick Room"
+   },
+   "text": "Lagging Tail makes the holder move last, ideal for Trick Room.",
+   "source": "curated",
+   "itemId": "lagging-tail",
+   "partnerId": "trick-room",
+   "usable": true
+  },
+  {
+   "id": "cur-38",
+   "item": "Booster Energy",
+   "partner": {
+    "kind": "ability",
+    "value": "Protosynthesis"
+   },
+   "text": "Booster Energy activates Protosynthesis in any weather.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "protosynthesis",
+   "usable": false
+  },
+  {
+   "id": "cur-39",
+   "item": "Booster Energy",
+   "partner": {
+    "kind": "ability",
+    "value": "Quark Drive"
+   },
+   "text": "Booster Energy activates Quark Drive without Electric Terrain.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "quark-drive",
+   "usable": false
+  },
+  {
+   "id": "cur-40",
+   "item": "Loaded Dice",
+   "partner": {
+    "kind": "move",
+    "value": "Bullet Seed"
+   },
+   "text": "Loaded Dice makes multi-hit moves more likely to hit 4-5 times.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "bullet-seed",
+   "usable": false
+  },
+  {
+   "id": "cur-41",
+   "item": "Loaded Dice",
+   "partner": {
+    "kind": "move",
+    "value": "Icicle Spear"
+   },
+   "text": "Loaded Dice makes Icicle Spear hit more often.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "icicle-spear",
+   "usable": false
+  },
+  {
+   "id": "cur-42",
+   "item": "Loaded Dice",
+   "partner": {
+    "kind": "move",
+    "value": "Rock Blast"
+   },
+   "text": "Loaded Dice makes Rock Blast hit more often.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "rock-blast",
+   "usable": false
+  },
+  {
+   "id": "cur-43",
+   "item": "Scope Lens",
+   "partner": {
+    "kind": "move",
+    "value": "Slash"
+   },
+   "text": "Scope Lens raises critical-hit chance for high-crit moves.",
+   "source": "curated",
+   "itemId": "scope-lens",
+   "partnerId": "slash",
+   "usable": true
+  },
+  {
+   "id": "cur-44",
+   "item": "Razor Claw",
+   "partner": {
+    "kind": "move",
+    "value": "Night Slash"
+   },
+   "text": "Razor Claw adds to high-crit moves.",
+   "source": "curated",
+   "itemId": "razor-claw",
+   "partnerId": "night-slash",
+   "usable": true
+  },
+  {
+   "id": "cur-45",
+   "item": "Razor Fang",
+   "partner": {
+    "kind": "move",
+    "value": "Fake Out"
+   },
+   "text": "Razor Fang adds flinch chance; paired with Fake Out it flinches reliably.",
+   "source": "curated",
+   "itemId": "razor-fang",
+   "partnerId": "fake-out",
+   "usable": true
+  },
+  {
+   "id": "cur-46",
+   "item": "King's Rock",
+   "partner": {
+    "kind": "move",
+    "value": "Aqua Jet"
+   },
+   "text": "King's Rock adds flinch chance to every hit.",
+   "source": "curated",
+   "itemId": "kings-rock",
+   "partnerId": "aqua-jet",
+   "usable": true
+  },
+  {
+   "id": "cur-47",
+   "item": "Shell Bell",
+   "partner": {
+    "kind": "move",
+    "value": "Draco Meteor"
+   },
+   "text": "Shell Bell heals the holder for 1/8 of the damage it deals.",
+   "source": "curated",
+   "itemId": "shell-bell",
+   "partnerId": "draco-meteor",
+   "usable": true
+  },
+  {
+   "id": "cur-48",
+   "item": "Expert Belt",
+   "partner": {
+    "kind": "role",
+    "value": "coverage attacker"
+   },
+   "text": "Expert Belt boosts super-effective hits.",
+   "source": "curated",
+   "itemId": "expert-belt",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-49",
+   "item": "Muscle Band",
+   "partner": {
+    "kind": "move",
+    "value": "Return"
+   },
+   "text": "Muscle Band boosts all physical moves slightly.",
+   "source": "curated",
+   "itemId": "muscle-band",
+   "partnerId": "return",
+   "usable": true
+  },
+  {
+   "id": "cur-50",
+   "item": "Wise Glasses",
+   "partner": {
+    "kind": "move",
+    "value": "Hydro Pump"
+   },
+   "text": "Wise Glasses boosts all special moves slightly.",
+   "source": "curated",
+   "itemId": "wise-glasses",
+   "partnerId": "hydro-pump",
+   "usable": true
+  },
+  {
+   "id": "cur-51",
+   "item": "Metronome",
+   "partner": {
+    "kind": "move",
+    "value": "Close Combat"
+   },
+   "text": "Metronome rewards repeating the same move.",
+   "source": "curated",
+   "itemId": "metronome",
+   "partnerId": "close-combat",
+   "usable": true
+  },
+  {
+   "id": "cur-52",
+   "item": "Quick Claw",
+   "partner": {
+    "kind": "role",
+    "value": "slow tank"
+   },
+   "text": "Quick Claw sometimes lets a slow Pokémon act first.",
+   "source": "curated",
+   "itemId": "quick-claw",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-53",
+   "item": "Lucky Egg",
+   "partner": {
+    "kind": "role",
+    "value": "support"
+   },
+   "text": "Lucky Egg increases the holder's experience gain.",
+   "source": "curated",
+   "itemId": "lucky-egg",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-54",
+   "item": "Exp. Share",
+   "partner": {
+    "kind": "role",
+    "value": "support"
+   },
+   "text": "Exp. Share shares experience with benched Pokémon.",
+   "source": "curated",
+   "itemId": "exp-share",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-55",
+   "item": "Amulet Coin",
+   "partner": {
+    "kind": "role",
+    "value": "support"
+   },
+   "text": "Amulet Coin doubles prize money from trainer battles.",
+   "source": "curated",
+   "itemId": "amulet-coin",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-56",
+   "item": "Soothe Bell",
+   "partner": {
+    "kind": "role",
+    "value": "friendship"
+   },
+   "text": "Soothe Bell raises friendship faster.",
+   "source": "curated",
+   "itemId": "soothe-bell",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-57",
+   "item": "Everstone",
+   "partner": {
+    "kind": "role",
+    "value": "evolving"
+   },
+   "text": "Everstone prevents evolution, locking in a form.",
+   "source": "curated",
+   "itemId": "everstone",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-58",
+   "item": "Destiny Knot",
+   "partner": {
+    "kind": "move",
+    "value": "Attract"
+   },
+   "text": "Destiny Knot shares the infatuation with the attacker.",
+   "source": "curated",
+   "itemId": "destiny-knot",
+   "partnerId": "attract",
+   "usable": true
+  },
+  {
+   "id": "cur-59",
+   "item": "Mental Herb",
+   "partner": {
+    "kind": "move",
+    "value": "Taunt"
+   },
+   "text": "Mental Herb cures a one-time Taunt or Encore on the holder.",
+   "source": "curated",
+   "itemId": "mental-herb",
+   "partnerId": "taunt",
+   "usable": true
+  },
+  {
+   "id": "cur-60",
+   "item": "White Herb",
+   "partner": {
+    "kind": "move",
+    "value": "Close Combat"
+   },
+   "text": "White Herb restores lowered stats once, enabling repeated Close Combat.",
+   "source": "curated",
+   "itemId": "white-herb",
+   "partnerId": "close-combat",
+   "usable": true
+  },
+  {
+   "id": "cur-61",
+   "item": "White Herb",
+   "partner": {
+    "kind": "move",
+    "value": "Draco Meteor"
+   },
+   "text": "White Herb restores Sp. Atk once after Draco Meteor.",
+   "source": "curated",
+   "itemId": "white-herb",
+   "partnerId": "draco-meteor",
+   "usable": true
+  },
+  {
+   "id": "cur-62",
+   "item": "Power Herb",
+   "partner": {
+    "kind": "move",
+    "value": "Solar Beam"
+   },
+   "text": "Power Herb lets the holder skip the charge turn once.",
+   "source": "curated",
+   "itemId": "power-herb",
+   "partnerId": "solar-beam",
+   "usable": true
+  },
+  {
+   "id": "cur-63",
+   "item": "Power Herb",
+   "partner": {
+    "kind": "move",
+    "value": "Meteor Beam"
+   },
+   "text": "Power Herb lets the holder skip the charge turn once.",
+   "source": "curated",
+   "itemId": "power-herb",
+   "partnerId": "meteor-beam",
+   "usable": true
+  },
+  {
+   "id": "cur-64",
+   "item": "Throat Spray",
+   "partner": {
+    "kind": "move",
+    "value": "Hyper Voice"
+   },
+   "text": "Throat Spray boosts Sp. Atk after using a sound move.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "hyper-voice",
+   "usable": false
+  },
+  {
+   "id": "cur-65",
+   "item": "Protective Pads",
+   "partner": {
+    "kind": "ability",
+    "value": "Long Reach"
+   },
+   "text": "Protective Pads stop contact effects on both sides.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "long-reach",
+   "usable": false
+  },
+  {
+   "id": "cur-66",
+   "item": "Safety Goggles",
+   "partner": {
+    "kind": "move",
+    "value": "Spore"
+   },
+   "text": "Safety Goggles block powder moves.",
+   "source": "curated",
+   "itemId": "safety-goggles",
+   "partnerId": "spore",
+   "usable": true
+  },
+  {
+   "id": "cur-67",
+   "item": "Utility Umbrella",
+   "partner": {
+    "kind": "ability",
+    "value": "Drizzle"
+   },
+   "text": "Utility Umbrella ignores weather effects on the holder.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "drizzle",
+   "usable": false
+  },
+  {
+   "id": "cur-68",
+   "item": "Clear Amulet",
+   "partner": {
+    "kind": "ability",
+    "value": "Intimidate"
+   },
+   "text": "Clear Amulet blocks stat drops, including Intimidate.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "intimidate",
+   "usable": false
+  },
+  {
+   "id": "cur-69",
+   "item": "Covert Cloak",
+   "partner": {
+    "kind": "ability",
+    "value": "Sheer Force"
+   },
+   "text": "Covert Cloak blocks secondary effects from foes.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "sheer-force",
+   "usable": false
+  },
+  {
+   "id": "cur-70",
+   "item": "Ability Shield",
+   "partner": {
+    "kind": "ability",
+    "value": "Mold Breaker"
+   },
+   "text": "Ability Shield stops the holder's ability from being changed.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "mold-breaker",
+   "usable": false
+  },
+  {
+   "id": "cur-71",
+   "item": "Ability Capsule",
+   "partner": {
+    "kind": "role",
+    "value": "ability swap"
+   },
+   "text": "Ability Capsule swaps between normal abilities.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "cur-72",
+   "item": "Bottle Cap",
+   "partner": {
+    "kind": "role",
+    "value": "training"
+   },
+   "text": "Bottle Cap maxes a stat's IV.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "cur-73",
+   "item": "Rare Candy",
+   "partner": {
+    "kind": "role",
+    "value": "leveling"
+   },
+   "text": "Rare Candy raises one Pokémon by one level.",
+   "source": "curated",
+   "itemId": "rare-candy",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "cur-74",
+   "item": "Mystic Water",
+   "partner": {
+    "kind": "move",
+    "value": "Surf"
+   },
+   "text": "Mystic Water boosts Water moves by 20%.",
+   "source": "curated",
+   "itemId": "mystic-water",
+   "partnerId": "surf",
+   "usable": true
+  },
+  {
+   "id": "cur-75",
+   "item": "Charcoal",
+   "partner": {
+    "kind": "move",
+    "value": "Flamethrower"
+   },
+   "text": "Charcoal boosts Fire moves by 20%.",
+   "source": "curated",
+   "itemId": "charcoal",
+   "partnerId": "flamethrower",
+   "usable": true
+  },
+  {
+   "id": "cur-76",
+   "item": "Miracle Seed",
+   "partner": {
+    "kind": "move",
+    "value": "Giga Drain"
+   },
+   "text": "Miracle Seed boosts Grass moves by 20%.",
+   "source": "curated",
+   "itemId": "miracle-seed",
+   "partnerId": "giga-drain",
+   "usable": true
+  },
+  {
+   "id": "cur-77",
+   "item": "Magnet",
+   "partner": {
+    "kind": "move",
+    "value": "Thunderbolt"
+   },
+   "text": "Magnet boosts Electric moves by 20%.",
+   "source": "curated",
+   "itemId": "magnet",
+   "partnerId": "thunderbolt",
+   "usable": true
+  },
+  {
+   "id": "cur-78",
+   "item": "Never-Melt Ice",
+   "partner": {
+    "kind": "move",
+    "value": "Ice Beam"
+   },
+   "text": "Never-Melt Ice boosts Ice moves by 20%.",
+   "source": "curated",
+   "itemId": "nevermeltice",
+   "partnerId": "ice-beam",
+   "usable": true
+  },
+  {
+   "id": "cur-79",
+   "item": "Black Belt",
+   "partner": {
+    "kind": "move",
+    "value": "Close Combat"
+   },
+   "text": "Black Belt boosts Fighting moves by 20%.",
+   "source": "curated",
+   "itemId": "black-belt",
+   "partnerId": "close-combat",
+   "usable": true
+  },
+  {
+   "id": "cur-80",
+   "item": "Poison Barb",
+   "partner": {
+    "kind": "move",
+    "value": "Sludge Bomb"
+   },
+   "text": "Poison Barb boosts Poison moves by 20%.",
+   "source": "curated",
+   "itemId": "poison-barb",
+   "partnerId": "sludge-bomb",
+   "usable": true
+  },
+  {
+   "id": "cur-81",
+   "item": "Soft Sand",
+   "partner": {
+    "kind": "move",
+    "value": "Earthquake"
+   },
+   "text": "Soft Sand boosts Ground moves by 20%.",
+   "source": "curated",
+   "itemId": "soft-sand",
+   "partnerId": "earthquake",
+   "usable": true
+  },
+  {
+   "id": "cur-82",
+   "item": "Sharp Beak",
+   "partner": {
+    "kind": "move",
+    "value": "Brave Bird"
+   },
+   "text": "Sharp Beak boosts Flying moves by 20%.",
+   "source": "curated",
+   "itemId": "sharp-beak",
+   "partnerId": "brave-bird",
+   "usable": true
+  },
+  {
+   "id": "cur-83",
+   "item": "Twisted Spoon",
+   "partner": {
+    "kind": "move",
+    "value": "Psychic"
+   },
+   "text": "Twisted Spoon boosts Psychic moves by 20%.",
+   "source": "curated",
+   "itemId": "twistedspoon",
+   "partnerId": "psychic",
+   "usable": true
+  },
+  {
+   "id": "cur-84",
+   "item": "Silver Powder",
+   "partner": {
+    "kind": "move",
+    "value": "X-Scissor"
+   },
+   "text": "Silver Powder boosts Bug moves by 20%.",
+   "source": "curated",
+   "itemId": "silverpowder",
+   "partnerId": "x-scissor",
+   "usable": true
+  },
+  {
+   "id": "cur-85",
+   "item": "Hard Stone",
+   "partner": {
+    "kind": "move",
+    "value": "Stone Edge"
+   },
+   "text": "Hard Stone boosts Rock moves by 20%.",
+   "source": "curated",
+   "itemId": "hard-stone",
+   "partnerId": "stone-edge",
+   "usable": true
+  },
+  {
+   "id": "cur-86",
+   "item": "Spell Tag",
+   "partner": {
+    "kind": "move",
+    "value": "Shadow Ball"
+   },
+   "text": "Spell Tag boosts Ghost moves by 20%.",
+   "source": "curated",
+   "itemId": "spell-tag",
+   "partnerId": "shadow-ball",
+   "usable": true
+  },
+  {
+   "id": "cur-87",
+   "item": "Dragon Fang",
+   "partner": {
+    "kind": "move",
+    "value": "Dragon Claw"
+   },
+   "text": "Dragon Fang boosts Dragon moves by 20%.",
+   "source": "curated",
+   "itemId": "dragon-fang",
+   "partnerId": "dragon-claw",
+   "usable": true
+  },
+  {
+   "id": "cur-88",
+   "item": "Black Glasses",
+   "partner": {
+    "kind": "move",
+    "value": "Crunch"
+   },
+   "text": "Black Glasses boosts Dark moves by 20%.",
+   "source": "curated",
+   "itemId": "blackglasses",
+   "partnerId": "crunch",
+   "usable": true
+  },
+  {
+   "id": "cur-89",
+   "item": "Metal Coat",
+   "partner": {
+    "kind": "move",
+    "value": "Iron Head"
+   },
+   "text": "Metal Coat boosts Steel moves by 20%.",
+   "source": "curated",
+   "itemId": "metal-coat",
+   "partnerId": "iron-head",
+   "usable": true
+  },
+  {
+   "id": "cur-90",
+   "item": "Silk Scarf",
+   "partner": {
+    "kind": "move",
+    "value": "Hyper Beam"
+   },
+   "text": "Silk Scarf boosts Normal moves by 20%.",
+   "source": "curated",
+   "itemId": "silk-scarf",
+   "partnerId": "hyper-beam",
+   "usable": true
+  },
+  {
+   "id": "cur-91",
+   "item": "Fairy Feather",
+   "partner": {
+    "kind": "move",
+    "value": "Moonblast"
+   },
+   "text": "Fairy Feather boosts Fairy moves by 20%.",
+   "source": "curated",
+   "itemId": "fairy-feather",
+   "partnerId": "moonblast",
+   "usable": true
+  },
+  {
+   "id": "cur-92",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu"
+   },
+   "text": "Light Ball doubles Pikachu's Attack and Sp. Atk.",
+   "source": "curated",
+   "itemId": "light-ball",
+   "partnerId": "pikachu",
+   "usable": true
+  },
+  {
+   "id": "cur-93",
+   "item": "Thick Club",
+   "partner": {
+    "kind": "species",
+    "value": "Marowak"
+   },
+   "text": "Thick Club doubles Cubone and Marowak's Attack.",
+   "source": "curated",
+   "itemId": "thick-club",
+   "partnerId": "marowak",
+   "usable": true
+  },
+  {
+   "id": "cur-94",
+   "item": "Thick Club",
+   "partner": {
+    "kind": "species",
+    "value": "Cubone"
+   },
+   "text": "Thick Club doubles Cubone and Marowak's Attack.",
+   "source": "curated",
+   "itemId": "thick-club",
+   "partnerId": "cubone",
+   "usable": true
+  },
+  {
+   "id": "cur-95",
+   "item": "Metal Powder",
+   "partner": {
+    "kind": "species",
+    "value": "Ditto"
+   },
+   "text": "Metal Powder boosts Ditto's Defense when untransformed.",
+   "source": "curated",
+   "itemId": "metal-powder",
+   "partnerId": "ditto",
+   "usable": true
+  },
+  {
+   "id": "cur-96",
+   "item": "Quick Powder",
+   "partner": {
+    "kind": "species",
+    "value": "Ditto"
+   },
+   "text": "Quick Powder doubles Ditto's Speed when untransformed.",
+   "source": "curated",
+   "itemId": "quick-powder",
+   "partnerId": "ditto",
+   "usable": true
+  },
+  {
+   "id": "cur-97",
+   "item": "Lucky Punch",
+   "partner": {
+    "kind": "species",
+    "value": "Chansey"
+   },
+   "text": "Lucky Punch raises Chansey's critical-hit chance.",
+   "source": "curated",
+   "itemId": "lucky-punch",
+   "partnerId": "chansey",
+   "usable": true
+  },
+  {
+   "id": "cur-98",
+   "item": "Leek",
+   "partner": {
+    "kind": "species",
+    "value": "Farfetch'd"
+   },
+   "text": "Leek raises Farfetch'd's critical-hit chance.",
+   "source": "curated",
+   "itemId": "stick",
+   "partnerId": "farfetchd",
+   "usable": true
+  },
+  {
+   "id": "cur-100",
+   "item": "Deep Sea Tooth",
+   "partner": {
+    "kind": "species",
+    "value": "Clamperl"
+   },
+   "text": "Deep Sea Tooth doubles Clamperl's Sp. Atk.",
+   "source": "curated",
+   "itemId": "deep-sea-tooth",
+   "partnerId": "clamperl",
+   "usable": true
+  },
+  {
+   "id": "cur-101",
+   "item": "Deep Sea Scale",
+   "partner": {
+    "kind": "species",
+    "value": "Clamperl"
+   },
+   "text": "Deep Sea Scale doubles Clamperl's Sp. Def.",
+   "source": "curated",
+   "itemId": "deep-sea-scale",
+   "partnerId": "clamperl",
+   "usable": true
+  },
+  {
+   "id": "cur-102",
+   "item": "Soul Dew",
+   "partner": {
+    "kind": "species",
+    "value": "Latios"
+   },
+   "text": "Soul Dew boosts Latios's Psychic and Dragon moves.",
+   "source": "curated",
+   "itemId": "soul-dew",
+   "partnerId": "latios",
+   "usable": true
+  },
+  {
+   "id": "cur-103",
+   "item": "Soul Dew",
+   "partner": {
+    "kind": "species",
+    "value": "Latias"
+   },
+   "text": "Soul Dew boosts Latias's Psychic and Dragon moves.",
+   "source": "curated",
+   "itemId": "soul-dew",
+   "partnerId": "latias",
+   "usable": true
+  },
+  {
+   "id": "cur-104",
+   "item": "Adamant Orb",
+   "partner": {
+    "kind": "species",
+    "value": "Dialga"
+   },
+   "text": "Adamant Orb boosts Dialga's Dragon and Steel moves.",
+   "source": "curated",
+   "itemId": "adamant-orb",
+   "partnerId": "dialga",
+   "usable": true
+  },
+  {
+   "id": "cur-105",
+   "item": "Lustrous Orb",
+   "partner": {
+    "kind": "species",
+    "value": "Palkia"
+   },
+   "text": "Lustrous Orb boosts Palkia's Dragon and Water moves.",
+   "source": "curated",
+   "itemId": "lustrous-orb",
+   "partnerId": "palkia",
+   "usable": true
+  },
+  {
+   "id": "cur-106",
+   "item": "Griseous Orb",
+   "partner": {
+    "kind": "species",
+    "value": "Giratina"
+   },
+   "text": "Griseous Orb boosts Giratina's Dragon and Ghost moves and enables Origin Forme.",
+   "source": "curated",
+   "itemId": "griseous-orb",
+   "partnerId": "giratina",
+   "usable": true
+  },
+  {
+   "id": "cur-107",
+   "item": "Rusted Sword",
+   "partner": {
+    "kind": "species",
+    "value": "Zacian"
+   },
+   "text": "Rusted Sword transforms Zacian into its Crowned Sword form.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "zacian",
+   "usable": false
+  },
+  {
+   "id": "cur-108",
+   "item": "Rusted Shield",
+   "partner": {
+    "kind": "species",
+    "value": "Zamazenta"
+   },
+   "text": "Rusted Shield transforms Zamazenta into its Crowned Shield form.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "zamazenta",
+   "usable": false
+  },
+  {
+   "id": "cur-109",
+   "item": "Blue Orb",
+   "partner": {
+    "kind": "species",
+    "value": "Kyogre"
+   },
+   "text": "Blue Orb triggers Kyogre's Primal Reversion.",
+   "source": "curated",
+   "itemId": "blue-orb",
+   "partnerId": "kyogre",
+   "usable": true
+  },
+  {
+   "id": "cur-110",
+   "item": "Red Orb",
+   "partner": {
+    "kind": "species",
+    "value": "Groudon"
+   },
+   "text": "Red Orb triggers Groudon's Primal Reversion.",
+   "source": "curated",
+   "itemId": "red-orb",
+   "partnerId": "groudon",
+   "usable": true
+  },
+  {
+   "id": "cur-111",
+   "item": "Wellspring Mask",
+   "partner": {
+    "kind": "species",
+    "value": "Ogerpon"
+   },
+   "text": "Wellspring Mask changes Ogerpon's form and type.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "ogerpon",
+   "usable": false
+  },
+  {
+   "id": "cur-112",
+   "item": "Hearthflame Mask",
+   "partner": {
+    "kind": "species",
+    "value": "Ogerpon"
+   },
+   "text": "Hearthflame Mask changes Ogerpon's form and type.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "ogerpon",
+   "usable": false
+  },
+  {
+   "id": "cur-113",
+   "item": "Cornerstone Mask",
+   "partner": {
+    "kind": "species",
+    "value": "Ogerpon"
+   },
+   "text": "Cornerstone Mask changes Ogerpon's form and type.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "ogerpon",
+   "usable": false
+  },
+  {
+   "id": "cur-114",
+   "item": "Eject Button",
+   "partner": {
+    "kind": "ability",
+    "value": "Emergency Exit"
+   },
+   "text": "Eject Button and Emergency Exit both pivot; redundant.",
+   "source": "curated",
+   "itemId": "eject-button",
+   "partnerId": "emergency-exit",
+   "usable": true
+  },
+  {
+   "id": "cur-115",
+   "item": "Red Card",
+   "partner": {
+    "kind": "ability",
+    "value": "Intimidate"
+   },
+   "text": "Red Card drags a foe out after a hit, restarting Intimidate.",
+   "source": "curated",
+   "itemId": "red-card",
+   "partnerId": "intimidate",
+   "usable": true
+  },
+  {
+   "id": "cur-116",
+   "item": "Eject Pack",
+   "partner": {
+    "kind": "ability",
+    "value": "Intimidate"
+   },
+   "text": "Eject Pack switches the holder out when a stat drops.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "intimidate",
+   "usable": false
+  },
+  {
+   "id": "cur-117",
+   "item": "Absorb Bulb",
+   "partner": {
+    "kind": "ability",
+    "value": "Water Absorb"
+   },
+   "text": "Absorb Bulb boosts Sp. Atk when hit by Water.",
+   "source": "curated",
+   "itemId": "absorb-bulb",
+   "partnerId": "water-absorb",
+   "usable": true
+  },
+  {
+   "id": "cur-118",
+   "item": "Cell Battery",
+   "partner": {
+    "kind": "ability",
+    "value": "Lightning Rod"
+   },
+   "text": "Cell Battery boosts Attack when hit by Electric.",
+   "source": "curated",
+   "itemId": "cell-battery",
+   "partnerId": "lightning-rod",
+   "usable": true
+  },
+  {
+   "id": "cur-119",
+   "item": "Luminous Moss",
+   "partner": {
+    "kind": "ability",
+    "value": "Storm Drain"
+   },
+   "text": "Luminous Moss boosts Sp. Def when hit by Water.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "storm-drain",
+   "usable": false
+  },
+  {
+   "id": "cur-120",
+   "item": "Snowball",
+   "partner": {
+    "kind": "ability",
+    "value": "Snow Warning"
+   },
+   "text": "Snowball boosts Attack when hit by Ice.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "snow-warning",
+   "usable": false
+  },
+  {
+   "id": "cur-121",
+   "item": "Air Balloon",
+   "partner": {
+    "kind": "move",
+    "value": "Earthquake"
+   },
+   "text": "Air Balloon dodges Ground moves until it pops.",
+   "source": "curated",
+   "itemId": "air-balloon",
+   "partnerId": "earthquake",
+   "usable": true
+  },
+  {
+   "id": "cur-122",
+   "item": "Shed Shell",
+   "partner": {
+    "kind": "move",
+    "value": "Mean Look"
+   },
+   "text": "Shed Shell frees the holder from traps.",
+   "source": "curated",
+   "itemId": "shed-shell",
+   "partnerId": "mean-look",
+   "usable": true
+  },
+  {
+   "id": "cur-123",
+   "item": "Binding Band",
+   "partner": {
+    "kind": "move",
+    "value": "Bind"
+   },
+   "text": "Binding Band makes trapping moves deal more damage.",
+   "source": "curated",
+   "itemId": "binding-band",
+   "partnerId": "bind",
+   "usable": true
+  },
+  {
+   "id": "cur-124",
+   "item": "Grip Claw",
+   "partner": {
+    "kind": "move",
+    "value": "Fire Spin"
+   },
+   "text": "Grip Claw extends trapping moves to the maximum duration.",
+   "source": "curated",
+   "itemId": "grip-claw",
+   "partnerId": "fire-spin",
+   "usable": true
+  },
+  {
+   "id": "cur-125",
+   "item": "Big Root",
+   "partner": {
+    "kind": "move",
+    "value": "Giga Drain"
+   },
+   "text": "Big Root boosts draining moves.",
+   "source": "curated",
+   "itemId": "big-root",
+   "partnerId": "giga-drain",
+   "usable": true
+  },
+  {
+   "id": "cur-126",
+   "item": "Big Root",
+   "partner": {
+    "kind": "move",
+    "value": "Leech Seed"
+   },
+   "text": "Big Root boosts Leech Seed's recovery.",
+   "source": "curated",
+   "itemId": "big-root",
+   "partnerId": "leech-seed",
+   "usable": true
+  },
+  {
+   "id": "cur-127",
+   "item": "Electric Seed",
+   "partner": {
+    "kind": "move",
+    "value": "Electric Terrain"
+   },
+   "text": "Electric Seed boosts Defense when terrain appears.",
+   "source": "curated",
+   "itemId": "electric-seed",
+   "partnerId": "electric-terrain",
+   "usable": true
+  },
+  {
+   "id": "cur-128",
+   "item": "Grassy Seed",
+   "partner": {
+    "kind": "move",
+    "value": "Grassy Terrain"
+   },
+   "text": "Grassy Seed boosts Defense when terrain appears.",
+   "source": "curated",
+   "itemId": "grassy-seed",
+   "partnerId": "grassy-terrain",
+   "usable": true
+  },
+  {
+   "id": "cur-129",
+   "item": "Misty Seed",
+   "partner": {
+    "kind": "move",
+    "value": "Misty Terrain"
+   },
+   "text": "Misty Seed boosts Sp. Def when terrain appears.",
+   "source": "curated",
+   "itemId": "misty-seed",
+   "partnerId": "misty-terrain",
+   "usable": true
+  },
+  {
+   "id": "cur-130",
+   "item": "Psychic Seed",
+   "partner": {
+    "kind": "move",
+    "value": "Psychic Terrain"
+   },
+   "text": "Psychic Seed boosts Sp. Def when terrain appears.",
+   "source": "curated",
+   "itemId": "psychic-seed",
+   "partnerId": "psychic-terrain",
+   "usable": true
+  },
+  {
+   "id": "cur-131",
+   "item": "Room Service",
+   "partner": {
+    "kind": "move",
+    "value": "Trick Room"
+   },
+   "text": "Room Service lowers Speed when Trick Room starts.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "trick-room",
+   "usable": false
+  },
+  {
+   "id": "cur-132",
+   "item": "Blunder Policy",
+   "partner": {
+    "kind": "move",
+    "value": "Focus Blast"
+   },
+   "text": "Blunder Policy rewards a miss with a Speed boost.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "focus-blast",
+   "usable": false
+  },
+  {
+   "id": "cur-133",
+   "item": "Adrenaline Orb",
+   "partner": {
+    "kind": "ability",
+    "value": "Intimidate"
+   },
+   "text": "Adrenaline Orb boosts Speed after being Intimidated.",
+   "source": "curated",
+   "itemId": "adrenaline-orb",
+   "partnerId": "intimidate",
+   "usable": true
+  },
+  {
+   "id": "cur-134",
+   "item": "Throat Spray",
+   "partner": {
+    "kind": "ability",
+    "value": "Punk Rock"
+   },
+   "text": "Punk Rock boosts sound moves; Throat Spray stacks mildly.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "punk-rock",
+   "usable": false
+  },
+  {
+   "id": "cur-135",
+   "item": "Punching Glove",
+   "partner": {
+    "kind": "move",
+    "value": "Mach Punch"
+   },
+   "text": "Punching Glove boosts punches and avoids contact.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "mach-punch",
+   "usable": false
+  },
+  {
+   "id": "cur-136",
+   "item": "Heavy-Duty Boots",
+   "partner": {
+    "kind": "move",
+    "value": "Stealth Rock"
+   },
+   "text": "Heavy-Duty Boots ignore entry hazards.",
+   "source": "curated",
+   "itemId": null,
+   "partnerId": "stealth-rock",
+   "usable": false
+  },
+  {
+   "id": "cur-137",
+   "item": "Rocky Helmet",
+   "partner": {
+    "kind": "ability",
+    "value": "Iron Barbs"
+   },
+   "text": "Iron Barbs and Rocky Helmet stack contact damage.",
+   "source": "curated",
+   "itemId": "rocky-helmet",
+   "partnerId": "iron-barbs",
+   "usable": true
+  },
+  {
+   "id": "syn-139",
+   "item": "Thunder Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu"
+   },
+   "text": "Thunder Stone evolves Pikachu into Raichu.",
+   "source": "dex:evoItem",
+   "itemId": "thunder-stone",
+   "partnerId": "pikachu",
+   "usable": true
+  },
+  {
+   "id": "syn-140",
+   "item": "Ice Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Sandshrew-Alola"
+   },
+   "text": "Ice Stone evolves Sandshrew-Alola into Sandslash-Alola.",
+   "source": "dex:evoItem",
+   "itemId": "ice-stone",
+   "partnerId": "sandshrew-alola",
+   "usable": true
+  },
+  {
+   "id": "syn-141",
+   "item": "Moon Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Nidorina"
+   },
+   "text": "Moon Stone evolves Nidorina into Nidoqueen.",
+   "source": "dex:evoItem",
+   "itemId": "moon-stone",
+   "partnerId": "nidorina",
+   "usable": true
+  },
+  {
+   "id": "syn-142",
+   "item": "Moon Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Nidorino"
+   },
+   "text": "Moon Stone evolves Nidorino into Nidoking.",
+   "source": "dex:evoItem",
+   "itemId": "moon-stone",
+   "partnerId": "nidorino",
+   "usable": true
+  },
+  {
+   "id": "syn-143",
+   "item": "Moon Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Clefairy"
+   },
+   "text": "Moon Stone evolves Clefairy into Clefable.",
+   "source": "dex:evoItem",
+   "itemId": "moon-stone",
+   "partnerId": "clefairy",
+   "usable": true
+  },
+  {
+   "id": "syn-144",
+   "item": "Fire Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Vulpix"
+   },
+   "text": "Fire Stone evolves Vulpix into Ninetales.",
+   "source": "dex:evoItem",
+   "itemId": "fire-stone",
+   "partnerId": "vulpix",
+   "usable": true
+  },
+  {
+   "id": "syn-145",
+   "item": "Ice Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Vulpix-Alola"
+   },
+   "text": "Ice Stone evolves Vulpix-Alola into Ninetales-Alola.",
+   "source": "dex:evoItem",
+   "itemId": "ice-stone",
+   "partnerId": "vulpix-alola",
+   "usable": true
+  },
+  {
+   "id": "syn-146",
+   "item": "Moon Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Jigglypuff"
+   },
+   "text": "Moon Stone evolves Jigglypuff into Wigglytuff.",
+   "source": "dex:evoItem",
+   "itemId": "moon-stone",
+   "partnerId": "jigglypuff",
+   "usable": true
+  },
+  {
+   "id": "syn-147",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Gloom"
+   },
+   "text": "Leaf Stone evolves Gloom into Vileplume.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "gloom",
+   "usable": true
+  },
+  {
+   "id": "syn-148",
+   "item": "Fire Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Growlithe"
+   },
+   "text": "Fire Stone evolves Growlithe into Arcanine.",
+   "source": "dex:evoItem",
+   "itemId": "fire-stone",
+   "partnerId": "growlithe",
+   "usable": true
+  },
+  {
+   "id": "syn-149",
+   "item": "Fire Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Growlithe-Hisui"
+   },
+   "text": "Fire Stone evolves Growlithe-Hisui into Arcanine-Hisui.",
+   "source": "dex:evoItem",
+   "itemId": "fire-stone",
+   "partnerId": "growlithe-hisui",
+   "usable": true
+  },
+  {
+   "id": "syn-150",
+   "item": "Water Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Poliwhirl"
+   },
+   "text": "Water Stone evolves Poliwhirl into Poliwrath.",
+   "source": "dex:evoItem",
+   "itemId": "water-stone",
+   "partnerId": "poliwhirl",
+   "usable": true
+  },
+  {
+   "id": "syn-151",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Weepinbell"
+   },
+   "text": "Leaf Stone evolves Weepinbell into Victreebel.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "weepinbell",
+   "usable": true
+  },
+  {
+   "id": "syn-152",
+   "item": "Galarica Cuff",
+   "partner": {
+    "kind": "species",
+    "value": "Slowpoke-Galar"
+   },
+   "text": "Galarica Cuff evolves Slowpoke-Galar into Slowbro-Galar.",
+   "source": "dex:evoItem",
+   "itemId": "galarica-cuff",
+   "partnerId": "slowpoke-galar",
+   "usable": true
+  },
+  {
+   "id": "syn-153",
+   "item": "Water Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Shellder"
+   },
+   "text": "Water Stone evolves Shellder into Cloyster.",
+   "source": "dex:evoItem",
+   "itemId": "water-stone",
+   "partnerId": "shellder",
+   "usable": true
+  },
+  {
+   "id": "syn-154",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Voltorb-Hisui"
+   },
+   "text": "Leaf Stone evolves Voltorb-Hisui into Electrode-Hisui.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "voltorb-hisui",
+   "usable": true
+  },
+  {
+   "id": "syn-155",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Exeggcute"
+   },
+   "text": "Leaf Stone evolves Exeggcute into Exeggutor.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "exeggcute",
+   "usable": true
+  },
+  {
+   "id": "syn-156",
+   "item": "Oval Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Happiny"
+   },
+   "text": "Oval Stone evolves Happiny into Chansey.",
+   "source": "dex:evoItem",
+   "itemId": "oval-stone",
+   "partnerId": "happiny",
+   "usable": true
+  },
+  {
+   "id": "syn-157",
+   "item": "Water Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Staryu"
+   },
+   "text": "Water Stone evolves Staryu into Starmie.",
+   "source": "dex:evoItem",
+   "itemId": "water-stone",
+   "partnerId": "staryu",
+   "usable": true
+  },
+  {
+   "id": "syn-158",
+   "item": "Water Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Eevee"
+   },
+   "text": "Water Stone evolves Eevee into Vaporeon.",
+   "source": "dex:evoItem",
+   "itemId": "water-stone",
+   "partnerId": "eevee",
+   "usable": true
+  },
+  {
+   "id": "syn-159",
+   "item": "Thunder Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Eevee"
+   },
+   "text": "Thunder Stone evolves Eevee into Jolteon.",
+   "source": "dex:evoItem",
+   "itemId": "thunder-stone",
+   "partnerId": "eevee",
+   "usable": true
+  },
+  {
+   "id": "syn-160",
+   "item": "Fire Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Eevee"
+   },
+   "text": "Fire Stone evolves Eevee into Flareon.",
+   "source": "dex:evoItem",
+   "itemId": "fire-stone",
+   "partnerId": "eevee",
+   "usable": true
+  },
+  {
+   "id": "syn-161",
+   "item": "Sun Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Gloom"
+   },
+   "text": "Sun Stone evolves Gloom into Bellossom.",
+   "source": "dex:evoItem",
+   "itemId": "sun-stone",
+   "partnerId": "gloom",
+   "usable": true
+  },
+  {
+   "id": "syn-162",
+   "item": "King's Rock",
+   "partner": {
+    "kind": "species",
+    "value": "Poliwhirl"
+   },
+   "text": "King's Rock evolves Poliwhirl into Politoed.",
+   "source": "dex:evoItem",
+   "itemId": "kings-rock",
+   "partnerId": "poliwhirl",
+   "usable": true
+  },
+  {
+   "id": "syn-163",
+   "item": "Sun Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Sunkern"
+   },
+   "text": "Sun Stone evolves Sunkern into Sunflora.",
+   "source": "dex:evoItem",
+   "itemId": "sun-stone",
+   "partnerId": "sunkern",
+   "usable": true
+  },
+  {
+   "id": "syn-164",
+   "item": "King's Rock",
+   "partner": {
+    "kind": "species",
+    "value": "Slowpoke"
+   },
+   "text": "King's Rock evolves Slowpoke into Slowking.",
+   "source": "dex:evoItem",
+   "itemId": "kings-rock",
+   "partnerId": "slowpoke",
+   "usable": true
+  },
+  {
+   "id": "syn-165",
+   "item": "Galarica Wreath",
+   "partner": {
+    "kind": "species",
+    "value": "Slowpoke-Galar"
+   },
+   "text": "Galarica Wreath evolves Slowpoke-Galar into Slowking-Galar.",
+   "source": "dex:evoItem",
+   "itemId": "galarica-wreath",
+   "partnerId": "slowpoke-galar",
+   "usable": true
+  },
+  {
+   "id": "syn-166",
+   "item": "Metal Coat",
+   "partner": {
+    "kind": "species",
+    "value": "Onix"
+   },
+   "text": "Metal Coat evolves Onix into Steelix.",
+   "source": "dex:evoItem",
+   "itemId": "metal-coat",
+   "partnerId": "onix",
+   "usable": true
+  },
+  {
+   "id": "syn-167",
+   "item": "Metal Coat",
+   "partner": {
+    "kind": "species",
+    "value": "Scyther"
+   },
+   "text": "Metal Coat evolves Scyther into Scizor.",
+   "source": "dex:evoItem",
+   "itemId": "metal-coat",
+   "partnerId": "scyther",
+   "usable": true
+  },
+  {
+   "id": "syn-168",
+   "item": "Dragon Scale",
+   "partner": {
+    "kind": "species",
+    "value": "Seadra"
+   },
+   "text": "Dragon Scale evolves Seadra into Kingdra.",
+   "source": "dex:evoItem",
+   "itemId": "dragon-scale",
+   "partnerId": "seadra",
+   "usable": true
+  },
+  {
+   "id": "syn-169",
+   "item": "Up-Grade",
+   "partner": {
+    "kind": "species",
+    "value": "Porygon"
+   },
+   "text": "Up-Grade evolves Porygon into Porygon2.",
+   "source": "dex:evoItem",
+   "itemId": "up-grade",
+   "partnerId": "porygon",
+   "usable": true
+  },
+  {
+   "id": "syn-170",
+   "item": "Water Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Lombre"
+   },
+   "text": "Water Stone evolves Lombre into Ludicolo.",
+   "source": "dex:evoItem",
+   "itemId": "water-stone",
+   "partnerId": "lombre",
+   "usable": true
+  },
+  {
+   "id": "syn-171",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Nuzleaf"
+   },
+   "text": "Leaf Stone evolves Nuzleaf into Shiftry.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "nuzleaf",
+   "usable": true
+  },
+  {
+   "id": "syn-172",
+   "item": "Moon Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Skitty"
+   },
+   "text": "Moon Stone evolves Skitty into Delcatty.",
+   "source": "dex:evoItem",
+   "itemId": "moon-stone",
+   "partnerId": "skitty",
+   "usable": true
+  },
+  {
+   "id": "syn-173",
+   "item": "Prism Scale",
+   "partner": {
+    "kind": "species",
+    "value": "Feebas"
+   },
+   "text": "Prism Scale evolves Feebas into Milotic.",
+   "source": "dex:evoItem",
+   "itemId": "prism-scale",
+   "partnerId": "feebas",
+   "usable": true
+  },
+  {
+   "id": "syn-174",
+   "item": "Shiny Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Roselia"
+   },
+   "text": "Shiny Stone evolves Roselia into Roserade.",
+   "source": "dex:evoItem",
+   "itemId": "shiny-stone",
+   "partnerId": "roselia",
+   "usable": true
+  },
+  {
+   "id": "syn-175",
+   "item": "Dusk Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Misdreavus"
+   },
+   "text": "Dusk Stone evolves Misdreavus into Mismagius.",
+   "source": "dex:evoItem",
+   "itemId": "dusk-stone",
+   "partnerId": "misdreavus",
+   "usable": true
+  },
+  {
+   "id": "syn-176",
+   "item": "Dusk Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Murkrow"
+   },
+   "text": "Dusk Stone evolves Murkrow into Honchkrow.",
+   "source": "dex:evoItem",
+   "itemId": "dusk-stone",
+   "partnerId": "murkrow",
+   "usable": true
+  },
+  {
+   "id": "syn-177",
+   "item": "Razor Claw",
+   "partner": {
+    "kind": "species",
+    "value": "Sneasel"
+   },
+   "text": "Razor Claw evolves Sneasel into Weavile.",
+   "source": "dex:evoItem",
+   "itemId": "razor-claw",
+   "partnerId": "sneasel",
+   "usable": true
+  },
+  {
+   "id": "syn-178",
+   "item": "Thunder Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Magneton"
+   },
+   "text": "Thunder Stone evolves Magneton into Magnezone.",
+   "source": "dex:evoItem",
+   "itemId": "thunder-stone",
+   "partnerId": "magneton",
+   "usable": true
+  },
+  {
+   "id": "syn-179",
+   "item": "Protector",
+   "partner": {
+    "kind": "species",
+    "value": "Rhydon"
+   },
+   "text": "Protector evolves Rhydon into Rhyperior.",
+   "source": "dex:evoItem",
+   "itemId": "protector",
+   "partnerId": "rhydon",
+   "usable": true
+  },
+  {
+   "id": "syn-180",
+   "item": "Electirizer",
+   "partner": {
+    "kind": "species",
+    "value": "Electabuzz"
+   },
+   "text": "Electirizer evolves Electabuzz into Electivire.",
+   "source": "dex:evoItem",
+   "itemId": "electirizer",
+   "partnerId": "electabuzz",
+   "usable": true
+  },
+  {
+   "id": "syn-181",
+   "item": "Magmarizer",
+   "partner": {
+    "kind": "species",
+    "value": "Magmar"
+   },
+   "text": "Magmarizer evolves Magmar into Magmortar.",
+   "source": "dex:evoItem",
+   "itemId": "magmarizer",
+   "partnerId": "magmar",
+   "usable": true
+  },
+  {
+   "id": "syn-182",
+   "item": "Shiny Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Togetic"
+   },
+   "text": "Shiny Stone evolves Togetic into Togekiss.",
+   "source": "dex:evoItem",
+   "itemId": "shiny-stone",
+   "partnerId": "togetic",
+   "usable": true
+  },
+  {
+   "id": "syn-183",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Eevee"
+   },
+   "text": "Leaf Stone evolves Eevee into Leafeon.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "eevee",
+   "usable": true
+  },
+  {
+   "id": "syn-184",
+   "item": "Ice Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Eevee"
+   },
+   "text": "Ice Stone evolves Eevee into Glaceon.",
+   "source": "dex:evoItem",
+   "itemId": "ice-stone",
+   "partnerId": "eevee",
+   "usable": true
+  },
+  {
+   "id": "syn-185",
+   "item": "Razor Fang",
+   "partner": {
+    "kind": "species",
+    "value": "Gligar"
+   },
+   "text": "Razor Fang evolves Gligar into Gliscor.",
+   "source": "dex:evoItem",
+   "itemId": "razor-fang",
+   "partnerId": "gligar",
+   "usable": true
+  },
+  {
+   "id": "syn-186",
+   "item": "Dubious Disc",
+   "partner": {
+    "kind": "species",
+    "value": "Porygon2"
+   },
+   "text": "Dubious Disc evolves Porygon2 into Porygon-Z.",
+   "source": "dex:evoItem",
+   "itemId": "dubious-disc",
+   "partnerId": "porygon2",
+   "usable": true
+  },
+  {
+   "id": "syn-187",
+   "item": "Dawn Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Kirlia"
+   },
+   "text": "Dawn Stone evolves Kirlia into Gallade.",
+   "source": "dex:evoItem",
+   "itemId": "dawn-stone",
+   "partnerId": "kirlia",
+   "usable": true
+  },
+  {
+   "id": "syn-188",
+   "item": "Reaper Cloth",
+   "partner": {
+    "kind": "species",
+    "value": "Dusclops"
+   },
+   "text": "Reaper Cloth evolves Dusclops into Dusknoir.",
+   "source": "dex:evoItem",
+   "itemId": "reaper-cloth",
+   "partnerId": "dusclops",
+   "usable": true
+  },
+  {
+   "id": "syn-189",
+   "item": "Dawn Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Snorunt"
+   },
+   "text": "Dawn Stone evolves Snorunt into Froslass.",
+   "source": "dex:evoItem",
+   "itemId": "dawn-stone",
+   "partnerId": "snorunt",
+   "usable": true
+  },
+  {
+   "id": "syn-190",
+   "item": "Leaf Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Pansage"
+   },
+   "text": "Leaf Stone evolves Pansage into Simisage.",
+   "source": "dex:evoItem",
+   "itemId": "leaf-stone",
+   "partnerId": "pansage",
+   "usable": true
+  },
+  {
+   "id": "syn-191",
+   "item": "Fire Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Pansear"
+   },
+   "text": "Fire Stone evolves Pansear into Simisear.",
+   "source": "dex:evoItem",
+   "itemId": "fire-stone",
+   "partnerId": "pansear",
+   "usable": true
+  },
+  {
+   "id": "syn-192",
+   "item": "Water Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Panpour"
+   },
+   "text": "Water Stone evolves Panpour into Simipour.",
+   "source": "dex:evoItem",
+   "itemId": "water-stone",
+   "partnerId": "panpour",
+   "usable": true
+  },
+  {
+   "id": "syn-193",
+   "item": "Moon Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Munna"
+   },
+   "text": "Moon Stone evolves Munna into Musharna.",
+   "source": "dex:evoItem",
+   "itemId": "moon-stone",
+   "partnerId": "munna",
+   "usable": true
+  },
+  {
+   "id": "syn-194",
+   "item": "Sun Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Cottonee"
+   },
+   "text": "Sun Stone evolves Cottonee into Whimsicott.",
+   "source": "dex:evoItem",
+   "itemId": "sun-stone",
+   "partnerId": "cottonee",
+   "usable": true
+  },
+  {
+   "id": "syn-195",
+   "item": "Sun Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Petilil"
+   },
+   "text": "Sun Stone evolves Petilil into Lilligant.",
+   "source": "dex:evoItem",
+   "itemId": "sun-stone",
+   "partnerId": "petilil",
+   "usable": true
+  },
+  {
+   "id": "syn-196",
+   "item": "Ice Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Darumaka-Galar"
+   },
+   "text": "Ice Stone evolves Darumaka-Galar into Darmanitan-Galar.",
+   "source": "dex:evoItem",
+   "itemId": "ice-stone",
+   "partnerId": "darumaka-galar",
+   "usable": true
+  },
+  {
+   "id": "syn-197",
+   "item": "Shiny Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Minccino"
+   },
+   "text": "Shiny Stone evolves Minccino into Cinccino.",
+   "source": "dex:evoItem",
+   "itemId": "shiny-stone",
+   "partnerId": "minccino",
+   "usable": true
+  },
+  {
+   "id": "syn-198",
+   "item": "Thunder Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Eelektrik"
+   },
+   "text": "Thunder Stone evolves Eelektrik into Eelektross.",
+   "source": "dex:evoItem",
+   "itemId": "thunder-stone",
+   "partnerId": "eelektrik",
+   "usable": true
+  },
+  {
+   "id": "syn-199",
+   "item": "Dusk Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Lampent"
+   },
+   "text": "Dusk Stone evolves Lampent into Chandelure.",
+   "source": "dex:evoItem",
+   "itemId": "dusk-stone",
+   "partnerId": "lampent",
+   "usable": true
+  },
+  {
+   "id": "syn-200",
+   "item": "Shiny Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Floette"
+   },
+   "text": "Shiny Stone evolves Floette into Florges.",
+   "source": "dex:evoItem",
+   "itemId": "shiny-stone",
+   "partnerId": "floette",
+   "usable": true
+  },
+  {
+   "id": "syn-201",
+   "item": "Dusk Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Doublade"
+   },
+   "text": "Dusk Stone evolves Doublade into Aegislash.",
+   "source": "dex:evoItem",
+   "itemId": "dusk-stone",
+   "partnerId": "doublade",
+   "usable": true
+  },
+  {
+   "id": "syn-202",
+   "item": "Sachet",
+   "partner": {
+    "kind": "species",
+    "value": "Spritzee"
+   },
+   "text": "Sachet evolves Spritzee into Aromatisse.",
+   "source": "dex:evoItem",
+   "itemId": "sachet",
+   "partnerId": "spritzee",
+   "usable": true
+  },
+  {
+   "id": "syn-203",
+   "item": "Whipped Dream",
+   "partner": {
+    "kind": "species",
+    "value": "Swirlix"
+   },
+   "text": "Whipped Dream evolves Swirlix into Slurpuff.",
+   "source": "dex:evoItem",
+   "itemId": "whipped-dream",
+   "partnerId": "swirlix",
+   "usable": true
+  },
+  {
+   "id": "syn-204",
+   "item": "Sun Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Helioptile"
+   },
+   "text": "Sun Stone evolves Helioptile into Heliolisk.",
+   "source": "dex:evoItem",
+   "itemId": "sun-stone",
+   "partnerId": "helioptile",
+   "usable": true
+  },
+  {
+   "id": "syn-205",
+   "item": "Thunder Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Charjabug"
+   },
+   "text": "Thunder Stone evolves Charjabug into Vikavolt.",
+   "source": "dex:evoItem",
+   "itemId": "thunder-stone",
+   "partnerId": "charjabug",
+   "usable": true
+  },
+  {
+   "id": "syn-206",
+   "item": "Ice Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Crabrawler"
+   },
+   "text": "Ice Stone evolves Crabrawler into Crabominable.",
+   "source": "dex:evoItem",
+   "itemId": "ice-stone",
+   "partnerId": "crabrawler",
+   "usable": true
+  },
+  {
+   "id": "syn-207",
+   "item": "Tart Apple",
+   "partner": {
+    "kind": "species",
+    "value": "Applin"
+   },
+   "text": "Tart Apple evolves Applin into Flapple.",
+   "source": "dex:evoItem",
+   "itemId": "tart-apple",
+   "partnerId": "applin",
+   "usable": true
+  },
+  {
+   "id": "syn-208",
+   "item": "Sweet Apple",
+   "partner": {
+    "kind": "species",
+    "value": "Applin"
+   },
+   "text": "Sweet Apple evolves Applin into Appletun.",
+   "source": "dex:evoItem",
+   "itemId": "sweet-apple",
+   "partnerId": "applin",
+   "usable": true
+  },
+  {
+   "id": "syn-209",
+   "item": "Cracked Pot",
+   "partner": {
+    "kind": "species",
+    "value": "Sinistea"
+   },
+   "text": "Cracked Pot evolves Sinistea into Polteageist.",
+   "source": "dex:evoItem",
+   "itemId": "cracked-pot",
+   "partnerId": "sinistea",
+   "usable": true
+  },
+  {
+   "id": "syn-210",
+   "item": "Chipped Pot",
+   "partner": {
+    "kind": "species",
+    "value": "Sinistea-Antique"
+   },
+   "text": "Chipped Pot evolves Sinistea-Antique into Polteageist-Antique.",
+   "source": "dex:evoItem",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-211",
+   "item": "Black Augurite",
+   "partner": {
+    "kind": "species",
+    "value": "Scyther"
+   },
+   "text": "Black Augurite evolves Scyther into Kleavor.",
+   "source": "dex:evoItem",
+   "itemId": "black-augurite",
+   "partnerId": "scyther",
+   "usable": true
+  },
+  {
+   "id": "syn-212",
+   "item": "Peat Block",
+   "partner": {
+    "kind": "species",
+    "value": "Ursaring"
+   },
+   "text": "Peat Block evolves Ursaring into Ursaluna.",
+   "source": "dex:evoItem",
+   "itemId": "peat-block",
+   "partnerId": "ursaring",
+   "usable": true
+  },
+  {
+   "id": "syn-213",
+   "item": "Razor Claw",
+   "partner": {
+    "kind": "species",
+    "value": "Sneasel-Hisui"
+   },
+   "text": "Razor Claw evolves Sneasel-Hisui into Sneasler.",
+   "source": "dex:evoItem",
+   "itemId": "razor-claw",
+   "partnerId": "sneasel-hisui",
+   "usable": true
+  },
+  {
+   "id": "syn-214",
+   "item": "Auspicious Armor",
+   "partner": {
+    "kind": "species",
+    "value": "Charcadet"
+   },
+   "text": "Auspicious Armor evolves Charcadet into Armarouge.",
+   "source": "dex:evoItem",
+   "itemId": "auspicious-armor",
+   "partnerId": "charcadet",
+   "usable": true
+  },
+  {
+   "id": "syn-215",
+   "item": "Malicious Armor",
+   "partner": {
+    "kind": "species",
+    "value": "Charcadet"
+   },
+   "text": "Malicious Armor evolves Charcadet into Ceruledge.",
+   "source": "dex:evoItem",
+   "itemId": "malicious-armor",
+   "partnerId": "charcadet",
+   "usable": true
+  },
+  {
+   "id": "syn-216",
+   "item": "Thunder Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Tadbulb"
+   },
+   "text": "Thunder Stone evolves Tadbulb into Bellibolt.",
+   "source": "dex:evoItem",
+   "itemId": "thunder-stone",
+   "partnerId": "tadbulb",
+   "usable": true
+  },
+  {
+   "id": "syn-217",
+   "item": "Fire Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Capsakid"
+   },
+   "text": "Fire Stone evolves Capsakid into Scovillain.",
+   "source": "dex:evoItem",
+   "itemId": "fire-stone",
+   "partnerId": "capsakid",
+   "usable": true
+  },
+  {
+   "id": "syn-218",
+   "item": "Ice Stone",
+   "partner": {
+    "kind": "species",
+    "value": "Cetoddle"
+   },
+   "text": "Ice Stone evolves Cetoddle into Cetitan.",
+   "source": "dex:evoItem",
+   "itemId": "ice-stone",
+   "partnerId": "cetoddle",
+   "usable": true
+  },
+  {
+   "id": "syn-219",
+   "item": "Syrupy Apple",
+   "partner": {
+    "kind": "species",
+    "value": "Applin"
+   },
+   "text": "Syrupy Apple evolves Applin into Dipplin.",
+   "source": "dex:evoItem",
+   "itemId": "syrupy-apple",
+   "partnerId": "applin",
+   "usable": true
+  },
+  {
+   "id": "syn-220",
+   "item": "Unremarkable Teacup",
+   "partner": {
+    "kind": "species",
+    "value": "Poltchageist"
+   },
+   "text": "Unremarkable Teacup evolves Poltchageist into Sinistcha.",
+   "source": "dex:evoItem",
+   "itemId": "unremarkable-teacup",
+   "partnerId": "poltchageist",
+   "usable": true
+  },
+  {
+   "id": "syn-221",
+   "item": "Masterpiece Teacup",
+   "partner": {
+    "kind": "species",
+    "value": "Poltchageist-Artisan"
+   },
+   "text": "Masterpiece Teacup evolves Poltchageist-Artisan into Sinistcha-Masterpiece.",
+   "source": "dex:evoItem",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-222",
+   "item": "Metal Alloy",
+   "partner": {
+    "kind": "species",
+    "value": "Duraludon"
+   },
+   "text": "Metal Alloy evolves Duraludon into Archaludon.",
+   "source": "dex:evoItem",
+   "itemId": "metal-alloy",
+   "partnerId": "duraludon",
+   "usable": true
+  },
+  {
+   "id": "syn-223",
+   "item": "Abomasite",
+   "partner": {
+    "kind": "species",
+    "value": "Abomasnow"
+   },
+   "text": "Abomasite lets Abomasnow Mega Evolve into Abomasnow-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "abomasite",
+   "partnerId": "abomasnow",
+   "usable": true
+  },
+  {
+   "id": "syn-224",
+   "item": "Absolite",
+   "partner": {
+    "kind": "species",
+    "value": "Absol"
+   },
+   "text": "Absolite lets Absol Mega Evolve into Absol-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "absolite",
+   "partnerId": "absol",
+   "usable": true
+  },
+  {
+   "id": "syn-225",
+   "item": "Absolite Z",
+   "partner": {
+    "kind": "species",
+    "value": "Absol"
+   },
+   "text": "Absolite Z lets Absol Mega Evolve into Absol-Mega-Z.",
+   "source": "dex:megaStone",
+   "itemId": "absolite-z",
+   "partnerId": "absol",
+   "usable": true
+  },
+  {
+   "id": "syn-226",
+   "item": "Aerodactylite",
+   "partner": {
+    "kind": "species",
+    "value": "Aerodactyl"
+   },
+   "text": "Aerodactylite lets Aerodactyl Mega Evolve into Aerodactyl-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "aerodactylite",
+   "partnerId": "aerodactyl",
+   "usable": true
+  },
+  {
+   "id": "syn-227",
+   "item": "Aggronite",
+   "partner": {
+    "kind": "species",
+    "value": "Aggron"
+   },
+   "text": "Aggronite lets Aggron Mega Evolve into Aggron-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "aggronite",
+   "partnerId": "aggron",
+   "usable": true
+  },
+  {
+   "id": "syn-228",
+   "item": "Alakazite",
+   "partner": {
+    "kind": "species",
+    "value": "Alakazam"
+   },
+   "text": "Alakazite lets Alakazam Mega Evolve into Alakazam-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "alakazite",
+   "partnerId": "alakazam",
+   "usable": true
+  },
+  {
+   "id": "syn-229",
+   "item": "Altarianite",
+   "partner": {
+    "kind": "species",
+    "value": "Altaria"
+   },
+   "text": "Altarianite lets Altaria Mega Evolve into Altaria-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "altarianite",
+   "partnerId": "altaria",
+   "usable": true
+  },
+  {
+   "id": "syn-230",
+   "item": "Ampharosite",
+   "partner": {
+    "kind": "species",
+    "value": "Ampharos"
+   },
+   "text": "Ampharosite lets Ampharos Mega Evolve into Ampharos-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "ampharosite",
+   "partnerId": "ampharos",
+   "usable": true
+  },
+  {
+   "id": "syn-231",
+   "item": "Audinite",
+   "partner": {
+    "kind": "species",
+    "value": "Audino"
+   },
+   "text": "Audinite lets Audino Mega Evolve into Audino-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "audinite",
+   "partnerId": "audino",
+   "usable": true
+  },
+  {
+   "id": "syn-232",
+   "item": "Banettite",
+   "partner": {
+    "kind": "species",
+    "value": "Banette"
+   },
+   "text": "Banettite lets Banette Mega Evolve into Banette-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "banettite",
+   "partnerId": "banette",
+   "usable": true
+  },
+  {
+   "id": "syn-233",
+   "item": "Barbaracite",
+   "partner": {
+    "kind": "species",
+    "value": "Barbaracle"
+   },
+   "text": "Barbaracite lets Barbaracle Mega Evolve into Barbaracle-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "barbaracite",
+   "partnerId": "barbaracle",
+   "usable": true
+  },
+  {
+   "id": "syn-234",
+   "item": "Baxcalibrite",
+   "partner": {
+    "kind": "species",
+    "value": "Baxcalibur"
+   },
+   "text": "Baxcalibrite lets Baxcalibur Mega Evolve into Baxcalibur-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "baxcalibrite",
+   "partnerId": "baxcalibur",
+   "usable": true
+  },
+  {
+   "id": "syn-235",
+   "item": "Beedrillite",
+   "partner": {
+    "kind": "species",
+    "value": "Beedrill"
+   },
+   "text": "Beedrillite lets Beedrill Mega Evolve into Beedrill-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "beedrillite",
+   "partnerId": "beedrill",
+   "usable": true
+  },
+  {
+   "id": "syn-236",
+   "item": "Blastoisinite",
+   "partner": {
+    "kind": "species",
+    "value": "Blastoise"
+   },
+   "text": "Blastoisinite lets Blastoise Mega Evolve into Blastoise-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "blastoisinite",
+   "partnerId": "blastoise",
+   "usable": true
+  },
+  {
+   "id": "syn-237",
+   "item": "Blazikenite",
+   "partner": {
+    "kind": "species",
+    "value": "Blaziken"
+   },
+   "text": "Blazikenite lets Blaziken Mega Evolve into Blaziken-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "blazikenite",
+   "partnerId": "blaziken",
+   "usable": true
+  },
+  {
+   "id": "syn-238",
+   "item": "Cameruptite",
+   "partner": {
+    "kind": "species",
+    "value": "Camerupt"
+   },
+   "text": "Cameruptite lets Camerupt Mega Evolve into Camerupt-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "cameruptite",
+   "partnerId": "camerupt",
+   "usable": true
+  },
+  {
+   "id": "syn-239",
+   "item": "Chandelurite",
+   "partner": {
+    "kind": "species",
+    "value": "Chandelure"
+   },
+   "text": "Chandelurite lets Chandelure Mega Evolve into Chandelure-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "chandelurite",
+   "partnerId": "chandelure",
+   "usable": true
+  },
+  {
+   "id": "syn-240",
+   "item": "Charizardite X",
+   "partner": {
+    "kind": "species",
+    "value": "Charizard"
+   },
+   "text": "Charizardite X lets Charizard Mega Evolve into Charizard-Mega-X.",
+   "source": "dex:megaStone",
+   "itemId": "charizardite-x",
+   "partnerId": "charizard",
+   "usable": true
+  },
+  {
+   "id": "syn-241",
+   "item": "Charizardite Y",
+   "partner": {
+    "kind": "species",
+    "value": "Charizard"
+   },
+   "text": "Charizardite Y lets Charizard Mega Evolve into Charizard-Mega-Y.",
+   "source": "dex:megaStone",
+   "itemId": "charizardite-y",
+   "partnerId": "charizard",
+   "usable": true
+  },
+  {
+   "id": "syn-242",
+   "item": "Chesnaughtite",
+   "partner": {
+    "kind": "species",
+    "value": "Chesnaught"
+   },
+   "text": "Chesnaughtite lets Chesnaught Mega Evolve into Chesnaught-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "chesnaughtite",
+   "partnerId": "chesnaught",
+   "usable": true
+  },
+  {
+   "id": "syn-243",
+   "item": "Chimechite",
+   "partner": {
+    "kind": "species",
+    "value": "Chimecho"
+   },
+   "text": "Chimechite lets Chimecho Mega Evolve into Chimecho-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "chimechite",
+   "partnerId": "chimecho",
+   "usable": true
+  },
+  {
+   "id": "syn-244",
+   "item": "Clefablite",
+   "partner": {
+    "kind": "species",
+    "value": "Clefable"
+   },
+   "text": "Clefablite lets Clefable Mega Evolve into Clefable-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "clefablite",
+   "partnerId": "clefable",
+   "usable": true
+  },
+  {
+   "id": "syn-245",
+   "item": "Crabominite",
+   "partner": {
+    "kind": "species",
+    "value": "Crabominable"
+   },
+   "text": "Crabominite lets Crabominable Mega Evolve into Crabominable-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "crabominite",
+   "partnerId": "crabominable",
+   "usable": true
+  },
+  {
+   "id": "syn-246",
+   "item": "Darkranite",
+   "partner": {
+    "kind": "species",
+    "value": "Darkrai"
+   },
+   "text": "Darkranite lets Darkrai Mega Evolve into Darkrai-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "darkranite",
+   "partnerId": "darkrai",
+   "usable": true
+  },
+  {
+   "id": "syn-247",
+   "item": "Delphoxite",
+   "partner": {
+    "kind": "species",
+    "value": "Delphox"
+   },
+   "text": "Delphoxite lets Delphox Mega Evolve into Delphox-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "delphoxite",
+   "partnerId": "delphox",
+   "usable": true
+  },
+  {
+   "id": "syn-248",
+   "item": "Diancite",
+   "partner": {
+    "kind": "species",
+    "value": "Diancie"
+   },
+   "text": "Diancite lets Diancie Mega Evolve into Diancie-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "diancite",
+   "partnerId": "diancie",
+   "usable": true
+  },
+  {
+   "id": "syn-249",
+   "item": "Dragalgite",
+   "partner": {
+    "kind": "species",
+    "value": "Dragalge"
+   },
+   "text": "Dragalgite lets Dragalge Mega Evolve into Dragalge-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "dragalgite",
+   "partnerId": "dragalge",
+   "usable": true
+  },
+  {
+   "id": "syn-250",
+   "item": "Dragoninite",
+   "partner": {
+    "kind": "species",
+    "value": "Dragonite"
+   },
+   "text": "Dragoninite lets Dragonite Mega Evolve into Dragonite-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "dragoninite",
+   "partnerId": "dragonite",
+   "usable": true
+  },
+  {
+   "id": "syn-251",
+   "item": "Drampanite",
+   "partner": {
+    "kind": "species",
+    "value": "Drampa"
+   },
+   "text": "Drampanite lets Drampa Mega Evolve into Drampa-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "drampanite",
+   "partnerId": "drampa",
+   "usable": true
+  },
+  {
+   "id": "syn-252",
+   "item": "Eelektrossite",
+   "partner": {
+    "kind": "species",
+    "value": "Eelektross"
+   },
+   "text": "Eelektrossite lets Eelektross Mega Evolve into Eelektross-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "eelektrossite",
+   "partnerId": "eelektross",
+   "usable": true
+  },
+  {
+   "id": "syn-253",
+   "item": "Emboarite",
+   "partner": {
+    "kind": "species",
+    "value": "Emboar"
+   },
+   "text": "Emboarite lets Emboar Mega Evolve into Emboar-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "emboarite",
+   "partnerId": "emboar",
+   "usable": true
+  },
+  {
+   "id": "syn-254",
+   "item": "Excadrite",
+   "partner": {
+    "kind": "species",
+    "value": "Excadrill"
+   },
+   "text": "Excadrite lets Excadrill Mega Evolve into Excadrill-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "excadrite",
+   "partnerId": "excadrill",
+   "usable": true
+  },
+  {
+   "id": "syn-255",
+   "item": "Falinksite",
+   "partner": {
+    "kind": "species",
+    "value": "Falinks"
+   },
+   "text": "Falinksite lets Falinks Mega Evolve into Falinks-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "falinksite",
+   "partnerId": "falinks",
+   "usable": true
+  },
+  {
+   "id": "syn-256",
+   "item": "Feraligite",
+   "partner": {
+    "kind": "species",
+    "value": "Feraligatr"
+   },
+   "text": "Feraligite lets Feraligatr Mega Evolve into Feraligatr-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "feraligite",
+   "partnerId": "feraligatr",
+   "usable": true
+  },
+  {
+   "id": "syn-257",
+   "item": "Floettite",
+   "partner": {
+    "kind": "species",
+    "value": "Floette-Eternal"
+   },
+   "text": "Floettite lets Floette-Eternal Mega Evolve into Floette-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "floettite",
+   "partnerId": "floette-eternal",
+   "usable": true
+  },
+  {
+   "id": "syn-258",
+   "item": "Froslassite",
+   "partner": {
+    "kind": "species",
+    "value": "Froslass"
+   },
+   "text": "Froslassite lets Froslass Mega Evolve into Froslass-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "froslassite",
+   "partnerId": "froslass",
+   "usable": true
+  },
+  {
+   "id": "syn-259",
+   "item": "Galladite",
+   "partner": {
+    "kind": "species",
+    "value": "Gallade"
+   },
+   "text": "Galladite lets Gallade Mega Evolve into Gallade-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "galladite",
+   "partnerId": "gallade",
+   "usable": true
+  },
+  {
+   "id": "syn-260",
+   "item": "Garchompite",
+   "partner": {
+    "kind": "species",
+    "value": "Garchomp"
+   },
+   "text": "Garchompite lets Garchomp Mega Evolve into Garchomp-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "garchompite",
+   "partnerId": "garchomp",
+   "usable": true
+  },
+  {
+   "id": "syn-261",
+   "item": "Garchompite Z",
+   "partner": {
+    "kind": "species",
+    "value": "Garchomp"
+   },
+   "text": "Garchompite Z lets Garchomp Mega Evolve into Garchomp-Mega-Z.",
+   "source": "dex:megaStone",
+   "itemId": "garchompite-z",
+   "partnerId": "garchomp",
+   "usable": true
+  },
+  {
+   "id": "syn-262",
+   "item": "Gardevoirite",
+   "partner": {
+    "kind": "species",
+    "value": "Gardevoir"
+   },
+   "text": "Gardevoirite lets Gardevoir Mega Evolve into Gardevoir-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "gardevoirite",
+   "partnerId": "gardevoir",
+   "usable": true
+  },
+  {
+   "id": "syn-263",
+   "item": "Gengarite",
+   "partner": {
+    "kind": "species",
+    "value": "Gengar"
+   },
+   "text": "Gengarite lets Gengar Mega Evolve into Gengar-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "gengarite",
+   "partnerId": "gengar",
+   "usable": true
+  },
+  {
+   "id": "syn-264",
+   "item": "Glalitite",
+   "partner": {
+    "kind": "species",
+    "value": "Glalie"
+   },
+   "text": "Glalitite lets Glalie Mega Evolve into Glalie-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "glalitite",
+   "partnerId": "glalie",
+   "usable": true
+  },
+  {
+   "id": "syn-265",
+   "item": "Glimmoranite",
+   "partner": {
+    "kind": "species",
+    "value": "Glimmora"
+   },
+   "text": "Glimmoranite lets Glimmora Mega Evolve into Glimmora-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "glimmoranite",
+   "partnerId": "glimmora",
+   "usable": true
+  },
+  {
+   "id": "syn-266",
+   "item": "Golisopite",
+   "partner": {
+    "kind": "species",
+    "value": "Golisopod"
+   },
+   "text": "Golisopite lets Golisopod Mega Evolve into Golisopod-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "golisopite",
+   "partnerId": "golisopod",
+   "usable": true
+  },
+  {
+   "id": "syn-267",
+   "item": "Golurkite",
+   "partner": {
+    "kind": "species",
+    "value": "Golurk"
+   },
+   "text": "Golurkite lets Golurk Mega Evolve into Golurk-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "golurkite",
+   "partnerId": "golurk",
+   "usable": true
+  },
+  {
+   "id": "syn-268",
+   "item": "Greninjite",
+   "partner": {
+    "kind": "species",
+    "value": "Greninja"
+   },
+   "text": "Greninjite lets Greninja Mega Evolve into Greninja-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "greninjite",
+   "partnerId": "greninja",
+   "usable": true
+  },
+  {
+   "id": "syn-269",
+   "item": "Gyaradosite",
+   "partner": {
+    "kind": "species",
+    "value": "Gyarados"
+   },
+   "text": "Gyaradosite lets Gyarados Mega Evolve into Gyarados-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "gyaradosite",
+   "partnerId": "gyarados",
+   "usable": true
+  },
+  {
+   "id": "syn-270",
+   "item": "Hawluchanite",
+   "partner": {
+    "kind": "species",
+    "value": "Hawlucha"
+   },
+   "text": "Hawluchanite lets Hawlucha Mega Evolve into Hawlucha-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "hawluchanite",
+   "partnerId": "hawlucha",
+   "usable": true
+  },
+  {
+   "id": "syn-271",
+   "item": "Heatranite",
+   "partner": {
+    "kind": "species",
+    "value": "Heatran"
+   },
+   "text": "Heatranite lets Heatran Mega Evolve into Heatran-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "heatranite",
+   "partnerId": "heatran",
+   "usable": true
+  },
+  {
+   "id": "syn-272",
+   "item": "Heracronite",
+   "partner": {
+    "kind": "species",
+    "value": "Heracross"
+   },
+   "text": "Heracronite lets Heracross Mega Evolve into Heracross-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "heracronite",
+   "partnerId": "heracross",
+   "usable": true
+  },
+  {
+   "id": "syn-273",
+   "item": "Houndoominite",
+   "partner": {
+    "kind": "species",
+    "value": "Houndoom"
+   },
+   "text": "Houndoominite lets Houndoom Mega Evolve into Houndoom-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "houndoominite",
+   "partnerId": "houndoom",
+   "usable": true
+  },
+  {
+   "id": "syn-274",
+   "item": "Kangaskhanite",
+   "partner": {
+    "kind": "species",
+    "value": "Kangaskhan"
+   },
+   "text": "Kangaskhanite lets Kangaskhan Mega Evolve into Kangaskhan-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "kangaskhanite",
+   "partnerId": "kangaskhan",
+   "usable": true
+  },
+  {
+   "id": "syn-275",
+   "item": "Latiasite",
+   "partner": {
+    "kind": "species",
+    "value": "Latias"
+   },
+   "text": "Latiasite lets Latias Mega Evolve into Latias-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "latiasite",
+   "partnerId": "latias",
+   "usable": true
+  },
+  {
+   "id": "syn-276",
+   "item": "Latiosite",
+   "partner": {
+    "kind": "species",
+    "value": "Latios"
+   },
+   "text": "Latiosite lets Latios Mega Evolve into Latios-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "latiosite",
+   "partnerId": "latios",
+   "usable": true
+  },
+  {
+   "id": "syn-277",
+   "item": "Lopunnite",
+   "partner": {
+    "kind": "species",
+    "value": "Lopunny"
+   },
+   "text": "Lopunnite lets Lopunny Mega Evolve into Lopunny-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "lopunnite",
+   "partnerId": "lopunny",
+   "usable": true
+  },
+  {
+   "id": "syn-278",
+   "item": "Lucarionite",
+   "partner": {
+    "kind": "species",
+    "value": "Lucario"
+   },
+   "text": "Lucarionite lets Lucario Mega Evolve into Lucario-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "lucarionite",
+   "partnerId": "lucario",
+   "usable": true
+  },
+  {
+   "id": "syn-279",
+   "item": "Lucarionite Z",
+   "partner": {
+    "kind": "species",
+    "value": "Lucario"
+   },
+   "text": "Lucarionite Z lets Lucario Mega Evolve into Lucario-Mega-Z.",
+   "source": "dex:megaStone",
+   "itemId": "lucarionite-z",
+   "partnerId": "lucario",
+   "usable": true
+  },
+  {
+   "id": "syn-280",
+   "item": "Magearnite",
+   "partner": {
+    "kind": "species",
+    "value": "Magearna"
+   },
+   "text": "Magearnite lets Magearna Mega Evolve into Magearna-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "magearnite",
+   "partnerId": "magearna",
+   "usable": true
+  },
+  {
+   "id": "syn-281",
+   "item": "Magearnite",
+   "partner": {
+    "kind": "species",
+    "value": "Magearna-Original"
+   },
+   "text": "Magearnite lets Magearna-Original Mega Evolve into Magearna-Original-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "magearnite",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-282",
+   "item": "Malamarite",
+   "partner": {
+    "kind": "species",
+    "value": "Malamar"
+   },
+   "text": "Malamarite lets Malamar Mega Evolve into Malamar-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "malamarite",
+   "partnerId": "malamar",
+   "usable": true
+  },
+  {
+   "id": "syn-283",
+   "item": "Manectite",
+   "partner": {
+    "kind": "species",
+    "value": "Manectric"
+   },
+   "text": "Manectite lets Manectric Mega Evolve into Manectric-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "manectite",
+   "partnerId": "manectric",
+   "usable": true
+  },
+  {
+   "id": "syn-284",
+   "item": "Mawilite",
+   "partner": {
+    "kind": "species",
+    "value": "Mawile"
+   },
+   "text": "Mawilite lets Mawile Mega Evolve into Mawile-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "mawilite",
+   "partnerId": "mawile",
+   "usable": true
+  },
+  {
+   "id": "syn-285",
+   "item": "Medichamite",
+   "partner": {
+    "kind": "species",
+    "value": "Medicham"
+   },
+   "text": "Medichamite lets Medicham Mega Evolve into Medicham-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "medichamite",
+   "partnerId": "medicham",
+   "usable": true
+  },
+  {
+   "id": "syn-286",
+   "item": "Meganiumite",
+   "partner": {
+    "kind": "species",
+    "value": "Meganium"
+   },
+   "text": "Meganiumite lets Meganium Mega Evolve into Meganium-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "meganiumite",
+   "partnerId": "meganium",
+   "usable": true
+  },
+  {
+   "id": "syn-287",
+   "item": "Meowsticite",
+   "partner": {
+    "kind": "species",
+    "value": "Meowstic"
+   },
+   "text": "Meowsticite lets Meowstic Mega Evolve into Meowstic-M-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "meowsticite",
+   "partnerId": "meowstic",
+   "usable": true
+  },
+  {
+   "id": "syn-288",
+   "item": "Meowsticite",
+   "partner": {
+    "kind": "species",
+    "value": "Meowstic-F"
+   },
+   "text": "Meowsticite lets Meowstic-F Mega Evolve into Meowstic-F-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "meowsticite",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-289",
+   "item": "Metagrossite",
+   "partner": {
+    "kind": "species",
+    "value": "Metagross"
+   },
+   "text": "Metagrossite lets Metagross Mega Evolve into Metagross-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "metagrossite",
+   "partnerId": "metagross",
+   "usable": true
+  },
+  {
+   "id": "syn-290",
+   "item": "Mewtwonite X",
+   "partner": {
+    "kind": "species",
+    "value": "Mewtwo"
+   },
+   "text": "Mewtwonite X lets Mewtwo Mega Evolve into Mewtwo-Mega-X.",
+   "source": "dex:megaStone",
+   "itemId": "mewtwonite-x",
+   "partnerId": "mewtwo",
+   "usable": true
+  },
+  {
+   "id": "syn-291",
+   "item": "Mewtwonite Y",
+   "partner": {
+    "kind": "species",
+    "value": "Mewtwo"
+   },
+   "text": "Mewtwonite Y lets Mewtwo Mega Evolve into Mewtwo-Mega-Y.",
+   "source": "dex:megaStone",
+   "itemId": "mewtwonite-y",
+   "partnerId": "mewtwo",
+   "usable": true
+  },
+  {
+   "id": "syn-292",
+   "item": "Pidgeotite",
+   "partner": {
+    "kind": "species",
+    "value": "Pidgeot"
+   },
+   "text": "Pidgeotite lets Pidgeot Mega Evolve into Pidgeot-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "pidgeotite",
+   "partnerId": "pidgeot",
+   "usable": true
+  },
+  {
+   "id": "syn-293",
+   "item": "Pinsirite",
+   "partner": {
+    "kind": "species",
+    "value": "Pinsir"
+   },
+   "text": "Pinsirite lets Pinsir Mega Evolve into Pinsir-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "pinsirite",
+   "partnerId": "pinsir",
+   "usable": true
+  },
+  {
+   "id": "syn-294",
+   "item": "Pyroarite",
+   "partner": {
+    "kind": "species",
+    "value": "Pyroar"
+   },
+   "text": "Pyroarite lets Pyroar Mega Evolve into Pyroar-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "pyroarite",
+   "partnerId": "pyroar",
+   "usable": true
+  },
+  {
+   "id": "syn-295",
+   "item": "Raichunite X",
+   "partner": {
+    "kind": "species",
+    "value": "Raichu"
+   },
+   "text": "Raichunite X lets Raichu Mega Evolve into Raichu-Mega-X.",
+   "source": "dex:megaStone",
+   "itemId": "raichunite-x",
+   "partnerId": "raichu",
+   "usable": true
+  },
+  {
+   "id": "syn-296",
+   "item": "Raichunite Y",
+   "partner": {
+    "kind": "species",
+    "value": "Raichu"
+   },
+   "text": "Raichunite Y lets Raichu Mega Evolve into Raichu-Mega-Y.",
+   "source": "dex:megaStone",
+   "itemId": "raichunite-y",
+   "partnerId": "raichu",
+   "usable": true
+  },
+  {
+   "id": "syn-297",
+   "item": "Sablenite",
+   "partner": {
+    "kind": "species",
+    "value": "Sableye"
+   },
+   "text": "Sablenite lets Sableye Mega Evolve into Sableye-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "sablenite",
+   "partnerId": "sableye",
+   "usable": true
+  },
+  {
+   "id": "syn-298",
+   "item": "Salamencite",
+   "partner": {
+    "kind": "species",
+    "value": "Salamence"
+   },
+   "text": "Salamencite lets Salamence Mega Evolve into Salamence-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "salamencite",
+   "partnerId": "salamence",
+   "usable": true
+  },
+  {
+   "id": "syn-299",
+   "item": "Sceptilite",
+   "partner": {
+    "kind": "species",
+    "value": "Sceptile"
+   },
+   "text": "Sceptilite lets Sceptile Mega Evolve into Sceptile-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "sceptilite",
+   "partnerId": "sceptile",
+   "usable": true
+  },
+  {
+   "id": "syn-300",
+   "item": "Scizorite",
+   "partner": {
+    "kind": "species",
+    "value": "Scizor"
+   },
+   "text": "Scizorite lets Scizor Mega Evolve into Scizor-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "scizorite",
+   "partnerId": "scizor",
+   "usable": true
+  },
+  {
+   "id": "syn-301",
+   "item": "Scolipite",
+   "partner": {
+    "kind": "species",
+    "value": "Scolipede"
+   },
+   "text": "Scolipite lets Scolipede Mega Evolve into Scolipede-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "scolipite",
+   "partnerId": "scolipede",
+   "usable": true
+  },
+  {
+   "id": "syn-302",
+   "item": "Scovillainite",
+   "partner": {
+    "kind": "species",
+    "value": "Scovillain"
+   },
+   "text": "Scovillainite lets Scovillain Mega Evolve into Scovillain-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "scovillainite",
+   "partnerId": "scovillain",
+   "usable": true
+  },
+  {
+   "id": "syn-303",
+   "item": "Scraftinite",
+   "partner": {
+    "kind": "species",
+    "value": "Scrafty"
+   },
+   "text": "Scraftinite lets Scrafty Mega Evolve into Scrafty-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "scraftinite",
+   "partnerId": "scrafty",
+   "usable": true
+  },
+  {
+   "id": "syn-304",
+   "item": "Sharpedonite",
+   "partner": {
+    "kind": "species",
+    "value": "Sharpedo"
+   },
+   "text": "Sharpedonite lets Sharpedo Mega Evolve into Sharpedo-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "sharpedonite",
+   "partnerId": "sharpedo",
+   "usable": true
+  },
+  {
+   "id": "syn-305",
+   "item": "Skarmorite",
+   "partner": {
+    "kind": "species",
+    "value": "Skarmory"
+   },
+   "text": "Skarmorite lets Skarmory Mega Evolve into Skarmory-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "skarmorite",
+   "partnerId": "skarmory",
+   "usable": true
+  },
+  {
+   "id": "syn-306",
+   "item": "Slowbronite",
+   "partner": {
+    "kind": "species",
+    "value": "Slowbro"
+   },
+   "text": "Slowbronite lets Slowbro Mega Evolve into Slowbro-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "slowbronite",
+   "partnerId": "slowbro",
+   "usable": true
+  },
+  {
+   "id": "syn-307",
+   "item": "Staraptite",
+   "partner": {
+    "kind": "species",
+    "value": "Staraptor"
+   },
+   "text": "Staraptite lets Staraptor Mega Evolve into Staraptor-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "staraptite",
+   "partnerId": "staraptor",
+   "usable": true
+  },
+  {
+   "id": "syn-308",
+   "item": "Starminite",
+   "partner": {
+    "kind": "species",
+    "value": "Starmie"
+   },
+   "text": "Starminite lets Starmie Mega Evolve into Starmie-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "starminite",
+   "partnerId": "starmie",
+   "usable": true
+  },
+  {
+   "id": "syn-309",
+   "item": "Steelixite",
+   "partner": {
+    "kind": "species",
+    "value": "Steelix"
+   },
+   "text": "Steelixite lets Steelix Mega Evolve into Steelix-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "steelixite",
+   "partnerId": "steelix",
+   "usable": true
+  },
+  {
+   "id": "syn-310",
+   "item": "Swampertite",
+   "partner": {
+    "kind": "species",
+    "value": "Swampert"
+   },
+   "text": "Swampertite lets Swampert Mega Evolve into Swampert-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "swampertite",
+   "partnerId": "swampert",
+   "usable": true
+  },
+  {
+   "id": "syn-311",
+   "item": "Tatsugirinite",
+   "partner": {
+    "kind": "species",
+    "value": "Tatsugiri"
+   },
+   "text": "Tatsugirinite lets Tatsugiri Mega Evolve into Tatsugiri-Curly-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "tatsugirinite",
+   "partnerId": "tatsugiri",
+   "usable": true
+  },
+  {
+   "id": "syn-312",
+   "item": "Tatsugirinite",
+   "partner": {
+    "kind": "species",
+    "value": "Tatsugiri-Droopy"
+   },
+   "text": "Tatsugirinite lets Tatsugiri-Droopy Mega Evolve into Tatsugiri-Droopy-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "tatsugirinite",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-313",
+   "item": "Tatsugirinite",
+   "partner": {
+    "kind": "species",
+    "value": "Tatsugiri-Stretchy"
+   },
+   "text": "Tatsugirinite lets Tatsugiri-Stretchy Mega Evolve into Tatsugiri-Stretchy-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "tatsugirinite",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-314",
+   "item": "Tyranitarite",
+   "partner": {
+    "kind": "species",
+    "value": "Tyranitar"
+   },
+   "text": "Tyranitarite lets Tyranitar Mega Evolve into Tyranitar-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "tyranitarite",
+   "partnerId": "tyranitar",
+   "usable": true
+  },
+  {
+   "id": "syn-315",
+   "item": "Venusaurite",
+   "partner": {
+    "kind": "species",
+    "value": "Venusaur"
+   },
+   "text": "Venusaurite lets Venusaur Mega Evolve into Venusaur-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "venusaurite",
+   "partnerId": "venusaur",
+   "usable": true
+  },
+  {
+   "id": "syn-316",
+   "item": "Victreebelite",
+   "partner": {
+    "kind": "species",
+    "value": "Victreebel"
+   },
+   "text": "Victreebelite lets Victreebel Mega Evolve into Victreebel-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "victreebelite",
+   "partnerId": "victreebel",
+   "usable": true
+  },
+  {
+   "id": "syn-317",
+   "item": "Zeraorite",
+   "partner": {
+    "kind": "species",
+    "value": "Zeraora"
+   },
+   "text": "Zeraorite lets Zeraora Mega Evolve into Zeraora-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "zeraorite",
+   "partnerId": "zeraora",
+   "usable": true
+  },
+  {
+   "id": "syn-318",
+   "item": "Zygardite",
+   "partner": {
+    "kind": "species",
+    "value": "Zygarde-Complete"
+   },
+   "text": "Zygardite lets Zygarde-Complete Mega Evolve into Zygarde-Mega.",
+   "source": "dex:megaStone",
+   "itemId": "zygardite",
+   "partnerId": "zygarde-complete",
+   "usable": true
+  },
+  {
+   "id": "syn-320",
+   "item": "Aloraichium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Raichu-Alola"
+   },
+   "text": "Aloraichium Z lets Raichu-Alola use the Z-Move Stoked Sparksurfer from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "raichu-alola",
+   "usable": false
+  },
+  {
+   "id": "syn-321",
+   "item": "Decidium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Decidueye"
+   },
+   "text": "Decidium Z lets Decidueye use the Z-Move Sinister Arrow Raid from Spirit Shackle.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "decidueye",
+   "usable": false
+  },
+  {
+   "id": "syn-322",
+   "item": "Eevium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Eevee"
+   },
+   "text": "Eevium Z lets Eevee use the Z-Move Extreme Evoboost from Last Resort.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "eevee",
+   "usable": false
+  },
+  {
+   "id": "syn-323",
+   "item": "Incinium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Incineroar"
+   },
+   "text": "Incinium Z lets Incineroar use the Z-Move Malicious Moonsault from Darkest Lariat.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "incineroar",
+   "usable": false
+  },
+  {
+   "id": "syn-324",
+   "item": "Kommonium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Kommo-o"
+   },
+   "text": "Kommonium Z lets Kommo-o use the Z-Move Clangorous Soulblaze from Clanging Scales.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "kommo-o",
+   "usable": false
+  },
+  {
+   "id": "syn-325",
+   "item": "Kommonium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Kommo-o-Totem"
+   },
+   "text": "Kommonium Z lets Kommo-o-Totem use the Z-Move Clangorous Soulblaze from Clanging Scales.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-326",
+   "item": "Lunalium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Lunala"
+   },
+   "text": "Lunalium Z lets Lunala use the Z-Move Menacing Moonraze Maelstrom from Moongeist Beam.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "lunala",
+   "usable": false
+  },
+  {
+   "id": "syn-327",
+   "item": "Lunalium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Necrozma-Dawn-Wings"
+   },
+   "text": "Lunalium Z lets Necrozma-Dawn-Wings use the Z-Move Menacing Moonraze Maelstrom from Moongeist Beam.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-328",
+   "item": "Lycanium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Lycanroc"
+   },
+   "text": "Lycanium Z lets Lycanroc use the Z-Move Splintered Stormshards from Stone Edge.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "lycanroc",
+   "usable": false
+  },
+  {
+   "id": "syn-329",
+   "item": "Lycanium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Lycanroc-Midnight"
+   },
+   "text": "Lycanium Z lets Lycanroc-Midnight use the Z-Move Splintered Stormshards from Stone Edge.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "lycanroc-midnight",
+   "usable": false
+  },
+  {
+   "id": "syn-330",
+   "item": "Lycanium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Lycanroc-Dusk"
+   },
+   "text": "Lycanium Z lets Lycanroc-Dusk use the Z-Move Splintered Stormshards from Stone Edge.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "lycanroc-dusk",
+   "usable": false
+  },
+  {
+   "id": "syn-331",
+   "item": "Marshadium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Marshadow"
+   },
+   "text": "Marshadium Z lets Marshadow use the Z-Move Soul-Stealing 7-Star Strike from Spectral Thief.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "marshadow",
+   "usable": false
+  },
+  {
+   "id": "syn-332",
+   "item": "Mewnium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Mew"
+   },
+   "text": "Mewnium Z lets Mew use the Z-Move Genesis Supernova from Psychic.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "mew",
+   "usable": false
+  },
+  {
+   "id": "syn-333",
+   "item": "Mimikium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Mimikyu"
+   },
+   "text": "Mimikium Z lets Mimikyu use the Z-Move Let's Snuggle Forever from Play Rough.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "mimikyu",
+   "usable": false
+  },
+  {
+   "id": "syn-334",
+   "item": "Mimikium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Mimikyu-Busted"
+   },
+   "text": "Mimikium Z lets Mimikyu-Busted use the Z-Move Let's Snuggle Forever from Play Rough.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "mimikyu-busted",
+   "usable": false
+  },
+  {
+   "id": "syn-335",
+   "item": "Mimikium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Mimikyu-Totem"
+   },
+   "text": "Mimikium Z lets Mimikyu-Totem use the Z-Move Let's Snuggle Forever from Play Rough.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-336",
+   "item": "Mimikium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Mimikyu-Busted-Totem"
+   },
+   "text": "Mimikium Z lets Mimikyu-Busted-Totem use the Z-Move Let's Snuggle Forever from Play Rough.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-337",
+   "item": "Pikanium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu"
+   },
+   "text": "Pikanium Z lets Pikachu use the Z-Move Catastropika from Volt Tackle.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "pikachu",
+   "usable": false
+  },
+  {
+   "id": "syn-338",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Original"
+   },
+   "text": "Pikashunium Z lets Pikachu-Original use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-339",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Hoenn"
+   },
+   "text": "Pikashunium Z lets Pikachu-Hoenn use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-340",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Sinnoh"
+   },
+   "text": "Pikashunium Z lets Pikachu-Sinnoh use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-341",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Unova"
+   },
+   "text": "Pikashunium Z lets Pikachu-Unova use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-342",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Kalos"
+   },
+   "text": "Pikashunium Z lets Pikachu-Kalos use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-343",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Alola"
+   },
+   "text": "Pikashunium Z lets Pikachu-Alola use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-344",
+   "item": "Pikashunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Partner"
+   },
+   "text": "Pikashunium Z lets Pikachu-Partner use the Z-Move 10,000,000 Volt Thunderbolt from Thunderbolt.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-345",
+   "item": "Primarium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Primarina"
+   },
+   "text": "Primarium Z lets Primarina use the Z-Move Oceanic Operetta from Sparkling Aria.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "primarina",
+   "usable": false
+  },
+  {
+   "id": "syn-346",
+   "item": "Snorlium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Snorlax"
+   },
+   "text": "Snorlium Z lets Snorlax use the Z-Move Pulverizing Pancake from Giga Impact.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "snorlax",
+   "usable": false
+  },
+  {
+   "id": "syn-347",
+   "item": "Solganium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Solgaleo"
+   },
+   "text": "Solganium Z lets Solgaleo use the Z-Move Searing Sunraze Smash from Sunsteel Strike.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "solgaleo",
+   "usable": false
+  },
+  {
+   "id": "syn-348",
+   "item": "Solganium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Necrozma-Dusk-Mane"
+   },
+   "text": "Solganium Z lets Necrozma-Dusk-Mane use the Z-Move Searing Sunraze Smash from Sunsteel Strike.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-349",
+   "item": "Tapunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Tapu Koko"
+   },
+   "text": "Tapunium Z lets Tapu Koko use the Z-Move Guardian of Alola from Nature's Madness.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "tapu-koko",
+   "usable": false
+  },
+  {
+   "id": "syn-350",
+   "item": "Tapunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Tapu Lele"
+   },
+   "text": "Tapunium Z lets Tapu Lele use the Z-Move Guardian of Alola from Nature's Madness.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "tapu-lele",
+   "usable": false
+  },
+  {
+   "id": "syn-351",
+   "item": "Tapunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Tapu Bulu"
+   },
+   "text": "Tapunium Z lets Tapu Bulu use the Z-Move Guardian of Alola from Nature's Madness.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "tapu-bulu",
+   "usable": false
+  },
+  {
+   "id": "syn-352",
+   "item": "Tapunium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Tapu Fini"
+   },
+   "text": "Tapunium Z lets Tapu Fini use the Z-Move Guardian of Alola from Nature's Madness.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "tapu-fini",
+   "usable": false
+  },
+  {
+   "id": "syn-353",
+   "item": "Ultranecrozium Z",
+   "partner": {
+    "kind": "species",
+    "value": "Necrozma-Ultra"
+   },
+   "text": "Ultranecrozium Z lets Necrozma-Ultra use the Z-Move Light That Burns the Sky from Photon Geyser.",
+   "source": "dex:zMove",
+   "itemId": null,
+   "partnerId": "necrozma-ultra",
+   "usable": false
+  },
+  {
+   "id": "syn-354",
+   "item": "Buginium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Bug"
+   },
+   "text": "Buginium Z lets the holder turn one Bug-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "buginium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-355",
+   "item": "Bug Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Bug Memory turns Silvally into a Bug type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "bug-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-356",
+   "item": "Burn Drive",
+   "partner": {
+    "kind": "move",
+    "value": "Techno Blast"
+   },
+   "text": "Burn Drive turns Techno Blast into Fire type when held by Genesect.",
+   "source": "dex:onDrive",
+   "itemId": "burn-drive",
+   "partnerId": "techno-blast",
+   "usable": true
+  },
+  {
+   "id": "syn-357",
+   "item": "Chill Drive",
+   "partner": {
+    "kind": "move",
+    "value": "Techno Blast"
+   },
+   "text": "Chill Drive turns Techno Blast into Ice type when held by Genesect.",
+   "source": "dex:onDrive",
+   "itemId": "chill-drive",
+   "partnerId": "techno-blast",
+   "usable": true
+  },
+  {
+   "id": "syn-358",
+   "item": "Darkinium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Dark"
+   },
+   "text": "Darkinium Z lets the holder turn one Dark-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "darkinium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-359",
+   "item": "Dark Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Dark Memory turns Silvally into a Dark type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "dark-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-360",
+   "item": "Douse Drive",
+   "partner": {
+    "kind": "move",
+    "value": "Techno Blast"
+   },
+   "text": "Douse Drive turns Techno Blast into Water type when held by Genesect.",
+   "source": "dex:onDrive",
+   "itemId": "douse-drive",
+   "partnerId": "techno-blast",
+   "usable": true
+  },
+  {
+   "id": "syn-361",
+   "item": "Draco Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Draco Plate turns Arceus into a Dragon type and Judgment follows; it also boosts Dragon moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "draco-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-362",
+   "item": "Dragonium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Dragon"
+   },
+   "text": "Dragonium Z lets the holder turn one Dragon-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "dragonium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-363",
+   "item": "Dragon Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Dragon Memory turns Silvally into a Dragon type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "dragon-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-364",
+   "item": "Dread Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Dread Plate turns Arceus into a Dark type and Judgment follows; it also boosts Dark moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "dread-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-365",
+   "item": "Earth Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Earth Plate turns Arceus into a Ground type and Judgment follows; it also boosts Ground moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "earth-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-366",
+   "item": "Electric Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Electric Memory turns Silvally into an Electric type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "electric-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-367",
+   "item": "Electrium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Electric"
+   },
+   "text": "Electrium Z lets the holder turn one Electric-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "electrium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-368",
+   "item": "Fairium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Fairy"
+   },
+   "text": "Fairium Z lets the holder turn one Fairy-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "fairium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-369",
+   "item": "Fairy Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Fairy Memory turns Silvally into a Fairy type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "fairy-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-370",
+   "item": "Fighting Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Fighting Memory turns Silvally into a Fighting type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "fighting-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-371",
+   "item": "Fightinium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Fighting"
+   },
+   "text": "Fightinium Z lets the holder turn one Fighting-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "fightinium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-372",
+   "item": "Fire Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Fire Memory turns Silvally into a Fire type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "fire-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-373",
+   "item": "Firium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Fire"
+   },
+   "text": "Firium Z lets the holder turn one Fire-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "firium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-374",
+   "item": "Fist Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Fist Plate turns Arceus into a Fighting type and Judgment follows; it also boosts Fighting moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "fist-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-375",
+   "item": "Flame Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Flame Plate turns Arceus into a Fire type and Judgment follows; it also boosts Fire moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "flame-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-376",
+   "item": "Flying Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Flying Memory turns Silvally into a Flying type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "flying-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-377",
+   "item": "Flyinium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Flying"
+   },
+   "text": "Flyinium Z lets the holder turn one Flying-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "flyinium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-378",
+   "item": "Ghostium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Ghost"
+   },
+   "text": "Ghostium Z lets the holder turn one Ghost-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "ghostium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-379",
+   "item": "Ghost Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Ghost Memory turns Silvally into a Ghost type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "ghost-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-380",
+   "item": "Grassium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Grass"
+   },
+   "text": "Grassium Z lets the holder turn one Grass-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "grassium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-381",
+   "item": "Grass Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Grass Memory turns Silvally into a Grass type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "grass-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-382",
+   "item": "Groundium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Ground"
+   },
+   "text": "Groundium Z lets the holder turn one Ground-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "groundium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-383",
+   "item": "Ground Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Ground Memory turns Silvally into a Ground type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "ground-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-384",
+   "item": "Ice Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Ice Memory turns Silvally into an Ice type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "ice-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-385",
+   "item": "Icicle Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Icicle Plate turns Arceus into an Ice type and Judgment follows; it also boosts Ice moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "icicle-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-386",
+   "item": "Icium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Ice"
+   },
+   "text": "Icium Z lets the holder turn one Ice-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "icium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-387",
+   "item": "Insect Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Insect Plate turns Arceus into a Bug type and Judgment follows; it also boosts Bug moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "insect-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-388",
+   "item": "Iron Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Iron Plate turns Arceus into a Steel type and Judgment follows; it also boosts Steel moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "iron-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-389",
+   "item": "Meadow Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Meadow Plate turns Arceus into a Grass type and Judgment follows; it also boosts Grass moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "meadow-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-390",
+   "item": "Mind Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Mind Plate turns Arceus into a Psychic type and Judgment follows; it also boosts Psychic moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "mind-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-391",
+   "item": "Pixie Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Pixie Plate turns Arceus into a Fairy type and Judgment follows; it also boosts Fairy moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "pixie-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-392",
+   "item": "Poisonium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Poison"
+   },
+   "text": "Poisonium Z lets the holder turn one Poison-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "poisonium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-393",
+   "item": "Poison Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Poison Memory turns Silvally into a Poison type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "poison-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-394",
+   "item": "Psychic Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Psychic Memory turns Silvally into a Psychic type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "psychic-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-395",
+   "item": "Psychium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Psychic"
+   },
+   "text": "Psychium Z lets the holder turn one Psychic-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "psychium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-396",
+   "item": "Rockium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Rock"
+   },
+   "text": "Rockium Z lets the holder turn one Rock-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "rockium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-397",
+   "item": "Rock Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Rock Memory turns Silvally into a Rock type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "rock-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-398",
+   "item": "Shock Drive",
+   "partner": {
+    "kind": "move",
+    "value": "Techno Blast"
+   },
+   "text": "Shock Drive turns Techno Blast into Electric type when held by Genesect.",
+   "source": "dex:onDrive",
+   "itemId": "shock-drive",
+   "partnerId": "techno-blast",
+   "usable": true
+  },
+  {
+   "id": "syn-399",
+   "item": "Sky Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Sky Plate turns Arceus into a Flying type and Judgment follows; it also boosts Flying moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "sky-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-400",
+   "item": "Splash Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Splash Plate turns Arceus into a Water type and Judgment follows; it also boosts Water moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "splash-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-401",
+   "item": "Spooky Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Spooky Plate turns Arceus into a Ghost type and Judgment follows; it also boosts Ghost moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "spooky-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-402",
+   "item": "Steelium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Steel"
+   },
+   "text": "Steelium Z lets the holder turn one Steel-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "steelium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-403",
+   "item": "Steel Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Steel Memory turns Silvally into a Steel type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "steel-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-404",
+   "item": "Stone Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Stone Plate turns Arceus into a Rock type and Judgment follows; it also boosts Rock moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "stone-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-405",
+   "item": "Toxic Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Toxic Plate turns Arceus into a Poison type and Judgment follows; it also boosts Poison moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "toxic-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-406",
+   "item": "Waterium Z",
+   "partner": {
+    "kind": "type",
+    "value": "Water"
+   },
+   "text": "Waterium Z lets the holder turn one Water-type move into its Z-Move, once per battle.",
+   "source": "dex:onPlate",
+   "itemId": "waterium-z",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-407",
+   "item": "Water Memory",
+   "partner": {
+    "kind": "move",
+    "value": "Multi-Attack"
+   },
+   "text": "Water Memory turns Silvally into a Water type and Multi-Attack follows.",
+   "source": "dex:onMemory",
+   "itemId": "water-memory",
+   "partnerId": "multi-attack",
+   "usable": true
+  },
+  {
+   "id": "syn-408",
+   "item": "Zap Plate",
+   "partner": {
+    "kind": "move",
+    "value": "Judgment"
+   },
+   "text": "Zap Plate turns Arceus into an Electric type and Judgment follows; it also boosts Electric moves by 20%.",
+   "source": "dex:onPlate",
+   "itemId": "zap-plate",
+   "partnerId": "judgment",
+   "usable": true
+  },
+  {
+   "id": "syn-409",
+   "item": "Bug Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Bug"
+   },
+   "text": "Bug Gem boosts the next Bug-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "bug-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-410",
+   "item": "Dark Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Dark"
+   },
+   "text": "Dark Gem boosts the next Dark-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "dark-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-411",
+   "item": "Dragon Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Dragon"
+   },
+   "text": "Dragon Gem boosts the next Dragon-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "dragon-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-412",
+   "item": "Electric Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Electric"
+   },
+   "text": "Electric Gem boosts the next Electric-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "electric-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-413",
+   "item": "Fairy Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Fairy"
+   },
+   "text": "Fairy Gem boosts the next Fairy-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "fairy-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-414",
+   "item": "Fighting Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Fighting"
+   },
+   "text": "Fighting Gem boosts the next Fighting-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "fighting-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-415",
+   "item": "Fire Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Fire"
+   },
+   "text": "Fire Gem boosts the next Fire-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "fire-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-416",
+   "item": "Flying Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Flying"
+   },
+   "text": "Flying Gem boosts the next Flying-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "flying-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-417",
+   "item": "Ghost Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Ghost"
+   },
+   "text": "Ghost Gem boosts the next Ghost-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "ghost-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-418",
+   "item": "Grass Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Grass"
+   },
+   "text": "Grass Gem boosts the next Grass-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "grass-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-419",
+   "item": "Ground Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Ground"
+   },
+   "text": "Ground Gem boosts the next Ground-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "ground-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-420",
+   "item": "Ice Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Ice"
+   },
+   "text": "Ice Gem boosts the next Ice-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "ice-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-421",
+   "item": "Normal Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Normal"
+   },
+   "text": "Normal Gem boosts the next Normal-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "normal-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-422",
+   "item": "Poison Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Poison"
+   },
+   "text": "Poison Gem boosts the next Poison-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "poison-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-423",
+   "item": "Psychic Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Psychic"
+   },
+   "text": "Psychic Gem boosts the next Psychic-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "psychic-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-424",
+   "item": "Rock Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Rock"
+   },
+   "text": "Rock Gem boosts the next Rock-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "rock-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-425",
+   "item": "Steel Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Steel"
+   },
+   "text": "Steel Gem boosts the next Steel-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "steel-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-426",
+   "item": "Water Gem",
+   "partner": {
+    "kind": "type",
+    "value": "Water"
+   },
+   "text": "Water Gem boosts the next Water-type move by 30% once, then is consumed.",
+   "source": "dex:gem",
+   "itemId": "water-gem",
+   "partnerId": null,
+   "usable": true
+  },
+  {
+   "id": "syn-427",
+   "item": "Adamant Crystal",
+   "partner": {
+    "kind": "species",
+    "value": "Dialga-Origin"
+   },
+   "text": "Adamant Crystal works for Dialga-Origin only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": "dialga-origin",
+   "usable": false
+  },
+  {
+   "id": "syn-428",
+   "item": "Cornerstone Mask",
+   "partner": {
+    "kind": "species",
+    "value": "Ogerpon-Cornerstone"
+   },
+   "text": "Cornerstone Mask works for Ogerpon-Cornerstone only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-429",
+   "item": "Griseous Core",
+   "partner": {
+    "kind": "species",
+    "value": "Giratina-Origin"
+   },
+   "text": "Griseous Core works for Giratina-Origin only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": "giratina-origin",
+   "usable": false
+  },
+  {
+   "id": "syn-430",
+   "item": "Hearthflame Mask",
+   "partner": {
+    "kind": "species",
+    "value": "Ogerpon-Hearthflame"
+   },
+   "text": "Hearthflame Mask works for Ogerpon-Hearthflame only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-431",
+   "item": "Leek",
+   "partner": {
+    "kind": "species",
+    "value": "Farfetch'd"
+   },
+   "text": "Leek works for Farfetch'd only.",
+   "source": "dex:itemUser",
+   "itemId": "stick",
+   "partnerId": "farfetchd",
+   "usable": true
+  },
+  {
+   "id": "syn-432",
+   "item": "Leek",
+   "partner": {
+    "kind": "species",
+    "value": "Farfetch'd-Galar"
+   },
+   "text": "Leek works for Farfetch'd-Galar only.",
+   "source": "dex:itemUser",
+   "itemId": "stick",
+   "partnerId": "farfetchd-galar",
+   "usable": true
+  },
+  {
+   "id": "syn-433",
+   "item": "Leek",
+   "partner": {
+    "kind": "species",
+    "value": "Sirfetch'd"
+   },
+   "text": "Leek works for Sirfetch'd only.",
+   "source": "dex:itemUser",
+   "itemId": "stick",
+   "partnerId": "sirfetchd",
+   "usable": true
+  },
+  {
+   "id": "syn-434",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Cosplay"
+   },
+   "text": "Light Ball works for Pikachu-Cosplay only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-435",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Rock-Star"
+   },
+   "text": "Light Ball works for Pikachu-Rock-Star only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-436",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Belle"
+   },
+   "text": "Light Ball works for Pikachu-Belle only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-437",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Pop-Star"
+   },
+   "text": "Light Ball works for Pikachu-Pop-Star only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-438",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-PhD"
+   },
+   "text": "Light Ball works for Pikachu-PhD only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-439",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Libre"
+   },
+   "text": "Light Ball works for Pikachu-Libre only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-440",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Original"
+   },
+   "text": "Light Ball works for Pikachu-Original only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-441",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Hoenn"
+   },
+   "text": "Light Ball works for Pikachu-Hoenn only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-442",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Sinnoh"
+   },
+   "text": "Light Ball works for Pikachu-Sinnoh only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-443",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Unova"
+   },
+   "text": "Light Ball works for Pikachu-Unova only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-444",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Kalos"
+   },
+   "text": "Light Ball works for Pikachu-Kalos only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-445",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Alola"
+   },
+   "text": "Light Ball works for Pikachu-Alola only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-446",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Partner"
+   },
+   "text": "Light Ball works for Pikachu-Partner only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-447",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-Starter"
+   },
+   "text": "Light Ball works for Pikachu-Starter only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-448",
+   "item": "Light Ball",
+   "partner": {
+    "kind": "species",
+    "value": "Pikachu-World"
+   },
+   "text": "Light Ball works for Pikachu-World only.",
+   "source": "dex:itemUser",
+   "itemId": "light-ball",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-449",
+   "item": "Lustrous Globe",
+   "partner": {
+    "kind": "species",
+    "value": "Palkia-Origin"
+   },
+   "text": "Lustrous Globe works for Palkia-Origin only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": "palkia-origin",
+   "usable": false
+  },
+  {
+   "id": "syn-450",
+   "item": "Rusted Shield",
+   "partner": {
+    "kind": "species",
+    "value": "Zamazenta-Crowned"
+   },
+   "text": "Rusted Shield works for Zamazenta-Crowned only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": "zamazenta-crowned",
+   "usable": false
+  },
+  {
+   "id": "syn-451",
+   "item": "Rusted Sword",
+   "partner": {
+    "kind": "species",
+    "value": "Zacian-Crowned"
+   },
+   "text": "Rusted Sword works for Zacian-Crowned only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": "zacian-crowned",
+   "usable": false
+  },
+  {
+   "id": "syn-453",
+   "item": "Thick Club",
+   "partner": {
+    "kind": "species",
+    "value": "Marowak-Alola"
+   },
+   "text": "Thick Club works for Marowak-Alola only.",
+   "source": "dex:itemUser",
+   "itemId": "thick-club",
+   "partnerId": "marowak-alola",
+   "usable": true
+  },
+  {
+   "id": "syn-454",
+   "item": "Thick Club",
+   "partner": {
+    "kind": "species",
+    "value": "Marowak-Alola-Totem"
+   },
+   "text": "Thick Club works for Marowak-Alola-Totem only.",
+   "source": "dex:itemUser",
+   "itemId": "thick-club",
+   "partnerId": null,
+   "usable": false
+  },
+  {
+   "id": "syn-455",
+   "item": "Wellspring Mask",
+   "partner": {
+    "kind": "species",
+    "value": "Ogerpon-Wellspring"
+   },
+   "text": "Wellspring Mask works for Ogerpon-Wellspring only.",
+   "source": "dex:itemUser",
+   "itemId": null,
+   "partnerId": null,
+   "usable": false
+  }
+ ]
+}

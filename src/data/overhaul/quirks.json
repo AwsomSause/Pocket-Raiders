@@ -1,0 +1,1087 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/quirks.json",
+ "entries": [
+  {
+   "id": "loves-naps",
+   "name": "Loves Naps",
+   "category": "rest",
+   "description": "Falls asleep anywhere that's warm.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} curls up in the sun and is asleep in seconds."
+    },
+    {
+     "when": "night",
+     "line": "{Name} yawns and doesn't even pretend to be awake."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} wins, then immediately starts to doze."
+    }
+   ]
+  },
+  {
+   "id": "rain-lover",
+   "name": "Rain Lover",
+   "category": "weather",
+   "description": "Delighted by any rain.",
+   "moments": [
+    {
+     "when": "rain",
+     "line": "{Name} turns its face to the sky and just stands there, happy."
+    },
+    {
+     "when": "storm",
+     "line": "{Name} splashes through the puddles instead of running for cover."
+    },
+    {
+     "when": "rain_end",
+     "line": "{Name} looks disappointed that the rain stopped."
+    }
+   ]
+  },
+  {
+   "id": "hates-cold",
+   "name": "Hates the Cold",
+   "category": "weather",
+   "description": "Shivers in the cold and complains about it.",
+   "moments": [
+    {
+     "when": "snow",
+     "line": "{Name} fluffs up and glares at the snow."
+    },
+    {
+     "when": "snowfield",
+     "line": "{Name} tries to hide inside your bag."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} hogs the fire."
+    }
+   ]
+  },
+  {
+   "id": "shiny-obsessed",
+   "name": "Shiny-Obsessed",
+   "category": "collection",
+   "description": "Fixates on anything that sparkles.",
+   "moments": [
+    {
+     "when": "shiny_encounter",
+     "line": "{Name} stares at the sparkle and won't look away."
+    },
+    {
+     "when": "item_found",
+     "line": "{Name} paws at anything shiny in the dirt."
+    },
+    {
+     "when": "town",
+     "line": "{Name} presses its nose against the jeweler's window."
+    }
+   ]
+  },
+  {
+   "id": "big-eater",
+   "name": "Big Eater",
+   "category": "food",
+   "description": "Always hungry.",
+   "moments": [
+    {
+     "when": "berry_found",
+     "line": "{Name} is already eating before you've said anything."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} eyes everyone else's food."
+    },
+    {
+     "when": "shop",
+     "line": "{Name} stops at every food stall."
+    }
+   ]
+  },
+  {
+   "id": "stage-fright",
+   "name": "Stage Fright",
+   "category": "battle",
+   "description": "Nervous before bosses, then fierce.",
+   "moments": [
+    {
+     "when": "boss_intro",
+     "line": "{Name} fidgets, then takes a breath and squares up."
+    },
+    {
+     "when": "rival_intro",
+     "line": "{Name} looks away, then back with determination."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} is relieved it's over and does a little hop."
+    }
+   ]
+  },
+  {
+   "id": "ball-averse",
+   "name": "Ball-Averse",
+   "category": "social",
+   "description": "Prefers walking beside you.",
+   "moments": [
+    {
+     "when": "town",
+     "line": "{Name} refuses to go back in the ball and trots alongside you."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} stays out, curled by your feet."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} dodges the ball and hops up on your shoulder."
+    }
+   ]
+  },
+  {
+   "id": "night-owl",
+   "name": "Night Owl",
+   "category": "time",
+   "description": "Livelier at night.",
+   "moments": [
+    {
+     "when": "night",
+     "line": "{Name}'s eyes light up the moment the sun sets."
+    },
+    {
+     "when": "cave",
+     "line": "{Name} acts as if it were home."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} stays up and watches the stars."
+    }
+   ]
+  },
+  {
+   "id": "legend-shy",
+   "name": "Legend-Shy",
+   "category": "legendary",
+   "description": "Hides in the presence of legends.",
+   "moments": [
+    {
+     "when": "legend_encounter",
+     "line": "{Name} is gone before the intro even finishes, peeking from behind you."
+    },
+    {
+     "when": "legend_sighting",
+     "line": "{Name} presses its face into your leg."
+    },
+    {
+     "when": "boss_intro",
+     "line": "{Name} is nervous, but stays."
+    }
+   ]
+  },
+  {
+   "id": "early-bird",
+   "name": "Early Bird",
+   "category": "time",
+   "description": "Up with the sun.",
+   "moments": [
+    {
+     "when": "day",
+     "line": "{Name} is already up and stretching when you wake."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} wakes everyone at dawn."
+    },
+    {
+     "when": "sunny",
+     "line": "{Name} basks happily."
+    }
+   ]
+  },
+  {
+   "id": "sun-worshipper",
+   "name": "Sun Worshipper",
+   "category": "weather",
+   "description": "Soaks up every ray of sun.",
+   "moments": [
+    {
+     "when": "sunny",
+     "line": "{Name} turns to follow the sun."
+    },
+    {
+     "when": "desert",
+     "line": "{Name} lies flat on the hot sand, content."
+    },
+    {
+     "when": "rain",
+     "line": "{Name} sulks under a leaf."
+    }
+   ]
+  },
+  {
+   "id": "puddle-jumper",
+   "name": "Puddle Jumper",
+   "category": "weather",
+   "description": "Can't resist a puddle.",
+   "moments": [
+    {
+     "when": "rain",
+     "line": "{Name} finds every puddle."
+    },
+    {
+     "when": "beach",
+     "line": "{Name} splashes in the shallows."
+    },
+    {
+     "when": "forest",
+     "line": "{Name} hops into the stream."
+    }
+   ]
+  },
+  {
+   "id": "tummy-rubs",
+   "name": "Loves Tummy Rubs",
+   "category": "social",
+   "description": "Flops over on the spot.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} rolls onto its back and waits."
+    },
+    {
+     "when": "victory",
+     "line": "{Name} flops over, expecting a reward."
+    },
+    {
+     "when": "town",
+     "line": "{Name} flops over in front of strangers."
+    }
+   ]
+  },
+  {
+   "id": "collector-of-stones",
+   "name": "Stone Collector",
+   "category": "collection",
+   "description": "Pockets interesting pebbles.",
+   "moments": [
+    {
+     "when": "cave",
+     "line": "{Name} comes back with a pebble it's proud of."
+    },
+    {
+     "when": "ruins",
+     "line": "{Name} presents a smooth stone."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} lines its stones up neatly."
+    }
+   ]
+  },
+  {
+   "id": "fear-of-thunder",
+   "name": "Afraid of Thunder",
+   "category": "weather",
+   "description": "Hides when the sky growls.",
+   "moments": [
+    {
+     "when": "storm",
+     "line": "{Name} dives under your jacket."
+    },
+    {
+     "when": "city",
+     "line": "{Name} startles at the electric buzz."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} looks at the sky nervously."
+    }
+   ]
+  },
+  {
+   "id": "song-hummer",
+   "name": "Humming Habit",
+   "category": "social",
+   "description": "Hums while walking.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} hums softly as it walks."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} hums a lullaby."
+    },
+    {
+     "when": "forest",
+     "line": "{Name} hums along with the birds."
+    }
+   ]
+  },
+  {
+   "id": "mirror-gazer",
+   "name": "Mirror Gazer",
+   "category": "vanity",
+   "description": "Checks its reflection constantly.",
+   "moments": [
+    {
+     "when": "beach",
+     "line": "{Name} checks itself in the water."
+    },
+    {
+     "when": "town",
+     "line": "{Name} stops at every window to check."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} checks its reflection after the win."
+    }
+   ]
+  },
+  {
+   "id": "trainer-clinger",
+   "name": "Trainer's Shadow",
+   "category": "social",
+   "description": "Walks as close to you as possible.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} walks so close it bumps into you."
+    },
+    {
+     "when": "town",
+     "line": "{Name} doesn't leave your side."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} sleeps against your boots."
+    }
+   ]
+  },
+  {
+   "id": "mud-lover",
+   "name": "Loves Mud",
+   "category": "food",
+   "description": "Dives into any mud.",
+   "moments": [
+    {
+     "when": "forest",
+     "line": "{Name} finds the only mud puddle and dives in."
+    },
+    {
+     "when": "rain",
+     "line": "{Name} is gleefully filthy."
+    },
+    {
+     "when": "town",
+     "line": "{Name} tracks mud through the Pokémon Center."
+    }
+   ]
+  },
+  {
+   "id": "cliff-climber",
+   "name": "Cliff Climber",
+   "category": "exploration",
+   "description": "Climbs anything.",
+   "moments": [
+    {
+     "when": "cave",
+     "line": "{Name} climbs the wall for no reason."
+    },
+    {
+     "when": "ruins",
+     "line": "{Name} perches on the highest ledge."
+    },
+    {
+     "when": "volcano",
+     "line": "{Name} scales a rock and looks proud."
+    }
+   ]
+  },
+  {
+   "id": "sneezer",
+   "name": "Pollen Sneezer",
+   "category": "weather",
+   "description": "Sneezes at flowers.",
+   "moments": [
+    {
+     "when": "meadow",
+     "line": "{Name} sneezes, startled by its own sneeze."
+    },
+    {
+     "when": "forest",
+     "line": "{Name} sneezes at a flower."
+    },
+    {
+     "when": "spring",
+     "line": "{Name} sneezes until its eyes water."
+    }
+   ]
+  },
+  {
+   "id": "water-skeptic",
+   "name": "Water Skeptic",
+   "category": "weather",
+   "description": "Doesn't trust big bodies of water.",
+   "moments": [
+    {
+     "when": "beach",
+     "line": "{Name} stays far from the waves."
+    },
+    {
+     "when": "ocean",
+     "line": "{Name} eyes the water suspiciously."
+    },
+    {
+     "when": "bridge",
+     "line": "{Name} won't cross without you."
+    }
+   ]
+  },
+  {
+   "id": "lucky-charm",
+   "name": "Lucky Charm",
+   "category": "luck",
+   "description": "Believes a certain object brings luck.",
+   "moments": [
+    {
+     "when": "boss_intro",
+     "line": "{Name} touches its charm."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} holds its charm up as thanks."
+    },
+    {
+     "when": "rare_find",
+     "line": "{Name} looks smug about its charm."
+    }
+   ]
+  },
+  {
+   "id": "dirt-digger",
+   "name": "Digger",
+   "category": "exploration",
+   "description": "Digs up random things.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} digs and finds something odd."
+    },
+    {
+     "when": "ruins",
+     "line": "{Name} digs where no one told it to."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} buries a snack for later."
+    }
+   ]
+  },
+  {
+   "id": "napkin-neat",
+   "name": "Tidy Habits",
+   "category": "rest",
+   "description": "Cleans up after everyone.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} tidies the camp."
+    },
+    {
+     "when": "town",
+     "line": "{Name} straightens the Pokémon Center's shelves."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} straightens itself before facing you."
+    }
+   ]
+  },
+  {
+   "id": "whistler",
+   "name": "Whistles at Birds",
+   "category": "social",
+   "description": "Mimics wild calls.",
+   "moments": [
+    {
+     "when": "forest",
+     "line": "{Name} whistles at a bird, and it whistles back."
+    },
+    {
+     "when": "meadow",
+     "line": "{Name} answers the wild calls."
+    },
+    {
+     "when": "route_walk",
+     "line": "{Name} whistles all the way."
+    }
+   ]
+  },
+  {
+   "id": "nervous-nibbler",
+   "name": "Nervous Nibbler",
+   "category": "food",
+   "description": "Nibbles when anxious.",
+   "moments": [
+    {
+     "when": "boss_intro",
+     "line": "{Name} nibbles on a berry nervously."
+    },
+    {
+     "when": "legend_encounter",
+     "line": "{Name} nibbles nonstop."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} nibbles until it relaxes."
+    }
+   ]
+  },
+  {
+   "id": "ghost-story-fan",
+   "name": "Ghost Story Fan",
+   "category": "storytelling",
+   "description": "Loves a spooky tale.",
+   "moments": [
+    {
+     "when": "ruins",
+     "line": "{Name} leans in, enthralled by the ruins."
+    },
+    {
+     "when": "night",
+     "line": "{Name} gets everyone to tell a ghost story."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} lights up when someone starts a story."
+    }
+   ]
+  },
+  {
+   "id": "shy-with-strangers",
+   "name": "Shy With Strangers",
+   "category": "social",
+   "description": "Hides from new NPCs.",
+   "moments": [
+    {
+     "when": "town",
+     "line": "{Name} hides behind you when someone talks."
+    },
+    {
+     "when": "shop",
+     "line": "{Name} won't look the shopkeeper in the eye."
+    },
+    {
+     "when": "trade",
+     "line": "{Name} is terrified to leave its new friend."
+    }
+   ]
+  },
+  {
+   "id": "rock-skipper",
+   "name": "Rock Skipper",
+   "category": "exploration",
+   "description": "Skips stones.",
+   "moments": [
+    {
+     "when": "beach",
+     "line": "{Name} skips a stone across the water."
+    },
+    {
+     "when": "river",
+     "line": "{Name} skips a stone and counts."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} challenges a teammate to skip stones."
+    }
+   ]
+  },
+  {
+   "id": "star-gazer",
+   "name": "Star Gazer",
+   "category": "exploration",
+   "description": "Stares at the night sky.",
+   "moments": [
+    {
+     "when": "night",
+     "line": "{Name} stares at the stars for hours."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} lies on its back, watching constellations."
+    },
+    {
+     "when": "cave",
+     "line": "{Name} looks for stars that aren't there."
+    }
+   ]
+  },
+  {
+   "id": "prankster-heart",
+   "name": "Prankster",
+   "category": "social",
+   "description": "Can't resist a prank.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} steals a teammate's snack and hides it."
+    },
+    {
+     "when": "town",
+     "line": "{Name} surprises a passerby."
+    },
+    {
+     "when": "battle_win",
+     "line": "{Name} pranks the loser."
+    }
+   ]
+  },
+  {
+   "id": "treasure-sniffer",
+   "name": "Treasure Sniffer",
+   "category": "exploration",
+   "description": "Finds hidden items.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} sniffs at a bush and finds something."
+    },
+    {
+     "when": "ruins",
+     "line": "{Name} points at a hidden alcove."
+    },
+    {
+     "when": "beach",
+     "line": "{Name} digs up a shell."
+    }
+   ]
+  },
+  {
+   "id": "sentimental-keeper",
+   "name": "Sentimental Keeper",
+   "category": "collection",
+   "description": "Hoards keepsakes.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} adds a keepsake to its collection."
+    },
+    {
+     "when": "town",
+     "line": "{Name} pockets a souvenir."
+    },
+    {
+     "when": "evolution",
+     "line": "{Name} holds its old keepsake and sighs."
+    }
+   ]
+  },
+  {
+   "id": "camera-shy",
+   "name": "Camera Shy",
+   "category": "social",
+   "description": "Hides when anyone points a device.",
+   "moments": [
+    {
+     "when": "town",
+     "line": "{Name} ducks behind you when a camera appears."
+    },
+    {
+     "when": "boss_intro",
+     "line": "{Name} tries to hide from the spotlight."
+    },
+    {
+     "when": "victory",
+     "line": "{Name} grudgingly poses."
+    }
+   ]
+  },
+  {
+   "id": "camera-hog",
+   "name": "Camera Hog",
+   "category": "social",
+   "description": "Loves attention.",
+   "moments": [
+    {
+     "when": "town",
+     "line": "{Name} poses for anyone watching."
+    },
+    {
+     "when": "victory",
+     "line": "{Name} leaps into the shot."
+    },
+    {
+     "when": "boss_intro",
+     "line": "{Name} swaggers in."
+    }
+   ]
+  },
+  {
+   "id": "bug-fan",
+   "name": "Bug Fan",
+   "category": "exploration",
+   "description": "Fascinated by insects.",
+   "moments": [
+    {
+     "when": "forest",
+     "line": "{Name} follows a bug for minutes."
+    },
+    {
+     "when": "meadow",
+     "line": "{Name} lets a butterfly land on its nose."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} watches an ant carry a crumb."
+    }
+   ]
+  },
+  {
+   "id": "flower-sniffer",
+   "name": "Flower Sniffer",
+   "category": "exploration",
+   "description": "Stops to smell every flower.",
+   "moments": [
+    {
+     "when": "meadow",
+     "line": "{Name} sniffs every flower it passes."
+    },
+    {
+     "when": "route_walk",
+     "line": "{Name} stops and smells a flower."
+    },
+    {
+     "when": "forest",
+     "line": "{Name} wears a flower proudly."
+    }
+   ]
+  },
+  {
+   "id": "cloud-chaser",
+   "name": "Cloud Chaser",
+   "category": "exploration",
+   "description": "Follows clouds.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} follows a cloud for a while."
+    },
+    {
+     "when": "meadow",
+     "line": "{Name} lies down and finds shapes."
+    },
+    {
+     "when": "storm",
+     "line": "{Name} watches the clouds with awe."
+    }
+   ]
+  },
+  {
+   "id": "echo-lover",
+   "name": "Echo Lover",
+   "category": "exploration",
+   "description": "Shouts into every cave.",
+   "moments": [
+    {
+     "when": "cave",
+     "line": "{Name} shouts into the dark and giggles at the echo."
+    },
+    {
+     "when": "ruins",
+     "line": "{Name} calls out and waits for a reply."
+    },
+    {
+     "when": "canyon",
+     "line": "{Name} yodels."
+    }
+   ]
+  },
+  {
+   "id": "bridge-wary",
+   "name": "Bridge-Wary",
+   "category": "exploration",
+   "description": "Unsure about bridges.",
+   "moments": [
+    {
+     "when": "bridge",
+     "line": "{Name} won't cross until you go first."
+    },
+    {
+     "when": "ruins",
+     "line": "{Name} tests every board."
+    },
+    {
+     "when": "city",
+     "line": "{Name} trembles at an overpass."
+    }
+   ]
+  },
+  {
+   "id": "magnet-for-trouble",
+   "name": "Trouble Magnet",
+   "category": "luck",
+   "description": "Things always go oddly around it.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} trips over a root, rolls, and recovers."
+    },
+    {
+     "when": "town",
+     "line": "{Name} startles a flock of birds."
+    },
+    {
+     "when": "shop",
+     "line": "{Name} knocks something over, looks at you, and sits."
+    }
+   ]
+  },
+  {
+   "id": "good-listener",
+   "name": "Good Listener",
+   "category": "social",
+   "description": "Listens to everyone.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} listens to a teammate's story all night."
+    },
+    {
+     "when": "town",
+     "line": "{Name} listens to a stranger's troubles."
+    },
+    {
+     "when": "victory",
+     "line": "{Name} listens to the loser's complaints."
+    }
+   ]
+  },
+  {
+   "id": "lullaby-singer",
+   "name": "Lullaby Singer",
+   "category": "social",
+   "description": "Sings others to sleep.",
+   "moments": [
+    {
+     "when": "rest_node",
+     "line": "{Name} sings a teammate to sleep."
+    },
+    {
+     "when": "night",
+     "line": "{Name} hums a soft lullaby."
+    },
+    {
+     "when": "hatch",
+     "line": "{Name} sings to an egg."
+    }
+   ]
+  },
+  {
+   "id": "egg-warmer",
+   "name": "Egg-Warmer",
+   "category": "social",
+   "description": "Loves eggs.",
+   "moments": [
+    {
+     "when": "hatch",
+     "line": "{Name} sits on the egg and refuses to move."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} guards the egg."
+    },
+    {
+     "when": "town",
+     "line": "{Name} watches the egg with a soft expression."
+    }
+   ]
+  },
+  {
+   "id": "leader-wannabe",
+   "name": "Self-Appointed Leader",
+   "category": "social",
+   "description": "Acts like the leader.",
+   "moments": [
+    {
+     "when": "route_walk",
+     "line": "{Name} marches at the front, glancing back."
+    },
+    {
+     "when": "boss_intro",
+     "line": "{Name} steps forward before you can."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} directs everyone to their spots."
+    }
+   ]
+  },
+  {
+   "id": "underdog-booster",
+   "name": "Underdog's Cheerleader",
+   "category": "social",
+   "description": "Roots for the weakest teammate.",
+   "moments": [
+    {
+     "when": "battle_win",
+     "line": "{Name} cheers the smallest teammate."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} shares food with the weakest."
+    },
+    {
+     "when": "boss_intro",
+     "line": "{Name} nudges the nervous one."
+    }
+   ]
+  },
+  {
+   "id": "heat-seeker",
+   "name": "Heat Seeker",
+   "category": "weather",
+   "description": "Loves warm places.",
+   "moments": [
+    {
+     "when": "volcano",
+     "line": "{Name} basks happily."
+    },
+    {
+     "when": "desert",
+     "line": "{Name} sprawls on a hot rock."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} sits as close to the fire as it can."
+    }
+   ]
+  },
+  {
+   "id": "shade-seeker",
+   "name": "Shade Seeker",
+   "category": "weather",
+   "description": "Hides from the sun.",
+   "moments": [
+    {
+     "when": "sunny",
+     "line": "{Name} searches for shade."
+    },
+    {
+     "when": "desert",
+     "line": "{Name} walks in your shadow."
+    },
+    {
+     "when": "volcano",
+     "line": "{Name} complains quietly."
+    }
+   ]
+  },
+  {
+   "id": "night-light",
+   "name": "Night Light",
+   "category": "time",
+   "description": "Glows or reassures in the dark.",
+   "moments": [
+    {
+     "when": "night",
+     "line": "{Name} makes the dark less scary."
+    },
+    {
+     "when": "cave",
+     "line": "{Name} lights the way."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} stays awake to keep watch."
+    }
+   ]
+  },
+  {
+   "id": "travel-journalist",
+   "name": "Travel Journalist",
+   "category": "storytelling",
+   "description": "Acts like it's keeping a record.",
+   "moments": [
+    {
+     "when": "new_region",
+     "line": "{Name} watches everything with a studious eye."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} looks at you as if it's recording the day."
+    },
+    {
+     "when": "victory",
+     "line": "{Name} looks proud and satisfied."
+    }
+   ]
+  },
+  {
+   "id": "trade-hearted",
+   "name": "Trade-Hearted",
+   "category": "social",
+   "description": "Misses the one it was traded from.",
+   "moments": [
+    {
+     "when": "trade",
+     "line": "{Name} looks back as it leaves its old trainer."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} stares at an empty spot."
+    },
+    {
+     "when": "evolution",
+     "line": "{Name} holds its old keepsake."
+    }
+   ]
+  },
+  {
+   "id": "secret-keeper",
+   "name": "Secret Keeper",
+   "category": "storytelling",
+   "description": "Acts as if it knows something.",
+   "moments": [
+    {
+     "when": "ruins",
+     "line": "{Name} stares at a wall, as if it knows."
+    },
+    {
+     "when": "legend_sighting",
+     "line": "{Name} stays quiet, as if it expected it."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} says nothing but smiles."
+    }
+   ]
+  },
+  {
+   "id": "puddle-philosopher",
+   "name": "Puddle Philosopher",
+   "category": "storytelling",
+   "description": "Contemplates reflections.",
+   "moments": [
+    {
+     "when": "rain",
+     "line": "{Name} stares into a puddle, deep in thought."
+    },
+    {
+     "when": "beach",
+     "line": "{Name} watches the tide pull and push."
+    },
+    {
+     "when": "rest_node",
+     "line": "{Name} looks at its reflection in the stream."
+    }
+   ]
+  }
+ ]
+}

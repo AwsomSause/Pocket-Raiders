@@ -1,0 +1,854 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/titles.json",
+ "entries": [
+  {
+   "id": "unbroken",
+   "title": "the Unbroken",
+   "tier": 1,
+   "requires": "M-UNBROKEN",
+   "flavor": "Never fainted in a boss battle."
+  },
+  {
+   "id": "giant-slayer",
+   "title": "the Giant Slayer",
+   "tier": 2,
+   "requires": "2xM-UNDERDOG",
+   "flavor": "Took down foes far above its level, repeatedly."
+  },
+  {
+   "id": "rivals-bane",
+   "title": "the Rival's Bane",
+   "tier": 1,
+   "requires": "2xM-RIVALACE",
+   "flavor": "Beat the rival's ace more than once."
+  },
+  {
+   "id": "last-stand",
+   "title": "the Last Stand",
+   "tier": 1,
+   "requires": "M-SAVIOR+M-BOSS",
+   "flavor": "Won a boss battle as the final conscious Pokémon."
+  },
+  {
+   "id": "old-friend",
+   "title": "the Old Friend",
+   "tier": 2,
+   "requires": "M-FIRST+M-ALLRUN",
+   "flavor": "With you from beginning to end."
+  },
+  {
+   "id": "champions-bane",
+   "title": "the Champion's Bane",
+   "tier": 0,
+   "requires": "M-CHAMPKO",
+   "flavor": "Defeated the Champion's ace."
+  },
+  {
+   "id": "thread-hanger",
+   "title": "the Thread-Walker",
+   "tier": 2,
+   "requires": "2xM-1HP",
+   "flavor": "Keeps winning with almost nothing left."
+  },
+  {
+   "id": "iron-wall",
+   "title": "the Iron Wall",
+   "tier": 2,
+   "requires": "M-WALL+M-PIVOT",
+   "flavor": "A bulwark that takes hits for everyone."
+  },
+  {
+   "id": "sweeper",
+   "title": "the Sweeper",
+   "tier": 2,
+   "requires": "2xM-SWEEP",
+   "flavor": "Leaves nothing standing."
+  },
+  {
+   "id": "unseen-blade",
+   "title": "the Unseen Blade",
+   "tier": 2,
+   "requires": "M-FLAWLESS+M-SPEEDSTER",
+   "flavor": "Strikes first and takes nothing in return."
+  },
+  {
+   "id": "spark-of-hope",
+   "title": "the Spark of Hope",
+   "tier": 1,
+   "requires": "M-OVERDRIVE+M-SAVIOR",
+   "flavor": "Turned a lost battle around with a last burst."
+  },
+  {
+   "id": "crimson-heart",
+   "title": "the Crimson Heart",
+   "tier": 1,
+   "requires": "M-OVERDRIVE+M-PROTECT",
+   "flavor": "Awakened to protect a friend."
+  },
+  {
+   "id": "shining-one",
+   "title": "the Shining One",
+   "tier": 1,
+   "requires": "M-SHINY+M-BOSS",
+   "flavor": "A shiny that broke a boss."
+  },
+  {
+   "id": "legend-walker",
+   "title": "the Legend-Walker",
+   "tier": 1,
+   "requires": "M-LEGENDCATCH",
+   "flavor": "Walked with a legend as its companion."
+  },
+  {
+   "id": "myth-keeper",
+   "title": "the Myth-Keeper",
+   "tier": 0,
+   "requires": "M-MYTHCATCH",
+   "flavor": "Trusted by a mythical Pokémon."
+  },
+  {
+   "id": "trial-passer",
+   "title": "the Trial-Passer",
+   "tier": 2,
+   "requires": "M-LEGENDTRIAL",
+   "flavor": "Judged worthy by a Legendary."
+  },
+  {
+   "id": "witness",
+   "title": "the Witness",
+   "tier": 2,
+   "requires": "M-LEGENDWITNESS",
+   "flavor": "Saw a legend from afar and kept the secret."
+  },
+  {
+   "id": "heart-of-the-team",
+   "title": "the Heart of the Team",
+   "tier": 1,
+   "requires": "M-ALLBONDED",
+   "flavor": "Everyone on the team is close to it."
+  },
+  {
+   "id": "true-friend",
+   "title": "the True Friend",
+   "tier": 2,
+   "requires": "M-BESTIE",
+   "flavor": "Found a best friend among its teammates."
+  },
+  {
+   "id": "mentor",
+   "title": "the Mentor",
+   "tier": 2,
+   "requires": "M-MENTOR",
+   "flavor": "Taught what it knows to younger teammates."
+  },
+  {
+   "id": "guardian",
+   "title": "the Guardian",
+   "tier": 2,
+   "requires": "M-PROTECT+M-REVENGE",
+   "flavor": "Takes the hit and avenges the fallen."
+  },
+  {
+   "id": "avenger",
+   "title": "the Avenger",
+   "tier": 2,
+   "requires": "2xM-REVENGE",
+   "flavor": "Never lets a fallen teammate go unanswered."
+  },
+  {
+   "id": "stalwart",
+   "title": "the Stalwart",
+   "tier": 3,
+   "requires": "M-WALL",
+   "flavor": "Stood firm."
+  },
+  {
+   "id": "steadfast",
+   "title": "the Steadfast",
+   "tier": 3,
+   "requires": "M-ENDURE+M-NEARMISS",
+   "flavor": "Refuses to go down."
+  },
+  {
+   "id": "lucky",
+   "title": "the Lucky",
+   "tier": 3,
+   "requires": "M-CRIT3",
+   "flavor": "Critical hits find it."
+  },
+  {
+   "id": "comeback-kid",
+   "title": "the Comeback Kid",
+   "tier": 2,
+   "requires": "M-COMEBACK+M-HEALEDUP",
+   "flavor": "Always rises again."
+  },
+  {
+   "id": "long-hauler",
+   "title": "the Long-Hauler",
+   "tier": 3,
+   "requires": "M-TIMEOUT",
+   "flavor": "Wins the long ones."
+  },
+  {
+   "id": "quick-fox",
+   "title": "the Quick",
+   "tier": 3,
+   "requires": "M-FASTWIN",
+   "flavor": "Ends fights in a flash."
+  },
+  {
+   "id": "heir-apparent",
+   "title": "the Heir Apparent",
+   "tier": 3,
+   "requires": "M-EVOFINAL+M-GYM",
+   "flavor": "Fully grown and already earning badges."
+  },
+  {
+   "id": "badge-bearer",
+   "title": "the Badge-Bearer",
+   "tier": 3,
+   "requires": "M-GYMALL",
+   "flavor": "Fought for every badge."
+  },
+  {
+   "id": "bossbreaker",
+   "title": "the Bossbreaker",
+   "tier": 2,
+   "requires": "M-BOSS5",
+   "flavor": "Faced five bosses and kept going."
+  },
+  {
+   "id": "elite-challenger",
+   "title": "the Elite Challenger",
+   "tier": 2,
+   "requires": "M-ELITE",
+   "flavor": "Reached the Elite Four."
+  },
+  {
+   "id": "road-warrior",
+   "title": "the Road Warrior",
+   "tier": 3,
+   "requires": "M-BATTLE100",
+   "flavor": "A hundred battles on the road."
+  },
+  {
+   "id": "reaper",
+   "title": "the Reaper",
+   "tier": 2,
+   "requires": "M-KO100",
+   "flavor": "A hundred KOs."
+  },
+  {
+   "id": "world-traveler",
+   "title": "the World Traveler",
+   "tier": 2,
+   "requires": "M-REGIONMULTI",
+   "flavor": "Has seen three regions."
+  },
+  {
+   "id": "local-hero",
+   "title": "the Local Hero",
+   "tier": 3,
+   "requires": "M-REGIONSET",
+   "flavor": "Knows its region like home."
+  },
+  {
+   "id": "chain-finisher",
+   "title": "the Chain-Finisher",
+   "tier": 2,
+   "requires": "M-EVENTHERO",
+   "flavor": "Saved the day at the end of a long story."
+  },
+  {
+   "id": "rare-witness",
+   "title": "the Rare Witness",
+   "tier": 3,
+   "requires": "M-RARECHAIN",
+   "flavor": "Lived through something almost no one sees."
+  },
+  {
+   "id": "shape-shifter",
+   "title": "the Shapeshifter",
+   "tier": 3,
+   "requires": "M-TRANSFORM3",
+   "flavor": "Transformation is second nature."
+  },
+  {
+   "id": "mega-resonant",
+   "title": "the Resonant",
+   "tier": 2,
+   "requires": "M-MEGA+M-MEGASIG",
+   "flavor": "Bond-powered and signature-ready."
+  },
+  {
+   "id": "crystal-heart",
+   "title": "the Crystal-Hearted",
+   "tier": 3,
+   "requires": "M-TERA+M-TERAOFFSET",
+   "flavor": "Became more itself."
+  },
+  {
+   "id": "titan",
+   "title": "the Titan",
+   "tier": 3,
+   "requires": "M-DYNA+M-DYNASAVE",
+   "flavor": "Giant and unrelenting."
+  },
+  {
+   "id": "g-max-glory",
+   "title": "the Gigantic",
+   "tier": 2,
+   "requires": "M-GMAX",
+   "flavor": "Took a form few ever see."
+  },
+  {
+   "id": "z-bearer",
+   "title": "the Z-Bearer",
+   "tier": 3,
+   "requires": "M-ZMOVE",
+   "flavor": "Moved as one with its trainer."
+  },
+  {
+   "id": "pure",
+   "title": "the Pure",
+   "tier": 2,
+   "requires": "M-NOTRANS",
+   "flavor": "Wins with no gimmicks."
+  },
+  {
+   "id": "sage",
+   "title": "the Sage",
+   "tier": 3,
+   "requires": "M-SUPPORT+M-SCREENS",
+   "flavor": "Wins with support, not spotlight."
+  },
+  {
+   "id": "medic",
+   "title": "the Medic",
+   "tier": 3,
+   "requires": "M-HEALER",
+   "flavor": "Keeps the team on its feet."
+  },
+  {
+   "id": "trapper",
+   "title": "the Trapper",
+   "tier": 3,
+   "requires": "M-HAZARD",
+   "flavor": "Lays the traps that decide fights."
+  },
+  {
+   "id": "plague",
+   "title": "the Plague-Bearer",
+   "tier": 3,
+   "requires": "M-STATUSMASTER",
+   "flavor": "Misery follows it."
+  },
+  {
+   "id": "dancer",
+   "title": "the Dancer",
+   "tier": 2,
+   "requires": "M-SETUPSWEEP+M-SWEEP",
+   "flavor": "Sets up, then sweeps."
+  },
+  {
+   "id": "treasure-hunter",
+   "title": "the Treasure-Hunter",
+   "tier": 3,
+   "requires": "M-ITEMFIND",
+   "flavor": "Always digging something up."
+  },
+  {
+   "id": "berry-king",
+   "title": "the Berry King",
+   "tier": 3,
+   "requires": "M-BERRYLOVER",
+   "flavor": "Berries vanish near it."
+  },
+  {
+   "id": "campfire-kind",
+   "title": "the Campfire Kind",
+   "tier": 3,
+   "requires": "M-CAMP",
+   "flavor": "Never misses a campfire."
+  },
+  {
+   "id": "named-one",
+   "title": "the Named",
+   "tier": 3,
+   "requires": "M-NICKNAME",
+   "flavor": "Answers to a name you chose."
+  },
+  {
+   "id": "fully-trusted",
+   "title": "the Fully Trusted",
+   "tier": 2,
+   "requires": "M-TRUST",
+   "flavor": "Complete trust."
+  },
+  {
+   "id": "born-on-road",
+   "title": "the Roadborn",
+   "tier": 2,
+   "requires": "M-HATCHED",
+   "flavor": "Hatched during the journey."
+  },
+  {
+   "id": "roadborn-shine",
+   "title": "the Sparkling Roadborn",
+   "tier": 1,
+   "requires": "M-HATCHSHINY",
+   "flavor": "Hatched shining."
+  },
+  {
+   "id": "rescued-one",
+   "title": "the Rescued",
+   "tier": 3,
+   "requires": "M-RESCUED",
+   "flavor": "Chose to stay after being saved."
+  },
+  {
+   "id": "gifted",
+   "title": "the Gifted",
+   "tier": 3,
+   "requires": "M-GIFT",
+   "flavor": "Came as a gift from the road."
+  },
+  {
+   "id": "chosen",
+   "title": "the Chosen",
+   "tier": 2,
+   "requires": "M-EVENTMON",
+   "flavor": "The end of a long chain of events."
+  },
+  {
+   "id": "survivor",
+   "title": "the Survivor",
+   "tier": 3,
+   "requires": "M-HEALDEBT+M-TANK1000",
+   "flavor": "Has taken it all and keeps coming back."
+  },
+  {
+   "id": "endless",
+   "title": "the Endless",
+   "tier": 2,
+   "requires": "M-DEPTH+M-BATTLE100",
+   "flavor": "Goes deep and keeps going."
+  },
+  {
+   "id": "solo-victor",
+   "title": "the Solitary Victor",
+   "tier": 1,
+   "requires": "M-ALONE",
+   "flavor": "Beat a boss alone."
+  },
+  {
+   "id": "ironclad-streak",
+   "title": "the Streaker",
+   "tier": 2,
+   "requires": "M-WINSTREAK10",
+   "flavor": "Ten wins and counting."
+  },
+  {
+   "id": "crowd-favorite",
+   "title": "the Crowd Favorite",
+   "tier": 3,
+   "requires": "M-SHOWOFF",
+   "flavor": "Always in the highlight reel."
+  },
+  {
+   "id": "mvp-title",
+   "title": "the Most Valuable",
+   "tier": 1,
+   "requires": "M-MVP",
+   "flavor": "The heart and soul of a run."
+  },
+  {
+   "id": "hall-fame",
+   "title": "the Hall-Famed",
+   "tier": 1,
+   "requires": "M-HALLFAME",
+   "flavor": "Entered the Hall of Fame."
+  },
+  {
+   "id": "veteran",
+   "title": "the Veteran",
+   "tier": 1,
+   "requires": "M-VETERAN",
+   "flavor": "On three completed journeys."
+  },
+  {
+   "id": "master-of-one",
+   "title": "the Master of One",
+   "tier": 3,
+   "requires": "M-MASTER",
+   "flavor": "Has made one move completely its own."
+  },
+  {
+   "id": "master-of-three",
+   "title": "the Master of Three",
+   "tier": 2,
+   "requires": "M-MASTER3",
+   "flavor": "A specialist with three perfected moves."
+  },
+  {
+   "id": "first-blood-title",
+   "title": "the First Mover",
+   "tier": 3,
+   "requires": "M-FIRSTBLOOD",
+   "flavor": "Always strikes first against bosses."
+  },
+  {
+   "id": "rival-rival",
+   "title": "the Rival's Rival",
+   "tier": 2,
+   "requires": "M-RIVAL3",
+   "flavor": "Has stood against the rival three times."
+  },
+  {
+   "id": "turner",
+   "title": "the Table-Turner",
+   "tier": 2,
+   "requires": "M-RIVALREV",
+   "flavor": "Turned the tables on the rival."
+  },
+  {
+   "id": "counter-breaker",
+   "title": "the Counter-Breaker",
+   "tier": 2,
+   "requires": "M-RIVALCOUNTER",
+   "flavor": "Beat the very answer prepared for it."
+  },
+  {
+   "id": "remembered",
+   "title": "the Remembered",
+   "tier": 3,
+   "requires": "M-MEMORY",
+   "flavor": "Even the rival remembers it."
+  },
+  {
+   "id": "villain-marked",
+   "title": "the Marked",
+   "tier": 3,
+   "requires": "M-VILLAINFOE",
+   "flavor": "Known by name to the villains."
+  },
+  {
+   "id": "villain-bane",
+   "title": "the Villain's Bane",
+   "tier": 2,
+   "requires": "M-VILLAIN",
+   "flavor": "Broke the evil team's best."
+  },
+  {
+   "id": "grunt-bane",
+   "title": "the Grunt-Crusher",
+   "tier": 3,
+   "requires": "M-GRUNTS",
+   "flavor": "Sent grunts packing in droves."
+  },
+  {
+   "id": "final-word",
+   "title": "the Final Word",
+   "tier": 3,
+   "requires": "M-CLEANUP",
+   "flavor": "Takes the last KO."
+  },
+  {
+   "id": "overkiller",
+   "title": "the Overkiller",
+   "tier": 3,
+   "requires": "M-OVERKILL+M-OHKO",
+   "flavor": "Hits far harder than it needs to."
+  },
+  {
+   "id": "weak-spot",
+   "title": "the Weakness-Finder",
+   "tier": 3,
+   "requires": "M-SE3",
+   "flavor": "Finds the weakness every time."
+  },
+  {
+   "id": "storm-chaser-title",
+   "title": "the Storm-Chaser",
+   "tier": 3,
+   "requires": "M-WEATHERWIN+M-BADWEATHER",
+   "flavor": "At home in any sky."
+  },
+  {
+   "id": "lasting-power",
+   "title": "the Last Drop",
+   "tier": 3,
+   "requires": "M-LASTPP",
+   "flavor": "Squeezes out the final PP."
+  },
+  {
+   "id": "shake-it-off",
+   "title": "the Shake-It-Off",
+   "tier": 3,
+   "requires": "M-STATUSFREE",
+   "flavor": "Powers through any ailment."
+  },
+  {
+   "id": "fire-walker",
+   "title": "the Fire-Walker",
+   "tier": 3,
+   "requires": "M-BURNWIN",
+   "flavor": "Fights on through the flames."
+  },
+  {
+   "id": "ice-heart",
+   "title": "the Ice-Hearted",
+   "tier": 3,
+   "requires": "M-FREEZEWIN",
+   "flavor": "Frozen, then fierce."
+  },
+  {
+   "id": "sleepless",
+   "title": "the Awakened",
+   "tier": 3,
+   "requires": "M-SLEEPWIN",
+   "flavor": "Woke at just the right moment."
+  },
+  {
+   "id": "static-nerve",
+   "title": "the Static Nerve",
+   "tier": 3,
+   "requires": "M-PARAWIN",
+   "flavor": "Numb but not defeated."
+  },
+  {
+   "id": "poison-proud",
+   "title": "the Poison-Proud",
+   "tier": 3,
+   "requires": "M-POISONWIN",
+   "flavor": "Poison couldn't stop it."
+  },
+  {
+   "id": "clear-minded",
+   "title": "the Clear-Minded",
+   "tier": 3,
+   "requires": "M-CONFUSEWIN",
+   "flavor": "Got its head together just in time."
+  },
+  {
+   "id": "wall-cracker",
+   "title": "the Wall-Cracker",
+   "tier": 2,
+   "requires": "M-TYPEHATE",
+   "flavor": "Finds the crack in any wall."
+  },
+  {
+   "id": "giant-killer",
+   "title": "the Giant-Killer",
+   "tier": 3,
+   "requires": "M-UNDERDOG",
+   "flavor": "Beat the odds."
+  },
+  {
+   "id": "relief",
+   "title": "the Reliever",
+   "tier": 3,
+   "requires": "M-RELIEF",
+   "flavor": "Saves the day from the bench."
+  },
+  {
+   "id": "awakened-one",
+   "title": "the Awakened Heart",
+   "tier": 1,
+   "requires": "M-OVERDRIVE",
+   "flavor": "Refused to fall."
+  },
+  {
+   "id": "zoned-in",
+   "title": "the Zoned-In",
+   "tier": 3,
+   "requires": "M-HYPER",
+   "flavor": "Found the rhythm."
+  },
+  {
+   "id": "early-bloom",
+   "title": "the Early Bloomer",
+   "tier": 3,
+   "requires": "M-EVOLOW",
+   "flavor": "Evolved before the journey began in earnest."
+  },
+  {
+   "id": "late-bloom",
+   "title": "the Late Bloomer",
+   "tier": 3,
+   "requires": "M-EVOLATE",
+   "flavor": "Worth the wait."
+  },
+  {
+   "id": "twice-grown",
+   "title": "the Twice-Grown",
+   "tier": 3,
+   "requires": "M-EVOTWICE",
+   "flavor": "Grew twice."
+  },
+  {
+   "id": "stone-touched",
+   "title": "the Stone-Touched",
+   "tier": 3,
+   "requires": "M-EVOSTONE",
+   "flavor": "Changed by a stone."
+  },
+  {
+   "id": "trade-born",
+   "title": "the Trade-Born",
+   "tier": 3,
+   "requires": "M-EVOTRADE",
+   "flavor": "Changed by an exchange."
+  },
+  {
+   "id": "friend-evolved",
+   "title": "the Friendship-Grown",
+   "tier": 2,
+   "requires": "M-EVOFRIEND",
+   "flavor": "Evolved out of trust."
+  },
+  {
+   "id": "hidden-path",
+   "title": "the Hidden-Path",
+   "tier": 1,
+   "requires": "M-EVOCUSTOM",
+   "flavor": "Took a path almost nobody knew existed."
+  },
+  {
+   "id": "team-grown",
+   "title": "the Team-Grown",
+   "tier": 3,
+   "requires": "M-EVOWITNESS",
+   "flavor": "Evolved with everyone watching."
+  },
+  {
+   "id": "shiny-victor",
+   "title": "the Glitter-Victor",
+   "tier": 2,
+   "requires": "M-SHINYWIN",
+   "flavor": "Shone brightest when it counted."
+  },
+  {
+   "id": "rare-one",
+   "title": "the Rare One",
+   "tier": 3,
+   "requires": "M-CAUGHTRARE",
+   "flavor": "A rare find."
+  },
+  {
+   "id": "shine-title",
+   "title": "the Radiant",
+   "tier": 2,
+   "requires": "M-SHINY",
+   "flavor": "Sparkles like nothing else."
+  },
+  {
+   "id": "world-spark",
+   "title": "the Spark of the World",
+   "tier": 0,
+   "requires": "M-SHINY+M-LEGENDCATCH",
+   "flavor": "A shiny legend at your side."
+  },
+  {
+   "id": "dead-calm",
+   "title": "the Deadly Calm",
+   "tier": 3,
+   "requires": "M-FLAWLESS",
+   "flavor": "Won without a scratch."
+  },
+  {
+   "id": "tireless",
+   "title": "the Tireless",
+   "tier": 3,
+   "requires": "M-TANK1000",
+   "flavor": "Takes the damage and keeps coming."
+  },
+  {
+   "id": "bare-bones",
+   "title": "the Underleveled Ace",
+   "tier": 3,
+   "requires": "M-UNDERLEVEL",
+   "flavor": "Punches above its level."
+  },
+  {
+   "id": "ahead",
+   "title": "the Prodigy",
+   "tier": 3,
+   "requires": "M-OVERLEVEL",
+   "flavor": "Far ahead of the pack."
+  },
+  {
+   "id": "fast-friend",
+   "title": "the Fast Friend",
+   "tier": 3,
+   "requires": "M-FRIENDLY",
+   "flavor": "Made friends right away."
+  },
+  {
+   "id": "shoulder",
+   "title": "the Shoulder",
+   "tier": 3,
+   "requires": "M-COMFORT",
+   "flavor": "Stays beside a hurt friend."
+  },
+  {
+   "id": "rivalry-title",
+   "title": "the Spur",
+   "tier": 3,
+   "requires": "M-RIVALRY",
+   "flavor": "Pushes teammates to do better."
+  },
+  {
+   "id": "signature",
+   "title": "the Signature",
+   "tier": 3,
+   "requires": "M-SIGMOMENT",
+   "flavor": "Does what only it can do."
+  },
+  {
+   "id": "home-here",
+   "title": "the At-Home",
+   "tier": 3,
+   "requires": "M-WORLDMOMENT",
+   "flavor": "Loves wherever it is."
+  },
+  {
+   "id": "relic-title",
+   "title": "the Relic-Finder",
+   "tier": 3,
+   "requires": "M-RELICFIND",
+   "flavor": "Finds something old."
+  },
+  {
+   "id": "fell-honorably",
+   "title": "the Honorable",
+   "tier": 3,
+   "requires": "M-DEFEATBOND",
+   "flavor": "Went down fighting."
+  },
+  {
+   "id": "first-catch-title",
+   "title": "the First Catch",
+   "tier": 3,
+   "requires": "M-FIRSTCATCH",
+   "flavor": "The one that started the collection."
+  },
+  {
+   "id": "adminslayer",
+   "title": "the Admin-Slayer",
+   "tier": 3,
+   "requires": "M-ADMIN",
+   "flavor": "Took down an admin."
+  },
+  {
+   "id": "champion-challenger",
+   "title": "the Challenger",
+   "tier": 3,
+   "requires": "M-CHAMPION",
+   "flavor": "Faced the Champion."
+  }
+ ]
+}

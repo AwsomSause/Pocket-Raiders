@@ -1,0 +1,484 @@
+{
+ "status": "disabled",
+ "note": "Imported in Overhaul slice 1 (data only). No game system reads this file yet.",
+ "source": "overhaul_content_pack_2.zip (director, 2026-11-06), catalogs/relationship_types.json",
+ "entries": [
+  {
+   "id": "best-friends",
+   "name": "Best Friends",
+   "pairing": "Playful+Gentle, Loyal+Loyal, Friendly+Cheerful",
+   "minBond": 70,
+   "interaction": "Celebrate together; share berries",
+   "benefit": "+5% chance to survive a KO hit at 1 HP once per battle (for the switched-in partner)",
+   "mechanical": true
+  },
+  {
+   "id": "friendly-rivals",
+   "name": "Friendly Rivals",
+   "pairing": "Competitive+Proud, Brave+Bold",
+   "minBond": 60,
+   "interaction": "One-up each other; trade teasing",
+   "benefit": "+10% damage on the turn after the partner lands a KO",
+   "mechanical": true
+  },
+  {
+   "id": "protective-partners",
+   "name": "Protective Partners",
+   "pairing": "Protective+Timid, Brave+Anxious",
+   "minBond": 60,
+   "interaction": "One shields the other in fights",
+   "benefit": "Partner gets Protective morale immediately when the other faints",
+   "mechanical": true
+  },
+  {
+   "id": "mutual-respect",
+   "name": "Mutual Respect",
+   "pairing": "Independent+Brave, Stoic+Honorable",
+   "minBond": 60,
+   "interaction": "Nods of acknowledgment",
+   "benefit": "Faster mastery gains for both",
+   "mechanical": true
+  },
+  {
+   "id": "unlikely-friends",
+   "name": "Unlikely Friends",
+   "pairing": "Opposing types, opposite personalities",
+   "minBond": 40,
+   "interaction": "Odd-couple moments",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "tension",
+   "name": "Tension",
+   "pairing": "Proud+Mischievous, Grumpy+Cheerful",
+   "minBond": 30,
+   "interaction": "Bickering and sniping",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "sibling-like",
+   "name": "Sibling-Like",
+   "pairing": "Same family, or similar size and nature",
+   "minBond": 50,
+   "interaction": "Bicker, then defend each other",
+   "benefit": "Shared evolution-family bonus: both gain +2 bond on any shared win",
+   "mechanical": true
+  },
+  {
+   "id": "mentor-student",
+   "name": "Mentor and Student",
+   "pairing": "Wise+Curious, Veteran+Rookie",
+   "minBond": 50,
+   "interaction": "Mentor corrects, student imitates",
+   "benefit": "Student gains mastery uses 25% faster",
+   "mechanical": true
+  },
+  {
+   "id": "old-souls",
+   "name": "Old Souls",
+   "pairing": "Wise+Noble, Zen+Patient",
+   "minBond": 50,
+   "interaction": "Silent, comfortable company",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "partners-in-crime",
+   "name": "Partners in Crime",
+   "pairing": "Mischievous+Sly, Playful+Rebellious",
+   "minBond": 50,
+   "interaction": "Pranks and plots",
+   "benefit": "Prank moments triggered more often",
+   "mechanical": true
+  },
+  {
+   "id": "heart-and-spark",
+   "name": "Heart and Spark",
+   "pairing": "Calm+Hot-headed",
+   "minBond": 50,
+   "interaction": "One calms the other",
+   "benefit": "Hot-headed's Frustrated morale clears one battle sooner",
+   "mechanical": true
+  },
+  {
+   "id": "night-and-day",
+   "name": "Night and Day",
+   "pairing": "Opposing time-of-day quirks",
+   "minBond": 40,
+   "interaction": "Compare moods at sunrise",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "two-peas",
+   "name": "Two Peas",
+   "pairing": "Same personality",
+   "minBond": 40,
+   "interaction": "Finish each other's sentences",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "quiet-company",
+   "name": "Quiet Company",
+   "pairing": "Shy+Shy, Timid+Stoic",
+   "minBond": 40,
+   "interaction": "Sit near each other, no words",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "study-buddies",
+   "name": "Study Buddies",
+   "pairing": "Scholarly+Curious, Perfectionist+Earnest",
+   "minBond": 50,
+   "interaction": "Compare notes on foes",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "gym-buddies",
+   "name": "Gym Buddies",
+   "pairing": "Tough+Competitive, Hot-headed+Brave",
+   "minBond": 50,
+   "interaction": "Train side by side",
+   "benefit": "Move mastery gains +10% for physical moves while both are in party",
+   "mechanical": true
+  },
+  {
+   "id": "cuddle-pile",
+   "name": "Cuddle Pile",
+   "pairing": "Affectionate+Clingy, Soft-hearted+Gentle",
+   "minBond": 50,
+   "interaction": "Sleep in a heap",
+   "benefit": "Rest nodes restore +2 bond for each",
+   "mechanical": true
+  },
+  {
+   "id": "foodie-duo",
+   "name": "Foodie Duo",
+   "pairing": "Foodie+Big Eater quirks",
+   "minBond": 40,
+   "interaction": "Share berries; fight over the last one",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "mother-hen",
+   "name": "Mother Hen",
+   "pairing": "Protective+Lazy, Gentle+Reckless",
+   "minBond": 50,
+   "interaction": "One fusses over the other",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "big-and-small",
+   "name": "Big and Small",
+   "pairing": "Huge+tiny size",
+   "minBond": 40,
+   "interaction": "The big one carries the small one",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "rival-to-friend",
+   "name": "Rival to Friend",
+   "pairing": "Former Friendly Rivals who've won together",
+   "minBond": 70,
+   "interaction": "Shift: Friendly Rivals become Best Friends",
+   "benefit": "Inherits Best Friends bonus",
+   "mechanical": true
+  },
+  {
+   "id": "friend-to-rival",
+   "name": "Friend to Rival",
+   "pairing": "Best Friends competing for a role",
+   "minBond": 60,
+   "interaction": "Shift: Best Friends become Friendly Rivals",
+   "benefit": "Inherits Friendly Rivals bonus",
+   "mechanical": true
+  },
+  {
+   "id": "healed-by-you",
+   "name": "Healed By You",
+   "pairing": "One restored the other from fainting",
+   "minBond": 50,
+   "interaction": "Gratitude and shy thanks",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "saved-by-you",
+   "name": "Saved By You",
+   "pairing": "One protected the other from a KO",
+   "minBond": 60,
+   "interaction": "Quiet loyalty",
+   "benefit": "+1 Defense for the saved one for the first turn after a switch-in",
+   "mechanical": true
+  },
+  {
+   "id": "shared-hardship",
+   "name": "Shared Hardship",
+   "pairing": "Survived a boss battle together",
+   "minBond": 50,
+   "interaction": "Look at each other differently",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "shared-origin",
+   "name": "Shared Origin",
+   "pairing": "Same region of origin or hatch",
+   "minBond": 40,
+   "interaction": "Swap homeland memories",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "egg-siblings",
+   "name": "Egg Siblings",
+   "pairing": "Hatched in the same chain event",
+   "minBond": 50,
+   "interaction": "Born together",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "joined-together",
+   "name": "Joined Together",
+   "pairing": "Joined the party within 3 nodes of each other",
+   "minBond": 40,
+   "interaction": "New-kid solidarity",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "star-and-shadow",
+   "name": "Star and Shadow",
+   "pairing": "Showy+Humble",
+   "minBond": 50,
+   "interaction": "One steals the spotlight, the other pushes it forward",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "duelists",
+   "name": "Duelists",
+   "pairing": "Honorable+Competitive",
+   "minBond": 60,
+   "interaction": "Formal spars at camp",
+   "benefit": "+10% accuracy for the first move after the partner lands a KO",
+   "mechanical": true
+  },
+  {
+   "id": "shield-and-sword",
+   "name": "Shield and Sword",
+   "pairing": "Defender+Attacker roles",
+   "minBond": 60,
+   "interaction": "Natural pairing in battle",
+   "benefit": "Attacker takes 5% less damage on the turn after the defender switches in",
+   "mechanical": true
+  },
+  {
+   "id": "dancers",
+   "name": "Dancers",
+   "pairing": "Playful+Dramatic",
+   "minBond": 50,
+   "interaction": "Choreograph victory poses",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "bookends",
+   "name": "Bookends",
+   "pairing": "First and last to join",
+   "minBond": 60,
+   "interaction": "The oldest and the newest",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "trade-twins",
+   "name": "Trade Twins",
+   "pairing": "Both obtained by trade",
+   "minBond": 40,
+   "interaction": "Share the odd-one-out feeling",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "elder-and-youth",
+   "name": "Elder and Youth",
+   "pairing": "Large level gap",
+   "minBond": 50,
+   "interaction": "Youth looks up to elder",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "dreamers",
+   "name": "Dreamers",
+   "pairing": "Dreamy+Romantic, Sunny+Dreamy",
+   "minBond": 40,
+   "interaction": "Daydream together",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "scheming-duo",
+   "name": "Scheming Duo",
+   "pairing": "Scheming+Sly",
+   "minBond": 50,
+   "interaction": "Plot together at camp",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "thunder-and-rain",
+   "name": "Thunder and Rain",
+   "pairing": "Electric+Water or similar opposed elemental pair",
+   "minBond": 40,
+   "interaction": "Weather-themed banter",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "fire-and-ice",
+   "name": "Fire and Ice",
+   "pairing": "Fire+Ice pair",
+   "minBond": 40,
+   "interaction": "Opposites who balance",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "light-and-dark",
+   "name": "Light and Dark",
+   "pairing": "Fairy/Psychic+Dark/Ghost pair",
+   "minBond": 40,
+   "interaction": "Opposites who understand each other",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "guard-and-guide",
+   "name": "Guard and Guide",
+   "pairing": "Protective+Wise",
+   "minBond": 50,
+   "interaction": "One guards, one guides",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "race-partners",
+   "name": "Race Partners",
+   "pairing": "Two fast Pokémon",
+   "minBond": 40,
+   "interaction": "Constant friendly races",
+   "benefit": "Outspeed ties between them resolve in the one who won the last race",
+   "mechanical": true
+  },
+  {
+   "id": "heavy-hitters",
+   "name": "Heavy Hitters",
+   "pairing": "Two strong physical attackers",
+   "minBond": 50,
+   "interaction": "Compare scars",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "tiny-terror-duo",
+   "name": "Tiny Terrors",
+   "pairing": "Two small Pokémon",
+   "minBond": 40,
+   "interaction": "Underestimated, overachieving",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "reluctant-allies",
+   "name": "Reluctant Allies",
+   "pairing": "Stubborn+Aloof",
+   "minBond": 30,
+   "interaction": "Don't admit they like each other",
+   "benefit": "Can resolve into Mutual Respect after a boss win together",
+   "mechanical": true
+  },
+  {
+   "id": "inseparables",
+   "name": "Inseparables",
+   "pairing": "Clingy+Loyal",
+   "minBond": 60,
+   "interaction": "Never apart",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "rock-and-roll",
+   "name": "Rock and Roll",
+   "pairing": "Tough+Showy",
+   "minBond": 50,
+   "interaction": "One anchors, one performs",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "voice-of-reason",
+   "name": "Voice of Reason",
+   "pairing": "Calm+Reckless",
+   "minBond": 50,
+   "interaction": "One slows down the other",
+   "benefit": "Reckless's Frustrated morale clears after a win",
+   "mechanical": true
+  },
+  {
+   "id": "champion-and-fan",
+   "name": "Champion and Fan",
+   "pairing": "Boss-slayer+admirer",
+   "minBond": 50,
+   "interaction": "Hero worship",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "caretaker-and-charge",
+   "name": "Caretaker and Charge",
+   "pairing": "Gentle+Weak or newly evolved",
+   "minBond": 50,
+   "interaction": "One watches the other eat",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "bonded-by-loss",
+   "name": "Bonded by Loss",
+   "pairing": "Survived the loss of a shared friend",
+   "minBond": 60,
+   "interaction": "Quiet, shared grief",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "sky-and-ground",
+   "name": "Sky and Ground",
+   "pairing": "Flying+Ground/Rock pair",
+   "minBond": 40,
+   "interaction": "Perspectives from above and below",
+   "benefit": null,
+   "mechanical": false
+  },
+  {
+   "id": "shared-secret",
+   "name": "Shared Secret",
+   "pairing": "Both witnessed an event no one else saw",
+   "minBond": 50,
+   "interaction": "Exchange knowing glances",
+   "benefit": null,
+   "mechanical": false
+  }
+ ]
+}
