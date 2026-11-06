@@ -414,7 +414,7 @@ function decide(content: Content, run: RunState, opts: DecideOpts = {}): AutoPic
   if (itemPick) return itemPick;
 
   // Switching: a Pokémon that can't hurt the foe, or is about to be knocked out by a better matchup, may step back.
-  if (!opts.slot) {
+  if (!opts.slot && !battle.eventRule?.noSwitch) {
     const hopeless = best.damage <= 0 || (best.damage / Math.max(1, foe.hp) < 0.08 && best.score < 0.9);
     const exposed = danger && foeFirst;
     if (hopeless || exposed) {

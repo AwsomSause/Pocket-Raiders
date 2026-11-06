@@ -2705,6 +2705,25 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
 export type EventEffect = z.infer<typeof EventEffectSchema>;
 
 /** A battle an outcome starts; `win` effects apply only if you win it. Wild Pokémon can be caught. */
+/**
+ * Run events B: rules for one trainer fight (kept on `battle.eventRule`).
+ * `noSwitch`: no voluntary switching. `noAttacks`: your attack moves are blocked while you have a status move with PP.
+ * `surviveTurns`: you win once this many turns have passed. `suddenDeath`: the first Pokémon to faint ends the fight.
+ * `turnLimit`: a win after more turns than this pays `slowWin` instead of `win`.
+ * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
+ */
+export const EventRuleSchema = z.object({
+  noSwitch: z.boolean().optional(),
+  noAttacks: z.boolean().optional(),
+  surviveTurns: z.number().int().min(1).max(30).optional(),
+  suddenDeath: z.boolean().optional(),
+  turnLimit: z.number().int().min(1).max(30).optional(),
+  foeAsleep: z.boolean().optional(),
+  reversed: z.boolean().optional(),
+  stages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-6).max(6)).optional(),
+});
+export type EventRule = z.infer<typeof EventRuleSchema>;
+
 export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
@@ -2752,6 +2771,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     terrain: TerrainSchema.optional(),
     /** Run events B: share of max HP your party recovers between the fights of a `chain` (Relay Battle). */
     chainHeal: z.number().min(0).max(1).optional(),
+    /** Run events B: special rules for this fight (see EventRuleSchema). */
+    rule: EventRuleSchema.optional(),
+    /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
+    slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
 ]);
