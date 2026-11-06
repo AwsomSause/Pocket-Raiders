@@ -44,7 +44,7 @@ import { legacyRotation, type RotationEntry } from '../core/legacyRuns';
 import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
-import { localDay } from '../core/town';
+import { cardBackground, localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
 import { HubIndicators, indicatorAssets } from '../ui/hubTown/indicators';
@@ -1869,6 +1869,8 @@ export class HubScene extends Phaser.Scene {
         draw: (scene, box, w) => {
           const x = (w - 620 * scale) / 2;
           const y = 8;
+          const bg = cardBackground(p);
+          if (bg) box.add(scene.add.rectangle(x - 6, y - 6, 620 * scale + 12, 356 * scale + 12, Phaser.Display.Color.HexStringToColor(bg.color).color, 0.85).setOrigin(0).setName(`trainer-card-bg-${bg.id}`));
           if (scene.textures.exists('ui.trainercard')) box.add(scene.add.image(x, y, 'ui.trainercard').setOrigin(0).setScale(scale));
           box.add(scene.add.graphics().lineStyle(2, Phaser.Display.Color.HexStringToColor(frame.color).color, 1).strokeRoundedRect(x, y, 620 * scale, 356 * scale, 6));
           const label = (row: number, text: string): void => {

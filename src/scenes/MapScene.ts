@@ -14,6 +14,7 @@ import { crossingHint, obstacleAt, towerClimb, TRAVERSAL } from '../core/travers
 import { realSeason, SEASON_SKIN } from '../ui/seasonSkin';
 import { clockLabel, periodOf, PERIOD_LOOK, tideLabel } from '../core/clock';
 import { modeObjectives, objectivesLine } from '../core/modeObjectives';
+import { bountyObjective } from '../core/bounties';
 import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
 import { stopIsHidden } from '../core/events';
@@ -405,7 +406,8 @@ export class MapScene extends Phaser.Scene {
     if (convoy) this.add.text(GAME_WIDTH / 2, 88, `Escort: ${convoy.name}  ${'♥'.repeat(convoy.hp)}${'♡'.repeat(convoy.maxHp - convoy.hp)}`, textStyle(13, '#ffd0d8', { stroke: '#4a0b1a', strokeThickness: 3 })).setOrigin(0.5, 0).setName('convoy');
     const chatter = league ? null : leadChatter(content, run);
     if (chatter) this.add.text(GAME_WIDTH / 2, 105, chatter, textStyle(12, '#e8e0c8', { stroke: '#2a2418', strokeThickness: 3 })).setOrigin(0.5, 0).setName('lead-chatter');
-    const objectives = modeObjectives(run);
+    const bounty = league ? null : bountyObjective(content, run);
+    const objectives = [...modeObjectives(run), ...(bounty ? [bounty] : [])];
     if (objectives.length > 0) this.add.text(GAME_WIDTH - 24, 68, objectivesLine(objectives), textStyle(14, '#f0e0a0')).setOrigin(1, 0);
 
     // Revisit This Timeline: the False Protagonist's title, and who is ahead of you now.

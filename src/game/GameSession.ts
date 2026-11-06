@@ -44,7 +44,9 @@ import * as Mini from '../core/minigame/flow';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
+import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { toggleCamp } from '../core/trainingCamp';
+import { applyMentorLesson, type MentorLesson } from '../core/mentorLesson';
 import { cycleXpPolicy, XP_POLICY_RULES } from '../core/teamPolicy';
 import * as PartyLife from '../core/partyLife';
 type PartyScene = PartyLife.Scene;
@@ -609,6 +611,24 @@ export class GameSession {
   toggleTrainingCamp(uid: string): string {
     const run = structuredClone(this.requireRun());
     const message = toggleCamp(run, uid);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor lesson: a more evolved teammate teaches a younger one a move (ideas S48). */
+  mentorLesson(lesson: MentorLesson): string {
+    const run = structuredClone(this.requireRun());
+    const message = applyMentorLesson(this.content, run, lesson);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Nursery: one parent move or one ability pick for an Egg (ideas S49). */
+  nursery(eggUid: string, choice: NurseryChoice): string {
+    const run = structuredClone(this.requireRun());
+    const message = applyNursery(this.content, run, eggUid, choice);
     this.run = run;
     this.persistRun();
     return message;

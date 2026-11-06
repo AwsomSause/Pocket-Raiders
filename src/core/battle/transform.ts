@@ -50,6 +50,7 @@ import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { effectiveHeld } from './held';
 import { zMoveDelayTurns, megaDelayTurns, megaPartyLimit, permanentMegaFriendship } from '../trainerPerks';
 import type { BattleState, PokemonInstance } from '../state';
+import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
 
 type Side = 'player' | 'enemy';
 export type FormChangeKind = 'mega' | 'primal' | 'gigantamax' | 'tera' | 'ability';
@@ -94,6 +95,8 @@ export interface TransformContext {
   perks?: Perks;
   /** S174 Z-Crystal Bonding: bond score (0-100) of one of your Pokémon. Absent = not checked (simulations). */
   bondScore?: (uid: string) => number;
+  /** Gimmick progression: use counts and type hits this run (core/gimmicks). */
+  gimmicks?: GimmickContext;
 }
 
 const owns = (inventory: Record<string, number>, id: string) => (inventory[id] ?? 0) > 0;
@@ -208,6 +211,10 @@ function zMoveProblem(ctx: TransformContext, mon: PokemonInstance, moveIndex: nu
   // S174: the Z-Power answers only a Pokémon that has trained with you long enough.
   const need = content.balance.zBond.minBond;
   if (ctx.bondScore && need > 0 && ctx.bondScore(mon.uid) < need) return `Not bonded enough for a Z-Move yet (bond ${ctx.bondScore(mon.uid)}/${need}). Battle together to grow it.`;
+  // S482: the Z-Ring attunes to a type after enough hits with it this run.
+  const attune = content.balance.transformations.gimmick.zAttuneUses;
+  const done = ctx.gimmicks?.typeUses[move.type] ?? attune;
+  if (done < attune) return `The Z-Ring is still attuning to ${typeName(move.type)} (${done}/${attune} hits).`;
   return null;
 }
 
@@ -315,7 +322,7 @@ function dynamax(ctx: TransformContext, side: Side, mon: PokemonInstance, events
   const { content, battle } = ctx;
   const before = calcStats(content, mon).hp;
   battle.transform.mechanics[mon.uid] = 'dynamax';
-  battle.transform.dynamax[mon.uid] = content.balance.transformations.dynamaxTurns;
+  battle.transform.dynamax[mon.uid] = content.balance.transformations.dynamaxTurns + (side === 'player' && ctx.gimmicks ? gimmickLevel(content, ctx.gimmicks.uses.dynamax ?? 0) : 0);
   battle.transform.used[side].push('dynamax');
   mon.dynamaxed = true;
   mon.hp = Math.max(1, Math.round((mon.hp * calcStats(content, mon).hp) / before));
@@ -535,6 +542,15 @@ function changeForm(ctx: TransformContext, side: Side, mon: PokemonInstance, kin
   mon.speciesId = option.formId;
   mon.hp = Math.min(mon.hp, calcStats(ctx.content, mon).hp);
   events.push({ type: 'transform', side, uid: mon.uid, kind, from, to: option.formId, itemId: option.itemId });
+  // A levelled Mega Stone steadies its Pokémon: it heals a share of max HP (S479).
+  if (kind === 'mega' && side === 'player' && option.itemId && ctx.gimmicks && mon.hp > 0) {
+    const level = gimmickLevel(ctx.content, ctx.gimmicks.uses[stoneKey(option.itemId)] ?? 0);
+    const amount = Math.min(calcStats(ctx.content, mon).hp - mon.hp, Math.round((calcStats(ctx.content, mon).hp * level * ctx.content.balance.transformations.gimmick.megaHealPerLevel) / 100));
+    if (amount > 0) {
+      mon.hp += amount;
+      events.push({ type: 'heal', side, amount, hpAfter: mon.hp });
+    }
+  }
 }
 
 /**

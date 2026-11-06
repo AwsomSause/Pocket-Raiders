@@ -8,6 +8,8 @@ import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
 import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
+import { OpponentAiSchema, DEFAULT_OPPONENT_AI } from './battle/opponentAiConfig';
+import { GrowthStatsSchema, DEFAULT_GROWTH_STATS } from './battle/growthConfig';
 import type { StoryConfig } from './story/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
@@ -1928,6 +1930,10 @@ export const BalanceSchema = z.object({
   typeRules: TypeRulesSchema.default(DEFAULT_TYPE_RULES),
   /** S174 Z-Crystal Bonding: a Pokémon needs this bond score (0-100, trust + affection) before it can use a Z-Move (0 = off). */
   zBond: z.object({ minBond: z.number().int().min(0).max(100) }).default({ minBond: 30 }),
+  /** Battle/AI batch 2 (S269 taunts, S272 team roles, S273 fatigue, S280 trap setting): battle/opponentAi.ts. */
+  opponentAi: OpponentAiSchema.default(DEFAULT_OPPONENT_AI),
+  /** Battle/AI batch 3 (S157 Focus, S158 Ability Awakening): battle/growthStats.ts. */
+  growthStats: GrowthStatsSchema.default(DEFAULT_GROWTH_STATS),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z
@@ -2057,6 +2063,8 @@ export const BalanceSchema = z.object({
     league: z.boolean(),
     /** Turns a Dynamax lasts, counting the turn it starts. */
     dynamaxTurns: z.number().int().min(1).default(3),
+    /** Gimmick progression (S479 to S482): uses needed for levels 1, 2, 3; Mega heal per stone level (percent); hits with a type before its Z-Crystal attunes. */
+    gimmick: z.object({ levels: z.array(z.number().int().min(1)).length(3), megaHealPerLevel: z.number().int().min(0), zAttuneUses: z.number().int().min(0) }).default({ levels: [2, 5, 9], megaHealPerLevel: 10, zAttuneUses: 5 }),
   }),
   /** Friendship (M8.75 part B): how it grows and when friendship evolutions happen. */
   friendship: z.object({
@@ -2292,7 +2300,7 @@ export const BalanceSchema = z.object({
   }),
   /** The gentle opening: for the first `encounters` fights of a run, wild Pokémon above `maxBaseStats` are swapped for weaker ones and are `levelOffset` levels lower (never below `minLevel`). */
   /** Streak Bonuses (S313): a gift each time the win streak reaches a milestone (it repeats every `wins` wins). Pity Counters (S321): after this many reward drafts with no rare or better reward, the next draft carries one. */
-  luck: z.object({ streakRewards: z.array(z.object({ wins: z.number().int().min(2), item: z.string() })).min(1), pityRareAfter: z.number().int().min(1), /** Milestone Chests (S312): a chest opens, once, when the profile's finished-run count reaches `runs`. */ milestoneChests: z.array(z.object({ runs: z.number().int().min(1), bankCredits: z.number().int().min(0), candies: z.number().int().min(0), researchPoints: z.number().int().min(0) })).min(1) }),
+  luck: z.object({ streakRewards: z.array(z.object({ wins: z.number().int().min(2), item: z.string() })).min(1), pityRareAfter: z.number().int().min(1), /** Bounty Boards (S316): each stage's bounty asks for `target` defeated Pokémon of one type and pays money (`money` + `moneyPerStage` x stage) and `item`. */ bounty: z.object({ target: z.number().int().min(0), money: z.number().int().min(0), moneyPerStage: z.number().int().min(0), item: z.string() }), /** Milestone Chests (S312): a chest opens, once, when the profile's finished-run count reaches `runs`. */ milestoneChests: z.array(z.object({ runs: z.number().int().min(1), bankCredits: z.number().int().min(0), candies: z.number().int().min(0), researchPoints: z.number().int().min(0) })).min(1) }),
   opening: z.object({ encounters: z.number().int().min(0), maxBaseStats: z.number().int().positive(), levelOffset: z.number().int().min(0), minLevel: z.number().int().min(1), softMovesUntilLevel: z.number().int().min(0), maxLevel: z.number().int().min(1) }),
   /** Chance that a wild encounter is a Legendary, Mythical or Ultra Beast (trainer perks scale it). */
   legendaryWildChance: z.number().min(0).max(1),
@@ -2728,6 +2736,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
 export const EventRuleSchema = z.object({
   noSwitch: z.boolean().optional(),
   noAttacks: z.boolean().optional(),
+  /** No bag items in this fight (Mentor's Examination). */
+  noItems: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),

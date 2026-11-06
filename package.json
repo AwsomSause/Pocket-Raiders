@@ -57,6 +57,7 @@
     "data:wild-scenes": "node tools/build-wild-scenes-events.ts",
     "data:rb2-events": "node tools/build-rb2-events.ts",
     "data:rb3-events": "node tools/build-rb3-events.ts",
+    "data:rb4-events": "node tools/build-rb4-events.ts",
     "data:w10-events": "node tools/build-w10-events.ts",
     "data:rk-events": "node tools/build-rk-events.ts",
     "data:merchant-events": "node tools/build-merchant-events.ts",

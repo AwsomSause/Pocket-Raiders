@@ -14,6 +14,7 @@
 
 import { companionSupport } from './companionSupport';
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
+import { gimmickContext } from './gimmicks';
 import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
@@ -54,7 +55,7 @@ import {
   rollLegendaryWild,
   withPartyStrength,
 } from './encounters';
-import { evolveFully, type EvolutionResult } from './evolution';
+import { evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
@@ -177,7 +178,10 @@ import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
+import { conditionEvolutionTarget } from './conditionEvolution';
+import { roleOrder } from './battle/opponentAi';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { noteBountyKills } from './bounties';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -336,6 +340,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     totems: { entered: 0, won: 0, lost: 0, done: [], unlocks: [], research: 0 },
     expedition: null,
     expeditions: { completed: [], failed: [], unlocked: [], last: [] },
+    gimmicks: { uses: {} },
     minigame: null,
     minigames: { stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0, contest: {} },
   };
@@ -1830,7 +1835,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       plan = { ...plan, members: trained.members };
       trainingIndex = trained.index;
     }
-    const team = plan.members.map((m, i) => {
+    const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
       const speciesId = plan.leaderId ? m.speciesId : lockSpecies(content, run, m.speciesId, `${node.id}:${i}`);
@@ -1839,9 +1844,12 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (!plan.leaderId) randomizeMoves(content, run, mon);
       return mon;
     });
+    // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
+    const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
+    const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     run.battle.ai = plan.ai;
-    run.battle.levelInfo = plan.levelInfo;
+    run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
     if (back) run.battle.returning = back.id;
     if (isRival) run.battle.rival = true;
@@ -2249,6 +2257,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: archetype.modifiers,
+    gimmicks: gimmickContext(content, run),
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,
@@ -2723,6 +2732,13 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       emit(content, run, 'storyMoment', { actors: [], data: { def: 'evolution-diary', suppressed: false }, importance: 35, text: diaryLine(content, mon.uid, content.species.get(evo.from)?.name ?? evo.from, content.species.get(evo.to)?.name ?? evo.to) });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
     }
+    // S171: a route by weather, a known move or a move used often enough.
+    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;
+    if (special) {
+      const evo = evolve(content, mon, special);
+      evolutions.push({ ...evo, uid: mon.uid });
+      for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+    }
   }
   count(run, 'evolutions', evolutions.length);
   settleMastery(run, battle.outcome === 'win');
@@ -2797,6 +2813,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (dropped) itemsFound.push(dropped);
   const streakGift = outcome === 'win' ? advanceStreak(content, run) : null;
   if (streakGift) itemsFound.push(streakGift.item);
+  const bountyItem = outcome === 'win' ? noteBountyKills(content, run, battle.enemyTeam) : null;
+  if (bountyItem) itemsFound.push(bountyItem);
   for (const id of itemsFound) addItem(run.inventory, id, 1);
   if (outcome === 'win') {
     count(run, 'battlesWon');

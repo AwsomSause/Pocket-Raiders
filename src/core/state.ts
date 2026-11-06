@@ -71,6 +71,10 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
+  /** S171 condition evolutions: uses of the moves a route counts (core/conditionEvolution.ts). */
+  moveCounts: z.record(z.string(), z.number().int().min(0)).optional(),
+  /** S158 Ability Awakening: times it showed its ability in battle (see battle/growthStats.ts). */
+  abilityUses: z.number().int().min(0).optional(),
   /** S168 weather tolerance: sandstorm/hail chip turns it has endured, per weather (see weatherTolerance). */
   weatherEndured: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Held items (catalog id → copies). A Pokémon can hold many items, each up to its catalog max (director, Q1). */
@@ -1235,6 +1239,8 @@ export const RunStateSchema = z.object({
   recorder: z.record(z.string(), z.unknown()).optional(),
   /** Journal: one line per finished stage (the stops passed), kept for the run history. */
   journal: z.array(z.string()).default([]),
+  /** Times each gimmick was used this run, by kind (mega:<stone>, dynamax, tera, zmove): drives Mega Stone and Dynamax Band levels (run v38). */
+  gimmicks: z.object({ uses: z.record(z.string(), z.number().int().min(0)).default({}) }).default({ uses: {} }),
   /** This run's Run Quest (trainerQuests.json runQuests), or null when none was offered. */
   runQuest: z.string().nullable().default(null),
   /** This run's mentorship, or null when none was chosen on the Preparation Desk. */

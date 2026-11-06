@@ -3,6 +3,7 @@
 // keeps two Pokémon of one species from acting identically is a hash of uid + turn + move, never a gameplay RNG stream.
 // The pick is only a PlayerAction: the engine still checks it like any other command.
 
+import { gimmickContext } from '../gimmicks';
 import { runPerks } from '../archetypes';
 import { bondMood, freshBond } from '../bond';
 import type { Content, Move } from '../contentSchema';
@@ -209,7 +210,7 @@ export interface AutoPick {
 }
 
 function context(run: RunState, content: Content) {
-  return { content: battleContent(content, run.rules, run.regionOrder[run.regionIndex]), battle: run.battle!, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(content, run), noBattleItems: noBattleItems(run.rules), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
+  return { content: battleContent(content, run.rules, run.regionOrder[run.regionIndex]), battle: run.battle!, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(content, run), gimmicks: gimmickContext(content, run), noBattleItems: noBattleItems(run.rules), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
 }
 
 const nameOf = (content: Content, mon: PokemonInstance) => getSpecies(content, mon.speciesId).name;

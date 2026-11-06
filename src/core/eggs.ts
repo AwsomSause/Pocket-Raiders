@@ -1,6 +1,7 @@
 import type { Content } from './contentSchema';
 import { NATURE_IDS } from './natures';
 import { rollShiny } from './encounters';
+import { nurseryAbilitySlot } from './nursery';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { maxHp } from './pokemon';
 import { count, countShiny, discover } from './progress';
@@ -116,6 +117,9 @@ export function hatchEgg(content: Content, run: RunState, egg: Egg): PokemonInst
   mon.eggTier = tier.id;
   mon.friendship = Math.max(mon.friendship, HATCH_FRIENDSHIP, tier.friendship);
   if (egg.hidden && content.species.get(egg.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
+  // Breeding Nursery (S49): the ability you picked beforehand.
+  const picked = nurseryAbilitySlot(run, egg.uid);
+  if (picked !== null && (picked < 0 || picked < (content.species.get(egg.speciesId)?.abilities.normal.length ?? 0))) mon.abilitySlot = picked;
   if (egg.blissful && !run.party.some((m) => m.blissful)) makeBlissful(content, mon);
   for (const id of egg.eggMoves) teachEggMove(content, mon, id, egg.eggMoves);
   // Legacy Descendant (core/memories/heirloom.ts): the one trait its ancestor passed on.

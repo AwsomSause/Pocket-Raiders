@@ -356,3 +356,16 @@ export function prestigeCosmetics(content: Content, p: Profile): { speciesId: st
     .slice(0, 6)
     .map((x) => ({ ...x, title: titles[x.stars]! }));
 }
+
+/** Trainer Card backgrounds (S472): the colour wash drawn behind the card. */
+export const CARD_BACKGROUNDS: Record<string, { name: string; color: string }> = {
+  'cb-sunrise': { name: 'Sunrise', color: '#f2a65a' },
+  'cb-midnight': { name: 'Midnight', color: '#1d2a5c' },
+  'cb-meadow': { name: 'Meadow', color: '#5fae5a' },
+};
+/** The background you equipped at the Town Hall, or null (no background, or one that is no longer owned). */
+export function cardBackground(p: Profile): { id: string; name: string; color: string } | null {
+  const id = townOf(p).equipped.cardbg ?? '';
+  const bg = CARD_BACKGROUNDS[id];
+  return bg && ownedSet(p, 'cardbg').includes(id) ? { id, ...bg } : null;
+}

@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitLine } from '../ui/fitText';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
@@ -17,7 +18,7 @@ import { genderSign } from '../core/gender';
 import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
-import { enemyIntent } from '../core/battle/intent';
+import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
@@ -32,7 +33,7 @@ import { bossRoleForClass } from '../core/encounters';
 import { findNode } from '../core/map';
 import { bossInfo, currentRegion, type BossInfo } from '../core/regions';
 import { isFinalBoss, type RunEvent, type TurnResult } from '../core/run';
-import { battleContent, noBattleItems } from '../core/rules';
+import { battleContent, noBattleItems, tagPilot } from '../core/rules';
 import { isHardcore, nuzlockeCatchProblem } from '../core/nuzlocke';
 import type { PresentationCue } from '../core/story/queue';
 import { currentEnemy, type BattleState, type PokemonInstance, type RunState } from '../core/state';
@@ -570,6 +571,12 @@ export class BattleScene extends Phaser.Scene {
 
   private get run(): RunState {
     return services().session.run!;
+  }
+
+  /** Tag Team: "Player 1: " in front of the prompt, or nothing. */
+  private pilotTag(mon: PokemonInstance): string {
+    const pilot = tagPilot(this.run.rules, this.run.party.indexOf(mon));
+    return pilot ? `${pilot}: ` : '';
   }
 
   private activeMon(): PokemonInstance {
@@ -2174,12 +2181,12 @@ export class BattleScene extends Phaser.Scene {
               ? ' It will Dynamax!'
               : '';
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
-    const intent = this.run.battle && !this.run.battle.doubles ? enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) : null;
+    const intent = this.run.battle && !this.run.battle.doubles ? (enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
     const battleNow = this.run.battle!;
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
     const shadow = this.activeMon().shadow;
-    this.message.setText(`${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax' })[c.kind];
@@ -2315,7 +2322,7 @@ export class BattleScene extends Phaser.Scene {
     const mon = this.activeMon();
     const anyPp = mon.moves.some((m) => m.pp > 0);
     this.clearMenus();
-    this.message.setText(`What will ${this.speciesName(mon)} do?`);
+    this.message.setText(`${this.pilotTag(mon)}What will ${this.speciesName(mon)} do?`);
     // With Z-Move on, each move shows the Z-Move it becomes; moves without one can't be picked.
     const zMoves = this.transformChoice?.kind === 'zmove' ? zMoveOptions(this.battleCtx()) : null;
     // Dynamaxed (or about to): every move shows the Max Move it becomes.
@@ -2443,7 +2450,7 @@ export class BattleScene extends Phaser.Scene {
     const doubles = run.battle?.doubles;
     const idx = doubles ? run.party.indexOf(this.activeMon()) : -1;
     const battle = doubles && idx >= 0 && idx !== run.battle!.activeIndex ? { ...run.battle!, activeIndex: idx } : run.battle!;
-    return { content: battleContent(services().session.content, run.rules, run.regionOrder[run.regionIndex]), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
+    return { content: battleContent(services().session.content, run.rules, run.regionOrder[run.regionIndex]), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), gimmicks: gimmickContext(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
   }
 
   private openBag(): void {

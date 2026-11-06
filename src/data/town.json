@@ -273,6 +273,18 @@
      }
     },
     {
+     "id": "dojo-rival",
+     "name": "Rival sparring",
+     "desc": "Your last run's lead Pokémon spars with one of a rival's Pokémon at the same level. Practice only (S474).",
+     "kind": "pick",
+     "rows": [
+      "S474"
+     ],
+     "limit": "day",
+     "dynamic": "rivals",
+     "template": {"id": "rival", "label": "{name}", "desc": "", "say": "", "reward": {"rp": 1, "xp": 1}, "once": false}
+    },
+    {
      "id": "dojo-dummy",
      "name": "Practice dummy (moveset lab)",
      "desc": "Pick a Pokémon from your last team and a move to see its damage against the dummy. No risk, no cost.",
@@ -3080,6 +3092,17 @@
      "view": "collections"
     },
     {
+     "id": "hall-cardbg",
+     "name": "Trainer Card backgrounds",
+     "desc": "Equip a background for your Trainer Card. Unlock them on the season track (S472).",
+     "kind": "equip",
+     "rows": [
+      "S472"
+     ],
+     "set": "cardbg",
+     "slot": "cardbg"
+    },
+    {
      "id": "hall-badges",
      "name": "Badge case",
      "desc": "Equip up to three gym badges; each gives a small perk every run.",
@@ -3663,7 +3686,15 @@
    "label": "Level 3",
    "reward": {
     "rp": 2,
-    "say": "2 Research Points"
+    "unlock": {
+     "set": "cardbg",
+     "pool": [
+      "cb-sunrise",
+      "cb-midnight",
+      "cb-meadow"
+     ]
+    },
+    "say": "2 Research Points and a Trainer Card background"
    }
   },
   {
@@ -3811,6 +3842,11 @@
   }
  ],
  "dailyQuests": [
+  { "id": "dq-winter", "season": "winter", "text": "Roll the Snow Day snowman", "action": "seasonal-tap", "reward": { "credits": 10, "xp": 2 } },
+  { "id": "dq-spring", "season": "spring", "text": "Catch the cherry petals", "action": "seasonal-tap", "reward": { "credits": 10, "xp": 2 } },
+  { "id": "dq-summer", "season": "summer", "text": "Visit the sunflowers", "action": "seasonal-tap", "reward": { "credits": 10, "xp": 2 } },
+  { "id": "dq-autumn", "season": "autumn", "text": "Gather the autumn leaves", "action": "seasonal-tap", "reward": { "credits": 10, "xp": 2 } },
+  { "id": "dq-halloween", "season": "halloween", "text": "Carve the Halloween pumpkin", "action": "seasonal-tap", "reward": { "credits": 10, "xp": 2 } },
   {
    "id": "dq-polish",
    "text": "Polish a trophy",
