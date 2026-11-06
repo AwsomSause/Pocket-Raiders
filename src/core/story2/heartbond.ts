@@ -153,3 +153,11 @@ export function heartbondVictory(run: RunState, battleKey: string, milestone: bo
   refreshHeartbond(run);
   return r;
 }
+
+/** Care and camp hook: pays a non-battle source (care touch, resting together) to the partner only. */
+export function heartbondCare(run: RunState, uid: string, source: string, key: string, turn: number): PayResult {
+  if (run.story.v2?.heartbond.partner !== uid) return { paid: [], folded: [] };
+  const r = payHeartbond(run, uid, key, turn, [source]);
+  refreshHeartbond(run);
+  return r;
+}
