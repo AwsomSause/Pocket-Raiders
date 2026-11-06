@@ -29,7 +29,8 @@ import { abilityHunt } from '../core/abilityHunt';
 import { eggChart, eggGroupName } from '../core/eggGroupChart';
 import { abilityChoices, atLeast, eggMoveOptions, masteredStarters, familyId, familyMembers, familyPerk, familyRank, nextGoal, rankIndex, RANK_BADGES, RANK_NAMES, speciesRank, type MasteryRank } from '../core/mastery';
 import { evolutionUnlocked, questLineView, stepsDone } from '../core/quests';
-import { eligibleSpecies, licenseProblem, licenseStatus, poolProblem, poolStatus, type LicenseStatus, type PoolStatus } from '../core/runPrep';
+import { getContent } from '../data';
+import { eligibleSpecies, licenseProblem, licenseStatus, poolProblem, poolStatus, starterSetsEnabled, type LicenseStatus, type PoolStatus } from '../core/runPrep';
 import type { Profile, RunRecord } from '../core/state';
 import { services } from '../game/services';
 import { playMusic, playSfx, playMusicLazy } from '../ui/audio';
@@ -72,7 +73,7 @@ import { device } from '../game/deviceTools';
 
 type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
-const ROOMS: { room: Room; label: string; blurb: string }[] = [
+const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
   { room: 'archive', label: 'Trainer Archive', blurb: 'Every trainer, what they change, and how to unlock them.' },
   { room: 'achievements', label: 'Achievement Hall', blurb: 'Milestones and their rewards. Progress counts automatically.' },
@@ -110,6 +111,8 @@ const ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'hubtown', label: 'Hub Town', blurb: 'Walk the town as your Pokémon: every room is a building (Settings > Hub style makes it the Hub).' },
   { room: 'lobby', label: 'Arena Lobby', blurb: 'Back to the Arena Lobby menu.' },
 ];
+/** The Starter Laboratory is part of the archived Starter Sets (balance.starterSets.enabled). */
+const ROOMS = ALL_ROOMS.filter((r) => r.room !== 'lab' || starterSetsEnabled(getContent()));
 
 const RANK_COLOR: Record<MasteryRank, string> = {
   none: COLORS.textMuted,

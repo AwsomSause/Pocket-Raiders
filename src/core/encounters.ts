@@ -149,6 +149,17 @@ function lineRoot(content: Content, speciesId: string): string {
   return id;
 }
 
+/** The species and all its ancestors ("vaporeon" -> vaporeon, eevee, tuftin), so a line can be named by any stage. */
+function lineIds(content: Content, speciesId: string): string[] {
+  const out = [speciesId];
+  for (let i = 0; i < 6; i++) {
+    const from = content.species.get(out[out.length - 1]!)?.evolvesFrom;
+    if (!from || !content.species.has(from)) break;
+    out.push(from);
+  }
+  return out;
+}
+
 const evolvers = new WeakMap<Content, Set<string>>();
 /** Whether some species evolves from this one. */
 function evolvesFurther(content: Content, speciesId: string): boolean {
@@ -175,7 +186,7 @@ export function speciesWeightPerk(content: Content, mods: readonly ArchetypeModi
       || (m.trait === 'unevolved' && evolvesFurther(content, speciesId))
       || (m.trait === 'fullyEvolved' && !evolvesFurther(content, speciesId));
     if (m.generation !== undefined && s.generation !== m.generation) continue;
-    const lineOk = !m.lines || m.lines.includes(lineRoot(content, speciesId));
+    const lineOk = !m.lines || lineIds(content, speciesId).some((id) => m.lines!.includes(id));
     if (traitOk && lineOk) v *= m.value;
   }
   return v;

@@ -70,6 +70,8 @@ import customSpeciesJson from './customSpecies.json';
 import formTraitsJson from './formTraits.json';
 import speciesFixesJson from './speciesFixes.json';
 import customEvolutionsJson from './customEvolutions.json';
+// Story Overhaul S15: ten new species (npm run data:story-species).
+import storySpeciesJson from './storySpecies.json';
 import themesJson from './themes.json';
 import trainersJson from './trainers.json';
 // Every trainer class from the Google Drive packs (tools/drive/build-trainers.py): one class per sprite.
@@ -109,6 +111,8 @@ const eventsExtraFiles = Object.values(import.meta.glob<unknown>('./events/*.jso
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
 import { chainEvents } from '../core/overhaul/chains';
+import { dungeonEvents } from '../core/dungeon/compile';
+import { validateAllDungeons } from '../core/dungeon/schema';
 
 export class ContentError extends Error {
   constructor(public readonly problems: string[]) {
@@ -201,6 +205,15 @@ export function mergeSpecies(base: unknown[], custom: unknown[], evolutions: { f
   return [...merged, ...custom];
 }
 
+/** Small field changes on existing species (Eevee now evolves from Tuftin). */
+export function patchSpecies(species: unknown[], patches: { id: string; evolvesFrom: string }[]): unknown[] {
+  const by = new Map(patches.map((p) => [p.id, p]));
+  return species.map((s) => {
+    const p = by.get((s as { id: string }).id);
+    return p ? { ...(s as object), evolvesFrom: p.evolvesFrom } : s;
+  });
+}
+
 interface SpeciesFixes {
   learnsets: Record<string, { level: number; move: string }[]>;
   replaceMoves: Record<string, Record<string, string>>;
@@ -236,7 +249,10 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 }
 
 export const RAW_CONTENT: RawContent = {
-  species: applySpeciesFixes(mergeSpecies(speciesJson, customSpeciesJson, customEvolutionsJson), speciesFixesJson),
+  species: applySpeciesFixes(
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions]), storySpeciesJson.patches),
+    speciesFixesJson,
+  ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   moves: [...movesJson, ...megaMovesJson.moves],
   abilities: abilitiesJson,
@@ -251,7 +267,7 @@ export const RAW_CONTENT: RawContent = {
   rewards: [...rewardsJson, ...megaStonesJson.rewards],
   items: [...itemsJson, ...megaStonesJson.items],
   itemCatalog: itemCatalogJson,
-  learnables: learnablesJson,
+  learnables: { ...learnablesJson, ...storySpeciesJson.learnables },
   trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
   bossTeams: bossTeamsJson,
@@ -362,6 +378,9 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
   for (const file of (raw.eventsExtra ?? []) as { events?: unknown[] }[]) gamesEvents.push(...(file.events ?? []));
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
+  // Story Overhaul W6: dungeons become room events (validated: every branch reaches the exit).
+  for (const p of validateAllDungeons()) problems.push(`dungeons.json ${p}`);
+  gamesEvents.push(...dungeonEvents());
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);

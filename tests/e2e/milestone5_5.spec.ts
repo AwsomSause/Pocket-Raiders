@@ -73,7 +73,8 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test('buy a license, unlock a pool, prepare a Type Focus run, save a preset, and read the briefing', async ({ page }) => {
+// Archive test: Starter Sets (the Lab and the pool picker) are switched off by balance.starterSets.enabled=false; turn the flag on to run it.
+test.skip('buy a license, unlock a pool, prepare a Type Focus run, save a preset, and read the briefing', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=e2e-m55&debug=1');

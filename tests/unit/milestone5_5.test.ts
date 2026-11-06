@@ -35,6 +35,16 @@ const prep = (changes: Partial<RunPrep> = {}): RunPrep => ({ ...defaultPrep(cont
 const pool = (id: string) => content.starterPools.get(id)!;
 const rng = (seed: string) => new Rng(hashSeed(seed));
 
+/** Archive tests: the Starter Sets (pool picker) are archived in the shipped game, so these run with the flag forced on. */
+const archive = { ...content, balance: { ...content.balance, starterSets: { enabled: true } } };
+
+it('with Starter Sets archived (the shipped setting) a chosen pool is ignored and the default pool is used', () => {
+  expect(content.balance.starterSets.enabled).toBe(false);
+  const resolved = resolvePrep(content, fresh(), 'red', prep({ poolId: 'rare' }));
+  expect(resolved.prep.poolId).toBe('classic');
+  expect(resolved.problems).toEqual([]);
+});
+
 describe('starter pools and the Starter Laboratory', () => {
   it('starts with only the Classic pool unlocked', () => {
     const p = fresh();
@@ -163,7 +173,7 @@ describe('preparation tokens and starting resources', () => {
   });
 
   it('an unavailable choice is replaced and reported before the run starts', () => {
-    const resolved = resolvePrep(content, fresh(), 'brock', prep({ poolId: 'rare', tokenId: 'pocket-money' }));
+    const resolved = resolvePrep(archive, fresh(), 'brock', prep({ poolId: 'rare', tokenId: 'pocket-money' }));
     expect(resolved.archetypeId).toBe('red');
     expect(resolved.prep.poolId).toBe('classic');
     expect(resolved.prep.tokenId).toBeNull();
@@ -186,7 +196,7 @@ describe('loadout presets and the build summary', () => {
   it('a preset that refers to something no longer unlocked is resolved, not used as is', () => {
     const preset = { ...prep({ poolId: 'johto' }), name: 'Johto', archetypeId: 'red' };
     const parts = presetParts(preset);
-    const resolved = resolvePrep(content, fresh(), parts.archetypeId, parts.prep);
+    const resolved = resolvePrep(archive, fresh(), parts.archetypeId, parts.prep);
     expect(resolved.prep.poolId).toBe('classic');
     expect(resolved.problems[0]).toMatch(/Johto pool isn't unlocked/);
   });

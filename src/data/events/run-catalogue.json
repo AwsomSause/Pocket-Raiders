@@ -1,0 +1,959 @@
+{
+ "events": [
+  {
+   "id": "ev-rival-sighted",
+   "name": "Rival Sighted",
+   "group": "Rival Interactions",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [
+    "Rival",
+    "Exploration"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A familiar figure crosses the far end of the road, pack on their back. They have not seen you yet.",
+   "choices": [
+    {
+     "label": "Wave",
+     "success": {
+      "text": "They notice and wave back. You both smile, then go your separate ways.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow at a distance",
+     "success": {
+      "text": "You learn which way they are headed. A shopkeeper hands you a Super Potion for the tip.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-unexpected-challenge",
+   "name": "Unexpected Challenge",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Combat",
+    "Trainer"
+   ],
+   "minStage": 2,
+   "requires": [],
+   "intro": "A veteran steps out of the grass. \"You. I have been watching your team. Battle me.\"",
+   "choices": [
+    {
+     "label": "Accept",
+     "success": {
+      "text": "\"Good. Show me.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "ace-trainer",
+       "name": "Challenger",
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "flag",
+         "key": "recurring-challenger"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "They shrug. \"Another day, then.\" You feel them watching you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "refused-challenge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-rival-rematch",
+   "name": "Rival Rematch",
+   "group": "Rival Interactions",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Combat"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 2
+    }
+   ],
+   "intro": "Your rival blocks the path with a grin. \"I have been training. Do not hold back.\"",
+   "choices": [
+    {
+     "label": "Take the rematch",
+     "success": {
+      "text": "\"Here we go!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "rival",
+       "rival": true,
+       "name": "Rival",
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "friendship",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "\"Later, then. I will find you.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-lost-pokemon",
+   "name": "A Lost Pokémon",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Recovery",
+    "Relationship"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "A small Pokémon trembles under a signpost. A collar tag reads: \"If found, please return.\"",
+   "choices": [
+    {
+     "label": "Return it to its owner",
+     "success": {
+      "text": "The owner cries with relief and presses coins into your hand. Your team feels proud.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "friendship",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it quiet and walk away",
+     "success": {
+      "text": "You tell yourself it will find its way. Your team is quieter than usual.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kept-lost-pokemon"
+       },
+       {
+        "kind": "friendship",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-pokemon-migration",
+   "name": "Pokémon Migration",
+   "group": "World & Traversal",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Region",
+    "Exploration"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Spring",
+      "Autumn"
+     ]
+    }
+   ],
+   "intro": "A long line of Pokémon crosses the hills. One in the herd looks far from home.",
+   "choices": [
+    {
+     "label": "Approach the stray",
+     "success": {
+      "text": "It turns, startled, and fights.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgeotto",
+        "staravia",
+        "swablu",
+        "tropius"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch from afar",
+     "success": {
+      "text": "You note where they go. It makes a fine memory.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-ancient-discovery",
+   "name": "Ancient Discovery",
+   "group": "Mysteries and story",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Exploration",
+    "Treasure",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [],
+   "intro": "Rain has washed a carved stone out of the hillside. Old letters circle a worn face.",
+   "choices": [
+    {
+     "label": "Copy the carvings",
+     "success": {
+      "text": "You take rubbings until dusk. A scholar will pay for these.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "You copied the carvings of an ancient stone.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dig beneath it",
+     "success": {
+      "text": "Under the stone lies a small box of coins.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-regional-festival",
+   "name": "Regional Festival",
+   "group": "Places and weather",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Region",
+    "Shop",
+    "Relationship"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "milestone"
+    }
+   ],
+   "intro": "Lanterns hang over the square. There are games, stalls, and a gift swap by the fountain.",
+   "choices": [
+    {
+     "label": "Play the games",
+     "success": {
+      "text": "A ring toss, a lucky win, and a prize for your team.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the gift swap",
+     "success": {
+      "text": "You trade a small keepsake. The stranger gives you a better one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest on a bench",
+     "success": {
+      "text": "The music is nice. Your team dozes in the sun.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-pokemon-sanctuary",
+   "name": "Pokémon Sanctuary",
+   "group": "Places and weather",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Recovery",
+    "Region"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "Past a gate of ivy, the air is warm and still. Pokémon doze in the grass without a care.",
+   "choices": [
+    {
+     "label": "Rest here",
+     "success": {
+      "text": "Everyone sleeps until the light changes. You wake rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Approach a calm Pokémon",
+     "success": {
+      "text": "It lets you come close.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "blissful": true,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-elite-four-exhibition",
+   "name": "Elite Four Exhibition",
+   "group": "Famous faces",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "badges",
+     "atLeast": 6
+    }
+   ],
+   "intro": "An Elite Four member waves you into a cleared court. \"An exhibition match. Nothing is lost, win or lose.\"",
+   "choices": [
+    {
+     "label": "Step in",
+     "success": {
+      "text": "\"Then let us see what you have.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "bossId": "lorelei",
+       "name": "Lorelei",
+       "size": 4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline politely",
+     "success": {
+      "text": "\"Come back when you are ready.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-champions-challenge",
+   "name": "Champion's Challenge",
+   "group": "Famous faces",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Combat",
+    "Story"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rep",
+     "category": "champion",
+     "atLeast": "known"
+    }
+   ],
+   "intro": "The Champion arrives in person. \"I have heard your name. One battle, no ceremony.\"",
+   "choices": [
+    {
+     "label": "Accept",
+     "success": {
+      "text": "\"Good.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "bossId": "lance",
+       "name": "Lance",
+       "size": 5,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "moment",
+         "text": "You beat a Champion in a surprise match.",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "\"Another time.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-trainer-reunion",
+   "name": "Trainer Reunion",
+   "group": "Trainer, Relationship",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Trainer",
+    "Relationship"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: needs recurring trainer memory ladder (11.4).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-champions-invitation",
+   "name": "Champion's Invitation",
+   "group": "Famous faces",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Trainer",
+    "Story",
+    "Region"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: opens ps_league_exhibition (W7).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-abandoned-expedition",
+   "name": "Abandoned Expedition",
+   "group": "Landmarks",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Dungeon",
+    "Exploration",
+    "Survival"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "A collapsed signpost marks an old trail into the hills. Boot prints go in. None come out.",
+   "choices": [
+    {
+     "label": "Follow the trail in",
+     "success": {
+      "text": "The trail drops into the dark.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-abandoned-mine-shaft-a",
+         "dg-dense-forest-path-a",
+         "dg-ancient-ruin-steps-a",
+         "dg-coastal-cove-a",
+         "dg-mountain-pass-a",
+         "dg-desert-well-a",
+         "dg-marsh-boardwalk-a",
+         "dg-sky-bridge-a"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You keep to the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-hidden-dungeon",
+   "name": "Hidden Dungeon",
+   "group": "Landmarks",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Mystery"
+   ],
+   "minStage": 3,
+   "requires": [],
+   "intro": "Behind a curtain of vines, a stone door hangs ajar. Your Key Charm hums.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "The door opens onto a place no map shows.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-ancient-ruins-a",
+         "dg-deep-mine-a",
+         "dg-haunted-mansion-a",
+         "dg-frozen-cavern-a",
+         "dg-volcanic-core-a",
+         "dg-deep-ocean-a",
+         "dg-overgrown-forest-a",
+         "dg-celestial-observatory-a"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You close the door gently.",
+      "effects": []
+     }
+    }
+   ],
+   "secret": [
+    {
+     "kind": "item",
+     "id": "key-charm"
+    }
+   ]
+  },
+  {
+   "id": "ev-distortion-rift",
+   "name": "Distortion Rift",
+   "group": "Mysteries and story",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Legendary",
+    "Mystery",
+    "Dungeon"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: opens ps_distortion_incident (W7).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-rival-emergency",
+   "name": "Rival Emergency",
+   "group": "Rival Interactions",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Survival",
+    "Relationship"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: needs the rival condition state (W4); live Rescue the Rival covers the scene.)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-trainer-tournament",
+   "name": "Trainer Tournament",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Trainer"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: live tournament chain covers it; the 3-round bracket with exhibition spectating is W7.)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-evil-team-raid",
+   "name": "Evil Team Raid",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Combat",
+    "Survival"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: live evil-team ambush covers it.)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-legendary-disturbance",
+   "name": "Legendary Disturbance",
+   "group": "Mysteries and story",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Legendary",
+    "Mystery"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: needs worldFlag disturbance and roamers (W8).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-rivals-victory",
+   "name": "Rival's Victory",
+   "group": "Rival Interactions",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Rival",
+    "Story"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: needs rival milestones from W4.)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-rivals-defeat",
+   "name": "Rival's Defeat",
+   "group": "Rival Interactions",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Rival",
+    "Story",
+    "Recovery"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: needs rival milestones from W4; live A Rival's Bad Day covers it.)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-forgotten-research-lab",
+   "name": "Forgotten Research Lab",
+   "group": "Landmarks",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Treasure"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: opens a lab dungeon (W6).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-treasure-expedition",
+   "name": "Treasure Expedition",
+   "group": "Landmarks",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Treasure",
+    "Exploration",
+    "Dungeon"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: 3-node dig route (W6).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-lost-civilization",
+   "name": "Lost Civilization",
+   "group": "Landmarks",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Legendary"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: opens ps_lost_island (W7).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  },
+  {
+   "id": "ev-dimensional-collision",
+   "name": "Dimensional Collision",
+   "group": "Mysteries and story",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Legendary",
+    "Mystery",
+    "Combat"
+   ],
+   "minStage": 1,
+   "requires": [],
+   "intro": "(Disabled until its system exists: merges two pseudo stages (W7).)",
+   "choices": [
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You let it pass and keep to the road.",
+      "effects": []
+     }
+    }
+   ],
+   "disabled": true
+  }
+ ]
+}

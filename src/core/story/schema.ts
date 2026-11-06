@@ -449,6 +449,8 @@ export const StoryStateSchema = z.object({
   choices: z.array(ChoiceRecordSchema).default([]),
   /** Story Overhaul v2 state (run v40): present only on Story Runs; Classic runs leave it out. */
   v2: StoryV2Schema.optional(),
+  /** W5: forced or high-priority events waiting for a stop (max 4); `since` is the stage number they were queued at. Optional, so no save bump. */
+  eventQueue: z.array(z.object({ id: z.string(), since: z.number().int().min(0) })).max(4).optional(),
 });
 export type StoryState = z.infer<typeof StoryStateSchema>;
 

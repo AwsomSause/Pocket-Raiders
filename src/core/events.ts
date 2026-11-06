@@ -9,6 +9,8 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
+import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
 import { emotionOf } from './story/emotions';
@@ -132,6 +134,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return rivalPath(run) === c.path;
     case 'rivalBeaten':
       return rivalBeaten(run);
+    case 'rep':
+      return repAtLeast(run, c.category, c.atLeast);
+    case 'badges':
+      return run.badges.length >= c.atLeast;
     case 'monRival':
       return monRivalState(run, c.state);
     case 'mentor':
@@ -258,6 +264,10 @@ export function conditionText(content: Content, c: EventCondition): string {
       return c.path === 'friend' ? 'Needs a rival who is becoming a friend' : c.path === 'rival' ? 'Needs a rival who sees you as an adversary' : 'Needs a rival who has not decided about you';
     case 'rivalBeaten':
       return 'Needs a rival you beat last time';
+    case 'rep':
+      return `Needs a ${c.atLeast} reputation as a ${c.category} contender`;
+    case 'badges':
+      return `Needs ${c.atLeast} badge${c.atLeast === 1 ? '' : 's'}`;
     case 'monRival':
       return c.state === 'any' ? 'Needs a Pokémon rival' : c.state === 'sacrificed' ? 'Needs a rival Pokémon that gave itself up' : c.state === 'carried' ? 'Needs a rival Pokémon that a trainer caught' : 'Needs a Pokémon rival still out there';
     case 'mentor':
@@ -329,6 +339,15 @@ function recruitsOwned(run: RunState, e: EventDef): boolean {
   return ids.length > 0 && ids.every((id) => id === run.archetypeId || (run.itemCounters?.[`owned:${id}`] ?? 0) > 0);
 }
 
+/** W5: Legendary-rank (epic) events are limited to 1 per region and 3 per run. */
+function legendaryCapped(run: RunState, e: EventDef): boolean {
+  if (e.rarity !== 'epic') return false;
+  const counters = run.itemCounters ?? {};
+  const inRegion = counters[`epic-seen:${run.regionIndex}`] ?? 0;
+  const inRun = Object.entries(counters).filter(([k]) => k.startsWith('epic-seen:')).reduce((sum, [, n]) => sum + n, 0);
+  return inRegion >= LEGENDARY_PER_REGION || inRun >= LEGENDARY_PER_RUN;
+}
+
 /** Events that can appear on the current stage (key-item events only while the key item is held). */
 export function eligibleEvents(content: Content, run: RunState): EventDef[] {
   const n = stageNumber(content, run);
@@ -336,6 +355,8 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
   return [...content.events.values()].filter(
     (e) =>
       !e.keyItem &&
+      !e.disabled &&
+      !legendaryCapped(run, e) &&
       e.stop !== 'rest' &&
       // A roaming Legendary's stop and the camp are placed by core/world.ts, not drawn.
       e.stop !== 'roamer' &&
@@ -357,7 +378,7 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
   const cfg = content.balance.events;
   const featured = featuredMapEvents(content, run);
   const pool = eligibleEvents(content, run)
-    .filter((e) => !taken.has(e.id))
+    .filter((e) => !taken.has(e.id) && !e.forced)
     .map((e) => ({
       item: e,
       weight:
@@ -400,6 +421,18 @@ export function addEventStops(content: Content, run: RunState): void {
     taken.add(id);
     place(id, false);
   }
+  // W5 Event Priority Manager: Critical (forced) events are never random. They take a stop now, or wait in a queue of 4.
+  const wanted = [...content.events.values()].filter((e) => e.forced && open.has(e.id) && !taken.has(e.id)).map((e) => e.id);
+  const step = stepQueue({
+    queue: run.story.eventQueue ?? [], wanted, capacity: FORCED_STOPS_PER_STAGE, stage: stageNumber(content, run), seed: run.seed,
+    critical: (id) => content.events.get(id)?.forced === true, priority: (id) => priorityOf(content.events.get(id)!),
+  });
+  for (const id of step.place) {
+    taken.add(id);
+    place(id, false);
+  }
+  for (const id of step.expired) run.journal.push(`A chance passed: ${content.events.get(id)?.name ?? id}.`);
+  if (step.queue.length > 0 || run.story.eventQueue) run.story.eventQueue = step.queue;
   // Stop types with a per-stage quota (special encounter, rare Pokémon, trade, detour, merchant): drawn first, from their own stream.
   const quotaRng = new Rng(hashSeed(`${run.seed}::event-quota::${stageKey(run)}`));
   for (const [stopType, [lo, hi]] of Object.entries(cfg.stopQuotas)) {
@@ -412,8 +445,8 @@ export function addEventStops(content: Content, run: RunState): void {
       node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: e.id, ...(quotaRng.chance(cfg.hiddenShare) ? { hidden: true } : {}) });
     }
   }
-  const wanted = Math.round(rng.int(cfg.perStage[0], cfg.perStage[1]) * eventChanceScale(run.rules)) + (focusIs(content, run, run.regionIndex, 'mystery') ? MYSTERY_EXTRA_STOPS : 0);
-  for (let i = 0; i < wanted && candidates.length > 0; i++) {
+  const wantedStops = Math.round(rng.int(cfg.perStage[0], cfg.perStage[1]) * eventChanceScale(run.rules)) + (focusIs(content, run, run.regionIndex, 'mystery') ? MYSTERY_EXTRA_STOPS : 0);
+  for (let i = 0; i < wantedStops && candidates.length > 0; i++) {
     const e = pickEvent(content, run, rng, taken);
     if (!e) break;
     place(e.id, e.secret.length > 0 || rng.chance(cfg.hiddenShare));
@@ -582,7 +615,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   delete runSide.hidden;
   // A roaming Legendary's stop: whatever you do, the chase ends here.
   if (runSide.roamer) endRoamer(run, runSide.roamer);
-  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1 };
+  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
   if (event.keyItem) useUpKeyItem(run, event.keyItem);
   const insight = perkItem(content, run, 'eventInsight');
   if (insight) spendUse(run, insight);

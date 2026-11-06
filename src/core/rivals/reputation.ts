@@ -66,3 +66,6 @@ export function recognitionLine(run: Pick<RunState, 'story' | 'seed' | 'regionIn
   run.story.flags[used] = 1;
   return { id: line.id, text: line.text.replace(/\{(\w+)\}/g, (_, k: string) => names[k] ?? k) };
 }
+
+/** True when the category has reached this level (used by event conditions). */
+export const repAtLeast = (run: Pick<RunState, 'story'>, c: RepCategory, level: Exclude<RepLevel, 'none'>): boolean => ORDER.indexOf(repLevel(run, c)) >= ORDER.indexOf(level);

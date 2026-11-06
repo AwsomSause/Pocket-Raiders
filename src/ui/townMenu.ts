@@ -11,10 +11,12 @@ import { playCry, playMusicLazy } from './audio';
 import { pokemonIcon } from './sprites';
 import { runInteractionPrompt } from './interactionPrompt';
 import { Picker, type PickerRow } from './partyPanel';
+import { TownPanel, type TownPanelLike } from './townPanel';
+import { buildingDistrict, panelLayout } from '../core/hubTown/panelTheme';
 import { COLORS, textStyle } from './theme';
 
 interface Choice { label: string; desc?: string; problem?: string | null }
-export interface TownHost { scene: Phaser.Scene; setPicker(p: Picker | null): void; refresh(note: string): void; setDecorMode?(on: boolean): void; enter?(b: TownBuilding): void; /** Where Esc from a building goes (the street); defaults to the building list. */ home?: () => void; /** Walkable Pocket Town: jump to a building's door and open it (the Town directory's fast travel). */ travel?(b: TownBuilding): void; /** Walkable Pocket Town: leave for the Hub (a row at the top of the directory). */ toHub?(): void }
+export interface TownHost { scene: Phaser.Scene; setPicker(p: TownPanelLike | null): void; refresh(note: string): void; setDecorMode?(on: boolean): void; enter?(b: TownBuilding): void; /** Where Esc from a building goes (the street); defaults to the building list. */ home?: () => void; /** Walkable Pocket Town: jump to a building's door and open it (the Town directory's fast travel). */ travel?(b: TownBuilding): void; /** Walkable Pocket Town: leave for the Hub (a row at the top of the directory). */ toHub?(): void }
 
 /** Above zero while a mini game or prompt runs over the town (the walkable town stands still). */
 export const townBusy = { n: 0 };
@@ -86,12 +88,27 @@ export function openBuilding(host: TownHost, b: TownBuilding, back: () => void, 
   const { session } = services();
   const rows = b.actions.map((a) => ({ label: a.name, desc: a.desc, problem: townProblem(session.content, session.profile, a, now()) }));
   const again = (msg: string) => { host.refresh(msg); openBuilding(host, b, back, leave, msg); };
-  choose(host, `${b.name}${note ? ` · ${note.slice(0, 90)}` : ''}`, rows.map((r) => ({ label: r.label, desc: r.desc, problem: null })), (i) => {
-    const a = b.actions[i]!;
-    const problem = rows[i]!.problem;
-    if (problem && a.kind !== 'view') return again(problem);
-    runAction(host, b, a, (msg) => again(msg));
-  }, back);
+  // The themed building panel (slice 2): district frame, icon, header line, and this building's own layout.
+  const panel: TownPanel = new TownPanel(host.scene, {
+    title: b.name,
+    icon: b.icon,
+    header: note ? note.slice(0, 120) : b.blurb,
+    headerIsNote: Boolean(note),
+    district: buildingDistrict(b.id),
+    layout: panelLayout(b.id),
+    actions: rows,
+    motion: motion(),
+    onSelect: (i) => {
+      panel.close();
+      host.setPicker(null);
+      const a = b.actions[i]!;
+      const problem = rows[i]!.problem;
+      if (problem && a.kind !== 'view') return again(problem);
+      runAction(host, b, a, (msg) => again(msg));
+    },
+    onBack: () => { panel.close(); host.setPicker(null); back(); },
+  });
+  host.setPicker(panel);
 }
 
 function call(a: TownAction, args: Parameters<ReturnType<typeof services>['session']['town']>[1], done: (msg: string) => void): void {

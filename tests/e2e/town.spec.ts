@@ -67,3 +67,31 @@ for (const size of [{ w: 1280, h: 720 }, { w: 390, h: 844 }]) {
     expect(errors, errors.join('\n')).toEqual([]);
   });
 }
+
+// Themed panels (slice 2): the Library, Shrine, Capsule Corner, Dojo and a plain building each open their own panel.
+test('Pocket Town building panels open, move focus and close', async ({ page }) => {
+  test.setTimeout(90_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/?debug=1');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
+  await page.evaluate(() => { (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Town'); });
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Town');
+  await page.waitForTimeout(500);
+  const town = (expr: string) => page.evaluate((e) => new Function('s', `return ${e}`)((window as any).__pkr.game.scene.getScene('Town')), expr);
+  for (const id of ['library', 'shrine', 'capsule', 'dojo', 'garden']) {
+    await page.evaluate((b) => { const s = (window as any).__pkr.game.scene.getScene('Town'); s.town.moveTo(s.doorFor(b).stand); }, id);
+    await page.waitForTimeout(250);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(450);
+    expect(await town('s.picker?.kind'), id).toBe('town-panel');
+    await page.keyboard.press(id === 'library' || id === 'shrine' ? 'ArrowRight' : 'ArrowDown');
+    await page.waitForTimeout(200);
+    await page.screenshot({ path: `test-results/town-panel-${id}.png` });
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(250);
+    expect(await town('Boolean(s.picker)'), `${id} closes`).toBe(false);
+  }
+  expect(errors, errors.join('\n')).toEqual([]);
+});

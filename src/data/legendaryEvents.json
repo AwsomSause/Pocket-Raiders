@@ -19305,6 +19305,1161 @@
      "lose": "The flame fades and you find yourselves at the foot of the tower."
     }
    }
+  },
+  {
+   "id": "legend-equinar",
+   "name": "Equinar: Waking Dream",
+   "tier": 2,
+   "blurb": "Equinar stirs, and its stage is open for a short time. Equinar has been sighted nearby, and the land is changing around it: dreamlike halls.",
+   "nodes": {
+    "min": 6,
+    "max": 8
+   },
+   "partyMode": "own",
+   "nodeWeights": {
+    "wild": 5,
+    "trainer": 2,
+    "elite": 1,
+    "rest": 1,
+    "cache": 1,
+    "research": 1,
+    "mystery": 2
+   },
+   "finale": {
+    "kind": "totem",
+    "totemId": "legend-equinar"
+   },
+   "rentals": [
+    "clefable",
+    "xatu",
+    "claydol"
+   ],
+   "restHeal": 0.4,
+   "cache": [
+    {
+     "item": "hyper-potion",
+     "chance": 1
+    },
+    {
+     "item": "full-heal",
+     "chance": 0.5
+    }
+   ],
+   "megaCost": 3,
+   "researchGoal": 2,
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "psychic-tera-shard",
+      "chance": 1
+     },
+     {
+      "item": "full-restore",
+      "chance": 0.6
+     }
+    ],
+    "megaStones": 0,
+    "researchBonusItem": null
+   },
+   "unlocks": null,
+   "failureKeep": 0.3,
+   "legendary": {
+    "species": "equinar",
+    "epithet": "Waking Dream",
+    "rarity": "rare",
+    "omen": "Equinar has been sighted nearby, and the land is changing around it: dreamlike halls.",
+    "lore": [
+     "Locals speak of Equinar in whispers.",
+     "Where it passes, the stage turns to dreamlike halls."
+    ],
+    "temporaryNote": "This chance is temporary: if you move on without entering, the way is gone when this stage ends.",
+    "visual": {
+     "tint": "#7a3a8a",
+     "accent": "#ffb0ff",
+     "motif": "dreamlike halls"
+    },
+    "music": null,
+    "trigger": {
+     "minRegion": 1,
+     "maxRegion": null,
+     "time": [
+      "night"
+     ],
+     "themeTypes": [],
+     "requires": [],
+     "any": [],
+     "favoured": [
+      "psychic",
+      "fairy"
+     ],
+     "weight": 1
+    },
+    "env": [
+     {
+      "fromLayer": 0,
+      "text": "Psychic terrain hums over the stage.",
+      "terrain": "psychic"
+     },
+     {
+      "fromLayer": 4,
+      "text": "Thought and sound seem to blur.",
+      "terrain": "psychic"
+     }
+    ],
+    "closes": [
+     {
+      "afterLayer": 2,
+      "text": "A path collapses behind you. One way forward is gone."
+     }
+    ],
+    "distort": [
+     {
+      "afterLayer": 1,
+      "text": "The way on shifts and rearranges itself."
+     }
+    ],
+    "affinity": {
+     "types": [
+      "psychic"
+     ],
+     "heal": 0.08,
+     "text": "psychic-type Pokémon recover a little HP here."
+    },
+    "peril": {
+     "types": [
+      "dark",
+      "bug",
+      "ghost"
+     ],
+     "chip": 0.05,
+     "text": "dark/bug/ghost-type Pokémon lose some HP here."
+    },
+    "wild": [
+     "clefable",
+     "xatu",
+     "claydol",
+     "reuniclus",
+     "primarina",
+     "wyrdeer"
+    ],
+    "wildLevelBonus": 2,
+    "npcs": [
+     {
+      "id": "equinar-witness",
+      "name": "A Local Witness",
+      "text": "\"I saw Equinar. Nobody believes me. You look like you might.\"",
+      "options": [
+       {
+        "label": "Listen to the story",
+        "result": "The witness tells you what to expect.",
+        "effect": {
+         "research": 1
+        }
+       },
+       {
+        "label": "Share your rations",
+        "result": "The witness shares a hidden cache.",
+        "effect": {
+         "item": "hyper-potion"
+        }
+       }
+      ]
+     },
+     {
+      "id": "equinar-pilgrim",
+      "name": "A Pilgrim",
+      "text": "\"Rest here. The road ahead is not kind.\"",
+      "options": [
+       {
+        "label": "Rest with the pilgrim",
+        "result": "Your team rests.",
+        "effect": {
+         "heal": 0.25
+        }
+       },
+       {
+        "label": "Press on",
+        "result": "You find a few coins on the road.",
+        "effect": {
+         "money": 200
+        }
+       }
+      ]
+     }
+    ],
+    "modifiers": [
+     "Psychic terrain hums over the stage",
+     "psychic-type Pokémon recover HP",
+     "A path collapses as you go"
+    ],
+    "finale": {
+     "intro": "Equinar waits at the end of the road.",
+     "win": "Equinar yields. The land begins to settle.",
+     "lose": "Equinar lets the land push you back. It is not done with you."
+    }
+   }
+  },
+  {
+   "id": "legend-hollow-shepherd",
+   "name": "Hollow Shepherd: Haunted Hour",
+   "tier": 2,
+   "blurb": "Hollow Shepherd stirs, and its stage is open for a short time. Hollow Shepherd has been sighted nearby, and the land is changing around it: lamplit ruins.",
+   "nodes": {
+    "min": 6,
+    "max": 8
+   },
+   "partyMode": "own",
+   "nodeWeights": {
+    "wild": 5,
+    "trainer": 2,
+    "elite": 1,
+    "rest": 1,
+    "cache": 1,
+    "research": 1,
+    "mystery": 2
+   },
+   "finale": {
+    "kind": "totem",
+    "totemId": "legend-hollow-shepherd"
+   },
+   "rentals": [
+    "dewgong",
+    "sealeo",
+    "dusknoir"
+   ],
+   "restHeal": 0.4,
+   "cache": [
+    {
+     "item": "hyper-potion",
+     "chance": 1
+    },
+    {
+     "item": "full-heal",
+     "chance": 0.5
+    }
+   ],
+   "megaCost": 3,
+   "researchGoal": 2,
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "ghost-tera-shard",
+      "chance": 1
+     },
+     {
+      "item": "full-restore",
+      "chance": 0.6
+     }
+    ],
+    "megaStones": 0,
+    "researchBonusItem": null
+   },
+   "unlocks": null,
+   "failureKeep": 0.3,
+   "legendary": {
+    "species": "hollow-shepherd",
+    "epithet": "Haunted Hour",
+    "rarity": "rare",
+    "omen": "Hollow Shepherd has been sighted nearby, and the land is changing around it: lamplit ruins.",
+    "lore": [
+     "Locals speak of Hollow Shepherd in whispers.",
+     "Where it passes, the stage turns to lamplit ruins."
+    ],
+    "temporaryNote": "This chance is temporary: if you move on without entering, the way is gone when this stage ends.",
+    "visual": {
+     "tint": "#3a2a50",
+     "accent": "#c78aff",
+     "motif": "lamplit ruins"
+    },
+    "music": null,
+    "trigger": {
+     "minRegion": 1,
+     "maxRegion": null,
+     "time": [
+      "night"
+     ],
+     "themeTypes": [],
+     "requires": [],
+     "any": [],
+     "favoured": [
+      "ghost",
+      "ice"
+     ],
+     "weight": 1
+    },
+    "env": [
+     {
+      "fromLayer": 0,
+      "text": "A cold mist drifts over every fight.",
+      "terrain": "misty"
+     },
+     {
+      "fromLayer": 4,
+      "text": "The shadows lengthen.",
+      "terrain": "misty"
+     }
+    ],
+    "closes": [
+     {
+      "afterLayer": 2,
+      "text": "A path collapses behind you. One way forward is gone."
+     }
+    ],
+    "distort": [
+     {
+      "afterLayer": 1,
+      "text": "The way on shifts and rearranges itself."
+     }
+    ],
+    "affinity": {
+     "types": [
+      "ghost"
+     ],
+     "heal": 0.08,
+     "text": "ghost-type Pokémon recover a little HP here."
+    },
+    "peril": {
+     "types": [
+      "normal"
+     ],
+     "chip": 0.05,
+     "text": "normal-type Pokémon lose some HP here."
+    },
+    "wild": [
+     "dewgong",
+     "sealeo",
+     "dusknoir",
+     "doublade",
+     "palossand",
+     "skeledirge"
+    ],
+    "wildLevelBonus": 2,
+    "npcs": [
+     {
+      "id": "hollow-shepherd-witness",
+      "name": "A Local Witness",
+      "text": "\"I saw Hollow Shepherd. Nobody believes me. You look like you might.\"",
+      "options": [
+       {
+        "label": "Listen to the story",
+        "result": "The witness tells you what to expect.",
+        "effect": {
+         "research": 1
+        }
+       },
+       {
+        "label": "Share your rations",
+        "result": "The witness shares a hidden cache.",
+        "effect": {
+         "item": "hyper-potion"
+        }
+       }
+      ]
+     },
+     {
+      "id": "hollow-shepherd-pilgrim",
+      "name": "A Pilgrim",
+      "text": "\"Rest here. The road ahead is not kind.\"",
+      "options": [
+       {
+        "label": "Rest with the pilgrim",
+        "result": "Your team rests.",
+        "effect": {
+         "heal": 0.25
+        }
+       },
+       {
+        "label": "Press on",
+        "result": "You find a few coins on the road.",
+        "effect": {
+         "money": 200
+        }
+       }
+      ]
+     }
+    ],
+    "modifiers": [
+     "A cold mist drifts over every fight",
+     "ghost-type Pokémon recover HP",
+     "A path collapses as you go"
+    ],
+    "finale": {
+     "intro": "Hollow Shepherd waits at the end of the road.",
+     "win": "Hollow Shepherd yields. The land begins to settle.",
+     "lose": "Hollow Shepherd lets the land push you back. It is not done with you."
+    }
+   }
+  },
+  {
+   "id": "legend-brinecrown",
+   "name": "Brinecrown: Rising Tide",
+   "tier": 2,
+   "blurb": "Brinecrown stirs, and its stage is open for a short time. Brinecrown has been sighted nearby, and the land is changing around it: flooded paths.",
+   "nodes": {
+    "min": 6,
+    "max": 8
+   },
+   "partyMode": "own",
+   "nodeWeights": {
+    "wild": 5,
+    "trainer": 2,
+    "elite": 1,
+    "rest": 1,
+    "cache": 1,
+    "research": 1,
+    "mystery": 2
+   },
+   "finale": {
+    "kind": "totem",
+    "totemId": "legend-brinecrown"
+   },
+   "rentals": [
+    "charizard",
+    "gyarados",
+    "marshtomp"
+   ],
+   "restHeal": 0.4,
+   "cache": [
+    {
+     "item": "hyper-potion",
+     "chance": 1
+    },
+    {
+     "item": "full-heal",
+     "chance": 0.5
+    }
+   ],
+   "megaCost": 3,
+   "researchGoal": 2,
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "water-tera-shard",
+      "chance": 1
+     },
+     {
+      "item": "full-restore",
+      "chance": 0.6
+     }
+    ],
+    "megaStones": 0,
+    "researchBonusItem": null
+   },
+   "unlocks": null,
+   "failureKeep": 0.3,
+   "legendary": {
+    "species": "brinecrown",
+    "epithet": "Rising Tide",
+    "rarity": "rare",
+    "omen": "Brinecrown has been sighted nearby, and the land is changing around it: flooded paths.",
+    "lore": [
+     "Locals speak of Brinecrown in whispers.",
+     "Where it passes, the stage turns to flooded paths."
+    ],
+    "temporaryNote": "This chance is temporary: if you move on without entering, the way is gone when this stage ends.",
+    "visual": {
+     "tint": "#1d4f9c",
+     "accent": "#6fd0ff",
+     "motif": "flooded paths"
+    },
+    "music": null,
+    "trigger": {
+     "minRegion": 1,
+     "maxRegion": null,
+     "time": [],
+     "themeTypes": [],
+     "requires": [],
+     "any": [],
+     "favoured": [
+      "water",
+      "flying"
+     ],
+     "weight": 1
+    },
+    "env": [
+     {
+      "fromLayer": 0,
+      "text": "Rain falls on every fight.",
+      "weather": "rain"
+     },
+     {
+      "fromLayer": 4,
+      "text": "The water keeps rising.",
+      "weather": "rain"
+     }
+    ],
+    "closes": [
+     {
+      "afterLayer": 2,
+      "text": "A path collapses behind you. One way forward is gone."
+     }
+    ],
+    "distort": [],
+    "affinity": {
+     "types": [
+      "water"
+     ],
+     "heal": 0.08,
+     "text": "water-type Pokémon recover a little HP here."
+    },
+    "peril": {
+     "types": [
+      "fire"
+     ],
+     "chip": 0.05,
+     "text": "fire-type Pokémon lose some HP here."
+    },
+    "wild": [
+     "charizard",
+     "gyarados",
+     "marshtomp",
+     "prinplup",
+     "swoobat",
+     "toucannon"
+    ],
+    "wildLevelBonus": 2,
+    "npcs": [
+     {
+      "id": "brinecrown-witness",
+      "name": "A Local Witness",
+      "text": "\"I saw Brinecrown. Nobody believes me. You look like you might.\"",
+      "options": [
+       {
+        "label": "Listen to the story",
+        "result": "The witness tells you what to expect.",
+        "effect": {
+         "research": 1
+        }
+       },
+       {
+        "label": "Share your rations",
+        "result": "The witness shares a hidden cache.",
+        "effect": {
+         "item": "hyper-potion"
+        }
+       }
+      ]
+     },
+     {
+      "id": "brinecrown-pilgrim",
+      "name": "A Pilgrim",
+      "text": "\"Rest here. The road ahead is not kind.\"",
+      "options": [
+       {
+        "label": "Rest with the pilgrim",
+        "result": "Your team rests.",
+        "effect": {
+         "heal": 0.25
+        }
+       },
+       {
+        "label": "Press on",
+        "result": "You find a few coins on the road.",
+        "effect": {
+         "money": 200
+        }
+       }
+      ]
+     }
+    ],
+    "modifiers": [
+     "Rain falls on every fight",
+     "water-type Pokémon recover HP",
+     "A path collapses as you go"
+    ],
+    "finale": {
+     "intro": "Brinecrown waits at the end of the road.",
+     "win": "Brinecrown yields. The land begins to settle.",
+     "lose": "Brinecrown lets the land push you back. It is not done with you."
+    }
+   }
+  },
+  {
+   "id": "legend-veinheart",
+   "name": "Veinheart: Stone Hall",
+   "tier": 2,
+   "blurb": "Veinheart stirs, and its stage is open for a short time. Veinheart has been sighted nearby, and the land is changing around it: ancient halls.",
+   "nodes": {
+    "min": 6,
+    "max": 8
+   },
+   "partyMode": "own",
+   "nodeWeights": {
+    "wild": 5,
+    "trainer": 2,
+    "elite": 1,
+    "rest": 1,
+    "cache": 1,
+    "research": 1,
+    "mystery": 2
+   },
+   "finale": {
+    "kind": "totem",
+    "totemId": "legend-veinheart"
+   },
+   "rentals": [
+    "golem",
+    "magcargo",
+    "rampardos"
+   ],
+   "restHeal": 0.4,
+   "cache": [
+    {
+     "item": "hyper-potion",
+     "chance": 1
+    },
+    {
+     "item": "full-heal",
+     "chance": 0.5
+    }
+   ],
+   "megaCost": 3,
+   "researchGoal": 2,
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "rock-tera-shard",
+      "chance": 1
+     },
+     {
+      "item": "full-restore",
+      "chance": 0.6
+     }
+    ],
+    "megaStones": 0,
+    "researchBonusItem": null
+   },
+   "unlocks": null,
+   "failureKeep": 0.3,
+   "legendary": {
+    "species": "veinheart",
+    "epithet": "Stone Hall",
+    "rarity": "rare",
+    "omen": "Veinheart has been sighted nearby, and the land is changing around it: ancient halls.",
+    "lore": [
+     "Locals speak of Veinheart in whispers.",
+     "Where it passes, the stage turns to ancient halls."
+    ],
+    "temporaryNote": "This chance is temporary: if you move on without entering, the way is gone when this stage ends.",
+    "visual": {
+     "tint": "#7a6a5a",
+     "accent": "#e8d8c0",
+     "motif": "ancient halls"
+    },
+    "music": null,
+    "trigger": {
+     "minRegion": 1,
+     "maxRegion": null,
+     "time": [],
+     "themeTypes": [],
+     "requires": [],
+     "any": [],
+     "favoured": [
+      "rock",
+      "steel"
+     ],
+     "weight": 1
+    },
+    "env": [
+     {
+      "fromLayer": 0,
+      "text": "Grit and dust fill the air of every fight.",
+      "weather": "sand"
+     },
+     {
+      "fromLayer": 4,
+      "text": "The walls start to shake.",
+      "weather": "sand"
+     }
+    ],
+    "closes": [
+     {
+      "afterLayer": 2,
+      "text": "A path collapses behind you. One way forward is gone."
+     }
+    ],
+    "distort": [],
+    "affinity": {
+     "types": [
+      "rock",
+      "steel"
+     ],
+     "heal": 0.08,
+     "text": "rock/steel-type Pokémon recover a little HP here."
+    },
+    "peril": {
+     "types": [
+      "water",
+      "grass"
+     ],
+     "chip": 0.05,
+     "text": "water/grass-type Pokémon lose some HP here."
+    },
+    "wild": [
+     "golem",
+     "magcargo",
+     "rampardos",
+     "crustle",
+     "aegislash",
+     "coalossal"
+    ],
+    "wildLevelBonus": 2,
+    "npcs": [
+     {
+      "id": "veinheart-witness",
+      "name": "A Local Witness",
+      "text": "\"I saw Veinheart. Nobody believes me. You look like you might.\"",
+      "options": [
+       {
+        "label": "Listen to the story",
+        "result": "The witness tells you what to expect.",
+        "effect": {
+         "research": 1
+        }
+       },
+       {
+        "label": "Share your rations",
+        "result": "The witness shares a hidden cache.",
+        "effect": {
+         "item": "hyper-potion"
+        }
+       }
+      ]
+     },
+     {
+      "id": "veinheart-pilgrim",
+      "name": "A Pilgrim",
+      "text": "\"Rest here. The road ahead is not kind.\"",
+      "options": [
+       {
+        "label": "Rest with the pilgrim",
+        "result": "Your team rests.",
+        "effect": {
+         "heal": 0.25
+        }
+       },
+       {
+        "label": "Press on",
+        "result": "You find a few coins on the road.",
+        "effect": {
+         "money": 200
+        }
+       }
+      ]
+     }
+    ],
+    "modifiers": [
+     "Grit and dust fill the air of every fight",
+     "rock/steel-type Pokémon recover HP",
+     "A path collapses as you go"
+    ],
+    "finale": {
+     "intro": "Veinheart waits at the end of the road.",
+     "win": "Veinheart yields. The land begins to settle.",
+     "lose": "Veinheart lets the land push you back. It is not done with you."
+    }
+   }
+  },
+  {
+   "id": "legend-lumeria",
+   "name": "Lumeria: Hive Mind",
+   "tier": 2,
+   "blurb": "Lumeria stirs, and its stage is open for a short time. Lumeria has been sighted nearby, and the land is changing around it: hives and thickets.",
+   "nodes": {
+    "min": 6,
+    "max": 8
+   },
+   "partyMode": "own",
+   "nodeWeights": {
+    "wild": 5,
+    "trainer": 2,
+    "elite": 1,
+    "rest": 1,
+    "cache": 1,
+    "research": 1,
+    "mystery": 2
+   },
+   "finale": {
+    "kind": "totem",
+    "totemId": "legend-lumeria"
+   },
+   "rentals": [
+    "clefable",
+    "granbull",
+    "mothim"
+   ],
+   "restHeal": 0.4,
+   "cache": [
+    {
+     "item": "hyper-potion",
+     "chance": 1
+    },
+    {
+     "item": "full-heal",
+     "chance": 0.5
+    }
+   ],
+   "megaCost": 3,
+   "researchGoal": 2,
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "bug-tera-shard",
+      "chance": 1
+     },
+     {
+      "item": "full-restore",
+      "chance": 0.6
+     },
+     {
+      "item": "master-ball",
+      "chance": 0.15
+     }
+    ],
+    "megaStones": 0,
+    "researchBonusItem": null
+   },
+   "unlocks": null,
+   "failureKeep": 0.3,
+   "legendary": {
+    "species": "lumeria",
+    "epithet": "Hive Mind",
+    "rarity": "veryRare",
+    "omen": "Lumeria has been sighted nearby, and the land is changing around it: hives and thickets.",
+    "lore": [
+     "Locals speak of Lumeria in whispers.",
+     "Where it passes, the stage turns to hives and thickets."
+    ],
+    "temporaryNote": "This chance is temporary: if you move on without entering, the way is gone when this stage ends.",
+    "visual": {
+     "tint": "#5a8a2a",
+     "accent": "#d8ff8a",
+     "motif": "hives and thickets"
+    },
+    "music": null,
+    "trigger": {
+     "minRegion": 2,
+     "maxRegion": null,
+     "time": [],
+     "themeTypes": [],
+     "requires": [],
+     "any": [
+      {
+       "kind": "friendship",
+       "atLeast": 120
+      },
+      {
+       "kind": "partyTag",
+       "tag": "legendary"
+      }
+     ],
+     "favoured": [
+      "bug",
+      "fairy"
+     ],
+     "weight": 1
+    },
+    "env": [
+     {
+      "fromLayer": 0,
+      "text": "The stage is thick with growth and the hum of wings.",
+      "terrain": "grassy"
+     },
+     {
+      "fromLayer": 4,
+      "text": "The swarm thickens.",
+      "terrain": "grassy"
+     }
+    ],
+    "closes": [
+     {
+      "afterLayer": 2,
+      "text": "A path collapses behind you. One way forward is gone."
+     }
+    ],
+    "distort": [],
+    "affinity": {
+     "types": [
+      "bug"
+     ],
+     "heal": 0.08,
+     "text": "bug-type Pokémon recover a little HP here."
+    },
+    "peril": {
+     "types": [
+      "fire",
+      "flying"
+     ],
+     "chip": 0.05,
+     "text": "fire/flying-type Pokémon lose some HP here."
+    },
+    "wild": [
+     "clefable",
+     "granbull",
+     "mothim",
+     "escavalier",
+     "primarina",
+     "orbeetle"
+    ],
+    "wildLevelBonus": 2,
+    "npcs": [
+     {
+      "id": "lumeria-witness",
+      "name": "A Local Witness",
+      "text": "\"I saw Lumeria. Nobody believes me. You look like you might.\"",
+      "options": [
+       {
+        "label": "Listen to the story",
+        "result": "The witness tells you what to expect.",
+        "effect": {
+         "research": 1
+        }
+       },
+       {
+        "label": "Share your rations",
+        "result": "The witness shares a hidden cache.",
+        "effect": {
+         "item": "hyper-potion"
+        }
+       }
+      ]
+     },
+     {
+      "id": "lumeria-pilgrim",
+      "name": "A Pilgrim",
+      "text": "\"Rest here. The road ahead is not kind.\"",
+      "options": [
+       {
+        "label": "Rest with the pilgrim",
+        "result": "Your team rests.",
+        "effect": {
+         "heal": 0.25
+        }
+       },
+       {
+        "label": "Press on",
+        "result": "You find a few coins on the road.",
+        "effect": {
+         "money": 200
+        }
+       }
+      ]
+     }
+    ],
+    "modifiers": [
+     "The stage is thick with growth and the hum of wings",
+     "bug-type Pokémon recover HP",
+     "A path collapses as you go"
+    ],
+    "finale": {
+     "intro": "Lumeria waits at the end of the road.",
+     "win": "Lumeria yields. The land begins to settle.",
+     "lose": "Lumeria lets the land push you back. It is not done with you."
+    }
+   }
+  },
+  {
+   "id": "legend-verdelis",
+   "name": "Verdelis: Overgrowth",
+   "tier": 2,
+   "blurb": "Verdelis stirs, and its stage is open for a short time. Verdelis has been sighted nearby, and the land is changing around it: tangled forest.",
+   "nodes": {
+    "min": 6,
+    "max": 8
+   },
+   "partyMode": "own",
+   "nodeWeights": {
+    "wild": 5,
+    "trainer": 2,
+    "elite": 1,
+    "rest": 1,
+    "cache": 1,
+    "research": 1,
+    "mystery": 2
+   },
+   "finale": {
+    "kind": "totem",
+    "totemId": "legend-verdelis"
+   },
+   "rentals": [
+    "ivysaur",
+    "scizor",
+    "wormadam"
+   ],
+   "restHeal": 0.4,
+   "cache": [
+    {
+     "item": "hyper-potion",
+     "chance": 1
+    },
+    {
+     "item": "full-heal",
+     "chance": 0.5
+    }
+   ],
+   "megaCost": 3,
+   "researchGoal": 2,
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "grass-tera-shard",
+      "chance": 1
+     },
+     {
+      "item": "full-restore",
+      "chance": 0.6
+     },
+     {
+      "item": "master-ball",
+      "chance": 0.15
+     }
+    ],
+    "megaStones": 0,
+    "researchBonusItem": null
+   },
+   "unlocks": null,
+   "failureKeep": 0.3,
+   "legendary": {
+    "species": "verdelis",
+    "epithet": "Overgrowth",
+    "rarity": "veryRare",
+    "omen": "Verdelis has been sighted nearby, and the land is changing around it: tangled forest.",
+    "lore": [
+     "Locals speak of Verdelis in whispers.",
+     "Where it passes, the stage turns to tangled forest."
+    ],
+    "temporaryNote": "This chance is temporary: if you move on without entering, the way is gone when this stage ends.",
+    "visual": {
+     "tint": "#2f7a2f",
+     "accent": "#b8ff8a",
+     "motif": "tangled forest"
+    },
+    "music": null,
+    "trigger": {
+     "minRegion": 2,
+     "maxRegion": null,
+     "time": [],
+     "themeTypes": [],
+     "requires": [],
+     "any": [
+      {
+       "kind": "friendship",
+       "atLeast": 120
+      },
+      {
+       "kind": "partyTag",
+       "tag": "legendary"
+      }
+     ],
+     "favoured": [
+      "grass",
+      "bug"
+     ],
+     "weight": 1
+    },
+    "env": [
+     {
+      "fromLayer": 0,
+      "text": "The stage is overgrown; grassy terrain covers it.",
+      "terrain": "grassy"
+     },
+     {
+      "fromLayer": 4,
+      "text": "The vines close in.",
+      "terrain": "grassy"
+     }
+    ],
+    "closes": [
+     {
+      "afterLayer": 2,
+      "text": "A path collapses behind you. One way forward is gone."
+     }
+    ],
+    "distort": [],
+    "affinity": {
+     "types": [
+      "grass"
+     ],
+     "heal": 0.08,
+     "text": "grass-type Pokémon recover a little HP here."
+    },
+    "peril": {
+     "types": [
+      "fire"
+     ],
+     "chip": 0.05,
+     "text": "fire-type Pokémon lose some HP here."
+    },
+    "wild": [
+     "ivysaur",
+     "scizor",
+     "wormadam",
+     "lilligant",
+     "dartrix",
+     "flapple"
+    ],
+    "wildLevelBonus": 2,
+    "npcs": [
+     {
+      "id": "verdelis-witness",
+      "name": "A Local Witness",
+      "text": "\"I saw Verdelis. Nobody believes me. You look like you might.\"",
+      "options": [
+       {
+        "label": "Listen to the story",
+        "result": "The witness tells you what to expect.",
+        "effect": {
+         "research": 1
+        }
+       },
+       {
+        "label": "Share your rations",
+        "result": "The witness shares a hidden cache.",
+        "effect": {
+         "item": "hyper-potion"
+        }
+       }
+      ]
+     },
+     {
+      "id": "verdelis-pilgrim",
+      "name": "A Pilgrim",
+      "text": "\"Rest here. The road ahead is not kind.\"",
+      "options": [
+       {
+        "label": "Rest with the pilgrim",
+        "result": "Your team rests.",
+        "effect": {
+         "heal": 0.25
+        }
+       },
+       {
+        "label": "Press on",
+        "result": "You find a few coins on the road.",
+        "effect": {
+         "money": 200
+        }
+       }
+      ]
+     }
+    ],
+    "modifiers": [
+     "The stage is overgrown; grassy terrain covers it",
+     "grass-type Pokémon recover HP",
+     "A path collapses as you go"
+    ],
+    "finale": {
+     "intro": "Verdelis waits at the end of the road.",
+     "win": "Verdelis yields. The land begins to settle.",
+     "lose": "Verdelis lets the land push you back. It is not done with you."
+    }
+   }
   }
  ],
  "totems": [
@@ -24965,6 +26120,384 @@
     "draftExtra": 2,
     "rareJoin": {
      "species": "pecharunt",
+     "chance": 0.2
+    },
+    "unlock": null,
+    "research": 3,
+    "megaStones": 0
+   }
+  },
+  {
+   "id": "legend-equinar",
+   "name": "Equinar, Waking Dream",
+   "tier": "mid",
+   "legendary": true,
+   "type": "psychic",
+   "blurb": "Equinar at the heart of its own stage.",
+   "species": [
+    "equinar"
+   ],
+   "levelBonus": 6,
+   "hpBoostPercent": 300,
+   "aura": {
+    "text": "Its presence fills the stage (Special Attack up).",
+    "boost": {
+     "spa": 1
+    },
+    "terrain": "psychic"
+   },
+   "ally": null,
+   "twoVsOne": false,
+   "fieldEffect": null,
+   "phases": [
+    {
+     "atHp": 0.65,
+     "text": "The air hums louder. Equinar presses the attack.",
+     "boost": {
+      "spd": 1
+     },
+     "clearPlayerStages": true
+    },
+    {
+     "atHp": 0.3,
+     "text": "Equinar gives everything it has!",
+     "boost": {
+      "spa": 1,
+      "spe": 1
+     },
+     "cleanse": true
+    }
+   ],
+   "environment": {
+    "text": "Waking Dream: Psychic terrain hums over the stage.",
+    "terrain": "psychic"
+   },
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "full-restore",
+      "chance": 1
+     }
+    ],
+    "draftExtra": 2,
+    "rareJoin": {
+     "species": "equinar",
+     "chance": 0.3
+    },
+    "unlock": null,
+    "research": 3,
+    "megaStones": 0
+   }
+  },
+  {
+   "id": "legend-hollow-shepherd",
+   "name": "Hollow Shepherd, Haunted Hour",
+   "tier": "mid",
+   "legendary": true,
+   "type": "ghost",
+   "blurb": "Hollow Shepherd at the heart of its own stage.",
+   "species": [
+    "hollow-shepherd"
+   ],
+   "levelBonus": 6,
+   "hpBoostPercent": 300,
+   "aura": {
+    "text": "Its presence fills the stage (Special Attack up).",
+    "boost": {
+     "spa": 1
+    },
+    "terrain": "misty"
+   },
+   "ally": null,
+   "twoVsOne": false,
+   "fieldEffect": null,
+   "phases": [
+    {
+     "atHp": 0.65,
+     "text": "The lights gutter. Hollow Shepherd presses the attack.",
+     "boost": {
+      "spd": 1
+     },
+     "clearPlayerStages": true
+    },
+    {
+     "atHp": 0.3,
+     "text": "Hollow Shepherd gives everything it has!",
+     "boost": {
+      "spa": 1,
+      "spe": 1
+     },
+     "cleanse": true
+    }
+   ],
+   "environment": {
+    "text": "Haunted Hour: A cold mist drifts over every fight.",
+    "terrain": "misty"
+   },
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "full-restore",
+      "chance": 1
+     }
+    ],
+    "draftExtra": 2,
+    "rareJoin": {
+     "species": "hollow-shepherd",
+     "chance": 0.3
+    },
+    "unlock": null,
+    "research": 3,
+    "megaStones": 0
+   }
+  },
+  {
+   "id": "legend-brinecrown",
+   "name": "Brinecrown, Rising Tide",
+   "tier": "mid",
+   "legendary": true,
+   "type": "water",
+   "blurb": "Brinecrown at the heart of its own stage.",
+   "species": [
+    "brinecrown"
+   ],
+   "levelBonus": 6,
+   "hpBoostPercent": 300,
+   "aura": {
+    "text": "Its presence fills the stage (Special Attack up).",
+    "boost": {
+     "spa": 1
+    },
+    "weather": "rain"
+   },
+   "ally": null,
+   "twoVsOne": false,
+   "fieldEffect": null,
+   "phases": [
+    {
+     "atHp": 0.65,
+     "text": "A wave rolls through. Brinecrown presses the attack.",
+     "boost": {
+      "spd": 1
+     },
+     "clearPlayerStages": true
+    },
+    {
+     "atHp": 0.3,
+     "text": "Brinecrown gives everything it has!",
+     "boost": {
+      "spa": 1,
+      "spe": 1
+     },
+     "cleanse": true
+    }
+   ],
+   "environment": {
+    "text": "Rising Tide: Rain falls on every fight.",
+    "weather": "rain"
+   },
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "full-restore",
+      "chance": 1
+     }
+    ],
+    "draftExtra": 2,
+    "rareJoin": {
+     "species": "brinecrown",
+     "chance": 0.3
+    },
+    "unlock": null,
+    "research": 3,
+    "megaStones": 0
+   }
+  },
+  {
+   "id": "legend-veinheart",
+   "name": "Veinheart, Stone Hall",
+   "tier": "mid",
+   "legendary": true,
+   "type": "rock",
+   "blurb": "Veinheart at the heart of its own stage.",
+   "species": [
+    "veinheart"
+   ],
+   "levelBonus": 6,
+   "hpBoostPercent": 300,
+   "aura": {
+    "text": "Its presence fills the stage (Attack up).",
+    "boost": {
+     "atk": 1
+    },
+    "weather": "sand"
+   },
+   "ally": null,
+   "twoVsOne": false,
+   "fieldEffect": null,
+   "phases": [
+    {
+     "atHp": 0.65,
+     "text": "The stone cracks. Veinheart presses the attack.",
+     "boost": {
+      "def": 1
+     },
+     "clearPlayerStages": true
+    },
+    {
+     "atHp": 0.3,
+     "text": "Veinheart gives everything it has!",
+     "boost": {
+      "atk": 1,
+      "spe": 1
+     },
+     "cleanse": true
+    }
+   ],
+   "environment": {
+    "text": "Stone Hall: Grit and dust fill the air of every fight.",
+    "weather": "sand"
+   },
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "full-restore",
+      "chance": 1
+     }
+    ],
+    "draftExtra": 2,
+    "rareJoin": {
+     "species": "veinheart",
+     "chance": 0.3
+    },
+    "unlock": null,
+    "research": 3,
+    "megaStones": 0
+   }
+  },
+  {
+   "id": "legend-lumeria",
+   "name": "Lumeria, Hive Mind",
+   "tier": "mid",
+   "legendary": true,
+   "type": "bug",
+   "blurb": "Lumeria at the heart of its own stage.",
+   "species": [
+    "lumeria"
+   ],
+   "levelBonus": 6,
+   "hpBoostPercent": 300,
+   "aura": {
+    "text": "Its presence fills the stage (Special Attack up).",
+    "boost": {
+     "spa": 1
+    },
+    "terrain": "grassy"
+   },
+   "ally": null,
+   "twoVsOne": false,
+   "fieldEffect": null,
+   "phases": [
+    {
+     "atHp": 0.65,
+     "text": "The swarm stirs. Lumeria presses the attack.",
+     "boost": {
+      "spd": 1
+     },
+     "clearPlayerStages": true
+    },
+    {
+     "atHp": 0.3,
+     "text": "Lumeria gives everything it has!",
+     "boost": {
+      "spa": 1,
+      "spe": 1
+     },
+     "cleanse": true
+    }
+   ],
+   "environment": {
+    "text": "Hive Mind: The stage is thick with growth and the hum of wings.",
+    "terrain": "grassy"
+   },
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "full-restore",
+      "chance": 1
+     }
+    ],
+    "draftExtra": 2,
+    "rareJoin": {
+     "species": "lumeria",
+     "chance": 0.2
+    },
+    "unlock": null,
+    "research": 3,
+    "megaStones": 0
+   }
+  },
+  {
+   "id": "legend-verdelis",
+   "name": "Verdelis, Overgrowth",
+   "tier": "mid",
+   "legendary": true,
+   "type": "grass",
+   "blurb": "Verdelis at the heart of its own stage.",
+   "species": [
+    "verdelis"
+   ],
+   "levelBonus": 6,
+   "hpBoostPercent": 300,
+   "aura": {
+    "text": "Its presence fills the stage (Attack up).",
+    "boost": {
+     "atk": 1
+    },
+    "terrain": "grassy"
+   },
+   "ally": null,
+   "twoVsOne": false,
+   "fieldEffect": null,
+   "phases": [
+    {
+     "atHp": 0.65,
+     "text": "The roots surge. Verdelis presses the attack.",
+     "boost": {
+      "spd": 1
+     },
+     "clearPlayerStages": true
+    },
+    {
+     "atHp": 0.3,
+     "text": "Verdelis gives everything it has!",
+     "boost": {
+      "atk": 1,
+      "spe": 1
+     },
+     "cleanse": true
+    }
+   ],
+   "environment": {
+    "text": "Overgrowth: The stage is overgrown; grassy terrain covers it.",
+    "terrain": "grassy"
+   },
+   "rewards": {
+    "moneyPerLevel": 200,
+    "items": [
+     {
+      "item": "full-restore",
+      "chance": 1
+     }
+    ],
+    "draftExtra": 2,
+    "rareJoin": {
+     "species": "verdelis",
      "chance": 0.2
     },
     "unlock": null,

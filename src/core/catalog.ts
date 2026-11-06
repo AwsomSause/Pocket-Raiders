@@ -18,7 +18,7 @@ import { addRunAttribute, attributeText, runAttributeEffects } from './attribute
 import type { AttributeKey, CatalogEffect, CatalogEntry, Content } from './contentSchema';
 import { changeFriendship } from './friendship';
 import { addItem } from './items';
-import { createPokemon, getSpecies, MAX_PP_UPS, maxHp, maxPp } from './pokemon';
+import { abilityOf, createPokemon, getSpecies, MAX_PP_UPS, maxHp, maxPp } from './pokemon';
 import { activePerks, addMapItem, mapItemCopies, perksOf } from './mapItems';
 import { discover } from './progress';
 import { runLevelCap } from './regions';
@@ -99,6 +99,11 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
     }
     case 'nature':
       return (effect.battles ? mon.tempNature?.nature : mon.nature) === effect.nature ? `That Pokémon is already ${natureName(effect.nature)}.` : null;
+    case 'ability': {
+      const abilities = getSpecies(content, mon.speciesId).abilities;
+      if (effect.mode === 'hidden') return !abilities.hidden ? 'That Pokémon has no hidden ability.' : mon.abilitySlot === -1 ? 'That Pokémon already has its hidden ability.' : null;
+      return abilities.normal.length < 2 ? 'That Pokémon has only one ability to choose from.' : mon.abilitySlot === -1 ? 'A hidden ability can\'t be swapped with a Capsule.' : null;
+    }
     case 'natureNudge':
       return nudgeNature(mon.nature, effect.stat) === (mon.nature ?? 'hardy') ? 'That Pokémon is already tuned that way.' : null;
     case 'ppUp':
@@ -253,6 +258,13 @@ export function applyCatalog(
       applyChanges(effect.changes);
       const blocks = passivePercent(content, run, 'feedCharisma');
       if (blocks > 0 && entry.family.startsWith('Berries')) applyChanges({ charisma: blocks });
+      break;
+    }
+    case 'ability': {
+      const mon = target!;
+      const abilities = getSpecies(content, mon.speciesId).abilities;
+      mon.abilitySlot = effect.mode === 'hidden' ? -1 : (Math.max(0, mon.abilitySlot) + 1) % abilities.normal.length;
+      messages.push(`${name(mon)}'s ability became ${(abilityOf(content, mon) ?? 'none').replace(/-/g, ' ')}.`);
       break;
     }
     case 'natureNudge': {

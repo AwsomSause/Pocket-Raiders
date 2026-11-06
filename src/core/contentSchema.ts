@@ -1216,6 +1216,38 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('whiteHerb') }),
   /** Reflect, Light Screen and Aurora Veil the holder sets last longer (Light Clay). */
   z.object({ hook: z.literal('lightClay'), turns: z.number().int().positive() }),
+  /** Hit by a super-effective move: +2 Attack and Sp. Atk, once per battle (Weakness Policy). */
+  z.object({ hook: z.literal('weaknessPolicy') }),
+  /** After one of its moves misses: +2 Speed, once per battle (Blunder Policy). */
+  z.object({ hook: z.literal('blunderPolicy') }),
+  /** After it uses a sound move: +1 Sp. Atk, once per battle (Throat Spray). */
+  z.object({ hook: z.literal('throatSpray') }),
+  /** When an opponent lowers its stats, it switches out, once per battle (Eject Pack). */
+  z.object({ hook: z.literal('ejectPack') }),
+  /** While Trick Room is up: -1 Speed, once per battle (Room Service). */
+  z.object({ hook: z.literal('roomService') }),
+  /** On coming in: +1 to its highest stat, once per battle; only for these (Paradox) species (Booster Energy). */
+  z.object({ hook: z.literal('boosterEnergy'), species: z.array(z.string()).min(1) }),
+  /** Copies the stat boosts an opponent just got, once per battle (Mirror Herb). */
+  z.object({ hook: z.literal('mirrorHerb') }),
+  /** Immune to the added effects of moves that hit it (Covert Cloak). */
+  z.object({ hook: z.literal('covertCloak') }),
+  /** Opponents can't lower its stats (Clear Amulet). */
+  z.object({ hook: z.literal('clearAmulet') }),
+  /** Multi-hit moves hit at least 4 times (Loaded Dice). */
+  z.object({ hook: z.literal('loadedDice') }),
+  /** Punching moves do more damage and don't make contact (Punching Glove). */
+  z.object({ hook: z.literal('punchingGlove'), percent: z.number().positive() }),
+  /** Its moves never make contact (Protective Pads). */
+  z.object({ hook: z.literal('protectivePads') }),
+  /** Entry hazards don't hurt it (Heavy-Duty Boots). */
+  z.object({ hook: z.literal('heavyDutyBoots') }),
+  /** Weather doesn't boost, weaken or hurt it or its moves (Utility Umbrella). */
+  z.object({ hook: z.literal('utilityUmbrella') }),
+  /** Its ability can't be ignored, swapped, copied or suppressed by opponents (Ability Shield). */
+  z.object({ hook: z.literal('abilityShield') }),
+  /** Terrain it sets lasts longer (Terrain Extender). */
+  z.object({ hook: z.literal('terrainExtender'), turns: z.number().int().positive() }),
   /** When hit, the attacker is forced out, once per battle (Red Card). */
   z.object({ hook: z.literal('redCard') }),
   /** When hit, the holder switches out, once per battle (Eject Button). */
@@ -1498,6 +1530,8 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('ppUp'), ups: z.number().int().min(1).max(3) }),
   /** Changes one Pokémon's nature (Mints). */
   z.object({ kind: z.literal('nature'), nature: z.enum(NATURE_IDS), /** S418 temporary mint: the nature only lasts this many won battles, then the real one returns. */ battles: z.number().int().min(1).max(10).optional() }),
+  /** Ability Capsule (swap between its normal abilities) and Ability Patch (switch to its hidden ability). */
+  z.object({ kind: z.literal('ability'), mode: z.enum(['swap', 'hidden']) }),
   /** Tuning Dust: nudges a nature one step so the named stat is the raised one (the lowered stat stays). */
   z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Care for one Pokémon: heal HP, revive, cure status, restore one move's PP; friendship and attribute side effects. */
@@ -2356,6 +2390,8 @@ export const BalanceSchema = z.object({
   /** Overhaul slice 20: battle environments and conditions (core/overhaul/field.ts). */
   overhaulRivalRoles: z.object({ enabled: z.boolean(), additionalCounters: z.number().int().min(0) }).default({ enabled: true, additionalCounters: 1 }),
   overhaulGrowth: z.object({ enabled: z.boolean(), bonus: z.number().min(0).max(0.3), minKos: z.number().int().min(1), minCloseCalls: z.number().int().min(1), minRoleKos: z.number().int().min(1).default(4) }).default({ enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2, minRoleKos: 4 }),
+  /** Archived Starter Sets (Story Overhaul S.6): off hides the Starter Laboratory and the starter pool picker; data, code and saves stay. */
+  starterSets: z.object({ enabled: z.boolean() }).default({ enabled: false }),
   overhaulChains: z.object({ enabled: z.boolean(), legendaryMinStage: z.number().int().min(1) }).default({ enabled: true, legendaryMinStage: 7 }),
   overhaulField: z.object({ powerCap: z.number().min(0).max(1), envChance: z.number().min(0).max(1), conditionChance: z.object({ mid: z.number().min(0).max(1), late: z.number().min(0).max(1), boss: z.number().min(0).max(1) }) }).default({ powerCap: 0.3, envChance: 0.6, conditionChance: { mid: 0.15, late: 0.25, boss: 0.35 } }),
   hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
@@ -2593,6 +2629,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('rivalPath'), path: z.enum(['friend', 'rival', 'between']) }),
   /** Living Rival: a rival you beat in your last meeting (it has something to prove). */
   z.object({ kind: z.literal('rivalBeaten') }),
+  /** W5: reputation of a category at this level or higher (rivals/reputation.ts). */
+  z.object({ kind: z.literal('rep'), category: z.enum(['champion', 'rival', 'bond', 'villain', 'strategy', 'exploration', 'legendary']), atLeast: z.enum(['noted', 'known', 'renowned']) }),
+  /** W5: badges won so far this run. */
+  z.object({ kind: z.literal('badges'), atLeast: z.number().int().min(1) }),
   /** §11/§29: a Pokémon rival is still out there (`open`), rides with a trainer rival (`carried`), or gave itself up (`sacrificed`), or any of these (`any`). */
   z.object({ kind: z.literal('monRival'), state: z.enum(['open', 'carried', 'sacrificed', 'any']) }),
   /** Event Director: a party member with a species tag (legendary, mythical, delta, zform...). */
@@ -3040,6 +3080,14 @@ export const EventDefSchema = z.object({
   /** The map stop it shows as (each has its own icon): event, merchant, shrine, treasure... */
   stop: z.string().default('event'),
   rarity: z.enum(EVENT_RARITIES).default('common'),
+  /** W5: tags (events/priority.ts EVENT_TAGS); empty means the defaults for its group. */
+  tags: z.array(z.enum(['Combat', 'Exploration', 'Trainer', 'Rival', 'Pokémon', 'Shop', 'Story', 'Mystery', 'Dungeon', 'Relationship', 'Region', 'Legendary', 'Evil Team', 'Survival', 'Treasure', 'Recovery'])).default([]),
+  /** W5: a Critical (forced) event: never random, always placed (queued if the map is full). */
+  forced: z.boolean().default(false),
+  /** W5: overrides the base priority (forced events 70 to 100). */
+  priority: z.number().int().min(0).max(100).optional(),
+  /** W5: off until the system it needs exists (dungeons, pseudo stages). Never drawn, never queued. */
+  disabled: z.boolean().default(false),
   /** Stages themed with these types see it more often. */
   types: z.array(TypeNameSchema).default([]),
   /** Not before this stage of the run (1 = the first). */
