@@ -139,6 +139,16 @@ describe('battle hooks', () => {
   });
 });
 
+describe('guard hook', () => {
+  it('the partner guarding an ally pays guard_ally at most twice a battle', () => {
+    const { run, uid } = setup();
+    const ev = [{ type: 'sacrifice', side: 'player', uid }];
+    expect(heartbondTurn(run, 'b1', 1, ev).paid).toEqual(['guard_ally']);
+    expect(heartbondTurn(run, 'b1', 2, ev).paid).toEqual(['guard_ally']);
+    expect(heartbondTurn(run, 'b1', 3, ev).paid).toEqual([]);
+  });
+});
+
 describe('care hooks', () => {
   it('care and rest pay the partner only, capped per stop', () => {
     const { run, uid } = setup();
