@@ -27,6 +27,6 @@ export default defineConfig(({ command }) => ({
     include: ['tests/unit/**/*.test.ts'],
     environment: 'node',
     // Several suites build the whole content set; on a slow or busy machine that takes longer than the 5 s default.
-    testTimeout: 30_000,
+    testTimeout: 90_000, // CI runs 300+ heavy files at once; single simulation tests passed alone but timed out at 30 s
   },
 }));
