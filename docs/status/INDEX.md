@@ -261,4 +261,5 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - migration-seasons.md: Migration Seasons, seasonal wild weights (S135)
 - treasure-hunt.md: Treasure Hunt Season, 5 map pieces over runs, profile v18 (S150)
 - `capture-dex-guides.md`: Hidden Ability Hunts S229, Egg Group Chart S238 (Species Mastery rows).
+- `run-events-b-batch7.md`: Run events B batch 7: Fan Club Tournament (KO crowd boost) and Beginner's Luck (foe crits, you heal a little).
 - `balance-test-scales.md`: minigame balance test split into one test per game.

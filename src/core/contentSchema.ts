@@ -2769,6 +2769,10 @@ export const EventRuleSchema = z.object({
   noItems: z.boolean().optional(),
   /** The weather changes every turn, in this order (Weather Rival). */
   weatherCycle: z.array(WeatherSchema).min(2).max(4).optional(),
+  /** The foe lands extra critical hits and your active Pokémon heals a little every turn (Beginner's Luck). */
+  beginnersLuck: z.boolean().optional(),
+  /** The crowd backs the side that scored the latest KO: that side's active Pokémon gets +1 Attack (Fan Club Tournament). */
+  fanClub: z.boolean().optional(),
   /** Every stat change is inverted for both sides (The Contrarian). */
   contrary: z.boolean().optional(),
   /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */

@@ -118,4 +118,18 @@ describe('event fight rules (run events B batch 3)', () => {
       expect(start(id).battle?.eventRule?.[key], id).toBe(true);
     }
   });
+  it('batch 7: fan club boosts the side that scored the KO, beginner\'s luck heals you', () => {
+    const b = { ...(battle({ fanClub: true }) as object), playerStages: { atk: 0 }, enemyStages: { atk: 0 } } as never as { playerStages: { atk: number }; enemyStages: { atk: number } };
+    eventRuleEnd(b as never, [{ type: 'faint', side: 'enemy', uid: 'x', participants: [] }]);
+    expect(b.playerStages.atk).toBe(1);
+    expect(b.enemyStages.atk).toBe(0);
+    eventRuleEnd(b as never, [{ type: 'faint', side: 'player', uid: 'y', participants: [] }]);
+    expect(b.enemyStages.atk).toBe(1);
+    for (const [id, key] of [['fan-club-tournament', 'fanClub'], ['beginners-luck', 'beginnersLuck']] as const) expect(start(id).battle?.eventRule?.[key], id).toBe(true);
+    const run = start('beginners-luck');
+    const lead = run.party[run.battle!.activeIndex]!;
+    lead.hp = 1;
+    eventRuleEnd(run.battle!, [], run.party, content);
+    expect(lead.hp).toBeGreaterThan(1);
+  });
 });
