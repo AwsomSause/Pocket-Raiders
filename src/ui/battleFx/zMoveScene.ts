@@ -25,6 +25,8 @@ export interface ZSceneOptions {
   tint: number;
   title?: string;
   titleId?: string;
+  /** The battle's own backdrop picture (the reference stage is the battle's backdrop, tinted); null draws a plain striped stage. */
+  backdropKey?: string | null;
   /** True when the Pokémon is the foe's: the trainer comes in from the right. */
   opposes: boolean;
   /** Flash strength 0..1 and shake 0..1 from the animation settings. */
@@ -70,12 +72,17 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
 
   // ---- Stage: backdrop picture (or stripes), bases. -------------------------------------------------------
   const stage = add(scene.add.container(0, 0).setDepth(depth).setVisible(false));
-  const paper = scene.add.rectangle(cx, H / 2, W, H, 0xd9d2ea).setOrigin(0.5);
-  stage.add(paper);
-  const stripes = scene.add.graphics();
-  stripes.fillStyle(0xffffff, 0.35);
-  for (let y = 0; y < H; y += 18) stripes.fillRect(0, y, W, 6);
-  stage.add(stripes);
+  if (has(o.backdropKey ?? null)) {
+    const bgImg = scene.add.image(cx, H / 2, o.backdropKey!);
+    bgImg.setScale(Math.max(W / bgImg.width, H / bgImg.height));
+    stage.add(bgImg);
+  } else {
+    stage.add(scene.add.rectangle(cx, H / 2, W, H, 0xd9d2ea).setOrigin(0.5));
+    const stripes = scene.add.graphics();
+    stripes.fillStyle(0xffffff, 0.35);
+    for (let y = 0; y < H; y += 18) stripes.fillRect(0, y, W, 6);
+    stage.add(stripes);
+  }
   const tintLayer = scene.add.rectangle(cx, H / 2, W, H, o.tint, 0).setOrigin(0.5);
   const dim = scene.add.rectangle(cx, H / 2, W, H, 0x000000, 0).setOrigin(0.5);
   const makeBase = (x: number, y: number) => {

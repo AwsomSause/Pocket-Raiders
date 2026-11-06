@@ -220,6 +220,8 @@ export class BattleScene extends Phaser.Scene {
   private header!: Phaser.GameObjects.Text;
   /** The arena and both Pokémon: what move animations draw among and screen shake moves (the menus stay still). */
   private field!: Phaser.GameObjects.Container;
+  /** The battle arena's backdrop texture (the Z-Move scene reuses it as its stage). */
+  private arenaBgKey: string | null = null;
   /** Index in `field` just above the arena art. */
   private fieldBase = 0;
   /** The doubles target picker's marker on the highlighted Pokémon. */
@@ -359,6 +361,7 @@ export class BattleScene extends Phaser.Scene {
     const raidArena = legendArena ? null : this.raidArena(battle);
     const uie = raidArena || (metTheme && !legendArena) ? null : this.uieArena();
     const bg = raidArena ?? (uie && this.textures.exists(uie) ? uie : arena && assets.has(arena) && this.textures.exists(arena) ? arena : 'bg.battle');
+    this.arenaBgKey = assets.has(bg) && this.textures.exists(bg) ? bg : null;
     this.field = this.add.container(0, 0);
     const backLayers: Phaser.GameObjects.Image[] = [];
     const groundLayers: Phaser.GameObjects.Image[] = [];
@@ -3072,6 +3075,7 @@ export class BattleScene extends Phaser.Scene {
                 makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
                 crystalKey: (crystalId ? content.items.get(crystalId)?.iconAssetId : null) ?? null,
                 ringKey: 'cine.key.zmove',
+                backdropKey: this.arenaBgKey,
                 tint: glowColor,
                 title: zMove?.name,
                 titleId: zMove?.id,
