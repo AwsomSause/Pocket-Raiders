@@ -893,6 +893,8 @@ export const MapNodeSchema = z.object({
   sides: z.array(SideStopSchema),
   /** W10 (I497): a name the player gave this node. */
   name: z.string().max(24).optional(),
+  /** Story Overhaul S4: the Story Stops (blueprint stop ids) that play when the player reaches this node. */
+  storyStops: z.array(z.string()).optional(),
   /** How the generator made this node, for debugging. */
   note: z.string(),
 });

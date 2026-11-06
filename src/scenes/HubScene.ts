@@ -1587,7 +1587,7 @@ export class HubScene extends Phaser.Scene {
       }
       case 'intel':
         title = `Regional Intelligence Board  ·  intel level ${intelLevel(p)}`;
-        for (const r of content.regions.values()) {
+        for (const r of [...content.regions.values()].filter((x) => !x.story)) {
           const b = regionBoard(content, p, r);
           entries.push({ label: `${r.name}  ·  visited ${b.visits}, cleared ${b.clears}`, sub: b.lines.join('   ') });
         }

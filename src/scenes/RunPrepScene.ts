@@ -417,7 +417,7 @@ export class RunPrepScene extends Phaser.Scene {
       }
       case 'region': {
         if (getMode(this.rules.modeId)?.campaignId !== 'regional-circuit') return playSfx(this, 'ui.error', 0.5);
-        const ids = [null, ...[...content.regions.values()].filter((r) => !r.grand).map((r) => r.id)];
+        const ids = [null, ...[...content.regions.values()].filter((r) => !r.grand && !r.story).map((r) => r.id)];
         return this.refresh({}, { rules: { ...this.rules, regionId: next<string | null>(ids, this.rules.regionId ?? null) } });
       }
       case 'difficulty': {

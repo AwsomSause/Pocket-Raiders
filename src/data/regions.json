@@ -364,5 +364,8 @@
   ],
   "grand": true,
   "generations": []
- }
+ },
+ { "id": "cairnmoor", "name": "Cairnmoor", "gymLeaders": [], "eliteFour": [], "champions": [], "grand": false, "story": true, "generations": [] },
+ { "id": "tidewrack-reaches", "name": "Tidewrack Reaches", "gymLeaders": [], "eliteFour": [], "champions": [], "grand": false, "story": true, "generations": [] },
+ { "id": "orrery-basin", "name": "Orrery Basin", "gymLeaders": [], "eliteFour": [], "champions": [], "grand": false, "story": true, "generations": [] }
 ]

@@ -234,6 +234,8 @@ import { memoryPick } from './memories/encounters';
 import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart } from './evil/teams';
+import { leagueAfterRegion } from './campaign/circuit';
+import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
@@ -593,6 +595,7 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
   fillRegionOrder(content, run);
+  ensureStoryRun(content, run);
   const campaign = getCampaign(content, run.campaignId);
   const region = currentRegion(content, run);
   // Beta 4.4: the stage is decided only now, from what the player did on the last one (core/stagePlan.ts).
@@ -648,6 +651,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeMinigameStop(content, run);
   placeServiceStop(run);
   placePlaza(run);
+  placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
   const planLines = [themeLine, ...tailorStage(content, run, signals)].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
@@ -658,6 +662,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
 /** Starts the region's Pokémon League (mutates `run`): picks the Elite Four and champion and heals the party. */
 function enterLeague(content: Content, run: RunState): void {
   fillRegionOrder(content, run);
+  ensureStoryRun(content, run);
   const campaign = getCampaign(content, run.campaignId);
   const region = currentRegion(content, run);
   withStream(run.rng, 'map', (r) => pickLeague(content, region, campaign, run.usedLeaders, r)); // rolled and dropped: keeps the 'map' stream where it was
@@ -682,6 +687,7 @@ function enterLeague(content: Content, run: RunState): void {
     extraFronts: [],
     roamers: [],
   };
+  placeStoryStops(content, run);
   startStageEffects(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
   if (!gauntlet(run.rules)) healParty(content, run);
@@ -736,10 +742,17 @@ export function isFinalBoss(content: Content, run: Pick<RunState, 'regionOrder' 
   return !!content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.grand && run.regionIndex === run.regionOrder.length - 1;
 }
 
+/** True when this gym is the region's last and no League follows it (the Orrery Circuit's first two regions): the region is cleared here. */
+function regionEndsAtGym(content: Content, run: RunState): boolean {
+  const campaign = getCampaign(content, run.campaignId);
+  return !!run.stage && run.stage.kind === 'stage' && run.stage.index + 1 >= campaign.stagesPerRegion && !leagueAfterRegion(campaign, run.regionIndex);
+}
+
 /** Starts the next region at its first stage, or ends the run in victory after the last one (mutates `run`). */
 function enterNextRegion(content: Content, run: RunState): void {
   recapRegion(content, run);
   if (run.regionIndex + 1 >= run.regionOrder.length) {
+    playFinaleStops(content, run);
     run.victory = true;
     run.phase = 'over';
     return;
@@ -817,6 +830,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   // An escort is struck on the way to a battle, and delivered (or lost) at the gym.
   convoyStep(content, run, node);
   recordRouteChosen(content, run, nodeId, node.harder, node.kind);
+  playNodeStops(content, run, node, onCross);
   bumpEventCounters(runPerks(content, run), run, 'nodeEnter');
   // The pack's party narration for the place and hour (a boss ahead, night, a bright day): one quiet line on about a third of stops.
   const nodeKey = `${run.runId}:${run.regionIndex}:${stage.index}:${nodeId}`;
@@ -3087,7 +3101,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (finale) {
     run.story.flags[FINALE_FLAG] = 'pending';
     healParty(content, run);
-  } else if (won && classId === CHAMPION_CLASS) {
+  } else if ((won && classId === CHAMPION_CLASS) || (won && classId === GYM_LEADER_CLASS && regionEndsAtGym(content, run))) {
     if (run.story.flags[FINALE_FLAG] === 'pending') run.story.flags[FINALE_FLAG] = 'done';
     regionCleared = currentRegion(content, run).id;
     run.regionsCleared.push(regionCleared);
@@ -3182,7 +3196,9 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     enterStage(content, run, 0); // a save from before stage maps existed
   } else if (kind === 'gym') {
     const campaign = getCampaign(content, run.campaignId);
-    if (stage.index + 1 >= campaign.stagesPerRegion) enterLeague(content, run);
+    playStageEndStops(content, run);
+    // The Orrery Circuit has one League, after its last region (Appendix S.7): the other regions go straight on.
+    if (stage.index + 1 >= campaign.stagesPerRegion) (leagueAfterRegion(campaign, run.regionIndex) ? enterLeague : enterNextRegion)(content, run);
     else enterStage(content, run, stage.index + 1);
   } else if (kind === 'champion' && run.story.flags[FINALE_FLAG] === 'pending') {
     // Phase two: back to the foot of the last node, so the champion can be chosen again.

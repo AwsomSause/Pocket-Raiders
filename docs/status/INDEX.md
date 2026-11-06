@@ -347,3 +347,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - [story-s1-bs-aether](story-s1-bs-aether.md): S1 backstory 4, Aether Experiment content, gates 0
 - [story-s1-bs-hisui](story-s1-bs-hisui.md): S1 backstory 5, Remains of the Past content, gates 0
 - `story-s8-relationships.md`: Story S8: relationship stages, attributes, ripples, memories, consequences (core only, not wired into events yet).
+- 2026-11-06 story-s4-director-circuit: Orrery Circuit campaign, evil override with hideout at League, Narrative Director (44 Story Stops, blueprint, map stops) (docs/status/story-s4-director-circuit.md)

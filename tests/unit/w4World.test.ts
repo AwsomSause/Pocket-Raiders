@@ -229,7 +229,7 @@ describe('treasure map, time rift, landmarks and conditions', () => {
     placeLandmark(content, after);
     expect(after.stage!.map.nodes.flatMap((n) => n.sides).some((s) => s.eventId === side.eventId)).toBe(false);
     const landmarks = [...content.events.values()].filter((e) => e.stop === 'landmark');
-    for (const region of content.regions.keys()) expect(landmarks.filter((e) => e.requires.some((c) => c.kind === 'region' && c.ids.includes(region))).length, region).toBe(1);
+    for (const region of [...content.regions.values()].filter((r) => !r.story).map((r) => r.id)) expect(landmarks.filter((e) => e.requires.some((c) => c.kind === 'region' && c.ids.includes(region))).length, region).toBe(1);
   });
 
   it('season and region conditions read the run', () => {

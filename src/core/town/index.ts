@@ -163,7 +163,7 @@ export function optionsOf(content: Content, p: Profile, a: TownAction, now: Date
     case 'items': return t.lost.map((id, i) => ({ id: `${i}:${id}`, label: id.replace(/-/g, ' '), desc: 'Left behind', say: 'It is waiting for you.', once: false }));
     case 'mail': return mailToday(content, p, now).map((m) => ({ id: m.id, label: `${m.from}${t.sets.mail?.includes(m.id) ? '' : ' (new)'}`, desc: m.text.slice(0, 70), say: m.text, once: true, reward: m.gift }));
     // Dream Tower (S109): peek at a region's road ahead (its gym leaders and its Champion) from the real campaign data.
-    case 'regions': return [...content.regions.values()].map((r) => {
+    case 'regions': return [...content.regions.values()].filter((r) => !r.story).map((r) => {
       const nice = (id: string) => id.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       const gyms = r.gymLeaders.slice(0, 4).map(nice).join(', ');
       return from(r.id, r.name, `${r.gymLeaders.length} gyms`, `You dream of ${r.name}: ${gyms}${r.gymLeaders.length > 4 ? ' and more' : ''} wait on the road. ${r.champions[0] ? `At the end, ${nice(r.champions[0])}.` : ''} Dreams are only a hint.`);

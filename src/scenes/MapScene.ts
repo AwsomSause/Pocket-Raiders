@@ -579,6 +579,8 @@ export class MapScene extends Phaser.Scene {
         mapLayer.add(this.add.text(x, y, style.glyph, textStyle(26, '#ffffff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setAlpha(alpha));
       }
       if (n.harder && !fog) mapLayer.add(this.add.text(x + r - 2, y - r + 2, '!', textStyle(22, '#f8f8f8', { stroke: '#5a2890', strokeThickness: 5 })).setOrigin(0.5));
+      // Story Run (S4): a Story Stop still to play here.
+      if (!fog && n.storyStops?.some((id) => !run.story.v2?.stops.done.includes(id))) mapLayer.add(this.add.text(x + r - 2, y + r - 4, '★', textStyle(20, '#ffd860', { stroke: '#3a1850', strokeThickness: 4 })).setOrigin(0.5));
       // Itemfinder: the stop hiding an item.
       if (n.id === hidden && !visited) mapLayer.add(this.add.text(x - r + 2, y - r + 2, '✦', textStyle(22, '#f8e070', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       if (!fog) this.drawPreview(mapLayer, n, x, y, r);
@@ -910,8 +912,10 @@ export class MapScene extends Phaser.Scene {
         const sides = n.sides.map((s) => (s.kind === 'heal' ? 'healing spot' : s.kind === 'fish' ? 'fishing spot' : s.kind === 'raid' ? 'raid den' : s.kind === 'totem' ? 'Totem territory' : s.kind === 'expedition' ? 'expedition gate' : s.kind === 'service' ? (SERVICES.services.find((x) => x.id === s.serviceId)?.name ?? 'service') : s.kind === 'event' ? (stopIsHidden(content, services().session.run!, n, s) ? 'mystery "?" stop' : `${content.events.get(s.eventId ?? '')?.name ?? 'event'} stop`) : s.kind === 'plaza' ? 'Trainer Plaza' : 'shop'));
         const seen = this.previewText(n) || this.omens[n.id]?.text || (n.kind === 'wild' ? `Habitat: likely ${habitatList(services().session.content, services().session.run!).join(', ')}` : '');
         const route = routeKind(services().session.run!, n);
+        const storyStops = (n.storyStops ?? []).map((id) => runNow.story.v2?.blueprint?.stops.find((x) => x.id === id)).filter((x) => !!x && !runNow.story.v2!.stops.done.includes(x.id));
+        const storyNote = storyStops.length ? `\n★ Story Stop: ${storyStops.map((x) => x!.category).join(', ')}` : '';
         const anomaly = stageAnomaly(services().session.content, services().session.run!);
-        return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${seen ? `\n${seen}` : ''}`;
+        return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${storyNote}${seen ? `\n${seen}` : ''}`;
       }
       case 'side':
         if (option.side.kind === 'plaza') return 'Trainer Plaza: the middle of the stage. Stalls, traders, a Battle Club, errands and gossip. Rest, shop and plan before you go on.';

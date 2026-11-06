@@ -16,6 +16,7 @@ import type { Content, EventBattle, EventCondition, EventEffect } from '../conte
 import { hashSeed, Rng } from '../rng';
 import type { RunState } from '../state';
 import { emit } from '../story/record';
+import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
@@ -44,17 +45,24 @@ export function runningOp(run: RunState): EvilState['ops'][number] | null {
   return evilOf(run).ops.find((o) => o.region === run.regionIndex && o.outcome === 'running') ?? null;
 }
 
+/** The team this run's world gets (a hash of the seed, no stream rolled). The Narrative Director reads it as the antagonist before it shows up. */
+export function plannedEvilTeamId(content: Content, run: Pick<RunState, 'seed' | 'perkEffects' | 'story'>): string | null {
+  if (run.story.evil?.teamId) return run.story.evil.teamId;
+  if (content.evilTeams.teams.length === 0) return null;
+  const focus = (run.perkEffects ?? []).flatMap((m) => (m.kind === 'evilTeamFocus' ? m.teams : []));
+  const focused = content.evilTeams.teams.filter((t) => focus.includes(t.id));
+  const teams = focused.length > 0 ? focused : content.evilTeams.teams;
+  return teams[new Rng(hashSeed(`${run.seed}::evil-team`)).int(0, teams.length - 1)]!.id;
+}
+
 /** Called as each stage begins (core/run.ts): counts stages, picks the team, ends a left-behind operation and starts this region's. */
 export function evilStageStart(content: Content, run: RunState): void {
   const s = evilOf(run);
-  const cfg = content.evilTeams.config;
+  const cfg = evilConfig(content, run);
   s.stages += 1;
   if (!s.teamId) {
     if (s.stages < cfg.firstStage || content.evilTeams.teams.length === 0) return;
-    const focus = (run.perkEffects ?? []).flatMap((m) => (m.kind === 'evilTeamFocus' ? m.teams : []));
-    const focused = content.evilTeams.teams.filter((t) => focus.includes(t.id));
-    const teams = focused.length > 0 ? focused : content.evilTeams.teams;
-    const team = teams[new Rng(hashSeed(`${run.seed}::evil-team`)).int(0, teams.length - 1)]!;
+    const team = content.evilTeams.teams.find((t) => t.id === plannedEvilTeamId(content, run))!;
     s.teamId = team.id;
     s.nextAt = s.stages;
     tell(content, run, 'evil-team', `Rumours spread of ${team.name}. People say they mean to ${team.goal}.`, 55);
@@ -107,7 +115,9 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   if (e.talk) words.push(`${team.ranks[e.talk].name}: ${villainLine(team, e.talk, s.villains[e.talk])}`);
   if (e.beat && s.beat < 7) {
     s.beat += 1;
-    s.nextAt = s.stages + content.evilTeams.config.beatEvery;
+    const cfg = evilConfig(content, run);
+    // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
+    s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;
     words.push(s.beat === 7 ? `the ${team.name} story reaches its end` : `the ${team.name} story moves on (${s.beat}/7)`);
   }
   if (e.heat !== 0) {

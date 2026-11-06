@@ -219,6 +219,7 @@
  "luck": { "streakRewards": [ { "wins": 3, "item": "super-potion" }, { "wins": 6, "item": "ultra-ball" }, { "wins": 10, "item": "revive" } ], "pityRareAfter": 4, "bounty": { "target": 2, "money": 150, "moneyPerStage": 50, "item": "great-ball" }, "milestoneChests": [ { "runs": 3, "bankCredits": 150, "candies": 3, "researchPoints": 0 }, { "runs": 10, "bankCredits": 400, "candies": 8, "researchPoints": 10 }, { "runs": 25, "bankCredits": 900, "candies": 15, "researchPoints": 25 }, { "runs": 50, "bankCredits": 2000, "candies": 30, "researchPoints": 50 }, { "runs": 100, "bankCredits": 5000, "candies": 60, "researchPoints": 100 } ] },
  "opening": { "encounters": 4, "maxBaseStats": 340, "levelOffset": 1, "minLevel": 4, "softMovesUntilLevel": 15,
   "maxLevel": 6 },
+ "story": { "stopsTotal": 44, "actEndStages": [5, 11, 18, 24, 25, 26], "actBudgets": [8, 8, 8, 7, 6, 4, 2, 1], "stopsPerStageMin": 1, "stopsPerStageMax": 4, "minColumnGap": 2, "maxMainStopsPerStage": 2, "firstStopMaxColumn": 4, "climaxColumns": [7, 10], "leaderSceneColumns": [9, 10], "columnJitter": 1, "replanWindowStops": 6, "maxConsecutiveHighIntensity": 2, "sameEventGapStops": 5, "sameEventMaxPerRun": 2 },
  "rolePool": { "wildCardWeight": 0.2, "wildCardMax": { "gymPerRegion": 1, "elitePerRun": 1, "championPerRun": 1 }, "teamLeaders": { "rocket": ["giovanni"], "aqua": ["archie"], "magma": ["maxie"], "galactic": ["cyrus"], "plasma": ["ghetsis"], "flare": ["lysandre"], "skull": ["guzma"], "aether": ["lusamine"], "yell": ["piers"], "star": ["ortega"] } },
  "rival": { "stage": 0, "column": 5, "level": 5, "depth": true, "starters": ["bulbasaur", "charmander", "squirtle", "chikorita", "cyndaquil", "totodile", "treecko", "torchic", "mudkip"] },
  "legendaryWildChance": 0.0025,
@@ -365,6 +366,21 @@
     ]
    ],
    "eliteFourSize": 2,
+   "countsForProgress": false
+  },
+  {
+   "id": "orrery-circuit",
+   "name": "The Orrery Circuit",
+   "mode": "story",
+   "regularRegions": 3,
+   "grandRegion": false,
+   "regions": ["cairnmoor", "tidewrack-reaches", "orrery-basin"],
+   "leagueRegions": [2],
+   "evil": { "beatEvery": 4, "firstStage": 2, "hideoutAtLeague": true },
+   "stagesPerRegion": 8,
+   "columns": 12,
+   "trainerColumns": [[3, 5], [7, 10]],
+   "eliteFourSize": 4,
    "countsForProgress": false
   }
  ],

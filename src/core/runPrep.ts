@@ -298,7 +298,7 @@ export function draftStarters(content: Content, rng: Rng, prep: RunPrep, mastere
   if (rule.kind === 'regional') {
     for (const first of shuffled) {
       const s = content.species.get(first)!;
-      const region = [...content.regions.values()].find((r) => r.id !== 'grand' && isNative(content, s, r.id));
+      const region = [...content.regions.values()].find((r) => r.id !== 'grand' && !r.story && isNative(content, s, r.id));
       if (!region) continue;
       const home = shuffled.filter((id) => isNative(content, content.species.get(id)!, region.id));
       if (home.length >= n) return { choices: home.slice(0, n), note: `All three starters are native to ${region.name}.` };

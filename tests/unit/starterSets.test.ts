@@ -19,7 +19,7 @@ describe('starter sets', () => {
   it('covers every category, every type, every region and every villainous team', () => {
     for (const c of STARTER_POOL_CATEGORIES) expect(pools.some((p) => p.category === c), c).toBe(true);
     expect(pools.filter((p) => p.category === 'type')).toHaveLength(18);
-    for (const r of content.regions.values()) if (!r.grand) expect(pools.some((p) => p.filter?.region === r.id || p.id === r.id), r.id).toBe(true);
+    for (const r of content.regions.values()) if (!r.grand && !r.story) expect(pools.some((p) => p.filter?.region === r.id || p.id === r.id), r.id).toBe(true);
     expect(pools.filter((p) => p.category === 'league')).toHaveLength(9);
     expect(pools.filter((p) => p.category === 'evilTeam').length).toBeGreaterThanOrEqual(10);
   });
