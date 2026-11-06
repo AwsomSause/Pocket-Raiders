@@ -5,7 +5,9 @@
 import Phaser from 'phaser';
 import { availableNodes } from '../core/expedition/flow';
 import type { ExpeditionState } from '../core/state';
+import type { Species } from '../core/contentSchema';
 import { fitLine } from './fitText';
+import { pokemonVisual } from './sprites';
 import { GAME_HEIGHT as H, GAME_WIDTH as W, textStyle } from './theme';
 
 export type ExpeditionLook = 'aero' | 'manga' | 'depth';
@@ -17,6 +19,9 @@ export interface ExpeditionLookData {
   loot: string;
   party: string;
   prompt: string;
+  /** The lead Pokémon and the finale's boss, drawn as small sprites (the boss is a silhouette until its layer). */
+  hero?: Species | undefined;
+  boss?: Species | undefined;
 }
 
 export interface ExpeditionLayout {
@@ -37,9 +42,19 @@ const layerCount = (exp: ExpeditionState): number => Math.max(...exp.nodes.map((
 const layerNow = (exp: ExpeditionState): number => (exp.current ? exp.nodes.find((n) => n.id === exp.current)!.layer + 1 : 0);
 
 export function drawExpeditionLook(scene: Phaser.Scene, look: ExpeditionLook, d: ExpeditionLookData): ExpeditionLayout {
-  if (look === 'aero') return aero(scene, d);
-  if (look === 'manga') return manga(scene, d);
-  return depth(scene, d);
+  const layout = look === 'aero' ? aero(scene, d) : look === 'manga' ? manga(scene, d) : depth(scene, d);
+  sprites(scene, look, d);
+  return layout;
+}
+
+/** The hero (lead Pokémon, back view) and the finale boss, where each look has room. Presentation only. */
+function sprites(scene: Phaser.Scene, look: ExpeditionLook, d: ExpeditionLookData): void {
+  const at = look === 'aero' ? { hx: 56, hy: 310, bx: W - 56, by: 76 } : look === 'manga' ? { hx: 60, hy: 300, bx: W - 60, by: 300 } : { hx: 660, hy: 460, bx: 880, by: 460 };
+  if (d.hero) pokemonVisual(scene, d.hero, 'back', at.hx, at.hy, 1.6, false);
+  if (d.boss) {
+    const v = pokemonVisual(scene, d.boss, 'front', at.bx, at.by, 1.6, false) as unknown as { setTintFill?: (c: number) => void };
+    if (layerNow(d.exp) < layerCount(d.exp)) v.setTintFill?.(look === 'depth' ? 0x4ae0ff : 0x000000);
+  }
 }
 
 function route(scene: Phaser.Scene, exp: ExpeditionState, box: { x0: number; x1: number; yc: number; dy: number }, draw: (g: Phaser.GameObjects.Graphics, x: number, y: number, state: 'done' | 'lit' | 'far', color: number) => void): void {

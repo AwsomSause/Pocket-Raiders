@@ -1085,6 +1085,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('lastStand') }),
   /** Evolves a Pokémon that has an evolution using this item (stones, Linking Cord, Soothe Bell, ...). */
   z.object({ kind: z.literal('evolve') }),
+  /** Tuning Dust sold in shops: nudges a Pokémon's nature so this stat is raised (used up). */
+  z.object({ kind: z.literal('natureNudge'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']) }),
   /** Raises a run attribute as soon as it's bought (shop attribute items; never goes in the Bag). */
   z.object({ kind: z.literal('attribute'), attribute: AttributeKeySchema, amount: z.number().int() }),
   /** A key item that unlocks a battle transformation (Mega Ring, ...). Kept for the whole run, never used up. */
@@ -1109,7 +1111,7 @@ export const ItemSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   description: z.string(),
-  category: z.enum(['ball', 'healing', 'revive', 'pp', 'charm', 'evolution', 'attribute', 'key', 'transformation']),
+  category: z.enum(['ball', 'healing', 'revive', 'pp', 'charm', 'evolution', 'attribute', 'key', 'transformation', 'nature']),
   iconAssetId: z.string(),
   usableInBattle: z.boolean(),
   usableOutside: z.boolean(),
@@ -1942,6 +1944,10 @@ export const BalanceSchema = z.object({
   w1: W1ConfigSchema,
   /** The shop puts one item on sale: it changes every this many stages, and takes this share off the price. */
   shopSale: z.object({ everyStages: z.number().int().positive(), discount: z.number().min(0).max(1) }).default({ everyStages: 3, discount: 0.2 }),
+  /** Dynamic Prices (S67): each stage every item's price swings by up to ±range; buying the same item again adds `repeat` per copy (up to repeatCap) until the next stage. */
+  priceSwing: z.object({ range: z.number().min(0).max(0.5), repeat: z.number().min(0).max(0.5), repeatCap: z.number().min(0).max(1) }).default({ range: 0.1, repeat: 0.05, repeatCap: 0.25 }),
+  /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
+  wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */
   shopTypes: z
     .object({

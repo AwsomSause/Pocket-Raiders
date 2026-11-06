@@ -122,6 +122,15 @@ describe('catalog effects', () => {
     }
   });
 
+  it('evolved Hisuian fossils revive the fully evolved forms', () => {
+    const want: Record<string, string> = { 'hisui-inferno-fossil': 'arcanine-hisui', 'hisui-thunder-fossil': 'electrode-hisui', 'hisui-ghostfire-fossil': 'typhlosion-hisui', 'hisui-blade-fossil': 'samurott-hisui', 'hisui-quill-fossil': 'decidueye-hisui', 'hisui-phantom-fossil': 'zoroark-hisui', 'hisui-slime-fossil': 'goodra-hisui', 'hisui-bloom-fossil': 'lilligant-hisui', 'hisui-crest-fossil': 'braviary-hisui', 'hisui-glacier-fossil': 'avalugg-hisui' };
+    for (const [id, species] of Object.entries(want)) {
+      const decision = pick(offering(newRun(), id), id).run.pending[0]!;
+      expect(decision.kind).toBe('caught');
+      if (decision.kind === 'caught') expect(decision.mon.speciesId).toBe(species);
+    }
+  });
+
   it('Max Revive can only go to a fainted Pokémon', () => {
     const run = newRun();
     const reward = content.rewards.get(catalogRewardId('max-revive'))!;

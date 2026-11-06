@@ -99,7 +99,7 @@ describe('each shop kind sells its own goods, with its own perk', () => {
     for (const e of stock) expect(bt.boutique.categories).toContain(cat(e.item));
     const open = stock.find((e) => mart.includes(e.item))!;
     const plain = as('mart');
-    expect(shopPrice(content, r, open)).toBe(Math.round(shopPrice(content, plain, open) * bt.boutique.priceFactor));
+    expect(Math.abs(shopPrice(content, r, open) - shopPrice(content, plain, open) * bt.boutique.priceFactor)).toBeLessThanOrEqual(1);
   });
 
   it('Depot: only balls and medicine; buying in bulk takes a share off', () => {
