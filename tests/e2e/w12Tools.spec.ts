@@ -18,7 +18,7 @@ test('Tools room pages open and close; offline files are served', async ({ page,
   await page.waitForTimeout(400);
 
   // The list also holds the bracket (a text prompt) and the save check (a file picker): those two have no page to open.
-  for (const item of [0, 1, 2, 3, 4, 7, 8]) {
+  for (const item of [0, 1, 2, 3, 4, 7, 8, 13]) {
     await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
     await page.waitForTimeout(250);
     expect(await hub(page, '!!hub.picker'), 'tools list open').toBe(true);
@@ -36,6 +36,33 @@ test('Tools room pages open and close; offline files are served', async ({ page,
 
   for (const file of ['manifest.webmanifest', 'sw.js', 'icons/icon-192.png']) {
     expect((await request.get(`${baseURL}/${file}`)).ok(), file).toBe(true);
+  }
+  expect(errors).toEqual([]);
+});
+
+test('Developer tools appear only when the flag is on, and their pages open', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.addInitScript(() => localStorage.setItem('pkr.flags', JSON.stringify({ devTools: true })));
+  await page.goto('/?debug=1');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub'));
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Hub');
+  await page.waitForTimeout(400);
+  // 14 balance dashboard, 17 asset sources (13 is the flags page, 15 and 16 need files).
+  for (const item of [14, 17]) {
+    await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
+    await page.waitForTimeout(250);
+    for (let i = 0; i < item; i++) await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);
+    expect(await hub(page, '!!hub.picker'), `dev page ${item} open`).toBe(true);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(200);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(150);
   }
   expect(errors).toEqual([]);
 });

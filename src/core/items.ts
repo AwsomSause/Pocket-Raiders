@@ -4,6 +4,7 @@
 import type { Content, Item, TypeName } from './contentSchema';
 import { blocksEvolution } from './battle/held';
 import { evolve, itemEvolutionTargets } from './evolution';
+import { natureName, nudgeNature } from './natures';
 import { getSpecies, maxHp, maxPp } from './pokemon';
 import type { PokemonInstance } from './state';
 
@@ -52,6 +53,9 @@ export function itemUseProblem(content: Content, item: Item, mon: PokemonInstanc
       if (fainted) return `${name} has fainted.`;
       if (blocksEvolution(content, mon)) return `${name} is holding an Everstone.`;
       return itemEvolutionTargets(content, mon, item.id, regionId).length > 0 ? null : `It won't have any effect on ${name}.`;
+    case 'natureNudge':
+      if (fainted) return `${name} has fainted.`;
+      return nudgeNature(mon.nature, item.effect.stat) === (mon.nature ?? 'hardy') ? `${name} is already tuned that way.` : null;
     case 'catch':
     case 'lastStand':
     case 'attribute':
@@ -115,6 +119,9 @@ export function applyItemToPokemon(content: Content, item: Item, mon: PokemonIns
       const skipped = result.wantsToLearn.length > 0 ? ` (It already knows four moves, so it didn't learn ${result.wantsToLearn.map((m) => content.moves.get(m)!.name).join(', ')}.)` : '';
       return `${name} evolved into ${newName}!${learned}${skipped}`;
     }
+    case 'natureNudge':
+      mon.nature = nudgeNature(mon.nature, item.effect.stat);
+      return `${name}'s nature shifted: ${natureName(mon.nature)}!`;
     case 'teraShard':
       mon.teraType = item.effect.type;
       return `${name}'s Tera Type is now ${typeLabel(item.effect.type)}!`;

@@ -5536,21 +5536,21 @@ export function w1DoublesStart(ctx: BattleContext, players: Combatant[], foes: C
 }
 
 /** The move an AI-controlled player-side Pokémon would pick (club exhibitions run both sides on the AI). */
-export function exhibitionMove(ctx: Pick<BattleContext, 'content' | 'battle' | 'party'>): number {
+export function exhibitionMove(ctx: Pick<BattleContext, 'content' | 'battle' | 'party'>, allow?: (moveId: string) => boolean): number {
   const { battle, content } = ctx;
   const me = ctx.party[battle.activeIndex]!;
   const brain = { content, ai: 0.7, target: currentEnemy(battle), stages: battle.playerStages, battle, party: battle.enemyTeam };
   let best = -1;
   let bestValue = -Infinity;
   me.moves.forEach((m, i) => {
-    if (m.pp <= 0) return;
+    if (m.pp <= 0 || (allow && !allow(m.id))) return;
     const v = moveValue(brain, me, m.id);
     if (v > bestValue) {
       best = i;
       bestValue = v;
     }
   });
-  return best;
+  return best < 0 && allow ? exhibitionMove(ctx) : best;
 }
 
 /** Start of a turn: a Rally is set. */

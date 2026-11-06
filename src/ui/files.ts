@@ -9,10 +9,10 @@ export function downloadText(filename: string, text: string): void {
   URL.revokeObjectURL(url);
 }
 
-export function pickTextFile(onText: (text: string) => void): void {
+export function pickTextFile(onText: (text: string) => void, accept = '.json,application/json'): void {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = '.json,application/json';
+  input.accept = accept;
   input.onchange = () => {
     const file = input.files?.[0];
     if (file) void file.text().then(onText);

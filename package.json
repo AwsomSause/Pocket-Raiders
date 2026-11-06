@@ -41,6 +41,7 @@
     "report:dashboard": "node tools/report-content.ts --write --html",
     "report:check": "node tools/report-content.ts --check",
     "report:balance": "node tools/report-balance.ts",
+    "fuzz:battle": "node tools/fuzz-battles.ts",
     "report:assets": "node tools/report-assets.ts",
     "report:economy": "node tools/report-economy.ts",
     "report:anims": "node tools/report-anims.ts",
