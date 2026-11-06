@@ -4,6 +4,7 @@
 import type Phaser from 'phaser';
 import { benchList, bagBerryChoices, campOf, campProblem, CAMP, comboList, cursedRelics, gadgetUses, getAction, hasGadget, marketLeft, marketSlots, mysteryOdds, shelfMoves, shelfTypes, slotChoices, usedHere, type CampArgs } from '../core/camp';
 import { campers, campProblem as boxCampProblem, CAMP_RULES } from '../core/trainingCamp';
+import { mentorLessons } from '../core/mentorLesson';
 import { promptById } from '../core/interaction/prompt';
 import { services } from '../game/services';
 import { Picker, type PickerRow } from './partyPanel';
@@ -19,6 +20,7 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:cookbook': { name: 'Cookbook', desc: 'Every recipe you know, and the ones still hidden.', group: 'kitchen' },
   'view:album': { name: 'Photo Album', desc: 'Species you have photographed (kept across runs).', group: 'gadgets' },
   'view:journal': { name: 'Item Journal', desc: 'The first time you used each item.', group: 'workshop' },
+  'view:mentor': { name: 'Mentor lesson', desc: 'A more evolved teammate teaches a younger one a move (once each).', group: 'camp' },
   'view:xp': { name: 'Experience share', desc: 'Choose how experience is split: Even, Focus on the lead, or Catch-up.', group: 'camp' },
   'view:training': { name: 'Training camp', desc: 'Send up to two Box Pokémon to train: they gain experience after every win.', group: 'camp' },
   'view:stuff': { name: 'Camp Pack', desc: 'Oil, keys, bottles, scraps, pages, tokens, luck and relics.', group: 'camp' },
@@ -129,6 +131,12 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
   }
   if (id === 'view:album') { const album = session.profile.camp?.album ?? []; return choose(host, `Photo Album (${album.length})`, album.map((s) => ({ label: content.species.get(s)?.name ?? s })), again, again); }
   if (id === 'view:journal') { const j = session.profile.camp?.journal ?? []; return choose(host, `Item Journal (${j.length})`, j.map((s) => ({ label: content.items.get(s)?.name ?? content.catalog.get(s)?.name ?? s })), again, again); }
+  if (id === 'view:mentor') {
+    const lessons = mentorLessons(content, run).slice(0, 24);
+    if (lessons.length === 0) return back('No lesson on offer: you need a more evolved, higher-level teammate that knows a move a younger one can learn.');
+    const nm = (uid: string) => content.species.get(run.party.find((m) => m.uid === uid)?.speciesId ?? '')?.name ?? uid;
+    return choose(host, 'Mentor lesson', lessons.map((l) => ({ label: `${nm(l.mentor)} teaches ${nm(l.student)}`, desc: content.moves.get(l.moveId)?.name ?? l.moveId })), (i) => back(session.mentorLesson(lessons[i]!)), again);
+  }
   if (id === 'view:training') {
     const crew = campers(run).map((m) => m.uid);
     const box = run.box;

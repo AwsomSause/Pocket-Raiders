@@ -239,3 +239,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
 - endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
 - `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.
+- `growth-mentor.md`: Growth slice 6: Pokémon Mentor lessons in the Camp menu (S48).
