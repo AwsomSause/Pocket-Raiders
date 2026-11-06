@@ -3,7 +3,7 @@
 
 import { z } from 'zod';
 import json from '../../data/camp.json';
-import { ArchetypeModifierSchema } from '../contentSchema';
+import { ArchetypeModifierSchema, TypeNameSchema } from '../contentSchema';
 
 const Cost = z.record(z.string(), z.number().int().min(0));
 const Range = z.tuple([z.number().int(), z.number().int()]);
@@ -35,6 +35,7 @@ export const CampDataSchema = z.object({
   })).min(1),
   combos: z.array(z.object({ id: z.string(), name: z.string(), a: z.string(), b: z.string(), gives: Gives, locked: z.boolean().optional() })).min(1),
   pot: z.object({ battles: z.number().int().positive(), perBerry: z.number(), maxBerries: z.number().int().positive(), mood: z.number().int(), meals: z.record(z.string(), z.object({ name: z.string(), effect: ArchetypeModifierSchema })), note: z.string() }),
+  sandwich: z.object({ berries: z.number().int().positive(), battles: z.number().int().positive(), value: z.number().positive(), perSame: z.number().min(0), heal: z.number().min(0).max(1), mood: z.number().int(), types: z.record(z.string(), z.tuple([TypeNameSchema, TypeNameSchema])), names: z.record(z.string(), z.string()), note: z.string() }),
   radio: z.object({ battles: z.number().int().positive(), news: z.object({ effects: Effects }), rock: z.object({ effects: Effects }), lullaby: z.object({ effects: Effects }), quiz: z.object({ effects: Effects }) }),
   flute: z.record(z.string(), z.object({ effects: Effects, battles: z.number().int().positive() })),
   tent: z.object({ heal: z.record(z.string(), z.number()), mood: z.record(z.string(), z.number().int()), fatigue: z.record(z.string(), z.number().int()) }),

@@ -199,12 +199,15 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
     case 'berries': {
       const berries = bagBerryChoices(content, run);
       const picked: string[] = [];
+      const isSandwich = id === 'sandwich';
+      const cap = isSandwich ? CAMP.sandwich.berries : CAMP.pot.maxBerries;
+      const verb = isSandwich ? 'Make a sandwich' : 'Cook';
       const step = (): void => {
-        const rows: Choice[] = [...(picked.length > 0 ? [{ label: `Cook ${picked.length} berr${picked.length === 1 ? 'y' : 'ies'} now`, desc: picked.map((p) => content.catalog.get(p)?.name ?? p).join(', ') }] : []), ...berries.map((b) => ({ label: b.name, desc: `${b.flavor} · ×${b.count - picked.filter((p) => p === b.id).length}`, problem: b.count - picked.filter((p) => p === b.id).length <= 0 ? 'None left.' : null }))];
-        choose(host, `Cooking Pot (${picked.length}/${CAMP.pot.maxBerries})`, rows, (i) => {
+        const rows: Choice[] = [...(picked.length > 0 ? [{ label: `${verb} with ${picked.length} berr${picked.length === 1 ? 'y' : 'ies'} now`, desc: picked.map((p) => content.catalog.get(p)?.name ?? p).join(', ') }] : []), ...berries.map((b) => ({ label: b.name, desc: `${b.flavor} · ×${b.count - picked.filter((p) => p === b.id).length}`, problem: b.count - picked.filter((p) => p === b.id).length <= 0 ? 'None left.' : null }))];
+        choose(host, `${isSandwich ? 'Picnic Sandwich' : 'Cooking Pot'} (${picked.length}/${cap})`, rows, (i) => {
           if (picked.length > 0 && i === 0) return call(host, id, { items: picked }, back);
           picked.push(berries[picked.length > 0 ? i - 1 : i]!.id);
-          if (picked.length >= CAMP.pot.maxBerries) return call(host, id, { items: picked }, back);
+          if (picked.length >= cap) return call(host, id, { items: picked }, back);
           step();
         }, again);
       };

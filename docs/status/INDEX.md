@@ -265,3 +265,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `scent-trails.md`: Scent Trails S220 (`core/scentTrail.ts`, Workshop).
 - `run-events-b-batch7.md`: Run events B batch 7: Fan Club Tournament (KO crowd boost) and Beginner's Luck (foe crits, you heal a little).
 - `balance-test-scales.md`: minigame balance test split into one test per game.
+- `picnic-sandwiches.md`: Picnic sandwiches, berry lure + heal at camp (S500).

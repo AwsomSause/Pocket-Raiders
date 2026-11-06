@@ -181,6 +181,30 @@ describe('kitchen and workshop', () => {
     expect(act(out.run, 'pot', { items: [b] }).message).toMatch(/Already done/);
     expect(act(run, 'pot', { items: [] }).ok).toBe(false);
   });
+  it('a picnic sandwich heals the team and lures two types for a few wild encounters', () => {
+    const run = setup();
+    const b = berry();
+    run.looseHeld = { [b]: 3 };
+    run.party[0]!.hp = 1;
+    const out = act(run, 'sandwich', { items: [b, b] });
+    expect(out.ok).toBe(true);
+    expect(out.run.looseHeld![b]).toBe(1);
+    expect(out.run.party[0]!.hp).toBeGreaterThan(1);
+    const lure = out.run.tempEffects.at(-1)!;
+    expect(lure.until).toBe('wild');
+    expect(lure.battles).toBe(CAMP.sandwich.battles);
+    expect(lure.effects.map((m) => m.kind)).toEqual(['typeEncounterWeight', 'typeEncounterWeight']);
+    // two berries of one flavour make a stronger lure than the base value
+    expect((lure.effects[0] as { value: number }).value).toBe(CAMP.sandwich.value + CAMP.sandwich.perSame);
+    expect(act(out.run, 'sandwich', { items: [b, b] }).message).toMatch(/Already done/);
+  });
+  it('a sandwich needs exactly two berries', () => {
+    const run = setup();
+    const b = berry();
+    run.looseHeld = { [b]: 3 };
+    expect(act(run, 'sandwich', { items: [b] }).ok).toBe(false);
+    expect(act(run, 'sandwich', { items: [b, b, b] }).ok).toBe(false);
+  });
   it('mixing potions succeeds only at the right ratio and a bad mix wastes one harmlessly', () => {
     const run = setup();
     run.inventory.potion = 4;
