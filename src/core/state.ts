@@ -73,6 +73,8 @@ export const PokemonInstanceSchema = z.object({
   caughtBall: z.string().optional(),
   /** Overhaul growth path (core/overhaul/growth.ts); set once, optional so older saves load as they are. */
   growthPath: z.string().optional(),
+  /** Dojo Student: the Fighting move it used most when it earned the path (+3% accuracy with it). */
+  growthMove: z.string().optional(),
   /** How much it likes you (0–255, see core/friendship.ts). */
   friendship: z.number().int().min(0).max(255),
   /**

@@ -79,3 +79,10 @@ Counters in `story/hooks.ts`, effects in `engine.ts`/`held.ts`. Each needs the s
 - Berry Friend (4 Berries eaten that did something): held healing Berries restore 5% more. Vanguard (4 switch-ins that took a hit from the foe's move the same turn): +5% Defense and Sp. Def on the turn it switches in.
 - Lucky (3 critical hits from moves with no crit boost): +1% crit chance. Scale Guard (Dragon, 8 resisted hits taken): takes 3% less from Dragon, Ice and Fairy moves.
 Left off on purpose: Fossil Memory (Rock types are immune to sandstorm, so its edge would do nothing). Still unplayed (12): Scout, Pivot, Tidy, Thorn Warden, Dojo Student, Burrower (no charge-interrupt mechanic), Shield Sibling, Closer (same as Loner), Free Spirit, Cheerleader, Fast Learner, Fossil Memory. Tests: `tests/unit/growthAllyPaths.test.ts`.
+
+## Batch 9: move-history paths (2 more, 96 of 106 play)
+Read from the per-move use counts each Pokémon's story history already keeps (`history.moves`), so no new counters:
+- Fast Learner (2 or more moves used 10+ times this run, single top in the party): at the end of the run its moves' uses count 5% extra (`masteryCredit` in `moveMastery.ts`, rounded up), which is the same as needing 5% fewer uses for Move Mastery ranks.
+- Dojo Student (Fighting type, 15+ uses of one Fighting move, single top): +3% accuracy with that move. The move is remembered on the Pokémon as `growthMove` (optional field, no save bump).
+Fast Learner is checked before Dojo Student.
+Still unplayed (10) and why: Closer (same rule as Loner), Fossil Memory (Rock is immune to sandstorm, the edge would do nothing), Burrower (no charge-interrupt chance in the engine), Free Spirit (no "wander off" node mechanic), Cheerleader (no team morale), Shield Sibling (pair bonds are not visible to the battle), Scout, Pivot, Tidy and Thorn Warden (no counter for first strikes against unseen foes, pivot switch-ins, hazards avoided or contact punishments yet). Tests: `tests/unit/growthMoveHistory.test.ts`.

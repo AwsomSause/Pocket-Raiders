@@ -3351,7 +3351,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
-      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
+      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, growthMove: user.mon.growthMove, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
