@@ -210,6 +210,7 @@ export class GameSession {
 
   private persistRun(): void {
     this.checkLiveAchievements();
+    if (this.run) Run.capMoney(this.content, this.run);
     if (this.run) this.checkSave(this.run.timeline ? this.saves.saveReplay(this.run) : this.saves.saveRun(this.run));
     this.changed();
   }
