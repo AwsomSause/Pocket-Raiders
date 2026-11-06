@@ -77,7 +77,7 @@ import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from '
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
-import { effectiveMax, passivePercent } from './catalog';
+import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -859,7 +859,7 @@ export function mapChoices(content: Content, run: RunState): MapNode[] {
   return plain;
 }
 
-export type MapActionKind = 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt';
+export type MapActionKind = 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt' | 'tmDeck';
 
 export interface MapAction {
   kind: MapActionKind;
@@ -870,6 +870,19 @@ export interface MapAction {
   problem: string | null;
   /** A bike chosen for the next move. */
   on: boolean;
+}
+
+function deckRng(run: RunState): Rng {
+  return new Rng(hashSeed(`${run.seed}::tm-deck::${stageKey(run)}::${run.stage?.visited.length ?? 0}`));
+}
+
+/** The TM Deck's offer: up to 3 (+TM Case) new moves of the lead's own types, picked from the map's own hash. */
+function deckMoves(content: Content, run: RunState, rng: Rng): string[] {
+  const lead = run.party[0];
+  if (!lead) return [];
+  const extra = perksOf(activePerks(content, run), 'tmChoices').reduce((sum, p) => sum + p.perk.extra, 0);
+  const pool = [...new Set(getSpecies(content, lead.speciesId).types.flatMap((t) => teachableMoves(content, lead, t)))].sort();
+  return rng.shuffle(pool).slice(0, TM_CHOICES + extra);
 }
 
 /** Where an Escape Rope leads: the index in `visited` of the last node with a choice of paths (-1 = the start), or null. */
@@ -962,6 +975,12 @@ export function mapActions(content: Content, run: RunState): MapAction[] {
     { kind: 'sprayduck', text: 'Cool a Pokémon down: +1 toward Peace', problem: null },
     { kind: 'squirt', text: 'Your lead gains +5% EXP in the next battle', problem: (run.itemCounters?.['squirt-exp'] ?? 0) > 0 ? 'Already sprayed for the next battle.' : null },
   ];
+  const deck = perkItem(content, run, 'tmDeck');
+  if (deck) {
+    const lead = run.party[0];
+    const used = usedThisStage(run, deck) ? 'Already used on this stage.' : null;
+    out.push({ kind: 'tmDeck', itemId: deck, text: 'Your lead picks a TM move of its own types (once per stage)', problem: league ?? used ?? (lead && deckMoves(content, run, deckRng(run)).length > 0 ? null : 'Your lead has no new TM moves to learn.'), on: false });
+  }
   for (const c of care) {
     const itemId = perkItem(content, run, c.kind === 'squirt' ? 'squirt' : c.kind);
     if (!itemId) continue;
@@ -1002,6 +1021,14 @@ export function useMapAction(content: Content, current: RunState, kind: MapActio
       const share = perksOf(activePerks(content, run), 'transceiver')[0]?.perk.heal ?? 0.25;
       for (const mon of run.party) if (mon.hp > 0) mon.hp = Math.min(maxHp(content, mon), mon.hp + Math.ceil(maxHp(content, mon) * share));
       return { run, message: `You called home with the ${name}: your team healed a little.` };
+    }
+    case 'tmDeck': {
+      markUsedThisStage(run, action.itemId);
+      const moveIds = deckMoves(content, run, deckRng(run));
+      run.pending.push({ kind: 'teachMove', uid: run.party[0]!.uid, itemName: name, moveIds });
+      run.afterDecisions = 'map';
+      continueAfterDecisions(content, run);
+      return { run, message: `You shuffled the ${name}: pick a move for your lead.` };
     }
     case 'pail':
     case 'sprayduck':
