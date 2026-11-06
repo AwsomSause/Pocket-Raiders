@@ -287,6 +287,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-rarity.md`: Overhaul slice 10, 8-tier rarity config + wild/egg weights; no save change.
 - `drive-items.md`: 146 Google Drive item pictures added as working items (held, charms, Roto Powers, food, fossils…).
 - `overhaul-boss-strategies.md`: Overhaul slice 17: named strategies for Gym, Elite Four and Champion bosses (opener, ace item, sharper AI).
+- `overhaul-legendary.md`: Overhaul slice 12, Legendary/Mythical roles, rare-chain and boss-phase checks; no save change.
 - `overhaul-environments.md`: Overhaul slice 20: seeded battle environments (±10% type power) and rare battlefield conditions, total capped at ±30%.
 - zmove-reference-look.md: full reference Z-Move scene; Fast Z-Move setting (settings v35)
 - `ci-green-p0.md`: 11 failing browser tests fixed (skip guard off in automated browsers; tests read prices, dates and texts from the game).

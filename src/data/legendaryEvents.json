@@ -8422,7 +8422,7 @@
     },
     "music": null,
     "trigger": {
-     "minRegion": 1,
+     "minRegion": 2,
      "maxRegion": null,
      "time": [],
      "themeTypes": [],
