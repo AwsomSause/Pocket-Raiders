@@ -2108,6 +2108,11 @@ export const BalanceSchema = z.object({
     loafBelow: z.number().min(0),
     /** The loaf chance at friendship 0; it falls to 0 at loafBelow. */
     loafChance: z.number().min(0).max(1),
+    /** Follow mode (S501): the lead Pokémon walks beside you; each stop it gains this much friendship. */
+    perStep: z.number().min(0),
+    /** Chance per stop that the follower digs something up; it picks from followFinds. */
+    findChance: z.number().min(0).max(1),
+    followFinds: z.array(z.string()).min(1),
   }),
   /**
    * Enemy levels climb through each region from its start level to just under its level cap:

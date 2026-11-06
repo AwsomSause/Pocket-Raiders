@@ -374,6 +374,14 @@
       "args": "none"
     },
     {
+      "id": "follow",
+      "group": "camp",
+      "name": "Follow Mode",
+      "desc": "Switch your lead Pokémon walking beside you on or off. It grows fonder each stop and sometimes digs something up.",
+      "limit": "none",
+      "args": "none"
+    },
+    {
       "id": "pot",
       "group": "kitchen",
       "name": "Cooking Pot",

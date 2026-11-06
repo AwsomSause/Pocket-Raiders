@@ -74,7 +74,10 @@
   "perVitamin": 5,
   "perFaint": -1,
   "loafBelow": 40,
-  "loafChance": 0.3
+  "loafChance": 0.3,
+  "perStep": 1,
+  "findChance": 0.1,
+  "followFinds": ["potion", "poke-ball", "super-potion"]
  },
  "money": {
   "startingMoney": 0,

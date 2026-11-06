@@ -266,5 +266,6 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `run-events-b-batch7.md`: Run events B batch 7: Fan Club Tournament (KO crowd boost) and Beginner's Luck (foe crits, you heal a little).
 - `balance-test-scales.md`: minigame balance test split into one test per game.
 - `picnic-sandwiches.md`: Picnic sandwiches, berry lure + heal at camp (S500).
+- `follow-mode.md`: Follow Mode camp toggle, lead gains friendship and finds items (S501).
 - `run-events-b-batch8.md`: Run events B batch 8: Blindfold Bout (hidden foe) and Magician's Misdirection (decoy foe name).
 - `mining-spots.md`: Mining Spots S231 (`core/mining.ts`, new map stop).
