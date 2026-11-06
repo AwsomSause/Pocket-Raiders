@@ -87,6 +87,7 @@ import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './cata
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
 import { recordAftermath } from './overhaul/aftermath';
+import { assignGrowthPaths } from './overhaul/growth';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -2057,7 +2058,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     healParty(content, run);
     careRest(run, content);
     partyLifeCamp(run);
-    const comboLine = partyLifeCombos(content, run);
+    const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
     count(run, 'healStopsUsed');
     // A Blissful Pokémon's aura calms the Shadow Pokémon resting beside it.

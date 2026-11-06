@@ -66,6 +66,8 @@ export const PokemonInstanceSchema = z.object({
   /** Vitamin stacks per stat; each stack multiplies that stat. */
   vitamins: z.record(StatNameSchema, z.number().int().min(0)),
   shiny: z.boolean(),
+  /** Overhaul growth path (core/overhaul/growth.ts); set once, optional so older saves load as they are. */
+  growthPath: z.string().optional(),
   /** How much it likes you (0–255, see core/friendship.ts). */
   friendship: z.number().int().min(0).max(255),
   /**
