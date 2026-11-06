@@ -87,6 +87,7 @@ import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './cata
 import { rollField } from './overhaul/field';
 import { quirkReaction } from './overhaul/personality';
 import { partyNarration } from './overhaul/partyNarration';
+import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
@@ -771,6 +772,12 @@ export function chooseNodeWithNotes(content: Content, current: RunState, nodeId:
   return out;
 }
 
+const fnvNarr = (text: string): number => {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
+  return h >>> 0;
+};
+
 function moveToNode(content: Content, current: RunState, nodeId: string, onCross: (words: string) => void): RunState {
   assertPhase(current, 'map');
   const choices = mapChoices(content, current);
@@ -797,6 +804,15 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   convoyStep(content, run, node);
   recordRouteChosen(content, run, nodeId, node.harder, node.kind);
   bumpEventCounters(runPerks(content, run), run, 'nodeEnter');
+  // The pack's party narration for the place and hour (a boss ahead, night, a bright day): one quiet line on about a third of stops.
+  const nodeKey = `${run.runId}:${run.regionIndex}:${stage.index}:${nodeId}`;
+  if (fnvNarr(nodeKey) % 3 === 0) {
+    const tod = timeOfDay(run.seed, stage.index);
+    const when = node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? 'boss_intro' : tod === 'night' ? 'night' : tod === 'day' ? 'sunny' : null;
+    const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
+    const line = when ? partyNarration(run.party, when, nodeKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []) : null;
+    if (line) onCross(line);
+  }
   // An obstacle on the node (ideas W4): a fitting Pokémon crosses it, or the party goes the long way round.
   const crossed = crossObstacle(content, run, node);
   // Earthquake tremors (a live-event rule) shift the stops ahead.
