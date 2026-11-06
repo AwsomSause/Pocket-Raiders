@@ -792,6 +792,8 @@ export const BattleStateSchema = z.object({
   enraged: z.object({ uid: z.string(), left: z.number().int().min(0), priority: z.number().int() }).optional(),
   /** §10 a rival's counter move: its Pokémon `uid` uses `moveId` whenever `target` is in front of it. */
   rivalCounter: z.object({ uid: z.string(), target: z.string(), moveId: z.string() }).optional(),
+  /** Overhaul slice 20: this battle's environment and battlefield condition (core/overhaul/field.ts). Optional: older saves load without it. */
+  overhaulField: z.object({ env: z.string().nullable(), condition: z.object({ id: z.string(), turns: z.number().int().min(0) }).nullable() }).optional(),
 });
 export type BattleState = z.infer<typeof BattleStateSchema>;
 

@@ -287,3 +287,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-rarity.md`: Overhaul slice 10, 8-tier rarity config + wild/egg weights; no save change.
 - `drive-items.md`: 146 Google Drive item pictures added as working items (held, charms, Roto Powers, food, fossils…).
 - `overhaul-boss-strategies.md`: Overhaul slice 17: named strategies for Gym, Elite Four and Champion bosses (opener, ace item, sharper AI).
+- `overhaul-environments.md`: Overhaul slice 20: seeded battle environments (±10% type power) and rare battlefield conditions, total capped at ±30%.

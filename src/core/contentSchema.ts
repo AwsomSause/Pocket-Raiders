@@ -2333,6 +2333,8 @@ export const BalanceSchema = z.object({
   /** Boss teams past level 100 (core/bossBands.ts), chosen by the team's top level. */
   /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
   /** Beta 4.4: a Hyper/Overdrive moment unlocks a move in an extra slot for the battle: this much more power, this many PP. */
+  /** Overhaul slice 20: battle environments and conditions (core/overhaul/field.ts). */
+  overhaulField: z.object({ powerCap: z.number().min(0).max(1), envChance: z.number().min(0).max(1), conditionChance: z.object({ mid: z.number().min(0).max(1), late: z.number().min(0).max(1), boss: z.number().min(0).max(1) }) }).default({ powerCap: 0.3, envChance: 0.6, conditionChance: { mid: 0.15, late: 0.25, boss: 0.35 } }),
   hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
   /** Beta 4.4: the next stage is built from what the player did on the last (core/stagePlan.ts). Thresholds per stage. */
   stagePlan: z.object({ catcher: z.number().int().min(1), fighter: z.number().int().min(1), explorer: z.number().int().min(1), shopper: z.number().int().min(1), heals: z.number().int().min(1), wipes: z.number().int().min(1), themeBonus: z.number().min(0), maxSignals: z.number().int().min(0) }).default({ catcher: 2, fighter: 5, explorer: 2, shopper: 3000, heals: 2, wipes: 1, themeBonus: 3, maxSignals: 2 }),
