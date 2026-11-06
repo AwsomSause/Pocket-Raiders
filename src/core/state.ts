@@ -1731,6 +1731,14 @@ export const SettingsSchema = z.object({
   victoryPoses: z.boolean().default(false),
   /** S254 Trainer portrait expressions: a portrait of the foe trainer reacts to the fight (off by default). */
   trainerExpressions: z.boolean().default(false),
+  /** S240 Dynamic battle camera: pans and zooms toward big moments (off by default). */
+  battleCamera: z.enum(['off', 'subtle', 'cinematic']).default('off'),
+  /** S242 Parallax map layers: the map's layers slide at different speeds with the pointer (off by default). */
+  mapParallax: z.boolean().default(false),
+  /** S253 Move animation packs: which animation set moves play (mixed = today's look). */
+  moveAnimPack: z.enum(['mixed', 'pokerogue', 'essentials']).default('mixed'),
+  /** S256 Sticker reactions: a row of emote stickers in battle (off by default). */
+  stickers: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 

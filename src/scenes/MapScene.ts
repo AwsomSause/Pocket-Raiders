@@ -62,6 +62,7 @@ import { fitBlock, fitLine } from '../ui/fitText';
 import { AERO, drawGlass, floatIdle, glassPanel as drawPanel, typeLabel, type MotionLevel } from '../ui/aero';
 import { uiTiming } from '../ui/wiiMotion';
 import { addAmbience } from '../ui/battleFx/ambience';
+import { PARALLAX_RANGE, parallaxOffset, pointerShare, type ParallaxLayer } from '../core/presentation/parallax';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
@@ -265,10 +266,12 @@ export class MapScene extends Phaser.Scene {
     // ---------- backdrop: the stage's own arena, dimmed ----------
     const arena = league ? undefined : arenaFor(content, theme);
     const bg = arena && this.textures.exists(arena) ? arena : this.textures.exists('bg.battle') ? 'bg.battle' : null;
+    let backImg: Phaser.GameObjects.Image | undefined;
     if (bg) {
       const back = this.add.image(0, 0, bg).setOrigin(0).setScale(PIXEL_SCALE).setDepth(-60);
+      backImg = back;
       // Parallax: the scenery drifts slowly behind the map (presentation only).
-      if (this.motion === 'full' && back.displayWidth > GAME_WIDTH) {
+      if (this.motion === 'full' && back.displayWidth > GAME_WIDTH && !session.settings.mapParallax) {
         this.tweens.add({ targets: back, x: GAME_WIDTH - back.displayWidth, duration: 40_000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       }
       this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, regionDim(identity.sky), 0.58).setOrigin(0).setDepth(-55);
@@ -295,7 +298,25 @@ export class MapScene extends Phaser.Scene {
     const ground = this.add.graphics().setDepth(-49);
     for (let i = 0; i < 8; i++) {
       ground.fillStyle(0x0a0a18, 0.05 + i * 0.03);
-      ground.fillRect(0, GAME_HEIGHT - 120 + i * 15, GAME_WIDTH, 15);
+      ground.fillRect(-PARALLAX_RANGE, GAME_HEIGHT - 120 + i * 15, GAME_WIDTH + PARALLAX_RANGE * 2, 15);
+    }
+    // S242: the layers slide at different speeds with the pointer (Settings > Map parallax). Presentation only.
+    if (session.settings.mapParallax && this.motion === 'full') {
+      const layers: { obj: Phaser.GameObjects.Components.Transform; layer: ParallaxLayer; x0: number }[] = [
+        { obj: air, layer: 'air', x0: air.x },
+        { obj: ground, layer: 'ground', x0: ground.x },
+      ];
+      {
+        const back = backImg;
+        if (back && back.displayWidth > GAME_WIDTH + PARALLAX_RANGE * 2) {
+          back.x = -(back.displayWidth - GAME_WIDTH) / 2;
+          layers.push({ obj: back, layer: 'scenery', x0: back.x });
+        }
+      }
+      this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
+        const share = pointerShare(p.x, GAME_WIDTH);
+        for (const l of layers) this.tweens.add({ targets: l.obj, x: l.x0 + parallaxOffset(true, this.motion, share, l.layer), duration: 180, ease: 'Sine.easeOut' });
+      });
     }
 
     // ---------- header ----------
