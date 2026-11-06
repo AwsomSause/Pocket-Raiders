@@ -353,3 +353,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `dev-console-moments-events.md`: Dev console moment viewer and force-an-event tool (dev/?debug=1 only).
 - `moment-sprite-poses.md`: Moments with sprite poses: story moments pose the Pokémon and pop an emote bubble (`core/presentation/poses.ts`, `ui/dialogue/poseMoment.ts`).
 - `story-s13-lore-archive.md`: Story S13 part 2: Lore Archive (view model, Hub Tales & News row).
+- `story-s13-cast.md`: Story S13 part 3: Character Database (view model, Hub Tales & News row).
