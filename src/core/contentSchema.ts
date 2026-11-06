@@ -2356,6 +2356,8 @@ export const BalanceSchema = z.object({
   /** Overhaul slice 20: battle environments and conditions (core/overhaul/field.ts). */
   overhaulRivalRoles: z.object({ enabled: z.boolean(), additionalCounters: z.number().int().min(0) }).default({ enabled: true, additionalCounters: 1 }),
   overhaulGrowth: z.object({ enabled: z.boolean(), bonus: z.number().min(0).max(0.3), minKos: z.number().int().min(1), minCloseCalls: z.number().int().min(1), minRoleKos: z.number().int().min(1).default(4) }).default({ enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2, minRoleKos: 4 }),
+  /** Archived Starter Sets (Story Overhaul S.6): off hides the Starter Laboratory and the starter pool picker; data, code and saves stay. */
+  starterSets: z.object({ enabled: z.boolean() }).default({ enabled: false }),
   overhaulChains: z.object({ enabled: z.boolean(), legendaryMinStage: z.number().int().min(1) }).default({ enabled: true, legendaryMinStage: 7 }),
   overhaulField: z.object({ powerCap: z.number().min(0).max(1), envChance: z.number().min(0).max(1), conditionChance: z.object({ mid: z.number().min(0).max(1), late: z.number().min(0).max(1), boss: z.number().min(0).max(1) }) }).default({ powerCap: 0.3, envChance: 0.6, conditionChance: { mid: 0.15, late: 0.25, boss: 0.35 } }),
   hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),

@@ -325,3 +325,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `walkable-pocket-town.md`: Pocket Town is a walkable second map on the Hub Town engine (data/pocketTown.json, tools/hubtown/pocket.py); Esc is the Town directory. Panels are slice 2.
 - story-icons-p7.md: P7 pack icon wiring (107 icons, lazy catalog ids, debug gallery)
 - 2026-11-06 ui-fixes-fonts: font slimming and battle/hub layout fixes (docs/status/ui-fixes-fonts.md)
+- `story-s1a-archive-and-checks.md`: Story S1a: Starter Sets archive switch (`balance.starterSets.enabled=false`) and live-game claim checks (lost fights end the run today; no `championDefense.ts`, no Rapport meter).

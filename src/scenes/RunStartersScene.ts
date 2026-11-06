@@ -3,7 +3,8 @@
 // Same controls as the Modifiers page: tap, drag/wheel, arrows, Enter, Q/E tabs, Esc back.
 
 import Phaser from 'phaser';
-import { poolStatus, poolTypes, draftRuleAvailable, type PoolStatus } from '../core/runPrep';
+import { poolStatus, poolTypes, draftRuleAvailable, starterSetsEnabled, type PoolStatus } from '../core/runPrep';
+import { getContent } from '../data';
 import type { TypeName } from '../core/contentSchema';
 import type { RunPrep } from '../core/state';
 import { services } from '../game/services';
@@ -36,8 +37,9 @@ const LIST_X = 16;
 const LIST_Y = 140;
 const LIST_W = 440;
 const LIST_H = 330;
+/** The pool tab is the archived Starter Sets picker (balance.starterSets.enabled). */
 const TABS: { id: StartersTab; label: string }[] = [
-  { id: 'pool', label: 'Starter pool' },
+  ...(starterSetsEnabled(getContent()) ? [{ id: 'pool' as const, label: 'Starter pool' }] : []),
   { id: 'draft', label: 'Draft rule' },
   { id: 'type', label: 'Focus type' },
 ];
@@ -48,7 +50,7 @@ const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 export class RunStartersScene extends Phaser.Scene {
   private desk!: RunPrepData;
   private prep!: RunPrep;
-  private tab: StartersTab = 'pool';
+  private tab: StartersTab = 'draft';
   private index = 0;
   private scroll = 0;
   private entries: Entry[] = [];
@@ -64,7 +66,7 @@ export class RunStartersScene extends Phaser.Scene {
   create(data: RunStartersData): void {
     this.desk = data.desk;
     this.prep = data.prep;
-    this.tab = data.tab ?? 'pool';
+    this.tab = data.tab && TABS.some((t) => t.id === data.tab) ? data.tab : TABS[0]!.id;
     this.scroll = 0;
     this.entries = this.makeEntries();
     const first = this.entries.findIndex((e) => e.chosen);

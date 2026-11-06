@@ -181,6 +181,9 @@ export function tokenLockText(content: Content, token: PrepToken): string {
   return token.unlockText ? token.unlockText.charAt(0).toLowerCase() + token.unlockText.slice(1) : 'locked';
 }
 
+/** Starter Sets (the pool picker and the Starter Laboratory) are archived: off in the shipped game, kept in code, data and saves. */
+export const starterSetsEnabled = (content: Content): boolean => content.balance.starterSets.enabled;
+
 export function standardRule(content: Content): DraftRule {
   return [...content.draftRules.values()].find((r) => r.kind === 'standard' && r.license === null)!;
 }
@@ -218,7 +221,10 @@ export function resolvePrep(content: Content, profile: Profile, archetypeId: str
     prep.campaignId = base.campaignId;
   }
   const pool = content.starterPools.get(prep.poolId);
-  if (!pool || poolStatus(content, profile, pool) !== 'unlocked') {
+  if (!starterSetsEnabled(content)) {
+    // Archived: every run uses the default pool (three random first-stage starters). A saved choice is kept in the save but not used.
+    prep.poolId = base.poolId;
+  } else if (!pool || poolStatus(content, profile, pool) !== 'unlocked') {
     problems.push(`The ${pool?.name ?? prep.poolId} pool isn't unlocked; using ${content.starterPools.get(base.poolId)!.name}.`);
     prep.poolId = base.poolId;
   }
