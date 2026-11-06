@@ -1867,6 +1867,8 @@ export const TrainerAiSchema = z.object({
       disruption: z.boolean().default(false),
       /** Pain Split, Destiny Bond, Substitute, Memento/Healing Wish/Final Gambit, hazard removal at the right time. */
       specialMoves: z.boolean().default(false),
+      /** Overhaul slice 18: a boss plays its named strategy's key moves (weather, hazards, Tailwind, Trick Room, set-up) when they would do something. */
+      strategy: z.boolean().default(false),
       /** Hazards while the foe has reserves (never past the cap), screens and Tailwind when not up. */
       sideMoves: z.boolean().default(false),
       /** No set-up when the foe's next hit would KO; Roar/Haze-style moves against a boosted foe. */
@@ -1894,7 +1896,7 @@ export const TrainerAiSchema = z.object({
       /** Guess the player's switch (bad matchup for them): hazards and set-up get a free turn, attacks are also judged on the player's bench. */
       prediction: z.boolean().default(false),
     })
-    .default({ abilityReads: false, recoil: false, disruption: false, specialMoves: false, sideMoves: false, setupSafety: false, statusTiming: false, repetition: false, fieldPlay: false, itemReads: false, pivot: false, endgame: false, personality: false, illusion: false, gimmickTiming: false, gimmickMaxWait: 3, prediction: false }),
+    .default({ abilityReads: false, recoil: false, disruption: false, specialMoves: false, sideMoves: false, strategy: false, setupSafety: false, statusTiming: false, repetition: false, fieldPlay: false, itemReads: false, pivot: false, endgame: false, personality: false, illusion: false, gimmickTiming: false, gimmickMaxWait: 3, prediction: false }),
 });
 
 export const EVENT_RARITIES = ['common', 'uncommon', 'rare', 'epic'] as const;
@@ -2342,6 +2344,10 @@ export const BalanceSchema = z.object({
   hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
   /** Beta 4.4: the next stage is built from what the player did on the last (core/stagePlan.ts). Thresholds per stage. */
   stagePlan: z.object({ catcher: z.number().int().min(1), fighter: z.number().int().min(1), explorer: z.number().int().min(1), shopper: z.number().int().min(1), heals: z.number().int().min(1), wipes: z.number().int().min(1), themeBonus: z.number().min(0), maxSignals: z.number().int().min(0) }).default({ catcher: 2, fighter: 5, explorer: 2, shopper: 3000, heals: 2, wipes: 1, themeBonus: 3, maxSignals: 2 }),
+  /** Overhaul slice 18: risk labels for big battles (enemy threat against your best party, plus the AI's sharpness). */
+  battleRisk: z
+    .object({ aiWeight: z.number().min(0), thresholds: z.object({ moderate: z.number(), high: z.number(), veryHigh: z.number(), extreme: z.number() }), keyMoveFactor: z.number().min(0) })
+    .default({ aiWeight: 0.3, thresholds: { moderate: 0.8, high: 1.1, veryHigh: 1.4, extreme: 1.8 }, keyMoveFactor: 1.3 }),
   /** Overhaul slice 17: every Gym Leader, Elite Four member and Champion has a named strategy (opener, ace item, sharper AI). */
   bossStrategy: z
     .object({

@@ -1932,6 +1932,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
+    if (plan.strategy) run.battle.strategy = plan.strategy;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
     if (back) run.battle.returning = back.id;

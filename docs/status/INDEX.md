@@ -301,3 +301,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `overhaul-egg-pools.md`: Overhaul slice 14, egg pools per tier and region (see file).
 - `overhaul-trainer-templates.md`: Overhaul slice 16, trainer roles and 17 team templates (see file).
 - `overhaul-p0-database.md`: Overhaul P0 audit report; Pokémon database checked vs PokeAPI; Tympole and 12 wrong moves fixed; Shedinja; validator.
+- `overhaul-battle-risk.md`: Overhaul slice 18: strategy-aware boss AI and Low-to-Extreme risk labels in the battle intro.

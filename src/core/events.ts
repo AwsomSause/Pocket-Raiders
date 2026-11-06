@@ -1189,7 +1189,10 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.name, leaderId: null });
-    if (shaped) run.battle.ai = Math.max(run.battle.ai, shaped.ai);
+    if (shaped) {
+      run.battle.ai = Math.max(run.battle.ai, shaped.ai);
+      if (shaped.strategy) run.battle.strategy = shaped.strategy.id;
+    }
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.terrain) run.battle.terrain = { id: b.terrain, turns: 999 };
     if (b.rule) {
