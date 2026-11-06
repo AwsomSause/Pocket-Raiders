@@ -5,7 +5,7 @@
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
-import { fitLine } from '../ui/fitText';
+import { fitBlock, fitLine } from '../ui/fitText';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
@@ -21,6 +21,7 @@ import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, trainerTaunt } from '../core/battle/intent';
+import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
@@ -131,6 +132,8 @@ const ENEMY_POS = { x: 648, y: 246 };
 const PLAYER_POS = { x: 312, y: 400 };
 /** The bottom message bar, and the command window on its right. */
 const MESSAGE_Y = 396;
+/** How long the first-time Hyper/Overdrive explanation ignores Continue, so it can't be skipped by accident. */
+const EXPLAIN_LOCK_MS = 1200;
 const COMMAND_X = 588;
 /** How long Auto-Battle's chosen action stays on screen before it is played (Back cancels). */
 const AUTO_PICK_MS = 1100;
@@ -1362,6 +1365,10 @@ export class BattleScene extends Phaser.Scene {
   // ---------- input and messages ----------
 
   private handleInput(action: InputAction): void {
+    if (this.explainWait) {
+      this.explainWait(action);
+      return;
+    }
     if (this.autoRunning) {
       if (action === 'back') this.autoCancel = true;
       return;
@@ -1432,6 +1439,8 @@ export class BattleScene extends Phaser.Scene {
   private readonly lastMoves = new Map<string, string>();
   /** Overhaul slice 8: what you have seen each foe show (an ability that triggered, a held item that acted), by foe uid. The Info panel tells nothing else. */
   private readonly foeReveals = new Map<string, FoeReveals>();
+  /** Overhaul slice 9: set while a first-time Hyper/Overdrive explanation waits for Continue; it takes every input. */
+  private explainWait: ((action: InputAction) => void) | null = null;
 
   /** Presentation only: a short vibration pattern by move type (Settings > Haptic buzz), and a camera push-in on a KO. */
   private buzz(type: string, strong = false): void {
@@ -2120,6 +2129,45 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     await this.act(pick.action, true);
+  }
+
+  /**
+   * Overhaul slice 9: the first-time Hyper/Overdrive explanation. Normal battle progress and every battle action wait
+   * (the event loop awaits this), Esc and held keys do nothing, and the Continue button only works after a short read
+   * lock so rapid clicking can't skip it. Each explanation shows once (profile.hyperExplained); later moments use the short banner.
+   */
+  private async explainHyper(defId: string): Promise<void> {
+    const { session } = services();
+    const def = session.content.story.definitions.find((d) => d.id === defId);
+    const x = def ? explainMoment(session.content, def) : null;
+    if (!x || unseenKeys(session.profile.hyperExplained, x).length === 0) return;
+    await new Promise<void>((resolve) => {
+      const dim = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.7).setOrigin(0).setInteractive();
+      const panel = drawGlass(this, 90, 36, GAME_WIDTH - 180, GAME_HEIGHT - 72, { radius: 22 });
+      const color = x.family === 'overdrive' ? '#ffb070' : '#8fd8ff';
+      const head = this.add.text(GAME_WIDTH / 2, 62, `${FAMILY_NAMES[x.family].toUpperCase()}: ${x.title}`, textStyle(30, color)).setOrigin(0.5);
+      const body = this.add.text(116, 96, '', textStyle(17, COLORS.textLight, { lineSpacing: 4, wordWrap: { width: GAME_WIDTH - 232 } }));
+      fitBlock(body, GAME_WIDTH - 232, GAME_HEIGHT - 96 - 90, explanationText(x));
+      const button = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 52, 'Read on...', textStyle(26, COLORS.textMuted)).setOrigin(0.5).setName('hyper-continue').setInteractive({ useHandCursor: true });
+      const root = this.add.container(0, 0, [dim, panel, head, body, button]).setDepth(160).setName('hyper-explain');
+      let ready = false;
+      this.time.delayedCall(EXPLAIN_LOCK_MS, () => {
+        ready = true;
+        button.setText('Continue  (Enter)').setColor(COLORS.gold);
+      });
+      const finish = (): void => {
+        if (!ready) return;
+        ready = false;
+        this.explainWait = null;
+        root.destroy();
+        session.markHyperExplained(x.keys);
+        resolve();
+      };
+      this.explainWait = (action) => {
+        if (action === 'confirm') finish();
+      };
+      button.on('pointerdown', finish);
+    });
   }
 
   /** A glass panel across the bar with up to three text columns (battle Info, move details, party summary). */
@@ -2985,6 +3033,8 @@ export class BattleScene extends Phaser.Scene {
           await this.refreshInfoBox(box, mon!, true);
           break;
         case 'hyper':
+          // The first time a Hyper or Overdrive state happens, the battle stops and explains it (why, what it does, what it costs).
+          if (e.side === 'player') await this.explainHyper(e.defId);
           // A Hyper moment: hung on, got back up, shook off its status or dug in (or the foe's rage).
           if (e.side === 'enemy') this.riledUid = e.variant === null || e.variant === 'uncontrollable' ? e.uid : null;
           // Beta 4.4: a moment for a Pokémon that isn't on the field never borrows the active Pokémon's HP bar.

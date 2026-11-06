@@ -626,6 +626,8 @@ export const StoryEventDefinitionSchema = z.object({
   /** Alternate texts; {name} is your Pokémon, {enemy} the opposing one. */
   messagePool: z.array(z.string()).min(1),
   category: z.enum(['survival', 'bond', 'emotion', 'rivalry', 'enemy', 'evolution', 'legacy', 'flavour']),
+  /** Overhaul slice 9: Hyper = a bond / defence state (it protects, it saves); Overdrive = aggressive and volatile (it hits harder and costs something). Unset for ordinary story moments. */
+  family: z.enum(['hyper', 'overdrive']).optional(),
   triggerConditions: TriggerConditionsSchema,
   /** Chance once the trigger's conditions hold (null: always). Rolled on the "hyper" stream. */
   chance: HyperChanceSchema.nullable(),
@@ -684,6 +686,18 @@ export const StoryConfigSchema = z.object({
     cooldownBattles: z.number().int().min(0),
     hyperScale: z.number().gt(0).max(1),
     exempt: z.array(z.string()),
+    /**
+     * Overhaul slice 9: what has to add up before a Hyper or Overdrive moment may happen, on top of each moment's own
+     * trigger: a Pokémon must have been on the field `minTurnsOnField` turns (so a fresh switch-in never starts one),
+     * every earlier moment of the same family this run multiplies its chance by `repeatPenalty` (never below `repeatFloor`),
+     * and a boss, rival or raid fight multiplies it by `intenseBoost`.
+     */
+    hyperRules: z.object({
+      minTurnsOnField: z.object({ hyper: z.number().int().min(0), overdrive: z.number().int().min(0) }),
+      repeatPenalty: z.number().gt(0).max(1),
+      repeatFloor: z.number().min(0).max(1),
+      intenseBoost: z.number().min(1).max(2),
+    }),
   }),
   /** Protégé system: battles a veteran needs, the level gap to a protégé, and the gap at which it graduates. */
   mentorship: z.object({ mentorBattles: z.number().int().positive(), levelGap: z.number().int().positive(), graduateGap: z.number().int().min(0) }),

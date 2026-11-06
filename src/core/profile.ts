@@ -57,6 +57,7 @@ export function createProfile(content: Content, profileId: string): Profile {
     mastery: {},
     gameEvents: {},
     momentCodex: {},
+    hyperExplained: [],
     mentorBonds: {},
     npcMemory: { npcs: {}, lore: [], epilogues: [], news: [], ngPlus: 0, hintsSeen: [], seenEvents: [] },
     hubTown: { pokemon: null, merchantDay: '', bought: [] },

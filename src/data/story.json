@@ -147,7 +147,8 @@
             "Not again! {name} still won't go down!"
           ]
         }
-      }
+      },
+      "family": "hyper"
     },
     {
       "id": "pushed-back-up",
@@ -201,7 +202,8 @@
       "emotions": [
         "determination"
       ],
-      "variants": {}
+      "variants": {},
+      "family": "hyper"
     },
     {
       "id": "felt-a-bond",
@@ -254,7 +256,8 @@
       "emotions": [
         "kindness"
       ],
-      "variants": {}
+      "variants": {},
+      "family": "hyper"
     },
     {
       "id": "hung-in-there",
@@ -307,7 +310,8 @@
             "{name} took super-effective hits and wouldn't stay down!"
           ]
         }
-      }
+      },
+      "family": "hyper"
     },
     {
       "id": "enemy-riled-up",
@@ -434,7 +438,8 @@
           ],
           "major": false
         }
-      }
+      },
+      "family": "overdrive"
     },
     {
       "id": "friendly-competition",
@@ -4367,7 +4372,8 @@
       "emotions": [
         "bravery",
         "determination"
-      ]
+      ],
+      "family": "overdrive"
     },
     {
       "cooldown": "oncePerBattlePerPokemon",
@@ -4425,7 +4431,8 @@
       "emotions": [
         "kindness",
         "justice"
-      ]
+      ],
+      "family": "hyper"
     },
     {
       "cooldown": "oncePerBattlePerPokemon",
@@ -4531,7 +4538,8 @@
       "priority": "emotionalOverdrive",
       "emotions": [
         "determination"
-      ]
+      ],
+      "family": "hyper"
     },
     {
       "id": "pushed-beyond-limits",
@@ -4610,7 +4618,8 @@
             "{name} pushed past its limits once more!"
           ]
         }
-      }
+      },
+      "family": "overdrive"
     }
   ],
   "awakening": {
@@ -4865,7 +4874,16 @@
       "crisisAid",
       "nemesisReckoning",
       "revengePact"
-    ]
+    ],
+    "hyperRules": {
+      "minTurnsOnField": {
+        "hyper": 0,
+        "overdrive": 3
+      },
+      "repeatPenalty": 0.5,
+      "repeatFloor": 0.25,
+      "intenseBoost": 1.25
+    }
   },
   "gauntlet": {
     "money": 2500,
