@@ -10,6 +10,7 @@
 import type { Content } from '../core/contentSchema';
 import { generateLeagueMap, generateStageMap, validateLeagueMap, validateStageMap } from '../core/map';
 import { usableLearnset } from '../core/pokemon';
+import { overBudget } from '../core/powerBudget';
 import { isSpecialForm } from '../core/specialForms';
 import { eligibleSpecies } from '../core/runPrep';
 import { wildEligibleSpecies } from '../core/themes';
@@ -71,7 +72,7 @@ export function settingPaths(value: unknown, prefix = ''): string[] {
  * Settings whose keys are data (item ids, rarities, side-stop kinds): the code
  * reads the whole map, so only the map's own name has to appear in the code.
  */
-const DATA_KEYED = new Set(['startingItems', 'rarityWeights', 'harderRarityWeights', 'bossRarityWeights', 'stage.sideWeights', 'typeRarity', 'comboRarity', 'candyShop[].items', 'bossStrategy.byType', 'bossStrategy.byBoss', 'bossStrategy.byRivalStyle', 'bossStrategy.byEvilTeam', 'bossStrategy.strategies']);
+const DATA_KEYED = new Set(['startingItems', 'rarityWeights', 'harderRarityWeights', 'bossRarityWeights', 'stage.sideWeights', 'typeRarity', 'comboRarity', 'candyShop[].items', 'bossStrategy.byType', 'bossStrategy.byBoss', 'bossStrategy.byRivalStyle', 'bossStrategy.byEvilTeam', 'bossStrategy.strategies', 'powerBudget.exempt']);
 
 /** The settings in balance.json that no game code reads. */
 export function unusedSettings(balanceJson: unknown, sources: string[]): string[] {
@@ -232,6 +233,7 @@ export function buildContentReport(content: Content, inputs: ReportInputs): Cont
 
   add('unused-balance-settings', 'Unused balance settings', 'Settings in balance.json that no game code reads (changing them does nothing).', unusedSettings(inputs.balanceJson, inputs.gameSources));
   add('untested-save-migrations', 'Save upgrades with no test', 'Save upgrades (old version to new) that no unit test loads an old save through.', untestedMigrations(inputs.migrations, inputs.testSources));
+  add('over-power-budget', 'Over the power budget', 'Species and forms whose Threat Rating is over their power class cap, and learnable moves over the move cap (balance.json powerBudget, Overhaul slice 4). New forms and moves must fit.', overBudget(content));
   add('invalid-entries', 'Invalid content entries', 'Entries whose support status is "invalid" (broken data).', statuses.filter((e) => e.status === 'invalid').map((e) => `${e.kind} ${e.id}: ${e.notes.join('; ')}`));
 
   add('mechanics-without-proof', 'Mechanics without code or tests', 'Mechanics claimed as built whose code or unit test file is missing, so nothing shows they work.', statuses.filter((e) => e.kind === 'mechanic' && e.status === 'invalid').map((e) => `${e.id}: ${e.notes.join('; ')}`));

@@ -59,6 +59,7 @@ It reads the game data, the asset files on disk and the test sources. It never c
 | `untested-save-migrations` | Save upgrades (vN → vN+1) that no unit test loads an old save through | 0 |
 | `mechanics-without-proof` | Mechanics claimed as built whose code file or unit test file is missing (`src/quality/mechanics.json`) | 0 |
 | `special-form-leaks` | Event-only forms that an ordinary wild, trainer or starter pool can hand out | 0 |
+| `over-power-budget` | Species or forms over their power class cap, or learnable moves over the move cap (`balance.json` `powerBudget`, Overhaul slice 4) | 0 |
 | `invalid-entries` | Entries with the status "invalid" | 0 |
 
 Two checks are heuristics, and say so: `unused-balance-settings` looks for the setting's name in the game code (comments don't count, and a name that is also used for something else hides an unused setting), and `untested-save-migrations` looks for a test that writes a save envelope with `record: '<name>', schemaVersion: <N>`.

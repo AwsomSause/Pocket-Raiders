@@ -14,6 +14,7 @@
  "broken-evolutions": 0,
  "unused-balance-settings": 0,
  "untested-save-migrations": 0,
+ "over-power-budget": 0,
  "invalid-entries": 0,
  "mechanics-without-proof": 0,
  "supported.species": 1025,
