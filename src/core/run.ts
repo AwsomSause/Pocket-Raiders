@@ -188,13 +188,13 @@ import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, reco
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
-import { clutchSurvived, heartbondTurn, heartbondVictory } from './story2/heartbond';
+import { clutchSurvived, heartbondTurn, heartbondVictory, takeBeat } from './story2/heartbond';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
 import { createStoryState, emit } from './story/record';
 import { chainGivesTalent, chainShiny, extendChain, shinyCharmTiers } from './catchChain';
-import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift, careOf } from './care';
+import { teamworkOnSwitch, careAceFell, careRest, careFaint, careVictory, releaseGift, careOf, displayName } from './care';
 import { createPartyLife, partyLifeCombos, partyLifeCamp, partyLifeTurn, partyLifeVictory } from './partyLife';
 import { diaryLine, seedNpcMemory } from './npcMemory';
 import { seedTreasureHunt } from './treasureHunt';
@@ -2590,6 +2590,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // A species scene that needs a count (tenth use of a move, first miss, first ability trigger): one quiet line, text only.
   const counted = countedScene(run.log.counters, run.party[battle.activeIndex], engineEvents as BattleEvent[], (kind, id) => (kind === 'move' ? (content.moves.get(id)?.name ?? id) : id.replaceAll('-', ' ')), run.encountersCompleted + 1);
   if (counted) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: counted });
+  // Heartbond: a Temperament beat plays after a won battle (one per battle, never over a species scene).
+  if (battle.outcome === 'win' && !counted) {
+    const beat = takeBeat(run, content.storyData.text, (m) => displayName(content, m));
+    if (beat) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: beat });
+  }
   if (battle.outcome === 'win' && !counted) {
     const winKey = `${run.runId}:${run.encountersCompleted}`;
     const winName = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;

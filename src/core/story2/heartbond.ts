@@ -9,6 +9,9 @@
 import { adjustBond, bondOf, type BondKey } from '../bond';
 import type { RunState } from '../state';
 import type { Bond } from '../story/schema';
+import { personalityOfMon } from '../overhaul/personality';
+import { renderTemplate } from './templates';
+import { temperamentOf } from './temperament';
 
 export const HEARTBOND = {
   weights: { trust: 0.30, affection: 0.25, respect: 0.15, synchronization: 0.15, confidence: 0.15, strain: -0.20 },
@@ -175,4 +178,25 @@ export function heartbondLabel(run: RunState, uid: string): string | null {
   const level = heartbondLevel(heartbondScore(bondOf(run, uid)));
   const peak = Math.max(level, ...run.story.v2.heartbond.latched);
   return level < peak ? `Heartbond ${level} (best ${peak})` : `Heartbond ${level}`;
+}
+
+/** Levels whose latch plays a short Temperament beat (the rest wait for their own scenes). */
+export const BEAT_LEVELS = [3, 6, 9] as const;
+
+/**
+ * One quiet Temperament line for the oldest waiting beat latch (3, 6 or 9), or null. Takes that latch off the waiting list;
+ * latches without a beat stay where they are. `text` is the story text table (`hb.beat.<temperament>.<level>`).
+ */
+export function takeBeat(run: RunState, text: Readonly<Record<string, string>>, nameOf: (mon: RunState['party'][number]) => string): string | null {
+  const v2 = run.story.v2;
+  const partner = v2?.heartbond.partner;
+  const mon = partner ? run.party.find((m) => m.uid === partner) : undefined;
+  if (!v2 || !mon) return null;
+  const level = v2.heartbond.pending.find((l) => (BEAT_LEVELS as readonly number[]).includes(l));
+  if (level === undefined) return null;
+  v2.heartbond.pending = v2.heartbond.pending.filter((l) => l !== level);
+  const tm = temperamentOf(personalityOfMon(mon).id);
+  const line = tm ? text[`hb.beat.${tm}.${level}`] : undefined;
+  if (!line) return null;
+  return renderTemplate(line, { pokemon: nameOf(mon) });
 }
