@@ -226,7 +226,7 @@ export class DecisionScene extends Phaser.Scene {
 
   // ---------- a trainer's signature mechanic (core/signature.ts) ----------
 
-  private buildSignature(title: string, options: { label: string; description: string }[]): void {
+  private buildSignature(title: string, options: { label: string; description: string }[], kind: 'signature' | 'mutator' = 'signature'): void {
     this.add.text(GAME_WIDTH / 2, 60, title, textStyle(34, COLORS.textLight, { align: 'center', wordWrap: { width: 800 } })).setOrigin(0.5, 0);
     drawPanel(this, 220, 170, 520, 70 * options.length + 30);
     this.menu = new Menu(this, {
@@ -236,14 +236,15 @@ export class DecisionScene extends Phaser.Scene {
       itemHeight: 70,
       itemWidth: 488,
       fontSize: 26,
-      onSelect: (i) => this.resolve({ kind: 'signature', optionIndex: i }),
+      // Beta 4.4: the modifier pick answers as a 'mutator' choice (it used to send 'signature', which the run refused).
+      onSelect: (i) => this.resolve({ kind, optionIndex: i }),
     });
   }
 
   /** Modifier Run: pick 1 of 3 blessings/curses. */
   private buildMutator(ids: string[]): void {
     const options = ids.flatMap((id) => getMutator(id) ?? []).map((m) => ({ label: `${m.kind === 'blessing' ? '✦' : '☠'} ${m.name}`, description: m.blurb }));
-    this.buildSignature('Pick a modifier for the rest of the run', options);
+    this.buildSignature('Pick a modifier for the rest of the run', options, 'mutator');
     const picked = (services().session.run?.mutators ?? []).flatMap((id) => getMutator(id)?.name ?? []);
     if (picked.length > 0) this.add.text(GAME_WIDTH / 2, 470, `Active: ${picked.join(', ')}`, textStyle(18, '#d8d0e0', { align: 'center', wordWrap: { width: 800 } })).setOrigin(0.5, 0);
   }
