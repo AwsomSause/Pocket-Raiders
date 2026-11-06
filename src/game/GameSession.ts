@@ -45,6 +45,7 @@ import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { toggleCamp } from '../core/trainingCamp';
+import { applyMentorLesson, type MentorLesson } from '../core/mentorLesson';
 import { cycleXpPolicy, XP_POLICY_RULES } from '../core/teamPolicy';
 import * as PartyLife from '../core/partyLife';
 type PartyScene = PartyLife.Scene;
@@ -609,6 +610,15 @@ export class GameSession {
   toggleTrainingCamp(uid: string): string {
     const run = structuredClone(this.requireRun());
     const message = toggleCamp(run, uid);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor lesson: a more evolved teammate teaches a younger one a move (ideas S48). */
+  mentorLesson(lesson: MentorLesson): string {
+    const run = structuredClone(this.requireRun());
+    const message = applyMentorLesson(this.content, run, lesson);
     this.run = run;
     this.persistRun();
     return message;
