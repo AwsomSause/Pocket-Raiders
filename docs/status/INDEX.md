@@ -226,3 +226,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `growth-shop-fossils.md`: Growth slice 1: Tuning Dust sold in shops, Bond Lv on the party Personality tab, 10 evolved Hisuian fossils.
 - dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)
 - wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)
+- `presentation-ash.md`: ash particles in Fire arenas (S251).
