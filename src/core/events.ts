@@ -834,6 +834,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
         ? (run.inventory[e.id] ?? 0) > 0 ? [e.id] : []
         : Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0 && !(content.catalog.get(id)?.family ?? '').startsWith('Key items'));
       ids.sort();
+      // A named key item that lives in the passives (rods, bikes ...) is traded in from there.
+      if (e.id && ids.length === 0 && (run.passives?.[e.id] ?? 0) > 0) {
+        useUpKeyItem(run, e.id);
+        return `Used a ${itemName(content, e.id)}`;
+      }
       if (ids.length === 0) return '';
       const id = rng.pick(ids);
       const n = Math.min(e.id ? e.count ?? 1 : 1, run.inventory[id]!);
