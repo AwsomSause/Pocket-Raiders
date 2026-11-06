@@ -2,6 +2,7 @@
 // A plain read of the encounter pool's weights: no random numbers, so looking never changes what you meet.
 
 import type { Content } from './contentSchema';
+import { biomeWildWeight } from './biomes';
 import { themePool } from './themes';
 import type { RunState } from './state';
 
@@ -25,7 +26,7 @@ export function habitatIds(content: Content, run: Pick<RunState, 'stage' | 'regi
       if (!from || !content.species.has(from)) break;
       id = from;
     }
-    byLine.set(id, (byLine.get(id) ?? 0) + p.weight);
+    byLine.set(id, (byLine.get(id) ?? 0) + p.weight * biomeWildWeight(content, run, p.speciesId));
   }
   return [...byLine.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
