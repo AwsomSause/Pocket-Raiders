@@ -1286,7 +1286,9 @@ export const RunStateSchema = z.object({
     effects: z.number().int().default(0),
     /** A shop discount won in a minigame, good for the stage it was won in. */
     discount: z.object({ percent: z.number().int(), stage: z.number().int() }).nullable().default(null),
-  }).default(() => ({ stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null })),
+    /** Battle Frontier Points won this run and not yet spent (run v36). */
+    frontierPoints: z.number().int().min(0).default(0),
+  }).default(() => ({ stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0 })),
   expeditions: z.object({ completed: z.array(z.string()), failed: z.array(z.string()), unlocked: z.array(z.string()), last: z.array(z.string()).default([]) }).default(() => ({ completed: [], failed: [], unlocked: [], last: [] })),
   /** Legendary world events (core/legendary): gates placed per region, and what happened with each event. Optional: older runs have none. */
   legendary: LegendaryRecordSchema.optional(),

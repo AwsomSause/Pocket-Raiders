@@ -10,7 +10,71 @@
       1.5,
       2
     ],
-    "effectCapPerStage": 2
+    "effectCapPerStage": 2,
+    "frontier": {
+      "games": [
+        "battle-factory",
+        "battle-palace",
+        "battle-arcade",
+        "battle-pyramid"
+      ],
+      "points": {
+        "bronze": 1,
+        "silver": 3,
+        "gold": 6
+      },
+      "prizes": [
+        {
+          "id": "revive-pair",
+          "name": "2 Revives",
+          "item": "revive",
+          "count": 2,
+          "cost": 2
+        },
+        {
+          "id": "ultra-balls",
+          "name": "3 Ultra Balls",
+          "item": "ultra-ball",
+          "count": 3,
+          "cost": 3
+        },
+        {
+          "id": "full-restore",
+          "name": "Full Restore",
+          "item": "full-restore",
+          "count": 1,
+          "cost": 4
+        },
+        {
+          "id": "speed-dust",
+          "name": "Tuning Dust (Spe)",
+          "item": "tuning-dust-spe",
+          "count": 1,
+          "cost": 6
+        },
+        {
+          "id": "lucky-egg",
+          "name": "Lucky Egg",
+          "item": "lucky-egg",
+          "count": 1,
+          "cost": 8
+        },
+        {
+          "id": "kings-rock",
+          "name": "King's Rock",
+          "item": "kings-rock",
+          "count": 1,
+          "cost": 10
+        },
+        {
+          "id": "master-ball",
+          "name": "Master Ball",
+          "item": "master-ball",
+          "count": 1,
+          "cost": 25
+        }
+      ]
+    }
   },
   "games": [
     {

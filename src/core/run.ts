@@ -336,7 +336,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     expedition: null,
     expeditions: { completed: [], failed: [], unlocked: [], last: [] },
     minigame: null,
-    minigames: { stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null },
+    minigames: { stage: -1, money: 0, items: 0, plays: {}, attempts: {}, best: {}, effects: 0, discount: null, frontierPoints: 0 },
   };
   // A mentor chosen on the Preparation Desk (it must still be unlocked; the desk checks that, this only needs the bond).
   run.mentor = startMentorship(opts.seed, prep.mentorId ?? null, bondOf({ mentorBonds: opts.mentorBonds ?? {} }, prep.mentorId ?? ''));
