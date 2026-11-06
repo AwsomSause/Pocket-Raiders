@@ -3,6 +3,7 @@
 // changes here is which heirloom option the next run starts with. Opened from the Hub (Events); Esc goes back one level.
 
 import Phaser from 'phaser';
+import { chronicleView } from '../core/story2/chronicle';
 import { fallenTrainers, hallOfMemories, journalEntry, memoryLane } from '../core/memories/journal';
 import { keepsakeName } from '../core/memories/keepsakes';
 import { pastDigest } from '../core/memories/past';
@@ -18,8 +19,9 @@ import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 const GOLD = '#ffe08a';
 const SKY = '#cfefff';
 
-type Section = 'journal' | 'hall' | 'lane' | 'fallen' | 'replays' | 'heirlooms' | 'lost';
+type Section = 'chronicle' | 'journal' | 'hall' | 'lane' | 'fallen' | 'replays' | 'heirlooms' | 'lost';
 const SECTIONS: { id: Section; label: string; blurb: string }[] = [
+  { id: 'chronicle', label: 'Run Chronicles', blurb: 'One page for every finished Story Run: how it went, who you grew close to, how it ended.' },
   { id: 'journal', label: 'Run Journal', blurb: 'A written entry for every finished run: team, Ace, rivals, rescues and milestones.' },
   { id: 'hall', label: 'Hall of Memories', blurb: 'Your most memorable runs, retold as short stories.' },
   { id: 'lane', label: 'Memory Lane', blurb: 'Revisit the moments, battle recaps and story beats of your own past adventures.' },
@@ -99,6 +101,13 @@ export class MemoriesScene extends Phaser.Scene {
     const empty = (title: string) => this.open([this.row('Nothing here yet.', 'Nothing here yet', 'Finish a run to fill this page.')], title, () => undefined, back);
     const { session } = services();
     switch (id) {
+      case 'chronicle': {
+        const chronicles = [...session.profile.story.chronicles].reverse();
+        if (!chronicles.length) return empty('Run Chronicles');
+        const views = chronicles.map((c) => chronicleView(this.content.storyData, c));
+        this.open(views.map((v, i) => this.row(v.sub, v.title, v.sub, [], chronicles[i]!.victory ? GOLD : '#ffffff')), 'Run Chronicles', (i) => this.read(views[i]!.title, views[i]!.lines), back);
+        return;
+      }
       case 'journal': {
         if (!this.records.length) return empty('Run Journal');
         const rows = this.records.map((r) => {

@@ -63,7 +63,7 @@ describe('profile v19 -> v20', () => {
     for (let i = 0; i < 74; i++) story.remembrance[`r${i}`] = { state: 'unlocked', firstSeenRun: i, runs: 9, mastery: 3 };
     for (let i = 0; i < 200; i++) story.lore[`lore_entry_${i}`] = { state: 'verified', sources: ['s1', 's2', 's3', 's4'] };
     for (let i = 0; i < 90; i++) story.cast[`c${i}`] = { tellings: ['a', 'b', 'c', 'd', 'e', 'f'], wins: 3, losses: 3, runs: ['r1', 'r2'] };
-    story.chronicles = Array.from({ length: 40 }, () => ({ text: 'x'.repeat(2000) }));
+    story.chronicles = Array.from({ length: 40 }, (_, i) => ({ runId: `run_${i}`, endedAt: '2026-11-06T00:00:00.000Z', victory: true, seed: 'seed', title: 'x'.repeat(80), stops: { done: 44, planned: 44 }, losses: 9, relationships: Object.fromEntries(Array.from({ length: 90 }, (_, j) => [`ch_character_${j}`, 'acquaintance'])), highlights: Array.from({ length: 12 }, (_, j) => `scene_${j}`) }));
     story.sceneSnapshots = Array.from({ length: 60 }, () => ({ text: 'x'.repeat(300) }));
     expect(JSON.stringify(story).length).toBeLessThan(300_000);
   });
