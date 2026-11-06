@@ -72,7 +72,9 @@
   "perBattleWon": 1,
   "perBossWon": 3,
   "perVitamin": 5,
-  "perFaint": -1
+  "perFaint": -1,
+  "loafBelow": 40,
+  "loafChance": 0.3
  },
  "money": {
   "startingMoney": 0,

@@ -2097,6 +2097,10 @@ export const BalanceSchema = z.object({
     perVitamin: z.number().min(0),
     /** Lost when it faints (a negative number). */
     perFaint: z.number().max(0),
+    /** Mood (S57): a player Pokémon below this friendship sometimes loafs instead of acting; 0 turns it off. */
+    loafBelow: z.number().min(0),
+    /** The loaf chance at friendship 0; it falls to 0 at loafBelow. */
+    loafChance: z.number().min(0).max(1),
   }),
   /**
    * Enemy levels climb through each region from its start level to just under its level cap:

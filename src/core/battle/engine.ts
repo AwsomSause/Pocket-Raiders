@@ -54,6 +54,7 @@ import {
 import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './growthStats';
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
+import { moodLoafs } from '../mood';
 import { preBattleTrap } from './opponentAi';
 import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
@@ -2068,6 +2069,11 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
   if (user.vol.truant) {
     user.vol.truant = false;
     announce(user, 'truant', events);
+    events.push({ type: 'cant', side: user.side, reason: 'truant' });
+    return false;
+  }
+  // Mood (S57): a Pokémon that barely trusts you sometimes loafs (shown as Truant's line). Uses no battle roll.
+  if (user.side === 'player' && moodLoafs(content.balance.friendship, user.mon, ctx.battle.turn)) {
     events.push({ type: 'cant', side: user.side, reason: 'truant' });
     return false;
   }
