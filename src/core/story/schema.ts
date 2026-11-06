@@ -323,6 +323,9 @@ export const RivalSchema = z.object({
   ace: z.string().optional(),
   /** Where it stands in the world (core/rivals/progression.ts; filled from rivalProgress events, absent until the first one). */
   world: RivalWorldRecordSchema.optional(),
+  /** S118 Family Tree of Rivals: the sibling that took up this rival's grudge after it retired (its id), and, on the sibling, whose grudge it carries. */
+  sibling: z.string().optional(),
+  siblingOf: z.object({ id: z.string(), name: z.string() }).optional(),
   /** Past contender (left-out 5.5): it took over a Gym, reached the regional finals, or became Champion. */
   rank: z.enum(['gymLeader', 'finalist', 'champion']).optional(),
   /** What it has learned about you, one telegraphed change per return. */

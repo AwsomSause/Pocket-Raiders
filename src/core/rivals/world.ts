@@ -18,6 +18,7 @@ import { rivalSponsorRoll } from './standing';
 import { rivalTransfers } from './transfer';
 import { promoteRival } from './promotion';
 import { rivalProgress } from './progression';
+import { maybeSibling } from './siblings';
 
 type Edge = RunState['story']['rivalGraph'][number];
 
@@ -84,6 +85,11 @@ export function simulateRivalWorld(content: Content, run: RunState): void {
       rivalProgress(content, run, r, 'unseenLoss');
       rumor ??= `${who} lost to a stranger and is retraining`;
     }
+  }
+  // S118: a retired rival's sibling may take up its grudge (own seeded stream).
+  for (const r of [...story.rivals]) {
+    const made = maybeSibling(content, run, r, `${run.regionIndex}.${stage}`);
+    if (made) rumor ??= made.rumor;
   }
   // Independent rivalries: rivals form feelings about each other without you.
   const graph = story.rivalGraph;
