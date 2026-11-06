@@ -137,6 +137,27 @@ export type StoryData = z.infer<typeof StoryDataSchema>;
 
 export const PronounsSchema = z.object({ subj: z.string().max(12), obj: z.string().max(12), poss: z.string().max(12), reflexive: z.string().max(12) });
 
+/** A finished Story Run, kept in the profile (the Run Chronicle). Written once at run end; never read back into gameplay. */
+export const ChronicleRecordSchema = z.object({
+  runId: z.string(),
+  endedAt: z.string(),
+  victory: z.boolean(),
+  seed: z.string(),
+  title: z.string(),
+  backstory: z.string().optional(),
+  theme: z.string().optional(),
+  starter: z.object({ line: z.string(), temperament: z.string() }).optional(),
+  rival: z.string().optional(),
+  antagonist: z.string().optional(),
+  stops: z.object({ done: z.number().int().min(0), planned: z.number().int().min(0) }),
+  losses: z.number().int().min(0).default(0),
+  /** Final relationship stage per character met. */
+  relationships: z.record(z.string(), z.string()).default({}),
+  /** Scenes seen, in order (up to 12). */
+  highlights: z.array(z.string()).max(12).default([]),
+});
+export type ChronicleRecord = z.infer<typeof ChronicleRecordSchema>;
+
 const ProfileStoryObject = z.object({
   protagonist: z.object({
     look: z.enum(['look_a', 'look_b']).default('look_a'), name: z.string().max(16).default(''), pronouns: z.union([z.string(), PronounsSchema]).default('they'), nameSet: z.boolean().default(false),
@@ -146,7 +167,7 @@ const ProfileStoryObject = z.object({
   remembrance: z.record(z.string(), z.object({ state: z.enum(['locked', 'seen', 'unlocked']), firstSeenRun: z.number().int().nullable().default(null), runs: z.number().int().default(0), mastery: z.number().default(0) })).default({}),
   lore: z.record(z.string(), z.object({ state: z.enum(['rumor', 'known', 'verified', 'contested']), sources: z.array(z.string()).max(4).default([]) })).default({}),
   cast: z.record(z.string(), z.object({ tellings: z.array(z.string()).max(6).default([]), wins: z.number().int().default(0), losses: z.number().int().default(0), runs: z.array(z.string()).default([]) })).default({}),
-  chronicles: z.array(z.unknown()).max(40).default([]),
+  chronicles: z.array(ChronicleRecordSchema).max(40).default([]),
   sceneSnapshots: z.array(z.unknown()).max(60).default([]),
   endingsSeen: z.array(z.string()).max(60).default([]),
   newBadges: z.array(z.string()).max(100).default([]),
