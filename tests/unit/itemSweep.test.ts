@@ -40,7 +40,7 @@ describe('item audit regressions (icons and the new items)', () => {
   const take = (run: RunState, id: string) => applyCatalog(content, run, getCatalogEntry(content, id), run.party[0], { moneyMultiplier: 1, rng: new Rng(hashSeed('t')) });
 
   it('every catalog item has an icon file', () => {
-    const missing = [...content.catalog.values()].filter((e) => !e.icon || !existsSync(`public/assets/images/items/gen5/${e.icon}.png`)).map((e) => e.id);
+    const missing = [...content.catalog.values()].filter((e) => !e.icon || !existsSync(`public/assets/images/items/${e.icon.includes('/') ? e.icon : `gen5/${e.icon}`}.png`)).map((e) => e.id);
     expect(missing).toEqual([]);
   });
 

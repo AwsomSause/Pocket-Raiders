@@ -1558,7 +1558,7 @@ export const CatalogEntrySchema = z
     /** Most copies that do anything (null: no limit). */
     max: z.number().int().positive().nullable(),
     how: z.enum(['held', 'use', 'passive']),
-    /** File name in the director's icon pack (images/items/gen5/<icon>.png), or null when the pack has none. */
+    /** File name in the director's icon pack (images/items/gen5/<icon>.png), "library/<name>" for images/items/library, or null when there is none. */
     icon: z.string().nullable(),
     status: z.enum(['supported', 'existing', 'pending']),
     /** For "existing" (and some "pending") entries: the reward or Bag item already in the game. */
@@ -3159,3 +3159,6 @@ export const TrainerUnlockSchema = z.object({
   note: z.string().optional(),
 });
 export const TrainerUnlocksFileSchema = z.object({ unlocks: z.array(TrainerUnlockSchema) });
+
+/** Catalog art id: "library/<name>" is a picture from images/items/library (48x48 or 32x32); anything else is a gen5 icon (24x24). */
+export const catalogIconId = (icon: string | null | undefined): string => `item.${icon?.includes('/') ? icon : `gen5/${icon ?? '0'}`}`;

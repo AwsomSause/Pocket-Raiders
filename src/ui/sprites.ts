@@ -135,9 +135,13 @@ export function trainerBackVisual(scene: Phaser.Scene, assetId: string, x: numbe
   return key ? posedSprite(scene, key, x, y, height, 10) : null;
 }
 
+/** Item library pictures are mostly 48x48 (PokeRogue ones 32x32) next to the 24x24 gen5 icons, so they are drawn at 24/size to match. */
+export const itemScaleFactor = (assetId: string, size: number): number => (assetId.startsWith('item.library/') ? 24 / Math.max(24, size) : 1);
+
 export function itemVisual(scene: Phaser.Scene, assetId: string, x: number, y: number, scale = 2): Phaser.GameObjects.GameObject {
   if (services().assets.has(assetId) && scene.textures.exists(assetId)) {
-    return scene.add.image(x, y, assetId).setScale(scale);
+    const img = scene.add.image(x, y, assetId);
+    return img.setScale(scale * itemScaleFactor(assetId, Math.max(img.width, img.height)));
   }
   const g = scene.add.graphics({ x, y });
   g.fillStyle(0xc0c8d0, 1);

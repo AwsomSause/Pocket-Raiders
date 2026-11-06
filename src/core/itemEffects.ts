@@ -4,7 +4,7 @@
 // and a unit test fails when a new one is added without a line.
 // Pure: reads content, changes nothing, rolls nothing.
 
-import type { Content, HeldHook } from './contentSchema';
+import { catalogIconId, type Content, type HeldHook } from './contentSchema';
 import type { PokemonInstance } from './state';
 
 const cap = (s: string): string => (s.length > 0 ? s[0]!.toUpperCase() + s.slice(1) : s);
@@ -210,7 +210,7 @@ export function describeHeldItem(content: Content, itemId: string, copies: numbe
     id: itemId,
     name: entry?.name ?? itemId,
     // Catalog art id, the same convention as data/index.ts catalogIconAssetId.
-    icon: entry ? `item.gen5/${entry.icon ?? '0'}` : null,
+    icon: entry ? catalogIconId(entry.icon) : null,
     copies,
     max,
     description: entry?.description ?? '',
