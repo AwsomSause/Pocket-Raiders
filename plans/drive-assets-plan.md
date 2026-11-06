@@ -17,7 +17,7 @@ Drive folder: `1jStJbc-dcs70vn1GLySO-HBrn7nf0_oq` (15 packs). Surveyed 2026-11-0
 | Lmigi's Nature & Stat Balls | 31 new Poké Balls (25 nature balls, 6 EV balls) with icons and throw sprites |
 | Gen 9 Learnsets Compendium | Full move pools for every family, Gen 1 to 9 |
 | Pokedex Data Page | Design idea for a Pokédex data screen |
-| Assets | Fan sprites (Alolan Dratini, Paldean Golett, Maliceye, extra Megas). Nobody has recorded where they came from |
+| Assets | Kice's own Pokémon made for this game (Alolan Dratini, Paldean Golett, Maliceye, extra Megas) |
 | Data, Plugins | Map files and Ruby plugins. We only read the plugins for ideas |
 
 ## 1. Trainers (Kice: add every one) — STARTING NOW
@@ -46,7 +46,7 @@ The game has 28 trainer classes, 229 bosses, and 57 animated bosses. The Drive h
   - 3 borrowed icons get their real art.
   - The Lantern gets an icon.
   - 53 items still need new art, because the Drive doesn't have it.
-- **New Pokémon.** The Assets folder has fan sprites like Alolan Dratini, Paldean Golett, Maliceye and extra Megas. **Question for Kice:** did you make these, or where are they from? We need a source before adding them.
+- **New Pokémon.** The Assets folder holds Kice's own Pokémon made for this game (Alolan Dratini, Paldean Golett, Maliceye, extra Megas). Add each one as a species with stats, types, moves and sprite, credited to Kice.
 
 ## 3. Animated Pokémon sprites
 

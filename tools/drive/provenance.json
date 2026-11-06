@@ -1,0 +1,4447 @@
+[
+ {
+  "file": "images/bosses/anim/barry.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKEMONTRAINER_Barry2.png"
+ },
+ {
+  "file": "images/bosses/anim/bianca-pwt.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKEMONTRAINER_Bianca.png"
+ },
+ {
+  "file": "images/bosses/anim/blue.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "blue.png"
+ },
+ {
+  "file": "images/bosses/anim/brawly-gen6.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "brawly.png"
+ },
+ {
+  "file": "images/bosses/anim/cynthia-gen7.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "cynthia.png"
+ },
+ {
+  "file": "images/bosses/anim/cyrus.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "GALACTICBOSS.png"
+ },
+ {
+  "file": "images/bosses/anim/elesa-gen5bw2.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "elesa.png"
+ },
+ {
+  "file": "images/bosses/anim/ghetsis.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ghetsis.png"
+ },
+ {
+  "file": "images/bosses/anim/grimsley-gen7.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "grimsley.png"
+ },
+ {
+  "file": "images/bosses/anim/iris-gen5bw2.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "iris.png"
+ },
+ {
+  "file": "images/bosses/anim/roxanne-gen6.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "roxanne.png"
+ },
+ {
+  "file": "images/bosses/anim/roxie-masters.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "roxie.png"
+ },
+ {
+  "file": "images/bosses/anim/sabrina-lgpe.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "sabrina.png"
+ },
+ {
+  "file": "images/bosses/anim/steven-gen6.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "steven.png"
+ },
+ {
+  "file": "images/bosses/anim/tateandliza-gen6.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "tate.png"
+ },
+ {
+  "file": "images/bosses/anim/wallace-gen6.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "wallace.png"
+ },
+ {
+  "file": "images/bosses/anim/winona-gen6.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "winona.png"
+ },
+ {
+  "file": "images/bosses/drive/acecouple.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ACECOUPLE.png"
+ },
+ {
+  "file": "images/bosses/drive/acetrainersnow-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ACETRAINERSNOW_F.png"
+ },
+ {
+  "file": "images/bosses/drive/acetrainersnow.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ACETRAINERSNOW.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-acetrainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_ACETRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-acetrainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_ACETRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-aether-foundation-employee-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_AETHER_FOUNDATION_EMPLOYEE_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-aether-foundation-employee-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_AETHER_FOUNDATION_EMPLOYEE_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-bellhop.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_BELLHOP.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-cook.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_COOK.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-firefighter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_FIREFIGHTER.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-fisherman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_FISHERMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-hiker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_HIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-janitor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_JANITOR.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-madame.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_MADAME.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-nurse.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_NURSE.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-office-worker-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_OFFICE_WORKER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-office-worker-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_OFFICE_WORKER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-officer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_OFFICER.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-pale-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_PALE_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-preschooler-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_PRESCHOOLER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-preschooler-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_PRESCHOOLER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-punk-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_PUNK_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-punk-guy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_PUNK_GUY.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-rising-star-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_RISING_STAR_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-rising-star-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_RISING_STAR_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-rocket-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_ROCKET_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-rocket-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_ROCKET_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-scientist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SCIENTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-sightseer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SIGHTSEER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-sightseer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SIGHTSEER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-skull-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SKULL_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-skull-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SKULL_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-surfer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SURFER.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-swimmer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SWIMMER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-tanned-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_TANNED_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-trialguide-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_TRIALGUIDE_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-veteran-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_VETERAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-veteran-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_VETERAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/alolan-usum-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/anthea.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B1W1_ANTHEA.png"
+ },
+ {
+  "file": "images/bosses/drive/ardos.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_XD_CIPHER_ADMIN_ARDOS.png"
+ },
+ {
+  "file": "images/bosses/drive/artist-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ARTIST_F.png"
+ },
+ {
+  "file": "images/bosses/drive/artist-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ARTIST_M.png"
+ },
+ {
+  "file": "images/bosses/drive/artist2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ARTIST2.png"
+ },
+ {
+  "file": "images/bosses/drive/augustinesycamore.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_AUGUSTINE_SYCAMORE.png"
+ },
+ {
+  "file": "images/bosses/drive/aureajuniper.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_AUREA_JUNIPER.png"
+ },
+ {
+  "file": "images/bosses/drive/backpacker.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BACKPACKER.png"
+ },
+ {
+  "file": "images/bosses/drive/baoba.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_BAOBA.png"
+ },
+ {
+  "file": "images/bosses/drive/battlegirl.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BATTLEGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/battlegirl2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BATTLEGIRL2.png"
+ },
+ {
+  "file": "images/bosses/drive/beauty3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BEAUTY3.png"
+ },
+ {
+  "file": "images/bosses/drive/belleandpa.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BELLEANDPA.png"
+ },
+ {
+  "file": "images/bosses/drive/bellis.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_BELLIS.png"
+ },
+ {
+  "file": "images/bosses/drive/biker2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BIKER2.png"
+ },
+ {
+  "file": "images/bosses/drive/birch.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_PROFESSOR_BIRCH.png"
+ },
+ {
+  "file": "images/bosses/drive/birdkeeper.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "BIRDKEEPER.png"
+ },
+ {
+  "file": "images/bosses/drive/blackbelt2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BLACKBELT2.png"
+ },
+ {
+  "file": "images/bosses/drive/blackbelt3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BLACKBELT3.png"
+ },
+ {
+  "file": "images/bosses/drive/boarder.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BOARDER.png"
+ },
+ {
+  "file": "images/bosses/drive/bonnie.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_BONNIE.png"
+ },
+ {
+  "file": "images/bosses/drive/bugcatcher2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BUGCATCHER2.png"
+ },
+ {
+  "file": "images/bosses/drive/burglar.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "BURGLAR.png"
+ },
+ {
+  "file": "images/bosses/drive/butler.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "BUTLER.png"
+ },
+ {
+  "file": "images/bosses/drive/cameraman.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CAMERAMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/cedric-juniper.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_CEDRIC_JUNIPER.png"
+ },
+ {
+  "file": "images/bosses/drive/celio.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SEVIIAN_FRLG_CELIO.png"
+ },
+ {
+  "file": "images/bosses/drive/champion-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHAMPION_F.png"
+ },
+ {
+  "file": "images/bosses/drive/champion-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHAMPION_M.png"
+ },
+ {
+  "file": "images/bosses/drive/chaneller.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHANELLER.png"
+ },
+ {
+  "file": "images/bosses/drive/channeler.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "CHANNELER.png"
+ },
+ {
+  "file": "images/bosses/drive/charon.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CHARON.png"
+ },
+ {
+  "file": "images/bosses/drive/chef.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHEF.png"
+ },
+ {
+  "file": "images/bosses/drive/christoph.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_CHRISTOPH.png"
+ },
+ {
+  "file": "images/bosses/drive/clerk.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CLERK.png"
+ },
+ {
+  "file": "images/bosses/drive/clown.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CLOWN.png"
+ },
+ {
+  "file": "images/bosses/drive/concordia.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B1W1_CONCORDIA.png"
+ },
+ {
+  "file": "images/bosses/drive/cooltrainer-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "COOLTRAINER_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/cowgirl.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "COWGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/criminalleader.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CRIMINALLEADER.png"
+ },
+ {
+  "file": "images/bosses/drive/criminals.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CRIMINALS.png"
+ },
+ {
+  "file": "images/bosses/drive/cultf.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CULTF.PNG"
+ },
+ {
+  "file": "images/bosses/drive/cultm.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CULTM.PNG"
+ },
+ {
+  "file": "images/bosses/drive/curtis.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_CURTIS.png"
+ },
+ {
+  "file": "images/bosses/drive/cyclist-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CYCLIST_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/dad.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DAD.png"
+ },
+ {
+  "file": "images/bosses/drive/daisy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_FRLG_DAISY_OAK.png"
+ },
+ {
+  "file": "images/bosses/drive/defiance-grunt.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DEFIANCE_GRUNT.png"
+ },
+ {
+  "file": "images/bosses/drive/dj-mary.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_DJ_MARY.png"
+ },
+ {
+  "file": "images/bosses/drive/doubleteam.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DOUBLETEAM.png"
+ },
+ {
+  "file": "images/bosses/drive/doubleteam2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DOUBLETEAM2.png"
+ },
+ {
+  "file": "images/bosses/drive/dusty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "POKETOPIA_PBR_DUSTY.png"
+ },
+ {
+  "file": "images/bosses/drive/elder.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ELDER.PNG"
+ },
+ {
+  "file": "images/bosses/drive/engineer.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "ENGINEER.png"
+ },
+ {
+  "file": "images/bosses/drive/executive-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "EXECUTIVE_F.png"
+ },
+ {
+  "file": "images/bosses/drive/executive.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "EXECUTIVE.png"
+ },
+ {
+  "file": "images/bosses/drive/executive2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "EXECUTIVE2.png"
+ },
+ {
+  "file": "images/bosses/drive/executive3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "EXECUTIVE3.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-akuma.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "AKUMA.PNG"
+ },
+ {
+  "file": "images/bosses/drive/fan-angelo.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Angelo.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-archaludon.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ARCHALUDON.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-callista.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHAMPION_Callista.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-calvin.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CALVIN.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-charm.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHARM.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-chase.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONTRAINER_Chase.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-chelsea.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CHELSEA.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-clarity.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "CLARITY.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-damon.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Damon.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-dareth.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DARETH.PNG"
+ },
+ {
+  "file": "images/bosses/drive/fan-den.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DEN.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-destiny.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DESTINY.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-dusknoir.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "DUSKNOIR.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-eclipse.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SPACEADMIN_Eclipse.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-einer.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "EINER.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-eleanor.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Eleanor.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-eris.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ERIS.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-essentia.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ESSENTIA.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-exthorem.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "EXTHOREM.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-franklin.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Franklin.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-gab.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONTRAINER_Gab.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-gabsnake.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "GABSNAKE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-griffin.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RIVAL_Griffin.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-horse.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HORSE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-hotaru.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HOTARU.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-izeka.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "IZEKA.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-jackie.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "JACKIE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-jane.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "JANE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-keith.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "KEITH.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-ketsumari.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "KETSUMARI.PNG"
+ },
+ {
+  "file": "images/bosses/drive/fan-khortares.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "KHORTARES.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-laurel.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LAUREL.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-lixue.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LIXUE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-lizzie.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Lizzie.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-marshall.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "MARSHALL.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-metagross.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "METAGROSS.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-mia.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONTRAINER_Mia.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-miapast.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "MIAPAST.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-mila.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "MILA.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-nakura.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "NAKURA.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-naomi.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "NAOMI.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-nebula.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SPACEADMIN_Nebula.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-nexussentinel.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "NEXUSSENTINEL.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-phoenix.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Phoenix.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-raya.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONPROFESSOR_Raya.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-rylas.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RYLAS.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-sally.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SALLY.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-shonun.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SHONUN.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-siginome.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SIGINOME.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-steve.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "STEVE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-trix.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TRIX.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-willow.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONTRAINER_Willow.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-woodrow.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_Woodrow.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-zayn.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ZAYN.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-zeke.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ZEKE.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-zenth.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ZENTH.png"
+ },
+ {
+  "file": "images/bosses/drive/fan-zoey.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RIVAL_Zoey.png"
+ },
+ {
+  "file": "images/bosses/drive/fennel.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_FENNEL.png"
+ },
+ {
+  "file": "images/bosses/drive/fisherman2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "FISHERMAN2.png"
+ },
+ {
+  "file": "images/bosses/drive/fisherman3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "FISHERMAN3.png"
+ },
+ {
+  "file": "images/bosses/drive/furisodegirl.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "FURISODEGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/furisodegirl2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "FURISODEGIRL2.png"
+ },
+ {
+  "file": "images/bosses/drive/furisodegirl3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "FURISODEGIRL3.png"
+ },
+ {
+  "file": "images/bosses/drive/furisodegirl4.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "FURISODEGIRL4.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-artist-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_ARTIST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-ball-guy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_BALL_GUY.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-cabbie.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_CABBIE.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-cafe-master.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_CAFE_MASTER.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-cameraman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_CAMERAMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-cook.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_COOK.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-dancer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_DANCER.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-doctor-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_DOCTOR_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-doctor-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_DOCTOR_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-fisherwoman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_FISHERWOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-leaguestaff-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_LEAGUESTAFF_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-model.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_MODEL.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-mom.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_MOM.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-office-worker-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_OFFICE_WORKER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-office-worker-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_OFFICE_WORKER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-pokemon-breeder-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_POKEMON_BREEDER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-pokemon-breeder-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_POKEMON_BREEDER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-post-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_POST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-railstaff.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_RAILSTAFF.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-reporter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_REPORTER.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-worker-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_WORKER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-worker-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_WORKER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-yell-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_YELL_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-yell-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_YELL_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/galarian-swsh-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "GALARIAN_SWSH_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/gambler.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "GAMBLER.png"
+ },
+ {
+  "file": "images/bosses/drive/gardener.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "GARDENER.png"
+ },
+ {
+  "file": "images/bosses/drive/gentleman3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "GENTLEMAN3.png"
+ },
+ {
+  "file": "images/bosses/drive/gonzap.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_SNAGEM_LEADER_GONZAP.png"
+ },
+ {
+  "file": "images/bosses/drive/gorigan.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_XD_CIPHER_ADMIN_GORIGAN.png"
+ },
+ {
+  "file": "images/bosses/drive/grand-oak.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOMEIAN_HOME_GRAND_OAK.png"
+ },
+ {
+  "file": "images/bosses/drive/guard.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "GUARD.png"
+ },
+ {
+  "file": "images/bosses/drive/guitarist2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "GUITARIST2.png"
+ },
+ {
+  "file": "images/bosses/drive/hazy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "REALLIFEIAN_DEVELOPER_HAZY_CRAZY.png"
+ },
+ {
+  "file": "images/bosses/drive/herd1.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD1.png"
+ },
+ {
+  "file": "images/bosses/drive/herd2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD2.png"
+ },
+ {
+  "file": "images/bosses/drive/herd3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD3.png"
+ },
+ {
+  "file": "images/bosses/drive/herd7.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD7.png"
+ },
+ {
+  "file": "images/bosses/drive/hiker2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HIKER2.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-acetrainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_ACETRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-acetrainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_ACETRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-aqua-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_AQUA_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-aqua-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_AQUA_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-aromalady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_AROMALADY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-battle-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_BATTLE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-birdkeeper.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_BIRDKEEPER.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-bug-catcher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_BUG_CATCHER.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-bug-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_BUG_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-cameraman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_CAMERAMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-camper-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_CAMPER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-camper-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_CAMPER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-collector.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_COLLECTOR.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-delinquent.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_DELINQUENT.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-diver-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_DIVER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-dragon-tamer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_DRAGON_TAMER.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-expert-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_EXPERT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-fisher-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_FISHER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-guitarist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_GUITARIST.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-interviewers.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_INTERVIEWERS.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-kindler.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_KINDLER.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-mom.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_MOM.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-ninja-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_NINJA_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-parasol-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_PARASOL_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-poke-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKE_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-pokefan-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKEFAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-pokefan-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKEFAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-pokemon-breeder-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKEMON_BREEDER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-pokemon-breeder-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKEMON_BREEDER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-pokemon-ranger-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKEMON_RANGER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-pokemon-ranger-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_POKEMON_RANGER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-reporter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_REPORTER.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-rich-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_RICH_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-sailor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_SAILOR.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-schoolboy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_SCHOOLBOY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-schoolgirl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_SCHOOLGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-street-thug.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_STREET_THUG.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-teammates.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_TEAMMATES.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-triathlete-bike.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_TRIATHLETE_BIKE.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-triathlete-running.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_TRIATHLETE_RUNNING.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-triathlete-swimming.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_TRIATHLETE_SWIMMING.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-tuber-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_TUBER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-tuber-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_TUBER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-youngcouple.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_YOUNGCOUPLE.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-oras-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/hoennian-rse-ninja-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_RSE_NINJA_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-blue-office-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_BLUE_OFFICE_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-book-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_BOOK_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-cafe-master.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_CAFE_MASTER.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-cheerleader.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_CHEERLEADER.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-courier.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_COURIER.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-gardener.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_GARDENER.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-jogger.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_JOGGER.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-madame.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_MADAME.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-model.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_MODEL.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-purple-office-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_PURPLE_OFFICE_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-ruin-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_RUIN_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-sailor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_SAILOR.png"
+ },
+ {
+  "file": "images/bosses/drive/hubian-pokengine-scientist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HUBIAN_POKENGINE_SCIENTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/idol.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "IDOL.png"
+ },
+ {
+  "file": "images/bosses/drive/jogger.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "JOGGER.png"
+ },
+ {
+  "file": "images/bosses/drive/johanna.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_JOHANNA.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-gsc-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_GSC_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-gsc-mom.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_GSC_MOM.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-ace-duo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_ACE_DUO.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-acetrainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_ACETRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-acetrainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_ACETRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-battle-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BATTLE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-biker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-border.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BORDER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-bug-catcher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BUG_CATCHER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-burglar.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_BURGLAR.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-elder.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_ELDER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-fire-breather.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_FIRE_BREATHER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-guitarist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_GUITARIST.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-juggler.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_JUGGLER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-kimono-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_KIMONO_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-medium.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_MEDIUM.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-poke-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_POKE_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-rocket-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_ROCKET_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-rocket-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_ROCKET_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-sage.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SAGE.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-schoolkid.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SCHOOLKID.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-scientist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SCIENTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-skier.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SKIER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-super-nerd.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SUPER_NERD.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-swimmer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SWIMMER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-teacher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_TEACHER.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-twins.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_TWINS.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-young-couple.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_YOUNG_COUPLE.png"
+ },
+ {
+  "file": "images/bosses/drive/johtoian-hgss-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "JOHTOIAN_HGSS_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/juggler.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "JUGGLER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-acetrainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ACETRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-acetrainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ACETRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-artist-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ARTIST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-artist-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ARTIST_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-backpacker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_BACKPACKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-black-furisode-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_BLACK_FURISODE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-blue-furisode-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_BLUE_FURISODE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-chef.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_CHEF.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-construction-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_CONSTRUCTION_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-fairytale-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_FAIRYTALE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-fisherman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_FISHERMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-gardener.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_GARDENER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-green-tourist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_GREEN_TOURIST.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-hex-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_HEX_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-hiker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_HIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-madame.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_MADAME.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-maid.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_MAID.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-orange-tourist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ORANGE_TOURIST.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-owner.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_OWNER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pink-furisode-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_PINK_FURISODE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pokefan-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_POKEFAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pokefan-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_POKEFAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pokemon-breeder-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_POKEMON_BREEDER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pokemon-breeder-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_POKEMON_BREEDER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pokemon-ranger-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_POKEMON_RANGER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-pokemon-ranger-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_POKEMON_RANGER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-preschooler-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_PRESCHOOLER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-preschooler-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_PRESCHOOLER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-psychic.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_PSYCHIC.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-punk-trainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_PUNK_TRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-punk-trainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_PUNK_TRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-rich-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_RICH_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-risingstar-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_RISINGSTAR_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-risingstar-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_RISINGSTAR_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-rollerskater-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ROLLERSKATER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-rollerskater-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_ROLLERSKATER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-school-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SCHOOL_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-school-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SCHOOL_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-scientist-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SCIENTIST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-scientist-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SCIENTIST_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-skytrainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SKYTRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-skytrainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SKYTRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-swimmer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SWIMMER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-team-flare-admin-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_TEAM_FLARE_ADMIN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-team-flare-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_TEAM_FLARE_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-team-flare-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_TEAM_FLARE_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-technical-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_TECHNICAL_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-tourist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_TOURIST.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-twins.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_TWINS.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-veteran-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_VETERAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-veteran-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_VETERAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-waiter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_WAITER.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-waitress.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_WAITRESS.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-white-furisode-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_WHITE_FURISODE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kaloian-xy-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KALOIAN_XY_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-frlg-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_FRLG_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-frlg-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_FRLG_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-frlg-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_FRLG_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-frlg-ruin-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_FRLG_RUIN_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-bird-keeper.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_BIRD_KEEPER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-bug-catcher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_BUG_CATCHER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-burglar.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_BURGLAR.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-camper-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_CAMPER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-camper-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_CAMPER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-channeler.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_CHANNELER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-crush-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_CRUSH_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-crush-kin.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_CRUSH_KIN.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-fisherman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_FISHERMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-gambler.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_GAMBLER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-gym-guide.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_GYM_GUIDE.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-hiker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_HIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-juggler.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_JUGGLER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-poke-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_POKE_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-psychic.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_PSYCHIC.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-punk-guy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_PUNK_GUY.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-rocker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_ROCKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-roughneck.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_ROUGHNECK.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-sailor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_SAILOR.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-scientist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_SCIENTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-super-nerd.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_SUPER_NERD.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-swimmer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_SWIMMER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/kantoian-lgpe-tamer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_LGPE_TAMER.png"
+ },
+ {
+  "file": "images/bosses/drive/katoian-lgpe-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KATOIAN_LGPE_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kimonogirl.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "KIMONOGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/kingambit.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_KINGAMBIT.png"
+ },
+ {
+  "file": "images/bosses/drive/kitakamian-sv-caretaker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KITAKAMIAN_SV_CARETAKER.png"
+ },
+ {
+  "file": "images/bosses/drive/kitakamian-sv-delinquent.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KITAKAMIAN_SV_DELINQUENT.png"
+ },
+ {
+  "file": "images/bosses/drive/kitakamian-sv-festival-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KITAKAMIAN_SV_FESTIVAL_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/kitakamian-sv-nurse.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KITAKAMIAN_SV_NURSE.png"
+ },
+ {
+  "file": "images/bosses/drive/kitakamian-sv-ogre-clan-member.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KITAKAMIAN_SV_OGRE_CLAN_MEMBER.png"
+ },
+ {
+  "file": "images/bosses/drive/lady2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LADY2.png"
+ },
+ {
+  "file": "images/bosses/drive/lass2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LASS2.png"
+ },
+ {
+  "file": "images/bosses/drive/lass3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LASS3.png"
+ },
+ {
+  "file": "images/bosses/drive/leader-akemi.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "LEADER_AKEMI.png"
+ },
+ {
+  "file": "images/bosses/drive/lucy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_RSE_LUCY.png"
+ },
+ {
+  "file": "images/bosses/drive/madame.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "MADAME.png"
+ },
+ {
+  "file": "images/bosses/drive/maid2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "MAID2.png"
+ },
+ {
+  "file": "images/bosses/drive/marina.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "POKETOPIA_PBR_MARINA.png"
+ },
+ {
+  "file": "images/bosses/drive/medium.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "MEDIUM.png"
+ },
+ {
+  "file": "images/bosses/drive/miror-b.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_XD_MIROR_B.png"
+ },
+ {
+  "file": "images/bosses/drive/mr-briney.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_MR_BRINEY.png"
+ },
+ {
+  "file": "images/bosses/drive/mr-stone.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_ORAS_JOSEPH_STONE.png"
+ },
+ {
+  "file": "images/bosses/drive/nancy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_NANCY.png"
+ },
+ {
+  "file": "images/bosses/drive/ninjaboy.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "NINJABOY.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-bodybuilder.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_BODYBUILDER.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-chaser-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CHASER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-chaser-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CHASER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-black.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_BLACK.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-blue.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_BLUE.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-brown.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_BROWN.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-green.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_GREEN.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-pink.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_PINK.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-purple.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_PURPLE.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-red.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_RED.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-cipher-peon-yellow.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_PEON_YELLOW.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-fun-old-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_FUN_OLD_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-fun-old-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_FUN_OLD_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-hunter-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_HUNTER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-mirrorb-peon-folly.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_MIRRORB_PEON_FOLLY.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-mirrorb-peon-trudly.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_MIRRORB_PEON_TRUDLY.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-snagem-grunt-glasses.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_SNAGEM_GRUNT_GLASSES.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-snagem-grunt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_SNAGEM_GRUNT.png"
+ },
+ {
+  "file": "images/bosses/drive/oerrian-colo-street-performer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_STREET_PERFORMER.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-ace-trainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_ACE_TRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-artist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_ARTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-backpacker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_BACKPACKER.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-bodybuilder-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_BODYBUILDER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-bodybuilder-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_BODYBUILDER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-courier.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_COURIER.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-dragon-tamer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_DRAGON_TAMER.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-janitor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_JANITOR.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-model.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_MODEL.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-office-worker-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_OFFICE_WORKER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-office-worker-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_OFFICE_WORKER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-schoolkid-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_SCHOOLKID_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-scientist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_SCIENTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-timemachine-ais-sada-turo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_TIMEMACHINE_AIS_SADA_TURO.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-waitress.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_WAITRESS.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/paldean-sv-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/parasollady2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "PARASOLLADY2.png"
+ },
+ {
+  "file": "images/bosses/drive/pasioian-maex-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/pasioian-maex-collector.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_COLLECTOR.png"
+ },
+ {
+  "file": "images/bosses/drive/pasioian-maex-punk-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_PUNK_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/pasioian-maex-street-thug.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_STREET_THUG.png"
+ },
+ {
+  "file": "images/bosses/drive/pasioian-maex-swimmer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_SWIMMER.png"
+ },
+ {
+  "file": "images/bosses/drive/pasioian-maex-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PASIOIAN_MAEX_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/perrin.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KITAKAMIAN_SV_PERRIN.png"
+ },
+ {
+  "file": "images/bosses/drive/pokefan-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEFAN_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/pokekid.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEKID.png"
+ },
+ {
+  "file": "images/bosses/drive/pokemaniac.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKEMANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/pokemonbreeder-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONBREEDER_F.png"
+ },
+ {
+  "file": "images/bosses/drive/pokemonbreeder-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONBREEDER_M.png"
+ },
+ {
+  "file": "images/bosses/drive/pokemonranger-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POKEMONRANGER_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/policeman2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POLICEMAN2.png"
+ },
+ {
+  "file": "images/bosses/drive/policeofficer.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "POLICEOFFICER.png"
+ },
+ {
+  "file": "images/bosses/drive/professor-oak.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "KANTOIAN_DPP_PROFESSOR_OAK.png"
+ },
+ {
+  "file": "images/bosses/drive/psychic-drive.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "PSYCHIC.png"
+ },
+ {
+  "file": "images/bosses/drive/punktrainer-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "PUNKTRAINER_F.png"
+ },
+ {
+  "file": "images/bosses/drive/punktrainer-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "PUNKTRAINER_M.png"
+ },
+ {
+  "file": "images/bosses/drive/rancher.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RANCHER.png"
+ },
+ {
+  "file": "images/bosses/drive/reporter-drive.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "REPORTER.png"
+ },
+ {
+  "file": "images/bosses/drive/richboy2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RICHBOY2.png"
+ },
+ {
+  "file": "images/bosses/drive/risingstar-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RISINGSTAR_F.png"
+ },
+ {
+  "file": "images/bosses/drive/risingstar-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "RISINGSTAR_M.png"
+ },
+ {
+  "file": "images/bosses/drive/rocker.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "ROCKER.png"
+ },
+ {
+  "file": "images/bosses/drive/rollerskater-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ROLLERSKATER_F.png"
+ },
+ {
+  "file": "images/bosses/drive/rollerskater-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ROLLERSKATER_M.png"
+ },
+ {
+  "file": "images/bosses/drive/rosie.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "POKETOPIA_PBR_ROSIE.png"
+ },
+ {
+  "file": "images/bosses/drive/roughneck2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ROUGHNECK2.png"
+ },
+ {
+  "file": "images/bosses/drive/routeboss.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ROUTEBOSS.png"
+ },
+ {
+  "file": "images/bosses/drive/routebossm.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "ROUTEBOSSM.png"
+ },
+ {
+  "file": "images/bosses/drive/sada.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_PROFESSOR_SADA.png"
+ },
+ {
+  "file": "images/bosses/drive/sage.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SAGE.png"
+ },
+ {
+  "file": "images/bosses/drive/samson-oak.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ALOLAN_USUM_SAMSON_OAK.png"
+ },
+ {
+  "file": "images/bosses/drive/schoolboy.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SCHOOLBOY.png"
+ },
+ {
+  "file": "images/bosses/drive/schoolgirl.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SCHOOLGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/schoolkid-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SCHOOLKID_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/scott.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "HOENNIAN_RSE_SCOTT.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-ace-duo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ACE_DUO.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-acetrainer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ACETRAINER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-acetrainer-winter-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ACETRAINER_WINTER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-acetrainer-winter-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ACETRAINER_WINTER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-acetrainer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ACETRAINER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-aroma-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_AROMA_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-artist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ARTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-battle-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_BATTLE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-bird-keeper-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_BIRD_KEEPER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-bird-keeper-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_BIRD_KEEPER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-bug-catcher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_BUG_CATCHER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-cameraman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CAMERAMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-camper-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CAMPER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-camper-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CAMPER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-clown.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CLOWN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-collector.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_COLLECTOR.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-cowgirl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_COWGIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-cyclist-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CYCLIST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-cyclist-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_CYCLIST_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-dragon-tamer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_DRAGON_TAMER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-fisherman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_FISHERMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-galactic-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_GALACTIC_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-galactic-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_GALACTIC_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-hiker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_HIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-idol.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_IDOL.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-jogger.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_JOGGER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-madame.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_MADAME.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-maid.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_MAID.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-ninja-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_NINJA_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-nurse.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_NURSE.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-officer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_OFFICER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-parasol-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_PARASOL_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokefan-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEFAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokefan-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEFAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokekid.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEKID.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokemon-breeder-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEMON_BREEDER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokemon-breeder-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEMON_BREEDER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokemon-ranger-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEMON_RANGER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-pokemon-ranger-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_POKEMON_RANGER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-private-investigator.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_PRIVATE_INVESTIGATOR.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-rancher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_RANCHER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-reporter-cameraman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_REPORTER_CAMERAMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-reporter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_REPORTER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-roughneck.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_ROUGHNECK.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-ruin-maniac.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_RUIN_MANIAC.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-sailor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SAILOR.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-schoolkid-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SCHOOLKID_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-schoolkid-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SCHOOLKID_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-scientist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SCIENTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-skier-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SKIER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-skier-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SKIER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-swimmer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SWIMMER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-swimming-duo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_SWIMMING_DUO.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-tuber-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_TUBER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-tuber-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_TUBER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-twins.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_TWINS.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-veteran.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_VETERAN.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-waiter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_WAITER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-waitress.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_WAITRESS.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-western-duo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_WESTERN_DUO.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-young-couple.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_YOUNG_COUPLE.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-dpp-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_DPP_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/sinnohian-unoffical-dpp-clown.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "SINNOHIAN_UNOFFICAL_DPP_CLOWN.png"
+ },
+ {
+  "file": "images/bosses/drive/sisandbro.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SISANDBRO.png"
+ },
+ {
+  "file": "images/bosses/drive/skier-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SKIER_F.png"
+ },
+ {
+  "file": "images/bosses/drive/skier-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SKIER_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/skier-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SKIER_M.png"
+ },
+ {
+  "file": "images/bosses/drive/skytrainer-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SKYTRAINER_F.png"
+ },
+ {
+  "file": "images/bosses/drive/skytrainer-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SKYTRAINER_M.png"
+ },
+ {
+  "file": "images/bosses/drive/socialite2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SOCIALITE2.png"
+ },
+ {
+  "file": "images/bosses/drive/supernerd.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SUPERNERD.png"
+ },
+ {
+  "file": "images/bosses/drive/swimmer-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "SWIMMER_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/swimmer2-f.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SWIMMER2_F.png"
+ },
+ {
+  "file": "images/bosses/drive/swimmer2-m.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SWIMMER2_M.png"
+ },
+ {
+  "file": "images/bosses/drive/tamer.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TAMER.png"
+ },
+ {
+  "file": "images/bosses/drive/taylor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "POKETOPIA_PBR_TAYLOR.png"
+ },
+ {
+  "file": "images/bosses/drive/teacher.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TEACHER.png"
+ },
+ {
+  "file": "images/bosses/drive/teamgalactic-f.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMGALACTIC_F.png"
+ },
+ {
+  "file": "images/bosses/drive/teamgalactic-m.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMGALACTIC_M.png"
+ },
+ {
+  "file": "images/bosses/drive/teamplasma-f.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMPLASMA_F.png"
+ },
+ {
+  "file": "images/bosses/drive/teamplasma-m.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMPLASMA_M.png"
+ },
+ {
+  "file": "images/bosses/drive/teamrocket-f.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMROCKET_F.png"
+ },
+ {
+  "file": "images/bosses/drive/teamrocket-m.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMROCKET_M.png"
+ },
+ {
+  "file": "images/bosses/drive/teamspace-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TEAMSPACE_F.png"
+ },
+ {
+  "file": "images/bosses/drive/teamspace-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TEAMSPACE_M.png"
+ },
+ {
+  "file": "images/bosses/drive/terrel.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "POKETOPIA_PBR_TERREL.png"
+ },
+ {
+  "file": "images/bosses/drive/tourist-f.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TOURIST_F.png"
+ },
+ {
+  "file": "images/bosses/drive/tourist-f2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TOURIST_F2.png"
+ },
+ {
+  "file": "images/bosses/drive/tourist-m.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TOURIST_M.png"
+ },
+ {
+  "file": "images/bosses/drive/trwaitress.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "trWaitress.png"
+ },
+ {
+  "file": "images/bosses/drive/tuber-f.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TUBER_F.png"
+ },
+ {
+  "file": "images/bosses/drive/tuber-m.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TUBER_M.png"
+ },
+ {
+  "file": "images/bosses/drive/tuber2-f.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TUBER2_F.png"
+ },
+ {
+  "file": "images/bosses/drive/tuber2-m.png",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TUBER2_M.png"
+ },
+ {
+  "file": "images/bosses/drive/turo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PALDEAN_SV_PROFESSOR_TURO.png"
+ },
+ {
+  "file": "images/bosses/drive/twins2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TWINS2.png"
+ },
+ {
+  "file": "images/bosses/drive/twins3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "TWINS3.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b1w1-mom.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B1W1_MOM.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b1w1-team-plasma-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B1W1_TEAM_PLASMA_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b1w1-team-plasma-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B1W1_TEAM_PLASMA_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-acetrainer-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_ACETRAINER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-acetrainer-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_ACETRAINER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-artist.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_ARTIST.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-backer-men.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BACKER_MEN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-backer-women.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BACKER_WOMEN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-backpacker-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BACKPACKER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-backpacker-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BACKPACKER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-baker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BAKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-battle-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BATTLE_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-beauty.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BEAUTY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-biker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-black-belt.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_BLACK_BELT.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-cyclist-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_CYCLIST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-cyclist-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_CYCLIST_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-dancer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_DANCER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-depot-agent.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_DEPOT_AGENT.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-doctor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_DOCTOR.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-fisherman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_FISHERMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-gentleman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_GENTLEMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-guitarist-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_GUITARIST_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-harlequin.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_HARLEQUIN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-hiker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_HIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-hoopster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_HOOPSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-infielder.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_INFIELDER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-janitor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_JANITOR.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-lass.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_LASS.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-linebacker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_LINEBACKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-madame.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_MADAME.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-maid.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_MAID.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-manager.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_MANAGER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-mines-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_MINES_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-mom.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_MOM.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-musician.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_MUSICIAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-n.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_N.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-nba-icons-micheal-jordan-charles-barkley.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_NBA_ICONS_MICHEAL_JORDAN_CHARLES_BARKLEY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-neo-plasma-grunt-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_NEO_PLASMA_GRUNT_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-neo-plasma-grunt-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_NEO_PLASMA_GRUNT_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-nurse.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_NURSE.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-nursery-aide.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_NURSERY_AIDE.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-office-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_OFFICE_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-office-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_OFFICE_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-officer.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_OFFICER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-parasol-lady.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_PARASOL_LADY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pilot.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_PILOT.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pokefan-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_POKEFAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pokefan-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_POKEFAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pokemon-breeder-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_POKEMON_BREEDER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pokemon-breeder-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_POKEMON_BREEDER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pokemon-ranger-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_POKEMON_RANGER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-pokemon-ranger-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_POKEMON_RANGER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-preschooler-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_PRESCHOOLER_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-preschooler-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_PRESCHOOLER_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-psychic-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_PSYCHIC_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-psychic-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_PSYCHIC_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-rich-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_RICH_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-rough-duo.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_ROUGH_DUO.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-roughneck.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_ROUGHNECK.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-schoolkid-boy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SCHOOLKID_BOY.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-schoolkid-girl.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SCHOOLKID_GIRL.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-scientist-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SCIENTIST_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-scientist-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SCIENTIST_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-shadow-triad.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SHADOW_TRIAD.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-smasher.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SMASHER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-snow-worker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SNOW_WORKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-striker.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_STRIKER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-suit-actor.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SUIT_ACTOR.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-swimmer-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SWIMMER_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-swimmer-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_SWIMMER_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-twins.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_TWINS.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-veteran-man.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_VETERAN_MAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-veteran-woman.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_VETERAN_WOMAN.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-waiter.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_WAITER.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-waitress.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_WAITRESS.png"
+ },
+ {
+  "file": "images/bosses/drive/unovaian-b2w2-youngster.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_YOUNGSTER.png"
+ },
+ {
+  "file": "images/bosses/drive/venus.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "OERRIAN_COLO_CIPHER_ADMIN_VENUS.png"
+ },
+ {
+  "file": "images/bosses/drive/voldon.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "POKETOPIA_PBR_VOLDON.png"
+ },
+ {
+  "file": "images/bosses/drive/waiter2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "WAITER2.png"
+ },
+ {
+  "file": "images/bosses/drive/waitress2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "WAITRESS2.png"
+ },
+ {
+  "file": "images/bosses/drive/wes.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "PLAYER_TRAINER_COLO_Wes.png"
+ },
+ {
+  "file": "images/bosses/drive/willie.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "ORREAN_COLO_RIDER_WILLIE.png"
+ },
+ {
+  "file": "images/bosses/drive/worker2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "WORKER2.png"
+ },
+ {
+  "file": "images/bosses/drive/worker3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "WORKER3.png"
+ },
+ {
+  "file": "images/bosses/drive/yancy.png",
+  "source": "Pokemon-Decades-main (Graphics/Trainers)",
+  "original": "UNOVAIAN_B2W2_YANCY.png"
+ },
+ {
+  "file": "images/bosses/drive/youngcouple2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "YOUNGCOUPLE2.png"
+ },
+ {
+  "file": "images/bosses/drive/youngster2.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "YOUNGSTER2.png"
+ },
+ {
+  "file": "images/bosses/drive/youngster3.png",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "YOUNGSTER3.png"
+ },
+ {
+  "file": "images/trainer/drive/argenta.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "FRONTIERBRAIN_Argenta.png"
+ },
+ {
+  "file": "images/trainer/drive/beauty.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "BEAUTY.png"
+ },
+ {
+  "file": "images/trainer/drive/blackbelt.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "BLACKBELT.png"
+ },
+ {
+  "file": "images/trainer/drive/clerk2-m.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "CLERK2_M.png"
+ },
+ {
+  "file": "images/trainer/drive/coolcouple.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "COOLCOUPLE.png"
+ },
+ {
+  "file": "images/trainer/drive/cooltrainer-f.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "COOLTRAINER_F.png"
+ },
+ {
+  "file": "images/trainer/drive/crushkin.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "CRUSHKIN.png"
+ },
+ {
+  "file": "images/trainer/drive/cueball.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "CUEBALL.png"
+ },
+ {
+  "file": "images/trainer/drive/dahlia.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "FRONTIERBRAIN_Dahlia.png"
+ },
+ {
+  "file": "images/trainer/drive/darach.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "FRONTIERBRAIN_Darach.png"
+ },
+ {
+  "file": "images/trainer/drive/doctor.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "DOCTOR.png"
+ },
+ {
+  "file": "images/trainer/drive/gentleman.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "GENTLEMAN.png"
+ },
+ {
+  "file": "images/trainer/drive/herd4.png|json",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD4.png"
+ },
+ {
+  "file": "images/trainer/drive/herd5.png|json",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD5.png"
+ },
+ {
+  "file": "images/trainer/drive/herd6.png|json",
+  "source": "Graphics (fan game, Graphics/Trainers)",
+  "original": "HERD6.png"
+ },
+ {
+  "file": "images/trainer/drive/lady.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "LADY.png"
+ },
+ {
+  "file": "images/trainer/drive/nurse.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "NURSE.png"
+ },
+ {
+  "file": "images/trainer/drive/pokemonbreeder2.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKEMONBREEDER2.png"
+ },
+ {
+  "file": "images/trainer/drive/pokemonranger-f.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKEMONRANGER_F.png"
+ },
+ {
+  "file": "images/trainer/drive/pokemontrainer-n.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKEMONTRAINER_N.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar10.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR10.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar11.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR11.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar12.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR12.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar13.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR13.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar14.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR14.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar15.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR15.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar16.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR16.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar2.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR2.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar3.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR3.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar4.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR4.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar5.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR5.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar6.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR6.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar7.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR7.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar8.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR8.png"
+ },
+ {
+  "file": "images/trainer/drive/pokestar9.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POKESTAR9.png"
+ },
+ {
+  "file": "images/trainer/drive/policeman.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "POLICEMAN.png"
+ },
+ {
+  "file": "images/trainer/drive/richboy.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "RICHBOY.png"
+ },
+ {
+  "file": "images/trainer/drive/scientist.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SCIENTIST.png"
+ },
+ {
+  "file": "images/trainer/drive/scientist2.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SCIENTIST2.png"
+ },
+ {
+  "file": "images/trainer/drive/shadowtriad.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SHADOWTRIAD.png"
+ },
+ {
+  "file": "images/trainer/drive/socialite.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "SOCIALITE.png"
+ },
+ {
+  "file": "images/trainer/drive/teamplasma2-f.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMPLASMA2_F.png"
+ },
+ {
+  "file": "images/trainer/drive/teamplasma2-m.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "TEAMPLASMA2_M.png"
+ },
+ {
+  "file": "images/trainer/drive/waiter.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "WAITER.png"
+ },
+ {
+  "file": "images/trainer/drive/waitress.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "WAITRESS.png"
+ },
+ {
+  "file": "images/trainer/drive/worker-drive.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "WORKER.png"
+ },
+ {
+  "file": "images/trainer/drive/youngster-drive.png|json",
+  "source": "Animated Trainer Intros (Graphics/Trainers)",
+  "original": "YOUNGSTER.png"
+ },
+ {
+  "file": "images/trainer/pr/ace_trainer_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ace_trainer_f.png"
+ },
+ {
+  "file": "images/trainer/pr/ace_trainer_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ace_trainer_m.png"
+ },
+ {
+  "file": "images/trainer/pr/aether_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "aether_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/aether_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "aether_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/aliana.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "aliana.png"
+ },
+ {
+  "file": "images/trainer/pr/aqua_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "aqua_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/aqua_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "aqua_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/archer.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "archer.png"
+ },
+ {
+  "file": "images/trainer/pr/ariana.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ariana.png"
+ },
+ {
+  "file": "images/trainer/pr/artist.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "artist.png"
+ },
+ {
+  "file": "images/trainer/pr/atticus.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "atticus.png"
+ },
+ {
+  "file": "images/trainer/pr/backers_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "backers_f.png"
+ },
+ {
+  "file": "images/trainer/pr/backers_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "backers_m.png"
+ },
+ {
+  "file": "images/trainer/pr/backpacker_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "backpacker_f.png"
+ },
+ {
+  "file": "images/trainer/pr/backpacker_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "backpacker_m.png"
+ },
+ {
+  "file": "images/trainer/pr/baker.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "baker.png"
+ },
+ {
+  "file": "images/trainer/pr/beauty_2.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "beauty_2.png"
+ },
+ {
+  "file": "images/trainer/pr/bird_keeper_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "bird_keeper_f.png"
+ },
+ {
+  "file": "images/trainer/pr/black_belt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "black_belt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/breeder_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "breeder_f.png"
+ },
+ {
+  "file": "images/trainer/pr/breeder_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "breeder_m.png"
+ },
+ {
+  "file": "images/trainer/pr/bryony.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "bryony.png"
+ },
+ {
+  "file": "images/trainer/pr/buck.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "buck.png"
+ },
+ {
+  "file": "images/trainer/pr/bug_type_superfan.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "bug_type_superfan.png"
+ },
+ {
+  "file": "images/trainer/pr/camper_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "camper_f.png"
+ },
+ {
+  "file": "images/trainer/pr/camper_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "camper_m.png"
+ },
+ {
+  "file": "images/trainer/pr/celosia.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "celosia.png"
+ },
+ {
+  "file": "images/trainer/pr/clerk_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "clerk_f.png"
+ },
+ {
+  "file": "images/trainer/pr/clerk_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "clerk_m.png"
+ },
+ {
+  "file": "images/trainer/pr/clerk_m_2.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "clerk_m_2.png"
+ },
+ {
+  "file": "images/trainer/pr/collector.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "collector.png"
+ },
+ {
+  "file": "images/trainer/pr/courtney.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "courtney.png"
+ },
+ {
+  "file": "images/trainer/pr/cyclist_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "cyclist_f.png"
+ },
+ {
+  "file": "images/trainer/pr/cyclist_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "cyclist_m.png"
+ },
+ {
+  "file": "images/trainer/pr/dancer.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "dancer.png"
+ },
+ {
+  "file": "images/trainer/pr/depot_agent.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "depot_agent.png"
+ },
+ {
+  "file": "images/trainer/pr/doctor_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "doctor_f.png"
+ },
+ {
+  "file": "images/trainer/pr/doctor_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "doctor_m.png"
+ },
+ {
+  "file": "images/trainer/pr/eri.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "eri.png"
+ },
+ {
+  "file": "images/trainer/pr/expert_pokemon_breeder.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "expert_pokemon_breeder.png"
+ },
+ {
+  "file": "images/trainer/pr/faba.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "faba.png"
+ },
+ {
+  "file": "images/trainer/pr/flare_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "flare_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/flare_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "flare_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/galactic_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "galactic_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/galactic_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "galactic_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/halloween_rival_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "halloween_rival_f.png"
+ },
+ {
+  "file": "images/trainer/pr/halloween_rival_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "halloween_rival_m.png"
+ },
+ {
+  "file": "images/trainer/pr/harlequin.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "harlequin.png"
+ },
+ {
+  "file": "images/trainer/pr/hooligans.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "hooligans.png"
+ },
+ {
+  "file": "images/trainer/pr/hoopster.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "hoopster.png"
+ },
+ {
+  "file": "images/trainer/pr/infielder.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "infielder.png"
+ },
+ {
+  "file": "images/trainer/pr/interviewers.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "interviewers.png"
+ },
+ {
+  "file": "images/trainer/pr/janitor.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "janitor.png"
+ },
+ {
+  "file": "images/trainer/pr/jupiter.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "jupiter.png"
+ },
+ {
+  "file": "images/trainer/pr/linebacker.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "linebacker.png"
+ },
+ {
+  "file": "images/trainer/pr/liza.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "liza.png"
+ },
+ {
+  "file": "images/trainer/pr/mable.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "mable.png"
+ },
+ {
+  "file": "images/trainer/pr/macro_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "macro_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/macro_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "macro_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/magma_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "magma_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/magma_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "magma_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/maid.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "maid.png"
+ },
+ {
+  "file": "images/trainer/pr/mars.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "mars.png"
+ },
+ {
+  "file": "images/trainer/pr/mela.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "mela.png"
+ },
+ {
+  "file": "images/trainer/pr/musician.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "musician.png"
+ },
+ {
+  "file": "images/trainer/pr/mysterious_sisters.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "mysterious_sisters.png"
+ },
+ {
+  "file": "images/trainer/pr/nursery_aide.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "nursery_aide.png"
+ },
+ {
+  "file": "images/trainer/pr/officer.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "officer.png"
+ },
+ {
+  "file": "images/trainer/pr/oleana.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "oleana.png"
+ },
+ {
+  "file": "images/trainer/pr/parasol_lady.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "parasol_lady.png"
+ },
+ {
+  "file": "images/trainer/pr/petrel.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "petrel.png"
+ },
+ {
+  "file": "images/trainer/pr/pilot.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "pilot.png"
+ },
+ {
+  "file": "images/trainer/pr/plasma_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "plasma_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/plasma_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "plasma_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/pokefan_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "pokefan_f.png"
+ },
+ {
+  "file": "images/trainer/pr/pokefan_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "pokefan_m.png"
+ },
+ {
+  "file": "images/trainer/pr/preschooler_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "preschooler_f.png"
+ },
+ {
+  "file": "images/trainer/pr/preschooler_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "preschooler_m.png"
+ },
+ {
+  "file": "images/trainer/pr/proton.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "proton.png"
+ },
+ {
+  "file": "images/trainer/pr/psychic_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "psychic_f.png"
+ },
+ {
+  "file": "images/trainer/pr/ranger_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ranger_f.png"
+ },
+ {
+  "file": "images/trainer/pr/ranger_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ranger_m.png"
+ },
+ {
+  "file": "images/trainer/pr/rich_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rich_f.png"
+ },
+ {
+  "file": "images/trainer/pr/rich_kid_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rich_kid_f.png"
+ },
+ {
+  "file": "images/trainer/pr/rich_kid_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rich_kid_m.png"
+ },
+ {
+  "file": "images/trainer/pr/rich_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rich_m.png"
+ },
+ {
+  "file": "images/trainer/pr/rival_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rival_f.png"
+ },
+ {
+  "file": "images/trainer/pr/rival_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rival_m.png"
+ },
+ {
+  "file": "images/trainer/pr/rocket_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rocket_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/rocket_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rocket_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/rood.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rood.png"
+ },
+ {
+  "file": "images/trainer/pr/rose.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "rose.png"
+ },
+ {
+  "file": "images/trainer/pr/ruin_maniac.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "ruin_maniac.png"
+ },
+ {
+  "file": "images/trainer/pr/saturn.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "saturn.png"
+ },
+ {
+  "file": "images/trainer/pr/school_kid_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "school_kid_f.png"
+ },
+ {
+  "file": "images/trainer/pr/school_kid_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "school_kid_m.png"
+ },
+ {
+  "file": "images/trainer/pr/scientist_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "scientist_f.png"
+ },
+ {
+  "file": "images/trainer/pr/scientist_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "scientist_m.png"
+ },
+ {
+  "file": "images/trainer/pr/scuba_diver_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "scuba_diver_f.png"
+ },
+ {
+  "file": "images/trainer/pr/scuba_diver_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "scuba_diver_m.png"
+ },
+ {
+  "file": "images/trainer/pr/skull_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "skull_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/skull_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "skull_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/smasher.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "smasher.png"
+ },
+ {
+  "file": "images/trainer/pr/snow_ace_trainer_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "snow_ace_trainer_f.png"
+ },
+ {
+  "file": "images/trainer/pr/snow_ace_trainer_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "snow_ace_trainer_m.png"
+ },
+ {
+  "file": "images/trainer/pr/snow_worker.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "snow_worker.png"
+ },
+ {
+  "file": "images/trainer/pr/snow_worker_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "snow_worker_f.png"
+ },
+ {
+  "file": "images/trainer/pr/star_grunt_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "star_grunt_f.png"
+ },
+ {
+  "file": "images/trainer/pr/star_grunt_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "star_grunt_m.png"
+ },
+ {
+  "file": "images/trainer/pr/striker.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "striker.png"
+ },
+ {
+  "file": "images/trainer/pr/swimmer_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "swimmer_m.png"
+ },
+ {
+  "file": "images/trainer/pr/twins.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "twins.png"
+ },
+ {
+  "file": "images/trainer/pr/veteran_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "veteran_f.png"
+ },
+ {
+  "file": "images/trainer/pr/veteran_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "veteran_m.png"
+ },
+ {
+  "file": "images/trainer/pr/vicky.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "vicky.png"
+ },
+ {
+  "file": "images/trainer/pr/victor.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "victor.png"
+ },
+ {
+  "file": "images/trainer/pr/victoria.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "victoria.png"
+ },
+ {
+  "file": "images/trainer/pr/vito.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "vito.png"
+ },
+ {
+  "file": "images/trainer/pr/vivi.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "vivi.png"
+ },
+ {
+  "file": "images/trainer/pr/waiter_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "waiter_f.png"
+ },
+ {
+  "file": "images/trainer/pr/waiter_m.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "waiter_m.png"
+ },
+ {
+  "file": "images/trainer/pr/worker_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "worker_f.png"
+ },
+ {
+  "file": "images/trainer/pr/xerosic.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "xerosic.png"
+ },
+ {
+  "file": "images/trainer/pr/young_couple.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "young_couple.png"
+ },
+ {
+  "file": "images/trainer/pr/youngster_f.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "youngster_f.png"
+ },
+ {
+  "file": "images/trainer/pr/zinzolin.png|json",
+  "source": "pokerogue-assets-beta (images/trainer)",
+  "original": "zinzolin.png"
+ }
+]

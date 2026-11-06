@@ -1,0 +1,13 @@
+- Google Drive trainers (Kice, 2026-11-06: "add every trainer in the drive"): every trainer sprite from 5 Drive packs, about 2,000 files with repeats removed, is now in the game. Built by `tools/drive/` in four steps: `inventory.py`, `identities.py`, `teams.py`, then `build-trainers.py` and `add-boss-teams.mjs`. The packs are PokeRogue beta, Animated Trainer Intros, Pokémon Decades, Essentials EBDX and the fan-game Graphics folder. What was added:
+  - **739 new trainer classes** in `src/data/trainersDrive.json`, marked `pack: "drive"`. They make up `balance.driveTrainerShare` (35%) of ordinary trainers, so the game's own classes keep their usual odds.
+  - **58 fan-game characters** that have no team anywhere. Each is an ordinary trainer under their own name (`fan-*`). Their type comes from their outfit's main colour.
+  - **75 new named trainers** appended to `bosses.json` with `drive: true`, such as Professor Oak, Archer, Kukui, Faba, Team Star bosses and Frontier Brains. Their signature Pokémon come from Decades' trainer teams or a short hand-written list. Their teams were added to `bossTeams.json` without changing any existing team, and are capped at level 100 like the old ones.
+  - **17 bosses that only had a still picture are now animated**, among them Cynthia, Blue, Cyrus and Ghetsis. They are listed between the `drive-anims` markers in `BOSS_ANIMATED`.
+- Art goes in `images/trainer/pr`, `images/trainer/drive` and `images/bosses/drive`, about 7 MB. It loads only when a screen first shows it (`driveTrainer()` in `catalog.ts`; `trainerVisual` swaps the art in once loaded). Pixel-doubled art was halved to 1x. Intro strips play once and hold their pose. Every file's source is listed in `tools/drive/provenance.json`.
+- Licence: the PokeRogue art is CC-BY-NC-SA-4.0 (non-commercial). The rest is fan-game and Nintendo material, the same as the existing packs.
+- Limits and things left out:
+  - Two real people (basketball players in Decades) and stock duplicates of Blue, Oak and Lance were skipped.
+  - Outfit variants of a person (Brock travel, Misty swimsuit…) were not added as new people.
+  - Fan classes with no team use keyword or colour types.
+  - Back sprites from these packs are not used yet.
+  - Running `npm run data:bosses` on its own rebuilds every boss team (its output no longer matches the committed file, which was already true before this change). To add only the Drive bosses' teams, use `node tools/drive/add-boss-teams.mjs`.

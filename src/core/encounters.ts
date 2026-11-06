@@ -2,7 +2,7 @@
 // Elite Four and champion encounters.
 
 import { enemyLevelOffset } from './archetypes';
-import type { Archetype, ArchetypeModifier, BossTeam, Campaign, Content, StatName, Theme } from './contentSchema';
+import type { Archetype, ArchetypeModifier, BossTeam, Campaign, Content, StatName, Theme, TrainerClass } from './contentSchema';
 import { createPokemon, getSpecies, maxHp } from './pokemon';
 import { hashSeed, Rng } from './rng';
 import type { LevelBreakdown, PokemonInstance } from './state';
@@ -245,11 +245,22 @@ function buildTeam(
 }
 
 /**
+ * One class from the fitting ones. The Google Drive classes outnumber the game's own many times over,
+ * so they are their own group, chosen balance.driveTrainerShare of the time.
+ */
+export function pickTrainerClass(content: Content, classes: readonly TrainerClass[], rng: Rng): TrainerClass {
+  const drive = classes.filter((c) => c.pack === 'drive');
+  const own = classes.filter((c) => c.pack !== 'drive');
+  if (drive.length === 0 || own.length === 0) return rng.pick([...classes]);
+  return rng.pick(rng.chance(content.balance.driveTrainerShare) ? drive : own);
+}
+
+/**
  * A trainer whose class fits the theme, with a team drawn from the theme.
  * `stageNumber` counts stages from the start of the run (teams grow with it).
  */
 export function planTrainer(content: Content, archetype: Archetype, theme: Theme, stageNumber: number, scale: LevelScale, rng: Rng, regionId?: string): TrainerPlan {
-  const trainerClass = rng.pick(trainerClassesFor(content, theme));
+  const trainerClass = pickTrainerClass(content, trainerClassesFor(content, theme), rng);
   const name = rng.pick(trainerClass.names);
   const size = teamSize(content.balance.trainerTeam, stageNumber, rng);
   const team = buildTeam(content, archetype, scale, size, content.balance.difficulty.trainerBonus, 0, () => pickThemeSpecies(content, theme, rng, trainerClass.types, regionId, undefined, curveLevel(content, scale)), rng);

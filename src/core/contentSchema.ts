@@ -1586,6 +1586,8 @@ export const TrainerClassSchema = z.object({
   lines: z.object({ intro: z.string(), win: z.string(), lose: z.string() }).optional(),
   /** Classes outside the original 17 only appear when balance.extraTrainerClasses is on. */
   extra: z.boolean().default(false),
+  /** "drive": one of the classes imported from the Google Drive packs (src/data/trainersDrive.json). */
+  pack: z.literal('drive').optional(),
 });
 export type TrainerClass = z.infer<typeof TrainerClassSchema>;
 
@@ -1997,6 +1999,8 @@ export const BalanceSchema = z.object({
   /** Repeat attribute boosts from items diminish: after this many full-size boosts to one attribute in a run, each is scaled by `factor` (at least 1 point). */
   /** Trainer classes added after the first 17 (5.17) can appear as ordinary trainers. Off keeps old seeds' trainer picks. */
   extraTrainerClasses: z.boolean().default(true),
+  /** Share of ordinary trainers drawn from the Google Drive classes (over 600 of them) instead of the game's own; the rest keep their usual odds. */
+  driveTrainerShare: z.number().min(0).max(1).default(0.35),
   /** Legendary and mythical starters (Special Specimen pools): they start this many levels lower, and only the standard draft rule can be used with them. */
   specialSpecimen: z.object({ levelPenalty: z.number().int().min(0) }).default({ levelPenalty: 3 }),
   /** Extra stock the shop carries in a mode (key: the mode id). */

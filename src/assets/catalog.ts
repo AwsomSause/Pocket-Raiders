@@ -97,6 +97,26 @@ export const BOSS_ANIMATED = [
   'colress', 'crasherwake', 'cress', 'drayden', 'emmet', 'erika', 'falkner', 'fantina', 'flannery', 'flint', 'gardenia', 'hilbert', 'hilda', 'hugh',
   'ingo', 'janine', 'jasmine', 'juan', 'karen', 'koga', 'lance', 'ltsurge', 'marley', 'marlon', 'maylene', 'misty', 'morty', 'n', 'nate', 'norman',
   'palmer', 'pryce', 'red', 'riley', 'rosa', 'silver', 'skyla', 'thorton', 'volkner', 'wattson', 'whitney',
+  // Bosses that gained an animation from the Google Drive packs (written by tools/drive/build-trainers.py).
+  // drive-anims:start
+  'barry',
+  'bianca-pwt',
+  'blue',
+  'brawly-gen6',
+  'cynthia-gen7',
+  'cyrus',
+  'elesa-gen5bw2',
+  'ghetsis',
+  'grimsley-gen7',
+  'iris-gen5bw2',
+  'roxanne-gen6',
+  'roxie-masters',
+  'sabrina-lgpe',
+  'steven-gen6',
+  'tateandliza-gen6',
+  'wallace-gen6',
+  'winona-gen6',
+  // drive-anims:end
 ] as const;
 /** Trainers with a Gen 4 / Gen 5 throwing back sprite (same source): "boss.back.lucas". */
 export const BOSS_BACKS = [
@@ -329,13 +349,19 @@ export const FIXED_ASSETS: AssetEntry[] = [
   { id: 'font.bold', kind: 'font', category: 'font', path: 'fonts/pkmnems.ttf' },
 ];
 
+/**
+ * The Google Drive trainers (over 700, in images/trainer/pr, images/trainer/drive and images/bosses/drive) load
+ * when a screen first shows them, not at start-up.
+ */
+export const driveTrainer = (assetId: string): boolean => /^(trainer\.(pr|drive)|boss\.drive)\//.test(assetId);
+
 export function trainerEntry(assetId: string): AssetEntry {
   // "boss.cynthia-gen7" -> images/bosses/cynthia-gen7.png (a single picture from the director's boss pack)
   if (assetId.startsWith('boss.')) {
-    return { id: assetId, kind: 'image', category: 'trainer', path: `images/bosses/${assetId.slice('boss.'.length)}.png` };
+    return { id: assetId, kind: 'image', category: 'trainer', path: `images/bosses/${assetId.slice('boss.'.length)}.png`, ...(driveTrainer(assetId) ? { lazy: true } : {}) };
   }
   // "trainer.red" -> images/trainer/red
-  return atlas(assetId, 'trainer', `images/trainer/${assetId.replace(/^trainer\./, '')}`);
+  return { ...atlas(assetId, 'trainer', `images/trainer/${assetId.replace(/^trainer\./, '')}`), ...(driveTrainer(assetId) ? { lazy: true } : {}) };
 }
 
 export function itemEntry(assetId: string): AssetEntry {
