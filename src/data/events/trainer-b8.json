@@ -1,0 +1,108 @@
+{
+ "events": [
+  {
+   "id": "blindfold-bout",
+   "name": "Blindfold Bout",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1a1a1a",
+    "effect": "none"
+   },
+   "intro": "\"Fight blind! You will not see my team until each Pokémon moves.\"",
+   "choices": [
+    {
+     "label": "Put on the blindfold",
+     "success": {
+      "text": "The lights drop. Only silhouettes remain.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Blindfold Master",
+       "classId": "psychic",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 650
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "hiddenFoe": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Keep your eyes open and walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "magicians-misdirection",
+   "name": "Magician's Misdirection",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1f33",
+    "effect": "none"
+   },
+   "intro": "A magician twirls a cape. \"Watch my hands! My Pokémon is never what it seems.\"",
+   "choices": [
+    {
+     "label": "Watch the magician",
+     "success": {
+      "text": "The announcer calls out the wrong name.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stage Magician",
+       "classId": "psychic",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 650
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "decoyFoe": "magikarp"
+       }
+      }
+     }
+    },
+    {
+     "label": "Applaud and leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

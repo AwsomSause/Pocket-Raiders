@@ -720,7 +720,24 @@ export class BattleScene extends Phaser.Scene {
     if (vol?.illusion) mon.speciesId = vol.illusion;
   }
 
+  /** Blindfold Bout: the foe is hidden (a silhouette called ???) until it has used a move. Display only. */
+  private foeHidden(mon: PokemonInstance): boolean {
+    const b = this.run?.battle;
+    return Boolean(b?.eventRule?.hiddenFoe && !b.enemyVolatile?.lastMove && b.enemyTeam[b.enemyIndex]?.uid === mon.uid);
+  }
+
+  /** Magician's Misdirection: the species name shown for the foe until it has used a move. */
+  private decoyName(mon: PokemonInstance): string | null {
+    const b = this.run?.battle;
+    const decoy = b?.eventRule?.decoyFoe;
+    if (!decoy || b.enemyVolatile?.lastMove || b.enemyTeam[b.enemyIndex]?.uid !== mon.uid) return null;
+    return services().session.content.species.get(decoy)?.name ?? null;
+  }
+
   private speciesName(mon: PokemonInstance): string {
+    if (this.foeHidden(mon)) return '???';
+    const decoy = this.decoyName(mon);
+    if (decoy) return decoy;
     return getSpecies(services().session.content, mon.speciesId).name;
   }
 
@@ -1053,7 +1070,11 @@ export class BattleScene extends Phaser.Scene {
     const spec = box.spec;
     const shown = `${this.speciesName(mon)}${genderSign(content, mon)}${mon.shiny ? ' ★' : ''}`;
     box.name.setText(spec ? `${spec.namePrefix ?? ''}${spec.upper ? shown.toUpperCase() : shown}${spec.level === 'inline' ? ` · Lv${mon.level}` : ''}` : shown);
-    box.level.setText(`Lv${mon.level}`);
+    box.level.setText(this.foeHidden(mon) ? 'Lv?' : `Lv${mon.level}`);
+    if (box === this.enemyBox && this.enemySprite instanceof Phaser.GameObjects.Sprite) {
+      if (this.foeHidden(mon)) this.enemySprite.setTintFill(0x000000);
+      else this.enemySprite.clearTint();
+    }
     // A long name stops short of the level and the form symbol instead of running under them.
     if (!spec || spec.level !== 'inline') fitLine(box.name, box.level.x - box.level.width - box.name.x - (spec ? 12 : 40));
     const pct = Math.ceil((Math.max(0, mon.hp) / max) * 100);
