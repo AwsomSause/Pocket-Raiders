@@ -59,6 +59,8 @@ test('a rival raid offers help, race or leave; helping starts a raid fight with 
   await page.waitForTimeout(300);
   expect(await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Map').picker))).toBe(true);
   await page.keyboard.press('Enter'); // first row: help your rival
+  await page.waitForTimeout(300);
+  await page.keyboard.press('Enter'); // "Go in as you are" (the preparation step)
   await waitForScene(page, 'Battle');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').status.text), { timeout: 10_000 }).toContain('RAID');
   const raid = await page.evaluate(() => {
