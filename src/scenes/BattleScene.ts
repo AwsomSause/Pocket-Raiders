@@ -2557,7 +2557,7 @@ export class BattleScene extends Phaser.Scene {
           // Inline: the badges follow the words on the same line.
           const bx = at ? (at.inline ? at.x + this.moveInfo.width + 16 : at.x - 2) : COMMAND_X + 28;
           const by = at ? (at.inline ? at.y + 10 : at.y + 16) : MESSAGE_Y + 40;
-          this.moveBadges = this.add.container(bx, by, [...art, ...this.moveExtras(move)]);
+          this.moveBadges = this.add.container(bx, by, [...art, ...this.moveExtras(move, !!at?.inline)]);
           bounceIn(this, this.moveBadges, this.motion);
         } else art.forEach((o) => o.destroy());
         this.moveInfo.setColor(this.panelText);
@@ -2614,7 +2614,8 @@ export class BattleScene extends Phaser.Scene {
    * (contact, sound, punch…) and how well the move hits the foe's visible
    * types, as a tag plus words. Only what the player can already see.
    */
-  private moveExtras(move: Move): Phaser.GameObjects.GameObject[] {
+  /** `inline`: the badges sit on the message bar's own row, so the effectiveness hint goes above them instead of down onto the party icons. */
+  private moveExtras(move: Move, inline = false): Phaser.GameObjects.GameObject[] {
     const out: Phaser.GameObjects.GameObject[] = [];
     const flags = moveFlagNames(move);
     flags.slice(0, 4).forEach((name, n) => {
@@ -2627,9 +2628,10 @@ export class BattleScene extends Phaser.Scene {
     const tera = this.run.battle?.transform.teraTypes[foe.uid];
     const types = (tera ? [tera] : getSpecies(content, foe.speciesId).types) as TypeName[];
     const hint = effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, types));
-    const icon = effectivenessIcon(this, 0, 72, hint.frame, 0.36);
+    const hy = inline ? -38 : 72;
+    const icon = effectivenessIcon(this, 0, hy, hint.frame, 0.36);
     if (icon) out.push(icon);
-    out.push(this.add.text(icon ? 32 : 0, 72, hint.text, textStyle(20, COLORS.textLight)).setOrigin(0, 0.5));
+    out.push(this.add.text(icon ? 32 : 0, hy, hint.text, textStyle(20, COLORS.textLight, inline ? { stroke: '#181818', strokeThickness: 4 } : {})).setOrigin(0, 0.5));
     return out;
   }
 

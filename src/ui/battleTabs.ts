@@ -3,7 +3,7 @@
 
 import Phaser from 'phaser';
 import { AERO, paintGlass, type MotionLevel } from './aero';
-import { COLORS, textStyle } from './theme';
+import { COLORS, GAME_WIDTH, textStyle } from './theme';
 
 export type BattlePage = 'attack' | 'party' | 'item';
 export const PAGES: { id: BattlePage; label: string; tint: number }[] = [
@@ -51,12 +51,20 @@ export class BattleTabs {
       this.pills.push({ g, label, zone });
     });
     this.paint();
+    this.fit();
+  }
+
+  /** Shrinks the strip so it never runs off the right edge of the screen. */
+  private fit(): void {
+    const total = PAGES.length * (W + GAP) + W + GAP + INFO_W;
+    this.root.setScale(Math.min(1, Math.max(0.5, (GAME_WIDTH - 12 - this.root.x) / total)));
   }
 
   /** Puts the strip where it belongs for the screen that is up. */
   place(where: TabsPlace, barX: number, barY: number): void {
     if (where === 'bar') this.root.setPosition(barX, barY);
     else this.root.setPosition(150, 36);
+    this.fit();
   }
 
   show(on: boolean): void {

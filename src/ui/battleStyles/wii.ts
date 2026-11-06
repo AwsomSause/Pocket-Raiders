@@ -32,7 +32,7 @@ export const wii: BattleSkin = {
     bar: [24, 362, 640, 36],
     message: { x: 40, y: 370, w: 610, size: 18 },
     command: null,
-    tabs: { x: 712, y: 368 },
+    tabs: { x: 668, y: 368 },
     moveInfo: { x: 40, y: 370, inline: true },
     combined: true,
     root: grid(18),
