@@ -6,6 +6,7 @@
 // Definitions describe what CAN happen (data); records describe what DID
 // happen in this run (saved with the run).
 
+import { StoryV2Schema } from '../story2/schema';
 import { z } from 'zod';
 import { AttributeKeySchema, BoostStatSchema } from '../contentSchema';
 import { BattleReplaySchema, WorldMemorySchema } from '../memories/schema';
@@ -435,6 +436,8 @@ export const StoryStateSchema = z.object({
   evil: EvilStateSchema.default(freshEvil()),
   /** Permanent choices (core/evil/choices.ts, run v32): the run's significant decisions, oldest first. */
   choices: z.array(ChoiceRecordSchema).default([]),
+  /** Story Overhaul v2 state (run v40): present only on Story Runs; Classic runs leave it out. */
+  v2: StoryV2Schema.optional(),
 });
 export type StoryState = z.infer<typeof StoryStateSchema>;
 

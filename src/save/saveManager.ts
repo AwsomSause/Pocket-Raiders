@@ -21,6 +21,7 @@ import {
 } from '../core/state';
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
+import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
 export const SAVE_FORMAT = 'pkmn-roguelike';
@@ -36,7 +37,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 19, run: 39, settings: 38, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 40, settings: 39, meta: 1, timeline: 1 };
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -128,6 +129,14 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     17: (data) => ({ ...(data as Json), treasureHunt: { pieces: [], claimed: false } }),
     // v19 (Overhaul slice 9): no Hyper/Overdrive explanation has been read yet.
     18: (data) => ({ ...(data as Json), hyperExplained: [] }),
+    // v20 (Story Overhaul F0): the story archive starts empty; lore the player already found (npcMemory.lore) becomes "known". npcMemory itself is untouched.
+    19: (data) => {
+      const profile = data as Json & { npcMemory?: { lore?: unknown } };
+      const story = freshProfileStory();
+      const lore = Array.isArray(profile.npcMemory?.lore) ? profile.npcMemory.lore : [];
+      for (const id of lore) if (typeof id === 'string') story.lore[id] = { state: 'known', sources: [] };
+      return { ...profile, story };
+    },
   },
   run: {
     // v2 (Milestone 2): Bag, candies, pending decisions, and battles against
@@ -341,6 +350,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     37: (data) => ({ ...(data as Json), gimmicks: { uses: {} } }),
     // v39 (Overhaul slice 3, shared generator): runs started before it remember no recent picks.
     38: (data) => ({ ...(data as Json), history: {} }),
+    // v40 (Story Overhaul F0): Story Runs add run.story.v2; older runs simply have none (Classic play is unchanged).
+    39: (data) => data,
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
@@ -420,6 +431,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     36: (data) => ({ ...(data as Json), fastTera: false }),
     // v38 (Mega reference look): Fast Mega, off (the full scene) by default. (v37 is Fast Tera.)
     37: (data) => ({ ...(data as Json), fastMega: false }),
+    // v39 (Story Overhaul F0): the story settings start at their defaults; every old key is unchanged.
+    38: (data) => ({ ...(data as Json), story: { ...STORY_SETTINGS_DEFAULTS } }),
   },
   meta: {},
   timeline: {},
@@ -449,7 +462,7 @@ export interface SlotPeek {
 
 export type SaveResult = { ok: true } | { ok: false; reason: string };
 
-export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, autoRules: [], uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, skipGuard: true, rememberChoices: true, fastZMove: false, fastDynamax: false, fastTera: false, fastMega: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high' };
+export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, autoRules: [], uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, skipGuard: true, rememberChoices: true, fastZMove: false, fastDynamax: false, fastTera: false, fastMega: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high', story: { ...STORY_SETTINGS_DEFAULTS } };
 
 /** True when the browser asks for less motion (then new players start with reduced battle animations). */
 function prefersReducedMotion(): boolean {

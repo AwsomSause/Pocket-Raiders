@@ -7,6 +7,7 @@
 // from outside the game data (files on disk, the test sources) are passed in,
 // so this file stays free of Node and Phaser.
 
+import { storyGates } from './storyGates';
 import type { Content } from '../core/contentSchema';
 import { generateLeagueMap, generateStageMap, validateLeagueMap, validateStageMap } from '../core/map';
 import { usableLearnset } from '../core/pokemon';
@@ -37,6 +38,9 @@ export interface ReportInputs extends StatusInputs {
   fileExists?: (path: string) => boolean;
   /** How many seeds to generate stage maps for, per campaign. */
   mapSeeds?: number;
+  /** Story data file sizes in bytes and whether hash.json is current (story gates). */
+  storyFileSizes?: Record<string, number>;
+  storyHashFresh?: boolean;
 }
 
 export interface ReportCheck {
@@ -234,6 +238,8 @@ export function buildContentReport(content: Content, inputs: ReportInputs): Cont
   add('unused-balance-settings', 'Unused balance settings', 'Settings in balance.json that no game code reads (changing them does nothing).', unusedSettings(inputs.balanceJson, inputs.gameSources));
   add('untested-save-migrations', 'Save upgrades with no test', 'Save upgrades (old version to new) that no unit test loads an old save through.', untestedMigrations(inputs.migrations, inputs.testSources));
   add('over-power-budget', 'Over the power budget', 'Species and forms whose Threat Rating is over their power class cap, and learnable moves over the move cap (balance.json powerBudget, Overhaul slice 4). New forms and moves must fit.', overBudget(content));
+  const budgetIds = new Set(overBudget(content).flatMap((line) => /^species (\S+)/.exec(line)?.[1] ?? []));
+  for (const g of storyGates(content.storyData, content, { fileExists: inputs.fileExists, fileSizes: inputs.storyFileSizes, overBudgetIds: budgetIds, hashFresh: inputs.storyHashFresh, lookB: { enabled: false, checklistDone: false } })) add(g.id, g.title, g.explain, g.offenders);
   add('invalid-entries', 'Invalid content entries', 'Entries whose support status is "invalid" (broken data).', statuses.filter((e) => e.status === 'invalid').map((e) => `${e.kind} ${e.id}: ${e.notes.join('; ')}`));
 
   add('mechanics-without-proof', 'Mechanics without code or tests', 'Mechanics claimed as built whose code or unit test file is missing, so nothing shows they work.', statuses.filter((e) => e.kind === 'mechanic' && e.status === 'invalid').map((e) => `${e.id}: ${e.notes.join('; ')}`));
