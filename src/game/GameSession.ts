@@ -1059,6 +1059,14 @@ export class GameSession {
     this.persistRun();
   }
 
+  /** Debug: adds the event to the current node and returns the stop id to open. */
+  debugForceEvent(eventId: string): string {
+    const { run, sideId } = Run.debugForceEvent(this.content, this.requireRun(), eventId);
+    this.run = run;
+    this.persistRun();
+    return sideId;
+  }
+
   debugHeal(): void {
     this.run = Run.debugHealParty(this.content, this.requireRun());
     this.persistRun();

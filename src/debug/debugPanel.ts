@@ -15,8 +15,12 @@ import { STREAM_NAMES } from '../core/rng';
 import { isAssisted } from '../core/tools/assisted';
 import { runDigest } from '../core/tools/replay';
 import { STORY_ICONS, storyIconScale } from '../assets/storyIcons';
+import { eventRows, filterRows, momentRows } from './momentViewer';
 
 let iconGalleryOpen = false;
+let momentsOpen = false;
+let momentQuery = '';
+let eventQuery = '';
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> = {}, children: (Node | string)[] = []): HTMLElementTagNameMap[K] {
   const node = Object.assign(document.createElement(tag), props);
@@ -166,6 +170,37 @@ export function installDebugPanel(game: Phaser.Game, session: GameSession): void
       textContent: 'Start',
       onclick: () => { session.newRun(archetypeSelect.value, seedInput.value.trim() || undefined, campaignSelect.value); goTo('StarterSelect'); render(); },
     }));
+
+    // --- moment viewer and "force this encounter" (Overhaul dev console)
+    panel.append(el('button', { textContent: momentsOpen ? 'Hide moment viewer' : 'Moment viewer', onclick: () => { momentsOpen = !momentsOpen; render(); } }));
+    if (momentsOpen) {
+      const q = el('input', { placeholder: 'filter moments', value: momentQuery });
+      q.oninput = () => { momentQuery = q.value; showMoments(); };
+      const out = el('pre', { id: 'moment-list' });
+      out.style.cssText = 'max-height:240px;overflow:auto;white-space:pre-wrap';
+      const showMoments = () => {
+        const rows = filterRows(momentRows(), momentQuery);
+        out.textContent = `${rows.length} shown\n` + rows.slice(0, 80).map((r) => `[${r.source}] ${r.name} (${r.category}, ${r.budget})\n  ${r.text}`).join('\n');
+      };
+      showMoments();
+      panel.append(q, out);
+    }
+    if (run && run.phase === 'map' && run.stage) {
+      panel.append(el('h3', { textContent: 'Force an event' }));
+      const eq = el('input', { placeholder: 'filter events', value: eventQuery });
+      const sel = el('select', { id: 'force-event' });
+      const fill = () => { sel.replaceChildren(...filterRows(eventRows(content), eventQuery).map((e) => el('option', { value: e.id, textContent: `${e.name} [${e.stop}] (${e.id})` }))); };
+      eq.oninput = () => { eventQuery = eq.value; fill(); };
+      fill();
+      panel.append(eq, sel, el('button', {
+        textContent: 'Open event',
+        onclick: () => {
+          if (!sel.value) return;
+          try { const sideId = session.debugForceEvent(sel.value); const cur = activeScene(); if (cur) cur.scene.start('Event', { sideId }); } catch (err) { alert(String(err)); }
+          render();
+        },
+      }));
+    }
 
     // --- story icon gallery (slice P7): every pack icon at 2x, named by catalog id
     panel.append(el('button', { textContent: iconGalleryOpen ? 'Hide icon gallery' : `Icon gallery (${STORY_ICONS.length})`, onclick: () => { iconGalleryOpen = !iconGalleryOpen; render(); } }));

@@ -3614,6 +3614,20 @@ export function debugAddToParty(content: Content, current: RunState, speciesId: 
   return run;
 }
 
+/** Debug: puts a copy of an event stop on the current node (or the first node, if none is chosen yet) and returns its stop id, so the Event screen can open it. */
+export function debugForceEvent(content: Content, current: RunState, eventId: string): { run: RunState; sideId: string } {
+  assertPhase(current, 'map');
+  if (!content.events.has(eventId)) throw new Error(`Unknown event "${eventId}"`);
+  const run = structuredClone(current);
+  markAssisted(run);
+  const stage = requireStage(run);
+  if (stage.current === null) stage.current = [...stage.map.nodes].sort((a, b) => a.column - b.column)[0]!.id;
+  const node = stage.map.nodes.find((n) => n.id === stage.current)!;
+  const sideId = `debug-event-${node.sides.length + 1}-${node.id}`;
+  node.sides.push({ id: sideId, kind: 'event', used: false, eventId });
+  return { run, sideId };
+}
+
 /** Debug: fully heals the party and restores PP. */
 export function debugHealParty(content: Content, current: RunState): RunState {
   const run = structuredClone(current);

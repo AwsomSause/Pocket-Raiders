@@ -12,7 +12,6 @@ import { uiMotionFrom } from './core/presentation/uiMotion';
 import Phaser from 'phaser';
 import { regionIdentity } from './core/presentation/regionIdentity';
 import { getContent } from './data';
-import { installDebugPanel } from './debug/debugPanel';
 import { GameSession } from './game/GameSession';
 import { LocalStorageProvider, MemoryStorageProvider, type StorageProvider } from './save/storage';
 import { BattleScene } from './scenes/BattleScene';
@@ -200,7 +199,7 @@ function start(): void {
   }
 
   const params = new URLSearchParams(window.location.search);
-  if (import.meta.env.DEV || params.has('debug')) installDebugPanel(game, session);
+  if (import.meta.env.DEV || params.has('debug')) void import('./debug/debugPanel').then((m) => m.installDebugPanel(game, session));
 }
 
 start();
