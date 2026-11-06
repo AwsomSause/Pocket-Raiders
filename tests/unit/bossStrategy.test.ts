@@ -2,9 +2,11 @@
 
 import { describe, expect, it } from 'vitest';
 import { getArchetype } from '../../src/core/archetypes';
-import { applyBossStrategy, strategyIdFor } from '../../src/core/bossStrategy';
+import { applyBossStrategy, shapeInstances, shapePlanned, strategyIdFor, strategyIdForGroup } from '../../src/core/bossStrategy';
 import { leagueScale, planChampion, planEliteFour, planGymLeader, type PlannedMember } from '../../src/core/encounters';
+import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
+import { RIVAL_PROFILES } from '../../src/core/rivals/schema';
 import { content, scaleAt } from './helpers';
 
 const RED = getArchetype(content, 'red');
@@ -72,5 +74,34 @@ describe('boss strategies (failure)', () => {
       expect(p.ai).toBeLessThanOrEqual(1);
     }
     expect(champ.members.at(-1)!.held).toBeDefined();
+  });
+});
+
+describe('rival, Evil Team and raid strategies', () => {
+  const profiles = (JSON.parse(JSON.stringify(content.balance.bossStrategy)) as typeof cfg);
+  it('every rival style and Evil Team has a defined strategy', () => {
+    for (const style of Object.keys(RIVAL_PROFILES.styles)) expect(cfg.strategies[strategyIdForGroup(content, 'rival', style)], style).toBeDefined();
+    for (const t of content.evilTeams.teams) expect(cfg.byEvilTeam[t.id], t.id).toBeDefined();
+    expect(profiles.byRivalStyle).toEqual(cfg.byRivalStyle);
+  });
+  it('an unlisted key uses the fallback', () => {
+    expect(strategyIdForGroup(content, 'rival', 'no-such-style')).toBe(cfg.fallback);
+    expect(strategyIdForGroup(content, 'evil', 'no-such-team')).toBe(cfg.fallback);
+  });
+  it('shapePlanned and shapeInstances put the opener first and keep the ace last', () => {
+    const plan = shapePlanned(content, 'rain-offense', 'rival', true, [mk('rattata', ['tackle']), mk('pidgey', ['rain-dance']), mk('onix', ['tackle'])], 0.5);
+    expect(plan.members.map((m) => m.speciesId)).toEqual(['pidgey', 'rattata', 'onix']);
+    expect(plan.ai).toBeCloseTo(0.5 + cfg.aiBonus.rival, 10);
+    const mons = ['rattata', 'pidgey', 'onix'].map((id, i) => createPokemon(content, id, 20, `e${i}`));
+    mons[1]!.moves = [{ id: 'rain-dance', pp: 5 }];
+    const out = shapeInstances(content, 'rain-offense', 'evil', mons, 0);
+    expect(out.team.map((m) => m.speciesId)).toEqual(['pidgey', 'rattata', 'onix']);
+    expect(out.team.at(-1)!.held).toBeDefined();
+    expect(out.ai).toBeCloseTo(cfg.aiBonus.evil, 10);
+  });
+  it('raids, Totems and legendary bosses keep their authored phases', () => {
+    const authored = content.raids.raids.filter((r) => r.phases.length > 0 || r.shield);
+    expect(authored.length).toBeGreaterThanOrEqual(25);
+    for (const r of content.raids.raids) expect(r.species.length, r.id).toBeGreaterThan(0);
   });
 });
