@@ -6,6 +6,7 @@ import Phaser from 'phaser';
 import { loadAssets } from './lazyAssets';
 import type { Content, Species } from '../core/contentSchema';
 import { itemCount } from '../core/items';
+import type { TargetPreview } from '../core/itemPreview';
 import { friendshipHearts } from '../core/friendship';
 import { emotionOf } from '../core/story/emotions';
 import { services } from '../game/services';
@@ -53,6 +54,8 @@ export interface PickerConfig {
   start?: number;
   /** Opt-in Aero look (glass panels, glossy rows). Hub screens leave it off. */
   glass?: boolean;
+  /** Press I (or click "I Summary") for a quick look at the focused row's Pokémon without leaving the list: returns the summary text. */
+  inspect?: (index: number) => string;
   /** A small picture in the header (a lazy asset id); it appears once loaded. */
   badge?: string;
   /** A full-screen picture (a lazy asset id) drawn instead of the panel and title band, once loaded. */
@@ -95,6 +98,9 @@ export class Picker implements PickerLike {
   private readonly more: Phaser.GameObjects.Text;
   private index = 0;
   private closed = false;
+  /** The quick-summary panel while it is open. */
+  private summary: Phaser.GameObjects.Container | null = null;
+  private readonly onInspectKey = (): void => this.toggleSummary();
   /** Where the list starts (lower when there are tabs) and ends. */
   private readonly top: number;
   private readonly bottom: number;
@@ -239,6 +245,12 @@ export class Picker implements PickerLike {
       this.root.add(scene.add.text(GAME_WIDTH / 2, (this.top + this.bottom) / 2, 'Nothing here yet', textStyle(32, skin?.light ? '#3a4a5a' : COLORS.textMuted)).setOrigin(0.5));
       this.footer.setText(config.onBack ? 'Press Esc to go back.' : '');
     }
+    if (config.inspect) {
+      scene.input.keyboard?.on('keydown-I', this.onInspectKey);
+      const label = scene.add.text(dock ? GAME_WIDTH - 150 : GAME_WIDTH - 52, dock ? 410 : GAME_HEIGHT - 20, 'I  Summary', textStyle(dock ? 15 : 16, COLORS.gold)).setOrigin(1, 0.5).setName('picker-inspect').setInteractive({ useHandCursor: true });
+      label.on('pointerdown', () => this.toggleSummary());
+      this.root.add(label);
+    }
     const first = config.rows.findIndex((r) => !r.problem);
     this.focus(config.start !== undefined && config.start < config.rows.length ? config.start : first >= 0 ? first : 0, false);
   }
@@ -290,6 +302,10 @@ export class Picker implements PickerLike {
 
   handle(action: InputAction): void {
     if (this.closed) return;
+    if (this.summary) {
+      if (action === 'confirm' || action === 'back') this.toggleSummary();
+      return;
+    }
     const n = this.config.rows.length;
     const cols = this.config.columns;
     switch (action) {
@@ -369,8 +385,30 @@ export class Picker implements PickerLike {
     });
   }
 
+  /** Opens or closes the quick summary of the focused Pokémon. The list, the focus and the chosen item stay as they were. */
+  private toggleSummary(): void {
+    if (this.closed || !this.config.inspect) return;
+    if (this.summary) {
+      this.summary.destroy();
+      this.summary = null;
+      return;
+    }
+    if (!this.config.rows[this.index]) return;
+    const text = this.config.inspect(this.index);
+    const box = this.scene.add.container(0, 0).setName('picker-summary');
+    box.add(this.scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0).setInteractive());
+    box.add(drawGlass(this.scene, 120, 40, GAME_WIDTH - 240, GAME_HEIGHT - 90, { radius: 22 }));
+    const body = this.scene.add.text(144, 58, text, textStyle(17, COLORS.textLight, { lineSpacing: 4, wordWrap: { width: GAME_WIDTH - 288 } }));
+    box.add(body);
+    fitBlock(body, GAME_WIDTH - 288, GAME_HEIGHT - 150, text);
+    box.add(this.scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 66, 'Press I, Enter or Esc to go back to the list', textStyle(16, COLORS.gold)).setOrigin(0.5));
+    this.root.add(box);
+    this.summary = box;
+  }
+
   close(): void {
     this.closed = true;
+    this.scene.input.keyboard?.off('keydown-I', this.onInspectKey);
     // Popup closing (spec §24): it stops taking input at once, then sinks and fades out.
     const root = this.root;
     const t = uiTiming('popupClose');
@@ -431,7 +469,7 @@ function iconTile(scene: Phaser.Scene, box: Phaser.GameObjects.Container, fainte
   else void loadAssets(scene, [id]).then(() => scene.scene.isActive() && box.active && add());
 }
 
-export function partyRow(content: Content, mon: PokemonInstance, problem: string | null, opts: { tag?: string; hint?: string } = {}): PickerRow {
+export function partyRow(content: Content, mon: PokemonInstance, problem: string | null, opts: { tag?: string; hint?: string; preview?: TargetPreview } = {}): PickerRow {
   const holding = heldSummary(content, mon);
   const boosts = mon.boosts?.length ? `${mon.boosts.length} battle boost${mon.boosts.length > 1 ? 's' : ''} ready` : '';
   // The Seven Emotions: its current emotion from its memories this run (none outside a run).
@@ -461,7 +499,7 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
       const bar = new Bar(scene, 72, 46, w - 200, 12, 'hp');
       bar.addTo(box);
       void bar.set(mon.hp / max, false);
-      box.add(scene.add.text(w - 12, 38, `${mon.hp}/${max}`, textStyle(20)).setOrigin(1, 0));
+      box.add(scene.add.text(w - 12, 38, opts.preview ? `${mon.hp}/${max} (${Math.round((mon.hp / max) * 100)}%)` : `${mon.hp}/${max}`, textStyle(opts.preview ? 16 : 20)).setOrigin(1, 0));
       const status = mon.hp <= 0 ? { label: 'FNT', color: 0x806060 } : mon.status ? STATUS_LABELS[mon.status.id] : null;
       // The UIE badge stands in for the status word when its art is loaded (the tag text stays for LEAD, etc.).
       const badge = status ? statusBadge(scene, 72, 66, mon.hp <= 0 ? 'fnt' : mon.status!.id) : null;
@@ -474,12 +512,22 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
         tagEnd += tagText.width + 10;
       }
       const count = Object.values(mon.held ?? {}).reduce((a, b) => a + b, 0);
-      if (count) {
+      if (opts.preview && count) {
+        const heldText = scene.add.text(tagEnd, 58, `◆ ${heldSummary(content, mon)}`, textStyle(16, '#8fb8e0')).setName('held-name');
+        fitLine(heldText, Math.max(60, w * 0.4 - tagEnd));
+        box.add(heldText);
+      } else if (count) {
         if (scene.textures.exists('ui.party.icon_item')) box.add(scene.add.image(tagEnd, 66, 'ui.party.icon_item').setOrigin(0, 0.5).setName('held-icon'));
         box.add(scene.add.text(tagEnd + (scene.textures.exists('ui.party.icon_item') ? 20 : 0), 58, scene.textures.exists('ui.party.icon_item') ? `${count} held` : `◆ ${count} held`, textStyle(16, '#8fb8e0')));
       }
       const abilityId = abilityOf(content, mon);
       const abilityName = abilityId ? content.abilities.get(abilityId)?.name : undefined;
+      if (opts.preview) {
+        const color = ({ good: '#60d080', fainted: '#d06060', already: '#e0b040', blocked: '#a0a0b0' })[opts.preview.mark];
+        const mark = ({ good: '✔', fainted: '✖', already: '●', blocked: '✖' })[opts.preview.mark];
+        box.add(scene.add.text(w - 12, 60, `${mark} ${opts.preview.short}`, textStyle(16, color)).setOrigin(1, 0).setName(`item-preview-${opts.preview.mark}`));
+        return;
+      }
       if (abilityName) box.add(scene.add.text(w - 100, 60, abilityName, textStyle(14, '#a69cb4')).setOrigin(1, 0));
       const hearts = friendshipHearts(content, mon);
       box.add(scene.add.text(w - 12, 60, '♥'.repeat(hearts) + '♡'.repeat(5 - hearts), textStyle(14, hearts === 5 ? '#e04870' : '#c07890')).setOrigin(1, 0));
@@ -487,8 +535,8 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
   };
 }
 
-export function partyRows(content: Content, party: PokemonInstance[], problemFor: (index: number) => string | null, tagFor?: (index: number) => string | undefined, hintFor?: (index: number) => string | undefined): PickerRow[] {
-  return party.map((mon, i) => partyRow(content, mon, problemFor(i), { tag: tagFor?.(i), hint: hintFor?.(i) }));
+export function partyRows(content: Content, party: PokemonInstance[], problemFor: (index: number) => string | null, tagFor?: (index: number) => string | undefined, hintFor?: (index: number) => string | undefined, previewFor?: (index: number) => TargetPreview | undefined): PickerRow[] {
+  return party.map((mon, i) => partyRow(content, mon, problemFor(i), { tag: tagFor?.(i), hint: hintFor?.(i), preview: previewFor?.(i) }));
 }
 
 /** One Bag row: icon, name, count and description. */

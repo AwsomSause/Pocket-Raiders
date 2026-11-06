@@ -56,6 +56,9 @@ import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
 import { bagRow, partyRows, Picker } from '../ui/partyPanel';
+import { itemCard, itemFooter } from '../core/itemPreview';
+import { runHealMultiplier } from '../core/run';
+import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
 import { resolveAnim } from '../core/presentation/animRegistry';
@@ -2565,6 +2568,9 @@ export class BattleScene extends Phaser.Scene {
     const content = services().session.content;
     const run = this.run;
     const item = content.items.get(itemId)!;
+    // Overhaul slice 7: every party member shows whether and how the item would work on it (the engine's own reasons win).
+    const previews = partyPreviews(content, item, run.party, { regionId: undefined, healMultiplier: runHealMultiplier(content, run), problemFor: (i) => itemProblem(this.battleCtx(), itemId, i) });
+    const card = itemCard(content, item, run.inventory[itemId] ?? 0, previews);
     this.clearMenus();
     this.picker = new Picker(this, {
       glass: true,
@@ -2572,7 +2578,8 @@ export class BattleScene extends Phaser.Scene {
       title: `Use ${item.name} on which Pokémon?`,
       columns: 3,
       rowHeight: 70,
-      rows: partyRows(content, run.party, (i) => itemProblem(this.battleCtx(), itemId, i), (i) => (i === run.battle!.activeIndex ? 'IN BATTLE' : undefined)),
+      rows: partyRows(content, run.party, (i) => itemProblem(this.battleCtx(), itemId, i), (i) => (i === run.battle!.activeIndex ? 'IN BATTLE' : undefined), (i) => `${itemFooter(card, previews[i]!)}`, (i) => previews[i]),
+      inspect: (i) => quickSummaryText(content, run, run.party[i]!),
       onSelect: (i) => {
         const content = services().session.content;
         const toss = content.catalog.get(itemId)?.family.includes('Berr') ?? false;

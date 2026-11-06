@@ -25,6 +25,9 @@ import { evilSummary } from '../core/evil/teams';
 import { choiceHistory } from '../core/evil/choices';
 import { EMOTION_NAMES } from '../core/story/emotions';
 import { services } from '../game/services';
+import { itemCard, itemFooter } from '../core/itemPreview';
+import { runHealMultiplier } from '../core/run';
+import { partyPreviews, quickSummaryText } from './itemScreen';
 import { emotionDot, partyRows, Picker, speciesRow, type PickerLike, type PickerRow } from './partyPanel';
 import { itemVisual } from './sprites';
 import { COLORS, textStyle } from './theme';
@@ -407,12 +410,15 @@ function openItemTarget(host: FieldMenuHost, itemId: string): void {
   const content = session.content;
   const item = content.items.get(itemId)!;
   const regionId = run.regionOrder[run.regionIndex];
+  const previews = partyPreviews(content, item, run.party, { regionId, healMultiplier: runHealMultiplier(content, run) });
+  const card = itemCard(content, item, run.inventory[itemId] ?? 0, previews);
   const picker: Picker = new Picker(host.scene, {
     glass: true,
     title: `Use the ${item.name} on which Pokémon?`,
     columns: 2,
     rowHeight: 78,
-    rows: partyRows(content, run.party, (i) => itemUseProblem(content, item, run.party[i]!, regionId)),
+    rows: partyRows(content, run.party, (i) => itemUseProblem(content, item, run.party[i]!, regionId), undefined, (i) => itemFooter(card, previews[i]!), (i) => previews[i]),
+    inspect: (i) => quickSummaryText(content, run, run.party[i]!, regionId),
     onSelect: (i) => {
       const targets = item.effect.kind === 'evolve' ? itemEvolutionTargets(content, run.party[i]!, itemId, regionId) : [];
       close(host, picker);
