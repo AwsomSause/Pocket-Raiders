@@ -53,6 +53,17 @@ def stamp_img(n):
     ts, x, y, w, h = STAMPS[n]
     return TS[ts].crop((x, y, x + w, y + h))
 
+def drop_baked_shadow(im, n):
+    """The tileset bakes a hard-edged dark rectangle under every building; at the stamp edge it reads as a cut-off box
+    laid over the ground and neighbours (Kice 2026-11-06). Trees keep their soft ellipse; everything else loses it."""
+    if n in TREES: return im
+    im = im.copy(); px = im.load()
+    for yy in range(im.height):
+        for xx in range(im.width):
+            r, g, b, a = px[xx, yy]
+            if 0 < a <= 140 and max(r, g, b) <= 80: px[xx, yy] = (0, 0, 0, 0)
+    return im
+
 def footprint(n, px, py):
     """Solid tiles of a stamp placed with its top-left at (px, py) map pixels."""
     if n in WALKABLE: return []
@@ -328,7 +339,7 @@ for n in items:
     if x + w > SHEET_W: x = 0; y += shelf + 2; shelf = 0
     frames[n] = (x, y, w, h); x += w + 2; shelf = max(shelf, h)
 sheet = Image.new('RGBA', (SHEET_W, y + shelf))
-for n, (fx, fy, w, h) in frames.items(): sheet.alpha_composite(stamp_img(n), (fx, fy))
+for n, (fx, fy, w, h) in frames.items(): sheet.alpha_composite(drop_baked_shadow(stamp_img(n), n), (fx, fy))
 sheet.save(os.path.join(OUT_IMG, 'hubtown_props.png'), optimize=True)
 json.dump({'frames': {n: {'frame': {'x': fx, 'y': fy, 'w': w, 'h': h}} for n, (fx, fy, w, h) in frames.items()},
            'meta': {'image': 'hubtown_props.png', 'size': {'w': SHEET_W, 'h': y + shelf}, 'scale': '1'}},

@@ -34,7 +34,7 @@ export function drawDaylight(town: HubTownView, scene: Phaser.Scene, period: Per
       const x = px + w / 2;
       const y = py + 10;
       const pool = scene.add.ellipse(x, depth - 4, 4 * T, 1.4 * T, 0xffd890, 0.3).setBlendMode(Phaser.BlendModes.ADD).setDepth(9);
-      const halo = scene.add.circle(x, y, 24, 0xffe8a0, 0.65).setBlendMode(Phaser.BlendModes.ADD).setDepth(10 + depth + 1);
+      const halo = scene.add.circle(x, y, 22, 0xffe8a0, 0.3).setBlendMode(Phaser.BlendModes.ADD).setDepth(10 + depth - 1);
       if (motion === 'full') scene.tweens.add({ targets: [halo, pool], alpha: '-=0.12', duration: 1300 + lit * 110, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       lit++;
     }
