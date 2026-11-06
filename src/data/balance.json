@@ -217,6 +217,7 @@
  "luck": { "streakRewards": [ { "wins": 3, "item": "super-potion" }, { "wins": 6, "item": "ultra-ball" }, { "wins": 10, "item": "revive" } ], "pityRareAfter": 4, "bounty": { "target": 2, "money": 150, "moneyPerStage": 50, "item": "great-ball" }, "milestoneChests": [ { "runs": 3, "bankCredits": 150, "candies": 3, "researchPoints": 0 }, { "runs": 10, "bankCredits": 400, "candies": 8, "researchPoints": 10 }, { "runs": 25, "bankCredits": 900, "candies": 15, "researchPoints": 25 }, { "runs": 50, "bankCredits": 2000, "candies": 30, "researchPoints": 50 }, { "runs": 100, "bankCredits": 5000, "candies": 60, "researchPoints": 100 } ] },
  "opening": { "encounters": 4, "maxBaseStats": 340, "levelOffset": 1, "minLevel": 4, "softMovesUntilLevel": 15,
   "maxLevel": 6 },
+ "rolePool": { "wildCardWeight": 0.2, "wildCardMax": { "gymPerRegion": 1, "elitePerRun": 1, "championPerRun": 1 }, "teamLeaders": { "rocket": ["giovanni"], "aqua": ["archie"], "magma": ["maxie"], "galactic": ["cyrus"], "plasma": ["ghetsis"], "flare": ["lysandre"], "skull": ["guzma"], "aether": ["lusamine"], "yell": ["piers"], "star": ["ortega"] } },
  "rival": { "stage": 0, "column": 5, "level": 5, "depth": true, "starters": ["bulbasaur", "charmander", "squirtle", "chikorita", "cyndaquil", "totodile", "treecko", "torchic", "mudkip"] },
  "legendaryWildChance": 0.0025,
  "legendaryMinRegion": 2,

@@ -66,14 +66,15 @@ describe('story foundation: random streams', () => {
   // effects slices 2 to 3b-3b (held, map, shop, money, map-movement, map-stop and draft items in drafts, bosses
   // holding items) M8.75 part C3 (every Pokémon has an ability) and the C2c move batch, which change
   // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts, and for the Beta 4.4 battle fixes (sleep 2-4 turns, the first rival on Stage 1 level 5, set boss aces, one Mega per battle, Choice locks only the move).
+  // Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move.
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': 'ffdb59f1871a546c',
-    'STORY2/0': '4014498e9c8ef016',
-    'STORY4/0': '723fa1f26d1cf54d',
-    'STORY5/0': '027838bfe2d0d662',
-    'STORY6/0': '4fc39f6b1d8e33de',
-    'STORY7/0': '8575727acdec4472',
-    'STORY8/0': '07d7f779fb995a6b',
+    'STORY1/0': '48969cd12efaa279',
+    'STORY2/0': 'bd56a564162a993d',
+    'STORY4/0': 'c29662104f1f1001',
+    'STORY5/0': 'b749d26dd793d04e',
+    'STORY6/0': 'a096e48a8cdb09b7',
+    'STORY7/0': '13d7cb0fa5509f05',
+    'STORY8/0': '3e4d9415713a7e52',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.

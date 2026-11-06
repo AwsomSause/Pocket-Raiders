@@ -14,7 +14,7 @@ import { CampProfileSchema, CampStateSchema } from './camp/schema';
 import { TownProfileSchema } from './town/schema';
 import { ArchetypeModifierSchema, EventRuleSchema, ATTRIBUTE_KEYS, BattleBoostSchema, BoostStatSchema, SemiSchema, StatNameSchema, StatusIdSchema, TerrainSchema, TransformKindSchema, TypeNameSchema, WeatherSchema } from './contentSchema';
 import { LineageSchema, BattleReplaySchema, MemoriesSchema, PastDigestSchema, WorldMemorySchema } from './memories/schema';
-import { STREAM_NAMES, type StreamName } from './rng';
+import { STREAM_NAMES, hashSeed, type StreamName } from './rng';
 import { ArchivedRivalSchema, StoryStateSchema } from './story/schema';
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
@@ -22,9 +22,11 @@ import { SpectacleBattleSchema } from './battle/spectacle';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
-export const RngStreamsSchema = z.object(
-  Object.fromEntries(STREAM_NAMES.map((n) => [n, RngStateSchema])) as Record<StreamName, typeof RngStateSchema>,
-);
+// Role Pool Casting: a run saved before the "roleCast" stream existed gets a fixed start state (new runs and migrated v39 runs get it from their seed).
+export const RngStreamsSchema = z.object({
+  ...(Object.fromEntries(STREAM_NAMES.map((n) => [n, RngStateSchema])) as Record<StreamName, typeof RngStateSchema>),
+  roleCast: RngStateSchema.default(() => hashSeed('legacy::roleCast')),
+});
 
 export const MoveSlotSchema = z.object({
   id: z.string(),
@@ -1223,6 +1225,8 @@ export const RunStateSchema = z.object({
   /** Themes and bosses (gym leaders, Elite Four, champions) already used this run (they never repeat, D6). */
   usedThemes: z.array(z.string()),
   usedLeaders: z.array(z.string()),
+  /** Role Pool Casting: who was cast as gym leader, Elite Four member or champion in each region, and from which pool (core/rolePool.ts). */
+  roleCast: z.array(z.object({ role: z.enum(['gym', 'elite', 'champion']), regionIndex: z.number().int().min(0), slot: z.number().int().min(0), id: z.string(), tier: z.enum(['core', 'wild_card']) })).default([]),
   /** Gym leaders beaten, in order. */
   badges: z.array(z.string()),
   /** Which campaign shape this run uses ("full", or "dev" for quick testing). */

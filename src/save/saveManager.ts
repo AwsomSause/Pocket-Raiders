@@ -351,7 +351,12 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     // v39 (Overhaul slice 3, shared generator): runs started before it remember no recent picks.
     38: (data) => ({ ...(data as Json), history: {} }),
     // v40 (Story Overhaul F0): Story Runs add run.story.v2; older runs simply have none (Classic play is unchanged).
-    39: (data) => data,
+    // Role Pool Casting adds the "roleCast" random stream (from the seed) and run.roleCast inside this same version.
+    39: (data) => {
+      const run = data as Json;
+      const rng = (run.rng ?? {}) as Json;
+      return { ...run, rng: { ...rng, roleCast: rng.roleCast ?? hashSeed(`${String(run.seed)}::roleCast`) }, roleCast: run.roleCast ?? [] };
+    },
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
