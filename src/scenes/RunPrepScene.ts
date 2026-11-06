@@ -6,6 +6,7 @@ import { goodbyeLine, profLine } from '../core/hubNook';
 import { notify } from '../ui/overlays';
 import { loanProblem, presetSlotCount } from '../core/bank';
 import { LICENSES, licenseName, type LicenseId } from '../core/license';
+import { getContent } from '../data';
 import Phaser from 'phaser';
 import { TYPE_NAMES, type TypeName } from '../core/contentSchema';
 import {
@@ -17,6 +18,7 @@ import {
   presetIn,
   presetParts,
   resolvePrep,
+  starterSetsEnabled,
   tokenAvailable,
   tokenLockText,
 } from '../core/runPrep';
@@ -70,7 +72,7 @@ interface PageDef {
 const PAGES: PageDef[] = [
   { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'heat', 'campaign', 'weeks', 'seed'] },
   { id: 'trainer', title: 'Trainer', blurb: 'Who you are and what you bring: preparation, directive, license, loan, Vault, mentor.', tint: 0x2fa080, rows: ['trainer', 'token', 'directive', 'license', 'loan', 'vault', 'mentor'] },
-  { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: ['pool', 'draft', 'type'] },
+  { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: [...(starterSetsEnabled(getContent()) ? (['pool'] as Row[]) : []), 'draft', 'type'] },
   { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier'] },
   { id: 'overview', title: 'Overview', blurb: 'Check everything, keep a preset, then roll the starters.', tint: 0xd04a5a, rows: ['start', 'seed', 'save', 'load'] },
 ];
