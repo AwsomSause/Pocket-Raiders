@@ -912,11 +912,30 @@ export class BattleScene extends Phaser.Scene {
     this.teraJewels[side]?.destroy();
     delete this.teraJewels[side];
     if (!visual || (!type && !mon.dynamaxed)) return;
-    // The Tera Type's jewel floats over the head, bobbing slowly (still when motion is reduced).
+    // The Tera Type's jewel floats over the head, bobbing slowly (still when motion is reduced). Stellar adds the crown: a pink star over a rainbow-lit jewel.
     if (type && !mon.dynamaxed && this.textures.exists('ui.tera.types')) {
-      const at = this.spotXY(side);
-      const jewel = this.add.image(at.x, at.y - 150, 'ui.tera.types', TERA_ICON_ROW[type]).setScale(1.1).setDepth(visual.depth + 5);
-      if (this.motion !== 'off' && this.motion !== 'reduced') this.tweens.add({ targets: jewel, y: jewel.y - 6, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      const stellar = mon.speciesId.startsWith('terapagos');
+      const jewel = this.add.image(0, 0, 'ui.tera.types', TERA_ICON_ROW[stellar ? 'stellar' : type]).setScale(1.1).setDepth(visual.depth + 5);
+      const star = stellar ? this.add.star(0, 0, 5, 6, 14, 0xff7ac8).setStrokeStyle(2, 0xffffff).setDepth(visual.depth + 6) : null;
+      // Follows the sprite's head every frame (it scales in after a swap), bobbing when motion is full.
+      const follow = () => {
+        if (!visual.active) return;
+        // A container's own bounds can be empty, so measure the picture parts inside it.
+        const parts = ('list' in visual ? (visual as Phaser.GameObjects.Container).list : [visual]).filter((p): p is Phaser.GameObjects.Sprite => !!(p as Phaser.GameObjects.Sprite).texture && (p as Phaser.GameObjects.Sprite).visible && (p as Phaser.GameObjects.Sprite).alpha > 0.2);
+        const top = parts.length ? parts[0]!.getBounds() : new Phaser.Geom.Rectangle(this.spotXY(side).x, this.spotXY(side).y - 120, 0, 0);
+        const bob = this.motion === 'full' ? Math.sin(this.time.now / 300) * 4 : 0;
+        const y = Math.max(top.top, 40);
+        jewel.setPosition(top.centerX, y + 14 + bob);
+        star?.setPosition(top.centerX, y - 14 + bob);
+        if (star && this.motion === 'full') star.angle = (this.time.now / 12) % 360;
+        if (stellar && this.motion === 'full') jewel.setTint(Phaser.Display.Color.HSVToRGB((this.time.now / 2500) % 1, 0.45, 1).color);
+      };
+      follow();
+      this.events.on('update', follow);
+      jewel.once('destroy', () => {
+        this.events.off('update', follow);
+        star?.destroy();
+      });
       this.teraJewels[side] = jewel;
     }
     const color = mon.dynamaxed ? 0xff3060 : (TYPE_COLORS[type!] ?? 0xffffff);
@@ -924,7 +943,7 @@ export class BattleScene extends Phaser.Scene {
     const value = Phaser.Display.Color.GetColor(tint.r, tint.g, tint.b);
     const parts = 'list' in visual ? (visual as Phaser.GameObjects.Container).list : [visual];
     for (const part of parts) (part as Partial<Phaser.GameObjects.Sprite>).setTint?.(value);
-    const key = mon.dynamaxed ? dynamaxPatternKey(mon.speciesId) : teraPatternKey(type!);
+    const key = mon.dynamaxed ? dynamaxPatternKey(mon.speciesId) : teraPatternKey(mon.speciesId.startsWith('terapagos') ? 'stellar' : type!);
     wearPattern(this, visual, key, this.motion, () => (visual as Phaser.GameObjects.Sprite).clearTint());
   }
 

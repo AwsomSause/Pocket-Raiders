@@ -23,9 +23,12 @@ export function actionTab(scene: Phaser.Scene, x: number, y: number, opts: { on:
     parts.push(ic);
   }
   parts.push(scene.add.text(34, h / 2, opts.label ?? 'ACTION', { fontFamily: 'sans-serif', fontSize: '15px', fontStyle: 'bold', color: opts.on ? '#ffffff' : '#c8ccdc' }).setOrigin(0, 0.5));
-  const container = scene.add.container(x, y, parts).setDepth(60);
-  container.setSize(w, h).setInteractive(new Phaser.Geom.Rectangle(0, 0, w, h), Phaser.Geom.Rectangle.Contains);
-  container.input!.cursor = 'pointer';
-  container.on('pointerdown', opts.onClick);
+  const zone = scene.add.zone(0, 0, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
+  zone.on('pointerdown', (_p: unknown, _x: unknown, _y: unknown, event?: { stopPropagation?: () => void }) => {
+    event?.stopPropagation?.();
+    opts.onClick();
+  });
+  parts.push(zone);
+  const container = scene.add.container(x, y, parts).setDepth(120).setName('action-tab');
   return { container, destroy: () => container.destroy() };
 }
