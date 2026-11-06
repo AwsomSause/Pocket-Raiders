@@ -215,6 +215,8 @@ export const ChronicleRecordSchema = z.object({
   relationships: z.record(z.string(), z.string()).default({}),
   /** Scenes seen, in order (up to 12). */
   highlights: z.array(z.string()).max(12).default([]),
+  /** S5: the backstory ending reached (an ending id), when the run got that far. */
+  ending: z.string().optional(),
 });
 export type ChronicleRecord = z.infer<typeof ChronicleRecordSchema>;
 
@@ -299,6 +301,20 @@ export const StoryV2Schema = z.object({
   queue: z.array(z.object({ id: z.string(), hidden: z.string(), rival: z.string(), due: z.number().int().min(0) })).default([]),
   scenesDone: z.array(z.string()).default([]),
   fired: z.array(z.string()).default([]),
+  /** S5: the backstory module loader's state (what is queued, playing and played, the echo count, the ending, scene snapshots for the Journal and Archive). */
+  module: z.object({
+    backstory: z.string(),
+    /** Scenes waiting to play next (the intro, a choice's follow-up), then the one on screen now. */
+    queue: z.array(z.string()).default([]),
+    active: z.string().nullable().default(null),
+    activeStop: z.string().nullable().default(null),
+    played: z.array(z.string()).default([]),
+    echoes: z.number().int().min(0).default(0),
+    lastSceneStop: z.number().int().min(0).default(0),
+    ending: z.string().nullable().default(null),
+    chronicle: z.array(z.string()).default([]),
+    snapshots: z.array(z.object({ event: z.string(), stop: z.string().nullable(), act: z.number().int().min(0), text: z.string(), choice: z.string().nullable() })).default([]),
+  }).optional(),
 });
 export type StoryV2 = z.infer<typeof StoryV2Schema>;
 

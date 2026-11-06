@@ -213,6 +213,11 @@ export class MapScene extends Phaser.Scene {
     void ensureNarration().catch(() => undefined);
     const { session } = services();
     const run = session.run!;
+    // S5: a backstory scene waiting (the intro at the start, or one a Story Stop queued) plays before the map shows.
+    if (session.storyScene()) {
+      this.scene.start('Story', { next: 'Map' });
+      return;
+    }
     // W10 (I496/I507/I497): C hears a cry, H holds the lead's paw, N names the node. Keys and touch buttons share one handler each.
     const stageKey = (nodeId: string): string => {
       const n = run.stage?.map.nodes.find((x) => x.id === nodeId);
@@ -1022,7 +1027,7 @@ export class MapScene extends Phaser.Scene {
           delay += 1400;
         }
         this.time.delayedCall(delay, () => this.cameras.main.fadeOut(250));
-        this.time.delayedCall(delay + 260, () => this.scene.start(sceneForRun(run)));
+        this.time.delayedCall(delay + 260, () => (session.storyScene() ? this.scene.start('Story', { next: sceneForRun(run) }) : this.scene.start(sceneForRun(run))));
         break;
       }
       case 'side': {

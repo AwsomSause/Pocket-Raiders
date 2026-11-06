@@ -273,29 +273,6 @@
   "catchAllEnding": "end_reckoning",
   "endingGrid": [
    {
-    "ending": "end_gardener",
-    "when": [
-     {
-      "kind": "flag",
-      "key": "rapport",
-      "op": ">=",
-      "value": 8
-     },
-     {
-      "kind": "flag",
-      "key": "migration",
-      "op": "!=",
-      "value": "sabotaged"
-     },
-     {
-      "kind": "flag",
-      "key": "migration",
-      "op": "!=",
-      "value": "none"
-     }
-    ]
-   },
-   {
     "ending": "end_echo",
     "when": [
      {
@@ -308,7 +285,30 @@
       "kind": "flag",
       "key": "rapport",
       "op": ">=",
-      "value": 9
+      "value": 6
+     }
+    ]
+   },
+   {
+    "ending": "end_gardener",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "rapport",
+      "op": ">=",
+      "value": 5
+     },
+     {
+      "kind": "flag",
+      "key": "migration",
+      "op": "!=",
+      "value": "sabotaged"
+     },
+     {
+      "kind": "flag",
+      "key": "migration",
+      "op": "!=",
+      "value": "none"
      }
     ]
    },

@@ -47,9 +47,14 @@ export class GameOverScene extends Phaser.Scene {
     preloadPokemon(this, partySpecies(), { icon: true, front: true });
   }
 
-  create(): void {
+  create(data: { storyShown?: boolean } = {}): void {
     stopMusic();
     const { session } = services();
+    // S5: the ending scene a Story Run reached plays before the results (its outcome was recorded when it was reached).
+    if (!data.storyShown && session.storyScene()) {
+      this.scene.start('Story', { next: 'GameOver' });
+      return;
+    }
     const run = session.run;
     const won = run?.victory ?? false;
     // Run-end look (screens redesign): a backdrop, a frame colour and title style; the numbers and flow are unchanged.

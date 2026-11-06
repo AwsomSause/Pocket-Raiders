@@ -1,6 +1,7 @@
 // The permanent player profile (survives between runs).
 
 import { recordChronicle } from './story2/chronicle';
+import { foldModuleIntoProfile } from './story2/module';
 import { recordBoardRun } from './boards';
 import { archiveRivals } from './rivals/legacy';
 import type { Content } from './contentSchema';
@@ -115,6 +116,7 @@ export function finalizeRun(
   claimPast(next, run);
   next.npcMemory = foldNpcMemory(content, next.npcMemory, run);
   recordChronicle(next, run, now);
+  foldModuleIntoProfile(next, run);
   next.treasureHunt = foldTreasureHunt(next.treasureHunt, run);
   next.finalizedRunIds = [...next.finalizedRunIds, run.runId].slice(-FINALIZED_HISTORY);
   return { profile: next, applied: true, summary };
