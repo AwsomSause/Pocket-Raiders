@@ -67,6 +67,9 @@
     { "id": "tower-dragon", "name": "Raise a Dragon Lure Tower", "cost": { "ember": 6, "star-core": 1 }, "money": 0, "minBadges": 2, "gives": { "kind": "lure", "type": "dragon", "battles": 99, "value": 1.8, "tower": true } },
     { "id": "tower-dark", "name": "Raise a Dark Lure Tower", "cost": { "aether": 6, "star-core": 1 }, "money": 0, "minBadges": 2, "gives": { "kind": "lure", "type": "dark", "battles": 99, "value": 1.8, "tower": true } },
     { "id": "tower-steel", "name": "Raise a Steel Lure Tower", "cost": { "scrap": 6, "star-core": 1 }, "money": 0, "minBadges": 2, "gives": { "kind": "lure", "type": "steel", "battles": 99, "value": 1.8, "tower": true } },
-    { "id": "tower-fairy", "name": "Raise a Fairy Lure Tower", "cost": { "fiber": 6, "star-core": 1 }, "money": 0, "minBadges": 2, "gives": { "kind": "lure", "type": "fairy", "battles": 99, "value": 1.8, "tower": true } }
+    { "id": "tower-fairy", "name": "Raise a Fairy Lure Tower", "cost": { "fiber": 6, "star-core": 1 }, "money": 0, "minBadges": 2, "gives": { "kind": "lure", "type": "fairy", "battles": 99, "value": 1.8, "tower": true } },
+    { "id": "friend-treat", "name": "Bake a Friend Treat", "cost": { "fiber": 3 }, "money": 0, "minBadges": 0, "needs": "captureStyles", "gives": { "kind": "item", "item": "friend-treat", "amount": 1 } },
+    { "id": "peace-offering", "name": "Prepare a Peace Offering", "cost": { "aether": 3 }, "money": 0, "minBadges": 0, "needs": "captureStyles", "gives": { "kind": "item", "item": "peace-offering", "amount": 1 } },
+    { "id": "snare-trap", "name": "Set a Snare Trap", "cost": { "scrap": 3 }, "money": 0, "minBadges": 0, "needs": "captureStyles", "gives": { "kind": "item", "item": "snare-trap", "amount": 1 } }
   ]
 }
