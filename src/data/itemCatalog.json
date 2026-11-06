@@ -15807,5 +15807,3141 @@
     }
    ]
   }
+ },
+ {
+  "id": "snowball",
+  "name": "Snowball",
+  "family": "Held items (Drive pack)",
+  "description": "Hit by an Ice move: +1 Attack, once per battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "snowball",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "absorb",
+     "type": "ice",
+     "stat": "atk",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "luminous-moss",
+  "name": "Luminous Moss",
+  "family": "Held items (Drive pack)",
+  "description": "Hit by a Water move: +1 Sp. Def, once per battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "luminous-moss",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "absorb",
+     "type": "water",
+     "stat": "spd",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "adamant-crystal",
+  "name": "Adamant Crystal",
+  "family": "Held items (Drive pack)",
+  "description": "Dialga takes its Origin Forme; its Steel and Dragon moves do 20% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "adamant-crystal",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "dialga",
+     "to": "dialga-origin"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "steel",
+      "dragon"
+     ],
+     "percent": 20,
+     "species": [
+      "dialga",
+      "dialga-origin"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "lustrous-globe",
+  "name": "Lustrous Globe",
+  "family": "Held items (Drive pack)",
+  "description": "Palkia takes its Origin Forme; its Water and Dragon moves do 20% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "lustrous-globe",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "palkia",
+     "to": "palkia-origin"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "water",
+      "dragon"
+     ],
+     "percent": 20,
+     "species": [
+      "palkia",
+      "palkia-origin"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "griseous-core",
+  "name": "Griseous Core",
+  "family": "Held items (Drive pack)",
+  "description": "Giratina takes its Origin Forme; its Ghost and Dragon moves do 20% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "griseous-core",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "giratina",
+     "to": "giratina-origin"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost",
+      "dragon"
+     ],
+     "percent": 20,
+     "species": [
+      "giratina",
+      "giratina-origin"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "rusted-sword",
+  "name": "Rusted Sword",
+  "family": "Held items (Drive pack)",
+  "description": "Zacian becomes Zacian Crowned Sword while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "rusted-sword",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "zacian",
+     "to": "zacian-crowned"
+    }
+   ]
+  }
+ },
+ {
+  "id": "rusted-shield",
+  "name": "Rusted Shield",
+  "family": "Held items (Drive pack)",
+  "description": "Zamazenta becomes Zamazenta Crowned Shield while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "rusted-shield",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "zamazenta",
+     "to": "zamazenta-crowned"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wellspring-mask",
+  "name": "Wellspring Mask",
+  "family": "Held items (Drive pack)",
+  "description": "Ogerpon wears its Wellspring Mask; its moves do 20% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "wellspring-mask",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "ogerpon",
+     "to": "ogerpon-wellspring-mask"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "water",
+      "grass"
+     ],
+     "percent": 20,
+     "species": [
+      "ogerpon",
+      "ogerpon-wellspring-mask",
+      "ogerpon-hearthflame-mask",
+      "ogerpon-cornerstone-mask"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "hearthflame-mask",
+  "name": "Hearthflame Mask",
+  "family": "Held items (Drive pack)",
+  "description": "Ogerpon wears its Hearthflame Mask; its moves do 20% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "hearthflame-mask",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "ogerpon",
+     "to": "ogerpon-hearthflame-mask"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "fire",
+      "grass"
+     ],
+     "percent": 20,
+     "species": [
+      "ogerpon",
+      "ogerpon-wellspring-mask",
+      "ogerpon-hearthflame-mask",
+      "ogerpon-cornerstone-mask"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "cornerstone-mask",
+  "name": "Cornerstone Mask",
+  "family": "Held items (Drive pack)",
+  "description": "Ogerpon wears its Cornerstone Mask; its moves do 20% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "cornerstone-mask",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "ogerpon",
+     "to": "ogerpon-cornerstone-mask"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "rock",
+      "grass"
+     ],
+     "percent": 20,
+     "species": [
+      "ogerpon",
+      "ogerpon-wellspring-mask",
+      "ogerpon-hearthflame-mask",
+      "ogerpon-cornerstone-mask"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "teal-mask",
+  "name": "Teal Mask",
+  "family": "Held items (Drive pack)",
+  "description": "Ogerpon's Grass moves do 20% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "teal-mask",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "grass"
+     ],
+     "percent": 20,
+     "species": [
+      "ogerpon",
+      "ogerpon-wellspring-mask",
+      "ogerpon-hearthflame-mask",
+      "ogerpon-cornerstone-mask"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "prison-bottle",
+  "name": "Prison Bottle",
+  "family": "Held items (Drive pack)",
+  "description": "Hoopa is unbound while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "prison-bottle",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "hoopa",
+     "to": "hoopa-unbound"
+    }
+   ]
+  }
+ },
+ {
+  "id": "reveal-glass",
+  "name": "Reveal Glass",
+  "family": "Held items (Drive pack)",
+  "description": "Tornadus, Thundurus, Landorus and Enamorus take their Therian Forme",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "reveal-glass",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "tornadus",
+     "to": "tornadus-therian"
+    },
+    {
+     "hook": "formHeld",
+     "from": "thundurus",
+     "to": "thundurus-therian"
+    },
+    {
+     "hook": "formHeld",
+     "from": "landorus",
+     "to": "landorus-therian"
+    },
+    {
+     "hook": "formHeld",
+     "from": "enamorus",
+     "to": "enamorus-therian"
+    }
+   ]
+  }
+ },
+ {
+  "id": "n-solarizer",
+  "name": "N-Solarizer",
+  "family": "Held items (Drive pack)",
+  "description": "Necrozma becomes Dusk Mane Necrozma while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "n-solarizer",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "necrozma",
+     "to": "necrozma-dusk"
+    }
+   ]
+  }
+ },
+ {
+  "id": "n-lunarizer",
+  "name": "N-Lunarizer",
+  "family": "Held items (Drive pack)",
+  "description": "Necrozma becomes Dawn Wings Necrozma while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "n-lunarizer",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "necrozma",
+     "to": "necrozma-dawn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "zygarde-cube",
+  "name": "Zygarde Cube",
+  "family": "Held items (Drive pack)",
+  "description": "Zygarde takes its Complete Forme while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "zygarde-cube",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "zygarde",
+     "to": "zygarde-complete"
+    }
+   ]
+  }
+ },
+ {
+  "id": "meteorite-attack",
+  "name": "Meteorite (Attack)",
+  "family": "Held items (Drive pack)",
+  "description": "Deoxys takes its Attack Forme while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "meteorite-attack",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "deoxys",
+     "to": "deoxys-attack"
+    }
+   ]
+  }
+ },
+ {
+  "id": "meteorite-defense",
+  "name": "Meteorite (Defense)",
+  "family": "Held items (Drive pack)",
+  "description": "Deoxys takes its Defense Forme while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "meteorite-defense",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "deoxys",
+     "to": "deoxys-defense"
+    }
+   ]
+  }
+ },
+ {
+  "id": "meteorite-speed",
+  "name": "Meteorite (Speed)",
+  "family": "Held items (Drive pack)",
+  "description": "Deoxys takes its Speed Forme while holding it",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "meteorite-speed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "deoxys",
+     "to": "deoxys-speed"
+    }
+   ]
+  }
+ },
+ {
+  "id": "pink-nectar",
+  "name": "Pink Nectar",
+  "family": "Held items (Drive pack)",
+  "description": "Oricorio dances in its Pa'u Style while holding it",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "pink-nectar",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "oricorio",
+     "to": "oricorio-pau"
+    }
+   ]
+  }
+ },
+ {
+  "id": "yellow-nectar",
+  "name": "Yellow Nectar",
+  "family": "Held items (Drive pack)",
+  "description": "Oricorio dances in its Pom-Pom Style while holding it",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "yellow-nectar",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "oricorio",
+     "to": "oricorio-pom-pom"
+    }
+   ]
+  }
+ },
+ {
+  "id": "purple-nectar",
+  "name": "Purple Nectar",
+  "family": "Held items (Drive pack)",
+  "description": "Oricorio dances in its Sensu Style while holding it",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "purple-nectar",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "oricorio",
+     "to": "oricorio-sensu"
+    }
+   ]
+  }
+ },
+ {
+  "id": "conkeldurr-gauntlet",
+  "name": "Conkeldurr Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Conkeldurr and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "conkeldurr-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "timburr",
+      "gurdurr",
+      "conkeldurr"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "drifblim-gauntlet",
+  "name": "Drifblim Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Drifblim and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "drifblim-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "drifloon",
+      "drifblim"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "dugtrio-gauntlet",
+  "name": "Dugtrio Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Dugtrio and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "dugtrio-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "diglett",
+      "dugtrio"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "eevee-gauntlet",
+  "name": "Eevee Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Eevee and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "eevee-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "eevee"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "fearow-gauntlet",
+  "name": "Fearow Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Fearow and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "fearow-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "spearow",
+      "fearow"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "linoone-gauntlet",
+  "name": "Linoone Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Linoone and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "linoone-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "zigzagoon",
+      "linoone"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "parasect-gauntlet",
+  "name": "Parasect Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Parasect and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "parasect-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "paras",
+      "parasect"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "raticate-gauntlet",
+  "name": "Raticate Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Raticate and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "raticate-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "rattata",
+      "raticate"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "simi-gauntlet",
+  "name": "Simi Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Simi monkeys and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "simi-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "pansage",
+      "simisage",
+      "pansear",
+      "simisear",
+      "panpour",
+      "simipour"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "skuntank-gauntlet",
+  "name": "Skuntank Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Skuntank and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "skuntank-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "stunky",
+      "skuntank"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "trevenant-gauntlet",
+  "name": "Trevenant Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Trevenant and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "trevenant-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "phantump",
+      "trevenant"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "unfezant-gauntlet",
+  "name": "Unfezant Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Unfezant and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "unfezant-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "pidove",
+      "tranquill",
+      "unfezant"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "wurmple-gauntlet",
+  "name": "Wurmple Gauntlet",
+  "family": "Fan held items (Drive pack)",
+  "description": "Wurmple and its family: every stat but HP x1.3",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "wurmple-gauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.3,
+     "species": [
+      "wurmple",
+      "silcoon",
+      "beautifly",
+      "cascoon",
+      "dustox"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "blazing-orb",
+  "name": "Blazing Orb",
+  "family": "Fan held items (Drive pack)",
+  "description": "Fire moves do 25% more, and the holder can't be frozen",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "blazing-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fire"
+     ],
+     "percent": 25
+    },
+    {
+     "hook": "statusImmune",
+     "statuses": [
+      "frz"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "freezing-orb",
+  "name": "Freezing Orb",
+  "family": "Fan held items (Drive pack)",
+  "description": "Ice moves do 25% more, and the holder can't be burned",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "freezing-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ice"
+     ],
+     "percent": 25
+    },
+    {
+     "hook": "statusImmune",
+     "statuses": [
+      "brn"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "wicked-orb",
+  "name": "Wicked Orb",
+  "family": "Fan held items (Drive pack)",
+  "description": "Poisons the holder at the end of its first turn; its Dark moves do 30% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "wicked-orb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "selfStatus",
+     "status": "psn",
+     "type": "dark",
+     "percent": 30
+    }
+   ]
+  }
+ },
+ {
+  "id": "mental-scarf",
+  "name": "Mental Scarf",
+  "family": "Fan held items (Drive pack)",
+  "description": "Cures a Taunt once per battle; +1 Intelligence per knockout (up to 10)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "mental-scarf",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "mentalHerb"
+    },
+    {
+     "hook": "koAttribute",
+     "attribute": "intelligence",
+     "amount": 1,
+     "cap": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "static-scarf",
+  "name": "Static Scarf",
+  "family": "Fan held items (Drive pack)",
+  "description": "The holder's physical hits may paralyze (10%)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "static-scarf",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "contactStatus",
+     "status": "par",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "toxic-scarf",
+  "name": "Toxic Scarf",
+  "family": "Fan held items (Drive pack)",
+  "description": "The holder's physical hits may poison (10%)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "toxic-scarf",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "contactStatus",
+     "status": "psn",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "coin-charm",
+  "name": "Coin Charm",
+  "family": "Charms (Drive pack)",
+  "description": "+10% money from battles per copy",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "coin-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "money",
+   "percent": 10
+  }
+ },
+ {
+  "id": "gold-charm",
+  "name": "Gold Charm",
+  "family": "Charms (Drive pack)",
+  "description": "+20% money from battles",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "gold-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "money",
+   "percent": 20
+  }
+ },
+ {
+  "id": "color-charm",
+  "name": "Color Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Shiny Pokémon are 1.5x as likely for the rest of the run",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "color-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "shiny",
+     "multiplier": 1.5
+    }
+   ]
+  }
+ },
+ {
+  "id": "glimmering-charm",
+  "name": "Glimmering Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Next stage: each wild Pokémon is the strongest of three",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "glimmering-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    }
+   ]
+  }
+ },
+ {
+  "id": "friendship-charm",
+  "name": "Friendship Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Feeding a Pokémon gives 50% more friendship",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "friendship-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "feedFriendship",
+   "percent": 50
+  }
+ },
+ {
+  "id": "healing-charm",
+  "name": "Healing Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Healing berries heal 25% more",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "healing-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryHeal",
+   "percent": 25
+  }
+ },
+ {
+  "id": "step-charm",
+  "name": "Step Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Every Egg gets one extra step toward hatching",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "step-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "ovalCharm"
+    }
+   ]
+  }
+ },
+ {
+  "id": "mercy-charm",
+  "name": "Mercy Charm",
+  "family": "Charms (Drive pack)",
+  "description": "After each won fight, one fallen Pokémon gets back up",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "mercy-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "lastChance"
+    }
+   ]
+  }
+ },
+ {
+  "id": "mining-charm",
+  "name": "Mining Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Each stage, one wild stop hides a Bag item",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "mining-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "hiddenItem"
+    }
+   ]
+  }
+ },
+ {
+  "id": "lure-charm",
+  "name": "Lure Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Wild Pokémon match the stage's first type more often (+15% per copy)",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "lure-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "types",
+     "types": [
+      "themeFirst"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "key-charm",
+  "name": "Key Charm",
+  "family": "Charms (Drive pack)",
+  "description": "Every hidden \"?\" stop shows what it is",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "key-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "revealEvents"
+    }
+   ]
+  }
+ },
+ {
+  "id": "clover-charm",
+  "name": "Clover Charm",
+  "family": "Charms (Drive pack)",
+  "description": "+3 Luck",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "clover-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "luck": 3
+   }
+  }
+ },
+ {
+  "id": "heart-charm",
+  "name": "Heart Charm",
+  "family": "Charms (Drive pack)",
+  "description": "+3 Love",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "heart-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 3
+   }
+  }
+ },
+ {
+  "id": "roto-bargain",
+  "name": "Roto Bargain",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Your next 3 shop purchases are 25% cheaper",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-bargain",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "purchases",
+    "count": 3
+   },
+   "perks": [
+    {
+     "perk": "discount",
+     "percent": 25
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-boost",
+  "name": "Roto Boost",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Whole team: +1 Attack and Sp. Atk for the first 3 turns of the next battle",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-boost",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "atk",
+     "stages": 1,
+     "turns": 3
+    },
+    {
+     "kind": "stage",
+     "stat": "spa",
+     "stages": 1,
+     "turns": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-catch",
+  "name": "Roto Catch",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Your next 3 ball throws catch twice as well",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-catch",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-encounter",
+  "name": "Roto Encounter",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Next 2 wild battles: the strongest of three Pokémon appears",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-encounter",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 2
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-exp-points",
+  "name": "Roto Exp. Points",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Next 3 wild battles give 50% more EXP",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-exp-points",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "exp",
+     "percent": 50
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-friendship",
+  "name": "Roto Friendship",
+  "family": "Roto Powers (Drive pack)",
+  "description": "A Pokémon of your choice gains a lot of friendship",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "roto-friendship",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 30,
+   "changes": {}
+  }
+ },
+ {
+  "id": "roto-hatch",
+  "name": "Roto Hatch",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Next stage: every Egg gets one extra step toward hatching",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-hatch",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "ovalCharm"
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-hp-restore",
+  "name": "Roto HP Restore",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Heals the whole team by half their HP",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "roto-hp-restore",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.5
+  }
+ },
+ {
+  "id": "roto-pp-restore",
+  "name": "Roto PP Restore",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Restores all of the whole team's PP",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "roto-pp-restore",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "pp": -1
+  }
+ },
+ {
+  "id": "roto-prize-money",
+  "name": "Roto Prize Money",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Your next 3 trainer wins pay 50% more",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-prize-money",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "trainers",
+    "count": 3
+   },
+   "perks": [
+    {
+     "perk": "trainerMoney",
+     "percent": 50
+    }
+   ]
+  }
+ },
+ {
+  "id": "roto-stealth",
+  "name": "Roto Stealth",
+  "family": "Roto Powers (Drive pack)",
+  "description": "Skips the next 2 wild battles",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "roto-stealth",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 2
+   },
+   "mods": [
+    {
+     "mod": "repel"
+    }
+   ]
+  }
+ },
+ {
+  "id": "bread",
+  "name": "Bread",
+  "family": "Food (Drive pack)",
+  "description": "Heals 40 HP; +1 Strength",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "bread",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 40,
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "boiled-egg",
+  "name": "Boiled Egg",
+  "family": "Food (Drive pack)",
+  "description": "Heals 50 HP; +1 Love",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "boiled-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "coconut-milk",
+  "name": "Coconut Milk",
+  "family": "Food (Drive pack)",
+  "description": "Heals 60 HP; +1 Charisma",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "coconut-milk",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 60,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "fruit-bunch",
+  "name": "Fruit Bunch",
+  "family": "Food (Drive pack)",
+  "description": "Heals 50 HP; +1 Luck",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "fruit-bunch",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "instant-noodles",
+  "name": "Instant Noodles",
+  "family": "Food (Drive pack)",
+  "description": "Heals 40 HP; +1 Speed",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "instant-noodles",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 40,
+   "changes": {
+    "speed": 1
+   }
+  }
+ },
+ {
+  "id": "moomoo-cheese",
+  "name": "Moomoo Cheese",
+  "family": "Food (Drive pack)",
+  "description": "Heals 80 HP; +1 Love",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "moomoo-cheese",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 80,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "pack-of-potatoes",
+  "name": "Pack of Potatoes",
+  "family": "Food (Drive pack)",
+  "description": "Heals 50 HP; +1 Strength",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "pack-of-potatoes",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50,
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "pasta",
+  "name": "Pasta",
+  "family": "Food (Drive pack)",
+  "description": "Heals 60 HP; +1 Intelligence",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "pasta",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 60,
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "precooked-burger",
+  "name": "Precooked Burger",
+  "family": "Food (Drive pack)",
+  "description": "Heals 70 HP; +1 Strength",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "precooked-burger",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 70,
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "salad-mix",
+  "name": "Salad Mix",
+  "family": "Food (Drive pack)",
+  "description": "Heals 40 HP and cures its status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "salad-mix",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 40,
+   "cure": true
+  }
+ },
+ {
+  "id": "sausages",
+  "name": "Sausages",
+  "family": "Food (Drive pack)",
+  "description": "Heals 60 HP; +1 Rage",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "sausages",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 60,
+   "changes": {
+    "ragePeace": 1
+   }
+  }
+ },
+ {
+  "id": "tin-of-beans",
+  "name": "Tin of Beans",
+  "family": "Food (Drive pack)",
+  "description": "Heals 40 HP; +1 Good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "tin-of-beans",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 40,
+   "changes": {
+    "goodEvil": 1
+   }
+  }
+ },
+ {
+  "id": "mixed-mushrooms",
+  "name": "Mixed Mushrooms",
+  "family": "Food (Drive pack)",
+  "description": "Cures its status; +1 Peace",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "mixed-mushrooms",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true,
+   "changes": {
+    "ragePeace": -1
+   }
+  }
+ },
+ {
+  "id": "shalour-sable",
+  "name": "Shalour Sable",
+  "family": "Food (Drive pack)",
+  "description": "Heals 20 HP and cures its status; +1 Charisma",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "shalour-sable",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 20,
+   "cure": true,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "max-honey",
+  "name": "Max Honey",
+  "family": "Food (Drive pack)",
+  "description": "Heals 120 HP and cures its status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "max-honey",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 120,
+   "cure": true
+  }
+ },
+ {
+  "id": "fancy-apple",
+  "name": "Fancy Apple",
+  "family": "Food (Drive pack)",
+  "description": "Friendship up; +1 Love",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "fancy-apple",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 15,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "fresh-cream",
+  "name": "Fresh Cream",
+  "family": "Food (Drive pack)",
+  "description": "Friendship up; +1 Charisma",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "fresh-cream",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 15,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "large-leek",
+  "name": "Large Leek",
+  "family": "Food (Drive pack)",
+  "description": "Friendship up; +1 Strength",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "large-leek",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 12,
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "smoke-poke-tail",
+  "name": "Smoke-Poke Tail",
+  "family": "Food (Drive pack)",
+  "description": "Friendship up; +1 Luck",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "smoke-poke-tail",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 12,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "spice-mix",
+  "name": "Spice Mix",
+  "family": "Food (Drive pack)",
+  "description": "Friendship up; +1 Rage",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "spice-mix",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 10,
+   "changes": {
+    "ragePeace": 1
+   }
+  }
+ },
+ {
+  "id": "pungent-root",
+  "name": "Pungent Root",
+  "family": "Food (Drive pack)",
+  "description": "Bitter: friendship down, but +2 Strength",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "pungent-root",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": -5,
+   "changes": {
+    "strength": 2
+   }
+  }
+ },
+ {
+  "id": "rainbow-flower",
+  "name": "Rainbow Flower",
+  "family": "Food (Drive pack)",
+  "description": "Friendship up a lot; +1 Charisma",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "rainbow-flower",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 25,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "packaged-curry",
+  "name": "Packaged Curry",
+  "family": "Food (Drive pack)",
+  "description": "Heals the whole team by 20% of their HP",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "packaged-curry",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.2
+  }
+ },
+ {
+  "id": "gigantamix",
+  "name": "Gigantamix",
+  "family": "Food (Drive pack)",
+  "description": "Heals the whole team by 30% of their HP",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "gigantamix",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.3
+  }
+ },
+ {
+  "id": "max-mushrooms",
+  "name": "Max Mushrooms",
+  "family": "Food (Drive pack)",
+  "description": "Heals the whole team by 25% of their HP",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "max-mushrooms",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.25
+  }
+ },
+ {
+  "id": "big-bamboo-shoot",
+  "name": "Big Bamboo Shoot",
+  "family": "Food (Drive pack)",
+  "description": "Sell it for 1500 money",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "big-bamboo-shoot",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1500,
+   "changes": {}
+  }
+ },
+ {
+  "id": "tiny-bamboo-shoot",
+  "name": "Tiny Bamboo Shoot",
+  "family": "Food (Drive pack)",
+  "description": "Sell it for 250 money",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "tiny-bamboo-shoot",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 250,
+   "changes": {}
+  }
+ },
+ {
+  "id": "sweet-herba-mystica",
+  "name": "Sweet Herba Mystica",
+  "family": "Herba Mystica (Drive pack)",
+  "description": "Fully heals the whole team's HP and PP",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "sweet-herba-mystica",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 1,
+   "pp": -1
+  }
+ },
+ {
+  "id": "spicy-herba-mystica",
+  "name": "Spicy Herba Mystica",
+  "family": "Herba Mystica (Drive pack)",
+  "description": "Whole team: +2 Attack for the first 5 turns of the next battle",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "spicy-herba-mystica",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "atk",
+     "stages": 2,
+     "turns": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "salty-herba-mystica",
+  "name": "Salty Herba Mystica",
+  "family": "Herba Mystica (Drive pack)",
+  "description": "Whole team: +2 Defense for the first 5 turns of the next battle",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "salty-herba-mystica",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "def",
+     "stages": 2,
+     "turns": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "bitter-herba-mystica",
+  "name": "Bitter Herba Mystica",
+  "family": "Herba Mystica (Drive pack)",
+  "description": "Whole team: +2 Sp. Atk for the first 5 turns of the next battle",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "bitter-herba-mystica",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "spa",
+     "stages": 2,
+     "turns": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "sour-herba-mystica",
+  "name": "Sour Herba Mystica",
+  "family": "Herba Mystica (Drive pack)",
+  "description": "Whole team: +2 Sp. Def for the first 5 turns of the next battle",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "sour-herba-mystica",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "spd",
+     "stages": 2,
+     "turns": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "health-mochi",
+  "name": "Health Mochi",
+  "family": "Mochi (Drive pack)",
+  "description": "+4% HP for one Pokémon, for good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "health-mochi",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "hp",
+   "percent": 4
+  }
+ },
+ {
+  "id": "muscle-mochi",
+  "name": "Muscle Mochi",
+  "family": "Mochi (Drive pack)",
+  "description": "+4% Attack for one Pokémon, for good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "muscle-mochi",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "atk",
+   "percent": 4
+  }
+ },
+ {
+  "id": "resist-mochi",
+  "name": "Resist Mochi",
+  "family": "Mochi (Drive pack)",
+  "description": "+4% Defense for one Pokémon, for good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "resist-mochi",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "def",
+   "percent": 4
+  }
+ },
+ {
+  "id": "genius-mochi",
+  "name": "Genius Mochi",
+  "family": "Mochi (Drive pack)",
+  "description": "+4% Sp. Atk for one Pokémon, for good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "genius-mochi",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spa",
+   "percent": 4
+  }
+ },
+ {
+  "id": "clever-mochi",
+  "name": "Clever Mochi",
+  "family": "Mochi (Drive pack)",
+  "description": "+4% Sp. Def for one Pokémon, for good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "clever-mochi",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spd",
+   "percent": 4
+  }
+ },
+ {
+  "id": "swift-mochi",
+  "name": "Swift Mochi",
+  "family": "Mochi (Drive pack)",
+  "description": "+4% Speed for one Pokémon, for good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "swift-mochi",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spe",
+   "percent": 4
+  }
+ },
+ {
+  "id": "stamina-gummy",
+  "name": "Stamina Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "+3% HP for one Pokémon, for good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "stamina-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "hp",
+   "percent": 3
+  }
+ },
+ {
+  "id": "strength-gummy",
+  "name": "Strength Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "+3% Attack for one Pokémon, for good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "strength-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "atk",
+   "percent": 3
+  }
+ },
+ {
+  "id": "toughness-gummy",
+  "name": "Toughness Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "+3% Defense for one Pokémon, for good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "toughness-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "def",
+   "percent": 3
+  }
+ },
+ {
+  "id": "sanity-gummy",
+  "name": "Sanity Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "+3% Sp. Atk for one Pokémon, for good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "sanity-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spa",
+   "percent": 3
+  }
+ },
+ {
+  "id": "will-gummy",
+  "name": "Will Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "+3% Sp. Def for one Pokémon, for good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "will-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spd",
+   "percent": 3
+  }
+ },
+ {
+  "id": "reaction-gummy",
+  "name": "Reaction Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "+3% Speed for one Pokémon, for good",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 5,
+  "how": "use",
+  "icon": "reaction-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "statBoost",
+   "stat": "spe",
+   "percent": 3
+  }
+ },
+ {
+  "id": "red-gummy",
+  "name": "Red Gummy",
+  "family": "Gummies (Drive pack)",
+  "description": "Friendship up a lot; +1 Love",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "red-gummy",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 20,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "amaze-mulch",
+  "name": "Amaze Mulch",
+  "family": "Mulch (Drive pack)",
+  "description": "Berries are saved 15% of the time",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "amaze-mulch",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berrySave",
+   "percent": 15
+  }
+ },
+ {
+  "id": "boost-mulch",
+  "name": "Boost Mulch",
+  "family": "Mulch (Drive pack)",
+  "description": "One more berry pot",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "boost-mulch",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryPotsExtra",
+   "percent": 1
+  }
+ },
+ {
+  "id": "rich-mulch",
+  "name": "Rich Mulch",
+  "family": "Mulch (Drive pack)",
+  "description": "Berries sell for 10% more",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "rich-mulch",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryMoney",
+   "percent": 10
+  }
+ },
+ {
+  "id": "surprise-mulch",
+  "name": "Surprise Mulch",
+  "family": "Mulch (Drive pack)",
+  "description": "Pinch berries work 15% earlier",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "surprise-mulch",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryPinch",
+   "percent": 15
+  }
+ },
+ {
+  "id": "red-petal",
+  "name": "Red Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Strength",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "red-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "orange-petal",
+  "name": "Orange Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Speed",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "orange-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "speed": 1
+   }
+  }
+ },
+ {
+  "id": "yellow-petal",
+  "name": "Yellow Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Luck",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "yellow-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "green-petal",
+  "name": "Green Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Good",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "green-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "goodEvil": 1
+   }
+  }
+ },
+ {
+  "id": "blue-petal",
+  "name": "Blue Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Intelligence",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "blue-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "purple-petal",
+  "name": "Purple Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Peace",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "purple-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "ragePeace": -1
+   }
+  }
+ },
+ {
+  "id": "pink-petal",
+  "name": "Pink Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+1 Love",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "pink-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "radiant-petal",
+  "name": "Radiant Petal",
+  "family": "Petals (Drive pack)",
+  "description": "+3 Charisma and +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "radiant-petal",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 3,
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "jaw-fossil",
+  "name": "Jaw Fossil",
+  "family": "Fossils (Drive pack)",
+  "description": "Revives into Tyrunt",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "jaw-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "tyrunt"
+  }
+ },
+ {
+  "id": "sail-fossil",
+  "name": "Sail Fossil",
+  "family": "Fossils (Drive pack)",
+  "description": "Revives into Amaura",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "sail-fossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "amaura"
+  }
+ },
+ {
+  "id": "fossilized-bird",
+  "name": "Fossilized Bird",
+  "family": "Fossils (Drive pack)",
+  "description": "Revives into Dracozolt",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "fossilized-bird",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "dracozolt"
+  }
+ },
+ {
+  "id": "fossilized-dino",
+  "name": "Fossilized Dino",
+  "family": "Fossils (Drive pack)",
+  "description": "Revives into Arctozolt",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "fossilized-dino",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "arctozolt"
+  }
+ },
+ {
+  "id": "fossilized-drake",
+  "name": "Fossilized Drake",
+  "family": "Fossils (Drive pack)",
+  "description": "Revives into Dracovish",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "fossilized-drake",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "dracovish"
+  }
+ },
+ {
+  "id": "fossilized-fish",
+  "name": "Fossilized Fish",
+  "family": "Fossils (Drive pack)",
+  "description": "Revives into Arctovish",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "fossilized-fish",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "arctovish"
+  }
+ },
+ {
+  "id": "eon-flute",
+  "name": "Eon Flute",
+  "family": "Map items (Drive pack)",
+  "description": "This stage: a 5% chance each for wild Latias or Latios",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "eon-flute",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "stage"
+   },
+   "mods": [
+    {
+     "mod": "species",
+     "species": "latias",
+     "percent": 5
+    },
+    {
+     "mod": "species",
+     "species": "latios",
+     "percent": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "sun-flute",
+  "name": "Sun Flute",
+  "family": "Map items (Drive pack)",
+  "description": "Solgaleo is chosen whenever an event could offer it",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "sun-flute",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "favorSpecies",
+     "species": "solgaleo"
+    }
+   ]
+  }
+ },
+ {
+  "id": "moon-flute",
+  "name": "Moon Flute",
+  "family": "Map items (Drive pack)",
+  "description": "Lunala is chosen whenever an event could offer it",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "moon-flute",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "favorSpecies",
+     "species": "lunala"
+    }
+   ]
+  }
+ },
+ {
+  "id": "dry-incense",
+  "name": "Dry Incense",
+  "family": "Map items (Drive pack)",
+  "description": "Wild Pokémon are more often Ground type (+20% per copy)",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "dry-incense",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "types",
+     "types": [
+      "ground"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "spark-incense",
+  "name": "Spark Incense",
+  "family": "Map items (Drive pack)",
+  "description": "Wild Pokémon are more often Electric type (+20% per copy)",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "spark-incense",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "types",
+     "types": [
+      "electric"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "infinite-repel",
+  "name": "Infinite Repel",
+  "family": "Map items (Drive pack)",
+  "description": "Skips the next 6 wild battles",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "infinite-repel",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 6
+   },
+   "mods": [
+    {
+     "mod": "repel"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wishing-piece",
+  "name": "Wishing Piece",
+  "family": "Map items (Drive pack)",
+  "description": "Next wild battle: the strongest of three Pokémon appears; +1 Luck",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "wishing-piece",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    }
+   ],
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "wishing-star",
+  "name": "Wishing Star",
+  "family": "Map items (Drive pack)",
+  "description": "Next 3 wild battles: shiny Pokémon are 3x as likely",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "wishing-star",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "shiny",
+     "multiplier": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "decoy",
+  "name": "Decoy",
+  "family": "Map items (Drive pack)",
+  "description": "The next wild Pokémon loses its first turn",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "decoy",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "gift-box",
+  "name": "Gift Box",
+  "family": "Gift boxes (Drive pack)",
+  "description": "Holds 2 Revives",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "gift-box",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "revive",
+   "count": 2
+  }
+ },
+ {
+  "id": "gift-box-balls",
+  "name": "Gift Box (Balls)",
+  "family": "Gift boxes (Drive pack)",
+  "description": "Holds 3 Ultra Balls",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "gift-box-balls",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "ultra-ball",
+   "count": 3
+  }
+ },
+ {
+  "id": "gift-box-support",
+  "name": "Gift Box (Support)",
+  "family": "Gift boxes (Drive pack)",
+  "description": "Holds 2 Full Restores",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "gift-box-support",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "full-restore",
+   "count": 2
+  }
+ },
+ {
+  "id": "gift-box-rare",
+  "name": "Gift Box (Rare)",
+  "family": "Gift boxes (Drive pack)",
+  "description": "Holds a Master Ball",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "gift-box-rare",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "master-ball",
+   "count": 1
+  }
+ },
+ {
+  "id": "gimmighoul-coin",
+  "name": "Gimmighoul Coin",
+  "family": "Valuables (Drive pack)",
+  "description": "Worth 100 money; +1 Luck",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "gimmighoul-coin",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 100,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "strange-souvenir",
+  "name": "Strange Souvenir",
+  "family": "Valuables (Drive pack)",
+  "description": "Worth 300 money; +2 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "strange-souvenir",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {
+    "charisma": 2
+   }
+  }
+ },
+ {
+  "id": "kofus-wallet",
+  "name": "Kofu's Wallet",
+  "family": "Valuables (Drive pack)",
+  "description": "Worth 1000 money; +2 Good",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "kofus-wallet",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1000,
+   "changes": {
+    "goodEvil": 2
+   }
+  }
+ },
+ {
+  "id": "honor-of-kalos",
+  "name": "Honor of Kalos",
+  "family": "Valuables (Drive pack)",
+  "description": "+3 Charisma and +2 Good",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "honor-of-kalos",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 3,
+    "goodEvil": 2
+   }
+  }
+ },
+ {
+  "id": "exp-all",
+  "name": "Exp. All",
+  "family": "Valuables (Drive pack)",
+  "description": "The whole team shares EXP fully",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "exp-all",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "expShare",
+   "percent": 100
+  }
  }
 ]

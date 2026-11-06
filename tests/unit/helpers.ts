@@ -27,17 +27,31 @@ import { freshSos } from '../../src/core/battle/sos';
 import { rewardTargetProblem } from '../../src/core/rewards';
 
 /**
- * Takes the first reward in the draft that some party member can receive,
+ * Takes the first plain reward in the draft that some party member can receive,
  * repeating after a free re-roll, the way a player who just clicks through would.
  */
+function plainCatalog(c: Content, entryId: string): boolean {
+  const effect = c.catalog.get(entryId)?.effect;
+  if (effect?.kind === 'encounter' || effect?.kind === 'perk') return false;
+  return !(effect?.kind === 'held' && effect.hooks.some((h) => h.hook === 'selfStatus' || h.hook === 'stickyBarb'));
+}
+
 export function takeAnyReward(run: RunState, c: Content = content): RunState {
   let guard = 0;
   while (run.phase === 'reward' && guard++ < 20) {
     let picked: RunState | null = null;
-    for (let i = 0; i < run.draft!.length && !picked; i++) {
-      const reward = c.rewards.get(run.draft![i]!)!;
-      const target = run.party.findIndex((_, t) => rewardTargetProblem(c, run, reward, t) === null);
-      if (target >= 0) picked = chooseReward(c, run, i, target).run;
+    // First pass: a plain reward, so a map item (a Repel...), a held item that hurts its holder (Flame Orb...)
+    // or a follow-up choice (a fossil, a move to teach) doesn't change what the test walks into next. Second pass: anything that can be taken.
+    for (const plain of [true, false]) {
+      for (let i = 0; i < run.draft!.length && !picked; i++) {
+        const reward = c.rewards.get(run.draft![i]!)!;
+        if (plain && reward.effect.kind === 'catalog' && !plainCatalog(c, reward.effect.entry)) continue;
+        const target = run.party.findIndex((_, t) => rewardTargetProblem(c, run, reward, t) === null);
+        if (target < 0) continue;
+        const next = chooseReward(c, run, i, target).run;
+        if (!plain || next.phase !== 'decision') picked = next;
+      }
+      if (picked) break;
     }
     if (!picked) throw new Error('No reward in the draft can be taken');
     run = picked;
