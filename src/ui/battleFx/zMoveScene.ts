@@ -9,6 +9,7 @@ import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import { zTitleAssetId, animAssetIds } from '../../assets/catalog';
 import { loadAssets } from '../lazyAssets';
 import type { Beat } from './spectacle';
+import { sizePair } from '../../core/heights';
 
 /** One frame of the original animation (it counts in frames). */
 const F = 40;
@@ -29,6 +30,9 @@ export interface ZSceneOptions {
   backdropKey?: string | null;
   /** The arena's platform picture (`<backdrop>.enemy`); the scene's bases are cut from it. Null draws plain ellipses. */
   baseKey?: string | null;
+  /** Canon heights in metres, so the Pokémon and trainer are drawn to scale (the Pokémon is nearer the camera). */
+  monHeightM?: number;
+  trainerHeightM?: number;
   /** True when the Pokémon is the foe's: the trainer comes in from the right. */
   opposes: boolean;
   /** Flash strength 0..1 and shake 0..1 from the animation settings. */
@@ -44,6 +48,60 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];
   const has = (k: string | null) => Boolean(k) && scene.textures.exists(k!);
+  /** Sizes a sprite so its visible height is `px` and puts its visible feet at (x, footY). */
+  const fit = <T extends Phaser.GameObjects.GameObject>(g: T, x: number, footY: number, px: number): T => {
+    const place = () => {
+      // A Pokémon whose art is still loading is a Container holding a sprite once it arrives.
+      const holder = g as unknown as Phaser.GameObjects.Container & Phaser.GameObjects.Sprite;
+      const sp = (g instanceof Phaser.GameObjects.Container ? (g.list.find((c) => (c as Phaser.GameObjects.Sprite).frame) as Phaser.GameObjects.Sprite | undefined) : (g as unknown as Phaser.GameObjects.Sprite)) ?? null;
+      const frame = sp?.frame;
+      if (!sp || !frame) {
+        holder.setPosition?.(x, footY);
+        return;
+      }
+      let top = 0;
+      let bottom = frame.height;
+      try {
+        const src = frame.source?.image as HTMLImageElement | HTMLCanvasElement | undefined;
+        if (src && frame.width > 0 && frame.height > 0 && typeof document !== 'undefined') {
+          const cv = document.createElement('canvas');
+          cv.width = frame.width;
+          cv.height = frame.height;
+          const ctx = cv.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(src, frame.cutX, frame.cutY, frame.width, frame.height, 0, 0, frame.width, frame.height);
+            const d = ctx.getImageData(0, 0, cv.width, cv.height).data;
+            let y0 = -1;
+            let y1 = -1;
+            for (let yy = 0; yy < cv.height; yy++) {
+              for (let xx = 0; xx < cv.width; xx++) {
+                if ((d[(yy * cv.width + xx) * 4 + 3] ?? 0) > 16) {
+                  if (y0 < 0) y0 = yy;
+                  y1 = yy;
+                  break;
+                }
+              }
+            }
+            if (y0 >= 0) {
+              top = y0;
+              bottom = y1 + 1;
+            }
+          }
+        }
+      } catch {
+        /* no pixel access: use the whole frame */
+      }
+      const visible = bottom - top;
+      if (visible <= 0) return;
+      const inner = sp === (g as unknown) ? 1 : sp.scaleX;
+      const k = px / (visible * inner);
+      holder.setScale(sp === (g as unknown) ? k : k);
+      holder.setPosition(x, footY + (frame.height - bottom) * inner * k);
+    };
+    place();
+    g.once?.('art-ready', place);
+    return g;
+  };
   const at = (ms: number, fn: () => void) => timers.push(scene.time.delayedCall(ms / o.speed, fn));
   const add = <T extends Phaser.GameObjects.GameObject>(g: T): T => {
     g.setName('cine-zmove');
@@ -128,11 +186,19 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
     g.lineStyle(3, 0x7d6cab, 1).strokeEllipse(0, 0, 330, 78);
     return g;
   };
-  const monBase = makeBase(cx, cy + 90);
+  // Perspective: the Pokémon is near the camera (big, low), the trainer further back (small, higher up).
+  const monFootY = cy + 110;
+  const trainerFootY = cy + 50;
+  const monM = o.monHeightM ?? 1;
+  const trM = o.trainerHeightM ?? 1.7;
+  const sizes = sizePair(trM, monM, { pxPerMetre: 120, maxPx: 400, minMonPx: 70 });
+  const monPx = Math.min(330, Math.round(sizes.monPx * 1.4));
+  const trainerPx = Math.max(90, Math.round(sizes.trainerPx * 0.62));
+  const monBase = makeBase(cx, monFootY);
   stage.add(monBase);
   const trainerX = o.opposes ? W - 170 : 170;
   const trainerStartX = o.opposes ? W + 160 : -160;
-  const trainerBase = o.makeTrainer ? makeBase(trainerStartX, cy + 130) : null;
+  const trainerBase = o.makeTrainer ? makeBase(trainerStartX, trainerFootY) : null;
   if (trainerBase) {
     trainerBase.setVisible(false);
     stage.add(trainerBase);
@@ -141,7 +207,7 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
   stage.add(dim);
 
   // ---- The Pokémon, front-facing, with a type-coloured outline. ----------------------------------------
-  const mon = add(o.makeFront(cx, cy + 40));
+  const mon = fit(add(o.makeFront(cx, monFootY)), cx, monFootY, monPx);
   mon.setDepth(depth + 3).setVisible(false);
   const monAny = mon as Phaser.GameObjects.Sprite;
   const outline: Phaser.GameObjects.GameObject[] = [];
@@ -164,10 +230,10 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
   let trainer: Phaser.GameObjects.GameObject | null = null;
   let ring: Phaser.GameObjects.Image | null = null;
   if (o.makeTrainer) {
-    trainer = add(o.makeTrainer(trainerStartX, cy + 130));
+    trainer = fit(add(o.makeTrainer(trainerStartX, trainerFootY)), trainerStartX, trainerFootY, trainerPx);
     (trainer as Phaser.GameObjects.Sprite).setDepth(depth + 4).setVisible(false);
     if (has(o.ringKey)) {
-      ring = add(scene.add.image(trainerX, cy - 40, o.ringKey!).setDepth(depth + 5).setVisible(false).setAlpha(0));
+      ring = add(scene.add.image(trainerX, trainerFootY - trainerPx * 0.55, o.ringKey!).setDepth(depth + 5).setVisible(false).setAlpha(0));
       ring.setScale(64 / Math.max(ring.width, ring.height));
     }
   }
@@ -280,8 +346,8 @@ export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
     crystal?.setVisible(false);
     particles.forEach((p) => p.img.setVisible(false));
     setWhite(false);
-    const ol = add(o.makeFront(cx, cy + 40));
-    ol.setDepth(depth + 2).setScale(ol.scaleX * 1.07, ol.scaleY * 1.07);
+    const ol = fit(add(o.makeFront(cx, monFootY)), cx, monFootY, monPx * 1.07);
+    ol.setDepth(depth + 2);
     const olAny = ol as Phaser.GameObjects.Sprite;
     if (typeof olAny.setTintFill === 'function') olAny.setTintFill(o.tint);
     else if (ol instanceof Phaser.GameObjects.Container) for (const c of ol.list) (c as Phaser.GameObjects.Sprite).setTintFill?.(o.tint);
