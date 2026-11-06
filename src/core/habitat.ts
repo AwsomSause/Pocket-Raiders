@@ -7,6 +7,11 @@ import type { RunState } from './state';
 
 /** The `count` likeliest wild species of the stage (names, most likely first), merging evolution lines by their base form. */
 export function habitatList(content: Content, run: Pick<RunState, 'stage' | 'regionOrder' | 'regionIndex'>, count = 4): string[] {
+  return habitatIds(content, run, count).map((id) => content.species.get(id)?.name ?? id);
+}
+
+/** Same list as species ids (base forms). */
+export function habitatIds(content: Content, run: Pick<RunState, 'stage' | 'regionOrder' | 'regionIndex'>, count = 4): string[] {
   const stage = run.stage;
   if (!stage) return [];
   const theme = content.themes.get(stage.themeId);
@@ -25,5 +30,5 @@ export function habitatList(content: Content, run: Pick<RunState, 'stage' | 'reg
   return [...byLine.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, count)
-    .map(([id]) => content.species.get(id)?.name ?? id);
+    .map(([id]) => id);
 }

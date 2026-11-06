@@ -309,7 +309,8 @@ export class RunPrepScene extends Phaser.Scene {
       const on = i === this.page;
       drawGlass(this, x, 48, w, 38, { tint: on ? p.tint : AERO.glassLow, alpha: on ? 0.96 : 0.55, glow: on, radius: 14 });
       this.add.text(x + w / 2, 67, `${i + 1}  ${p.title}`, textStyle(on ? 19 : 17, on ? '#ffffff' : COLORS.textMuted)).setOrigin(0.5);
-      this.add.zone(x, 48, w, 38).setOrigin(0).setInteractive({ useHandCursor: true }).on('pointerdown', () => !this.picker && this.goPage(i));
+      // The tap zone is taller than the drawn chip so it is easy to hit on a phone.
+      this.add.zone(x, 42, w, 50).setOrigin(0).setInteractive({ useHandCursor: true }).on('pointerdown', () => !this.picker && this.goPage(i));
     });
   }
 

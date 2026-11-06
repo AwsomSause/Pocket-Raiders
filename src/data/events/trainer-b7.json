@@ -1,0 +1,108 @@
+{
+ "events": [
+  {
+   "id": "fan-club-tournament",
+   "name": "Fan Club Tournament",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#33201f",
+    "effect": "none"
+   },
+   "intro": "A stadium full of fans chants for whoever just scored a knockout. \"Take the crowd, take the match!\"",
+   "choices": [
+    {
+     "label": "Play to the crowd",
+     "success": {
+      "text": "The stands erupt before the first move.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Fan Club Champion",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 650
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "fanClub": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Skip the stadium",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "beginners-luck",
+   "name": "Beginner's Luck",
+   "group": "Trainer Challenges",
+   "stop": "event",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a3320",
+    "effect": "none"
+   },
+   "intro": "A wide-eyed rookie waves. \"I have never won a thing, so the universe owes me! My Pokémon crit like crazy, but you heal a little too.\"",
+   "choices": [
+    {
+     "label": "Play along",
+     "success": {
+      "text": "Luck swings both ways in this one.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Lucky Rookie",
+       "classId": "youngster",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        }
+       ],
+       "rule": {
+        "beginnersLuck": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Wish them luck and leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
