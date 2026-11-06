@@ -614,6 +614,12 @@
  "sos": {
   "enabled": true
  },
+ "powerBudget": {
+  "level": 50,
+  "caps": { "baby": 145, "basic": 190, "middle": 195, "final": 270, "legendary": 330, "mythical": 280, "form": 360 },
+  "moveCap": 250,
+  "exempt": { "eternatus-eternamax": "Boss-only form (Eternamax Eternatus is never owned)." }
+ },
  "variety": {
   "penalty": 0.35,
   "window": {

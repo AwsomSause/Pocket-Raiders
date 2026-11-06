@@ -1960,6 +1960,14 @@ export const BalanceSchema = z.object({
   battleFlair: BattleFlairSchema.default(DEFAULT_BATTLE_FLAIR),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
+  /** Overhaul slice 4 (core/powerBudget.ts): Threat Rating caps per power class at `level`, and the cap on a learnable move's effective power. */
+  powerBudget: z.object({
+    level: z.number().int().min(1).max(100),
+    caps: z.object({ baby: z.number(), basic: z.number(), middle: z.number(), final: z.number(), legendary: z.number(), mythical: z.number(), form: z.number() }),
+    moveCap: z.number().positive(),
+    /** Species allowed over their cap on purpose (a boss-only form), each with the reason. */
+    exempt: z.record(z.string(), z.string().min(1)).default({}),
+  }).default({ level: 50, caps: { baby: 1e9, basic: 1e9, middle: 1e9, final: 1e9, legendary: 1e9, mythical: 1e9, form: 1e9 }, moveCap: 1e9, exempt: {} }),
   /** Overhaul slice 3 (core/variety.ts): picks within `window[pool]` of the same pool get weight × `penalty`. A pool with no window keeps no history. */
   variety: z.object({ penalty: z.number().gt(0).max(1), window: z.record(z.string(), z.number().int().min(0).max(50)) }).default({ penalty: 1, window: {} }),
   doubles: z
