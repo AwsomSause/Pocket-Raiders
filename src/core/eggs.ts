@@ -73,7 +73,7 @@ export function layEgg(content: Content, run: RunState, speciesId: string, opts:
   const usable = eggMoveOptions(content, family).filter((o) => o.active).map((o) => o.id);
   const eggMoves: string[] = [];
   while (eggMoves.length < tier.eggMoveCap && usable.length > 0) eggMoves.push(usable.splice(rng.int(0, usable.length - 1), 1)[0]!);
-  run.itemCounters = { ...run.itemCounters, 'eggs-laid': n };
+  run.itemCounters = { ...run.itemCounters, 'eggs-laid': n, [`egg-fam:${family}`]: (run.itemCounters?.[`egg-fam:${family}`] ?? 0) + 1 };
   const left = Math.max(1, opts.left) + tier.extraDistance;
   const egg: Egg = {
     uid: `egg${n}`,

@@ -12,8 +12,8 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
-import { pickEggSpecies } from './rarity';
 import { biomeWildWeight } from './biomes';
+import { pickEggFamily } from './eggPools';
 import { companionSupport } from './companionSupport';
 import { applyLeaderMood, leaderMood } from './story/leaderMood';
 import { gimmickContext } from './gimmicks';
@@ -542,7 +542,7 @@ export function hatchEggs(content: Content, run: RunState): void {
     run.itemCounters = rest;
     if (left <= 0) continue;
     const rng = new Rng(hashSeed(`${run.seed}::egg::${key}`));
-    const species = pickEggSpecies(content, wildEligibleSpecies(content).filter((s) => s.evolutionStage === 1), rng);
+    const species = content.species.get(pickEggFamily(content, run, 'Mystery Egg', rng))!;
     const levels = run.party.map((m) => m.level);
     const level = Math.max(1, Math.min(runLevelCap(content, run), Math.floor(levels.reduce((a, b) => a + b, 0) / Math.max(1, levels.length)) - 5));
     layEgg(content, run, species.id, { level, left, unit: 'stage', source: 'Mystery Egg', shinyMultiplier: runAttributeEffects(content, run).shinyChance * shiny }, rng);
