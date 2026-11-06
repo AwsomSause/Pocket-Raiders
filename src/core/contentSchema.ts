@@ -1976,6 +1976,8 @@ export const BalanceSchema = z.object({
   frugalRunMaxSpent: z.number().int().min(0).default(300),
   /** Badge Powers (idea S483): each Gym badge boosts your Pokémon of the Leader's types and cuts their super-effective damage taken. */
   /** Elite Four Rematches (S127): after this many battles won per region cleared so far, the Elite Four field remixed teams. */
+  /** Weather-Locked Spawns (S234): off in the old-seed story check. */
+  spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),

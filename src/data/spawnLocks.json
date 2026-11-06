@@ -1,0 +1,11 @@
+{
+  "note": "Weather-Locked Spawns (S234): these species only turn up in battles fought under the listed weather (a weather front on the route, or a camp/event weather); the weather also makes them likelier. Everyone else is unaffected.",
+  "boost": 3,
+  "locks": {
+    "rain": ["lotad", "barboach", "tympole"],
+    "sun": ["sunkern", "cacnea", "numel"],
+    "sand": ["trapinch", "sandile", "hippopotas"],
+    "snow": ["snover", "snorunt", "swinub"],
+    "hail": ["snover", "snorunt", "swinub"]
+  }
+}
