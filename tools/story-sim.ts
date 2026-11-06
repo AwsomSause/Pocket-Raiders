@@ -7,10 +7,12 @@ import { writeFileSync } from 'node:fs';
 import type * as Auto from '../tests/unit/autoplay.ts';
 import type * as Data from '../src/data/index.ts';
 import type * as Mod from '../src/core/story2/module.ts';
+import type * as Play from '../tests/unit/storyPlay.ts';
 import { closeModules, loadModule } from './lib/gameModules.ts';
 
 const { autoplay } = await loadModule<typeof Auto>('/tests/unit/autoplay.ts');
 const { buildContent } = await loadModule<typeof Data>('/src/data/index.ts');
+const { newStoryRun, playModule } = await loadModule<typeof Play>('/tests/unit/storyPlay.ts');
 const { chooseBackstory } = await loadModule<typeof Mod>('/src/core/story2/module.ts');
 await closeModules();
 
@@ -56,7 +58,21 @@ for (const backstory of backstories) {
 }
 const by = (b: string) => rows.filter((r) => r.backstory === b);
 const med = (xs: number[]) => xs.sort((a, c) => a - c)[Math.floor(xs.length / 2)] ?? 0;
+// Ending shares: every Story Stop of the module is played without fights; answers are random, the Champion is won, lost or neither (thirds).
+const ENDING_RUNS = Number(process.env.ENDING_RUNS ?? 300);
+const endings: Record<string, Record<string, number>> = {};
+for (const b of backstories) {
+  endings[b] = {};
+  for (let i = 0; i < ENDING_RUNS; i++) {
+    const run = newStoryRun(`end-${b}-${i}`, b);
+    playModule(run, (c, at) => Math.floor(Math.abs(Math.sin(i * 131 + at * 17)) * 1000) % c.length, (['won', 'lost', undefined] as const)[i % 3]);
+    const e = run.story.v2!.module!.ending ?? 'NONE';
+    endings[b]![e] = (endings[b]![e] ?? 0) + 1;
+  }
+}
 const summary = {
+  endingRunsPerBackstory: ENDING_RUNS,
+  endings,
   runsPerBackstory: PER,
   errors: rows.filter((r) => r.error).map((r) => `${r.seed}: ${r.error}`),
   lostTo: rows.reduce<Record<string, number>>((a, r) => (r.lostTo ? ((a[r.lostTo] = (a[r.lostTo] ?? 0) + 1), a) : a), {}),

@@ -250,6 +250,12 @@
     "kind": "set_flag",
     "key": "met_pell",
     "value": true
+   },
+   {
+    "id": "ev_old_uniform_out_seen",
+    "kind": "set_flag",
+    "key": "seen_marauders",
+    "value": true
    }
   ],
   "variants": [
