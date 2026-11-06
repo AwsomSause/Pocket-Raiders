@@ -17,6 +17,7 @@ import { PARTY_LIFE, createPartyLife, type Pair, type PartyLifeState, type Perso
 
 export * from './schema';
 import { identityLine } from '../overhaul/personality';
+import { growthLine, DEFAULT_GROWTH_CONFIG } from '../overhaul/growth';
 import { activeCombos, COMBO_CAMP_POINTS } from '../overhaul/chemistry';
 const RULES = PARTY_LIFE.rules;
 const BOSS_KINDS = ['gym', 'elite', 'champion'];
@@ -50,7 +51,7 @@ export const personalityData = (trait: string): Personality => PARTY_LIFE.person
 export function personalityOf(run: RunState, mon: PokemonInstance): PersonalityView {
   const trait = bondOf(run, mon.uid).trait;
   const p = personalityData(trait);
-  return { trait, label: p.label, blurb: p.blurb, quirk: PARTY_LIFE.quirks[fnv(`${mon.uid}:quirk`) % PARTY_LIFE.quirks.length]!, sulk: p.sulk, identity: identityLine(mon) };
+  return { trait, label: p.label, blurb: p.blurb, quirk: PARTY_LIFE.quirks[fnv(`${mon.uid}:quirk`) % PARTY_LIFE.quirks.length]!, sulk: p.sulk, identity: `${identityLine(mon)}${mon.growthPath ? ` ${growthLine(mon, DEFAULT_GROWTH_CONFIG) ?? ''}` : ''}`.trim() };
 }
 
 const traitOf = (run: RunState, uid: string): string => bondOf(run, uid).trait;
