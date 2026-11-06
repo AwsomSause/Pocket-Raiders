@@ -57,6 +57,12 @@ export const RemembranceSchema = z.object({
   id: Id, v: Ver, line: z.array(Id).min(1).max(3), types: z.array(Id).min(1).max(2), temperament: Id, affinity: z.record(Id, z.number()),
   unlock: z.object({ kind: z.enum(['start', 'quiz', 'win', 'mastery', 'event', 'backstory']), arg: z.string().optional() }),
   moves: z.array(Id), keystone: Id, status: z.enum(['supported', 'limited', 'disabled']),
+  /** Quiz fields (S3): combat role, generation of origin, whether the line branches, whether stage 1 is a baby, and whether the quiz may offer it. */
+  role: z.enum(['sweeper', 'tank', 'support', 'disruptor', 'trapper', 'pivot', 'scout']).optional(),
+  generation: z.number().int().min(1).optional(),
+  branching: z.boolean().default(false),
+  baby: z.boolean().default(false),
+  quizEligible: z.boolean().default(true),
 });
 
 export const MoveMomentSchema = z.object({
@@ -91,7 +97,7 @@ export const BackstorySchema = z.object({
 
 export const QuizQuestionSchema = z.object({
   id: Id, quick: z.boolean().default(false), textKey: Key,
-  answers: z.array(z.object({ id: Id, textKey: Key, weights: z.record(Id, z.number()) })).min(2),
+  answers: z.array(z.object({ id: Id, textKey: Key, weights: z.record(Id, z.number()), tag: Id.optional() })).min(2),
 });
 
 export const StoryBlueprintSchema = z.object({

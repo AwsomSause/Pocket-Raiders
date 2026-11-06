@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { PARITY_ITEMS, storyGates, type StoryGateContext } from '../../src/quality/storyGates';
-import { BackstorySchema, type StoryData } from '../../src/core/story2/schema';
+import { BackstorySchema, RemembranceSchema, type StoryData } from '../../src/core/story2/schema';
 import { content } from './helpers';
 
 // A blank StoryData: the shipped story content is authored now, so gate tests start from empty arrays.
@@ -21,7 +21,7 @@ describe('story gates', () => {
   it('a sound character and event pass', () => {
     const d = empty();
     d.characters = [character()];
-    d.text = { 'c.dara': 'Dara', 'c.dara.bio': 'Bio' };
+    d.text = { ...d.text, 'c.dara': 'Dara', 'c.dara.bio': 'Bio' };
     for (const id of GATES) expect(count(d, id, { fileExists: () => true }), id).toBe(0);
   });
   const bad: [string, (d: StoryData) => void, StoryGateContext?][] = [
@@ -32,7 +32,7 @@ describe('story gates', () => {
     ['story-canon-write', (d) => { d.events = [event({ outputs: [{ kind: 'fact', target: 'canon.dara' }] })]; }],
     ['story-backstory-parity', (d) => { d.backstories = [BackstorySchema.parse({ id: 'bs', nameKey: 'k', parity: PARITY_ITEMS.slice(1), endings: ['e'], catchAllEnding: 'e' })]; }],
     ['story-quiz-balance', (d) => { d.quiz = [{ id: 'q1', quick: false, textKey: 'k', answers: [{ id: 'a', textKey: 'k', weights: { bold: 3 } }, { id: 'b', textKey: 'k', weights: { calm: 3 } }] }]; }],
-    ['story-remembrance-unlock', (d) => { d.remembrances = [{ id: 'r', v: 1, line: ['pidgey'], types: ['flying'], temperament: 't', affinity: {}, unlock: { kind: 'event', arg: 'missing_event' }, moves: [], keystone: 'k', status: 'supported' }]; }],
+    ['story-remembrance-unlock', (d) => { d.remembrances = [RemembranceSchema.parse({ id: 'r', v: 1, line: ['pidgey'], types: ['flying'], temperament: 't', affinity: {}, unlock: { kind: 'event', arg: 'missing_event' }, moves: [], keystone: 'k', status: 'supported' })]; }],
     ['story-romance-age', (d) => { d.characters = [character({ romanceable: true, age: 17 })]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }],
     ['story-twist-clues', (d) => { d.themes = [{ id: 't', letter: 'a', nameKey: 'k', beatSheet: [{ act: 1, slot: 'reveal' }, { act: 2, slot: 'clue1' }], slotRules: [], endings: ['e'], weight: 1, needs: [], twist: { revealSlot: 'reveal', clueSlots: ['clue1'], minClues: 1 } }]; }],
     ['story-movemoment-types', (d) => { d.moveMoments = [{ id: 'm', trigger: 'finisher', templateKey: 'k', typeMap: { fire: 'k' } }]; }],
@@ -40,7 +40,7 @@ describe('story gates', () => {
     ['story-string-keys', (d) => { d.characters = [character()]; }],
     ['story-pose-set', (d) => { d.characters = [character({ poses: { a: 'x.png' } })]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }],
     ['story-look-lock', () => {}, { lookB: { enabled: true, checklistDone: false } }],
-    ['story-species-budget', (d) => { d.remembrances = [{ id: 'r', v: 1, line: ['mewtwo'], types: ['psychic'], temperament: 't', affinity: {}, unlock: { kind: 'start' }, moves: [], keystone: 'k', status: 'supported' }]; }, { overBudgetIds: new Set(['mewtwo']) }],
+    ['story-species-budget', (d) => { d.remembrances = [RemembranceSchema.parse({ id: 'r', v: 1, line: ['mewtwo'], types: ['psychic'], temperament: 't', affinity: {}, unlock: { kind: 'start' }, moves: [], keystone: 'k', status: 'supported' })]; }, { overBudgetIds: new Set(['mewtwo']) }],
     ['story-asset-files', (d) => { d.characters = [character()]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }, { fileExists: () => false }],
     ['story-bundle-budget', () => {}, { fileSizes: { events: 700_000 } }],
     ['story-hash-stable', () => {}, { hashFresh: false }],

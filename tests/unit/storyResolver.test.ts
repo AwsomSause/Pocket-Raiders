@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { validateModule } from '../../src/core/story2/moduleValidator';
 import { resolveVariant } from '../../src/core/story2/resolver';
 import { PARITY_ITEMS } from '../../src/quality/storyGates';
-import { BackstorySchema, type StoryData } from '../../src/core/story2/schema';
+import { BackstorySchema, RemembranceSchema, type StoryData } from '../../src/core/story2/schema';
 import { content } from './helpers';
 
 const ctx = { backstory: 'bs_hisui', backstoryInputs: { prior_role: 'handler' }, rel: { ch_pell: { trust: 45 } }, flags: { contract_stage: 2 }, traits: { courage: 70 }, starter: { personality: 'timid', line: 'rm_ralts' }, act: 3 };
@@ -50,7 +50,7 @@ describe('Module Validator', () => {
     const d = structuredClone(content.storyData);
     const ev = (id: string) => ({ id, v: 1, tags: [], requires: [], roles: {}, beats: [], choices: [], outputs: [], variants: [], cost: 1, tier: 'A' as const, moment: 'none' as const });
     d.events = Array.from({ length: 11 }, (_, i) => ev(`ev_${i}`));
-    d.remembrances = [{ id: 'rm_a', v: 1, line: ['pidgey'], types: ['flying'], temperament: 't', affinity: {}, unlock: { kind: 'start' }, moves: [], keystone: 'k', status: 'supported' }];
+    d.remembrances = [RemembranceSchema.parse({ id: 'rm_a', v: 1, line: ['pidgey'], types: ['flying'], temperament: 't', affinity: {}, unlock: { kind: 'start' }, moves: [], keystone: 'k', status: 'supported' })];
     d.backstories = [BackstorySchema.parse({
       id: 'bs_a', nameKey: 'k', parity: [...PARITY_ITEMS], endings: ['e1', 'e2'], catchAllEnding: 'e2',
       events: Array.from({ length: 8 }, (_, i) => `ev_${i}`), echoEvents: ['ev_8', 'ev_9', 'ev_10'], encounterPools: ['pool'], remembranceUnlocks: ['rm_a'],
