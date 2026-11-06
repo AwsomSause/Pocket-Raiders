@@ -1785,6 +1785,8 @@ export const SettingsSchema = z.object({
   skipRecap: z.boolean().default(false),
   /** Beta 4.4 skip guard: a held key, or a press in the first moment of a new screen, never confirms or skips (on by default). */
   skipGuard: z.boolean().default(true),
+  /** Overhaul slice 6: the move menu starts on the move each Pokémon used last (on by default). */
+  rememberChoices: z.boolean().default(true),
   /** S255 Pokémon idle animations: party icons hop, sway or breathe (off by default). */
   livelyTeam: z.boolean().default(false),
   /** S250 Victory poses: the winner strikes a pose picked from its types and weight instead of the plain hop (off by default). */

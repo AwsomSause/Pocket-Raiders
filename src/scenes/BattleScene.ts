@@ -6,6 +6,7 @@ import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitLine } from '../ui/fitText';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
+import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
 import { promptById } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -1388,6 +1389,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private lastMoveType = 'normal';
+  /** Overhaul slice 6: the move each of your Pokémon used last this battle (uid -> move id), for the menu cursor. */
+  private readonly lastMoves = new Map<string, string>();
 
   /** Presentation only: a short vibration pattern by move type (Settings > Haptic buzz), and a camera push-in on a KO. */
   private buzz(type: string, strong = false): void {
@@ -2413,6 +2416,7 @@ export class BattleScene extends Phaser.Scene {
         }),
         motion: this.motion,
       },
+      initialIndex: anyPp && services().session.settings.rememberChoices ? defaultMoveIndex(mon.moves.map((m) => m.id), options.map((o) => !('disabled' in o && o.disabled)), this.lastMoves.get(mon.uid)) ?? undefined : undefined,
       onFocus: (i) => {
         this.focusedMove = i;
         this.moveBadges?.destroy();
@@ -2444,6 +2448,7 @@ export class BattleScene extends Phaser.Scene {
         this.moveInfo.setColor(this.panelText);
       },
       onSelect: (i) => {
+        if (anyPp && mon.moves[i]) this.lastMoves.set(mon.uid, mon.moves[i]!.id);
         const transform = this.transformChoice;
         this.transformChoice = null;
         const rally = this.rallyChoice;

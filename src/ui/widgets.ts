@@ -170,6 +170,8 @@ export interface MenuConfig {
   fontSize?: number;
   color?: string;
   onSelect: (index: number) => void;
+  /** Where the cursor starts (used only when that option is enabled); the first enabled option otherwise. */
+  initialIndex?: number;
   onFocus?: (index: number) => void;
   onBack?: () => void;
   /**
@@ -297,7 +299,8 @@ export class Menu {
       this.cursor.setVisible(false).setAlpha(0);
       this.wii.g.setVisible(false).setAlpha(0);
     }
-    const first = config.options.findIndex((o) => !o.disabled);
+    const start = config.initialIndex !== undefined && config.options[config.initialIndex] && !config.options[config.initialIndex]!.disabled ? config.initialIndex : -1;
+    const first = start >= 0 ? start : config.options.findIndex((o) => !o.disabled);
     this.focus(first >= 0 ? first : 0, false);
     this.wii.moveTo(...this.frameBox(this.index), true);
     if (config.animateIn !== false && !justRedrawn() && config.cursor !== 'none') this.wii.show();
