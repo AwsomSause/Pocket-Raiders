@@ -6,6 +6,7 @@
 // numbers (lines are picked by hashing the battle and event ids), never
 // changes HP/moves/turn order, and reveals only what the trainer could see.
 
+import { packPool } from '../overhaul/trainerLines';
 import type { BattleEvent, Side } from '../battle/engine';
 import type { Content } from '../contentSchema';
 import type { RunState, BattleState } from '../state';
@@ -198,9 +199,10 @@ export function planDrama(content: Content, run: RunState, prior: BattleState | 
     }
     // Bond, arc and trainer type colour half of the plain lines when a fitting set exists.
     const flavored = !c.pool && !c.def && pickIndex(`${key}|${c.ev.id}|flavor`, 2) === 0 ? flavorPool(ctx, c.category as DialogueCategory) : null;
-    const pool = c.pool ?? flavored?.lines ?? DRAMA.lines[c.category as DialogueCategory][voice];
-    const prefix = c.def ? `event/${c.def.id}` : flavored ? `flavor/${flavored.tag}/${c.category}` : c.pool ? `pool/${c.ev.id.split(':').pop()}/${c.category}` : (c.category as string);
-    const fresh = pool.map((_, i) => `${prefix}/${c.pool || flavored ? '' : voice + '/'}${i}`).filter((id) => !state.recent.includes(id));
+    const packed = !c.pool && !c.def && !flavored ? packPool(battle.trainer?.leaderId, c.category as DialogueCategory) : null;
+    const pool = c.pool ?? flavored?.lines ?? packed ?? DRAMA.lines[c.category as DialogueCategory][voice];
+    const prefix = c.def ? `event/${c.def.id}` : packed ? `pack/${battle.trainer!.leaderId}/${c.category}` : flavored ? `flavor/${flavored.tag}/${c.category}` : c.pool ? `pool/${c.ev.id.split(':').pop()}/${c.category}` : (c.category as string);
+    const fresh = pool.map((_, i) => `${prefix}/${c.pool || flavored || packed ? '' : voice + '/'}${i}`).filter((id) => !state.recent.includes(id));
     if (fresh.length === 0) continue;
     const id = fresh[pickIndex(`${key}|${c.ev.id}`, fresh.length)]!;
     const text = fill(pool[Number(id.split('/').pop())]!, {

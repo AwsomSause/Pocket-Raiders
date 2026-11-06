@@ -15,6 +15,7 @@ import { filterLog, LOG_TABS, type LogTab } from '../ui/logFilter';
 import { modeBattleLine } from '../core/modeObjectives';
 import { isUltimateBattle, ULTIMATE_EMBLEM } from '../core/rivals/ultimate';
 import { buildEpilogue } from '../core/ending';
+import { ensureTrainerLines } from '../core/overhaul/trainerLines';
 import { materialName } from '../core/crafting';
 import { genderSign } from '../core/gender';
 import { hasPerk } from '../core/mapItems';
@@ -1749,6 +1750,7 @@ export class BattleScene extends Phaser.Scene {
       await this.say(framing.sign);
       await this.say(framing.line);
     }
+    if (battle.kind === 'trainer') await ensureTrainerLines().catch(() => undefined);
     for (const line of session.battleOpening()) await this.sayTrainer(line);
     if ((battle.pendingEntry ?? []).length > 0 && !battle.needsSwitch) {
       const before = structuredClone(session.run!);
