@@ -192,6 +192,7 @@
  "wildMaxBaseStats": 560,
   "levelBst": { "base": 290, "perLevel": 9, "retries": 10 },
  "stagePlan": { "catcher": 2, "fighter": 5, "explorer": 2, "shopper": 3000, "heals": 2, "wipes": 1, "themeBonus": 3, "maxSignals": 2 },
+  "overhaulRivalRoles": { "enabled": true, "additionalCounters": 1 },
   "overhaulGrowth": { "enabled": true, "bonus": 0.05, "minKos": 8, "minCloseCalls": 2 },
   "overhaulChains": { "enabled": true, "legendaryMinStage": 7 },
   "overhaulField": { "powerCap": 0.3, "envChance": 0.6, "conditionChance": { "mid": 0.15, "late": 0.25, "boss": 0.35 } },
