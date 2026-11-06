@@ -146,6 +146,9 @@ export function validateTheme(data: StoryData, themeId: string): string[] {
     if (theme.journal.templates.length !== THEME_JOURNAL_TEMPLATES) problems.push(`Journal tab needs ${THEME_JOURNAL_TEMPLATES} templates`);
     for (const k of theme.journal.templates) text(k, 'journal template');
   }
+  const rivalRow = data.rivalThemes.find((r) => r.theme === themeId);
+  if (!rivalRow) problems.push('no rival row in rivalThemes.json');
+  else for (const id of [rivalRow.primary, rivalRow.secondary, rivalRow.friendly]) if (!data.rivals.some((r) => r.id === id)) problems.push(`rival "${id}" does not exist`);
   if (Object.keys(theme.backstoryFit).length === 0) problems.push('no backstory fit');
   // Ending table: a catch-all last row, every listed ending has a row, text for each.
   const grid = theme.endingGrid;

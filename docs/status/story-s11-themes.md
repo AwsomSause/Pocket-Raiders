@@ -8,3 +8,4 @@
 - **Text** moved to `src/data/story/text/themes.json` (merged with `en.json` at load; `text.themes` has its own 0.1 MB budget) so parallel slices do not fight over `en.json`.
 - **Saves**: none bumped. Tests: `tests/unit/storyThemes.test.ts`, `storyGates.test.ts`.
 - **Limits (later slices)**: a reached Stop still plays its category line; running the card's events and setting the battle flags is S5 and S12. The Director does not yet filter themes by backstory fit (inputs carry no backstory). Journal tab screens are S13. The Mythic Equation has no design-doc Journal tab, so its 3 templates are new text. Journal templates use only the known tokens, so the design's `{hour}`/`{day}` style tokens were reworded.
+- **Rivals (S10 wiring)**: the Director takes a theme's Primary, Secondary and Friendly rivals from the S10 table (`rolesForTheme`) when it has a row; the card audit checks the row exists. Playing the rival scenes on the theme beat sheets is S5/S12.

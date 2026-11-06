@@ -4,6 +4,7 @@
 // stream: its draws come from `story_director` (a hash of the run seed and the pass number), so no existing roll moves.
 // Story events that fill the slots come from later slices (S5, S11); until then every slot plays its fallback line.
 
+import { rolesForTheme } from '../story2/storyRivals';
 import type { Content } from '../contentSchema';
 import { evilEventId } from '../evil/content';
 import { evilOf, evilTeam, plannedEvilTeamId } from '../evil/teams';
@@ -172,7 +173,8 @@ export function buildBlueprint(content: Content, inputs: DirectorInputs): StoryB
   });
   const body: StoryBlueprint = {
     id: 'bp_pending', seed: inputs.seed, contentHash: inputs.contentHash, theme: toId(theme), antagonist: toId(inputs.antagonist),
-    rivals: { primary: toId(inputs.rivals.primary), secondary: toId(inputs.rivals.secondary), friendly: toId(inputs.rivals.friendly) },
+    // S10 rival table: a theme with a row names its Primary, Secondary and Friendly rivals (list order, rule R1); otherwise the run's rivals.
+    rivals: (() => { const r = rolesForTheme(data, toId(theme)) ?? inputs.rivals; return { primary: toId(r.primary), secondary: toId(r.secondary), friendly: toId(r.friendly) }; })(),
     slots, locks: stops.filter((s) => s.locked).map((s) => s.id), replans: [], stops, checksum: '',
   };
   body.id = `bp_${checksumOf(body).slice(0, 12)}`;
