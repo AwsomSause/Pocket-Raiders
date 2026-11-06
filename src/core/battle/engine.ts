@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, growthBerryMultiplier, growthCritBonus, growthIncomingMultiplier, growthVanguardMultiplier, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -2292,7 +2292,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, period: ctx.period, ...growthSituation(ctx, user, target) }) : 1);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3227,7 +3227,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (fx.protect) {
     // Works only when the user moves first; each use in a row is a third as likely to work.
     // Tricky Feet: the first back-to-back Protect of the battle is a little likelier to work.
-    const dodgeBonus = user.vol.protectChain > 0 && growthHas(ctx, user, 'tricky-feet') && growthOnce((ctx.battle.growthMarks ??= []), 'turn:tricky-feet') ? Math.min(ctx.content.balance.overhaulGrowth.bonus, 0.03) : 0;
+    const dodgeBonus = user.vol.protectChain > 0 && (growthHas(ctx, user, 'tricky-feet') || growthHas(ctx, user, 'bodyguard')) && growthOnce((ctx.battle.growthMarks ??= []), `turn:${user.mon.growthPath}`) ? Math.min(ctx.content.balance.overhaulGrowth.bonus, growthHas(ctx, user, 'bodyguard') ? 1 : 0.03) : 0;
     if (movedFirst && rng.chance(Math.min(1, 1 / 3 ** user.vol.protectChain + dodgeBonus))) {
       user.protected = true;
       if (fx.protectContact) PROTECT_CONTACT.set(user, fx.protectContact);
@@ -3467,7 +3467,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
@@ -3558,6 +3558,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (!hitsDefense && foeAbility === 'flower-gift' && weather === 'sun') defense = Math.floor(defense * 1.5);
       if (userAbility && RUINS[userAbility] === (hitsDefense ? 'def' : 'spd')) defense = Math.floor(defense * 0.75);
       if (hitsDefense && foeAbility === 'grass-pelt' && ctx.battle.terrain?.id === 'grassy') defense = Math.floor(defense * 1.5);
+      if (target.side === 'player') defense = Math.floor(defense * growthVanguardMultiplier(content.balance.overhaulGrowth, target.mon, target.vol.turnsOut));
       if (hitsDefense && target.side === 'player') defense = Math.floor(defense * growthDefenseMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, targetStats.hp)));
       // Abilities that change the final damage.
       let final = 1;
@@ -3797,7 +3798,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
   }
   if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
-    target.vol.bound = rng.int(4, 5);
+    target.vol.bound = rng.int(4, 5) + growthExtraTurn(ctx, user, 'trapper');
     target.vol.boundBy = move.id;
     events.push({ type: 'bound', side: target.side, moveId: move.id });
   }
@@ -4810,7 +4811,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
   }
   if (fx.healTarget) {
     const grassyBoost = move.id === 'floral-healing' && ctx.battle.terrain?.id === 'grassy';
-    healMon(ctx, target, grassyBoost ? 2 / 3 : fx.healTarget, events);
+    healMon(ctx, target, (grassyBoost ? 2 / 3 : fx.healTarget) * (user.side === 'player' ? growthHealMultiplier(ctx.content.balance.overhaulGrowth, user.mon) : 1), events);
     return;
   }
   if (fx.fieldBoost) {

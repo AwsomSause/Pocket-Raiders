@@ -121,6 +121,9 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   const triggers: StoryTrigger[] = [];
   /** The foe's HP just before the last hit it took (Hunter: a KO on a foe under half HP). */
   let lastHit: { before: number; max: number } | null = null;
+  /** Medic: the player Pokémon whose healing move is being played. Vanguard: a fresh switch-in waiting to take a hit. */
+  let healer: string | undefined;
+  let fresh: { uid: string; foeMoved: boolean } | null = null;
 
   /** Friendly Competition: two teammates take turns landing finishing blows (counted across the run). */
   const noteFinisher = (by: string, at: number) => {
@@ -186,6 +189,9 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
       case 'move':
         lastMove[e.side] = e.moveId;
         lastMover = e.side;
+        if (e.side === 'enemy' && fresh) fresh.foeMoved = true;
+        healer = e.side === 'player' && content.moves.get(e.moveId)?.effects.healTarget ? active.player : undefined;
+        if (e.side === 'player' && active.player && prior.doubles && GUARD_MOVES.has(e.moveId)) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['guardAlly']);
         if (e.side === 'player' && active.player) {
           const mv = content.moves.get(e.moveId);
           const me = mon(active.player);
@@ -214,8 +220,17 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         break;
       case 'switchIn':
         active[e.side] = e.uid;
+        if (e.side === 'player') fresh = { uid: e.uid, foeMoved: false };
         if (e.side === 'player') noteFought(run, e.uid);
         emit(content, run, 'switchIn', { where, actors: [e.uid], data: { side: e.side, speciesId: e.speciesId } });
+        break;
+      case 'heal':
+        // Medic: its healing move restored an ally's HP (doubles).
+        if (e.side === 'player' && healer && prior.doubles && e.amount > 0) { bumpGrowth(content.balance.overhaulGrowth, run.story.histories[healer], ['healAlly']); healer = undefined; }
+        break;
+      case 'held':
+        // Berry Friend: it ate a Berry that did something.
+        if (e.side === 'player' && active.player && (e.what === 'heal' || e.what === 'stat') && content.catalog.get(e.itemId)?.family.startsWith('Berries')) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['berryEaten']);
         break;
       case 'switchOut':
         emit(content, run, 'switchOut', { where, actors: [e.uid], data: { side: e.side } });
@@ -237,6 +252,15 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         emit(content, run, 'statusInflicted', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, status: e.status } });
         break;
       case 'damage': {
+        if (e.side === 'player' && active.player) {
+          const h = run.story.histories[active.player];
+          const cfg = content.balance.overhaulGrowth;
+          // Vanguard: a Pokémon that just switched in took a hit from the foe's move.
+          if (fresh && fresh.foeMoved && fresh.uid === active.player && e.hpAfter > 0) { bumpGrowth(cfg, h, ['vanguardHit']); fresh = null; }
+          // Scale Guard: a resisted hit.
+          if (e.effectiveness < 1 && e.amount > 0) bumpGrowth(cfg, h, ['resistHit']);
+        }
+        if (e.side === 'enemy' && e.crit && active.player && lastMove.player && content.moves.get(lastMove.player)?.critStage === 0) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['critLucky']);
         if (e.side === 'enemy' && active.player) {
           const foe = mon(active.enemy);
           if (foe) {
@@ -272,6 +296,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
           triggers.push({ ...t, side: 'enemy', combat: false });
           break;
         }
+        if (e.proxy) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[e.proxy.uid], ['guardAlly']);
         const history = run.story.histories[e.uid];
         if (history) history.hyper[def.id] = (history.hyper[def.id] ?? 0) + 1;
         const kind = def.effect?.kind;
@@ -858,6 +883,9 @@ function recordRunEnded(content: Content, run: RunState): void {
 export function ensureHistories(content: Content, run: RunState): void {
   for (const mon of run.party) openHistory(content, run, mon.uid, mon.speciesId, mon.uid === run.log.starterUid ? 'starter' : 'gift');
 }
+
+/** Moves that protect a partner in doubles (Bodyguard counts them). */
+const GUARD_MOVES: ReadonlySet<string> = new Set(['follow-me', 'rage-powder', 'wide-guard', 'quick-guard']);
 
 /** The situation of one KO for the Hunter, Sweeper, Comeback, Duelist, Glass Cannon, Scarfer and Grudge Keeper counters. */
 function koSituation(content: Content, run: RunState, by: string, winner: PokemonInstance, hit: { before: number; max: number } | null, movedFirst: boolean) {
