@@ -245,9 +245,9 @@ describe('Landmark Dungeons (S9)', () => {
     placeDungeon(content, other);
     expect(other.stage!.map.nodes.flatMap((n) => n.sides).some((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon')).toBe(false);
   });
-  it('four dungeons exist and are never drawn as ordinary events', () => {
+  it('eight dungeons exist (four landmarks, four puzzle dungeons) and are never drawn as ordinary events', () => {
     const all = [...content.events.values()].filter((e) => e.stop === 'dungeon');
-    expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dungeon-victory-hall']);
+    expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dungeon-victory-hall', 'dz-clockwork', 'dz-crypt', 'dz-dive', 'dz-mansion']);
   });
 });
 

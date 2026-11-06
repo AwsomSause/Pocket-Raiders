@@ -26,6 +26,8 @@ import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { sceneForRun } from './routing';
 import { screenStyleOf } from '../core/presentation/screenStyles';
+import { getRaid } from '../core/raid/raid';
+import { getTotem } from '../core/totem/totem';
 import { drawExpeditionLook, type ExpeditionLayout, type ExpeditionLook } from '../ui/expeditionLooks';
 
 const GLYPH: Record<string, { glyph: string; color: number }> = {
@@ -111,7 +113,12 @@ export class ExpeditionScene extends Phaser.Scene {
     const lootLine = `Loot: ₽${loot.money}${items.length ? `, ${items.join(', ')}` : ''}  ·  Mega Energy ${loot.energy}/${def.megaCost}  ·  Research ${loot.research}/${def.researchGoal}`;
     let layout: ExpeditionLayout | null = null;
     if (look) {
-      layout = drawExpeditionLook(this, look, { exp, name: def.name, tier: def.tier, loot: lootLine, party: this.partyLine(run), prompt: '' });
+      const sp = session.content.species;
+      const lead = run.party[0] ? sp.get(run.party[0].speciesId) : undefined;
+      const fin = def.finale;
+      const bossId = fin.kind === 'megaBoss' ? fin.species[0] : fin.kind === 'raid' ? getRaid(session.content, fin.raidId).species[0] : getTotem(session.content, fin.totemId).species[0];
+      const bossSpecies = bossId ? sp.get(bossId) : undefined;
+      layout = drawExpeditionLook(this, look, { exp, name: def.name, tier: def.tier, loot: lootLine, party: this.partyLine(run), prompt: '', hero: lead, boss: bossSpecies });
     } else {
     this.add.text(GAME_WIDTH / 2, 22, legend ? def.name : `${def.name}  ·  Tier ${def.tier}`, textStyle(32, COLORS.textLight)).setOrigin(0.5);
     const route = drawPanel(this, 16, 48, GAME_WIDTH - 32, 200, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true });

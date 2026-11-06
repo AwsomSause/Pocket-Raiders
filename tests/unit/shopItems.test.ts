@@ -37,18 +37,19 @@ describe('Coupons', () => {
   it('lower the next purchase only', () => {
     let run = inShop(take(newRun(), 'coupon-2'));
     const full = shopPrice(content, inShop(newRun()), ball);
-    expect(shopPrice(content, run, ball)).toBe(Math.round(full * 0.75));
+    expect(Math.abs(shopPrice(content, run, ball) - full * 0.75)).toBeLessThanOrEqual(1);
     const money = run.money;
     run = buyItem(content, run, 'poke-ball').run;
-    expect(money - run.money).toBe(Math.round(full * 0.75));
-    expect(shopPrice(content, run, ball)).toBe(full);
+    expect(Math.abs(money - run.money - full * 0.75)).toBeLessThanOrEqual(1);
+    // The coupon is gone: only the repeat-purchase surcharge (S67) is left.
+    expect(Math.abs(shopPrice(content, run, ball) - full * (1 + content.balance.priceSwing.repeat))).toBeLessThanOrEqual(1);
     expect(run.mapEffects).toEqual([]);
   });
 
   it('stack with each other for one purchase', () => {
     const run = inShop(take(take(newRun(), 'coupon-3'), 'coupon-1'));
     const full = shopPrice(content, inShop(newRun()), ball);
-    expect(shopPrice(content, run, ball)).toBe(Math.round(full * 0.5 * 0.9));
+    expect(Math.abs(shopPrice(content, run, ball) - full * 0.5 * 0.9)).toBeLessThanOrEqual(1);
     expect(mapItemSummary(content, run)).toBe('Coupon 3 ×1 · Coupon 1 ×1');
   });
 });

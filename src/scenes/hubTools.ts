@@ -11,6 +11,13 @@ import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
 import { inspectSave, reportLines } from '../save/saveInspector';
 import { categoryLabel, parseSplits, splitLines } from '../core/tools/speedrun';
 import { peekStreams } from '../core/tools/rngView';
+import { flagList, flagOn, setFlag } from '../core/tools/featureFlags';
+import { botReportLines } from '../core/tools/botReport';
+import { diffLines, diffRuns } from '../core/tools/replayDiff';
+import { balanceLines, balanceView } from '../core/tools/balanceView';
+import { provenanceLines, provenanceSources } from '../core/tools/provenanceView';
+import { speciesStrength } from '../quality/balanceSim';
+import { RunStateSchema } from '../core/state';
 import { acceptOffer, cancelOffer, logPhoto, postOffer, readOffer, redeemReply, SHOWCASE_SLOTS, showcaseOf, toggleShowcase, weekTheme } from '../core/social';
 import { backupDue } from '../core/tools/backup';
 import { packSeeds } from '../core/configPack';
@@ -65,9 +72,18 @@ export function openTools(host: ToolsHost): void {
     { label: 'Photo contest', sub: 'A new theme each week. Take a shot (F9 saves a framed screenshot) and log it here.', go: () => openPhotos(host) },
     { label: 'Trade board', sub: 'Swap kept Pokémon with friends using short codes. No server; each code works once.', go: () => openTradeBoard(host) },
     { label: 'Report a bug', sub: 'Bundles the version, seed and recent errors into a file you can send.', go: () => openBugReport(host) },
+    { label: 'Feature flags', sub: 'Switch optional parts of the game on or off. Stored on this device only.', go: () => openFlags(host) },
+    ...(flagOn(device, 'devTools')
+      ? [
+          { label: 'Balance dashboard (dev)', sub: 'Runs quick one-on-one battles and shows which species win most and least.', go: () => openBalance(host) },
+          { label: 'Bot report (dev)', sub: 'Pick a playtest log (.jsonl from node tools/playtest.ts) for a plain summary.', go: () => openBotReport(host) },
+          { label: 'Replay diff (dev)', sub: 'Pick two run files and see the first place they differ.', go: () => openReplayDiff(host) },
+          { label: 'Asset sources (dev)', sub: 'How many art and audio files come from each pack, and who to credit.', go: () => openProvenance(host) },
+        ]
+      : []),
     { label: 'Back up my save', sub: due ? 'You have not saved a copy in a while. Enter to download one.' : 'Download a copy of your profile and settings.', go: () => backup(host) },
   ];
-  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, n === 13 && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
+  page(host, 'Tools & Community', items.map((i, n) => row(i.label, i.sub, i.label === 'Back up my save' && due ? 'Due' : '')), (n) => items[n]!.go(), () => host.close());
 }
 
 export function openChangelog(host: ToolsHost): void {
@@ -295,4 +311,51 @@ export function hubArrivalNotice(): { text: string; openChangelog: boolean } | n
     return { text: 'Back up your save: Settings > Tools & Community > Back up my save.', openChangelog: false };
   }
   return null;
+}
+
+function openFlags(host: ToolsHost): void {
+  const flags = flagList(device);
+  page(host, 'Feature flags', flags.map(({ flag, on }) => row(flag.label, flag.blurb, on ? 'On' : 'Off')), (n) => {
+    const f = flags[n];
+    if (!f) return;
+    setFlag(device, f.flag.id, !f.on);
+    host.restart(`${f.flag.label}: ${f.on ? 'off' : 'on'}.`);
+  });
+}
+
+function textRows(lines: string[]): PickerRow[] {
+  return lines.map((l) => row(l, ''));
+}
+
+function openBalance(host: ToolsHost): void {
+  // A small sample keeps the wait short; the full report is `npm run report:balance`.
+  const rows = speciesStrength(services().session.content, 'dashboard-v1', 50, 6).map((r) => ({ speciesId: r.speciesId, winRate: r.winRate, battles: r.battles }));
+  page(host, 'Balance dashboard', textRows(balanceLines(balanceView(rows))));
+}
+
+function openBotReport(host: ToolsHost): void {
+  pickTextFile((text) => page(host, 'Bot report', textRows(botReportLines(text))), '.jsonl,.json,.txt,application/json,text/plain');
+}
+
+function openReplayDiff(host: ToolsHost): void {
+  const read = (text: string) => {
+    try {
+      const r = RunStateSchema.safeParse(JSON.parse(text));
+      return r.success ? r.data : null;
+    } catch {
+      return null;
+    }
+  };
+  pickTextFile((first) =>
+    pickTextFile((second) => {
+      const a = read(first);
+      const b = read(second);
+      page(host, 'Replay diff', textRows(a && b ? diffLines(diffRuns(a, b)) : ['One of the files is not a saved run.']));
+    }),
+  );
+}
+
+async function openProvenance(host: ToolsHost): Promise<void> {
+  const { default: md } = await import('../../docs/quality/asset-provenance.md?raw');
+  page(host, 'Asset sources', textRows(provenanceLines(provenanceSources(md))));
 }

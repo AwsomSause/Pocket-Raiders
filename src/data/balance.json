@@ -641,6 +641,8 @@
   "everyStages": 3,
   "discount": 0.2
  },
+ "priceSwing": { "range": 0.1, "repeat": 0.05, "repeatCap": 0.25 },
+ "wealthTax": { "base": 4000, "perRegion": 2500, "rate": 0.15 },
  "shopTypes": {
   "boutique": { "categories": ["charm", "attribute", "evolution", "transformation"], "priceFactor": 1.1, "earlyRare": 3 },
   "bazaar": { "stockSize": 8, "haggleBase": 0.35, "hagglePerCharisma": 0.005, "haggleMax": 0.8, "haggleDiscount": 0.3, "hagglePenalty": 0.15 },

@@ -8,7 +8,7 @@ import type { MotionLevel } from './screenSkins';
 import { pokemonVisual } from './sprites';
 import { GAME_HEIGHT as H, GAME_WIDTH as W, textStyle } from './theme';
 
-export type StopLook = 'maxden' | 'shonen' | 'tera' | 'ink';
+export type StopLook = 'maxden' | 'shonen' | 'tera' | 'ink' | 'sunset' | 'classic';
 
 export interface StopOption {
   label: string;
@@ -73,7 +73,9 @@ export class StopCard {
     const add = <T extends Phaser.GameObjects.GameObject>(o: T): T => (this.layer.add(o), o);
     const g = add(scene.add.graphics());
     const full = this.motion === 'full';
-    const bossX = look === 'ink' ? 600 : 690;
+    const totem = look === 'ink' || look === 'sunset' || look === 'classic';
+    const lightInk = look === 'tera' || look === 'ink';
+    const bossX = totem ? 600 : 690;
     const bossY = look === 'tera' ? 400 : 380;
 
     // Backdrop per look.
@@ -90,6 +92,14 @@ export class StopCard {
         const y = (i * 97) % H;
         g.fillStyle([0xa8d0ff, 0xffc8e0, 0xc8f0e0, 0xfff0a8][i % 4]!, 0.5).fillTriangle(x, y, x + 140, y + 30, x + 40, y + 120);
       }
+    } else if (look === 'sunset') {
+      g.fillGradientStyle(0xff9a3a, 0xff9a3a, 0x5a2a6a, 0x5a2a6a, 1, 1, 1, 1).fillRect(0, 0, W, H);
+      g.fillStyle(0xffe08a, 0.9).fillCircle(bossX, 250, 150).fillStyle(0xffb85a, 0.5).fillCircle(bossX, 250, 200);
+      g.fillStyle(0x2a1238, 1).fillRect(0, H - 90, W, 90);
+    } else if (look === 'classic') {
+      g.fillGradientStyle(0x0a1a3a, 0x0a1a3a, 0x1a4a5a, 0x1a4a5a, 1, 1, 1, 1).fillRect(0, 0, W, H);
+      for (let i = 0; i < 6; i++) g.lineStyle(6, 0xfff0a0, 0.28 - i * 0.04).strokeCircle(bossX, 250, 90 + i * 34);
+      g.fillStyle(0x08162a, 0.85).fillRoundedRect(30, 30, 330, 320, 10).lineStyle(3, 0xfff0a0, 1).strokeRoundedRect(30, 30, 330, 320, 10);
     } else {
       g.fillStyle(0xf4ead0, 1).fillRect(0, 0, W, H);
       g.fillStyle(0x16100a, 1).fillPoints([new Phaser.Geom.Point(330, 110), new Phaser.Geom.Point(880, 70), new Phaser.Geom.Point(900, 400), new Phaser.Geom.Point(350, 440)], true);
@@ -113,6 +123,12 @@ export class StopCard {
       g.fillStyle(0xffffff, 1).fillRect(30, 28, 470, 84).lineStyle(4, 0xe83a3a, 1).lineBetween(30, 112, 500, 112);
       add(scene.add.text(46, 40, data.kicker, textStyle(13, '#e83a3a')));
       add(fitLine(scene.add.text(46, 62, data.title, textStyle(26, '#16203a')), 440));
+    } else if (look === 'sunset') {
+      add(scene.add.text(46, 40, 'TOTEM', textStyle(16, '#ffe08a')));
+      add(fitLine(scene.add.text(46, 66, data.title, textStyle(26, '#ffffff', { stroke: '#3a1448', strokeThickness: 5 })), 300));
+    } else if (look === 'classic') {
+      add(scene.add.text(48, 46, 'TOTEM POKéMON', textStyle(14, '#fff0a0')));
+      add(fitLine(scene.add.text(48, 72, data.title, textStyle(20, '#ffffff')), 300));
     } else {
       add(scene.add.text(46, 50, '主', textStyle(80, '#16100a')));
       add(scene.add.text(52, 150, 'TOTEM', textStyle(14, '#b02a2a')));
@@ -120,8 +136,8 @@ export class StopCard {
     }
 
     // Info lines.
-    const infoInk = look === 'tera' || look === 'ink' ? '#16203a' : '#ffffff';
-    const infoBox = look === 'maxden' ? { x: 440, y: 340, w: 480, h: 110 } : look === 'tera' ? { x: 30, y: 440, w: 560, h: 70 } : look === 'shonen' ? { x: 30, y: 330, w: 330, h: 130 } : { x: 52, y: 210, w: 270, h: 90 };
+    const infoInk = lightInk ? '#16203a' : '#ffffff';
+    const infoBox = look === 'maxden' ? { x: 440, y: 340, w: 480, h: 110 } : look === 'tera' ? { x: 30, y: 440, w: 560, h: 70 } : look === 'shonen' ? { x: 30, y: 330, w: 330, h: 130 } : { x: look === 'ink' ? 52 : 46, y: look === 'ink' ? 210 : 120, w: 270, h: 100 };
     if (look === 'maxden') g.fillStyle(0x08162a, 0.9).fillRoundedRect(infoBox.x, infoBox.y, infoBox.w, infoBox.h, 8).lineStyle(2, 0x20e0e8, 1).strokeRoundedRect(infoBox.x, infoBox.y, infoBox.w, infoBox.h, 8);
     if (look === 'tera') g.fillStyle(0x16203a, 0.92).fillRect(infoBox.x, infoBox.y, infoBox.w, infoBox.h);
     add(fitBlock(scene.add.text(infoBox.x + 12, infoBox.y + 8, `${data.species.name} Lv ${data.level}\n${data.info.join('\n')}`, textStyle(13, look === 'tera' ? '#ffffff' : infoInk, { wordWrap: { width: infoBox.w - 24 } })), infoBox.w - 24, infoBox.h - 14));
@@ -134,13 +150,16 @@ export class StopCard {
       if (look === 'maxden') { x = 450 + (i % 3) * 150; y = 462 + Math.floor(i / 3) * 34; w = 140; h = 30; }
       else if (look === 'shonen') { x = 24 + i * 14; y = 150 + i * 46; w = 330; h = 40; }
       else if (look === 'tera') { x = 620 + (i % 2) * 150; y = 450 + Math.floor(i / 2) * 36; w = 140; h = 30; }
-      else { x = 52; y = 320 + i * 40; w = 280; h = 34; }
+      else if (look === 'ink') { x = 52; y = 320 + i * 40; w = 280; h = 34; }
+      else { x = 46; y = 240 + i * 36; w = 290; h = 32; }
       const b = add(scene.add.graphics());
       if (look === 'maxden') b.fillStyle(on ? 0x20e0e8 : 0x0a2a4a, 1).fillRoundedRect(x, y, w, h, 4).lineStyle(2, 0x20e0e8, 1).strokeRoundedRect(x, y, w, h, 4);
       else if (look === 'shonen') b.fillStyle(on ? 0xe83a3a : 0x10206a, 1).fillPoints([new Phaser.Geom.Point(x + 10, y), new Phaser.Geom.Point(x + w, y), new Phaser.Geom.Point(x + w - 10, y + h), new Phaser.Geom.Point(x, y + h)], true);
       else if (look === 'tera') b.fillStyle(on ? 0xe83a3a : 0xffffff, 1).fillRect(x, y, w, h).lineStyle(2, 0x16203a, 1).strokeRect(x, y, w, h);
+      else if (look === 'sunset') b.fillStyle(on ? 0xffe08a : 0x2a1238, 0.92).fillRoundedRect(x, y, w, h, h / 2).lineStyle(2, 0xffe08a, 1).strokeRoundedRect(x, y, w, h, h / 2);
+      else if (look === 'classic') b.fillStyle(on ? 0xfff0a0 : 0x143a5a, 1).fillRoundedRect(x, y, w, h, 4).lineStyle(2, 0xfff0a0, 1).strokeRoundedRect(x, y, w, h, 4);
       else { b.lineStyle(2, 0x16100a, 1).lineBetween(x, y + h, x + w, y + h); if (on) b.fillStyle(0xb02a2a, 1).fillRect(x - 10, y + 4, 5, h - 8); }
-      const tcol = look === 'tera' ? (on ? '#ffffff' : '#16203a') : look === 'maxden' && on ? '#06202a' : ink;
+      const tcol = look === 'tera' ? (on ? '#ffffff' : '#16203a') : (look === 'sunset' || look === 'classic') && on ? '#2a1238' : look === 'maxden' && on ? '#06202a' : ink;
       add(fitLine(scene.add.text(x + 10, y + h / 2, o.label, textStyle(look === 'maxden' ? 12 : 14, o.problem ? '#9a9aaa' : tcol)).setOrigin(0, 0.5), w - 20));
       const z = scene.add.zone(x, y, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
       z.on('pointerdown', () => {
@@ -155,9 +174,9 @@ export class StopCard {
     // The focused option's detail (or why it can't be picked).
     const cur = data.options[this.index];
     if (cur) {
-      const ink = look === 'tera' || look === 'ink' ? '#16203a' : '#ffffff';
+      const ink = lightInk ? '#16203a' : '#ffffff';
       add(fitLine(scene.add.text(look === 'ink' ? 52 : 30, H - 22, cur.problem ?? cur.detail, textStyle(13, cur.problem ? '#ff9090' : ink)), W - 80));
     }
-    add(scene.add.text(W - 24, 14, 'Enter choose · Esc back', textStyle(12, look === 'tera' || look === 'ink' ? '#4a5a78' : '#e8f0ff')).setOrigin(1, 0));
+    add(scene.add.text(W - 24, 14, 'Enter choose · Esc back', textStyle(12, lightInk ? '#4a5a78' : '#e8f0ff')).setOrigin(1, 0));
   }
 }
