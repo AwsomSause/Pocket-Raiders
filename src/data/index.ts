@@ -67,6 +67,8 @@ import formTraitsJson from './formTraits.json';
 import customEvolutionsJson from './customEvolutions.json';
 import themesJson from './themes.json';
 import trainersJson from './trainers.json';
+// Every trainer class from the Google Drive packs (tools/drive/build-trainers.py): one class per sprite.
+import trainersDriveJson from './trainersDrive.json';
 import typeChartJson from './typeChart.json';
 import storyJson from './story.json';
 import raidsJson from './raids.json';
@@ -207,7 +209,7 @@ export const RAW_CONTENT: RawContent = {
   items: [...itemsJson, ...megaStonesJson.items],
   itemCatalog: itemCatalogJson,
   learnables: learnablesJson,
-  trainers: trainersJson,
+  trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
   bossTeams: bossTeamsJson,
   regions: regionsJson,

@@ -88,7 +88,31 @@ export function trainerVisual(scene: Phaser.Scene, assetId: string, name: string
     const sprite = posedSprite(scene, anim, x, y, scale * 80);
     if (sprite) return sprite;
   }
-  return atlasSprite(scene, assetId, x, y, scale) ?? placeholder(scene, x, y, 70 * scale, COLORS.panelDark, `${name}\n(art missing)`);
+  const ready = trainerArt(scene, assetId, x, y, scale);
+  if (ready) return ready;
+  const holder = placeholder(scene, x, y, 70 * scale, COLORS.panelDark, `${name}\n(art missing)`);
+  // The Google Drive trainers load on first use: show the placeholder, then swap the art in.
+  if (notLoadedYet(scene, assetId)) {
+    void loadAssets(scene, [assetId]).then(() => {
+      if (!holder.active) return;
+      const sprite = trainerArt(scene, assetId, 0, 0, scale);
+      if (!sprite) return;
+      holder.removeAll(true);
+      holder.add(sprite);
+      holder.emit('art-ready');
+    });
+  }
+  return holder;
+}
+
+/** A trainer's art if it is loaded. Animated intro strips (images/trainer/drive) play once and hold their pose. */
+function trainerArt(scene: Phaser.Scene, assetId: string, x: number, y: number, scale: number): Phaser.GameObjects.Sprite | null {
+  if (assetId.startsWith('trainer.drive/') && services().assets.has(assetId) && scene.textures.exists(assetId)) {
+    const first = scene.textures.get(assetId).getFrameNames().sort()[0];
+    const posed = posedSprite(scene, assetId, x, y, scale * scene.textures.getFrame(assetId, first).height);
+    if (posed) return posed;
+  }
+  return atlasSprite(scene, assetId, x, y, scale);
 }
 
 /**

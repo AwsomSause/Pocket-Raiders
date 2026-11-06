@@ -278,3 +278,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `beta44-battle-moves.md`: Beta 4.4 follow-up: moves found mid-battle go in the Hyper slot, keep-or-skip after the fight.
 - `alpha-nobles.md`: 8 frenzied noble events, calm one to recruit it (S498).
 - capture-styles.md: Capture Styles (S224): befriend/negotiate/trap items, off by default behind a balance switch.
+- `drive-trainers.md`: every Google Drive trainer added: 739 classes, 75 named bosses, 17 bosses animated, lazy art.

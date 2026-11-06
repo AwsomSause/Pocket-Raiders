@@ -45,7 +45,7 @@ describe('animated trainer sprites', () => {
 
   it('maps a boss picture to its animated and back sprites, and nothing else', () => {
     expect(bossAnimId('boss.brock')).toBe('boss.anim.brock');
-    expect(bossAnimId('boss.cynthia-gen7')).toBeNull();
+    expect(bossAnimId('boss.npc_lass')).toBeNull();
     expect(bossAnimId('trainer.red')).toBeNull();
     expect(bossBackId('boss.hilda')).toBe('boss.back.hilda');
     expect(bossBackId('boss.brock')).toBeNull();
