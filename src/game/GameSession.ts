@@ -19,6 +19,7 @@ import { careAction, type CareAction } from '../core/care';
 import { interactionLog } from '../core/presentation/uiPrefs';
 import type { Achievement, Content } from '../core/contentSchema';
 import { finalizeRun, recordRunStarted } from '../core/profile';
+import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { awardLiveAchievements, claimTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
 import { setCardFrame, setCryTheme, setMenuArena } from '../core/wardrobe';
 import { buyNote } from '../core/researchNotes';
@@ -437,6 +438,18 @@ export class GameSession {
     this.run = result.run;
     this.persistRun();
     return result.message;
+  }
+
+  /** S5: the backstory scene waiting to be shown, if any (reads state only). */
+  storyScene(): StoryScene | null {
+    return this.run ? activeScene(this.content, this.run) : null;
+  }
+
+  /** S5: finishes the scene on screen with the player's choice (if it has choices) and saves. False when the choice is not valid. */
+  finishStoryScene(choiceId?: string): boolean {
+    const ok = finishScene(this.content, this.requireRun(), choiceId);
+    if (ok && this.run && this.run.phase !== 'over') this.persistRun(); // a finished run's save is already cleared
+    return ok;
   }
 
     visitSide(sideId: string): string {

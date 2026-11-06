@@ -6161,7 +6161,7 @@
     "kind": "flag",
     "key": "rapport",
     "op": ">=",
-    "value": 9
+    "value": 5
    }
   ],
   "roles": {

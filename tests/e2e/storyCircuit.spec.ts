@@ -13,11 +13,17 @@ test('the Orrery Circuit starts a Story Run with Story Stops on the map', async 
   await page.evaluate(() => localStorage.clear());
   await page.goto('/?seed=story-circuit&campaign=orrery-circuit&debug=1');
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
-  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Story']) {
     await page.keyboard.press('Enter');
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe(next);
     await page.waitForTimeout(250);
   }
+  // S5: the backstory intro plays first; Enter turns its pages and takes the first answer.
+  for (let i = 0; i < 6 && (await scene(page)) === 'Story'; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+  }
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Map');
   await page.waitForTimeout(800);
   const info = await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;

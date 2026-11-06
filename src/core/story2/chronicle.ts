@@ -32,6 +32,7 @@ export function buildChronicle(run: RunState, endedAt: string): ChronicleRecord 
     stops: { done: v2.stops.done.length, planned: v2.stops.planned },
     losses, relationships,
     highlights: v2.scenesDone.slice(0, HIGHLIGHTS),
+    ...(v2.module?.ending ? { ending: v2.module.ending } : {}),
   });
 }
 
@@ -66,6 +67,7 @@ export function chronicleView(data: StoryData, rec: ChronicleRecord): ChronicleV
     ...(rec.starter ? [`Partner: ${cap(rec.starter.line.replace(/^rm_/, ''))} (${cap(rec.starter.temperament)})`] : []),
     ...(rec.rival ? [`Rival: ${name(rec.rival)}`] : []),
     ...(rec.antagonist ? [`Opposed by: ${name(rec.antagonist)}`] : []),
+    ...(rec.ending ? [`Ending: ${cap(rec.ending.replace(/^end_/, ''))}`] : []),
     ...(bond ? [`Closest bond: ${name(bond)}`] : []),
     ...(Object.keys(rec.relationships).length > 0 ? ['', 'Cast:', ...Object.entries(rec.relationships).map(([id, stage]) => `  ${name(id)}: ${cap(stage)}`)] : []),
   ];

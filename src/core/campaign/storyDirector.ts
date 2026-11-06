@@ -12,6 +12,7 @@ import { getCampaign } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { MapNode, RunState } from '../state';
 import { emit } from '../story/record';
+import { queueStopScene, startBackstory } from '../story2/module';
 import { StoryBlueprintSchema, StoryV2Schema, type StopContract, type StoryBlueprint } from '../story2/schema';
 import { evilConfig, HIDEOUT_AT_LEAGUE, isStoryCampaign } from './circuit';
 
@@ -250,6 +251,7 @@ export function ensureStoryRun(content: Content, run: RunState): void {
   if (!isStoryCampaign(content, run.campaignId)) return;
   if (!run.story.v2) run.story.v2 = StoryV2Schema.parse({ mode: 'story_run' });
   const v2 = run.story.v2;
+  startBackstory(content, run);
   const bp = v2.blueprint;
   if (bp && bp.checksum === checksumOf(bp) && bp.stops.length === content.balance.story.stopsTotal) return;
   const fresh = buildBlueprint(content, directorInputs(content, run));
@@ -357,6 +359,7 @@ function playStop(content: Content, run: RunState, id: string, say?: (text: stri
   v2.stops.done.push(id);
   v2.stops.index = Math.max(v2.stops.index, bp.stops.indexOf(stop) + 1);
   replanStops(content, run, v2.stops.index);
+  queueStopScene(content, run, id);
   const tag = stop.slotTags.find((t) => TAG_LINES[t]);
   const text = tag ? TAG_LINES[tag]! : STOP_LINES[stop.category];
   emit(content, run, 'storyMoment', { data: { storyStop: id, category: stop.category, act: stop.act }, importance: 30 + stop.intensity * 10, text });
