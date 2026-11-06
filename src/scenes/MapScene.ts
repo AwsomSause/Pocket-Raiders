@@ -59,6 +59,7 @@ import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
 import { openPokemonMenu } from '../ui/pokemonMenu';
 import { openCampMenu } from '../ui/campMenu';
 import { openBagMenu, openBoxMenu, openSaveMenu, openStoryMenu, type FieldMenuHost } from '../ui/fieldMenus';
+import { hasRelationships, openRelationshipsMenu } from '../ui/relationshipsMenu';
 import { onInputAction } from '../ui/input';
 import { Picker, speciesRow, type PickerLike } from '../ui/partyPanel';
 import { STOP_STYLES, stopStyle } from '../ui/stopIcons';
@@ -139,6 +140,7 @@ type Option =
   | { kind: 'bag' }
   | { kind: 'camp' }
   | { kind: 'story' }
+  | { kind: 'relationships' }
   | { kind: 'bond' }
   | { kind: 'scrapbook' }
   | { kind: 'box' }
@@ -696,7 +698,7 @@ export class MapScene extends Phaser.Scene {
       buttons.push({ option: { kind: 'side', side }, label: side.kind === 'expedition' && legendOf(side.expeditionId) ? 'Legendary' : SIDE_LABEL[side.kind], color: side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE.color : side.kind === 'event' && !stopIsHidden(content, run, currentNode!, side) ? stopStyle(content.events.get(side.eventId ?? '')?.stop).color : SIDE_STYLE[side.kind].color });
     }
     if (boxCapacity(runPerks(content, services().session.run!)) > 0) buttons.push({ option: { kind: 'box' }, label: 'PC', color: COLORS.panel });
-    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
+    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
     if (wipeStatus(services().session.run!)) buttons.push({ option: { kind: 'endRun' }, label: 'End run', color: 0x6a2a38 });
     // Buttons share the width right of the party: one tall row when they fit, else two short rows.
     const areaX = 40 + slots * step + 4;
@@ -945,6 +947,8 @@ export class MapScene extends Phaser.Scene {
         return 'Your team scrapbook: photos and small moments from the road. Take a team photo here.';
       case 'story':
         return `Read the story of your run so far, with the feelings each moment left. People call you ${protagonistTitle(services().session.run!).name}.`;
+      case 'relationships':
+        return 'The people you have met in this story: how they feel about you and what they remember.';
       case 'save':
         return 'Save the run, or save and leave: Save & Quit goes to the title, Save & go back to Hub visits the Hub. Continue resumes the run.';
       case 'endRun':
@@ -1087,6 +1091,9 @@ export class MapScene extends Phaser.Scene {
         break;
       case 'story':
         openStoryMenu(this.fieldHost());
+        break;
+      case 'relationships':
+        openRelationshipsMenu(this.fieldHost());
         break;
       case 'box':
         openBoxMenu(this.fieldHost());
