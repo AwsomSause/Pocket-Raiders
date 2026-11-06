@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { PARITY_ITEMS, storyGates, type StoryGateContext } from '../../src/quality/storyGates';
-import { BackstorySchema, RemembranceSchema, type StoryData } from '../../src/core/story2/schema';
+import { BackstorySchema, RemembranceSchema, ThemeSchema, type StoryData } from '../../src/core/story2/schema';
 import { content } from './helpers';
 
 // A blank StoryData: the shipped story content is authored now, so gate tests start from empty arrays.
@@ -10,10 +10,10 @@ const empty = (): StoryData => ({ ...structuredClone(content.storyData), charact
 const count = (data: StoryData, id: string, ctx: StoryGateContext = {}) => storyGates(data, content, ctx).find((g) => g.id === id)!.offenders.length;
 const character = (over: object = {}) => ({ id: 'dara', v: 1, nameKey: 'c.dara', age: 20, role: 'rival' as const, poses: { a: 'x.png', b: 'y.png', c: 'z.png', d: 'w.png' }, tier: 1 as const, party: [], relationClass: 'friend' as const, romanceable: false, tellings: [], bio: [{ tier: 1, textKey: 'c.dara.bio', spoiler: false }], flags: [], ...over });
 const event = (over: object = {}) => ({ id: 'ev', v: 1, tags: [], requires: [], roles: {}, beats: [], choices: [], outputs: [], variants: [], cost: 1, tier: 'A' as const, moment: 'none' as const, ...over });
-const GATES = ['story-unresolved-ids', 'story-event-variants', 'story-branch-no-exit', 'story-unreachable-ending', 'story-canon-write', 'story-backstory-parity', 'story-quiz-balance', 'story-remembrance-unlock', 'story-romance-age', 'story-twist-clues', 'story-movemoment-types', 'story-character-sheet', 'story-string-keys', 'story-template-tokens', 'story-pose-set', 'story-look-lock', 'story-species-budget', 'story-asset-files', 'story-bundle-budget', 'story-rival-audit', 'story-hash-stable'];
+const GATES = ['story-unresolved-ids', 'story-event-variants', 'story-branch-no-exit', 'story-unreachable-ending', 'story-canon-write', 'story-backstory-parity', 'story-quiz-balance', 'story-remembrance-unlock', 'story-romance-age', 'story-twist-clues', 'story-theme-audit', 'story-movemoment-types', 'story-character-sheet', 'story-string-keys', 'story-template-tokens', 'story-pose-set', 'story-look-lock', 'story-species-budget', 'story-asset-files', 'story-bundle-budget', 'story-rival-audit', 'story-hash-stable'];
 
 describe('story gates', () => {
-  it('there are 21, and empty data passes every one', () => {
+  it('there are 22, and empty data passes every one', () => {
     const gates = storyGates(empty(), content, { fileExists: () => true, overBudgetIds: new Set(), hashFresh: true, fileSizes: {} });
     expect(gates.map((g) => g.id)).toEqual(GATES);
     for (const g of gates) expect(g.offenders, g.id).toEqual([]);
@@ -34,7 +34,8 @@ describe('story gates', () => {
     ['story-quiz-balance', (d) => { d.quiz = [{ id: 'q1', quick: false, textKey: 'k', answers: [{ id: 'a', textKey: 'k', weights: { bold: 3 } }, { id: 'b', textKey: 'k', weights: { calm: 3 } }] }]; }],
     ['story-remembrance-unlock', (d) => { d.remembrances = [RemembranceSchema.parse({ id: 'r', v: 1, line: ['pidgey'], types: ['flying'], temperament: 't', affinity: {}, unlock: { kind: 'event', arg: 'missing_event' }, moves: [], keystone: 'k', status: 'supported' })]; }],
     ['story-romance-age', (d) => { d.characters = [character({ romanceable: true, age: 17 })]; d.text = { 'c.dara': 'x', 'c.dara.bio': 'x' }; }],
-    ['story-twist-clues', (d) => { d.themes = [{ id: 't', letter: 'a', nameKey: 'k', beatSheet: [{ act: 1, slot: 'reveal' }, { act: 2, slot: 'clue1' }], slotRules: [], endings: ['e'], weight: 1, needs: [], twist: { revealSlot: 'reveal', clueSlots: ['clue1'], minClues: 1 } }]; }],
+    ['story-twist-clues', (d) => { d.themes = [ThemeSchema.parse({ id: 't', letter: 'a', nameKey: 'k', beatSheet: [{ act: 1, slot: 'reveal' }, { act: 2, slot: 'clue1' }], slotRules: [], endings: ['e'], weight: 1, needs: [], twist: { revealSlot: 'reveal', clueSlots: ['clue1'], minClues: 1 } })]; }],
+    ['story-theme-audit', (d) => { d.themes = [ThemeSchema.parse({ id: 't', letter: 'a', nameKey: 'k', beatSheet: [{ act: 1, slot: 's' }], slotRules: [], endings: ['e'], weight: 1, events: ['ev_missing'] })]; }],
     ['story-movemoment-types', (d) => { d.moveMoments = [{ id: 'm', trigger: 'finisher', templateKey: 'k', typeMap: { fire: 'k' } }]; }],
     ['story-character-sheet', (d) => { d.characters = [character({ bio: [] })]; d.text = { 'c.dara': 'x' }; }],
     ['story-string-keys', (d) => { d.characters = [character()]; }],

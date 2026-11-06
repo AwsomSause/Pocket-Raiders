@@ -4,6 +4,7 @@
 // stream: its draws come from `story_director` (a hash of the run seed and the pass number), so no existing roll moves.
 // Story events that fill the slots come from later slices (S5, S11); until then every slot plays its fallback line.
 
+import { rolesForTheme } from '../story2/storyRivals';
 import type { Content } from '../contentSchema';
 import { evilEventId } from '../evil/content';
 import { evilOf, evilTeam, plannedEvilTeamId } from '../evil/teams';
@@ -158,16 +159,22 @@ export function buildBlueprint(content: Content, inputs: DirectorInputs): StoryB
   const used: { event: string; at: number }[] = [];
   const slots = stops.map((s, at) => {
     const tags = new Set([s.category, ...s.slotTags]);
+    // A theme's exclusive events (`theme_<id>` tag) are only offered inside that theme, and the drawn theme's events are favoured.
+    const mine = `theme_${toId(theme)}`;
     const pool = s.beat ? [] : data.events.filter((e) => e.tags.some((t) => tags.has(t))
+      && !e.tags.some((t) => t.startsWith('theme_') && t !== mine)
       && used.filter((u) => u.event === e.id).length < k.sameEventMaxPerRun
       && !used.some((u) => u.event === e.id && at - u.at < k.sameEventGapStops));
-    const event = pool.length > 0 ? fill.pick(pool).id : s.fallback;
+    const event = pool.length === 0 ? s.fallback
+      : pool.some((e) => e.tags.includes(mine)) ? fill.weighted(pool.map((e) => ({ item: e.id, weight: e.tags.includes(mine) ? k.themeEventWeight : 1 })))
+      : fill.pick(pool).id;
     if (event !== s.fallback) used.push({ event, at });
     return { slot: s.id, stop: at + 1, event, fallbacks: [s.fallback] };
   });
   const body: StoryBlueprint = {
     id: 'bp_pending', seed: inputs.seed, contentHash: inputs.contentHash, theme: toId(theme), antagonist: toId(inputs.antagonist),
-    rivals: { primary: toId(inputs.rivals.primary), secondary: toId(inputs.rivals.secondary), friendly: toId(inputs.rivals.friendly) },
+    // S10 rival table: a theme with a row names its Primary, Secondary and Friendly rivals (list order, rule R1); otherwise the run's rivals.
+    rivals: (() => { const r = rolesForTheme(data, toId(theme)) ?? inputs.rivals; return { primary: toId(r.primary), secondary: toId(r.secondary), friendly: toId(r.friendly) }; })(),
     slots, locks: stops.filter((s) => s.locked).map((s) => s.id), replans: [], stops, checksum: '',
   };
   body.id = `bp_${checksumOf(body).slice(0, 12)}`;
