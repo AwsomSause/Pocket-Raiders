@@ -221,3 +221,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `zip-z6j-bag-layout.md`: Z6j: the Bag menu sits on the pack's Bag backdrop (orange grid, BAG plate, dark list area); the Picker skips i
 - story-endings-mysteries.md: S115 betrayal, S120 ending variations, S122 secret endings, S125 mystery, S129 lead chatter
 - dungeon-puzzles.md: Dungeon traps/puzzles, Haunted Mansion, Dive, Sky Route, Rival Ambush (S22, S145-S147, S149)
+- wandering-merchant.md: Wandering Merchant Line, 4-visit route (S144)
