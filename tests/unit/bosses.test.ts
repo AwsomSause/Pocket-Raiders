@@ -72,11 +72,13 @@ describe('boss teams', () => {
       const plan = planGymLeader(content, RED, 'brock', stageNumber, scaleAt(stageNumber % 8, FULL.columns, Math.floor(stageNumber / 8)), new Rng(hashSeed(`gym-${stageNumber}`)));
       // Beta 4.4: the boss's set ace (its first signature family) always goes last.
       const team = { ...boss.teams.gym[Math.min(stageNumber, 15)]!, members: withSetAce(content, boss, 'gym', Math.min(stageNumber, 15), [...boss.teams.gym[Math.min(stageNumber, 15)]!.members]) };
-      expect(plan.members.map((m) => m.speciesId)).toEqual(team.members.map((m) => m.speciesId));
+      // Overhaul slice 17: the strategy opener may lead, so compare the team as a set; the ace stays last.
+      expect([...plan.members.map((m) => m.speciesId)].sort()).toEqual(team.members.map((m) => m.speciesId).sort());
+      expect(plan.members.at(-1)!.speciesId).toBe(team.members.at(-1)!.speciesId);
       expect(plan.leaderId).toBe('brock');
       if (stageNumber < content.balance.competitiveGyms.fromStage) {
-        expect(plan.members.map((m) => m.moves)).toEqual(team.members.map((m) => m.moves));
-        expect(plan.ai).toBe(team.ai);
+        expect(plan.members.map((m) => m.moves).sort()).toEqual(team.members.map((m) => m.moves).sort());
+        expect(plan.ai).toBeCloseTo(Math.min(1, team.ai + content.balance.bossStrategy.aiBonus.gym), 10);
       } else {
         // Beta 4.4: from Stage 5 the leader brings a competitive set: best moves, held items, sharper AI.
         expect(plan.ai).toBeGreaterThan(team.ai);
