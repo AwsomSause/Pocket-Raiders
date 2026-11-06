@@ -1,0 +1,1255 @@
+{
+ "note": "Dungeons (Story Overhaul W6, design 14.16): authored node graphs compiled into room events at load (core/dungeon/compile.ts). A dungeon is not a stage: no stage index, no badge, no level cap.",
+ "config": {
+  "levelBonus": [
+   0,
+   2,
+   4,
+   6
+  ],
+  "trapDamage": 0.2,
+  "restHeal": 0.6,
+  "mysteryHeal": 0.3,
+  "trainerClasses": {
+   "1": [
+    "youngster",
+    "bug-catcher",
+    "lass"
+   ],
+   "2": [
+    "camper",
+    "picnicker",
+    "ranger"
+   ],
+   "3": [
+    "ace-trainer",
+    "veteran",
+    "black-belt"
+   ],
+   "4": [
+    "veteran",
+    "ace-trainer"
+   ]
+  },
+  "potion": {
+   "1": "potion",
+   "2": "super-potion",
+   "3": "hyper-potion",
+   "4": "max-potion"
+  },
+  "moneyPerTier": 150
+ },
+ "dungeons": [
+  {
+   "id": "dg_abandoned_mine_shaft",
+   "name": "Abandoned Mine Shaft",
+   "kind": "basic",
+   "tier": 1,
+   "theme": "mine",
+   "types": [
+    "rock"
+   ],
+   "wild": [
+    "geodude",
+    "roggenrola",
+    "zubat",
+    "aron"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b",
+      "c"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "den",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "cache",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "everstone",
+    "count": 1
+   },
+   "intro": "A rusted track leads into the hill."
+  },
+  {
+   "id": "dg_dense_forest_path",
+   "name": "Dense Forest Path",
+   "kind": "basic",
+   "tier": 1,
+   "theme": "forest",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "wild": [
+    "pidgey",
+    "caterpie",
+    "oddish",
+    "shroomish"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "rest",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "sitrus-berry",
+    "count": 2
+   },
+   "reward": {
+    "item": "miracle-seed",
+    "count": 1
+   },
+   "intro": "The path narrows under heavy branches."
+  },
+  {
+   "id": "dg_ancient_ruin_steps",
+   "name": "Ancient Ruin Steps",
+   "kind": "basic",
+   "tier": 2,
+   "theme": "ruins",
+   "types": [
+    "psychic",
+    "ground"
+   ],
+   "wild": [
+    "unown",
+    "baltoy",
+    "natu"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "puzzle",
+     "next": [
+      "b",
+      "c"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "trap",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "cache",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "hard-stone",
+    "count": 1
+   },
+   "intro": "Worn steps climb to a carved door."
+  },
+  {
+   "id": "dg_coastal_cove",
+   "name": "Coastal Cove",
+   "kind": "basic",
+   "tier": 1,
+   "theme": "coast",
+   "types": [
+    "water"
+   ],
+   "wild": [
+    "wingull",
+    "krabby",
+    "shellder"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b",
+      "c"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "mystery",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "cache",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "mystic-water",
+    "count": 1
+   },
+   "intro": "Waves boom at the mouth of a hidden cove."
+  },
+  {
+   "id": "dg_mountain_pass",
+   "name": "Mountain Pass",
+   "kind": "basic",
+   "tier": 2,
+   "theme": "mountain",
+   "types": [
+    "fighting",
+    "rock"
+   ],
+   "wild": [
+    "machop",
+    "rhyhorn",
+    "rufflet"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "trainer",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "rest",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "wild",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "escape-rope",
+    "count": 1
+   },
+   "reward": {
+    "item": "hard-stone",
+    "count": 1
+   },
+   "intro": "A narrow ledge winds up between two peaks."
+  },
+  {
+   "id": "dg_desert_well",
+   "name": "Desert Well",
+   "kind": "basic",
+   "tier": 2,
+   "theme": "desert",
+   "types": [
+    "ground"
+   ],
+   "wild": [
+    "sandshrew",
+    "trapinch",
+    "cacnea"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "trap",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "den",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "cache",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "soft-sand",
+    "count": 1
+   },
+   "intro": "A stone well, dry for a hundred years."
+  },
+  {
+   "id": "dg_marsh_boardwalk",
+   "name": "Marsh Boardwalk",
+   "kind": "basic",
+   "tier": 1,
+   "theme": "marsh",
+   "types": [
+    "water",
+    "poison"
+   ],
+   "wild": [
+    "wooper",
+    "lotad",
+    "croagunk"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "mystery",
+     "next": [
+      "e",
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "rest",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "sitrus-berry",
+    "count": 3
+   },
+   "intro": "Rotten planks creak over still water."
+  },
+  {
+   "id": "dg_sky_bridge",
+   "name": "Sky Bridge",
+   "kind": "basic",
+   "tier": 3,
+   "theme": "sky",
+   "types": [
+    "flying"
+   ],
+   "wild": [
+    "swablu",
+    "rufflet",
+    "pidove"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "trainer",
+     "next": [
+      "c",
+      "d"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "hidden",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "cache",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "key-charm",
+    "count": 1
+   },
+   "reward": {
+    "item": "sharp-beak",
+    "count": 1
+   },
+   "intro": "A rope bridge strung between two cliffs."
+  },
+  {
+   "id": "dg_ancient_ruins",
+   "name": "Ancient Ruins",
+   "kind": "themed",
+   "tier": 3,
+   "theme": "ruins",
+   "types": [
+    "psychic",
+    "ground",
+    "ghost"
+   ],
+   "wild": [
+    "unown",
+    "baltoy",
+    "yamask"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "puzzle",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "wild",
+     "next": [
+      "d",
+      "e"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "trap",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "den",
+     "next": [
+      "f",
+      "g"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "hidden",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "boss",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "hyper-potion",
+    "count": 2
+   },
+   "intro": "A sunken city under the hills.",
+   "rare": [
+    "claydol"
+   ],
+   "boss": {
+    "classId": "veteran",
+    "name": "Ruin Warden",
+    "size": 3
+   }
+  },
+  {
+   "id": "dg_deep_mine",
+   "name": "Deep Mine",
+   "kind": "themed",
+   "tier": 2,
+   "theme": "mine",
+   "types": [
+    "rock",
+    "steel",
+    "dark"
+   ],
+   "wild": [
+    "aron",
+    "drilbur",
+    "sableye"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "cache",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "trap",
+     "next": [
+      "d",
+      "e"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "den",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "wild",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "rest",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "boss",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "escape-rope",
+    "count": 1
+   },
+   "reward": {
+    "item": "super-potion",
+    "count": 3
+   },
+   "intro": "Lamps hang from beams that no one has checked.",
+   "boss": {
+    "classId": "hiker",
+    "name": "Mine Foreman",
+    "size": 3
+   }
+  },
+  {
+   "id": "dg_haunted_mansion",
+   "name": "Haunted Mansion",
+   "kind": "themed",
+   "tier": 3,
+   "theme": "haunted",
+   "types": [
+    "ghost"
+   ],
+   "wild": [
+    "gastly",
+    "litwick",
+    "mimikyu"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "mystery",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "puzzle",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "trap",
+     "next": [
+      "e",
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "rare",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "wild",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "rest",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "boss",
+     "next": [
+      "i"
+     ]
+    },
+    {
+     "id": "i",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "hyper-potion",
+    "count": 2
+   },
+   "intro": "Every window is dark except one.",
+   "rare": [
+    "mimikyu"
+   ],
+   "boss": {
+    "classId": "hex-maniac",
+    "name": "Mansion Keeper",
+    "size": 4
+   }
+  },
+  {
+   "id": "dg_frozen_cavern",
+   "name": "Frozen Cavern",
+   "kind": "themed",
+   "tier": 3,
+   "theme": "ice",
+   "types": [
+    "ice"
+   ],
+   "wild": [
+    "sneasel",
+    "cryogonal",
+    "snorunt"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "trap",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "rest",
+     "next": [
+      "d",
+      "e"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "rare",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "wild",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "den",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "boss",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "escape-rope",
+    "count": 1
+   },
+   "reward": {
+    "item": "hyper-potion",
+    "count": 2
+   },
+   "intro": "Blue light bends through the ice.",
+   "rare": [
+    "glalie"
+   ],
+   "boss": {
+    "classId": "snow-worker",
+    "name": "Glacier Warden",
+    "size": 4
+   }
+  },
+  {
+   "id": "dg_volcanic_core",
+   "name": "Volcanic Core",
+   "kind": "themed",
+   "tier": 3,
+   "theme": "volcano",
+   "types": [
+    "fire"
+   ],
+   "wild": [
+    "slugma",
+    "torkoal",
+    "heatmor"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "trap",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "cache",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "den",
+     "next": [
+      "e",
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "rest",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "wild",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "rare",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "boss",
+     "next": [
+      "i"
+     ]
+    },
+    {
+     "id": "i",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "escape-rope",
+    "count": 1
+   },
+   "reward": {
+    "item": "hyper-potion",
+    "count": 3
+   },
+   "intro": "The rock is warm underfoot and getting warmer.",
+   "rare": [
+    "magcargo"
+   ],
+   "boss": {
+    "classId": "firebreather",
+    "name": "Core Guardian",
+    "size": 4
+   }
+  },
+  {
+   "id": "dg_deep_ocean",
+   "name": "Deep Ocean",
+   "kind": "themed",
+   "tier": 4,
+   "theme": "ocean",
+   "types": [
+    "water"
+   ],
+   "wild": [
+    "relicanth",
+    "frillish",
+    "clamperl"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "mystery",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "trap",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "rare",
+     "next": [
+      "e",
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "rest",
+     "next": [
+      "g",
+      "h"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "wild",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "hidden",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "boss",
+     "next": [
+      "i"
+     ]
+    },
+    {
+     "id": "i",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "key-charm",
+    "count": 1
+   },
+   "reward": {
+    "item": "max-potion",
+    "count": 2
+   },
+   "intro": "The water goes dark long before the bottom.",
+   "rare": [
+    "relicanth"
+   ],
+   "boss": {
+    "classId": "swimmer",
+    "name": "Sea Guard",
+    "size": 5
+   }
+  },
+  {
+   "id": "dg_overgrown_forest",
+   "name": "Overgrown Forest",
+   "kind": "themed",
+   "tier": 2,
+   "theme": "forest",
+   "types": [
+    "grass",
+    "ghost"
+   ],
+   "wild": [
+    "phantump",
+    "shroomish",
+    "morelull"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "den",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "puzzle",
+     "next": [
+      "d",
+      "e"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "mystery",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "wild",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "rest",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "boss",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "super-potion",
+    "count": 3
+   },
+   "intro": "Roots have swallowed the road.",
+   "boss": {
+    "classId": "ranger",
+    "name": "Grove Keeper",
+    "size": 3
+   }
+  },
+  {
+   "id": "dg_celestial_observatory",
+   "name": "Celestial Observatory",
+   "kind": "themed",
+   "tier": 4,
+   "theme": "stars",
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "wild": [
+    "elgyem",
+    "clefairy",
+    "minior"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "puzzle",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "wild",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "rare",
+     "next": [
+      "d"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "trap",
+     "next": [
+      "e",
+      "f"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "hidden",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "wild",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "boss",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "key-charm",
+    "count": 1
+   },
+   "reward": {
+    "item": "max-potion",
+    "count": 2
+   },
+   "intro": "A dome of old glass over a map of the sky.",
+   "rare": [
+    "minior"
+   ],
+   "boss": {
+    "classId": "psychic",
+    "name": "Star Keeper",
+    "size": 5
+   }
+  }
+ ]
+}

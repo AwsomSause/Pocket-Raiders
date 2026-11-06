@@ -601,17 +601,37 @@
    ],
    "minStage": 1,
    "requires": [],
-   "intro": "(Disabled until its system exists: opens a basic dungeon (W6).)",
+   "intro": "A collapsed signpost marks an old trail into the hills. Boot prints go in. None come out.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Follow the trail in",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "The trail drops into the dark.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-abandoned-mine-shaft-a",
+         "dg-dense-forest-path-a",
+         "dg-ancient-ruin-steps-a",
+         "dg-coastal-cove-a",
+         "dg-mountain-pass-a",
+         "dg-desert-well-a",
+         "dg-marsh-boardwalk-a",
+         "dg-sky-bridge-a"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You keep to the road.",
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-hidden-dungeon",
@@ -623,19 +643,45 @@
     "Dungeon",
     "Mystery"
    ],
-   "minStage": 1,
+   "minStage": 3,
    "requires": [],
-   "intro": "(Disabled until its system exists: opens a themed dungeon (W6).)",
+   "intro": "Behind a curtain of vines, a stone door hangs ajar. Your Key Charm hums.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Step through",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "The door opens onto a place no map shows.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-ancient-ruins-a",
+         "dg-deep-mine-a",
+         "dg-haunted-mansion-a",
+         "dg-frozen-cavern-a",
+         "dg-volcanic-core-a",
+         "dg-deep-ocean-a",
+         "dg-overgrown-forest-a",
+         "dg-celestial-observatory-a"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You close the door gently.",
       "effects": []
      }
     }
    ],
-   "disabled": true
+   "secret": [
+    {
+     "kind": "item",
+     "id": "key-charm"
+    }
+   ]
   },
   {
    "id": "ev-distortion-rift",
