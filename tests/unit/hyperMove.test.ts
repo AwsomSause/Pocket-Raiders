@@ -49,3 +49,19 @@ describe('Hyper slot (Beta 4.4 #12)', () => {
     expect(mon.moves.some((m) => m.id === id)).toBe(false);
   });
 });
+
+describe('learning a found move into a free slot', () => {
+  it('a Pokémon with fewer than four moves learns it without forgetting one', async () => {
+    const { chooseStarter, createRun, resolveDecision } = await import('../../src/core/run');
+    const { content } = await import('./helpers');
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'free-slot', archetypeId: 'red' }), 0);
+    const mon = run.party[0]!;
+    mon.moves = mon.moves.slice(0, 2);
+    run.pending = [{ kind: 'learnMove', uid: mon.uid, moveId: 'flamethrower' }];
+    run.phase = 'decision';
+    const out = resolveDecision(content, run, { kind: 'forgetMove', moveIndex: 2 });
+    const after = out.run.party[0]!;
+    expect(after.moves.map((m) => m.id)).toEqual([...mon.moves.map((m) => m.id), 'flamethrower']);
+    expect(out.message).toContain('learned Flamethrower');
+  });
+});

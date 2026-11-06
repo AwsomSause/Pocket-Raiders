@@ -3,6 +3,7 @@
 // Pokémon Recognition and the Emotional Turning Point.
 
 import { describe, expect, it } from 'vitest';
+import { endHyperMoves } from '../../src/core/battle/hyperMove';
 import { adjustBond, bondLevelHandover, bondMood, pairedMoveName, bondVictory, pairBondLevel, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
 import { trackFeelings } from '../../src/core/bond/feelings';
 import { createBattle, type BattleEvent } from '../../src/core/battle/engine';
@@ -151,6 +152,22 @@ describe('New Move', () => {
     expect(ev).toMatchObject({ type: 'newMove', moveId: pick!.moveId });
     expect(mon.moves.some((m) => m.id === pick!.moveId)).toBe(true);
     expect(revealMove(content, run, 'player', false)).toBeNull(); // once per battle
+  });
+  it('your Pokémon with four moves gets the new move in an extra Hyper slot; nothing is replaced, and it is offered after a win', () => {
+    const run = battleRun();
+    const mon = run.party[0]!;
+    mon.level = 40;
+    mon.moves = [{ id: 'growl', pp: 20 }, { id: 'tackle', pp: 20 }, { id: 'tail-whip', pp: 20 }, { id: 'leer', pp: 20 }];
+    mon.hp = Math.floor(mon.hp / 3);
+    Object.assign(bondOf(run, mon.uid), { trust: 80, synchronization: 70 });
+    const ev = revealMove(content, run, 'player', false);
+    expect(ev).toMatchObject({ type: 'newMove', side: 'player', replaced: null });
+    expect(mon.moves).toHaveLength(5);
+    expect(mon.moves.slice(0, 4).map((m) => m.id)).toEqual(['growl', 'tackle', 'tail-whip', 'leer']);
+    expect(mon.moves[4]).toMatchObject({ id: (ev as { moveId: string }).moveId, hyper: true });
+    endHyperMoves(run, true);
+    expect(mon.moves).toHaveLength(4);
+    expect(run.pending).toContainEqual({ kind: 'learnMove', uid: mon.uid, moveId: (ev as { moveId: string }).moveId });
   });
   it('a confident rival Pokémon replaces its weakest move with a stronger valid one', () => {
     const run = battleRun('charizard', 'trainer');

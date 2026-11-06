@@ -288,7 +288,7 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
     case 'combo':
       return `${names.nameOf(e.to)} takes over exactly as practiced! Its ${e.stat === 'atk' ? 'Attack' : 'Sp. Atk'} rose!`;
     case 'newMove':
-      return `${names.nameOf(e.uid)} showed a move it had been working on: ${content.moves.get(e.moveId)?.name ?? e.moveId}!`;
+      return `${names.nameOf(e.uid)} showed a move it had been working on: ${content.moves.get(e.moveId)?.name ?? e.moveId}!${e.side === 'player' ? ' (Hyper slot for this battle. Keep it after the fight?)' : ''}`;
     case 'turningPoint':
       return `${names.nameOf(e.uid)} found its ${e.emotion}!`;
     case 'evolved':

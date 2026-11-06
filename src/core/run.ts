@@ -3155,6 +3155,10 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
     const move = content.moves.get(decision.moveId)!;
     if (!mon) {
       message = '';
+    } else if (choice.kind === 'forgetMove' && choice.moveIndex === mon.moves.length && mon.moves.length < 4) {
+      // A free slot (Beta 4.4: a move found in battle by a Pokémon with fewer than four moves): nothing is forgotten.
+      mon.moves.push({ id: move.id, pp: move.pp });
+      message = `${speciesName(content, mon.speciesId)} learned ${move.name}!`;
     } else if (choice.kind === 'forgetMove') {
       const old = mon.moves[choice.moveIndex];
       if (!old) throw new Error(`Invalid move slot ${choice.moveIndex}`);
