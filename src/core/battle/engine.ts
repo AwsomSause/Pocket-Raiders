@@ -1981,6 +1981,8 @@ function resolveMove(content: Content, mon: PokemonInstance, index: number): Mov
   const id = index === -1 ? content.ruleset.struggleMoveId : mon.moves[index]?.id;
   const move = id ? content.moves.get(id) : undefined;
   if (!move) throw new Error(`Unknown move "${id}"`);
+  // Beta 4.4: the Hyper slot's move hits harder.
+  if (index >= 0 && mon.moves[index]?.hyper && move.power) return { ...move, power: move.power + content.balance.hyperMove.powerBonus };
   return move;
 }
 

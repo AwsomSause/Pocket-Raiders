@@ -2278,6 +2278,8 @@ export const BalanceSchema = z.object({
   levelBst: z.object({ base: z.number().int().positive(), perLevel: z.number().positive(), retries: z.number().int().min(0) }),
   /** Boss teams past level 100 (core/bossBands.ts), chosen by the team's top level. */
   /** Beta 4.4: gym leaders from this stage (0-based) on bring competitive sets (best moves, training, held items, sharper AI). */
+  /** Beta 4.4: a Hyper/Overdrive moment unlocks a move in an extra slot for the battle: this much more power, this many PP. */
+  hyperMove: z.object({ powerBonus: z.number().int().min(0), pp: z.number().int().min(1) }).default({ powerBonus: 20, pp: 5 }),
   competitiveGyms: z.object({ fromStage: z.number().int().min(0), training: z.number().int().min(0), ai: z.number().min(0).max(1), items: z.array(z.string()) }).default({ fromStage: 4, training: 1, ai: 0.1, items: ['leftovers', 'life-orb', 'sitrus-berry', 'expert-belt'] }),
   bossBands: z.array(z.object({ minLevel: z.number().int().min(101), training: z.number().int().min(0), ai: z.number().min(0).max(1), signatureSwaps: z.number().int().min(0), items: z.array(z.string()) })).default([]),
   /** Combat Threat Rating (core/threat.ts) and the Encounter Director (core/encounterDirector.ts). 100 = all-70 base stats with a 60-power same-type attack. */

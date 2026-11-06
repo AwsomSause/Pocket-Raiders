@@ -76,6 +76,7 @@ import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoic
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent } from './catalog';
+import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
 import { wildLuck } from './wildLuck';
@@ -2354,6 +2355,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const enemyBefore = battle.enemyIndex;
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
   const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
+  // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
+  engineEvents.push(...grantHyperMoves(content, run, engineEvents));
   // A practiced pair hands over after a faint (yours, or a rival's).
   if (wasForced && action.kind === 'switch' && outgoing) {
     const combo = playerCombo(content, run, outgoing, run.party[action.partyIndex]!.uid);
@@ -2423,6 +2426,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     for (const mon of run.party) endHeldBattle(mon);
   }
 
+  // Beta 4.4: Hyper slots end with the battle; after a win or catch each is offered to keep.
+  if (battle.outcome) endHyperMoves(run, (battle.outcome === 'win' || battle.outcome === 'caught') && !battle.raid?.practice);
   if (battle.outcome === 'win' && !run.party.some((m) => m.hp > 0)) {
     // A double KO that the player wins (recoil, Explosion by the foe) must not leave a team that cannot fight again.
     run.party[battle.activeIndex]!.hp = 1;

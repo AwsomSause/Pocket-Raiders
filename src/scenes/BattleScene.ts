@@ -2080,7 +2080,7 @@ export class BattleScene extends Phaser.Scene {
         const foeTypes = getSpecies(content, this.shown.enemy.speciesId).types as TypeName[];
         const hint = move.category === 'status' ? null : effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes));
         const flags = moveFlagLabels(move);
-        const power = move.power ?? fixedDamageLabel(move.effects.fixedDamage);
+        const power = move.power ? (slot!.hyper ? `${move.power + content.balance.hyperMove.powerBonus} (Hyper +${content.balance.hyperMove.powerBonus})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
         this.openPanel([
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
           { head: 'What it does', text: moveFullDescription(move) },
@@ -2341,7 +2341,8 @@ export class BattleScene extends Phaser.Scene {
     const options = anyPp
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
-          const name = zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          // Beta 4.4: the Hyper slot's move is starred.
+          const name = (slot.hyper ? '★ ' : '') + zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -2358,8 +2359,9 @@ export class BattleScene extends Phaser.Scene {
       options,
       columns: 2,
       itemWidth: 270,
-      itemHeight: 50,
-      fontSize: 28,
+      // A fifth move (the Hyper slot) needs a third row: smaller buttons then.
+      itemHeight: options.length > 4 ? 36 : 50,
+      fontSize: options.length > 4 ? 22 : 28,
       // A battle style may fan the moves out as cards or ring them around your Pokémon.
       ...(this.skin ? this.menuSpec(this.skin.layout.moves, options.length) : {}),
       color: this.btnText,
@@ -2383,7 +2385,8 @@ export class BattleScene extends Phaser.Scene {
           return;
         }
         const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
-        const power = move.power ?? fixedDamageLabel(move.effects.fixedDamage);
+        const hyperBoost = slot.hyper && !zMoves?.[i] && !maxMoves?.[i] && move.power ? content.balance.hyperMove.powerBonus : 0;
+        const power = move.power ? (hyperBoost ? `${move.power + hyperBoost} (+${hyperBoost})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
         // Type label and category icon from Essentials; plain text if the art is missing.
         const type = typeLabel(this, 0, 0, move.type, 1.5);
         const cat = categoryIcon(this, 120, 0, move.category, 1.5);

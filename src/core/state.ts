@@ -29,6 +29,8 @@ export const MoveSlotSchema = z.object({
   pp: z.number().int().min(0),
   /** PP Ups used on this move (each +20% max PP, at most 3; see pokemon.ts maxPp). */
   ppUps: z.number().int().min(0).max(3).optional(),
+  /** Beta 4.4: a move a Hyper/Overdrive moment unlocked for this battle only (the extra slot; +power). Removed when the battle ends. */
+  hyper: z.literal(true).optional(),
   /** Times this Pokémon used the move this run, and the mastery star it earned (core/care: +1 PP, +5% accuracy). */
   uses: z.number().int().min(0).optional(),
   star: z.boolean().optional(),
@@ -716,6 +718,8 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
+  /** Beta 4.4: your Pokémon that already got a Hyper slot this battle (once each). */
+  hyperMoved: z.array(z.string()).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
   narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60), /** The rival's last Pokémon already held on once; the next knockout sticks. */ refused: z.boolean().optional() }).optional(),
   /** Nemesis system: the nemesis back for its Return or Reckoning, and the telegraphed change told in the intro. */

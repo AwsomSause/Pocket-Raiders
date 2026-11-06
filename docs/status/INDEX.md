@@ -252,3 +252,4 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `beta44-economy.md`: Beta 4.4 part 2: attribute nerf, resale cap, item caps + No Item Caps, rarer legendaries, themed trades.
 - `beta44-trainers.md`: Beta 4.4 part 3: gym entrance fixed, competitive gym teams and gimmicks from Stage 5.
 - `beta44-ui.md`: Beta 4.4 part 4: Devon Scope preview fix, nature on catch screen, move side effects and descriptions, skip guard (settings v33).
+- `beta44-hyper-slot.md`: Beta 4.4 part 5a: Hyper moment grants a +20-power bonus move for the battle, keep-or-skip after.
