@@ -1,0 +1,471 @@
+{
+ "events": [
+  {
+   "id": "relic-tree-roots",
+   "name": "The Relic Tree",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2a10",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-branch",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "An old tree grows three seeds. A plaque: \"Choose a branch. It grows with you, and it bends the rules.\"",
+   "choices": [
+    {
+     "label": "Ember branch: Fire moves hit 10% harder.",
+     "success": {
+      "text": "The Ember Seed takes root. The tree may grow again.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-ember-1",
+        "name": "Ember Seed",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "fire",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-ember",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tree-branch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tide branch: Healing is 10% stronger.",
+     "success": {
+      "text": "The Tide Seed takes root. The tree may grow again.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-tide-1",
+        "name": "Tide Seed",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-tide",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tree-branch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leaf branch: +5% EXP.",
+     "success": {
+      "text": "The Leaf Seed takes root. The tree may grow again.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-leaf-1",
+        "name": "Leaf Seed",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-leaf",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tree-branch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-tree-ember-bough",
+   "name": "The Relic Tree: Ember Bough",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 5,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1608",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-ember",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "intro": "Your Ember Seed has grown a bough.",
+   "choices": [
+    {
+     "label": "Take the Ember Bough: Fire hits harder still, healing is 10% weaker.",
+     "success": {
+      "text": "The Ember Bough joins your Ember Seed.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-ember-2",
+        "name": "Ember Bough",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "fire",
+          "value": 1.1
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-ember",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-tree-ember-crown",
+   "name": "The Relic Tree: Ember Crown",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 7,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1608",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-ember",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "intro": "The Ember branch blooms into a crown.",
+   "choices": [
+    {
+     "label": "Take the Ember Crown: +10% EXP, enemies 1 level higher.",
+     "success": {
+      "text": "The Ember Crown completes the branch.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-ember-3",
+        "name": "Ember Crown",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-ember",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-tree-tide-bough",
+   "name": "The Relic Tree: Tide Bough",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 5,
+   "scene": {
+    "cast": [],
+    "tint": "#0c2038",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-tide",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "intro": "Your Tide Seed has grown a bough.",
+   "choices": [
+    {
+     "label": "Take the Tide Bough: Healing is stronger still, catches are 5% easier.",
+     "success": {
+      "text": "The Tide Bough joins your Tide Seed.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-tide-2",
+        "name": "Tide Bough",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "captureMultiplier",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-tide",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-tree-tide-crown",
+   "name": "The Relic Tree: Tide Crown",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 7,
+   "scene": {
+    "cast": [],
+    "tint": "#0c2038",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-tide",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "intro": "The Tide branch blooms into a crown.",
+   "choices": [
+    {
+     "label": "Take the Tide Crown: +10% money and healing.",
+     "success": {
+      "text": "The Tide Crown completes the branch.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-tide-3",
+        "name": "Tide Crown",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-tide",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-tree-leaf-bough",
+   "name": "The Relic Tree: Leaf Bough",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 5,
+   "scene": {
+    "cast": [],
+    "tint": "#10301a",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-leaf",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "intro": "Your Leaf Seed has grown a bough.",
+   "choices": [
+    {
+     "label": "Take the Leaf Bough: More EXP and friendship.",
+     "success": {
+      "text": "The Leaf Bough joins your Leaf Seed.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-leaf-2",
+        "name": "Leaf Bough",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.05
+         },
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-leaf",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relic-tree-leaf-crown",
+   "name": "The Relic Tree: Leaf Crown",
+   "group": "Relics",
+   "rarity": "rare",
+   "minStage": 7,
+   "scene": {
+    "cast": [],
+    "tint": "#10301a",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-leaf",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "intro": "The Leaf branch blooms into a crown.",
+   "choices": [
+    {
+     "label": "Take the Leaf Crown: +10% EXP, enemies 1 level higher.",
+     "success": {
+      "text": "The Leaf Crown completes the branch.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "tree-leaf-3",
+        "name": "Leaf Crown",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tree-leaf",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
