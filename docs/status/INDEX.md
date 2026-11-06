@@ -32,6 +32,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `catch-chains-shiny-charm.md`: Catch Chains (S218) + Shiny Charm tiers (S225), roadmap slice 6 (`core/catchChain.ts`, numbers in `balance.jso
 - `challenge-modes.md`: Challenge modes and seeds (W8, ideas F77/F82/F84/F78/F79/M107-M109/F106-F107/F14): new modes in `runRules.json
 - `default-original-designs.md`: Kice: every menu or visual with selectable looks now starts on its original, pre-rework design. Redesigned loo
+- `dev-tools-pack.md`: Social/tech slice 6 (S327 Balance Dashboard, S328 Playtest Bot Reports, S329 Replay Diff, S332 Feature Flags, 
 - `dex-completion-rewards.md`: Dex Completion Rewards (S239; `core/dexRewards.ts`, `balance.json` `dexRewards`): species caught across all ru
 - `doubles-limits.md`: Left-out 5.10 Doubles limits: in a double battle either of your Pokémon can Mega/Tera/Z/Dynamax (one of each m
 - `drama-flavor.md`: Left-out 2.1 (rest): Battle Drama lines now pick by bond, rival arc and your trainer's favoured type (`drama.j
