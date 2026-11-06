@@ -142,6 +142,7 @@ export function freshRaidBattle(def: RaidDef, badges = 0): RaidBattle {
     aim: null,
     featured: false,
     formNote: null,
+    coop: null,
   };
 }
 
@@ -312,10 +313,11 @@ export const CHEER_TURNS = 3;
 export type Cheer = 'offense' | 'defense' | 'healing' | 'counter';
 
 /** Why a cheer can't be used now, or null. */
-export function cheerProblem(content: Content, battle: BattleState, cheer: Cheer): string | null {
+export function cheerProblem(content: Content, battle: BattleState, cheer: Cheer, activeUid?: string): string | null {
   const raid = battle.raid;
   if (!raid) return 'Only raid fights have cheers.';
   if (raid.cheersLeft <= 0) return 'No cheers left.';
+  if (raid.coop && activeUid !== undefined && raid.coop.cheers[coopOwner(raid, activeUid)]! <= 0) return `Player ${coopOwner(raid, activeUid) + 1} has no cheers left.`;
   if (cheer === 'healing' && raidDef(content, raid).modifiers.noHealing) return 'Healing is restricted in this raid.';
   return null;
 }
@@ -631,7 +633,7 @@ export function crowdStep(content: Content, battle: BattleState): 'roused' | 'ro
   const raid = battle.raid;
   if (!raid) return null;
   const c = content.raids.crowd;
-  raid.crowd = Math.min(100, raid.crowd + c.perTurn);
+  raid.crowd = Math.min(100, raid.crowd + c.perTurn + (raid.coop ? content.raids.coop.crowdBonus : 0));
   if (raid.crowd >= 100) {
     raid.crowd = 0;
     raid.roused = false;
@@ -773,5 +775,24 @@ export function talkOutcome(talk: RaidTalk, path: readonly string[]): { replies:
     out.hpPercent += choice.hpPercent ?? 0;
     level = choice.next ?? [];
   }
+  return out;
+}
+
+// ---------- S410 Team Co-op Raids ----------
+
+/** Which player (0 or 1) plays this Pokémon in a co-op raid (0 when the raid is single-player). */
+export function coopOwner(raid: Pick<RaidBattle, 'coop'>, uid: string): 0 | 1 {
+  return (raid.coop?.owners[uid] ?? 0) as 0 | 1;
+}
+
+/** Splits the party between two players by slot (1st, 3rd, 5th and 2nd, 4th, 6th). */
+export function coopSplit(party: readonly { uid: string }[]): Record<string, 0 | 1> {
+  return Object.fromEntries(party.map((m, i) => [m.uid, (i % 2) as 0 | 1]));
+}
+
+/** Damage each player's Pokémon dealt to the boss, from the raid's record. */
+export function coopDamage(raid: Pick<RaidBattle, 'coop' | 'damageBy'>): [number, number] {
+  const out: [number, number] = [0, 0];
+  for (const [uid, n] of Object.entries(raid.damageBy)) out[coopOwner(raid, uid)] += n;
   return out;
 }

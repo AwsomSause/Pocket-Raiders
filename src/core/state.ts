@@ -525,6 +525,8 @@ export const RaidBattleSchema = z.object({
   formIndex: z.number().int().min(0).default(0),
   /** S397: the zone you aim at ('body' or 'core'); null = hit whichever suits the move (the older rule). */
   aim: z.enum(['body', 'core']).nullable().default(null),
+  /** S410 Team Co-op Raids: who plays which Pokémon (uid to player 0 or 1) and the cheers each player has left; null = one player. */
+  coop: z.object({ owners: z.record(z.string(), z.number().int().min(0).max(1)), cheers: z.tuple([z.number().int().min(0), z.number().int().min(0)]) }).nullable().default(null),
   /** S394: this den was the featured raid of the week. */
   featured: z.boolean().default(false),
   /** S407: the form change that just happened (the engine turns it into events at the end of the turn). */

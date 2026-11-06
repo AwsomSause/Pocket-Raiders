@@ -1379,19 +1379,22 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** "Before you go in": a gimmick card, a lobby bot, or a talk with the boss (one of them), or none. */
-  private openRaidPrep(sideId: string, approachId: string | undefined, pv: ReturnType<typeof raidPreview>): void {
+  private openRaidPrep(sideId: string, approachId: string | undefined, pv: ReturnType<typeof raidPreview>, coop = false): void {
     const { session } = services();
     const money = session.run!.money;
     const approachCost = approachId ? pv.approaches.find((a) => a.id === approachId)?.cost ?? 0 : pv.approaches[0]?.cost ?? 0;
     const base = pv.entryCost + approachCost;
     type Row = { label: string; hint: string; cost: number; go: () => void };
-    const rows: Row[] = [{ label: 'Go in as you are', hint: 'No extra rules, no help.', cost: 0, go: () => this.enterRaidNow(sideId, approachId) }];
-    for (const c of pv.cards) rows.push({ label: `Card: ${c.label}`, hint: c.text, cost: 0, go: () => this.enterRaidNow(sideId, approachId, `card:${c.id}`) });
-    for (const b of pv.bots) rows.push({ label: `Ally: ${b.label} · ₽${b.cost}`, hint: b.text, cost: b.cost, go: () => this.enterRaidNow(sideId, approachId, `bot:${b.id}`) });
-    if (pv.talk) rows.push({ label: 'Talk to it first...', hint: 'What you say changes how both sides start the fight.', cost: 0, go: () => this.openRaidTalk(sideId, approachId, pv.talk!.prompt, pv.talk!.choices, []) });
+    // S410: with co-op on, every choice below also brings a second player (they share the party, taking turns).
+    const withCoop = (p?: string): string | undefined => (coop ? (p ? `coop+${p}` : 'coop') : p);
+    const rows: Row[] = [{ label: coop ? 'Go in together' : 'Go in as you are', hint: coop ? 'Two players, no extra rules.' : 'No extra rules, no help.', cost: 0, go: () => this.enterRaidNow(sideId, approachId, withCoop()) }];
+    for (const c of pv.cards) rows.push({ label: `Card: ${c.label}`, hint: c.text, cost: 0, go: () => this.enterRaidNow(sideId, approachId, withCoop(`card:${c.id}`)) });
+    for (const b of pv.bots) rows.push({ label: `Ally: ${b.label} · ₽${b.cost}`, hint: b.text, cost: b.cost, go: () => this.enterRaidNow(sideId, approachId, withCoop(`bot:${b.id}`)) });
+    if (pv.talk) rows.push({ label: 'Talk to it first...', hint: 'What you say changes how both sides start the fight.', cost: 0, go: () => this.openRaidTalk(sideId, approachId, pv.talk!.prompt, pv.talk!.choices, [], coop) });
+    rows.push({ label: coop ? 'Co-op: ON (tap to turn off)' : 'Co-op: OFF (2 players, one device)', hint: 'A friend plays half your team and you pass the controller each turn. The boss is tougher, the crowd louder, the prize bigger.', cost: 0, go: () => this.openRaidPrep(sideId, approachId, pv, !coop) });
     const picker: Picker = new Picker(this, {
       glass: true,
-      title: `Before you go in: ${pv.name}`,
+      title: `Before you go in: ${pv.name}${coop ? ' (co-op)' : ''}`,
       columns: 1,
       rowHeight: 74,
       rows: rows.map((r) => ({
@@ -1416,7 +1419,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** S402 Boss Dialogue Trees: pick a line; some lead to a second set of lines. */
-  private openRaidTalk(sideId: string, approachId: string | undefined, prompt: string, choices: { id: string; label: string; reply: string; next?: unknown[] }[], path: string[]): void {
+  private openRaidTalk(sideId: string, approachId: string | undefined, prompt: string, choices: { id: string; label: string; reply: string; next?: unknown[] }[], path: string[], coop = false): void {
     const picker: Picker = new Picker(this, {
       glass: true,
       title: prompt,
@@ -1435,8 +1438,8 @@ export class MapScene extends Phaser.Scene {
         picker.close();
         this.picker = null;
         const next = [...path, c.id];
-        if (c.next && c.next.length > 0) this.openRaidTalk(sideId, approachId, c.reply, c.next as typeof choices, next);
-        else this.enterRaidNow(sideId, approachId, `talk:${next.join('>')}`);
+        if (c.next && c.next.length > 0) this.openRaidTalk(sideId, approachId, c.reply, c.next as typeof choices, next, coop);
+        else this.enterRaidNow(sideId, approachId, coop ? `coop+talk:${next.join('>')}` : `talk:${next.join('>')}`);
       },
       onBack: () => {
         picker.close();

@@ -128,7 +128,7 @@ import {
   wildSpeciesWithItems,
 } from './mapItems';
 import { pickRaidRival } from './raid/rivalAlly';
-import { RAID_MEMORY_FRIENDSHIP, RETURNING_HP_PERCENT, RETURNING_LEVEL_BONUS, cheerLevelFor, denWeather, lootTiers, pickApproach, raidMemories, applyBossHp, describeMechanics, describeRewards, freshRaidBattle, getRaid, placeRaidDens, raidDef, raidLevel, raidSpecies, talkOutcome, type RaidPreview } from './raid/raid';
+import { RAID_MEMORY_FRIENDSHIP, RETURNING_HP_PERCENT, RETURNING_LEVEL_BONUS, cheerLevelFor, denWeather, lootTiers, pickApproach, raidMemories, applyBossHp, describeMechanics, describeRewards, freshRaidBattle, getRaid, placeRaidDens, raidDef, raidLevel, raidSpecies, talkOutcome, coopDamage, coopSplit, type RaidPreview } from './raid/raid';
 import { applyBossAbility, raidBadgeLevel, scaledRaid } from './raid/scaling';
 import type { GimmickCard, RaidApproach, RaidBot, RaidDef } from './raid/schema';
 import type { BoostStat, Weather } from './contentSchema';
@@ -1205,7 +1205,8 @@ export function enterRaid(content: Content, current: RunState, sideId: string, a
   const def = getRaid(content, side.raidId!);
   if (approachId === PRACTICE_APPROACH) return practiceRaid(content, current, def, node.id + sideId);
   const approach = pickApproach(def, approachId);
-  const prepCost = prep?.startsWith('bot:') ? content.raids.bots.find((b) => b.id === prep.slice(4))?.cost ?? 0 : 0;
+  const botToken = prep?.split('+').find((t) => t.startsWith('bot:'));
+  const prepCost = botToken ? content.raids.bots.find((b) => b.id === botToken.slice(4))?.cost ?? 0 : 0;
   const cost = def.entryCost + (approach?.cost ?? 0) + prepCost;
   if (current.money < (approach?.leave ? 0 : cost)) throw new Error(`You need ₽${cost} to enter this raid`);
   const activeIndex = current.party.findIndex((p) => p.hp > 0);
@@ -1252,7 +1253,7 @@ export function startRaidBattle(content: Content, run: RunState, baseDef: RaidDe
   const approach = opts.approach ?? null;
   // S401 cards and S402 talk: what you prepared with before going in (a bad id is refused; story raids take none).
   const prep = parseRaidPrep(content, baseDef, opts.prep);
-  boss.statBoosts = { ...boss.statBoosts, hp: Math.max(0, (boss.statBoosts?.hp ?? 0) + (approach?.hpDeltaPercent ?? 0) + (opts.returning ? RETURNING_HP_PERCENT : 0) + (prep.card?.hpDeltaPercent ?? 0) + (prep.talk?.hpPercent ?? 0)) };
+  boss.statBoosts = { ...boss.statBoosts, hp: Math.max(0, (boss.statBoosts?.hp ?? 0) + (approach?.hpDeltaPercent ?? 0) + (opts.returning ? RETURNING_HP_PERCENT : 0) + (prep.card?.hpDeltaPercent ?? 0) + (prep.talk?.hpPercent ?? 0) + (prep.coop ? content.raids.coop.hpPercent : 0)) };
   for (const id of def.extraMoves) {
     const mv = content.moves.get(id);
     if (mv && !boss.moves.some((m) => m.id === id)) boss.moves.push({ id, pp: mv.pp });
@@ -1286,6 +1287,15 @@ export function startRaidBattle(content: Content, run: RunState, baseDef: RaidDe
     raidState.draftDelta += prep.card.draftDelta;
   }
   if (prep.bot) raidState.bot = prep.bot.id;
+  // S410 Team Co-op Raids: two players share the party; the boss is tougher and the prize bigger.
+  if (prep.coop) {
+    if (run.party.filter((m) => m.hp > 0).length < 2) throw new Error('Co-op needs two Pokémon able to fight');
+    const co = content.raids.coop;
+    raidState.coop = { owners: coopSplit(run.party), cheers: [co.cheersEach, co.cheersEach] };
+    raidState.cheersLeft = co.cheersEach * 2;
+    raidState.rewardPercent = Math.round((raidState.rewardPercent * co.rewardPercent) / 100);
+    raidState.draftDelta += co.draftDelta;
+  }
   if (prep.talk) {
     for (const [stat, n] of Object.entries(prep.talk.boss)) run.battle.enemyStages[stat as BoostStat] = Math.max(-6, Math.min(6, n));
     for (const [stat, n] of Object.entries(prep.talk.player)) run.battle.playerStages[stat as BoostStat] = Math.max(-6, Math.min(6, n));
@@ -1308,27 +1318,33 @@ export function startRaidBattle(content: Content, run: RunState, baseDef: RaidDe
 }
 
 /** What the player prepared with at the den: "card:<id>", "bot:<id>" or "talk:<id>[><id>]". Unknown ids and story raids are refused. */
-function parseRaidPrep(content: Content, def: RaidDef, prep: string | undefined): { card: GimmickCard | null; bot: RaidBot | null; talk: ReturnType<typeof talkOutcome> } {
-  const none = { card: null, bot: null, talk: null };
-  if (!prep) return none;
+function parseRaidPrep(content: Content, def: RaidDef, prep: string | undefined): { card: GimmickCard | null; bot: RaidBot | null; talk: ReturnType<typeof talkOutcome>; coop: boolean } {
+  const out = { card: null as GimmickCard | null, bot: null as RaidBot | null, talk: null as ReturnType<typeof talkOutcome>, coop: false };
+  if (!prep) return out;
   if (def.grand || def.gang || def.legendary) throw new Error('This raid takes no preparation');
-  const [kind, rest = ''] = [prep.slice(0, prep.indexOf(':')), prep.slice(prep.indexOf(':') + 1)];
-  if (kind === 'card') {
-    const card = content.raids.gimmickCards.find((c) => c.id === rest);
-    if (!card) throw new Error(`Unknown gimmick card "${rest}"`);
-    return { ...none, card };
+  let picked = 0;
+  for (const token of prep.split('+')) {
+    const at = token.indexOf(':');
+    const kind = at < 0 ? token : token.slice(0, at);
+    const rest = at < 0 ? '' : token.slice(at + 1);
+    if (kind === 'coop' && at < 0) {
+      out.coop = true;
+      continue;
+    }
+    picked += 1;
+    if (picked > 1) throw new Error('Pick one of a card, a bot or a talk');
+    if (kind === 'card') {
+      out.card = content.raids.gimmickCards.find((c) => c.id === rest) ?? null;
+      if (!out.card) throw new Error(`Unknown gimmick card "${rest}"`);
+    } else if (kind === 'bot') {
+      out.bot = content.raids.bots.find((b) => b.id === rest) ?? null;
+      if (!out.bot) throw new Error(`Unknown lobby bot "${rest}"`);
+    } else if (kind === 'talk' && content.raids.talk) {
+      out.talk = talkOutcome(content.raids.talk, rest.split('>'));
+      if (!out.talk) throw new Error(`Unknown talk path "${rest}"`);
+    } else throw new Error(`Unknown preparation "${prep}"`);
   }
-  if (kind === 'bot') {
-    const bot = content.raids.bots.find((b) => b.id === rest);
-    if (!bot) throw new Error(`Unknown lobby bot "${rest}"`);
-    return { ...none, bot };
-  }
-  if (kind === 'talk' && content.raids.talk) {
-    const talk = talkOutcome(content.raids.talk, rest.split('>'));
-    if (!talk) throw new Error(`Unknown talk path "${rest}"`);
-    return { ...none, talk };
-  }
-  throw new Error(`Unknown preparation "${prep}"`);
+  return out;
 }
 
 /** Totem territory preview. */
@@ -1555,7 +1571,11 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
   run.log.counters.raidBestTier = run.raids.bestTier;
   run.raids.done.push(def.id);
   if (def.grand) endGrandBattle(content, run, true, run.party[battle.activeIndex]?.uid);
-  const notes = def.gang ? gangRaidWon(content, run, def) : undefined;
+  let notes: string[] | undefined = def.gang ? gangRaidWon(content, run, def) : undefined;
+  if (battle.raid!.coop) {
+    const [a, b] = coopDamage(battle.raid!);
+    (notes ??= []).push(`Co-op: Player 1 dealt ${a} damage, Player 2 dealt ${b}.`);
+  }
   return { items, draftExtra: Math.max(0, def.rewards.draftExtra + battle.raid!.draftDelta), money, notes };
 }
 
