@@ -35,5 +35,32 @@ export function buildEpilogue(content: Content, run: RunState): string[] {
   if (Number(f['ev:charity'] ?? 0) > 0) out.push('The orphanage ledger keeps your name at the top of its page.');
   if (Number(f['ev:oath-steel'] ?? 0) > 0 || Number(f['ev:oath-mercy'] ?? 0) > 0) out.push('The shrine keeper marks your oath as kept.');
   if (Number(f['ev:umbrella-friend'] ?? 0) > 0) out.push('Somewhere, a stranger remembers the umbrella you shared.');
+  out.push(...endingVariationLines(content, run), ...secretEndingLines(run));
+  return out;
+}
+
+/** Ending Variations (S120): extra lines from the team you built, the bonds you made and the choices you kept. Pure. */
+export function endingVariationLines(content: Content, run: RunState): string[] {
+  const out: string[] = [];
+  const mons = run.party;
+  if (mons.length === 0) return out;
+  const typesOf = (id: string): string[] => content.species.get(id)?.types ?? [];
+  const shared = typesOf(mons[0]!.speciesId).filter((t) => mons.every((m) => typesOf(m.speciesId).includes(t)));
+  if (mons.length >= 4 && shared.length > 0) out.push(`Your whole team stood in one colour, ${shared[0]}, and the crowd chanted it back.`);
+  else if (new Set(mons.flatMap((m) => typesOf(m.speciesId))).size >= 10) out.push('A team of every kind of Pokémon: the commentators ran out of words for it.');
+  const close = mons.filter((m) => m.friendship >= 200).length;
+  if (close >= Math.min(3, mons.length)) out.push('Your Pokémon would not leave your side after the final bell. Nobody tried to make them.');
+  else if (mons.every((m) => m.friendship < 70) && mons.length >= 3) out.push('Your team won, but the victory felt quiet. There is still a friendship to be made.');
+  if (mons.length === 1) out.push('One Pokémon, one road, one trophy. A legend of its own kind.');
+  return out;
+}
+
+/** Secret Ending Hunts (S122): obscure conditions unlock hidden finales. A hidden ending replaces nothing; it adds its own line. Pure. */
+export function secretEndingLines(run: RunState): string[] {
+  const f = run.story.flags;
+  const out: string[] = [];
+  if (Number(f['ev:oath-steel'] ?? 0) > 0 && Number(f['ev:oath-mercy'] ?? 0) > 0) out.push('SECRET ENDING, The Two Oaths: the shrine keeper bows. Steel and mercy, both kept.');
+  if (Number(f['ev:charity'] ?? 0) > 0 && Number(f['ev:umbrella-friend'] ?? 0) > 0 && Number(f['ev:mystery-solved'] ?? 0) > 0) out.push('SECRET ENDING, The Quiet Hero: a stranger you helped left a lantern lit for you at the gate.');
+  if (Number(f['ev:betrayal-forgiven'] ?? 0) > 0) out.push('SECRET ENDING, A Second Chance: someone who once betrayed you stands in the crowd, and nods.');
   return out;
 }

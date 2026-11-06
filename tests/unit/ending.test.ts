@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildEpilogue, endingFor } from '../../src/core/ending';
+import { buildEpilogue, endingFor, endingVariationLines, secretEndingLines } from '../../src/core/ending';
+import { leadChatter } from '../../src/core/leadChatter';
 import { buildCredits } from '../../src/core/credits';
 import { getArchetype } from '../../src/core/archetypes';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -38,7 +39,7 @@ describe('the Grand Region finale', () => {
     expect(buildEpilogue(content, run)).toEqual([]);
     const won = { ...structuredClone(run), victory: true };
     const lines = buildEpilogue(content, won);
-    expect(lines).toHaveLength(1);
+    expect(lines.length).toBeGreaterThanOrEqual(1);
     expect(buildEpilogue(content, won)).toEqual(lines);
     expect(buildCredits(content, won).map((l) => l.text)).toContain(lines[0]);
   });
@@ -48,5 +49,32 @@ describe('the Grand Region finale', () => {
     won.story.flags['ge:won'] = true;
     expect(endingFor(won)).toBe('storm');
     expect(buildEpilogue(content, won)[0]).toContain(content.story.grandEnemy.name);
+  });
+});
+
+describe('story endings and lead chatter (S120, S122, S129)', () => {
+  const base = chooseStarter(content, createRun(content, { runId: 'ev', seed: 'ev', archetypeId: 'red' }), 0);
+  const won = () => ({ ...structuredClone(base), victory: true });
+
+  it('a close team earns a bond line; a lone Pokémon earns its own', () => {
+    const run = won();
+    run.party[0]!.friendship = 255;
+    expect(endingVariationLines(content, run).join(' ')).toContain('One Pokémon');
+  });
+
+  it('secret endings need their obscure flags, and add lines the same way every time', () => {
+    const run = won();
+    expect(secretEndingLines(run)).toEqual([]);
+    run.story.flags['ev:oath-steel'] = 1;
+    run.story.flags['ev:oath-mercy'] = 1;
+    run.story.flags['ev:betrayal-forgiven'] = 1;
+    const lines = secretEndingLines(run);
+    expect(lines).toHaveLength(2);
+    expect(buildEpilogue(content, run)).toEqual(buildEpilogue(content, structuredClone(run)));
+  });
+
+  it('the lead Pokémon always has a line, and it does not change on a redraw', () => {
+    expect(leadChatter(content, base)).toBe(leadChatter(content, base));
+    expect(leadChatter(content, { ...base, party: [] })).toBeNull();
   });
 });

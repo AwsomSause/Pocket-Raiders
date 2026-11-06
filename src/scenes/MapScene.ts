@@ -16,6 +16,7 @@ import { modeObjectives, objectivesLine } from '../core/modeObjectives';
 import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
 import { stopIsHidden } from '../core/events';
+import { leadChatter } from '../core/leadChatter';
 import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
 import { pinnedObjective } from '../core/objectives';
@@ -361,6 +362,8 @@ export class MapScene extends Phaser.Scene {
     // Convoy Mode: the escort's health, as hearts.
     const convoy = league ? null : run.stage?.convoy;
     if (convoy) this.add.text(GAME_WIDTH / 2, 88, `Escort: ${convoy.name}  ${'♥'.repeat(convoy.hp)}${'♡'.repeat(convoy.maxHp - convoy.hp)}`, textStyle(13, '#ffd0d8', { stroke: '#4a0b1a', strokeThickness: 3 })).setOrigin(0.5, 0).setName('convoy');
+    const chatter = league ? null : leadChatter(content, run);
+    if (chatter) this.add.text(GAME_WIDTH / 2, 105, chatter, textStyle(12, '#e8e0c8', { stroke: '#2a2418', strokeThickness: 3 })).setOrigin(0.5, 0).setName('lead-chatter');
     const objectives = modeObjectives(run);
     if (objectives.length > 0) this.add.text(GAME_WIDTH - 24, 68, objectivesLine(objectives), textStyle(14, '#f0e0a0')).setOrigin(1, 0);
 
