@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
+import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
 import type { StoryConfig } from './story/schema';
 import type { RaidFile } from './raid/schema';
 import type { TotemFile } from './totem/schema';
@@ -1923,6 +1924,10 @@ export const BalanceSchema = z.object({
   weatherTolerance: z.object({ turnsPerLevel: z.number().int().min(1), cutPerLevel: z.number().min(0).max(1), maxLevels: z.number().int().min(0) }).default({ turnsPerLevel: 12, cutPerLevel: 0.15, maxLevels: 4 }),
   /** S164 charge-up: each banked stack adds `perStack` to the next damaging move's power, up to `max` stacks. */
   bankPower: z.object({ perStack: z.number().min(0), max: z.number().int().min(1) }).default({ perStack: 0.5, max: 3 }),
+  /** Battle/AI batch 1 (S156 regional charts, S161 status stacks, S162 reactions, S169 immunity breakers, S170 counter types): battle/typeRules.ts. */
+  typeRules: TypeRulesSchema.default(DEFAULT_TYPE_RULES),
+  /** S174 Z-Crystal Bonding: a Pokémon needs this bond score (0-100, trust + affection) before it can use a Z-Move (0 = off). */
+  zBond: z.object({ minBond: z.number().int().min(0).max(100) }).default({ minBond: 30 }),
   /** Double battles: the chance an ordinary trainer fights two at a time, from this stage number (0 = the first stage). */
   /** Double battles: ordinary trainers (`chance`), wild Pokémon in pairs (`wildChance`), and bosses that always fight two at a time (`bossIds`). */
   doubles: z
@@ -1976,6 +1981,8 @@ export const BalanceSchema = z.object({
   frugalRunMaxSpent: z.number().int().min(0).default(300),
   /** Badge Powers (idea S483): each Gym badge boosts your Pokémon of the Leader's types and cuts their super-effective damage taken. */
   /** Elite Four Rematches (S127): after this many battles won per region cleared so far, the Elite Four field remixed teams. */
+  /** Weather-Locked Spawns (S234): off in the old-seed story check. */
+  spawnLocks: z.object({ enabled: z.boolean().default(true) }).default({ enabled: true }),
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
@@ -2284,6 +2291,8 @@ export const BalanceSchema = z.object({
     rarityWeights: z.object({ common: z.number().positive(), uncommon: z.number().positive(), rare: z.number().positive(), veryRare: z.number().positive(), legendary: z.number().positive(), mythical: z.number().positive() }),
   }),
   /** The gentle opening: for the first `encounters` fights of a run, wild Pokémon above `maxBaseStats` are swapped for weaker ones and are `levelOffset` levels lower (never below `minLevel`). */
+  /** Streak Bonuses (S313): a gift each time the win streak reaches a milestone (it repeats every `wins` wins). Pity Counters (S321): after this many reward drafts with no rare or better reward, the next draft carries one. */
+  luck: z.object({ streakRewards: z.array(z.object({ wins: z.number().int().min(2), item: z.string() })).min(1), pityRareAfter: z.number().int().min(1), /** Milestone Chests (S312): a chest opens, once, when the profile's finished-run count reaches `runs`. */ milestoneChests: z.array(z.object({ runs: z.number().int().min(1), bankCredits: z.number().int().min(0), candies: z.number().int().min(0), researchPoints: z.number().int().min(0) })).min(1) }),
   opening: z.object({ encounters: z.number().int().min(0), maxBaseStats: z.number().int().positive(), levelOffset: z.number().int().min(0), minLevel: z.number().int().min(1), softMovesUntilLevel: z.number().int().min(0), maxLevel: z.number().int().min(1) }),
   /** Chance that a wild encounter is a Legendary, Mythical or Ultra Beast (trainer perks scale it). */
   legendaryWildChance: z.number().min(0).max(1),

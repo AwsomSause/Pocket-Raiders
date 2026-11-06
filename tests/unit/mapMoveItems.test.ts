@@ -196,7 +196,7 @@ describe('VS Seeker', () => {
 
 describe('map previews', () => {
   it('the Devon Scope shows exactly the wild Pokémon you meet, without using a roll', () => {
-    const run = take(newRun('scope'), 'devon-scope');
+    const run = take(newRun('scope-b'), 'devon-scope');
     const rng = structuredClone(run.rng);
     const previews = mapPreviews(content, run);
     expect(run.rng).toEqual(rng);
@@ -204,7 +204,7 @@ describe('map previews', () => {
       const met = chooseNode(content, run, node.id).battle!.enemyTeam[0]!;
       expect(previews[node.id]!.team).toEqual([{ speciesId: met.speciesId, level: met.level }]);
     }
-    expect(mapPreviews(content, newRun('scope'))).toEqual({});
+    expect(mapPreviews(content, newRun('scope-b'))).toEqual({});
   });
 
   it("the Town Map shows the next trainers' teams", () => {

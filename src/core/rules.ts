@@ -1,10 +1,12 @@
 // Game modes, difficulty, modifiers, Death-Block (Untitled doc §13–16, Phase E).
 // The choices are copied into the run (`run.rules`) when it starts and never change; rewards use that snapshot.
 
+import { regionRules, regionalChart } from './battle/typeRules';
 import { z } from 'zod';
 import rulesJson from '../data/runRules.json';
 import type { Content, TypeName } from './contentSchema';
 import { getSpecies, usableLearnset } from './pokemon';
+import { applyMutator, MUTATORS } from './mutators';
 import { hashSeed, Rng } from './rng';
 import { poolTypes } from './runPrep';
 import type { PokemonInstance, RunRules, RunState } from './state';
@@ -57,6 +59,8 @@ export const RunRulesDataSchema = z.object({
       quickWin: z.object({ turns: z.number().int().min(1), money: z.number().int().min(1) }).optional(),
       /** Inverse Battle (S291): the type chart is reversed in every battle of the run. */
       inverseChart: z.boolean().optional(),
+      /** Elite Duelist (S275): every battle roll is the middle value (no crits, no lucky misses, fixed damage roll). */
+      steady: z.boolean().optional(),
       gauntlet: z.boolean().optional(),
       doublesOnly: z.boolean().optional(),
       /** Pacifist (S300): wild Pokémon can't be knocked out; win by catching or running. */
@@ -81,7 +85,7 @@ export const RunRulesDataSchema = z.object({
     once: z.object({ pool: z.string().optional(), trainer: z.string().optional(), title: z.string().optional(), bankCredits: z.number().int().optional(), text: z.string() }),
     repeat: z.object({ bankCredits: z.number().int().optional(), candies: z.number().int().optional(), text: z.string() }),
   })),
-  modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), /** Time Pressure (S20): the mode's reward bonus melts by `perDay` for every in-game day past `daysPerRegion` x regions entered (core/clock.ts timePressureTick). */ timePressure: z.object({ daysPerRegion: z.number().int().min(1), perDay: z.number().positive() }).optional(), blurb: z.string() })).min(1),
+  modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), /** Endless Tower (S14): each new lap also takes a seeded curse (core/mutators.ts), so every floor climb gets harder. */ loopCurse: z.boolean().optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), /** Time Pressure (S20): the mode's reward bonus melts by `perDay` for every in-game day past `daysPerRegion` x regions entered (core/clock.ts timePressureTick). */ timePressure: z.object({ daysPerRegion: z.number().int().min(1), perDay: z.number().positive() }).optional(), blurb: z.string() })).min(1),
 });
 export const RUN_RULES = RunRulesDataSchema.parse(rulesJson);
 
@@ -230,23 +234,37 @@ export const timeAttackPoints = (rules: Pick<RunRules, 'modifierIds'>, turnsTake
     return sum + (t && turnsTaken <= t.turns ? (t.turns - Math.max(1, turnsTaken) + 1) * t.perTurn : 0);
   }, 0);
 export const bossRemix = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.bossRemix);
+/** Elite Duelist (S275) is on: battles use a steady roll instead of the battle stream. */
+export const eliteDuelist = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.steady);
 /** Inverse Battle is on. */
 export const inverseChart = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.inverseChart);
 /** The tightest run-wide level cap a modifier sets (Level 50 Cup), or null. */
 export const modifierLevelCap = (rules: Pick<RunRules, 'modifierIds'>): number | null =>
   rules.modifierIds.reduce<number | null>((cap, id) => { const c = getModifier(id)?.levelCap; return c === undefined ? cap : cap === null ? c : Math.min(cap, c); }, null);
-const invertedCharts = new WeakMap<object, Content>();
-/** Content as the battle engine should see it: with Inverse Battle the type chart is reversed (2 -> 0.5, 0.5 and 0 -> 2). Cached, pure. */
-export function battleContent(content: Content, rules: Pick<RunRules, 'modifierIds'>): Content {
-  if (!inverseChart(rules)) return content;
-  const cached = invertedCharts.get(content);
+const battleContents = new WeakMap<object, Map<string, Content>>();
+/**
+ * Content as the battle engine should see it: with Inverse Battle the type chart is reversed (2 -> 0.5, 0.5 and 0 -> 2);
+ * a region with its own type rules (S156, balance `typeRules.regions`) tweaks the chart first. Cached, pure.
+ */
+export function battleContent(content: Content, rules: Pick<RunRules, 'modifierIds'>, regionId?: string | null): Content {
+  const inverse = inverseChart(rules);
+  const local = regionRules(content, regionId);
+  if (!inverse && local.length === 0) return content;
+  const key = `${inverse ? 'inv' : ''}|${local.length ? regionId : ''}`;
+  let cache = battleContents.get(content);
+  if (!cache) battleContents.set(content, (cache = new Map()));
+  const cached = cache.get(key);
   if (cached) return cached;
-  const typeChart: Content['typeChart'] = {} as Content['typeChart'];
-  for (const [atk, row] of Object.entries(content.typeChart)) {
-    typeChart[atk as keyof typeof typeChart] = Object.fromEntries(Object.entries(row ?? {}).map(([def, v]) => [def, v > 1 ? 0.5 : v < 1 ? 2 : v])) as never;
+  let typeChart = regionalChart(content.typeChart, local);
+  if (inverse) {
+    const flipped: Content['typeChart'] = {} as Content['typeChart'];
+    for (const [atk, row] of Object.entries(typeChart)) {
+      flipped[atk as keyof typeof flipped] = Object.fromEntries(Object.entries(row ?? {}).map(([def, v]) => [def, v > 1 ? 0.5 : v < 1 ? 2 : v])) as never;
+    }
+    typeChart = flipped;
   }
   const out = { ...content, typeChart };
-  invertedCharts.set(content, out);
+  cache.set(key, out);
   return out;
 }
 /** Gauntlet (S294): no healing stops, and no free heal at the League gate or between Elite Four fights. */
@@ -361,7 +379,7 @@ export const dailyClaimKey = (isoDate: string): string => `daily:${isoDate.slice
  * Endless: when the last champion falls, add another lap of the regions instead of winning (mutates `run`).
  * Returns false in any other mode. Enemies get stronger every lap.
  */
-export function extendEndless(run: Pick<RunState, 'rules' | 'regionOrder'>): boolean {
+export function extendEndless(run: Pick<RunState, 'rules' | 'regionOrder'> & Partial<Pick<RunState, 'seed' | 'mutators'>>): boolean {
   const mode = getMode(run.rules.modeId);
   const bonus = mode?.loopLevelBonus;
   // The configured endpoint: after the last lap the run is won like any other.
@@ -370,6 +388,12 @@ export function extendEndless(run: Pick<RunState, 'rules' | 'regionOrder'>): boo
   run.regionOrder.push(...run.regionOrder.slice(0, lap));
   run.rules.loops += 1;
   run.rules.enemyLevelBonus += bonus;
+  // Endless Tower: every lap also adds a curse (seeded by the run and the lap, never the gameplay stream).
+  if (mode?.loopCurse) {
+    const curses = MUTATORS.mutators.filter((m) => m.kind === 'curse' && (m.enemyLevel ?? 0) > 0);
+    const curse = new Rng(hashSeed(`${run.seed ?? ''}::tower::${run.rules.loops}`)).pick(curses);
+    applyMutator(run as RunState, curse.id);
+  }
   return true;
 }
 

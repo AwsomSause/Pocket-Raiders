@@ -169,6 +169,7 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - `shops-redesign.md`: Shops redesign, slice 1 (Kice 2026-11-02; mock-ups in project files `redesign/shops/`): Kice picked six looks
 - `social-profile.md`: Social/tech slice 6 (S214 Achievements Showcase, S215 Photo Contest, S217 Trade Boards): `core/social.ts`, sto
 - `social-share-codes.md`: Social/tech slice 1 (S198 Share Codes, S200 Challenge Cards; S199 Ghost Teams already existed as GH1 ghost cod
+- `social-tools-pack.md`: Social/tech slice 7 (S201 Leaderboard by Seed, S202 Co-op Draft, S203 Hot-Seat Versus, S204 Spectator Replay V
 - `speedrun-timer.md`: Social/tech slice 4 (S211 Speedrun Timer): `core/tools/speedrun.ts`. Off by default; Hub > Tools & Community >
 - `story-elite-four-rematch.md`: Story & rivals S127 Elite Four Rematches: once you have won 25+ battles per region (`balance.eliteRematch`), t
 - `story-gym-leader-moods.md`: Story & rivals S126 Gym Leader Personalities: each gym leader has a mood on the day you face them (`core/story
@@ -230,3 +231,11 @@ One line per note (first 110 characters). Grep this file (`grep -i word docs/sta
 - [meta-hub-9-remaining](meta-hub-9-remaining.md): Airship, market swings, rival sponsors, Dream Tower, garden visitors, lab, cards, notice filters, orchard, NPC schedules, gossip, teleporters.
 - `presentation-ash.md`: ash particles in Fire arenas (S251).
 - [meta-hub-10-tips-rank-prestige](meta-hub-10-tips-rank-prestige.md): Guide Pip tips, social rank, mastery prestige.
+- `growth-synergy-tags.md`: Growth slice 3: Team Synergy Tags (Sun/Rain/Sand/Snow/Trick Room teams open with a +1 lift).
+- `raid-bosses-slice6.md`: Raids & bosses slice 6: S393 bots, S394 weekly raid, S395 Totem auras, S397 aim picker, S398 loot preview, S399 mini-bosses, S401 cards, S402 talk, S403 crowd, S405 den weather, S406 titans, S407 gauntlet, S408 revenge, S409 capture, S411 puzzle, S412 hazards, role badge. S410 co-op not built.
+- `growth-paired-moves.md`: Growth slice 4: Bond Level 2+ pairs get a named paired-move bonus on the faint hand-over.
+- `lures-weather-spawns.md`: Lure Crafting S223, Lure Towers S237, Weather-Locked Spawns S234 (`core/spawnLocks.ts`, `crafting.json` lure recipes).
+- `growth-training-camp.md`: Growth slice 5: Training Camps (two Box Pokémon gain XP after each win).
+- `frontier-points.md`: Battle Frontier Points and prize shop (S490), run v36.
+- endless-tower.md: Endless Tower mode, no lap limit, curse every lap (S14)
+- `contest-conditions.md`: Contest conditions, Poffin blending, Pokémon Contest game and curry heal (S487-S489, S503), run v37.

@@ -82,6 +82,19 @@ export function pairBondLevel(run: RunState, a: string, b: string): number {
   return BOND_RULES.pairLevels.wins.filter((w) => wins >= w).length;
 }
 
+/** The paired move two partners make (their damaging moves' types match one of `BOND_RULES.pairedMoves`), or null. Needs Bond Level 2+. */
+export function pairedMoveName(content: Content, run: RunState, fainted: string, incoming: string): string | null {
+  if (pairBondLevel(run, fainted, incoming) < BOND_RULES.minPairedLevel) return null;
+  const typesOf = (uid: string) => new Set((run.party.find((m) => m.uid === uid)?.moves ?? []).map((m) => content.moves.get(m.id)).filter((mv) => mv && (mv.power ?? 0) > 0).map((mv) => mv!.type as string));
+  const a = typesOf(fainted);
+  const b = typesOf(incoming);
+  for (const pair of BOND_RULES.pairedMoves) {
+    const [x, y] = pair.types;
+    if ((a.has(x) && b.has(y)) || (a.has(y) && b.has(x))) return pair.name;
+  }
+  return null;
+}
+
 /** After a faint, a partner you have won with comes in with a stronger attacking stat (once per pair per battle). Level 1 +1, level 2+ +2. */
 export function bondLevelHandover(content: Content, run: RunState, fainted: string, incoming: string): BattleEvent | null {
   const battle = run.battle!;
@@ -92,8 +105,9 @@ export function bondLevelHandover(content: Content, run: RunState, fainted: stri
   const stat = comboStat(content, mon);
   if (!stat) return null;
   battle.drama.combos.push(key);
-  battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + Math.min(BOND_RULES.pairLevels.maxStages, level));
-  return { type: 'bondLevel', side: 'player', from: fainted, to: incoming, stat, level };
+  const paired = pairedMoveName(content, run, fainted, incoming);
+  battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + Math.min(BOND_RULES.pairLevels.maxStages, level) + (paired ? 1 : 0));
+  return { type: 'bondLevel', side: 'player', from: fainted, to: incoming, stat, level, ...(paired ? { paired } : {}) };
 }
 
 // ---------- Refusal and Initiative: a Pokémon acting on its own, before the turn ----------

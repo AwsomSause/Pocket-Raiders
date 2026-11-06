@@ -244,6 +244,15 @@
       "inverseChart": true
     },
     {
+      "id": "elite-duelist",
+      "name": "Elite Duelist",
+      "status": "supported",
+      "bonus": 0.2,
+      "blurb": "Pure skill: no critical hits, no lucky misses or side effects, every damage roll is the middle one. Moves under 50% accuracy always miss.",
+      "group": "luck",
+      "steady": true
+    },
+    {
       "id": "gauntlet",
       "name": "Gauntlet",
       "status": "supported",
@@ -366,6 +375,16 @@
       "blurb": "No final victory: beat the last champion and the regions start again, enemies +5 levels each loop. The run ends when you wipe.",
       "loopLevelBonus": 5,
       "loopLimit": 10
+    },
+    {
+      "id": "endless-tower",
+      "name": "Endless Tower",
+      "status": "supported",
+      "progressionEligible": false,
+      "checkpoints": false,
+      "blurb": "A climb with no top: beat the last champion and the regions start again, with no lap limit. Every lap enemies get +4 levels and a new curse (+2 or +3 more levels). It ends when you wipe. Practice mode: no account progress.",
+      "loopLevelBonus": 4,
+      "loopCurse": true
     },
     {
       "id": "spooky",

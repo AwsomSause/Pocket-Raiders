@@ -92,6 +92,8 @@ export interface TransformContext {
   inventory: Record<string, number>;
   disabledMechanics?: readonly TransformKind[];
   perks?: Perks;
+  /** S174 Z-Crystal Bonding: bond score (0-100) of one of your Pokémon. Absent = not checked (simulations). */
+  bondScore?: (uid: string) => number;
 }
 
 const owns = (inventory: Record<string, number>, id: string) => (inventory[id] ?? 0) > 0;
@@ -203,6 +205,9 @@ function zMoveProblem(ctx: TransformContext, mon: PokemonInstance, moveIndex: nu
   if (slot.pp <= 0) return 'That move has no PP left.';
   if (!zMoveFor(content, move)) return `${move.name} can't become a Z-Move.`;
   if (!ownedZCrystal(content, inventory, move.type)) return `You need the ${typeName(move.type)} Z-Crystal for ${move.name}.`;
+  // S174: the Z-Power answers only a Pokémon that has trained with you long enough.
+  const need = content.balance.zBond.minBond;
+  if (ctx.bondScore && need > 0 && ctx.bondScore(mon.uid) < need) return `Not bonded enough for a Z-Move yet (bond ${ctx.bondScore(mon.uid)}/${need}). Battle together to grow it.`;
   return null;
 }
 

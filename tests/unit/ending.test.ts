@@ -112,4 +112,16 @@ describe('companion, factions and legend trail (S112, S114, S117)', () => {
     expect(story.flags['ev:lore-legend-trail-1']).toBe(1);
     expect(content.npcStory.lore.some((l) => l.id === 'legend-trail-3')).toBe(true);
   });
+
+  it('in a double battle the companion helps the weaker of the two Pokémon on the field', () => {
+    const run = structuredClone(base);
+    run.party.push(structuredClone(run.party[0]!));
+    run.party[0]!.hp = 1;
+    run.party[1]!.hp = 1;
+    run.party[1]!.uid = 'second';
+    run.battle = { outcome: undefined, activeIndex: 0, doubles: { player: { index: 1 } } } as never;
+    run.story.flags[COMPANION_FLAG] = 1;
+    expect(companionSupport(content, run)?.uid).toBeDefined();
+    expect(companionSupport(content, run)).toBeNull();
+  });
 });

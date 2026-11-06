@@ -38,10 +38,14 @@ import { StopCard, type StopLook } from '../ui/stopLooks';
 import { fishingOffer, raidPreview, totemPreview, mapActions, wipeStatus, mapChoices, mapPreviews, nextGymLeaders, type MapActionKind, type NodePreview } from '../core/run';
 import { bossInfo, currentRegion, getCampaign, runLevelCap } from '../core/regions';
 import { blindMap } from '../core/rules';
+import { regionRules } from '../core/battle/typeRules';
 import { arenaFor, getTheme } from '../core/themes';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
 import { device } from '../game/deviceTools';
+import { flagOn } from '../core/tools/featureFlags';
+import { commentaryLine } from '../core/tools/commentary';
+import { maxHp } from '../core/pokemon';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
 import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy } from '../ui/audio';
@@ -350,6 +354,15 @@ export class MapScene extends Phaser.Scene {
     this.add
       .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
+    // S156: this region's own type-chart rules, if it has any.
+    const localRules = regionRules(content, run.regionOrder[run.regionIndex]);
+    if (localRules.length > 0) {
+      const cap = (t: string): string => t[0]!.toUpperCase() + t.slice(1);
+      this.add
+        .text(GAME_WIDTH - 24, 66, `${region.name} type rules: ${localRules.map((r) => `${cap(r.attack)}→${cap(r.defend)} ×${r.mult}`).join('  ·  ')}`, textStyle(14, hSub))
+        .setOrigin(1, 0)
+        .setName('region-type-rules');
+    }
     // Speedrun timer (core/tools/speedrun.ts, off by default; Hub > Tools): splits per badge kept on this device only.
     if (device.speedrunOn()) {
       const now = Date.now();
@@ -357,6 +370,12 @@ export class MapScene extends Phaser.Scene {
       const sp = updateSplits(old && old.runId === run.runId ? old : newSplits(run.runId, now), now, run.badges.length, false);
       device.setSplits(JSON.stringify(sp));
       this.add.text(GAME_WIDTH - 24, 68, `Run time ${formatMs(now - sp.startedAt)}${sp.splits.length ? `  ·  last split ${formatMs(sp.splits[sp.splits.length - 1]!.ms)}` : ''}`, textStyle(13, hSub)).setOrigin(1, 0).setName('speedrun-hud');
+    }
+    // Run Commentary Bot (S213, off unless the "commentary" feature flag is on): one narrator line, text only.
+    if (flagOn(device, 'commentary')) {
+      const lead = run.party[0];
+      const text = commentaryLine({ seed: run.seed, encounters: run.encountersCompleted, badges: run.badges.length, leadHp: lead ? lead.hp / Math.max(1, maxHp(content, lead)) : 1, partySize: run.party.length, fainted: run.party.filter((p) => p.hp <= 0).length });
+      this.add.text(GAME_WIDTH / 2, 92, `“${text}”`, textStyle(13, '#e8e0c8', { stroke: '#1a1a2a', strokeThickness: 3 })).setOrigin(0.5, 0).setName('commentary');
     }
     // Mentors: who trains you, how far the bond has come and where you stand against the fellow apprentice.
     const mentorLine = league ? null : mentorHudLine(run);
@@ -1301,11 +1320,7 @@ export class MapScene extends Phaser.Scene {
         onSelect: (i) => {
           const choice = choices[i]!;
           leave();
-          this.busy = true;
-          playSfx(this, 'ui.select');
-          const run = session.enterRaid(sideId, choice.id || undefined);
-          this.cameras.main.fadeOut(250);
-          this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+          this.startRaid(sideId, choice, pv);
         },
         onBack: leave,
       }, );
@@ -1335,11 +1350,91 @@ export class MapScene extends Phaser.Scene {
         const choice = choices[i]!;
         picker.close();
         this.picker = null;
-        this.busy = true;
-        playSfx(this, 'ui.select');
-        const run = session.enterRaid(sideId, choice.id || undefined);
-        this.cameras.main.fadeOut(250);
-        this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+        this.startRaid(sideId, choice, pv);
+      },
+      onBack: () => {
+        picker.close();
+        this.picker = null;
+      },
+    });
+    this.picker = picker;
+  }
+
+  /** After the approach: offer the preparations (S401 cards, S393 bots, S402 talk) when the den has any, else go in. */
+  private startRaid(sideId: string, choice: { id: string; leave: boolean }, pv: ReturnType<typeof raidPreview>): void {
+    const prepable = !choice.leave && choice.id !== 'practice' && (pv.cards.length > 0 || pv.bots.length > 0 || pv.talk !== null);
+    if (!prepable) this.enterRaidNow(sideId, choice.id || undefined);
+    else this.openRaidPrep(sideId, choice.id || undefined, pv);
+  }
+
+  private enterRaidNow(sideId: string, approachId: string | undefined, prep?: string): void {
+    const { session } = services();
+    this.busy = true;
+    playSfx(this, 'ui.select');
+    const run = session.enterRaid(sideId, approachId, prep);
+    this.cameras.main.fadeOut(250);
+    this.time.delayedCall(260, () => this.scene.start(sceneForRun(run)));
+  }
+
+  /** "Before you go in": a gimmick card, a lobby bot, or a talk with the boss (one of them), or none. */
+  private openRaidPrep(sideId: string, approachId: string | undefined, pv: ReturnType<typeof raidPreview>): void {
+    const { session } = services();
+    const money = session.run!.money;
+    const approachCost = approachId ? pv.approaches.find((a) => a.id === approachId)?.cost ?? 0 : pv.approaches[0]?.cost ?? 0;
+    const base = pv.entryCost + approachCost;
+    type Row = { label: string; hint: string; cost: number; go: () => void };
+    const rows: Row[] = [{ label: 'Go in as you are', hint: 'No extra rules, no help.', cost: 0, go: () => this.enterRaidNow(sideId, approachId) }];
+    for (const c of pv.cards) rows.push({ label: `Card: ${c.label}`, hint: c.text, cost: 0, go: () => this.enterRaidNow(sideId, approachId, `card:${c.id}`) });
+    for (const b of pv.bots) rows.push({ label: `Ally: ${b.label} · ₽${b.cost}`, hint: b.text, cost: b.cost, go: () => this.enterRaidNow(sideId, approachId, `bot:${b.id}`) });
+    if (pv.talk) rows.push({ label: 'Talk to it first...', hint: 'What you say changes how both sides start the fight.', cost: 0, go: () => this.openRaidTalk(sideId, approachId, pv.talk!.prompt, pv.talk!.choices, []) });
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: `Before you go in: ${pv.name}`,
+      columns: 1,
+      rowHeight: 74,
+      rows: rows.map((r) => ({
+        problem: money < base + r.cost ? `You need ₽${base + r.cost} to enter.` : null,
+        hint: r.hint,
+        draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
+          box.add(scene.add.text(16, 8, r.label, textStyle(22)));
+          box.add(scene.add.text(16, 38, r.hint, textStyle(16, '#ffe0a0', { wordWrap: { width: w - 32 } })));
+        },
+      })),
+      onSelect: (i) => {
+        picker.close();
+        this.picker = null;
+        rows[i]!.go();
+      },
+      onBack: () => {
+        picker.close();
+        this.picker = null;
+      },
+    });
+    this.picker = picker;
+  }
+
+  /** S402 Boss Dialogue Trees: pick a line; some lead to a second set of lines. */
+  private openRaidTalk(sideId: string, approachId: string | undefined, prompt: string, choices: { id: string; label: string; reply: string; next?: unknown[] }[], path: string[]): void {
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: prompt,
+      columns: 1,
+      rowHeight: 74,
+      rows: choices.map((c) => ({
+        problem: null,
+        hint: c.reply,
+        draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
+          box.add(scene.add.text(16, 8, c.label, textStyle(22)));
+          box.add(scene.add.text(16, 38, c.next ? 'It may answer back...' : 'Say it and go in.', textStyle(16, '#ffe0a0', { wordWrap: { width: w - 32 } })));
+        },
+      })),
+      onSelect: (i) => {
+        const c = choices[i]!;
+        picker.close();
+        this.picker = null;
+        const next = [...path, c.id];
+        if (c.next && c.next.length > 0) this.openRaidTalk(sideId, approachId, c.reply, c.next as typeof choices, next);
+        else this.enterRaidNow(sideId, approachId, `talk:${next.join('>')}`);
       },
       onBack: () => {
         picker.close();

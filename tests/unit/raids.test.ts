@@ -44,11 +44,11 @@ describe('raid data', () => {
     expect(content.raids.raids.some((r) => r.shield === null)).toBe(true);
   });
 
-  it('places at most one den per stage, only before the gym, stable for a seed', () => {
+  it('places at most one ordinary den per stage (plus the week\'s den and one special den), only before the gym, stable for a seed', () => {
     let dens = 0;
     for (let i = 0; i < 40; i++) {
       const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'pl', seed: `den-${i}`, archetypeId: 'red' }), 0));
-      const raidSides = run.stage!.map.nodes.flatMap((n) => n.sides.filter((s) => s.kind === 'raid').map(() => n));
+      const raidSides = run.stage!.map.nodes.flatMap((n) => n.sides.filter((s) => s.kind === 'raid' && !s.id.startsWith('raid-week-') && !s.id.startsWith('raid-special-')).map(() => n));
       expect(raidSides.length).toBeLessThanOrEqual(1);
       for (const n of raidSides) expect(n.column).toBeLessThan(run.stage!.map.columns);
       dens += raidSides.length;

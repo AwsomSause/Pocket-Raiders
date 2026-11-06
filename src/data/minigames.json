@@ -10,7 +10,71 @@
       1.5,
       2
     ],
-    "effectCapPerStage": 2
+    "effectCapPerStage": 2,
+    "frontier": {
+      "games": [
+        "battle-factory",
+        "battle-palace",
+        "battle-arcade",
+        "battle-pyramid"
+      ],
+      "points": {
+        "bronze": 1,
+        "silver": 3,
+        "gold": 6
+      },
+      "prizes": [
+        {
+          "id": "revive-pair",
+          "name": "2 Revives",
+          "item": "revive",
+          "count": 2,
+          "cost": 2
+        },
+        {
+          "id": "ultra-balls",
+          "name": "3 Ultra Balls",
+          "item": "ultra-ball",
+          "count": 3,
+          "cost": 3
+        },
+        {
+          "id": "full-restore",
+          "name": "Full Restore",
+          "item": "full-restore",
+          "count": 1,
+          "cost": 4
+        },
+        {
+          "id": "speed-dust",
+          "name": "Tuning Dust (Spe)",
+          "item": "tuning-dust-spe",
+          "count": 1,
+          "cost": 6
+        },
+        {
+          "id": "lucky-egg",
+          "name": "Lucky Egg",
+          "item": "lucky-egg",
+          "count": 1,
+          "cost": 8
+        },
+        {
+          "id": "kings-rock",
+          "name": "King's Rock",
+          "item": "kings-rock",
+          "count": 1,
+          "cost": 10
+        },
+        {
+          "id": "master-ball",
+          "name": "Master Ball",
+          "item": "master-ball",
+          "count": 1,
+          "cost": 25
+        }
+      ]
+    }
   },
   "games": [
     {
@@ -1648,7 +1712,7 @@
       "id": "berry-blending",
       "name": "Berry Blending",
       "category": "resource",
-      "blurb": "Mix flavours for the order.",
+      "blurb": "Blend Poffins; the main flavour raises a contest condition.",
       "instructions": "Add berries to match the wanted flavours. Too much counts against you as much as too little.",
       "unlockRequirements": {
         "badges": 0,
@@ -1734,7 +1798,7 @@
       "id": "camp-cooking",
       "name": "Camp Cooking",
       "category": "resource",
-      "blurb": "Cook for the camp.",
+      "blurb": "Cook curry and sandwiches; the party heals.",
       "instructions": "Add ingredients so the pot matches the order. Serve when it looks right.",
       "unlockRequirements": {
         "badges": 0,
@@ -1787,9 +1851,9 @@
             "chance": 0.5
           },
           "effect": {
-            "kind": "research",
-            "amount": 1,
-            "chance": 0.5
+            "kind": "heal",
+            "amount": 25,
+            "chance": 1.0
           }
         },
         "gold": {
@@ -1799,9 +1863,9 @@
             "chance": 0.6
           },
           "effect": {
-            "kind": "discount",
-            "amount": 10,
-            "chance": 0.8
+            "kind": "heal",
+            "amount": 40,
+            "chance": 1.0
           }
         }
       },
@@ -2759,6 +2823,95 @@
       },
       "failureOutcome": "Nothing is lost. You just get no reward.",
       "replayRules": "Replay any time; each repeat in the same stage pays less.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "pokemon-contest",
+      "name": "Pokémon Contest",
+      "category": "skill",
+      "blurb": "Show off your lead's conditions.",
+      "instructions": "Each round the judges want one condition. Appeal in it for a big bonus. Your lead's conditions (raised by Poffins from Berry Blending) add to every appeal.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "rounds": 3,
+            "base": 2,
+            "bonus": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "rounds": 4,
+            "base": 2,
+            "bonus": 5
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "rounds": 5,
+            "base": 2,
+            "bonus": 6
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "Appeal points: 2 + condition + flair, +6 for the judged condition, halved when repeated.",
+      "medals": {
+        "bronze": 0.4,
+        "silver": 0.6,
+        "gold": 0.8
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 110,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 170,
+          "item": {
+            "item": "hyper-potion",
+            "chance": 0.6
+          },
+          "effect": {
+            "kind": "discount",
+            "amount": 10,
+            "chance": 0.8
+          }
+        }
+      },
+      "failureOutcome": "Nothing is lost. You just get no reward.",
+      "replayRules": "One entry per stop; each repeat in the same stage pays less.",
       "uiConfiguration": {
         "layout": "grid",
         "tickMs": 0

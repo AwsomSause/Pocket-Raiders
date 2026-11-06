@@ -51,6 +51,7 @@ import {
   isStatusImmune,
   typeEffectiveness,
 } from './damage';
+import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
   ABSORB,
   AURAS,
@@ -82,7 +83,7 @@ import { genderOf, oppositeGender, sameGender } from '../gender';
 import * as Held from './held';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
-import { absorbHit, advanceRaid, chargedDamage, cheerProblem, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
+import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
@@ -202,7 +203,7 @@ export type BattleEvent =
   | { type: 'refused'; side: Side; uid: string; moveId: string }
   | { type: 'initiative'; side: Side; uid: string; from: string; to: string }
   | { type: 'teamwork'; side: Side; uid: string; partner: string; name: string; stats: string[] }
-  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number }
+  | { type: 'bondLevel'; side: Side; from: string; to: string; stat: 'atk' | 'spa'; level: number; paired?: string }
   | { type: 'combo'; side: Side; from: string; to: string; stat: 'atk' | 'spa' }
   | { type: 'newMove'; side: Side; uid: string; moveId: string; replaced: string | null }
   | { type: 'turningPoint'; side: Side; uid: string; emotion: string }
@@ -259,6 +260,8 @@ export interface BattleContext {
   party: PokemonInstance[];
   /** Bag contents (items used in battle are removed from here). */
   inventory: Record<string, number>;
+  /** Hot-Seat Versus (S203): a second player's move index for the foe this turn, used instead of the AI's choice (a forced or locked move still wins). Cleared after the turn. */
+  enemyPick?: number;
   /** The "battle" random stream. */
   rng: Rng;
   /** The "capture" random stream. */
@@ -474,7 +477,7 @@ function moveValueBase(brain: EnemyBrain, user: PokemonInstance, moveId: string)
   const targetAbilityId = abilityOf(content, target);
   const attackPower = (m: Move) => {
     if (m.category === 'status') return 0;
-    const effectiveness = m.flags.includes('typeless') ? 1 : typeEffectiveness(content.typeChart, m.type, targetSpecies.types);
+    const effectiveness = m.flags.includes('typeless') ? 1 : typeEffectiveness(content.typeChart, m.type, breakImmunity(content, content.typeChart, m.id, m.type, targetSpecies.types).types);
     // It knows the obvious ability immunities (Levitate, Volt Absorb, Wonder Guard).
     if (targetAbilityId && (ABSORB[targetAbilityId]?.type === m.type || ((targetAbilityId === 'levitate' || targetAbilityId === 'eelevate') && m.type === 'ground') || (targetAbilityId === 'wonder-guard' && effectiveness <= 1))) return 0;
     // A two-turn move is worth about half as much per turn.
@@ -655,7 +658,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyChoice = choiceLock(battle, enemy.mon);
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
   let enemyMoveIndex =
-    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+  ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
 
   // 1. Switching and items go before any move.
@@ -796,6 +800,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (battle.totem && !battle.outcome) {
     totemPhases(ctx, enemy, events);
     totemFieldEffect(ctx, enemy, [playerC], events);
+    totemAuraTurn(ctx, playerC, enemy, events);
   }
 
   // Held items at the end of the turn (Leftovers, Orbs, berries), then battle boosts count down.
@@ -905,6 +910,7 @@ function raidEndOfTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, 
       events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
     }
   }
+  if (!timeout && !battle.outcome && battle.raid) raidExtras(ctx, player, enemy, events);
   // The named rival's strike (no dice): a rival that lands the final blow takes half the prize.
   const rival = battle.raid?.rival;
   if (rival && !timeout && !battle.outcome && !battle.raid!.rivalFinished && player.mon.hp > 0 && enemy.mon.hp > 0) {
@@ -931,6 +937,68 @@ function raidEndOfTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, 
     }
   }
   return timeout;
+}
+
+/**
+ * S393 to S412 at the end of a raid turn: the boss rises in its next form (gauntlet), the arena's hazard bites,
+ * a lobby bot helps, the crowd cheers, and the puzzle counts your hits. No dice; everything follows the turn's events.
+ */
+function raidExtras(ctx: BattleContext, player: Combatant, enemy: Combatant, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const raid = battle.raid!;
+  const def = raidDef(content, raid);
+  if (raid.formNote) {
+    const note = raid.formNote;
+    raid.formNote = null;
+    events.push({ type: 'raid', tone: 'phase', text: note.text });
+    events.push({ type: 'transform', side: 'enemy', uid: enemy.mon.uid, kind: 'ability', from: note.from, to: note.to, itemId: null } as BattleEvent);
+    events.push({ type: 'heal', side: 'enemy', amount: enemy.mon.hp, hpAfter: enemy.mon.hp });
+  }
+  if (player.mon.hp <= 0 || enemy.mon.hp <= 0) return;
+  // S411 Boss Puzzles.
+  if (def.modifiers.puzzle) {
+    for (const text of puzzleProgress(content, battle, playerHits(content, events))) events.push({ type: 'raid', tone: 'info', text });
+  }
+  // S412 Boss Arenas.
+  const hz = def.modifiers.hazard;
+  if (hz) {
+    const lost = hazardDamage(content, battle, player.mon, getSpecies(content, player.mon.speciesId).types);
+    if (lost > 0) {
+      player.mon.hp -= lost;
+      events.push({ type: 'raid', tone: 'info', text: hz.text });
+      events.push({ type: 'recoil', side: 'player', amount: lost, hpAfter: player.mon.hp });
+    }
+  }
+  // S393 Raid Lobby Bots.
+  const bot = raidBot(content, raid);
+  if (bot) {
+    const hit = botStrike(content, battle, enemy.mon);
+    if (hit > 0) {
+      enemy.mon.hp -= hit;
+      events.push({ type: 'raid', tone: 'info', text: `${bot.label} strikes the boss!` });
+      events.push({ type: 'damage', side: 'enemy', amount: hit, hpAfter: enemy.mon.hp, effectiveness: 1, crit: false });
+    }
+    const mend = botMend(content, battle, player.mon);
+    if (mend > 0) {
+      player.mon.hp += mend;
+      events.push({ type: 'raid', tone: 'info', text: `${bot.label} mends your Pokémon.` });
+      events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
+    }
+  }
+  // S403 Raid Cheering: the crowd meter.
+  const crowd = crowdStep(content, battle);
+  if (crowd === 'roused') {
+    for (const stat of ['atk', 'spa'] as const) battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + 1);
+    events.push({ type: 'raid', tone: 'info', text: 'The crowd is on its feet! Your Pokémon feels pumped up.' });
+  } else if (crowd === 'roar') {
+    const mend = def.modifiers.noHealing ? 0 : Math.min(maxHp(content, player.mon) - player.mon.hp, Math.floor(maxHp(content, player.mon) * content.raids.crowd.roarHeal));
+    events.push({ type: 'raid', tone: 'info', text: 'The crowd roars!' + (mend > 0 ? ' Your Pokémon is lifted.' : '') });
+    if (mend > 0) {
+      player.mon.hp += mend;
+      events.push({ type: 'heal', side: 'player', amount: mend, hpAfter: player.mon.hp });
+    }
+  }
+  if (player.mon.hp <= 0 || enemy.mon.hp <= 0) recordFaints(ctx, player, enemy, events);
 }
 
 /** A raid or Totem phase starts: its message, stat boosts, weather, and the optional cleanses. */
@@ -1065,6 +1133,44 @@ function totemPhases(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]
 }
 
 /** The Totem's territory spreads its status: each of your Pokémon without one may catch it (battle stream, once per Pokémon per turn). */
+/** S395 Totem Aura Variety: thorns, regeneration and sap at the end of a turn (each has a counter, see totems.json). No dice. */
+function totemAuraTurn(ctx: BattleContext, player: Combatant, enemy: Combatant, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const t = battle.totem;
+  if (!t || battle.outcome || player.mon.hp <= 0 || enemy.mon.hp <= 0 || enemy.mon.uid !== t.uid) return;
+  const aura = getTotem(content, t.id).aura;
+  if (aura.thorns) {
+    const hurt = playerHits(content, events).filter((h) => h.physical).length;
+    const lost = Math.min(player.mon.hp - 1, hurt * Math.max(1, Math.floor(maxHp(content, player.mon) * aura.thorns)));
+    if (lost > 0) {
+      player.mon.hp -= lost;
+      events.push({ type: 'raid', tone: 'info', text: 'Its thorny aura pricks your Pokémon!' });
+      events.push({ type: 'recoil', side: 'player', amount: lost, hpAfter: player.mon.hp });
+    }
+  }
+  if (aura.sap && !getSpecies(content, player.mon.speciesId).types.some((ty) => aura.sap!.immune.includes(ty))) {
+    const lost = Math.min(player.mon.hp - 1, Math.max(1, Math.floor(maxHp(content, player.mon) * aura.sap.percent)));
+    if (lost > 0) {
+      player.mon.hp -= lost;
+      events.push({ type: 'raid', tone: 'info', text: 'The aura saps your Pokémon!' });
+      events.push({ type: 'recoil', side: 'player', amount: lost, hpAfter: player.mon.hp });
+      const gain = Math.min(maxHp(content, enemy.mon) - enemy.mon.hp, Math.ceil(lost / 2));
+      if (gain > 0) {
+        enemy.mon.hp += gain;
+        events.push({ type: 'heal', side: 'enemy', amount: gain, hpAfter: enemy.mon.hp });
+      }
+    }
+  }
+  if (aura.regen && !enemy.mon.status) {
+    const gain = Math.min(maxHp(content, enemy.mon) - enemy.mon.hp, Math.max(1, Math.floor(maxHp(content, enemy.mon) * aura.regen)));
+    if (gain > 0) {
+      enemy.mon.hp += gain;
+      events.push({ type: 'raid', tone: 'info', text: 'The aura mends the Totem.' });
+      events.push({ type: 'heal', side: 'enemy', amount: gain, hpAfter: enemy.mon.hp });
+    }
+  }
+}
+
 function totemFieldEffect(ctx: BattleContext, source: Combatant, targets: Combatant[], events: BattleEvent[]): void {
   const t = ctx.battle.totem;
   if (!t || ctx.battle.outcome) return;
@@ -1121,6 +1227,7 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
 function useCheer(ctx: BattleContext, cheer: Cheer, events: BattleEvent[]): void {
   const raid = ctx.battle.raid!;
   raid.cheersLeft -= 1;
+  raid.crowd = Math.min(100, raid.crowd + ctx.content.raids.crowd.perCheer);
   const text = { offense: 'Go all-out!', defense: 'Hang tough!', healing: 'Heal up!', counter: 'Turn the tables!' }[cheer];
   events.push({ type: 'raid', tone: 'info', text: `Cheer: ${text}` });
   if (cheer === 'offense') raid.cheerOffense = CHEER_TURNS + 1;
@@ -1173,7 +1280,13 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (ctx.battle.kind !== 'wild') return "You can't catch another trainer's Pokémon!";
     if (ctx.catchBlocked) return ctx.catchBlocked;
     if (ctx.battle.totem) return "A Totem can't be caught mid-fight. Beat it and something rare may follow!";
-    if (ctx.battle.raid) return "A raid boss can't be caught mid-fight. Beat it and it may join you!";
+    if (ctx.battle.raid) {
+      // S409 Boss Pokémon Capture: some bosses can be caught once they are worn down (not a called minion).
+      const raid = ctx.battle.raid;
+      const foe = currentEnemy(ctx.battle);
+      const line = raidDef(ctx.content, raid).capture;
+      if (!line || raid.minionUid === foe.uid || foe.hp > maxHp(ctx.content, foe) * line) return line ? `It still has too much fight in it. Wear it down below ${Math.round(line * 100)}% HP first.` : "A raid boss can't be caught mid-fight. Beat it and it may join you!";
+    }
     if (ctx.battle.monRival) return "It won't be caught! It only wants to settle things with its rival.";
     // Wild double battle: the ball has no clear target until only one wild Pokémon is left.
     const partner = ctx.battle.doubles ? ctx.battle.enemyTeam[ctx.battle.doubles.enemy.index] : undefined;
@@ -3099,7 +3212,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   // Scrappy: Normal and Fighting moves hit Ghost types.
   const hitTypes = userAbility === 'scrappy' && (moveType === 'normal' || moveType === 'fighting') ? targetTypes.filter((t) => t !== 'ghost') : targetTypes;
   // Foresight / Odor Sleuth / Miracle Eye open the immunities they name.
-  const idHit = target.vol.identified === 'ghost' && (moveType === 'normal' || moveType === 'fighting') ? hitTypes.filter((t) => t !== 'ghost') : target.vol.identified === 'dark' && moveType === 'psychic' ? hitTypes.filter((t) => t !== 'dark') : hitTypes;
+  const seen = target.vol.identified === 'ghost' && (moveType === 'normal' || moveType === 'fighting') ? hitTypes.filter((t) => t !== 'ghost') : target.vol.identified === 'dark' && moveType === 'psychic' ? hitTypes.filter((t) => t !== 'dark') : hitTypes;
+  // S169: a rare move ignores the one immunity it is named for.
+  const breaker = breakImmunity(content, content.typeChart, move.id, moveType, seen);
+  const idHit = breaker.types;
+  if (breaker.broke && targetsEnemy) events.push(say(user.side, 'arena', `${content.moves.get(move.id)?.name ?? 'The move'} breaks through the ${breaker.broke[0]!.toUpperCase()}${breaker.broke.slice(1)} type's immunity!`, user.mon.uid));
   let rawEff = fx.superAgainst ? idHit.reduce((n, t) => n * (t === fx.superAgainst ? 2 : typeEffectiveness(content.typeChart, moveType, [t])), 1) : typeEffectiveness(content.typeChart, moveType, idHit);
   if (fx.secondType) rawEff *= typeEffectiveness(content.typeChart, fx.secondType, idHit);
   if (target.vol.tarred && moveType === 'fire') rawEff *= 2;
@@ -3201,6 +3318,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'orichalcum-pulse' && physical && weather === 'sun') attackBoost *= 4 / 3;
       if (userAbility === 'hadron-engine' && !physical && ctx.battle.terrain?.id === 'electric') attackBoost *= 4 / 3;
       if (sheerForce) powerMult *= 1.3;
+      // S170 counter types: Song beats Aura, Aura beats Trap, Trap beats Song (against the target's last move).
+      const myClass = counterClassOf(move);
+      const theirMove = target.vol.lastMove ? content.moves.get(target.vol.lastMove) : undefined;
+      const theirClass = theirMove ? counterClassOf(theirMove) : null;
+      if (counterBeats(myClass, theirClass) && typeRulesOf(content).counterBonus > 0) {
+        powerMult *= 1 + typeRulesOf(content).counterBonus;
+        if (hit === 0) events.push(say(user.side, 'arena', `${COUNTER_NAMES[myClass!]} beats ${COUNTER_NAMES[theirClass!]}! The move hits harder.`, user.mon.uid));
+      }
       if (hit === 0 && user.vol.bank > 0) {
         powerMult *= 1 + content.balance.bankPower.perStack * user.vol.bank;
         user.vol.bank = 0;
@@ -3365,6 +3490,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       events.push(say(target.side, 'curseTag', `${nameOf(ctx, target.mon)} was tagged by a curse! Ghost and Dark moves will hurt more.`, target.mon.uid));
     }
   }
+  if (landed > 0) elementalReaction(ctx, user, target, moveType, events);
   if (landed > 0 && target.mon.hp > 0) {
     // Smelling Salts and Wake-Up Slap use up the status they punish; Steel Roller and Ice Spinner clear the terrain.
     const cures = (fx.powerRule === 'doubleTargetParalyzed' && target.mon.status?.id === 'par') || (fx.powerRule === 'doubleTargetAsleep' && target.mon.status?.id === 'slp');
@@ -3513,6 +3639,23 @@ function abilityHurt(ctx: BattleContext, c: Combatant, amount: number, events: B
   const { lost, lastStand } = takeHp(ctx, c, amount);
   events.push({ type: 'damage', side: c.side, amount: lost, hpAfter: c.mon.hp, effectiveness: 1, crit: false });
   if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
+}
+
+/** S162: a hit of one type on a target marked by another type's hit can set off a reaction; otherwise the hit marks it. */
+function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatant, moveType: TypeName, events: BattleEvent[]): void {
+  if (target.mon.hp <= 0) return;
+  const reaction = reactionFor(ctx.content, target.vol.element, moveType);
+  if (!reaction) {
+    target.vol.element = moveType;
+    return;
+  }
+  target.vol.element = undefined;
+  events.push(say(user.side, 'arena', `Reaction: ${reaction.name}!`, user.mon.uid));
+  const max = calcStats(ctx.content, target.mon).hp;
+  if (reaction.effect === 'chip') abilityHurt(ctx, target, Math.max(1, Math.floor(max * reaction.amount)), events);
+  else if (reaction.effect === 'burn') tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
+  else if (reaction.effect === 'stat' && reaction.stat) changeStage(ctx, user, target, reaction.stat, reaction.amount, events);
+  else if (reaction.effect === 'heal' && user.mon.hp > 0 && user.mon.hp < calcStats(ctx.content, user.mon).hp) healMon(ctx, user, reaction.amount, events);
 }
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
@@ -5008,6 +5151,18 @@ function tryInflictStatus(
 ): boolean {
   const { content, rng } = ctx;
   const types = getSpecies(content, target.mon.speciesId).types;
+  // S161: a second burn (or plain poison) on a Pokémon that already has it makes it worse instead of failing.
+  if (stackableStatus(target.mon.status, status) && target.mon.hp > 0 && source !== target) {
+    const max = typeRulesOf(content).statusStacks.maxStacks;
+    const now = target.mon.status!.stacks ?? 1;
+    if (now >= max) {
+      if (announceFailure) events.push({ type: 'fail', side: target.side });
+      return false;
+    }
+    target.mon.status!.stacks = now + 1;
+    events.push(say(target.side, 'bleed', `${nameOf(ctx, target.mon)}'s ${status === 'brn' ? 'burn' : 'poison'} got worse! (x${now + 1})`, target.mon.uid));
+    return true;
+  }
   const blocker = target.mon.status ? null : statusAbilityBlock(ctx, source, target, status);
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
   if (target.mon.status || (!corrosive && isStatusImmune(status, types, move)) || blocker || Held.statusBlocked(ctx, target, status) || terrainBlocksStatus(ctx, target, status) || (source.side !== target.side && ctx.battle.sideEffects[target.side].safeguard > 0)) {
@@ -5281,6 +5436,7 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
     fraction = c.mon.status.turns / 16;
   }
   if (status === 'psn' && c.side === 'enemy') fraction *= poisonDamagePerk(ctx.perks);
+  fraction *= stackMultiplier(content, c.mon.status?.stacks);
   if (c.mon.hp > 0 && c.vol.bleed > 0) {
     const { lost, lastStand } = takeHp(ctx, c, bleedDamage(content, max, c.vol.bleed));
     events.push(say(c.side, 'bleed', `${nameOf(ctx, c.mon)} is hurt by bleeding! (-${lost})`, c.mon.uid));

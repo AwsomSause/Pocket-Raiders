@@ -36,3 +36,6 @@ Everything loaded early is re-sent on every turn for the rest of the session. Ke
 - **Serena** (plugin, MCP): prefer its symbol tools (find symbol, references, overview) over reading whole files in `src/`.
 - **Superpowers** and **Ponytail** (plugins): follow them, but this file and CLAUDE.md win where they differ (no subagents for small lookups; smallest change that works).
 - Cloud threads load plugins only from claude.ai **Project settings > Plugins** and MCP servers only from claude.ai connectors; repo `.mcp.json`, `.claude/settings.json` plugins and `.claude/skills/` are ignored there.
+
+## Stale test cache (cloud sandboxes)
+- If unit tests say an event or data file is missing ("Cannot read properties of undefined (reading 'choices')") right after you or a merge added a file under `src/data/events/`, the local transform cache is stale, not main. Run `rm -rf node_modules/.vitest-cache node_modules/.vite` and re-run; CI starts clean and is not affected.

@@ -18,7 +18,7 @@ import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent } from '../core/battle/intent';
-import { momentumMax, rallyProblem } from '../core/battle/spectacle';
+import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
 import { canDynamax, maxMoveOptions, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -46,7 +46,7 @@ import { vsScreen, vsScreenReady } from '../ui/battleFx/vsScreens';
 import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
-import { cheerProblem, raidDef } from '../core/raid/raid';
+import { cheerProblem, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { playCry, playMusic, playSfx, playSfxLazy, setMusicIntensity } from '../ui/audio';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
@@ -161,6 +161,8 @@ interface InfoBox {
   statusBadge?: Phaser.GameObjects.Container;
   /** "TERA WATER" while the Pokémon is Terastallized. */
   teraBadge?: Phaser.GameObjects.Container;
+  /** Raid role (Tank / Striker / Support) of your Pokémon in front. */
+  roleBadge?: Phaser.GameObjects.Container;
   rageBadge?: Phaser.GameObjects.Container;
   /** EBDX's Mega / Dynamax symbol beside the name. */
   formIcon?: Phaser.GameObjects.Image;
@@ -1066,6 +1068,15 @@ export class BattleScene extends Phaser.Scene {
       this.badgeIcon(box.teraBadge, 'ui.dynamax.icon');
       box.container.add(box.teraBadge);
     }
+    // S391: in a raid your Pokémon in front shows its role.
+    box.roleBadge?.destroy();
+    box.roleBadge = undefined;
+    if (box.isPlayer && this.run.battle?.raid) {
+      const role = raidRole(content, mon);
+      const look = { tank: { text: 'TANK', color: 0x2c8ad8 }, striker: { text: 'STRIKER', color: 0xc8303c }, support: { text: 'SUPPORT', color: 0x1f9a52 } }[role];
+      box.roleBadge = badge(this, box.statusAt.x + (box.statusBadge ? 76 : 0) + (box.teraBadge ? 120 : 0), box.statusAt.y + 22, look.text, look.color, 14);
+      box.container.add(box.roleBadge);
+    }
     this.dangerGlow(box, mon.hp / max);
     box.formIcon?.destroy();
     box.formIcon = undefined;
@@ -1213,6 +1224,16 @@ export class BattleScene extends Phaser.Scene {
     if (def && def.phases.length > 0) parts.push(`phase ${raid.phasesDone.length}/${def.phases.length}`);
     if (raid.charging) parts.push('!! CHARGED ATTACK !!');
     if (raid.timerLeft !== null) parts.push(`${raid.timerLeft} turns left`);
+    // S403 crowd, S411 puzzle, S397 weak spot, S393 bot, S407 gauntlet.
+    parts.push(`CROWD ${Math.round(raid.crowd)}%`);
+    const cur = raidDef(content, raid);
+    const puzzle = cur.modifiers.puzzle;
+    if (puzzle) parts.push(raid.puzzleSolved ? 'PUZZLE SOLVED' : `PUZZLE ${raid.puzzleStep}/${puzzlePattern(content, this.run.battle!).length} (${puzzle.pool.join('/')})`);
+    const spot = exposedWeakSpot(content, this.run.battle!);
+    if (spot) parts.push(`${spot.zone.toUpperCase()} EXPOSED${raid.aim ? ` · aiming ${raid.aim}` : ''}`);
+    const bot = raidBot(content, raid);
+    if (bot) parts.push(`ally: ${bot.label.split(' (')[0]}`);
+    if (cur.gauntlet) parts.push(`form ${raid.formIndex + 1}/${cur.gauntlet.forms.length + 1}`);
     this.status.setText(parts.join('  ·  '));
   }
 
@@ -1955,7 +1976,7 @@ export class BattleScene extends Phaser.Scene {
 
   private async runAuto(): Promise<void> {
     const { session } = services();
-    const pick = chooseAutoAction(session.content, this.run);
+    const pick = chooseAutoAction(session.content, this.run, session.settings.autoRules);
     if (!pick) {
       this.showRootMenu();
       return;
@@ -2164,6 +2185,9 @@ export class BattleScene extends Phaser.Scene {
     const raid = this.run.battle?.raid;
     const cheerAt = raid && raid.cheersLeft > 0 && !this.duo ? options.length : -1;
     if (cheerAt >= 0) options.push({ label: `Cheer ×${raid!.cheersLeft}` });
+    // S397 Boss Weak Spots: choose where to aim (the exposed zone takes the bonus).
+    const aimAt = raid && !this.duo && raidDef(content, raid).modifiers.weakSpots ? options.length : -1;
+    if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
     const rallyAt = canRally ? options.length : -1;
     if (canRally) options.push({ label: this.rallyChoice ? 'Rally: ON' : 'Rally: OFF' });
     // Ideas W1: a surrender deal, smashing the arena, the Pokédex scan and the item hotbar.
@@ -2207,7 +2231,12 @@ export class BattleScene extends Phaser.Scene {
         }
         const i = k > 0 ? pick - k + 1 : pick;
         if (i === dealAt) this.showDealMenu();
-        else if (i === smashAt) this.submit({ kind: 'arena' });
+        else if (i === aimAt) {
+          const r = this.run.battle!.raid!;
+          r.aim = r.aim === null ? 'body' : r.aim === 'body' ? 'core' : null;
+          this.updateHeader();
+          this.showRootMenu();
+        } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
         else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
@@ -2410,7 +2439,7 @@ export class BattleScene extends Phaser.Scene {
     const doubles = run.battle?.doubles;
     const idx = doubles ? run.party.indexOf(this.activeMon()) : -1;
     const battle = doubles && idx >= 0 && idx !== run.battle!.activeIndex ? { ...run.battle!, activeIndex: idx } : run.battle!;
-    return { content: battleContent(services().session.content, run.rules), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle) };
+    return { content: battleContent(services().session.content, run.rules, run.regionOrder[run.regionIndex]), battle, party: run.party, inventory: run.inventory, disabledMechanics: run.disabledMechanics, perks: runPerks(services().session.content, run), noBattleItems: noBattleItems(run.rules), setStyle: isHardcore(run.rules), catchBlocked: nuzlockeCatchProblem(battle), bondScore: (uid: string) => bondScoreOf(run.story.histories[uid]?.bond) };
   }
 
   private openBag(): void {
