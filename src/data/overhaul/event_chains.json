@@ -2033,7 +2033,8 @@
        "outcome": "a buried item",
        "sets": [
         "dig_found"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "dig-up-s1-o2",
@@ -2195,7 +2196,8 @@
        "outcome": "a quest to find the other half",
        "sets": [
         "map_kept"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "treasure-map-s1-o2",
@@ -6349,7 +6351,8 @@
        "outcome": "a discount",
        "sets": [
         "king_bow"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "silent-merchant-king-s2-o2",
@@ -7808,7 +7811,8 @@
        "outcome": "a memory item",
        "sets": [
         "lt_photo"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "the-last-trainer-of-town-s2-o2",
@@ -8819,7 +8823,8 @@
        "outcome": "a small blessing",
        "sets": [
         "sg_wave"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "the-snow-globe-s2-o2",
@@ -9991,7 +9996,8 @@
        "outcome": "the first crest dims",
        "sets": [
         "dp_pass"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "legend-time-space-trial-s2-o2",
@@ -10551,7 +10557,8 @@
        "outcome": "a trial",
        "sets": [
         "ruin_seal"
-       ]
+       ],
+       "continues": true
       },
       {
        "id": "legend-ruin-quartet-shrine-s2-o2",
