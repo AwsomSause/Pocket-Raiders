@@ -45,7 +45,9 @@ test('player trainer plays every moment, each is skippable, and the battle state
       const frames = new Set<string>();
       const p = a.play(m, { target: { x: 312, y: 400 } });
       const poll = setInterval(() => frames.add(String(a.sprite.frame.name) + a.sprite.texture.key), 20);
-      await new Promise((res) => setTimeout(res, 250));
+      // A slow software-GL runner can stall the first ticks: wait (up to 1.2 s) until two frames were seen.
+      const w0 = performance.now();
+      do await new Promise((res) => setTimeout(res, 50)); while (frames.size < 2 && performance.now() - w0 < 1200);
       const midPlaying = a.playing;
       a.skip();
       await p;
