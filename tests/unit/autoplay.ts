@@ -9,7 +9,7 @@ import { nuzlockeCatchProblem } from '../../src/core/nuzlocke';
 import type { RulesChoice } from '../../src/core/rules';
 import { evolvedFormAt } from '../../src/core/encounters';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
-import { buyItem, chooseReward, chooseStarter, createRun, debugHealParty, leaveShop, partyCapacity, resolveDecision, takeTurn, type TurnResult } from '../../src/core/run';
+import { buyItem, chooseReward, chooseStarter, createRun, debugHealParty, leaveShop, partyCapacity, releaseLimitReached, resolveDecision, takeTurn, type TurnResult } from '../../src/core/run';
 import { currentEnemy, type PokemonInstance, type RunState } from '../../src/core/state';
 import { content as defaultContent, toBattle } from './helpers';
 
@@ -123,7 +123,7 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
         } catch {
           // Refused by a modifier: let it go.
         }
-        return { run: resolveDecision(content, run, { kind: 'release' }).run, turn: null };
+        return { run: letGo(content, run), turn: null };
       }
       if (run.party.length < partyCapacity(content, run)) {
         try {
@@ -132,7 +132,7 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
           // A modifier (Monotype, No Duplicate Species) refuses this Pokémon: let it go.
         }
       }
-      return { run: resolveDecision(content, run, { kind: 'release' }).run, turn: null };
+      return { run: letGo(content, run), turn: null };
     }
     case 'reward': {
       const order = [...(run.draft ?? []).keys()];
@@ -209,6 +209,19 @@ function moveScore(content: Content, mon: PokemonInstance, moveId: string, enemy
 }
 
 const bestScore = (content: Content, mon: PokemonInstance, enemy: PokemonInstance): number => Math.max(0, ...mon.moves.filter((m) => m.pp > 0).map((m) => moveScore(content, mon, m.id, enemy)));
+
+/** Lets a caught Pokémon go: release it, or, once this trainer's releases are used up, send it to the PC (or swap out the last member). */
+function letGo(content: Content, run: RunState): RunState {
+  if (!releaseLimitReached(content, run)) return resolveDecision(content, run, { kind: 'release' }).run;
+  for (const choice of [{ kind: 'sendToBox' as const }, { kind: 'replace' as const, partyIndex: run.party.length - 1 }]) {
+    try {
+      return resolveDecision(content, run, choice).run;
+    } catch {
+      // The PC is full or the swap is refused: try the next way.
+    }
+  }
+  return resolveDecision(content, run, { kind: 'release' }).run;
+}
 
 /** How much the strong player wants a reward: levels, stat boosters and healing before held items before everything else. */
 function rewardRank(content: Content, id: string): number {

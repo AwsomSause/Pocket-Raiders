@@ -144,6 +144,8 @@ describe('plaza view', () => {
 describe('stalls and oddities', () => {
   it('sells an item once, takes the money and builds reputation', () => {
     const run = plazaRun('buy');
+    // High reputation, so the +1 from buying opens no new stall (that would reshuffle which stalls are open).
+    run.plaza.rep = 50;
     const buy = options(run, 'stalls').find((o) => o.problem === null)!;
     const out = use(run, 'stalls', buy.id);
     expect(out.run.money).toBe(run.money - buy.cost);

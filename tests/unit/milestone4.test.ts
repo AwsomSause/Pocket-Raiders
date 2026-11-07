@@ -3,6 +3,7 @@
 // badges and the v3 → v4 save upgrade.
 
 import { describe, expect, it } from 'vitest';
+import { doublesSwitchProblem } from '../../src/core/battle/doubles';
 import { getArchetype } from '../../src/core/archetypes';
 import { leagueScale, planChampion, planEliteFour } from '../../src/core/encounters';
 import { generateLeagueMap, validateLeagueMap } from '../../src/core/map';
@@ -52,7 +53,9 @@ function win(run: RunState, topUp = false): RunState {
   let guard = 0;
   while (run.phase === 'battle' && guard++ < 500) {
     if (run.battle!.needsSwitch) {
-      run = takeTurn(content, run, { kind: 'switch', partyIndex: run.party.findIndex((p) => p.hp > 0) }).run;
+      // In a double battle the first healthy Pokémon may already be out; send the first one that isn't.
+      const ctx = { battle: run.battle!, party: run.party };
+      run = takeTurn(content, run, { kind: 'switch', partyIndex: run.party.findIndex((p, i) => p.hp > 0 && (!run.battle!.doubles || doublesSwitchProblem(ctx, i) === null)) }).run;
       continue;
     }
     const mon = run.party[run.battle!.activeIndex]!;
