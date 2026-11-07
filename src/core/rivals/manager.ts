@@ -6,6 +6,7 @@ import type { DomainEvent, Where } from '../story/schema';
 import type { Rival, Traits } from '../story/schema';
 import { TRAIT_KEYS } from '../story/schema';
 import { applyLegacy } from './legacy';
+import { isHostile } from './outcome';
 import { factionFor, type PathContext } from './standing';
 import { RIVAL_ARCS, RIVAL_CONFIG, RIVAL_PATHS, RIVAL_PROFILES } from './schema';
 
@@ -40,10 +41,15 @@ export function maybeSpark(run: RunState, input: SparkInput): Rival | null {
   const id = `rival-${input.ended.id}`;
   if (rivals.length >= RIVAL_CONFIG.maxRivals || rivals.some((r) => r.id === id)) return null;
   const gain = sparkGain(input);
-  if (gain < RIVAL_CONFIG.spark.threshold) return null;
-  // Beta 4.4: the first few trainers of a run don't all become rivals; a rivalry starts later and only sometimes.
-  if (input.where.region === 0 && (input.where.stage ?? 0) < RIVAL_CONFIG.spark.minStage) return null;
-  if (RIVAL_CONFIG.spark.chance < 1 && !new Rng(hashSeed(`${run.seed}::rival-spark::${id}`)).chance(RIVAL_CONFIG.spark.chance)) return null;
+  // Kice 2026-11-07: once the first rival exists, a run always keeps `activeTarget` live rivals, so a spark is forced
+  // (any gain, any stage, no chance roll) whenever fewer are left.
+  const forced = rivals.some((r) => r.major) && rivals.filter(isHostile).length < RIVAL_CONFIG.activeTarget;
+  if (!forced) {
+    if (gain < RIVAL_CONFIG.spark.threshold) return null;
+    // Beta 4.4: the first few trainers of a run don't all become rivals; a rivalry starts later and only sometimes.
+    if (input.where.region === 0 && (input.where.stage ?? 0) < RIVAL_CONFIG.spark.minStage) return null;
+    if (RIVAL_CONFIG.spark.chance < 1 && !new Rng(hashSeed(`${run.seed}::rival-spark::${id}`)).chance(RIVAL_CONFIG.spark.chance)) return null;
+  }
   // Its own seeded stream: never touches the gameplay streams.
   const rng = new Rng(hashSeed(`${run.seed}::rival::${id}`));
   const personalityId = rng.pick(Object.keys(RIVAL_PROFILES.personalities).sort());

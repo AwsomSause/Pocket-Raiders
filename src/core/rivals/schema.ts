@@ -14,6 +14,8 @@ export { TRAIT_KEYS, type Traits } from '../story/schema';
 
 export const RivalConfigSchema = z.object({
   maxRivals: z.number().int().min(1),
+  /** Kice 2026-11-07: a run always keeps this many rivals who are still your rivals (not an ally or retired); a spark is forced when fewer. */
+  activeTarget: z.number().int().min(0),
   spark: z.object({
     ordinaryGain: z.number().min(0),
     closeGain: z.number().min(0),
