@@ -376,3 +376,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - level-cap-100.md: first region caps at 100, +50 per region; enemy curve unchanged.
 - `story-starter-arcs.md`: Starter arcs for all lines (Signature II hook), Vulpix and Psyduck lines, and the Story Run now binds its Heartbond partner.
 - early-deaths-difficulties.md: flatter early curve, second-wind healing, Casual/Brutal/Mythic difficulties, +1 HP per level.
+- `story-quest-unlocks.md`: 13 quest arcs unlock the 14 Rare and Exceptional starter lines that had no route.
