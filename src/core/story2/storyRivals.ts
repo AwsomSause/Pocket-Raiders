@@ -174,3 +174,30 @@ export function rivalAudit(data: StoryData, species?: { has(id: string): boolean
   return out;
 }
 export type { RivalThemeRow };
+
+// ---------- S10 wiring: who plays the three roles in a run, and the plan a story rival brings ----------
+
+/** The run's three story rivals. A theme row decides when the theme has one; otherwise a seeded stream (`story_rival_roles`) deals them, Friendly from the Friendly-capable four. */
+export function pickStoryRivals(data: Pick<StoryData, 'rivals' | 'rivalThemes'>, seed: string, themeId?: string, backstory?: string): RivalRoleIds | null {
+  if (data.rivals.length < 3) return null;
+  const byTheme = themeId ? rolesForTheme(data, themeId, backstory) : null;
+  if (byTheme) return byTheme;
+  const rng = new Rng(hashSeed(`${seed}::story_rival_roles`));
+  const all = data.rivals.map((r) => r.id);
+  const primary = rng.pick(all);
+  const secondary = rng.pick(all.filter((id) => id !== primary));
+  const friendly = rng.pick(data.rivals.filter((r) => r.id !== primary && r.id !== secondary && r.roles.includes('friendly')).map((r) => r.id));
+  return { primary, secondary, friendly };
+}
+
+/** The role a story rival plays in this run's blueprint, or null when it is not one of the three. */
+export function storyRoleOf(roles: RivalRoleIds | undefined, id: string): RivalRole | null {
+  if (!roles) return null;
+  return roles.primary === id ? 'primary' : roles.secondary === id ? 'secondary' : roles.friendly === id ? 'friendly' : null;
+}
+
+/** The Act (1 to 6) a stage belongs to, clamped, from balance.story.actEndStages. */
+export function actForStage(actEndStages: readonly number[], stage: number): number {
+  const i = actEndStages.findIndex((end) => stage <= end);
+  return Math.min(6, Math.max(1, i < 0 ? 6 : i + 1));
+}

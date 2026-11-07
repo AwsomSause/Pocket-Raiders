@@ -375,3 +375,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-s7d-signatures.md`: Story S7d: Signature I, II and Keystone moves for all 74 starter lines (222 moves), unlocks, naming.
 - level-cap-100.md: first region caps at 100, +50 per region; enemy curve unchanged.
 - `story-starter-arcs.md`: Starter arcs for all lines (Signature II hook), Vulpix and Psyduck lines, and the Story Run now binds its Heartbond partner.
+- early-deaths-difficulties.md: flatter early curve, second-wind healing, Casual/Brutal/Mythic difficulties, +1 HP per level.

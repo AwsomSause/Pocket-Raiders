@@ -55,7 +55,7 @@ describe('permanent attributes grow from lifetime counters', () => {
     expect(a.intelligence).toBe(3);
     expect(a.speed).toBe(2);
     expect(a.charisma).toBe(6);
-    expect(a.luck).toBe(3 + 10); // 31 caught / 10, plus 5 per shiny
+    expect(a.luck).toBe(0 + 2); // 31 caught / 50, plus 1 per shiny (Luck nerf, 2026-11-07)
     expect(a.ragePeace).toBe(5 - 7); // Fire toward Rage, Grass toward Peace
     expect(a.goodEvil).toBe(1 - 3); // Fairy toward Good, Dark toward Evil
     expect(a.love).toBe(2);
@@ -82,10 +82,10 @@ describe('permanent attributes grow from lifetime counters', () => {
     const run = newRun('base', { luck: 40 });
     expect(effectiveAttributes(content, run).luck).toBe(40);
     applyReward(content, run, getArchetype(content, 'red'), 'lucky-charm');
-    expect(effectiveAttributes(content, run).luck).toBe(55);
+    expect(effectiveAttributes(content, run).luck).toBe(43); // a run keeps a quarter of each Luck gain (+15 -> +3.75)
     applyReward(content, run, getArchetype(content, 'red'), 'shiny-charm');
     applyReward(content, run, getArchetype(content, 'red'), 'shiny-charm');
-    expect(effectiveAttributes(content, run).luck).toBe(100);
+    expect(effectiveAttributes(content, run).luck).toBe(55); // 7.5 + 3.75 (third boost halved) plus the carried fractions
   });
 });
 
@@ -123,14 +123,14 @@ describe('effects: each point is worth its percentage (Beta 4.4 nerf)', () => {
 });
 
 describe('Luck', () => {
-  it('tilts the draft weights (rare 8.5% → about 11.5% at Luck 100) and leaves common alone', () => {
+  it('tilts the draft weights (rare 8.5% → about 10% at Luck 100, after the 2026-11-07 nerf) and leaves common alone', () => {
     const w = luckWeights(content.balance.rarityWeights, fx({ luck: 100 }));
     const total = w.common! + w.uncommon! + w.rare!;
     expect(w.common).toBe(content.balance.rarityWeights.common);
-    expect(w.rare! / total).toBeCloseTo(0.115, 2);
+    expect(w.rare! / total).toBeCloseTo(0.1, 2);
   });
 
-  it('raises the shiny chance by half at Luck 100 (1/2000 → 1/1333)', () => {
+  it('raises the shiny chance by a quarter at Luck 100 (1/2000 → 1/1600)', () => {
     const count = (multiplier: number) => {
       const rng = new Rng(hashSeed('shiny'));
       let n = 0;
@@ -140,8 +140,8 @@ describe('Luck', () => {
     const base = count(1);
     const lucky = count(fx({ luck: 100 }).shinyChance);
     expect(base / 200_000).toBeCloseTo(1 / 2000, 3);
-    expect(lucky / base).toBeGreaterThan(1.35);
-    expect(lucky / base).toBeLessThan(1.65);
+    expect(lucky / base).toBeGreaterThan(1.12);
+    expect(lucky / base).toBeLessThan(1.4);
   });
 });
 

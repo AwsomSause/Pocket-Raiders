@@ -2119,6 +2119,10 @@ export const BalanceSchema = z.object({
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
+  /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
+  itemRework: z
+    .object({ charmGate: z.boolean().default(true), charmDraftChance: z.number().min(0).max(1).default(0.0001), luckGainScale: z.number().min(0).max(1).default(0.25) })
+    .default({ charmGate: true, charmDraftChance: 0.0001, luckGainScale: 0.25 }),
   attributeItemFalloff: z.object({ afterBoosts: z.number().int().min(0), factor: z.number().min(0).max(1) }).default({ afterBoosts: 2, factor: 0.5 }),
   partyMax: z.number().int().positive(),
   starterLevel: z.number().int().positive(),

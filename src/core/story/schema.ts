@@ -346,6 +346,8 @@ export const RivalSchema = z.object({
   /** §21 the run's guaranteed major rival (the first rival, made a recurring character) and its semi-canon character (majorRivals.json). */
   major: z.boolean().optional(),
   canon: z.string().optional(),
+  /** Story Overhaul S10: the story rival (rv_*) this record plays, set in a Story Run; its team, lines and role come from story2/storyRivals. */
+  storyRival: z.string().optional(),
   /** §9 its ace as it was at the end of the last battle: form, level, moves, held item, record and what changed. */
   aceLog: z.object({
     speciesId: z.string(), level: z.number().int().min(1), moves: z.array(z.string()), held: z.string().nullable(),

@@ -99,6 +99,7 @@ import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCa
 import { wildLuck } from './wildLuck';
 import { arenaFor } from './battle/w1Play';
 import { underdogXpMultiplier } from './battle/w1Rules';
+import { storyFirstRivalPlan, storyRivalLine, storyRivalPlan, storyRoles } from './story2/rivalPlan';
 import { expShareUnlocked, FIRST_RIVAL_FLAG } from './firstRival';
 import { bankOverflowXp, xpPolicyMultiplier } from './teamPolicy';
 import { trainCampers } from './trainingCamp';
@@ -207,7 +208,7 @@ import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mut
 import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
-import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { noteBountyKills } from './bounties';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
@@ -1918,6 +1919,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
       plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))));
+      plan = storyFirstRivalPlan(content, run, plan) ?? plan;
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
     }
     // A trainer that vowed to return takes the place of the first ordinary trainer of a later stage.
@@ -1938,7 +1940,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (rule && rivalBack) {
       ensureAce(content, rivalBack);
       // §21 a major rival keeps its semi-canon team; §9/§10 its ace carries what it learned.
-      const ret = rivalReturn(content, run, rivalBack, canonPlan(content, rivalBack, plan), rule.effect);
+      const ret = rivalReturn(content, run, rivalBack, storyRivalPlan(content, run, rivalBack, canonPlan(content, rivalBack, plan), stageNumber), rule.effect);
       // W2 (14.6/14.7/14.5): the ace's ladder step, then the adaptation triggers (from what the rival saw), then the ace's coverage set.
       const ladder = withAceLadder(content, run, rivalBack, withSignatureAce(content, rivalBack, ret.plan));
       ret.plan = withAceProgress(content, rivalBack, ladder.plan);
@@ -2045,8 +2047,12 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       run.battle.firstRival = true;
       const who = characterOf(plan.name).data.home;
       run.battle.rivalNote = `${plan.name} from ${who} picked ${content.species.get(plan.members[0]!.speciesId)?.name ?? 'a starter'} too, and wants to see who's better. This won't be the last time.`;
+      const introLine = storyRoles(run)?.primary ? storyRivalLine(content, storyRoles(run)!.primary, 'intro') : null;
+      if (introLine) run.battle.rivalNote = `${plan.name}: "${introLine}"`;
     }
     if (rivalBack && rule) {
+      const returnLine = rivalBack.storyRival ? storyRivalLine(content, rivalBack.storyRival, 'rematch') : null;
+      if (returnLine) run.battle.rivalNote = [run.battle.rivalNote, `${plan.name}: "${returnLine}"`].filter(Boolean).join(' ');
       const ace = rivalBack.ace ? team.find((m) => familyId(content, m.speciesId) === rivalBack.ace) : undefined;
       // §10 studied moves are the ace's signature moves (they hit harder, like an awakened move).
       const signature = (rivalBack.studied ?? []).map((st) => st.moveId).filter((id) => ace?.moves.some((m) => m.id === id));
@@ -2889,6 +2895,11 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
   // Last Chance Charm: one fallen Pokémon gets back up before anyone is buried.
   if (battle.outcome !== 'lose') lastChanceRevive(content, run);
+  // Second wind (core/rules.ts): a breather after an ordinary win in a run's early fights.
+  if (battle.outcome === 'win' && (battle.kind === 'wild' || (battle.kind === 'trainer' && ![GYM_LEADER_CLASS, ELITE_FOUR_CLASS, CHAMPION_CLASS].includes(battle.trainer?.classId as string)))) {
+    const share = winHealFraction(run);
+    if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
+  }
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);

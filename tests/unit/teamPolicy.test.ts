@@ -32,10 +32,11 @@ describe('Overlevel conversion (S61)', () => {
   it('banks wasted XP and pays one Bag item per threshold', () => {
     const run = newRun();
     const { xpPerItem: per, item } = content.balance.overlevel;
+    const had = run.inventory[item] ?? 0;
     expect(bankOverflowXp(content, run, per - 1)).toBe(0);
-    expect(run.inventory[item]).toBeUndefined();
+    expect(run.inventory[item] ?? 0).toBe(had);
     expect(bankOverflowXp(content, run, 1 + per)).toBe(2);
-    expect(run.inventory[item]).toBe(2);
+    expect(run.inventory[item]).toBe(had + 2);
     expect(bankOverflowXp(content, run, 0)).toBe(0);
   });
 
