@@ -44,7 +44,9 @@ for (const m of OTHER) add(Math.round(4000 / OTHER.length), { id: `mode-${m}`, g
 let sd = 12345;
 const rnd = () => ((sd = (sd * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
 for (let i = scns.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [scns[i], scns[j]] = [scns[j]!, scns[i]!]; }
-const plan = (n: number): Scn => scns[n % scns.length]!;
+// MS_ONLY=<mode id> plays just that mode (e.g. multi-region, regional-circuit) to probe one part of the game.
+const only = process.env.MS_ONLY ? scns.filter((x) => x.modeId === process.env.MS_ONLY) : scns;
+const plan = (n: number): Scn => only[n % only.length]!;
 
 const done = new Set<number>();
 if (existsSync(OUT)) for (const l of readFileSync(OUT, 'utf8').split('\n')) { if (l) try { done.add((JSON.parse(l) as { n: number }).n); } catch { /* partial last line */ } }
@@ -116,7 +118,7 @@ function playOne(n: number): Record<string, unknown> {
       for (const p of run.party) {
         const mh = maxHp(content, p);
         if (!Number.isFinite(p.hp) || p.hp < 0 || p.hp > mh) { bugs.push(`bad hp ${p.speciesId} ${p.hp}/${mh}`); break; }
-        if (p.level < 1 || p.level > 100 || !Number.isInteger(p.level)) { bugs.push(`bad level ${p.speciesId} ${p.level}`); break; }
+        if (p.level < 1 || p.level > content.balance.difficulty.maxLevel || !Number.isInteger(p.level)) { bugs.push(`bad level ${p.speciesId} ${p.level}`); break; }
         for (const m of p.moves) if (m.pp < 0 || !Number.isFinite(m.pp)) { bugs.push(`bad pp ${p.speciesId} ${m.id}`); break; }
       }
       if (!Number.isFinite(run.money) || run.money < 0) bugs.push(`bad money ${run.money}`);
