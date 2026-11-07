@@ -2,6 +2,7 @@
 // party, progress and save time. Enter loads a slot (or starts fresh in an empty one); → reaches Delete, which asks
 // first and keeps a copy. Nothing here writes to a slot you only look at.
 
+import { prologueGateActive } from '../core/story2/prologue';
 import Phaser from 'phaser';
 import { slotCard, stampText, type SlotCard } from '../core/presentation/slotLines';
 import { lookSpecies } from '../core/pokemon';
@@ -132,6 +133,7 @@ export class SaveSlotsScene extends Phaser.Scene {
     const card = this.cards[i]!;
     if (card.status === 'damaged') return this.say(`Slot ${card.slot} is damaged. Delete it to start over (a copy is kept).`);
     session.switchSlot(card.slot as SlotNumber);
+    if (prologueGateActive(session.profile.story)) return void this.scene.start('MainMenu');
     if (session.canContinue) {
       const run = session.continueRun();
       return void this.scene.start(sceneForRun(run));

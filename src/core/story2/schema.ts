@@ -82,6 +82,8 @@ export const RemembranceSchema = z.object({
   quizEligible: z.boolean().default(true),
   /** How hard the line is to discover (Design v2 Part II rarity table); not how strong it is. */
   rarity: z.enum(['familiar', 'unusual', 'rare', 'exceptional', 'legendary', 'mythical', 'secret', 'extraordinary']).optional(),
+  /** An item the starter holds when the run starts (the Jet starters: Booster Energy, Black Sludge). */
+  held: GameId.optional(),
 });
 
 export const MoveMomentSchema = z.object({

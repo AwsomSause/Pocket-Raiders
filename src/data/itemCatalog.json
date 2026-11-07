@@ -21188,7 +21188,11 @@
       "iron-boulder",
       "iron-crown",
       "koraidon",
-      "miraidon"
+      "miraidon",
+      "espeon-paradox",
+      "umbreon-paradox",
+      "toxtricity-future",
+      "toxtricity-past"
      ]
     }
    ]
@@ -27512,583 +27516,762 @@
   }
  },
  {
-  "id": "bitter-berry-juice",
-  "name": "Bitter Berry Juice",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals 30 HP, +1 Evil",
-  "rarity": "common",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/berry-juice-bad",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "heal": 30,
-   "changes": {
-    "goodEvil": -1
-   }
-  }
- },
- {
-  "id": "sweet-berry-juice",
-  "name": "Sweet Berry Juice",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals 50 HP, friendship +3",
-  "rarity": "common",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/berry-juice-good",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "heal": 50,
-   "friendship": 3
-  }
- },
- {
-  "id": "great-butter",
-  "name": "Great Butter",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals 100 HP, +1 Strength",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/greatbutter",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "heal": 100,
-   "changes": {
-    "strength": 1
-   }
-  }
- },
- {
-  "id": "hopo-berry",
-  "name": "Hopo Berry",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Restores PP to the move with the least",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/hopoberry",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "ppMove": "lowest"
-  }
- },
- {
-  "id": "mythical-pecha-berry",
-  "name": "Mythical Pecha Berry",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals fully and cures status",
+  "id": "yellow-bike",
+  "name": "Yellow Bike",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per stage, from the map: ride two columns ahead, skipping one",
   "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/mythicalpechaberry",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bikeyellow",
   "status": "supported",
   "effect": {
-   "kind": "care",
-   "heal": 9999,
-   "cure": true
-  }
- },
- {
-  "id": "pecha-berry-plus",
-  "name": "Pecha Berry Plus",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The holder eats it when poisoned or paralyzed and is cured",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": 2,
-  "how": "held",
-  "icon": "library/pechaberry2",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
     {
-     "hook": "berryCure",
-     "statuses": [
-      "psn",
-      "par"
-     ]
+     "perk": "bicycle"
     }
    ]
   }
  },
  {
-  "id": "red-nectar",
-  "name": "Red Nectar",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals 40 HP, +1 Luck",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/rednectar",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "heal": 40,
-   "changes": {
-    "luck": 1
-   }
-  }
- },
- {
-  "id": "arboliva-oil",
-  "name": "Arboliva Oil",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals 70 HP, friendship +5",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/arbolivaoil",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "heal": 70,
-   "friendship": 5
-  }
- },
- {
-  "id": "super-vial",
-  "name": "Super Vial",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals 150 HP and cures status",
+  "id": "aqua-bike",
+  "name": "Aqua Bike",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per stage, from the map: jump to any stop in the next column, even without a path",
   "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/supervial",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bikeaqua",
   "status": "supported",
   "effect": {
-   "kind": "care",
-   "heal": 150,
-   "cure": true
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "acroBike"
+    }
+   ]
   }
  },
  {
-  "id": "epice-noire",
-  "name": "Épice Noire",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals fully, +1 Evil",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/epicenoire",
-  "status": "supported",
-  "effect": {
-   "kind": "care",
-   "heal": 9999,
-   "changes": {
-    "goodEvil": -1
-   }
-  }
- },
- {
-  "id": "apophyll-pan",
-  "name": "Apophyll Pan",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Cooks a hearty meal: heals the whole team 35%, +1 Love",
-  "rarity": "rare",
-  "stacksOn": "team",
-  "max": null,
-  "how": "use",
-  "icon": "library/apophyllpan",
-  "status": "supported",
-  "effect": {
-   "kind": "teamCare",
-   "heal": 0.35,
-   "changes": {
-    "love": 1
-   }
-  }
- },
- {
-  "id": "origin-essence",
-  "name": "Origin Essence",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Heals the whole team 60% and wakes sleepers",
+  "id": "bike-v",
+  "name": "Bike V",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per stage, from the map: ride past a wild Pokémon and still get its reward",
   "rarity": "epic",
-  "stacksOn": "team",
-  "max": null,
-  "how": "use",
-  "icon": "library/originessencezyg",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bikev",
   "status": "supported",
   "effect": {
-   "kind": "teamCare",
-   "heal": 0.6,
-   "cureSleep": true
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "machBike"
+    }
+   ]
   }
  },
  {
-  "id": "reborn-flower",
-  "name": "Reborn Flower",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Revives a fainted Pokémon with full HP",
+  "id": "ride-pager",
+  "name": "Ride Pager",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "From the map, 2 trips: call a ride and fly two columns ahead to any stop",
   "rarity": "epic",
-  "stacksOn": "pokemon",
-  "max": null,
+  "stacksOn": "player",
+  "max": 2,
   "how": "use",
-  "icon": "library/rebornflower",
+  "icon": "library/ridepager",
   "status": "supported",
   "effect": {
-   "kind": "care",
-   "revive": 1,
-   "cure": true
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 2
+   },
+   "perks": [
+    {
+     "perk": "airship"
+    }
+   ]
   }
  },
  {
-  "id": "pp-all",
-  "name": "PP All",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Restores all PP of the whole team",
-  "rarity": "rare",
-  "stacksOn": "team",
-  "max": null,
-  "how": "use",
-  "icon": "library/ppall",
-  "status": "supported",
-  "effect": {
-   "kind": "teamCare",
-   "pp": -1
-  }
- },
- {
-  "id": "wl-max-elixir-2",
-  "name": "Max Elixir (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Restores 10 PP to every move of the whole team",
-  "rarity": "rare",
-  "stacksOn": "team",
-  "max": null,
-  "how": "use",
-  "icon": "library/wl-max-elixir",
-  "status": "supported",
-  "effect": {
-   "kind": "teamCare",
-   "pp": 10
-  }
- },
- {
-  "id": "fresh-start-mochi",
-  "name": "Fresh Start Mochi",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Wipes all of a Pokémon’s EVs so you can train it again",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": null,
-  "how": "use",
-  "icon": "library/freshstartmochi",
-  "status": "supported",
-  "effect": {
-   "kind": "feed",
-   "friendship": 0,
-   "changes": {},
-   "evs": {
-    "hp": -252,
-    "atk": -252,
-    "def": -252,
-    "spa": -252,
-    "spd": -252,
-    "spe": -252
-   }
-  }
- },
- {
-  "id": "excite-scent",
-  "name": "Excite Scent",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The next 3 wild battles give 30% more EXP",
+  "id": "ladder",
+  "name": "Ladder",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Next fork: add a bridge to a \"?\" event",
   "rarity": "uncommon",
   "stacksOn": "player",
   "max": 3,
   "how": "use",
-  "icon": "library/excitescent",
+  "icon": "library/ladder",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "extraStop",
+     "kind": "event",
+     "where": "nextNode"
+    }
+   ]
+  }
+ },
+ {
+  "id": "mining-kit",
+  "name": "Mining Kit",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Each wild battle on a Rock or Ground stage pays +₽20 per copy",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "library/miningkit",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "wildMoney",
+     "type": "rock",
+     "amount": 20
+    },
+    {
+     "perk": "wildMoney",
+     "type": "ground",
+     "amount": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "dowsing-machine",
+  "name": "Dowsing Machine",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "One wild stop on each stage hides a Bag item, and the first draft shows 6 choices",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/dowsingmachine",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "hiddenItem"
+    },
+    {
+     "perk": "dowsing"
+    }
+   ]
+  }
+ },
+ {
+  "id": "poke-scanner",
+  "name": "Poké Scanner",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The map shows the wild Pokémon waiting at the next stops and what is behind every \"?\" stop",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/pokescanner",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "wild"
+    },
+    {
+     "perk": "revealEvents"
+    }
+   ]
+  }
+ },
+ {
+  "id": "hi-tech-earbuds",
+  "name": "Hi-Tech Earbuds",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Next \"?\" stop shows its outcome before you choose, and the next trainers' teams show on the map",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/hitechearbuds",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "eventInsight"
+    },
+    {
+     "perk": "preview",
+     "what": "trainers"
+    }
+   ]
+  }
+ },
+ {
+  "id": "soundtrack-earbuds",
+  "name": "Soundtrack Earbuds",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Battle music changes to Gen 1 style; +1 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/soundtrackearbuds",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "gbSounds"
+    }
+   ]
+  }
+ },
+ {
+  "id": "bell-machine",
+  "name": "Bell Machine",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The map shows an omen for each fight you can walk to: calm, uneasy or dire",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bellmchn",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "omen"
+    }
+   ]
+  }
+ },
+ {
+  "id": "rotom-phone",
+  "name": "Rotom Phone",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "From the map: fight a trainer from this stage again for double money",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/rotomphone",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "rematch"
+    }
+   ]
+  }
+ },
+ {
+  "id": "rotom-catalog",
+  "name": "Rotom Catalog",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Shops sell one item early, and everything is 5% cheaper",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/rotomcatalog",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "earlyStock",
+     "count": 1
+    },
+    {
+     "perk": "discount",
+     "percent": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "remote-pc",
+  "name": "Remote PC",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "On the reward screen: swap one draft choice for a new one",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/remotepc",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 2
+   },
+   "perks": [
+    {
+     "perk": "rerollOne"
+    }
+   ]
+  }
+ },
+ {
+  "id": "pokemon-box-link",
+  "name": "Pokémon Box Link",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "On the reward screen: lock one choice so it is in the next draft too",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/pokemonboxlink",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 1
+   },
+   "perks": [
+    {
+     "perk": "lockOne"
+    }
+   ]
+  }
+ },
+ {
+  "id": "pokemon-center-disk",
+  "name": "Pokémon Center Disk",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Next stage: one extra healing spot",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/pokemoncenterdisk",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "extraStop",
+     "kind": "heal",
+     "where": "stage"
+    }
+   ]
+  }
+ },
+ {
+  "id": "save-disk",
+  "name": "Save Disk",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per run, a wipe is undone: the fight restarts with your party healed",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/savedisk",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "safetyNet"
+    }
+   ]
+  }
+ },
+ {
+  "id": "save-arrow",
+  "name": "Save Arrow",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Run History records this run's full map",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/savearrow",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "journal"
+    }
+   ]
+  }
+ },
+ {
+  "id": "data-cable",
+  "name": "Data Cable",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Next stage: the reward draft after each trainer has one extra choice",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/datacable",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "extraChoice"
+    }
+   ]
+  }
+ },
+ {
+  "id": "transmitter",
+  "name": "Transmitter",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per stage, call home: your whole team heals 20%",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/transmitter",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "transceiver",
+     "heal": 0.2
+    }
+   ]
+  }
+ },
+ {
+  "id": "x-transceiver-red",
+  "name": "X Transceiver (Red)",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per stage, call home: your whole team heals 30%",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/xtransceiverred",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "transceiver",
+     "heal": 0.3
+    }
+   ]
+  }
+ },
+ {
+  "id": "x-transceiver-yellow",
+  "name": "X Transceiver (Yellow)",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Once per stage, call home: your whole team heals 35%",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/xtransceiveryellow",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "transceiver",
+     "heal": 0.35
+    }
+   ]
+  }
+ },
+ {
+  "id": "power-plant-pass",
+  "name": "Power Plant Pass",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The next stage: wild Pokémon are often Electric",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/powerplantpass",
   "status": "supported",
   "effect": {
    "kind": "encounter",
    "lasts": {
-    "for": "battles",
-    "count": 3
+    "for": "stage"
    },
    "mods": [
     {
-     "mod": "exp",
-     "percent": 30
+     "mod": "types",
+     "types": [
+      "electric"
+     ],
+     "percent": 50
     }
    ]
   }
  },
  {
-  "id": "joy-scent",
-  "name": "Joy Scent",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The next 3 wild battles are 1.4x easier to catch, +1 Love",
-  "rarity": "uncommon",
+  "id": "snag-machine",
+  "name": "Snag Machine",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Every wild Pokémon is 1.2x easier to catch",
+  "rarity": "rare",
   "stacksOn": "player",
-  "max": 3,
-  "how": "use",
-  "icon": "library/joyscent",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/snagmachine",
   "status": "supported",
   "effect": {
    "kind": "encounter",
    "lasts": {
-    "for": "battles",
-    "count": 3
+    "for": "run"
    },
    "mods": [
     {
      "mod": "catch",
-     "multiplier": 1.4
-    }
-   ],
-   "changes": {
-    "love": 1
-   }
-  }
- },
- {
-  "id": "vivid-scent",
-  "name": "Vivid Scent",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The next 2 wild battles show a rare Pokémon of any type",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 3,
-  "how": "use",
-  "icon": "library/vividscent",
-  "status": "supported",
-  "effect": {
-   "kind": "encounter",
-   "lasts": {
-    "for": "battles",
-    "count": 2
-   },
-   "mods": [
-    {
-     "mod": "rare"
-    },
-    {
-     "mod": "anyType"
+     "multiplier": 1.2
     }
    ]
   }
  },
  {
-  "id": "faraway-essence",
-  "name": "Faraway Essence",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The next 3 wild battles: Pokémon are 1.5x as likely shiny",
-  "rarity": "rare",
+  "id": "snag-machine-1",
+  "name": "Snag Machine Mk I",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The next 5 throws are 1.5x easier",
+  "rarity": "uncommon",
   "stacksOn": "player",
-  "max": 2,
+  "max": 3,
   "how": "use",
-  "icon": "library/farawayessence",
+  "icon": "library/snagmachine1",
   "status": "supported",
   "effect": {
    "kind": "encounter",
    "lasts": {
-    "for": "battles",
-    "count": 3
+    "for": "throws",
+    "count": 5
    },
    "mods": [
     {
-     "mod": "shiny",
+     "mod": "catch",
      "multiplier": 1.5
     }
    ]
   }
  },
  {
-  "id": "emotion-powder",
-  "name": "Emotion Powder",
-  "family": "Supplies (Drive pack 3)",
-  "description": "+2 Love, +2 Charisma",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "library/emotionpowder",
-  "status": "supported",
-  "effect": {
-   "kind": "attributes",
-   "changes": {
-    "love": 2,
-    "charisma": 2
-   }
-  }
- },
- {
-  "id": "smile-burst",
-  "name": "Smile Burst",
-  "family": "Supplies (Drive pack 3)",
-  "description": "+3 Charisma, +1 Luck",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "library/smileburst",
-  "status": "supported",
-  "effect": {
-   "kind": "attributes",
-   "changes": {
-    "charisma": 3,
-    "luck": 1
-   }
-  }
- },
- {
-  "id": "nightmare-fuel",
-  "name": "Nightmare Fuel",
-  "family": "Supplies (Drive pack 3)",
-  "description": "+3 Evil, +2 toward Rage",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "library/nightmarefuel",
-  "status": "supported",
-  "effect": {
-   "kind": "attributes",
-   "changes": {
-    "goodEvil": -3,
-    "ragePeace": 2
-   }
-  }
- },
- {
-  "id": "hoennian-salt",
-  "name": "Hoennian Salt",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Your whole team can't fall asleep in its next battle",
-  "rarity": "uncommon",
-  "stacksOn": "team",
-  "max": 3,
-  "how": "use",
-  "icon": "library/hoenniansalt",
-  "status": "supported",
-  "effect": {
-   "kind": "battleBoost",
-   "boosts": [
-    {
-     "kind": "immune",
-     "status": "slp"
-    }
-   ]
-  }
- },
- {
-  "id": "vial-of-glitter",
-  "name": "Vial of Glitter",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Sell for ₽700, +1 Charisma",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "library/vialofglitter",
-  "status": "supported",
-  "effect": {
-   "kind": "money",
-   "amount": 700,
-   "changes": {
-    "charisma": 1
-   }
-  }
- },
- {
-  "id": "gooci-bag",
-  "name": "Gooci Bag",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Sell for ₽900, +2 Charisma",
+  "id": "colress-machine",
+  "name": "Colress Machine",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Next 3 wild battles: you get a free turn",
   "rarity": "rare",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "library/goocibag",
-  "status": "supported",
-  "effect": {
-   "kind": "money",
-   "amount": 900,
-   "changes": {
-    "charisma": 2
-   }
-  }
- },
- {
-  "id": "sprinklotad",
-  "name": "Sprinklotad",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Between levels, water a Pokémon: friendship up (more than a Wailmer Pail)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/sprinklotad",
-  "status": "supported",
-  "effect": {
-   "kind": "perk",
-   "lasts": {
-    "for": "run"
-   },
-   "perks": [
-    {
-     "perk": "pail",
-     "friendship": 8
-    }
-   ]
-  }
- },
- {
-  "id": "baby-monitor",
-  "name": "Baby Monitor",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Eggs hatch faster: every Egg gets one extra step toward hatching each time",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/babymonitor",
-  "status": "supported",
-  "effect": {
-   "kind": "perk",
-   "lasts": {
-    "for": "run"
-   },
-   "perks": [
-    {
-     "perk": "ovalCharm"
-    }
-   ]
-  }
- },
- {
-  "id": "clefairy-doll",
-  "name": "Clefairy Doll",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The next 2 wild battles are skipped (the level still counts)",
-  "rarity": "uncommon",
   "stacksOn": "player",
   "max": 3,
   "how": "use",
-  "icon": "library/clefairy-doll",
+  "icon": "library/colressmachine",
   "status": "supported",
   "effect": {
    "kind": "encounter",
    "lasts": {
     "for": "battles",
-    "count": 2
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "synchro-machine",
+  "name": "Synchro Machine",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Your whole team gets +1 Speed in its next battle",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "library/synchromachine",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "spe",
+     "stages": 1,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "stabilizer",
+  "name": "Stabilizer",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Your whole team cannot have its stats lowered for 8 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "library/stabilizer",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "guard",
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "mag-wand",
+  "name": "Mag Wand",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The next 3 wild battles show a Steel, Electric or Rock Pokémon",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/magwand",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "types",
+     "types": [
+      "steel",
+      "electric",
+      "rock"
+     ],
+     "percent": 70
+    }
+   ]
+  }
+ },
+ {
+  "id": "magnetic-lure",
+  "name": "Magnetic Lure",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The next 3 wild battles are often Steel or Electric",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/magneticlure",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "types",
+     "types": [
+      "steel",
+      "electric"
+     ],
+     "percent": 60
+    }
+   ]
+  }
+ },
+ {
+  "id": "everlasting-repel",
+  "name": "Everlasting Repel",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "Skip every wild battle on the next stage (the level still counts)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/infirepel",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "stage"
    },
    "mods": [
     {
@@ -28098,385 +28281,31 @@
   }
  },
  {
-  "id": "wl-ability-urge",
-  "name": "Ability Urge (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Two Ability Urges go into your Bag: trigger the Pokémon in battle’s ability now",
+  "id": "everlasting-repel-off",
+  "name": "Everlasting Repel (Off)",
+  "family": "Map gadgets (Drive pack 3)",
+  "description": "The next stage: wild Pokémon are 1 level higher and give 15% more EXP",
   "rarity": "uncommon",
   "stacksOn": "player",
   "max": 3,
   "how": "use",
-  "icon": "library/wl-ability-urge",
+  "icon": "library/infirepeloff",
   "status": "supported",
   "effect": {
-   "kind": "bagItem",
-   "item": "ability-urge",
-   "count": 2
-  }
- },
- {
-  "id": "wl-item-urge",
-  "name": "Item Urge (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Two Item Urges go into your Bag: use the held Berry or Herb now",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 3,
-  "how": "use",
-  "icon": "library/wl-item-urge",
-  "status": "supported",
-  "effect": {
-   "kind": "bagItem",
-   "item": "item-urge",
-   "count": 2
-  }
- },
- {
-  "id": "wl-reset-urge",
-  "name": "Reset Urge (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Two Reset Urges go into your Bag: reset every stat change in battle",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 3,
-  "how": "use",
-  "icon": "library/wl-reset-urge",
-  "status": "supported",
-  "effect": {
-   "kind": "bagItem",
-   "item": "reset-urge",
-   "count": 2
-  }
- },
- {
-  "id": "wl-item-drop",
-  "name": "Item Drop (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Two Item Drops go into your Bag (see the Bag for what they do in battle)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 3,
-  "how": "use",
-  "icon": "library/wl-item-drop",
-  "status": "supported",
-  "effect": {
-   "kind": "bagItem",
-   "item": "item-drop",
-   "count": 2
-  }
- },
- {
-  "id": "wl-guard-spec",
-  "name": "Guard Spec. (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Your whole team can't have its stats lowered for 6 turns of its next battle",
-  "rarity": "uncommon",
-  "stacksOn": "team",
-  "max": 3,
-  "how": "use",
-  "icon": "library/wl-guard-spec",
-  "status": "supported",
-  "effect": {
-   "kind": "battleBoost",
-   "boosts": [
+   "kind": "encounter",
+   "lasts": {
+    "for": "stage"
+   },
+   "mods": [
     {
-     "kind": "guard",
-     "turns": 6
+     "mod": "level",
+     "amount": 1
+    },
+    {
+     "mod": "exp",
+     "percent": 15
     }
    ]
-  }
- },
- {
-  "id": "wl-custom-spliced",
-  "name": "Spliced Egg (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x2)",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "library/wl-custom-spliced",
-  "status": "supported",
-  "effect": {
-   "kind": "egg",
-   "stages": 2,
-   "shiny": 2
-  }
- },
- {
-  "id": "wl-custom-thief",
-  "name": "Sticky Fingers (Warp Lab)",
-  "family": "Supplies (Drive pack 3)",
-  "description": "The holder steals 20% of the foe’s prize money when it wins",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "library/wl-custom-thief",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "steal",
-     "percent": 20
-    }
-   ]
-  }
- },
- {
-  "id": "red-canari-pal-1",
-  "name": "Red Canari Pal Lv.1",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Prize money from trainers +5% (the Plush Workshop can upgrade it)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/redcanariplushlv1",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "trainerMoney",
-   "percent": 5
-  }
- },
- {
-  "id": "red-canari-pal-2",
-  "name": "Red Canari Pal Lv.2",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Prize money from trainers +10% (the Plush Workshop can upgrade it)",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/redcanariplushlv2",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "trainerMoney",
-   "percent": 10
-  }
- },
- {
-  "id": "red-canari-pal-3",
-  "name": "Red Canari Pal Lv.3",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Prize money from trainers +18%",
-  "rarity": "epic",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/redcanariplushlv3",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "trainerMoney",
-   "percent": 18
-  }
- },
- {
-  "id": "blue-canari-pal-1",
-  "name": "Blue Canari Pal Lv.1",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Healing berries heal 15% more (the Plush Workshop can upgrade it)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/bluecanariplushlv1",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "berryHeal",
-   "percent": 15
-  }
- },
- {
-  "id": "blue-canari-pal-2",
-  "name": "Blue Canari Pal Lv.2",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Healing berries heal 30% more (the Plush Workshop can upgrade it)",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/bluecanariplushlv2",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "berryHeal",
-   "percent": 30
-  }
- },
- {
-  "id": "blue-canari-pal-3",
-  "name": "Blue Canari Pal Lv.3",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Healing berries heal 50% more",
-  "rarity": "epic",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/bluecanariplushlv3",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "berryHeal",
-   "percent": 50
-  }
- },
- {
-  "id": "green-canari-pal-1",
-  "name": "Green Canari Pal Lv.1",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Feeding a Pokémon gives 25% more friendship (the Plush Workshop can upgrade it)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/greencanariplushlv1",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "feedFriendship",
-   "percent": 25
-  }
- },
- {
-  "id": "green-canari-pal-2",
-  "name": "Green Canari Pal Lv.2",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Feeding a Pokémon gives 50% more friendship (the Plush Workshop can upgrade it)",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/greencanariplushlv2",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "feedFriendship",
-   "percent": 50
-  }
- },
- {
-  "id": "green-canari-pal-3",
-  "name": "Green Canari Pal Lv.3",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Feeding a Pokémon gives 100% more friendship",
-  "rarity": "epic",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/greencanariplushlv3",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "feedFriendship",
-   "percent": 100
-  }
- },
- {
-  "id": "pink-canari-pal-1",
-  "name": "Pink Canari Pal Lv.1",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Every stage cleared gives +1 Charisma (the Plush Workshop can upgrade it)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/pinkcanariplushlv1",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "stageCharisma",
-   "percent": 1
-  }
- },
- {
-  "id": "pink-canari-pal-2",
-  "name": "Pink Canari Pal Lv.2",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Every stage cleared gives +2 Charisma (the Plush Workshop can upgrade it)",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/pinkcanariplushlv2",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "stageCharisma",
-   "percent": 2
-  }
- },
- {
-  "id": "pink-canari-pal-3",
-  "name": "Pink Canari Pal Lv.3",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Every stage cleared gives +3 Charisma",
-  "rarity": "epic",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/pinkcanariplushlv3",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "stageCharisma",
-   "percent": 3
-  }
- },
- {
-  "id": "gold-canari-pal-1",
-  "name": "Gold Canari Pal Lv.1",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Money from battles +5% (the Plush Workshop can upgrade it)",
-  "rarity": "uncommon",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/goldcanariplushlv1",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "money",
-   "percent": 5
-  }
- },
- {
-  "id": "gold-canari-pal-2",
-  "name": "Gold Canari Pal Lv.2",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Money from battles +10% (the Plush Workshop can upgrade it)",
-  "rarity": "rare",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/goldcanariplushlv2",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "money",
-   "percent": 10
-  }
- },
- {
-  "id": "gold-canari-pal-3",
-  "name": "Gold Canari Pal Lv.3",
-  "family": "Canari Pals (upgrade line)",
-  "description": "Money from battles +20%",
-  "rarity": "epic",
-  "stacksOn": "player",
-  "max": 1,
-  "how": "passive",
-  "icon": "library/goldcanariplushlv3",
-  "status": "supported",
-  "effect": {
-   "kind": "passive",
-   "passive": "money",
-   "percent": 20
   }
  }
 ]

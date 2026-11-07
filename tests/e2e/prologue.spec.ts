@@ -118,3 +118,12 @@ test('Story Run: the title entry plays the prologue, then trainer choice and the
   expect(await texts(page)).toContain('Story Run');
   expect(errors).toEqual([]);
 });
+
+test('Prologue gate: a save without a finished prologue is sent to it; no skip offered', async ({ page }) => {
+  await page.goto('/?debug=1&gate=1');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Prologue');
+  await page.waitForTimeout(500);
+  expect(await texts(page)).not.toMatch(/Skip/);
+  await page.evaluate(() => { (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub'); });
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toMatch(/Prologue|MainMenu/);
+});
