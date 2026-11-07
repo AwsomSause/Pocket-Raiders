@@ -5,7 +5,10 @@
 import Phaser from 'phaser';
 import { trialView, type TrialMenu, type TrialStepView, type TrialView } from '../core/story2/fieldTrial';
 import { services } from '../game/services';
+import { playStoryMusic, playStorySfx } from '../ui/audio';
 import { onInputAction, type InputAction } from '../ui/input';
+import { storyIcon } from '../ui/storyIcon';
+import { heartIconId, storyIconId } from '../assets/storyIcons';
 import { preloadPokemon } from '../ui/lazyAssets';
 import { pokemonVisual, type Visual } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
@@ -70,6 +73,7 @@ export class FieldTrialScene extends Phaser.Scene {
     onInputAction(this, (a) => this.wait?.(a));
     this.input.on('pointerdown', () => this.wait?.('confirm'));
     this.cameras.main.fadeIn(session.settings.battleAnimations === 'full' ? 300 : 1);
+    playStoryMusic(this, 'mu_battle_rival_a', 'bgm.battle_trainer');
     void this.play();
   }
 
@@ -139,7 +143,10 @@ export class FieldTrialScene extends Phaser.Scene {
           this.menuRows = [];
           resolve();
           return;
-        } else if (a === 'confirm') this.body.setText('Not now. Follow the arrow this time.');
+        } else if (a === 'confirm') {
+          this.body.setText('Not now. Follow the arrow this time.');
+          playStorySfx(this, 'se_error', 0.6);
+        }
         draw();
       };
     });
@@ -174,6 +181,14 @@ export class FieldTrialScene extends Phaser.Scene {
     const linesFirst = s.teach === 'switch' || s.teach === 'items';
     if (!linesFirst && s.menu) await this.pickMenu(s.menu);
     if (s.teach === 'moves') this.chart = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT * 0.42, this.view.chart, textStyle(20, '#ffffff', { backgroundColor: '#1d1a2b', padding: { x: 14, y: 10 }, wordWrap: { width: 640 } })).setOrigin(0.5).setName('trial-chart');
+    if (s.teach === 'heartbond') {
+      playStorySfx(this, 'se_heartbond_tick');
+      storyIcon(this, heartIconId(1), GAME_WIDTH * 0.28 + 90, GAME_HEIGHT * 0.4, 48);
+    }
+    if (s.teach === 'feat') {
+      playStorySfx(this, 'st_feat');
+      storyIcon(this, storyIconId('emote', 'exclamation'), GAME_WIDTH * 0.72 + 80, GAME_HEIGHT * 0.14, 48);
+    }
     for (const l of s.lines) await this.say(l.speaker, l.text);
     this.chart?.destroy();
     this.chart = null;
@@ -194,7 +209,10 @@ export class FieldTrialScene extends Phaser.Scene {
     for (const s of this.view.steps) await this.step(s);
     for (const line of this.view.reaction.lines) await this.say(this.view.reaction.speaker, line);
     const dramatic = (await this.choose(this.view.ask.text, this.view.ask.options)) as 'full' | 'quiet' | 'off';
-    for (const tip of this.view.tips) await this.say(null, tip);
+    for (const tip of this.view.tips) {
+      playStorySfx(this, 'st_tip');
+      await this.say(null, tip);
+    }
     services().session.finishFieldTrial(dramatic);
     this.cameras.main.fadeOut(200);
     this.time.delayedCall(210, () => this.scene.start('Map'));

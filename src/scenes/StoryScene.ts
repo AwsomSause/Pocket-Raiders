@@ -5,6 +5,7 @@
 import Phaser from 'phaser';
 import type { StoryScene as View } from '../core/story2/module';
 import { services } from '../game/services';
+import { playStorySfx } from '../ui/audio';
 import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
@@ -73,6 +74,7 @@ export class StoryScene extends Phaser.Scene {
     const last = this.page >= this.view.lines.length - 1;
     if (!last && this.view.lines.length > 0) {
       if (action === 'confirm') {
+        playStorySfx(this, 'se_page_flip', 0.6);
         this.page += 1;
         this.show();
       }
@@ -81,6 +83,7 @@ export class StoryScene extends Phaser.Scene {
     if (this.view.choices.length > 0) {
       if (action === 'up' || action === 'down') {
         this.choice = (this.choice + (action === 'down' ? 1 : this.view.choices.length - 1)) % this.view.choices.length;
+        playStorySfx(this, 'se_choice_hover', 0.6);
         this.show();
       } else if (action === 'confirm') this.finish(this.view.choices[this.choice]!.id);
       return;
@@ -91,6 +94,7 @@ export class StoryScene extends Phaser.Scene {
   private finish(choiceId?: string): void {
     const { session } = services();
     if (!session.finishStoryScene(choiceId)) return;
+    if (choiceId) playStorySfx(this, 'se_choice_confirm');
     this.done = true;
     // Another scene may be waiting (never two in one Stop today, but a saved run may carry one).
     const again = session.storyScene();

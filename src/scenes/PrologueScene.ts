@@ -3,6 +3,7 @@
 // other slices and are skipped here. All rules live in core/story2/{identity,prologue}.ts.
 
 import Phaser from 'phaser';
+import { playStoryMusic } from '../ui/audio';
 import { VANCE_ANIMS, VANCE_FRAMES, type VanceAnim } from '../assets/catalog';
 import { services } from '../game/services';
 import { queueAssets } from '../ui/lazyAssets';
@@ -307,6 +308,7 @@ export class PrologueScene extends Phaser.Scene {
     const data = services().session.content.storyData;
     const qs = quizQuestions(data, this.quickQuiz);
     if (i >= qs.length) return this.interview ? this.go('reveal') : this.advance('quiz');
+    if (i === 0) playStoryMusic(this, 'mu_quiz_lab_base');
     const q = qs[i]!;
     this.title(`Beat 5: The quiz (${i + 1} of ${qs.length})`);
     this.vance(i % 3 === 0 ? 'tilt' : i % 3 === 1 ? 'explain' : 'nudge');
