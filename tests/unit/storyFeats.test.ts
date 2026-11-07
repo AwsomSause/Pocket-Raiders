@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createBattle } from '../../src/core/battle/engine';
+import { createBattle, type PlayerAction } from '../../src/core/battle/engine';
+import { makeDoubles } from '../../src/core/battle/doubles';
 import { createPokemon } from '../../src/core/pokemon';
 import { openHistory } from '../../src/core/story/record';
 import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
@@ -169,7 +170,17 @@ describe('Feat lines', () => {
 
 // ---------- scenario suite: force each supported Feat in each boss fight; no softlock, valid state ----------
 
-type Setup = (run: RunState, c: { content: Content }) => void;
+type Setup = (run: RunState, c: { content: Content; classId: string; first?: PlayerAction; expect?: string }) => void;
+const backstory = (r: RunState, id: string) => { r.story.v2!.protagonist = { look: 'a', name: 'Kai', pronouns: 'they', backstory: id }; };
+const mon = (species: string, level: number, uid: string, moves: string[]) => ({ ...createPokemon(content, species, level, uid), moves: moves.map((id) => ({ id, pp: 99 })) });
+/** A double battle: the partner (made sturdy) beside a frail ally, against two foes. */
+function duo(r: RunState, classId: string, foes: [string, number]): void {
+  const uid = r.party[0]!.uid;
+  r.party = [mon('charmander', 60, uid, ['scratch']), mon('rattata', 30, 'ally', ['tackle'])];
+  r.battle = createBattle('trainer', [mon(foes[0], foes[1], 'e1', ['tackle']), mon(foes[0], foes[1], 'e2', ['tackle'])], 0, uid, { classId, name: 'Boss', leaderId: null });
+  r.battle.turn = 4;
+  makeDoubles(r.battle, r.party);
+}
 const half = (run: RunState) => { const m = run.party[0]!; m.hp = Math.max(1, Math.floor(m.hp / 2)); };
 const SETUPS: Record<string, { foe: string; level: number; setup: Setup; check: (before: RunState, after: RunState) => void }> = {
   not_yet: { foe: 'machamp', level: 70, setup: half, check: (_b, a) => {
@@ -186,6 +197,23 @@ const SETUPS: Record<string, { foe: string; level: number; setup: Setup; check: 
   blind_strike: { foe: 'snorlax', level: 5, setup: (r) => { r.battle!.playerStages.acc = -6; }, check: () => {} },
   read_the_room: { foe: 'snorlax', level: 30, setup: (r) => { half(r); r.story.v2!.heartbond.latched.push(8); }, check: () => {} },
   crack_the_barrier: { foe: 'snorlax', level: 10, setup: (r) => { half(r); r.battle!.sideEffects.enemy.reflect = 5; }, check: (_b, a) => expect(a.battle?.sideEffects.enemy.reflect ?? 0).toBe(0) },
+  between_them_and_it: { foe: 'machop', level: 30, setup: (r, c) => { duo(r, c.classId, ['machop', 30]); r.party[1]!.hp = 1; }, check: (b, a) => expect(a.party[0]!.hp).toBeLessThan(b.party[0]!.hp) },
+  spark_shared: { foe: 'snorlax', level: 10, setup: (r, c) => { duo(r, c.classId, ['snorlax', 10]); half(r); r.battle!.sideEffects.enemy.reflect = 5; c.expect = 'crack_the_barrier'; }, check: (_b, a) => expect(a.battle!.doubles!.player.stages.atk).toBe(1) },
+  break_the_rule: { foe: 'misdreavus', level: 10, setup: (r) => { r.party[0]!.moves = [{ id: 'mud-slap', pp: 99 }]; }, check: (_b, a) => expect(a.story.v2!.feats.gains).toContain('brk:levitate') },
+  unmask_the_illusion: { foe: 'mimikyu', level: 10, setup: () => {}, check: (_b, a) => expect(a.battle?.extra.brokenFace ?? ['e1']).toContain('e1') },
+  call_of_the_wild: { foe: 'snorlax', level: 30, setup: (r) => { backstory(r, 'bs_viridian'); half(r); }, check: (b, a) => expect(a.battle!.enemyTeam[0]!.hp).toBeLessThan(b.battle!.enemyTeam[0]!.hp) },
+  old_tactics: { foe: 'snorlax', level: 10, setup: (r, c) => {
+    backstory(r, 'bs_ex_criminal');
+    const partner = r.party[0]!;
+    r.party = [mon('rattata', 10, 'lead', ['tackle']), partner];
+    r.battle = createBattle('trainer', [mon('snorlax', 10, 'e1', ['tackle'])], 0, 'lead', { classId: c.classId, name: 'Boss', leaderId: null });
+    r.battle.turn = 4;
+    r.battle.sideEffects.player.spikes = 3;
+    r.battle.sideEffects.player.stealthRock = true;
+    c.first = { kind: 'switch', partyIndex: 1 };
+  }, check: (b, a) => expect(a.party[1]!.hp).toBeGreaterThan(0) },
+  resonance_pulse: { foe: 'snorlax', level: 10, setup: (r) => { backstory(r, 'bs_aether'); r.battle!.enemyTeam[0]!.moves = [{ id: 'thunder-wave', pp: 99 }]; }, check: (_b, a) => expect(a.party[0]!.status).toBeNull() },
+  old_style_surge: { foe: 'snorlax', level: 30, setup: (r) => { backstory(r, 'bs_hisui'); half(r); }, check: () => {} },
 };
 
 describe('scenario suite: each Feat in each boss fight', () => {
@@ -199,25 +227,27 @@ describe('scenario suite: each Feat in each boss fight', () => {
         const { run } = storyRun(`${id}-${classId}`);
         bossBattle(run, classId, s.foe, s.level);
         // Loose Act/run caps so the other Feats can be parked as "used twice" and only this one can fire.
-        const c = { content: { ...content, balance: { ...content.balance, story: { ...content.balance.story, feats: { ...content.balance.story.feats, caps: { battle: 1, act: 999, run: 999, sameFeat: 2 } } } } } as Content };
+        const c: { content: Content; classId: string; first?: PlayerAction; expect?: string } = { classId, content: { ...content, balance: { ...content.balance, story: { ...content.balance.story, feats: { ...content.balance.story.feats, caps: { battle: 1, act: 999, run: 999, sameFeat: 2 } } } } } as Content };
         s.setup(run, c);
         const f = feats(run);
         f.banked = 1;
-        for (const other of FEAT_IDS) if (other !== id) f.used.push({ id: other, battle: 'pre', act: 99 }, { id: other, battle: 'pre2', act: 99 });
+        for (const other of FEAT_IDS) if (other !== (c.expect ?? id)) f.used.push({ id: other, battle: 'pre', act: 99 }, { id: other, battle: 'pre2', act: 99 });
         const parked = f.used.length;
         let state = run;
         let fired = false;
         for (let t = 0; t < 30 && state.phase === 'battle' && state.battle && !state.battle.outcome; t += 1) {
           const before = state;
-          state = takeTurn(c.content, state, { kind: 'move', index: 0 }).run;
+          const swap = state.battle.needsSwitch ? state.party.findIndex((m, i) => m.hp > 0 && i !== state.battle!.activeIndex) : -1;
+          if (state.battle.needsSwitch && swap < 0) break;
+          state = takeTurn(c.content, state, swap >= 0 ? { kind: 'switch', partyIndex: swap } : t === 0 && c.first ? c.first : { kind: 'move', index: 0 }).run;
           if (!fired && state.story.v2!.feats.used.length > parked) {
             fired = true;
             s.check(before, state);
           }
         }
         const used = feats(state).used.slice(parked);
-        expect(used.map((u) => u.id)).toEqual([id]);
-        expect(feats(state).first).toBe(id);
+        expect(used.map((u) => u.id)).toEqual([c.expect ?? id]);
+        expect(feats(state).first).toBe(c.expect ?? id);
         expect(feats(state).banked).toBe(0);
         expect(() => RunStateSchema.parse(JSON.parse(JSON.stringify(state)))).not.toThrow();
       });

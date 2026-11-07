@@ -28,6 +28,8 @@ export interface FeatDef {
   backstory?: string;
   /** Built: the engine has its hook. Limited: in the catalog, no hook yet (never offered). */
   status: 'supported' | 'limited';
+  /** Spark Shared rides on another Feat (doubles) instead of firing by itself. */
+  rider?: boolean;
 }
 
 export const FEATS: readonly FeatDef[] = [
@@ -37,16 +39,16 @@ export const FEATS: readonly FeatDef[] = [
   { id: 'through_the_numbness', hook: 'status', per: 'battle', status: 'supported' },
   { id: 'faster_than_fear', hook: 'order', per: 'battle', status: 'supported' },
   { id: 'blind_strike', hook: 'accuracy', per: 'battle', status: 'supported' },
-  { id: 'between_them_and_it', hook: 'redirect', per: 'battle', status: 'limited' },
+  { id: 'between_them_and_it', hook: 'redirect', per: 'battle', status: 'supported' },
   { id: 'refuse_to_fall', hook: 'faint', per: 'run', status: 'supported' },
-  { id: 'break_the_rule', hook: 'ability', per: 'run', status: 'limited' },
-  { id: 'unmask_the_illusion', hook: 'transform', per: 'battle', status: 'limited' },
+  { id: 'break_the_rule', hook: 'ability', per: 'battle', status: 'supported' },
+  { id: 'unmask_the_illusion', hook: 'transform', per: 'battle', status: 'supported' },
   { id: 'read_the_room', hook: 'evade', per: 'battle', status: 'supported' },
-  { id: 'spark_shared', hook: 'post', per: 'battle', status: 'limited' },
-  { id: 'call_of_the_wild', hook: 'turn', per: 'run', backstory: 'bs_viridian', status: 'limited' },
-  { id: 'old_tactics', hook: 'hazard', per: 'run', backstory: 'bs_ex_criminal', status: 'limited' },
-  { id: 'resonance_pulse', hook: 'status', per: 'run', backstory: 'bs_aether', status: 'limited' },
-  { id: 'old_style_surge', hook: 'move', per: 'run', backstory: 'bs_hisui', status: 'limited' },
+  { id: 'spark_shared', hook: 'post', per: 'battle', status: 'supported', rider: true },
+  { id: 'call_of_the_wild', hook: 'turn', per: 'run', status: 'supported' },
+  { id: 'old_tactics', hook: 'hazard', per: 'run', backstory: 'bs_ex_criminal', status: 'supported' },
+  { id: 'resonance_pulse', hook: 'status', per: 'run', backstory: 'bs_aether', status: 'supported' },
+  { id: 'old_style_surge', hook: 'move', per: 'run', backstory: 'bs_hisui', status: 'supported' },
 ];
 export const FEAT_IDS = FEATS.map((f) => f.id);
 const BY_ID = new Map(FEATS.map((f) => [f.id, f]));
@@ -133,7 +135,7 @@ export function armFeat(run: RunState): boolean {
 }
 
 /** What the engine needs this turn: the partner's uid and the Feats it may fire (moment conditions are checked at the hook). */
-export interface FeatGate { uid: string; allowed: readonly string[]; final: boolean; boss: boolean; fired?: string }
+export interface FeatGate { uid: string; allowed: readonly string[]; final: boolean; boss: boolean; fired?: string; broke?: readonly string[]; detail?: string }
 
 /**
  * The Feats the partner may fire this turn, or null. Checks the setting, the bank, the battle, the turn, the run caps,
@@ -160,25 +162,29 @@ export function featGate(content: Content, run: RunState): FeatGate | null {
   const level8 = v2.heartbond.latched.includes(8);
   const final = finalStoryBattle(run, battle);
   const boss = isBossFight(battle) || Boolean(battle.rivalId);
+  const backstory = v2.module?.backstory ?? v2.protagonist?.backstory;
   const allowed = FEATS.filter((d) => {
-    if (d.status !== 'supported') return false;
-    if (d.backstory && d.backstory !== v2.module?.backstory && d.backstory !== v2.protagonist?.backstory) return false;
+    if (d.status !== 'supported' || d.rider) return false;
+    if (d.backstory && d.backstory !== backstory) return false;
     const times = used.filter((u) => u.id === d.id).length;
     if (times >= f.caps.sameFeat || (d.per === 'run' && times >= 1)) return false;
     if (d.id === 'not_yet') return boss;
     if (d.id === 'refuse_to_fall') return final;
     if (d.id === 'read_the_room') return temperament === 'tm_intelligent' || level8;
     if (d.id === 'against_the_odds') return boss || Boolean(battle.doubles);
+    if (d.id === 'between_them_and_it') return Boolean(battle.doubles);
+    if (d.id === 'call_of_the_wild') return !battle.doubles && (backstory === 'bs_viridian' || Number(v2.facts['rapport'] ?? 0) >= 6);
     return true;
   }).map((d) => d.id);
-  return allowed.length ? { uid, allowed, final, boss } : null;
+  const broke = v2.feats.gains.filter((g) => g.startsWith('brk:')).map((g) => g.slice(4));
+  return allowed.length ? { uid, allowed, final, boss, broke } : null;
 }
 
 /**
  * The engine reported a Feat: spend the bank, record it and take the Moment Director's major slot. Heartbond pays
  * `feat` through `heartbondTurn` in the same ranked call as clutch and Hyper, so only one of them pays that turn. Returns false if nothing was banked (the engine never fires without one).
  */
-export function recordFeat(content: Content, run: RunState, id: string): boolean {
+export function recordFeat(content: Content, run: RunState, id: string, detail?: string): boolean {
   const v2 = run.story.v2;
   const uid = v2?.heartbond.partner;
   if (!v2 || !uid || !BY_ID.has(id) || v2.feats.banked <= 0) return false;
@@ -186,6 +192,7 @@ export function recordFeat(content: Content, run: RunState, id: string): boolean
   v2.feats.armed = false;
   v2.feats.used.push({ id, battle: battleKey(run), act: currentAct(run) });
   v2.feats.first ??= id;
+  if (id === 'break_the_rule' && detail) v2.feats.gains.push(`brk:${detail}`);
   noteMoments(run, 'major');
   if (run.battle) run.story.majorCuesThisBattle += 1;
   return true;
@@ -206,6 +213,24 @@ export function featLines(text: Readonly<Record<string, string>>, id: string, po
   if (own) out.push(renderTemplate(own, { pokemon }));
   if (memory && text['feat.remembered']) out.push(renderTemplate(text['feat.remembered'], { pokemon, memory }));
   return out;
+}
+
+/**
+ * Spark Shared: a Feat fired in a double battle also gives the partner's ally +1 to every stat (stages, so a switch
+ * clears it). Returns the ally's uid, or null.
+ */
+export function sparkShared(run: RunState): string | null {
+  const battle = run.battle;
+  const uid = run.story.v2?.heartbond.partner;
+  const d = battle?.doubles;
+  if (!battle || !d || !uid) return null;
+  const primary = run.party[battle.activeIndex];
+  const second = d.player.index >= 0 ? run.party[d.player.index] : undefined;
+  const ally = primary?.uid === uid ? second : second?.uid === uid ? primary : undefined;
+  if (!ally || ally.hp <= 0) return null;
+  const stages = ally === primary ? battle.playerStages : d.player.stages;
+  for (const k of ['atk', 'def', 'spa', 'spd', 'spe'] as const) stages[k] = Math.min(6, stages[k] + 1);
+  return ally.uid;
 }
 
 /** Whether the partner's HP frame should show the Resolve spark (a Feat is banked and Dramatic Moments is on). */
