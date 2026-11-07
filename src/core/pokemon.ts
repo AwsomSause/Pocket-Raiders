@@ -26,7 +26,7 @@ export function lookSpecies(content: Content, mon: Pick<PokemonInstance, 'specie
 /**
  * Battle stats from base stats and level (modern formula with no IVs, EVs or
  * natures, per director decision D2), then vitamin stacks.
- *   HP    = floor(2 × Base × Level / 100) + Level + 10
+ *   HP    = floor(2 × Base × Level / 100) + Level + 10 + floor(Level × hpPerLevel)
  *   Other = floor(2 × Base × Level / 100) + 5
  */
 export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
@@ -37,7 +37,7 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
     const base = species.baseStats[stat];
     const raw =
       stat === 'hp'
-        ? Math.floor((2 * base * mon.level) / 100) + mon.level + 10
+        ? Math.floor((2 * base * mon.level) / 100) + mon.level + 10 + Math.floor(mon.level * content.balance.hpPerLevel)
         : Math.floor(((Math.floor((2 * base * mon.level) / 100) + 5) * Math.round(natureMultiplier(effectiveNature(mon), stat) * 100)) / 100);
     const stacks = mon.vitamins[stat] ?? 0;
     const boost = ((mon.statBoosts?.[stat] ?? 0) + (stat === 'hp' ? mon.perkHp ?? 0 : 0)) / 100;

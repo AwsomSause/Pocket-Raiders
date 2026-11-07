@@ -24,7 +24,7 @@ export interface ThreatBreakdown {
 }
 
 const refStat = (level: number) => Math.floor((2 * 70 * level) / 100) + 5;
-const refHp = (level: number) => Math.floor((2 * 70 * level) / 100) + level + 10;
+const refHp = (content: Content, level: number) => Math.floor((2 * 70 * level) / 100) + level + 10 + Math.floor(level * content.balance.hpPerLevel);
 
 /** The rating of a built Pokémon (its moves, level and ability as they are). */
 export function threatOf(content: Content, mon: PokemonInstance): ThreatBreakdown {
@@ -52,7 +52,7 @@ export function threatOf(content: Content, mon: PokemonInstance): ThreatBreakdow
     if (!seen.has('priority') && move.priority > 0 && (move.power ?? 0) > 0) (seen.add('priority'), (bonus += cfg.priorityBonus));
   }
   const offense = Math.max(cfg.noAttackOffense, best / (60 * 1.5 * ref));
-  const bulk = (stats.hp * (stats.def + stats.spd)) / 2 / (refHp(mon.level) * ref);
+  const bulk = (stats.hp * (stats.def + stats.spd)) / 2 / (refHp(content, mon.level) * ref);
   const speed = Math.min(2, stats.spe / ref);
   const ability = abilityOf(content, mon);
   if (ability && cfg.strongAbilities.includes(ability)) bonus += cfg.abilityBonus;

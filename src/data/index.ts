@@ -37,6 +37,7 @@ import {
   type Requirement,
   type Reward,
 } from '../core/contentSchema';
+import { withStages } from '../core/itemStages';
 import abilitiesJson from './abilities.json';
 import { HISTORY_MEMORIES, HYPER_EFFECTS } from '../core/story/hyper';
 import { MOMENT_EFFECTS } from '../core/story/moments';
@@ -422,7 +423,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     licenses: toMap(runPrep.licenses, 'runPrep.json licenses', problems),
     rewards: toMap(rewards, 'rewards.json', problems),
     items: toMap(items, 'items.json', problems),
-    catalog: toMap(itemCatalog, 'itemCatalog.json', problems),
+    catalog: toMap(withStages(itemCatalog, balance.itemStages), 'itemCatalog.json', problems),
     learnables: new Map(Object.entries(learnables).map(([id, l]) => [id, [...new Set([...l.egg, ...l.other])]])),
     eggMoves: new Map(Object.entries(learnables).map(([id, l]) => [id, l.egg])),
     trainers: toMap(trainers, 'trainers.json', problems),
