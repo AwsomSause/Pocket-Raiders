@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 # A newer push to the same PR, or to main, cancels the older run, so the runner queue does not back up.
 # The newest main run still finishes, and "CI ok" runs with if: always(), so it reports on cancelled runs.
@@ -15,6 +16,8 @@ concurrency:
 jobs:
   # Docs-only PRs (markdown, docs, plans, promo, reports, ideas) skip the heavy jobs; "CI ok" still reports.
   changes:
+    # Draft PRs do not run CI (mark ready for review to run it); this halves runner load.
+    if: github.event.pull_request.draft != true
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
@@ -104,6 +107,7 @@ jobs:
     steps:
       - run: |
           echo "code=${{ needs.changes.outputs.code }} check=${{ needs.check.result }} e2e=${{ needs.e2e.result }}"
+          if [ "${{ needs.changes.result }}" = skipped ]; then echo "Draft PR: CI did not run. Mark it ready for review to run CI."; exit 1; fi
           [ "${{ needs.changes.result }}" = success ] || exit 1
           if [ "${{ needs.changes.outputs.code }}" = false ]; then exit 0; fi
           [ "${{ needs.check.result }}" = success ] && [ "${{ needs.e2e.result }}" = success ]
