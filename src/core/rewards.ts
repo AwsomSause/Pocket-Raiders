@@ -16,6 +16,7 @@
 // item already at its max is a free re-roll of the draft (director, answer 5).
 
 import { noRevives } from './rules';
+import { rewardTierAllowed } from './rarity';
 import { fortuneBias } from './bank';
 import { moneyMultiplier, runArchetype } from './archetypes';
 import { evolutionLevelOffset, rareItemWeightPerk } from './trainerPerks';
@@ -43,6 +44,8 @@ export class RewardConfigError extends Error {
 }
 
 export function isRewardEligible(content: Content, run: RunState, reward: Reward): boolean {
+  // Rarity cap by source: early drafts (before 2 badges) offer no epic rewards (rarity.json caps.rewardItem).
+  if (!rewardTierAllowed(content, reward.rarity, run.badges.length)) return false;
   if (reward.scope === 'pokemon' && run.party.length === 0) return false;
   if (reward.effect.kind === 'addItem' && noRevives(run.rules) && content.items.get(reward.effect.item)?.category === 'revive') return false;
   if (reward.effect.kind === 'catalog') {

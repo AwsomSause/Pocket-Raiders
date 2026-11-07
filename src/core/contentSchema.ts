@@ -2031,7 +2031,14 @@ export const BalanceSchema = z.object({
     moveCap: z.number().positive(),
     /** Species allowed over their cap on purpose (a boss-only form), each with the reason. */
     exempt: z.record(z.string(), z.string().min(1)).default({}),
-  }).default({ level: 50, caps: { baby: 1e9, basic: 1e9, middle: 1e9, final: 1e9, legendary: 1e9, mythical: 1e9, form: 1e9 }, moveCap: 1e9, exempt: {} }),
+    /**
+     * Tera and Z access (one spike per battle): the rating counts `teraPercent` for Terastallization, `zPercent` for the
+     * type Z-Move, and `speciesZPercent` instead when the species has its own Z-Crystal. A species may reach `headroom` x its cap with access.
+     */
+    access: z.object({ teraPercent: z.number().min(0), zPercent: z.number().min(0), speciesZPercent: z.number().min(0), headroom: z.number().min(1) }).default({ teraPercent: 0, zPercent: 0, speciesZPercent: 0, headroom: 1e9 }),
+  }).default({ level: 50, caps: { baby: 1e9, basic: 1e9, middle: 1e9, final: 1e9, legendary: 1e9, mythical: 1e9, form: 1e9 }, moveCap: 1e9, exempt: {}, access: { teraPercent: 0, zPercent: 0, speciesZPercent: 0, headroom: 1e9 } }),
+  /** Rarity caps by source (core/rarity.ts): regional forms sit `offRegionShift` tiers rarer outside their home region; `trade` = rarest species tier a Trade Post offers; `shopItem` = rarest item tier shops sell (Black Market excepted); `rewardItem` = rarest item tier a reward draft offers by badges (last row at or below your badges). */
+  rarityCaps: z.object({ offRegionShift: z.number().int().min(0), trade: z.enum(['common', 'uncommon', 'rare', 'veryRare', 'epic', 'legendary', 'mythical', 'special']), shopItem: z.enum(['common', 'uncommon', 'rare', 'epic']), rewardItem: z.array(z.object({ badges: z.number().int().min(0), max: z.enum(['common', 'uncommon', 'rare', 'epic']) })).min(1) }).default({ offRegionShift: 0, trade: 'special', shopItem: 'epic', rewardItem: [{ badges: 0, max: 'epic' }] }),
   /** Overhaul slice 3 (core/variety.ts): picks within `window[pool]` of the same pool get weight × `penalty`. A pool with no window keeps no history. */
   variety: z.object({ penalty: z.number().gt(0).max(1), window: z.record(z.string(), z.number().int().min(0).max(50)) }).default({ penalty: 1, window: {} }),
   doubles: z

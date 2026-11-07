@@ -90,6 +90,7 @@ import {
 } from './abilities';
 import { genderOf, oppositeGender, sameGender } from '../gender';
 import * as Held from './held';
+import { roleEntryBoost } from '../legendary/roles';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
@@ -1631,6 +1632,9 @@ function enterField(ctx: BattleContext, holder: Held.Holder): void {
   state.used[key] = { on: 1 };
   Held.onSwitchIn(ctx, holder);
   Held.boosterEnergy(ctx, holder, []);
+  // Legendary roles: a Legendary or Mythical enters with one stage for its role (legendary/roles.ts).
+  const boost = roleEntryBoost(ctx.content, holder.mon.speciesId);
+  if (boost) holder.stages[boost.stat] = clampStage(holder.stages[boost.stat] + boost.stages);
 }
 
 function leaveField(ctx: BattleContext, mon: PokemonInstance): void {
