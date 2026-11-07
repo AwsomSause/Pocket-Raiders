@@ -756,6 +756,12 @@ function hitAll(ctx: BattleContext, field: Field, turn: TurnState, user: Combata
     field.on(user, events);
     return;
   }
+  // Pledge combos: the second, different Pledge of a side in one turn hits at 150 power and adds a field effect.
+  const pledge = /-pledge$/.test(move.id) ? PLEDGE_COMBOS[[doubles.pledges?.[user.side], move.id].sort().join('+')] : undefined;
+  if (/-pledge$/.test(move.id)) {
+    doubles.pledgeCombo = Boolean(pledge) && doubles.pledges?.[user.side] !== move.id;
+    doubles.pledges = { ...doubles.pledges, [user.side]: pledge && doubles.pledgeCombo ? undefined : move.id };
+  }
   doubles.spread = targets.length > 1 && move.category !== 'status';
   for (const t of targets) {
     if (t.mon.hp <= 0 || field.spotOf(t) === null) continue;
@@ -775,8 +781,36 @@ function hitAll(ctx: BattleContext, field: Field, turn: TurnState, user: Combata
     if (user.mon.hp <= 0 && !move.effects.selfFaint) break;
   }
   doubles.spread = false;
+  if (doubles.pledgeCombo && pledge) {
+    const side = pledge.onUser ? user.side : otherSide(user.side);
+    ctx.battle.sideEffects[side][pledge.effect] = 4;
+    events.push({ type: 'sideEffect', side, effect: pledge.effect, on: true });
+  }
+  doubles.pledgeCombo = false;
+  // Order Up: a Dondozo with a commanding Tatsugiri gets a stat boost from the Tatsugiri's form.
+  if (move.id === 'order-up' && user.mon.hp > 0 && user.mon.speciesId.startsWith('dondozo')) {
+    const tat = field.ally(user);
+    const stat = tat && ctx.battle.doubles!.commanding!.includes(tat.mon.uid) ? ORDER_UP_BOOST[tatsugiriForm(tat.mon)] : undefined;
+    if (stat) S.applyStageChange(ctx, user, stat, 1, events);
+  }
   field.on(user, events);
 }
+
+/** Pledge pairs (sorted ids) and the field effect they make: Sea of Fire and Swamp hit the foe's side, Rainbow helps the user's. */
+const PLEDGE_COMBOS: Record<string, { effect: 'seaOfFire' | 'rainbow' | 'swamp'; onUser: boolean }> = {
+  'fire-pledge+grass-pledge': { effect: 'seaOfFire', onUser: false },
+  'fire-pledge+water-pledge': { effect: 'rainbow', onUser: true },
+  'grass-pledge+water-pledge': { effect: 'swamp', onUser: false },
+};
+/** A Tatsugiri's pattern: named in its species id, otherwise fixed by its uid (the same every battle). */
+export function tatsugiriForm(mon: PokemonInstance): 'curly' | 'droopy' | 'stretchy' {
+  if (mon.speciesId.includes('droopy')) return 'droopy';
+  if (mon.speciesId.includes('stretchy')) return 'stretchy';
+  if (mon.speciesId.includes('curly')) return 'curly';
+  return (['curly', 'droopy', 'stretchy'] as const)[[...mon.uid].reduce((a, ch) => a + ch.charCodeAt(0), 0) % 3]!;
+}
+/** Order Up's boost by the commanding Tatsugiri's form (Curly: Attack, Droopy: Defense, Stretchy: Speed). */
+const ORDER_UP_BOOST: Record<string, BoostStat> = { curly: 'atk', droopy: 'def', stretchy: 'spe' };
 
 type DoublesMove = (ctx: BattleContext, field: Field, turn: TurnState, user: Combatant, target: Combatant | null, events: BattleEvent[]) => boolean;
 
@@ -944,6 +978,7 @@ function endOfTurn(ctx: BattleContext, field: Field, commands: (SlotCommand | nu
   };
   each((c) => S.applyWeather(ctx, [c], events, false));
   S.applyWeather(ctx, [], events);
+  each((c) => S.applySeaOfFire(ctx, c, events));
   each((c) => S.applyTurnHeal(ctx, c, events));
   each((c) => S.applyTerrain(ctx, [c], events, false));
   S.applyTerrain(ctx, [], events);

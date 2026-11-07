@@ -2465,6 +2465,57 @@
     },
     "primal": true
    }
+  },
+  {
+   "id": "tatsugirinite-droopy",
+   "name": "Droopy Tatsugirinite",
+   "description": "Lets Tatsugiri Mega Evolve in battle (needs the Mega Ring).",
+   "category": "transformation",
+   "iconAssetId": "item.tatsugirinite",
+   "usableInBattle": false,
+   "usableOutside": false,
+   "target": "none",
+   "effect": {
+    "kind": "megaStone",
+    "forms": {
+     "tatsugiri": "tatsugiri-droopy-mega"
+    },
+    "primal": false
+   }
+  },
+  {
+   "id": "tatsugirinite-stretchy",
+   "name": "Stretchy Tatsugirinite",
+   "description": "Lets Tatsugiri Mega Evolve in battle (needs the Mega Ring).",
+   "category": "transformation",
+   "iconAssetId": "item.tatsugirinite",
+   "usableInBattle": false,
+   "usableOutside": false,
+   "target": "none",
+   "effect": {
+    "kind": "megaStone",
+    "forms": {
+     "tatsugiri": "tatsugiri-stretchy-mega"
+    },
+    "primal": false
+   }
+  },
+  {
+   "id": "magearnite-original",
+   "name": "Original Magearnite",
+   "description": "Lets Magearna Mega Evolve in battle (needs the Mega Ring).",
+   "category": "transformation",
+   "iconAssetId": "item.magearnite",
+   "usableInBattle": false,
+   "usableOutside": false,
+   "target": "none",
+   "effect": {
+    "kind": "megaStone",
+    "forms": {
+     "magearna": "magearna-original-mega"
+    },
+    "primal": false
+   }
   }
  ],
  "rewards": [
@@ -4787,6 +4838,54 @@
    "scope": "run",
    "moneyMultiplierApplies": false,
    "iconAssetId": "item.blue_orb"
+  },
+  {
+   "id": "tatsugirinite-droopy",
+   "name": "Droopy Tatsugirinite",
+   "description": "Lets Tatsugiri Mega Evolve in battle (needs the Mega Ring).",
+   "category": "transformation",
+   "rarity": "rare",
+   "effect": {
+    "kind": "addItem",
+    "item": "tatsugirinite-droopy",
+    "quantity": 1
+   },
+   "stacking": "instant",
+   "scope": "run",
+   "moneyMultiplierApplies": false,
+   "iconAssetId": "item.tatsugirinite"
+  },
+  {
+   "id": "tatsugirinite-stretchy",
+   "name": "Stretchy Tatsugirinite",
+   "description": "Lets Tatsugiri Mega Evolve in battle (needs the Mega Ring).",
+   "category": "transformation",
+   "rarity": "rare",
+   "effect": {
+    "kind": "addItem",
+    "item": "tatsugirinite-stretchy",
+    "quantity": 1
+   },
+   "stacking": "instant",
+   "scope": "run",
+   "moneyMultiplierApplies": false,
+   "iconAssetId": "item.tatsugirinite"
+  },
+  {
+   "id": "magearnite-original",
+   "name": "Original Magearnite",
+   "description": "Lets Magearna Mega Evolve in battle (needs the Mega Ring).",
+   "category": "transformation",
+   "rarity": "rare",
+   "effect": {
+    "kind": "addItem",
+    "item": "magearnite-original",
+    "quantity": 1
+   },
+   "stacking": "instant",
+   "scope": "run",
+   "moneyMultiplierApplies": false,
+   "iconAssetId": "item.magearnite"
   }
  ]
 }

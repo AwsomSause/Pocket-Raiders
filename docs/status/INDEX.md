@@ -386,3 +386,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `content-audit-2.md`: Fury Cutter streak power, Alluring Voice confusion; Pledge combos and Order Up listed as limits.
 - `doubles-trainer-poses.md`: your trainer throws both balls and shows recall/win/defeat poses in doubles (W17).
 - `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
+- `w18-move-ability-gaps.md`: Pledge combos, Order Up boost, Tatsugiri/Magearna Mega stones, five Delta battle forms.
