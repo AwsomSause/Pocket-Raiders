@@ -37,7 +37,7 @@ async function openShop(page: Page, type: string) {
   expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').shopType)).toBe(type);
 }
 
-for (const type of ['mart', 'boutique', 'bazaar', 'night', 'pokenet']) test(`shop type ${type}: draws, buys in place and opens Sell`, async ({ page }) => {
+for (const type of ['mart', 'boutique', 'bazaar', 'night', 'pokenet']) test(`shop type ${type}: draws and buys in place (selling is off)`, async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await openShop(page, type);
@@ -69,9 +69,10 @@ for (const type of ['mart', 'boutique', 'bazaar', 'night', 'pokenet']) test(`sho
   if (type === 'pokenet') for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(600);
   await page.screenshot({ path: `test-results/shop-${type}-4.png` });
-  // The last stop going down is Sell; confirming opens the sell list.
+  // Selling is off (shops only sell): confirming at the bottom must not open a sell list.
   await page.keyboard.press('Enter');
-  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data?.sell ?? false)).toBe(true);
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data?.sell ?? false)).toBe(false);
   expect(errors).toEqual([]);
 });
 
@@ -101,10 +102,11 @@ test('Supply Depot: goods go in the basket, Checkout pays once with the bulk dis
   await page.keyboard.press('Escape');
   await page.waitForTimeout(300);
   expect(await scene(page)).toBe('Shop');
-  // Up from Checkout is Sell.
+  // Selling is off: Up from Checkout never opens a sell list.
   for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowUp');
   await page.keyboard.press('Enter');
-  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data?.sell ?? false)).toBe(true);
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Shop').sys.settings.data?.sell ?? false)).toBe(false);
   expect(errors).toEqual([]);
 });

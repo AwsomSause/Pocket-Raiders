@@ -45,7 +45,8 @@ test('Memories: journal, fallen trainers, battle replay and heirloom choice', as
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Memories');
   await page.waitForTimeout(400);
   expect(await texts(page)).toContain('Run Journal');
-  // Run Journal: open the newest entry.
+  // Run Journal is the second section (Run Chronicles comes first): open the newest entry.
+  await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
   await page.waitForTimeout(300);
   await page.keyboard.press('Enter');
