@@ -1,0 +1,1 @@
+- Accessibility (W11 part 2): Bigger small print (fine print drawn in the larger bold font) and Map quest contrast (dark plate behind the pinned quest line); both off by default, settings v40 -> v41 with migration test. Limit: Bigger small print can make dense screens look busier.
