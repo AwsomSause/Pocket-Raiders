@@ -7,7 +7,6 @@ import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext, type BattleEvent, type PlayerAction } from '../../src/core/battle/engine';
 import {
   battleTypes,
-  bossMechanics,
   canDynamax,
   gmaxFormFor,
   maxMoveFor,
@@ -154,8 +153,6 @@ describe('Mega Evolution in battle (PokeRogue style)', () => {
     ctx.disabledMechanics = ['mega'];
     expect(transforms(resolveTurn(ctx, { kind: 'move', index: 0 }))).toEqual([]);
     expect(p.speciesId).toBe('venusaur');
-    expect(bossMechanics(content, 'champion', 1, ['mega'])).toEqual(['tera', 'dynamax']);
-    expect(bossMechanics(content, 'champion', 1, ['mega', 'tera'])).toEqual(['dynamax']);
   });
 });
 
@@ -173,12 +170,7 @@ describe('Mega Evolution for opponents', () => {
     expect(transforms(resolveTurn(ctx, { kind: 'move', index: 0 }))).toEqual([]);
   });
 
-  it('bosses use it from gym 5 and in the league; other trainers and wild Pokémon never', () => {
-    expect(bossMechanics(content, 'gym', 4, [])).toEqual([]);
-    expect(bossMechanics(content, 'gym', 5, [])).toEqual(['mega', 'tera']);
-    expect(bossMechanics(content, 'elite', 1, [])).toEqual(['mega', 'tera', 'zmove']);
-    expect(bossMechanics(content, 'champion', 1, [])).toEqual(['mega', 'tera', 'dynamax']);
-    expect(bossMechanics(content, null, 9, [])).toEqual([]);
+  it('trainers and wild Pokémon with no boss mechanics never transform', () => {
     const { ctx } = setup([mon('snorlax', 60, 'p1', 'splash')], [mon('garchomp', 30, 'e1', 'splash')], {});
     expect(transforms(resolveTurn(ctx, { kind: 'move', index: 0 }))).toEqual([]);
   });

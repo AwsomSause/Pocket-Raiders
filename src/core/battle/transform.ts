@@ -465,24 +465,43 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
       turnsOut: battle.enemyVolatile.turnsOut,
       ...extra,
     });
-  if (enemy.hp > 0 && isAce && !battle.transform.forms[enemy.uid] && !battle.transform.mechanics[enemy.uid]) {
+  const fireMega = (): boolean => {
     const option = may('mega') ? stoneForms(content, enemy.speciesId, false)[0] : undefined;
-    if (option) {
-      changeForm(ctx, 'enemy', enemy, 'mega', { ...option, itemId: null }, events);
-      battle.transform.used.enemy.push('mega');
-    } else if (may('zmove') && bossZMove(content, enemy)) {
-      if (!ready('zmove', { zMoveType: bossZMove(content, enemy)!.type })) return;
-      const move = bossZMove(content, enemy)!;
-      battle.transform.mechanics[enemy.uid] = 'zmove';
-      battle.transform.used.enemy.push('zmove');
-      events.push({ type: 'transform', side: 'enemy', uid: enemy.uid, kind: 'zmove', from: enemy.speciesId, to: enemy.speciesId, itemId: null, moveId: move.id, zMoveId: zMoveFor(content, move)!.id });
-    } else if (may('dynamax')) {
-      if (ready('dynamax', {})) dynamax(ctx, 'enemy', enemy, events);
-    } else if (may('tera')) {
-      // A type specialist Terastallizes into their speciality.
-      const specialty = battle.trainer?.leaderId ? content.bosses.get(battle.trainer.leaderId)?.types[0] : undefined;
-      const teraType = specialty ?? teraTypeOf(content, enemy);
-      if (ready('tera', { teraType })) terastallize(ctx, 'enemy', enemy, teraType, events);
+    if (!option) return false;
+    changeForm(ctx, 'enemy', enemy, 'mega', { ...option, itemId: null }, events);
+    battle.transform.used.enemy.push('mega');
+    return true;
+  };
+  const fireZ = (): void => {
+    const move = bossZMove(content, enemy);
+    if (!move || !ready('zmove', { zMoveType: move.type })) return;
+    battle.transform.mechanics[enemy.uid] = 'zmove';
+    battle.transform.used.enemy.push('zmove');
+    events.push({ type: 'transform', side: 'enemy', uid: enemy.uid, kind: 'zmove', from: enemy.speciesId, to: enemy.speciesId, itemId: null, moveId: move.id, zMoveId: zMoveFor(content, move)!.id });
+  };
+  const fireTera = (): void => {
+    // A type specialist Terastallizes into their speciality.
+    const specialty = battle.trainer?.leaderId ? content.bosses.get(battle.trainer.leaderId)?.types[0] : undefined;
+    const teraType = specialty ?? teraTypeOf(content, enemy);
+    if (ready('tera', { teraType })) terastallize(ctx, 'enemy', enemy, teraType, events);
+  };
+  if (enemy.hp > 0 && !battle.transform.forms[enemy.uid] && !battle.transform.mechanics[enemy.uid]) {
+    const planned = battle.transform.bossPlan[enemy.uid];
+    if (planned) {
+      // A boss's designated gimmick (core/battle/bossGimmicks.ts): fires on the Pokémon it was given to, as soon as it is out.
+      if (!may(planned)) return;
+      if (planned === 'mega') fireMega();
+      else if (planned === 'zmove') fireZ();
+      else if (planned === 'dynamax') {
+        if (ready('dynamax', {})) dynamax(ctx, 'enemy', enemy, events);
+      } else if (planned === 'tera') fireTera();
+    } else if (isAce) {
+      if (!fireMega()) {
+        if (may('zmove') && bossZMove(content, enemy)) fireZ();
+        else if (may('dynamax')) {
+          if (ready('dynamax', {})) dynamax(ctx, 'enemy', enemy, events);
+        } else if (may('tera')) fireTera();
+      }
     }
   }
 }
@@ -628,30 +647,11 @@ export function revertTransformations(content: Content, battle: BattleState, par
   battle.transform.teraTypes = {};
   battle.transform.dynamax = {};
   battle.transform.mechanics = {};
+  battle.transform.bossPlan = {};
 }
-
-/** The mechanics a trainer battle's opponent may use (bosses only; see balance.transformations). */
-export function bossMechanics(content: Content, role: 'gym' | 'elite' | 'champion' | null, gymNumber: number, disabled: readonly TransformKind[], bossId?: string): TransformKind[] {
-  const rules = content.balance.transformations;
-  const allowed = role === 'gym' ? gymNumber >= rules.bossGymFrom : role !== null && rules.league;
-  if (!allowed) return [];
-  // Beta 4.4: each later gym leader has a signature gimmick (Tera, a Z-Move or Dynamax, fixed per leader); a Mega still comes first when the ace can.
-  if (role === 'gym' && bossId) {
-    const pick = GYM_GIMMICKS[[...bossId].reduce((n, ch) => (n * 31 + ch.charCodeAt(0)) >>> 0, 7) % GYM_GIMMICKS.length]!;
-    return (['mega', pick] as TransformKind[]).filter((m) => !disabled.includes(m));
-  }
-  // The Elite Four's aces unleash a Z-Move and the champion's ace Dynamaxes, once a battle; a Mega form or Tera comes first for the rest.
-  const mechanics: TransformKind[] = ['mega', 'tera'];
-  if (role === 'elite') mechanics.push('zmove');
-  if (role === 'champion') mechanics.push('dynamax');
-  return mechanics.filter((m) => !disabled.includes(m));
-}
-
-/** The gimmicks a later gym leader can be given (one each, from the leader's id). */
-const GYM_GIMMICKS: readonly TransformKind[] = ['tera', 'zmove', 'dynamax'];
 
 /** The boss's strongest damaging move that has a Z-Move, or null. */
-function bossZMove(content: Content, mon: PokemonInstance): Move | null {
+export function bossZMove(content: Content, mon: PokemonInstance): Move | null {
   let best: Move | null = null;
   for (const slot of mon.moves) {
     const move = content.moves.get(slot.id);

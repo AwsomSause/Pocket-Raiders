@@ -36,7 +36,8 @@ import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBat
 import { createBattle, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
-import { bossMechanics, revertTransformations } from './battle/transform';
+import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
+import { revertTransformations } from './battle/transform';
 import { RARITIES, TYPE_NAMES, type AttributeKey, type Content, type TypeName } from './contentSchema';
 import { auditEncounter, directSpecies } from './encounterDirector';
 import {
@@ -2131,7 +2132,12 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Bosses hold items, from their own generator so no other roll changes.
     if (role) giveBossItems(content, team, role, run.regionIndex, new Rng(hashSeed(`${run.seed}::boss-items::${run.regionIndex}::${stage.index}::${node.id}`)));
     // Gym number counted from the start of the run (1 = the first gym).
-    run.battle.transform.enemyMechanics = bossMechanics(content, role, run.badges.length + 1, run.disabledMechanics, run.battle.trainer?.leaderId ?? undefined);
+    // Designated gimmicks (core/battle/bossGimmicks.ts): none up to Stage 5 of Region 1, then one more every region.
+    const gimmickPlan = role
+      ? planBossGimmicks(content, run.battle.trainer?.leaderId, run.battle.enemyTeam, gimmickSlots(run.regionIndex, role === 'gym' ? stage.index + 1 : null, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics)
+      : {};
+    run.battle.transform.bossPlan = gimmickPlan;
+    run.battle.transform.enemyMechanics = [...new Set(Object.values(gimmickPlan))];
     // Meteor's Prophecy: every third boss also gains a random second type (its own seed, so no other roll changes).
     if (role && thirdBossLevels(runPerks(content, run)) > 0) {
       const c = run.log.counters;

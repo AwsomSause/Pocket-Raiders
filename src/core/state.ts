@@ -481,10 +481,12 @@ export const BattleTransformSchema = z.object({
   dynamax: z.record(z.string(), z.number().int().min(0)).default({}),
   /** uid -> the once-per-battle mechanic it used (Tera, Z-Move or Dynamax; one per Pokémon). */
   mechanics: z.record(z.string(), z.enum(['tera', 'zmove', 'dynamax'])).default({}),
+  /** uid -> the gimmick a boss designated for that team member (core/battle/bossGimmicks.ts). Old saves have none. */
+  bossPlan: z.record(z.string(), z.enum(['mega', 'tera', 'zmove', 'dynamax'])).default({}),
 });
 export type BattleTransform = z.infer<typeof BattleTransformSchema>;
 
-export const freshTransform = (): BattleTransform => ({ used: { player: [], enemy: [] }, forms: {}, enemyMechanics: [], teraTypes: {}, bonusTypes: {}, dynamax: {}, mechanics: {} });
+export const freshTransform = (): BattleTransform => ({ used: { player: [], enemy: [] }, forms: {}, enemyMechanics: [], teraTypes: {}, bonusTypes: {}, dynamax: {}, mechanics: {}, bossPlan: {} });
 
 export const freshExtra = () => ({
   allyFaintedTurn: { player: -9, enemy: -9 },

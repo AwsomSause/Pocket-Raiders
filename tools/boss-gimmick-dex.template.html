@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pocket Raiders Boss Gimmick Dex</title>
+<style>
+:root{--bg:#10141c;--p:#1a2130;--t:#e8ecf4;--m:#9aa6bd;--a:#ffcb45;--line:#2b364d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:14px/1.35 system-ui,Segoe UI,sans-serif}
+header{padding:22px 28px;border-bottom:1px solid var(--line)}
+h1{margin:0 0 6px;font-size:28px;color:var(--a)}.sub{color:var(--m);max-width:1100px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0;align-items:flex-end}.legend div{text-align:center;font-size:11px;color:var(--m)}
+input,select{padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--p);color:var(--t);margin-right:8px}
+main{padding:12px 28px 60px}details.b{background:var(--p);border:1px solid var(--line);border-radius:10px;margin:8px 0}
+summary.bh{display:flex;gap:14px;align-items:center;padding:10px 14px;cursor:pointer;list-style:none}
+summary.bh img.tr{height:64px;image-rendering:pixelated}.nm{font-size:17px;font-weight:700;min-width:170px}
+.chip{display:inline-block;font-size:10px;text-transform:uppercase;padding:1px 7px;border-radius:9px;color:#111;margin-right:3px;font-weight:700}
+.order{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}.og{display:flex;align-items:center;gap:4px;background:#0c1018;border-radius:8px;padding:3px 8px;font-size:11px}
+.og img{height:34px;image-rendering:pixelated}.og b{font-size:10px;text-transform:uppercase}
+.k-mega{color:#ff8fd0}.k-tera{color:#7fe3d6}.k-zmove{color:#ffb26b}.k-dynamax{color:#ff6b7a}
+.body{padding:4px 14px 14px}.tabs{display:flex;gap:6px;margin:6px 0}.tabs button{background:#232c40;color:var(--t);border:0;border-radius:8px;padding:6px 14px;cursor:pointer}
+.tabs button.on{background:var(--a);color:#111;font-weight:700}
+.team{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;background:#161c28;border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:6px 0}
+.th{flex:0 0 150px;font-size:12px;color:var(--m);align-self:center}.th b{display:block;color:var(--t);font-size:13px}
+.m{text-align:center;font-size:10px;color:var(--m);width:96px}.m .im{display:flex;align-items:flex-end;justify-content:center;height:96px}
+.m img{image-rendering:pixelated;max-width:92px}.m.dyn{width:230px}.m.dyn .im{height:230px}.m.dyn img{max-width:none}
+.m u{text-decoration:none;font-weight:700;display:block}.hide{display:none!important}.note{color:var(--m);font-size:12px;margin:2px 0 8px}
+@media(max-width:800px){.order{margin-left:0}header,main{padding-left:14px;padding-right:14px}}
+</style></head><body>
+<header><h1>Pocket Raiders — Boss Gimmick Dex</h1>
+<div class="sub" id="sub"></div>
+<div class="legend" id="legend"></div>
+<input id="q" placeholder="Search a trainer or Pokémon…" size="34"><select id="f"><option value="">All gimmick first</option><option value="mega">Mega first</option><option value="tera">Tera first</option><option value="zmove">Z-Move first</option><option value="dynamax">Dynamax first</option></select><span id="count" class="sub"></span></header>
+<main id="list"></main>
+<script>
+const D=/*DATA*/null;
+const TC={normal:'#a8a77a',fire:'#ee8130',water:'#6390f0',electric:'#f7d02c',grass:'#7ac74c',ice:'#96d9d6',fighting:'#c22e28',poison:'#a33ea1',ground:'#e2bf65',flying:'#a98ff3',psychic:'#f95587',bug:'#a6b91a',rock:'#b6a136',ghost:'#735797',dragon:'#6f35fc',dark:'#705746',steel:'#b7b7ce',fairy:'#d685ad'};
+const KN={mega:'Mega',tera:'Tera',zmove:'Z-Move',dynamax:'Dynamax'};
+const ROLE={gym:'Gym Leader',elite:'Elite Four',champion:'Champion'};
+const chip=t=>`<span class="chip" style="background:${TC[t]||'#888'}">${t}</span>`;
+const img=(id,extra='')=>{const s=D.sprites[id];return s?`<img src="${s[0]}" width="${s[1]}" height="${s[2]}" alt="${D.names[id]||id}" ${extra}>`:'<span>?</span>'};
+document.getElementById('sub').innerHTML=`Every Gym Leader, Elite Four member and Champion (${D.bosses.length}) with all 36 of their teams (16 gym, 10 Elite Four, 10 Champion). A boss gets no gimmick through Stage ${D.after} of Region 1, one after it, and one more after Stage ${D.after} of each later region, up to four. Each gimmick is tied to one Pokémon on the team. Gym teams 1-8 are Region 1 and 9-16 are Region 2; in later regions a gym leader reuses team 16 with a higher count (up to four). Elite Four and Champion teams 1-10 are Regions 1-10.`;
+document.getElementById('legend').innerHTML=
+ `<div>${img(D.legend.normal)}<br>Normal</div><div>${img(D.legend.mega)}<br><span class="k-mega">Mega</span>: mega form</div>`+
+ `<div><span style="filter:drop-shadow(0 0 6px #ee8130) drop-shadow(0 0 3px #ee8130)">${img(D.legend.normal)}</span><br><span class="k-zmove">Z-Move</span>: glows in its move's type</div>`+
+ `<div>${img(D.legend.normal)}<br><span class="k-tera">Tera</span>: unchanged (type in caption)</div>`+
+ `<div>${img(D.legend.normal,'style="height:150px;width:auto"')}<br><span class="k-dynamax">Dynamax</span>: gigantic</div>`;
+function member(m){
+  const sp=m.f||m.s;let cls='m',st='',cap=D.names[m.s]||m.s,lab='';
+  if(m.g==='zmove'){const c=TC[m.z]||'#fff';st=`filter:drop-shadow(0 0 7px ${c}) drop-shadow(0 0 14px ${c}) drop-shadow(0 0 3px ${c})`}
+  if(m.g==='dynamax')cls+=' dyn';
+  if(m.g==='mega')cap=D.names[sp]||sp;
+  if(m.g)lab=`<u class="k-${m.g}">${KN[m.g]}${m.g==='tera'?' '+m.t:''}${m.g==='zmove'?' '+m.z:''}</u>`;
+  const s=D.sprites[sp]||D.sprites[m.s];
+  const scale=m.g==='dynamax'?2.4:1;
+  const im=s?`<img src="${s[0]}" alt="${cap}" style="${st};${scale>1?`width:${Math.round(s[1]*scale)}px;height:${Math.round(s[2]*scale)}px`:''}">`:'?';
+  return `<div class="${cls}"><div class="im">${im}</div>${lab}${cap}</div>`;
+}
+function teamRow(role,t,i){
+  const where=role==='gym'?`Gym team ${i+1} · Region ${t.region} · Stage ${t.stage}`:`${ROLE[role]} team ${i+1} · Region ${t.region}`;
+  return `<div class="team"><div class="th"><b>${where}</b>Lv ${t.level} · ${t.slots} gimmick${t.slots===1?'':'s'} allowed${t.members.filter(m=>m.g).length<Math.min(t.slots,t.members.length)?' (a kind had no carrier)':''}</div>${t.members.map(member).join('')}</div>`;
+}
+function body(b,role){
+  return `<div class="note">${ROLE[role]} teams for ${b.name}, weakest to strongest.</div>`+b[role].map((t,i)=>teamRow(role,t,i)).join('');
+}
+const list=document.getElementById('list');
+list.innerHTML=D.bosses.map((b,i)=>`<details class="b" data-i="${i}" data-n="${(b.name+' '+b.signature.join(' ')+' '+Object.values(b.mons).join(' ')).toLowerCase()}" data-o="${b.order[0]}">
+<summary class="bh">${D.trainers[b.id]?`<img class="tr" src="${D.trainers[b.id]}" alt="">`:'<span style="width:48px"></span>'}<span class="nm">${b.name}<br>${b.types.map(chip).join('')}</span>
+<span class="order">${b.order.map((k,j)=>`<span class="og">${img(b.mons[k])}<span><b class="k-${k}">${j+1}. ${KN[k]}</b><br>${D.names[b.mons[k]]||b.mons[k]}</span></span>`).join('')}</span></summary>
+<div class="body"><div class="tabs"><button class="on" data-r="gym">Gym Leader</button><button data-r="elite">Elite Four</button><button data-r="champion">Champion</button></div><div class="pane"></div></div></details>`).join('');
+list.addEventListener('toggle',e=>{const d=e.target;if(!d.open||d.dataset.done)return;d.dataset.done=1;show(d,'gym')},true);
+list.addEventListener('click',e=>{const b=e.target.closest('.tabs button');if(!b)return;const d=b.closest('details');d.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));show(d,b.dataset.r)});
+function show(d,role){d.querySelector('.pane').innerHTML=body(D.bosses[d.dataset.i],role)}
+const q=document.getElementById('q'),f=document.getElementById('f'),cnt=document.getElementById('count');
+function filt(){const t=q.value.trim().toLowerCase();let n=0;list.querySelectorAll('details.b').forEach(d=>{const ok=(!t||d.dataset.n.includes(t))&&(!f.value||d.dataset.o===f.value);d.classList.toggle('hide',!ok);if(ok)n++});cnt.textContent=n+' shown'}
+q.oninput=f.onchange=filt;filt();
+</script></body></html>

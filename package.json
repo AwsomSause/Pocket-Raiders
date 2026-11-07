@@ -22,6 +22,7 @@
     "assets:manifest": "node tools/build-asset-manifest.ts",
     "assets:check": "node tools/check-assets.ts",
     "check": "npm run typecheck && npm test && npm run build && npm run report:check && npm run report:assets && npm run report:perf",
+    "data:boss-gimmicks": "node tools/build-boss-gimmicks.ts",
     "data:movesets": "node tools/import-movesets.ts",
     "data:moves": "node tools/import-moves.ts",
     "data:move-text": "node tools/import-move-descriptions.ts",
