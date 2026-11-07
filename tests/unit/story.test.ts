@@ -26,7 +26,7 @@ import { MemoryStorageProvider } from '../../src/save/storage';
 import { autoplay, gameplayFingerprint, step } from './autoplay';
 import { content, toBattle } from './helpers';
 
-const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
+const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
 // The Google Drive pack's items (tools/drive/build-items.py) came later too.
 import DRIVE_ITEMS from '../../tools/drive/items.json';
 import LIBRARY_ITEMS from '../../tools/drive/library-items.json';

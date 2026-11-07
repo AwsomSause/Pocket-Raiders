@@ -29,6 +29,10 @@ const D: Def[] = [
   { id: 'oracowl', name: 'Oracowl', dex: 1029, types: ['psychic', 'flying'], stats: [110, 55, 70, 125, 115, 65], catchRate: 45, baseExp: 245, growthRate: 'medium-fast', stage: 3, from: 'noctowl',
     learn: [...inherit('noctowl'), [42, 'psychic'], [46, 'future-sight'], [50, 'calm-mind']],
     abilities: { normal: ['wise-eye'], hidden: 'tinted-lens' }, art: { icon: '2/164', cry: '164' }, weight: 52, female: 0.5, eggGroups: ['flying'], color: 'white', generation: 9 },
+  // Day form (Sun Stone); Oracowl above is the Night form (Moon / Dusk Stone). Kice, 2026-11-07.
+  { id: 'oracowl-day', name: 'Oracowl (Day)', dex: 1038, types: ['psychic', 'flying'], stats: [110, 100, 80, 95, 100, 55], catchRate: 45, baseExp: 245, growthRate: 'medium-fast', stage: 3, from: 'noctowl',
+    learn: [...inherit('noctowl'), [42, 'psychic'], [46, 'solar-beam'], [50, 'calm-mind']],
+    abilities: { normal: ['wise-eye'], hidden: 'serene-grace' }, art: { icon: '2/164', cry: '164' }, weight: 52, female: 0.5, eggGroups: ['flying'], color: 'brown', generation: 9 },
   { id: 'tempestwing', name: 'Tempestwing', dex: 1030, types: ['flying', 'fighting'], stats: [90, 125, 70, 55, 70, 120], catchRate: 45, baseExp: 245, growthRate: 'medium-slow', stage: 3, from: 'swellow',
     learn: [...inherit('swellow'), [46, 'close-combat'], [50, 'brave-bird'], [54, 'swords-dance']],
     abilities: { normal: ['eye-of-the-gale'], hidden: 'guts' }, art: { icon: '3/277', cry: '277' }, weight: 24, female: 0.5, eggGroups: ['flying'], color: 'gray', generation: 9 },

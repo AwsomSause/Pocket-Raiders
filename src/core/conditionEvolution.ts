@@ -64,6 +64,8 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
   { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
   { from: 'noctowl', to: 'oracowl', minLevel: 42, stones: ['moon-stone', 'dusk-stone'], condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
+  // Day form: the Sun Stone picks it (Night needs night, Heartbond 6 or a Moon / Dusk Stone above).
+  { from: 'noctowl', to: 'oracowl-day', minLevel: 42, stones: ['sun-stone'] },
   { from: 'swellow', to: 'tempestwing', minLevel: 46, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
   { from: 'kilowattrel', to: 'megawattrel', minLevel: 52, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
 ];

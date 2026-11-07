@@ -31,6 +31,8 @@ describe('stone routes for timed evolutions', () => {
       return m;
     };
     expect(itemEvolutionTargets(content, at('noctowl', 42), 'moon-stone')).toEqual(['oracowl']);
+    expect(itemEvolutionTargets(content, at('noctowl', 42), 'sun-stone')).toEqual(['oracowl-day']);
+    expect(itemEvolutionTargets(content, at('noctowl', 41), 'sun-stone')).toEqual([]);
     expect(itemEvolutionTargets(content, at('rockruff', 25), 'dusk-stone')).toEqual(['lycanroc-dusk']);
     expect(itemEvolutionTargets(content, at('rockruff', 25), 'sun-stone')).toEqual(['lycanroc']);
     expect(itemEvolutionTargets(content, at('tyrunt', 39), 'sun-stone')).toEqual(['tyrantrum']);
