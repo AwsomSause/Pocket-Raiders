@@ -26,7 +26,9 @@ interface Row { stage: number; col: number | null; category: Category; weight: '
 const CHAMPION_COL = -1;
 const row = (stage: number, col: number | null, category: Category, weight: 'main' | 'side', tags: string[], intensity: number, extra: Partial<Row> = {}): Row => ({ stage, col, category, weight, tags, intensity, ...extra });
 const evil = (stage: number, col: number, beat: number, intensity: number, tags: string[] = []): Row => row(stage, col, 'conflict', 'main', ['evil_beat', ...tags], intensity, { locked: true, beat });
-const leader = (stage: number): Row => row(stage, 9, 'character', 'main', ['leader_scene'], 2);
+const leader = (stage: number, category: Category = 'character', tags: string[] = []): Row => row(stage, 9, category, 'main', ['leader_scene', ...tags], 2);
+/** The last leader scene of an Act is its quiet close (S19 rule: every Act ends on a Climax, a Recovery or a Resolution). */
+const leaderClose = (stage: number): Row => leader(stage, 'resolution');
 const gate = (stage: number, tags: string[] = []): Row => row(stage, null, 'resolution', 'main', ['region_gate', 'rematch_day', 'downtime', ...tags], 2, { locked: true });
 
 /** Stage 25 is the Elite Four corridor, 26 the Champion, 27 the Finale and Epilogue scenes. */
@@ -44,34 +46,34 @@ export const CIRCUIT_STOPS: readonly Row[] = [
   row(2, 3, 'recovery', 'side', ['downtime'], 1), evil(2, 6, 1, 3, ['suspicious_trainers']),
   leader(3),
   row(4, 5, 'discovery', 'main', ['clue'], 2),
-  row(5, 4, 'relationship', 'side', ['relationship'], 2), leader(5),
+  row(5, 4, 'relationship', 'side', ['relationship', 'downtime'], 2), leaderClose(5),
   evil(6, 4, 2, 3, ['evidence']), row(6, 8, 'conflict', 'main', ['rival_beat'], 3),
-  leader(7),
+  leader(7, 'character', ['downtime']),
   row(8, 4, 'narrative', 'main', ['major_event'], 3), gate(8),
   row(9, 5, 'branch', 'main', ['branch'], 3),
   evil(10, 5, 3, 3, ['recognition', 'major_event_preview']),
-  leader(11),
+  leaderClose(11),
   row(12, 5, 'recovery', 'side', ['downtime'], 1),
   leader(13),
   evil(14, 7, 4, 5, ['executive', 'reveal', 'midpoint']),
   leader(15),
   gate(16),
   row(17, 5, 'discovery', 'main', ['clue'], 2),
-  evil(18, 4, 5, 4, ['executive_returns']), row(18, 8, 'branch', 'main', ['branch'], 3),
+  evil(18, 4, 5, 4, ['executive_returns']), row(18, 8, 'resolution', 'main', ['branch', 'downtime'], 3),
   leader(19),
   row(20, 8, 'climax', 'main', ['rival_beat', 'turning_point'], 5, { locked: true }),
-  leader(21),
+  leader(21, 'character', ['downtime']),
   evil(22, 4, 6, 4, ['real_plan']), row(22, 8, 'narrative', 'main', ['rally', 'returns'], 3),
   leader(23),
   gate(24, ['league_summit']),
   evil(ELITE_STAGE, 1, 7, 5, ['hideout']), row(ELITE_STAGE, 1, 'conflict', 'main', ['rival_beat'], 4),
   row(ELITE_STAGE, 2, 'character', 'main', ['elite_scene'], 3), row(ELITE_STAGE, 3, 'character', 'main', ['elite_scene'], 3),
-  row(ELITE_STAGE, 4, 'discovery', 'main', ['clue'], 3), row(ELITE_STAGE, 4, 'recovery', 'side', ['downtime'], 1),
+  row(ELITE_STAGE, 4, 'discovery', 'main', ['clue', 'downtime'], 3), row(ELITE_STAGE, 4, 'recovery', 'side', ['downtime'], 1),
   row(CHAMPION_STAGE, CHAMPION_COL, 'branch', 'main', ['the_choice'], 3, { locked: true }),
   row(CHAMPION_STAGE, CHAMPION_COL, 'climax', 'main', ['champion'], 4, { locked: true }),
   row(CHAMPION_STAGE, CHAMPION_COL, 'climax', 'main', ['champion', 'reveal'], 3, { locked: true }),
   row(CHAMPION_STAGE, CHAMPION_COL, 'climax', 'main', ['champion', 'final'], 5, { locked: true }),
-  row(SCENE_STAGE, null, 'resolution', 'main', ['finale'], 3, { locked: true }), row(SCENE_STAGE, null, 'resolution', 'main', ['finale'], 2, { locked: true }),
+  row(SCENE_STAGE, null, 'resolution', 'main', ['finale', 'downtime'], 3, { locked: true }), row(SCENE_STAGE, null, 'resolution', 'main', ['finale'], 2, { locked: true }),
   row(SCENE_STAGE, null, 'resolution', 'main', ['epilogue', 'chronicle'], 1, { locked: true }),
 ];
 
