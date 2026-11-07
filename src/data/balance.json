@@ -38,6 +38,11 @@
  "vitaminMultiplierPerStack": 0.1,
  "hpPerLevel": 1,
  "vitaminMaxStacks": 3,
+ "evs": {
+  "perStat": 252,
+  "total": 510,
+  "gainMultiplier": 2
+ },
  "abilities": {
   "hiddenChance": 0.05
  },

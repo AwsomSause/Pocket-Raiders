@@ -342,6 +342,12 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...['battle_wild_oras', 'battle_wild_dppt', 'battle_wild_hgss', 'battle_wild_bw2', 'battle_trainer_oras', 'battle_trainer_dppt', 'battle_trainer_hgss', 'battle_trainer_bw2', 'battle_gym_oras', 'battle_gym_dppt', 'battle_gym_hgss', 'battle_elite_oras', 'battle_elite_dppt', 'map_bw', 'map_oras', 'map_dppt', 'map_dppt2', 'map_hgss'].map(
     (n): AssetEntry => ({ id: `bgm.${n}`, kind: 'audio', category: 'music', path: `audio/bgm/${n}.mp3`, lazy: true }),
   ),
+  // More Pokemon Decades songs (Audio/BGM, 80 kbps mp3, lazy): region route/town songs and region-specific gym, Elite Four, champion and rival battles (see REGION_* in battleMusic.ts).
+  ...[
+    'town_dppt', 'forest_dppt', 'city_xy', 'map_xy', 'map_bw2', 'forest_oras', 'forest_swsh', 'town_xy', 'city_bw', 'sky_oras',
+    'gym_sm', 'gym_swsh', 'gym_xy', 'gym_sv', 'elite_sm', 'elite_xy', 'elite_bw',
+    'champion_bw', 'champion_dppt', 'champion_xy', 'champion_swsh', 'champion_sv', 'champion_hgss', 'rival_dppt', 'rival_bw2', 'rival_hgss',
+  ].map((n): AssetEntry => ({ id: `bgm.${n}`, kind: 'audio', category: 'music', path: `audio/bgm/${n}.mp3`, lazy: true })),
   // Jingles (UIE "ME" folder): item, key item, badge, new Pokémon, evolution, healing, save, TM, berry, forgotten move.
   ...Object.entries({ item_get: 'item_get', key_item: 'key_item', badge: 'badge', pkmn_get: 'pkmn_get', evo_start: 'evo_start', evo_success: 'evo_success', heal: 'heal', save: 'save', tm_get: 'tm_get', berry: 'berry', forget_move: 'forget_move' }).map(
     ([id, file]): AssetEntry => ({ id: `me.${id}`, kind: 'audio', category: 'sound', path: `audio/me/${file}.ogg`, lazy: true }),

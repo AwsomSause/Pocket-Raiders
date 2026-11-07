@@ -13,6 +13,7 @@ import type { PokemonInstance, RunState } from '../core/state';
 import { personalityOf, relationLines } from '../core/partyLife';
 import { MOOD_LOOK } from './bondLook';
 import { STAT_LABELS } from './summaryLook';
+import { hiddenPowerType, ivJudge, ivsOf } from '../core/ivs';
 
 export type Move = z.infer<typeof MoveSchema>;
 
@@ -178,6 +179,11 @@ export function traitLines(content: Content, mon: PokemonInstance): string[] {
   if (mon.shiny) out.push('★ Shiny.');
   if (mon.hatched) out.push('Hatched from an Egg this run.');
   if (mon.lineage) out.push(`Descends from ${mon.lineage.ancestor}, from an earlier run.`);
+  const ivs = ivsOf(mon);
+  const best = (Object.keys(ivs) as StatName[]).filter((k) => ivs[k] === 31).map((k) => STAT_LABELS[k]);
+  out.push(`IVs: ${(Object.keys(ivs) as StatName[]).map((k) => `${STAT_LABELS[k]} ${ivs[k]} (${ivJudge(ivs[k])})`).join(', ')}.${best.length ? ` Best in ${best.join(', ')}.` : ''}`);
+  if (mon.hyperTrained?.length) out.push(`Hyper trained (Bottle Cap): ${mon.hyperTrained.map((k) => STAT_LABELS[k]).join(', ')}.`);
+  if (mon.moves.some((m) => m.id === 'hidden-power')) out.push(`Hidden Power type: ${hiddenPowerType(mon)[0]!.toUpperCase()}${hiddenPowerType(mon).slice(1)}.`);
   for (const [stat, n] of Object.entries(mon.vitamins)) if (n > 0) out.push(`${STAT_LABELS[stat as StatName]}: ${n} vitamin${n === 1 ? '' : 's'} taken.`);
   for (const [stat, n] of Object.entries(mon.statBoosts ?? {})) if (n && n > 0) out.push(`${STAT_LABELS[stat as StatName]}: ${n} permanent boost${n === 1 ? '' : 's'}.`);
   if (mon.perkHp) out.push(`${mon.perkHp > 0 ? '+' : ''}${mon.perkHp}% max HP from your trainer's perks.`);

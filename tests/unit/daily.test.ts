@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dailyChampionId, dailyModifierId, dailySetup, dailyStarters } from '../../src/core/daily';
+import { dailyChampionId, dailyDate, dailyModifierId, dailySetup, dailyStarters } from '../../src/core/daily';
 import { defaultPrep } from '../../src/core/runPrep';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { dailySeed, getMode, makeRules, rulesProblem, rulesCampaign, STANDARD_CHOICE } from '../../src/core/rules';
@@ -52,5 +52,13 @@ describe('Daily Run format', () => {
     expect(set.size).toBeGreaterThan(3);
     const setup = dailySetup(content, '2026-11-07', defaultPrep(content), choice);
     expect(setup.lines.join(' ')).toContain(content.bosses.get(dailyChampionId(content, seed))!.name);
+  });
+  it('practice replays one of the last six days with that day\'s own seed', () => {
+    const now = new Date('2026-11-07T10:00:00Z');
+    expect(dailyDate(now, 0)).toBe('2026-11-07');
+    expect(dailyDate(now, 2)).toBe('2026-11-05');
+    expect(dailyDate(now, 99)).toBe('2026-11-01');
+    expect(dailyDate(now, -3)).toBe('2026-11-07');
+    expect(dailySetup(content, dailyDate(now, 1), defaultPrep(content), choice).seed).toBe(dailySeed('2026-11-06'));
   });
 });

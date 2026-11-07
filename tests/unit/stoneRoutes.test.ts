@@ -24,4 +24,19 @@ describe('stone routes for timed evolutions', () => {
     const eevee = createPokemon(content, 'eevee', 20, 'e2');
     expect(itemEvolutionTargets(content, eevee, 'fire-stone')).toEqual(['flareon']);
   });
+  it('Noctowl, Rockruff, Tyrunt, Amaura, Budew and Cosmoem have stone routes', () => {
+    const at = (id: string, level: number, friend = false) => {
+      const m = createPokemon(content, id, level, `x-${id}`);
+      if (friend) m.friendship = content.balance.friendship.evolveAt;
+      return m;
+    };
+    expect(itemEvolutionTargets(content, at('noctowl', 42), 'moon-stone')).toEqual(['oracowl']);
+    expect(itemEvolutionTargets(content, at('rockruff', 25), 'dusk-stone')).toEqual(['lycanroc-dusk']);
+    expect(itemEvolutionTargets(content, at('rockruff', 25), 'sun-stone')).toEqual(['lycanroc']);
+    expect(itemEvolutionTargets(content, at('tyrunt', 39), 'sun-stone')).toEqual(['tyrantrum']);
+    expect(itemEvolutionTargets(content, at('amaura', 39), 'moon-stone')).toEqual(['aurorus']);
+    expect(itemEvolutionTargets(content, at('budew', 5), 'sun-stone')).toEqual([]);
+    expect(itemEvolutionTargets(content, at('budew', 5, true), 'sun-stone')).toEqual(['roselia']);
+    expect(itemEvolutionTargets(content, at('cosmoem', 53), 'moon-stone')).toEqual(['lunala']);
+  });
 });

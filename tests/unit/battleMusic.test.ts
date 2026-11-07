@@ -124,7 +124,7 @@ describe('region themes (W16)', () => {
   it('gives every shipped region its own map song, and story regions a story route id', async () => {
     const { mapTrack, storyRegionMusic, storyBattleMusic } = await import('../../src/core/presentation/battleMusic');
     expect(mapTrack('johto')).toBe('bgm.map_hgss');
-    expect(mapTrack('unova')).toBe('bgm.map_bw');
+    expect(mapTrack('unova')).toBe('bgm.map_bw2');
     expect(mapTrack('some-new-region')).toMatch(/^bgm\./);
     expect(storyRegionMusic('tidewrack-reaches', 'route')).toBe('mu_region_tidewrack_route');
     expect(storyRegionMusic('orrery-basin', 'town')).toBe('mu_region_orrery_basin_town');
@@ -138,5 +138,24 @@ describe('region themes (W16)', () => {
     const hits = Array.from({ length: 40 }, (_, i) => pick(`s:${i}`)).filter((t) => t === 'bgm.battle_wild_dppt').length;
     expect(hits).toBeGreaterThan(20);
     expect(pick('s:3')).toBe(pick('s:3'));
+  });
+});
+
+describe('Decades region songs (W16)', () => {
+  it('ships every regional boss and map song as a real file in the catalog', async () => {
+    const { REGION_ROLE_TRACK_IDS, MAP_TRACKS } = await import('../../src/core/presentation/battleMusic');
+    for (const id of [...REGION_ROLE_TRACK_IDS, ...MAP_TRACKS]) {
+      const entry = FIXED_ASSETS.find((a) => a.id === id);
+      expect(entry, id).toBeDefined();
+      expect(existsSync(`public/assets/${entry!.path}`), id).toBe(true);
+    }
+  });
+  it('gives a region its own boss song and keeps the shared one elsewhere', async () => {
+    const { battleTrack } = await import('../../src/core/presentation/battleMusic');
+    const t = (role: 'gym' | 'elite' | 'champion' | 'rival', regionId: string) => battleTrack({ raidTrack: null, trainer: true, gbSounds: false, role, regionId, variantKey: 'k' });
+    expect(t('champion', 'galar')).toBe('bgm.champion_swsh');
+    expect(t('gym', 'alola')).toBe('bgm.gym_sm');
+    expect(t('rival', 'unova')).toBe('bgm.rival_bw2');
+    expect(t('champion', 'kanto')).toBe('bgm.raid.ultra3');
   });
 });
