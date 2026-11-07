@@ -31,7 +31,7 @@ import { Picker, type PickerRow } from '../ui/partyPanel';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { AERO, drawGlass, glassPanel as drawPanel, type MotionLevel } from '../ui/aero';
-import { dailySetup } from '../core/daily';
+import { dailyDate, dailySetup, PRACTICE_DAYS } from '../core/daily';
 import { boardLines } from '../core/boards';
 import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
 import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
@@ -60,7 +60,7 @@ export interface RunPrepData {
   slide?: 1 | -1;
 }
 
-type Row = 'start' | 'trainer' | 'campaign' | 'pool' | 'draft' | 'type' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'heat' | 'weeks' | 'modifier' | 'deathBlock' | 'seed' | 'save' | 'load';
+type Row = 'start' | 'trainer' | 'campaign' | 'pool' | 'draft' | 'type' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'heat' | 'weeks' | 'practice' | 'modifier' | 'deathBlock' | 'seed' | 'save' | 'load';
 
 interface PageDef {
   id: string;
@@ -72,7 +72,7 @@ interface PageDef {
 
 /** The five pages of the Preparation Desk (spec §13). It opens on the Overview, where Enter rolls the starters. */
 const PAGES: PageDef[] = [
-  { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'heat', 'campaign', 'weeks', 'seed'] },
+  { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'heat', 'campaign', 'weeks', 'practice', 'seed'] },
   { id: 'trainer', title: 'Trainer', blurb: 'Who you are and what you bring: preparation, directive, license, loan, Vault, mentor.', tint: 0x2fa080, rows: ['trainer', 'token', 'directive', 'license', 'loan', 'vault', 'mentor'] },
   { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: [...(starterSetsEnabled(getContent()) ? (['pool'] as Row[]) : []), 'draft', 'type'] },
   { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier'] },
@@ -95,6 +95,7 @@ const ROW_HELP: Record<Row, string> = {
   mentor: 'Train under a mentor: lessons that unlock with trust, a mission, a fellow apprentice. More mentors unlock with runs, wins and trust.',
   vault: "Take a rare held item from the Collector's Vault into this run.",
   mode: 'The kind of run: Standard, Adventure, Endless, Daily Run and more. Some modes pay no account rewards.',
+  practice: 'Daily Run only: replay one of the last 6 days (that day\'s seed, starters, modifier and champion). Practice pays no account rewards.',
   region: 'Regional Circuit only: the region you run. "By seed" lets the seed pick.',
   difficulty: 'Raises enemy levels and the rewards for beating them.',
   heat: 'Heat Level: stacking opt-in difficulty. Each level adds enemy levels and a reward bonus on top of the difficulty. ←/→ change it.',
@@ -118,6 +119,8 @@ export class RunPrepScene extends Phaser.Scene {
   private archetypeId = '';
   private prep!: RunPrep;
   private seed: string | null = null;
+  /** Daily Run practice: how many days back to play (0 = today). */
+  private practiceDays = 0;
   private rules: RulesChoice = STANDARD_CHOICE;
   private modCursor = 0;
   private page = OVERVIEW;
@@ -180,6 +183,7 @@ export class RunPrepScene extends Phaser.Scene {
       region: `Circuit region: ${this.rules.regionId ? content.regions.get(this.rules.regionId)?.name ?? this.rules.regionId : 'by seed'}`,
       difficulty: `Difficulty: ${getDifficulty(this.rules.difficultyId)?.name}`,
       heat: `Heat: ${heatOf(this.rules)}`,
+      practice: `Daily date: ${this.practiceDays === 0 ? 'today' : `${this.practiceDays} day${this.practiceDays > 1 ? 's' : ''} ago (practice)`}`,
       weeks: `Weeks: ${this.rules.weeks === false ? 'OFF' : 'ON (default)'}`,
       modifier: `Modifiers: ${this.rules.modifierIds.length} on${this.rules.deathBlock ? ' + Death-Block' : ''}  ▶`,
       deathBlock: `Death-Block: ${this.rules.deathBlock ? 'on' : 'off'}`,
@@ -187,7 +191,7 @@ export class RunPrepScene extends Phaser.Scene {
       save: 'Save as preset…',
       load: 'Load a preset…',
     };
-    const disabled = (r: Row): boolean => (r === 'type' && rule.kind !== 'typeFocus') || (r === 'region' && getMode(this.rules.modeId)?.campaignId !== 'regional-circuit');
+    const disabled = (r: Row): boolean => (r === 'type' && rule.kind !== 'typeFocus') || (r === 'region' && getMode(this.rules.modeId)?.campaignId !== 'regional-circuit') || (r === 'practice' && !getMode(this.rules.modeId)?.dailySeed);
     this.menu = new Menu(this, {
       x: 34,
       y: 134,
@@ -226,13 +230,13 @@ export class RunPrepScene extends Phaser.Scene {
       for (const l of buildSummary(content, this.archetypeId, this.prep, profile.attributes)) line(l, 17, l.startsWith('  −') ? '#f0a0a0' : l.startsWith('  +') ? '#a0e0a0' : COLORS.textLight);
       y += 6;
       for (const l of rulesLines(this.rules)) line(l, 15, '#c8e0f0');
-      if (getMode(this.rules.modeId)?.dailySeed) for (const l of dailySetup(content, new Date().toISOString(), this.prep, this.rules).lines) line(l, 15, '#f0e0a0');
+      if (getMode(this.rules.modeId)?.dailySeed) for (const l of dailySetup(content, dailyDate(new Date(), this.practiceDays), this.prep, this.rules).lines) line(l, 15, '#f0e0a0');
       if (getMode(this.rules.modeId)?.weeklySeed) {
         const now = new Date().toISOString();
         for (const l of weeklySetup(content, now, this.prep, this.rules).lines) line(l, 15, '#f0e0a0');
         for (const l of boardLines(profile, 'weekly', weeklySeed(now))) line(l, 14, '#c8d8a0');
       }
-      if (getMode(this.rules.modeId)?.dailySeed) for (const l of boardLines(profile, 'daily', dailySeed(new Date().toISOString()))) line(l, 14, '#c8d8a0');
+      if (getMode(this.rules.modeId)?.dailySeed) for (const l of boardLines(profile, 'daily', dailySeed(dailyDate(new Date(), this.practiceDays)))) line(l, 14, '#c8d8a0');
       y += 6;
       line(`${rule.description}`, 15, '#d8d0e0');
       const locked = [
@@ -422,6 +426,11 @@ export class RunPrepScene extends Phaser.Scene {
         const ids = [null, ...[...content.regions.values()].filter((r) => !r.grand && !r.story).map((r) => r.id)];
         return this.refresh({}, { rules: { ...this.rules, regionId: next<string | null>(ids, this.rules.regionId ?? null) } });
       }
+      case 'practice': {
+        if (!getMode(this.rules.modeId)?.dailySeed) return playSfx(this, 'ui.error', 0.5);
+        this.practiceDays = (this.practiceDays + (step < 0 ? PRACTICE_DAYS : 1)) % (PRACTICE_DAYS + 1);
+        return this.refresh({});
+      }
       case 'difficulty': {
         const ids = RUN_RULES.difficulties.map((d) => d.id);
         return this.refresh({}, { rules: { ...this.rules, difficultyId: next(ids, this.rules.difficultyId) } });
@@ -464,12 +473,12 @@ export class RunPrepScene extends Phaser.Scene {
     let daily: ReturnType<typeof dailySetup> | undefined;
     if (getMode(rules.modeId)?.dailySeed) {
       // Daily Run: the date is the seed; the day's account rewards pay once.
-      const today = new Date().toISOString();
-      daily = dailySetup(session.content, today, this.prep, rules);
+      const day = dailyDate(new Date(), this.practiceDays);
+      daily = dailySetup(session.content, day, this.prep, rules);
       seed = daily.seed;
       prep = daily.prep;
-      const key = dailyClaimKey(today);
-      rules = { ...daily.rules, noRewards: isClaimed(session.profile, key) };
+      const key = dailyClaimKey(day);
+      rules = { ...daily.rules, noRewards: this.practiceDays > 0 || isClaimed(session.profile, key) };
       if (!rules.noRewards) session.claimOnce(key);
     }
     if (getMode(rules.modeId)?.weeklySeed) {
