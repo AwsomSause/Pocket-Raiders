@@ -3,6 +3,7 @@
 // Run History and save data. Everything
 // here reads and changes the permanent profile only.
 
+import { prologueGateActive } from '../core/story2/prologue';
 import { fitLine } from '../ui/fitText';
 import { candyPerkProblem } from '../core/candyShop';
 import { researchLines } from '../core/trainerResearch';
@@ -18,6 +19,7 @@ import { decodeSeedCode, encodeSeedCode } from '../core/seedCode';
 import { contractBoard, contractDone, contractRewardText } from '../core/contracts';
 import Phaser from 'phaser';
 import { availableMentors, bondOf, categoryName, mentorUnlocked, MENTORS, tierName } from '../core/mentors';
+import { JET_LINES } from '../core/story2/jetBlessing';
 import { taleEntries } from '../core/npcMemory';
 import { loreArchiveSummary, openLoreArchive } from '../ui/loreArchiveMenu';
 import { castSummary, openCastDatabase } from '../ui/castMenu';
@@ -226,6 +228,7 @@ const pauseRooms = (): Room[] => (services().session.settings.hubStyle === 'lobb
 const KEEPERS: Record<string, { name: string; line: (p: Profile) => string }> = {
   merchant: { name: 'Strange Merchant', line: () => 'Heh. New wares every day, one of each. Have a look...' },
   gatekeeper: { name: 'Gatekeeper Sonia', line: (p) => (p.stats.runsEnded ? `${p.stats.runsEnded} runs have set off through this gate. Step into the arch when you're ready.` : "The Departure Gate is right behind me. Step into the arch when you're ready.") },
+  viking: { name: 'Jet', line: () => 'Skål, raider! Come and take the old storms\' blessing.' },
   sanctuary_keeper: { name: 'Sanctuary Keeper', line: () => 'The starters here are waiting for a partner. Come and see the sets.' },
 };
 
@@ -284,6 +287,7 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(data: { notice?: string; focus?: number } = {}): void {
+    if (prologueGateActive(services().session.profile.story)) { this.scene.start('MainMenu'); return; }
     this.archiveOpen = false;
     if (!data.notice) data = { ...data, notice: hubArrivalNotice()?.text };
     this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => {
@@ -367,7 +371,7 @@ export class HubScene extends Phaser.Scene {
     const day = localDay(new Date());
     const sold = boughtToday(p, day);
     this.indicators = new HubIndicators(this.town, this, {
-      keepers: { merchant: merchantStock(day).some((w) => !sold.includes(w.item)) ? 'flair_item' : null, gatekeeper: 'flair_important', sanctuary_keeper: 'flair_talk' },
+      keepers: { merchant: merchantStock(day).some((w) => !sold.includes(w.item)) ? 'flair_item' : null, gatekeeper: 'flair_important', sanctuary_keeper: 'flair_talk', viking: JET_LINES.some((id) => p.story.remembrance[id]?.state !== 'unlocked') ? 'flair_important' : null },
       quests: ready > 0 ? ['arena'] : [],
       pedestals: Math.min(this.entries.length, HUB_TOWN.pads.length),
     }, keeperSprites, this.crowd, motion);
@@ -494,6 +498,12 @@ export class HubScene extends Phaser.Scene {
   }
 
   private talkTo(id: string, location: string): void {
+    if (id === 'viking') {
+      const { session } = services();
+      const names = session.receiveJetBlessing().map((r) => session.content.storyData.remembrances.find((x) => x.id === r)?.line[0]).map((s) => (s ? session.content.species.get(s)?.name : null)).filter(Boolean);
+      notify(names.length > 0 ? `Jet: Skål, raider! The old storms bless you: ${names.join(', ')}. They wait in your Remembrance Archive.` : 'Jet: My blessing already rides with you. Go and raid!');
+      return;
+    }
     const keeper = KEEPERS[id];
     if (keeper) notify(`${keeper.name}: ${keeper.line(services().session.profile)}`);
     const pl = placeById(location);

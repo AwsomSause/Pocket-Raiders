@@ -72,10 +72,10 @@ describe('draft archetypes', () => {
       for (let i = 0; i < 400; i++) {
         const run = fresh('bias-share');
         run.prep = { ...run.prep, tokenId: token };
-        const [id] = generateDraft(content, run, new Rng(hashSeed(`pick-${i}`)), all, undefined, { size: 1 });
-        if (content.rewards.get(id!)!.category === 'stat-buff') hits++;
+        // Ten offers per draft: stat boosters are about 1% of the pool since the library items batch, so one offer per draft is too few hits to compare.
+        for (const id of generateDraft(content, run, new Rng(hashSeed(`pick-${i}`)), all, undefined, { size: 10 })) if (content.rewards.get(id)!.category === 'stat-buff') hits++;
       }
-      return hits / 400;
+      return hits / 4000;
     };
     const plain = share(null);
     const biased = share('focus-aggressive');
