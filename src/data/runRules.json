@@ -9,39 +9,68 @@
   },
   "difficulties": [
     {
+      "id": "casual",
+      "name": "Casual",
+      "blurb": "Very gentle enemies and a big breather after each win. For learning the game.",
+      "multiplier": 0.6,
+      "enemyLevelBonus": -4,
+      "winHeal": 0.6
+    },
+    {
       "id": "story",
       "name": "Story",
       "blurb": "Gentler enemies. For enjoying the campaign.",
       "multiplier": 0.8,
-      "enemyLevelBonus": -2
+      "enemyLevelBonus": -2,
+      "winHeal": 0.5
     },
     {
       "id": "standard",
       "name": "Standard",
       "blurb": "The intended game.",
       "multiplier": 1.0,
-      "enemyLevelBonus": 0
+      "enemyLevelBonus": 0,
+      "winHeal": 0.35
     },
     {
       "id": "veteran",
       "name": "Veteran",
       "blurb": "Enemies hit a little higher.",
       "multiplier": 1.2,
-      "enemyLevelBonus": 2
+      "enemyLevelBonus": 2,
+      "winHeal": 0.2
     },
     {
       "id": "champion",
       "name": "Champion",
       "blurb": "Tougher teams, fewer safety nets.",
       "multiplier": 1.4,
-      "enemyLevelBonus": 4
+      "enemyLevelBonus": 4,
+      "winHeal": 0.0
     },
     {
       "id": "nightmare",
       "name": "Nightmare",
       "blurb": "For the end of the road.",
       "multiplier": 1.7,
-      "enemyLevelBonus": 7
+      "enemyLevelBonus": 7,
+      "winHeal": 0.0
+    },
+    {
+      "id": "brutal",
+      "name": "Brutal",
+      "blurb": "Much stronger enemies, no breathers.",
+      "multiplier": 1.9,
+      "enemyLevelBonus": 11,
+      "winHeal": 0.0
+    },
+    {
+      "id": "mythic",
+      "name": "Mythic",
+      "blurb": "Every enemy is far above you. Only for experts.",
+      "multiplier": 2.0,
+      "enemyLevelBonus": 15,
+      "winHeal": 0.0
     }
   ],
   "deathBlock": {
@@ -600,5 +629,8 @@
         "text": "+150 Bank Credits"
       }
     }
-  ]
+  ],
+  "winHeal": {
+    "encounters": 30
+  }
 }

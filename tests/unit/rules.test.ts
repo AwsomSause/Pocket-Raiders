@@ -8,8 +8,8 @@ import { awardModeRewards } from '../../src/core/modeRewards';
 import { dailyClaimKey, dailySeed, extendEndless, joinProblem, lockSpecies, partyCap, pickGeneration, randomDraft, spookyWild } from '../../src/core/rules';
 import { specialFamily } from '../../src/core/specialForms';
 import { getSpecies } from '../../src/core/pokemon';
-import { createPokemon } from '../../src/core/pokemon';
-import { makeRules, rewardMultiplier, rulesLines, rulesProblem, RUN_RULES, STANDARD_CHOICE, type RulesChoice } from '../../src/core/rules';
+import { createPokemon, maxHp } from '../../src/core/pokemon';
+import { makeRules, winHealFraction, rewardMultiplier, rulesLines, rulesProblem, RUN_RULES, STANDARD_CHOICE, type RulesChoice } from '../../src/core/rules';
 import type { RunState } from '../../src/core/state';
 import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
@@ -356,5 +356,41 @@ describe('Endless Tower (S14)', () => {
     const run = { ...tower(), rules: makeRules({ modeId: 'endless', difficultyId: 'standard', modifierIds: [], deathBlock: false }) };
     extendEndless(run as never);
     expect(run.mutators).toBeUndefined();
+  });
+});
+
+describe('difficulty ladder and second wind', () => {
+  const ids = RUN_RULES.difficulties.map((d) => d.id);
+  it('has eight presets, each harder than the last, and only the gentle ones give a breather', () => {
+    expect(ids).toEqual(['casual', 'story', 'standard', 'veteran', 'champion', 'nightmare', 'brutal', 'mythic']);
+    const levels = RUN_RULES.difficulties.map((d) => d.enemyLevelBonus);
+    expect([...levels].sort((a, b) => a - b)).toEqual(levels);
+    const heals = RUN_RULES.difficulties.map((d) => d.winHeal);
+    expect([...heals].sort((a, b) => b - a)).toEqual(heals);
+    expect(heals[0]).toBeGreaterThan(0);
+    expect(heals.at(-1)).toBe(0);
+    for (const id of ids) expect(rulesProblem({ ...STANDARD_CHOICE, difficultyId: id })).toBeNull();
+  });
+  it('the breather fades over the first fights and is zero on hard presets', () => {
+    const mk = (difficultyId: string, encountersCompleted: number) => ({ rules: makeRules({ ...STANDARD_CHOICE, difficultyId }), encountersCompleted });
+    expect(winHealFraction(mk('standard', 0))).toBeCloseTo(0.35);
+    expect(winHealFraction(mk('standard', 15))).toBeCloseTo(0.175);
+    expect(winHealFraction(mk('standard', 30))).toBe(0);
+    expect(winHealFraction(mk('standard', 500))).toBe(0);
+    expect(winHealFraction(mk('mythic', 0))).toBe(0);
+  });
+  it('a won early wild fight heals a hurt Pokémon on more on Casual than on Standard', () => {
+    const hpAfter = (difficultyId: string) => {
+      let r = debugReplaceEnemy(content, toBattle(start('heal-test', { difficultyId })), 'caterpie', 1);
+      r.party[0]!.hp = Math.max(2, Math.floor(maxHp(content, r.party[0]!) / 2));
+      let guard = 0;
+      while (r.phase === 'battle' && guard++ < 50) r = takeTurn(content, r, { kind: 'move', index: 0 }).run;
+      expect(r.party[0]!.hp).toBeGreaterThan(0);
+      return { hp: r.party[0]!.hp, max: maxHp(content, r.party[0]!) };
+    };
+    const gentle = hpAfter('casual');
+    const plain = hpAfter('standard');
+    expect(gentle.hp).toBeGreaterThan(plain.hp);
+    expect(gentle.hp).toBeLessThanOrEqual(gentle.max);
   });
 });
