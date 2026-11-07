@@ -1960,6 +1960,8 @@ export class BattleScene extends Phaser.Scene {
         } else {
           const dropped = this.showSprite('enemy', this.shown.enemy);
           dropIn(this, this.motion, dropped);
+          // The foe's box slides in a beat after it lands (the reference).
+          if (this.motion === 'full') await sleep(this, 550);
           await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
           foeRow?.out();
           if (battle.rivalNote) await this.say(battle.rivalNote);
@@ -2004,6 +2006,8 @@ export class BattleScene extends Phaser.Scene {
         const goLine = this.say(`Go! ${this.speciesName(this.shown.player)}!`, true);
         await this.throwPose();
         this.showSprite('player', this.shown.player);
+        // The camera pulls back and your box slides in a beat after your Pokémon lands.
+        if (this.motion === 'full') await sleep(this, 400);
         cameraTo(this, this.motion, null, 1, 450);
         await this.refreshInfoBox(this.playerBox, this.shown.player, false);
         playerRow.out();
