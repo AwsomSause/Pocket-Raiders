@@ -3,6 +3,7 @@
 import type { Move } from '../contentSchema';
 import { counterLine } from './typeRules';
 import descriptionsJson from '../../data/moveDescriptions.json';
+import storySignatureJson from '../../data/storySignatureMoves.json';
 import megaMovesJson from '../../data/megaMoves.json';
 
 const DESCRIPTIONS = descriptionsJson as Record<string, string>;
@@ -61,7 +62,7 @@ export function moveDescription(move: Move): string {
 
 /** The game's own description of a move (moveDescriptions.json), or null for moves it has none for (Z-Moves, Max Moves). */
 export function moveFlavor(moveId: string): string | null {
-  return DESCRIPTIONS[moveId] ?? (megaMovesJson.descriptions as Record<string, string>)[moveId] ?? null;
+  return DESCRIPTIONS[moveId] ?? (megaMovesJson.descriptions as Record<string, string>)[moveId] ?? (storySignatureJson.descriptions as Record<string, string>)[moveId] ?? null;
 }
 
 /** Beta 4.4: the full description: what the games say, then what it does here in numbers (chances, stages). */

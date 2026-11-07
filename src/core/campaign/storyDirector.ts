@@ -386,5 +386,7 @@ export function playStageEndStops(content: Content, run: RunState): void {
 export function playFinaleStops(content: Content, run: RunState): void {
   const bp = run.story.v2?.blueprint;
   if (!bp) return;
+  // S20: the last Champion is beaten when the Finale plays; the Champion's Heir ending grid reads this.
+  run.story.v2!.facts.championship_won = true;
   for (const s of bp.stops) if (s.stage === SCENE_STAGE) playStop(content, run, s.id);
 }

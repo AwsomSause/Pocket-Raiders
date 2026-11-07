@@ -19,6 +19,8 @@ import { availableMentors, bondOf, categoryName, mentorUnlocked, MENTORS, tierNa
 import { taleEntries } from '../core/npcMemory';
 import { loreArchiveSummary, openLoreArchive } from '../ui/loreArchiveMenu';
 import { castSummary, openCastDatabase } from '../ui/castMenu';
+import { openCharacterProfile } from '../ui/profileMenu';
+import { openRemembranceArchive, remembranceSummary } from '../ui/remembranceMenu';
 import { openStoryArchive, storyArchiveCount } from '../ui/storyArchiveMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
 import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, STARTER_POOL_CATEGORIES, type Achievement, type Archetype, type QuestReward, type Species, type StarterPoolCategory } from '../core/contentSchema';
@@ -1951,12 +1953,15 @@ export class HubScene extends Phaser.Scene {
     }));
     const lore = loreArchiveSummary();
     const cast = castSummary();
+    const remembrance = remembranceSummary();
     const archived = storyArchiveCount();
     const host = { open: (c: Parameters<typeof this.openPicker>[0]) => { this.picker?.close(); this.openPicker(c); }, close: () => this.closePicker() };
     const backToTales = () => { this.picker?.close(); this.openTales(); };
     const extras: { label: string; right: string; hint: string; go: () => void }[] = [];
     if (lore.total > 0) extras.push({ label: 'Lore Archive', right: `${lore.found}/${lore.total}`, hint: 'The story archive: people, places, teams and mysteries you have found in your runs.', go: () => openLoreArchive(host, backToTales) });
     if (archived > 0) extras.push({ label: 'Story Archive', right: String(archived), hint: 'Scenes you have seen in your Story Runs, newest first.', go: () => openStoryArchive(host, backToTales) });
+    if (services().session.profile.story.protagonist.nameSet) extras.push({ label: 'Character Profile', right: services().session.profile.story.protagonist.name, hint: 'Who you are in the story: your name, pronouns and Look, and how many tales you have told.', go: () => openCharacterProfile(host, backToTales) });
+    if (remembrance.total > 0) extras.push({ label: 'Remembrance Archive', right: `${remembrance.unlocked}/${remembrance.total}`, hint: 'The Pokémon lines you have unlocked in Story Runs. Locked ones stay hidden until you find them.', go: () => openRemembranceArchive(host, backToTales) });
     if (cast.total > 0) extras.push({ label: 'Character Database', right: `${cast.met}/${cast.total}`, hint: 'Everyone you have met in the story: who they are, your record against them, and the tellings you have seen.', go: () => openCastDatabase(host, backToTales) });
     rows.unshift(...extras.map((x) => ({
       problem: null,

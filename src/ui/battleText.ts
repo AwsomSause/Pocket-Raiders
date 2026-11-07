@@ -35,6 +35,8 @@ export interface Names {
   trainer: string | null;
   /** Name of any party Pokémon by its uid (for experience messages). */
   nameOf: (uid: string) => string;
+  /** Story S7d: the name the player gave a signature move (undefined: the move's own name). */
+  moveName?: (moveId: string) => string | undefined;
 }
 
 const BALL_FAIL = ['Oh no! The Pokémon broke free!', 'Aww! It appeared to be caught!', 'Aargh! Almost had it!', 'Gah! It was so close, too!'];
@@ -47,7 +49,7 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
   const species = (id: string) => content.species.get(id)?.name ?? id;
   switch (e.type) {
     case 'move':
-      return `${who(e.side)} used ${content.moves.get(e.moveId)?.name ?? e.moveId}!`;
+      return `${who(e.side)} used ${(e.side === 'player' ? names.moveName?.(e.moveId) : undefined) ?? content.moves.get(e.moveId)?.name ?? e.moveId}!`;
     case 'noPp':
       return `${who(e.side)} has no moves left!`;
     case 'miss':

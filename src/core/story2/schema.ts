@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 export const Id = z.string().regex(/^[a-z][a-z0-9_]*$/);
 export const Key = z.string().regex(/^[a-z][a-z0-9_.]*$/);
+/** A species or move id from the game data (these use hyphens: nidoran-f, leech-seed). */
+export const GameId = z.string().regex(/^[a-z][a-z0-9_-]*$/);
 const Ver = z.number().int().min(1);
 const Scalar = z.union([z.boolean(), z.number(), z.string()]);
 
@@ -69,15 +71,17 @@ export const ThemeSchema = z.object({
 });
 
 export const RemembranceSchema = z.object({
-  id: Id, v: Ver, line: z.array(Id).min(1).max(3), types: z.array(Id).min(1).max(2), temperament: Id, affinity: z.record(Id, z.number()),
+  id: Id, v: Ver, line: z.array(GameId).min(1).max(3), types: z.array(Id).min(1).max(2), temperament: Id, affinity: z.record(Id, z.number()),
   unlock: z.object({ kind: z.enum(['start', 'quiz', 'win', 'mastery', 'event', 'backstory']), arg: z.string().optional() }),
-  moves: z.array(Id), keystone: Id, status: z.enum(['supported', 'limited', 'disabled']),
+  moves: z.array(GameId), keystone: Id, status: z.enum(['supported', 'limited', 'disabled']),
   /** Quiz fields (S3): combat role, generation of origin, whether the line branches, whether stage 1 is a baby, and whether the quiz may offer it. */
   role: z.enum(['sweeper', 'tank', 'support', 'disruptor', 'trapper', 'pivot', 'scout']).optional(),
   generation: z.number().int().min(1).optional(),
   branching: z.boolean().default(false),
   baby: z.boolean().default(false),
   quizEligible: z.boolean().default(true),
+  /** How hard the line is to discover (Design v2 Part II rarity table); not how strong it is. */
+  rarity: z.enum(['familiar', 'unusual', 'rare', 'exceptional', 'legendary', 'mythical', 'secret', 'extraordinary']).optional(),
 });
 
 export const MoveMomentSchema = z.object({
@@ -272,6 +276,8 @@ export const StoryV2Schema = z.object({
   quiz: z.object({ traitVector: z.record(z.string(), z.number()), picks: z.array(z.string()) }).optional(),
   starter: z.object({ lineId: z.string(), temperament: z.string(), twist: z.string().optional(), keystone: z.array(z.string()).default([]) }).optional(),
   heartbondOverrides: z.number().int().min(0).default(0),
+  /** S6: the Personality Autonomy setting, copied here each turn (off and flavor: no refusal offers; full: offers the player may override at a Heartbond cost). */
+  autonomy: z.enum(['off', 'flavor', 'full']).default('full'),
   circuit: CircuitStateSchema.optional(),
   /** S6: the partner's uid, levels already latched (unlocks never fall), latches waiting for a safe moment to play, the Keystone flag, and the pay ledger. */
   heartbond: z.object({
@@ -281,6 +287,21 @@ export const StoryV2Schema = z.object({
     keystoneReady: z.boolean().default(false),
     ledger: z.array(z.string()).max(600).default([]),
   }).default(() => ({ latched: [], pending: [], keystoneReady: false, ledger: [] })),
+  /** S7: the Dramatic Moments setting, copied here each turn (off: no Feats and no Charge). */
+  dramatic: z.enum(['off', 'quiet', 'full', 'prompt']).default('full'),
+  /** S7: the partner's Resolve Charge (0 to 100), banked Feats, the Feats used (id, battle key, Act), Charge ledger keys, a player-armed Feat (Prompt mode), and the first Feat (Chronicle). */
+  feats: z.object({
+    charge: z.number().int().min(0).max(100).default(0),
+    banked: z.number().int().min(0).max(2).default(0),
+    used: z.array(z.object({ id: z.string(), battle: z.string(), act: z.number().int().min(0) })).default([]),
+    gains: z.array(z.string()).max(400).default([]),
+    armed: z.boolean().default(false),
+    first: z.string().nullable().default(null),
+  }).default(() => ({ charge: 0, banked: 0, used: [], gains: [], armed: false, first: null })),
+  /** S7d: the partner's signature moves learned this run (Signature I or its Keystone upgrade, Signature II), added to it in each battle. */
+  sigMoves: z.array(z.string()).max(2).default([]),
+  /** S7d: the name shown for each signature move (the player may rename each once a run; core/story2/moveName.ts). */
+  sigNames: z.record(z.string(), z.object({ defaultName: z.string(), raw: z.string().nullable(), display: z.string(), renamed: z.boolean() })).default({}),
   cast: z.record(z.string(), z.object({
     stage: z.string(), attrs: z.record(z.string(), z.number()).default({}), memories: z.array(z.string()).default([]),
     /** S8 relationship record: flags (met, owes_player...), gate events passed, structured memories, the stage waiting to settle, last contact. */

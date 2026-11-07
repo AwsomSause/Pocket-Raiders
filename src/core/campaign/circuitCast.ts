@@ -171,6 +171,12 @@ export function chooseGuestMatch(c: CircuitState, region: number, leaderId: stri
   return true;
 }
 
+/** True while the current stage's gym is a Rematch Day Guest Match: a harder fight with the Leader's rotating slots. */
+export function guestMatch(content: Content, run: RunState): boolean {
+  const c = run.story.v2?.circuit;
+  return !!c && !!run.stage && c.guest[String(run.regionIndex)] === run.stage.leaderId;
+}
+
 /** Called from run.ts when a gym leader is beaten: records the badge for a Story Run's Circuit leader. */
 export function noteGymWin(content: Content, run: RunState, leaderId: string): void {
   const c = ensureCircuit(content, run);
@@ -190,8 +196,9 @@ export function castAuthoredLeague(content: Content, run: RunState, regionIndex:
   return league;
 }
 
-/** The boss who runs the gym at a Story Run stage (the first door unless the player chose another). Null in Classic. */
+/** The boss who runs the gym at a Story Run stage: the chosen door, else the first one until the Fork Gate is answered. Null in Classic. */
 export function circuitLeader(content: Content, run: RunState, region: number, index: number): Boss | null {
-  const id = chooseDoor(content, run, region, index);
+  const c = ensureCircuit(content, run);
+  const id = c ? c.chosen[String(gymKey(region, index))] ?? c.cast[gymKey(region, index)]?.doors[0] : null;
   return id ? content.bosses.get(id) ?? null : null;
 }

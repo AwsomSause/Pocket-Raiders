@@ -19,6 +19,7 @@ import { genderSign } from '../core/gender';
 import { heldBuild, type HeldItemInfo } from '../core/itemEffects';
 import { runLevelCap } from '../core/regions';
 import { lookSpecies } from '../core/pokemon';
+import { nextNameable, signatureDisplay } from '../core/story2/signature';
 import { emotionOf } from '../core/story/emotions';
 import type { PokemonInstance, RunState } from '../core/state';
 import type { Content } from '../core/contentSchema';
@@ -64,7 +65,7 @@ const ACCESSORY_CHOICES = ['', ...ACCESSORIES];
 const TRAIN_CHOICES = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 type Mode = 'list' | 'menu' | 'detail';
 interface MenuOption {
-  id: 'lead' | 'up' | 'down' | 'moves' | 'items' | 'cancel' | 'care' | 'back' | CareAction;
+  id: 'lead' | 'up' | 'down' | 'moves' | 'items' | 'cancel' | 'care' | 'back' | 'signame' | CareAction;
   label: string;
   problem: string | null;
   hint: string;
@@ -360,6 +361,7 @@ class PokemonScreen implements PickerLike {
       p('fetch', 'Play fetch', 'Throw a ball: it may bring back a berry. Once per stop.'),
       p('story', 'Bedtime story', 'Once per run, for Pokémon that trust you: friendship and mood rise.'),
       p('nickname', 'Nickname', 'Give it a name (up to 12 letters). Leave it empty to clear.'),
+      ...(nextNameable(run, this.mon.uid) ? [{ id: 'signame' as const, label: 'Name its move', problem: null, hint: 'Name its own signature move (3 to 20 letters). The first name is free, then one rename a run.' }] : []),
       { id: 'favourite', label: care?.favourite ? 'Unfavourite' : 'Favourite', problem: null, hint: 'Favourites are never offered as swap or trade fodder.' },
       { id: 'ace', label: care?.ace ? 'Unmark ace' : 'Mark ace', problem: null, hint: 'Your ace is remembered on the Hub memorial wall if it falls.' },
       { id: 'back', label: 'Back', problem: null, hint: 'Back to the Pokémon menu.' },
@@ -393,6 +395,7 @@ class PokemonScreen implements PickerLike {
       this.careMenu = o.id === 'care';
       this.menuIdx = 0;
     } else if ((CARE_ACTIONS as readonly string[]).includes(o.id)) this.doCare(o.id as CareAction);
+    else if (o.id === 'signame') this.nameSig();
     else if (o.id === 'lead') this.reorder(0);
     else if (o.id === 'up') this.reorder(this.sel - 1);
     else if (o.id === 'down') this.reorder(this.sel + 1);
@@ -410,6 +413,17 @@ class PokemonScreen implements PickerLike {
     t.timer?.remove(false);
     this.tap = null;
     this.doCare(t.id, `tap:${t.count}`);
+    this.render();
+  }
+
+  /** Story S7d: names the partner's signature move (a text prompt, like Nickname). */
+  private nameSig(): void {
+    const moveId = nextNameable(this.run, this.mon.uid);
+    if (!moveId) return;
+    const current = signatureDisplay(this.run, moveId) ?? moveId;
+    const answer = typeof window !== 'undefined' && typeof window.prompt === 'function' ? window.prompt(`Name ${current} (3 to 20 letters; Cancel keeps it):`, current) : null;
+    this.flash = services().session.nameSignatureMove(moveId, answer);
+    this.notice = this.flash;
     this.render();
   }
 

@@ -1,6 +1,7 @@
 // Story Run: losing a rival fight does not end the run (Kice, Appendix S R7). The run goes on as if the fight were won, with no prize,
 // EXP, badge or win counters, the party healed, and the loss recorded in memories, the chronicle and the rival's record.
 // Classic Run keeps today's rules (a wipe ends the run, or restores a checkpoint in Adventure and Death-Block).
+import { gainCharge } from './feats';
 import type { Content } from '../contentSchema';
 import { emit } from '../story/record';
 import { getMode } from '../rules';
@@ -26,8 +27,14 @@ export function recordStoryLoss(content: Content, run: RunState): void {
   const v2 = run.story.v2;
   const id = battle.rivalId ?? (battle.firstRival ? 'first_rival' : battle.nemesis ? `nemesis:${battle.nemesis}` : battle.monRival ? `mon:${battle.monRival.id}` : battle.event ? `event:${battle.event.eventId}` : 'rival');
   run.story.flags[storyLossFlag(id)] = run.encountersCompleted;
-  if (v2) v2.facts.story_losses = (typeof v2.facts.story_losses === 'number' ? v2.facts.story_losses : 0) + 1;
+  if (v2) {
+    v2.facts.story_losses = (typeof v2.facts.story_losses === 'number' ? v2.facts.story_losses : 0) + 1;
+    // S20: a story fight lost during the League is the "final loss" the Champion's Heir ending grid reads.
+    if (run.stage?.kind === 'league') v2.facts.final_loss = true;
+  }
   else run.story.flags['story:losses'] = Number(run.story.flags['story:losses'] ?? 0) + 1;
+  // S7: coming back after a story loss adds Resolve Charge (once per Act).
+  gainCharge(content, run, 'return_after_loss');
   const rival = battle.rivalId ? run.story.rivals.find((r) => r.id === battle.rivalId) : undefined;
   emit(content, run, 'storyMoment', {
     data: { storyLoss: true, rival: battle.rivalId ?? null },

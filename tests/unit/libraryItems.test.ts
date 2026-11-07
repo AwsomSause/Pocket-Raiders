@@ -25,8 +25,7 @@ describe('item library wiring (P4)', () => {
     }
   });
 
-  it('level candies give the levels they say', () => {
-    const r = getContent().rewards.get('lvl-100-candy')!;
-    expect(r.effect).toMatchObject({ kind: 'levelUp', levels: 5 });
+  it('EXP and level candies are gone from the draft (Kice, 2026-11-07)', () => {
+    for (const id of ['lvl-1-candy', 'lvl-100-candy', 'rarer-candy', 'exp-candy-s', 'exp-candy-m', 'exp-candy-l']) expect(getContent().rewards.has(id), id).toBe(false);
   });
 });

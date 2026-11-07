@@ -36,7 +36,7 @@ import { raidCaptureTrack } from '../core/presentation/battleMusic';
 import { onInputAction, type InputAction } from '../ui/input';
 import { partyRows, Picker } from '../ui/partyPanel';
 import { fitHeight } from '../ui/showcase';
-import { pokemonVisual } from '../ui/sprites';
+import { pokemonVisual, trainerVisual } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, TYPE_COLORS, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel } from '../ui/aero';
@@ -102,6 +102,7 @@ export class DecisionScene extends Phaser.Scene {
     else if (decision.kind === 'teachMove') this.buildTeachMove(decision.uid, decision.itemName, decision.moveIds);
     else if (decision.kind === 'signature') this.buildSignature(decision.title, decision.options);
     else if (decision.kind === 'mutator') this.buildMutator(decision.choices);
+    else if (decision.kind === 'circuit') this.buildCircuit(decision.title, decision.options);
     else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path);
     else if (decision.kind === 'askLead') this.buildAskLead(decision.uid, decision.reason);
     else this.buildPpUp(decision.uid, decision.itemName, decision.ups);
@@ -226,18 +227,28 @@ export class DecisionScene extends Phaser.Scene {
 
   // ---------- a trainer's signature mechanic (core/signature.ts) ----------
 
-  private buildSignature(title: string, options: { label: string; description: string }[], kind: 'signature' | 'mutator' = 'signature'): void {
+  private buildSignature(title: string, options: { label: string; description: string }[], kind: 'signature' | 'mutator' | 'circuit' = 'signature'): void {
     this.add.text(GAME_WIDTH / 2, 60, title, textStyle(34, COLORS.textLight, { align: 'center', wordWrap: { width: 800 } })).setOrigin(0.5, 0);
-    drawPanel(this, 220, 170, 520, 70 * options.length + 30);
+    // The Circuit's Fork Gate and Rematch Day have long leader lines: a wider panel.
+    const wide = kind === 'circuit';
+    drawPanel(this, wide ? 60 : 220, 170, wide ? 840 : 520, 70 * options.length + 30);
     this.menu = new Menu(this, {
-      x: 236,
+      x: wide ? 176 : 236,
       y: 184,
       options: options.map((o) => ({ label: o.label, detail: o.description })),
       itemHeight: 70,
-      itemWidth: 488,
-      fontSize: 26,
+      itemWidth: wide ? 708 : 488,
+      fontSize: wide ? 24 : 26,
       // Beta 4.4: the modifier pick answers as a 'mutator' choice (it used to send 'signature', which the run refused).
       onSelect: (i) => this.resolve({ kind, optionIndex: i }),
+    });
+  }
+
+  /** The Circuit's Fork Gate and Rematch Day: the menu with each Leader's portrait beside their row. */
+  private buildCircuit(title: string, options: { label: string; description: string; sprite?: string }[]): void {
+    this.buildSignature(title, options, 'circuit');
+    options.forEach((o, i) => {
+      if (o.sprite) trainerVisual(this, o.sprite, o.label, 118, 184 + 70 * i + 38, 0.6).setDepth(5);
     });
   }
 

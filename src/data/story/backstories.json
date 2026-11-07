@@ -158,7 +158,7 @@
       "character": "ch_gideon_hartwell",
       "key": "affection",
       "op": ">=",
-      "value": 50
+      "value": 40
      },
      {
       "kind": "flag",
@@ -192,7 +192,7 @@
       "kind": "flag",
       "key": "legacy",
       "op": "<=",
-      "value": -6
+      "value": -2
      }
     ]
    },
@@ -285,7 +285,7 @@
       "kind": "flag",
       "key": "rapport",
       "op": ">=",
-      "value": 6
+      "value": 5
      }
     ]
    },
@@ -386,7 +386,7 @@
       "kind": "flag",
       "key": "humanity",
       "op": ">=",
-      "value": 70
+      "value": 65
      }
     ]
    },
@@ -487,6 +487,17 @@
   ],
   "catchAllEnding": "end_lost",
   "endingGrid": [
+   {
+    "ending": "end_lost",
+    "when": [
+     {
+      "kind": "flag",
+      "key": "displacement",
+      "op": ">=",
+      "value": 9
+     }
+    ]
+   },
    {
     "ending": "end_home",
     "when": [

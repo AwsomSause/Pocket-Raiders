@@ -37,6 +37,8 @@ export const MoveSlotSchema = z.object({
   hyper: z.literal(true).optional(),
   /** Overhaul slice 27: a Mega signature move, added when the Pokémon Mega Evolves and removed when the battle ends (battle/megaMove.ts). */
   megaSig: z.literal(true).optional(),
+  /** Story S7d: a Story Run signature move, added to the partner when a battle starts and removed when it ends (story2/signature.ts). */
+  storySig: z.literal(true).optional(),
   /** Times this Pokémon used the move this run, and the mastery star it earned (core/care: +1 PP, +5% accuracy). */
   uses: z.number().int().min(0).optional(),
   star: z.boolean().optional(),
@@ -64,7 +66,7 @@ export const PokemonInstanceSchema = z.object({
   /** Total experience points (the level is derived from growth rate). */
   xp: z.number().int().min(0),
   hp: z.number().int().min(0),
-  moves: z.array(MoveSlotSchema).min(1).max(6),
+  moves: z.array(MoveSlotSchema).min(1).max(8),
   status: StatusSchema.nullable(),
   /** Vitamin stacks per stat; each stack multiplies that stat. */
   vitamins: z.record(StatNameSchema, z.number().int().min(0)),
@@ -963,6 +965,15 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('mentorship'), mentorUid: z.string(), proteUid: z.string(), path: z.enum(['guardian', 'striker', 'strategist', 'survivor', 'challenger', 'bonded']) }),
   /** A benched Pokémon asks to lead (core/story/askLead.ts). */
   z.object({ kind: z.literal('askLead'), uid: z.string(), reason: z.enum(['leftOut', 'campfire']) }),
+  /** Story Overhaul S9: the Gym Fork (two doors, or pass the town) and Rematch Day (a Guest Match, or move on) of the Orrery Circuit (core/campaign/circuitGate.ts). */
+  z.object({
+    kind: z.literal('circuit'),
+    step: z.enum(['fork', 'rematch']),
+    region: z.number().int().min(0),
+    index: z.number().int().min(0),
+    title: z.string(),
+    options: z.array(z.object({ label: z.string(), description: z.string(), action: z.enum(['door0', 'door1', 'pass', 'guest', 'skip']), leaderId: z.string().optional(), /** The Leader's portrait asset id (Fork Gate and Rematch Day menus). */ sprite: z.string().optional() })).min(1),
+  }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
   /** A trainer's signature mechanic: pick one of the options (core/signature.ts). */

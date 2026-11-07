@@ -86,3 +86,24 @@ Read from the per-move use counts each Pokémon's story history already keeps (`
 - Dojo Student (Fighting type, 15+ uses of one Fighting move, single top): +3% accuracy with that move. The move is remembered on the Pokémon as `growthMove` (optional field, no save bump).
 Fast Learner is checked before Dojo Student.
 Still unplayed (10) and why: Closer (same rule as Loner), Fossil Memory (Rock is immune to sandstorm, the edge would do nothing), Burrower (no charge-interrupt chance in the engine), Free Spirit (no "wander off" node mechanic), Cheerleader (no team morale), Shield Sibling (pair bonds are not visible to the battle), Scout, Pivot, Tidy and Thorn Warden (no counter for first strikes against unseen foes, pivot switch-ins, hazards avoided or contact punishments yet). Tests: `tests/unit/growthMoveHistory.test.ts`.
+
+## Batch 10: Tidy and Thorn Warden (98 of 106 play)
+- Tidy: counter `tidyHazard` (6+, most in party) from clearing hazards (Rapid Spin, Defog, Tidy Up) and from dodging them on switch-in (Heavy-Duty Boots, or a flyer with no Stealth Rock down). Edge: entry-hazard damage taken −5% (`growthHazardMultiplier`).
+- Thorn Warden (Grass): counter `thornHit` (5+) each time its Rough Skin, Iron Barbs, Static-style contact status, or a contact-punishing Protect move hits a foe. Edge: +5% damage to a foe that made contact this turn or last (engine marks `contact:<uid>:<turn>`). Rocky Helmet is not counted yet (held-item module).
+- The engine leaves `avoid:`/`thorn:` marks in `growthMarks`; `story/hooks.ts` turns them into counters. No save bump.
+Still unplayed (8): Closer, Fossil Memory, Burrower, Free Spirit, Cheerleader, Shield Sibling, Scout, Pivot (reasons as above; Scout and Pivot need first-strike and pivot-switch tracking). Tests: `tests/unit/growthHazardContact.test.ts`.
+
+## Batch 11: Scout and Pivot (100 of 106 play)
+- Scout: counter `scoutFirst` (5+, most in party) each time it moves first, on a foe's first turn out, against a foe with higher base Speed (story hooks). Edge: +3% accuracy on moves against a foe on its first turn out (`growthAccuracyMultiplier`, `scout`).
+- Pivot: counter `pivotOut` (4+) for a U-turn-style exit, or a voluntary switch out after it dealt damage this stay (engine marks `dealt:<uid>`, `pivotOut:<uid>`). Edge: +5% damage on the first turn out of the Pokémon sent in right after a U-turn-style exit (`pivotIn:<uid>` mark). Settled as: the path holder must itself be the one sent in.
+- Forced switches (Roar etc.) do not count. No save bump (marks live in the optional `growthMarks`).
+Still unplayed (6): Closer, Fossil Memory, Burrower, Free Spirit, Cheerleader, Shield Sibling. Tests: `tests/unit/growthScoutPivot.test.ts`.
+
+## Batch 12: Closer, Shield Sibling, Fossil Memory, Burrower (104 of 106 play)
+Designs picked as the simplest fit to the pack text:
+- Closer: counter `koLast` (4+): KOs while it is the last Pokémon in party order still standing with someone ahead of it (alone = Loner's case, so it differs). Edge: +5% damage in that situation (`isLastStanding`).
+- Shield Sibling: counter `koPair` (4+): KOs while a bonded teammate (an open `bond` relationship in the story) is still standing and has hit the foe this battle (`hit:<uid>` marks). Edge: +3% damage while any bonded teammate is standing (`BattleContext.bondPartners`, set from the run in `battleContext`).
+- Fossil Memory (Rock): counter `surviveOne` (2+): left on exactly 1 HP by a hit, or saved by Endure/Focus Sash (`lastStand`). Rock is immune to sandstorm, so the edge is on the chip it does take: weather chip −5% (hail; sandstorm too if its type ever changes).
+- Burrower (Ground): counter `underground` (4+): turns ending underground (Dig). The engine has no charge-interrupt chance, so the edge is on what does stop a charge: full paralysis and confusion self-hit chances are 5% lower (relative) while it is mid two-turn move.
+- No save bump (marks in the optional `growthMarks`, no new fields).
+Still unplayed (2, Kice chose skip): Free Spirit, Cheerleader. Tests: `tests/unit/growthLastFossil.test.ts`.

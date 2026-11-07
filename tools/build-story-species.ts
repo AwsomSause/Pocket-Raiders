@@ -28,13 +28,13 @@ const D: Def[] = [
     evolvesTo: [{ to: 'eevee', level: 12 }], abilities: { normal: ['run-away'], hidden: 'anticipation' }, art: { icon: '1/133', cry: '133' }, weight: 2.4, female: 0.5, eggGroups: ['ground'], color: 'brown', generation: 9 },
   { id: 'oracowl', name: 'Oracowl', dex: 1029, types: ['psychic', 'flying'], stats: [110, 55, 70, 125, 115, 65], catchRate: 45, baseExp: 245, growthRate: 'medium-fast', stage: 3, from: 'noctowl',
     learn: [...inherit('noctowl'), [42, 'psychic'], [46, 'future-sight'], [50, 'calm-mind']],
-    abilities: { normal: ['keen-eye'], hidden: 'tinted-lens' }, art: { icon: '2/164', cry: '164' }, weight: 52, female: 0.5, eggGroups: ['flying'], color: 'white', generation: 9 },
+    abilities: { normal: ['wise-eye'], hidden: 'tinted-lens' }, art: { icon: '2/164', cry: '164' }, weight: 52, female: 0.5, eggGroups: ['flying'], color: 'white', generation: 9 },
   { id: 'tempestwing', name: 'Tempestwing', dex: 1030, types: ['flying', 'fighting'], stats: [90, 125, 70, 55, 70, 120], catchRate: 45, baseExp: 245, growthRate: 'medium-slow', stage: 3, from: 'swellow',
     learn: [...inherit('swellow'), [46, 'close-combat'], [50, 'brave-bird'], [54, 'swords-dance']],
-    abilities: { normal: ['guts'], hidden: 'scrappy' }, art: { icon: '3/277', cry: '277' }, weight: 24, female: 0.5, eggGroups: ['flying'], color: 'gray', generation: 9 },
+    abilities: { normal: ['eye-of-the-gale'], hidden: 'guts' }, art: { icon: '3/277', cry: '277' }, weight: 24, female: 0.5, eggGroups: ['flying'], color: 'gray', generation: 9 },
   { id: 'megawattrel', name: 'Megawattrel', dex: 1031, types: ['electric', 'flying'], stats: [80, 70, 70, 120, 70, 125], catchRate: 45, baseExp: 245, growthRate: 'medium-slow', stage: 3, from: 'kilowattrel',
     learn: [...inherit('kilowattrel'), [52, 'thunder'], [56, 'hurricane'], [60, 'calm-mind']],
-    abilities: { normal: ['wind-power', 'volt-absorb'], hidden: 'competitive' }, art: { icon: '9/941', cry: '941' }, weight: 52, female: 0.5, eggGroups: ['water1', 'flying'], color: 'yellow', generation: 9 },
+    abilities: { normal: ['grid-surfer', 'volt-absorb'], hidden: 'competitive' }, art: { icon: '9/941', cry: '941' }, weight: 52, female: 0.5, eggGroups: ['water1', 'flying'], color: 'yellow', generation: 9 },
   { id: 'equinar', name: 'Equinar', dex: 1032, types: ['psychic', 'fairy'], stats: [100, 80, 100, 125, 115, 70], catchRate: 3, baseExp: 290, growthRate: 'slow', stage: 1, from: null, tags: ['legendary'],
     learn: [[1, 'confusion'], [1, 'disarming-voice'], [10, 'calm-mind'], [20, 'dazzling-gleam'], [30, 'psychic'], [40, 'moonblast'], [50, 'future-sight'], [60, 'recover']],
     abilities: { normal: ['pressure'], hidden: 'magic-bounce' }, art: { icon: '4/488', cry: '488' }, weight: 85, female: null, eggGroups: ['no-eggs'], color: 'purple', generation: 9 },
@@ -65,11 +65,14 @@ const out = D.map((d) => {
     assets: { sprite: `custom/${d.id}`, ...d.art }, weight: d.weight, femaleRatio: d.female, eggGroups: d.eggGroups, color: d.color,
   };
 });
-// Entries added to existing species: the three new final stages come from existing lines.
-const evolutions = [
-  { from: 'noctowl', to: 'oracowl', level: 42 }, { from: 'swellow', to: 'tempestwing', level: 46 }, { from: 'kilowattrel', to: 'megawattrel', level: 52 },
-];
+// The three new final stages evolve by condition (src/core/conditionEvolution.ts), not by level alone, so no plain level entries here.
+const evolutions: { from: string; to: string; level: number }[] = [];
 // Eevee now has a baby; TMs and tutors for the new Legends and Tuftin (the others borrow their pre-evolution's list).
+const abilities = [
+  { id: 'wise-eye', name: 'Wise Eye', description: 'Ignores the foe raising its evasion and prevents its own accuracy from being lowered.' },
+  { id: 'eye-of-the-gale', name: 'Eye of the Gale', description: 'Raises Speed by one stage after surviving a super-effective hit.' },
+  { id: 'grid-surfer', name: 'Grid Surfer', description: 'Doubles Speed on Electric Terrain and raises Speed by one stage after landing an Electric move.' },
+];
 const patches = [{ id: 'eevee', evolvesFrom: 'tuftin' }];
 // Wild-availability rows (the CSV import only knows PokeAPI's species). Babies and Legends are not wild-eligible, so only Tuftin needs one.
 const availability = { tuftin: { rarity: 'common', difficulty: 1, minLevel: 4, maxLevel: 8, captureRate: 190 } };
@@ -86,5 +89,5 @@ for (const [id, extra] of Object.entries(other)) {
   for (const m of list) if (!moves.has(m)) throw new Error(`${id}: unknown move ${m}`);
   learnables[id] = { egg: id === 'tuftin' ? ['wish', 'curse', 'stored-power'].filter((m) => moves.has(m)) : [], other: list };
 }
-writeFileSync(join(dataDir, 'storySpecies.json'), JSON.stringify({ species: out, evolutions, patches, learnables, availability }) + '\n');
+writeFileSync(join(dataDir, 'storySpecies.json'), JSON.stringify({ species: out, evolutions, patches, abilities, learnables, availability }) + '\n');
 console.log(`wrote ${out.length} species, ${evolutions.length} evolutions`);

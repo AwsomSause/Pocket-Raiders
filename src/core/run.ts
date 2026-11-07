@@ -189,7 +189,10 @@ import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, reco
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
-import { clutchSurvived, heartbondTurn, heartbondVictory, takeBeat } from './story2/heartbond';
+import { clutchSurvived, heartbondTurn, heartbondVictory, recoveryScenes, takeBeat } from './story2/heartbond';
+import { renderTemplate } from './story2/templates';
+import { checkSignatures, endSignatureMoves, learnedLine } from './story2/signature';
+import { featGate, featLines, gainCharge, memoryPhrase, keystoneFeat, recordFeat, significantBattle, sparkShared } from './story2/feats';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
@@ -203,7 +206,7 @@ import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
-import { conditionEvolutionTarget } from './conditionEvolution';
+import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { noteBountyKills } from './bounties';
@@ -240,7 +243,8 @@ import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart } from './evil/teams';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
-import { castAuthoredLeague, circuitLeader, noteGymWin } from './campaign/circuitCast';
+import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
+import { applyCircuitChoice, forkDecision, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
@@ -817,6 +821,16 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (!choices.some((n) => n.id === nodeId)) throw new Error(`Node "${nodeId}" is not one of the next choices`);
   const run = structuredClone(current);
   const stage = run.stage!;
+  // The Orrery Circuit's Gym Fork: entering a gym asks for a door (or a pass) first; the move happens when the node is chosen again.
+  if (findNode(stage.map, nodeId).kind === 'gym') {
+    const fork = forkDecision(content, run, run.regionIndex, stage.index);
+    if (fork) {
+      run.pending.unshift(fork);
+      run.afterDecisions = 'map';
+      run.phase = 'decision';
+      return run;
+    }
+  }
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);
@@ -1866,7 +1880,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     let plan: TrainerPlan = roll((r) => {
       switch (node.kind) {
         case 'gym':
-          return planGymLeader(content, archetype, stage.leaderId, stageNumber, scale, r, bossRemix(run.rules));
+          return planGymLeader(content, archetype, stage.leaderId, stageNumber, scale, r, bossRemix(run.rules) || guestMatch(content, run), guestMatch(content, run) ? content.balance.story.guestMatchBonus : 0);
         case 'elite': {
           const memberId = stage.eliteFour[node.column - 1];
           if (!memberId) throw new Error(`No Elite Four member for column ${node.column}`);
@@ -2155,8 +2169,14 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const campKey = `${run.runId}:${run.encountersCompleted}:${sideId}`;
     const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
     // One line only: a quirk reaction first, else the pack's party narration (personality, type, species lore).
+    const heartbondScenes = recoveryScenes(run, content.storyData.text, (m) => displayName(content, m)).join(' ');
+    // S7: the Keystone Memory's guaranteed Feat slot (once a run).
+    if (run.story.v2?.heartbond.keystoneReady) keystoneFeat(content, run);
+    // S7d: Signature II (and the Keystone upgrade) are learned at a Recovery stop.
+    const sigPartner = run.party.find((m) => m.uid === run.story.v2?.heartbond.partner);
+    const sigLines = sigPartner ? checkSignatures(content, run, 'recovery').map((u) => learnedLine(content, run, displayName(content, sigPartner), u)).join(' ') : '';
     const camp = quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2425,6 +2445,18 @@ export interface TurnResult {
 }
 
 /** The battle engine's view of the run's battle (the engine changes `run` in place). */
+/**
+ * S7 Resolve Charge from one turn (partner only, significant fights only): surviving a super-effective hit at a quarter
+ * HP or less, and taking a hit for an ally. Caps per battle live in balance.story.feats.charge.
+ */
+function storyChargeTurn(content: Content, run: RunState, partner: RunState['party'][number], events: readonly BattleEvent[]): void {
+  const battle = run.battle;
+  if (!run.story.v2 || !battle || !significantBattle(battle)) return;
+  const active = run.party[battle.activeIndex]?.uid === partner.uid;
+  if (active && partner.hp > 0 && partner.hp * 4 <= maxHp(content, partner) && events.some((e) => e.type === 'damage' && e.side === 'player' && e.effectiveness > 1)) gainCharge(content, run, 'survive_disadvantage');
+  if (events.some((e) => e.type === 'sacrifice' && e.uid === partner.uid)) gainCharge(content, run, 'protect_ally');
+}
+
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
   const archetype = runArchetype(content, run);
   syncHpPerks(content, archetype.modifiers, run.party);
@@ -2461,6 +2493,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     setStyle: isHardcore(run.rules),
     catchBlocked: nuzlockeCatchProblem(run.battle!),
     bondScore: (uid) => bondScoreOf(run.story.histories[uid]?.bond),
+    bondPartners: (uid) => run.story.relationships.filter((r) => r.open && r.kind === 'bond' && (r.a.id === uid || r.b.id === uid)).map((r) => (r.a.id === uid ? r.b.id : r.a.id)),
   };
 }
 
@@ -2530,6 +2563,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const partnerUid = run.story.v2?.heartbond.partner;
   const partnerBefore = partnerUid ? run.party.find((m) => m.uid === partnerUid)?.hp ?? 0 : 0;
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
+  // S7: the Story Run partner's banked Impossible Feat (the engine checks the moment; no RNG).
+  turnCtx.feat = featGate(content, run) ?? undefined;
   const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
   engineEvents.push(...grantHyperMoves(content, run, engineEvents));
@@ -2552,7 +2587,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   updateBondsTurn(run, engineEvents);
   const partnerMon = partnerUid ? run.party.find((m) => m.uid === partnerUid) : undefined;
   const clutch = partnerMon && clutchSurvived(partnerBefore, partnerMon.hp, maxHp(content, partnerMon)) ? [{ type: 'clutch', side: 'player', uid: partnerMon.uid }] : [];
-  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, [...(engineEvents as { type: string; side?: string; uid?: string }[]), ...clutch]);
+  const featFired = turnCtx.feat?.fired && partnerMon && recordFeat(content, run, turnCtx.feat.fired, turnCtx.feat.detail) ? turnCtx.feat.fired : null;
+  const sparked = featFired ? sparkShared(run) : null;
+  const featEvent = featFired && partnerMon ? [{ type: 'feat', side: 'player', uid: partnerMon.uid }] : [];
+  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, [...(engineEvents as { type: string; side?: string; uid?: string }[]), ...clutch, ...featEvent]);
+  if (partnerMon) storyChargeTurn(content, run, partnerMon, engineEvents);
   partyLifeTurn(content, run, engineEvents);
   run.rng.battle = rng.state;
   run.rng.capture = captureRng.state;
@@ -2590,6 +2629,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId));
+  if (battle.outcome === 'win' && partnerUid && run.story.histories[partnerUid]?.lastBattle === run.encountersCompleted && significantBattle(battle)) gainCharge(content, run, 'win_significant');
+  // S7d: Signature I after a won boss, Gym, Elite, Champion or rival fight the partner fought in; Keystone when ready.
+  if (battle.outcome === 'win' && partnerMon && run.story.histories[partnerMon.uid]?.lastBattle === run.encountersCompleted) for (const u of checkSignatures(content, run, 'victory', isBossFight(battle) || Boolean(battle.rivalId))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: learnedLine(content, run, displayName(content, partnerMon), u), uid: partnerMon.uid });
+  // S7: the Feat's line, then the memory it quotes (one spectacle line each; Quiet and Full both show them).
+  if (featFired && partnerMon) for (const text of featLines(content.storyData.text, featFired, displayName(content, partnerMon), memoryPhrase(run, partnerMon.uid))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text, uid: partnerMon.uid });
+  if (sparked && partnerMon) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: renderTemplate(content.storyData.text['feat.spark_shared.line'] ?? '', { pokemon: displayName(content, partnerMon) }), uid: sparked });
   if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);
@@ -2625,6 +2670,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
     for (const mon of run.party) endHeldBattle(mon);
+    endSignatureMoves(run.party);
   }
 
   // Beta 4.4: Hyper slots end with the battle; after a win or catch each is offered to keep.
@@ -3010,7 +3056,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       }
     }
     // S171: a route by weather, a known move or a move used often enough.
-    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;
+    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null, evoRunInfo(run, mon)) : null;
     if (special) {
       const evo = evolve(content, mon, special);
       evolutions.push({ ...evo, uid: mon.uid });
@@ -3229,11 +3275,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   if (!stage) {
     enterStage(content, run, 0); // a save from before stage maps existed
   } else if (kind === 'gym') {
-    const campaign = getCampaign(content, run.campaignId);
-    playStageEndStops(content, run);
-    // The Orrery Circuit has one League, after its last region (Appendix S.7): the other regions go straight on.
-    if (stage.index + 1 >= campaign.stagesPerRegion) (leagueAfterRegion(campaign, run.regionIndex) ? enterLeague : enterNextRegion)(content, run);
-    else enterStage(content, run, stage.index + 1);
+    advanceAfterGym(content, run);
   } else if (kind === 'champion' && run.story.flags[FINALE_FLAG] === 'pending') {
     // Phase two: back to the foot of the last node, so the champion can be chosen again.
     const last = stage!.map.nodes.find((n) => n.next.includes(stage!.current!));
@@ -3244,6 +3286,30 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   } else {
     run.phase = 'map';
   }
+}
+
+/**
+ * After a gym (or a passed town): the next stage, the Story Run's make-up fights and Rematch Day, then the League or the next region.
+ * Classic runs just go to the next stage.
+ */
+function advanceAfterGym(content: Content, run: RunState): void {
+  const campaign = getCampaign(content, run.campaignId);
+  const stage = run.stage!;
+  playStageEndStops(content, run);
+  const story = isStoryCampaign(content, run.campaignId);
+  const next = story ? nextGymIndex(content, run, run.regionIndex, stage.index) : stage.index + 1 < campaign.stagesPerRegion ? stage.index + 1 : null;
+  if (next !== null) return enterStage(content, run, next);
+  if (story) {
+    const rematch = rematchDecision(content, run, run.regionIndex);
+    if (rematch) {
+      run.pending.unshift(rematch);
+      run.afterDecisions = 'map';
+      run.phase = 'decision';
+      return;
+    }
+  }
+  // The Orrery Circuit has one League, after its last region (Appendix S.7): the other regions go straight on.
+  (leagueAfterRegion(campaign, run.regionIndex) ? enterLeague : enterNextRegion)(content, run);
 }
 
 /** A fresh reward draft. The draft items' extra choices and carried-over rewards (Lock Capsule, Favored Mail) are used up here. */
@@ -3312,7 +3378,8 @@ export type DecisionChoice =
   | { kind: 'teachMove'; moveIndex: number }
   | { kind: 'ppUpMove'; moveIndex: number }
   | { kind: 'mentor'; accept: boolean }
-  | { kind: 'askLead'; accept: boolean };
+  | { kind: 'askLead'; accept: boolean }
+  | { kind: 'circuit'; optionIndex: number };
 
 export interface DecisionResult {
   run: RunState;
@@ -3328,6 +3395,15 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'circuit') {
+    run.pending.shift();
+    const out = applyCircuitChoice(content, run, decision, choice.kind === 'circuit' ? choice.optionIndex : decision.step === 'fork' ? 0 : decision.options.length - 1);
+    if (out.next === 'advance') advanceAfterGym(content, run);
+    else if (out.next !== 'none') enterStage(content, run, out.next.stage);
+    continueAfterDecisions(content, run);
+    recordChanges(content, current, run, 'level');
+    return { run, message: out.message };
+  }
   if (decision.kind === 'learnMove') {
     const mon = run.party.find((p) => p.uid === decision.uid);
     const move = content.moves.get(decision.moveId)!;

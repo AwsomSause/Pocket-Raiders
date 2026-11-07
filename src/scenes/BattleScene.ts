@@ -25,6 +25,8 @@ import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
+import { armFeat, featCharged } from '../core/story2/feats';
+import { signatureDisplay } from '../core/story2/signature';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -638,6 +640,13 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The sprites the contact shadows follow, with the y each stands at (flyers and levitators float). */
+  /** Re-applies the battle style's sprite look (Ink's white silhouettes) after move flashes clear the tint. */
+  private reskin(): void {
+    const look = this.skin?.sprite;
+    if (!look) return;
+    for (const t of this.shadowTargets()) if (t.visual?.active) look(t.visual);
+  }
+
   private shadowTargets(): ShadowTarget[] {
     const content = services().session.content;
     const floats = (mon: PokemonInstance | null | undefined) => {
@@ -965,6 +974,7 @@ export class BattleScene extends Phaser.Scene {
         const mon = party.find((p) => p.uid === uid);
         return mon ? this.speciesName(mon) : '???';
       },
+      moveName: (id) => signatureDisplay(this.run, id),
     };
   }
 
@@ -2472,8 +2482,12 @@ export class BattleScene extends Phaser.Scene {
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
     const shadow = this.activeMon().shadow;
+    // S7: the Resolve spark (a banked Impossible Feat). Prompt mode adds a "Memory stirs" button that arms it.
+    const featV2 = this.run.story.v2;
+    const featReady = !this.duo && featCharged(this.run) && featV2?.heartbond.partner === this.activeMon().uid;
+    const featLine = featReady ? (featV2!.feats.armed ? 'Memory stirs: the Feat is armed.\n' : 'Memory stirs: a Feat is charged.\n') : '';
     const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];
@@ -2488,6 +2502,8 @@ export class BattleScene extends Phaser.Scene {
     if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
     const rallyAt = canRally ? options.length : -1;
     if (canRally) options.push({ label: this.rallyChoice ? 'Rally: ON' : 'Rally: OFF' });
+    const featAt = featReady && featV2!.dramatic === 'prompt' && !featV2!.feats.armed ? options.length : -1;
+    if (featAt >= 0) options.push({ label: 'Memory stirs' });
     // Ideas W1: a surrender deal, smashing the arena, the Pokédex scan and the item hotbar.
     const foeNow = currentEnemy(battleNow);
     const stake = foeStake(content, battleNow);
@@ -2539,6 +2555,9 @@ export class BattleScene extends Phaser.Scene {
         else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
           this.rallyChoice = !this.rallyChoice;
+          this.showRootMenu();
+        } else if (i === featAt) {
+          armFeat(this.run);
           this.showRootMenu();
         } else if (i === cheerAt) this.showCheerMenu();
         else if (i === 0) this.showMoveMenu();
@@ -2624,7 +2643,7 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : '') + zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -2642,8 +2661,9 @@ export class BattleScene extends Phaser.Scene {
       columns: 2,
       itemWidth: 270,
       // A fifth move (the Hyper slot) needs a third row: smaller buttons then.
-      itemHeight: options.length > 4 ? 36 : 50,
-      fontSize: options.length > 4 ? 22 : 28,
+      // Story signature moves can make it 7 or 8 (a fourth row).
+      itemHeight: options.length > 6 ? 27 : options.length > 4 ? 36 : 50,
+      fontSize: options.length > 6 ? 18 : options.length > 4 ? 22 : 28,
       // A battle style may fan the moves out as cards or ring them around your Pokémon.
       ...(this.skin ? this.menuSpec(this.skin.layout.moves, options.length) : {}),
       color: this.btnText,
@@ -2706,6 +2726,11 @@ export class BattleScene extends Phaser.Scene {
           if (this.duo && move && needsTarget(move)) this.openTargetPicker(chosen, move);
           else this.submit(chosen);
         };
+        // Story Run: a Pokémon that would refuse offers a choice first. Insisting always works and costs Heartbond.
+        if (slot && this.run.story.v2 && wouldRefuse(content, this.run, mon, slot.id)) {
+          this.openRefusalOffer(action, mon, slot.id, () => void withSkill());
+          return;
+        }
         void withSkill();
       },
       onBack: () => this.showRootMenu(),
@@ -2713,6 +2738,31 @@ export class BattleScene extends Phaser.Scene {
     this.moveInfo.setVisible(true);
     this.showTabs('attack');
     this.showActionTab();
+  }
+
+  /** A Story Run offer: the Pokémon is unsure about a reckless move. Insist (costs Heartbond), let it decline, or pick again. */
+  private openRefusalOffer(action: Extract<PlayerAction, { kind: 'move' }>, mon: PokemonInstance, moveId: string, goOn: () => void): void {
+    const content = services().session.content;
+    const name = mon.care?.nickname || (content.species.get(mon.speciesId)?.name ?? mon.speciesId);
+    const moveName = content.moves.get(moveId)?.name ?? moveId;
+    this.menu?.destroy();
+    this.message.setVisible(true).setText(`${name} is not sure about ${moveName}. Insisting will cost some Heartbond.`);
+    this.commandWindow.setVisible(true);
+    const choices = ['Insist', 'Let it decline', 'Pick another move'];
+    this.menu = new Menu(this, {
+      x: COMMAND_X + 24,
+      y: MESSAGE_Y + 26,
+      options: choices.map((label) => ({ label })),
+      columns: 1,
+      itemWidth: 340,
+      itemHeight: 46,
+      fontSize: 26,
+      color: this.btnText,
+      onSelect: (i) => {
+        if (i === 0) { Object.assign(action, { override: true }); goOn(); } else if (i === 1) goOn(); else this.showMoveMenu();
+      },
+      onBack: () => this.showMoveMenu(),
+    });
   }
 
   /** The ACTION tab over the move menu: click to cycle Mega / Tera / Z-Move / Dynamax on and off; red-orange while one is on. */
@@ -3546,6 +3596,7 @@ export class BattleScene extends Phaser.Scene {
       }
       // What the trainer says about it (spoken lines, after the event's own text).
       for (const line of drama.filter((d) => d.at === index)) await this.sayTrainer(line);
+      this.reskin();
     }
     // Make sure the boxes match the real state at the end of the turn.
     const run = this.run;
@@ -3564,6 +3615,7 @@ export class BattleScene extends Phaser.Scene {
       const active = run.party.find((m) => m.uid === this.shown.player.uid);
       if (active) await this.refreshInfoBox(this.playerBox, active, false);
     }
+    this.reskin();
     this.updateHeader();
   }
 

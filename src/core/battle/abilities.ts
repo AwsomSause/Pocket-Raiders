@@ -80,6 +80,7 @@ export const DROP_GUARD: Record<string, BoostStat | 'all'> = {
   'full-metal-body': 'all',
   'hyper-cutter': 'atk',
   'keen-eye': 'acc',
+  'wise-eye': 'acc',
   'minds-eye': 'acc',
   'big-pecks': 'def',
 };
@@ -152,7 +153,7 @@ export const HALF_HP_BOOST: Record<string, { stat: BoostStat; stages: number }> 
 
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
-  'cute-charm', 'rivalry',
+  'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
   ...Object.keys(PINCH),
   ...Object.keys(WEATHER_SETTERS),
   ...Object.keys(TERRAIN_SETTERS),

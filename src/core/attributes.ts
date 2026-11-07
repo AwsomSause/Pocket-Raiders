@@ -151,8 +151,22 @@ export function luckWeights(weights: Partial<Record<Rarity, number>>, effects: A
 
 /** Adds a run modifier from a reward (mutates `run`). Returns the attribute's new effective value. */
 export function addRunAttribute(content: Content, run: RunState, key: AttributeKey, amount: number): number {
+  if (key === 'luck' && amount > 0 && content.balance.itemRework.luckGainScale !== 1) amount = scaledLuckGain(content, run, amount);
   run.attributeModifiers[key] = (run.attributeModifiers[key] ?? 0) + amount;
   return effectiveAttributes(content, run)[key];
+}
+
+const LUCK_CARRY = 'luck-carry';
+
+/**
+ * Luck nerf (Kice, 2026-11-07): a run keeps only balance.itemRework.luckGainScale of every Luck gain.
+ * The leftover fraction carries over (in thousandths) so small gains still add up; returns the whole points to add.
+ */
+function scaledLuckGain(content: Content, run: RunState, amount: number): number {
+  const total = (run.itemCounters?.[LUCK_CARRY] ?? 0) + Math.round(amount * content.balance.itemRework.luckGainScale * 1000);
+  const whole = Math.floor(total / 1000);
+  run.itemCounters = { ...run.itemCounters, [LUCK_CARRY]: total - whole * 1000 };
+  return whole;
 }
 
 /**

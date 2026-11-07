@@ -186,8 +186,9 @@ export const MoveSchema = z.object({
    * contact/punch/bite/pulse/sound come from PokeAPI (abilities such as Static and Iron Fist use them).
    * `zmove`, `max`: a Z-Move or Max Move made in battle (battle/transform.ts); they hit through Protect for a quarter of their damage.
    * `megasig`: a Mega signature move (battle/megaMove.ts): only a Mega Evolved Pokémon has it, in an extra slot, so no learnset or random pool picks it.
+   * `storysig`: a Story Run signature move (story2/signature.ts): only the run's partner has it, in an extra slot each battle.
    */
-  flags: z.array(z.enum(['powder', 'typeless', 'zmove', 'max', 'megasig', 'contact', 'punch', 'bite', 'pulse', 'sound', 'bullet', 'slicing', 'wind'])).default([]),
+  flags: z.array(z.enum(['powder', 'typeless', 'zmove', 'max', 'megasig', 'storysig', 'contact', 'punch', 'bite', 'pulse', 'sound', 'bullet', 'slicing', 'wind'])).default([]),
   /**
    * False for moves whose effects the battle engine can't run yet. They stay
    * in the data (and in learnsets) so they can be switched on later, but no
@@ -2118,6 +2119,10 @@ export const BalanceSchema = z.object({
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
+  /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
+  itemRework: z
+    .object({ charmGate: z.boolean().default(true), charmDraftChance: z.number().min(0).max(1).default(0.0001), luckGainScale: z.number().min(0).max(1).default(0.25) })
+    .default({ charmGate: true, charmDraftChance: 0.0001, luckGainScale: 0.25 }),
   attributeItemFalloff: z.object({ afterBoosts: z.number().int().min(0), factor: z.number().min(0).max(1) }).default({ afterBoosts: 2, factor: 0.5 }),
   partyMax: z.number().int().positive(),
   starterLevel: z.number().int().positive(),
@@ -2231,6 +2236,8 @@ export const BalanceSchema = z.object({
     capMargin: z.number().int().min(0),
     /** Each region raises the level cap by this much (director decision D14). */
     levelCapStep: z.number().int().positive(),
+    /** The first region's level cap (Kice 2026-11-07: 100); later regions add `levelCapStep` each. Default: the step itself (the old rule). */
+    levelCapStart: z.number().int().positive().optional(),
     /** Multiplies all experience gained (the single knob for how fast the party levels). */
     xpScale: z.number().positive(),
     /** Auto-Battle (spec §32): a battle where the Pokémon chose their own actions gives this share of the EXP. */
@@ -2503,6 +2510,8 @@ export const BalanceSchema = z.object({
   /** Story Overhaul S4: Narrative Director knobs (design Part V-B). Rules that need story content are checked by later slices (S11, S19). */
   story: z.object({
     stopsTotal: z.number().int().min(1),
+    /** S9c: extra enemy levels in a Rematch Day Guest Match (its team also uses the leader's rotating slots). */
+    guestMatchBonus: z.number().int().min(0).default(3),
     /** The last stage number of Acts 1 to 6 (Act 1 starts at stage 1). */
     actEndStages: z.array(z.number().int().min(1)).length(6),
     /** Stops per Act: Acts 1 to 6, then the Finale and the Epilogue (scene stops). */
@@ -2536,7 +2545,20 @@ export const BalanceSchema = z.object({
       echoFromAct: z.number().int().min(1),
       maxSnapshots: z.number().int().min(1),
       rolls: z.record(z.string(), z.array(z.object({ key: z.string(), options: z.array(z.object({ value: z.string(), weight: z.number().min(0) })).min(1) }))).default({}),
-    }).default({ enabledBackstories: ['bs_viridian'], gapStops: 1, echoFromAct: 4, maxSnapshots: 40, rolls: {} }),
+      /** S20: counters a module starts with (the design's start values; a counter without one starts at 0) and the floor and cap of counters that have one. */
+      starts: z.record(z.string(), z.record(z.string(), z.number())).default({}),
+      limits: z.record(z.string(), z.tuple([z.number(), z.number()])).default({}),
+    }).default({ enabledBackstories: ['bs_viridian'], gapStops: 1, echoFromAct: 4, maxSnapshots: 40, rolls: {}, starts: {}, limits: {} }),
+    /** S7: Impossible Feats and the Resolve Charge (design Part II, Feats). Charge sources: points and a limit per scope (battle, act or a beat key). */
+    feats: z.object({
+      chargeMax: z.number().int().min(1),
+      bank: z.number().int().min(1), bankAtLevel9: z.number().int().min(1),
+      minTurn: z.number().int().min(1),
+      caps: z.object({ battle: z.number().int().min(1), act: z.number().int().min(1), run: z.number().int().min(1), sameFeat: z.number().int().min(1) }),
+      charge: z.record(z.string(), z.object({ points: z.number().int().min(1), limit: z.number().int().min(1), per: z.enum(['battle', 'act', 'key']) })),
+      /** Refuse to Fall: the share of max HP it recovers. */
+      refuseToFallHeal: z.number().min(0).max(1),
+    }).default({ chargeMax: 100, bank: 1, bankAtLevel9: 2, minTurn: 3, caps: { battle: 1, act: 2, run: 6, sameFeat: 2 }, charge: {}, refuseToFallHeal: 0.2 }),
   }),
   rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), /** Harder rivals: the opener is the player level + this; the ace is the player level + aceOffset. */ openerOffset: z.number().int().default(0), aceOffset: z.number().int().default(2), /** 1 keeps the old single-Pokémon first rival (used to pin old-seed tests). */ members: z.number().int().min(1).max(2).default(2), /** False restores the old rule: a rival loss ends a non-Story run (used to pin old-seed tests). */ softLoss: z.boolean().default(true), /** False keeps the fixed level instead of following the player's level (old-seed tests). */ followPlayer: z.boolean().default(true), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */

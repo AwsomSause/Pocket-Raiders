@@ -132,14 +132,14 @@ describe('six of eight', () => {
 
   it('allows at most 2 passes per region and none after entering a door', () => {
     const run = storyRun('s9-pass');
-    expect(passTown(content, run, 0, 0)).toBe(false); // the first gym was already entered
+    expect(passTown(content, run, 0, 0)).toBe(true);
     expect(passTown(content, run, 0, 1)).toBe(true);
+    expect(passTown(content, run, 0, 3)).toBe(false); // two passes used
     expect(passTown(content, run, 0, 1)).toBe(false);
-    expect(passTown(content, run, 0, 3)).toBe(true);
     expect(passTown(content, run, 0, 4)).toBe(false);
     expect(passTown(content, run, 1, 4)).toBe(true);
-    chooseDoor(content, run, 0, 6);
-    expect(passTown(content, run, 0, 6)).toBe(false);
+    chooseDoor(content, run, 1, 6);
+    expect(passTown(content, run, 1, 6)).toBe(false); // a door was entered
   });
 
   it('runs Rematch Day: met passed-over leaders invite (one Guest Match), unmet ones write a letter', () => {
@@ -169,21 +169,137 @@ describe('six of eight', () => {
 });
 
 describe('on the map', () => {
-  it('records the badge and Charter progress when a Circuit gym falls, and the League is the authored one', () => {
-    let r = debugJumpToColumn(storyRun('s9-win'), storyRun('s9-win').stage!.map.columns);
-    const leader = r.stage!.leaderId;
+  /** Heals and levels the lead, then clicks the gym node (answering the Fork Gate with `answer` when it shows). */
+  function toGym(run: RunState, answer: number | 'first'): RunState {
+    let r = debugJumpToColumn(run, run.stage!.map.columns);
     const mon = createPokemon(content, 'houndoom', 400, r.party[0]!.uid);
     mon.moves = [{ id: 'flamethrower', pp: 64 }, { id: 'crunch', pp: 64 }];
     r.party[0] = mon;
     r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
+    if (r.phase === 'decision' && answer !== 'first') {
+      r = resolveDecision(content, r, { kind: 'circuit', optionIndex: answer }).run;
+      if (r.phase === 'map' && r.stage!.kind === 'stage' && r.stage!.current !== null) r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
+    }
+    return r;
+  }
+  function fight(r: RunState): RunState {
     for (let guard = 0; r.phase !== 'map' && r.phase !== 'over' && guard < 600; guard++) {
       if (r.phase === 'battle') { for (const m of r.battle!.enemyTeam) m.hp = Math.min(m.hp, 1); r = takeTurn(content, r, { kind: 'move', index: 1 }).run; }
       else if (r.phase === 'reward') r = takeAnyReward(r);
+      else if (r.phase === 'decision' && r.pending[0]!.kind === 'circuit') break;
       else if (r.phase === 'decision') r = resolveDecision(content, r, r.pending[0]!.kind === 'caught' ? { kind: 'release' } : { kind: 'skipMove' }).run;
       else break;
     }
+    return r;
+  }
+
+  it('asks at the gym node which door to enter, offers a pass, and runs the chosen Leader', () => {
+    const base = storyRun('s9-fork');
+    const [a, b] = forkOf(content, base, 0, 0)!;
+    let r = debugJumpToColumn(base, base.stage!.map.columns);
+    r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
+    expect(r.phase).toBe('decision');
+    const d = r.pending[0]!;
+    expect(d.kind === 'circuit' && d.options.map((o) => o.action)).toEqual(['door0', 'door1', 'pass']);
+    expect(r.stage!.current).not.toBe(mapChoices(content, base)[0]!.id);
+    r = resolveDecision(content, r, { kind: 'circuit', optionIndex: 1 }).run;
+    expect(r.phase).toBe('map');
+    expect(r.stage!.leaderId).toBe(b);
+    expect(r.stage!.leaderId).not.toBe(a);
+    expect(r.story.v2!.circuit!.chosen['0']).toBe(b);
+    expect(r.story.v2!.circuit!.met).toEqual(expect.arrayContaining([a, b]));
+    r = chooseNodeWithNotes(content, r, mapChoices(content, r)[0]!.id).run;
+    expect(r.phase).toBe('battle');
+    expect(r.battle!.trainer!.leaderId).toBe(b);
+  });
+
+  it('records the badge when a Circuit gym falls, and the League is the authored one', () => {
+    const base = storyRun('s9-win');
+    const leader = forkOf(content, base, 0, 0)![0];
+    const r = fight(toGym(base, 0));
     expect(r.story.v2!.circuit!.badges).toEqual([{ leaderId: leader, regionId: 0, counted: true, source: 'gym' }]);
-    const league = debugJumpToLeague(content, storyRun('s9-league'));
-    expect(league.stage!.eliteFour).toEqual(['orig-isadora', 'orig-kofi', 'orig-brigid', 'orig-aurelio']);
+    expect(r.stage!.index).toBe(1);
+    expect(debugJumpToLeague(content, storyRun('s9-league')).stage!.eliteFour).toEqual(['orig-isadora', 'orig-kofi', 'orig-brigid', 'orig-aurelio']);
+  });
+
+  it('passing a town skips its gym and moves on with no badge', () => {
+    const base = storyRun('s9-pass-run');
+    const r = toGym(base, 2);
+    expect(r.phase).toBe('map');
+    expect(r.stage!.index).toBe(1);
+    const c = r.story.v2!.circuit!;
+    expect(c.passed).toEqual(['0']);
+    expect(c.badges).toEqual([]);
+    expect(c.passedOver).toEqual(expect.arrayContaining(c.cast[0]!.doors));
+  });
+
+  it('plays a make-up fight when the last town leaves a region under 6 badges, and the fork asks again', () => {
+    let r = storyRun('s9-makeup');
+    r.stage!.index = 7;
+    const c = ensureCircuit(content, r)!;
+    for (let i = 0; i < 4; i++) recordBadge(c, `e${i}`, 0, 'gym');
+    c.chosen['0'] = c.cast[0]!.doors[0]; // town 1 was entered but its fight was lost: no badge
+    r = fight(toGym(r, 0));
+    const after = r.story.v2!.circuit!;
+    expect(countedBadges(after, 0)).toBe(5);
+    expect(r.regionIndex).toBe(0);
+    expect(r.stage!.index).toBe(0); // back to the first town without a badge
+    expect(after.chosen['0']).toBeUndefined();
+  });
+
+  it('offers Rematch Day at the Region Gate: one Guest Match from a met, passed-over Leader', () => {
+    let r = storyRun('s9-rematchday');
+    const c = ensureCircuit(content, r)!;
+    for (let i = 0; i < 5; i++) recordBadge(c, `e${i}`, 0, 'gym');
+    for (let i = 0; i < 7; i++) c.chosen[String(i)] = c.cast[i]!.doors[0]; // the first seven towns were played
+    c.passedOver.push(c.cast[2]!.doors[1]);
+    c.met.push(...c.cast[2]!.doors);
+    r.stage!.index = 7;
+    r = toGym(r, 0);
+    r = fight(r);
+    expect(r.phase).toBe('decision');
+    const d = r.pending[0]!;
+    expect(d.kind === 'circuit' && d.step).toBe('rematch');
+    const guest = c.cast[2]!.doors[1];
+    expect(d.kind === 'circuit' && d.options.map((o) => o.leaderId)).toEqual([guest, c.cast[7]!.doors[1], undefined]); // the last town's unchosen Leader was seen at its Fork too
+    if (d.kind === 'circuit') expect(d.options[0]!.leaderId).toBe(guest);
+    r = resolveDecision(content, r, { kind: 'circuit', optionIndex: 0 }).run;
+    expect(r.regionIndex).toBe(0);
+    expect(r.stage!.index).toBe(2);
+    expect(r.stage!.leaderId).toBe(guest);
+    expect(r.story.v2!.circuit!.guest['0']).toBe(guest);
+    // A Guest Match is harder: the same gym without the Guest Match has lower enemy levels.
+    const plain = structuredClone(r);
+    plain.story.v2!.circuit!.guest['0'] = 'someone-else';
+    const top = (run: RunState): number => Math.max(...run.battle!.enemyTeam.map((m) => m.level));
+    const hard = toGym(structuredClone(r), 'first');
+    expect(hard.battle).toBeTruthy();
+    expect(top(hard)).toBeGreaterThan(top(toGym(plain, 'first')));
+    r = fight(toGym(r, 'first'));
+    const done = r.story.v2!.circuit!;
+    expect(done.badges.find((b) => b.leaderId === guest)).toMatchObject({ counted: false, source: 'guest' });
+    expect(done.merit).toBe(1);
+    expect(r.regionIndex).toBe(1); // the Guest Match was the region's last stop
+  });
+
+  it('declining Rematch Day leaves the region', () => {
+    let r = storyRun('s9-decline');
+    const c = ensureCircuit(content, r)!;
+    for (let i = 0; i < 5; i++) recordBadge(c, `e${i}`, 0, 'gym');
+    for (let i = 0; i < 7; i++) c.chosen[String(i)] = c.cast[i]!.doors[0];
+    c.met.push(...c.cast[2]!.doors);
+    r.stage!.index = 7;
+    r = fight(toGym(r, 0));
+    r = resolveDecision(content, r, { kind: 'circuit', optionIndex: 1 }).run;
+    expect(r.regionIndex).toBe(1);
+    expect(r.story.v2!.circuit!.guest['0']).toBe('declined');
+  });
+
+  it('lets an auto-player answer the Fork with any other choice: the first door', () => {
+    const base = storyRun('s9-auto');
+    const first = forkOf(content, base, 0, 0)![0];
+    let r = toGym(base, 'first');
+    r = resolveDecision(content, r, { kind: 'skipMove' }).run;
+    expect(r.stage!.leaderId).toBe(first);
   });
 });

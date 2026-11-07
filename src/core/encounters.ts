@@ -7,7 +7,7 @@ import type { Archetype, ArchetypeModifier, BossTeam, Campaign, Content, StatNam
 import { createPokemon, getSpecies, maxHp } from './pokemon';
 import { hashSeed, Rng } from './rng';
 import type { LevelBreakdown, PokemonInstance } from './state';
-import { getBoss, levelCap, type BossRole } from './regions';
+import { getBoss, curveCap, type BossRole } from './regions';
 import { isUsableMove } from './pokemon';
 import { eliteLevelOffset, isLegendaryLike, wildWeightPerk } from './trainerPerks';
 import { auditEncounter, directSpecies } from './encounterDirector';
@@ -49,8 +49,8 @@ export function withPartyStrength(content: Content, scale: LevelScale, partyLeve
 
 export function levelScale(content: Content, campaign: Campaign, regionIndex: number, stageIndex: number, column: number): LevelScale {
   const cfg = content.balance.difficulty;
-  const cap = levelCap(content, regionIndex);
-  const start = regionIndex === 0 ? cfg.baseLevel : levelCap(content, regionIndex - 1);
+  const cap = curveCap(content, regionIndex);
+  const start = regionIndex === 0 ? cfg.baseLevel : curveCap(content, regionIndex - 1);
   const end = Math.max(start, cap - cfg.capMargin);
   const total = campaign.stagesPerRegion * campaign.columns - 1;
   const t = Math.min(1, Math.max(0, (stageIndex * campaign.columns + (column - 1)) / Math.max(1, total)));
@@ -60,8 +60,8 @@ export function levelScale(content: Content, campaign: Campaign, regionIndex: nu
 /** The league comes after the region's last gym: the top of the curve. */
 export function leagueScale(content: Content, regionIndex: number): LevelScale {
   const cfg = content.balance.difficulty;
-  const cap = levelCap(content, regionIndex);
-  const start = regionIndex === 0 ? cfg.baseLevel : levelCap(content, regionIndex - 1);
+  const cap = curveCap(content, regionIndex);
+  const start = regionIndex === 0 ? cfg.baseLevel : curveCap(content, regionIndex - 1);
   return { start, end: Math.max(start, cap - cfg.capMargin), t: 1, cap };
 }
 
@@ -419,8 +419,8 @@ function planBoss(content: Content, archetype: Archetype, role: BossRole, bossId
 }
 
 /** The gym leader's team for the run's `stageNumber`-th stage (0-based). */
-export function planGymLeader(content: Content, archetype: Archetype, leaderId: string, stageNumber: number, scale: LevelScale, rng: Rng, remix = false): TrainerPlan {
-  return planBoss(content, archetype, 'gym', leaderId, stageNumber, scale, content.balance.difficulty.gymBonus, GYM_LEADER_CLASS, rng, remix);
+export function planGymLeader(content: Content, archetype: Archetype, leaderId: string, stageNumber: number, scale: LevelScale, rng: Rng, remix = false, extraBonus = 0): TrainerPlan {
+  return planBoss(content, archetype, 'gym', leaderId, stageNumber, scale, content.balance.difficulty.gymBonus + extraBonus, GYM_LEADER_CLASS, rng, remix);
 }
 
 /** An Elite Four member's team for region `regionIndex` (0-based). Teams get harder every region. */

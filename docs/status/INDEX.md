@@ -366,3 +366,11 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-s10-rivals.md`: Story S10: seven rivals data (teams, scenes, lines, packs), Kael/Soren clue ledgers, theme role table, fair-play audit gate (not yet wired into runs).
 - `story-s11-themes.md`: Story S11: four theme cards (Viridian, Rival's Promise, Champion's Legacy, Mythic Equation), ending sim, audit gate.
 - story-s5-backstory-loader.md: S5 backstory loader plus the Viridian slice (intro, events, arcs, echoes, ending, Chronicle, profile fold).
+- `story-s9b-fork-gate.md`: Story S9b: Fork Gate, pass, make-up fights and Rematch Day on the Orrery Circuit.
+- `story-s7c-remembrances.md`: Story S7c: all 74 Remembrance lines in the data (roster TSV + build script), rarity, 52-line quiz pool.
+- mass-sim-10k.md: 10,000-run sim tools, stronger bot, bug and polish list (docs/qa/mass-sim-10k.md).
+- `story-s7a-feats.md`: Story S7a: Impossible Feats (8 of 16 hooked in battle), Resolve Charge, run caps, Dramatic Moments gate, Memory stirs button.
+- `story-s7b-feats.md`: Story S7b: the other 8 Impossible Feats (doubles guard, ability break, unmask, spark, backstory Feats); all 16 built.
+- mass-sim-fix-rival-trade.md: rival trades skip Pokémon without a bond (crash found by the 10,000-run sim).
+- `story-s7d-signatures.md`: Story S7d: Signature I, II and Keystone moves for all 74 starter lines (222 moves), unlocks, naming.
+- level-cap-100.md: first region caps at 100, +50 per region; enemy curve unchanged.

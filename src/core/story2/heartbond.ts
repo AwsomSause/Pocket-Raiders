@@ -82,7 +82,7 @@ export const PAY_SOURCES: Record<string, PaySource> = {
   care_touch: { deltas: { affection: 1 }, cap: 3 },
   faint_loss: { deltas: { strain: 3 } },
   refusal_ignored: { deltas: { trust: -2, strain: 4 }, cap: 3 },
-  override_cost: { deltas: { trust: -2, respect: -2 }, cap: 3 },
+  override_cost: { deltas: { trust: -2, respect: -2 }, cap: 2 },
 };
 const LEDGER_MAX = 600;
 
@@ -143,6 +143,7 @@ export function heartbondTurn(run: RunState, battleKey: string, turn: number, ev
     else if (e.type === 'faint') fired.push('faint_loss');
     else if (e.type === 'sacrifice') fired.push('guard_ally');
     else if (e.type === 'clutch') fired.push('clutch_survive');
+    else if (e.type === 'feat') fired.push('feat');
   }
   if (!fired.length) return { paid: [], folded: [] };
   const r = payHeartbond(run, partner, battleKey, turn, fired);
@@ -199,4 +200,24 @@ export function takeBeat(run: RunState, text: Readonly<Record<string, string>>, 
   const line = tm ? text[`hb.beat.${tm}.${level}`] : undefined;
   if (!line) return null;
   return renderTemplate(line, { pokemon: nameOf(mon) });
+}
+
+/**
+ * A Recovery stop (a healing stop): marks the Keystone Memory ready when level 10 is latched and returns its scene line, once.
+ * Also plays a waiting Temperament beat when the player did not just win a battle. Returns the lines to show, in order.
+ */
+export function recoveryScenes(run: RunState, text: Readonly<Record<string, string>>, nameOf: (mon: RunState['party'][number]) => string): string[] {
+  const v2 = run.story.v2;
+  const partner = v2?.heartbond.partner;
+  const mon = partner ? run.party.find((m) => m.uid === partner) : undefined;
+  if (!v2 || !mon) return [];
+  const out: string[] = [];
+  const beat = takeBeat(run, text, nameOf);
+  if (beat) out.push(beat);
+  if (markRecovery(v2)) {
+    const tm = temperamentOf(personalityOfMon(mon).id);
+    const line = tm ? text[`hb.keystone.${tm}`] : undefined;
+    if (line) out.push(renderTemplate(line, { pokemon: nameOf(mon) }));
+  }
+  return out;
 }
