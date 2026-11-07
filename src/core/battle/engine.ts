@@ -79,6 +79,8 @@ import {
   TRAPPERS,
   INTIMIDATE_GUARD,
   KO_BOOST,
+  FORM_PAIRS,
+  FORECAST_FORMS,
   MOLD_BREAKERS,
   PINCH,
   STATUS_IMMUNE,
@@ -90,6 +92,7 @@ import {
 } from './abilities';
 import { genderOf, oppositeGender, sameGender } from '../gender';
 import * as Held from './held';
+import { roleEntryBoost } from '../legendary/roles';
 import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
@@ -608,7 +611,7 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
     const foeMon = currentEnemy(ctx.battle);
     const trapper = foeMon.hp > 0 ? (ctx.battle.enemyVolatile.abilityOverride ?? abilityOf(ctx.content, foeMon)) : null;
     const types = getSpecies(ctx.content, active.speciesId).types;
-    const grounded = !types.includes('flying') && abilityOf(ctx.content, active) !== 'levitate';
+    const grounded = !types.includes('flying') && !['levitate', 'eelevate'].includes(abilityOf(ctx.content, active) ?? '');
     const caught = trapper === 'shadow-tag' ? abilityOf(ctx.content, active) !== 'shadow-tag' : trapper === 'arena-trap' ? grounded : trapper === 'magnet-pull' ? types.includes('steel') : false;
     if (trapper && TRAPPERS.has(trapper) && caught && !types.includes('ghost')) return `The foe's ${trapper.replace(/-/g, ' ')} keeps you from switching out!`;
   }
@@ -819,7 +822,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (action.kind === 'move') {
     const chosen = resolveMove(content, playerC.mon, action.index);
     // A Z-Move replaces the chosen move (its Z-Power was spent above).
-    const playerMove = battleMove(content, battle, playerC.mon, action.transform?.kind === 'zmove' ? (zMoveFor(content, chosen) ?? chosen) : chosen);
+    const playerMove = battleMove(content, battle, playerC.mon, action.transform?.kind === 'zmove' ? (zMoveFor(content, chosen, { speciesId: playerC.mon.speciesId, inventory: ctx.inventory }) ?? chosen) : chosen);
     playerC.vol.plannedAttack = playerMove.category !== 'status';
     playerC.vol.plannedMove = playerMove.id;
     playerC.vol.beakHeat = Boolean(playerMove.effects.beakBlast);
@@ -1631,6 +1634,9 @@ function enterField(ctx: BattleContext, holder: Held.Holder): void {
   state.used[key] = { on: 1 };
   Held.onSwitchIn(ctx, holder);
   Held.boosterEnergy(ctx, holder, []);
+  // Legendary roles: a Legendary or Mythical enters with one stage for its role (legendary/roles.ts).
+  const boost = roleEntryBoost(ctx.content, holder.mon.speciesId);
+  if (boost) holder.stages[boost.stat] = clampStage(holder.stages[boost.stat] + boost.stages);
 }
 
 function leaveField(ctx: BattleContext, mon: PokemonInstance): void {
@@ -1924,16 +1930,6 @@ function swapForm(ctx: BattleContext, c: Combatant, to: string, events: BattleEv
   events.push({ type: 'transform', side: c.side, uid: c.mon.uid, kind: 'ability', from, to, itemId: null } as BattleEvent);
 }
 
-/** Forms that follow HP, weather or a toggle: [base, alternate] pairs per ability. */
-const FORM_PAIRS: Record<string, [string, string][]> = {
-  'zen-mode': [['darmanitan', 'darmanitan-zen'], ['darmanitan-galar', 'darmanitan-galar-zen']],
-  schooling: [['wishiwashi', 'wishiwashi-school']],
-  'power-construct': [['zygarde', 'zygarde-complete']],
-  'hunger-switch': [['morpeko', 'morpeko-hangry']],
-  'tera-shift': [['terapagos', 'terapagos-terastal']],
-  'shields-down': [['minior', 'minior-core']],
-};
-const FORECAST_FORMS: Partial<Record<Weather, string>> = { sun: 'castform-sunny', rain: 'castform-rainy', snow: 'castform-snowy', hail: 'castform-snowy' };
 
 /** Moves a Pokémon into or out of the form its ability asks for. `endOfTurn` lets Hunger Switch flip. */
 function syncForms(ctx: BattleContext, c: Combatant, events: BattleEvent[], endOfTurn: boolean): void {
@@ -2110,12 +2106,18 @@ function statusCureAbility(ctx: BattleContext, c: Combatant, events: BattleEvent
  * and friends (take the move and heal or get stronger), Wonder Guard (only
  * super-effective hits), Soundproof. Returns true if the move was stopped.
  */
+/** Levitate and Eelevate dodge Ground moves unless Gravity or Smack Down has grounded it; Thousand Arrows (smackDown) still hits. */
+function floatsOver(ctx: BattleContext, target: Combatant, ability: string | null, move: Move, moveType: TypeName): boolean {
+  if (ability !== 'levitate' && ability !== 'eelevate') return false;
+  return moveType === 'ground' && !move.effects.smackDown && ctx.battle.field.gravity <= 0 && !target.vol.smackedDown;
+}
+
 /** S7: the target's ability that would block this damaging move (absorbs, Levitate, Wonder Guard, Soundproof, Bulletproof), or null. No side effects. */
 function abilityWouldBlock(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, moveType: TypeName, effectiveness: number): string | null {
   const ability = targetAbility(ctx, user, target);
   if (!ability) return null;
   if (ABSORB[ability]?.type === moveType) return ability;
-  if ((ability === 'levitate' || ability === 'eelevate') && moveType === 'ground' && !move.effects.hitsSemi) return ability;
+  if (floatsOver(ctx, target, ability, move, moveType)) return ability;
   if (ability === 'wonder-guard' && effectiveness <= 1 && !move.flags.includes('typeless')) return ability;
   if ((ability === 'soundproof' && move.flags.includes('sound')) || (ability === 'bulletproof' && move.flags.includes('bullet'))) return ability;
   return null;
@@ -2149,8 +2151,8 @@ function abilityBlocksMove(ctx: BattleContext, user: Combatant, target: Combatan
     }
     return true;
   }
-  if (damaging && (ability === 'levitate' || ability === 'eelevate') && moveType === 'ground' && !move.effects.hitsSemi) blocked = true;
-  if (damaging && ctx.battle.eventRule?.sky && moveType === 'ground' && !move.effects.hitsSemi) blocked = true;
+  if (damaging && floatsOver(ctx, target, ability, move, moveType)) blocked = true;
+  if (damaging && ctx.battle.eventRule?.sky && moveType === 'ground' && !move.effects.smackDown) blocked = true;
   if (damaging && ability === 'wonder-guard' && effectiveness <= 1 && !move.flags.includes('typeless')) blocked = true;
   if (ability === 'soundproof' && move.flags.includes('sound')) blocked = true;
   if (ability === 'good-as-gold' && !damaging) blocked = true;
@@ -2273,6 +2275,8 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
     if (turns > 0) {
       // Early Bird wakes up twice as fast.
       status.turns = Math.max(0, turns - (ability === 'early-bird' ? 2 : 1));
+      // Decades rule: Drowsy lets a sleeper act about half the time instead of never.
+      if (content.ruleset.drowsy && !move?.effects.asleepOnly && rng.chance(0.5)) return true;
       if (!move?.effects.asleepOnly) {
         events.push({ type: 'cant', side: user.side, reason: 'slp' });
         return false;
@@ -2282,7 +2286,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
     user.mon.status = null;
     events.push({ type: 'wake', side: user.side });
   }
-  if (user.mon.status?.id === 'frz') {
+  if (user.mon.status?.id === 'frz' && !content.ruleset.frostbite) {
     if (rng.chance(content.ruleset.freezeThawChance)) {
       user.mon.status = null;
       events.push({ type: 'thaw', side: user.side });
@@ -3465,6 +3469,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   // Ion Deluge, Plasma Fists and Electrify turn Normal moves Electric.
   if (baseType === 'normal' && !move.flags.includes('typeless') && (ctx.battle.extra.ionDeluge || user.vol.electrified)) baseType = 'electric';
   user.vol.electrified = false;
+  // Decades rule: Normal-type moves take the user's own first type (a Normal-type user is unchanged).
+  if (content.ruleset.normalFollowsUser && baseType === 'normal' && !move.flags.includes('typeless')) baseType = battleTypes(content, ctx.battle, user.mon)[0] ?? 'normal';
   const typeChange = userAbility ? TYPE_CHANGE[userAbility] : undefined;
   const liquid = userAbility === 'liquid-voice' && move.flags.includes('sound') && !move.flags.includes('typeless');
   const normalized = userAbility === 'normalize' && baseType !== 'normal' && !move.flags.includes('typeless');
@@ -3570,7 +3576,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (fx.userFaint === 'finalGambit') damage = Math.max(1, user.mon.hp);
       else if (fx.counter) damage = Math.max(1, Math.floor((fx.counter === 'physical' ? user.vol.tookPhysical : fx.counter === 'special' ? user.vol.tookSpecial : (user.vol.tookPhysical + user.vol.tookSpecial) * 0.75) * 2));
       else if (fx.endeavor) damage = Math.max(1, target.mon.hp - user.mon.hp);
-      else if (fx.halveTarget) damage = Math.max(1, Math.floor(target.mon.hp / 2));
+      else if (fx.halveTarget) damage = Math.max(1, Math.floor(target.mon.hp * (typeof fx.halveTarget === 'number' ? fx.halveTarget : 0.5)));
       else if (fx.fixedDamage === 'level') damage = user.mon.level;
       else if (fx.fixedDamage === 'psywave') damage = Math.max(1, Math.floor((user.mon.level * rng.int(50, 150)) / 100));
       else damage = fx.fixedDamage as number;
@@ -3716,6 +3722,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         randomFactor,
         // Guts ignores the burn's Attack cut.
         burned: userStatus === 'brn' && userAbility !== 'guts',
+        frostbitten: !!ruleset.frostbite && userStatus === 'frz',
         physical,
         weather: Held.hasHook(ctx, user.mon, user.side, 'utilityUmbrella') || Held.hasHook(ctx, target.mon, target.side, 'utilityUmbrella') ? 1 : weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
         final,
@@ -4157,7 +4164,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
   if (koBoost && target.mon.hp <= 0 && user.mon.hp > 0) {
     let stat: BoostStat;
     if (koBoost === 'best') {
-      // Beast Boost raises its highest stat.
+      // Beast Boost and Eelevate raise the highest stat.
       const stats = calcStats(ctx.content, user.mon);
       stat = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce((best, s) => (stats[s] > stats[best] ? s : best));
     } else stat = koBoost;
@@ -5813,7 +5820,7 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
   };
   const status = ability === 'poison-heal' && c.mon.status?.id === 'psn' ? undefined : c.mon.status?.id;
   const burn = content.ruleset.burnResidualFraction / (ability === 'heatproof' ? 2 : 1);
-  let fraction = status === 'brn' ? burn * (c.side === 'enemy' ? burnDamagePerk(ctx.perks) : burnDamageTakenPerk(ctx.perks)) : status === 'psn' ? content.ruleset.poisonResidualFraction : 0;
+  let fraction = status === 'frz' && content.ruleset.frostbite ? content.ruleset.burnResidualFraction : status === 'brn' ? burn * (c.side === 'enemy' ? burnDamagePerk(ctx.perks) : burnDamageTakenPerk(ctx.perks)) : status === 'psn' ? content.ruleset.poisonResidualFraction : 0;
   if (status === 'psn' && c.mon.status?.bad) {
     // Toxic: 1/16 more of max HP each turn, up to 15/16.
     c.mon.status.turns = Math.min(15, (c.mon.status.turns ?? 0) + 1);
