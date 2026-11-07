@@ -2123,6 +2123,10 @@ export const BalanceSchema = z.object({
   itemRework: z
     .object({ charmGate: z.boolean().default(true), charmDraftChance: z.number().min(0).max(1).default(0.0001), luckGainScale: z.number().min(0).max(1).default(0.25) })
     .default({ charmGate: true, charmDraftChance: 0.0001, luckGainScale: 0.25 }),
+  /** Item stages (item rework part 2): Stage II/III copies of catalog items, built at load (core/itemStages.ts). */
+  itemStages: z
+    .object({ enabled: z.boolean(), factors: z.tuple([z.number().min(1), z.number().min(1)]), skipKinds: z.array(z.string()), skipFamilies: z.array(z.string()) })
+    .default({ enabled: false, factors: [1.5, 2], skipKinds: [], skipFamilies: [] }),
   attributeItemFalloff: z.object({ afterBoosts: z.number().int().min(0), factor: z.number().min(0).max(1) }).default({ afterBoosts: 2, factor: 0.5 }),
   partyMax: z.number().int().positive(),
   starterLevel: z.number().int().positive(),
@@ -2168,6 +2172,8 @@ export const BalanceSchema = z.object({
     betterPerRegion: z.number().min(0),
   }),
   vitaminMultiplierPerStack: z.number().positive(),
+  /** Extra max HP per level for every Pokémon (both sides): with no IVs or EVs a high-level Pokémon would otherwise die to one or two hits. */
+  hpPerLevel: z.number().min(0).default(0),
   vitaminMaxStacks: z.number().int().positive(),
   /** Abilities (M8.75 part C3): the chance a new Pokémon has its hidden ability instead of a normal one. */
   abilities: z.object({ hiddenChance: z.number().min(0).max(1) }),

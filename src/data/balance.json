@@ -36,6 +36,7 @@
   "betterPerRegion": 0.5
  },
  "vitaminMultiplierPerStack": 0.1,
+ "hpPerLevel": 1,
  "vitaminMaxStacks": 3,
  "abilities": {
   "hiddenChance": 0.05
@@ -140,7 +141,7 @@
  },
  "difficulty": {
   "baseLevel": 4,
-  "curve": 1,
+  "curve": 1.35,
   "capMargin": 5,
   "levelCapStep": 50,
     "levelCapStart": 100,
@@ -901,6 +902,12 @@
    100
   ]
  },
+  "itemStages": {
+   "enabled": true,
+   "factors": [1.5, 2],
+   "skipKinds": ["teachMove", "fossil", "nature", "natureNudge", "ability", "teraType", "egg", "bagItem", "ppUp", "perk"],
+   "skipFamilies": ["Evolution items", "Species items", "Memories", "Plates (team-wide)", "Drives", "Key items: tickets, keys and story items", "Key items: gadgets", "Fossils", "Fossils (Drive pack)", "TMs and HMs", "Natures and Mints", "Tera Jewels", "Ability items", "Charms", "Charms (Drive pack)", "Held items (Drive pack)"]
+  },
   "itemRework": { "charmGate": true, "charmDraftChance": 0.0001, "luckGainScale": 0.25 },
   "overlevel": { "xpPerItem": 2000, "item": "premier-ball" }
 }
