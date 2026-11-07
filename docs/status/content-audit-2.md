@@ -1,0 +1,1 @@
+- Content audit 2 (moves): Fury Cutter now doubles each hit in a row (40, 80, 160) and resets after another move; Alluring Voice now confuses a target with a raised stat and counts as a sound move. Fire/Grass/Water Pledge combos and Order Up's Commander boost are listed as known limits (plain hits).

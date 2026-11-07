@@ -253,6 +253,8 @@ export const VolatileSchema = z.object({
   movesUsed: z.array(z.string()).default([]),
   /** Rollout / Ice Ball hits in a row. */
   rollout: z.number().int().min(0).default(0),
+  /** Fury Cutter hits in a row. */
+  furyCutter: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
   nightmare: z.boolean().default(false),
   /** Cursed by a Ghost's Curse. */
@@ -367,6 +369,7 @@ export const freshVolatile = (): Volatile => ({
   loweredThisTurn: false,
   movesUsed: [],
   rollout: 0,
+  furyCutter: 0,
   nightmare: false,
   cursed: false,
   imprison: false,

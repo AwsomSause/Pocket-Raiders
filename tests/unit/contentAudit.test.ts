@@ -9,12 +9,12 @@ import { abilityOf, createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { content } from './helpers';
 
-type Opts = { player?: string; enemy?: string; pAbility?: string; eAbility?: string; pMoves?: string[]; eMove?: string; level?: number; seed?: string };
+type Opts = { player?: string; enemy?: string; pAbility?: string; eAbility?: string; pMoves?: string[]; eMove?: string; level?: number; eLevel?: number; seed?: string };
 
 function duel(o: Opts) {
   const level = o.level ?? 50;
   const player = createPokemon(content, o.player ?? 'machop', level, 'p');
-  const enemy = createPokemon(content, o.enemy ?? 'snorlax', level, 'e');
+  const enemy = createPokemon(content, o.enemy ?? 'snorlax', o.eLevel ?? level, 'e');
   const move = (m: string) => ({ id: m, pp: content.moves.get(m)!.pp });
   player.moves = (o.pMoves ?? ['tackle']).map(move);
   enemy.moves = [move(o.eMove ?? 'splash')];
@@ -144,5 +144,25 @@ describe('Mega and battle forms', () => {
     const forms = literals.filter((id) => content.species.get(id)?.form);
     expect(forms.filter((id) => !ABILITY_FORMS.has(id))).toEqual([]);
     for (const id of ABILITY_FORMS) expect(content.species.has(id)).toBe(true);
+  });
+});
+
+describe('moves that used to be plain hits', () => {
+  const hit = (ev: BattleEvent[]) => ev.reduce((n, e) => (e.type === 'damage' && e.side === 'enemy' ? n + e.amount : n), 0);
+  it('Fury Cutter doubles each hit in a row and resets after another move', () => {
+    const d = duel({ player: 'scyther', pMoves: ['fury-cutter', 'swords-dance'], enemy: 'blissey', level: 20, eLevel: 100, seed: 'fc' });
+    const dmg: number[] = [];
+    for (let t = 0; t < 3; t++) dmg.push(hit(d.turn()));
+    expect(d.battle.playerVolatile.furyCutter).toBe(3);
+    expect(dmg[2]! / Math.max(1, dmg[0]!)).toBeGreaterThan(2);
+    d.turn(1);
+    expect(d.battle.playerVolatile.furyCutter).toBe(0);
+  });
+  it('Alluring Voice confuses a target with a raised stat, and not one without', () => {
+    const boosted = duel({ player: 'sylveon', pMoves: ['alluring-voice'], enemy: 'snorlax' });
+    boosted.battle.enemyStages.atk = 1;
+    expect(boosted.turn().some((e) => e.type === 'confused' && e.side === 'enemy')).toBe(true);
+    const plain = duel({ player: 'sylveon', pMoves: ['alluring-voice'], enemy: 'snorlax' });
+    expect(plain.turn().some((e) => e.type === 'confused')).toBe(false);
   });
 });
