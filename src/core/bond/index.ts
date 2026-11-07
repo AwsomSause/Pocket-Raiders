@@ -7,6 +7,7 @@ import type { Content } from '../contentSchema';
 import { calcStats, getSpecies, isUsableMove } from '../pokemon';
 import type { PokemonInstance, RunState } from '../state';
 import type { Bond } from '../story/schema';
+import { isHardcore } from '../nuzlocke';
 import { payHeartbond } from '../story2/heartbond';
 import { BOND_KEYS, BOND_RULES, TRAIT_AUTONOMY, type BondKey } from './schema';
 
@@ -143,7 +144,8 @@ export function shapeAction(content: Content, run: RunState, action: PlayerActio
     // The player insists: the command goes through, it costs Heartbond (the first two a battle), and it will not be refused again.
     battle.drama.refused.push(mon.uid);
     run.story.v2.heartbondOverrides += 1;
-    payHeartbond(run, mon.uid, `b${run.encountersCompleted}`, battle.turn, ['override_cost']);
+    // A Hardcore challenge keeps the offers but the override costs nothing.
+    if (!isHardcore(run.rules)) payHeartbond(run, mon.uid, `b${run.encountersCompleted}`, battle.turn, ['override_cost']);
     return { action, events: [] };
   }
   if (wouldRefuse(content, run, mon, slot.id)) {
