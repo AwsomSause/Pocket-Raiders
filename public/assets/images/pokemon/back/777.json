@@ -4,8 +4,8 @@
 			"image": "777.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 150,
-				"h": 150
+				"w": 163,
+				"h": 163
 			},
 			"scale": 1,
 			"frames": [

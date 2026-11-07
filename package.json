@@ -20,6 +20,7 @@
     "assets:import": "node tools/import-assets.ts",
     "status:find": "node tools/status-find.ts",
     "assets:manifest": "node tools/build-asset-manifest.ts",
+    "assets:check": "node tools/check-assets.ts",
     "check": "npm run typecheck && npm test && npm run build && npm run report:check && npm run report:assets && npm run report:perf",
     "data:movesets": "node tools/import-movesets.ts",
     "data:moves": "node tools/import-moves.ts",
