@@ -325,6 +325,23 @@
       },
       "poolClass": "special",
       "approved": false
+    },
+    "Lillie": {
+      "home": "Alola",
+      "personality": "golden-retriever",
+      "style": "trust-fighter",
+      "pool": [
+        "vulpix",
+        "clefairy",
+        "togepi",
+        "snubbull"
+      ],
+      "lines": {
+        "intro": "{rival} is back, and {ace} is brave today!",
+        "studied": "{rival} has been watching your {move}. Now {ace} uses it too.",
+        "counter": "{rival} trained {ace} for one job: {move} for your {target}."
+      },
+      "poolClass": "secondary"
     }
   },
   "config": {

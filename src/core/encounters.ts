@@ -1,6 +1,7 @@
 // The difficulty model, and planning wild, trainer, gym leader,
 // Elite Four and champion encounters.
 
+import { homeStarters, signatureOf } from './rivals/home';
 import { pickTemplate, templateFit } from './teamTemplates';
 import { enemyLevelOffset } from './archetypes';
 import type { Archetype, ArchetypeModifier, BossTeam, Campaign, Content, StatName, Theme, TrainerClass } from './contentSchema';
@@ -298,10 +299,15 @@ export function planTrainer(content: Content, archetype: Archetype, theme: Theme
 export function planFirstRival(content: Content, seed: string, playerLevel: number = content.balance.rival.level): TrainerPlan {
   const cfg = content.balance.rival;
   const r = new Rng(hashSeed(`${seed}::first-rival`));
-  const ace = cfg.starters[r.int(0, cfg.starters.length - 1)]!;
+  const aceRoll = r.int(0, cfg.starters.length - 1);
   const name = r.pick(content.trainers.get(RIVAL_CLASS)!.names);
-  const others = cfg.starters.filter((id) => id !== ace);
-  const opener = others[r.int(0, others.length - 1)]!;
+  const others = cfg.starters.filter((id) => id !== cfg.starters[aceRoll]);
+  const openerRoll = r.int(0, others.length - 1);
+  // Kice 2026-11-07: the starter-line Pokémon come from the rival's home region; a signature Pokémon is the opener.
+  const home = cfg.homeRegion ? homeStarters(name) : null;
+  const ace = home ? home[aceRoll % home.length]! : cfg.starters[aceRoll]!;
+  const homeOthers = home ? home.filter((id) => id !== ace) : others;
+  const opener = (cfg.homeRegion ? signatureOf(name)?.species : undefined) ?? homeOthers[openerRoll % homeOthers.length]!;
   playerLevel = cfg.followPlayer ? playerLevel : cfg.level;
   const cap = content.balance.difficulty.maxLevel;
   const level = (n: number): number => Math.max(1, Math.min(cap, n));

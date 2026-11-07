@@ -7,11 +7,12 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
-# A newer push to the same PR, or to main, cancels the older run, so the runner queue does not back up.
-# The newest main run still finishes, and "CI ok" runs with if: always(), so it reports on cancelled runs.
+# A newer push to the same PR cancels the older run, and on main only waiting runs are replaced, so the runner queue does not back up.
+# "CI ok" runs with if: always(), so it reports on cancelled runs.
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # PRs: a newer push cancels the running one. Main: the running CI finishes and only waiting runs are replaced by the newest.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   # Docs-only PRs (markdown, docs, plans, promo, reports, ideas) skip the heavy jobs; "CI ok" still reports.

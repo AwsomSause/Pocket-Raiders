@@ -22778,7 +22778,8 @@
       "shake": 3,
       "flash": "#705848",
       "hitStopMs": 110,
-      "telegraph": "strong"
+      "telegraph": "strong",
+      "script": "duskvolley"
     },
     "quake-jaw": {
       "anim": "headlong-rush",

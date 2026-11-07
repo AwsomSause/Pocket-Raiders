@@ -36,7 +36,7 @@ describe('W1 approved rival pool', () => {
     expect(pickMainRival('seed-1', 'story', [a!])).not.toBe(a);
   });
   it('every character has a valid pool of species and a personality/style', () => {
-    expect(Object.keys(MAJOR.characters)).toHaveLength(18);
+    expect(Object.keys(MAJOR.characters)).toHaveLength(19);
   });
 });
 

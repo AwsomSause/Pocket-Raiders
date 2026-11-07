@@ -19,6 +19,7 @@ import { shapePlanned, strategyIdForGroup } from '../bossStrategy';
 import type { PokemonInstance, RunState } from '../state';
 import type { DomainEvent, Rival, Traits, Where } from '../story/schema';
 import { TRAIT_KEYS } from '../story/schema';
+import { signatureOf } from './home';
 import { factionFor } from './standing';
 import { RIVAL_ARCS, RIVAL_CONFIG, RIVAL_PROFILES } from './schema';
 
@@ -48,6 +49,12 @@ export const MajorRivalsSchema = z.object({
   sacrifice: z.object({ note: z.string(), chance: z.number().min(0).max(1), priority: z.number().int().min(1), moves: z.number().int().min(1) }),
 });
 export const MAJOR = MajorRivalsSchema.parse(json);
+
+/** The species the rival's ace is tracked by: the first team member that is not its signature Pokémon. */
+function aceSpeciesOf(content: Content, name: string, team: string[]): string {
+  const sig = content.balance.rival.homeRegion ? signatureOf(name) : null;
+  return team.find((id) => !sig || familyId(content, id) !== familyId(content, sig.species)) ?? team[0]!;
+}
 
 /** The run's major rival, if it has been met. */
 export const majorRival = (run: RunState): Rival | undefined => run.story.rivals.find((r) => r.major);
@@ -94,7 +101,7 @@ export function createMajorRival(run: RunState, input: { classId: string; name: 
     offscreen: [],
     major: true,
     canon,
-    ace: familyId(content, input.team[0]!),
+    ace: familyId(content, aceSpeciesOf(content, input.name, input.team)),
     origin: { eventId: input.ended.id, where: input.where, path: 'major' },
     memory: { lastBattle: { eventId: input.ended.id, result: input.result, hpLeftShare: input.hpLeftShare, turns: input.turns, team: input.team.slice(0, 6), foes: input.foes } },
   };
@@ -121,11 +128,17 @@ function strategyPlan(content: Content, rival: Rival, plan: TrainerPlan): Traine
 
 function canonTeam(content: Content, rival: Rival, plan: TrainerPlan): TrainerPlan {
   if (!rival.major) return plan;
-  const pool = characterOf(rival.canon ?? rival.name).data.pool.filter((id) => content.species.has(id) && familyId(content, id) !== rival.ace);
+  // A signature Pokémon (N's Zorua, Wally's Ralts...) is always on the team; Hop's Wooloo is first-fight only (never in the pool again).
+  const sig = content.balance.rival.homeRegion ? signatureOf(rival.canon ?? rival.name) : null;
+  const sigAny = sig && content.species.has(sig.species) ? familyId(content, sig.species) : null;
+  const sigFamily = sig && !sig.firstFightOnly ? sigAny : null;
+  const pool = characterOf(rival.canon ?? rival.name).data.pool.filter((id) => content.species.has(id) && familyId(content, id) !== rival.ace && familyId(content, id) !== sigAny);
   if (pool.length === 0) return plan;
   const start = fnv1a(`canon::${rival.canon ?? rival.name}`) % pool.length;
   const used = new Set<string>();
+  if (sigFamily) used.add(sigFamily);
   const members = plan.members.map((m, i) => {
+    if (sigFamily && i === 0) return { ...m, speciesId: evolvedFormAt(content, sigFamily, m.level) };
     const family = pool[(start + i) % pool.length]!;
     if (used.has(family)) return m;
     used.add(family);

@@ -27581,6 +27581,64 @@
         }
       },
       "sfx": []
+    },
+    "duskvolley": {
+      "v": 1,
+      "length": 1100,
+      "veil": {
+        "color": "#1a0f33",
+        "alpha": 0.35,
+        "inMs": 150,
+        "outMs": 400
+      },
+      "layers": [
+        {
+          "img": "dusk-arrow",
+          "count": 6,
+          "start": 120,
+          "stagger": 90,
+          "dur": 360,
+          "from": {
+            "at": "user",
+            "dx": 40,
+            "jy": 50
+          },
+          "to": {
+            "at": "target",
+            "jy": 50
+          },
+          "ease": "in",
+          "angle": "aim",
+          "scale": [
+            0.55,
+            0.55
+          ],
+          "fade": [
+            0.1,
+            0.9
+          ]
+        }
+      ],
+      "hit": {
+        "at": 480,
+        "squash": 0.12,
+        "shake": {
+          "ms": 420,
+          "amp": 3
+        },
+        "flash": {
+          "color": "#6a3fa0",
+          "ms": 300
+        }
+      },
+      "sfx": [
+        {
+          "at": 100,
+          "id": "ebdx-anim-normal3",
+          "src": "EBDX/Anim/normal3",
+          "vol": 0.7
+        }
+      ]
     }
   },
   "moves": {
@@ -28062,6 +28120,7 @@
     "shore-up": "shoreup",
     "doom-desire": "doomdesire",
     "shell-trap": "shelltrap",
-    "coaching": "coaching"
+    "coaching": "coaching",
+    "dusk-volley": "duskvolley"
   }
 }
