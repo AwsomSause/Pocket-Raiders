@@ -19,6 +19,17 @@ const rival = (id: string, teamIds: string[], bonds: Record<string, Bond>, over:
 const baseRun = (seed: string): RunState => structuredClone(chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0));
 
 describe('rival Pokémon transfer', () => {
+  it('never crashes when a roster Pokémon has no bond (mass sim seed ms3505)', () => {
+    for (let i = 0; i < 300; i++) {
+      const run = baseRun(`nb${i}`);
+      const a = rival('a', ['rattata', 'pidgey'], { pidgey: bond() });
+      const b = rival('b', ['caterpie', 'weedle'], { weedle: bond() });
+      run.story.rivals = [a, b];
+      run.story.rivalGraph = [{ a: 'a', b: 'b', kind: 'friends' }];
+      expect(() => rivalTransfers(content, run, `9.${i}`)).not.toThrow();
+    }
+  });
+
   it('releases a Pokémon that does not trust its trainer, keeps a minimum team, and drops its empathy', () => {
     let released = 0;
     for (let i = 0; i < 80; i++) {
