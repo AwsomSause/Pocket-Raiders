@@ -150,6 +150,6 @@ for (const m of newMoves) {
     .sort((a, b) => (b.power ?? 0) - (a.power ?? 0) || a.id.localeCompare(b.id))[0];
   if (!donor) throw new Error(`no animation donor for ${m.id}`);
   const { pack: _pack, script: _script, ...look } = anims.moves[donor.id] as Record<string, unknown>;
-  anims.moves[m.id] = { ...look, source: 'type' };
+  anims.moves[m.id] = { ...look, source: 'type', ...(m.id === 'dusk-volley' ? { script: 'duskvolley' } : {}) };
 }
 writeFileSync(animsPath, JSON.stringify(anims, null, 2) + '\n');
