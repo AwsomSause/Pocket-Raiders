@@ -2678,5 +2678,112 @@
   "branching": false,
   "baby": false,
   "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_eevee",
+  "line": [
+   "eevee",
+   "espeon-paradox"
+  ],
+  "types": [
+   "normal"
+  ],
+  "temperament": "tm_playful",
+  "affinity": {
+   "adaptability": 3,
+   "loyalty": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "jet_viking"
+  },
+  "moves": [
+   "tackle",
+   "tail-whip",
+   "helping-hand"
+  ],
+  "keystone": "keystone_eevee",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "unusual",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false,
+  "held": "booster-energy"
+ },
+ {
+  "v": 1,
+  "id": "rm_toxel",
+  "line": [
+   "toxel",
+   "toxtricity-future"
+  ],
+  "types": [
+   "electric",
+   "poison"
+  ],
+  "temperament": "tm_independent",
+  "affinity": {
+   "independence": 3,
+   "instinct": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "jet_viking"
+  },
+  "moves": [
+   "belch",
+   "tearful-look",
+   "nuzzle"
+  ],
+  "keystone": "keystone_toxel",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "unusual",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false,
+  "held": "booster-energy"
+ },
+ {
+  "v": 1,
+  "id": "rm_shieldon",
+  "line": [
+   "shieldon",
+   "bastiodon-skull"
+  ],
+  "types": [
+   "rock",
+   "steel"
+  ],
+  "temperament": "tm_protective",
+  "affinity": {
+   "resolve": 3,
+   "loyalty": 3,
+   "compassion": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "jet_viking"
+  },
+  "moves": [
+   "protect",
+   "tackle",
+   "taunt"
+  ],
+  "keystone": "keystone_shieldon",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "unusual",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false,
+  "held": "black-sludge"
  }
 ]

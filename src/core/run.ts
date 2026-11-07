@@ -253,7 +253,7 @@ import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
 import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
-import { applyCircuitChoice, forkDecision, nextGymIndex, rematchDecision } from './campaign/circuitGate';
+import { applyCircuitChoice, forkDecision, isCircuitRun, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
@@ -510,6 +510,9 @@ export function chooseStarter(content: Content, current: RunState, choiceIndex: 
       starter.moves[weakest] = slot;
     }
   }
+  // Jet starters (Story Run lines with a `held` item): they begin the run holding it (Booster Energy, Black Sludge).
+  const heldLine = isCircuitRun(content, run) ? content.storyData.remembrances.find((r) => r.line[0] === speciesId && r.held) : undefined;
+  if (heldLine?.held) run.party[0]!.held = { ...run.party[0]!.held, [heldLine.held]: 1 };
   run.log.starterUid = run.party[0]!.uid;
   enterStage(content, run, 0);
   if (getMode(run.rules.modeId)?.startDraft) {

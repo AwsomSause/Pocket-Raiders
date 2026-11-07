@@ -15,7 +15,7 @@ import type { ProfileStory, StoryData } from '../core/story2/schema';
 import { chooseNextBackstory, chooseNextLine, intakeChoices, quizQuestions, revealPicks, saveQuizResult } from '../core/story2/intake';
 import { enabledBackstories } from '../core/story2/module';
 import { LOOKS, lookReady, previewSentence, renderTokens, vanceTone, type PronounSet, type Tone } from '../core/story2/identity';
-import { BEATS, beatsFor, canSkipPrologue, chooseMode, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setLook, setTone, shortIntake, type BeatId, type PrologueMode } from '../core/story2/prologue';
+import { BEATS, beatsFor, canSkipPrologue, chooseMode, prologueRequired, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setLook, setTone, shortIntake, type BeatId, type PrologueMode } from '../core/story2/prologue';
 import { BACKSTORY_PITCH, BACKSTORY_PROMPT, INTAKE_STARTER_PROMPT, QUICK_QUIZ_INTRO, QUIZ_INTRO, REVEAL_INTRO, REVEAL_LABELS, STARTER_PROMPT, BRIEFING, FIRST_NAME_USE, MONTAGE, OBJECTS, PRONOUN_PROMPT, QUICK_OBJECTS, VANCE_CLOSING, VANCE_NAME_PROMPT, VANCE_OPENING, VANCE_QUESTIONS } from '../core/story2/prologueText';
 
 const VANCE_ANIM_IDS = VANCE_ANIMS.map((n) => `story.vance.${n}`);
@@ -195,7 +195,7 @@ export class PrologueScene extends Phaser.Scene {
     let y = this.body([`VANCE: ${renderTokens(intake.greeting, { name: s.protagonist.name, pronouns: s.protagonist.pronouns })}`, ...(intake.extraLine ? [`VANCE: ${intake.extraLine}`] : [])]);
     if (intake.extraLine) this.edit((st) => markBeat(st, 'intake'));
     y += 10;
-    const opts = [...(this.thenRun ? [{ label: 'Begin the Story Run' }] : []), { label: 'Replay the prologue' }, { label: 'Back to the title' }];
+    const opts = [...(this.thenRun ? [{ label: 'Begin the Story Run' }] : []), { label: 'Replay the prologue' }, ...(prologueRequired(this.story) ? [] : [{ label: 'Back to the title' }])];
     this.choose(opts, (i) => {
       const pick = opts[i]!.label;
       if (pick === 'Begin the Story Run') { this.intake = true; return this.go('backstory'); }
@@ -227,7 +227,7 @@ export class PrologueScene extends Phaser.Scene {
     const modes: { label: string; mode: PrologueMode }[] = [
       { label: 'Full Story (about 25 minutes)', mode: 'full' },
       { label: 'Quick Start (about 6 minutes)', mode: 'quick' },
-      ...(canSkipPrologue(services().session.slot) ? [{ label: 'Skip Prologue (later saves only)', mode: 'skipped' as const }] : []),
+      ...(canSkipPrologue(this.story) ? [{ label: 'Skip Prologue (later saves only)', mode: 'skipped' as const }] : []),
     ];
     this.choose(modes.map((m) => ({ label: m.label })), (i) => {
       this.mode = modes[i]!.mode;
@@ -245,6 +245,7 @@ export class PrologueScene extends Phaser.Scene {
       this.shot += 1;
       this.go('cold_open');
     });
+    if (prologueRequired(this.story)) return;
     const skip = this.add.text(40, GAME_HEIGHT - 30, 'Skip opening', textStyle(16, '#c9bfd6')).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
     skip.on('pointerup', (_p: unknown, _x: unknown, _y: unknown, e: Phaser.Types.Input.EventData) => { e.stopPropagation(); this.advance('cold_open'); });
   }

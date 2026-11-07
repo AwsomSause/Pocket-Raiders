@@ -44,7 +44,8 @@ t.border('pine')
 t.pads = [[25, 36], [34, 36], [25, 39], [34, 39], [25, 42], [34, 42]]
 t.keepers = [{'id': 'merchant', 'sprite': 'hood_man', 'x': 38, 'y': 45, 'facing': 'down', 'location': 'merchant'},
              {'id': 'gatekeeper', 'sprite': 'NPC_Sonia', 'x': 31, 'y': 49, 'facing': 'down', 'location': 'gate'},
-             {'id': 'sanctuary_keeper', 'sprite': 'POKEMONBREADER2', 'x': 50, 'y': 21, 'facing': 'down', 'location': 'sanctuary'}]
+             {'id': 'sanctuary_keeper', 'sprite': 'POKEMONBREADER2', 'x': 50, 'y': 21, 'facing': 'down', 'location': 'sanctuary'},
+             {'id': 'viking', 'sprite': 'viking', 'x': 27, 'y': 47, 'facing': 'down', 'location': 'viking'}]
 # Districts: the location banner, the minimap and the wandering crowd use these (ids are fixed: plaza/north/west/east/south).
 t.district('plaza', 'Market Green', 'The market square and the Legacy Display', [24, 35, 12, 10], '#e8c070')
 t.district('north', "Champions' Row", 'Arena, Memories, Achievements, Dojo, Events', [3, 2, 54, 15], '#e07060')

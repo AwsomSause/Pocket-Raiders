@@ -361,6 +361,8 @@ for t in TRAINERS:
     im = Image.open(f)
     if im.size != (256, 256): continue
     shutil.copyfile(f, os.path.join(OUT_IMG, 'trainers', safe(t) + '.png')); trainers.append(safe(t))
+# The Viking NPC sheet is made by tools/jet/make-jet-sprites.py (not from the Graphics folder); keep it listed.
+if os.path.exists(os.path.join(OUT_IMG, 'trainers', 'viking.png')): trainers.insert(0, 'viking')
 
 # ---------- followers ----------
 fdir = os.path.join(OUT_IMG, 'followers')
