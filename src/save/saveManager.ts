@@ -7,6 +7,7 @@ import { ATTRIBUTE_KEYS, type Content } from '../core/contentSchema';
 import { validateLeagueMap, validateStageMap } from '../core/map';
 import { createProfile } from '../core/profile';
 import { hashSeed } from '../core/rng';
+import { rollIvs } from '../core/ivs';
 import { createStoryState } from '../core/story/record';
 import { createPartyLife } from '../core/partyLife/schema';
 import { legacyRunFromHistory } from '../core/legacyRuns';
@@ -37,7 +38,21 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 40, settings: 41, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 41, settings: 41, meta: 1, timeline: 1 };
+
+/** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
+function withIvs(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(withIvs);
+  if (!node || typeof node !== 'object') return node;
+  const out: Json = {};
+  for (const [k, v] of Object.entries(node as Json)) out[k] = withIvs(v);
+  const isMon = typeof out.uid === 'string' && typeof out.speciesId === 'string' && typeof out.level === 'number' && typeof out.vitamins === 'object';
+  if (isMon) {
+    if (!out.ivs) out.ivs = rollIvs(out.uid as string);
+    if (!out.evs) out.evs = {};
+  }
+  return out;
+}
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -357,6 +372,9 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       const rng = (run.rng ?? {}) as Json;
       return { ...run, rng: { ...rng, roleCast: rng.roleCast ?? hashSeed(`${String(run.seed)}::roleCast`) }, roleCast: run.roleCast ?? [] };
     },
+    // v41 (W5 IVs and EVs): every Pokémon anywhere in the run gets its IVs written down (the roll for its uid,
+    // the same value the game used to fall back on) and starts with no EVs. Nothing else changes.
+    40: (data) => withIvs(data),
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.

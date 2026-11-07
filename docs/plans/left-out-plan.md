@@ -62,12 +62,11 @@ Kice asked (2026-10-30 23:49): "Look through every file, chat, and document in t
 
 ## Needs Kice's call (not planned until answered)
 - **Regional forms as a battle mechanic** (M8.5 "if still wanted"). They exist as event-only forms today.
-- **IVs/EVs, time of day, weather-based evolutions** (D2 said none; natures were added later). Add or keep out?
+- **Time of day, weather-based evolutions** (D2 said none). IVs/EVs: built (`docs/status/ivs-evs.md`).
 - **Online co-op, cloud saves, accounts** (catalog 160). The Electric plan says these are a separate project. Recommend: skip.
 
 ## Left out on purpose, and staying out
 - Z-Moves, Max Moves and G-Max Moves only run through their own systems (87 move rows), by design.
-- Hidden Power's type is fixed per Pokémon (D2, no IVs).
 - Windowskins (RPG Maker frames; the Aero look replaces them).
 - Gen 1 music: the packs don't have any; GB Sounds uses an original stand-in.
 
