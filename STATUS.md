@@ -19,3 +19,5 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 - Story Overhaul Track W: W0, W1, W3, W5, W6, W7, W8, W9 done (`story-w9-shiny-egg.md`, `story-w8-world-sim.md`, `story-w7-pseudo-stages.md`, `story-w6-dungeons.md`, `story-w5-run-events.md`, `docs/status/story-w0-rival-observed.md`, `story-w1-rival-foundations.md`, `story-w3-dialogue-consequences.md`); W2 and W4 in other threads, Track W complete.
 - Pocket Town v2 (Woodland Hamlets, Kice's pick of 9) done: `docs/status/pocket-town-v2.md`; both towns now share one atlas built by `tools/hubtown/build.py`.
 - CI: `.github/workflows` runs `check` on every PR; branch protection is still off.
+
+- Empty battle arena fix (W2): a failing battle opening now still shows both Pokémon and boxes (`BattleScene.intro` catch + `recoverIntro`). Root cause on Kice's save not reproduced; error logs to console as "Battle intro failed". Tests in `tests/e2e/battleStyles.spec.ts`.
