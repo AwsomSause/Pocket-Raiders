@@ -2628,7 +2628,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
-  if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId));
+  if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId), underdogXpMultiplier(content, run.party, battle.enemyTeam) > 1);
   if (battle.outcome === 'win' && partnerUid && run.story.histories[partnerUid]?.lastBattle === run.encountersCompleted && significantBattle(battle)) gainCharge(content, run, 'win_significant');
   // S7d: Signature I after a won boss, Gym, Elite, Champion or rival fight the partner fought in; Keystone when ready.
   if (battle.outcome === 'win' && partnerMon && run.story.histories[partnerMon.uid]?.lastBattle === run.encountersCompleted) for (const u of checkSignatures(content, run, 'victory', isBossFight(battle) || Boolean(battle.rivalId))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: learnedLine(content, run, displayName(content, partnerMon), u), uid: partnerMon.uid });

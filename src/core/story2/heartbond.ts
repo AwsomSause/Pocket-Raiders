@@ -151,11 +151,15 @@ export function heartbondTurn(run: RunState, battleKey: string, turn: number, ev
   return r;
 }
 
-/** A won battle: the partner earns a milestone win only when `milestone` (a leader, rival or boss fight). */
-export function heartbondVictory(run: RunState, battleKey: string, milestone: boolean): PayResult {
+/**
+ * A won battle: the partner earns a milestone win when `milestone` (a leader, rival or boss fight), and an underdog win
+ * when `underdog` (the team was outleveled, the same test as underdog XP). Both fire together; the ranked pick keeps the milestone.
+ */
+export function heartbondVictory(run: RunState, battleKey: string, milestone: boolean, underdog = false): PayResult {
   const partner = run.story.v2?.heartbond.partner;
-  if (!partner || !milestone || !run.party.some((m) => m.uid === partner)) return { paid: [], folded: [] };
-  const r = payHeartbond(run, partner, battleKey, 0, ['milestone_win']);
+  if (!partner || !(milestone || underdog) || !run.party.some((m) => m.uid === partner)) return { paid: [], folded: [] };
+  const fired = [...(milestone ? ['milestone_win'] : []), ...(underdog ? ['underdog_win'] : [])];
+  const r = payHeartbond(run, partner, battleKey, 0, fired);
   refreshHeartbond(run);
   return r;
 }

@@ -136,6 +136,13 @@ describe('battle hooks', () => {
     expect(heartbondVictory(run, 'b1', true).paid).toEqual([]);
     expect(bondOf(run, uid).respect).toBeGreaterThan(0);
   });
+  it('an underdog win pays once, and a boss win that is also an underdog win pays only the higher source', () => {
+    const { run } = setup();
+    expect(heartbondVictory(run, 'b1', false, true).paid).toEqual(['underdog_win']);
+    expect(heartbondVictory(run, 'b1', false, true).paid).toEqual([]);
+    expect(heartbondVictory(run, 'b2', true, true).paid).toEqual(['milestone_win']);
+    expect(heartbondVictory(run, 'b3', false, false).paid).toEqual([]);
+  });
   it('without a Story Run the hooks do nothing', () => {
     const { run } = setup();
     run.story.v2 = undefined;
