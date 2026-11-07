@@ -14,6 +14,10 @@ import { allPlayerAnims, playerAnimBase, playerAnimId } from './playerArt.ts';
 
 import { STORY_ICONS } from './storyIcons.ts';
 
+export const VANCE_ANIMS = ['surprised', 'nudge', 'explain', 'tilt', 'adjust', 'confident'] as const;
+export type VanceAnim = (typeof VANCE_ANIMS)[number];
+export const VANCE_FRAMES = 17;
+
 export type AssetKind = 'image' | 'atlas' | 'audio' | 'font' | 'spritesheet' | 'json';
 export type AssetCategory = 'pokemon' | 'trainer' | 'item' | 'background' | 'ui' | 'music' | 'sound' | 'font' | 'animation';
 
@@ -273,6 +277,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
   // Story Overhaul icon pack (P7, src/assets/storyIcons.ts): emotes, hearts, snacks, keepsakes, badges, tokens, ball-exit effects.
   ...STORY_ICONS.map((i): AssetEntry => ({ id: i.id, kind: 'image', category: 'ui', path: i.path, lazy: true })),
+  // Professor Vance's six looping animations for the prologue (17 frames each, 160 px cells, 5 per row).
+  ...VANCE_ANIMS.map((n): AssetEntry => ({ id: `story.vance.${n}`, kind: 'spritesheet', category: 'ui', path: `images/packs/vance/${n}.png`, frameSize: 160, lazy: true })),
   { id: 'bgm.menu', kind: 'audio', category: 'music', path: 'audio/bgm/menu.mp3' },
   { id: 'bgm.battle', kind: 'audio', category: 'music', path: 'audio/bgm/battle_wild.mp3' },
   ...['ultra', 'max', 'tera'].map((n): AssetEntry => ({ id: `bgm.raid.${n}`, kind: 'audio', category: 'music', path: `audio/bgm/raid_${n}.mp3` })),

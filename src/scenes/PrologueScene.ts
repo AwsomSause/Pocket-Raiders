@@ -3,7 +3,9 @@
 // other slices and are skipped here. All rules live in core/story2/{identity,prologue}.ts.
 
 import Phaser from 'phaser';
+import { VANCE_ANIMS, VANCE_FRAMES, type VanceAnim } from '../assets/catalog';
 import { services } from '../game/services';
+import { queueAssets } from '../ui/lazyAssets';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
@@ -12,6 +14,10 @@ import type { ProfileStory } from '../core/story2/schema';
 import { LOOKS, lookReady, previewSentence, renderTokens, vanceTone, type PronounSet, type Tone } from '../core/story2/identity';
 import { BEATS, beatsFor, canSkipPrologue, chooseMode, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setLook, setTone, shortIntake, type BeatId, type PrologueMode } from '../core/story2/prologue';
 import { BRIEFING, FIRST_NAME_USE, MONTAGE, OBJECTS, PRONOUN_PROMPT, QUICK_OBJECTS, VANCE_CLOSING, VANCE_NAME_PROMPT, VANCE_OPENING, VANCE_QUESTIONS } from '../core/story2/prologueText';
+
+const VANCE_ANIM_IDS = VANCE_ANIMS.map((n) => `story.vance.${n}`);
+const VANCE_SIDE = 400;
+const VANCE_SCALE = 2.5;
 
 type Step = 'intake' | 'look' | 'mode' | BeatId;
 
@@ -24,9 +30,31 @@ export class PrologueScene extends Phaser.Scene {
   private shot = 0;
   private pronounPick: 'she' | 'he' | 'they' | 'custom' | null = null;
   private onConfirm: (() => void) | null = null;
+  /** Width the Vance picture takes on the right while she is on screen (text and menus keep clear of it). */
+  private sideW = 0;
 
   constructor() {
     super('Prologue');
+  }
+
+  preload(): void {
+    queueAssets(this, VANCE_ANIM_IDS);
+  }
+
+  /**
+   * Shows Professor Vance on the right, looping one of her animations (static first frame when motion is reduced or off).
+   * Drawing only: nothing here changes the story, and a missing sheet just leaves her out.
+   */
+  private vance(anim: VanceAnim): void {
+    const key = `story.vance.${anim}`;
+    if (!this.textures.exists(key)) return;
+    this.sideW = VANCE_SIDE;
+    const sprite = this.add.sprite(GAME_WIDTH - VANCE_SIDE / 2 - 20, GAME_HEIGHT - 20, key, 0).setOrigin(0.5, 1).setScale(VANCE_SCALE);
+    sprite.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+    const calm = services().session.settings.animationIntensity === 'reduced' || services().session.settings.battleAnimations !== 'full';
+    if (calm) return;
+    if (!this.anims.exists(key)) this.anims.create({ key, frames: this.anims.generateFrameNumbers(key, { start: 0, end: VANCE_FRAMES - 1 }), frameRate: 8, repeat: -1 });
+    sprite.play(key);
   }
 
   private get story() {
@@ -58,6 +86,7 @@ export class PrologueScene extends Phaser.Scene {
     this.menu = null;
     this.onConfirm = null;
     this.clearInputs();
+    this.sideW = 0;
     this.children.removeAll(true);
     drawBackdrop(this);
   }
@@ -72,13 +101,13 @@ export class PrologueScene extends Phaser.Scene {
   }
 
   private body(lines: string[], y = 90): number {
-    const t = this.add.text(60, y, lines.join('\n\n'), textStyle(20, COLORS.text, { wordWrap: { width: GAME_WIDTH - 120 } }));
+    const t = this.add.text(60, y, lines.join('\n\n'), textStyle(20, COLORS.text, { wordWrap: { width: GAME_WIDTH - 120 - this.sideW } }));
     return y + t.height + 16;
   }
 
   private choose(options: MenuOption[], onSelect: (i: number) => void, y: number, onBack?: () => void, initialIndex?: number): void {
     this.menu?.destroy();
-    this.menu = new Menu(this, { x: 60, y, options, itemWidth: GAME_WIDTH - 120, itemHeight: 40, fontSize: 20, onSelect, onBack, initialIndex });
+    this.menu = new Menu(this, { x: 60, y, options, itemWidth: GAME_WIDTH - 120 - this.sideW, itemHeight: 40, fontSize: 20, onSelect, onBack, initialIndex });
   }
 
   private next(text: string, fn: () => void): void {
@@ -225,11 +254,13 @@ export class PrologueScene extends Phaser.Scene {
     this.title('Beat 3: Professor Vance');
     if (q >= lastQ) {
       const tone = vanceTone(this.tones);
+      this.vance(tone === 'formal' ? 'confident' : tone === 'playful' ? 'surprised' : 'explain');
       this.edit((s) => setTone(s, tone, this.gettingToIt));
       this.body([reply && `VANCE: ${reply}`, `VANCE: ${VANCE_CLOSING[tone]}`, `VANCE: ${VANCE_NAME_PROMPT}`].filter(Boolean) as string[], 80);
       return this.next('Enter to continue', () => this.advance('professor'));
     }
     const question = VANCE_QUESTIONS[q]!;
+    this.vance(q === 0 && !reply ? 'nudge' : reply ? 'explain' : 'tilt');
     const intro = q === 0 ? VANCE_OPENING : reply ? [`VANCE: ${reply}`] : [];
     const y = this.body([...intro, `VANCE: ${question.prompt}`], 80);
     this.choose(question.options.map((o) => ({ label: o.text })), (i) => {
@@ -244,6 +275,7 @@ export class PrologueScene extends Phaser.Scene {
   private stepName(error = '', keep = ''): void {
     this.clear();
     this.title('Beat 4: Identity');
+    this.vance('adjust');
     this.body(['VANCE: For the record. Your name?', 'Name: 1 to 12 letters, numbers, spaces, hyphens or apostrophes.'], 80);
     const box = this.inputBox('Name', 250, keep || this.story.protagonist.name);
     box.focus({ preventScroll: true });
@@ -262,6 +294,7 @@ export class PrologueScene extends Phaser.Scene {
   private stepPronouns(error = ''): void {
     this.clear();
     this.title('Beat 4: Identity');
+    this.vance('tilt');
     const y = this.body([`VANCE: ${PRONOUN_PROMPT}`], 80);
     const mark = (k: string) => (this.pronounPick === k ? '● ' : '○ ');
     const options: MenuOption[] = [
@@ -310,6 +343,7 @@ export class PrologueScene extends Phaser.Scene {
   private stepPreview(): void {
     this.clear();
     this.title('Beat 4: Read it back');
+    this.vance('nudge');
     const p = this.story.protagonist;
     const y = this.body([`VANCE: Let me read it back. "${previewSentence({ name: p.name, pronouns: p.pronouns })}"`], 90);
     this.choose([{ label: 'Looks right' }, { label: 'Change' }], (i) => (i === 0 ? this.stepFirstUse() : this.stepPronouns()), y);
@@ -318,6 +352,7 @@ export class PrologueScene extends Phaser.Scene {
   private stepFirstUse(): void {
     this.clear();
     this.title('Beat 4: Identity');
+    this.vance('explain');
     const p = this.story.protagonist;
     this.body([renderTokens(FIRST_NAME_USE, { name: p.name, pronouns: p.pronouns })], 110);
     this.next('Enter to continue', () => this.advance('identity'));
@@ -326,6 +361,7 @@ export class PrologueScene extends Phaser.Scene {
   private stepBriefing(): void {
     this.clear();
     this.title('Beat 10: Departure');
+    this.vance('confident');
     const p = this.story.protagonist;
     const y = this.body([...BRIEFING.map((l) => renderTokens(l, { name: p.name, pronouns: p.pronouns })), 'The rest of the opening (the quiz, backstory, first partner and Field Trial) arrives in later updates. Your identity is saved.'], 80);
     this.choose([{ label: 'Finish' }], () => {
