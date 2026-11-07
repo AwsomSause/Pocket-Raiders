@@ -2610,5 +2610,73 @@
   "branching": false,
   "baby": false,
   "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_vulpix",
+  "line": [
+   "vulpix",
+   "ninetales"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_shy",
+  "affinity": {
+   "curiosity": 3,
+   "compassion": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "ember",
+   "tail-whip"
+  ],
+  "keystone": "keystone_vulpix",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_psyduck",
+  "line": [
+   "psyduck",
+   "golduck"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_anxious",
+  "affinity": {
+   "instinct": 3,
+   "adaptability": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "water-sport",
+   "bubble"
+  ],
+  "keystone": "keystone_psyduck",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
  }
 ]

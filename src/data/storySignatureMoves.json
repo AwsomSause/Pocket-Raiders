@@ -370,6 +370,16 @@
    "sig1": "sig-signal-ping",
    "sig2": "sig-static-ping",
    "keystone": "sig-signal-ping-keystone"
+  },
+  "vulpix": {
+   "sig1": "sig-six-tail-flicker",
+   "sig2": "sig-will-o-lantern",
+   "keystone": "sig-six-tail-flicker-keystone"
+  },
+  "psyduck": {
+   "sig1": "sig-headache-burst",
+   "sig2": "sig-worry-wave",
+   "keystone": "sig-headache-burst-keystone"
   }
  },
  "descriptions": {
@@ -521,6 +531,10 @@
   "sig-spark-burrow": "Grubbin's line's second own move, born from the story the two of you lived.",
   "sig-signal-ping": "A move only Blipbug's line and its Trainer share, first found in a hard-won fight.",
   "sig-static-ping": "Blipbug's line's second own move, born from the story the two of you lived.",
+  "sig-six-tail-flicker": "A move only Vulpix's line and its Trainer share, first found in a hard-won fight.",
+  "sig-will-o-lantern": "Vulpix's line's second own move, born from the story the two of you lived.",
+  "sig-headache-burst": "A move only Psyduck's line and its Trainer share, first found in a hard-won fight.",
+  "sig-worry-wave": "Psyduck's line's second own move, born from the story the two of you lived.",
   "sig-rootbound-stand-keystone": "Rootbound Stand grown stronger by the Keystone Memory. Only Bulbasaur's line knows it.",
   "sig-tailfire-vow-keystone": "Tailfire Vow grown stronger by the Keystone Memory. Only Charmander's line knows it.",
   "sig-shellback-rally-keystone": "Shellback Rally grown stronger by the Keystone Memory. Only Squirtle's line knows it.",
@@ -594,7 +608,9 @@
   "sig-dune-gleam-keystone": "Dune Gleam grown stronger by the Keystone Memory. Only Sandile's line knows it.",
   "sig-hollow-edge-keystone": "Hollow Edge grown stronger by the Keystone Memory. Only Pawniard's line knows it.",
   "sig-dig-charge-keystone": "Dig Charge grown stronger by the Keystone Memory. Only Grubbin's line knows it.",
-  "sig-signal-ping-keystone": "Signal Ping grown stronger by the Keystone Memory. Only Blipbug's line knows it."
+  "sig-signal-ping-keystone": "Signal Ping grown stronger by the Keystone Memory. Only Blipbug's line knows it.",
+  "sig-six-tail-flicker-keystone": "Six-Tail Flicker grown stronger by the Keystone Memory. Only Vulpix's line knows it.",
+  "sig-headache-burst-keystone": "Headache Burst grown stronger by the Keystone Memory. Only Psyduck's line knows it."
  },
  "moves": [
   {
@@ -3764,6 +3780,101 @@
    }
   },
   {
+   "id": "sig-six-tail-flicker",
+   "name": "Six-Tail Flicker",
+   "type": "fire",
+   "category": "special",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "brn",
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-will-o-lantern",
+   "name": "Will-o'-Lantern",
+   "type": "fire",
+   "category": "status",
+   "power": null,
+   "accuracy": 90,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "brn",
+     "chance": 100
+    },
+    "statChanges": [
+     {
+      "stat": "spe",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-headache-burst",
+   "name": "Headache Burst",
+   "type": "psychic",
+   "category": "special",
+   "power": 75,
+   "accuracy": 95,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "confuse": {
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-worry-wave",
+   "name": "Worry Wave",
+   "type": "water",
+   "category": "special",
+   "power": 65,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spa",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
    "id": "sig-rootbound-stand-keystone",
    "name": "Rootbound Stand+",
    "type": "grass",
@@ -5323,6 +5434,47 @@
       "chance": 100
      }
     ]
+   }
+  },
+  {
+   "id": "sig-six-tail-flicker-keystone",
+   "name": "Six-Tail Flicker+",
+   "type": "fire",
+   "category": "special",
+   "power": 80,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "brn",
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-headache-burst-keystone",
+   "name": "Headache Burst+",
+   "type": "psychic",
+   "category": "special",
+   "power": 85,
+   "accuracy": 95,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "confuse": {
+     "chance": 30
+    }
    }
   }
  ]

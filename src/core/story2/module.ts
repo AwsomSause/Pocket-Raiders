@@ -180,10 +180,21 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     m.activeStop = stopId;
     return;
   }
-  if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) return;
   const mod = moduleOf(content.storyData, m.backstory);
   if (!mod) return;
   const ctx = { ...resolveCtx(content, run), act: stop.act };
+  // The partner's own Starter arc (`arc_<Remembrance id>`) plays alongside any backstory: at Stops the backstory leaves free, and
+  // at the quiet Stops between backstory scenes (it never moves the backstory's gap; its steps are Act-gated).
+  const starterArc = v2.starter ? content.storyData.arcs.find((a) => a.id === `arc_${v2.starter!.lineId}`) : undefined;
+  const ownPick = (): StoryEvent | undefined => (starterArc?.steps ?? []).map((s) => eventOf(content.storyData, s.event)).find((e) => !!e && eligible(content, run, e, stop.act, ctx));
+  if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) {
+    const own = ownPick();
+    if (own) {
+      m.active = own.id;
+      m.activeStop = stopId;
+    }
+    return;
+  }
   const slotEvent = v2.blueprint?.slots.find((s) => s.slot === stopId)?.event;
   const pool: string[] = [...mod.events];
   // The next step of an arc already begun is also a candidate, ahead of anything new.
@@ -191,7 +202,8 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     const arc = arcOf(content.storyData, id);
     return arc ? arc.steps.map((s) => s.event) : [];
   }).filter((id) => !pool.includes(id));
-  const order = [...(slotEvent && mod.events.includes(slotEvent) ? [slotEvent] : []), ...next, ...pool];
+  const own = (starterArc?.steps.map((s) => s.event) ?? []).filter((id) => !pool.includes(id) && !next.includes(id));
+  const order = [...(slotEvent && mod.events.includes(slotEvent) ? [slotEvent] : []), ...next, ...pool, ...own];
   let pick = order.map((id) => eventOf(content.storyData, id)).find((e) => !!e && eligible(content, run, e, stop.act, ctx) && !e.tags.includes('micro'));
   if (!pick && stop.act >= content.balance.story.module.echoFromAct && m.echoes < mod.echoEvents.length) {
     const echo = eventOf(content.storyData, mod.echoEvents[m.echoes]!);
@@ -274,7 +286,8 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
     const text = scene.lines.map((l) => (l.speaker ? `${l.speaker}: ` : '') + l.text).join(' ').slice(0, 220);
     m.snapshots = [...m.snapshots, { event: e.id, stop: m.activeStop, act: resolveCtx(content, run).act ?? 0, text, choice: choice?.id ?? null }].slice(-content.balance.story.module.maxSnapshots);
   }
-  m.lastSceneStop = v2.stops.index;
+  // A Starter arc scene does not count toward the backstory's gap between scenes.
+  if (!e.tags.includes('starter_arc')) m.lastSceneStop = v2.stops.index;
 }
 
 /** Finishes the scene on screen: commits it (an ending was committed when reached) and clears the screen state. A choice scene needs a valid choice. */

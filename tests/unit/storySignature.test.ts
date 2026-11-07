@@ -25,8 +25,8 @@ function storyRun(species = 'charmander'): { run: RunState; uid: string } {
 const LINES = content.storyData.remembrances.map((r) => r.line[0]!);
 
 describe('signature move data', () => {
-  it('gives every one of the 74 Remembrance lines a Signature I, a Signature II and a Keystone that exist as moves', () => {
-    expect(LINES).toHaveLength(74);
+  it('gives every one of the 76 Remembrance lines a Signature I, a Signature II and a Keystone that exist as moves', () => {
+    expect(LINES).toHaveLength(76);
     expect(Object.keys(signatureJson.byLine).sort()).toEqual([...LINES].sort());
     const ids = new Set<string>();
     for (const line of LINES) {
@@ -37,7 +37,7 @@ describe('signature move data', () => {
         ids.add(id);
       }
     }
-    expect(ids.size).toBe(222);
+    expect(ids.size).toBe(228);
   });
 
   it('keeps every move inside the balance caps and out of random pools', () => {
@@ -87,20 +87,20 @@ describe('signature unlocks', () => {
 
   it('teaches Signature II at a Recovery stop once Heartbond 7 is latched and the Starter arc is done', () => {
     const s = signatureMoves('charmander')!;
-    // With the line's arc written, it must be done first.
-    const withArc = { ...content, storyData: { ...content.storyData, arcs: [...content.storyData.arcs, { ...content.storyData.arcs[0]!, id: 'arc_rm_charmander' }] } } as typeof content;
+    expect(content.storyData.arcs.some((a) => a.id === 'arc_rm_charmander')).toBe(true);
     const { run } = storyRun();
     run.story.v2!.heartbond.latched.push(3, 7);
-    expect(checkSignatures(withArc, run, 'recovery')).toEqual([]);
+    expect(checkSignatures(content, run, 'recovery')).toEqual([]);
     run.story.v2!.arcs['arc_rm_charmander'] = { state: 'done' } as never;
-    expect(checkSignatures(withArc, run, 'victory', true).map((u) => u.slot)).toEqual(['sig1']);
-    expect(checkSignatures(withArc, run, 'recovery')).toEqual([{ slot: 'sig2', moveId: s.sig2 }]);
-    // Without a written arc, Heartbond 7 alone is enough.
+    expect(checkSignatures(content, run, 'victory', true).map((u) => u.slot)).toEqual(['sig1']);
+    expect(checkSignatures(content, run, 'recovery')).toEqual([{ slot: 'sig2', moveId: s.sig2 }]);
+    // A line whose arc is not written yet needs Heartbond 7 alone.
+    const noArc = { ...content, storyData: { ...content.storyData, arcs: content.storyData.arcs.filter((a) => a.id !== 'arc_rm_charmander') } } as typeof content;
     const other = storyRun().run;
     other.story.v2!.heartbond.latched.push(6);
-    expect(checkSignatures(content, other, 'recovery')).toEqual([]);
+    expect(checkSignatures(noArc, other, 'recovery')).toEqual([]);
     other.story.v2!.heartbond.latched.push(7);
-    expect(checkSignatures(content, other, 'recovery')).toEqual([{ slot: 'sig2', moveId: s.sig2 }]);
+    expect(checkSignatures(noArc, other, 'recovery')).toEqual([{ slot: 'sig2', moveId: s.sig2 }]);
   });
 
   it('upgrades Signature I into its Keystone and keeps the name the player gave it', () => {
