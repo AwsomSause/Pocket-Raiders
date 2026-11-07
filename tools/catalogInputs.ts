@@ -1,6 +1,6 @@
 // Reads the game data files and lists the assets they refer to.
 
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CatalogInputs, PokemonArt } from '../src/assets/catalog.ts';
 import { animCatalogInputs, parseMoveAnims } from '../src/core/presentation/moveAnims.ts';
@@ -16,7 +16,8 @@ export function readCatalogInputs(): CatalogInputs {
   const megaStones = readJson('megaStones.json') as { items: { iconAssetId: string }[]; rewards: { iconAssetId: string }[] };
   const items = [...(readJson('items.json') as { iconAssetId: string }[]), ...megaStones.items, ...megaStones.rewards];
   // Catalog items use the director's icon pack (same rule as catalogIconAssetId in src/data/index.ts).
-  const catalogIcons = (readJson('itemCatalog.json') as { icon: string | null }[]).map((e) => `item.${e.icon?.includes('/') ? e.icon : `gen5/${e.icon ?? '0'}`}`);
+  const catalogEntries = [...(readJson('itemCatalog.json') as { icon: string | null }[]), ...readdirSync(join(dataDir, 'itemCatalog')).filter((f) => f.endsWith('.json')).flatMap((f) => readJson(`itemCatalog/${f}`) as { icon: string | null }[])];
+  const catalogIcons = catalogEntries.map((e) => `item.${e.icon?.includes('/') ? e.icon : `gen5/${e.icon ?? '0'}`}`);
   const trainers = [...(readJson('trainers.json') as { spriteAssetId: string }[]), ...(readJson('trainersDrive.json') as { spriteAssetId: string }[])];
   const bosses = readJson('bosses.json') as { sprites: Record<string, string> }[];
   const events = (readJson('events.json') as { events: { scene: { cast: string[] } }[] }).events;
