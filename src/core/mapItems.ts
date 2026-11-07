@@ -233,7 +233,12 @@ export function useRepel(content: Content, run: RunState): string {
     const effect = mapItemEffect(content, e.itemId);
     return (e.battles ?? 0) > 0 && effect?.kind === 'encounter' && effect.mods.some((m) => m.mod === 'repel');
   });
-  if (index < 0) throw new Error('No Repel is working');
+  if (index < 0) {
+    // A run-long Repel (passive) has no charge to spend and keeps working.
+    const passive = activeEffects(content, run).find(({ effect }) => effect.kind === 'encounter' && effect.mods.some((m) => m.mod === 'repel'));
+    if (!passive) throw new Error('No Repel is working');
+    return content.catalog.get(passive.itemId)!.name;
+  }
   const e = effects[index]!;
   const name = content.catalog.get(e.itemId)!.name;
   run.mapEffects = effects.map((x, i) => (i === index ? { ...x, battles: x.battles! - 1 } : x)).filter((x) => x.battles !== 0);
@@ -388,7 +393,8 @@ export function usesLeft(run: Pick<RunState, 'mapEffects'>, itemId: string): num
 /** Uses up one use of a manual item (mutates `run`). */
 export function spendUse(run: RunState, itemId: string): void {
   const index = (run.mapEffects ?? []).findIndex((e) => e.itemId === itemId && (e.uses ?? 0) > 0);
-  if (index < 0) throw new Error('That item is used up');
+  // A run-long copy (a passive) has no uses to spend and keeps working; only a manual item with no uses left is spent.
+  if (index < 0) return;
   run.mapEffects = run.mapEffects!.map((e, i) => (i === index ? { ...e, uses: e.uses! - 1 } : e)).filter((e) => e.uses !== 0);
 }
 

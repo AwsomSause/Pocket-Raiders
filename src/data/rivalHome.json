@@ -1,0 +1,21 @@
+{
+  "note": "Kice 2026-11-07: a rival's starter-line Pokémon (first fight opener and ace) come from their home region, and some have a signature Pokémon that is always on their team. Hop's Wooloo is first-fight only. Homes are in majorRivals.json.",
+  "regionStarters": {
+    "Kanto": ["bulbasaur", "charmander", "squirtle"],
+    "Johto": ["chikorita", "cyndaquil", "totodile"],
+    "Hoenn": ["treecko", "torchic", "mudkip"],
+    "Sinnoh": ["turtwig", "chimchar", "piplup"],
+    "Unova": ["snivy", "tepig", "oshawott"],
+    "Kalos": ["chespin", "fennekin", "froakie"],
+    "Alola": ["rowlet", "litten", "popplio"],
+    "Galar": ["grookey", "scorbunny", "sobble"],
+    "Paldea": ["sprigatito", "fuecoco", "quaxly"]
+  },
+  "signature": {
+    "N": { "species": "zorua", "firstFightOnly": false },
+    "Wally": { "species": "ralts", "firstFightOnly": false },
+    "Gladion": { "species": "type-null", "firstFightOnly": false },
+    "Lillie": { "species": "cosmog", "firstFightOnly": false },
+    "Hop": { "species": "wooloo", "firstFightOnly": true }
+  }
+}

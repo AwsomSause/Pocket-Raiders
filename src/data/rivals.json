@@ -1,5 +1,6 @@
 {
- "maxRivals": 3,
+ "maxRivals": 12,
+ "activeTarget": 4,
  "spark": {
   "ordinaryGain": 5,
   "closeGain": 12,
