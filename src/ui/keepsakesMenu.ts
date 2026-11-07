@@ -6,6 +6,8 @@ import { KEEPSAKES } from '../core/story2/keepsakes';
 import { services } from '../game/services';
 import type { LoreHost } from './loreArchiveMenu';
 import { fitLine } from './fitText';
+import { storyIcon } from './storyIcon';
+import { storyIconId } from '../assets/storyIcons';
 import { COLORS, textStyle } from './theme';
 
 export const keepsakeCount = (): { have: number; total: number } => ({ have: services().session.profile.story.keepsakes.length, total: KEEPSAKES.length });
@@ -26,7 +28,8 @@ export function openKeepsakes(host: LoreHost, back: () => void): void {
         problem: null,
         hint: `${k.name} (${k.slot}): ${how}`,
         draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number, h: number) => {
-          box.add(fitLine(scene.add.text(12, h / 2, k.name, textStyle(18, owned ? COLORS.text : COLORS.textMuted)).setOrigin(0, 0.5), w - 200));
+          storyIcon(scene, storyIconId('keepsake', k.id.replace(/^kp_/, '')), 26, h / 2, 32, box);
+          box.add(fitLine(scene.add.text(50, h / 2, k.name, textStyle(18, owned ? COLORS.text : COLORS.textMuted)).setOrigin(0, 0.5), w - 240));
           box.add(scene.add.text(w - 12, h / 2, `${k.slot} · ${state}`, textStyle(14, COLORS.textMuted)).setOrigin(1, 0.5));
         },
       };

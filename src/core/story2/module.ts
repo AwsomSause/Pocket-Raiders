@@ -10,9 +10,10 @@ import { hashSeed, Rng } from '../rng';
 import type { Profile, RunState } from '../state';
 import { change, freshRecord, meet, ATTRS, type Attr } from './relationships';
 import { resolveVariant, scoreCond, type ResolveContext, type ResolveCond } from './resolver';
-import { foldKeepsakes } from './keepsakes';
+import { foldKeepsakes, foldStarterMastery, markKeepsake } from './keepsakes';
 import { dueRivalScene, epilogueRivalScene } from './rivalPlan';
 import { renderTemplate } from './templates';
+import { pronounForms, type PronounSet } from './identity';
 import { evolveCrossroads, worldPick } from './worldScenes';
 import type { StoryData, StoryEvent, StoryV2 } from './schema';
 
@@ -43,6 +44,9 @@ export function condsPass(conds: readonly ResolveCond[], ctx: ResolveContext): b
 }
 
 // ---------- start ----------
+
+/** The Gift beat's line when the story text has none. */
+const GIFT_LINE = 'The Gift: your partner trots back with something it found along the way, a small worn satchel, and drops it at your feet.';
 
 const moduleOf = (data: StoryData, id: string) => data.backstories.find((b) => b.id === id);
 const eventOf = (data: StoryData, id: string): StoryEvent | undefined => data.events.find((e) => e.id === id);
@@ -265,6 +269,13 @@ function questPick(content: Content, run: RunState, act: number, ctx: ResolveCon
 
 // ---------- the scene a player sees ----------
 
+/** The pronoun tokens ({they}, {Their}, {they_are}...) for story text, from the run's protagonist (they/them when unset). */
+const pronounValues = (pronouns: string | PronounSet | undefined): Record<string, string> => {
+  const forms = pronounForms(pronouns);
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(forms)) { out[k] = v; out[k[0]!.toUpperCase() + k.slice(1)] = v[0]!.toUpperCase() + v.slice(1); }
+  return out;
+};
 const textOf = (data: StoryData, key: string | undefined, values: Record<string, string>): string => renderTemplate(key ? data.text[key] ?? '' : '', values);
 const nameOf = (data: StoryData, id: string): string => {
   const c = data.characters.find((x) => x.id === id);
@@ -279,7 +290,7 @@ export function activeScene(content: Content, run: RunState): StoryScene | null 
   if (!v2 || !e) return null;
   const data = content.storyData;
   const ctx = resolveCtx(content, run);
-  const values: Record<string, string> = { player: v2.protagonist?.name || 'you', starter: v2.starter?.lineId.replace(/^rm_/, '') ?? 'your partner' };
+  const values: Record<string, string> = { ...pronounValues(v2.protagonist?.pronouns), player: v2.protagonist?.name || 'you', starter: v2.starter?.lineId.replace(/^rm_/, '') ?? 'your partner' };
   // World scenes (worldScenes.ts) name the Pokémon and place they are about: `tok.<name>` facts.
   for (const [k, v] of Object.entries(v2.facts)) if (k.startsWith('tok.') && typeof v === 'string') values[k.slice(4)] = v;
   const lines: StoryLine[] = [];
@@ -332,7 +343,14 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
       applyEffects(content, run, arc.effects as Eff[]);
       // Two exits: the first is the good one; a "sabotaged" or "none" flag named for the arc takes the last.
       const flag = v2.facts[arc.id.replace(/^arc_/, '')];
-      v2.facts[`arc.${arc.id}`] = arc.exits.length > 1 && (flag === 'sabotaged' || flag === 'none') ? arc.exits[arc.exits.length - 1]! : arc.exits[0]!;
+      const good = !(arc.exits.length > 1 && (flag === 'sabotaged' || flag === 'none'));
+      v2.facts[`arc.${arc.id}`] = good ? arc.exits[0]! : arc.exits[arc.exits.length - 1]!;
+      // "The Gift" beat (design Part II, Heartbond beats): after a questline ends well, the Starter brings back a small find.
+      if (good && v2.heartbond.partner && !v2.facts['beat.gift']) {
+        v2.facts['beat.gift'] = true;
+        markKeepsake(run, 'gift');
+        emit(content, run, 'storyMoment', { actors: [], data: { beat: 'gift', arc: arc.id }, importance: 40, text: content.storyData.text['hb.beat.gift'] ?? GIFT_LINE });
+      }
     }
   }
   if (scene) {
@@ -365,10 +383,20 @@ export function finishScene(content: Content, run: RunState, choiceId?: string):
 
 // ---------- run end: what the profile keeps ----------
 
-/** Folds the run's module results into the profile once (Remembrances unlocked, Lore learned, the ending seen, scene snapshots). Called with the Chronicle. */
-export function foldModuleIntoProfile(profile: Profile, run: RunState): void {
+/**
+ * Folds the run's module results into the profile once (Remembrances unlocked, Lore learned, the ending seen, scene
+ * snapshots), then the Starter's Remembrance Mastery and the Keepsakes (which read the folded Archive and Lore).
+ * Called with the Chronicle. `storyData` gives the Grass-type lines for the Leaf Crown.
+ */
+export function foldModuleIntoProfile(profile: Profile, run: RunState, storyData?: Pick<StoryData, 'remembrances'>): void {
+  foldModuleResults(profile, run);
+  if (!run.story.v2) return;
+  foldStarterMastery(profile, run);
+  foldKeepsakes(profile, run, (storyData?.remembrances ?? []).filter((r) => r.types.includes('grass')).map((r) => r.id));
+}
+
+function foldModuleResults(profile: Profile, run: RunState): void {
   const v2 = run.story.v2;
-  if (v2) foldKeepsakes(profile, run);
   const m = v2?.module;
   if (!v2 || !m) return;
   const story = profile.story;

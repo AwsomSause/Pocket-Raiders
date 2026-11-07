@@ -215,6 +215,11 @@ export class MapScene extends Phaser.Scene {
     void ensureNarration().catch(() => undefined);
     const { session } = services();
     const run = session.run!;
+    // Beat 9: the Field Trial plays before anything else on a save's first Story Run.
+    if (session.fieldTrialDue()) {
+      this.scene.start('FieldTrial');
+      return;
+    }
     // S5: a backstory scene waiting (the intro at the start, or one a Story Stop queued) plays before the map shows.
     if (session.storyScene()) {
       this.scene.start('Story', { next: 'Map' });

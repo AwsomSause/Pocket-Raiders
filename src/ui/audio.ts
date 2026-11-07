@@ -10,6 +10,7 @@ import { cryDetune } from '../core/wardrobe';
 import { sfxAllowed, SFX_WINDOW_MS, type SfxPlay } from '../core/audioBudget';
 import { services } from '../game/services';
 import { loadAssets } from './lazyAssets';
+import { storyAssetId } from '../core/storyAudio';
 
 let recentSfx: SfxPlay[] = [];
 
@@ -46,6 +47,18 @@ export function playSfxLazy(scene: Phaser.Scene, id: string, volumeScale = 1): v
   if (!services().assets.has(id) || services().session.settings.muted) return;
   if (scene.cache.audio.exists(id)) playSfx(scene, id, volumeScale);
   else void loadAssets(scene, [id]).then(() => scene.sys.isActive() && playSfx(scene, id, volumeScale));
+}
+
+/** S17 story sounds: plays a story audio id (st_*, se_*) through its catalog sound (the made file, else its reuse sound). */
+export function playStorySfx(scene: Phaser.Scene, id: string, volumeScale = 1): void {
+  const asset = storyAssetId(id, (a) => services().assets.has(a));
+  if (asset) playSfxLazy(scene, asset, volumeScale);
+}
+
+/** S17 story music: plays a story music id (mu_*) through its catalog song. */
+export function playStoryMusic(scene: Phaser.Scene, id: string, fallback?: string): void {
+  const asset = storyAssetId(id, (a) => services().assets.has(a));
+  if (asset) playMusicLazy(scene, asset, fallback);
 }
 
 let currentMusic: { id: string; sound: Phaser.Sound.BaseSound } | null = null;
