@@ -3,7 +3,6 @@
 
 import type Phaser from 'phaser';
 import type { Content } from '../core/contentSchema';
-import { dexPage } from '../core/presentation/dexInfo';
 import { FOOTPRINT_COLS, FOOTPRINT_SIZE, footprintCell } from '../core/presentation/footprints';
 import { dexDataPage, dexPage } from '../core/presentation/dexInfo';
 import type { Profile } from '../core/state';
@@ -46,11 +45,9 @@ export class DexInfo {
       page.stats.forEach((line, i) => this.root.add(scene.add.text(40 * S + (i % 4) * 170 * S, 350 * S + Math.floor(i / 4) * 34 * S, line, textStyle(22, '#503820'))));
       this.root.add(scene.add.text(GAME_WIDTH - 16, GAME_HEIGHT - 14, 'Left/Right: data page · Enter or Esc: back', textStyle(14, '#d8d8d8')).setOrigin(1, 1));
     };
+    this.draw = draw;
     if (scene.textures.exists(DEX_INFO_ASSET) && scene.textures.exists(FOOTPRINT_ASSET)) draw();
     else void loadAssets(scene, [DEX_INFO_ASSET, FOOTPRINT_ASSET]).then(draw);
-    this.draw = draw;
-    if (scene.textures.exists(DEX_INFO_ASSET)) draw();
-    else void loadAssets(scene, [DEX_INFO_ASSET]).then(draw);
   }
 
   /** Left/right flip between the species page and the data page. */
