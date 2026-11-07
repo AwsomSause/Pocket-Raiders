@@ -24,11 +24,16 @@ export function cameraTo(scene: Phaser.Scene, motion: MotionLevel, at: { x: numb
   const to = at ?? { x: W / 2, y: H / 2 };
   cam.pan(to.x, to.y, ms, 'Sine.easeInOut', true);
   cam.zoomTo(zoom, ms, 'Sine.easeInOut', true);
+  // A slight tilt on the way out and back gives the sideways look of the camera swinging round the arena.
+  scene.tweens.killTweensOf(cam);
+  scene.tweens.add({ targets: cam, rotation: at ? -0.03 : 0, duration: ms, ease: 'Sine.easeInOut' });
 }
 
 /** Puts the camera back on the whole arena at once. */
 export function cameraReset(scene: Phaser.Scene): void {
   const cam = scene.cameras.main;
+  scene.tweens.killTweensOf(cam);
+  cam.setRotation(0);
   cam.setZoom(1);
   cam.centerOn(W / 2, H / 2);
 }
@@ -62,6 +67,9 @@ export function openingReveal(scene: Phaser.Scene, motion: MotionLevel, foe: { x
   const cam = scene.cameras.main;
   cam.setZoom(2.3);
   cam.centerOn(foe.x - 260, foe.y + 150);
+  // The sweep starts tilted (the floor runs diagonally) and levels out as it settles.
+  cam.setRotation(-0.16);
+  scene.tweens.add({ targets: cam, rotation: 0, duration: 1900, delay: 300, ease: 'Sine.easeInOut' });
   shape?.setTintFill?.(0x000000);
   // 0.0 s - 0.6 s: black. 0.4 s - 1.1 s: the floor comes up out of the dark while the camera sweeps toward the foe's platform.
   scene.time.delayedCall(300, () => over || cam.pan(foe.x - 40, foe.y - 10, 900, 'Sine.easeInOut', true));
@@ -97,21 +105,22 @@ export interface BallRow {
 /** A row of party balls (white = able to fight, dark = fainted) on a thin bar that slides in from the screen edge. */
 export function partyBallRow(scene: Phaser.Scene, side: 'foe' | 'player', states: boolean[], motion: MotionLevel, y: number): BallRow {
   if (motion === 'off' || states.length === 0) return { out: () => undefined };
-  const gap = 26;
+  const gap = 34;
   const width = states.length * gap + 30;
   const root = scene.add.container(0, 0).setDepth(DEPTH_ROW);
   const left = side === 'foe';
   const x0 = left ? 18 : W - 18 - states.length * gap;
+  const r = 13;
   const bar = scene.add.rectangle(left ? 0 : W - width - 40, y + 17, width + 40, 4, 0x0a0a10, 0.9).setOrigin(0, 0.5);
   root.add(bar);
   states.forEach((alive, i) => {
     const g = scene.add.graphics();
-    g.fillStyle(alive ? 0xf4f4f4 : 0x3a3a44, 1).fillCircle(0, 0, 10);
-    if (alive) g.fillStyle(0xd23a3a, 1).slice(0, 0, 10, Math.PI, Math.PI * 2).fillPath();
-    g.fillStyle(0x0a0a10, 1).fillRect(-10, -1.5, 20, 3);
-    g.lineStyle(2.5, 0x0a0a10, 1).strokeCircle(0, 0, 10);
-    g.fillStyle(alive ? 0xffffff : 0x14141a, 1).fillCircle(0, 0, 3.2).lineStyle(1.5, 0x0a0a10, 1).strokeCircle(0, 0, 3.2);
-    g.setPosition(x0 + 12 + i * gap, y).setScale(0);
+    g.fillStyle(alive ? 0xf4f4f4 : 0x3a3a44, 1).fillCircle(0, 0, r);
+    if (alive) g.fillStyle(0xd23a3a, 1).slice(0, 0, r, Math.PI, Math.PI * 2).fillPath();
+    g.fillStyle(0x0a0a10, 1).fillRect(-r, -2, r * 2, 4);
+    g.lineStyle(2.5, 0x0a0a10, 1).strokeCircle(0, 0, r);
+    g.fillStyle(alive ? 0xffffff : 0x14141a, 1).fillCircle(0, 0, 4.2).lineStyle(1.5, 0x0a0a10, 1).strokeCircle(0, 0, 4.2);
+    g.setPosition(x0 + r + 2 + i * gap, y).setScale(0);
     root.add(g);
     scene.tweens.add({ targets: g, scale: 1, duration: 200, delay: 260 + i * 70, ease: 'Back.easeOut' });
   });
@@ -180,4 +189,52 @@ export function dropIn(scene: Phaser.Scene, motion: MotionLevel, target: { y: nu
   const rest = target.y;
   target.setY(rest - height);
   scene.tweens.add({ targets: target, y: rest, duration: motion === 'full' ? 460 : 200, ease: 'Bounce.easeOut' });
+}
+
+/** How tall (px) every foe trainer stands on the arena, whatever size its art is drawn at. */
+export const FOE_TRAINER_HEIGHT = 190;
+
+/** The first and last rows of a frame that have visible pixels (cached). Null when the pixels cannot be read. */
+function opaqueRows(scene: Phaser.Scene, key: string, frame: string | number): { top: number; bottom: number; height: number } | null {
+  const cacheKey = `${key}#${frame}`;
+  const cached = rowCache.get(cacheKey);
+  if (cached !== undefined) return cached;
+  let result: { top: number; bottom: number; height: number } | null = null;
+  try {
+    const f = scene.textures.getFrame(key, frame as string);
+    const w = f.cutWidth;
+    const h = f.cutHeight;
+    let top = -1;
+    let bottom = -1;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x += 2) {
+        if (scene.textures.getPixelAlpha(x, y, key, frame as string) > 20) {
+          if (top < 0) top = y;
+          bottom = y;
+          break;
+        }
+      }
+    }
+    if (top >= 0) result = { top, bottom, height: h };
+  } catch {
+    result = null;
+  }
+  rowCache.set(cacheKey, result);
+  return result;
+}
+const rowCache = new Map<string, { top: number; bottom: number; height: number } | null>();
+
+/**
+ * Draws a foe trainer at one common size: its visible figure (head to feet, ignoring empty margin) is `height` px tall and
+ * its feet stand on y. Anything that cannot be measured (a placeholder, unreadable pixels) keeps its own size.
+ */
+export function fitTrainer(scene: Phaser.Scene, visual: Phaser.GameObjects.GameObject, y: number, height = FOE_TRAINER_HEIGHT): void {
+  const s = visual as Phaser.GameObjects.Sprite;
+  if (!s.frame || typeof s.setScale !== 'function' || !s.texture) return;
+  const rows = opaqueRows(scene, s.texture.key, s.frame.name);
+  if (!rows) return;
+  const figure = rows.bottom - rows.top + 1;
+  s.setScale(height / figure);
+  s.setOrigin(s.originX, (rows.bottom + 1) / rows.height);
+  s.setY(y);
 }
