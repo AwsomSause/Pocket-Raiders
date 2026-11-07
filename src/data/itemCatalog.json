@@ -21906,5 +21906,2338 @@
    "kind": "teraType",
    "mode": "random"
   }
+ },
+ {
+  "id": "ampharos-crest",
+  "name": "Ampharos Crest",
+  "family": "Crests (species held)",
+  "description": "Ampharos and its family: Sp. Atk and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/aeamphcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "mareep",
+      "flaaffy",
+      "ampharos"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "mareep",
+      "flaaffy",
+      "ampharos"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "ariados-crest",
+  "name": "Ariados Crest",
+  "family": "Crests (species held)",
+  "description": "Ariados and its family: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/ariacrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "spinarak",
+      "ariados"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "spinarak",
+      "ariados"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "bastiodon-crest",
+  "name": "Bastiodon Crest",
+  "family": "Crests (species held)",
+  "description": "Bastiodon and its family: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/bastcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "shieldon",
+      "bastiodon"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "shieldon",
+      "bastiodon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "beheeyem-crest",
+  "name": "Beheeyem Crest",
+  "family": "Crests (species held)",
+  "description": "Beheeyem and its family: Sp. Atk and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/behecrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "elgyem",
+      "beheeyem"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "elgyem",
+      "beheeyem"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "boltund-crest",
+  "name": "Boltund Crest",
+  "family": "Crests (species held)",
+  "description": "Boltund and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/boltcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "yamper",
+      "boltund"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "yamper",
+      "boltund"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "castform-crest",
+  "name": "Castform Crest",
+  "family": "Crests (species held)",
+  "description": "Castform: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/castcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "castform"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "castform"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "celebi-crest",
+  "name": "Celebi Crest",
+  "family": "Crests (species held)",
+  "description": "Celebi: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/celecrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "celebi"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "celebi"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "cherrim-crest",
+  "name": "Cherrim Crest",
+  "family": "Crests (species held)",
+  "description": "Cherrim and its family: Sp. Atk and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/chercrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "cherubi",
+      "cherrim"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "cherubi",
+      "cherrim"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "cinccino-crest",
+  "name": "Cinccino Crest",
+  "family": "Crests (species held)",
+  "description": "Cinccino and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/cinccrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "minccino",
+      "cinccino"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "minccino",
+      "cinccino"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "claydol-crest",
+  "name": "Claydol Crest",
+  "family": "Crests (species held)",
+  "description": "Claydol and its family: Sp. Def and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/claycrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "baltoy",
+      "claydol"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "baltoy",
+      "claydol"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "cofagrigus-crest",
+  "name": "Cofagrigus Crest",
+  "family": "Crests (species held)",
+  "description": "Cofagrigus and its family: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/cofcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "yamask",
+      "cofagrigus"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "yamask",
+      "cofagrigus"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "crabominable-crest",
+  "name": "Crabominable Crest",
+  "family": "Crests (species held)",
+  "description": "Crabominable and its family: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/crabcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "crabrawler",
+      "crabominable"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "crabrawler",
+      "crabominable"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "cryogonal-crest",
+  "name": "Cryogonal Crest",
+  "family": "Crests (species held)",
+  "description": "Cryogonal: Sp. Def and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/crycrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "cryogonal"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "cryogonal"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "darmanitan-crest",
+  "name": "Darmanitan Crest",
+  "family": "Crests (species held)",
+  "description": "Darmanitan and its family: Attack and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/darmcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "darumaka",
+      "darmanitan"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "darumaka",
+      "darmanitan"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "dedenne-crest",
+  "name": "Dedenne Crest",
+  "family": "Crests (species held)",
+  "description": "Dedenne: Speed and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/dedecrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "dedenne"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "dedenne"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "delcatty-crest",
+  "name": "Delcatty Crest",
+  "family": "Crests (species held)",
+  "description": "Delcatty and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/delcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "skitty",
+      "delcatty"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "skitty",
+      "delcatty"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "druddigon-crest",
+  "name": "Druddigon Crest",
+  "family": "Crests (species held)",
+  "description": "Druddigon: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/druddicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "druddigon"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "druddigon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "dusknoir-crest",
+  "name": "Dusknoir Crest",
+  "family": "Crests (species held)",
+  "description": "Dusknoir and its family: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/duskcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "duskull",
+      "dusclops",
+      "dusknoir"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "duskull",
+      "dusclops",
+      "dusknoir"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "electrode-crest",
+  "name": "Electrode Crest",
+  "family": "Crests (species held)",
+  "description": "Electrode and its family: Speed and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/eleccrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "voltorb",
+      "electrode"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "voltorb",
+      "electrode"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "empoleon-crest",
+  "name": "Empoleon Crest",
+  "family": "Crests (species held)",
+  "description": "Empoleon and its family: Sp. Atk and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/empcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "piplup",
+      "prinplup",
+      "empoleon"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "piplup",
+      "prinplup",
+      "empoleon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "entei-crest",
+  "name": "Entei Crest",
+  "family": "Crests (species held)",
+  "description": "Entei: Attack and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/enteicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "entei"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "entei"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "fearow-crest",
+  "name": "Fearow Crest",
+  "family": "Crests (species held)",
+  "description": "Fearow and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/fearcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "spearow",
+      "fearow"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "spearow",
+      "fearow"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "feraligatr-crest",
+  "name": "Feraligatr Crest",
+  "family": "Crests (species held)",
+  "description": "Feraligatr and its family: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/feracrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "totodile",
+      "croconaw",
+      "feraligatr"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "totodile",
+      "croconaw",
+      "feraligatr"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "flygon-crest",
+  "name": "Flygon Crest",
+  "family": "Crests (species held)",
+  "description": "Flygon and its family: Attack and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/flygoncrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "trapinch",
+      "vibrava",
+      "flygon"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "trapinch",
+      "vibrava",
+      "flygon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "furret-crest",
+  "name": "Furret Crest",
+  "family": "Crests (species held)",
+  "description": "Furret and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/furrcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "sentret",
+      "furret"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "sentret",
+      "furret"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "glaceon-crest",
+  "name": "Glaceon Crest",
+  "family": "Crests (species held)",
+  "description": "Glaceon and its family: Sp. Atk and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/glaccrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "eevee",
+      "glaceon"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "eevee",
+      "glaceon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "gothitelle-crest",
+  "name": "Gothitelle Crest",
+  "family": "Crests (species held)",
+  "description": "Gothitelle and its family: Sp. Def and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/gothcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "gothita",
+      "gothorita",
+      "gothitelle"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "gothita",
+      "gothorita",
+      "gothitelle"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "hypno-crest",
+  "name": "Hypno Crest",
+  "family": "Crests (species held)",
+  "description": "Hypno and its family: Sp. Def and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/hypcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "drowzee",
+      "hypno"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "drowzee",
+      "hypno"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "infernape-crest",
+  "name": "Infernape Crest",
+  "family": "Crests (species held)",
+  "description": "Infernape and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/infcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "chimchar",
+      "monferno",
+      "infernape"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "chimchar",
+      "monferno",
+      "infernape"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "leafeon-crest",
+  "name": "Leafeon Crest",
+  "family": "Crests (species held)",
+  "description": "Leafeon and its family: Defense and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/leafcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "eevee",
+      "leafeon"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "eevee",
+      "leafeon"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "ledian-crest",
+  "name": "Ledian Crest",
+  "family": "Crests (species held)",
+  "description": "Ledian and its family: Sp. Def and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/ledicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "ledyba",
+      "ledian"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "ledyba",
+      "ledian"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "luvdisc-crest",
+  "name": "Luvdisc Crest",
+  "family": "Crests (species held)",
+  "description": "Luvdisc: Speed and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/luvcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "luvdisc"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "luvdisc"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "luxray-crest",
+  "name": "Luxray Crest",
+  "family": "Crests (species held)",
+  "description": "Luxray and its family: Attack and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/luxcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "shinx",
+      "luxio",
+      "luxray"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "shinx",
+      "luxio",
+      "luxray"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "magcargo-crest",
+  "name": "Magcargo Crest",
+  "family": "Crests (species held)",
+  "description": "Magcargo and its family: Defense and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/magcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "slugma",
+      "magcargo"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "slugma",
+      "magcargo"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "meganium-crest",
+  "name": "Meganium Crest",
+  "family": "Crests (species held)",
+  "description": "Meganium and its family: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/megcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "chikorita",
+      "bayleef",
+      "meganium"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "chikorita",
+      "bayleef",
+      "meganium"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "minun-crest",
+  "name": "Minun Crest",
+  "family": "Crests (species held)",
+  "description": "Minun: Speed and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/minuncrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "minun"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "minun"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "noctowl-crest",
+  "name": "Noctowl Crest",
+  "family": "Crests (species held)",
+  "description": "Noctowl and its family: Sp. Def and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/noccrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "hoothoot",
+      "noctowl"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "hoothoot",
+      "noctowl"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "oricorio-crest",
+  "name": "Oricorio Crest",
+  "family": "Crests (species held)",
+  "description": "Oricorio: Sp. Atk and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/oricrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "oricorio"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "oricorio"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "phione-crest",
+  "name": "Phione Crest",
+  "family": "Crests (species held)",
+  "description": "Phione: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/phionecrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "phione"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "phione"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "plusle-crest",
+  "name": "Plusle Crest",
+  "family": "Crests (species held)",
+  "description": "Plusle: Speed and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/pluslecrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "plusle"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "plusle"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "simipour-crest",
+  "name": "Simipour Crest",
+  "family": "Crests (species held)",
+  "description": "Simipour and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/pourcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "panpour",
+      "simipour"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "panpour",
+      "simipour"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "probopass-crest",
+  "name": "Probopass Crest",
+  "family": "Crests (species held)",
+  "description": "Probopass and its family: Sp. Def and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/probocrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "nosepass",
+      "probopass"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "nosepass",
+      "probopass"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "raikou-crest",
+  "name": "Raikou Crest",
+  "family": "Crests (species held)",
+  "description": "Raikou: Sp. Atk and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/raicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "raikou"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "raikou"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "rampardos-crest",
+  "name": "Rampardos Crest",
+  "family": "Crests (species held)",
+  "description": "Rampardos and its family: Attack and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/rampcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "cranidos",
+      "rampardos"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "cranidos",
+      "rampardos"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "relicanth-crest",
+  "name": "Relicanth Crest",
+  "family": "Crests (species held)",
+  "description": "Relicanth: Defense and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/relicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "relicanth"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "relicanth"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "reuniclus-crest",
+  "name": "Reuniclus Crest",
+  "family": "Crests (species held)",
+  "description": "Reuniclus and its family: Sp. Atk and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/reunicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "solosis",
+      "duosion",
+      "reuniclus"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "solosis",
+      "duosion",
+      "reuniclus"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "simisage-crest",
+  "name": "Simisage Crest",
+  "family": "Crests (species held)",
+  "description": "Simisage and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/sagecrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "pansage",
+      "simisage"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "pansage",
+      "simisage"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "samurott-crest",
+  "name": "Samurott Crest",
+  "family": "Crests (species held)",
+  "description": "Samurott and its family: Sp. Atk and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/samucrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "oshawott",
+      "dewott",
+      "samurott"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "oshawott",
+      "dewott",
+      "samurott"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "sawsbuck-crest",
+  "name": "Sawsbuck Crest",
+  "family": "Crests (species held)",
+  "description": "Sawsbuck and its family: Attack and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/sawscrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "deerling",
+      "sawsbuck"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "deerling",
+      "sawsbuck"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "simisear-crest",
+  "name": "Simisear Crest",
+  "family": "Crests (species held)",
+  "description": "Simisear and its family: Speed and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/searcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "pansear",
+      "simisear"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "pansear",
+      "simisear"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "seviper-crest",
+  "name": "Seviper Crest",
+  "family": "Crests (species held)",
+  "description": "Seviper: Attack and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/sevcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "seviper"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "seviper"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "shiinotic-crest",
+  "name": "Shiinotic Crest",
+  "family": "Crests (species held)",
+  "description": "Shiinotic and its family: Sp. Def and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/shiincrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "morelull",
+      "shiinotic"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "morelull",
+      "shiinotic"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "silvally-crest",
+  "name": "Silvally Crest",
+  "family": "Crests (species held)",
+  "description": "Silvally and its family: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/silvcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "type-null",
+      "silvally"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "type-null",
+      "silvally"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "skuntank-crest",
+  "name": "Skuntank Crest",
+  "family": "Crests (species held)",
+  "description": "Skuntank and its family: Attack and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/skuncrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "stunky",
+      "skuntank"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "stunky",
+      "skuntank"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "spiritomb-crest",
+  "name": "Spiritomb Crest",
+  "family": "Crests (species held)",
+  "description": "Spiritomb: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/spiritcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "spiritomb"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "spiritomb"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "stantler-crest",
+  "name": "Stantler Crest",
+  "family": "Crests (species held)",
+  "description": "Stantler: Attack and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/stantcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "stantler"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "stantler"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "suicune-crest",
+  "name": "Suicune Crest",
+  "family": "Crests (species held)",
+  "description": "Suicune: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/suicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "suicune"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "suicune"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "sunflora-crest",
+  "name": "Sunflora Crest",
+  "family": "Crests (species held)",
+  "description": "Sunflora and its family: Sp. Atk and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/sunfloracrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "sunkern",
+      "sunflora"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "sunkern",
+      "sunflora"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "swalot-crest",
+  "name": "Swalot Crest",
+  "family": "Crests (species held)",
+  "description": "Swalot and its family: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/swacrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "gulpin",
+      "swalot"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "gulpin",
+      "swalot"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "thievul-crest",
+  "name": "Thievul Crest",
+  "family": "Crests (species held)",
+  "description": "Thievul and its family: Sp. Def and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/thievcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "nickit",
+      "thievul"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "nickit",
+      "thievul"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "torterra-crest",
+  "name": "Torterra Crest",
+  "family": "Crests (species held)",
+  "description": "Torterra and its family: Attack and Defense x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/torcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "turtwig",
+      "grotle",
+      "torterra"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "turtwig",
+      "grotle",
+      "torterra"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "typhlosion-crest",
+  "name": "Typhlosion Crest",
+  "family": "Crests (species held)",
+  "description": "Typhlosion and its family: Sp. Atk and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/typhcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "cyndaquil",
+      "quilava",
+      "typhlosion"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "cyndaquil",
+      "quilava",
+      "typhlosion"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "unown-crest",
+  "name": "Unown Crest",
+  "family": "Crests (species held)",
+  "description": "Unown: Attack and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/unowncrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "unown"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "unown"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "vespiquen-crest",
+  "name": "Vespiquen Crest",
+  "family": "Crests (species held)",
+  "description": "Vespiquen and its family: Defense and Sp. Def x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/vespicrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.2,
+     "species": [
+      "combee",
+      "vespiquen"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.2,
+     "species": [
+      "combee",
+      "vespiquen"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "whiscash-crest",
+  "name": "Whiscash Crest",
+  "family": "Crests (species held)",
+  "description": "Whiscash and its family: Attack and Sp. Atk x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/whiscrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "barboach",
+      "whiscash"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "barboach",
+      "whiscash"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "zangoose-crest",
+  "name": "Zangoose Crest",
+  "family": "Crests (species held)",
+  "description": "Zangoose: Attack and Speed x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/zangcrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "zangoose"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.2,
+     "species": [
+      "zangoose"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "zoroark-crest",
+  "name": "Zoroark Crest",
+  "family": "Crests (species held)",
+  "description": "Zoroark and its family: Sp. Atk and Attack x1.2",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/zorocrest",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.2,
+     "species": [
+      "zorua",
+      "zoroark"
+     ]
+    },
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.2,
+     "species": [
+      "zorua",
+      "zoroark"
+     ]
+    }
+   ]
+  }
  }
 ]
