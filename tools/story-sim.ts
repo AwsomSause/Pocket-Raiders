@@ -70,7 +70,52 @@ for (const b of backstories) {
     endings[b]![e] = (endings[b]![e] ?? 0) + 1;
   }
 }
+// Late game: the strong bot (best switch-ins, healing, revives, team building) with every Pokémon kept at (the highest foe level seen + offset), Orrery Circuit.
+// Offset 0 = at par with the last fight; higher offsets show where the game's fights stop being winnable, per kind of battle.
+const LATE_RUNS = Number(process.env.LATE_RUNS ?? 10);
+const OFFSETS = (process.env.LATE_OFFSETS ?? '0,5,10,20').split(',').map(Number);
+interface LateRow { offset: number; seed: string; battles: number; regions: number; victory: boolean; stage: number; fights: Record<string, number>; lostTo?: string; error?: string }
+const lateRows: LateRow[] = [];
+for (const offset of OFFSETS) {
+  for (let i = 0; i < LATE_RUNS; i++) {
+    const row: LateRow = { offset, seed: `late-${offset}-${i}`, battles: 0, regions: 0, victory: false, stage: 0, fights: {} };
+    let last: unknown = null;
+    try {
+      const run = autoplay({
+        seed: row.seed, campaignId: 'orrery-circuit', steps: 16000, smart: true, strong: true, parLevel: offset, healOnMap: true,
+        onStep: (r) => {
+          const b = r.battle;
+          if (b && !last) {
+            const k = b.rival || b.firstRival || b.rivalId ? 'rival' : String(b.kind);
+            row.fights[k] = (row.fights[k] ?? 0) + 1;
+          }
+          last = b;
+          return r;
+        },
+      });
+      row.battles = run.encountersCompleted;
+      row.regions = run.regionsCleared.length;
+      row.victory = run.victory;
+      row.stage = run.stage?.index ?? 0;
+      const lb = last as { kind?: string; rival?: boolean; firstRival?: boolean; rivalId?: string } | null;
+      if (run.phase === 'over' && !run.victory && lb) row.lostTo = lb.rival || lb.firstRival || lb.rivalId ? 'rival' : String(lb.kind);
+    } catch (e) {
+      row.error = (e as Error).message.slice(0, 160);
+    }
+    lateRows.push(row);
+  }
+}
+const lateSummary = Object.fromEntries(OFFSETS.map((o) => {
+  const rs = lateRows.filter((r) => r.offset === o);
+  const sum = (f: (r: LateRow) => number) => rs.reduce((a, r) => a + f(r), 0);
+  const fights: Record<string, number> = {};
+  const lost: Record<string, number> = {};
+  for (const r of rs) { for (const [k, n] of Object.entries(r.fights)) fights[k] = (fights[k] ?? 0) + n; if (r.lostTo) lost[r.lostTo] = (lost[r.lostTo] ?? 0) + 1; }
+  const winRate = Object.fromEntries(Object.keys(fights).map((k) => [k, Number((1 - (lost[k] ?? 0) / fights[k]!).toFixed(3))]));
+  return [`+${o}`, { runs: rs.length, won: rs.filter((r) => r.victory).length, medianBattles: med(rs.map((r) => r.battles)), medianRegions: med(rs.map((r) => r.regions)), bestRegions: Math.max(...rs.map((r) => r.regions)), errors: sum((r) => (r.error ? 1 : 0)), fights, lostTo: lost, winRatePerFight: winRate }];
+}));
 const summary = {
+  late: lateSummary,
   endingRunsPerBackstory: ENDING_RUNS,
   endings,
   runsPerBackstory: PER,
@@ -82,4 +127,4 @@ const summary = {
   })),
 };
 console.log(JSON.stringify(summary, null, 1));
-if (OUT) writeFileSync(OUT, JSON.stringify({ summary, rows }, null, 1) + '\n');
+if (OUT) writeFileSync(OUT, JSON.stringify({ summary, rows, lateRows }, null, 1) + '\n');

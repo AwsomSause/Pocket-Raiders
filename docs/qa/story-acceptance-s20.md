@@ -44,3 +44,17 @@ Ending shares (300 runs each, random answers, so a careful player can steer towa
 ## Still not covered
 - A full Story Run through real fights to the Epilogue (the bot cannot get past region 1); the S19 level-500 walk covers the Stops, not these endings.
 - Final screenshots (no change to any screen in this slice).
+
+## Late game (strong bot)
+`autoplay` has two new options: `strong` (best switch-in, potions at half HP, revives, full-restore, candies to the weakest, healing and stat boosters before junk rewards, keeps only strong catches and swaps out the weakest) and `parLevel` (before each battle every Pokémon is raised to the highest foe level seen so far + an offset, and evolved the way trainers' Pokémon are). `npm run sim:story` runs it, 10 runs per offset, Orrery Circuit.
+
+| Offset over par | Runs won | Median battles | Median / best regions cleared | Trainer fights won | Wild fights won |
+|---|---|---|---|---|---|
+| +0 | 0/10 | 28 | 0 / 0 | 85% (59 fights) | 99.6% |
+| +5 | 0/10 | 47 | 0 / 1 | 91% (92) | 99.5% |
+| +10 | 0/10 | 131 | 1 / 2 | 96% (253) | 100% |
+| +20 | 0/10 | 143 | 1 / 1 | 96% (225) | 99.9% |
+
+(Rival fights: 100% won at every offset, 23 to 103 fights. The plain smart bot stopped at median 11 battles, 0 regions.)
+
+**Finding (needs a human look):** adding levels stops helping. At +20 levels (level 100 against level 77) the bot still loses to the first big trainer wall of regions 1 to 2 (the League fights, for example Lance): a single boss Pokémon takes a level-100 teammate down in one or two hits (our level-100 Pokémon have about 270 HP), so six teammates fall to six foes. Nearly every loss is a trainer fight (39 of 40 runs). Either the bosses hit far harder than their level, or the Pokémon at high levels are too frail. No run reached the Champion in this sim, so Finale and Epilogue were not played through real fights (the walk with cheat Pokémon does reach them).
