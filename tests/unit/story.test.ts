@@ -67,15 +67,15 @@ describe('story foundation: random streams', () => {
   // effects slices 2 to 3b-3b (held, map, shop, money, map-movement, map-stop and draft items in drafts, bosses
   // holding items) M8.75 part C3 (every Pokémon has an ability) and the C2c move batch, which change
   // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts, and for the Beta 4.4 battle fixes (sleep 2-4 turns, the first rival on Stage 1 level 5, set boss aces, one Mega per battle, Choice locks only the move).
-  // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2). Re-pinned for IVs and EVs (W5, ivs-evs.md).
+  // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2). Re-pinned for IVs and EVs (W5, ivs-evs.md) and for the second library item batch (#1021: 3,000+ lines of new catalog items change drafts, shops and rewards).
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': 'aa5757009e49ef9d',
-    'STORY2/0': '79c283333f2c7fe0',
-    'STORY4/0': 'f481a2ec3037edf4',
-    'STORY5/0': '08798645f42fc973',
-    'STORY6/0': '6ce622bca19ab896',
-    'STORY7/0': 'fbbc78718ba162d8',
-    'STORY8/0': 'e7ebd42a26b77690',
+    'STORY1/0': '2b195304e30062e1',
+    'STORY2/0': '496898e1ea103f6d',
+    'STORY4/0': '726eae3900865633',
+    'STORY5/0': '33ccfeefdb4cb630',
+    'STORY6/0': 'a762fcf429692622',
+    'STORY7/0': '2ebdc99af85d69d3',
+    'STORY8/0': 'ea3d65381bb92929',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.
