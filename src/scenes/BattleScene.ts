@@ -56,7 +56,7 @@ import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
-import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr } from '../ui/audio';
+import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr, playCue } from '../ui/audio';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
@@ -3155,7 +3155,7 @@ export class BattleScene extends Phaser.Scene {
     for (const line of end.aftermath ?? []) await this.say(line);
     if (end.voiceJoined) await this.say(`${content.species.get(end.voiceJoined)?.name ?? 'The Pokémon'} heard your voice. It wants to come with you!`);
     if (end.badge) {
-      playSfxLazy(this, `me.${services().session.settings.victoryJingle}`);
+      playCue(this, 'st_badge_circuit', `me.${services().session.settings.victoryJingle}`);
       const leaderName = content.bosses.get(end.badge)?.name ?? end.badge;
       await this.playBeat(stamp(this, 'BADGE GET!', `${leaderName}'s badge`, ROLE_RIMS.gym, this.motion));
       await this.say(`You earned ${leaderName}'s badge! (${result.run.badges.length} total)`);
@@ -3197,7 +3197,7 @@ export class BattleScene extends Phaser.Scene {
           }),
         );
       } else await burstReveal(this, PLAYER_POS.x, PLAYER_POS.y - 100, 0x9fe8ff, this.motion).done;
-      playSfxLazy(this, 'me.evo_success');
+      playCue(this, 'st_evolution_moment', 'me.evo_success');
       await this.say(`Congratulations! Your ${fromName} evolved into ${toName}!`);
       for (const m of evo.learnedMoves) await this.say(`${toName} learned ${content.moves.get(m)!.name}!`);
     }

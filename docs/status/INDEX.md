@@ -388,3 +388,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
 - `wire-a11y-text-quest.md`: Bigger small print and Map quest contrast settings (settings v41).
 - `quest-log.md`: Hub Quest Log room listing trainer quest lines and Mythical chains with progress; read-only, no save bump.
+- [audio-barks-w16.md] Barks and cues W16: talk blips exist, story stinger hooks
