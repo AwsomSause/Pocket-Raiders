@@ -264,18 +264,22 @@ function memoryMatch(host: TownHost, a: TownAction, done: (m: string) => void, a
 function gacha(host: TownHost, a: TownAction, done: (m: string) => void): void {
   const { session } = services();
   const scene = host.scene;
-  const free = session.profile.town?.daily['gacha-free'] !== todayKey();
-  const problem = townProblem(session.content, session.profile, a, now()) ?? (!free && session.profile.bankCredits < (TOWN.gacha.cost.credits ?? 0) ? `A capsule costs ${TOWN.gacha.cost.credits} credits.` : null);
+  const problem = townProblem(session.content, session.profile, a, now());
   if (problem) return done(problem);
+  townBusy.n++;
   // The capsule: tap or press it three times to wiggle it open (motion off: it opens at once).
-  const cap = scene.add.container(480, 280).setDepth(1200);
+  // Screen-fixed (the town camera scrolls), over a dim cover, so the capsule never sits in the street.
+  const cap = scene.add.container(480, 270).setDepth(2600).setScrollFactor(0);
+  const cover = scene.add.rectangle(0, 0, 960, 540, 0x000000, 0.6).setOrigin(0).setDepth(2590).setScrollFactor(0);
   const body = scene.add.circle(0, 0, 54, 0xe94f4f).setStrokeStyle(4, 0xffffff);
   const top = scene.add.rectangle(0, -26, 108, 4, 0xffffff);
-  const label = scene.add.text(0, 90, free ? 'Free capsule! Tap it 3 times' : 'Tap the capsule 3 times', textStyle(20, COLORS.gold)).setOrigin(0.5);
+  const label = scene.add.text(0, 90, 'Tap the capsule 3 times', textStyle(20, COLORS.gold)).setOrigin(0.5);
   cap.add([body, top, label]).setSize(120, 120).setInteractive({ useHandCursor: true });
   let taps = 0;
   const open = (): void => {
     cap.destroy();
+    cover.destroy();
+    townBusy.n--;
     const r = session.town(a.id, {});
     host.refresh(r.message);
     done(r.message);

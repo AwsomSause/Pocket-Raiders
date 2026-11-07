@@ -55,6 +55,17 @@ describe('Spooky Mode content', () => {
   });
 });
 
+describe('Spooky festival calendar', () => {
+  it('the Lantern Festival and Costume Judge are Spooky-only Autumn events', () => {
+    for (const id of ['spooky-lantern-festival', 'spooky-costume-judge']) {
+      const e = content.events.get(id)!;
+      expect(e.mode, id).toBe('spooky');
+      expect(e.requires.some((r) => r.kind === 'season' && r.in.includes('Autumn')), id).toBe(true);
+      expect(e.scene.cast.length, id).toBeGreaterThan(0);
+    }
+  });
+});
+
 describe('starter-tagged events', () => {
   it('only appear for a matching starter', () => {
     const run = standard('tag');

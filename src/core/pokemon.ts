@@ -2,6 +2,7 @@
 
 import { careMultiplier } from './care/mods';
 import { effectiveNature, natureMultiplier, rollNature } from './natures';
+import { evsOf, rollIvs, statIvsOf } from './ivs';
 import type { Content, GrowthRate, Species, StatBlock, StatName } from './contentSchema';
 import { STAT_NAMES } from './contentSchema';
 import { Rng, hashSeed } from './rng';
@@ -24,21 +25,25 @@ export function lookSpecies(content: Content, mon: Pick<PokemonInstance, 'specie
 }
 
 /**
- * Battle stats from base stats and level (modern formula with no IVs, EVs or
- * natures, per director decision D2), then vitamin stacks.
- *   HP    = floor(2 × Base × Level / 100) + Level + 10 + floor(Level × hpPerLevel)
- *   Other = floor(2 × Base × Level / 100) + 5
+ * Battle stats: the main-series formula with IVs, EVs and nature (W5, D2 revisited),
+ * then vitamin stacks, Wings and care.
+ *   core  = floor((2 × Base + IV + floor(EV / 4)) × Level / 100)
+ *   HP    = core + Level + 10 + floor(Level × hpPerLevel)
+ *   Other = floor((core + 5) × nature)
  */
 export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
   const species = getSpecies(content, mon.speciesId);
   const perStack = content.balance.vitaminMultiplierPerStack;
   const stats = {} as StatBlock;
+  const ivs = statIvsOf(mon);
+  const evs = evsOf(mon);
   for (const stat of STAT_NAMES) {
-    const base = species.baseStats[stat];
+    // Main-series formula: (2 × base + IV + EV/4) × level / 100.
+    const core = Math.floor(((2 * species.baseStats[stat] + ivs[stat] + Math.floor(evs[stat] / 4)) * mon.level) / 100);
     const raw =
       stat === 'hp'
-        ? Math.floor((2 * base * mon.level) / 100) + mon.level + 10 + Math.floor(mon.level * content.balance.hpPerLevel)
-        : Math.floor(((Math.floor((2 * base * mon.level) / 100) + 5) * Math.round(natureMultiplier(effectiveNature(mon), stat) * 100)) / 100);
+        ? core + mon.level + 10 + Math.floor(mon.level * content.balance.hpPerLevel)
+        : Math.floor(((core + 5) * Math.round(natureMultiplier(effectiveNature(mon), stat) * 100)) / 100);
     const stacks = mon.vitamins[stat] ?? 0;
     const boost = ((mon.statBoosts?.[stat] ?? 0) + (stat === 'hp' ? mon.perkHp ?? 0 : 0)) / 100;
     stats[stat] = Math.floor(raw * (1 + perStack * stacks + boost) * (content.balance.careEffects ? careMultiplier(mon.care, stat) : 1));
@@ -215,6 +220,7 @@ export function createPokemon(
     friendship: content.balance.friendship.base,
     abilitySlot: rollAbilitySlot(content, species, abilityKey),
     nature: rollNature(abilityKey),
+    ivs: rollIvs(abilityKey),
   };
   mon.hp = maxHp(content, mon);
   return mon;

@@ -54,6 +54,12 @@ export function storyAssetId(id: string, hasAsset: (assetId: string) => boolean 
   return t.reuse;
 }
 
+/** True once a story id has a real made file (not just a reuse sound). */
+export function storyTrackIsMade(id: string, hasAsset: (assetId: string) => boolean = () => true): boolean {
+  const t = byId.get(id);
+  return Boolean(t && t.source !== 'reuse' && hasAsset(t.asset));
+}
+
 /** When to start a cross-fade between two arrangements: the next bar line at or after `positionMs` (16-bar grid, shared tempo). */
 export function nextBarLineMs(positionMs: number, barMs: number): number {
   if (barMs <= 0) return positionMs;

@@ -18,6 +18,7 @@
     "sim:story": "node tools/story-sim.ts",
     "sim:story-nightly": "node tools/story-nightly.ts",
     "assets:import": "node tools/import-assets.ts",
+    "status:find": "node tools/status-find.ts",
     "assets:manifest": "node tools/build-asset-manifest.ts",
     "check": "npm run typecheck && npm test && npm run build && npm run report:check && npm run report:assets && npm run report:perf",
     "data:movesets": "node tools/import-movesets.ts",

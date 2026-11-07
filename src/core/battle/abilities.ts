@@ -162,10 +162,26 @@ export const FORM_PAIRS: Record<string, [string, string][]> = {
 };
 export const FORECAST_FORMS: Partial<Record<Weather, string>> = { sun: 'castform-sunny', rain: 'castform-rainy', snow: 'castform-snowy', hail: 'castform-snowy' };
 
+/**
+ * The five Delta battle forms. Each swaps between [base, alternate] on a rule that depends on the battle:
+ * Mega Delta Typhlosion is Active at half HP or less, Delta Emolga is Fired up in sun, Delta Volcarona puts on
+ * Armor while its Defense or Sp. Def is raised, Ruin Delta Metagross is a Crystal at full HP, and Delta Meloetta
+ * turns Magician on every other turn.
+ */
+export type DeltaRule = 'halfHp' | 'sun' | 'defRaised' | 'fullHp' | 'alternate';
+export const DELTA_FORMS: [string, string, DeltaRule][] = [
+  ['typhlosion-delta-mega', 'typhlosion-delta-mega-active', 'halfHp'],
+  ['emolga-delta', 'emolga-delta-fired', 'sun'],
+  ['volcarona-delta', 'volcarona-delta-armor', 'defRaised'],
+  ['metagross-delta-ruin', 'metagross-delta-ruin-crystal', 'fullHp'],
+  ['meloetta-delta', 'meloetta-delta-magician', 'alternate'],
+];
+
 /** Every form an ability can turn a Pokémon into in battle (the support report counts these as reachable). */
 export const ABILITY_FORMS = new Set<string>([
   ...Object.values(FORM_PAIRS).flatMap((pairs) => pairs.map(([, alt]) => alt)),
   ...Object.values(FORECAST_FORMS),
+  ...DELTA_FORMS.map(([, alt]) => alt),
   'aegislash-blade', 'cramorant-gulping', 'cramorant-gorging', 'greninja-ash', 'mimikyu-busted', 'eiscue-noice', 'palafin-hero',
 ]);
 

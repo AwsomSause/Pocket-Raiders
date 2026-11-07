@@ -348,6 +348,15 @@ export class GameSession {
     return run;
   }
 
+  /** A rival may steal, block or help at a stop without a fight; returns the line to show, or null. */
+  rivalInterfere(sideId: string): string | null {
+    const hit = Run.rivalInterfere(this.requireRun(), sideId);
+    if (!hit) return null;
+    this.run = hit.run;
+    this.persistRun();
+    return hit.text;
+  }
+
   /** What happened on the way to the last node chosen (an obstacle crossed or gone round, ideas W4), for the map. */
   lastCrossing: string | null = null;
   /** Set when a saved run is continued; the map takes it once to show the "welcome back" banner (ideas W4). */

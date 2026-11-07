@@ -70,6 +70,12 @@ export const PokemonInstanceSchema = z.object({
   status: StatusSchema.nullable(),
   /** Vitamin stacks per stat; each stack multiplies that stat. */
   vitamins: z.record(StatNameSchema, z.number().int().min(0)),
+  /** W5 IVs, 0–31 per stat (core/ivs.ts). Missing (old saves, profile Pokémon): the roll for its uid. */
+  ivs: z.partialRecord(StatNameSchema, z.number().int().min(0).max(31)).optional(),
+  /** W5 EVs earned from knockouts and berries (at most 252 a stat, 510 in all). Missing = none. */
+  evs: z.partialRecord(StatNameSchema, z.number().int().min(0).max(255)).optional(),
+  /** W5 Bottle Caps: stats that count their IV as 31 (Hidden Power still uses the real IV). */
+  hyperTrained: z.array(StatNameSchema).optional(),
   shiny: z.boolean(),
   /** Item id of the ball it was caught in (Overhaul P3); thrown sprites use it. Missing = Poké Ball. Optional, so no save bump. */
   caughtBall: z.string().optional(),
@@ -487,6 +493,10 @@ export const SideEffectsSchema = z.object({
   safeguard: z.number().int().min(0).default(0),
   mist: z.number().int().min(0).default(0),
   luckyChant: z.number().int().min(0).default(0),
+  /** Pledge combos (double battles): Sea of Fire burns the side, Rainbow doubles extra-effect chances, Swamp halves Speed. */
+  seaOfFire: z.number().int().min(0).default(0),
+  rainbow: z.number().int().min(0).default(0),
+  swamp: z.number().int().min(0).default(0),
   spikes: z.number().int().min(0).max(3).default(0),
   toxicSpikes: z.number().int().min(0).max(2).default(0),
   stealthRock: z.boolean().default(false),
@@ -1747,6 +1757,10 @@ export const SettingsSchema = z.object({
   typeMarkers: z.boolean().default(false),
   /** How much of the window the game fills: full, 90% or 80%. */
   uiScale: z.enum(['full', 'medium', 'small']).default('full'),
+  /** Accessibility: fine print (under 18px) is drawn in the bigger bold font. */
+  smallTextBoost: z.boolean().default(false),
+  /** Accessibility: the pinned quest line on the map gets a dark plate and white text. */
+  questContrast: z.boolean().default(false),
   /** Off keeps menu icons and idle Pokémon still. */
   spriteAnimations: z.boolean().default(true),
   /** Floating damage numbers over the Pokémon that was hit. */

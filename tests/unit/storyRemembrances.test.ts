@@ -26,10 +26,10 @@ describe('Remembrance roster', () => {
     }
   });
 
-  it('has the design rarity counts (plus 2 Familiar) and a 54-line opening quiz pool', () => {
+  it('has the design rarity counts (plus 2 Familiar) and a 53-line opening quiz pool (Wattrel is no longer a starter)', () => {
     const count = (k: string) => lines.filter((r) => r.rarity === k).length;
     expect([count('familiar'), count('unusual'), count('rare'), count('exceptional')]).toEqual([34, 20, 12, 10]);
-    expect(lines.filter((r) => r.quizEligible)).toHaveLength(54);
+    expect(lines.filter((r) => r.quizEligible)).toHaveLength(53);
   });
 
   it('the quiz gives 3 distinct lines from the real pool for many score sets', () => {

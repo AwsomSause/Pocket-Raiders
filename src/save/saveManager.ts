@@ -7,6 +7,7 @@ import { ATTRIBUTE_KEYS, type Content } from '../core/contentSchema';
 import { validateLeagueMap, validateStageMap } from '../core/map';
 import { createProfile } from '../core/profile';
 import { hashSeed } from '../core/rng';
+import { rollIvs } from '../core/ivs';
 import { createStoryState } from '../core/story/record';
 import { createPartyLife } from '../core/partyLife/schema';
 import { legacyRunFromHistory } from '../core/legacyRuns';
@@ -37,7 +38,21 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 40, settings: 40, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 41, settings: 41, meta: 1, timeline: 1 };
+
+/** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
+function withIvs(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(withIvs);
+  if (!node || typeof node !== 'object') return node;
+  const out: Json = {};
+  for (const [k, v] of Object.entries(node as Json)) out[k] = withIvs(v);
+  const isMon = typeof out.uid === 'string' && typeof out.speciesId === 'string' && typeof out.level === 'number' && typeof out.vitamins === 'object';
+  if (isMon) {
+    if (!out.ivs) out.ivs = rollIvs(out.uid as string);
+    if (!out.evs) out.evs = {};
+  }
+  return out;
+}
 
 /** Migrations upgrade a record from version N to N+1. */
 type Migration = (data: unknown) => unknown;
@@ -357,6 +372,9 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       const rng = (run.rng ?? {}) as Json;
       return { ...run, rng: { ...rng, roleCast: rng.roleCast ?? hashSeed(`${String(run.seed)}::roleCast`) }, roleCast: run.roleCast ?? [] };
     },
+    // v41 (W5 IVs and EVs): every Pokémon anywhere in the run gets its IVs written down (the roll for its uid,
+    // the same value the game used to fall back on) and starts with no EVs. Nothing else changes.
+    40: (data) => withIvs(data),
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
@@ -440,6 +458,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     38: (data) => ({ ...(data as Json), story: { ...STORY_SETTINGS_DEFAULTS } }),
     // v40 (Story Portrait text box): trainer speech types out at normal speed; battle text keeps its speed.
     39: (data) => ({ ...(data as Json), speechSpeed: 'normal' }),
+    // v41 (W11 accessibility): Bigger small print and Map quest contrast, both off.
+    40: (data) => ({ ...(data as Json), smallTextBoost: false, questContrast: false }),
   },
   meta: {},
   timeline: {},
@@ -469,7 +489,7 @@ export interface SlotPeek {
 
 export type SaveResult = { ok: true } | { ok: false; reason: string };
 
-export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', speechSpeed: 'normal', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, autoRules: [], uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, skipGuard: true, rememberChoices: true, fastZMove: false, fastDynamax: false, fastTera: false, fastMega: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high', story: { ...STORY_SETTINGS_DEFAULTS } };
+export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', speechSpeed: 'normal', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, smallTextBoost: false, questContrast: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, autoRules: [], uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, skipGuard: true, rememberChoices: true, fastZMove: false, fastDynamax: false, fastTera: false, fastMega: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high', story: { ...STORY_SETTINGS_DEFAULTS } };
 
 /** True when the browser asks for less motion (then new players start with reduced battle animations). */
 function prefersReducedMotion(): boolean {

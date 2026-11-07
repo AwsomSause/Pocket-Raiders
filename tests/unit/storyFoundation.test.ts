@@ -13,7 +13,7 @@ const profileOf = () => new SaveManager(new MemoryStorageProvider(), content).lo
 
 describe('save versions', () => {
   it('are profile 20, run 40, settings 40 and every step has a migration', () => {
-    expect(CURRENT_VERSIONS).toMatchObject({ profile: 20, run: 40, settings: 40 });
+    expect(CURRENT_VERSIONS).toMatchObject({ profile: 20, run: 41, settings: 41 });
     expect(MIGRATIONS.profile[19]).toBeTypeOf('function');
     expect(MIGRATIONS.run[39]).toBeTypeOf('function');
     expect(MIGRATIONS.settings[38]).toBeTypeOf('function');

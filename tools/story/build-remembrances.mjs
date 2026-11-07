@@ -14,6 +14,8 @@ const byLine = new Map(existing.map((r) => [r.line[0], r]));
 
 const rows = readFileSync(new URL('tools/story/remembrance-roster.tsv', root), 'utf8').split('\n').filter((l) => l && !l.startsWith('#')).map((l) => l.split('\t'));
 const BRANCHING = new Set(['tuftin', 'poliwag', 'oddish', 'ralts']);
+// Kice, 2026-11-07: Wattrel/Kilowattrel is no longer a starter (the species stays in the game).
+const DISABLED = new Set(['wattrel']);
 const BABY = new Set(['pichu', 'tuftin', 'magby', 'elekid', 'togepi']);
 const result = [];
 for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
@@ -22,7 +24,7 @@ for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
   const base = species.get(first);
   const [a, b, c] = traits.split(',');
   const affinity = { [a]: 3, [b]: 3, [c]: 2 };
-  const quiz = route === 'quiz';
+  const quiz = route === 'quiz' && !DISABLED.has(first);
   const old = byLine.get(first);
   const learn = (base.learnset ?? []).filter((m) => m.level <= 12).map((m) => m.move);
   const moves = old?.moves ?? [...new Set(learn)].slice(0, 3);
@@ -37,7 +39,7 @@ for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
     unlock: quiz ? { kind: 'quiz', arg: rarity === 'familiar' ? 'initial' : 'low_weight' } : old?.unlock ?? { kind: 'win', arg: route },
     moves,
     keystone: old?.keystone ?? `keystone_${first.replace(/-/g, '_')}`,
-    status: 'limited',
+    status: DISABLED.has(first) ? 'disabled' : 'limited',
     role,
     rarity,
     generation: base.generation,

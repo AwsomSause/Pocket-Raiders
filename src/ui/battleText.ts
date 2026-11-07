@@ -257,6 +257,8 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       return TERRAIN_START[e.terrain];
     case 'terrainEnd':
       return TERRAIN_END[e.terrain];
+    case 'seaOfFireDamage':
+      return `${who(e.side)} is hurt by the sea of fire!`;
     case 'weatherDamage':
       return `${who(e.side)} is buffeted by the ${e.weather === 'sand' ? 'sandstorm' : 'hail'}!`;
     case 'switchOut':
@@ -323,6 +325,9 @@ const SIDE_ON: Record<string, string> = {
   safeguard: 'A veil protects the team from status!',
   mist: 'A mist shrouded the team!',
   luckyChant: 'The Lucky Chant shields the team from critical hits!',
+  seaOfFire: 'A sea of fire enveloped the foe!',
+  rainbow: 'A rainbow appeared in the sky above the team!',
+  swamp: 'A swamp enveloped the foe!',
   spikes: 'Spikes were scattered around the foe!',
   toxicSpikes: 'Poison spikes were scattered around the foe!',
   stealthRock: 'Pointed stones float around the foe!',
@@ -336,6 +341,9 @@ const SIDE_OFF: Record<string, string> = {
   safeguard: "Safeguard wore off.",
   mist: "The mist faded.",
   luckyChant: "Lucky Chant wore off.",
+  seaOfFire: "The sea of fire disappeared.",
+  rainbow: "The rainbow disappeared.",
+  swamp: "The swamp disappeared.",
   toxicSpikes: "The poison spikes were absorbed.",
   hazards: "The hazards were swept away!",
 };

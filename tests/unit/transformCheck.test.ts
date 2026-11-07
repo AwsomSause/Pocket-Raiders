@@ -90,7 +90,7 @@ describe('Mega, Primal and Gigantamax data', () => {
     for (const item of content.items.values()) if (item.effect.kind === 'megaStone') for (const f of Object.values(item.effect.forms)) reachable.add(f);
     const orphans = forms.filter((s) => ['mega', 'primal'].includes(s.form!.kind) && !reachable.has(s.id)).map((s) => s.id).sort();
     // Documented limit: these Z-A forms have no Mega Stone in the game yet, so they are never reached.
-    expect(orphans).toEqual(['magearna-original-mega', 'tatsugiri-droopy-mega', 'tatsugiri-stretchy-mega']);
+    expect(orphans).toEqual([]);
     for (const id of reachable) expect(content.species.has(id), id).toBe(true);
   });
 

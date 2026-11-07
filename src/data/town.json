@@ -2851,12 +2851,12 @@
    "id": "capsule",
    "name": "Capsule Corner",
    "icon": "item.mystery_egg",
-   "blurb": "A gacha capsule machine for cosmetics. Tap and wiggle the capsule to open it.",
+   "blurb": "A capsule machine. Tap and wiggle the capsule: it holds one starting item for your next run.",
    "actions": [
     {
      "id": "capsule-pull",
      "name": "Turn the crank",
-     "desc": "One capsule costs credits (the first of each day is free). Duplicates turn into Research Points. A rare or better always drops within ten pulls.",
+     "desc": "Free. One capsule per finished run: its item waits in your pack for the next run. Rare and epic capsules also hold a keepsake (duplicates turn into Research Points). A rare or better always drops within ten pulls.",
      "kind": "gacha",
      "rows": [
       "I214"
@@ -4059,10 +4059,29 @@
   "bondAt": 5
  },
  "gacha": {
-  "cost": {
-   "credits": 15
-  },
   "pity": 10,
+  "items": {
+   "common": [
+    { "id": "oran-berry", "label": "Oran Berry" },
+    { "id": "pecha-berry", "label": "Pecha Berry" },
+    { "id": "super-potion", "label": "Super Potion" },
+    { "id": "great-ball", "label": "Great Ball" }
+   ],
+   "rare": [
+    { "id": "sitrus-berry", "label": "Sitrus Berry" },
+    { "id": "ether", "label": "Ether" },
+    { "id": "revive", "label": "Revive" },
+    { "id": "hyper-potion", "label": "Hyper Potion" },
+    { "id": "ultra-ball", "label": "Ultra Ball" }
+   ],
+   "epic": [
+    { "id": "full-restore", "label": "Full Restore" },
+    { "id": "max-revive", "label": "Max Revive" },
+    { "id": "lum-berry", "label": "Lum Berry" },
+    { "id": "max-ether", "label": "Max Ether" },
+    { "id": "pp-up", "label": "PP Up" }
+   ]
+  },
   "pools": [
    {
     "rarity": "common",

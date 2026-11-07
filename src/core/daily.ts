@@ -14,6 +14,15 @@ function dailyModifiers(): string[] {
   return RUN_RULES.modifiers.filter((m) => m.status === 'supported' && !banned.has(m.group) && !m.campaignId).map((m) => m.id);
 }
 
+/** How many past days the Daily Run can be replayed for practice. */
+export const PRACTICE_DAYS = 6;
+
+/** The date (YYYY-MM-DD, UTC) `daysAgo` days before `now`, clamped to the practice window. */
+export function dailyDate(now: Date, daysAgo = 0): string {
+  const back = Math.min(PRACTICE_DAYS, Math.max(0, Math.floor(daysAgo)));
+  return new Date(now.getTime() - back * 86_400_000).toISOString().slice(0, 10);
+}
+
 /** The day's one modifier, the same for everyone. */
 export function dailyModifierId(isoDate: string): string {
   const ids = dailyModifiers();
@@ -27,6 +36,12 @@ export const dailyStarters = (content: Content, isoDate: string): string[] => st
 export function starterSet(content: Content, seed: string): string[] {
   const ids = [...new Set([...content.starterPools.values()].filter((p) => ['classic', 'region', 'type'].includes(p.category) && !p.mastered && !p.specimens).flatMap((p) => eligibleSpecies(content, p)))].sort();
   return new Rng(hashSeed(`${seed}::starters`)).shuffle(ids).slice(0, content.balance.starterChoices);
+}
+
+/** The day's set final boss: one champion from any region's champion list, picked by the date seed alone (same for everyone, shown in Run Prep). */
+export function dailyChampionId(content: Content, seed: string): string {
+  const ids = [...new Set([...content.regions.values()].flatMap((r) => r.champions))].filter((id) => content.bosses.get(id) && !content.bosses.get(id)!.story).sort();
+  return ids[new Rng(hashSeed(`${seed}::champion`)).int(0, ids.length - 1)]!;
 }
 
 export interface DailySetup {
@@ -49,6 +64,6 @@ export function dailySetup(content: Content, isoDate: string, prep: RunPrep, rul
     starters: dailyStarters(content, isoDate),
     prep: { ...prep, poolId: base.poolId, draftRuleId: base.draftRuleId, typeFocus: null, tokenId: null, loan: false, vaultItem: null },
     rules: { ...rules, difficultyId: 'standard', modifierIds: [modifierId], deathBlock: false },
-    lines: [`Daily modifier: ${modifier.name}`, `Starters today: ${dailyStarters(content, isoDate).map((id) => content.species.get(id)?.name ?? id).join(', ')}`, 'Route: one region, four gyms, then the champion'],
+    lines: [`Daily modifier: ${modifier.name}`, `Starters today: ${dailyStarters(content, isoDate).map((id) => content.species.get(id)?.name ?? id).join(', ')}`, `Route: one region, four gyms, then ${content.bosses.get(dailyChampionId(content, dailySeed(isoDate)))?.name ?? 'the champion'}`],
   };
 }

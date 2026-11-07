@@ -80,6 +80,7 @@ import {
   INTIMIDATE_GUARD,
   KO_BOOST,
   FORM_PAIRS,
+  DELTA_FORMS,
   FORECAST_FORMS,
   MOLD_BREAKERS,
   PINCH,
@@ -105,6 +106,7 @@ import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
+import { hiddenPowerType } from '../ivs';
 
 export type Side = 'player' | 'enemy';
 
@@ -173,6 +175,8 @@ export type BattleEvent =
   | { type: 'terrain'; terrain: Terrain }
   | { type: 'terrainEnd'; terrain: Terrain }
   | { type: 'weatherDamage'; side: Side; weather: Weather; amount: number; hpAfter: number }
+  /** The Sea of Fire (a Fire + Grass Pledge combo) burned a Pokémon. */
+  | { type: 'seaOfFireDamage'; side: Side; amount: number; hpAfter: number }
   | { type: 'wake'; side: Side }
   | { type: 'thaw'; side: Side }
   | { type: 'residual'; side: Side; status: StatusId; amount: number; hpAfter: number }
@@ -344,6 +348,10 @@ export interface DoublesTurn {
   spread: boolean;
   /** Pokémon an ally's Helping Hand powers up this turn (once per Helping Hand). */
   helped: string[];
+  /** The Pledge move each side used earlier this turn (a different Pledge from its partner makes a combo). */
+  pledges?: Partial<Record<Side, string>>;
+  /** The Pledge being used is the second of a combo: 150 power instead of 80. */
+  pledgeCombo?: boolean;
   /** Runs a move on every Pokémon it hits (called by executeMove in place of runMove). */
   hit?: (user: Combatant, target: Combatant, move: Move, movedFirst: boolean, events: BattleEvent[]) => void;
 }
@@ -1818,6 +1826,7 @@ function doublesDamageMultiplier(ctx: BattleContext, user: Combatant, target: Co
   const turn = ctx.doublesTurn;
   if (!ctx.battle.doubles || !turn) return 1;
   let m = turn.spread ? 0.75 : 1;
+  if (turn.pledgeCombo) m *= 150 / 80;
   for (const uid of turn.helped) if (uid === user.mon.uid) m *= 1.5;
   const sun = weatherNow(ctx) === 'sun';
   const mine = allyAbility(ctx, user);
@@ -1917,11 +1926,14 @@ function swapForm(ctx: BattleContext, c: Combatant, to: string, events: BattleEv
   const { battle, content } = ctx;
   if (c.mon.speciesId === to || !content.species.has(to)) return;
   const rec = battle.transform.forms[c.mon.uid];
-  if (rec && rec.kind !== 'ability') return;
+  // A Mega Delta Typhlosion keeps its Mega record (it reverts to the stone's base form) while it flips to its Active look.
+  const megaFlip = rec?.kind === 'mega' && DELTA_FORMS.some(([a, b]) => (a === c.mon.speciesId && b === to) || (b === c.mon.speciesId && a === to));
+  if (rec && rec.kind !== 'ability' && !megaFlip) return;
   const ability = abilityIn(ctx, c);
   const from = c.mon.speciesId;
   const oldMax = calcStats(content, c.mon).hp;
-  if (!rec) battle.transform.forms[c.mon.uid] = { kind: 'ability', from };
+  if (megaFlip) { /* record stays */ }
+  else if (!rec) battle.transform.forms[c.mon.uid] = { kind: 'ability', from };
   else if (rec.from === to) delete battle.transform.forms[c.mon.uid];
   c.mon.speciesId = to;
   const newMax = calcStats(content, c.mon).hp;
@@ -1939,6 +1951,19 @@ function syncForms(ctx: BattleContext, c: Combatant, events: BattleEvent[], endO
       swapForm(ctx, c, hook.to, events);
       return;
     }
+  }
+  const delta = DELTA_FORMS.find(([base, alt]) => c.mon.speciesId === base || c.mon.speciesId === alt);
+  if (delta) {
+    const full = calcStats(ctx.content, c.mon).hp;
+    const rule = delta[2];
+    const alt =
+      rule === 'halfHp' ? c.mon.hp * 2 <= full
+      : rule === 'sun' ? weatherNow(ctx) === 'sun'
+      : rule === 'defRaised' ? c.stages.def > 0 || c.stages.spd > 0
+      : rule === 'fullHp' ? c.mon.hp >= full
+      : c.mon.speciesId === delta[1] ? !endOfTurn : endOfTurn;
+    swapForm(ctx, c, alt ? delta[1] : delta[0], events);
+    return;
   }
   const ability = abilityIn(ctx, c);
   if (!ability) return;
@@ -2200,6 +2225,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   if (ability && weather && WEATHER_SPEED[ability]?.includes(weather)) speed *= 2;
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
+  if (ctx.battle.sideEffects[c.side].swamp > 0) speed = Math.floor(speed / 2);
   if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0, koed: (ctx.battle.growthMarks ?? []).includes(`ko:${c.mon.uid}`) }));
   if ((ability === 'surge-surfer' || ability === 'grid-surfer') && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
@@ -3926,7 +3952,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (landed > 0 && fx.clearHazards) { clearHazards(ctx, user, fx.clearHazards, events); if (growthHas(ctx, user, 'cleaner')) healMon(ctx, user, 1 / 16, events); }
 
   // Extra effects only land if the target is still standing. Serene Grace doubles their chances; Shield Dust blocks them.
-  const chanceMult = userAbility === 'serene-grace' ? 2 : 1;
+  const chanceMult = (userAbility === 'serene-grace' ? 2 : 1) * (ctx.battle.sideEffects[user.side].rainbow > 0 ? 2 : 1);
   const shielded = foeAbility === 'shield-dust' || Held.hasHook(ctx, target.mon, target.side, 'covertCloak');
   const userTypes = getSpecies(ctx.content, user.mon.speciesId).types;
   const roll = (percent: number, statusId?: string) => rng.chance(Math.min(100, percent * chanceMult * (user.side === 'player' ? statusChancePerk(ctx.perks, userTypes, statusId) : 1) + (user.side === 'player' ? growthStatusChance(ctx.content.balance.overhaulGrowth, user.mon, statusId) : 0)) / 100);
@@ -4449,7 +4475,7 @@ function endTurnField(ctx: BattleContext, events: BattleEvent[]): void {
 }
 
 const HAZARDS = ['spikes', 'toxicSpikes', 'stealthRock', 'stickyWeb'] as const;
-const SIDE_TURNS: Partial<Record<SideMove, number>> = { reflect: 5, lightScreen: 5, auroraVeil: 5, tailwind: 4, safeguard: 5, mist: 5, luckyChant: 5 };
+const SIDE_TURNS: Partial<Record<SideMove, number>> = { reflect: 5, lightScreen: 5, auroraVeil: 5, tailwind: 4, safeguard: 5, mist: 5, luckyChant: 5, seaOfFire: 4, rainbow: 4, swamp: 4 };
 const otherSide = (side: Side): Side => (side === 'player' ? 'enemy' : 'player');
 
 /** Sets up a screen, Tailwind, Safeguard, Mist or Lucky Chant on the user's side, or an entry hazard on the foe's. Returns false if it failed. */
@@ -4520,12 +4546,8 @@ function specialMoveType(ctx: BattleContext, user: Combatant, move: Move, _weath
       case 'morpeko': return id.includes('hangry') ? 'dark' : 'electric';
     }
   }
-  if (fx.hiddenPower) {
-    const types = TYPE_NAMES.filter((t) => t !== 'normal' && t !== 'fairy');
-    let h = 0;
-    for (const ch of `hidden-power:${user.mon.uid}`) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-    return types[h % types.length]!;
-  }
+  // W5: Hidden Power's type comes from the user's real IVs (core/ivs.ts).
+  if (fx.hiddenPower) return hiddenPowerType(user.mon);
   if (fx.itemMove === 'naturalGift') {
     const berry = firstItem(Held.effectiveHeld(ctx, user.mon), (i) => i in BERRY_TYPE);
     return berry ? BERRY_TYPE[berry]! : null;
@@ -5725,6 +5747,15 @@ function applyTerrain(ctx: BattleContext, sides: Combatant[], events: BattleEven
 }
 
 /** End of turn: Pokémon of a perk's type recover a share of their max HP (Erika, Gen 3). */
+/** End of turn in a double battle: the Sea of Fire burns each Pokémon on that side that is not Fire type (1/8 HP). */
+function applySeaOfFire(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
+  if (ctx.battle.sideEffects[c.side].seaOfFire <= 0 || c.mon.hp <= 0) return;
+  if (getSpecies(ctx.content, c.mon.speciesId).types.includes('fire') || abilityIn(ctx, c) === 'magic-guard') return;
+  const { lost, lastStand } = takeHp(ctx, c, Math.max(1, Math.floor(calcStats(ctx.content, c.mon).hp / 8)));
+  events.push({ type: 'seaOfFireDamage', side: c.side, amount: lost, hpAfter: c.mon.hp });
+  if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
+}
+
 function applyTurnHeal(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const percent = turnHealPercent(ctx.perks, getSpecies(ctx.content, c.mon.speciesId).types);
   if (percent <= 0 || c.mon.hp <= 0 || enemyHealingBlockedFor(ctx, c)) return;
@@ -6041,6 +6072,7 @@ export const doublesSteps = {
   applyHazards,
   entryAbility,
   applyWeather,
+  applySeaOfFire,
   applyTurnHeal,
   applyTerrain,
   tickSides,

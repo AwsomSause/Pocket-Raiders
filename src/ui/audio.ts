@@ -10,7 +10,7 @@ import { cryDetune } from '../core/wardrobe';
 import { sfxAllowed, SFX_WINDOW_MS, type SfxPlay } from '../core/audioBudget';
 import { services } from '../game/services';
 import { loadAssets } from './lazyAssets';
-import { storyAssetId } from '../core/storyAudio';
+import { storyAssetId, storyTrackIsMade } from '../core/storyAudio';
 
 let recentSfx: SfxPlay[] = [];
 
@@ -59,6 +59,19 @@ export function playStorySfx(scene: Phaser.Scene, id: string, volumeScale = 1): 
 export function playStoryMusic(scene: Phaser.Scene, id: string, fallback?: string): void {
   const asset = storyAssetId(id, (a) => services().assets.has(a));
   if (asset) playMusicLazy(scene, asset, fallback);
+}
+
+/** The song for a story id once a real file for it exists, else the plain catalog song `plain` (so shipped sound never changes until real music is dropped in). */
+export function storyOr(storyId: string | null, plain: string): string {
+  const has = (a: string) => services().assets.has(a);
+  return storyId && storyTrackIsMade(storyId, has) ? (storyAssetId(storyId, has) ?? plain) : plain;
+}
+
+/** A story cue (stinger or sound effect): the made story sound once its file exists, else the sound the game already plays here (so nothing changes until real audio is dropped in). */
+export function playCue(scene: Phaser.Scene, storyId: string, plain: string | null, volumeScale = 1): void {
+  const has = (a: string) => services().assets.has(a);
+  if (storyTrackIsMade(storyId, has)) playStorySfx(scene, storyId, volumeScale);
+  else if (plain) playSfxLazy(scene, plain, volumeScale);
 }
 
 let currentMusic: { id: string; sound: Phaser.Sound.BaseSound } | null = null;

@@ -52,13 +52,13 @@ import { commentaryLine } from '../core/tools/commentary';
 import { maxHp } from '../core/pokemon';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
-import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, playStoryMusic } from '../ui/audio';
+import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr, playCue, playStoryMusic } from '../ui/audio';
 import { storyRegionTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
 import { notify } from '../ui/overlays';
-import { mapTrack } from '../core/presentation/battleMusic';
+import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
 import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
 import { openPokemonMenu } from '../ui/pokemonMenu';
@@ -66,6 +66,7 @@ import { openCampMenu } from '../ui/campMenu';
 import { openBagMenu, openBoxMenu, openRivalNotebook, openSaveMenu, openStoryMenu, type FieldMenuHost } from '../ui/fieldMenus';
 import { hasRelationships, openRelationshipsMenu } from '../ui/relationshipsMenu';
 import { hasJournal, openJournalMenu } from '../ui/journalMenu';
+import { openRunContentsMenu } from '../ui/runContentsMenu';
 import { onInputAction } from '../ui/input';
 import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
 import { regionFormPrompt } from '../core/regionForms';
@@ -149,6 +150,7 @@ type Option =
   | { kind: 'story' }
   | { kind: 'relationships' }
   | { kind: 'journal' }
+  | { kind: 'contents' }
   | { kind: 'notebook' }
   | { kind: 'bond' }
   | { kind: 'scrapbook' }
@@ -294,10 +296,11 @@ export class MapScene extends Phaser.Scene {
     this.index = 0;
     this.picker = null;
     this.busy = false;
-    // Story Runs play the story region's own song (Part AD), other runs the hashed map song.
+    if (league) playCue(this, 'st_league_gate', null);
+    // Story Runs play the story region's own song (Part AD), other runs the made story song or the hashed map song.
     const storySong = isStoryCampaign(content, run.campaignId) ? storyRegionTrack(region.id) : null;
     if (storySong) playStoryMusic(this, storySong, mapTrack(region.id));
-    else playMusicLazy(this, mapTrack(region.id));
+    else playMusicLazy(this, storyOr(storyRegionMusic(region.id, 'route'), mapTrack(region.id)));
 
     // ---------- backdrop: the stage's own arena, dimmed ----------
     const arena = league ? undefined : arenaFor(content, theme);
@@ -458,6 +461,12 @@ export class MapScene extends Phaser.Scene {
     }
     if (pinned) {
       const pinText = this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0).setName('pinned-quest');
+      if (services().session.settings.questContrast) {
+        pinText.setColor('#ffffff');
+        const plate = this.add.rectangle(pinText.x + 8, pinText.y - 4, pinText.width + 16, pinText.height + 8, 0x000000, 0.85).setOrigin(1, 0);
+        plate.setDepth(pinText.depth).setName('pinned-quest-plate');
+        this.children.moveTo(plate, this.children.getIndex(pinText));
+      }
       // Reroll Points: tap the Run Quest line to swap it for ₽100 (+₽100 each time).
       if (pinned.kind === 'runQuest') {
         pinText.setInteractive({ useHandCursor: true }).on('pointerup', () => {
@@ -727,7 +736,7 @@ export class MapScene extends Phaser.Scene {
       buttons.push({ option: { kind: 'side', side }, label: side.kind === 'expedition' && legendOf(side.expeditionId) ? 'Legendary' : SIDE_LABEL[side.kind], color: side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE.color : side.kind === 'event' && !stopIsHidden(content, run, currentNode!, side) ? stopStyle(content.events.get(side.eventId ?? '')?.stop).color : SIDE_STYLE[side.kind].color });
     }
     if (boxCapacity(runPerks(content, services().session.run!)) > 0) buttons.push({ option: { kind: 'box' }, label: 'PC', color: COLORS.panel });
-    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(services().session.run!.story.rivals.length > 0 ? [{ option: { kind: 'notebook' as const }, label: 'Rivals', color: COLORS.panel }] : []), ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), ...(hasJournal() ? [{ option: { kind: 'journal' as const }, label: 'Notes', color: COLORS.panel }] : []), { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
+    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(services().session.run!.story.rivals.length > 0 ? [{ option: { kind: 'notebook' as const }, label: 'Rivals', color: COLORS.panel }] : []), ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), ...(hasJournal() ? [{ option: { kind: 'journal' as const }, label: 'Notes', color: COLORS.panel }] : []), { option: { kind: 'contents' }, label: 'Run', color: COLORS.panel }, { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
     if (wipeStatus(services().session.run!)) buttons.push({ option: { kind: 'endRun' }, label: 'End run', color: 0x6a2a38 });
     // Buttons share the width right of the party: one tall row when they fit, else two short rows.
     const areaX = 40 + slots * step + 4;
@@ -1013,6 +1022,8 @@ export class MapScene extends Phaser.Scene {
         return 'Rival Notebook: what each rival has learned about you this run.';
       case 'story':
         return `Read the story of your run so far, with the feelings each moment left. People call you ${protagonistTitle(services().session.run!).name}.`;
+      case 'contents':
+        return "What's in this run: your rules, picks, the time and tide, the stage bounty and any events.";
       case 'journal':
         return 'Field Notebook: your route so far, the story arcs you are in and the scenes you have seen.';
       case 'relationships':
@@ -1097,6 +1108,12 @@ export class MapScene extends Phaser.Scene {
           this.time.delayedCall(260, () => this.scene.start(sceneForRun(cut)));
           break;
         }
+        const meddled = session.rivalInterfere(option.side.id);
+        if (meddled) {
+          this.busy = true;
+          this.scene.restart({ notice: meddled, focus: this.index });
+          break;
+        }
         if (option.side.kind === 'fish') {
           this.openFishing(option.side.id);
           break;
@@ -1166,6 +1183,9 @@ export class MapScene extends Phaser.Scene {
         break;
       case 'journal':
         openJournalMenu(this.fieldHost());
+        break;
+      case 'contents':
+        openRunContentsMenu(this.fieldHost());
         break;
       case 'notebook':
         openRivalNotebook(this.fieldHost());

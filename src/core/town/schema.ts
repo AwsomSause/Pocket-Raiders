@@ -122,7 +122,7 @@ export const TownDataSchema = z.object({
   dailyQuests: z.array(z.object({ id: z.string(), text: z.string(), action: z.string(), reward: RewardSchema, season: z.string().optional() })),
   badgePerks: z.record(z.string(), RewardSchema),
   pets: z.object({ chatter: z.array(z.string()), bondAt: Count }),
-  gacha: z.object({ cost: Cost, pity: Count, pools: z.array(z.object({ rarity: z.enum(['common', 'rare', 'epic']), weight: Count, goods: z.array(z.object({ set: z.string(), id: z.string(), label: z.string() })) })), dupe: RewardSchema }),
+  gacha: z.object({ pity: Count, items: z.object({ common: z.array(z.object({ id: z.string(), label: z.string() })).min(1), rare: z.array(z.object({ id: z.string(), label: z.string() })).min(1), epic: z.array(z.object({ id: z.string(), label: z.string() })).min(1) }), pools: z.array(z.object({ rarity: z.enum(['common', 'rare', 'epic']), weight: Count, goods: z.array(z.object({ set: z.string(), id: z.string(), label: z.string() })) })), dupe: RewardSchema }),
   tracks: z.array(z.object({ id: z.string(), name: z.string(), unlock: z.string() })),
   floors: z.array(z.object({ id: z.string(), name: z.string(), scene: z.string(), building: z.string().nullable() })),
   jokes: z.array(z.string()),

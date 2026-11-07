@@ -1,0 +1,1 @@
+- Quest Log (W15, `core/questLog.ts`, Hub room "Quest Log"): one list of all trainer quest lines (steps done, next goal) and the 12 Mythical chains (done when the Mythical is caught). Read-only, no saved state. Tests `tests/unit/questLog.test.ts`. Limited: Mythical chains show seen/caught only, not which map-event stage you reached.
