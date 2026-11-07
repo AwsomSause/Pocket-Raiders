@@ -5,6 +5,7 @@ import { createPokemon } from '../../src/core/pokemon';
 import { openHistory } from '../../src/core/story/record';
 import { berryFlavor, careAction, favoriteFlavor, hatedFlavor } from '../../src/core/care';
 import { chooseStarter, createRun } from '../../src/core/run';
+import { makeRules, STANDARD_CHOICE } from '../../src/core/rules';
 import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, recoveryScenes, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
 import { StoryV2Schema } from '../../src/core/story2/schema';
 import { TEMPERAMENTS, TEMPERAMENT_NAMES, temperamentOf } from '../../src/core/story2/temperament';
@@ -301,6 +302,16 @@ describe('autonomy and override', () => {
     expect(run.story.v2!.heartbondOverrides).toBe(1);
     // The cap: only two pays a battle.
     for (const t of [2, 3]) expect(payHeartbond(run, lead.uid, `b${run.encountersCompleted}`, t, ['override_cost']).paid.length).toBe(t === 2 ? 1 : 0);
+  });
+  it('a Hardcore challenge keeps the offer but an override costs nothing', () => {
+    const { run, lead } = refuser();
+    run.rules = makeRules({ ...STANDARD_CHOICE, modeId: 'hardcore-nuzlocke' });
+    expect(wouldRefuse(content, run, lead, 'explosion')).toBe(true);
+    const before = { ...bondOf(run, lead.uid) };
+    expect(shapeAction(content, run, { kind: 'move', index: 0, override: true }).action).toMatchObject({ kind: 'move' });
+    expect(bondOf(run, lead.uid).trust).toBe(before.trust);
+    expect(bondOf(run, lead.uid).respect).toBe(before.respect);
+    expect(run.story.v2!.heartbondOverrides).toBe(1);
   });
   it('Classic runs still refuse as before, and ignore the override flag', () => {
     const { run } = refuser();
