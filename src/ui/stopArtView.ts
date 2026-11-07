@@ -6,14 +6,14 @@ import type { StopArt } from './stopArt';
 import { itemVisual, pokemonIcon, trainerVisual } from './sprites';
 import { loadAssets } from './lazyAssets';
 
-const BOX = 42;
+const BOX = 18;
 
 /** Adds the art centred on (x, y), fitted to the badge. Returns the object, or null if it cannot be drawn yet. */
 export function addStopArt(scene: Phaser.Scene, content: Content, art: StopArt, x: number, y: number, alpha: number): Phaser.GameObjects.GameObject | null {
   let obj: Phaser.GameObjects.GameObject | null = null;
   if (art.kind === 'pokemon') {
     const species = content.species.get(art.species);
-    obj = species ? pokemonIcon(scene, species, x, y, 1.25) : null;
+    obj = species ? pokemonIcon(scene, species, x, y, 0.6) : null;
   } else if (art.kind === 'item') {
     obj = itemVisual(scene, art.assetId, x, y, 1);
     const img = obj as Phaser.GameObjects.Image;
