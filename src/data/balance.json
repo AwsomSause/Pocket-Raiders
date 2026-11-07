@@ -154,7 +154,7 @@
   "maxLevel": 500,
   "partyStrength": { "enabled": true, "grace": 3, "factor": 0.5, "maxBonus": 4 },
   "trainerBonus": 1,
-  "gymBonus": 0,
+  "gymBonus": -1,
   "aceBonus": 1,
   "eliteFourBonus": 1,
   "championBonus": 2,

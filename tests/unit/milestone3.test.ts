@@ -183,14 +183,14 @@ describe('difficulty', () => {
     }
   });
 
-  it('the gym leader of stage 1 has an ace around level 7 (the early curve is flat)', () => {
+  it('the gym leader of stage 1 has an ace around level 6 (the early curve is flat and gym leaders are 1 level lower)', () => {
     const theme = content.themes.get('water-normal') ?? content.themes.get('normal-water')!;
     const leader = pickGymLeader(content, theme, [], new Rng(hashSeed('ace')));
     for (let i = 0; i < 20; i++) {
       const plan = planGymLeader(content, RED, leader.id, 0, scaleAt(0, 20), new Rng(hashSeed(`ace-${i}`)));
       const top = Math.max(...plan.members.map((m) => m.level));
-      expect(top).toBeGreaterThanOrEqual(6);
-      expect(top).toBeLessThanOrEqual(10);
+      expect(top).toBeGreaterThanOrEqual(5);
+      expect(top).toBeLessThanOrEqual(9);
       expect(plan.leaderId).toBe(leader.id);
     }
   });

@@ -2261,7 +2261,7 @@ export const BalanceSchema = z.object({
     /** Above level 100 each level costs this × (the cost of level 100) × level / 100 EXP (pokemon.ts xpForLevel). */
     highLevelXp: z.number().positive().default(0.4),
     trainerBonus: z.number().int().min(0),
-    gymBonus: z.number().int().min(0),
+    gymBonus: z.number().int(),
     /** Extra levels on the gym leader's last Pokémon. */
     aceBonus: z.number().int().min(0),
     eliteFourBonus: z.number().int().min(0),
