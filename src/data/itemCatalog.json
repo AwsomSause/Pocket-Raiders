@@ -27510,5 +27510,1696 @@
    "stages": 2,
    "shiny": 4
   }
+ },
+ {
+  "id": "adventure-guide",
+  "name": "Adventure Guide",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Twice: the next \"?\" stop shows its outcome before you choose",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/adventureguide",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 2
+   },
+   "perks": [
+    {
+     "perk": "eventInsight"
+    }
+   ]
+  }
+ },
+ {
+  "id": "research-notes",
+  "name": "Research Notes",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Once: the next \"?\" stop shows its outcome before you choose",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/researchnotes",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 1
+   },
+   "perks": [
+    {
+     "perk": "eventInsight"
+    }
+   ]
+  }
+ },
+ {
+  "id": "design-notes",
+  "name": "Design Notes",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The map shows the gym leader's ace",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/designnotes",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "gymAce"
+    }
+   ]
+  }
+ },
+ {
+  "id": "garufa-book",
+  "name": "Garufa's Book",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The map shows the gym leader's whole team",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/garufabook",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "gymTeam"
+    }
+   ]
+  }
+ },
+ {
+  "id": "ancient-book",
+  "name": "Ancient Book",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "TM choices show one more move",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/ancientbook",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "tmChoices",
+     "extra": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "briars-book",
+  "name": "Briar's Book",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Once per stage, your lead picks a TM move of its own types",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/briarsbook",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "tmDeck"
+    }
+   ]
+  }
+ },
+ {
+  "id": "scarlet-book",
+  "name": "Scarlet Book",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon a Ground move: pick 1 of 3",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/scarletbook",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "ground",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "violet-book",
+  "name": "Violet Book",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon a Psychic move: pick 1 of 3",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/violetbook",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "psychic",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "ancient-teach",
+  "name": "Ancient Teachings",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon a Rock move: pick 1 of 3",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/ancientteach",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "rock",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "h-disk",
+  "name": "H Disk",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon any Normal move",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/hdisk",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "normal",
+   "mode": "hm"
+  }
+ },
+ {
+  "id": "indigo-disk",
+  "name": "Indigo Disk",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon a Fighting move: pick 1 of 3",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/indigodisk",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "fighting",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "shattered-disk",
+  "name": "Shattered Disk",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon a Dark move: pick 1 of 3",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/shattereddisk",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "dark",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "tm-702",
+  "name": "TM 702",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Teach a Pokémon a Steel move: pick 1 of 3",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/tm702",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "type": "steel",
+   "mode": "tm"
+  }
+ },
+ {
+  "id": "tm-material",
+  "name": "TM Material",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽300",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/tmmaterial",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {}
+  }
+ },
+ {
+  "id": "deagans-letter",
+  "name": "Deagan's Letter",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Next stage: the best item you skipped in the last draft comes back in the next one",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/deaganslett",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "favored"
+    }
+   ]
+  }
+ },
+ {
+  "id": "profs-letter",
+  "name": "Prof.'s Letter",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The next trainer you beat gives a reward draft with a gym leader’s odds",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/profsletter",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "betterDraft"
+    }
+   ]
+  }
+ },
+ {
+  "id": "professors-mask",
+  "name": "Professor's Mask",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Next stage: the first reward draft shows 6 choices instead of 5",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/professorsmask",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "dowsing"
+    }
+   ]
+  }
+ },
+ {
+  "id": "package",
+  "name": "Package",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Next stage: shops sell one item early",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/package",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "earlyStock",
+     "count": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "spu-parcel",
+  "name": "SPU Parcel",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Deliver it: ₽400 and +1 Love",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/spuparcel",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 400,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "weird-diary",
+  "name": "Weird Diary",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+1 Intelligence, +1 Evil",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/weirddiary",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 1,
+    "goodEvil": -1
+   }
+  }
+ },
+ {
+  "id": "concert-ticket",
+  "name": "Concert Ticket",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Detours on the map show an extra item",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/concerttck",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "eventBonus"
+    }
+   ]
+  }
+ },
+ {
+  "id": "contest-costume-f",
+  "name": "Contest Costume (F)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Contest stops give double Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/contestcostumef",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "doubleContest"
+    }
+   ]
+  }
+ },
+ {
+  "id": "portable-wardrobe",
+  "name": "Portable Wardrobe",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+1 Charisma per stage cleared",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/portablewardrobe",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "stageCharisma",
+   "percent": 1
+  }
+ },
+ {
+  "id": "audition-tape",
+  "name": "Audition Tape",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+4 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/auditiontape",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 4
+   }
+  }
+ },
+ {
+  "id": "band-autograph",
+  "name": "Band Autograph",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽300, +2 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/bandautograph",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {
+    "charisma": 2
+   }
+  }
+ },
+ {
+  "id": "makeup-bag",
+  "name": "Makeup Bag",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+3 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/makeupbag",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 3
+   }
+  }
+ },
+ {
+  "id": "family-portrait",
+  "name": "Family Portrait",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+5 Love",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/familyportrait",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 5
+   }
+  }
+ },
+ {
+  "id": "link-heart",
+  "name": "Link Heart",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+3 Love and your lead’s friendship +10",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/linkheart",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 3
+   },
+   "leadFriendship": 10
+  }
+ },
+ {
+  "id": "heart",
+  "name": "Heart",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Heals 30 HP, friendship +5",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/heart",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 30,
+   "friendship": 5
+  }
+ },
+ {
+  "id": "medal-box",
+  "name": "Medal Box",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Each trainer you beat adds a point; at 8 points, a Bag item from the shop’s dearest third",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/medalbox",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "trainerPoints",
+     "every": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "data-chip",
+  "name": "Data Chip",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+2 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/datachip",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 2
+   }
+  }
+ },
+ {
+  "id": "hq-data-chip",
+  "name": "HQ Data Chip",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "+4 Intelligence, +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hqdatachip",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 4,
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "gather-cube",
+  "name": "Gather Cube",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Berries are saved 15% of the time when eaten",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/gathercube",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berrySave",
+   "percent": 15
+  }
+ },
+ {
+  "id": "exp-all-off",
+  "name": "Exp. All (Off)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Party members that didn’t battle get 25% of the EXP",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/expalloff",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "expShare",
+   "percent": 25
+  }
+ },
+ {
+  "id": "exp-precision",
+  "name": "Exp. Precision",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "New team members get +20% EXP until they reach your lead’s level",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/expprecision",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "catchUpExp",
+   "percent": 20
+  }
+ },
+ {
+  "id": "teachy-tv-2",
+  "name": "Teachy TV (Spare)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "New team members get +15% EXP until they reach your lead’s level",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/teachytvdupe",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "catchUpExp",
+   "percent": 15
+  }
+ },
+ {
+  "id": "devon-parts",
+  "name": "Devon Parts",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽500, +1 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/devonparts",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 500,
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "armorite-ore",
+  "name": "Armorite Ore",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽650",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/armoriteore",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 650,
+   "changes": {}
+  }
+ },
+ {
+  "id": "rift-fragment",
+  "name": "Rift Fragment",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽1000, +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/riftfragment",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1000,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "ship-part",
+  "name": "Ship Part",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "From the map, one trip: fly two columns ahead to any stop",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/shippart",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 1
+   },
+   "perks": [
+    {
+     "perk": "airship"
+    }
+   ]
+  }
+ },
+ {
+  "id": "teleport-pad",
+  "name": "Teleport Pad",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Two uses: skip the stop in front of you (like an Escape Rope)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/tp",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 2
+   },
+   "perks": [
+    {
+     "perk": "escapeRope"
+    }
+   ]
+  }
+ },
+ {
+  "id": "back-arrow",
+  "name": "Back Arrow",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "On the reward screen: swap one draft choice for a new one",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/itemback",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "manual",
+    "count": 1
+   },
+   "perks": [
+    {
+     "perk": "rerollOne"
+    }
+   ]
+  }
+ },
+ {
+  "id": "mystery-mark",
+  "name": "Mystery Mark",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Next stage: every \"?\" stop shows what it is",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/item000",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "revealEvents"
+    }
+   ]
+  }
+ },
+ {
+  "id": "unknown-item",
+  "name": "Unknown Item",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Hatches after 3 stages into a random first-stage Pokémon (shiny chance x2)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/unknown",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 3,
+   "shiny": 2
+  }
+ },
+ {
+  "id": "mb-ball",
+  "name": "Mystery Ball (M)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "A Master Ball goes into your Bag",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "library/mb",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "master-ball",
+   "count": 1
+  }
+ },
+ {
+  "id": "rb-ball",
+  "name": "Mystery Ball (R)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Three Ultra Balls go into your Bag",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/rb",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "ultra-ball",
+   "count": 3
+  }
+ },
+ {
+  "id": "poliflute",
+  "name": "Poliflute",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Once per battle, wakes your whole team",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "held",
+  "icon": "library/poliflute",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "wakeAll"
+    }
+   ]
+  }
+ },
+ {
+  "id": "avaros-flute",
+  "name": "Avaro's Flute",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Wakes every sleeper on your team and heals the team 10%",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/avarosflute",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.1,
+   "cureSleep": true
+  }
+ },
+ {
+  "id": "time-flute",
+  "name": "Time Flute",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The next 3 wild battles: you get a free turn",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/timeflute",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "moon-dial",
+  "name": "Moon Dial",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The next stage: wild Pokémon are often Dark or Ghost",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/moondial",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "stage"
+   },
+   "mods": [
+    {
+     "mod": "types",
+     "types": [
+      "dark",
+      "ghost"
+     ],
+     "percent": 50
+    }
+   ]
+  }
+ },
+ {
+  "id": "phase-dial",
+  "name": "Phase Dial",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The next stage: a sandstorm blows in every wild battle",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/phasedial",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "stage"
+   },
+   "mods": [
+    {
+     "mod": "weather",
+     "weather": "sand"
+    }
+   ]
+  }
+ },
+ {
+  "id": "mini-black-hole",
+  "name": "Mini Black Hole",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The next 3 wild battles: wild Pokémon are slower",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/mini-black-hole",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "foeSpeed",
+     "stages": -1
+    }
+   ]
+  }
+ },
+ {
+  "id": "boss-mini-black-hole",
+  "name": "Boss Mini Black Hole",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The next 5 wild battles: wild Pokémon are much slower and 1 level lower",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/boss-mini-black-hole",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "foeSpeed",
+     "stages": -2
+    },
+    {
+     "mod": "level",
+     "amount": -1
+    }
+   ]
+  }
+ },
+ {
+  "id": "blue-mic",
+  "name": "Blue Mic",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sound moves of the holder hit harder: its first move each battle does more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/bluemic",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "throatSpray"
+    }
+   ]
+  }
+ },
+ {
+  "id": "anju-pendant",
+  "name": "Anju's Pendant",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Fairy moves of the holder do 15% more, and it grows fond of you 50% faster",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/anjupendant",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fairy"
+     ],
+     "percent": 15
+    },
+    {
+     "hook": "friendship",
+     "percent": 50
+    }
+   ]
+  }
+ },
+ {
+  "id": "leek",
+  "name": "Leek",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Farfetch'd and Sirfetch'd: +2 critical-hit stages",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/leek",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "crit",
+     "stages": 2,
+     "species": [
+      "farfetchd",
+      "sirfetchd"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "cane",
+  "name": "Cane",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The holder's Speed goes up 10%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/scane",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spe",
+     "multiplier": 1.1
+    }
+   ]
+  }
+ },
+ {
+  "id": "mystery-spine",
+  "name": "Mystery Spine",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Physical attackers lose 1/8 of their max HP",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/mysteryspine",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "contactDamage",
+     "fraction": 0.125
+    }
+   ]
+  }
+ },
+ {
+  "id": "xen-waste",
+  "name": "Xen Waste",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Contact attackers are poisoned 30% of the time",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/xenwaste",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "contactStatus",
+     "status": "psn",
+     "percent": 30
+    }
+   ]
+  }
+ },
+ {
+  "id": "break-gear-a",
+  "name": "Break Gear A",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The holder's Attack goes up 6%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/brka",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.06
+    }
+   ]
+  }
+ },
+ {
+  "id": "break-gear-ar",
+  "name": "Break Gear AR",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The holder's Sp. Atk goes up 6%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/brkar",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.06
+    }
+   ]
+  }
+ },
+ {
+  "id": "reins-of-unity",
+  "name": "Reins of Unity",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Calyrex: every stat +10%",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/reinsofunity",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.1,
+     "species": [
+      "calyrex",
+      "calyrex-ice",
+      "calyrex-shadow"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "icy-reins-of-unity",
+  "name": "Icy Reins of Unity",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Calyrex: Ice Rider while held, Ice and Psychic moves +20%",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/icy-reins-of-unity",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "calyrex",
+     "to": "calyrex-ice"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "ice",
+      "psychic"
+     ],
+     "percent": 20,
+     "species": [
+      "calyrex",
+      "calyrex-ice",
+      "calyrex-shadow"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "shadow-reins-of-unity",
+  "name": "Shadow Reins of Unity",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Calyrex: Shadow Rider while held, Ghost and Psychic moves +20%",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/shadow-reins-of-unity",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "formHeld",
+     "from": "calyrex",
+     "to": "calyrex-shadow"
+    },
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost",
+      "psychic"
+     ],
+     "percent": 20,
+     "species": [
+      "calyrex",
+      "calyrex-ice",
+      "calyrex-shadow"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "enigma-fossil",
+  "name": "Enigma Fossil",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Unown joins your party",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/enigmafossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "unown"
+  }
+ },
+ {
+  "id": "shiny-fossil",
+  "name": "Shiny Fossil",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Carbink joins your party",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/shinyfossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "carbink"
+  }
+ },
+ {
+  "id": "venom-fossil",
+  "name": "Venom Fossil",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Skorupi joins your party",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/venomfossil",
+  "status": "supported",
+  "effect": {
+   "kind": "fossil",
+   "species": "skorupi"
+  }
+ },
+ {
+  "id": "meteorite-1",
+  "name": "Meteorite I",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽400",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/meteorite-1",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 400,
+   "changes": {}
+  }
+ },
+ {
+  "id": "meteorite-2",
+  "name": "Meteorite II",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽700",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/meteorite-2",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 700,
+   "changes": {}
+  }
+ },
+ {
+  "id": "meteorite-3",
+  "name": "Meteorite III",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽1100",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/meteorite-3",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1100,
+   "changes": {}
+  }
+ },
+ {
+  "id": "meteorite-4",
+  "name": "Meteorite IV",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽1600, +1 Luck",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/meteorite-4",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1600,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "myst-black-box",
+  "name": "Mystery Black Box",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell for ₽800, +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/mystblackbox",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 800,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "myst-black-box-2",
+  "name": "Mystery Black Box II",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x4)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/mystblackbox2",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 4
+  }
+ },
+ {
+  "id": "holocaster-green",
+  "name": "Holo Caster (Green)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The map shows the wild Pokémon waiting at the next stops",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/holocastergreen",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "wild"
+    }
+   ]
+  }
+ },
+ {
+  "id": "holocaster-red",
+  "name": "Holo Caster (Red)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "The map shows the gym leaders of this region’s next stages and their types",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/holocasterred",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "nextLeaders"
+    }
+   ]
+  }
+ },
+ {
+  "id": "berry-pot-2",
+  "name": "Berry Pot",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "After each gym, get a random berry",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/berry-pot",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryPots",
+   "percent": 1
+  }
+ },
+ {
+  "id": "charm-case",
+  "name": "Charm Case",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Prize money +10% per copy",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "library/charmcase",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "money",
+   "percent": 10
+  }
+ },
+ {
+  "id": "gift-box-gem",
+  "name": "Gift Box (Gem)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Sell the gem inside for ₽800, +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/giftboxgem",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 800,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "gram",
+  "name": "Gram",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Next stage: every trainer pays +35%",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/gram",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "nextStage"
+   },
+   "perks": [
+    {
+     "perk": "trainerMoney",
+     "percent": 35
+    }
+   ]
+  }
+ },
+ {
+  "id": "inverse",
+  "name": "Inverse",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Flips a Pokémon's Tera Type to its second type (its first type if it has one)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/inverse",
+  "status": "supported",
+  "effect": {
+   "kind": "teraType",
+   "mode": "secondary"
+  }
+ },
+ {
+  "id": "oval-charm-gold",
+  "name": "Oval Charm (Gold)",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Eggs hatch faster: every Egg gets one extra step toward hatching each time",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/ovalcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "ovalCharm"
+    }
+   ]
+  }
+ },
+ {
+  "id": "seed-of-mastery",
+  "name": "Seed of Mastery",
+  "family": "Curios and story props (Drive pack 3)",
+  "description": "Hyper trains a Pokémon's lowest IV (it counts as 31)",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "use",
+  "icon": "library/seedofmastery",
+  "status": "supported",
+  "effect": {
+   "kind": "hyperTrain",
+   "mode": "lowest"
+  }
  }
 ]
