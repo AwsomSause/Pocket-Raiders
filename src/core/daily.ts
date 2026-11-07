@@ -14,6 +14,15 @@ function dailyModifiers(): string[] {
   return RUN_RULES.modifiers.filter((m) => m.status === 'supported' && !banned.has(m.group) && !m.campaignId).map((m) => m.id);
 }
 
+/** How many past days the Daily Run can be replayed for practice. */
+export const PRACTICE_DAYS = 6;
+
+/** The date (YYYY-MM-DD, UTC) `daysAgo` days before `now`, clamped to the practice window. */
+export function dailyDate(now: Date, daysAgo = 0): string {
+  const back = Math.min(PRACTICE_DAYS, Math.max(0, Math.floor(daysAgo)));
+  return new Date(now.getTime() - back * 86_400_000).toISOString().slice(0, 10);
+}
+
 /** The day's one modifier, the same for everyone. */
 export function dailyModifierId(isoDate: string): string {
   const ids = dailyModifiers();
