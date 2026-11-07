@@ -2172,6 +2172,8 @@ export const BalanceSchema = z.object({
     betterPerRegion: z.number().min(0),
   }),
   vitaminMultiplierPerStack: z.number().positive(),
+  /** Extra max HP per level for every Pokémon (both sides): with no IVs or EVs a high-level Pokémon would otherwise die to one or two hits. */
+  hpPerLevel: z.number().min(0).default(0),
   vitaminMaxStacks: z.number().int().positive(),
   /** Abilities (M8.75 part C3): the chance a new Pokémon has its hidden ability instead of a normal one. */
   abilities: z.object({ hiddenChance: z.number().min(0).max(1) }),

@@ -36,6 +36,7 @@
   "betterPerRegion": 0.5
  },
  "vitaminMultiplierPerStack": 0.1,
+ "hpPerLevel": 1,
  "vitaminMaxStacks": 3,
  "abilities": {
   "hiddenChance": 0.05
@@ -140,7 +141,7 @@
  },
  "difficulty": {
   "baseLevel": 4,
-  "curve": 1,
+  "curve": 1.35,
   "capMargin": 5,
   "levelCapStep": 50,
     "levelCapStart": 100,
