@@ -7,7 +7,7 @@ import { directiveText } from '../core/directive';
 import { licenseName } from '../core/license';
 import { getArchetype } from '../core/archetypes';
 import { attributesLine, effectiveAttributes } from '../core/attributes';
-import { getCampaign, levelCap } from '../core/regions';
+import { getCampaign, runLevelCap } from '../core/regions';
 import { eventIdOf } from '../core/gameEvents';
 import { questTrainer, runQuestOf, stepsDone } from '../core/quests';
 import { itemsText } from '../core/runPrep';
@@ -59,7 +59,7 @@ export class BriefingScene extends Phaser.Scene {
     line('Region order', regions.join(' → '));
     if (run.stage) {
       const theme = getTheme(content, run.stage.themeId);
-      line('First stage', `${theme.name} (${theme.types.map(capitalise).join(' / ')}), level cap ${levelCap(content, 0)}`);
+      line('First stage', `${theme.name} (${theme.types.map(capitalise).join(' / ')}), level cap ${runLevelCap(content, run)}`);
     }
     line('Starting with', `₽${run.money}; ${itemsText(content, run.inventory) || 'an empty Bag'}`);
     line('Rules', `${pool?.name ?? run.prep.poolId} pool, ${rule?.name ?? run.prep.draftRuleId}${run.prep.typeFocus ? ` (${capitalise(run.prep.typeFocus)})` : ''}; preparation: ${token?.name ?? 'none'}`);

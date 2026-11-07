@@ -480,7 +480,9 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
   return {
     problem,
     hint: [opts.hint ?? abilityHint(content, mon), extra].filter(Boolean).join('  ') || undefined,
-    draw: (scene, box, w) => {
+    draw: (scene, box, w, h) => {
+      // The lower line sits 18px above the row's bottom, so short rows (battle: 70) keep it inside.
+      const low = Math.min(58, h - 18);
       const species = lookSpecies(content, mon);
       const max = calcStats(content, mon).hp;
       iconTile(scene, box, mon.hp <= 0);
@@ -496,41 +498,41 @@ export function partyRow(content: Content, mon: PokemonInstance, problem: string
         box.add(scene.add.text(x + 12, 12, emotion.name, textStyle(14, emotion.color)));
       }
       box.add(scene.add.text(w - 12, 8, `Lv${mon.level}`, textStyle(22)).setOrigin(1, 0));
-      const bar = new Bar(scene, 72, 46, w - 200, 12, 'hp');
+      const bar = new Bar(scene, 72, low - 12, w - 200, 12, 'hp');
       bar.addTo(box);
       void bar.set(mon.hp / max, false);
-      box.add(scene.add.text(w - 12, 38, opts.preview ? `${mon.hp}/${max} (${Math.round((mon.hp / max) * 100)}%)` : `${mon.hp}/${max}`, textStyle(opts.preview ? 16 : 20)).setOrigin(1, 0));
+      box.add(scene.add.text(w - 12, low - 20, opts.preview ? `${mon.hp}/${max} (${Math.round((mon.hp / max) * 100)}%)` : `${mon.hp}/${max}`, textStyle(opts.preview ? 16 : 20)).setOrigin(1, 0));
       const status = mon.hp <= 0 ? { label: 'FNT', color: 0x806060 } : mon.status ? STATUS_LABELS[mon.status.id] : null;
       // The UIE badge stands in for the status word when its art is loaded (the tag text stays for LEAD, etc.).
-      const badge = status ? statusBadge(scene, 72, 66, mon.hp <= 0 ? 'fnt' : mon.status!.id) : null;
+      const badge = status ? statusBadge(scene, 72, low + 8, mon.hp <= 0 ? 'fnt' : mon.status!.id) : null;
       const tags = [badge ? undefined : status?.label, opts.tag].filter(Boolean).join('  ');
       let tagEnd = 72 + (badge ? 44 : 0);
       if (badge) box.add(badge);
       if (tags) {
-        const tagText = scene.add.text(tagEnd, 58, tags, textStyle(16, mon.hp <= 0 ? '#c05050' : '#d07020'));
+        const tagText = scene.add.text(tagEnd, low, tags, textStyle(16, mon.hp <= 0 ? '#c05050' : '#d07020'));
         box.add(tagText);
         tagEnd += tagText.width + 10;
       }
       const count = Object.values(mon.held ?? {}).reduce((a, b) => a + b, 0);
       if (opts.preview && count) {
-        const heldText = scene.add.text(tagEnd, 58, `◆ ${heldSummary(content, mon)}`, textStyle(16, '#8fb8e0')).setName('held-name');
+        const heldText = scene.add.text(tagEnd, low, `◆ ${heldSummary(content, mon)}`, textStyle(16, '#8fb8e0')).setName('held-name');
         fitLine(heldText, Math.max(60, w * 0.4 - tagEnd));
         box.add(heldText);
       } else if (count) {
-        if (scene.textures.exists('ui.party.icon_item')) box.add(scene.add.image(tagEnd, 66, 'ui.party.icon_item').setOrigin(0, 0.5).setName('held-icon'));
-        box.add(scene.add.text(tagEnd + (scene.textures.exists('ui.party.icon_item') ? 20 : 0), 58, scene.textures.exists('ui.party.icon_item') ? `${count} held` : `◆ ${count} held`, textStyle(16, '#8fb8e0')));
+        if (scene.textures.exists('ui.party.icon_item')) box.add(scene.add.image(tagEnd, low + 8, 'ui.party.icon_item').setOrigin(0, 0.5).setName('held-icon'));
+        box.add(scene.add.text(tagEnd + (scene.textures.exists('ui.party.icon_item') ? 20 : 0), low, scene.textures.exists('ui.party.icon_item') ? `${count} held` : `◆ ${count} held`, textStyle(16, '#8fb8e0')));
       }
       const abilityId = abilityOf(content, mon);
       const abilityName = abilityId ? content.abilities.get(abilityId)?.name : undefined;
       if (opts.preview) {
         const color = ({ good: '#60d080', fainted: '#d06060', already: '#e0b040', blocked: '#a0a0b0' })[opts.preview.mark];
         const mark = ({ good: '✔', fainted: '✖', already: '●', blocked: '✖' })[opts.preview.mark];
-        box.add(scene.add.text(w - 12, 60, `${mark} ${opts.preview.short}`, textStyle(16, color)).setOrigin(1, 0).setName(`item-preview-${opts.preview.mark}`));
+        box.add(scene.add.text(w - 12, low + 2, `${mark} ${opts.preview.short}`, textStyle(16, color)).setOrigin(1, 0).setName(`item-preview-${opts.preview.mark}`));
         return;
       }
-      if (abilityName) box.add(scene.add.text(w - 100, 60, abilityName, textStyle(14, '#a69cb4')).setOrigin(1, 0));
+      if (abilityName) box.add(scene.add.text(w - 100, low + 2, abilityName, textStyle(14, '#a69cb4')).setOrigin(1, 0));
       const hearts = friendshipHearts(content, mon);
-      box.add(scene.add.text(w - 12, 60, '♥'.repeat(hearts) + '♡'.repeat(5 - hearts), textStyle(14, hearts === 5 ? '#e04870' : '#c07890')).setOrigin(1, 0));
+      box.add(scene.add.text(w - 12, low + 2, '♥'.repeat(hearts) + '♡'.repeat(5 - hearts), textStyle(14, hearts === 5 ? '#e04870' : '#c07890')).setOrigin(1, 0));
     },
   };
 }

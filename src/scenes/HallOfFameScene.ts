@@ -58,7 +58,7 @@ export class HallOfFameScene extends Phaser.Scene {
       problem: null,
       hint: 'Your records across every run.',
       draw: (_scene, box, w) => {
-        heading(box, '★ Records');
+        heading(box, 'Records');
         hof.records.forEach((rec, i) => {
           const x = 14 + (i % 3) * ((w - 28) / 3);
           const y = 40 + Math.floor(i / 3) * 26;
@@ -87,7 +87,7 @@ export class HallOfFameScene extends Phaser.Scene {
         problem: null,
         hint: hof.rareForms.map((f) => `Shiny ${name(f.speciesId)} (Lv${f.level}, ${trainer(f.run)}, ${date(f.run)})`).join(' · '),
         draw: (_scene, box) => {
-          heading(box, '✦ Rare forms', '#7ff3ff');
+          heading(box, 'Rare forms', '#7ff3ff');
           hof.rareForms.slice(0, 12).forEach((f, i) => icon(box, f.speciesId, 40 + i * 60, 64, 1.6, true, i));
         },
       });

@@ -29,6 +29,7 @@ import { services } from '../game/services';
 import { stopMusic } from '../ui/audio';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_WIDTH, textStyle } from '../ui/theme';
+import { fitBlock } from '../ui/fitText';
 import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel, slideIn } from '../ui/aero';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
@@ -198,7 +199,10 @@ export class GameOverScene extends Phaser.Scene {
     if (letter) lines.push('', `Letter from ${letter.from}: "${letter.text}"`);
     const reflection = run && !won ? whatIf(session.content, run) : null;
     if (reflection) lines.unshift(reflection, '');
-    this.add.text(500, 84, lines.join('\n'), textStyle(18, COLORS.textLight, { lineSpacing: 3, wordWrap: { width: GAME_WIDTH - 540 } }));
+    // Long endings (a what-if, rewards, a letter) step down a size, then cut, so they never spill out of the panel.
+    const endText = this.add.text(500, 84, lines.join('\n'), textStyle(18, COLORS.textLight, { lineSpacing: 3, wordWrap: { width: GAME_WIDTH - 540 } }));
+    if (endText.height > 266) endText.setStyle(textStyle(16, COLORS.textLight, { lineSpacing: 2, wordWrap: { width: GAME_WIDTH - 540 } }));
+    fitBlock(endText, GAME_WIDTH - 540, 266);
     const choose = (i: number): void => {
       if (won && i === (run ? 2 : 1)) {
         this.scene.start('Credits');

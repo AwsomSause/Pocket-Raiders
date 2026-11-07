@@ -75,7 +75,7 @@ export class MainMenuScene extends Phaser.Scene {
         this.tweens.add({ targets: icon, x: GAME_WIDTH - 60, duration: 260, ease: 'Back.easeOut', yoyo: true, hold: 900, onComplete: () => icon.destroy() });
       });
     });
-    dailyChest(this, lay ? (lay.carousel ? 910 : 900) : 420, lay ? (lay.carousel ? 410 : 440) : 460, new Date().toISOString().slice(0, 10));
+    dailyChest(this, lay ? (lay.carousel ? 910 : 900) : 530, lay ? (lay.carousel ? 410 : 440) : 462, new Date().toISOString().slice(0, 10));
     if (!lay) this.add.text(64, 158, 'Raid. Collect. Rise.', textStyle(16, COLORS.textMuted));
     if (!lay) drawPanel(this, 48, 186, 400, 300, { alpha: 0.95 });
     else if (lay.panel) this.drawLookPanel(lay.panel);

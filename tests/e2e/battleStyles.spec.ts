@@ -38,6 +38,17 @@ for (const style of SCREEN_STYLES_READY.battle) {
     await page.screenshot({ path: `test-results/visual/battle-style-${style}-moves.png` });
     if (await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').menu))) await page.keyboard.press('Enter');
     await confirmUntil(page, async () => (await turn()) > before || (await scene(page)) !== 'Battle', 30_000);
+    if (style === 'ink' && (await scene(page)) === 'Battle') {
+      // Ink fighters are white silhouettes; a move flash may show their colour, but it must come back after.
+      await confirmToMenu(page, 30_000);
+      const white = await page.evaluate(() => {
+        const b = (window as any).__pkr.game.scene.getScene('Battle');
+        return [b.playerSprite, b.enemySprite].filter((s: any) => s?.active).map((s: any) => Boolean(s.tintFill));
+      });
+      await page.screenshot({ path: 'test-results/visual/battle-style-ink-after-turn.png' });
+      expect(white.length).toBeGreaterThan(0);
+      expect(white.every(Boolean)).toBe(true);
+    }
     expect(errors).toEqual([]);
   });
 }
