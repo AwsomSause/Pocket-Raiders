@@ -551,6 +551,7 @@ export class GameSession {
   private syncAutonomy(): void {
     const v2 = this.run?.story.v2;
     if (v2) v2.autonomy = this.settings.story.autonomy;
+    if (v2) v2.dramatic = this.settings.story.dramaticMoments;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {

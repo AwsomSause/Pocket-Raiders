@@ -3,7 +3,7 @@
 /** Every token story text may use. A token outside this list fails the `story-template-tokens` gate. */
 export const TEMPLATE_TOKENS = [
   'player', 'rival', 'leader', 'town', 'region', 'team', 'legend', 'professor',
-  'theme', 'ending', 'starter', 'seed', 'character', 'stage', 'node', 'event', 'choice', 'quest', 'outcome', 'speaker', 'pokemon', 'title',
+  'theme', 'ending', 'starter', 'seed', 'character', 'stage', 'node', 'event', 'choice', 'quest', 'outcome', 'speaker', 'pokemon', 'title', 'memory',
 ] as const;
 export type TemplateToken = (typeof TEMPLATE_TOKENS)[number];
 
