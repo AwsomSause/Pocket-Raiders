@@ -9,6 +9,7 @@
 // Mouse: click a row, a tab, a menu entry or a move/item. The screen never changes the
 // run except for the party order (session.moveParty) and never rolls anything.
 
+import { embraceUnlocked } from '../core/story2/heartbond';
 import { fitLine } from './fitText';
 import Phaser from 'phaser';
 import { DRAG_MIN_PX, hotkeyIndex, LONG_PRESS_MS, MoveUndo, rowAt } from '../core/presentation/uiPrefs';
@@ -338,6 +339,7 @@ class PokemonScreen implements PickerLike {
     return [
       p('pet', 'Pet', 'A little pat: tiny friendship, up to 3 times per stop.'),
       p('hug', 'Hug', 'Once per stop: friendship, affection and a better mood.'),
+      ...(embraceUnlocked(run, this.mon.uid) ? [p('embrace', 'Embrace', 'Once per stop: a long, quiet hug that only a Trusted Partner (Heartbond Level 7) gives. Friendship, affection, less strain and a better mood.')] : []),
       p('feed', 'Feed berry', `Feeds a loose Bag berry (likes ${favoriteFlavor(this.mon)}, hates ${hatedFlavor(this.mon)}).`),
       p('groom', 'Groom', 'Brush away a status condition and add some sparkle.'),
       p('lullaby', 'Lullaby', 'Tuck it in: heals 20% of its HP, once per stop.'),
