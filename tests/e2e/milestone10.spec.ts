@@ -334,8 +334,8 @@ test('slice 7: a trainer line shows in the story box that goes away with the lin
   await expect.poll(() => hasNamed(page, 'story-line'), { timeout: 3000, intervals: [100] }).toBe(true);
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'test-results/m10-speech.png' });
-  await page.keyboard.press('Enter');
-  await expect.poll(() => hasNamed(page, 'story-line'), { timeout: 3000, intervals: [100] }).toBe(false);
+  // The first Enter may only finish the typing; keep pressing until the box closes.
+  await expect.poll(async () => { await page.keyboard.press('Enter'); return hasNamed(page, 'story-line'); }, { timeout: 8000, intervals: [300] }).toBe(false);
   expect(errors).toEqual([]);
 });
 
