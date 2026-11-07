@@ -57,7 +57,7 @@ export function shopScreenType(type: ShopTypeId, override?: string): ShopTypeId 
 
 /** The minimal content and run shapes the stock rules need (no import of run.ts, which imports this). */
 interface StockContent {
-  items: Map<string, { category: string }>;
+  items: Map<string, { category: string; name: string }>;
   catalog: Map<string, { rarity?: string }>;
   shop: readonly { item: string }[];
   balance: { shopTypes?: ShopTypeBalance };
@@ -118,7 +118,7 @@ export function typedStock<E extends StockEntry>(content: StockContent, run: Sto
     case 'night': {
       const listed = new Set(content.shop.map((e) => e.item));
       const pool = [...content.items.entries()]
-        .filter(([id, it]) => !listed.has(id) && !open.some((e) => e.item === id) && !['key', 'transformation', 'attribute'].includes(it.category) && b.night.mysteryPrice[content.catalog.get(id)?.rarity ?? ''] !== undefined)
+        .filter(([id, it]) => !listed.has(id) && !open.some((e) => e.item === id) && !['key', 'transformation', 'attribute'].includes(it.category) && !/\bCharm$/.test(it.name) && b.night.mysteryPrice[content.catalog.get(id)?.rarity ?? ''] !== undefined)
         .map(([id]) => id)
         .sort((x, y) => placeHash(run, `mystery:${x}`) - placeHash(run, `mystery:${y}`))
         .slice(0, b.night.mystery);

@@ -72,7 +72,7 @@
  {
   "id": "hyper-potion",
   "name": "Hyper Potion",
-  "description": "Restores 120 HP.",
+  "description": "Restores 80 HP.",
   "category": "healing",
   "iconAssetId": "item.hyper_potion",
   "usableInBattle": true,
@@ -80,7 +80,7 @@
   "target": "party",
   "effect": {
    "kind": "healHp",
-   "amount": 120
+   "amount": 80
   }
  },
  {

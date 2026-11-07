@@ -1,0 +1,143 @@
+{
+ "_note": "Values from before the item rework (2026-11-07), so story.test.ts old seeds still play exactly as before.",
+ "rewards": [
+  {
+   "id": "exp-candy-s",
+   "name": "Exp. Candy S",
+   "description": "A Pokémon of your choice gains 1 level.",
+   "category": "consumable",
+   "rarity": "uncommon",
+   "effect": {
+    "kind": "levelUp",
+    "levels": 1
+   },
+   "stacking": "instant",
+   "scope": "pokemon",
+   "moneyMultiplierApplies": false,
+   "iconAssetId": "item.exp_candy_s"
+  },
+  {
+   "id": "exp-candy-m",
+   "name": "Exp. Candy M",
+   "description": "A Pokémon of your choice gains 2 levels.",
+   "category": "consumable",
+   "rarity": "rare",
+   "effect": {
+    "kind": "levelUp",
+    "levels": 2
+   },
+   "stacking": "instant",
+   "scope": "pokemon",
+   "moneyMultiplierApplies": false,
+   "iconAssetId": "item.exp_candy_m"
+  },
+  {
+   "id": "exp-candy-l",
+   "name": "Exp. Candy L",
+   "description": "A Pokémon of your choice gains 3 levels.",
+   "category": "consumable",
+   "rarity": "epic",
+   "effect": {
+    "kind": "levelUp",
+    "levels": 3
+   },
+   "stacking": "instant",
+   "scope": "pokemon",
+   "moneyMultiplierApplies": false,
+   "iconAssetId": "item.exp_candy_l"
+  }
+ ],
+ "attributeEffects": {
+  "strengthPhysicalDamage": 0.5,
+  "intelligenceSpecialDamage": 0.5,
+  "speedStat": 0.5,
+  "charismaPriceCut": 0.3,
+  "charismaExpGain": 0.5,
+  "charismaFriendshipGain": 0.75,
+  "luckUncommonWeight": 0.25,
+  "luckRareWeight": 0.4,
+  "luckShinyChance": 0.5,
+  "rageDamageDealt": 1.0,
+  "rageDamageTaken": 1.0,
+  "peaceHealing": 1.0,
+  "peaceDamageTakenCut": 0.35,
+  "goodCatch": 1.0,
+  "evilMoney": 0.5,
+  "luckEpicWeight": 0.5,
+  "luckDraftVariety": 0.5
+ },
+ "attributeGrowth": [
+  {
+   "attribute": "strength",
+   "counter": "defeatedOrCaught.fighting",
+   "per": 4,
+   "amount": 1
+  },
+  {
+   "attribute": "intelligence",
+   "counter": "defeatedOrCaught.psychic",
+   "per": 4,
+   "amount": 1
+  },
+  {
+   "attribute": "speed",
+   "counter": "defeatedOrCaught.electric",
+   "per": 4,
+   "amount": 1
+  },
+  {
+   "attribute": "charisma",
+   "counter": "statsBoosted",
+   "per": 3,
+   "amount": 1
+  },
+  {
+   "attribute": "luck",
+   "counter": "pokemonCaught",
+   "per": 10,
+   "amount": 1
+  },
+  {
+   "attribute": "luck",
+   "counter": "shiniesFound",
+   "per": 1,
+   "amount": 5
+  },
+  {
+   "attribute": "ragePeace",
+   "counter": "defeatedOrCaught.fire",
+   "per": 4,
+   "amount": 1
+  },
+  {
+   "attribute": "ragePeace",
+   "counter": "defeatedOrCaught.grass",
+   "per": 4,
+   "amount": -1
+  },
+  {
+   "attribute": "goodEvil",
+   "counter": "defeatedOrCaught.fairy",
+   "per": 4,
+   "amount": 1
+  },
+  {
+   "attribute": "goodEvil",
+   "counter": "defeatedOrCaught.dark",
+   "per": 4,
+   "amount": -1
+  },
+  {
+   "attribute": "love",
+   "counter": "evolutions",
+   "per": 1,
+   "amount": 1
+  },
+  {
+   "attribute": "love",
+   "counter": "regionsClearedWithStarter",
+   "per": 1,
+   "amount": 1
+  }
+ ]
+}

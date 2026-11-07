@@ -90,10 +90,7 @@ add('hardcharm', 'hard-charm', 'Hard Charm', F, '+4 Strength', 'uncommon', Y, No
 add('easycharm', 'easy-charm', 'Easy Charm', F, '+4 toward Peace', 'uncommon', Y, None, 'use', {'kind': 'attributes', 'changes': {'ragePeace': 4}})
 add('contestcharm', 'contest-charm', 'Contest Charm', F, '+4 Charisma', 'uncommon', Y, None, 'use', {'kind': 'attributes', 'changes': {'charisma': 4}})
 
-# ---- candies (reward draft cards: gain levels) ----
-for pic, id_, nm, lv, r in [('lvl1candy', 'lvl-1-candy', 'Lv. 1 Candy', 1, 'common'), ('lvl10candy', 'lvl-10-candy', 'Lv. 10 Candy', 2, 'uncommon'), ('lvl30candy', 'lvl-30-candy', 'Lv. 30 Candy', 3, 'rare'), ('lvl35candy', 'lvl-35-candy', 'Lv. 35 Candy', 4, 'rare'),
-                            ('lvl100candy', 'lvl-100-candy', 'Lv. 100 Candy', 5, 'epic'), ('rarer-candy', 'rarer-candy', 'Rarer Candy', 3, 'epic')]:
-    REWARDS.append({'id': id_, 'name': nm, 'description': f'A Pokémon of your choice gains {lv} level{"s" if lv > 1 else ""}.', 'category': 'consumable', 'rarity': r, 'effect': {'kind': 'levelUp', 'levels': lv}, 'stacking': 'instant', 'scope': 'pokemon', 'moneyMultiplierApplies': False, 'iconAssetId': f'item.library/{pic}'})
+# ---- candies: removed (Kice, 2026-11-07: "Remove EXP candies"); the level candies are no longer draft cards ----
 
 # ---- write ----
 cat_p, rew_p, ids_p = (f'{REPO}/src/data/itemCatalog.json', f'{REPO}/src/data/rewards.json', f'{REPO}/tools/drive/library-items.json')
