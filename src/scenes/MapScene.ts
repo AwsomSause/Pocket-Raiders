@@ -446,6 +446,12 @@ export class MapScene extends Phaser.Scene {
     }
     if (pinned) {
       const pinText = this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0).setName('pinned-quest');
+      if (services().session.settings.questContrast) {
+        pinText.setColor('#ffffff');
+        const plate = this.add.rectangle(pinText.x + 8, pinText.y - 4, pinText.width + 16, pinText.height + 8, 0x000000, 0.85).setOrigin(1, 0);
+        plate.setDepth(pinText.depth).setName('pinned-quest-plate');
+        this.children.moveTo(plate, this.children.getIndex(pinText));
+      }
       // Reroll Points: tap the Run Quest line to swap it for ₽100 (+₽100 each time).
       if (pinned.kind === 'runQuest') {
         pinText.setInteractive({ useHandCursor: true }).on('pointerup', () => {
