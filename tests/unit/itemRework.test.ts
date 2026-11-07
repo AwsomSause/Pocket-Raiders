@@ -51,13 +51,13 @@ describe('item rework part 1', () => {
     expect(effectiveAttributes(content, run).luck).toBe(Math.max(0, start + 1 + 7 - 4));
   });
 
-  it('Hyper Potion heals 80 and capped experience pays Potions, not Hyper Potions', () => {
+  it('Hyper Potion heals 80 and capped experience pays a Premier Ball per 2000 XP (Kice), not Hyper Potions', () => {
     expect(content.items.get('hyper-potion')!.effect).toMatchObject({ kind: 'healHp', amount: 80 });
     const run = fresh('overflow');
-    const before = run.inventory['potion'] ?? 0;
-    expect(bankOverflowXp(content, run, 999)).toBe(0);
+    const before = run.inventory['premier-ball'] ?? 0;
+    expect(bankOverflowXp(content, run, 1999)).toBe(0);
     expect(bankOverflowXp(content, run, 1)).toBe(1);
-    expect(run.inventory['potion']).toBe(before + 1);
+    expect(run.inventory['premier-ball']).toBe(before + 1);
     expect(run.inventory['hyper-potion'] ?? 0).toBe(0);
   });
 
