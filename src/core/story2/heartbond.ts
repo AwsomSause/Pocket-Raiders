@@ -172,6 +172,12 @@ export function heartbondCare(run: RunState, uid: string, source: string, key: s
   return r;
 }
 
+/** Embrace (design Part: Pokémon interaction) opens for the Heartbond partner once Level 7 (Trusted Partner) has latched. */
+export function embraceUnlocked(run: RunState, uid: string): boolean {
+  const hb = run.story.v2?.heartbond;
+  return !!hb && hb.partner === uid && hb.latched.includes(7);
+}
+
 /** A clutch survive: started the turn at half HP or more and ended it alive at 15% or less. */
 export function clutchSurvived(hpBefore: number, hpAfter: number, maxHp: number): boolean {
   return maxHp > 0 && hpAfter > 0 && hpBefore >= maxHp * 0.5 && hpAfter <= maxHp * 0.15;

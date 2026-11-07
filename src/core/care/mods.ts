@@ -11,6 +11,7 @@ const CareDataSchema = z.object({
   fatigue: z.object({ perFight: z.number().int(), max: z.number().int(), statPercent: z.number(), benchedRecovery: z.number().int() }),
   pet: z.object({ perStop: z.number().int(), friendship: z.number().int() }),
   hug: z.object({ friendship: z.number().int(), affection: z.number().int(), mood: z.number().int() }),
+  embrace: z.object({ friendship: z.number().int(), affection: z.number().int(), strain: z.number().int(), mood: z.number().int() }),
   feed: z.object({
     liked: z.object({ friendship: z.number().int(), mood: z.number().int() }),
     neutral: z.object({ friendship: z.number().int(), mood: z.number().int() }),

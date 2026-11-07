@@ -23,6 +23,12 @@
     "affection": 3,
     "mood": 1
   },
+  "embrace": {
+    "friendship": 4,
+    "affection": 4,
+    "strain": -4,
+    "mood": 2
+  },
   "feed": {
     "liked": {
       "friendship": 3,
@@ -71,6 +77,11 @@
     "hug": [
       "hugs you back tightly.",
       "nuzzles your shoulder."
+    ],
+    "embrace": [
+      "leans into you and stays there, calm and sure.",
+      "holds on for a long moment, then breathes out.",
+      "presses close. Neither of you says anything, and it is enough."
     ],
     "likedBerry": [
       "gobbles it up happily!",
