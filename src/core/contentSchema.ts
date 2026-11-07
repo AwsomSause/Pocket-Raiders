@@ -2555,6 +2555,15 @@ export const BalanceSchema = z.object({
       starts: z.record(z.string(), z.record(z.string(), z.number())).default({}),
       limits: z.record(z.string(), z.tuple([z.number(), z.number()])).default({}),
     }).default({ enabledBackstories: ['bs_viridian'], gapStops: 1, echoFromAct: 4, maxSnapshots: 40, rolls: {}, starts: {}, limits: {} }),
+    /** Design v2 Part XI / II-F / II: world scenes at free Stops (core/story2/worldScenes.ts): event templates per run and per Act, Eevee Crossroads offers and the level it needs, camp scenes per run, chemistry types shown at once. */
+    world: z.object({
+      templatesPerRun: z.number().int().min(0),
+      templatesPerAct: z.number().int().min(0),
+      eeveeOffers: z.number().int().min(0),
+      eeveeLevel: z.number().int().min(1),
+      campPerRun: z.number().int().min(0),
+      maxChemistry: z.number().int().min(1),
+    }).default({ templatesPerRun: 8, templatesPerAct: 2, eeveeOffers: 3, eeveeLevel: 20, campPerRun: 6, maxChemistry: 3 }),
     /** S7: Impossible Feats and the Resolve Charge (design Part II, Feats). Charge sources: points and a limit per scope (battle, act or a beat key). */
     feats: z.object({
       chargeMax: z.number().int().min(1),
