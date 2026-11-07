@@ -154,6 +154,12 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
 
   // Speedster: it moved before the foe this turn (singles). Rival Mirror: it shares a type with the foe (once per battle).
   if (!prior.doubles && firstMove?.type === 'move' && firstMove.side === 'player' && active.player) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['movedFirst']);
+  // Scout: it struck first against a foe that had just appeared and has a higher base Speed.
+  if (!prior.doubles && firstMove?.type === 'move' && firstMove.side === 'player' && active.player && active.enemy && (prior.enemyVolatile?.turnsOut ?? 0) === 0) {
+    const mine = content.species.get(mon(active.player)?.speciesId ?? '')?.baseStats.spe ?? 0;
+    const theirs = content.species.get(mon(active.enemy)?.speciesId ?? '')?.baseStats.spe ?? 0;
+    if (theirs > mine) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['scoutFirst']);
+  }
   if (!prior.doubles && active.player && active.enemy) {
     const a = mon(active.player);
     const b = mon(active.enemy);
@@ -185,11 +191,11 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   }
 
   // Tidy and Thorn Warden: the engine leaves `avoid:<uid>` and `thorn:<uid>` marks; turn them into counters once.
-  if (battle.growthMarks?.some((m) => m.startsWith('avoid:') || m.startsWith('thorn:'))) {
+  if (battle.growthMarks?.some((m) => m.startsWith('avoid:') || m.startsWith('thorn:') || m.startsWith('pivotOut:'))) {
     const left: string[] = [];
     for (const m of battle.growthMarks) {
       const [kind, uid] = m.split(':');
-      if (kind === 'avoid' || kind === 'thorn') bumpGrowth(content.balance.overhaulGrowth, run.story.histories[uid ?? ''], [kind === 'avoid' ? 'tidyHazard' : 'thornHit']);
+      if (kind === 'avoid' || kind === 'thorn' || kind === 'pivotOut') bumpGrowth(content.balance.overhaulGrowth, run.story.histories[uid ?? ''], [kind === 'avoid' ? 'tidyHazard' : kind === 'thorn' ? 'thornHit' : 'pivotOut']);
       else left.push(m);
     }
     battle.growthMarks = left;

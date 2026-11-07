@@ -32,6 +32,8 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   support: { counter: 'useStatus', words: 'accuracy with status moves', min: 15 },
   'tank-buster': { counter: 'hitHigh', words: 'damage against foes above 75% HP', min: 12 },
   'bond-breaker': { counter: 'koFull', words: 'damage against foes at full HP' },
+  scout: { counter: 'scoutFirst', words: 'accuracy on its first move against a foe that has just appeared', min: 5, cap: 0.03 },
+  pivot: { counter: 'pivotOut', words: 'damage on its first turn out after a teammate pivoted out with a U-turn-style move', min: 4 },
   tidy: { counter: 'tidyHazard', words: 'less damage from entry hazards (it has swept or dodged them)', min: 6 },
   'thorn-warden': { counter: 'thornHit', words: 'damage against foes that made contact last turn (it punishes touching)', min: 5, type: 'grass' },
   'ember-heart': { counter: 'useFireLow', words: 'Fire damage while under 50% HP', min: 6 },
@@ -229,7 +231,7 @@ export function growthOnce(marks: string[], key: string): boolean {
   return true;
 }
 /** Paths whose edge is not damage (status chances, durations, healing, accuracy, Protect). */
-const NON_DAMAGE: ReadonlySet<string> = new Set(['dojo-student', 'fast-learner', 'medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'tidy', 'disruptor', 'buffer', 'tricky-feet']);
+const NON_DAMAGE: ReadonlySet<string> = new Set(['dojo-student', 'fast-learner', 'medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'tidy', 'scout', 'disruptor', 'buffer', 'tricky-feet']);
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');
@@ -378,7 +380,7 @@ export function assignGrowthPaths(content: Content, party: PokemonInstance[], hi
 }
 
 /** Damage multiplier from the attacker's path for one hit. `hpFrac` is the attacker's HP share (0..1). */
-export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string; behind?: boolean; duel?: boolean; chain?: boolean; legend?: boolean; grudge?: boolean; mirror?: boolean; turn?: number; turnsOut?: number; waited?: boolean; unhit?: boolean; contacted?: boolean }
+export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string; behind?: boolean; duel?: boolean; chain?: boolean; legend?: boolean; grudge?: boolean; mirror?: boolean; turn?: number; turnsOut?: number; waited?: boolean; unhit?: boolean; contacted?: boolean; pivoted?: boolean }
 export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string, effectiveness: number, hpFrac: number, monTypes: readonly string[], hit: HitFacts = {}): number {
   const id = mon.growthPath;
   if (!cfg.enabled || !id) return 1;
@@ -412,6 +414,7 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
       : id === 'lead-out' ? (hit.turn ?? 99) <= 2
       : id === 'opener' ? hit.turnsOut === 0
       : id === 'patient' ? hit.waited === true
+      : id === 'pivot' ? hit.pivoted === true
       : id === 'thorn-warden' ? hit.contacted === true
       : id === 'quiet-strength' ? hit.unhit === true
       : id === 'bruiser' ? hpFrac >= 1
@@ -433,13 +436,14 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
 
 const TRICKS: ReadonlySet<string> = new Set(['taunt', 'torment', 'fake-out']);
 /** Accuracy multiplier for the two accuracy paths (Gambler: moves under 80%; Support: status moves). */
-export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false, extra: { moveId?: string; lowersSpe?: boolean; growthMove?: string } = {}): number {
+export function growthAccuracyMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, accuracy: number | null, category: string, weather: string | null = null, moveType = '', lowersFoe = false, extra: { moveId?: string; lowersSpe?: boolean; growthMove?: string; scout?: boolean } = {}): number {
   if (!cfg.enabled || accuracy === null) return 1;
   if (mon.growthPath === 'steady-hand' && moveType.toLowerCase() === 'normal') return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'weather-wise' && weather) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'disruptor' && lowersFoe) return 1 + cfg.bonus;
   if (mon.growthPath === 'silk-spinner' && extra.lowersSpe) return 1 + cfg.bonus;
   if (mon.growthPath === 'haunt-keeper' && category === 'status' && moveType.toLowerCase() === 'ghost') return 1 + cfg.bonus;
+  if (mon.growthPath === 'scout' && extra.scout) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'dojo-student' && extra.moveId !== undefined && extra.moveId === extra.growthMove) return 1 + Math.min(cfg.bonus, 0.03);
   if (mon.growthPath === 'trickster' && TRICKS.has(extra.moveId ?? '')) return 1 + cfg.bonus;
   if (mon.growthPath === 'gambler' && accuracy < 80) return 1 + cfg.bonus;
