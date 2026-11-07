@@ -25,6 +25,7 @@ import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
+import { armFeat, featCharged } from '../core/story2/feats';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -2479,8 +2480,12 @@ export class BattleScene extends Phaser.Scene {
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;
     const shadow = this.activeMon().shadow;
+    // S7: the Resolve spark (a banked Impossible Feat). Prompt mode adds a "Memory stirs" button that arms it.
+    const featV2 = this.run.story.v2;
+    const featReady = !this.duo && featCharged(this.run) && featV2?.heartbond.partner === this.activeMon().uid;
+    const featLine = featReady ? (featV2!.feats.armed ? 'Memory stirs: the Feat is armed.\n' : 'Memory stirs: a Feat is charged.\n') : '';
     const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];
@@ -2495,6 +2500,8 @@ export class BattleScene extends Phaser.Scene {
     if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
     const rallyAt = canRally ? options.length : -1;
     if (canRally) options.push({ label: this.rallyChoice ? 'Rally: ON' : 'Rally: OFF' });
+    const featAt = featReady && featV2!.dramatic === 'prompt' && !featV2!.feats.armed ? options.length : -1;
+    if (featAt >= 0) options.push({ label: 'Memory stirs' });
     // Ideas W1: a surrender deal, smashing the arena, the Pokédex scan and the item hotbar.
     const foeNow = currentEnemy(battleNow);
     const stake = foeStake(content, battleNow);
@@ -2546,6 +2553,9 @@ export class BattleScene extends Phaser.Scene {
         else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
           this.rallyChoice = !this.rallyChoice;
+          this.showRootMenu();
+        } else if (i === featAt) {
+          armFeat(this.run);
           this.showRootMenu();
         } else if (i === cheerAt) this.showCheerMenu();
         else if (i === 0) this.showMoveMenu();

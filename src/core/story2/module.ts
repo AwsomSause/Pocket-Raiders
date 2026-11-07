@@ -3,6 +3,7 @@
 // Scenes play on Story Stops (the Director's `playStop` calls `queueStopScene`). Pure and deterministic: the only roll (the module's hidden flags) uses
 // its own seeded stream, and nothing here touches battle rules or gameplay RNG. Outcomes never depend on the screen that shows a scene.
 
+import { gainCharge } from './feats';
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
 import type { Profile, RunState } from '../state';
@@ -260,6 +261,8 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
     const i = arc.steps.findIndex((s) => s.event === e.id);
     const done = i === arc.steps.length - 1;
     v2.arcs[arc.id] = { state: done ? 'done' : 'active', step: i + 1, nodeCost: arc.nodeCost };
+    // S7: a beat of the partner's own Starter arc (`arc_<line>`) adds Resolve Charge, once per beat.
+    if (v2.starter && arc.id === `arc_${v2.starter.lineId}`) gainCharge(content, run, 'arc_beat', `${arc.id}:${i}`);
     if (done) {
       applyEffects(content, run, arc.effects as Eff[]);
       // Two exits: the first is the good one; a "sabotaged" or "none" flag named for the arc takes the last.
