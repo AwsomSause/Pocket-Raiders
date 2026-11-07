@@ -3017,9 +3017,18 @@ function executeMove(
     return;
   }
   const mark = events.length;
-  if (ctx.doublesTurn?.hit) ctx.doublesTurn.hit(user, target, move, movedFirst, events);
-  else runMove(ctx, user, target, move, movedFirst, events);
+  // Cataclysm Cannon hits as the version for its user's Forme (Attack and Defence Cataggron have their own).
+  const hitMove = move.id === 'cataclysm-cannon' ? (ctx.content.moves.get(`cataclysm-cannon-${user.mon.speciesId.slice('cataggron-'.length)}`) ?? move) : move;
+  if (ctx.doublesTurn?.hit) ctx.doublesTurn.hit(user, target, hitMove, movedFirst, events);
+  else runMove(ctx, user, target, hitMove, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
+  if (abilityIn(ctx, user) === 'encore-amp' && move.flags.includes('sound') && !user.vol.lastFailed) {
+    user.vol.ampCount = user.vol.ampMove === move.id ? Math.min(3, user.vol.ampCount + 1) : 1;
+    user.vol.ampMove = move.id;
+  } else if (user.vol.ampMove !== null) {
+    user.vol.ampMove = null;
+    user.vol.ampCount = 0;
+  }
   user.vol.furyCutter = move.effects.powerRule === 'furyCutter' && !user.vol.lastFailed ? (user.vol.furyCutter ?? 0) + 1 : 0;
   if (move.effects.powerRule === 'rollout') {
     if (user.vol.lastFailed) {
@@ -3091,6 +3100,7 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
     case 'doubleTargetStatus': return target.mon.status ? base * 2 : base;
     case 'doubleUserStatus': return user.mon.status ? base * 2 : base;
     case 'doubleTargetPoison': return target.mon.status?.id === 'psn' ? base * 2 : base;
+    case 'poisonedBoost': return target.mon.status?.id === 'psn' ? Math.floor(base * 1.5) : base;
     case 'doubleTargetParalyzed': return target.mon.status?.id === 'par' ? base * 2 : base;
     case 'doubleTargetAsleep': return target.mon.status?.id === 'slp' ? base * 2 : base;
     case 'doubleUserFirst': return movedFirst ? base * 2 : base;
@@ -3174,7 +3184,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
 
   // Metronome, Mirror Move, Copycat: use another move instead.
   if (fx.callMove) {
-    const pool = [...content.moves.values()].filter((m) => m.supported && !m.effects.callMove && !m.effects.charge && !m.effects.protect && !m.flags.includes('zmove') && !m.flags.includes('max') && !m.flags.includes('megasig') && !m.flags.includes('storysig')).map((m) => m.id).sort();
+    const pool = [...content.moves.values()].filter((m) => m.supported && !m.effects.callMove && !m.effects.charge && !m.effects.protect && !m.flags.includes('zmove') && !m.flags.includes('max') && !m.flags.includes('megasig') && !m.flags.includes('storysig') && !m.flags.includes('jetform')).map((m) => m.id).sort();
     const id = fx.callMove === 'metronome' ? (pool.length ? rng.pick(pool) : null) : (target.vol.lastMove ?? (fx.callMove === 'copycat' ? user.vol.lastMove : null));
     const called = id ? content.moves.get(id) : undefined;
     if (!called || called.effects.callMove) {
@@ -3638,6 +3648,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'technician' && power <= 60) powerMult *= 1.5;
       const flagBoost = userAbility ? FLAG_BOOST[userAbility] : undefined;
       if (flagBoost && move.flags.includes(flagBoost.flag)) powerMult *= flagBoost.multiplier;
+      // Encore Amp: the same sound move on consecutive turns hits 20% harder each time, up to 1.6x.
+      if (userAbility === 'encore-amp' && move.flags.includes('sound') && user.vol.ampMove === move.id) powerMult *= Math.min(1.6, 1 + 0.2 * user.vol.ampCount);
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
@@ -3674,7 +3686,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'dry-skin' && moveType === 'fire') powerMult *= 1.25;
       if (powerMult !== 1) power = Math.max(1, pokeRound(power, powerMult));
       // Abilities that change the attacking stat.
-      const baseAttack = fx.beatUp && beaters.length > 0 ? calcStats(content, beaters[Math.min(hit, beaters.length - 1)]!).atk : fx.attackFrom === 'targetAtk' ? targetStats.atk : fx.attackFrom === 'def' ? userStats.def : physical ? userStats.atk : userStats.spa;
+      const baseAttack = fx.beatUp && beaters.length > 0 ? calcStats(content, beaters[Math.min(hit, beaters.length - 1)]!).atk : fx.attackFrom === 'targetAtk' ? targetStats.atk : fx.attackFrom === 'def' ? userStats.def : fx.attackFrom === 'spd' ? userStats.spd : physical ? userStats.atk : userStats.spa;
       let attack = Math.floor(baseAttack * Held.heldStatMultiplier(ctx, user.mon, user.side, physical ? 'atk' : 'spa'));
       let attackMult = attackBoost;
       if (physical && (userAbility === 'huge-power' || userAbility === 'pure-power')) attackMult *= 2;
@@ -3733,6 +3745,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'fluffy' && moveType === 'fire') final *= 2;
       if (foeAbility === 'ice-scales' && !physical) final *= 0.5;
       if (foeAbility === 'punk-rock' && move.flags.includes('sound')) final *= 0.5;
+      if (foeAbility === 'plague-bulwark' && user.mon.status?.id === 'psn') final *= 0.75;
+      if (userAbility === 'soul-kindling' && moveType === 'psychic' && target.mon.status?.id === 'brn') final *= 1.3;
       const ruleset = crit ? { ...content.ruleset, critMultiplier: Held.critDamage(ctx, user, content.ruleset.critMultiplier) * critDamagePerk(ctx.perks, user.side) } : content.ruleset;
       damage = calcDamage(ruleset, {
         level: user.mon.level,
@@ -4054,7 +4068,26 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
   const { rng } = ctx;
   const holder = abilityIn(ctx, target);
   const userAbility = abilityIn(ctx, user);
+  // Thorn Ballad: sound moves can poison; Soul Kindling: Psychic moves can burn.
+  if (target.mon.hp > 0 && move.category !== 'status') {
+    if (userAbility === 'thorn-ballad' && move.flags.includes('sound') && rng.chance(0.3) && canGetStatus(ctx, user, target, 'psn')) {
+      announce(user, userAbility, events);
+      tryInflictStatus(ctx, user, target, 'psn', undefined, events, false);
+    }
+    if (userAbility === 'soul-kindling' && moveType === 'psychic' && rng.chance(0.2) && canGetStatus(ctx, user, target, 'brn')) {
+      announce(user, userAbility, events);
+      tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
+    }
+  }
   if (contact && holder && user.mon.hp > 0) {
+    if (holder === 'plague-bulwark' && rng.chance(0.5) && canGetStatus(ctx, target, user, 'psn')) {
+      announce(target, holder, events);
+      tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
+    }
+    if (holder === 'neon-circuit') {
+      announce(target, holder, events);
+      applyStageChange(ctx, user, 'acc', -1, events, target);
+    }
     const status = CONTACT_STATUS[holder];
     if (status && rng.chance(0.3) && canGetStatus(ctx, target, user, status)) {
       announce(target, holder, events);
@@ -5657,6 +5690,10 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
   if (stages < 0) c.vol.loweredThisTurn = true;
   events.push({ type: 'stat', side: c.side, stat, change: after - before });
   if (source && after < before && source.side !== c.side && Held.triggerOnce(ctx, c, 'ejectPack', events as Held.HeldEvent[])) c.vol.pivot = { baton: false };
+  if (after > before && abilityIn(ctx, c) === 'adaptive-plating' && c.mon.speciesId.startsWith('cataggron')) {
+    // Adaptive Plating: a rise in Attack or Sp. Atk means Attack Forme; Defense or Sp. Def, Defence Forme (the last rise wins).
+    swapForm(ctx, c, stat === 'atk' || stat === 'spa' ? 'cataggron-attack' : stat === 'def' || stat === 'spd' ? 'cataggron-defence' : c.mon.speciesId, events);
+  }
   if (after > before) {
     const { player, enemy } = activeCombatants(ctx);
     const foe = c.side === 'player' ? enemy : player;
@@ -5836,6 +5873,12 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
   const ability = abilityIn(ctx, c);
   if (ability === 'poison-heal' && c.mon.status?.id === 'psn' && c.mon.hp > 0 && c.mon.hp < max) {
     const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+    announce(c, ability, events);
+    c.mon.hp += amount;
+    events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+  }
+  if (ability === 'neon-circuit' && c.mon.hp > 0 && c.mon.hp < max) {
+    const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 16)));
     announce(c, ability, events);
     c.mon.hp += amount;
     events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });

@@ -96,6 +96,7 @@ export const FLAG_BOOST: Record<string, { flag: 'contact' | 'punch' | 'bite' | '
   'strong-jaw': { flag: 'bite', multiplier: 1.5 },
   'mega-launcher': { flag: 'pulse', multiplier: 1.5 },
   'punk-rock': { flag: 'sound', multiplier: 1.3 },
+  'thorn-ballad': { flag: 'sound', multiplier: 1.2 },
 };
 
 /** Normal moves become this type and are 1.2× as strong. */
@@ -182,12 +183,13 @@ export const ABILITY_FORMS = new Set<string>([
   ...Object.values(FORM_PAIRS).flatMap((pairs) => pairs.map(([, alt]) => alt)),
   ...Object.values(FORECAST_FORMS),
   ...DELTA_FORMS.map(([, alt]) => alt),
-  'aegislash-blade', 'cramorant-gulping', 'cramorant-gorging', 'greninja-ash', 'mimikyu-busted', 'eiscue-noice', 'palafin-hero',
+  'aegislash-blade', 'cramorant-gulping', 'cramorant-gorging', 'greninja-ash', 'mimikyu-busted', 'eiscue-noice', 'palafin-hero', 'cataggron-attack', 'cataggron-defence',
 ]);
 
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
+  'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   ...Object.keys(PINCH),
   ...Object.keys(WEATHER_SETTERS),
   ...Object.keys(TERRAIN_SETTERS),

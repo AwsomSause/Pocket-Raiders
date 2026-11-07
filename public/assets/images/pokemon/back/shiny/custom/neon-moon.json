@@ -1,0 +1,1 @@
+{"textures": [{"image": "neon-moon.png", "format": "RGBA8888", "size": {"w": 90, "h": 112}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 90, "h": 112}, "spriteSourceSize": {"x": 0, "y": 0, "w": 90, "h": 112}, "frame": {"x": 0, "y": 0, "w": 90, "h": 112}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

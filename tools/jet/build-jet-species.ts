@@ -1,50 +1,76 @@
-// Builds src/data/jetSpecies.json: the six Jet Pokémon (director's "Jet" pack, 2026-11-07).
+// Builds src/data/jetSpecies.json from the director's Jet Pokédex data (tools/jet/source/pokedex.json, 2026-11-07):
 //   node tools/jet/build-jet-species.ts
-// Four Paradox forms (Eevee and Toxel holding Booster Energy), Skull Bastiodon (Shieldon holding Black Sludge)
-// and Aggron's new final stage. The pack's Pokédex file listed no stats, types or moves, so these are designed
-// here (types read from the art and file names; stats near each base form's class). Evolution routes: Aggron by level
-// (below); the held-item routes are in core/conditionEvolution.ts. Sprites: tools/jet/make-jet-sprites.py.
-// Learnsets: the pre-evolution's list, plus a few moves for the new types. Abilities and icons use existing ones.
+// Six Pokémon: Vine Riff, Electric Oncore (Toxel), Pyro Spirit, Neon Moon (Eevee), Bastiodoom (Bastiodon), Cataggron (Aggron;
+// Attack and Defence Formes are battle forms). Base stats, types, moves, TMs and abilities are the pack's. The pack's evolution
+// rules (held item, nature, time, friendship) live in src/core/conditionEvolution.ts. Sprites: tools/jet/make-jet-sprites.py.
+// Not in the game from the pack: the Pokédex entry texts, EV yields, height, and the "spread" targeting of the sound moves.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const dataDir = join(import.meta.dirname, '..', '..', 'src', 'data');
+const here = import.meta.dirname;
+const dataDir = join(here, '..', '..', 'src', 'data');
 const read = (f: string) => JSON.parse(readFileSync(join(dataDir, f), 'utf8'));
+const pack = JSON.parse(readFileSync(join(here, 'source', 'pokedex.json'), 'utf8')).pokemon as any[];
 const species: any[] = read('species.json');
-const moves = new Set<string>((read('moves.json') as { id: string }[]).map((m) => m.id));
+const moveList: any[] = read('moves.json');
+const moves = new Set<string>(moveList.map((m) => m.id));
 const byId = new Map(species.map((s) => [s.id, s]));
-type L = [number, string];
-const stats = (a: number[]) => ({ hp: a[0]!, atk: a[1]!, def: a[2]!, spa: a[3]!, spd: a[4]!, spe: a[5]! });
-const inherit = (id: string): L[] => byId.get(id).learnset.map((e: any) => [e.level, e.move]);
+const kebab = (s: string) => s.toLowerCase().replace(/_/g, '-');
+const FIRST = { cataggron: 'aggron' } as Record<string, string>;
 
-interface Def { id: string; name: string; base: string; types: string[]; stats: number[]; from: string; stage: number; learn: L[]; abilities: { normal: string[]; hidden: string | null }; baseExp: number }
-const D: Def[] = [
-  { id: 'espeon-paradox', name: 'Paradox Espeon', base: 'espeon', types: ['psychic', 'fire'], stats: [70, 65, 65, 135, 95, 125], from: 'eevee', stage: 2, baseExp: 230,
-    learn: [...inherit('espeon'), [30, 'flamethrower'], [40, 'calm-mind'], [48, 'fire-blast']], abilities: { normal: ['protosynthesis'], hidden: 'magic-bounce' } },
-  { id: 'umbreon-paradox', name: 'Paradox Umbreon', base: 'umbreon', types: ['dark', 'steel'], stats: [100, 70, 120, 70, 130, 70], from: 'eevee', stage: 2, baseExp: 230,
-    learn: [...inherit('umbreon'), [30, 'iron-head'], [38, 'flash-cannon'], [44, 'iron-defense']], abilities: { normal: ['protosynthesis'], hidden: 'inner-focus' } },
-  { id: 'toxtricity-future', name: 'Future Toxtricity', base: 'toxtricity', types: ['electric', 'steel'], stats: [80, 100, 75, 125, 75, 95], from: 'toxel', stage: 2, baseExp: 230,
-    learn: [...inherit('toxtricity'), [34, 'flash-cannon'], [40, 'thunderbolt'], [46, 'volt-switch']], abilities: { normal: ['quark-drive'], hidden: 'transistor' } },
-  { id: 'toxtricity-past', name: 'Past Toxtricity', base: 'toxtricity', types: ['poison', 'grass'], stats: [85, 115, 80, 100, 85, 75], from: 'toxel', stage: 2, baseExp: 230,
-    learn: [...inherit('toxtricity'), [34, 'giga-drain'], [40, 'sludge-bomb'], [46, 'power-whip']], abilities: { normal: ['protosynthesis'], hidden: 'poison-heal' } },
-  { id: 'bastiodon-skull', name: 'Skull Bastiodon', base: 'bastiodon', types: ['rock', 'poison'], stats: [70, 80, 160, 45, 135, 30], from: 'shieldon', stage: 2, baseExp: 190,
-    learn: [...inherit('bastiodon'), [30, 'sludge-bomb'], [36, 'poison-jab'], [42, 'toxic']], abilities: { normal: ['sturdy'], hidden: 'poison-heal' } },
-  { id: 'aggron-evolution', name: 'Aggron Evolution', base: 'aggron', types: ['steel', 'rock'], stats: [75, 130, 185, 65, 75, 55], from: 'aggron', stage: 4, baseExp: 290,
-    learn: [...inherit('aggron'), [56, 'meteor-mash'], [60, 'stone-edge'], [64, 'heavy-slam']], abilities: { normal: ['sturdy'], hidden: 'heavy-metal' } },
+const ICON: Record<string, string> = { 'vine-riff': '8/849', 'electric-oncore': '8/849', 'pyro-spirit': '2/196', 'neon-moon': '2/197', bastiodoom: '4/411', cataggron: '3/306' };
+const CRY: Record<string, string> = { 'vine-riff': '849', 'electric-oncore': '849', 'pyro-spirit': '196', 'neon-moon': '197', bastiodoom: '411', cataggron: '306' };
+const EGG: Record<string, string> = { 'Human-Like': 'humanshape', Field: 'ground', Monster: 'monster' };
+const COLOR: Record<string, string> = { 'vine-riff': 'green', 'electric-oncore': 'purple', 'pyro-spirit': 'red', 'neon-moon': 'black', bastiodoom: 'gray', cataggron: 'gray' };
+const stat = (b: any) => ({ hp: b.hp, atk: b.attack, def: b.defense, spa: b.spAtk, spd: b.spDef, spe: b.speed });
+
+// New moves (the six signature moves; Cataclysm Cannon has one version per Forme, picked in battle by its user's form).
+const mv = (id: string, name: string, type: string, category: string, power: number, accuracy: number, pp: number, flags: string[], effects: object) =>
+  ({ id, name, type, category, power, accuracy, pp, priority: 0, critStage: 0, target: 'enemy', flags, effects });
+const newMoves = [
+  mv('thornstrum', 'Thornstrum', 'grass', 'special', 80, 100, 10, ['sound'], { powerRule: 'poisonedBoost' }),
+  mv('feedback-shred', 'Feedback Shred', 'electric', 'special', 90, 100, 10, ['sound'], { status: { id: 'par', chance: 20 } }),
+  mv('grave-rampart', 'Grave Rampart', 'poison', 'special', 80, 100, 10, [], { attackFrom: 'spd', status: { id: 'psn', chance: 30 } }),
+  mv('mindflare', 'Mindflare', 'fire', 'special', 85, 100, 10, [], { targetsDefense: true, status: { id: 'brn', chance: 10 } }),
+  mv('neon-eclipse', 'Neon Eclipse', 'dark', 'physical', 75, 100, 10, ['contact'], { drain: 0.5 }),
+  mv('cataclysm-cannon', 'Cataclysm Cannon', 'steel', 'physical', 100, 90, 5, [], {}),
+  mv('cataclysm-cannon-attack', 'Cataclysm Cannon', 'steel', 'physical', 130, 90, 5, ['jetform'], { recoil: 0.25 }),
+  mv('cataclysm-cannon-defence', 'Cataclysm Cannon', 'steel', 'physical', 80, 90, 5, ['jetform'], { statChanges: [{ stat: 'def', stages: 1, target: 'self', chance: 100 }] }),
 ];
+const known = new Set([...moves, ...newMoves.map((m) => m.id)]);
 
-const out = D.map((d) => {
-  for (const [, m] of d.learn) if (!moves.has(m)) throw new Error(`${d.id}: unknown move ${m}`);
-  const b = byId.get(d.base);
+const abilities: { id: string; name: string; description: string }[] = [];
+const out: any[] = [];
+const learnables: Record<string, { egg: string[]; other: string[] }> = {};
+const tmCsv = readFileSync(join(here, 'source', 'tm_moves.csv'), 'utf8').trim().split('\n').slice(1).map((l) => l.split(','));
+let dex = 1100;
+
+for (const p of pack) {
+  const id = kebab(p.id);
+  const stage = p.evolution.chain.length;
+  const learn: [number, string][] = [];
+  for (const e of p.learnset.levelUp) {
+    const m = kebab(e.moveId);
+    if (!known.has(m)) throw new Error(`${id}: unknown move ${m}`);
+    learn.push([e.level === 0 ? Math.max(1, p.evolution.minLevel ?? 1) : e.level, m]);
+  }
   const seen = new Set<string>();
-  const learnset = d.learn.filter(([l, m]) => !seen.has(`${l}${m}`) && seen.add(`${l}${m}`)).sort((a, c) => a[0] - c[0]).map(([level, move]) => ({ level, move }));
-  return {
-    id: d.id, dex: 1100 + D.indexOf(d), name: d.name, generation: b.generation, types: d.types, baseStats: stats(d.stats), catchRate: 45, baseExp: d.baseExp,
-    growthRate: b.growthRate, evolutionStage: d.stage, evolvesFrom: d.from, tags: [], learnset, evolutions: [],
-    abilities: d.abilities, assets: { sprite: `custom/${d.id}`, icon: b.assets.icon, cry: b.assets.cry }, weight: b.weight, femaleRatio: b.femaleRatio, eggGroups: b.eggGroups, color: b.color,
-  };
-});
-// Aggron's new final stage is a plain level evolution (the others need a held item, see conditionEvolution.ts).
-const evolutions = [{ from: 'aggron', to: 'aggron-evolution', level: 55 }];
-writeFileSync(join(dataDir, 'jetSpecies.json'), JSON.stringify({ species: out, evolutions }) + '\n');
-console.log(`wrote ${out.length} Jet species`);
+  const learnset = learn.filter(([l, m]) => !seen.has(`${l}${m}`) && seen.add(`${l}${m}`)).sort((a, b) => a[0] - b[0]).map(([level, move]) => ({ level, move }));
+  const slot = (s: string) => p.abilities.find((a: any) => a.slot === s);
+  for (const a of p.abilities) if (a.isNew && !abilities.some((x) => x.id === kebab(a.id))) abilities.push({ id: kebab(a.id), name: a.name, description: a.description });
+  const normal = [slot('standard'), slot('unique')].filter(Boolean).map((a: any) => kebab(a.id));
+  const base = byId.get(FIRST[id] ?? kebab(p.evolution.from));
+  const mk = (sid: string, name: string, stats: any, extra: object) => ({
+    id: sid, dex: dex++, name, generation: base.generation, types: p.types.map((t: string) => t.toLowerCase()), baseStats: stat(stats), catchRate: p.profile.catchRate, baseExp: p.profile.baseExp,
+    growthRate: p.profile.growthRate.toLowerCase().replace(/ /g, '-'), evolutionStage: stage, evolvesFrom: kebab(p.evolution.from), tags: [], learnset, evolutions: [],
+    abilities: { normal, hidden: slot('hidden') ? kebab(slot('hidden').id) : null }, assets: { sprite: `custom/${sid}`, icon: ICON[id], cry: CRY[id] },
+    weight: p.profile.weightKg, femaleRatio: p.profile.genderRatio.femalePercent / 100, eggGroups: p.profile.eggGroups.map((g: string) => EGG[g] ?? g.toLowerCase()), color: COLOR[id], ...extra,
+  });
+  if (p.forms?.length) {
+    for (const f of p.forms) out.push(mk(f.isDefault ? id : `${id}-${f.id}`, f.isDefault ? p.name : `${f.name.replace(' Forme', '')} ${p.name}`, f.baseStats, f.isDefault ? {} : { form: { kind: 'battle', base: id } }));
+  } else out.push(mk(id, p.name, p.baseStats, {}));
+  const tm = [...new Set(tmCsv.filter((r) => r[0] === p.id).map((r) => kebab(r[2]!)).filter((m) => moves.has(m)))];
+  for (const f of out.filter((o) => o.id === id || o.id.startsWith(`${id}-`))) learnables[f.id] = { egg: [], other: tm };
+}
+writeFileSync(join(dataDir, 'jetSpecies.json'), JSON.stringify({ species: out, evolutions: [], moves: newMoves, abilities, learnables }) + '\n');
+console.log(`wrote ${out.length} Jet species, ${newMoves.length} moves, ${abilities.length} abilities`);

@@ -2684,7 +2684,7 @@
   "id": "rm_eevee",
   "line": [
    "eevee",
-   "espeon-paradox"
+   "pyro-spirit"
   ],
   "types": [
    "normal"
@@ -2719,7 +2719,7 @@
   "id": "rm_toxel",
   "line": [
    "toxel",
-   "toxtricity-future"
+   "vine-riff"
   ],
   "types": [
    "electric",
@@ -2755,7 +2755,8 @@
   "id": "rm_shieldon",
   "line": [
    "shieldon",
-   "bastiodon-skull"
+   "bastiodon",
+   "bastiodoom"
   ],
   "types": [
    "rock",

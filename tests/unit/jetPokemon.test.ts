@@ -6,24 +6,28 @@ import { describe, expect, it } from 'vitest';
 import { conditionEvolutionTarget, conditionText, CONDITION_EVOLUTIONS } from '../../src/core/conditionEvolution';
 import { evolutionTarget } from '../../src/core/evolution';
 import { HUB_TOWN, OVERWORLD } from '../../src/core/hubTown/schema';
+import type { NatureId } from '../../src/core/natures';
 import { createPokemon } from '../../src/core/pokemon';
 import { createProfile } from '../../src/core/profile';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { JET_LINES, jetBlessing } from '../../src/core/story2/jetBlessing';
 import { content } from './helpers';
 
-const IDS = ['espeon-paradox', 'umbreon-paradox', 'toxtricity-future', 'toxtricity-past', 'bastiodon-skull', 'aggron-evolution'];
+const IDS = ['vine-riff', 'electric-oncore', 'pyro-spirit', 'neon-moon', 'bastiodoom', 'cataggron', 'cataggron-attack', 'cataggron-defence'];
 const img = (...p: string[]): string => join(__dirname, '..', '..', 'public', 'assets', 'images', ...p);
 const day = { heartbond: null, night: false };
 const night = { heartbond: null, night: true };
-const holder = (id: string, level: number, held: Record<string, number>) => {
+const holder = (id: string, level: number, held: Record<string, number>, nature?: NatureId, friendship?: number) => {
   const m = createPokemon(content, id, level, 'u1');
   m.held = held;
+  if (nature) m.nature = nature;
+  if (friendship !== undefined) m.friendship = friendship;
   return m;
 };
+const BOOST = { 'booster-energy': 1 };
 
 describe('Jet species', () => {
-  it('are six valid species with art in every folder and an existing cry and icon', () => {
+  it('are the pack\'s six Pokémon (and Cataggron\'s two battle Formes) with art in every folder', () => {
     for (const id of IDS) {
       const s = content.species.get(id)!;
       expect(s, id).toBeTruthy();
@@ -31,41 +35,49 @@ describe('Jet species', () => {
       expect(s.abilities.normal.every((a) => content.abilities.has(a)), id).toBe(true);
       for (const dir of ['', 'back', 'shiny', 'back/shiny']) for (const ext of ['png', 'json']) expect(existsSync(img('pokemon', dir, 'custom', `${id}.${ext}`)), `${dir}/${id}.${ext}`).toBe(true);
     }
-    expect(content.species.get('espeon-paradox')!.types).toEqual(['psychic', 'fire']);
-    expect(content.species.get('bastiodon-skull')!.types).toEqual(['rock', 'poison']);
+    const s = (id: string) => content.species.get(id)!;
+    expect(s('vine-riff').types).toEqual(['grass', 'poison']);
+    expect(Object.values(s('vine-riff').baseStats)).toEqual([95, 80, 85, 120, 90, 100]);
+    expect(s('neon-moon').types).toEqual(['dark', 'steel']);
+    expect(s('bastiodoom').abilities).toEqual({ normal: ['sturdy', 'plague-bulwark'], hidden: 'soundproof' });
+    expect(Object.values(s('cataggron-defence').baseStats)).toEqual([85, 95, 230, 60, 115, 15]);
+    expect(s('cataggron-attack').form).toEqual({ kind: 'battle', base: 'cataggron' });
   });
-
-  it('Aggron evolves into its new final stage at level 55', () => {
-    const aggron = createPokemon(content, 'aggron', 54, 'u1');
-    expect(evolutionTarget(content, aggron)).toBeNull();
-    aggron.level = 55;
-    expect(evolutionTarget(content, aggron)).toBe('aggron-evolution');
+  it('their signature moves exist, one per Pokémon', () => {
+    for (const [sp, mv] of [['vine-riff', 'thornstrum'], ['electric-oncore', 'feedback-shred'], ['pyro-spirit', 'mindflare'], ['neon-moon', 'neon-eclipse'], ['bastiodoom', 'grave-rampart'], ['cataggron', 'cataclysm-cannon']] as const) {
+      expect(content.moves.get(mv), mv).toBeTruthy();
+      expect(content.species.get(sp)!.learnset.some((e) => e.move === mv), `${sp} ${mv}`).toBe(true);
+    }
   });
 });
 
-describe('Jet held-item evolutions', () => {
-  it('Eevee holding Booster Energy becomes Paradox Espeon by day and Paradox Umbreon by night, from level 28', () => {
-    expect(conditionEvolutionTarget(content, holder('eevee', 28, { 'booster-energy': 1 }), null, day)).toBe('espeon-paradox');
-    expect(conditionEvolutionTarget(content, holder('eevee', 28, { 'booster-energy': 1 }), null, night)).toBe('umbreon-paradox');
-    expect(conditionEvolutionTarget(content, holder('eevee', 27, { 'booster-energy': 1 }), null, day)).toBeNull();
-    expect(conditionEvolutionTarget(content, holder('eevee', 40, {}), null, day)).toBeNull();
+describe('Jet evolutions', () => {
+  it('Toxel holding Booster Energy at level 30: Low Key nature becomes Vine Riff, Amped becomes Electric Oncore', () => {
+    expect(conditionEvolutionTarget(content, holder('toxel', 30, BOOST, 'modest'), null, day)).toBe('vine-riff');
+    expect(conditionEvolutionTarget(content, holder('toxel', 30, BOOST, 'adamant'), null, day)).toBe('electric-oncore');
+    expect(conditionEvolutionTarget(content, holder('toxel', 29, BOOST, 'modest'), null, day)).toBeNull();
+    expect(conditionEvolutionTarget(content, holder('toxel', 40, {}, 'modest'), null, day)).toBeNull();
   });
-  it('Toxel holding Booster Energy becomes Past Toxtricity by day and Future Toxtricity by night', () => {
-    expect(conditionEvolutionTarget(content, holder('toxel', 28, { 'booster-energy': 1 }), null, day)).toBe('toxtricity-past');
-    expect(conditionEvolutionTarget(content, holder('toxel', 28, { 'booster-energy': 1 }), null, night)).toBe('toxtricity-future');
+  it('Eevee holding Booster Energy with high friendship: Pyro Spirit by day, Neon Moon at night', () => {
+    expect(conditionEvolutionTarget(content, holder('eevee', 5, BOOST, undefined, 255), null, day)).toBe('pyro-spirit');
+    expect(conditionEvolutionTarget(content, holder('eevee', 5, BOOST, undefined, 255), null, night)).toBe('neon-moon');
+    expect(conditionEvolutionTarget(content, holder('eevee', 5, BOOST, undefined, 0), null, day)).toBeNull();
+    expect(conditionEvolutionTarget(content, holder('eevee', 5, {}, undefined, 255), null, day)).toBeNull();
   });
-  it('Shieldon holding Black Sludge becomes Skull Bastiodon; plain Shieldon still needs level 30', () => {
-    expect(conditionEvolutionTarget(content, holder('shieldon', 28, { 'black-sludge': 1 }), null, day)).toBe('bastiodon-skull');
-    expect(conditionEvolutionTarget(content, holder('shieldon', 28, {}), null, day)).toBeNull();
-    expect(evolutionTarget(content, holder('shieldon', 30, {}))).toBe('bastiodon');
+  it('Bastiodon holding Black Sludge becomes Bastiodoom; Aggron holding a Metal Coat at level 55 becomes Cataggron', () => {
+    expect(conditionEvolutionTarget(content, holder('bastiodon', 20, { 'black-sludge': 1 }), null, day)).toBe('bastiodoom');
+    expect(conditionEvolutionTarget(content, holder('bastiodon', 20, {}), null, day)).toBeNull();
+    expect(conditionEvolutionTarget(content, holder('aggron', 55, { 'metal-coat': 1 }), null, day)).toBe('cataggron');
+    expect(conditionEvolutionTarget(content, holder('aggron', 54, { 'metal-coat': 1 }), null, day)).toBeNull();
+    expect(evolutionTarget(content, holder('aggron', 60, {}))).toBeNull();
   });
   it('the routes name their condition in plain words', () => {
-    const e = CONDITION_EVOLUTIONS.find((x) => x.to === 'bastiodon-skull')!;
+    const e = CONDITION_EVOLUTIONS.find((x) => x.to === 'bastiodoom')!;
     expect(conditionText(content, e.condition!)).toBe('hold Black Sludge');
   });
-  it('Booster Energy works on the Paradox forms', () => {
+  it('Booster Energy works on the four Paradox forms', () => {
     const hook = (content.catalog.get('booster-energy')!.effect as { hooks: { species: string[] }[] }).hooks[0]!;
-    for (const id of ['espeon-paradox', 'umbreon-paradox', 'toxtricity-future', 'toxtricity-past']) expect(hook.species).toContain(id);
+    for (const id of ['vine-riff', 'electric-oncore', 'pyro-spirit', 'neon-moon']) expect(hook.species).toContain(id);
   });
 });
 

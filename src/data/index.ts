@@ -260,13 +260,13 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 
 export const RAW_CONTENT: RawContent = {
   species: applySpeciesFixes(
-    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), storySpeciesJson.patches),
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions]), storySpeciesJson.patches),
     speciesFixesJson,
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   // Story Run signature moves: npm run data:story-sigs (flagged storysig).
-  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves],
-  abilities: [...abilitiesJson, ...storySpeciesJson.abilities],
+  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...jetSpeciesJson.moves],
+  abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities],
   typeChart: typeChartJson,
   archetypes: archetypesJson,
   trainerUnlocks: trainerUnlocksJson,
@@ -278,7 +278,7 @@ export const RAW_CONTENT: RawContent = {
   rewards: [...rewardsJson, ...megaStonesJson.rewards],
   items: [...itemsJson, ...megaStonesJson.items],
   itemCatalog: [...itemCatalogJson, ...itemCatalogExtra],
-  learnables: { ...learnablesJson, ...storySpeciesJson.learnables },
+  learnables: { ...learnablesJson, ...storySpeciesJson.learnables, ...jetSpeciesJson.learnables },
   trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
   bossTeams: bossTeamsJson,
