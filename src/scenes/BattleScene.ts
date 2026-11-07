@@ -133,6 +133,7 @@ import { cameraShot } from '../core/presentation/camera';
 import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
+import { aceBurst, legendFlash, rivalCatch, rivalEntrance, rivalExit } from '../ui/battleFx/rivalStepIn';
 import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner } from '../ui/battleFx/spectacle';
 import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui/dialogue/storyDialogue';
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
@@ -284,6 +285,8 @@ export class BattleScene extends Phaser.Scene {
   private portrait: PortraitChip | undefined;
   private advance: (() => void) | null = null;
   private busy = false;
+  /** What an assisting rival says after a win (set when it stepped in). */
+  private assistAfter: string | null = null;
   /** The transformation the player chose to do with their next move (null = off). */
   private transformChoice: TransformRequest | null = null;
   private actionTabUi: ActionTab | null = null;
@@ -1900,6 +1903,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** Plays the opening; if any part of the show fails, the Pokémon and boxes still appear and the battle goes on. */
   private async intro(): Promise<void> {
+    if (await this.rivalStepInScene()) return;
     try {
       await this.introShow();
     } catch (e) {
@@ -1908,6 +1912,79 @@ export class BattleScene extends Phaser.Scene {
       this.busy = false;
       this.nextPrompt();
     }
+  }
+
+  /** The rival's picture: its own character if it has one, else its trainer class. */
+  private rivalArt(rival: { classId: string; name: string }): { assetId: string; label: string } | null {
+    const content = services().session.content;
+    const character = rival.classId === 'rival' ? content.bosses.get(rival.name.toLowerCase()) : undefined;
+    if (character) return { assetId: character.sprites.default, label: rival.name };
+    const cls = content.trainers.get(rival.classId);
+    return cls ? { assetId: cls.spriteAssetId, label: rival.name } : null;
+  }
+
+  /**
+   * A rival may step into this battle before it starts (core/rivals/stepIn.ts): help (the battle goes on), battle you first,
+   * or throw a ball at the wild Pokémon. Returns true when the scene was left for another one. Presentation only: the outcome
+   * is already decided in the core, so a failing animation never changes it.
+   */
+  private async rivalStepInScene(): Promise<boolean> {
+    const { session } = services();
+    let res: ReturnType<typeof session.rivalStepIn> = null;
+    try {
+      res = session.rivalStepIn();
+    } catch (e) {
+      console.warn('Rival step-in failed', e);
+      return false;
+    }
+    if (!res) return false;
+    const motion = this.motion;
+    let visual: Awaited<ReturnType<typeof rivalEntrance>> = null;
+    try {
+      const art = this.rivalArt(res.rival);
+      const st = session.settings;
+      const home = { x: 200, y: 400 };
+      if (res.kind === 'catch') {
+        const foe = this.shown.enemy;
+        const sprite = foe ? this.showSprite('enemy', foe, false) : null;
+        visual = await rivalEntrance(this, motion, art, 'left', home);
+        await this.playBeat(stamp(this, res.legend ? (res.legend === 'mythical' ? 'MYTHICAL!' : 'LEGENDARY!') : 'RIVAL!', `${res.rival.name} throws first`, this.foeRim(), motion));
+        await rivalCatch(this, motion, { x: home.x + 40, y: home.y - 150 }, { x: ENEMY_POS.x, y: ENEMY_POS.y - 20 }, sprite);
+        if (res.legend) await legendFlash(this, motion, capFlash(st.effectIntensity, st.reducedFlash));
+      } else {
+        visual = await rivalEntrance(this, motion, art, res.kind === 'assist' ? 'left' : 'right', res.kind === 'assist' ? home : { x: 560, y: 400 });
+        await this.playBeat(stamp(this, res.kind === 'assist' ? 'RIVAL ASSIST!' : 'RIVAL BATTLE!', res.kind === 'assist' ? `${res.rival.name} joins in` : `${res.rival.name} blocks the way`, this.foeRim(), motion));
+        if (res.kind === 'assist' && visual) aceBurst(this, motion, visual.x + 70, visual.y - 40);
+      }
+    } catch (e) {
+      console.warn('Rival step-in animation failed', e);
+    }
+    for (const line of res.lines) await this.say(line);
+    try {
+      await rivalExit(this, motion, visual, res.kind === 'duel' ? 'right' : 'left');
+    } catch (e) {
+      console.warn('Rival step-in exit failed', e);
+    }
+    this.assistAfter = res.afterLine ?? null;
+    if (res.next === 'continue') return false;
+    await exitWipe(this, motion, this.wipeMask());
+    this.scene.start(sceneForRun(res.run));
+    return true;
+  }
+
+  /** The rival's duel is over: say what happens next, then go to the real battle (win) or on with the run (loss). */
+  private async finishStepInDuel(end: NonNullable<TurnResult['stepIn']>, run: RunState): Promise<void> {
+    const motion = this.motion;
+    const st = services().session.settings;
+    if (end.won) {
+      await this.playBeat(stamp(this, 'YOU WON!', `${end.rival.name} heals your team`, this.foeRim(), motion));
+    } else if (end.legend) {
+      await legendFlash(this, motion, capFlash(st.effectIntensity, st.reducedFlash));
+      await this.playBeat(stamp(this, end.legend === 'mythical' ? 'MYTHICAL!' : 'LEGENDARY!', `${end.rival.name} takes it`, this.foeRim(), motion));
+    }
+    for (const line of end.lines) await this.say(line);
+    await exitWipe(this, motion, this.wipeMask());
+    this.scene.start(sceneForRun(run));
   }
 
   /** After a failed opening: the arena must never stay empty. Draws whoever is not on screen yet (presentation only). */
@@ -3153,6 +3230,10 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    if (result.stepIn) {
+      await this.finishStepInDuel(result.stepIn, result.run);
+      return;
+    }
     if (result.clubLost) {
       await this.say('The match is over. Your team is patched up: no hard feelings.');
       await exitWipe(this, this.motion, this.wipeMask());
@@ -3217,6 +3298,10 @@ export class BattleScene extends Phaser.Scene {
         );
       }
       await this.say(`You defeated ${trainer}!`);
+    }
+    if (end.outcome === 'win' && this.assistAfter) {
+      await this.say(this.assistAfter);
+      this.assistAfter = null;
     }
     if (end.moneyGained > 0) await this.say(`You got ₽${end.moneyGained}!`);
     for (const id of end.itemsFound) await this.say(`You found a ${content.items.get(id)?.name ?? id}!`);

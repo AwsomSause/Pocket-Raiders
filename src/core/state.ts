@@ -774,6 +774,8 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
+  /** Rival step-in (core/rivals/stepIn.ts): 'assist' fights beside you, 'duel' is the warm-up fight with the real battle queued behind it, 'done' is the real battle after the duel. */
+  stepIn: z.object({ kind: z.enum(['assist', 'duel', 'done']), rivalId: z.string(), queued: z.unknown().optional() }).optional(),
   /** W0/W2: moves you used this battle, by move id (the rival's adaptations read only what it saw here). */
   playerMovesSeen: z.record(z.string(), z.number().int().min(1)).optional(),
   /** W2: times you chose to switch this battle (rival adaptation trigger #4). */
