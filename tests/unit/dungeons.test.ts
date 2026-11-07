@@ -59,3 +59,24 @@ describe('W6 compiled rooms', () => {
     expect(content.events.get('ev-hidden-dungeon')!.secret.length).toBeGreaterThan(0);
   });
 });
+
+describe('W14 dungeon items and map hints', () => {
+  it('Torch and Dungeon Key exist, and rooms offer to spend them', async () => {
+    const { dungeonEvents } = await import('../../src/core/dungeon/compile');
+    expect(content.catalog.has('torch')).toBe(true);
+    expect(content.catalog.has('dungeon-key')).toBe(true);
+    const evs = dungeonEvents() as { choices: { label: string; requires?: { id: string }[] }[] }[];
+    const labels = evs.flatMap((e) => e.choices.map((c) => c.label));
+    expect(labels.some((l) => l.startsWith('Light a Torch'))).toBe(true);
+    expect(labels.some((l) => l.startsWith('Use a Dungeon Key'))).toBe(true);
+  });
+  it('nodeHint is a pure, seeded read', async () => {
+    const { nodeHint } = await import('../../src/core/worldSim/tick');
+    expect(nodeHint({ seed: 's', story: { sim: undefined } } as never, 'n1')).toBeNull();
+    const run = { seed: 's', story: { sim: { rumors: [{ id: 'a', text: 'Rumour A', shown: false }] } } } as never;
+    const hits = Array.from({ length: 30 }, (_, i) => nodeHint(run, `n${i}`)).filter(Boolean);
+    expect(hits.length).toBeGreaterThan(3);
+    expect(hits.length).toBeLessThan(25);
+    expect(nodeHint(run, 'n1')).toBe(nodeHint(run, 'n1'));
+  });
+});
