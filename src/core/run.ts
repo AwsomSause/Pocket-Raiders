@@ -93,6 +93,7 @@ import { closeWinScene, countedScene, finisherScene, partyNarration } from './ov
 import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
+import { tickChainTimers } from './overhaul/chains';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
@@ -209,6 +210,8 @@ import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { shopTierAllowed } from './rarity';
+import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
@@ -844,6 +847,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   else if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
   stage.current = nodeId;
   stage.visited.push(nodeId);
+  tickChainTimers(run.story.flags);
   stepClock(content, run);
   // Bridge Mail adds a stop beside the node the player reaches.
   addBridgeStops(content, run, nodeId);
@@ -2177,7 +2181,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // S7d: Signature II (and the Keystone upgrade) are learned at a Recovery stop.
     const sigPartner = run.party.find((m) => m.uid === run.story.v2?.heartbond.partner);
     const sigLines = sigPartner ? checkSignatures(content, run, 'recovery').map((u) => learnedLine(content, run, displayName(content, sigPartner), u)).join(' ') : '';
-    const camp = quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
+    const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
   }
   run.phase = 'shop';
@@ -2235,7 +2239,7 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   const modeStock = (content.balance.modeShops[run.rules?.modeId ?? ''] ?? []).filter((x) => content.items.has(x.item) && !content.shop.some((e) => e.item === x.item));
   const secret = secretTierEntries(content, run.story).filter((x) => !content.shop.some((e) => e.item === x.item) && !modeStock.some((e) => e.item === x.item));
   const stock = [...content.shop, ...bankShopEntries(content, run.licenses).filter((x) => !content.shop.some((e) => e.item === x.item)), ...modeStock, ...secret];
-  const allowed = (e: Content['shop'][number]) => !owned(e) && !(noRevive && content.items.get(e.item)?.category === 'revive');
+  const allowed = (e: Content['shop'][number]) => !owned(e) && !(noRevive && content.items.get(e.item)?.category === 'revive') && (black || shopTierAllowed(content, content.catalog.get(e.item)?.rarity));
   const selling = stock.filter((e) => (black || open(e) || early.includes(e)) && allowed(e));
   // Shops redesign: each kind of shop sells its own part of that (core/shopTypes.ts).
   const locked = stock.filter((e) => !selling.includes(e) && allowed(e)).sort((a, b) => shopBadgesNeeded(content, run, a) - shopBadgesNeeded(content, run, b));
@@ -2250,13 +2254,13 @@ export function isBlackMarket(content: Content, run: Pick<RunState, 'badges' | '
 /** Key items, Mega Stones and Z-Crystals last the whole run, so you only ever need one. */
 function ownsKeepsake(content: Content, inventory: Record<string, number>, itemId: string): boolean {
   const kind = content.items.get(itemId)?.effect.kind;
-  return (kind === 'keyItem' || kind === 'megaStone' || kind === 'zCrystal') && itemCount(inventory, itemId) > 0;
+  return (kind === 'keyItem' || kind === 'megaStone' || kind === 'zCrystal' || kind === 'speciesZCrystal') && itemCount(inventory, itemId) > 0;
 }
 
 /** True for items you only ever need one of (key items, Mega Stones, Z-Crystals): the basket holds one at most. */
 export function oneOnly(content: Content, itemId: string): boolean {
   const kind = content.items.get(itemId)?.effect.kind;
-  return kind === 'keyItem' || kind === 'megaStone' || kind === 'zCrystal';
+  return kind === 'keyItem' || kind === 'megaStone' || kind === 'zCrystal' || kind === 'speciesZCrystal';
 }
 
 /** Badges needed before the shop sells an entry, after the trainer's shopUnlockOffset. */
