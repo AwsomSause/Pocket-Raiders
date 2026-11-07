@@ -51,5 +51,5 @@ export function slotCard(content: Content, peek: SlotPeek): SlotCard {
   if (stats && (stats.runsStarted > 0 || stats.runsEnded > 0)) {
     return { ...base, status: 'between', title: `Slot ${peek.slot} · Between runs`, lines: ['No run in progress (the last one is finished).', progress] };
   }
-  return { ...base, status: 'empty', title: `Slot ${peek.slot} · Empty`, lines: ['Nothing saved here yet. Choose it to start fresh.'] };
+  return { ...base, savedAt: null, status: 'empty', title: `Slot ${peek.slot} · Empty`, lines: ['Nothing saved here yet. Choose it to start fresh.'] };
 }

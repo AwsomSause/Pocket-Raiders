@@ -72,7 +72,7 @@ export class StarterSelectScene extends Phaser.Scene {
     this.focus(0);
 
     // Keyboard hints are only for keyboards (on a touch screen they sat on top of the cards).
-    if (!this.sys.game.device.input.touch) this.add.text(GAME_WIDTH / 2, 516, '←/→ choose  ·  Enter confirm  ·  Esc menu (run is saved)', textStyle(18, look === 'original' ? '#a69cb4' : L.head)).setOrigin(0.5).setDepth(5);
+    if (!this.sys.game.device.input.touch) this.add.text(GAME_WIDTH / 2, 516, 'Arrows choose  ·  Enter confirm  ·  Esc menu (run is saved)', textStyle(18, look === 'original' ? '#a69cb4' : L.head)).setOrigin(0.5).setDepth(5);
 
     onInputAction(this, (action) => {
       if (action === 'left') this.focus((this.index + 2) % 3);
