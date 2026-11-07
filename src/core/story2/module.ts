@@ -9,6 +9,7 @@ import { hashSeed, Rng } from '../rng';
 import type { Profile, RunState } from '../state';
 import { change, freshRecord, meet, ATTRS, type Attr } from './relationships';
 import { resolveVariant, scoreCond, type ResolveContext, type ResolveCond } from './resolver';
+import { foldKeepsakes } from './keepsakes';
 import { dueRivalScene, epilogueRivalScene } from './rivalPlan';
 import { renderTemplate } from './templates';
 import type { StoryData, StoryEvent, StoryV2 } from './schema';
@@ -360,6 +361,7 @@ export function finishScene(content: Content, run: RunState, choiceId?: string):
 /** Folds the run's module results into the profile once (Remembrances unlocked, Lore learned, the ending seen, scene snapshots). Called with the Chronicle. */
 export function foldModuleIntoProfile(profile: Profile, run: RunState): void {
   const v2 = run.story.v2;
+  if (v2) foldKeepsakes(profile, run);
   const m = v2?.module;
   if (!v2 || !m) return;
   const story = profile.story;

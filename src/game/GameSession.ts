@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
 import { dexCaughtCount } from '../core/dexRewards';
 import { changeFriendship } from '../core/friendship';
@@ -701,6 +702,15 @@ export class GameSession {
     this.checkSave(this.saves.saveProfile(this.profile));
     this.persistRun();
     return { message: result.message, ok: true };
+  }
+
+  /** Keepsakes: wear an unlocked one in its slot (null takes the slot's item off), and save the profile. */
+  wearKeepsake(slot: KeepsakeSlot, id: string | null): boolean {
+    const next = structuredClone(this.profile);
+    if (!wearKeepsake(next, slot, id)) return false;
+    this.profile = next;
+    this.checkSave(this.saves.saveProfile(this.profile));
+    return true;
   }
 
   /** A Pocket Town action (core/town): the profile changes, saves, and the message comes back. */
