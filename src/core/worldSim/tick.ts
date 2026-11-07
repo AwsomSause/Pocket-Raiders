@@ -106,6 +106,13 @@ export function markRumorShown(run: RunState, text: string): void {
   if (r) r.shown = true;
 }
 
+/** True while the world holds an unsettled Legendary disturbance (W8). */
+export const hasDisturbance = (run: RunState): boolean => (run.story.sim?.disturbances.length ?? 0) > 0;
+/** Settles every disturbance (the Legendary Disturbance event). */
+export function calmDisturbance(run: RunState): void {
+  if (run.story.sim) run.story.sim.disturbances = [];
+}
+
 /** Called when an event starts: remembers dungeons entered and finds the mystery trainer waiting there. Returns the finding text, or ''. */
 export function noteDungeonEntered(run: RunState, eventId: string): string {
   const entrances = DUNGEONS.dungeons.map((d) => ({ d, id: entranceEventId(d) }));

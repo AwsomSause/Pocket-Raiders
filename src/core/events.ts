@@ -30,7 +30,7 @@ import { addItem } from './items';
 import { makeDoubles } from './battle/doubles';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
-import { featuredRival, rivalBeaten, rivalFightTeam, rivalPath } from './rivals/living';
+import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
 import { monRivalState } from './rivals/monRivals';
 import { openFeud, settleFeud } from './story/feud';
 import { apprenticeLevelBonus, applyMentorEffect, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
@@ -64,7 +64,7 @@ import type { MapNode, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
-import { noteDungeonEntered } from './worldSim/tick';
+import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
 import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
@@ -138,6 +138,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return rivalPath(run) === c.path;
     case 'rivalBeaten':
       return rivalBeaten(run);
+    case 'rivalLast':
+      return rivalLastResult(run) === c.result;
+    case 'disturbance':
+      return hasDisturbance(run);
     case 'rep':
       return repAtLeast(run, c.category, c.atLeast);
     case 'badges':
@@ -270,6 +274,10 @@ export function conditionText(content: Content, c: EventCondition): string {
       return c.path === 'friend' ? 'Needs a rival who is becoming a friend' : c.path === 'rival' ? 'Needs a rival who sees you as an adversary' : 'Needs a rival who has not decided about you';
     case 'rivalBeaten':
       return 'Needs a rival you beat last time';
+    case 'rivalLast':
+      return c.result === 'win' ? 'Needs a rival you beat last time' : 'Needs a rival who beat you last time';
+    case 'disturbance':
+      return 'Needs a restless land (a Legendary stirring)';
     case 'rep':
       return `Needs a ${c.atLeast} reputation as a ${c.category} contender`;
     case 'badges':
@@ -801,6 +809,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'a feud is settled';
     case 'hunt':
       return e.finish ? 'the hunt ends' : 'a clue';
+    case 'calmDisturbance':
+      return 'the land settles';
     case 'gauntlet':
       return `${e.rivals} rivals will come for you`;
     case 'pastGauntlet':
@@ -1049,6 +1059,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return settleFeud(content, run, e.choice);
     case 'hunt':
       return e.finish ? finishHunt(content, run) : addHuntClue(content, run);
+    case 'calmDisturbance':
+      calmDisturbance(run);
+      return effectWords(content, e);
     case 'gauntlet':
       return startGauntlet(content, run, e.rivals) > 0 ? effectWords(content, e) : 'no rivals to face yet';
     case 'pastGauntlet':

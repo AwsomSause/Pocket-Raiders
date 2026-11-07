@@ -562,10 +562,106 @@
     "Trainer",
     "Relationship"
    ],
-   "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: needs recurring trainer memory ladder (11.4).)",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "ev-unexpected-challenge"
+    }
+   ],
+   "intro": "A familiar veteran waits at a crossroads, arms folded. \"I remembered you. I never forget a trainer who is worth remembering.\"",
    "choices": [
+    {
+     "label": "Greet the trainer you beat",
+     "success": {
+      "text": "\"The one who beat me! I have been training. Let us see who is better now.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "ace-trainer",
+       "name": "Challenger",
+       "size": 4,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "friendship",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trainer-reunion",
+         "amount": 1
+        }
+       ]
+      }
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recurring-challenger"
+      }
+     ]
+    },
+    {
+     "label": "Take the rematch you refused",
+     "success": {
+      "text": "\"You walked away last time. Not today.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "ace-trainer",
+       "name": "Challenger",
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "friendship",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trainer-reunion",
+         "amount": 1
+        }
+       ]
+      }
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "refused-challenge"
+      }
+     ]
+    },
+    {
+     "label": "Share a meal instead",
+     "success": {
+      "text": "You trade stories over warm food. They nod at each of your Pokémon by name.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "friendship",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trainer-reunion",
+        "amount": 1
+       }
+      ]
+     }
+    },
     {
      "label": "Walk on",
      "success": {
@@ -573,8 +669,7 @@
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-champions-invitation",
@@ -773,18 +868,83 @@
     "Relationship"
    ],
    "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: needs the rival condition state (W4); live Rescue the Rival covers the scene.)",
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "Your rival is on the ground at the roadside, their Pokémon hurt, wild Pokémon circling. They wave you off, but their hands are shaking.",
    "choices": [
+    {
+     "label": "Treat their Pokémon (Super Potion)",
+     "success": {
+      "text": "You spray the wounds and the circling Pokémon back off. \"I owe you. Do not tell anyone.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "super-potion"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rival-rescued",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "item",
+       "id": "super-potion"
+      }
+     ]
+    },
+    {
+     "label": "Drive off the wild Pokémon",
+     "success": {
+      "text": "You step in front of them. They get back on their feet behind you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "friendship",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 3
+        },
+        {
+         "kind": "flag",
+         "key": "rival-rescued",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
     {
      "label": "Walk on",
      "success": {
-      "text": "You let it pass and keep to the road.",
-      "effects": []
+      "text": "They glare at your back, but they manage. You do not look round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-abandoned",
+        "amount": 1
+       }
+      ]
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-trainer-tournament",
@@ -834,9 +994,59 @@
     "Survival"
    ],
    "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: live evil-team ambush covers it.)",
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 1
+    }
+   ],
+   "intro": "Alarm bells. The Evil Team is stripping a roadside stall and loading Pokémon into crates. A lookout spots you and whistles.",
    "choices": [
+    {
+     "label": "Defend the stall",
+     "success": {
+      "text": "\"Move along, kid!\" They come at you two at a time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Raiding Grunt",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 2,
+       "chainHeal": 0.15,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "evil",
+         "beat": false,
+         "heat": -1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Slip away",
+     "success": {
+      "text": "You keep your head down. Behind you the crates go onto a truck.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": false,
+        "heat": 1
+       }
+      ]
+     }
+    },
     {
      "label": "Walk on",
      "success": {
@@ -844,8 +1054,7 @@
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-legendary-disturbance",
@@ -858,18 +1067,73 @@
     "Mystery"
    ],
    "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: needs worldFlag disturbance and roamers (W8).)",
+   "requires": [
+    {
+     "kind": "disturbance"
+    }
+   ],
+   "intro": "Every Pokémon nearby is restless. Birds will not land, and the grass lies flat in a long line. Something enormous passed through here.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Track the disturbance",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "You follow the flattened grass to its source.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "latios",
+        "latias",
+        "articuno",
+        "zapdos",
+        "moltres",
+        "raikou",
+        "entei",
+        "suicune"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 5
+        },
+        {
+         "kind": "calmDisturbance"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Calm the land with a legendary companion",
+     "success": {
+      "text": "Your companion's presence settles the grass and the birds return.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "calmDisturbance"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyTag",
+       "tag": "legendary"
+      }
+     ]
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "Whatever it was, it will settle on its own.",
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-rivals-victory",
@@ -882,9 +1146,56 @@
     "Story"
    ],
    "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: needs rival milestones from W4.)",
+   "requires": [
+    {
+     "kind": "rivalLast",
+     "result": "lose"
+    }
+   ],
+   "intro": "Your rival catches up to you, grinning, a little out of breath. \"That was close. Admit it, I earned that win.\"",
    "choices": [
+    {
+     "label": "Congratulate them",
+     "success": {
+      "text": "\"Next time.\" They are quiet for a moment, then smile properly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-respect",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a rematch",
+     "success": {
+      "text": "\"Right now? Fine. Do not blame the road.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "rival",
+       "rival": true,
+       "name": "Rival",
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "friendship",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
     {
      "label": "Walk on",
      "success": {
@@ -892,8 +1203,7 @@
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-rivals-defeat",
@@ -907,18 +1217,66 @@
     "Recovery"
    ],
    "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: needs rival milestones from W4; live A Rival's Bad Day covers it.)",
+   "requires": [
+    {
+     "kind": "rivalLast",
+     "result": "win"
+    }
+   ],
+   "intro": "Your rival sits on a fence, staring at the ground. They notice you and look away. \"Do not say it.\"",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Offer them a Potion",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "They take it without a word, then nod once.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-respect",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ]
+    },
+    {
+     "label": "Tell them what you saw in the battle",
+     "success": {
+      "text": "\"...You noticed that? I will fix it.\" They look a little better.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rival-respect",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be",
+     "success": {
+      "text": "Some losses are best sat through alone.",
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-forgotten-research-lab",
@@ -933,17 +1291,28 @@
    ],
    "minStage": 1,
    "requires": [],
-   "intro": "(Disabled until its system exists: opens a lab dungeon (W6).)",
+   "intro": "Behind a rusted gate a squat concrete building hums faintly. A faded sign reads Research Annex. Lights are on inside.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Go inside",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "The door grinds open onto a dim corridor.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-forgotten-lab-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You keep to the road.",
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-treasure-expedition",
@@ -958,17 +1327,54 @@
    ],
    "minStage": 1,
    "requires": [],
-   "intro": "(Disabled until its system exists: 3-node dig route (W6).)",
+   "intro": "A weathered map scrap marks a dig site off the road. Someone has already started: a shovel stands in the soil.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Follow the dig route",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "Three marked spots lie ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use your Treasure Map",
+     "success": {
+      "text": "The map fits the scrap exactly. The dig is paid up front.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "treasure-map"
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-a"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "item",
+       "id": "treasure-map"
+      }
+     ]
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You keep to the road.",
       "effects": []
      }
     }
-   ],
-   "disabled": true
+   ]
   },
   {
    "id": "ev-lost-civilization",
@@ -1024,18 +1430,37 @@
     "Combat"
    ],
    "minStage": 1,
-   "requires": [],
-   "intro": "(Disabled until its system exists: merges two pseudo stages (W7).)",
+   "requires": [
+    {
+     "kind": "disturbance"
+    }
+   ],
+   "intro": "The air ahead folds like paper. Two places that should never touch are overlapping, and something unquiet is leaning through.",
    "choices": [
     {
-     "label": "Walk on",
+     "label": "Step into the fold",
      "success": {
-      "text": "You let it pass and keep to the road.",
+      "text": "Up becomes sideways. The way back is somewhere else.",
+      "effects": [
+       {
+        "kind": "calmDisturbance"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ps-distortion-world-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away",
+     "success": {
+      "text": "The fold closes with a sigh.",
       "effects": []
      }
     }
    ],
-   "disabled": true
+   "pseudo": true
   }
  ]
 }

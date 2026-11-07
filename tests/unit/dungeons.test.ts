@@ -6,10 +6,10 @@ import { content } from './helpers';
 const bad = (patch: Partial<DungeonDef>): DungeonDef => ({ ...structuredClone(DUNGEONS.dungeons[0]!), ...patch });
 
 describe('W6 dungeon definitions', () => {
-  it('has 8 basic (3 to 5 nodes) and 8 themed (6 to 9 nodes) dungeons that all validate', () => {
+  it('has 9 basic (3 to 5 nodes) and 9 themed (6 to 9 nodes) dungeons that all validate', () => {
     expect(validateAllDungeons()).toEqual([]);
-    expect(DUNGEONS.dungeons.filter((d) => d.kind === 'basic')).toHaveLength(8);
-    expect(DUNGEONS.dungeons.filter((d) => d.kind === 'themed')).toHaveLength(8);
+    expect(DUNGEONS.dungeons.filter((d) => d.kind === 'basic')).toHaveLength(9);
+    expect(DUNGEONS.dungeons.filter((d) => d.kind === 'themed')).toHaveLength(9);
   });
   it('rejects bad graphs: dead end, loop, 3 wild in a row, too few kinds, size, hidden-only, missing boss', () => {
     const base = DUNGEONS.dungeons[0]!;
