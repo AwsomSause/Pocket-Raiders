@@ -38,7 +38,35 @@ def trainer_img(asset):
         p = assets / 'bosses' / f'{rest}.png'; j = None
     else:
         p = assets / 'trainer' / f'{rest}.png'; j = assets / 'trainer' / f'{rest}.json'
-    return first_frame(p, j)[0] if p.exists() else None
+    return list(first_frame(p, j)) if p.exists() else None
+
+MAX_FRAMES = 18
+
+def animated(sprite):
+    """All frames of a front sprite as one looping lossless WebP, cropped to the union box (feet stay put), thinned to MAX_FRAMES."""
+    base = assets / 'pokemon' / sprite
+    j = json.load(open(f'{base}.json'))
+    frames = j['textures'][0]['frames'] if 'textures' in j else j['frames']
+    frames = frames if isinstance(frames, list) else list(frames.values())
+    im = Image.open(f'{base}.png').convert('RGBA')
+    fr = [im.crop((f['frame']['x'], f['frame']['y'], f['frame']['x'] + f['frame']['w'], f['frame']['y'] + f['frame']['h'])) for f in frames]
+    box = None
+    for f in fr:
+        bb = f.getbbox()
+        if bb: box = bb if box is None else (min(box[0], bb[0]), min(box[1], bb[1]), max(box[2], bb[2]), max(box[3], bb[3]))
+    fr = [f.crop(box) for f in fr]
+    total_ms = len(fr) * 1000 / 12
+    if len(fr) > MAX_FRAMES:
+        fr = [fr[round(i * len(fr) / MAX_FRAMES)] for i in range(MAX_FRAMES)]
+    if fr[0].height > 120:
+        k = 120 / fr[0].height
+        fr = [f.resize((max(1, round(f.width * k)), 120), Image.LANCZOS) for f in fr]
+    buf = io.BytesIO()
+    fr[0].save(buf, 'WEBP', save_all=True, append_images=fr[1:], duration=max(83, round(total_ms / len(fr))), loop=0, lossless=True, method=4)
+    return 'data:image/webp;base64,' + base64.b64encode(buf.getvalue()).decode(), fr[0].width, fr[0].height
+
+need = {(m.get('f') or m['s']) for b in data['bosses'] for m in b['champion'][-1]['members']}
+anims = {sid: animated(data['species'][sid]['sprite']) for sid in sorted(need) if sid in sprites}
 
 trainers = {b['id']: trainer_img(b['sprite']) for b in data['bosses']}
 payload = {
@@ -47,6 +75,9 @@ payload = {
     'names': {k: v['name'] for k, v in data['species'].items()},
     'sprites': {k: [v[0], v[1], v[2]] for k, v in sprites.items()},
     'trainers': trainers,
+    'anims': {k: list(v) for k, v in anims.items()},
+    'heights': {k: v['h'] for k, v in data['species'].items()},
+    'th': {b['id']: b['th'] for b in data['bosses']},
     'bosses': data['bosses'],
 }
 html = open(root / 'tools/boss-gimmick-dex.template.html').read().replace('/*DATA*/null', json.dumps(payload, separators=(',', ':')))
