@@ -963,6 +963,15 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('mentorship'), mentorUid: z.string(), proteUid: z.string(), path: z.enum(['guardian', 'striker', 'strategist', 'survivor', 'challenger', 'bonded']) }),
   /** A benched Pokémon asks to lead (core/story/askLead.ts). */
   z.object({ kind: z.literal('askLead'), uid: z.string(), reason: z.enum(['leftOut', 'campfire']) }),
+  /** Story Overhaul S9: the Gym Fork (two doors, or pass the town) and Rematch Day (a Guest Match, or move on) of the Orrery Circuit (core/campaign/circuitGate.ts). */
+  z.object({
+    kind: z.literal('circuit'),
+    step: z.enum(['fork', 'rematch']),
+    region: z.number().int().min(0),
+    index: z.number().int().min(0),
+    title: z.string(),
+    options: z.array(z.object({ label: z.string(), description: z.string(), action: z.enum(['door0', 'door1', 'pass', 'guest', 'skip']), leaderId: z.string().optional() })).min(1),
+  }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
   /** A trainer's signature mechanic: pick one of the options (core/signature.ts). */

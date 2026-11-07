@@ -26,7 +26,11 @@ export function recordStoryLoss(content: Content, run: RunState): void {
   const v2 = run.story.v2;
   const id = battle.rivalId ?? (battle.firstRival ? 'first_rival' : battle.nemesis ? `nemesis:${battle.nemesis}` : battle.monRival ? `mon:${battle.monRival.id}` : battle.event ? `event:${battle.event.eventId}` : 'rival');
   run.story.flags[storyLossFlag(id)] = run.encountersCompleted;
-  if (v2) v2.facts.story_losses = (typeof v2.facts.story_losses === 'number' ? v2.facts.story_losses : 0) + 1;
+  if (v2) {
+    v2.facts.story_losses = (typeof v2.facts.story_losses === 'number' ? v2.facts.story_losses : 0) + 1;
+    // S20: a story fight lost during the League is the "final loss" the Champion's Heir ending grid reads.
+    if (run.stage?.kind === 'league') v2.facts.final_loss = true;
+  }
   else run.story.flags['story:losses'] = Number(run.story.flags['story:losses'] ?? 0) + 1;
   const rival = battle.rivalId ? run.story.rivals.find((r) => r.id === battle.rivalId) : undefined;
   emit(content, run, 'storyMoment', {

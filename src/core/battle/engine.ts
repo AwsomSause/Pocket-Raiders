@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, growthBerryMultiplier, growthCritBonus, growthIncomingMultiplier, growthVanguardMultiplier, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, growthBerryMultiplier, growthCritBonus, growthIncomingMultiplier, growthHazardMultiplier, growthVanguardMultiplier, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -231,7 +231,7 @@ export type BattleEvent =
 
 export type PlayerAction =
   /** `transform`: Mega Evolve (etc.) before moving this turn. */
-  | { kind: 'move'; index: number; transform?: TransformRequest; /** Spend a full Momentum Meter: this move is a Surge Strike. */ rally?: boolean; /** A prompt grade earned in the UI: aim drag or signature shout (ideas W1). */ skill?: SkillInput }
+  | { kind: 'move'; index: number; /** Story Run: insist on a move the Pokémon would refuse (costs Heartbond). */ override?: boolean; transform?: TransformRequest; /** Spend a full Momentum Meter: this move is a Surge Strike. */ rally?: boolean; /** A prompt grade earned in the UI: aim drag or signature shout (ideas W1). */ skill?: SkillInput }
   | { kind: 'switch'; partyIndex: number }
   /** `skill`: the grade of a Ball Launcher skill throw (core/camp); it scales the catch rate. `throwSkill`: the grade of the hand-aimed throw ring (ideas W1). */
   | { kind: 'item'; itemId: string; targetIndex?: number; skill?: 'miss' | 'ok' | 'good' | 'perfect'; throwSkill?: SkillInput }
@@ -1658,6 +1658,17 @@ function growthSituation(ctx: BattleContext, user: Combatant, target: Combatant)
   };
 }
 
+/** Thorn Warden: the foe made contact this turn or last (marks `contact:<uid>:<turn>`). */
+function foeContacted(ctx: BattleContext, foe: Combatant): boolean {
+  if (foe.side !== 'enemy') return false;
+  const marks = ctx.battle.growthMarks ?? [];
+  return marks.includes(`contact:${foe.mon.uid}:${ctx.battle.turn}`) || marks.includes(`contact:${foe.mon.uid}:${ctx.battle.turn - 1}`);
+}
+/** Growth counters the story hooks pick up after the turn (marks `<counter>:<uid>`, one per event). */
+function noteGrowthMark(ctx: BattleContext, c: Combatant, counter: 'thorn' | 'avoid'): void {
+  if (c.side === 'player' && ctx.content.balance.overhaulGrowth.enabled) (ctx.battle.growthMarks ??= []).push(`${counter}:${c.mon.uid}`);
+}
+
 /** The player's Pokémon has this growth path (and the switch is on). */
 function growthHas(ctx: BattleContext, c: Combatant, path: string): boolean {
   return c.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && c.mon.growthPath === path;
@@ -2295,7 +2306,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3282,6 +3293,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     events.push({ type: 'protected', side: target.side });
     const punish = PROTECT_CONTACT.get(target);
     if (punish && move.flags.includes('contact') && user.mon.hp > 0) {
+      noteGrowthMark(ctx, target, 'thorn');
       if (punish.stat && punish.stages) applyStageChange(ctx, user, punish.stat, punish.stages, events, target);
       if (punish.status && canGetStatus(ctx, target, user, punish.status)) tryInflictStatus(ctx, target, user, punish.status, undefined, events, false);
       if (punish.hurt) abilityHurt(ctx, user, Math.max(1, Math.floor(calcStats(content, user.mon).hp * punish.hurt)), events);
@@ -3844,6 +3856,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     tryInflictStatus(ctx, user, target, rng.pick(extras.randomStatus), undefined, events, false);
   }
 
+  if (landed > 0 && contact && user.side === 'enemy') (ctx.battle.growthMarks ??= []).push(`contact:${user.mon.uid}:${ctx.battle.turn}`);
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
 
@@ -3891,6 +3904,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
     if (status && rng.chance(0.3) && canGetStatus(ctx, target, user, status)) {
       announce(target, holder, events);
       tryInflictStatus(ctx, target, user, status, undefined, events, false);
+      noteGrowthMark(ctx, target, 'thorn');
     }
     if (holder === 'cute-charm' && !user.vol.infatuated && rng.chance(0.3) && oppositeGender(ctx.content, target.mon, user.mon) && abilityIn(ctx, user) !== 'oblivious' && !Held.statusBlocked(ctx, user, 'infatuation')) {
       announce(target, holder, events);
@@ -3911,6 +3925,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
     }
     if (CONTACT_HURT.has(holder) && userAbility !== 'magic-guard') {
       announce(target, holder, events);
+      noteGrowthMark(ctx, target, 'thorn');
       abilityHurt(ctx, user, Math.max(1, Math.floor(calcStats(ctx.content, user.mon).hp / 8)), events);
     }
     if ((holder === 'gooey' || holder === 'tangling-hair') && user.mon.hp > 0) {
@@ -4678,14 +4693,16 @@ function content_maxPp(ctx: BattleContext, slot: { id: string; pp: number; ppUps
 /** A Pokémon coming in meets the hazards its side has: Stealth Rock, Spikes, Toxic Spikes, Sticky Web. */
 function applyHazards(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const fx = ctx.battle.sideEffects[c.side];
-  if (c.mon.hp <= 0 || !(fx.spikes || fx.toxicSpikes || fx.stealthRock || fx.stickyWeb) || Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots')) return;
+  if (c.mon.hp <= 0 || !(fx.spikes || fx.toxicSpikes || fx.stealthRock || fx.stickyWeb)) return;
+  const grounded = isGrounded(ctx, c);
+  // Tidy counts hazards it dodges: Heavy-Duty Boots, or in the air with no Stealth Rock down.
+  if (Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots') || (!grounded && !fx.stealthRock)) { noteGrowthMark(ctx, c, 'avoid'); if (Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots')) return; }
   const max = calcStats(ctx.content, c.mon).hp;
   const types = getSpecies(ctx.content, c.mon.speciesId).types;
-  const grounded = isGrounded(ctx, c);
   const hurt = (hazard: 'spikes' | 'stealthRock', amount: number) => {
     if (c.mon.hp <= 0 || abilityIn(ctx, c) === 'magic-guard') return;
     const extra = c.side === 'enemy' && (ctx.battle.growthMarks ?? []).includes('hazard+') ? Math.floor(max / 32) : 0;
-    const { lost, lastStand } = takeHp(ctx, c, Math.max(1, amount + extra));
+    const { lost, lastStand } = takeHp(ctx, c, Math.max(1, Math.floor((amount + extra) * (c.side === 'player' ? growthHazardMultiplier(ctx.content.balance.overhaulGrowth, c.mon) : 1))));
     events.push({ type: 'hazard', side: c.side, hazard, amount: lost, hpAfter: c.mon.hp });
     if (lastStand) events.push({ type: 'lastStand', side: c.side, itemId: lastStand });
   };

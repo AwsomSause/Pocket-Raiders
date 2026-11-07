@@ -54,6 +54,7 @@ export function startBackstory(content: Content, run: RunState): void {
   const m = moduleOf(content.storyData, id)!;
   v2.protagonist = { look: 'look_a', name: '', pronouns: 'they', ...v2.protagonist, backstory: id, ...(m.signatureProp ? { signatureProp: m.signatureProp } : {}) };
   const rng = new Rng(hashSeed(`${run.seed}::story_module::${id}`));
+  for (const [k, n] of Object.entries(content.balance.story.module.starts[id] ?? {})) v2.facts[k] = n;
   for (const roll of content.balance.story.module.rolls[id] ?? []) v2.facts[roll.key] = rng.weighted(roll.options.map((o) => ({ item: o.value, weight: o.weight })));
   const intro = content.storyData.events.find((e) => e.backstory === id && e.tags.includes('intro'));
   v2.module = { backstory: id, queue: intro ? [intro.id] : [], active: null, activeStop: null, played: [], echoes: 0, lastSceneStop: 0, ending: null, chronicle: [], snapshots: [] };
@@ -102,7 +103,8 @@ export function applyEffects(content: Content, run: RunState, effects: readonly 
       case 'set_flag': v2.facts[String(e.key)] = e.value as string | number | boolean; break;
       case 'add_counter': {
         const k = String(e.counter);
-        v2.facts[k] = bounded((typeof v2.facts[k] === 'number' ? (v2.facts[k] as number) : 0) + Number(e.amount ?? 0));
+        const [lo, hi] = content.balance.story.module.limits[k] ?? [-99, 99];
+        v2.facts[k] = Math.max(lo, Math.min(hi, (typeof v2.facts[k] === 'number' ? (v2.facts[k] as number) : 0) + Number(e.amount ?? 0)));
         break;
       }
       case 'add_relationship': addRelationship(run, String(e.character), String(e.attr), Number(e.amount ?? 0)); break;

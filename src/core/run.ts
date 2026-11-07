@@ -188,7 +188,7 @@ import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeWon, reco
 import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
-import { clutchSurvived, heartbondTurn, heartbondVictory, takeBeat } from './story2/heartbond';
+import { clutchSurvived, heartbondTurn, heartbondVictory, recoveryScenes, takeBeat } from './story2/heartbond';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
@@ -240,6 +240,7 @@ import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart } from './evil/teams';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { castAuthoredLeague, circuitLeader, noteGymWin } from './campaign/circuitCast';
+import { applyCircuitChoice, forkDecision, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis } from './story/schema';
@@ -816,6 +817,16 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (!choices.some((n) => n.id === nodeId)) throw new Error(`Node "${nodeId}" is not one of the next choices`);
   const run = structuredClone(current);
   const stage = run.stage!;
+  // The Orrery Circuit's Gym Fork: entering a gym asks for a door (or a pass) first; the move happens when the node is chosen again.
+  if (findNode(stage.map, nodeId).kind === 'gym') {
+    const fork = forkDecision(content, run, run.regionIndex, stage.index);
+    if (fork) {
+      run.pending.unshift(fork);
+      run.afterDecisions = 'map';
+      run.phase = 'decision';
+      return run;
+    }
+  }
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);
@@ -2149,8 +2160,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const campKey = `${run.runId}:${run.encountersCompleted}:${sideId}`;
     const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
     // One line only: a quirk reaction first, else the pack's party narration (personality, type, species lore).
+    const heartbondScenes = recoveryScenes(run, content.storyData.text, (m) => displayName(content, m)).join(' ');
     const camp = quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -3223,11 +3235,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   if (!stage) {
     enterStage(content, run, 0); // a save from before stage maps existed
   } else if (kind === 'gym') {
-    const campaign = getCampaign(content, run.campaignId);
-    playStageEndStops(content, run);
-    // The Orrery Circuit has one League, after its last region (Appendix S.7): the other regions go straight on.
-    if (stage.index + 1 >= campaign.stagesPerRegion) (leagueAfterRegion(campaign, run.regionIndex) ? enterLeague : enterNextRegion)(content, run);
-    else enterStage(content, run, stage.index + 1);
+    advanceAfterGym(content, run);
   } else if (kind === 'champion' && run.story.flags[FINALE_FLAG] === 'pending') {
     // Phase two: back to the foot of the last node, so the champion can be chosen again.
     const last = stage!.map.nodes.find((n) => n.next.includes(stage!.current!));
@@ -3238,6 +3246,30 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   } else {
     run.phase = 'map';
   }
+}
+
+/**
+ * After a gym (or a passed town): the next stage, the Story Run's make-up fights and Rematch Day, then the League or the next region.
+ * Classic runs just go to the next stage.
+ */
+function advanceAfterGym(content: Content, run: RunState): void {
+  const campaign = getCampaign(content, run.campaignId);
+  const stage = run.stage!;
+  playStageEndStops(content, run);
+  const story = isStoryCampaign(content, run.campaignId);
+  const next = story ? nextGymIndex(content, run, run.regionIndex, stage.index) : stage.index + 1 < campaign.stagesPerRegion ? stage.index + 1 : null;
+  if (next !== null) return enterStage(content, run, next);
+  if (story) {
+    const rematch = rematchDecision(content, run, run.regionIndex);
+    if (rematch) {
+      run.pending.unshift(rematch);
+      run.afterDecisions = 'map';
+      run.phase = 'decision';
+      return;
+    }
+  }
+  // The Orrery Circuit has one League, after its last region (Appendix S.7): the other regions go straight on.
+  (leagueAfterRegion(campaign, run.regionIndex) ? enterLeague : enterNextRegion)(content, run);
 }
 
 /** A fresh reward draft. The draft items' extra choices and carried-over rewards (Lock Capsule, Favored Mail) are used up here. */
@@ -3306,7 +3338,8 @@ export type DecisionChoice =
   | { kind: 'teachMove'; moveIndex: number }
   | { kind: 'ppUpMove'; moveIndex: number }
   | { kind: 'mentor'; accept: boolean }
-  | { kind: 'askLead'; accept: boolean };
+  | { kind: 'askLead'; accept: boolean }
+  | { kind: 'circuit'; optionIndex: number };
 
 export interface DecisionResult {
   run: RunState;
@@ -3322,6 +3355,15 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'circuit') {
+    run.pending.shift();
+    const out = applyCircuitChoice(content, run, decision, choice.kind === 'circuit' ? choice.optionIndex : decision.step === 'fork' ? 0 : decision.options.length - 1);
+    if (out.next === 'advance') advanceAfterGym(content, run);
+    else if (out.next !== 'none') enterStage(content, run, out.next.stage);
+    continueAfterDecisions(content, run);
+    recordChanges(content, current, run, 'level');
+    return { run, message: out.message };
+  }
   if (decision.kind === 'learnMove') {
     const mon = run.party.find((p) => p.uid === decision.uid);
     const move = content.moves.get(decision.moveId)!;

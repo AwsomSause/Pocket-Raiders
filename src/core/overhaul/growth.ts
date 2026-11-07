@@ -32,6 +32,8 @@ export const COUNTER_PATHS: Record<string, { counter: string; words: string; min
   support: { counter: 'useStatus', words: 'accuracy with status moves', min: 15 },
   'tank-buster': { counter: 'hitHigh', words: 'damage against foes above 75% HP', min: 12 },
   'bond-breaker': { counter: 'koFull', words: 'damage against foes at full HP' },
+  tidy: { counter: 'tidyHazard', words: 'less damage from entry hazards (it has swept or dodged them)', min: 6 },
+  'thorn-warden': { counter: 'thornHit', words: 'damage against foes that made contact last turn (it punishes touching)', min: 5, type: 'grass' },
   'ember-heart': { counter: 'useFireLow', words: 'Fire damage while under 50% HP', min: 6 },
   // Run-map paths: counted where the run happens (nodes, shops, eggs, berries, field items). The lead Pokémon is credited
   // for node events. They give a flat +bonus damage, since the pack's own bonuses (XP, shop prices) are not battle rules.
@@ -173,6 +175,8 @@ export const growthBerryMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstan
 export const growthVanguardMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, turnsOut: number): number => (cfg.enabled && mon.growthPath === 'vanguard' && turnsOut === 0 ? 1 + cfg.bonus : 1);
 /** Damage taken from a move of this type: Scale Guard shrugs off 3% of Dragon, Ice and Fairy moves. */
 export const growthIncomingMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string): number => (cfg.enabled && mon.growthPath === 'scale-guard' && ['dragon', 'ice', 'fairy'].includes(moveType.toLowerCase()) ? 1 - Math.min(cfg.bonus, 0.03) : 1);
+/** Tidy: entry hazards bite a little less. */
+export const growthHazardMultiplier = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>): number => (cfg.enabled && mon.growthPath === 'tidy' ? 1 - cfg.bonus : 1);
 /** Lucky: a flat extra critical-hit chance. */
 export const growthCritBonus = (cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>): number => (cfg.enabled && mon.growthPath === 'lucky' ? Math.min(cfg.bonus, 0.01) : 0);
 /** Evasion multiplier (>1 makes foes miss more): Dodger above 75% HP. */
@@ -209,7 +213,7 @@ export function moveRoleCounters(m: MoveRoleFacts): string[] {
   if (m.sideMove === 'reflect' || m.sideMove === 'lightScreen' || m.sideMove === 'auroraVeil') out.push('useScreen');
   if (m.sideMove === 'spikes' || m.sideMove === 'toxicSpikes' || m.sideMove === 'stealthRock' || m.sideMove === 'stickyWeb') out.push('setHazard');
   if (m.id === 'toxic' || m.id === 'toxic-spikes') out.push('useToxic');
-  if (m.clearHazards) out.push('useClean');
+  if (m.clearHazards) out.push('useClean', 'tidyHazard');
   if (m.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)) out.push('dropFoe');
   if (m.category === 'status' && m.statChanges?.some((c) => c.target === 'self' && c.stages > 0)) out.push('raiseSelf');
   if (m.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) out.push('dropSpe');
@@ -225,7 +229,7 @@ export function growthOnce(marks: string[], key: string): boolean {
   return true;
 }
 /** Paths whose edge is not damage (status chances, durations, healing, accuracy, Protect). */
-const NON_DAMAGE: ReadonlySet<string> = new Set(['dojo-student', 'fast-learner', 'medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'disruptor', 'buffer', 'tricky-feet']);
+const NON_DAMAGE: ReadonlySet<string> = new Set(['dojo-student', 'fast-learner', 'medic', 'bodyguard', 'trapper', 'berry-friend', 'vanguard', 'lucky', 'scale-guard', 'speedster', 'scarfer', 'silk-spinner', 'haunt-keeper', 'trickster', 'live-wire', 'glacial-mind', 'dream-weaver', 'toxic-weaver', 'rain-dancer', 'terrain-master', 'trick-roomer', 'screen-keeper', 'hazard-setter', 'cleaner', 'tidy', 'disruptor', 'buffer', 'tricky-feet']);
 export function moveCounters(f: MoveFacts): string[] {
   const out: string[] = [];
   if (f.category === 'status') out.push('useStatus');
@@ -374,7 +378,7 @@ export function assignGrowthPaths(content: Content, party: PokemonInstance[], hi
 }
 
 /** Damage multiplier from the attacker's path for one hit. `hpFrac` is the attacker's HP share (0..1). */
-export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string; behind?: boolean; duel?: boolean; chain?: boolean; legend?: boolean; grudge?: boolean; mirror?: boolean; turn?: number; turnsOut?: number; waited?: boolean; unhit?: boolean }
+export interface HitFacts { foeTypes?: readonly string[]; rival?: boolean; trainerClass?: string | null; solo?: boolean; accuracy?: number | null; sound?: boolean; foeHpFrac?: number; period?: string; behind?: boolean; duel?: boolean; chain?: boolean; legend?: boolean; grudge?: boolean; mirror?: boolean; turn?: number; turnsOut?: number; waited?: boolean; unhit?: boolean; contacted?: boolean }
 export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInstance, 'growthPath'>, moveType: string, effectiveness: number, hpFrac: number, monTypes: readonly string[], hit: HitFacts = {}): number {
   const id = mon.growthPath;
   if (!cfg.enabled || !id) return 1;
@@ -408,6 +412,7 @@ export function growthDamageMultiplier(cfg: GrowthConfig, mon: Pick<PokemonInsta
       : id === 'lead-out' ? (hit.turn ?? 99) <= 2
       : id === 'opener' ? hit.turnsOut === 0
       : id === 'patient' ? hit.waited === true
+      : id === 'thorn-warden' ? hit.contacted === true
       : id === 'quiet-strength' ? hit.unhit === true
       : id === 'bruiser' ? hpFrac >= 1
       : id === 'ember-heart' ? moveType.toLowerCase() === 'fire' && hpFrac < 0.5

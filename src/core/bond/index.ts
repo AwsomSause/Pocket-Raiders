@@ -7,6 +7,7 @@ import type { Content } from '../contentSchema';
 import { calcStats, getSpecies, isUsableMove } from '../pokemon';
 import type { PokemonInstance, RunState } from '../state';
 import type { Bond } from '../story/schema';
+import { payHeartbond } from '../story2/heartbond';
 import { BOND_KEYS, BOND_RULES, TRAIT_AUTONOMY, type BondKey } from './schema';
 
 export * from './schema';
@@ -117,6 +118,9 @@ export const isReckless = (content: Content, moveId: string): boolean => Boolean
 /** Would this Pokémon refuse this command? Foreshadowed by `bondMood` = wary. Never random. */
 export function wouldRefuse(content: Content, run: RunState, mon: PokemonInstance, moveId: string): boolean {
   if (!isReckless(content, moveId) || run.battle?.drama.refused.includes(mon.uid)) return false;
+  // Story Runs: Autonomy Off or Flavor never offers a refusal, and neither does your last conscious Pokémon.
+  const v2 = run.story.v2;
+  if (v2 && (v2.autonomy !== 'full' || run.party.filter((m) => m.hp > 0).length <= 1)) return false;
   const b = bondOf(run, mon.uid);
   return b.autonomy >= BOND_RULES.refuse.minAutonomy && b.trust <= BOND_RULES.refuse.maxTrust;
 }
@@ -135,6 +139,13 @@ export function shapeAction(content: Content, run: RunState, action: PlayerActio
   const slot = mon.moves[action.index];
   const move = slot && content.moves.get(slot.id);
   if (!slot || !move) return { action, events: [] };
+  if (wouldRefuse(content, run, mon, slot.id) && action.override && run.story.v2) {
+    // The player insists: the command goes through, it costs Heartbond (the first two a battle), and it will not be refused again.
+    battle.drama.refused.push(mon.uid);
+    run.story.v2.heartbondOverrides += 1;
+    payHeartbond(run, mon.uid, `b${run.encountersCompleted}`, battle.turn, ['override_cost']);
+    return { action, events: [] };
+  }
   if (wouldRefuse(content, run, mon, slot.id)) {
     battle.drama.refused.push(mon.uid);
     adjustBond(bondOf(run, mon.uid), { strain: -3, autonomy: 2 });
