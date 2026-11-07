@@ -3,6 +3,7 @@
 // Run History and save data. Everything
 // here reads and changes the permanent profile only.
 
+import { prologueGateActive } from '../core/story2/prologue';
 import { fitLine } from '../ui/fitText';
 import { candyPerkProblem } from '../core/candyShop';
 import { researchLines } from '../core/trainerResearch';
@@ -284,6 +285,7 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(data: { notice?: string; focus?: number } = {}): void {
+    if (prologueGateActive(services().session.profile.story)) { this.scene.start('MainMenu'); return; }
     this.archiveOpen = false;
     if (!data.notice) data = { ...data, notice: hubArrivalNotice()?.text };
     this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => {

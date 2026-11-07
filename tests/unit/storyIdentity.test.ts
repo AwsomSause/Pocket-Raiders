@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { freshProfileStory, ProfileStorySchema } from '../../src/core/story2/schema';
 import { normalizeLook, previewSentence, pronounForms, renderTokens, resolveLook, setLook, validateCustomPronouns, validateName, vanceTone } from '../../src/core/story2/identity';
-import { BEATS, beatsFor, builtBeatsFor, canSkipPrologue, chooseMode, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setTone, shortIntake } from '../../src/core/story2/prologue';
+import { BEATS, beatsFor, builtBeatsFor, canSkipPrologue, prologueRequired, chooseMode, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setTone, shortIntake } from '../../src/core/story2/prologue';
 
 describe('S2 name rules', () => {
   it('accepts normal names and trims', () => {
@@ -84,8 +84,12 @@ describe('S2 prologue shell', () => {
     expect(builtBeatsFor('skipped')).toEqual(['look', 'identity', 'backstory', 'starter', 'briefing']);
   });
   it('Skip is hidden on the first save, Quick Start only before the mode is chosen', () => {
-    expect(canSkipPrologue(1)).toBe(false);
-    expect(canSkipPrologue(2)).toBe(true);
+    const fresh = ProfileStorySchema.parse({});
+    expect(canSkipPrologue(fresh)).toBe(false);
+    expect(prologueRequired(fresh)).toBe(true);
+    const done = finishPrologue(fresh);
+    expect(canSkipPrologue(done)).toBe(true);
+    expect(prologueRequired(done)).toBe(false);
     const s = freshProfileStory();
     expect(quickStartOffered(s)).toBe(true);
     expect(quickStartOffered(chooseMode(s, 'quick'))).toBe(false);

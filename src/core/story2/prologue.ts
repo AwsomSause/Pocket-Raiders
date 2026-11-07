@@ -34,9 +34,19 @@ export const builtBeatsFor = (mode: PrologueMode): BeatId[] => beatsFor(mode).fi
 /** Station objects the player must examine: 5 in the full prologue, 2 (wall map and clipping) in Quick Start. */
 export const requiredObjects = (mode: PrologueMode): number => (mode === 'full' ? 5 : mode === 'quick' ? 2 : 0);
 
-/** Skip Prologue is hidden on the very first save (slot 1) and while the profile has never finished a prologue. */
-export function canSkipPrologue(slot: number): boolean {
-  return slot > 1;
+/** The prologue is mandatory until it has been finished once (new saves and old saves without it). */
+export const prologueRequired = (story: ProfileStory): boolean => !story.prologue.done;
+
+/** Skip Prologue is only offered to replays: never before the prologue has been finished once. */
+export function canSkipPrologue(story: ProfileStory): boolean {
+  return story.prologue.done;
+}
+
+/** Automated browsers (Playwright) skip the gate so tests reach the menu; ?gate=1 forces it. */
+export function prologueGateActive(story: ProfileStory): boolean {
+  if (!prologueRequired(story)) return false;
+  if (typeof navigator !== 'undefined' && navigator.webdriver && !location.search.includes('gate=1')) return false;
+  return true;
 }
 
 /** Quick Start is offered on the first launch only: before the mode has been chosen and before a prologue is done. */
