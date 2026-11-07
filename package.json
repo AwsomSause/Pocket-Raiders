@@ -54,6 +54,8 @@
     "report:balance": "node tools/report-balance.ts",
     "fuzz:battle": "node tools/fuzz-battles.ts",
     "data:validate": "node tools/validate-species.ts",
+    "shinies:fill": "python3 tools/generate-shinies.py",
+    "shinies:check": "python3 tools/generate-shinies.py --check",
     "report:assets": "node tools/report-assets.ts",
     "report:economy": "node tools/report-economy.ts",
     "report:anims": "node tools/report-anims.ts",
