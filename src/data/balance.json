@@ -902,5 +902,5 @@
   ]
  },
   "itemRework": { "charmGate": true, "charmDraftChance": 0.0001, "luckGainScale": 0.25 },
-  "overlevel": { "xpPerItem": 1000, "item": "potion" }
+  "overlevel": { "xpPerItem": 2000, "item": "premier-ball" }
 }
