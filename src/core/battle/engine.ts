@@ -819,7 +819,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (action.kind === 'move') {
     const chosen = resolveMove(content, playerC.mon, action.index);
     // A Z-Move replaces the chosen move (its Z-Power was spent above).
-    const playerMove = battleMove(content, battle, playerC.mon, action.transform?.kind === 'zmove' ? (zMoveFor(content, chosen) ?? chosen) : chosen);
+    const playerMove = battleMove(content, battle, playerC.mon, action.transform?.kind === 'zmove' ? (zMoveFor(content, chosen, { speciesId: playerC.mon.speciesId, inventory: ctx.inventory }) ?? chosen) : chosen);
     playerC.vol.plannedAttack = playerMove.category !== 'status';
     playerC.vol.plannedMove = playerMove.id;
     playerC.vol.beakHeat = Boolean(playerMove.effects.beakBlast);
@@ -3570,7 +3570,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (fx.userFaint === 'finalGambit') damage = Math.max(1, user.mon.hp);
       else if (fx.counter) damage = Math.max(1, Math.floor((fx.counter === 'physical' ? user.vol.tookPhysical : fx.counter === 'special' ? user.vol.tookSpecial : (user.vol.tookPhysical + user.vol.tookSpecial) * 0.75) * 2));
       else if (fx.endeavor) damage = Math.max(1, target.mon.hp - user.mon.hp);
-      else if (fx.halveTarget) damage = Math.max(1, Math.floor(target.mon.hp / 2));
+      else if (fx.halveTarget) damage = Math.max(1, Math.floor(target.mon.hp * (typeof fx.halveTarget === 'number' ? fx.halveTarget : 0.5)));
       else if (fx.fixedDamage === 'level') damage = user.mon.level;
       else if (fx.fixedDamage === 'psywave') damage = Math.max(1, Math.floor((user.mon.level * rng.int(50, 150)) / 100));
       else damage = fx.fixedDamage as number;

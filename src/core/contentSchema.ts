@@ -210,8 +210,8 @@ export const MoveSchema = z.object({
       recoilMaxHp: z.number().positive().max(1).optional(),
       /** Deals damage equal to the user's level, ignoring stats. */
       fixedDamage: z.union([z.literal('level'), z.literal('psywave'), z.number().int().positive()]).optional(),
-      /** Takes off half of the target's current HP (Super Fang). */
-      halveTarget: z.literal(true).optional(),
+      /** Takes off half of the target's current HP (Super Fang); a number takes off that fraction instead (Guardian of Alola: 0.75). */
+      halveTarget: z.union([z.literal(true), z.number().min(0.1).max(0.9)]).optional(),
       /** Brings the target's HP down to the user's (Endeavor); fails if it is already lower. */
       endeavor: z.literal(true).optional(),
       /** How the move's power is worked out from the battle (see powerFromRule in the engine). */
@@ -1115,6 +1115,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('teraShard'), type: TypeNameSchema }),
   /** A Z-Crystal: with the Z-Ring, turns one move of its type into that type's Z-Move once per battle. */
   z.object({ kind: z.literal('zCrystal'), type: TypeNameSchema }),
+  /** A species Z-Crystal: with the Z-Ring, lets these species turn `move` into its own `zMove` once per battle (replaces the type Z-Move). */
+  z.object({ kind: z.literal('speciesZCrystal'), species: z.array(z.string()).min(1), move: z.string(), zMove: z.string() }),
   /** Battle-only "urge" items on the Pokémon in battle: trigger its ability now, use its held Berry or Herb now, or reset its stat changes. */
   z.object({ kind: z.literal('urge'), what: z.enum(['ability', 'item', 'reset']) }),
   /** Makes the opposing Pokémon drop its held item for the rest of the battle (Item Drop). */

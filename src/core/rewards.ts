@@ -66,6 +66,11 @@ export function isRewardEligible(content: Content, run: RunState, reward: Reward
     const type = item.effect.type;
     return itemCount(run.inventory, item.id) === 0 && hasKeyItem(content, run.inventory, 'zmove') && run.party.some((p) => p.moves.some((m) => content.moves.get(m.id)?.type === type));
   }
+  // A species Z-Crystal is offered once you have the Z-Ring, and only when a party member of that species knows its move.
+  if (item?.effect.kind === 'speciesZCrystal') {
+    const { species, move } = item.effect;
+    return itemCount(run.inventory, item.id) === 0 && hasKeyItem(content, run.inventory, 'zmove') && run.party.some((p) => species.includes(p.speciesId) && p.moves.some((m) => m.id === move));
+  }
   if (item?.effect.kind === 'megaStone') {
     const forms = item.effect.forms;
     return itemCount(run.inventory, item.id) === 0 && run.party.some((p) => forms[p.speciesId] !== undefined);
