@@ -384,4 +384,6 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `drive-music.md`: 18 Decades songs for battle and map variety.
 - `drive-overworld-npcs.md`: 43 generic Decades class NPC sheets added to the hub town crowd.
 - `content-audit-2.md`: Fury Cutter streak power, Alluring Voice confusion; Pledge combos and Order Up listed as limits.
-w12-run-recap-contents.md: W12 run contents menu and run card
+- `doubles-trainer-poses.md`: your trainer throws both balls and shows recall/win/defeat poses in doubles (W17).
+- `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
+- `wire-a11y-text-quest.md`: Bigger small print and Map quest contrast settings (settings v41).

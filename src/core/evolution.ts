@@ -6,6 +6,7 @@
 import { genderOf } from './gender';
 import type { Content, Evolution } from './contentSchema';
 import { blocksEvolution } from './battle/held';
+import { stoneRouteTargets } from './conditionEvolution';
 import { friendshipReady } from './friendship';
 import { calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from './pokemon';
 import type { PokemonInstance, RunState } from './state';
@@ -66,7 +67,9 @@ export function evolutionTarget(content: Content, mon: PokemonInstance, regionId
 export function itemEvolutionTargets(content: Content, mon: PokemonInstance, itemId: string, regionId?: string): string[] {
   const species = getSpecies(content, mon.speciesId);
   const matching = species.evolutions.filter((e) => e.item === itemId);
-  return applicableBranches(content, mon, matching, regionId).map((e) => e.to);
+  const direct = applicableBranches(content, mon, matching, regionId).map((e) => e.to);
+  // A stone also stands in for a time-of-day or weather route.
+  return [...new Set([...direct, ...stoneRouteTargets(content, mon, itemId)])];
 }
 
 export interface EvolutionResult {

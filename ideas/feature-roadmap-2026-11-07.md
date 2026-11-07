@@ -111,16 +111,41 @@ Ranked by value to "a fun, replayable, complete game". Each respects the decisio
 19. **Audio pass:** per-region and per-boss themes from the 527-track pack, story music ids actually played, ambient town loop (needs `Amb-Birds.mp3`).
 20. **Performance:** lazy-load game data chunks, break the `run.ts` import cycle, compress oversize assets (P9 / repo audit).
 
-### Questions only Kice can answer (the rest are settled by the record)
-- Why was the platform alignment (#808) reverted in #809, and should it be re-landed (floaters like Koffing still hover)?
-- When a battle shows a black screen with a non-default Battle UI, which style and what were you doing? (Never reproduced.)
-- Which of the ~640 unused item picture groups should be built into items next?
-- Plaza speckle fix (#937) was closed on your "remove this stuff": redo it differently, or leave the plaza as is?
-- Wording of Decades rules Frostbite and Drowsy, and "1 of 6 abilities" now means "any of its own": OK?
-- The 3 story pacing rules the Stop table breaks on every seed (S19): accept, or fix?
-- Final art, cries, Dex text and poses for the 10 new story species, plus the Look B / male-trainer art and your own Pokémon from the Assets folder: these need files only you have.
-- Regional forms as a real battle mechanic, and IVs/EVs, time of day, weather evolutions (this also decides Bottle Caps)?
-- Did the website deploy go live?
+### Kice's answers (2026-11-07 18:43) and what they turn into
+1. **Alignment (#808):** reverted because the Pokémon sat over the UI and the enemy lost depth. If redone, it must match the reference image (`shots/kice-2026-11-07/reference-battle-depth.png`).
+2. **Non-default battle styles:** in every style the battle shows only empty platforms, no Pokémon or HUD (`shots/kice-2026-11-07/bug-empty-arena-all-styles.png`). Not a black screen.
+3. **Unused item pictures:** build all of them.
+4. **Plaza speckle (#937):** wanted the marked things removed (image did not arrive; Kice asked to resend).
+5. **"1 of 6 abilities":** remove the text.
+6. **Story pacing rules (S19):** fix.
+7. **Sprites:** Kice will provide; send specifics (see "Sprites needed" below).
+8. **Regional forms:** NOT a battle mechanic. When a normal Pokémon steps into a region where it has a new form, a prompt appears ("Raichu is loving the beaches of Alola, want him to start surfing?") and the player may choose to make it regional. **IVs and EVs must be implemented properly.** Time-of-day and weather evolutions still happen, and a stone of that type also works (Espeon can use a Sun Stone at high friendship).
+9. **Website deploy:** yes, it went live.
+
+### Workstreams to build (one thread each)
+| # | Workstream | Notes |
+|---|---|---|
+| W1 | Platform alignment redo | Match the reference image: Pokémon sit on the circle, enemy keeps depth, nothing over the HUD. Screenshot test for singles and doubles. |
+| W2 | Fix empty arena in every non-default battle style | Reproduce at 1366x768 per style; add a Playwright check that every style shows Pokémon and HUD. |
+| W3 | Removals | "1 of 6 abilities" text; the marked hub plaza things once Kice resends the image. Tiny. |
+| W4 | Regional-form prompt | Prompt on entering a region where the Pokémon has a regional form; player opts in. Replaces the idea of a regional battle mechanic. Camp Moon Stone ritual stays or folds in (thread decides, tells Kice). |
+| W5 | IVs and EVs, done properly | Per-Pokémon IVs, EV training and vitamins, stat formula, summary screen, Hidden Power from IVs, Bottle Caps, respec. Needs a save bump with migration test and a balance re-sim. Design-heavy (Opus). Revisits D2. |
+| W6 | Time-of-day and weather evolutions plus matching stone | Day/night and weather conditions in the engine; a stone of that type also evolves (Espeon/Sun Stone at high friendship, Umbreon/Moon). |
+| W7 | Build all unused item pictures into items | About 640 pictures; start with groups that need no new engine code, list the rest. |
+| W8 | Fix the 3 story pacing rules | Plus a storyPacing test. |
+| W9 | Sprite hand-off pack | Spec sheet and drop-in folder for Kice's art (see below). |
+| W10 | CI and playtest hardening | Shard Playwright, branch protection note, 50-seed bot playtest in CI, a bot or fast-forward start that reaches region 3+, re-run the 10k sim. |
+| W11 | Settings that do nothing, plus accessibility | Story Intensity, subtitles, journal voice, rivalIntensity, worldNews, shake/flash split, colour-blind markers, UI scale, small text, map quest contrast. |
+| W12 | Run recap, shareable run card, "What's in this run" screen, first-time tutorial | Biggest replay and clarity win. |
+| W13 | Daily Run format plus Draft Lab, Regional Circuit, Spooky Mode content | Reuses Randomizer and Tag Team code. |
+| W14 | Track W and Mythical leftovers | 4 pseudo stages with openers, map-node hints, dungeon items, Rival Interference, 10 more Mythical chains. |
+| W15 | Hub depth | Bank tiers, Research Tree, Prestige, Regional Intelligence Board. |
+| W16 | Audio and performance | Story music and barks, per-region themes from the 527-track pack, lazy-loaded data, oversize asset compression. |
+| W17 | Doubles trainer and capture/command poses | The P2/P8 gap, plus the male trainer look once Kice supplies art. |
+| W18 | Remaining move/ability gaps | Pledge combos, Order Up, 5 Delta forms, Tatsugiri/Magearna Megas, 17 signature Z-Moves disabled. |
+
+### Sprites needed (Kice is providing art)
+Drop files at `public/assets/images/pokemon/custom/<id>.png` plus matching `<id>.json` (same size and frame layout as the current stand-in; today's are recoloured PokeRogue sprites made by `tools/make-story-sprites.py`). Species with stand-in art: **Tuftin** (baby, becomes Eevee), **Oracowl** (Noctowl line, level 42), **Tempestwing** (Swellow line, 46), **Megawattrel** (Kilowattrel line, 52), and six Legends **Equinar, Hollow Shepherd, Brinecrown, Veinheart, Lumeria, Verdelis**. Each also needs a Dex icon, front and back sprite, a cry, and Dex text. Also still on stand-in or missing art: Look B and the male trainer (shows "COMING SOON"), King N and Champion Oak evolutions (reuse base art), and your own Pokémon from the Assets folder.
 
 ### Already settled by Kice (do not ask again)
 Profile journal: skipped unless asked. Capture Styles: stay off. Triple Battle: deferred. Free Spirit / Cheerleader: skip. Rival difficulty: answered (#904). Town names, evil beat 7, 6-of-8 gyms, level cap (100, +50 per region): answered. Birdsong: `Amb-Birds.mp3` was added (#748). Growth paths without a real mechanic: never invent a stand-in rule. Online co-op and cloud saves: skipped. Menu speed work: on hold.

@@ -37,7 +37,7 @@ function openTab(host: FieldMenuHost, tab: JournalTab): void {
 }
 
 export function openJournalMenu(host: FieldMenuHost): void {
-  const tabs = journalTabs(services().session.run!);
+  const tabs = journalTabs(services().session.run!, services().session.settings.story.journalVoice);
   const rows = tabs.map((t) => ({ title: t.label, right: String(t.rows.length), hint: t.rows[0]?.hint ?? 'Nothing here yet.' }));
   listRows(host, 'Field Notebook', rows, (i) => { const t = tabs[i]; if (t) openTab(host, t); }, () => host.setPicker(null));
 }

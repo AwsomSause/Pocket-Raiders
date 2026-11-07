@@ -165,6 +165,8 @@ export const SETTINGS: SettingDef[] = [
   { id: 'messageDelay', label: 'Message delay', description: 'How long an auto-advanced message waits.', category: 'text', applies: 'now', advanced: true, disabled: (s) => !s.autoAdvance, ...choice('messageDelay', { short: 'Short', normal: 'Normal', long: 'Long' }, ['short', 'normal', 'long']) },
   // Accessibility
   { id: 'accessibilityProfile', label: 'Accessibility preset', description: 'One choice that sets several settings at once.', category: 'accessibility', applies: 'now', show: (s) => PROFILE_INFO[s.accessibilityProfile].label, next: (s) => applyProfile(s, nextProfile(s.accessibilityProfile)) },
+  { id: 'smallTextBoost', label: 'Bigger small print', description: 'Draws the smallest text in the larger bold font. Some screens may look busier.', category: 'accessibility', applies: 'now', ...toggle('smallTextBoost') },
+  { id: 'questContrast', label: 'Map quest contrast', description: 'Puts the pinned quest line on the map on a dark plate with white text.', category: 'accessibility', applies: 'now', ...toggle('questContrast') },
   { id: 'typeMarkers', label: 'Type names in words', description: 'Names a move’s type in words next to the coloured art.', category: 'accessibility', applies: 'now', ...toggle('typeMarkers') },
   // W11: themes, readability, tooltips, transitions, controls
   { id: 'uiTheme', label: 'Interface theme', description: 'Classic Plum, Frutiger Aero, DS Touch, Wii Channel or Cyber-Maximalism. A preview is shown on the right; screens redraw as you open them.', category: 'display', applies: 'now', show: (s) => UI_THEMES[s.uiTheme].label, next: (s) => ({ ...s, uiTheme: UI_THEME_ORDER[(UI_THEME_ORDER.indexOf(s.uiTheme) + 1) % UI_THEME_ORDER.length]! }) },

@@ -13,6 +13,11 @@ function setup() {
 describe('story journal tabs', () => {
   const tab = (run: ReturnType<typeof setup>, id: string) => journalTabs(run).find((t) => t.id === id);
 
+  it('Journal voice: Vance adds a note to the Main Story hint, Plain does not', () => {
+    const run = setup();
+    const plain = journalTabs(run, 'plain')[0]!.rows[0]!.hint;
+    expect(journalTabs(run, 'vance')[0]!.rows[0]!.hint).toBe(`Vance's note: ${plain}`);
+  });
   it('has no tabs for a Classic run', () => {
     const run = setup();
     run.story.v2 = undefined;

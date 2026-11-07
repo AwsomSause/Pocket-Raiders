@@ -201,7 +201,7 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
       const berries = bagBerryChoices(content, run);
       const picked: string[] = [];
       const isSandwich = id === 'sandwich';
-      const cap = isSandwich ? CAMP.sandwich.berries : CAMP.pot.maxBerries;
+      const cap = services().session.settings.story.activities === 'quick' ? 1 : isSandwich ? CAMP.sandwich.berries : CAMP.pot.maxBerries;
       const verb = isSandwich ? 'Make a sandwich' : 'Cook';
       const step = (): void => {
         const rows: Choice[] = [...(picked.length > 0 ? [{ label: `${verb} with ${picked.length} berr${picked.length === 1 ? 'y' : 'ies'} now`, desc: picked.map((p) => content.catalog.get(p)?.name ?? p).join(', ') }] : []), ...berries.map((b) => ({ label: b.name, desc: `${b.flavor} · ×${b.count - picked.filter((p) => p === b.id).length}`, problem: b.count - picked.filter((p) => p === b.id).length <= 0 ? 'None left.' : null }))];

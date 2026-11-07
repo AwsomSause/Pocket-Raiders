@@ -51,6 +51,7 @@ import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
+import { answerRegionForm, regionFormOffers, type RegionFormOffer } from '../core/regionForms';
 import { useCapsule } from '../core/capsuleQuests';
 import { toggleCamp } from '../core/trainingCamp';
 import { applyMentorLesson, type MentorLesson } from '../core/mentorLesson';
@@ -346,6 +347,15 @@ export class GameSession {
     return run;
   }
 
+  /** A rival may steal, block or help at a stop without a fight; returns the line to show, or null. */
+  rivalInterfere(sideId: string): string | null {
+    const hit = Run.rivalInterfere(this.requireRun(), sideId);
+    if (!hit) return null;
+    this.run = hit.run;
+    this.persistRun();
+    return hit.text;
+  }
+
   /** What happened on the way to the last node chosen (an obstacle crossed or gone round, ideas W4), for the map. */
   lastCrossing: string | null = null;
   /** Set when a saved run is continued; the map takes it once to show the "welcome back" banner (ideas W4). */
@@ -586,6 +596,7 @@ export class GameSession {
     const v2 = this.run?.story.v2;
     if (v2) v2.autonomy = this.settings.story.autonomy;
     if (v2) v2.dramatic = this.settings.story.dramaticMoments;
+    if (v2) v2.intensity = this.settings.story.intensity;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {
@@ -687,6 +698,20 @@ export class GameSession {
   nursery(eggUid: string, choice: NurseryChoice): string {
     const run = structuredClone(this.requireRun());
     const message = applyNursery(this.content, run, eggUid, choice);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Region entry: the Pokémon that may take a regional form here (not yet asked). */
+  regionFormOffers(): RegionFormOffer[] {
+    return this.run ? regionFormOffers(this.content, this.run) : [];
+  }
+
+  /** Answers a regional form offer (target null = not now). Free; asked once per Pokémon per region. */
+  answerRegionForm(uid: string, target: string | null): string {
+    const run = structuredClone(this.requireRun());
+    const message = answerRegionForm(this.content, run, uid, target);
     this.run = run;
     this.persistRun();
     return message;

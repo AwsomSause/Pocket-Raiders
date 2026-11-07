@@ -116,17 +116,18 @@ export function worldPick(content: Content, run: RunState, stop: Stop, act: numb
   const cfg = content.balance.story.world;
   const free = (id: string) => !played.includes(id) && !queued.includes(id);
   const place = run.stage?.themeId && content.themes.has(run.stage.themeId) ? getTheme(content, run.stage.themeId).name : 'the road';
+  const intensity = v2.intensity ?? 'full';
   if (stop.category === 'recovery') {
     const eevee = crossroadsEevee(content, run);
     const offered = played.filter((id) => id.startsWith('ev_eevee_')).length;
-    if (eevee && offered < cfg.eeveeOffers) {
+    if (eevee && offered < cfg.eeveeOffers && intensity !== 'minimal') {
       const form = eeveeForms(content, run, act).find(free);
       if (form) {
         Object.assign(v2.facts, { 'tok.pokemon': displayName(content, eevee), 'tok.place': place, 'tok.eevee_uid': eevee.uid });
         return form;
       }
     }
-    if (played.filter((id) => id.startsWith('ev_camp_')).length < cfg.campPerRun) {
+    if (intensity === 'full' && played.filter((id) => id.startsWith('ev_camp_')).length < cfg.campPerRun) {
       for (const p of partyChemistry(content, run)) {
         const id = [1, 2].map((n) => `ev_camp_${p.type}_${n}`).find((x) => free(x) && sceneOf(content, x));
         if (id) {
@@ -137,6 +138,7 @@ export function worldPick(content: Content, run: RunState, stop: Stop, act: numb
     }
     return undefined;
   }
+  if (intensity !== 'full') return undefined;
   const done = played.filter((id) => id.startsWith('ev_tpl_'));
   if (done.length >= cfg.templatesPerRun) return undefined;
   const inAct = done.filter((id) => v2.facts[`tpl_act.${id}`] === act).length;

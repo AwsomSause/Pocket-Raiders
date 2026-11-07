@@ -64,7 +64,8 @@ import { hasRelationships, openRelationshipsMenu } from '../ui/relationshipsMenu
 import { hasJournal, openJournalMenu } from '../ui/journalMenu';
 import { openRunContentsMenu } from '../ui/runContentsMenu';
 import { onInputAction } from '../ui/input';
-import { Picker, speciesRow, type PickerLike } from '../ui/partyPanel';
+import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
+import { regionFormPrompt } from '../core/regionForms';
 import { STOP_STYLES, stopStyle } from '../ui/stopIcons';
 import { itemVisual, pokemonIcon, trainerVisual } from '../ui/sprites';
 import { showAchievementToasts } from '../ui/achievementToast';
@@ -447,6 +448,12 @@ export class MapScene extends Phaser.Scene {
     }
     if (pinned) {
       const pinText = this.add.text(GAME_WIDTH - 24, 66, `★ ${pinned.text} (${pinned.current}/${pinned.target})`, textStyle(14, '#f0e0a0')).setOrigin(1, 0).setName('pinned-quest');
+      if (services().session.settings.questContrast) {
+        pinText.setColor('#ffffff');
+        const plate = this.add.rectangle(pinText.x + 8, pinText.y - 4, pinText.width + 16, pinText.height + 8, 0x000000, 0.85).setOrigin(1, 0);
+        plate.setDepth(pinText.depth).setName('pinned-quest-plate');
+        this.children.moveTo(plate, this.children.getIndex(pinText));
+      }
       // Reroll Points: tap the Run Quest line to swap it for ₽100 (+₽100 each time).
       if (pinned.kind === 'runQuest') {
         pinText.setInteractive({ useHandCursor: true }).on('pointerup', () => {
@@ -793,6 +800,41 @@ export class MapScene extends Phaser.Scene {
         this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
+    this.askRegionForm();
+  }
+
+  /** A Pokémon that has a regional form of this region may take it: one free prompt per Pokémon per region. */
+  private askRegionForm(): void {
+    const { session } = services();
+    const offer = session.regionFormOffers()[0];
+    if (!offer || this.picker) return;
+    const content = session.content;
+    const name = (id: string) => content.species.get(id)?.name ?? id;
+    const row = (label: string, desc: string): PickerRow => ({
+      problem: null,
+      hint: desc,
+      draw: (scene, box, w) => {
+        box.add(scene.add.text(16, 6, label, textStyle(20)));
+        box.add(scene.add.text(16, 34, desc, textStyle(14, '#d8d0e0', { wordWrap: { width: w - 32 }, maxLines: 1 })));
+      },
+    });
+    const answer = (target: string | null) => {
+      this.picker?.close();
+      this.picker = null;
+      const note = session.answerRegionForm(offer.uid, target);
+      this.scene.restart({ notice: note, focus: this.index });
+    };
+    const rows = [...offer.targets.map((t) => row(`Yes: become ${name(t)}`, 'Free. Swap back any time at Camp > Form shift (a Moon Stone).')), row('Not now', `${name(offer.speciesId)} stays as it is.`)];
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: regionFormPrompt(content, session.run!, offer),
+      columns: 1,
+      rowHeight: 64,
+      rows,
+      onSelect: (i) => answer(offer.targets[i] ?? null),
+      onBack: () => answer(null),
+    });
+    this.picker = picker;
   }
 
   /** The gym leader, Elite Four member or champion waiting at a node (null for other nodes). */
@@ -1051,6 +1093,12 @@ export class MapScene extends Phaser.Scene {
           playSfx(this, 'ui.select');
           this.cameras.main.fadeOut(250);
           this.time.delayedCall(260, () => this.scene.start(sceneForRun(cut)));
+          break;
+        }
+        const meddled = session.rivalInterfere(option.side.id);
+        if (meddled) {
+          this.busy = true;
+          this.scene.restart({ notice: meddled, focus: this.index });
           break;
         }
         if (option.side.kind === 'fish') {
