@@ -111,17 +111,30 @@ describe('town actions', () => {
     p = ok(p, 'photo-equip', { choice: 'bd-meadow' }).profile;
     expect(townOf(p).equipped.backdrop).toBe('bd-meadow');
   });
-  it('gacha: free daily pull, pity guarantees a rare or better, duplicates become Research', () => {
+  it('gacha: one free spin per finished run, it gives one starting item, pity still guarantees a rare', () => {
     let p = rich();
-    const first = ok(p, 'capsule-pull');
-    p = first.profile;
+    const r = ok(p, 'capsule-pull');
+    p = r.profile;
+    const items = townOf(p).boon.items;
+    expect(Object.values(items).reduce((x, y) => x + y, 0)).toBe(1);
     expect(p.bankCredits).toBe(5000);
-    for (let i = 0; i < 40; i++) p = ok(p, 'capsule-pull').profile;
-    expect(p.bankCredits).toBe(5000 - 40 * TOWN.gacha.cost.credits!);
-    const got = Object.values(townOf(p).sets).flat().length;
-    expect(got).toBeGreaterThan(5);
-    const poor = { ...rich(), bankCredits: 3 };
-    expect(act(ok(poor, 'capsule-pull').profile, 'capsule-pull').ok).toBe(false);
+    // locked until the run ends: starting the next run does not open it, finishing it does
+    expect(act(p, 'capsule-pull').ok).toBe(false);
+    p = spendTownStart(p);
+    expect(act(p, 'capsule-pull').ok).toBe(false);
+    recordTownRun(content, p, { runId: 'r1', seed: 's', victory: false, inventory: {} });
+    p = ok(p, 'capsule-pull').profile;
+    expect(Object.values(townOf(p).boon.items).reduce((x, y) => x + y, 0)).toBe(1);
+    // ten spins (with the run ending between each) always include a rare or better
+    let rare = false;
+    for (let i = 0; i < 10; i++) {
+      recordTownRun(content, p, { runId: `r${i + 2}`, seed: 's', victory: false, inventory: {} });
+      const before = Object.values(townOf(p).sets).flat().length;
+      p = ok(p, 'capsule-pull').profile;
+      if (Object.values(townOf(p).sets).flat().length > before || (townOf(p).counts.pity ?? 0) === 0) rare = true;
+      p = spendTownStart(p);
+    }
+    expect(rare).toBe(true);
   });
   it('basement and statue puzzles open only on the right answer, then change', () => {
     let p = rich();
