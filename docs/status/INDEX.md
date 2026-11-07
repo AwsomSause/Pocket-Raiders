@@ -368,3 +368,6 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - story-s5-backstory-loader.md: S5 backstory loader plus the Viridian slice (intro, events, arcs, echoes, ending, Chronicle, profile fold).
 - `story-s9b-fork-gate.md`: Story S9b: Fork Gate, pass, make-up fights and Rematch Day on the Orrery Circuit.
 - mass-sim-10k.md: 10,000-run sim tools, stronger bot, bug and polish list (docs/qa/mass-sim-10k.md).
+- `story-s7a-feats.md`: Story S7a: Impossible Feats (8 of 16 hooked in battle), Resolve Charge, run caps, Dramatic Moments gate, Memory stirs button.
+- `story-s7b-feats.md`: Story S7b: the other 8 Impossible Feats (doubles guard, ability break, unmask, spark, backstory Feats); all 16 built.
+- mass-sim-fix-rival-trade.md: rival trades skip Pokémon without a bond (crash found by the 10,000-run sim).

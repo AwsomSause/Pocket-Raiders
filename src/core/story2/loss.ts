@@ -1,6 +1,7 @@
 // Story Run: losing a rival fight does not end the run (Kice, Appendix S R7). The run goes on as if the fight were won, with no prize,
 // EXP, badge or win counters, the party healed, and the loss recorded in memories, the chronicle and the rival's record.
 // Classic Run keeps today's rules (a wipe ends the run, or restores a checkpoint in Adventure and Death-Block).
+import { gainCharge } from './feats';
 import type { Content } from '../contentSchema';
 import { emit } from '../story/record';
 import { getMode } from '../rules';
@@ -32,6 +33,8 @@ export function recordStoryLoss(content: Content, run: RunState): void {
     if (run.stage?.kind === 'league') v2.facts.final_loss = true;
   }
   else run.story.flags['story:losses'] = Number(run.story.flags['story:losses'] ?? 0) + 1;
+  // S7: coming back after a story loss adds Resolve Charge (once per Act).
+  gainCharge(content, run, 'return_after_loss');
   const rival = battle.rivalId ? run.story.rivals.find((r) => r.id === battle.rivalId) : undefined;
   emit(content, run, 'storyMoment', {
     data: { storyLoss: true, rival: battle.rivalId ?? null },

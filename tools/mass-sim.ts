@@ -138,7 +138,7 @@ function playOne(n: number): Record<string, unknown> {
   Object.assign(row, {
     ms: Date.now() - t0, steps, phase: run.phase, victory: run.victory, capped: run.phase !== 'over' && !row.error && steps >= STEPS,
     encounters: run.encountersCompleted, regions: run.regionsCleared.length, badges: run.badges.length, stage: run.stage?.index ?? 0, days: run.clock?.day ?? 0,
-    party: mon.map((p) => ({ s: p.speciesId, lv: p.level, f: p.friendship, h: (p as { heldItem?: string }).heldItem ?? null, m: p.moves.map((x) => x.id) })),
+    party: mon.map((p) => ({ s: p.speciesId, lv: p.level, f: p.friendship, h: Object.keys(p.held ?? {}), m: p.moves.map((x) => x.id) })),
     partySize: mon.length, topLv: Math.max(0, ...mon.map((p) => p.level)), sumLv: mon.reduce((a, p) => a + p.level, 0),
     money: run.money, maxMoney, inv: run.inventory, rewards: l.rewardsTaken, battlesWon: l.battlesWon, counters: l.counters,
     seen: l.speciesSeen.length, caught: l.speciesCaught.length, shiny: l.speciesShiny.length, lostTo: l.defeatedBy, bugs,

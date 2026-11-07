@@ -55,7 +55,7 @@ const speciesFinal: Record<string, number> = {}, speciesLv: Record<string, numbe
 const moveUse: Record<string, number> = {}, evt: Record<string, number> = {}, inv: Record<string, number> = {}, rewards: Record<string, number> = {}, counters: Record<string, number> = {}, storyEvt: Record<string, number> = {};
 const starter: Record<string, { n: number; enc: number }> = {};
 for (const r of played) {
-  for (const p of r.party ?? []) { add(speciesFinal, p.s); (speciesLv[p.s] ??= []).push(p.lv); if (p.h) add(held, p.h); for (const m of p.m) add(movesFinal, m); }
+  for (const p of r.party ?? []) { add(speciesFinal, p.s); (speciesLv[p.s] ??= []).push(p.lv); for (const h of Array.isArray(p.h) ? p.h : p.h ? [p.h] : []) add(held, h); for (const m of p.m) add(movesFinal, m); }
   mergeInto(moveUse, r.moves); mergeInto(evt, r.evt); mergeInto(inv, r.inv); mergeInto(counters, r.counters); mergeInto(storyEvt, r.storyEvtTypes);
   for (const id of r.rewards ?? []) add(rewards, id);
   const s0 = r.party?.[0]?.s; if (s0) { const a = (starter[s0] ??= { n: 0, enc: 0 }); a.n++; a.enc += r.encounters; }
