@@ -7,6 +7,7 @@
 // stages, cycles, learnsets that could not give a Pokémon a usable move, duplicates, and stats.
 // Sprite files are checked by `npm run assets:manifest` (it fails on a missing file).
 
+import { CONDITION_EVOLUTIONS } from '../core/conditionEvolution';
 import type { Content, Species } from '../core/contentSchema';
 
 export interface SpeciesProblem {
@@ -67,7 +68,7 @@ export function auditSpecies(content: Content): SpeciesProblem[] {
     }
     if (s.evolvesFrom && !STATE_FORMS.has(s.form?.kind ?? '')) {
       const from = content.species.get(s.evolvesFrom);
-      if (from && !from.evolutions.some((e) => e.to === s.id)) add(s, 'evolution', `evolves from ${s.evolvesFrom}, which has no evolution into it`);
+      if (from && !from.evolutions.some((e) => e.to === s.id) && !CONDITION_EVOLUTIONS.some((e) => e.from === from.id && e.to === s.id)) add(s, 'evolution', `evolves from ${s.evolvesFrom}, which has no evolution into it`);
     }
 
     // No evolution line that loops back on itself.

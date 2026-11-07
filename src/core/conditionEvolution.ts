@@ -3,12 +3,21 @@
 // move, or using a move often enough. Checked after battles (core/run.ts); pure and RNG-free.
 
 import type { Content } from './contentSchema';
-import type { PokemonInstance } from './state';
+import type { PokemonInstance, RunState } from './state';
+import { periodOf } from './clock';
+import { bondOf } from './bond';
+import { heartbondLevel, heartbondScore } from './story2/heartbond';
 
 export type EvoCondition =
   | { kind: 'weather'; weather: 'rain' | 'sun' | 'sand' | 'snow' | 'hail' }
   | { kind: 'knowsMove'; move: string }
-  | { kind: 'moveUses'; move: string; count: number };
+  | { kind: 'moveUses'; move: string; count: number }
+  /** Story Overhaul: the Pokémon's Heartbond level (Story runs only). */
+  | { kind: 'heartbond'; level: number }
+  /** The run clock reads night. */
+  | { kind: 'night' }
+  /** Every part must hold. */
+  | { kind: 'all'; of: EvoCondition[] };
 
 export interface ConditionEvolution {
   from: string;
@@ -31,6 +40,11 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'dunsparce', to: 'dudunsparce', minLevel: 20, condition: { kind: 'knowsMove', move: 'hyper-drill' } },
   { from: 'stantler', to: 'wyrdeer', minLevel: 20, condition: { kind: 'moveUses', move: 'psyshield-bash', count: 20 } },
   { from: 'primeape', to: 'annihilape', minLevel: 25, condition: { kind: 'moveUses', move: 'rage-fist', count: 20 } },
+  // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
+  { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
+  { from: 'noctowl', to: 'oracowl', minLevel: 42, condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
+  { from: 'swellow', to: 'tempestwing', minLevel: 46, condition: { kind: 'weather', weather: 'rain' } },
+  { from: 'kilowattrel', to: 'megawattrel', minLevel: 52, condition: { kind: 'weather', weather: 'rain' } },
 ];
 
 /** Moves whose uses are counted on the Pokémon (`moveCounts`) because a route needs them. */
@@ -45,18 +59,37 @@ export function countMoveUse(mon: PokemonInstance, moveId: string): void {
 /** Plain words for a route ("knows Ancient Power", "battle in rain", "use Rage Fist 20 times"). */
 export function conditionText(content: Content, c: EvoCondition): string {
   if (c.kind === 'weather') return `win a battle that ends in ${c.weather}`;
+  if (c.kind === 'heartbond') return `reach Heartbond ${c.level}`;
+  if (c.kind === 'night') return 'win at night';
+  if (c.kind === 'all') return c.of.map((x) => conditionText(content, x)).join(' and ');
   const name = content.moves.get(c.move)?.name ?? c.move;
   return c.kind === 'knowsMove' ? `know ${name}` : `use ${name} ${c.count} times`;
 }
 
+/** What the run adds to a check: it unlocks the Heartbond and night conditions. */
+export interface EvoRunInfo { heartbond: number | null; night: boolean }
+
+export function evoRunInfo(run: RunState, mon: PokemonInstance): EvoRunInfo {
+  return { heartbond: run.story.v2 ? heartbondLevel(heartbondScore(bondOf(run, mon.uid))) : null, night: periodOf(run) === 'night' };
+}
+
+function conditionMet(c: EvoCondition, mon: PokemonInstance, weather: string | null, info: EvoRunInfo | undefined): boolean {
+  switch (c.kind) {
+    case 'weather': return weather === c.weather;
+    case 'knowsMove': return mon.moves.some((m) => m.id === c.move);
+    case 'moveUses': return (mon.moveCounts?.[c.move] ?? 0) >= c.count;
+    case 'heartbond': return (info?.heartbond ?? 0) >= c.level;
+    case 'night': return info?.night === true;
+    case 'all': return c.of.every((x) => conditionMet(x, mon, weather, info));
+  }
+}
+
 /** The species this Pokémon evolves into by a condition route right now (`weather` = the weather the battle ended in), or null. */
-export function conditionEvolutionTarget(content: Content, mon: PokemonInstance, weather: string | null): string | null {
+export function conditionEvolutionTarget(content: Content, mon: PokemonInstance, weather: string | null, info?: EvoRunInfo): string | null {
   if (mon.hp <= 0 || mon.care?.holdEvolve) return null;
   for (const e of CONDITION_EVOLUTIONS) {
     if (e.from !== mon.speciesId || mon.level < e.minLevel || !content.species.has(e.to)) continue;
-    const c = e.condition;
-    const met = c.kind === 'weather' ? weather === c.weather : c.kind === 'knowsMove' ? mon.moves.some((m) => m.id === c.move) : (mon.moveCounts?.[c.move] ?? 0) >= c.count;
-    if (met) return e.to;
+    if (conditionMet(e.condition, mon, weather, info)) return e.to;
   }
   return null;
 }

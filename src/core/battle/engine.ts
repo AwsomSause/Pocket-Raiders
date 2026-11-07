@@ -2189,7 +2189,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
   if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0, koed: (ctx.battle.growthMarks ?? []).includes(`ko:${c.mon.uid}`) }));
-  if (ability === 'surge-surfer' && ctx.battle.terrain?.id === 'electric') speed *= 2;
+  if ((ability === 'surge-surfer' || ability === 'grid-surfer') && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
   return speed * (c.side === 'player' ? (ctx.attributes?.speed ?? 1) : 1);
 }
@@ -3411,7 +3411,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   } else {
     // Unaware ignores the other side's stages; Keen Eye ignores raised evasion.
     const accStage = foeAbility === 'unaware' ? 0 : user.stages.acc;
-    const keenEye = (userAbility === 'keen-eye' || userAbility === 'minds-eye') && target.stages.eva > 0;
+    const keenEye = (userAbility === 'keen-eye' || userAbility === 'minds-eye' || userAbility === 'wise-eye') && target.stages.eva > 0;
     const evaStage = fx.ignoreStages || userAbility === 'unaware' || keenEye ? 0 : target.stages.eva;
     accuracy = hitChance(baseAccuracy, accStage, evaStage) * itemAccuracy * perkAccuracy;
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
@@ -3772,6 +3772,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (hyper) events.push(hyper);
     if (stand) lastStandMoment(ctx, target, events);
     spectacleAfterHit(ctx, user, target, lost, effectiveness, events);
+    // Eye of the Gale: surviving a super-effective hit raises Speed.
+    if (effectiveness > 1 && target.mon.hp > 0 && target.stages.spe < 6 && abilityIn(ctx, target) === 'eye-of-the-gale') {
+      announce(target, 'eye-of-the-gale', events);
+      applyStageChange(ctx, target, 'spe', 1, events);
+    }
     if (target.side === 'player' && effectiveness > 1 && target.mon.hp > 0) {
       ctx.battle.hyper.superEffective[target.mon.uid] = (ctx.battle.hyper.superEffective[target.mon.uid] ?? 0) + 1;
     }
@@ -3781,6 +3786,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   if (fx.hits || fx.beatUp) events.push({ type: 'hits', side: target.side, count: landed });
+  // Grid Surfer: landing a Volt (Electric) move raises Speed.
+  if (landed > 0 && user.mon.hp > 0 && userAbility === 'grid-surfer' && moveType === 'electric' && user.stages.spe < 6) {
+    announce(user, 'grid-surfer', events);
+    applyStageChange(ctx, user, 'spe', 1, events);
+  }
   if (dealt > 0) {
     if (move.category === 'physical') target.vol.tookPhysical += dealt;
     else if (move.category === 'special') target.vol.tookSpecial += dealt;

@@ -257,7 +257,7 @@ export const RAW_CONTENT: RawContent = {
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   moves: [...movesJson, ...megaMovesJson.moves],
-  abilities: abilitiesJson,
+  abilities: [...abilitiesJson, ...storySpeciesJson.abilities],
   typeChart: typeChartJson,
   archetypes: archetypesJson,
   trainerUnlocks: trainerUnlocksJson,
