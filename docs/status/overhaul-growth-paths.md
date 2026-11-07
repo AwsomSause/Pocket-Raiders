@@ -92,3 +92,9 @@ Still unplayed (10) and why: Closer (same rule as Loner), Fossil Memory (Rock is
 - Thorn Warden (Grass): counter `thornHit` (5+) each time its Rough Skin, Iron Barbs, Static-style contact status, or a contact-punishing Protect move hits a foe. Edge: +5% damage to a foe that made contact this turn or last (engine marks `contact:<uid>:<turn>`). Rocky Helmet is not counted yet (held-item module).
 - The engine leaves `avoid:`/`thorn:` marks in `growthMarks`; `story/hooks.ts` turns them into counters. No save bump.
 Still unplayed (8): Closer, Fossil Memory, Burrower, Free Spirit, Cheerleader, Shield Sibling, Scout, Pivot (reasons as above; Scout and Pivot need first-strike and pivot-switch tracking). Tests: `tests/unit/growthHazardContact.test.ts`.
+
+## Batch 11: Scout and Pivot (100 of 106 play)
+- Scout: counter `scoutFirst` (5+, most in party) each time it moves first, on a foe's first turn out, against a foe with higher base Speed (story hooks). Edge: +3% accuracy on moves against a foe on its first turn out (`growthAccuracyMultiplier`, `scout`).
+- Pivot: counter `pivotOut` (4+) for a U-turn-style exit, or a voluntary switch out after it dealt damage this stay (engine marks `dealt:<uid>`, `pivotOut:<uid>`). Edge: +5% damage on the first turn out of the Pokémon sent in right after a U-turn-style exit (`pivotIn:<uid>` mark). Settled as: the path holder must itself be the one sent in.
+- Forced switches (Roar etc.) do not count. No save bump (marks live in the optional `growthMarks`).
+Still unplayed (6): Closer, Fossil Memory, Burrower, Free Spirit, Cheerleader, Shield Sibling. Tests: `tests/unit/growthScoutPivot.test.ts`.
