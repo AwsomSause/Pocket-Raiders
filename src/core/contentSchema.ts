@@ -1588,6 +1588,10 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('battleBoost'), boosts: z.array(BattleBoostSchema).min(1), cure: StatusIdSchema.optional() }),
   /** A map and encounter item (Repels, Flutes, Incense, Mail, Poké Doll, Apricorns...), plus attribute changes now. */
   z.object({ kind: z.literal('encounter'), lasts: EncounterLastsSchema, mods: z.array(EncounterModSchema).min(1), changes: AttributeChangesSchema.optional() }),
+  /** Keystone, Mega Charm: hands you the Mega Stone of party Pokémon that can Mega Evolve and have none yet (`all`: one per Pokémon, otherwise one); the Mega Ring is added too when you have none. */
+  z.object({ kind: z.literal('megaStoneGift'), all: z.boolean() }),
+  /** IV Charms: hyper trains the lowest IV (or all six) of every Pokémon in the party. */
+  z.object({ kind: z.literal('teamTrain'), mode: z.enum(['lowest', 'all']) }),
   /** A shop or money item (Coupons, Point Card, Loot Sack, Reply Mail...). */
   z.object({ kind: z.literal('perk'), lasts: EncounterLastsSchema, perks: z.array(PerkSchema).min(1) }),
 ]);
