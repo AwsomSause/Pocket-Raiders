@@ -388,4 +388,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
 - `wire-a11y-text-quest.md`: Bigger small print and Map quest contrast settings (settings v41).
 - `quest-log.md`: Hub Quest Log room listing trainer quest lines and Mythical chains with progress; read-only, no save bump.
-- `ivs-evs.md`: IVs and EVs (W5, run v41): IVs 0-31 rolled per Pokémon, EVs from knockouts (252/510), main-series stat
+- [audio-barks-w16.md] Barks and cues W16: talk blips exist, story stinger hooks
