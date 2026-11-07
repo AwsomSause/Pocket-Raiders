@@ -161,6 +161,19 @@ describe('Beta 4.4 abilities and moves', () => {
     expect(battle.enemyStages.spa).toBeLessThanOrEqual(-1);
   });
 
+  it('Quake Jaw hits Flying types and Levitate; Bastion Fist breaks screens', () => {
+    const fly = duel({ player: 'dreadodile', enemy: 'pidgeot', pMove: 'quake-jaw' });
+    expect(damageDone(fly)).toBeGreaterThan(0);
+    const lev = duel({ player: 'dreadodile', enemy: 'gengar', pMove: 'quake-jaw', eAbility: 'levitate' });
+    expect(damageDone(lev)).toBeGreaterThan(0);
+    const d = duel({ player: 'paldean-golurk', enemy: 'snorlax', pMove: 'bastion-fist' });
+    d.battle.sideEffects.enemy.reflect = 5;
+    d.battle.sideEffects.enemy.lightScreen = 5;
+    d.battle.sideEffects.enemy.auroraVeil = 5;
+    d.go();
+    expect(d.battle.sideEffects.enemy.reflect + d.battle.sideEffects.enemy.lightScreen + d.battle.sideEffects.enemy.auroraVeil).toBe(0);
+  });
+
   it('Riptide Arc and Cyclone Wing hit harder in rain / Tailwind rules', () => {
     expect(content.moves.get('riptide-arc')!.effects.powerRule).toBe('rainBoost');
     expect(content.moves.get('cyclone-wing')!.effects.powerRule).toBe('tailwindBoost');

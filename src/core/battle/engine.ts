@@ -2159,6 +2159,7 @@ function statusCureAbility(ctx: BattleContext, c: Combatant, events: BattleEvent
 /** Levitate and Eelevate dodge Ground moves unless Gravity or Smack Down has grounded it; Thousand Arrows (smackDown) still hits. */
 function floatsOver(ctx: BattleContext, target: Combatant, ability: string | null, move: Move, moveType: TypeName): boolean {
   if (ability !== 'levitate' && ability !== 'eelevate') return false;
+  if (typeRulesOf(ctx.content).immunityBreakers[move.id] === 'flying') return false;
   return moveType === 'ground' && !move.effects.smackDown && ctx.battle.field.gravity <= 0 && !target.vol.smackedDown;
 }
 
@@ -3595,6 +3596,16 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (disguised) {
         ctx.battle.extra.brokenFace.push(target.mon.uid);
         swapForm(ctx, target, 'mimikyu-busted', events);
+      }
+    }
+  }
+  // Bastion Fist: breaks the target's Reflect, Light Screen and Aurora Veil before dealing damage.
+  if (targetsEnemy && move.effects.breaksScreens) {
+    const sfx = ctx.battle.sideEffects[target.side];
+    for (const screen of ['reflect', 'lightScreen', 'auroraVeil'] as const) {
+      if (sfx[screen] > 0) {
+        sfx[screen] = 0;
+        events.push({ type: 'sideEffect', side: target.side, effect: screen, on: false });
       }
     }
   }

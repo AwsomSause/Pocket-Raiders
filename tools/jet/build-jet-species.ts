@@ -61,7 +61,7 @@ const newMoves = [
   mv('hypnospot', 'Hypnospot', 'psychic', 'special', 80, 100, 15, [], { status: { id: 'slp', chance: 10 } }),
   mv('hypnospot-mega', 'Hypnospot', 'psychic', 'special', 80, 100, 15, ['jetform'], { status: { id: 'slp', chance: 30 } }),
   mv('rune-jab', 'Rune Jab', 'ghost', 'physical', 40, 100, 30, ['punch', 'contact'], {}, { priority: 1 }),
-  mv('bastion-fist', 'Bastion Fist', 'rock', 'physical', 100, 90, 10, ['punch', 'contact'], {}),
+  mv('bastion-fist', 'Bastion Fist', 'rock', 'physical', 100, 90, 10, ['punch', 'contact'], { breaksScreens: true }),
   mv('coral-splash', 'Coral Splash', 'water', 'special', 45, 100, 25, [], { statChanges: [{ stat: 'spe', stages: -1, target: 'enemy', chance: 30 }] }),
   mv('pearl-pulse', 'Pearl Pulse', 'water', 'special', 75, 100, 15, ['pulse'], { statChanges: [{ stat: 'spd', stages: 1, target: 'self', chance: 20 }] }),
   mv('reef-tempest', 'Reef Tempest', 'water', 'special', 100, 100, 5, [], { weather: 'rain' }),

@@ -473,6 +473,8 @@ export const MoveSchema = z.object({
       firstTurnOnly: z.literal(true).optional(),
       /** Goes through Protect (Feint, Phantom Force). */
       breaksProtect: z.literal(true).optional(),
+      /** Breaks the target's Reflect, Light Screen and Aurora Veil before the hit (Bastion Fist). */
+      breaksScreens: z.literal(true).optional(),
     })
     .default({}),
 });
