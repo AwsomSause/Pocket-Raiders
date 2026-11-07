@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { playFinaleStops } from '../../src/core/campaign/storyDirector';
 import { applyEffects, chooseBackstory } from '../../src/core/story2/module';
 import { validateModule } from '../../src/core/story2/moduleValidator';
+import { chooseStarter, createRun } from '../../src/core/run';
 import { autoplay } from './autoplay';
 import { content } from './helpers';
 import { newStoryRun, playModule, reachedEndings } from './storyPlay';
@@ -30,7 +31,7 @@ describe('story acceptance (S20)', () => {
 });
 
 /** Endings that real play never reaches on purpose: the catch-all of a grid whose earlier rows cover every answer. */
-const CATCH_ALL_ONLY: Record<string, string[]> = { bs_hisui: ['end_lost'] };
+const CATCH_ALL_ONLY: Record<string, string[]> = {};
 
 describe('story acceptance (S20): endings and counters', () => {
   for (const b of content.storyData.backstories) {
@@ -46,6 +47,16 @@ describe('story acceptance (S20): endings and counters', () => {
       }
     }, 120000);
   }
+
+  it('all five backstories are on, and seeds spread across them', () => {
+    expect(content.balance.story.module.enabledBackstories.sort()).toEqual(content.storyData.backstories.map((b) => b.id).sort());
+    const picked = new Set<string>();
+    for (let i = 0; i < 60; i++) {
+      const run = chooseStarter(content, createRun(content, { runId: `p${i}`, seed: `p${i}`, archetypeId: 'red', campaignId: 'orrery-circuit' }), 0);
+      picked.add(run.story.v2!.module!.backstory);
+    }
+    expect(picked.size).toBe(5);
+  });
 
   it('counters start at the design values and stay inside their floor and cap', () => {
     const crim = newStoryRun('start-a', 'bs_ex_criminal');
