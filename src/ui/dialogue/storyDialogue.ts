@@ -219,8 +219,11 @@ export function storyLine(scene: Phaser.Scene, o: StoryLineOpts): StoryLine {
   box.setData('homeX', BOX.x);
   const g = scene.add.graphics();
   drawBox(g, BOX.w, BOX.h, o.rim ?? STORY_GOLD);
+  // Story > Subtitle style/size (presentation only): plain text fades the box back, size scales the font.
+  const sub = services().session.settings.story;
+  if (sub.subtitleStyle === 'plain') g.setAlpha(0.4);
   const plate = namePlate(scene, o.speaker, o.role, o.rim ?? STORY_GOLD).setPosition(26, -20);
-  const body = scene.add.text(32, 30, '', textStyle(28, COLORS.textLight, { wordWrap: { width: BOX.w - 70 }, lineSpacing: 10 }));
+  const body = scene.add.text(32, 30, '', textStyle({ small: 24, medium: 28, large: 32 }[sub.subtitleSize] ?? 28, COLORS.textLight, { wordWrap: { width: BOX.w - 70 }, lineSpacing: 10, ...(sub.subtitleStyle === 'plain' ? { stroke: '#000000', strokeThickness: 4 } : {}) }));
   const cue = nextCue(scene, BOX.w - 16, BOX.h - 10, motion);
   box.add([g, plate, body, cue]);
   root.add(box);

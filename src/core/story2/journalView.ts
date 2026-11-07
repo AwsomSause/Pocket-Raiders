@@ -67,7 +67,7 @@ function changeRows(run: RunState): JournalRow[] {
 }
 
 /** Every tab that has something to show. Empty for a Classic run. */
-export function journalTabs(run: RunState): JournalTab[] {
+export function journalTabs(run: RunState, voice: 'vance' | 'plain' = 'plain'): JournalTab[] {
   if (!run.story.v2) return [];
   const all: JournalTab[] = [
     { id: 'main', label: 'Main Story', rows: mainRows(run) },
@@ -76,5 +76,13 @@ export function journalTabs(run: RunState): JournalTab[] {
     { id: 'backstory', label: 'Backstory', rows: backstoryRows(run) },
     { id: 'changes', label: 'Route Changes', rows: changeRows(run) },
   ];
-  return all.filter((t) => t.id === 'main' || t.rows.length > 0);
+  const shown = all.filter((t) => t.id === 'main' || t.rows.length > 0);
+  // Story > Journal voice: Vance adds a first-person note to the tab's key rows; Plain leaves bare facts.
+  if (voice === 'vance') {
+    for (const t of shown) {
+      const first = t.rows[0];
+      if (first && (t.id === 'main' || t.id === 'changes')) first.hint = `Vance's note: ${first.hint}`;
+    }
+  }
+  return shown;
 }
