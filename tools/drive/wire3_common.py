@@ -38,10 +38,13 @@ tp = lambda types, pct: {'hook': 'typePower', 'types': types, 'percent': pct}
 
 
 def finish(tag):
-    cat_p, ids_p = f'{REPO}/src/data/itemCatalog.json', f'{REPO}/tools/drive/library-items3-{tag}.json'
-    old = set(json.load(open(ids_p))) if os.path.exists(ids_p) else set()
-    catalog = [e for e in json.load(open(cat_p, encoding='utf-8')) if e['id'] not in old]
-    taken = {e['id'] for e in catalog}
+    """Writes this batch's entries to src/data/itemCatalog/library3-<tag>.json (auto-discovered; itemCatalog.json is not touched, so batches never conflict)."""
+    ids_p = f'{REPO}/tools/drive/library-items3-{tag}.json'
+    os.makedirs(f'{REPO}/src/data/itemCatalog', exist_ok=True)
+    taken = {e['id'] for e in json.load(open(f'{REPO}/src/data/itemCatalog.json', encoding='utf-8'))}
+    for f in os.listdir(f'{REPO}/src/data/itemCatalog'):
+        if f.endswith('.json') and f != f'library3-{tag}.json':
+            taken |= {e['id'] for e in json.load(open(f'{REPO}/src/data/itemCatalog/{f}', encoding='utf-8'))}
     lib = {f[:-4] for f in os.listdir(f'{REPO}/public/assets/images/items/library')}
     out = []
     for e in ITEMS:
@@ -54,7 +57,6 @@ def finish(tag):
             print('renamed to', e['id'])
         taken.add(e['id'])
         out.append(e)
-    open(cat_p, 'w', encoding='utf-8').write(json.dumps(catalog + out, indent=1, ensure_ascii=False) + '\n')
+    open(f'{REPO}/src/data/itemCatalog/library3-{tag}.json', 'w', encoding='utf-8').write(json.dumps(out, indent=1, ensure_ascii=False) + '\n')
     open(ids_p, 'w').write(json.dumps(sorted(e['id'] for e in out), indent=1) + '\n')
-    pics = sorted({e['icon'].split('/')[-1] for e in out})
-    print(len(out), 'catalog items,', len(pics), 'pictures')
+    print(len(out), 'catalog items,', len({e['icon'] for e in out}), 'pictures')

@@ -17,10 +17,11 @@ import { itemSlotLimit } from './trainerPerks';
 import { addRunAttribute, attributeText, runAttributeEffects } from './attributes';
 import { STAT_NAMES, TYPE_NAMES, type AttributeKey, type CatalogEffect, type CatalogEntry, type Content, type StatName } from './contentSchema';
 import { addEvs, hyperTrain, ivsOf, MAX_IV } from './ivs';
+import { pickStones } from './expedition/flow';
 
 const STAT_LABEL: Record<StatName, string> = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
 import { changeFriendship } from './friendship';
-import { addItem } from './items';
+import { addItem, itemCount } from './items';
 import { abilityOf, createPokemon, getSpecies, MAX_PP_UPS, maxHp, maxPp } from './pokemon';
 import { activePerks, addMapItem, mapItemCopies, perksOf } from './mapItems';
 import { discover } from './progress';
@@ -164,6 +165,12 @@ const APRICORN_BALLS: Record<string, string> = {
   'blk-apricorn': 'heavy-ball',
 };
 
+/** Whether one of the Pokémon's IVs can still be hyper trained. */
+function hyperTrainable(mon: PokemonInstance): boolean {
+  const real = ivsOf(mon);
+  return STAT_NAMES.some((s) => real[s] < MAX_IV && !(mon.hyperTrained ?? []).includes(s));
+}
+
 /** Whether the item does something for this run right now (it's left out of the draft otherwise). */
 export function isCatalogUseful(content: Content, run: RunState, entry: CatalogEntry): boolean {
   if (entry.status !== 'supported') return false;
@@ -179,6 +186,8 @@ export function isCatalogUseful(content: Content, run: RunState, entry: CatalogE
     );
   }
   if (effect.kind === 'fossil' || effect.kind === 'egg') return run.party.length > 0;
+  if (effect.kind === 'teamTrain') return run.party.some((mon) => hyperTrainable(mon));
+  if (effect.kind === 'megaStoneGift') return pickStones(content, run, 1, new Rng(hashSeed('stone-gift'))).length > 0;
   return true;
 }
 
@@ -303,6 +312,27 @@ export function applyCatalog(
       const trained = hyperTrain(mon, effect.mode);
       messages.push(trained.length ? `${name(mon)} was hyper trained: ${trained.map((s) => STAT_LABEL[s]).join(', ')} now count${trained.length === 1 ? 's' : ''} as the best IV.` : `${name(mon)} is already at its best.`);
       if (mon.hp > 0) mon.hp = Math.max(1, Math.min(maxHp(content, mon), mon.hp + maxHp(content, mon) - before));
+      break;
+    }
+    case 'teamTrain': {
+      for (const mon of run.party) {
+        const before = maxHp(content, mon);
+        const trained = hyperTrain(mon, effect.mode);
+        if (trained.length) messages.push(`${name(mon)} was hyper trained: ${trained.map((s) => STAT_LABEL[s]).join(', ')}.`);
+        if (mon.hp > 0) mon.hp = Math.max(1, Math.min(maxHp(content, mon), mon.hp + maxHp(content, mon) - before));
+      }
+      break;
+    }
+    case 'megaStoneGift': {
+      const stones = pickStones(content, run, effect.all ? run.party.length : 1, opts.rng);
+      for (const stone of stones) {
+        addItem(run.inventory, stone.id, 1);
+        messages.push(`${stone.name} went into your Bag.`);
+      }
+      if (stones.length > 0 && itemCount(run.inventory, 'mega-ring') === 0) {
+        addItem(run.inventory, 'mega-ring', 1);
+        messages.push('A Mega Ring came with it.');
+      }
       break;
     }
     case 'natureNudge': {

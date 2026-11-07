@@ -1,0 +1,1227 @@
+[
+ {
+  "id": "adrenaline-orb-2",
+  "name": "Adrenaline Orb Mk II",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Wild Pokémon call for help more for 8 turns of the next battle, and the holder gets +1 Speed",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/adrenalineorb",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "sos",
+     "turns": 8
+    },
+    {
+     "kind": "stage",
+     "stat": "spe",
+     "stages": 1,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "aegis-policy",
+  "name": "Aegis Policy",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Super-effective hits do 12% less damage to the holder",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/aegispolicy",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "damageTaken",
+     "percent": -12,
+     "superEffective": true
+    }
+   ]
+  }
+ },
+ {
+  "id": "auto-win-policy",
+  "name": "Auto-Win Policy",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder's chance to hang on at 1 HP is tripled",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/autowinpolicy",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "endure",
+     "multiplier": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "allens-sword",
+  "name": "Allen's Sword",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Steel and Fighting moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/allensword",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "steel",
+      "fighting"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "amplifield-rock",
+  "name": "Amplifield Rock",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Terrains the holder sets last 3 turns longer",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/amplifieldrock",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "terrainExtender",
+     "turns": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "ancient-wing",
+  "name": "Ancient Wing",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Flying and Dragon moves of the holder do 15% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/ancientwing",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "flying",
+      "dragon"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "baton",
+  "name": "Baton",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "When hit, the holder switches out (one use per battle)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/baton",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "ejectButton"
+    }
+   ]
+  }
+ },
+ {
+  "id": "black-mane-hair",
+  "name": "Black Mane Hair",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Ghost and Dark moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/blackmanehair",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost",
+      "dark"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "white-mane-hair",
+  "name": "White Mane Hair",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Ice and Psychic moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/whitemanehair",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ice",
+      "psychic"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "blank-plate",
+  "name": "Blank Plate",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Normal moves of every team member do 10% more",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "held",
+  "icon": "library/blankplate",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "normal"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "legend-plate",
+  "name": "Legend Plate",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Every move of every team member does 5% more",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "held",
+  "icon": "library/legendplate",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "black-prism",
+  "name": "Black Prism",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder's critical-hit stage goes up by 1",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/blkprism",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "crit",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "cell-imprint",
+  "name": "Cell Imprint",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder heals 10% of the damage it deals",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/cellimprint",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "drain",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "common-stone",
+  "name": "Common Stone",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder gets 10% more EXP",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/commonstone",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "exp",
+     "multiplier": 1.1
+    }
+   ]
+  }
+ },
+ {
+  "id": "intriguing-stone",
+  "name": "Intriguing Stone",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder gets 25% more EXP",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/intriguingstone",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "exp",
+     "multiplier": 1.25
+    }
+   ]
+  }
+ },
+ {
+  "id": "cursed-candle",
+  "name": "Cursed Candle",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Ghost and Fire moves of the holder do 15% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/cursedcandle",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost",
+      "fire"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "darch-mirror",
+  "name": "Darch's Mirror",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Copies the stat boosts an opponent just got, once per battle",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/darchmirror",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "mirrorHerb"
+    }
+   ]
+  }
+ },
+ {
+  "id": "mirror-sprig",
+  "name": "Mirror Sprig",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Opponents can't lower the holder's stats",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/mirrorsprig",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "clearAmulet"
+    }
+   ]
+  }
+ },
+ {
+  "id": "dark-matter",
+  "name": "Dark Matter",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Dark, Ghost and Dragon moves of the holder do 12% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/darkmatter",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "dark",
+      "ghost",
+      "dragon"
+     ],
+     "percent": 12
+    }
+   ]
+  }
+ },
+ {
+  "id": "haunted-chalice",
+  "name": "Haunted Chalice",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Ghost types heal 1/8 a turn; others lose 1/16",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/hauntedchalice",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "endTurn",
+     "fraction": 0.125,
+     "typed": "ghost",
+     "otherwise": -0.0625
+    }
+   ]
+  }
+ },
+ {
+  "id": "hidden-orb",
+  "name": "Hidden Orb",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder dodges 8% more attacks",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hiddenorb",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "evasion",
+     "percent": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "lens-case",
+  "name": "Lens Case",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder's accuracy goes up 10% and its critical-hit stage by 1",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/lenscase",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "accuracy",
+     "percent": 10
+    },
+    {
+     "hook": "crit",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "metabreaker-amulet",
+  "name": "Metabreaker Amulet",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Super-effective moves of the holder do 20% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/metabreakeramulet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "superPower",
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "mosely-beanie",
+  "name": "Mosely's Beanie",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder grows fond of you 100% faster",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/moselysbeanie",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "friendship",
+     "percent": 100
+    }
+   ]
+  }
+ },
+ {
+  "id": "robo-cloak",
+  "name": "Robo Cloak",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder's Defense and Sp. Def go up 10%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/robocloak",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "def",
+     "multiplier": 1.1
+    },
+    {
+     "hook": "stat",
+     "stat": "spd",
+     "multiplier": 1.1
+    }
+   ]
+  }
+ },
+ {
+  "id": "ultra-memory",
+  "name": "Ultra Memory",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Every stat of the holder goes up 5%",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/ultramemory",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.05
+    }
+   ]
+  }
+ },
+ {
+  "id": "glitch-memory",
+  "name": "Glitch Memory",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "One random stat of the holder goes up 20%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/glitchmemory",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "randomStat",
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "resistor-charm",
+  "name": "Resistor Charm",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder takes 8% less damage",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/resistorcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "damageTaken",
+     "percent": -8
+    }
+   ]
+  }
+ },
+ {
+  "id": "stab-charm",
+  "name": "STAB Charm",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Every move of the holder does 8% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "library/stabcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "power",
+     "percent": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "disable-charm",
+  "name": "Disable Charm",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder shrugs off 25% of status effects",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/disablecharm",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "statusShield",
+     "percent": 25
+    }
+   ]
+  }
+ },
+ {
+  "id": "inverse-ribbon",
+  "name": "Inverse Ribbon",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Super-effective moves of the holder do 10% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/inverse-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "superPower",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "flip-stats-ribbon",
+  "name": "Flip Stats Ribbon",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder's Attack and Sp. Atk go up 8%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/flip-stats-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "atk",
+     "multiplier": 1.08
+    },
+    {
+     "hook": "stat",
+     "stat": "spa",
+     "multiplier": 1.08
+    }
+   ]
+  }
+ },
+ {
+  "id": "fresh-start-ribbon",
+  "name": "Fresh Start Ribbon",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder gets 30% more EXP",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/fresh-start-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "exp",
+     "multiplier": 1.3
+    }
+   ]
+  }
+ },
+ {
+  "id": "myst-emblem",
+  "name": "Myst Emblem",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Every stat of the holder goes up 8%",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/mystemblem",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "stat",
+     "stat": "all",
+     "multiplier": 1.08
+    }
+   ]
+  }
+ },
+ {
+  "id": "xen-emblem",
+  "name": "Xen Emblem",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Every move of the holder does 10% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/xenemblem",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "z-booster",
+  "name": "Z Booster",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Your whole team gets +1 Attack and +1 Sp. Atk for 8 turns of its next battle",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "library/zbooster",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "atk",
+     "stages": 1,
+     "turns": 8
+    },
+    {
+     "kind": "stage",
+     "stat": "spa",
+     "stages": 1,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "z-splicer",
+  "name": "Z Splicer",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Super-effective moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/zsplicer",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "superPower",
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "intercept-z",
+  "name": "Interceptor Z",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "The holder gets the first move more often",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/interceptz",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "dodgeFirst"
+    }
+   ]
+  }
+ },
+ {
+  "id": "interceptor-wish",
+  "name": "Interceptor Wish",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Revives fainted Pokémon with half HP and heals the whole team 50%",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/interceptorwish",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "revive": 0.5,
+   "heal": 0.5
+  }
+ },
+ {
+  "id": "elemental-seed",
+  "name": "Elemental Seed",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Electric Terrain: the holder gets +1 Sp. Def",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/elementalseed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "terrainSeed",
+     "terrain": "electric",
+     "stat": "spd",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "magical-seed",
+  "name": "Magical Seed",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Psychic Terrain: the holder gets +1 Defense",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/magicalseed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "terrainSeed",
+     "terrain": "psychic",
+     "stat": "def",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "synthetic-seed",
+  "name": "Synthetic Seed",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Grassy Terrain: the holder gets +1 Sp. Def",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/syntheticseed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "terrainSeed",
+     "terrain": "grassy",
+     "stat": "spd",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "telluric-seed",
+  "name": "Telluric Seed",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Misty Terrain: the holder gets +1 Defense",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/telluricseed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "terrainSeed",
+     "terrain": "misty",
+     "stat": "def",
+     "stages": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "reviver-seed",
+  "name": "Reviver Seed",
+  "family": "Battle gear (Drive pack 3)",
+  "description": "Revives a fainted Pokémon with 40% HP and cures its status",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/reviver-seed",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 0.4,
+   "cure": true
+  }
+ },
+ {
+  "id": "mega-ring-2",
+  "name": "Mega Bracer",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Goes in your Bag: Pokémon holding their Mega Stone can Mega Evolve (like the Mega Ring)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "library/megaring",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "mega-ring",
+   "count": 1
+  }
+ },
+ {
+  "id": "mega-cuff",
+  "name": "Mega Cuff",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Goes in your Bag: Pokémon holding their Mega Stone can Mega Evolve (like the Mega Ring)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "library/megacuff",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "mega-ring",
+   "count": 1
+  }
+ },
+ {
+  "id": "z-power-ring",
+  "name": "Z-Power Ring",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Goes in your Bag: lets a Z-Crystal turn a move into its Z-Move once per battle (like the Z-Ring)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "library/zpowerring",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "z-ring",
+   "count": 1
+  }
+ },
+ {
+  "id": "dynamax-crystal",
+  "name": "Dynamax Crystal",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Goes in your Bag: lets one Pokémon Dynamax once per battle (like the Dynamax Band)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "library/dynamaxcrystal",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "dynamax-band",
+   "count": 1
+  }
+ },
+ {
+  "id": "dynamax-inhibitor",
+  "name": "Dynamax Inhibitor",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "The holder takes 15% less damage from wild Pokémon",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/dynamaxinhibitor",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "damageTaken",
+     "percent": -15,
+     "fromWild": true
+    }
+   ]
+  }
+ },
+ {
+  "id": "keystone",
+  "name": "Keystone",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Hands you the Mega Stone of every party Pokémon that can Mega Evolve (and a Mega Ring if you have none)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "library/keystone",
+  "status": "supported",
+  "effect": {
+   "kind": "megaStoneGift",
+   "all": true
+  }
+ },
+ {
+  "id": "mega-charm",
+  "name": "Mega Charm",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Hands you the Mega Stone of the first party Pokémon that can Mega Evolve and has none yet",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/megacharm",
+  "status": "supported",
+  "effect": {
+   "kind": "megaStoneGift",
+   "all": false
+  }
+ },
+ {
+  "id": "stellar-tera-shard",
+  "name": "Stellar Tera Shard",
+  "family": "Transformation items (Drive pack 3)",
+  "description": "Gives a Pokémon a random new Tera Type",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/stellarterashard",
+  "status": "supported",
+  "effect": {
+   "kind": "teraType",
+   "mode": "random"
+  }
+ },
+ {
+  "id": "iv-charm",
+  "name": "IV Charm",
+  "family": "IV and ability items (Drive pack 3)",
+  "description": "Hyper trains the lowest IV of every Pokémon in your party (it counts as 31)",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 2,
+  "how": "use",
+  "icon": "library/ivcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "teamTrain",
+   "mode": "lowest"
+  }
+ },
+ {
+  "id": "iv-charm-2",
+  "name": "IV Charm II",
+  "family": "IV and ability items (Drive pack 3)",
+  "description": "Hyper trains every IV of every Pokémon in your party (they count as 31)",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": 1,
+  "how": "use",
+  "icon": "library/ivcharm-2",
+  "status": "supported",
+  "effect": {
+   "kind": "teamTrain",
+   "mode": "all"
+  }
+ },
+ {
+  "id": "ability-charm",
+  "name": "Ability Charm",
+  "family": "IV and ability items (Drive pack 3)",
+  "description": "Swaps a Pokémon between its normal abilities (needs two)",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "use",
+  "icon": "library/ability-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "ability",
+   "mode": "swap"
+  }
+ },
+ {
+  "id": "ability-vial",
+  "name": "Ability Vial",
+  "family": "IV and ability items (Drive pack 3)",
+  "description": "Gives a Pokémon its hidden ability",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "use",
+  "icon": "library/abilityvial",
+  "status": "supported",
+  "effect": {
+   "kind": "ability",
+   "mode": "hidden"
+  }
+ }
+]

@@ -57,6 +57,8 @@ import bossesJson from './bosses.json';
 import bossTeamsJson from './bossTeams.json';
 import itemsJson from './items.json';
 import itemCatalogJson from './itemCatalog.json';
+// Item catalog entries added in their own files (src/data/itemCatalog/*.json, one per batch, auto-discovered like events/*.json).
+const itemCatalogExtra = Object.values(import.meta.glob<unknown[]>('./itemCatalog/*.json', { eager: true, import: 'default' })).flat();
 import learnablesJson from './learnables.json';
 import megaStonesJson from './megaStones.json';
 import zMovesJson from './zMoves.json';
@@ -275,7 +277,7 @@ export const RAW_CONTENT: RawContent = {
   // Mega Stones are generated (npm run data:megas) and kept in their own file.
   rewards: [...rewardsJson, ...megaStonesJson.rewards],
   items: [...itemsJson, ...megaStonesJson.items],
-  itemCatalog: itemCatalogJson,
+  itemCatalog: [...itemCatalogJson, ...itemCatalogExtra],
   learnables: { ...learnablesJson, ...storySpeciesJson.learnables },
   trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
