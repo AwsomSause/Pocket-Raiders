@@ -48,12 +48,15 @@ export class TrainerSelectScene extends Phaser.Scene {
   private hint!: Phaser.GameObjects.Text;
   private sortKey: TrainerSortKey = 'default';
   private sortReverse = false;
+  /** A run mode picked before this screen (the title's Story Run), handed on to the Preparation Desk. */
+  private modeId: string | undefined;
 
   constructor() {
     super('TrainerSelect');
   }
 
-  create(): void {
+  create(data?: { modeId?: string }): void {
+    this.modeId = data?.modeId;
     const { session } = services();
     const p = session.profile;
     this.index = 0;
@@ -401,7 +404,7 @@ export class TrainerSelectScene extends Phaser.Scene {
       return;
     }
     // The Preparation Desk picks up ?seed=... and ?campaign=dev from the address.
-    this.scene.start('RunPrep', { archetypeId: slot.archetype.id });
+    this.scene.start('RunPrep', { archetypeId: slot.archetype.id, ...(this.modeId ? { modeId: this.modeId } : {}) });
   }
 }
 

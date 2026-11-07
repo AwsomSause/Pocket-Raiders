@@ -100,7 +100,7 @@ test('when a pack animation can\'t load, the PokeRogue one plays instead', async
 test('animation settings cycle on the title screen and turn animations off', async ({ page }) => {
   await page.goto('/?seed=m9-settings');
   await waitForScene(page, 'MainMenu');
-  // Continue (disabled), Hub (focused), New Run, Story Prologue, Save Slots, Settings; then Animations & Effects (4th category); then Battle motion (2nd row).
+  // Continue (disabled), Hub (focused), New Run, Story Run, Save Slots, Settings; then Animations & Effects (4th category); then Battle motion (2nd row).
   for (let i = 0; i < 4; i++) await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Settings');

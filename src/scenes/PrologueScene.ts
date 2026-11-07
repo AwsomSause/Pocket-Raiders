@@ -18,6 +18,8 @@ import { BRIEFING, FIRST_NAME_USE, MONTAGE, OBJECTS, PRONOUN_PROMPT, QUICK_OBJEC
 const VANCE_ANIM_IDS = VANCE_ANIMS.map((n) => `story.vance.${n}`);
 const VANCE_SIDE = 400;
 const VANCE_SCALE = 2.5;
+/** The run mode (runRules.json) that plays the Orrery Circuit as a Story Run. */
+export const STORY_RUN_MODE = 'story-run';
 
 type Step = 'intake' | 'look' | 'mode' | BeatId;
 
@@ -32,6 +34,8 @@ export class PrologueScene extends Phaser.Scene {
   private onConfirm: (() => void) | null = null;
   /** Width the Vance picture takes on the right while she is on screen (text and menus keep clear of it). */
   private sideW = 0;
+  /** Opened from the title's Story Run entry: finishing goes on to trainer choice for a Story Run. */
+  private thenRun = false;
 
   constructor() {
     super('Prologue');
@@ -65,7 +69,8 @@ export class PrologueScene extends Phaser.Scene {
     services().session.changeProfile((p) => ({ ...p, story: change(p.story) }));
   }
 
-  create(): void {
+  create(data?: { thenRun?: boolean }): void {
+    this.thenRun = data?.thenRun === true;
     this.tones = [];
     this.examined.clear();
     this.shot = 0;
@@ -183,7 +188,13 @@ export class PrologueScene extends Phaser.Scene {
     let y = this.body([`VANCE: ${renderTokens(intake.greeting, { name: s.protagonist.name, pronouns: s.protagonist.pronouns })}`, ...(intake.extraLine ? [`VANCE: ${intake.extraLine}`] : [])]);
     if (intake.extraLine) this.edit((st) => markBeat(st, 'intake'));
     y += 10;
-    this.choose([{ label: 'Replay the prologue' }, { label: 'Back to the title' }], (i) => (i === 0 ? this.go('look') : this.leave()), y, () => this.leave());
+    const opts = [...(this.thenRun ? [{ label: 'Begin the Story Run' }] : []), { label: 'Replay the prologue' }, { label: 'Back to the title' }];
+    this.choose(opts, (i) => {
+      const pick = opts[i]!.label;
+      if (pick === 'Begin the Story Run') return this.leave(true);
+      if (pick === 'Replay the prologue') return this.go('look');
+      this.leave(false);
+    }, y, () => this.leave(false));
   }
 
   private stepLook(): void {
@@ -363,15 +374,17 @@ export class PrologueScene extends Phaser.Scene {
     this.title('Beat 10: Departure');
     this.vance('confident');
     const p = this.story.protagonist;
-    const y = this.body([...BRIEFING.map((l) => renderTokens(l, { name: p.name, pronouns: p.pronouns })), 'The rest of the opening (the quiz, backstory, first partner and Field Trial) arrives in later updates. Your identity is saved.'], 80);
-    this.choose([{ label: 'Finish' }], () => {
+    const y = this.body([...BRIEFING.map((l) => renderTokens(l, { name: p.name, pronouns: p.pronouns })), 'Your identity is saved.'], 80);
+    this.choose([{ label: this.thenRun ? 'Begin the Story Run' : 'Finish' }], () => {
       this.edit(finishPrologue);
-      this.leave();
+      this.leave(true);
     }, y);
   }
 
-  private leave(): void {
+  /** Back to the title, or (when opened for a Story Run and `go` is true) on to trainer choice in Story Run mode. */
+  private leave(go = false): void {
     this.clearInputs();
-    this.scene.start('MainMenu');
+    if (go && this.thenRun) this.scene.start('TrainerSelect', { modeId: STORY_RUN_MODE });
+    else this.scene.start('MainMenu');
   }
 }
