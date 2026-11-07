@@ -12,7 +12,7 @@ add('bikeyellow', 'yellow-bike', 'Yellow Bike', F, 'Once per stage, from the map
 add('bikeaqua', 'aqua-bike', 'Aqua Bike', F, 'Once per stage, from the map: jump to any stop in the next column, even without a path', 'rare', Y, 1, 'passive', perk({'perk': 'acroBike'}))
 add('bikev', 'bike-v', 'Bike V', F, 'Once per stage, from the map: ride past a wild Pokémon and still get its reward', 'epic', Y, 1, 'passive', perk({'perk': 'machBike'}))
 add('ridepager', 'ride-pager', 'Ride Pager', F, 'From the map, 2 trips: call a ride and fly two columns ahead to any stop', 'epic', Y, 2, 'use', perk({'perk': 'airship'}, lasts=once(2)))
-add('ladder', 'ladder', 'Ladder', F, 'Next fork: add a bridge to a "?" event', 'uncommon', Y, 3, 'use', perk({'perk': 'extraStop', 'kind': 'event', 'where': 'nextNode'}, lasts=NEXT))
+add('ladder', 'ladder', 'Ladder', F, 'Next fork: add a bridge to a "?" event (one use)', 'uncommon', Y, 3, 'use', perk({'perk': 'extraStop', 'kind': 'event', 'where': 'nextNode'}, lasts=once(1)))
 # ---- digging and finding ----
 add('miningkit', 'mining-kit', 'Mining Kit', F, 'Each wild battle on a Rock or Ground stage pays +₽20 per copy', 'uncommon', Y, 3, 'passive', perk({'perk': 'wildMoney', 'type': 'rock', 'amount': 20}, {'perk': 'wildMoney', 'type': 'ground', 'amount': 20}))
 add('dowsingmachine', 'dowsing-machine', 'Dowsing Machine', F, 'One wild stop on each stage hides a Bag item, and the first draft shows 6 choices', 'epic', Y, 1, 'passive', perk({'perk': 'hiddenItem'}, {'perk': 'dowsing'}))
