@@ -186,8 +186,9 @@ export const MoveSchema = z.object({
    * contact/punch/bite/pulse/sound come from PokeAPI (abilities such as Static and Iron Fist use them).
    * `zmove`, `max`: a Z-Move or Max Move made in battle (battle/transform.ts); they hit through Protect for a quarter of their damage.
    * `megasig`: a Mega signature move (battle/megaMove.ts): only a Mega Evolved Pokémon has it, in an extra slot, so no learnset or random pool picks it.
+   * `storysig`: a Story Run signature move (story2/signature.ts): only the run's partner has it, in an extra slot each battle.
    */
-  flags: z.array(z.enum(['powder', 'typeless', 'zmove', 'max', 'megasig', 'contact', 'punch', 'bite', 'pulse', 'sound', 'bullet', 'slicing', 'wind'])).default([]),
+  flags: z.array(z.enum(['powder', 'typeless', 'zmove', 'max', 'megasig', 'storysig', 'contact', 'punch', 'bite', 'pulse', 'sound', 'bullet', 'slicing', 'wind'])).default([]),
   /**
    * False for moves whose effects the battle engine can't run yet. They stay
    * in the data (and in learnsets) so they can be switched on later, but no

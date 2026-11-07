@@ -1,0 +1,152 @@
+# Signature I and II for the 74 Remembrance lines (Design v2 Part II roster "Signature move concept" and Part II-D).
+# The concept text is mapped onto effects the battle engine already runs; the Keystone upgrade of Sig I is derived by
+# tools/story/build-signature-moves.mjs (one change: +15 points of chance, or one more stage, or about +15% power/heal).
+# line|slot|name|type|cat(P/S/St)|power|acc(- = never misses)|priority|crit|effects JSON|flags
+bulbasaur|1|Rootbound Stand|grass|St|-|-|4|0|{"protect":true,"protectContact":{"hurt":0.125}}|
+bulbasaur|2|Thorn Mend|grass|P|60|100|0|0|{"drain":0.5}|contact
+charmander|1|Tailfire Vow|fire|S|70|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":50}]}|
+charmander|2|Ember Tether|fire|S|65|100|0|0|{"status":{"id":"brn","chance":30}}|
+squirtle|1|Shellback Rally|water|P|60|100|0|0|{"switchOut":"switch"}|contact
+squirtle|2|Backwash|water|S|65|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
+chikorita|1|Leaf Lullaby|grass|St|-|-|0|0|{"heal":0.25,"cure":"self"}|
+chikorita|2|Soft Reprise|grass|St|-|-|0|0|{"selfState":"ingrain"}|
+cyndaquil|1|Ember Whisper|fire|S|75|100|0|0|{"ignoreStages":true}|
+cyndaquil|2|Smoke Signal|fire|S|60|100|0|0|{"statChanges":[{"stat":"acc","stages":-1,"target":"enemy","chance":100}]}|
+totodile|1|Snap Jest|water|P|70|100|0|0|{"confuse":{"chance":30}}|contact,bite
+totodile|2|Last Laugh|water|P|65|100|0|0|{"powerRule":"doubleTargetStatus"}|contact,bite
+treecko|1|Branch Gambit|grass|P|60|100|1|0|{}|contact
+treecko|2|Leaf Feint|grass|S|70|100|0|0|{"statChanges":[{"stat":"eva","stages":1,"target":"self","chance":50}]}|
+torchic|1|Rooster's Pride|fire|St|-|-|0|0|{"statChanges":[{"stat":"atk","stages":1,"target":"self","chance":100},{"stat":"spe","stages":1,"target":"self","chance":100}]}|
+torchic|2|Crow Call|fire|P|70|100|0|0|{"status":{"id":"brn","chance":20}}|contact
+mudkip|1|Mudsplash Wall|water|St|-|-|0|0|{"sideMove":"reflect"}|
+mudkip|2|Mud Roll|ground|P|65|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|contact
+turtwig|1|Slow Bloom|grass|St|-|-|0|0|{"heal":0.4}|
+turtwig|2|Seed Rooting|grass|P|70|100|0|0|{"drain":0.5}|contact
+chimchar|1|Flame Sprint|fire|P|60|100|1|0|{}|contact
+chimchar|2|Tail Whip Spark|fire|P|70|100|0|0|{"status":{"id":"brn","chance":30}}|contact
+piplup|1|Proud Plume|water|S|65|100|0|0|{"statChanges":[{"stat":"atk","stages":-1,"target":"enemy","chance":100}]}|
+piplup|2|Frost Brush|water|S|65|100|0|0|{"statChanges":[{"stat":"spa","stages":-1,"target":"enemy","chance":100}]}|
+snivy|1|Cool Rebuke|grass|S|60|100|0|0|{"powerRule":"targetStatsRaised"}|
+snivy|2|Vine Grace|grass|St|-|-|0|0|{"statChanges":[{"stat":"eva","stages":1,"target":"self","chance":100},{"stat":"spe","stages":1,"target":"self","chance":100}]}|
+tepig|1|Cinder Hug|fire|P|70|100|0|0|{"status":{"id":"brn","chance":30}}|contact
+tepig|2|Warm Ember|fire|St|-|-|0|0|{"heal":0.3}|
+oshawott|1|Scalchop Oath|water|P|80|-|0|0|{}|contact,slicing
+oshawott|2|Shell Parry|water|St|-|-|4|0|{"protect":true}|
+chespin|1|Spine Guard|grass|St|-|-|0|0|{"sideMove":"lightScreen"}|
+chespin|2|Burr Wall|grass|St|-|-|4|0|{"protect":true,"protectContact":{"hurt":0.125}}|
+fennekin|1|Twig Spell|fire|S|70|100|0|0|{"statChanges":[{"stat":"spd","stages":1,"target":"self","chance":50}]}|
+fennekin|2|Spark Rune|psychic|S|70|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":30}]}|
+froakie|1|Bubble Veil|water|S|65|100|0|0|{"statChanges":[{"stat":"eva","stages":1,"target":"self","chance":100}]}|
+froakie|2|Quick Ripple|water|S|60|100|1|0|{}|
+rowlet|1|Silent Feather|grass|P|70|-|0|0|{}|contact
+rowlet|2|Moonlit Glide|flying|P|70|100|0|0|{"switchOut":"switch"}|contact
+litten|1|Alley Claw|fire|P|60|100|0|0|{"powerRule":"doubleUserFirst"}|contact
+litten|2|Shadow Slink|dark|P|65|100|0|0|{"doubleBelowHalf":true}|contact
+popplio|1|Seal's Serenade|water|S|60|100|0|0|{"drain":0.5}|sound
+popplio|2|Tide Chorus|water|St|-|-|0|0|{"cure":"party"}|sound
+grookey|1|Drumline|grass|P|15|90|0|0|{"hits":[3,3],"powerRule":"perHit"}|contact
+grookey|2|Beat Break|grass|P|70|100|0|0|{"resetStages":"target"}|contact
+scorbunny|1|Kickoff|fire|P|65|100|0|0|{"statChanges":[{"stat":"spe","stages":1,"target":"self","chance":100}]}|contact
+scorbunny|2|Hot Lap|fire|P|60|100|0|0|{"switchOut":"switch"}|contact
+sobble|1|Teardrop Gambit|water|S|90|100|0|0|{"charge":{"semi":"underwater"}}|
+sobble|2|Misty Eyes|water|St|-|100|0|0|{"statChanges":[{"stat":"atk","stages":-1,"target":"enemy","chance":100},{"stat":"eva","stages":1,"target":"self","chance":100}]}|
+sprigatito|1|Catnip Trick|grass|P|65|100|0|0|{"resetStages":"target"}|contact
+sprigatito|2|Purr Snare|grass|St|-|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100},{"stat":"eva","stages":-1,"target":"enemy","chance":100}]}|
+fuecoco|1|Lazy Blaze|fire|S|90|90|0|0|{"charge":{}}|
+fuecoco|2|Warm Doze|fire|St|-|-|0|0|{"heal":0.5}|
+quaxly|1|Tidewalk Step|water|St|-|-|0|0|{"statChanges":[{"stat":"spe","stages":1,"target":"self","chance":100},{"stat":"eva","stages":1,"target":"self","chance":100}]}|
+quaxly|2|Fan Flourish|water|P|75|100|0|0|{"powerRule":"statsRaised"}|contact
+dratini|1|Mist Coil|dragon|S|60|95|0|0|{"bind":true}|
+dratini|2|Scale Hum|dragon|St|-|-|0|0|{"statChanges":[{"stat":"spd","stages":1,"target":"self","chance":100},{"stat":"spe","stages":1,"target":"self","chance":100}]}|sound
+larvitar|1|Gravel Heart|rock|P|70|95|0|0|{"statChanges":[{"stat":"def","stages":1,"target":"self","chance":100}]}|
+larvitar|2|Pebble Rain|rock|P|25|90|0|0|{"hits":[3,3]}|
+bagon|1|Dreamwing Dive|dragon|P|90|95|0|0|{"charge":{"semi":"air"}}|contact
+bagon|2|Cloud Climb|dragon|St|-|-|0|0|{"statChanges":[{"stat":"spe","stages":2,"target":"self","chance":100},{"stat":"def","stages":-1,"target":"self","chance":100}]}|
+beldum|1|Quiet Calculus|steel|P|80|-|0|0|{}|contact
+beldum|2|Mag Net|steel|P|65|100|0|0|{"superAgainst":"rock"}|
+gible|1|Sandbite Rush|ground|P|70|100|0|0|{"drain":0.5}|contact,bite
+gible|2|Ground Rumble|ground|P|80|95|0|0|{}|
+deino|1|Blind Maw|dark|P|80|100|0|0|{"ignoreStages":true}|contact,bite
+deino|2|Dark Howl|dark|St|-|100|0|0|{"statChanges":[{"stat":"acc","stages":-1,"target":"enemy","chance":100},{"stat":"spa","stages":1,"target":"self","chance":100}]}|sound
+goomy|1|Slick Comfort|dragon|S|65|100|0|0|{"drain":0.5}|
+goomy|2|Dewy Hold|dragon|St|-|-|0|0|{"heal":0.25,"cure":"self"}|
+jangmo-o|1|Scale Song|dragon|S|60|100|0|0|{"statChanges":[{"stat":"def","stages":1,"target":"self","chance":100}]}|sound
+jangmo-o|2|Rattle Stomp|fighting|P|75|100|0|0|{"flinchChance":20}|contact
+dreepy|1|Haunting Orbit|ghost|P|75|100|0|0|{"statChanges":[{"stat":"eva","stages":1,"target":"self","chance":50}]}|
+dreepy|2|Lost Lantern|ghost|S|70|100|0|0|{"powerRule":"knockOff"}|
+frigibax|1|Long Winter|ice|P|65|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
+frigibax|2|Snow Swell|ice|S|70|95|0|0|{"weather":"snow"}|
+pichu|1|Spark Promise|electric|P|60|100|1|0|{}|contact
+pichu|2|Static Cuddle|electric|St|-|90|0|0|{"status":{"id":"par","chance":100}}|
+tuftin|1|Many Roads|normal|P|70|-|0|0|{}|contact
+tuftin|2|Tuft Ruffle|normal|St|-|-|0|0|{"statChanges":[{"stat":"spe","stages":1,"target":"self","chance":100},{"stat":"eva","stages":1,"target":"self","chance":100}]}|
+magby|1|Coalheart|fire|S|65|100|0|0|{"status":{"id":"brn","chance":30}}|
+magby|2|Ember Rolls|fire|P|60|100|0|0|{"powerRule":"doubleUserStatus"}|contact
+elekid|1|Static Dare|electric|P|60|100|0|0|{"powerRule":"targetSpeed"}|contact,punch
+elekid|2|Shock Jab|electric|P|60|100|1|0|{}|contact,punch
+togepi|1|Lucky Warmth|fairy|St|-|-|0|0|{"wish":true}|
+togepi|2|Wish Chime|fairy|St|-|-|0|0|{"heal":0.25}|sound
+aron|1|Iron Appetite|steel|P|65|100|0|0|{"powerRule":"knockOff"}|contact,bite
+aron|2|Rock Chew|steel|P|70|95|0|0|{"statChanges":[{"stat":"def","stages":-1,"target":"enemy","chance":100}]}|contact,bite
+pidgey|1|Courier Dash|flying|P|60|100|0|0|{"switchOut":"switch"}|contact
+pidgey|2|Gust Mail|flying|S|65|100|0|0|{"statChanges":[{"stat":"acc","stages":-1,"target":"enemy","chance":30}]}|wind
+hoothoot|1|Dusk Meter|psychic|S|70|100|0|0|{"flinchChance":20}|
+hoothoot|2|Hush Hoot|normal|S|65|100|0|0|{"disrupt":"throatChop"}|sound
+taillow|1|Brave Swallow|flying|P|70|100|0|1|{}|contact
+taillow|2|Gale Dive|flying|P|75|100|0|0|{"recoil":0.25}|contact
+starly|1|Flock Cry|flying|P|25|90|0|0|{"hits":[3,3]}|contact
+starly|2|Wing Rally|flying|St|-|-|0|0|{"sideMove":"tailwind"}|wind
+pidove|1|Quiet Courier|normal|St|-|-|0|0|{"sideMove":"safeguard"}|
+pidove|2|Station Hush|flying|S|65|100|0|0|{"statChanges":[{"stat":"spa","stages":-1,"target":"enemy","chance":50}]}|wind
+fletchling|1|Ember Flight|fire|P|60|100|1|0|{}|contact
+fletchling|2|Cinder Dart|fire|P|65|100|0|0|{"status":{"id":"brn","chance":20}}|
+pikipek|1|Drum Peck|flying|P|15|90|0|0|{"hits":[3,3],"powerRule":"perHit"}|contact
+pikipek|2|Roll Call|flying|P|60|100|0|0|{"koBoost":{"stat":"spa","stages":1}}|
+rookidee|1|Black Wing Oath|flying|St|-|100|0|0|{"statChanges":[{"stat":"acc","stages":-1,"target":"enemy","chance":100},{"stat":"def","stages":1,"target":"self","chance":100}]}|
+rookidee|2|Iron Perch|steel|St|-|-|0|0|{"sideMove":"lightScreen"}|
+wattrel|1|Storm Skim|electric|S|70|100|0|0|{"statChanges":[{"stat":"eva","stages":-1,"target":"enemy","chance":100}]}|
+wattrel|2|Spark Surf|electric|S|70|100|0|0|{"ignoreStages":true}|
+rhyhorn|1|Horn Drill Pledge|ground|P|85|90|0|0|{}|contact
+rhyhorn|2|Charge Plow|ground|P|65|100|0|0|{"courtChange":true}|contact
+porygon|1|Debug Loop|normal|St|-|-|0|0|{"stageTrick":"copy","cure":"self"}|
+porygon|2|Patch Update|normal|St|-|-|0|0|{"cure":"party"}|
+mankey|1|Rage Rally|fighting|P|50|100|0|0|{"powerRule":"fallenAllies"}|contact
+mankey|2|Pound Tantrum|fighting|P|75|100|0|0|{"powerRule":"stompingTantrum"}|contact
+gastly|1|Prank Mist|ghost|St|-|90|0|0|{"confuse":{"chance":100}}|
+gastly|2|Boo Brew|ghost|St|-|90|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100},{"stat":"acc","stages":-1,"target":"enemy","chance":100}]}|
+abra|1|Short Nap Teleport|psychic|St|-|-|0|0|{"heal":0.1,"switchOut":"switch"}|
+abra|2|Sleepwalk|psychic|S|65|100|0|0|{"switchOut":"switch"}|
+machop|1|Training Montage|fighting|P|70|100|0|0|{"koBoost":{"stat":"atk","stages":1}}|contact
+machop|2|Warm-Up Set|fighting|St|-|-|0|0|{"statChanges":[{"stat":"atk","stages":1,"target":"self","chance":100},{"stat":"def","stages":1,"target":"self","chance":100}]}|
+magnemite|1|Magnet Handshake|steel|St|-|-|0|0|{"stageTrick":"copy"}|
+magnemite|2|Pole Flip|steel|St|-|-|0|0|{"stageTrick":"swapAll"}|
+shinx|1|Glint Pounce|electric|P|70|-|0|0|{}|contact
+shinx|2|Eye Flash|electric|St|-|100|0|0|{"statChanges":[{"stat":"acc","stages":-2,"target":"enemy","chance":100}]}|
+weedle|1|Stinger Debt|bug|P|65|100|0|0|{"status":{"id":"psn","chance":30}}|contact
+weedle|2|Venom Needle|poison|P|65|100|0|0|{"powerRule":"doubleTargetPoison"}|contact
+caterpie|1|Silk Cradle|bug|St|-|-|0|0|{"statChanges":[{"stat":"def","stages":1,"target":"self","chance":100},{"stat":"spd","stages":1,"target":"self","chance":100}]}|
+caterpie|2|Thread Net|bug|St|-|95|0|0|{"statChanges":[{"stat":"spe","stages":-2,"target":"enemy","chance":100}]}|
+nidoran-f|1|Mother's Spike|poison|St|-|-|4|0|{"protect":true,"protectContact":{"status":"psn"}}|
+nidoran-f|2|Burrow Wall|ground|St|-|-|0|0|{"sideMove":"reflect"}|
+nidoran-m|1|Challenger's Horn|poison|P|60|100|0|0|{"powerRule":"targetSpeed"}|contact
+nidoran-m|2|Poison Charge|poison|P|70|100|0|0|{"status":{"id":"psn","chance":20}}|contact
+poliwag|1|Swirl Step|water|St|-|100|0|0|{"statChanges":[{"stat":"spe","stages":-2,"target":"enemy","chance":100}]}|
+poliwag|2|Belly Whirl|water|P|65|100|0|0|{"confuse":{"chance":30}}|contact
+oddish|1|Midnight Pollen|grass|St|-|85|0|0|{"randomStatus":{"chance":100,"ids":["slp","par","psn"]}}|powder
+oddish|2|Dew Mist|grass|St|-|-|0|0|{"heal":0.25}|
+swinub|1|Truffle Hunter|ice|P|70|100|0|0|{"status":{"id":"frz","chance":10}}|contact
+swinub|2|Snow Sniff|ground|P|65|100|0|0|{"statChanges":[{"stat":"acc","stages":-1,"target":"enemy","chance":50}]}|
+ralts|1|Heartlight|psychic|St|-|-|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":100},{"stat":"spd","stages":1,"target":"self","chance":100}]}|
+ralts|2|Calm Pulse|psychic|St|-|-|0|0|{"cure":"party"}|pulse
+trapinch|1|Antlion Pit|ground|St|-|100|0|0|{"trap":true,"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
+trapinch|2|Sand Pit|ground|P|60|95|0|0|{"bind":true}|
+duskull|1|Lantern Vigil|ghost|St|-|-|4|0|{"selfState":"endure"}|
+duskull|2|Candle Ward|ghost|St|-|-|0|0|{"sideMove":"safeguard"}|
+sandile|1|Dune Gleam|ground|P|75|100|0|1|{}|contact,bite
+sandile|2|Heat Haze|ground|S|65|100|0|0|{"statChanges":[{"stat":"acc","stages":-1,"target":"enemy","chance":100}]}|
+pawniard|1|Hollow Edge|dark|P|60|100|0|0|{"doubleBelowHalf":true}|contact,slicing
+pawniard|2|Dark Whet|dark|St|-|-|0|0|{"selfState":"focusEnergy"}|
+grubbin|1|Dig Charge|electric|P|80|100|0|0|{"charge":{"semi":"underground"}}|contact
+grubbin|2|Spark Burrow|bug|S|70|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":30}]}|
+blipbug|1|Signal Ping|psychic|S|65|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
+blipbug|2|Static Ping|bug|S|60|100|0|0|{"identify":"dark"}|

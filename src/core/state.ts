@@ -37,6 +37,8 @@ export const MoveSlotSchema = z.object({
   hyper: z.literal(true).optional(),
   /** Overhaul slice 27: a Mega signature move, added when the Pokémon Mega Evolves and removed when the battle ends (battle/megaMove.ts). */
   megaSig: z.literal(true).optional(),
+  /** Story S7d: a Story Run signature move, added to the partner when a battle starts and removed when it ends (story2/signature.ts). */
+  storySig: z.literal(true).optional(),
   /** Times this Pokémon used the move this run, and the mastery star it earned (core/care: +1 PP, +5% accuracy). */
   uses: z.number().int().min(0).optional(),
   star: z.boolean().optional(),
@@ -64,7 +66,7 @@ export const PokemonInstanceSchema = z.object({
   /** Total experience points (the level is derived from growth rate). */
   xp: z.number().int().min(0),
   hp: z.number().int().min(0),
-  moves: z.array(MoveSlotSchema).min(1).max(6),
+  moves: z.array(MoveSlotSchema).min(1).max(8),
   status: StatusSchema.nullable(),
   /** Vitamin stacks per stat; each stack multiplies that stat. */
   vitamins: z.record(StatNameSchema, z.number().int().min(0)),

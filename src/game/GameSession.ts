@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { nameSignature } from '../core/story2/signature';
 import { dexCaughtCount } from '../core/dexRewards';
 import { changeFriendship } from '../core/friendship';
 import { spendTownStart, townAction, visitBuilding, type TownArgs, type TownResult } from '../core/town';
@@ -747,6 +748,15 @@ export class GameSession {
     this.run = result.run;
     this.persistRun();
     return result.message;
+  }
+
+  /** Story S7d: names the partner's signature move (null keeps the default). Returns the message to show. */
+  nameSignatureMove(moveId: string, raw: string | null): string {
+    const run = structuredClone(this.requireRun());
+    const message = nameSignature(this.content, run, moveId, raw);
+    this.run = run;
+    this.persistRun();
+    return message;
   }
 
   /** Gives a held item waiting in the Bag to a party Pokémon. */

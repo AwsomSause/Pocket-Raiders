@@ -26,6 +26,7 @@ import { enemyIntent, trainerTaunt } from '../core/battle/intent';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
+import { signatureDisplay } from '../core/story2/signature';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
 import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -973,6 +974,7 @@ export class BattleScene extends Phaser.Scene {
         const mon = party.find((p) => p.uid === uid);
         return mon ? this.speciesName(mon) : '???';
       },
+      moveName: (id) => signatureDisplay(this.run, id),
     };
   }
 
@@ -2641,7 +2643,7 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : '') + zLabel(i, content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -2659,8 +2661,9 @@ export class BattleScene extends Phaser.Scene {
       columns: 2,
       itemWidth: 270,
       // A fifth move (the Hyper slot) needs a third row: smaller buttons then.
-      itemHeight: options.length > 4 ? 36 : 50,
-      fontSize: options.length > 4 ? 22 : 28,
+      // Story signature moves can make it 7 or 8 (a fourth row).
+      itemHeight: options.length > 6 ? 27 : options.length > 4 ? 36 : 50,
+      fontSize: options.length > 6 ? 18 : options.length > 4 ? 22 : 28,
       // A battle style may fan the moves out as cards or ring them around your Pokémon.
       ...(this.skin ? this.menuSpec(this.skin.layout.moves, options.length) : {}),
       color: this.btnText,

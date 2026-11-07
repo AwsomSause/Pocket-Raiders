@@ -298,6 +298,10 @@ export const StoryV2Schema = z.object({
     armed: z.boolean().default(false),
     first: z.string().nullable().default(null),
   }).default(() => ({ charge: 0, banked: 0, used: [], gains: [], armed: false, first: null })),
+  /** S7d: the partner's signature moves learned this run (Signature I or its Keystone upgrade, Signature II), added to it in each battle. */
+  sigMoves: z.array(z.string()).max(2).default([]),
+  /** S7d: the name shown for each signature move (the player may rename each once a run; core/story2/moveName.ts). */
+  sigNames: z.record(z.string(), z.object({ defaultName: z.string(), raw: z.string().nullable(), display: z.string(), renamed: z.boolean() })).default({}),
   cast: z.record(z.string(), z.object({
     stage: z.string(), attrs: z.record(z.string(), z.number()).default({}), memories: z.array(z.string()).default([]),
     /** S8 relationship record: flags (met, owes_player...), gate events passed, structured memories, the stage waiting to settle, last contact. */
