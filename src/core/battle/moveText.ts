@@ -1,5 +1,6 @@
 // Short plain-words description of what a move does, built from its data (no move text is stored). Pure.
 
+import jetSpeciesJson from '../../data/jetSpecies.json';
 import type { Move } from '../contentSchema';
 import { counterLine } from './typeRules';
 import descriptionsJson from '../../data/moveDescriptions.json';
@@ -62,7 +63,7 @@ export function moveDescription(move: Move): string {
 
 /** The game's own description of a move (moveDescriptions.json), or null for moves it has none for (Z-Moves, Max Moves). */
 export function moveFlavor(moveId: string): string | null {
-  return DESCRIPTIONS[moveId] ?? (megaMovesJson.descriptions as Record<string, string>)[moveId] ?? (storySignatureJson.descriptions as Record<string, string>)[moveId] ?? null;
+  return DESCRIPTIONS[moveId] ?? (megaMovesJson.descriptions as Record<string, string>)[moveId] ?? (storySignatureJson.descriptions as Record<string, string>)[moveId] ?? (jetSpeciesJson.descriptions as Record<string, string>)[moveId] ?? null;
 }
 
 /** Beta 4.4: the full description: what the games say, then what it does here in numbers (chances, stages). */

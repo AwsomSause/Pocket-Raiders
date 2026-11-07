@@ -97,6 +97,7 @@ export const FLAG_BOOST: Record<string, { flag: 'contact' | 'punch' | 'bite' | '
   'mega-launcher': { flag: 'pulse', multiplier: 1.5 },
   'punk-rock': { flag: 'sound', multiplier: 1.3 },
   'thorn-ballad': { flag: 'sound', multiplier: 1.2 },
+  'dread-jaws': { flag: 'bite', multiplier: 1.3 },
 };
 
 /** Normal moves become this type and are 1.2× as strong. */
@@ -189,6 +190,7 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   ...Object.keys(PINCH),
   ...Object.keys(WEATHER_SETTERS),

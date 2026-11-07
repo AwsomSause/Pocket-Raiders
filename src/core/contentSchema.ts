@@ -55,7 +55,7 @@ export const GrowthRateSchema = z.enum(GROWTH_RATES);
 export type GrowthRate = z.infer<typeof GrowthRateSchema>;
 
 /** delta / zform / spooky: the director's custom forms (Milestone 8, tools/import-custom-forms.ts). */
-export const SPECIES_TAGS = ['baby', 'legendary', 'mythical', 'delta', 'zform', 'spooky'] as const;
+export const SPECIES_TAGS = ['baby', 'legendary', 'mythical', 'delta', 'zform', 'spooky', 'scout'] as const;
 export type SpeciesTag = (typeof SPECIES_TAGS)[number];
 
 /**
@@ -142,7 +142,7 @@ export const WeatherSchema = z.enum(WEATHERS);
 export const TERRAINS = ['electric', 'grassy', 'misty', 'psychic'] as const;
 export const PowerRuleSchema = z.enum([
   'userSpeed', 'targetSpeed', 'userHp', 'targetHp',
-  'doubleTargetStatus', 'doubleUserStatus', 'doubleTargetPoison', 'poisonedBoost', 'doubleTargetParalyzed', 'doubleTargetAsleep',
+  'doubleTargetStatus', 'doubleUserStatus', 'doubleTargetPoison', 'poisonedBoost', 'rainBoost', 'tailwindBoost', 'doubleTargetParalyzed', 'doubleTargetAsleep',
   'doubleUserFirst', 'doubleUserSecond',
   'electricTerrainDouble', 'electricTerrainBoost', 'mistyTerrainBoost', 'psychicTerrainBoost', 'needsTerrain',
   'statsRaised', 'targetStatsRaised', 'fallenAllies', 'friendship', 'frustration',

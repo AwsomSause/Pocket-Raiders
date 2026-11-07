@@ -6,6 +6,8 @@ import Phaser from 'phaser';
 import { overworldAssetIds } from '../../assets/catalog';
 import type { Content } from '../../core/contentSchema';
 import { pocketChatterFor } from '../../core/hubTown/chatter';
+import { scoutPlacement } from '../../core/hubTown/scoutPlacement';
+import type { StarterScout } from '../../core/story2/starterScouts';
 import { OVERWORLD, type Facing } from '../../core/hubTown/schema';
 import { STEP } from '../../core/hubTown/world';
 import type { Profile } from '../../core/state';
@@ -26,6 +28,8 @@ export interface Folk {
   name: string;
   sheet: string;
   zone: string;
+  /** A starter scout: talking to them gives their one starter line. */
+  scout?: StarterScout;
 }
 
 const NAMES = ['Ava', 'Bo', 'Cleo', 'Dax', 'Eli', 'Fern', 'Gus', 'Hana', 'Ivo', 'Juno', 'Kai', 'Lena'];
@@ -41,6 +45,9 @@ export function pocketFolk(count = 10): Folk[] {
     zone: ZONES[i % ZONES.length]!,
   }));
 }
+
+/** The five starter scouts (placement in core/hubTown/scoutPlacement.ts). */
+export const pocketScouts = (profileId: string): Folk[] => scoutPlacement(profileId);
 
 export const folkAssets = (list: Folk[]): string[] => [...new Set(list.map((f) => overworldAssetIds.trainer(f.sheet)))];
 
@@ -64,7 +71,7 @@ export class PocketFolk {
     content: Content,
     profile: Profile,
     list: Folk[],
-    private readonly opts: { motion: 'full' | 'reduced' | 'off'; window: string; say(line: string): void },
+    private readonly opts: { motion: 'full' | 'reduced' | 'off'; window: string; say(line: string): void; scout?(scout: StarterScout): string },
   ) {
     const stands = new Set(town.map.places.map((p) => `${p.stand.x},${p.stand.y}`));
     for (const folk of list) {
@@ -89,7 +96,7 @@ export class PocketFolk {
         name: folk.name,
         verb: 'Talk',
         tiles: walker.tiles,
-        onTalk: () => opts.say(`${folk.name}: ${pocketChatterFor(content, profile, folk.id, opts.window)}`),
+        onTalk: () => opts.say(folk.scout && opts.scout ? `${folk.name}: ${opts.scout(folk.scout)}` : `${folk.name}: ${pocketChatterFor(content, profile, folk.id, opts.window)}`),
       });
     }
     this.stands = stands;

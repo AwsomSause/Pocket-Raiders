@@ -390,3 +390,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `quest-log.md`: Hub Quest Log room listing trainer quest lines and Mythical chains with progress; read-only, no save bump.
 - [audio-barks-w16.md] Barks and cues W16: talk blips exist, story stinger hooks
 - gacha-item.md: Capsule Corner fix; one starting item per spin, one spin per finished run.
+- beta-4-4-pokemon.md: 17 Beta 4.4 Pokémon, Mega Alolan Flygon, and five Pocket Town starter scouts (one new Story Run starter line each).

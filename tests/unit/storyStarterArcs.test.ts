@@ -35,9 +35,9 @@ function playAll(run: RunState, pick = 0): string[] {
 }
 
 describe('Starter arcs', () => {
-  it('every one of the 79 lines has a 3-scene arc whose text exists, gated to its own starter', () => {
+  it('every one of the 84 lines has a 3-scene arc whose text exists, gated to its own starter', () => {
     const lines = content.storyData.remembrances;
-    expect(lines).toHaveLength(79);
+    expect(lines).toHaveLength(84);
     for (const r of lines) {
       const arc = content.storyData.arcs.find((a) => a.id === `arc_${r.id}`);
       expect(arc, r.id).toBeDefined();

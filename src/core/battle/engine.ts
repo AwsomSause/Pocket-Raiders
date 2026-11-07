@@ -795,7 +795,15 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // Transformations (Mega Evolution, ...) happen before any move, so they count for turn order.
   if (!battle.outcome) {
     const move = action.kind === 'move' ? action : undefined;
+    const before = events.length;
     applyTransformations(ctx, move?.transform, events as TransformStepEvent[], move?.index);
+    // Eyespot Glare also fires when the Pokémon Mega Evolves.
+    for (const e of events.slice(before) as TransformStepEvent[]) {
+      if (e.type !== 'transform' || e.kind !== 'mega') continue;
+      const sides = activeCombatants(ctx);
+      const c = e.side === 'player' ? sides.player : sides.enemy;
+      if (c.mon.hp > 0 && abilityIn(ctx, c) === 'eyespot-glare') entryAbility(ctx, c, e.side === 'player' ? sides.enemy : sides.player, events);
+    }
   }
   // A boss that unleashed its Z-Power this turn uses that Z-Move instead of the move it chose.
   const bossZ = (events as TransformStepEvent[]).find((e) => e.type === 'transform' && e.side === 'enemy' && e.kind === 'zmove');
@@ -2105,6 +2113,23 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     if (guard === 'rattled') applyStageChange(ctx, other, 'spe', 1, events);
     return;
   }
+  if (ability === 'eyespot-glare' && other.mon.hp > 0) {
+    announce(c, ability, events);
+    applyStageChange(ctx, other, 'spa', -1, events, c);
+    return;
+  }
+  if (ability === 'tailwind-rider') {
+    // The first time it enters battle (once per Pokémon per battle), a 2-turn Tailwind on its side.
+    const mark = `tr:${c.mon.uid}`;
+    const marks = (ctx.battle.growthMarks ??= []);
+    if (!marks.includes(mark)) {
+      marks.push(mark);
+      announce(c, ability, events);
+      ctx.battle.sideEffects[c.side].tailwind = Math.max(ctx.battle.sideEffects[c.side].tailwind, 2);
+      events.push({ type: 'sideEffect', side: c.side, effect: 'tailwind', on: true });
+    }
+    return;
+  }
   if (ability === 'download' && other.mon.hp > 0) {
     // Raises Attack if the foe's Defense is lower than its Sp. Def, otherwise Sp. Atk.
     const stats = calcStats(ctx.content, other.mon);
@@ -2242,6 +2267,7 @@ function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   const ability = abilityIn(ctx, c);
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
+  if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;
@@ -3018,10 +3044,12 @@ function executeMove(
   }
   const mark = events.length;
   // Cataclysm Cannon hits as the version for its user's Forme (Attack and Defence Cataggron have their own).
-  const hitMove = move.id === 'cataclysm-cannon' ? (ctx.content.moves.get(`cataclysm-cannon-${user.mon.speciesId.slice('cataggron-'.length)}`) ?? move) : move;
+  const variant = move.id === 'cataclysm-cannon' ? `cataclysm-cannon-${user.mon.speciesId.slice('cataggron-'.length)}` : move.id === 'hypnospot' && user.mon.speciesId === 'alolan-flygon-mega' ? 'hypnospot-mega' : null;
+  const hitMove = (variant ? ctx.content.moves.get(variant) : null) ?? move;
   if (ctx.doublesTurn?.hit) ctx.doublesTurn.hit(user, target, hitMove, movedFirst, events);
   else runMove(ctx, user, target, hitMove, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
+  if (abilityIn(ctx, user) === 'silent-cloak') user.vol.cloakUsed = true;
   if (abilityIn(ctx, user) === 'encore-amp' && move.flags.includes('sound') && !user.vol.lastFailed) {
     user.vol.ampCount = user.vol.ampMove === move.id ? Math.min(3, user.vol.ampCount + 1) : 1;
     user.vol.ampMove = move.id;
@@ -3100,6 +3128,8 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
     case 'doubleTargetStatus': return target.mon.status ? base * 2 : base;
     case 'doubleUserStatus': return user.mon.status ? base * 2 : base;
     case 'doubleTargetPoison': return target.mon.status?.id === 'psn' ? base * 2 : base;
+    case 'rainBoost': return weatherNow(ctx) === 'rain' ? Math.floor(base * 1.5) : base;
+    case 'tailwindBoost': return ctx.battle.sideEffects[user.side].tailwind > 0 ? Math.floor(base * 1.5) : base;
     case 'poisonedBoost': return target.mon.status?.id === 'psn' ? Math.floor(base * 1.5) : base;
     case 'doubleTargetParalyzed': return target.mon.status?.id === 'par' ? base * 2 : base;
     case 'doubleTargetAsleep': return target.mon.status?.id === 'slp' ? base * 2 : base;
@@ -3306,7 +3336,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         target.vol.skyHeld = false;
         target.vol.semi = null;
       }
-    } else if (!(fx.charge.sunSkips && weather === 'sun') && !Held.usePowerHerb(ctx, user, events as Held.HeldEvent[])) {
+    } else if (!(fx.charge.sunSkips && weather === 'sun') && !(abilityIn(ctx, user) === 'silent-cloak' && !user.vol.cloakUsed) && !Held.usePowerHerb(ctx, user, events as Held.HeldEvent[])) {
       user.vol.charging = move.id;
       user.vol.semi = fx.charge.semi ?? null;
       if (fx.charge.grab) {
@@ -3650,6 +3680,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (flagBoost && move.flags.includes(flagBoost.flag)) powerMult *= flagBoost.multiplier;
       // Encore Amp: the same sound move on consecutive turns hits 20% harder each time, up to 1.6x.
       if (userAbility === 'encore-amp' && move.flags.includes('sound') && user.vol.ampMove === move.id) powerMult *= Math.min(1.6, 1 + 0.2 * user.vol.ampCount);
+      if (userAbility === 'sovereign-plumage' && moveType === 'flying') powerMult *= 1.2;
+      if (userAbility === 'dynamo-down' && moveType === 'electric' && user.vol.dynamoBoost) { powerMult *= 1.5; user.vol.dynamoBoost = false; }
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
@@ -3746,6 +3778,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'ice-scales' && !physical) final *= 0.5;
       if (foeAbility === 'punk-rock' && move.flags.includes('sound')) final *= 0.5;
       if (foeAbility === 'plague-bulwark' && user.mon.status?.id === 'psn') final *= 0.75;
+      if (foeAbility === 'sovereign-plumage' && moveType === 'electric') final *= 0.5;
+      if (foeAbility === 'coral-veil' && target.mon.hp >= targetStats.hp) final *= 0.75;
+      if (foeAbility === 'gem-orbit' && effectiveness > 1 && target.vol.gems < 4) { target.vol.gems++; final *= 0.5; }
       if (userAbility === 'soul-kindling' && moveType === 'psychic' && target.mon.status?.id === 'brn') final *= 1.3;
       const ruleset = crit ? { ...content.ruleset, critMultiplier: Held.critDamage(ctx, user, content.ruleset.critMultiplier) * critDamagePerk(ctx.perks, user.side) } : content.ruleset;
       damage = calcDamage(ruleset, {
@@ -4026,6 +4061,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
 
   if (landed > 0 && user.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && !(ctx.battle.growthMarks ??= []).includes(`dealt:${user.mon.uid}`)) ctx.battle.growthMarks.push(`dealt:${user.mon.uid}`, `hit:${user.mon.uid}`);
   if (landed > 0 && contact && user.side === 'enemy') (ctx.battle.growthMarks ??= []).push(`contact:${user.mon.uid}:${ctx.battle.turn}`);
+  // Twin Maw: a biting move strikes again with the second head for 25% of the first bite.
+  if (landed > 0 && dealt > 0 && target.mon.hp > 0 && move.flags.includes('bite') && abilityIn(ctx, user) === 'twin-maw') {
+    announce(user, 'twin-maw', events);
+    abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
+  }
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
 
@@ -4079,7 +4119,28 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
     }
   }
+  if (target.mon.hp > 0 && move.category !== 'status') {
+    if (userAbility === 'dread-jaws' && move.flags.includes('bite') && rng.chance(0.3)) {
+      announce(user, userAbility, events);
+      applyStageChange(ctx, target, 'atk', -1, events, user);
+    }
+    if (userAbility === 'storm-talons' && contact && rng.chance(0.3) && canGetStatus(ctx, user, target, 'par')) {
+      announce(user, userAbility, events);
+      tryInflictStatus(ctx, user, target, 'par', undefined, events, false);
+    }
+    if (userAbility === 'rune-sigil' && move.flags.includes('punch') && !user.vol.sigilUsed) {
+      user.vol.sigilUsed = true;
+      announce(user, userAbility, events);
+      applyStageChange(ctx, target, 'def', -1, events, user);
+    }
+  }
+  // Dynamo Down: after it takes damage from an attack, its next Electric-type move is stronger.
+  if (holder === 'dynamo-down' && target.mon.hp > 0 && move.category !== 'status') target.vol.dynamoBoost = true;
   if (contact && holder && user.mon.hp > 0) {
+    if (holder === 'clinging-dust') {
+      announce(target, holder, events);
+      applyStageChange(ctx, user, 'spe', -1, events, target);
+    }
     if (holder === 'plague-bulwark' && rng.chance(0.5) && canGetStatus(ctx, target, user, 'psn')) {
       announce(target, holder, events);
       tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
@@ -5873,6 +5934,12 @@ function applyResidual(ctx: BattleContext, c: Combatant, other: Combatant, event
   const ability = abilityIn(ctx, c);
   if (ability === 'poison-heal' && c.mon.status?.id === 'psn' && c.mon.hp > 0 && c.mon.hp < max) {
     const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+    announce(c, ability, events);
+    c.mon.hp += amount;
+    events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+  }
+  if (ability === 'coral-veil' && weatherNow(ctx) === 'rain' && c.mon.hp > 0 && c.mon.hp < max) {
+    const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 16)));
     announce(c, ability, events);
     c.mon.hp += amount;
     events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });

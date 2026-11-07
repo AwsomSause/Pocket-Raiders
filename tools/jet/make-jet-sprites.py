@@ -15,7 +15,12 @@ from PIL import Image, ImageOps
 root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 src = os.path.join(root, 'tools', 'jet', 'source')
 out = os.path.join(root, 'public', 'assets', 'images')
-MONS = ['vine-riff', 'electric-oncore', 'pyro-spirit', 'neon-moon', 'bastiodoom', 'cataggron', 'cataggron-attack', 'cataggron-defence']
+MONS = ['vine-riff', 'electric-oncore', 'pyro-spirit', 'neon-moon', 'bastiodoom', 'cataggron', 'cataggron-attack', 'cataggron-defence',
+        # Beta 4.4 batch (pokedex-data.zip + Beta 4.4 Added Pokemon.zip)
+        'promised-prince', 'benovolant-beak', 'tyrant-king', 'fallen-liege', 'maliceye', 'gemgoyle', 'decidueye-assassian', 'dreadodile',
+        'alolan-trapinch', 'alolan-vibrava', 'alolan-flygon', 'mega-alolan-flygon', 'paldean-golett', 'paldean-golurk', 'alolan-dratini', 'alolan-dragonair', 'alolan-dragonite']
+# The source file name differs from the game id for the Mega (the game calls it alolan-flygon-mega like the other Megas).
+OUT_ID = {'mega-alolan-flygon': 'alolan-flygon-mega'}
 
 
 def trim(im):
@@ -63,7 +68,7 @@ for key in MONS:
     bp = os.path.join(src, 'back', f'{key}.png')
     back = [trim(Image.open(bp).convert('RGBA'))] if os.path.exists(bp) else [ImageOps.mirror(still)]
     for folder, frames in (('', front), ('back', back), ('shiny', front), (os.path.join('back', 'shiny'), back)):
-        write_atlas(frames, folder, key)
+        write_atlas(frames, folder, OUT_ID.get(key, key))
 
 viking = trim(Image.open(os.path.join(src, 'viking.png')).convert('RGBA'))
 scale = 56 / viking.height

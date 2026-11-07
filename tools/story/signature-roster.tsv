@@ -160,3 +160,13 @@ toxel|1|Static Chord|electric|S|70|100|0|0|{"status":{"id":"par","chance":30}}|
 toxel|2|Venom Riff|poison|S|65|100|0|0|{"statChanges":[{"stat":"spd","stages":-1,"target":"enemy","chance":100}]}|
 shieldon|1|Sludge Bash|poison|P|75|100|0|0|{"status":{"id":"psn","chance":30}}|
 shieldon|2|Iron Wall|steel|St|-|-|0|0|{"statChanges":[{"stat":"def","stages":2,"target":"self","chance":100}]}|
+sableye|1|Gem Glint|ghost|S|75|100|0|0|{"statChanges":[{"stat":"spd","stages":-1,"target":"enemy","chance":30}]}|
+sableye|2|Hoard Guard|dark|St|-|-|0|0|{"statChanges":[{"stat":"def","stages":1,"target":"self","chance":100},{"stat":"spd","stages":1,"target":"self","chance":100}]}|
+promised-prince|1|Royal Splash|water|S|70|100|0|0|{"status":{"id":"par","chance":20}}|
+promised-prince|2|Vow of the Tide|water|St|-|-|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":100},{"stat":"spd","stages":1,"target":"self","chance":100}]}|
+alolan-trapinch|1|Dune Snap|ground|P|70|100|0|0|{"bind":true}|contact
+alolan-trapinch|2|Tidepool Burrow|ground|St|-|-|0|0|{"statChanges":[{"stat":"atk","stages":1,"target":"self","chance":100},{"stat":"def","stages":1,"target":"self","chance":100}]}|
+paldean-golett|1|Relic Rap|ghost|P|65|100|0|0|{"statChanges":[{"stat":"def","stages":-1,"target":"enemy","chance":30}]}|contact
+paldean-golett|2|Rune Ward|rock|St|-|-|4|0|{"protect":true}|
+alolan-dratini|1|Tide Scale|water|S|65|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":30}]}|
+alolan-dratini|2|Coral Mend|water|St|-|-|0|0|{"heal":0.5}|
