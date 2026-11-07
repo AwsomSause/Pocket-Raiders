@@ -213,16 +213,15 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     const arc = arcOf(content.storyData, id);
     return arc ? arc.steps.map((s) => s.event) : [];
   }).filter((id) => !pool.includes(id));
-  const own = (starterArc?.steps.map((s) => s.event) ?? []).filter((id) => !pool.includes(id) && !next.includes(id));
-  const order = [...(slotEvent && mod.events.includes(slotEvent) ? [slotEvent] : []), ...next, ...pool, ...own];
+  const order = [...(slotEvent && mod.events.includes(slotEvent) ? [slotEvent] : []), ...next, ...pool];
   let pick = order.map((id) => eventOf(content.storyData, id)).find((e) => !!e && eligible(content, run, e, stop.act, ctx) && !e.tags.includes('micro'));
   if (!pick && stop.act >= content.balance.story.module.echoFromAct && m.echoes < mod.echoEvents.length) {
     const echo = eventOf(content.storyData, mod.echoEvents[m.echoes]!);
     if (echo && condsPass(echo.requires as ResolveCond[], ctx)) pick = echo;
   }
   if (!pick) {
-    // Nothing from the module: a Secondary or Friendly rival scene that is due may take the Stop.
-    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue);
+    // Nothing from the module: a Secondary or Friendly rival scene that is due may take the Stop, else the Starter arc's next scene.
+    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue) ?? ownPick()?.id;
     if (due) { m.active = due; m.activeStop = stopId; }
     return;
   }
