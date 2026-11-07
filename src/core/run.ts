@@ -836,8 +836,10 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);
-  // The Bicycle rides through a node of the skipped column without stopping.
-  if (mode === 'bicycle') stage.visited.push(nextChoices(stage).find((n) => n.next.includes(nodeId))!.id);
+  // The Bicycle rides through a node of the skipped column without stopping (at the column before the gym there is none to skip:
+  // mapChoices then offered the plain next column, so nothing is ridden through).
+  const via = mode === 'bicycle' ? nextChoices(stage).find((n) => n.next.includes(nodeId)) : undefined;
+  if (via) stage.visited.push(via.id);
   // An event's express ride (ideas W4) sets the bicycle mode without an item: nothing to use up then.
   const modeItem = mode ? perkItem(content, run, mode) : null;
   if (mode === 'airship' && modeItem) spendUse(run, modeItem);

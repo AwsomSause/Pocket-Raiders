@@ -50,6 +50,8 @@ export interface RunPrepData {
   notice?: string;
   /** Mode, difficulty, modifier and Death-Block (default: standard; Death-Block on for a player's first three runs). */
   rules?: RulesChoice;
+  /** Start on this mode when `rules` is not given (the title's Story Run passes 'story-run'). */
+  modeId?: string;
   /** Which modifier the Modifier row shows (Enter turns it on or off). */
   modCursor?: number;
   /** The page shown (0 to 4; default the Overview). */
@@ -143,7 +145,7 @@ export class RunPrepScene extends Phaser.Scene {
     this.prep = resolved.prep;
     this.seed = data.seed !== undefined ? data.seed : params.get('seed');
     this.modCursor = data.modCursor ?? 0;
-    this.rules = data.rules ?? { ...STANDARD_CHOICE, deathBlock: profile.stats.runsEnded < 3 && !params.has('debug') };
+    this.rules = data.rules ?? { ...STANDARD_CHOICE, ...(data.modeId && getMode(data.modeId) ? { modeId: data.modeId } : {}), deathBlock: profile.stats.runsEnded < 3 && !params.has('debug') };
     const notice = [data.notice, ...resolved.problems].filter(Boolean).join(' ');
     this.page = Math.max(0, Math.min(OVERVIEW, data.page ?? OVERVIEW));
     const def = PAGES[this.page]!;
@@ -199,7 +201,7 @@ export class RunPrepScene extends Phaser.Scene {
         this.help?.setText(ROW_HELP[rows[i]!] ?? '');
       },
       onSelect: (i) => this.select(rows[i]!),
-      onBack: () => this.scene.start('TrainerSelect'),
+      onBack: () => this.scene.start('TrainerSelect', { modeId: this.rules.modeId }),
     });
 
     // The right pane: what the focused row does, then the Run Build Summary (the whole pane on the Overview).

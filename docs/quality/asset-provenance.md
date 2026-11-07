@@ -151,4 +151,14 @@ Dataset: `src/data/moveTargets.json` (which moves hit both foes, everyone, the p
 107 icons generated for the director with PixelLab Pro Flash (32x32; the champion trophy is 48x48), supplied as `Pokemon_Roguelike_Asset_Pack/02_PixelLab_Generated_Sprites` (style anchor: the game's coin case icon). Imported by `tools/import-story-icons.mjs` to `public/assets/images/packs/story/`: 30 emote bubbles, 4 choice tones, 12 snacks, 10 bond hearts, 4 elite tokens + trophy, 18 gym badges (one per type), 20 keepsake accessories, 8 ball-exit effects. Generation prompts and costs are in the pack's `03_Records_and_Tools`. Flagged for redo by the pack: Snot Bubble, Nervous Sweat, Double Note, Charm Necklace, Steel badge, hearts 5-7.
 
 ## Professor Vance animations (2026-11-07)
+| Path | Source | Original | Notes |
+|---|---|---|---|
+| `images/packs/vance/{surprised,nudge,explain,tilt,adjust,confident}.png` | the director's own PixelLab animations of Professor Vance (uploaded 2026-11-07 as `Professor.zip`) | six 800x640 sheets, 17 frames each of 160x160, 5 per row; copied unchanged and renamed | Used by the prologue (Beats 3, 4, 10). The zip's static `New Professer.png` portrait is not imported yet. |
 `images/packs/vance/{surprised,nudge,explain,tilt,adjust,confident}.png`: the director's own PixelLab animations of Professor Vance, uploaded 2026-11-07 as `Professor.zip` (six 800x640 sheets, 17 frames each of 160x160, 5 per row; copied unchanged and renamed). Used by the prologue (Beats 3, 4, 10). The zip's static `New Professer.png` portrait is not imported yet.
+
+## Drive plan leftovers: footprints, low-HP song, themed arenas (2026-11-07)
+| Repo path (`public/assets/…`) | Source pack | Original path in the pack |
+|---|---|---|
+| `images/ui/footprints.png` (+ `src/assets/footprints.json`) | Pokemon-Decades-main (same 1,039 files in Animated Pokemon Sprites and Essentials 21) | `Graphics/Pokemon/Footprints/*.png`, base species only, packed 32 per row by `tools/drive/build-footprints.py` |
+| `audio/bgm/battle_lowhp.mp3` | Deluxe Battle Kit (DBK) | `Audio/BGM/Battle low HP.ogg`, re-encoded to mp3 96 kbps |
+| `images/arenas/uie/{beach,beach_eve,beach_night,bigtop,burning,cave4,clouds,clouds2,corrosivemist,darkcrystalcavern,deepforest,desert,desert_eve,desert_night,dimensional,dragonsden,electric,factory,fairytale,flowergarden,forest2,forest2_eve,forest2_night,haunted,newworld,psychic,starlight,whitecrystalcavern}_{bg,a,b}.png` | Pokemon-Decades-main | `Graphics/Battlebacks/<name>_bg.png` and `_base0/_base1.png` via `tools/import-battlebacks.py` (beach uses the `sand` ground patches) |
