@@ -110,7 +110,7 @@ describe('story foundation: random streams', () => {
     })(),
     // The six original Evil Teams are Story Run only (Classic never draws them) and name the story Legends.
     evilTeams: { ...structuredClone(RAW_CONTENT.evilTeams as object), teams: (RAW_CONTENT.evilTeams as { teams: { storyOnly?: boolean }[] }).teams.filter((t) => !t.storyOnly) },
-    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:')) })),
+    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop') })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
     eventsHelpers: { events: [] },
