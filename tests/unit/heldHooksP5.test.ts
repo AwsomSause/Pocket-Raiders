@@ -127,8 +127,8 @@ describe('P5 held-item hooks', () => {
       resolveTurn(setup(p, mon('snorlax', 90, 'e', ['splash'], { 'rocky-helmet': 1 }), 'pp').ctx, move());
       return p.hp;
     };
-    expect(run()).toBeLessThan(createPokemon(content, 'machop', 40, 'x').hp);
-    expect(run({ 'protective-pads': 1 })).toBe(createPokemon(content, 'machop', 40, 'x').hp);
+    expect(run()).toBeLessThan(createPokemon(content, 'machop', 40, 'p').hp);
+    expect(run({ 'protective-pads': 1 })).toBe(createPokemon(content, 'machop', 40, 'p').hp);
   });
 
   it('Heavy-Duty Boots: Stealth Rock does not hurt the holder coming in', () => {
@@ -138,7 +138,7 @@ describe('P5 held-item hooks', () => {
       const { battle, ctx } = setup(lead, mon('snorlax', 40, 'e', ['splash']), 'hz', [reserve]);
       battle.sideEffects.player.stealthRock = true;
       resolveTurn(ctx, { kind: 'switch', partyIndex: 1 });
-      return reserve.hp - createPokemon(content, 'charizard', 40, 'x').hp;
+      return reserve.hp - createPokemon(content, 'charizard', 40, 'r').hp;
     };
     expect(run()).toBeLessThan(0);
     expect(run({ 'heavy-duty-boots': 1 })).toBe(0);

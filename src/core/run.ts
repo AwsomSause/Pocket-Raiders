@@ -66,6 +66,7 @@ import { changeFriendship } from './friendship';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
+import { addEvs, evYield } from './ivs';
 import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
 import { applyReward, generateDraft, rewardTargetProblem, type RewardResult } from './rewards';
@@ -2897,6 +2898,14 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       const full = xpForDefeat(baseExp, defeated.level, mon.level, multiplier * underdog * perkXp * (1 + catchUp / 100) * expMultiplier(content, mon));
       const squirt = mon === run.party[0] && (run.itemCounters?.['squirt-exp'] ?? 0) > 0 ? 1 + (perksOf(activePerks(content, run), 'squirt')[0]?.perk.percent ?? 5) / 100 : 1;
       const amount = Math.floor((participants.includes(uid) ? full : Math.floor((full * Math.min(100, share)) / 100)) * squirt * xpPolicyMultiplier(run, uid));
+      // W5 EVs: everyone who shares the experience also gets the defeated species' EV yield (core/ivs.ts).
+      const evGain = evYield(getSpecies(content, defeated.speciesId));
+      const evAmount = Math.round(evGain.amount * content.balance.evs.gainMultiplier);
+      if (evAmount > 0) {
+        const hpBefore = maxHp(content, mon);
+        addEvs(content, mon, evGain.stat, evAmount);
+        if (evGain.stat === 'hp') mon.hp = Math.min(maxHp(content, mon), mon.hp + maxHp(content, mon) - hpBefore);
+      }
       if (amount <= 0) continue;
       const xpBefore = mon.xp;
       const result = gainXp(content, mon, amount, runLevelCap(content, run));

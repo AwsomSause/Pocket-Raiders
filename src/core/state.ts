@@ -70,6 +70,12 @@ export const PokemonInstanceSchema = z.object({
   status: StatusSchema.nullable(),
   /** Vitamin stacks per stat; each stack multiplies that stat. */
   vitamins: z.record(StatNameSchema, z.number().int().min(0)),
+  /** W5 IVs, 0–31 per stat (core/ivs.ts). Missing (old saves, profile Pokémon): the roll for its uid. */
+  ivs: z.partialRecord(StatNameSchema, z.number().int().min(0).max(31)).optional(),
+  /** W5 EVs earned from knockouts and berries (at most 252 a stat, 510 in all). Missing = none. */
+  evs: z.partialRecord(StatNameSchema, z.number().int().min(0).max(255)).optional(),
+  /** W5 Bottle Caps: stats that count their IV as 31 (Hidden Power still uses the real IV). */
+  hyperTrained: z.array(StatNameSchema).optional(),
   shiny: z.boolean(),
   /** Item id of the ball it was caught in (Overhaul P3); thrown sprites use it. Missing = Poké Ball. Optional, so no save bump. */
   caughtBall: z.string().optional(),

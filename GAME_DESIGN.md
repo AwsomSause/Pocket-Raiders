@@ -241,7 +241,7 @@ Six plain attributes from 0 to 100 (Strength, Intelligence, Speed, Charisma, Luc
 
 **Needed before Milestone 1**
 - **D0 Repository.** Decided: `AwsomSause/pkmn` (switch to private before assets go in).
-- **D2 Battle ruleset.** Decided (2026-10-25): modern Gen 9-style, no IVs/EVs/natures for now.
+- **D2 Battle ruleset.** Decided (2026-10-25): modern Gen 9-style, no IVs/EVs/natures for now. Revised: natures added later; IVs and EVs added 2026-11-07 (Kice, W5; `docs/status/ivs-evs.md`).
 - **D3 Fleeing.** Decided (2026-10-25): **no running** from any battle.
 - **D4 Asset licensing and hosting.** Decided (2026-10-25): keep private, no public deploy.
 - **D5 Starter pool for the prototype.** Decided (2026-10-25): ~12 hand-picked Gen 1 first-stage Pokémon for now.

@@ -5465,7 +5465,7 @@
   "id": "pomeg-berry",
   "name": "Pomeg Berry",
   "family": "Berries (held, eaten in battle)",
-  "description": "Feed to a Pokémon: big friendship boost, +1 Love",
+  "description": "Feed to a Pokémon: big friendship boost, +1 Love, −10 HP EVs",
   "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
@@ -5477,6 +5477,9 @@
    "friendship": 20,
    "changes": {
     "love": 1
+   },
+   "evs": {
+    "hp": -10
    }
   }
  },
@@ -5484,7 +5487,7 @@
   "id": "kelpsy-berry",
   "name": "Kelpsy Berry",
   "family": "Berries (held, eaten in battle)",
-  "description": "Feed to a Pokémon: friendship boost, +1 toward Peace",
+  "description": "Feed to a Pokémon: friendship boost, +1 toward Peace, −10 Attack EVs",
   "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
@@ -5496,6 +5499,9 @@
    "friendship": 12,
    "changes": {
     "ragePeace": -1
+   },
+   "evs": {
+    "atk": -10
    }
   }
  },
@@ -5503,7 +5509,7 @@
   "id": "qualot-berry",
   "name": "Qualot Berry",
   "family": "Berries (held, eaten in battle)",
-  "description": "Feed to a Pokémon: friendship boost, +1 Good",
+  "description": "Feed to a Pokémon: friendship boost, +1 Good, −10 Defense EVs",
   "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
@@ -5515,6 +5521,9 @@
    "friendship": 12,
    "changes": {
     "goodEvil": 1
+   },
+   "evs": {
+    "def": -10
    }
   }
  },
@@ -5522,7 +5531,7 @@
   "id": "hondew-berry",
   "name": "Hondew Berry",
   "family": "Berries (held, eaten in battle)",
-  "description": "Feed to a Pokémon: friendship boost, +1 Intelligence",
+  "description": "Feed to a Pokémon: friendship boost, +1 Intelligence, −10 Sp. Atk EVs",
   "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
@@ -5534,6 +5543,9 @@
    "friendship": 12,
    "changes": {
     "intelligence": 1
+   },
+   "evs": {
+    "spa": -10
    }
   }
  },
@@ -5541,7 +5553,7 @@
   "id": "grepa-berry",
   "name": "Grepa Berry",
   "family": "Berries (held, eaten in battle)",
-  "description": "Feed to a Pokémon: friendship boost, +1 Charisma",
+  "description": "Feed to a Pokémon: friendship boost, +1 Charisma, −10 Sp. Def EVs",
   "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
@@ -5553,6 +5565,9 @@
    "friendship": 12,
    "changes": {
     "charisma": 1
+   },
+   "evs": {
+    "spd": -10
    }
   }
  },
@@ -5560,7 +5575,7 @@
   "id": "tamato-berry",
   "name": "Tamato Berry",
   "family": "Berries (held, eaten in battle)",
-  "description": "Feed to a Pokémon: friendship boost, +1 Strength",
+  "description": "Feed to a Pokémon: friendship boost, +1 Strength, −10 Speed EVs",
   "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
@@ -5572,6 +5587,9 @@
    "friendship": 12,
    "changes": {
     "strength": 1
+   },
+   "evs": {
+    "spe": -10
    }
   }
  },
@@ -18119,6 +18137,38 @@
    "kind": "statBoost",
    "stat": "spe",
    "percent": 4
+  }
+ },
+ {
+  "id": "bottle-cap",
+  "name": "Bottle Cap",
+  "family": "IVs and EVs",
+  "description": "Hyper trains a Pokémon's lowest IV: that stat counts as a perfect 31 (Hidden Power keeps the real IV)",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/bottlecap",
+  "status": "supported",
+  "effect": {
+   "kind": "hyperTrain",
+   "mode": "lowest"
+  }
+ },
+ {
+  "id": "gold-bottle-cap",
+  "name": "Gold Bottle Cap",
+  "family": "IVs and EVs",
+  "description": "Hyper trains every IV of a Pokémon: all its stats count as a perfect 31",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/goldbottlecap",
+  "status": "supported",
+  "effect": {
+   "kind": "hyperTrain",
+   "mode": "all"
   }
  },
  {
