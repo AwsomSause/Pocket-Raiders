@@ -1,0 +1,153 @@
+{
+ "events": [
+  {
+   "id": "ev-safari-ticket",
+   "name": "Safari Ticket",
+   "group": "Pseudo Stages",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Exploration",
+    "Pokémon"
+   ],
+   "minStage": 2,
+   "requires": [],
+   "intro": "A warden at a fenced preserve offers you a day pass: no battles, only careful steps and good throws.",
+   "choices": [
+    {
+     "label": "Take the ticket",
+     "success": {
+      "text": "You pass through the gate.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-safari-zone-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You let it pass.",
+      "effects": []
+     }
+    }
+   ],
+   "pseudo": true
+  },
+  {
+   "id": "ev-dream-orb",
+   "name": "The Dream Orb",
+   "group": "Pseudo Stages",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Dungeon"
+   ],
+   "minStage": 3,
+   "requires": [],
+   "intro": "A faintly glowing orb rests on a pillow of moss by the path. It hums a lullaby that makes your eyelids heavy.",
+   "choices": [
+    {
+     "label": "Hold the orb",
+     "success": {
+      "text": "Your eyes close and the world goes soft.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-dreamscape-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You let it pass.",
+      "effects": []
+     }
+    }
+   ],
+   "pseudo": true
+  },
+  {
+   "id": "ev-hidden-hideout",
+   "name": "A Suspicious Warehouse",
+   "group": "Pseudo Stages",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Combat",
+    "Mystery"
+   ],
+   "minStage": 3,
+   "requires": [],
+   "intro": "Cold air leaks from a warehouse door that should be locked. Inside, machines hum and boots shuffle.",
+   "choices": [
+    {
+     "label": "Slip inside",
+     "success": {
+      "text": "You ease the door open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-evil-hideout-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out",
+     "success": {
+      "text": "You let it pass.",
+      "effects": []
+     }
+    }
+   ],
+   "pseudo": true
+  },
+  {
+   "id": "ev-star-path",
+   "name": "The Star Path",
+   "group": "Pseudo Stages",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Mystery",
+    "Legendary"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "ev-distortion-rift"
+    }
+   ],
+   "intro": "Past the observatory a stair of light climbs into a sky with no ground.",
+   "choices": [
+    {
+     "label": "Climb the star path",
+     "success": {
+      "text": "Light curls around your feet and the ground falls away.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-celestial-expanse-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look from below",
+     "success": {
+      "text": "You let it pass.",
+      "effects": []
+     }
+    }
+   ],
+   "pseudo": true
+  }
+ ]
+}

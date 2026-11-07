@@ -26,3 +26,15 @@ describe('Hub style across settings upgrades', () => {
     expect(new SaveManager(storage, content).loadSettings().hubStyle).toBe('lobby');
   });
 });
+
+describe('W11 accessibility settings (settings v41)', () => {
+  it('a v40 save gains Bigger small print and Map quest contrast, both off, and keeps its other settings', () => {
+    const storage = new MemoryStorageProvider();
+    const { smallTextBoost: _a, questContrast: _b, ...old } = new SaveManager(storage, content).loadSettings();
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 40, savedAt: '', data: { ...old, musicVolume: 0.3 } }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded.smallTextBoost).toBe(false);
+    expect(loaded.questContrast).toBe(false);
+    expect(loaded.musicVolume).toBe(0.3);
+  });
+});

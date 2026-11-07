@@ -29,6 +29,7 @@ import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
 import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
 import { buildPriceFactor, sabotageStep, wildEffect } from './battle/battleFlair';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
+import { applyInterference } from './rivals/interference';
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
@@ -2161,6 +2162,13 @@ export function rivalChallenge(content: Content, current: RunState, sideId: stri
   run.battle.rivalNote = `${run.story.rivals.find((r) => r.id === rival.id)!.name} cut in on you at ${where}! ${run.battle.rivalNote ?? ''}`.trim();
   recordBattleStart(content, run);
   return run;
+}
+
+/** Rival Interference (11.1): a rival steals from, blocks or helps at a stop without a fight. Null when nothing happens. */
+export function rivalInterfere(current: RunState, sideId: string): { run: RunState; text: string } | null {
+  if (current.phase !== 'map' || waitingTrainer(current)) return null;
+  const hit = applyInterference(current, sideId);
+  return hit ? { run: hit.run, text: hit.text } : null;
 }
 
 /** Uses a healing stop or enters a shop beside the current node. */
