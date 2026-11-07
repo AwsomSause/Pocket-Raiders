@@ -63,7 +63,8 @@ import { openBagMenu, openBoxMenu, openRivalNotebook, openSaveMenu, openStoryMen
 import { hasRelationships, openRelationshipsMenu } from '../ui/relationshipsMenu';
 import { hasJournal, openJournalMenu } from '../ui/journalMenu';
 import { onInputAction } from '../ui/input';
-import { Picker, speciesRow, type PickerLike } from '../ui/partyPanel';
+import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
+import { regionFormPrompt } from '../core/regionForms';
 import { STOP_STYLES, stopStyle } from '../ui/stopIcons';
 import { itemVisual, pokemonIcon, trainerVisual } from '../ui/sprites';
 import { showAchievementToasts } from '../ui/achievementToast';
@@ -791,6 +792,41 @@ export class MapScene extends Phaser.Scene {
         this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
+    this.askRegionForm();
+  }
+
+  /** A Pokémon that has a regional form of this region may take it: one free prompt per Pokémon per region. */
+  private askRegionForm(): void {
+    const { session } = services();
+    const offer = session.regionFormOffers()[0];
+    if (!offer || this.picker) return;
+    const content = session.content;
+    const name = (id: string) => content.species.get(id)?.name ?? id;
+    const row = (label: string, desc: string): PickerRow => ({
+      problem: null,
+      hint: desc,
+      draw: (scene, box, w) => {
+        box.add(scene.add.text(16, 6, label, textStyle(20)));
+        box.add(scene.add.text(16, 34, desc, textStyle(14, '#d8d0e0', { wordWrap: { width: w - 32 }, maxLines: 1 })));
+      },
+    });
+    const answer = (target: string | null) => {
+      this.picker?.close();
+      this.picker = null;
+      const note = session.answerRegionForm(offer.uid, target);
+      this.scene.restart({ notice: note, focus: this.index });
+    };
+    const rows = [...offer.targets.map((t) => row(`Yes: become ${name(t)}`, 'Free. Swap back any time at Camp > Form shift (a Moon Stone).')), row('Not now', `${name(offer.speciesId)} stays as it is.`)];
+    const picker: Picker = new Picker(this, {
+      glass: true,
+      title: regionFormPrompt(content, session.run!, offer),
+      columns: 1,
+      rowHeight: 64,
+      rows,
+      onSelect: (i) => answer(offer.targets[i] ?? null),
+      onBack: () => answer(null),
+    });
+    this.picker = picker;
   }
 
   /** The gym leader, Elite Four member or champion waiting at a node (null for other nodes). */
