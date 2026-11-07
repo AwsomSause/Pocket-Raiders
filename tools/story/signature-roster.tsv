@@ -154,3 +154,9 @@ vulpix|1|Six-Tail Flicker|fire|S|70|100|0|0|{"status":{"id":"brn","chance":30}}|
 vulpix|2|Will-o'-Lantern|fire|St|-|90|0|0|{"status":{"id":"brn","chance":100},"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
 psyduck|1|Headache Burst|psychic|S|75|95|0|0|{"confuse":{"chance":30}}|
 psyduck|2|Worry Wave|water|S|65|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":100}]}|
+eevee|1|Paradox Pulse|psychic|S|75|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":30}]}|
+eevee|2|Energy Hold|normal|St|-|-|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":100},{"stat":"spe","stages":1,"target":"self","chance":100}]}|
+toxel|1|Static Chord|electric|S|70|100|0|0|{"status":{"id":"par","chance":30}}|
+toxel|2|Venom Riff|poison|S|65|100|0|0|{"statChanges":[{"stat":"spd","stages":-1,"target":"enemy","chance":100}]}|
+shieldon|1|Sludge Bash|poison|P|75|100|0|0|{"status":{"id":"psn","chance":30}}|
+shieldon|2|Iron Wall|steel|St|-|-|0|0|{"statChanges":[{"stat":"def","stages":2,"target":"self","chance":100}]}|

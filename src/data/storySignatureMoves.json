@@ -380,6 +380,21 @@
    "sig1": "sig-headache-burst",
    "sig2": "sig-worry-wave",
    "keystone": "sig-headache-burst-keystone"
+  },
+  "eevee": {
+   "sig1": "sig-paradox-pulse",
+   "sig2": "sig-energy-hold",
+   "keystone": "sig-paradox-pulse-keystone"
+  },
+  "toxel": {
+   "sig1": "sig-static-chord",
+   "sig2": "sig-venom-riff",
+   "keystone": "sig-static-chord-keystone"
+  },
+  "shieldon": {
+   "sig1": "sig-sludge-bash",
+   "sig2": "sig-iron-wall",
+   "keystone": "sig-sludge-bash-keystone"
   }
  },
  "descriptions": {
@@ -535,6 +550,12 @@
   "sig-will-o-lantern": "Vulpix's line's second own move, born from the story the two of you lived.",
   "sig-headache-burst": "A move only Psyduck's line and its Trainer share, first found in a hard-won fight.",
   "sig-worry-wave": "Psyduck's line's second own move, born from the story the two of you lived.",
+  "sig-paradox-pulse": "A move only Eevee's line and its Trainer share, first found in a hard-won fight.",
+  "sig-energy-hold": "Eevee's line's second own move, born from the story the two of you lived.",
+  "sig-static-chord": "A move only Toxel's line and its Trainer share, first found in a hard-won fight.",
+  "sig-venom-riff": "Toxel's line's second own move, born from the story the two of you lived.",
+  "sig-sludge-bash": "A move only Shieldon's line and its Trainer share, first found in a hard-won fight.",
+  "sig-iron-wall": "Shieldon's line's second own move, born from the story the two of you lived.",
   "sig-rootbound-stand-keystone": "Rootbound Stand grown stronger by the Keystone Memory. Only Bulbasaur's line knows it.",
   "sig-tailfire-vow-keystone": "Tailfire Vow grown stronger by the Keystone Memory. Only Charmander's line knows it.",
   "sig-shellback-rally-keystone": "Shellback Rally grown stronger by the Keystone Memory. Only Squirtle's line knows it.",
@@ -610,7 +631,10 @@
   "sig-dig-charge-keystone": "Dig Charge grown stronger by the Keystone Memory. Only Grubbin's line knows it.",
   "sig-signal-ping-keystone": "Signal Ping grown stronger by the Keystone Memory. Only Blipbug's line knows it.",
   "sig-six-tail-flicker-keystone": "Six-Tail Flicker grown stronger by the Keystone Memory. Only Vulpix's line knows it.",
-  "sig-headache-burst-keystone": "Headache Burst grown stronger by the Keystone Memory. Only Psyduck's line knows it."
+  "sig-headache-burst-keystone": "Headache Burst grown stronger by the Keystone Memory. Only Psyduck's line knows it.",
+  "sig-paradox-pulse-keystone": "Paradox Pulse grown stronger by the Keystone Memory. Only Eevee's line knows it.",
+  "sig-static-chord-keystone": "Static Chord grown stronger by the Keystone Memory. Only Toxel's line knows it.",
+  "sig-sludge-bash-keystone": "Sludge Bash grown stronger by the Keystone Memory. Only Shieldon's line knows it."
  },
  "moves": [
   {
@@ -3875,6 +3899,154 @@
    }
   },
   {
+   "id": "sig-paradox-pulse",
+   "name": "Paradox Pulse",
+   "type": "psychic",
+   "category": "special",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spa",
+      "stages": 1,
+      "target": "self",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-energy-hold",
+   "name": "Energy Hold",
+   "type": "normal",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spa",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     },
+     {
+      "stat": "spe",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-static-chord",
+   "name": "Static Chord",
+   "type": "electric",
+   "category": "special",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "par",
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-venom-riff",
+   "name": "Venom Riff",
+   "type": "poison",
+   "category": "special",
+   "power": 65,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spd",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-sludge-bash",
+   "name": "Sludge Bash",
+   "type": "poison",
+   "category": "physical",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "psn",
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-iron-wall",
+   "name": "Iron Wall",
+   "type": "steel",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "def",
+      "stages": 2,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
    "id": "sig-rootbound-stand-keystone",
    "name": "Rootbound Stand+",
    "type": "grass",
@@ -5473,6 +5645,73 @@
    ],
    "effects": {
     "confuse": {
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-paradox-pulse-keystone",
+   "name": "Paradox Pulse+",
+   "type": "psychic",
+   "category": "special",
+   "power": 85,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spa",
+      "stages": 1,
+      "target": "self",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-static-chord-keystone",
+   "name": "Static Chord+",
+   "type": "electric",
+   "category": "special",
+   "power": 80,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "par",
+     "chance": 30
+    }
+   }
+  },
+  {
+   "id": "sig-sludge-bash-keystone",
+   "name": "Sludge Bash+",
+   "type": "poison",
+   "category": "physical",
+   "power": 85,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "psn",
      "chance": 30
     }
    }

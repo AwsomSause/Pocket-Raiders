@@ -110,7 +110,7 @@ export const SpeciesSchema = z.object({
    * 1 = has no pre-evolution (eligible as a "stage-one" starter and in the wild).
    * Baby Pokémon don't count, so Pikachu (from Pichu) is still stage 1.
    */
-  evolutionStage: z.number().int().min(1).max(3),
+  evolutionStage: z.number().int().min(1).max(4),
   /** The species it evolves from, if any. */
   evolvesFrom: z.string().nullable().default(null),
   tags: z.array(z.enum(SPECIES_TAGS)).default([]),
