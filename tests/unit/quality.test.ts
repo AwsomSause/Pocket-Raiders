@@ -45,7 +45,10 @@ describe('support status', () => {
   it('Mega forms with a stone and Gigantamax forms work with limits, a Mega without a stone waits; a species with no usable moves is disabled', () => {
     const owners = new Map<string, string>();
     expect(speciesStatus(content, content.species.get('venusaur-mega')!, { assetExists: everyFileExists }, owners, owners)).toMatchObject({ kind: 'form', status: 'limited' });
-    expect(speciesStatus(content, content.species.get('tatsugiri-droopy-mega')!, { assetExists: everyFileExists }, owners, owners)).toMatchObject({ kind: 'form', status: 'disabled' });
+    expect(speciesStatus(content, content.species.get('tatsugiri-droopy-mega')!, { assetExists: everyFileExists }, owners, owners)).toMatchObject({ kind: 'form', status: 'limited' });
+    const noStone = structuredClone(content);
+    noStone.items.delete('tatsugirinite-droopy');
+    expect(speciesStatus(noStone, noStone.species.get('tatsugiri-droopy-mega')!, { assetExists: everyFileExists }, owners, owners)).toMatchObject({ kind: 'form', status: 'disabled' });
     expect(speciesStatus(content, content.species.get('venusaur-gmax')!, { assetExists: everyFileExists }, owners, owners)).toMatchObject({ kind: 'form', status: 'limited' });
     const c2 = structuredClone(content);
     c2.species.get('ditto')!.learnset = [{ level: 1, move: 'max-guard' }];

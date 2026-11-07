@@ -152,7 +152,7 @@ export const PowerRuleSchema = z.enum([
 ]);
 export type PowerRule = z.infer<typeof PowerRuleSchema>;
 
-export const SideMoveSchema = z.enum(['reflect', 'lightScreen', 'auroraVeil', 'tailwind', 'safeguard', 'mist', 'luckyChant', 'spikes', 'toxicSpikes', 'stealthRock', 'stickyWeb']);
+export const SideMoveSchema = z.enum(['reflect', 'lightScreen', 'auroraVeil', 'tailwind', 'safeguard', 'mist', 'luckyChant', 'seaOfFire', 'rainbow', 'swamp', 'spikes', 'toxicSpikes', 'stealthRock', 'stickyWeb']);
 export type SideMove = z.infer<typeof SideMoveSchema>;
 
 export const TerrainSchema = z.enum(TERRAINS);

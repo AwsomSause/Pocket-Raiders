@@ -10,7 +10,7 @@ describe('settings v40 speech speed', () => {
     const { speechSpeed: _s, ...old } = { ...DEFAULT_SETTINGS, textSpeed: 'slow' as const };
     storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 39, savedAt: '', data: old }));
     const loaded = new SaveManager(storage, content).loadSettings();
-    expect(CURRENT_VERSIONS.settings).toBe(40);
+    expect(CURRENT_VERSIONS.settings).toBeGreaterThanOrEqual(40);
     expect(loaded.speechSpeed).toBe('normal');
     expect(loaded.textSpeed).toBe('slow');
   });

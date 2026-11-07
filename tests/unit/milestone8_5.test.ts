@@ -60,7 +60,7 @@ describe('Mega Stone data', () => {
     const covered = new Set(stones.flatMap((i) => (i.effect.kind === 'megaStone' ? Object.values(i.effect.forms) : [])));
     const missing = [...content.species.values()].filter((s) => s.form?.kind === 'mega' && !covered.has(s.id)).map((s) => s.id);
     // These three have no base form in the game (Magearna's Original Color, Tatsugiri's Droopy and Stretchy forms).
-    expect(missing.sort()).toEqual(['magearna-original-mega', 'tatsugiri-droopy-mega', 'tatsugiri-stretchy-mega']);
+    expect(missing.sort()).toEqual([]);
     expect(covered.has('groudon-primal') && covered.has('kyogre-primal')).toBe(true);
   });
 

@@ -119,3 +119,24 @@ describe('map music', () => {
     for (const id of MAP_TRACKS) expect(ids.has(id), id).toBe(true);
   });
 });
+
+describe('region themes (W16)', () => {
+  it('gives every shipped region its own map song, and story regions a story route id', async () => {
+    const { mapTrack, storyRegionMusic, storyBattleMusic } = await import('../../src/core/presentation/battleMusic');
+    expect(mapTrack('johto')).toBe('bgm.map_hgss');
+    expect(mapTrack('unova')).toBe('bgm.map_bw');
+    expect(mapTrack('some-new-region')).toMatch(/^bgm\./);
+    expect(storyRegionMusic('tidewrack-reaches', 'route')).toBe('mu_region_tidewrack_route');
+    expect(storyRegionMusic('orrery-basin', 'town')).toBe('mu_region_orrery_basin_town');
+    expect(storyRegionMusic('kanto', 'route')).toBeNull();
+    expect(storyBattleMusic('rival', 'k')).toMatch(/^mu_battle_rival_[ab]$/);
+    expect(storyBattleMusic('wild', 'k')).toBeNull();
+  });
+  it('leans on the region era for ordinary fights and stays deterministic', async () => {
+    const { battleTrack } = await import('../../src/core/presentation/battleMusic');
+    const pick = (k: string) => battleTrack({ raidTrack: null, trainer: false, gbSounds: false, variantKey: k, regionId: 'sinnoh' });
+    const hits = Array.from({ length: 40 }, (_, i) => pick(`s:${i}`)).filter((t) => t === 'bgm.battle_wild_dppt').length;
+    expect(hits).toBeGreaterThan(20);
+    expect(pick('s:3')).toBe(pick('s:3'));
+  });
+});

@@ -487,6 +487,10 @@ export const SideEffectsSchema = z.object({
   safeguard: z.number().int().min(0).default(0),
   mist: z.number().int().min(0).default(0),
   luckyChant: z.number().int().min(0).default(0),
+  /** Pledge combos (double battles): Sea of Fire burns the side, Rainbow doubles extra-effect chances, Swamp halves Speed. */
+  seaOfFire: z.number().int().min(0).default(0),
+  rainbow: z.number().int().min(0).default(0),
+  swamp: z.number().int().min(0).default(0),
   spikes: z.number().int().min(0).max(3).default(0),
   toxicSpikes: z.number().int().min(0).max(2).default(0),
   stealthRock: z.boolean().default(false),
@@ -1747,6 +1751,10 @@ export const SettingsSchema = z.object({
   typeMarkers: z.boolean().default(false),
   /** How much of the window the game fills: full, 90% or 80%. */
   uiScale: z.enum(['full', 'medium', 'small']).default('full'),
+  /** Accessibility: fine print (under 18px) is drawn in the bigger bold font. */
+  smallTextBoost: z.boolean().default(false),
+  /** Accessibility: the pinned quest line on the map gets a dark plate and white text. */
+  questContrast: z.boolean().default(false),
   /** Off keeps menu icons and idle Pokémon still. */
   spriteAnimations: z.boolean().default(true),
   /** Floating damage numbers over the Pokémon that was hit. */

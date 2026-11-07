@@ -9,6 +9,7 @@ import { researchLines } from '../core/trainerResearch';
 import { BANK_MAX_TIER, bankTier, exchangeProblem, nextTier, tierProblem } from '../core/bank';
 import { notify } from '../ui/overlays';
 import { NOOK, collectWish, localLeaderboard, reputationOf, stampCeremony, stampsOwed, konamiJoke, konamiStep, cookieReady, crackCookie, donate, donationNext, donationProblem, fortuneFor, makeWish, nookOf, redeemCode, wishProblem, writeNote } from '../core/hubNook';
+import { BOOKS, bookComplete, bookKey, bookProgress, claimAllProfile, trackKey, trackPoints, trackTier } from '../core/collectionBooks';
 import { LEGACY, legacySummary, ascend, buyNode, contactProblem, intelLevel, legacyOf, networkSlots, nextPrestige, nodeProblem, nodeStatus, prestigeProblem, prestigeRank, regionBoard, serviceFor, shelfProblem, shelveSeed, toggleContact, trainMove, trainProblem, unshelveSeed } from '../core/legacy';
 import { showcaseOf } from '../core/social';
 import { STANDARD_CHOICE } from '../core/rules';
@@ -77,7 +78,7 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
@@ -103,6 +104,7 @@ const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'prestige', label: 'Prestige', blurb: 'Rise a rank for a title and more contacts. Nothing you own is ever deleted (Enter).' },
   { room: 'network', label: 'Trainer Network', blurb: 'Trainers you did not pick still send a small parcel when you start a run (Enter).' },
   { room: 'museum', label: 'Item Museum', blurb: 'Every item you ever carried through a run, with Research Point milestones.' },
+  { room: 'books', label: 'Collection Books', blurb: 'Themed Pokémon sets and the Reward Track. Finish a book or climb a tier for credits and Research Points (Enter).' },
   { room: 'intel', label: 'Intelligence Board', blurb: 'What you know about each region and its League. Grows with visits and the Tree.' },
   { room: 'moves', label: 'Move Research', blurb: 'Your moves, their mastery, and training with Research Points (Enter).' },
   { room: 'seeds', label: 'Seed Shelf', blurb: 'Keep shared seed codes and start a run from one (Enter).' },
@@ -194,6 +196,7 @@ const ROOM_ICON: Partial<Record<Room, string>> = {
   prestige: 'item.master_ribbon',
   network: 'item.pair_of_tickets',
   museum: 'item.map',
+  books: 'item.map',
   intel: 'item.scanner',
   moves: 'item.exp_charm',
   seeds: 'item.mystery_egg',
@@ -691,6 +694,8 @@ export class HubScene extends Phaser.Scene {
       case 'tree':
       case 'prestige':
       case 'network':
+      case 'books':
+        return `Track tier ${trackTier(p)} of ${BOOKS.track.tiers.length}, ${BOOKS.books.filter((b) => bookComplete(p, b)).length} of ${BOOKS.books.length} books`;
       case 'museum':
       case 'intel':
       case 'moves':
@@ -797,6 +802,7 @@ export class HubScene extends Phaser.Scene {
       case 'prestige':
       case 'network':
       case 'museum':
+      case 'books':
       case 'intel':
       case 'moves':
       case 'seeds':
@@ -1590,6 +1596,20 @@ export class HubScene extends Phaser.Scene {
         const next = LEGACY.museum.milestones.find((m) => seen.length < m.items);
         entries.push({ label: next ? `Next milestone: ${next.items} items` : 'Every milestone paid', sub: next ? `Pays ${next.research} Research Points once.` : 'The Museum is complete for now.', on: !next });
         for (const id of seen) entries.push({ label: content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id, sub: content.items.get(id)?.description ?? content.catalog.get(id)?.description ?? '' });
+        break;
+      }
+      case 'books': {
+        const pts = trackPoints(p);
+        const due = BOOKS.books.filter((b) => bookComplete(p, b) && !p.claims[bookKey(b.id)]).length + BOOKS.track.tiers.filter((t, i) => pts >= t.points && !p.claims[trackKey(i + 1)]).length;
+        title = `Collection Books  ·  Track ${pts} points`;
+        entries.push({ label: due ? `Claim rewards (${due} ready)` : 'Nothing to claim yet', sub: 'Pays finished books and reached Track tiers once each.', on: !due, problem: due ? null : 'Nothing to claim yet.', run: () => { const r = claimAllProfile(p, now); session.changeProfile(() => r.profile); return r.message; } });
+        const nt = BOOKS.track.tiers.find((t) => pts < t.points);
+        entries.push({ label: nt ? `Reward Track: next tier at ${nt.points} points` : 'Reward Track complete', sub: nt ? `${nt.points - pts} to go: ${nt.credits} credits, ${nt.rp} RP${nt.title ? `, title ${nt.title}` : ''}. Points come from species caught, shinies, achievements, runs and books.` : 'Every tier is paid.', right: `${trackTier(p)}/${BOOKS.track.tiers.length}`, on: !nt });
+        for (const b of BOOKS.books) {
+          const g = bookProgress(p, b);
+          const paid = !!p.claims[bookKey(b.id)];
+          entries.push({ label: `${b.name}  ·  ${g.have}/${g.total}`, sub: `${b.blurb} Reward: ${b.reward.credits} credits, ${b.reward.rp} RP${b.reward.title ? `, title ${b.reward.title}` : ''}.${g.missing.length ? ` Missing: ${g.missing.map((m) => content.species.get(m)?.name ?? m).join(', ')}.` : ''}`, right: paid ? 'Paid' : g.missing.length ? '' : 'Ready', on: paid });
+        }
         break;
       }
       case 'intel':
