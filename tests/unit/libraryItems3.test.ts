@@ -25,9 +25,9 @@ describe('Library batch 3 items', () => {
     }
   });
 
-  it('none is a key, a card or a candy (Kice 2026-11-07)', () => {
+  it('none is a key, a card or a candy (Kice 2026-11-07; the Keystone is a Mega item)', () => {
     const picture = (id: string) => getCatalogEntry(content, id).icon!.split('/').pop()!;
-    for (const id of ids) expect(picture(id), id).not.toMatch(/(?<!bi)key|candy|card$|^cardkeys/);
+    for (const id of ids) expect(picture(id), id).not.toMatch(/(?<!bi)key(?!stone)|candy|card$|^cardkeys/);
   });
 
   it('every effect applies without throwing', () => {
@@ -35,6 +35,7 @@ describe('Library batch 3 items', () => {
       const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'library-items-3', archetypeId: 'red' }), 0);
       const entry = getCatalogEntry(content, id);
       const mon = entry.stacksOn === 'pokemon' ? run.party[0] : undefined;
+      if (mon && entry.effect && 'revive' in entry.effect) mon.hp = 0;
       expect(() => applyCatalog(content, run, entry, mon ?? createPokemon(content, 'eevee', 20, 'e'), { moneyMultiplier: 1, rng: new Rng(hashSeed('library-items-3')) }), id).not.toThrow();
     }
   });
