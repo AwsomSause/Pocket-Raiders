@@ -3,7 +3,7 @@ import { adjustBond, bondOf, shapeAction, wouldRefuse } from '../../src/core/bon
 import { createBattle } from '../../src/core/battle/engine';
 import { createPokemon } from '../../src/core/pokemon';
 import { openHistory } from '../../src/core/story/record';
-import { berryFlavor, careAction, favoriteFlavor, hatedFlavor } from '../../src/core/care';
+import { berryFlavor, careAction, careProblem, favoriteFlavor, hatedFlavor } from '../../src/core/care';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { makeRules, STANDARD_CHOICE } from '../../src/core/rules';
 import { HEARTBOND, heartbondTurn, heartbondVictory, heartbondCare, heartbondLabel, takeBeat, BEAT_LEVELS, recoveryScenes, clutchSurvived, heartbondLevel, heartbondScore, markRecovery, payHeartbond, refreshHeartbond, takePendingLatches } from '../../src/core/story2/heartbond';
@@ -192,6 +192,42 @@ describe('care hooks', () => {
     expect(heartbondCare(run, uid, 'care_touch', 'c1', 1).paid).toEqual([]);
     expect(heartbondCare(run, 'other', 'care_touch', 'c1', 2).paid).toEqual([]);
     expect(heartbondCare(run, uid, 'rest_together', 'r1', 0).paid).toEqual(['rest_together']);
+  });
+});
+
+describe('embrace', () => {
+  function atStop() {
+    const { run, uid, v2 } = setup();
+    run.phase = 'map';
+    return { run, uid, v2 };
+  }
+  it('is locked until the partner has latched Level 7, and only the partner can ever embrace', () => {
+    const { run, uid, v2 } = atStop();
+    expect(careProblem(content, run, 0, 'embrace')).toMatch(/Level 7/);
+    v2.heartbond.latched = [1, 2, 3, 4, 5, 6];
+    expect(careProblem(content, run, 0, 'embrace')).toMatch(/Level 7/);
+    v2.heartbond.latched = [1, 2, 3, 4, 5, 6, 7];
+    expect(careProblem(content, run, 0, 'embrace')).toBeNull();
+    v2.heartbond.partner = 'someone-else';
+    expect(careProblem(content, run, 0, 'embrace')).toMatch(/Level 7/);
+    expect(uid).toBeTruthy();
+  });
+  it('once per stop: raises affection, lowers strain, and still pays the care touch', () => {
+    const { run, uid, v2 } = atStop();
+    v2.heartbond.latched = [1, 2, 3, 4, 5, 6, 7];
+    adjustBond(bondOf(run, uid), { strain: 10 });
+    const before = { ...bondOf(run, uid) };
+    const after = careAction(content, run, 0, 'embrace');
+    const b = bondOf(after.run, uid);
+    expect(b.affection).toBeGreaterThan(before.affection);
+    expect(b.strain).toBeLessThan(before.strain);
+    expect(after.message).toContain(' ');
+    expect(careProblem(content, after.run, 0, 'embrace')).toMatch(/already/);
+  });
+  it('Classic runs cannot embrace', () => {
+    const { run } = atStop();
+    run.story.v2 = undefined;
+    expect(careProblem(content, run, 0, 'embrace')).toMatch(/Level 7/);
   });
 });
 

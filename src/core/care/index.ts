@@ -4,7 +4,7 @@
 // `run.encountersCompleted`. Numbers live in data/care.json.
 
 import { adjustBond, bondOf } from '../bond';
-import { heartbondCare } from '../story2/heartbond';
+import { embraceUnlocked, heartbondCare } from '../story2/heartbond';
 import type { Content } from '../contentSchema';
 import { seasonOf } from '../clock';
 import { warmEggs } from '../eggs';
@@ -18,7 +18,7 @@ export * from './mods';
 const PHASES: readonly RunState['phase'][] = ['reward', 'decision', 'map', 'shop'];
 const TRAIN_STATS = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 export type TrainStat = (typeof TRAIN_STATS)[number];
-export const CARE_ACTIONS = ['pet', 'hug', 'feed', 'groom', 'lullaby', 'cheer', 'train', 'sing', 'dress', 'fetch', 'story', 'wake', 'showoff', 'hold', 'whistle', 'singalong', 'teamdance', 'race', 'healcircle', 'spar', 'birthday', 'praise', 'scold', 'cry', 'nickname', 'favourite', 'ace'] as const;
+export const CARE_ACTIONS = ['pet', 'hug', 'embrace', 'feed', 'groom', 'lullaby', 'cheer', 'train', 'sing', 'dress', 'fetch', 'story', 'wake', 'showoff', 'hold', 'whistle', 'singalong', 'teamdance', 'race', 'healcircle', 'spar', 'birthday', 'praise', 'scold', 'cry', 'nickname', 'favourite', 'ace'] as const;
 export type CareAction = (typeof CARE_ACTIONS)[number];
 
 export const hash = (text: string): number => {
@@ -92,6 +92,7 @@ export function careProblem(content: Content, run: RunState, partyIndex: number,
   switch (action) {
     case 'pet': return n('pet') >= CARE.pet.perStop ? 'It has had enough petting for this stop.' : null;
     case 'hug': return n('hug') >= 1 ? 'You already hugged it at this stop.' : null;
+    case 'embrace': return !embraceUnlocked(run, mon.uid) ? 'Only a Trusted Partner (Heartbond Level 7) will embrace you.' : n('embrace') >= 1 ? 'You already embraced it at this stop.' : null;
     case 'feed': {
       if (care.sulkUntil >= run.encountersCompleted) return 'It is sulking and will not eat yet.';
       if (n('feed') >= 1) return 'It already ate at this stop.';
@@ -180,6 +181,13 @@ export function careAction(content: Content, current: RunState, partyIndex: numb
       adjustBond(bondOf(run, mon.uid), { affection: CARE.hug.affection });
       setMood(care, CARE.hug.mood);
       message = `${name} ${pickLine('hug', seed)}`;
+      break;
+    case 'embrace':
+      tick();
+      changeFriendship(content, mon, CARE.embrace.friendship);
+      adjustBond(bondOf(run, mon.uid), { affection: CARE.embrace.affection, strain: CARE.embrace.strain });
+      setMood(care, CARE.embrace.mood);
+      message = `${name} ${pickLine('embrace', seed)}`;
       break;
     case 'feed': {
       tick();
