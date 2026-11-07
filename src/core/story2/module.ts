@@ -9,6 +9,7 @@ import { hashSeed, Rng } from '../rng';
 import type { Profile, RunState } from '../state';
 import { change, freshRecord, meet, ATTRS, type Attr } from './relationships';
 import { resolveVariant, scoreCond, type ResolveContext, type ResolveCond } from './resolver';
+import { dueRivalScene, epilogueRivalScene } from './rivalPlan';
 import { renderTemplate } from './templates';
 import type { StoryData, StoryEvent, StoryV2 } from './schema';
 
@@ -170,6 +171,9 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
       m.activeStop = stopId;
       // The ending counts the moment it is reached (the run may be finalized before the screen is read); the screen only shows it.
       commit(content, run, eventOf(content.storyData, ev)!, undefined);
+      // The Primary rival's epilogue (beat 8) plays after the ending.
+      const rv = epilogueRivalScene(content, run);
+      if (rv && !m.played.includes(rv) && eventOf(content.storyData, rv)) m.queue.push(rv);
     }
     return;
   }
@@ -180,9 +184,18 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     m.activeStop = stopId;
     return;
   }
-  if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) return;
+  // A Stop built for rivals plays the next rival scene due (the Primary first), whatever the gap.
+  // It follows the Stop's own module scene (if any) instead of taking its place.
+  const rivalDue = stop.slotTags.includes('rival_beat') ? dueRivalScene(content, run, stop.act, true, m.played, m.queue) : null;
+  if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) {
+    if (rivalDue) { m.active = rivalDue; m.activeStop = stopId; }
+    return;
+  }
   const mod = moduleOf(content.storyData, m.backstory);
-  if (!mod) return;
+  if (!mod) {
+    if (rivalDue) { m.active = rivalDue; m.activeStop = stopId; }
+    return;
+  }
   const ctx = { ...resolveCtx(content, run), act: stop.act };
   const slotEvent = v2.blueprint?.slots.find((s) => s.slot === stopId)?.event;
   const pool: string[] = [...mod.events];
@@ -197,9 +210,15 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     const echo = eventOf(content.storyData, mod.echoEvents[m.echoes]!);
     if (echo && condsPass(echo.requires as ResolveCond[], ctx)) pick = echo;
   }
-  if (!pick) return;
+  if (!pick) {
+    // Nothing from the module: a Secondary or Friendly rival scene that is due may take the Stop.
+    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue);
+    if (due) { m.active = due; m.activeStop = stopId; }
+    return;
+  }
   m.active = pick.id;
   m.activeStop = stopId;
+  if (rivalDue) m.queue.push(rivalDue);
 }
 
 // ---------- the scene a player sees ----------
@@ -238,7 +257,7 @@ export function activeScene(content: Content, run: RunState): StoryScene | null 
   }
   return {
     eventId: e.id,
-    kicker: e.tags.includes('ending') ? 'The Ending' : e.tags.includes('echo') ? 'An Echo' : e.tags.includes('intro') ? 'Your Story Begins' : `Act ${ctx.act ?? 1}`,
+    kicker: e.tags.includes('ending') ? 'The Ending' : e.tags.includes('rv_story') ? 'A Rival' : e.tags.includes('echo') ? 'An Echo' : e.tags.includes('intro') ? 'Your Story Begins' : `Act ${ctx.act ?? 1}`,
     lines: lines.filter((l) => l.text.length > 0),
     choices: e.choices.map((c) => ({ id: c.id, text: textOf(data, c.textKey, values) })),
     ending: e.tags.includes('ending'),
@@ -287,8 +306,13 @@ export function finishScene(content: Content, run: RunState, choiceId?: string):
     if (e.choices.length > 0 && !choice) return false;
     commit(content, run, e, choice);
   }
+  const stop = m.activeStop;
   m.active = null;
   m.activeStop = null;
+  // After the ending, the scenes queued for the Epilogue play one after another (the screen asks for the next one).
+  const head = m.queue[0];
+  const rivalNext = !!head && !!eventOf(content.storyData, head)?.tags.includes('rv_story');
+  if ((m.ending || rivalNext) && m.queue.length > 0) { m.active = m.queue.shift()!; m.activeStop = stop; }
   return true;
 }
 

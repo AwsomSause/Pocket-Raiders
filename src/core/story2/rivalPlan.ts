@@ -5,8 +5,9 @@ import type { PlannedMember, TrainerPlan } from '../encounters';
 import { runLevelCap } from '../regions';
 import type { RunState } from '../state';
 import type { Rival } from '../story/schema';
-import { actForStage, pipDraw, pipTeamKey, rivalById, storyRoleOf, teamFor, type RivalBands } from './storyRivals';
-import type { RivalRole, StoryRival } from './schema';
+import { getSpecies } from '../pokemon';
+import { actForStage, beatsFor, counterFor, pipDraw, pipTeamKey, rivalById, storyRoleOf, teamFor, type RivalBands } from './storyRivals';
+import { RIVAL_ROLES, type RivalRole, type StoryRival } from './schema';
 
 const PIP_HISTORY = 'rvpip:history';
 
@@ -34,6 +35,26 @@ function breakdown(level: number, base: number) {
 /** Marisol has Bastion back once the Act 4 cage scene set either freed flag. */
 const bastionFreed = (run: RunState): boolean => Boolean(run.story.flags.bastion_freed || run.story.v2?.facts.bastion_freed);
 
+const STUDYING_LINE = "I've been studying you.";
+
+/**
+ * The written counter slot: after the player beat this rival last time, a Primary (or a Secondary, once per run) swaps the slot named for the
+ * Act when the player's lead is one of the types the swap answers. A Friendly rival never does. Marks the use in a run flag. True when it swapped.
+ */
+function swapCounter(content: Content, run: RunState, def: StoryRival, act: number, role: RivalRole, members: PlannedMember[]): boolean {
+  const rival = run.story.rivals.find((r) => r.storyRival === def.id);
+  if (!rival || rival.memory.lastBattle.result !== 'win') return false;
+  const flag = `rvctr:${def.id}`;
+  const used = Number(run.story.flags[flag] ?? 0);
+  const c = counterFor(def, act, role, { used, freed: bastionFreed(run) });
+  const lead = run.party.find((m) => m.hp > 0);
+  if (!c || !c.species || c.draw || !lead || !content.species.has(c.species) || c.slot < 1 || c.slot > members.length) return false;
+  if (c.vs.length > 0 && !getSpecies(content, lead.speciesId).types.some((t) => c.vs.includes(t))) return false;
+  members[c.slot - 1] = { ...members[c.slot - 1]!, speciesId: c.species };
+  run.story.flags[flag] = used + 1;
+  return true;
+}
+
 function planFromTeam(content: Content, run: RunState, def: StoryRival, base: TrainerPlan, act: number, role: RivalRole, floor: number[] = []): TrainerPlan {
   const history = String(run.story.flags[PIP_HISTORY] ?? '').split('|').filter(Boolean);
   const fight = history.length;
@@ -43,7 +64,8 @@ function planFromTeam(content: Content, run: RunState, def: StoryRival, base: Tr
   if (def.drawPool.length > 0) run.story.flags[PIP_HISTORY] = [...history, pipTeamKey(def.teams[act - 1]!.slots.map((s) => s.species), drawn)].join('|');
   // Never weaker than the plan it replaces (the harder-rival rule: the ace stays at your level +2).
   const members: PlannedMember[] = team.map((m, i) => ({ speciesId: m.species, level: Math.max(m.level, floor[i] ?? 0) }));
-  return { ...base, name: storyRivalName(content, def.id) ?? base.name, members, levelInfo: members.map((m) => breakdown(m.level, content.balance.rival.level)) };
+  const studied = swapCounter(content, run, def, act, role, members);
+  return { ...base, name: storyRivalName(content, def.id) ?? base.name, members, levelInfo: members.map((m) => breakdown(m.level, content.balance.rival.level)), ...(studied ? { memoryNote: STUDYING_LINE } : {}) };
 }
 
 /** Story Run, stage-2 slot (rule R3): the Primary rival's Act 1 team replaces the scripted starter pair. Null outside a Story Run. */
@@ -82,4 +104,34 @@ export function assignStoryRole(content: Content, run: RunState, rival: Rival): 
   if (!id || !rivalById(content.storyData, id) || run.story.rivals.some((r) => r.storyRival === id)) return;
   rival.storyRival = id;
   rival.name = storyRivalName(content, id) ?? rival.name;
+}
+
+// ---------- the key scenes (beats 2, 4, 6 on Stops; beat 8 at the Epilogue) ----------
+
+const SCENE_BEATS = [2, 4, 6];
+
+/** The rival scene due at a Stop of this Act, or null. `rivalStop`: a Stop built for rivals, where the Primary goes first; elsewhere only the Secondary and the Friendly. */
+export function dueRivalScene(content: Content, run: RunState, act: number, rivalStop: boolean, played: readonly string[], queued: readonly string[]): string | null {
+  const roles = storyRoles(run);
+  if (!roles) return null;
+  const order: RivalRole[] = rivalStop ? [...RIVAL_ROLES] : ['secondary', 'friendly'];
+  for (const role of order) {
+    const def = rivalById(content.storyData, roles[role]);
+    if (!def) continue;
+    for (const beat of beatsFor(def, role).filter((b) => SCENE_BEATS.includes(b))) {
+      const sc = def.scenes.find((x) => x.beat === beat);
+      if (!sc || played.includes(sc.event) || queued.includes(sc.event)) continue;
+      // Beats go in order for one rival: an earlier unplayed beat blocks a later one.
+      if (act < sc.act) break;
+      return sc.event;
+    }
+  }
+  return null;
+}
+
+/** The Primary's epilogue scene (beat 8), played after the ending. */
+export function epilogueRivalScene(content: Content, run: RunState): string | null {
+  const roles = storyRoles(run);
+  const def = roles ? rivalById(content.storyData, roles.primary) : undefined;
+  return def?.scenes.find((x) => x.beat === 8)?.event ?? null;
 }

@@ -8,3 +8,9 @@
 - **Wired (follow-up PR)**: `core/story2/rivalPlan.ts`. A Story Run's stage-2 first rival is the Primary with its written Act 1 team (never weaker than the scripted +2 ace); the new record is tagged `Rival.storyRival` (optional field, no save bump) and named after the character. Returning story rivals fight the written team of the current Act (`storyRivalPlan`, then the usual adaptation pipeline), Pip's draws are kept in a run flag, Marisol's Bastion needs the `bastion_freed` flag. The first two sparked rivals become the Secondary and Friendly (list order, R1); extra sparks stay ordinary. Intro/rematch lines show as the rival note. Without a theme row the roles are dealt on stream `story_rival_roles`.
 - **Limits**: the written key scenes (28 events) still wait for the Stop-event runner (S5/S19); the written counter slots are not used (the engine's own counter logic still applies); battle mid/win/lose lines are text only. Marisol has no clue ledger. Theme D's Marisol pack is my reading. Poses are placeholder sprites.
 - Tests: `tests/unit/storyRivals.test.ts`, `storyRivalPlan.test.ts`, `storyGates.test.ts`.
+
+## Key scenes and counter slots (third piece)
+- The S5 runner plays the 28 rival scenes: Primary beats 2/4/6 on the rival Stops (1, 6, 20, 25), Secondary and Friendly on those Stops or spare ones; a rival scene follows the Stop's own module scene instead of replacing it. Primary beat 8 plays after the ending.
+- Written counters are used: after a rival wins, its next team can swap one member for the written counter if the player's lead is weak to it (Secondary once, never Friendly). The rival then says "I've been studying you."
+- Limits: Pip's draw-counter not wired; Friendly spars not battles; Marisol has no clue ledger; clue ledgers do not fire in scenes; poses are placeholders.
+- Tests: `tests/unit/storyRivalScenes.test.ts`.
