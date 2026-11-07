@@ -893,18 +893,17 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform for the opening throw; it then leaves (trainerOut). Trainers with their own
-   * throwing sprite keep the older opening throw; doubles have no trainer on the field. Skip: Enter, Space or a tap.
+   * throwing sprite keep the older opening throw; in doubles the same trainer throws both balls. Skip: Enter, Space or a tap.
    */
   private setupTrainerActor(doubles: boolean): void {
     this.trainerActor = null;
     this.trainerReady = Promise.resolve();
-    if (doubles) return;
     const art = this.playerArt();
     if (throwKind(art) === 'own') return;
     const look = playerLookForBattle();
     this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      this.trainerHomeX = PLAYER_POS.x - 175;
+      this.trainerHomeX = doubles ? 70 : PLAYER_POS.x - 175;
       const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, PLAYER_POS.y - 4, 190, this.motion, throwTint(art));
       // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
       this.field.addAt(actor.sprite, this.fieldBase);
@@ -922,6 +921,31 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
+  /** Doubles opening: your trainer throws one ball to each of your two spots, then steps off. Presentation only. */
+  private async duoThrowPose(): Promise<void> {
+    if (this.trainerReady) await this.trainerReady;
+    const duo = this.duo;
+    if (!duo) return;
+    if (!this.trainerActor) return this.ownBackThrow();
+    const actor = await this.trainerIn();
+    if (!actor) return;
+    const focus = duo.focus.player;
+    const throws: Array<{ mon: PokemonInstance; spot: 0 | 1 }> = [{ mon: this.shown.player, spot: focus }];
+    if (duo.other.player.mon) throws.push({ mon: duo.other.player.mon, spot: focus === 0 ? 1 : 0 });
+    throws.sort((a, b) => a.spot - b.spot);
+    for (const t of throws) {
+      if (t.mon.hp <= 0) continue;
+      const ball = t.mon.caughtBall ?? DEFAULT_BALL;
+      const at = DUO_POS.player[t.spot];
+      await actor.play('sendOut', {
+        target: { x: at.x, y: at.y - 50 },
+        makeBall: (x, y) => ballVisual(this, ball, x, y),
+        onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+      });
+    }
+    this.trainerOut();
+  }
+
   /**
    * The player's trainer throws out the first Pokémon (Gen 4/5 back sprite, Pokémon Memories), then slides away.
    * Presentation only: skipped when motion is off or the trainer has no back sprite.
@@ -932,6 +956,11 @@ export class BattleScene extends Phaser.Scene {
       await this.sendOutMoment(this.shown.player);
       return;
     }
+    await this.ownBackThrow();
+  }
+
+  /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
+  private async ownBackThrow(): Promise<void> {
     const art = this.playerArt();
     if (!art || this.motion === 'off') return;
     const back = trainerBackVisual(this, art, PLAYER_POS.x - 90, MESSAGE_Y + 4, 260);
@@ -1869,6 +1898,7 @@ export class BattleScene extends Phaser.Scene {
       if (this.shown.enemy.shiny) await this.shinySparkle();
       await this.formIntroBeat(this.shown.enemy);
       if (this.duo) {
+        await this.duoThrowPose();
         await this.showDuoSide('player', true);
         const second = this.duo.other.player.mon;
         await this.say(`Go! ${this.speciesName(this.shown.player)}${second ? ` and ${this.speciesName(second)}` : ''}!`);
