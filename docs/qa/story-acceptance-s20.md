@@ -29,7 +29,13 @@ Ending shares (300 runs each, random answers, so a careful player can steer towa
 - `tests/unit/storyAcceptance.test.ts` steers each scene toward and away from every grid key and proves **every ending is reachable by real answers**, each run plays exactly one ending, no scene repeats, and counters stay inside their limits. Only Hisui's Lost ending is not reached, on purpose: it is the catch-all after Home, Bridge and Present, which cover every answer once the return choice is made.
 - Fight sim: 100 runs, 0 errors, 0 wins. Every run was lost early (median 11 battles, none cleared a region; 76 to trainers, 24 to wild). Rival and story losses kept the run going as designed (17 to 25 per 20 runs). The test bot is too weak for the late game, same as `sim:overhaul`.
 
-## Balance notes for Kice (not changed)
+## Follow-up (Kice: "decide for yourself")
+- Easier rare endings: Third Way needs Gideon affection 40 (was 50), Echo needs Rapport 5 (was 6), Own Choice needs Humanity 65 (was 70).
+- Hisui's Lost now has a real trigger: Displacement 9 or more (start 5, cap 10); it is checked first.
+- All five backstories are on in `enabledBackstories`; seeds now spread across them (unit test). The two story e2e specs keep their seeds, which still pick Viridian.
+- The shares in the table above are from before this follow-up; run `npm run sim:story` for the new ones.
+
+## Balance notes (before the follow-up)
 - Rare endings with random answers: Third Way (Champion), Echo (Viridian) and Own Choice (Aether) are under 1% to 2%. A player who picks on purpose reaches them (the test proves it), but you may want easier thresholds.
 - Most random runs end on the catch-all (Champion: Own Name 67%, Viridian: Reckoning 69%, Ex-Criminal: Ghost 49%).
 - Only Viridian is on in `enabledBackstories`; the other four play only when chosen (`chooseBackstory`, S2). Turning them on for seeded picks is Kice's call.

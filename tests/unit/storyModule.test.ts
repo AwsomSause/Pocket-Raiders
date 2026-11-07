@@ -8,10 +8,14 @@ import { createProfile } from '../../src/core/profile';
 import { RunStateSchema, type RunState } from '../../src/core/state';
 import { buildChronicle, chronicleView } from '../../src/core/story2/chronicle';
 import { validateModule } from '../../src/core/story2/moduleValidator';
-import { activeScene, applyEffects, finishScene, foldModuleIntoProfile, pickEnding, queueStopScene } from '../../src/core/story2/module';
+import { activeScene, applyEffects, chooseBackstory, finishScene, foldModuleIntoProfile, pickEnding, queueStopScene } from '../../src/core/story2/module';
 import { content } from './helpers';
 
-const storyRun = (seed: string): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', campaignId: 'orrery-circuit' }), 0);
+const storyRun = (seed: string): RunState => {
+  const run = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', campaignId: 'orrery-circuit' }), 0);
+  chooseBackstory(content, run, 'bs_viridian'); // these tests are about the Viridian slice; the seed would pick any of the five
+  return run;
+};
 
 /** Plays every Stop of the blueprint in order, answering each choice scene with the option picked by `pick`. Returns the event ids played. */
 function playAll(run: RunState, pick: (choices: string[], at: number) => number = () => 0): string[] {
@@ -96,7 +100,8 @@ describe('the backstory module loader (S5)', () => {
     };
     expect(endingFor({ rapport: 6, rapport_nature: 'resonant', migration: 'exposed' })).toBe('end_echo');
     expect(endingFor({ rapport: 6, rapport_nature: 'practiced', migration: 'exposed' })).toBe('end_gardener');
-    expect(endingFor({ rapport: 5, rapport_nature: 'resonant', migration: 'negotiated' })).toBe('end_gardener');
+    expect(endingFor({ rapport: 5, rapport_nature: 'resonant', migration: 'negotiated' })).toBe('end_echo');
+    expect(endingFor({ rapport: 5, rapport_nature: 'practiced', migration: 'negotiated' })).toBe('end_gardener');
     expect(endingFor({ rapport: 3, rapport_nature: 'practiced', migration: 'sabotaged' })).toBe('end_listener');
     expect(endingFor({ rapport: 1, rapport_nature: 'resonant', migration: 'none' })).toBe('end_reckoning');
     // And real play gets there: always taking the kind option reaches a good ending on some seed of each nature.
