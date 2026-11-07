@@ -455,6 +455,15 @@
       ]
     },
     {
+      "id": "story-run",
+      "name": "Story Run",
+      "status": "supported",
+      "progressionEligible": true,
+      "checkpoints": false,
+      "blurb": "The Orrery Circuit: three story regions in a fixed order, a main rival, an evil team and an ending shaped by your choices. Rival and story losses never end the run.",
+      "campaignId": "orrery-circuit"
+    },
+    {
       "id": "regional-circuit",
       "name": "Regional Circuit",
       "status": "supported",

@@ -69,3 +69,31 @@ test('Prologue: Look B is locked, Quick Start saves name, pronouns and Tone', as
   expect(await texts(page)).toContain('Good morning, Kay. You are on time.');
   expect(errors).toEqual([]);
 });
+
+test('Story Run: the title entry plays the prologue, then trainer choice and the Desk in Story Run mode', async ({ page }) => {
+  test.setTimeout(90_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/?debug=1');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
+  expect(await texts(page)).toContain('Story Run');
+  // A finished prologue: the Short Intake offers to begin the Story Run.
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.changeProfile((p: any) => ({ ...p, story: { ...p.story, protagonist: { ...p.story.protagonist, name: 'Kay', nameSet: true }, prologue: { ...p.story.prologue, done: true } } }));
+    (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Prologue', { thenRun: true });
+  });
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Prologue');
+  await page.waitForTimeout(400);
+  expect(await texts(page)).toContain('Begin the Story Run');
+  await press(page, 'Enter');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('TrainerSelect');
+  await page.waitForTimeout(400);
+  await press(page, 'Enter');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('RunPrep');
+  const mode = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').rules.modeId);
+  expect(mode).toBe('story-run');
+  expect(await texts(page)).toContain('Story Run');
+  expect(errors).toEqual([]);
+});

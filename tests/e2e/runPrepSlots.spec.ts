@@ -72,7 +72,7 @@ test('Continue and Save Slots: slots keep separate runs and Continue picks the l
   await page.reload();
   await waitForScene(page, 'MainMenu');
   const labels = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('MainMenu').menu.config.options.map((o: any) => o.label));
-  expect(labels).toEqual(['Continue (Slot 1)', 'Enter the Hub', 'New Run', 'Story Prologue', 'Save Slots', 'Settings']);
+  expect(labels).toEqual(['Continue (Slot 1)', 'Enter the Hub', 'New Run', 'Story Run', 'Save Slots', 'Settings']);
 
   await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('MainMenu').scene.start('SaveSlots'); });
   await waitForScene(page, 'SaveSlots');
