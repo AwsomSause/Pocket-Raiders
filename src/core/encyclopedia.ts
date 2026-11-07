@@ -2,6 +2,7 @@
 // content so it can never drift from what the game really has. Pure data, no Phaser. Each topic lists entries;
 // an entry has a short line (shown in the list) and a longer text (shown when it is focused).
 
+import { levelCap } from './regions';
 import { RUN_RULES } from './rules';
 import type { Content } from './contentSchema';
 import mechanicsJson from '../quality/mechanics.json';
@@ -40,7 +41,7 @@ export function gameSummary(content: Content): SummaryTopic[] {
     { id: 'battle', name: 'Battles', short: 'Turn-based, one move or action per turn.', text: 'Choose Fight, Bag or Pokémon each turn. Bonds make your Pokémon braver, Momentum fills as you land super effective hits, and bosses telegraph their strongest attack so you can plan for it.' },
     { id: 'save', name: 'Saving', short: 'Autosave after every step, plus Save, Save & Quit and Save & Hub.', text: 'The game saves after every step. On the map, Save writes now, Save & Quit saves and goes to the title screen, and Save & go back to Hub saves and visits the Hub. Continue on the title screen resumes the run exactly where you left it.' },
     { id: 'signature', name: 'Signature moves', short: 'A move used often becomes that Pokémon\'s signature move.', text: `A damaging move a Pokémon uses ${content.story.awakening.uses} times, in wild or trainer fights, becomes its signature move: it hits ${Math.round((content.story.awakening.boost - 1) * 100)}% harder and shows a star in the party view.` },
-    { id: 'levels', name: 'Levels', short: `Levels climb to ${content.balance.difficulty.maxLevel}; each region raises the cap by ${content.balance.difficulty.levelCapStep}.`, text: `Wild Pokémon start near your starter (level ${content.balance.starterLevel}) and get stronger every stage. The level cap rises by ${content.balance.difficulty.levelCapStep} each region, up to level ${content.balance.difficulty.maxLevel}.` },
+    { id: 'levels', name: 'Levels', short: `Levels climb to ${content.balance.difficulty.maxLevel}; the first region caps at ${levelCap(content, 0)} and each region after raises it by ${content.balance.difficulty.levelCapStep}.`, text: `Wild Pokémon start near your starter (level ${content.balance.starterLevel}) and get stronger every stage. The level cap is ${levelCap(content, 0)} in the first region and rises by ${content.balance.difficulty.levelCapStep} each region after, up to level ${content.balance.difficulty.maxLevel}.` },
   ]);
 
   add('pokemon', 'Pokémon', 'Every species and form.', species.map((s) => {

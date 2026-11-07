@@ -2231,6 +2231,8 @@ export const BalanceSchema = z.object({
     capMargin: z.number().int().min(0),
     /** Each region raises the level cap by this much (director decision D14). */
     levelCapStep: z.number().int().positive(),
+    /** The first region's level cap (Kice 2026-11-07: 100); later regions add `levelCapStep` each. Default: the step itself (the old rule). */
+    levelCapStart: z.number().int().positive().optional(),
     /** Multiplies all experience gained (the single knob for how fast the party levels). */
     xpScale: z.number().positive(),
     /** Auto-Battle (spec §32): a battle where the Pokémon chose their own actions gives this share of the EXP. */

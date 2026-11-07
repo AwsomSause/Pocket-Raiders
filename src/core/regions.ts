@@ -41,10 +41,19 @@ export function currentRegion(content: Content, run: RunState): Region {
 }
 
 /**
- * The highest level any Pokémon can reach in a region: levelCapStep × region number
- * (50, 100, ...), never above balance.difficulty.maxLevel (D14).
+ * The highest level any Pokémon can reach in a region: levelCapStart + levelCapStep × region number
+ * (100, 150, 200, ...), never above balance.difficulty.maxLevel (D14).
  */
 export function levelCap(content: Content, regionIndex: number): number {
+  const { levelCapStep, levelCapStart, maxLevel } = content.balance.difficulty;
+  return Math.min(maxLevel, (levelCapStart ?? levelCapStep) + levelCapStep * regionIndex);
+}
+
+/**
+ * The level enemies climb toward in a region: levelCapStep × region number (50, 100, ...), never above maxLevel.
+ * Kept apart from the party's level cap (Kice 2026-11-07) so the enemy curve and boss teams did not change.
+ */
+export function curveCap(content: Content, regionIndex: number): number {
   const { levelCapStep, maxLevel } = content.balance.difficulty;
   return Math.min(maxLevel, levelCapStep * (regionIndex + 1));
 }
@@ -62,8 +71,8 @@ export function runLevelCap(content: Content, run: Pick<RunState, 'regionIndex'>
 /** What the party may reach in a stage: the level of that stage's last wild enemy plus balance.difficulty.stageCapMargin. */
 export function stageLevelCap(content: Content, campaign: Campaign, regionIndex: number, stageIndex: number): number {
   const cfg = content.balance.difficulty;
-  const cap = levelCap(content, regionIndex);
-  const start = regionIndex === 0 ? cfg.baseLevel : levelCap(content, regionIndex - 1);
+  const cap = curveCap(content, regionIndex);
+  const start = regionIndex === 0 ? cfg.baseLevel : curveCap(content, regionIndex - 1);
   const end = Math.max(start, cap - cfg.capMargin);
   const total = campaign.stagesPerRegion * campaign.columns - 1;
   const t = Math.min(1, ((stageIndex + 1) * campaign.columns - 1) / Math.max(1, total));
