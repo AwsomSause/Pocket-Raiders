@@ -21,6 +21,10 @@ export type EvoCondition =
   | { kind: 'day' }
   /** The Pokémon is holding this item (kept: it is not used up). Jet Pokémon: Booster Energy, Black Sludge. */
   | { kind: 'holds'; item: string }
+  /** The Pokémon's nature is one of these (Toxel's Amped and Low Key groups). */
+  | { kind: 'nature'; natures: readonly string[] }
+  /** Friendship has reached the evolution level (the same high friendship the friendship routes need). */
+  | { kind: 'friendship' }
   /** Every part must hold. */
   | { kind: 'all'; of: EvoCondition[] };
 
@@ -36,6 +40,10 @@ export interface ConditionEvolution {
   /** The stone route also needs high friendship (Eevee to Espeon / Umbreon). */
   stoneFriendship?: boolean;
 }
+
+/** Toxel's nature groups (Jet Pokédex): Low Key becomes Vine Riff, Amped becomes Electric Oncore. */
+const JET_LOW_KEY = ['lonely', 'bold', 'relaxed', 'timid', 'serious', 'modest', 'mild', 'quiet', 'bashful', 'calm', 'gentle', 'careful'] as const;
+const JET_AMPED = ['hardy', 'brave', 'adamant', 'naughty', 'docile', 'impish', 'lax', 'hasty', 'jolly', 'naive', 'rash', 'sassy', 'quirky'] as const;
 
 export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'sliggoo', to: 'goodra', minLevel: 40, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
@@ -65,12 +73,13 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'dunsparce', to: 'dudunsparce', minLevel: 20, condition: { kind: 'knowsMove', move: 'hyper-drill' } },
   { from: 'stantler', to: 'wyrdeer', minLevel: 20, condition: { kind: 'moveUses', move: 'psyshield-bash', count: 20 } },
   { from: 'primeape', to: 'annihilape', minLevel: 25, condition: { kind: 'moveUses', move: 'rage-fist', count: 20 } },
-  // Jet Pokémon (docs/status/jet-pokemon.md): holding the item from level 28 on, by day or by night. The item stays held.
-  { from: 'eevee', to: 'espeon-paradox', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'day' }] } },
-  { from: 'eevee', to: 'umbreon-paradox', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'night' }] } },
-  { from: 'toxel', to: 'toxtricity-past', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'day' }] } },
-  { from: 'toxel', to: 'toxtricity-future', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'night' }] } },
-  { from: 'shieldon', to: 'bastiodon-skull', minLevel: 28, condition: { kind: 'holds', item: 'black-sludge' } },
+  // Jet Pokémon (docs/status/jet-pokemon.md; rules from the director's Jet Pokédex). The held item stays held.
+  { from: 'toxel', to: 'vine-riff', minLevel: 30, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'nature', natures: JET_LOW_KEY }] } },
+  { from: 'toxel', to: 'electric-oncore', minLevel: 30, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'nature', natures: JET_AMPED }] } },
+  { from: 'eevee', to: 'pyro-spirit', minLevel: 1, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'day' }, { kind: 'friendship' }] } },
+  { from: 'eevee', to: 'neon-moon', minLevel: 1, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'night' }, { kind: 'friendship' }] } },
+  { from: 'bastiodon', to: 'bastiodoom', minLevel: 1, condition: { kind: 'holds', item: 'black-sludge' } },
+  { from: 'aggron', to: 'cataggron', minLevel: 55, condition: { kind: 'holds', item: 'metal-coat' } },
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
   { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
   { from: 'noctowl', to: 'oracowl', minLevel: 42, stones: ['moon-stone', 'dusk-stone'], condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
@@ -95,6 +104,8 @@ export function conditionText(content: Content, c: EvoCondition): string {
   if (c.kind === 'heartbond') return `reach Heartbond ${c.level}`;
   if (c.kind === 'night') return 'win at night';
   if (c.kind === 'day') return 'win by day';
+  if (c.kind === 'nature') return `have a ${c.natures.length === 12 ? 'Low Key' : 'Amped'} nature`;
+  if (c.kind === 'friendship') return 'be very friendly';
   if (c.kind === 'holds') return `hold ${c.item.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ')}`;
   if (c.kind === 'all') return c.of.map((x) => conditionText(content, x)).join(' and ');
   const name = content.moves.get(c.move)?.name ?? c.move;
@@ -108,7 +119,7 @@ export function evoRunInfo(run: RunState, mon: PokemonInstance): EvoRunInfo {
   return { heartbond: run.story.v2 ? heartbondLevel(heartbondScore(bondOf(run, mon.uid))) : null, night: periodOf(run) === 'night' };
 }
 
-function conditionMet(c: EvoCondition, mon: PokemonInstance, weather: string | null, info: EvoRunInfo | undefined): boolean {
+function conditionMet(content: Content, c: EvoCondition, mon: PokemonInstance, weather: string | null, info: EvoRunInfo | undefined): boolean {
   switch (c.kind) {
     case 'weather': return weather === c.weather;
     case 'knowsMove': return mon.moves.some((m) => m.id === c.move);
@@ -117,7 +128,9 @@ function conditionMet(c: EvoCondition, mon: PokemonInstance, weather: string | n
     case 'night': return info?.night === true;
     case 'day': return info?.night === false;
     case 'holds': return (mon.held?.[c.item] ?? 0) > 0;
-    case 'all': return c.of.every((x) => conditionMet(x, mon, weather, info));
+    case 'nature': return mon.nature !== undefined && c.natures.includes(mon.nature);
+    case 'friendship': return friendshipReady(content, mon);
+    case 'all': return c.of.every((x) => conditionMet(content, x, mon, weather, info));
   }
 }
 
@@ -126,7 +139,7 @@ export function conditionEvolutionTarget(content: Content, mon: PokemonInstance,
   if (mon.hp <= 0 || mon.care?.holdEvolve) return null;
   for (const e of CONDITION_EVOLUTIONS) {
     if (e.from !== mon.speciesId || mon.level < e.minLevel || !content.species.has(e.to) || !e.condition) continue;
-    if (conditionMet(e.condition, mon, weather, info)) return e.to;
+    if (conditionMet(content, e.condition, mon, weather, info)) return e.to;
   }
   return null;
 }

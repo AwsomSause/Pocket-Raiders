@@ -142,7 +142,7 @@ export const WeatherSchema = z.enum(WEATHERS);
 export const TERRAINS = ['electric', 'grassy', 'misty', 'psychic'] as const;
 export const PowerRuleSchema = z.enum([
   'userSpeed', 'targetSpeed', 'userHp', 'targetHp',
-  'doubleTargetStatus', 'doubleUserStatus', 'doubleTargetPoison', 'doubleTargetParalyzed', 'doubleTargetAsleep',
+  'doubleTargetStatus', 'doubleUserStatus', 'doubleTargetPoison', 'poisonedBoost', 'doubleTargetParalyzed', 'doubleTargetAsleep',
   'doubleUserFirst', 'doubleUserSecond',
   'electricTerrainDouble', 'electricTerrainBoost', 'mistyTerrainBoost', 'psychicTerrainBoost', 'needsTerrain',
   'statsRaised', 'targetStatsRaised', 'fallenAllies', 'friendship', 'frustration',
@@ -188,7 +188,7 @@ export const MoveSchema = z.object({
    * `megasig`: a Mega signature move (battle/megaMove.ts): only a Mega Evolved Pokémon has it, in an extra slot, so no learnset or random pool picks it.
    * `storysig`: a Story Run signature move (story2/signature.ts): only the run's partner has it, in an extra slot each battle.
    */
-  flags: z.array(z.enum(['powder', 'typeless', 'zmove', 'max', 'megasig', 'storysig', 'contact', 'punch', 'bite', 'pulse', 'sound', 'bullet', 'slicing', 'wind'])).default([]),
+  flags: z.array(z.enum(['powder', 'typeless', 'zmove', 'max', 'megasig', 'storysig', 'jetform', 'contact', 'punch', 'bite', 'pulse', 'sound', 'bullet', 'slicing', 'wind'])).default([]),
   /**
    * False for moves whose effects the battle engine can't run yet. They stay
    * in the data (and in learnsets) so they can be switched on later, but no
@@ -251,7 +251,7 @@ export const MoveSchema = z.object({
       /** Uses another move: a random one (Metronome), the target's last (Mirror Move), or the last one used by anyone (Copycat). */
       callMove: z.enum(['metronome', 'mirrorMove', 'copycat']).optional(),
       /** Which stat the attack uses: the target's Attack (Foul Play), the user's Defense (Body Press), or the higher of Atk and Sp. Atk (Photon Geyser). */
-      attackFrom: z.enum(['targetAtk', 'def', 'best']).optional(),
+      attackFrom: z.enum(['targetAtk', 'def', 'spd', 'best']).optional(),
       /** Only works on a sleeping target (Dream Eater). */
       requiresSleepingTarget: z.literal(true).optional(),
       /** Fails unless the target chose an attack and the user moved first (Sucker Punch, Thunderclap). */

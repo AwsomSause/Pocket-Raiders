@@ -1,0 +1,151 @@
+pokemon,move,move_id,type
+vine_riff,Hyper Voice,HYPER_VOICE,Normal
+vine_riff,Uproar,UPROAR,Normal
+vine_riff,Snarl,SNARL,Dark
+vine_riff,Sludge Bomb,SLUDGE_BOMB,Poison
+vine_riff,Sludge Wave,SLUDGE_WAVE,Poison
+vine_riff,Venoshock,VENOSHOCK,Poison
+vine_riff,Energy Ball,ENERGY_BALL,Grass
+vine_riff,Giga Drain,GIGA_DRAIN,Grass
+vine_riff,Grass Knot,GRASS_KNOT,Grass
+vine_riff,Leaf Storm,LEAF_STORM,Grass
+vine_riff,Solar Beam,SOLAR_BEAM,Grass
+vine_riff,Seed Bomb,SEED_BOMB,Grass
+vine_riff,Bullet Seed,BULLET_SEED,Grass
+vine_riff,Grassy Terrain,GRASSY_TERRAIN,Grass
+vine_riff,Poison Jab,POISON_JAB,Poison
+vine_riff,Gunk Shot,GUNK_SHOT,Poison
+vine_riff,Drain Punch,DRAIN_PUNCH,Fighting
+vine_riff,Focus Blast,FOCUS_BLAST,Fighting
+vine_riff,Toxic Spikes,TOXIC_SPIKES,Poison
+vine_riff,Taunt,TAUNT,Dark
+vine_riff,Protect,PROTECT,Normal
+vine_riff,Substitute,SUBSTITUTE,Normal
+vine_riff,Rest,REST,Psychic
+vine_riff,Sleep Talk,SLEEP_TALK,Normal
+vine_riff,Facade,FACADE,Normal
+vine_riff,Tera Blast,TERA_BLAST,Normal
+electric_oncore,Thunderbolt,THUNDERBOLT,Electric
+electric_oncore,Thunder,THUNDER,Electric
+electric_oncore,Volt Switch,VOLT_SWITCH,Electric
+electric_oncore,Discharge,DISCHARGE,Electric
+electric_oncore,Rising Voltage,RISING_VOLTAGE,Electric
+electric_oncore,Parabolic Charge,PARABOLIC_CHARGE,Electric
+electric_oncore,Charge Beam,CHARGE_BEAM,Electric
+electric_oncore,Wild Charge,WILD_CHARGE,Electric
+electric_oncore,Thunder Wave,THUNDER_WAVE,Electric
+electric_oncore,Electric Terrain,ELECTRIC_TERRAIN,Electric
+electric_oncore,Flash Cannon,FLASH_CANNON,Steel
+electric_oncore,Steel Beam,STEEL_BEAM,Steel
+electric_oncore,Iron Head,IRON_HEAD,Steel
+electric_oncore,Hyper Voice,HYPER_VOICE,Normal
+electric_oncore,Uproar,UPROAR,Normal
+electric_oncore,Boomburst,BOOMBURST,Normal
+electric_oncore,Snarl,SNARL,Dark
+electric_oncore,Focus Blast,FOCUS_BLAST,Fighting
+electric_oncore,Taunt,TAUNT,Dark
+electric_oncore,Protect,PROTECT,Normal
+electric_oncore,Substitute,SUBSTITUTE,Normal
+electric_oncore,Rest,REST,Psychic
+electric_oncore,Sleep Talk,SLEEP_TALK,Normal
+electric_oncore,Facade,FACADE,Normal
+electric_oncore,Tera Blast,TERA_BLAST,Normal
+cataggron,Swords Dance,SWORDS_DANCE,Normal
+cataggron,Iron Defense,IRON_DEFENSE,Steel
+cataggron,Body Press,BODY_PRESS,Fighting
+cataggron,Earthquake,EARTHQUAKE,Ground
+cataggron,High Horsepower,HIGH_HORSEPOWER,Ground
+cataggron,Stone Edge,STONE_EDGE,Rock
+cataggron,Rock Slide,ROCK_SLIDE,Rock
+cataggron,Stealth Rock,STEALTH_ROCK,Rock
+cataggron,Rock Polish,ROCK_POLISH,Rock
+cataggron,Heavy Slam,HEAVY_SLAM,Steel
+cataggron,Heat Crash,HEAT_CRASH,Fire
+cataggron,Iron Head,IRON_HEAD,Steel
+cataggron,Flash Cannon,FLASH_CANNON,Steel
+cataggron,Superpower,SUPERPOWER,Fighting
+cataggron,Ice Punch,ICE_PUNCH,Ice
+cataggron,Thunder Punch,THUNDER_PUNCH,Electric
+cataggron,Fire Punch,FIRE_PUNCH,Fire
+cataggron,Dragon Claw,DRAGON_CLAW,Dragon
+cataggron,Dragon Tail,DRAGON_TAIL,Dragon
+cataggron,Outrage,OUTRAGE,Dragon
+cataggron,Roar,ROAR,Normal
+cataggron,Protect,PROTECT,Normal
+cataggron,Substitute,SUBSTITUTE,Normal
+cataggron,Rest,REST,Psychic
+cataggron,Giga Impact,GIGA_IMPACT,Normal
+cataggron,Tera Blast,TERA_BLAST,Normal
+bastiodoom,Stealth Rock,STEALTH_ROCK,Rock
+bastiodoom,Toxic,TOXIC,Poison
+bastiodoom,Toxic Spikes,TOXIC_SPIKES,Poison
+bastiodoom,Body Press,BODY_PRESS,Fighting
+bastiodoom,Sludge Bomb,SLUDGE_BOMB,Poison
+bastiodoom,Sludge Wave,SLUDGE_WAVE,Poison
+bastiodoom,Venoshock,VENOSHOCK,Poison
+bastiodoom,Hex,HEX,Ghost
+bastiodoom,Shadow Ball,SHADOW_BALL,Ghost
+bastiodoom,Power Gem,POWER_GEM,Rock
+bastiodoom,Rock Slide,ROCK_SLIDE,Rock
+bastiodoom,Stone Edge,STONE_EDGE,Rock
+bastiodoom,Earth Power,EARTH_POWER,Ground
+bastiodoom,Earthquake,EARTHQUAKE,Ground
+bastiodoom,Flash Cannon,FLASH_CANNON,Steel
+bastiodoom,Iron Head,IRON_HEAD,Steel
+bastiodoom,Heavy Slam,HEAVY_SLAM,Steel
+bastiodoom,Calm Mind,CALM_MIND,Psychic
+bastiodoom,Roar,ROAR,Normal
+bastiodoom,Protect,PROTECT,Normal
+bastiodoom,Substitute,SUBSTITUTE,Normal
+bastiodoom,Rest,REST,Psychic
+bastiodoom,Sleep Talk,SLEEP_TALK,Normal
+bastiodoom,Tera Blast,TERA_BLAST,Normal
+pyro_spirit,Flamethrower,FLAMETHROWER,Fire
+pyro_spirit,Fire Blast,FIRE_BLAST,Fire
+pyro_spirit,Heat Wave,HEAT_WAVE,Fire
+pyro_spirit,Overheat,OVERHEAT,Fire
+pyro_spirit,Mystical Fire,MYSTICAL_FIRE,Fire
+pyro_spirit,Burning Jealousy,BURNING_JEALOUSY,Fire
+pyro_spirit,Will-O-Wisp,WILL_O_WISP,Fire
+pyro_spirit,Sunny Day,SUNNY_DAY,Fire
+pyro_spirit,Psychic,PSYCHIC,Psychic
+pyro_spirit,Psyshock,PSYSHOCK,Psychic
+pyro_spirit,Expanding Force,EXPANDING_FORCE,Psychic
+pyro_spirit,Psychic Terrain,PSYCHIC_TERRAIN,Psychic
+pyro_spirit,Calm Mind,CALM_MIND,Psychic
+pyro_spirit,Trick Room,TRICK_ROOM,Psychic
+pyro_spirit,Reflect,REFLECT,Psychic
+pyro_spirit,Light Screen,LIGHT_SCREEN,Psychic
+pyro_spirit,Shadow Ball,SHADOW_BALL,Ghost
+pyro_spirit,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+pyro_spirit,Solar Beam,SOLAR_BEAM,Grass
+pyro_spirit,Hyper Voice,HYPER_VOICE,Normal
+pyro_spirit,Protect,PROTECT,Normal
+pyro_spirit,Substitute,SUBSTITUTE,Normal
+pyro_spirit,Rest,REST,Psychic
+pyro_spirit,Tera Blast,TERA_BLAST,Normal
+neon_moon,Foul Play,FOUL_PLAY,Dark
+neon_moon,Crunch,CRUNCH,Dark
+neon_moon,Knock Off,KNOCK_OFF,Dark
+neon_moon,Dark Pulse,DARK_PULSE,Dark
+neon_moon,Snarl,SNARL,Dark
+neon_moon,Taunt,TAUNT,Dark
+neon_moon,Iron Head,IRON_HEAD,Steel
+neon_moon,Heavy Slam,HEAVY_SLAM,Steel
+neon_moon,Gyro Ball,GYRO_BALL,Steel
+neon_moon,Flash Cannon,FLASH_CANNON,Steel
+neon_moon,Iron Defense,IRON_DEFENSE,Steel
+neon_moon,Volt Switch,VOLT_SWITCH,Electric
+neon_moon,Wild Charge,WILD_CHARGE,Electric
+neon_moon,Thunder Fang,THUNDER_FANG,Electric
+neon_moon,Thunder Wave,THUNDER_WAVE,Electric
+neon_moon,Electric Terrain,ELECTRIC_TERRAIN,Electric
+neon_moon,Wish,WISH,Normal
+neon_moon,Yawn,YAWN,Normal
+neon_moon,Curse,CURSE,Ghost
+neon_moon,Toxic,TOXIC,Poison
+neon_moon,Protect,PROTECT,Normal
+neon_moon,Substitute,SUBSTITUTE,Normal
+neon_moon,Rest,REST,Psychic
+neon_moon,Sleep Talk,SLEEP_TALK,Normal
+neon_moon,Tera Blast,TERA_BLAST,Normal

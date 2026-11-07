@@ -1,0 +1,3041 @@
+{
+  "name": "Jet Pokédex",
+  "version": 1,
+  "pokemon": [
+    {
+      "id": "vine_riff",
+      "internalName": "VINE_RIFF",
+      "dexNumber": 1,
+      "name": "Vine Riff",
+      "category": "Thornsong Pokémon",
+      "types": [
+        "Grass",
+        "Poison"
+      ],
+      "paradox": {
+        "era": "Ancient"
+      },
+      "basedOn": "Toxtricity",
+      "pokedexEntries": [
+        "An old expedition journal describes a creature that strummed a gourd-bodied lute strung with its own vines. Its music was said to make whole forests lean toward it.",
+        "The thorns on its tail drip a sap that numbs the skin. It plays slow, droning songs at dusk, and wild Pokémon that listen too long drift into a poisoned sleep."
+      ],
+      "profile": {
+        "heightM": 1.7,
+        "weightKg": 41.5,
+        "genderRatio": {
+          "malePercent": 50,
+          "femalePercent": 50
+        },
+        "eggGroups": [
+          "Human-Like"
+        ],
+        "catchRate": 30,
+        "evYield": {
+          "spAtk": 3
+        },
+        "baseExp": 285,
+        "growthRate": "Medium Slow"
+      },
+      "evolution": {
+        "chain": [
+          "Toxel",
+          "Vine Riff"
+        ],
+        "from": "Toxel",
+        "trigger": "level_up",
+        "minLevel": 30,
+        "heldItem": "Booster Energy",
+        "natures": [
+          "Lonely",
+          "Bold",
+          "Relaxed",
+          "Timid",
+          "Serious",
+          "Modest",
+          "Mild",
+          "Quiet",
+          "Bashful",
+          "Calm",
+          "Gentle",
+          "Careful"
+        ],
+        "natureGroup": "Low Key",
+        "description": "Level up Toxel to Lv. 30 or higher while it holds Booster Energy, if Toxel has a Low Key nature.",
+        "notes": "Low Key natures: Lonely, Bold, Relaxed, Timid, Serious, Modest, Mild, Quiet, Bashful, Calm, Gentle, Careful. Toxel with an Amped nature evolve into Electric Oncore instead."
+      },
+      "abilities": [
+        {
+          "id": "PROTOSYNTHESIS",
+          "name": "Protosynthesis",
+          "slot": "standard",
+          "isNew": false,
+          "description": "Boosts its highest stat by 30% (Speed by 50%) in harsh sunlight or while holding Booster Energy."
+        },
+        {
+          "id": "THORN_BALLAD",
+          "name": "Thorn Ballad",
+          "slot": "unique",
+          "isNew": true,
+          "description": "Its sound-based moves get 1.2× power and have a 30% chance to poison the target.",
+          "mechanics": {
+            "effects": [
+              {
+                "kind": "power_multiplier",
+                "appliesTo": {
+                  "flag": "sound"
+                },
+                "multiplier": 1.2
+              },
+              {
+                "kind": "secondary_status",
+                "appliesTo": {
+                  "flag": "sound"
+                },
+                "status": "poison",
+                "chance": 30
+              }
+            ]
+          }
+        }
+      ],
+      "baseStats": {
+        "hp": 95,
+        "attack": 80,
+        "defense": 85,
+        "spAtk": 120,
+        "spDef": 90,
+        "speed": 100,
+        "total": 570
+      },
+      "typeDefenses": {
+        "2": [
+          "Fire",
+          "Ice",
+          "Flying",
+          "Psychic"
+        ],
+        "0.5": [
+          "Water",
+          "Electric",
+          "Fighting",
+          "Fairy"
+        ],
+        "0.25": [
+          "Grass"
+        ]
+      },
+      "signatureMove": {
+        "id": "THORNSTRUM",
+        "name": "Thornstrum",
+        "type": "Grass",
+        "category": "Special",
+        "power": 80,
+        "accuracy": 100,
+        "pp": 10,
+        "priority": 0,
+        "target": "all_adjacent_foes",
+        "makesContact": false,
+        "flags": [
+          "sound",
+          "bypass_substitute"
+        ],
+        "description": "Sound-based. Hits all adjacent opponents and goes through Substitute. Power is 1.5× against a target that is poisoned or badly poisoned. Vine Riff's answer to Toxtricity's Overdrive.",
+        "synergyNote": "With Thorn Ballad, Thornstrum lands at 96 effective power and can poison the first target, which boosts the hit on later turns.",
+        "effects": [
+          {
+            "kind": "power_multiplier",
+            "condition": "target_poisoned_or_badly_poisoned",
+            "multiplier": 1.5
+          }
+        ]
+      },
+      "learnset": {
+        "levelUp": [
+          {
+            "level": 0,
+            "learnedOnEvolution": true,
+            "move": "Thornstrum",
+            "moveId": "THORNSTRUM",
+            "type": "Grass",
+            "category": "Special",
+            "power": 80,
+            "isSignature": true
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Acid",
+            "moveId": "ACID",
+            "type": "Poison",
+            "category": "Special",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Absorb",
+            "moveId": "ABSORB",
+            "type": "Grass",
+            "category": "Special",
+            "power": 20,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Belch",
+            "moveId": "BELCH",
+            "type": "Poison",
+            "category": "Special",
+            "power": 120,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Growl",
+            "moveId": "GROWL",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Leer",
+            "moveId": "LEER",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tearful Look",
+            "moveId": "TEARFUL_LOOK",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 4,
+            "learnedOnEvolution": false,
+            "move": "Vine Whip",
+            "moveId": "VINE_WHIP",
+            "type": "Grass",
+            "category": "Physical",
+            "power": 45,
+            "isSignature": false
+          },
+          {
+            "level": 8,
+            "learnedOnEvolution": false,
+            "move": "Mega Drain",
+            "moveId": "MEGA_DRAIN",
+            "type": "Grass",
+            "category": "Special",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 12,
+            "learnedOnEvolution": false,
+            "move": "Grass Whistle",
+            "moveId": "GRASS_WHISTLE",
+            "type": "Grass",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 16,
+            "learnedOnEvolution": false,
+            "move": "Venoshock",
+            "moveId": "VENOSHOCK",
+            "type": "Poison",
+            "category": "Special",
+            "power": 65,
+            "isSignature": false
+          },
+          {
+            "level": 20,
+            "learnedOnEvolution": false,
+            "move": "Toxic Spikes",
+            "moveId": "TOXIC_SPIKES",
+            "type": "Poison",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 24,
+            "learnedOnEvolution": false,
+            "move": "Screech",
+            "moveId": "SCREECH",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 28,
+            "learnedOnEvolution": false,
+            "move": "Giga Drain",
+            "moveId": "GIGA_DRAIN",
+            "type": "Grass",
+            "category": "Special",
+            "power": 75,
+            "isSignature": false
+          },
+          {
+            "level": 32,
+            "learnedOnEvolution": false,
+            "move": "Toxic",
+            "moveId": "TOXIC",
+            "type": "Poison",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 36,
+            "learnedOnEvolution": false,
+            "move": "Energy Ball",
+            "moveId": "ENERGY_BALL",
+            "type": "Grass",
+            "category": "Special",
+            "power": 90,
+            "isSignature": false
+          },
+          {
+            "level": 40,
+            "learnedOnEvolution": false,
+            "move": "Synthesis",
+            "moveId": "SYNTHESIS",
+            "type": "Grass",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 44,
+            "learnedOnEvolution": false,
+            "move": "Sludge Wave",
+            "moveId": "SLUDGE_WAVE",
+            "type": "Poison",
+            "category": "Special",
+            "power": 95,
+            "isSignature": false
+          },
+          {
+            "level": 48,
+            "learnedOnEvolution": false,
+            "move": "Boomburst",
+            "moveId": "BOOMBURST",
+            "type": "Normal",
+            "category": "Special",
+            "power": 140,
+            "isSignature": false
+          },
+          {
+            "level": 52,
+            "learnedOnEvolution": false,
+            "move": "Leaf Storm",
+            "moveId": "LEAF_STORM",
+            "type": "Grass",
+            "category": "Special",
+            "power": 130,
+            "isSignature": false
+          }
+        ],
+        "tm": [
+          {
+            "move": "Hyper Voice",
+            "moveId": "HYPER_VOICE",
+            "type": "Normal"
+          },
+          {
+            "move": "Uproar",
+            "moveId": "UPROAR",
+            "type": "Normal"
+          },
+          {
+            "move": "Snarl",
+            "moveId": "SNARL",
+            "type": "Dark"
+          },
+          {
+            "move": "Sludge Bomb",
+            "moveId": "SLUDGE_BOMB",
+            "type": "Poison"
+          },
+          {
+            "move": "Sludge Wave",
+            "moveId": "SLUDGE_WAVE",
+            "type": "Poison"
+          },
+          {
+            "move": "Venoshock",
+            "moveId": "VENOSHOCK",
+            "type": "Poison"
+          },
+          {
+            "move": "Energy Ball",
+            "moveId": "ENERGY_BALL",
+            "type": "Grass"
+          },
+          {
+            "move": "Giga Drain",
+            "moveId": "GIGA_DRAIN",
+            "type": "Grass"
+          },
+          {
+            "move": "Grass Knot",
+            "moveId": "GRASS_KNOT",
+            "type": "Grass"
+          },
+          {
+            "move": "Leaf Storm",
+            "moveId": "LEAF_STORM",
+            "type": "Grass"
+          },
+          {
+            "move": "Solar Beam",
+            "moveId": "SOLAR_BEAM",
+            "type": "Grass"
+          },
+          {
+            "move": "Seed Bomb",
+            "moveId": "SEED_BOMB",
+            "type": "Grass"
+          },
+          {
+            "move": "Bullet Seed",
+            "moveId": "BULLET_SEED",
+            "type": "Grass"
+          },
+          {
+            "move": "Grassy Terrain",
+            "moveId": "GRASSY_TERRAIN",
+            "type": "Grass"
+          },
+          {
+            "move": "Poison Jab",
+            "moveId": "POISON_JAB",
+            "type": "Poison"
+          },
+          {
+            "move": "Gunk Shot",
+            "moveId": "GUNK_SHOT",
+            "type": "Poison"
+          },
+          {
+            "move": "Drain Punch",
+            "moveId": "DRAIN_PUNCH",
+            "type": "Fighting"
+          },
+          {
+            "move": "Focus Blast",
+            "moveId": "FOCUS_BLAST",
+            "type": "Fighting"
+          },
+          {
+            "move": "Toxic Spikes",
+            "moveId": "TOXIC_SPIKES",
+            "type": "Poison"
+          },
+          {
+            "move": "Taunt",
+            "moveId": "TAUNT",
+            "type": "Dark"
+          },
+          {
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal"
+          },
+          {
+            "move": "Substitute",
+            "moveId": "SUBSTITUTE",
+            "type": "Normal"
+          },
+          {
+            "move": "Rest",
+            "moveId": "REST",
+            "type": "Psychic"
+          },
+          {
+            "move": "Sleep Talk",
+            "moveId": "SLEEP_TALK",
+            "type": "Normal"
+          },
+          {
+            "move": "Facade",
+            "moveId": "FACADE",
+            "type": "Normal"
+          },
+          {
+            "move": "Tera Blast",
+            "moveId": "TERA_BLAST",
+            "type": "Normal"
+          }
+        ]
+      },
+      "recommendedSet": {
+        "name": "Special sweeper",
+        "item": "Choice Specs",
+        "ability": "Thorn Ballad",
+        "nature": "Modest",
+        "natureNote": "Modest (Low Key, so no mint needed)",
+        "evs": {
+          "spAtk": 252,
+          "speed": 252,
+          "hp": 4
+        },
+        "moves": [
+          "Thornstrum",
+          "Boomburst",
+          "Sludge Bomb",
+          "Focus Blast"
+        ],
+        "note": "Thornstrum and Boomburst both get the Thorn Ballad boost. Focus Blast covers Steel types, which wall both of its STABs."
+      },
+      "notes": [
+        "Name: vine + riff. Its lute is an acoustic, folk-era take on Toxtricity's electric bass.",
+        "Swaps Toxtricity's Electric typing for Grass and keeps Poison.",
+        "Ancient Paradox: highest stats in HP and Sp. Def compared to Toxtricity, as with other Ancient Paradox Pokémon."
+      ],
+      "sprite": "sprites/vine_riff.png"
+    },
+    {
+      "id": "electric_oncore",
+      "internalName": "ELECTRIC_ONCORE",
+      "dexNumber": 2,
+      "name": "Electric Oncore",
+      "category": "Amplifier Pokémon",
+      "types": [
+        "Electric",
+        "Steel"
+      ],
+      "paradox": {
+        "era": "Future"
+      },
+      "basedOn": "Toxtricity",
+      "pokedexEntries": [
+        "It closely resembles a robot described in a science-fiction magazine. The screen on its chest is a speaker that can project sound loud enough to crack stone.",
+        "The cable on its back can plug into anything that carries a current. Once it starts playing it will not stop until the crowd calls for an encore."
+      ],
+      "profile": {
+        "heightM": 1.8,
+        "weightKg": 88,
+        "genderRatio": {
+          "malePercent": 50,
+          "femalePercent": 50
+        },
+        "eggGroups": [
+          "Human-Like"
+        ],
+        "catchRate": 30,
+        "evYield": {
+          "spAtk": 2,
+          "speed": 1
+        },
+        "baseExp": 285,
+        "growthRate": "Medium Slow"
+      },
+      "evolution": {
+        "chain": [
+          "Toxel",
+          "Electric Oncore"
+        ],
+        "from": "Toxel",
+        "trigger": "level_up",
+        "minLevel": 30,
+        "heldItem": "Booster Energy",
+        "natures": [
+          "Hardy",
+          "Brave",
+          "Adamant",
+          "Naughty",
+          "Docile",
+          "Impish",
+          "Lax",
+          "Hasty",
+          "Jolly",
+          "Naive",
+          "Rash",
+          "Sassy",
+          "Quirky"
+        ],
+        "natureGroup": "Amped",
+        "description": "Level up Toxel to Lv. 30 or higher while it holds Booster Energy, if Toxel has an Amped nature.",
+        "notes": "Amped natures: Hardy, Brave, Adamant, Naughty, Docile, Impish, Lax, Hasty, Jolly, Naive, Rash, Sassy, Quirky. Toxel with a Low Key nature evolve into Vine Riff instead."
+      },
+      "abilities": [
+        {
+          "id": "QUARK_DRIVE",
+          "name": "Quark Drive",
+          "slot": "standard",
+          "isNew": false,
+          "description": "Boosts its highest stat by 30% (Speed by 50%) on Electric Terrain or while holding Booster Energy."
+        },
+        {
+          "id": "ENCORE_AMP",
+          "name": "Encore Amp",
+          "slot": "unique",
+          "isNew": true,
+          "description": "Each time it uses the same sound-based move on consecutive turns, that move's power rises by 20%, up to 1.6×. Switching out or using a different move resets the count.",
+          "mechanics": {
+            "effects": [
+              {
+                "kind": "consecutive_use_power",
+                "appliesTo": {
+                  "flag": "sound",
+                  "sameMoveConsecutive": true
+                },
+                "stepMultiplier": 0.2,
+                "maxMultiplier": 1.6,
+                "resetOn": [
+                  "switch_out",
+                  "different_move"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "baseStats": {
+        "hp": 75,
+        "attack": 100,
+        "defense": 85,
+        "spAtk": 125,
+        "spDef": 75,
+        "speed": 110,
+        "total": 570
+      },
+      "typeDefenses": {
+        "0": [
+          "Poison"
+        ],
+        "2": [
+          "Fire",
+          "Fighting"
+        ],
+        "4": [
+          "Ground"
+        ],
+        "0.5": [
+          "Normal",
+          "Electric",
+          "Grass",
+          "Ice",
+          "Psychic",
+          "Bug",
+          "Rock",
+          "Dragon",
+          "Fairy"
+        ],
+        "0.25": [
+          "Flying",
+          "Steel"
+        ]
+      },
+      "signatureMove": {
+        "id": "FEEDBACK_SHRED",
+        "name": "Feedback Shred",
+        "type": "Electric",
+        "category": "Special",
+        "power": 90,
+        "accuracy": 100,
+        "pp": 10,
+        "priority": 0,
+        "target": "all_adjacent_foes",
+        "makesContact": false,
+        "flags": [
+          "sound",
+          "bypass_substitute"
+        ],
+        "description": "Sound-based. Hits all adjacent opponents and goes through Substitute. 20% chance to paralyze each target.",
+        "synergyNote": "Encore Amp stacks on repeat uses: 90 → 108 → 126 → 144 power by the fourth turn in a row.",
+        "effects": [
+          {
+            "kind": "secondary_status",
+            "status": "paralysis",
+            "chance": 20
+          }
+        ]
+      },
+      "learnset": {
+        "levelUp": [
+          {
+            "level": 0,
+            "learnedOnEvolution": true,
+            "move": "Feedback Shred",
+            "moveId": "FEEDBACK_SHRED",
+            "type": "Electric",
+            "category": "Special",
+            "power": 90,
+            "isSignature": true
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Thunder Shock",
+            "moveId": "THUNDER_SHOCK",
+            "type": "Electric",
+            "category": "Special",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Metal Claw",
+            "moveId": "METAL_CLAW",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 50,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Nuzzle",
+            "moveId": "NUZZLE",
+            "type": "Electric",
+            "category": "Physical",
+            "power": 20,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Growl",
+            "moveId": "GROWL",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Leer",
+            "moveId": "LEER",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tearful Look",
+            "moveId": "TEARFUL_LOOK",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 4,
+            "learnedOnEvolution": false,
+            "move": "Charge",
+            "moveId": "CHARGE",
+            "type": "Electric",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 8,
+            "learnedOnEvolution": false,
+            "move": "Spark",
+            "moveId": "SPARK",
+            "type": "Electric",
+            "category": "Physical",
+            "power": 65,
+            "isSignature": false
+          },
+          {
+            "level": 12,
+            "learnedOnEvolution": false,
+            "move": "Metal Sound",
+            "moveId": "METAL_SOUND",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 16,
+            "learnedOnEvolution": false,
+            "move": "Shock Wave",
+            "moveId": "SHOCK_WAVE",
+            "type": "Electric",
+            "category": "Special",
+            "power": 60,
+            "isSignature": false
+          },
+          {
+            "level": 20,
+            "learnedOnEvolution": false,
+            "move": "Screech",
+            "moveId": "SCREECH",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 24,
+            "learnedOnEvolution": false,
+            "move": "Flash Cannon",
+            "moveId": "FLASH_CANNON",
+            "type": "Steel",
+            "category": "Special",
+            "power": 80,
+            "isSignature": false
+          },
+          {
+            "level": 28,
+            "learnedOnEvolution": false,
+            "move": "Discharge",
+            "moveId": "DISCHARGE",
+            "type": "Electric",
+            "category": "Special",
+            "power": 80,
+            "isSignature": false
+          },
+          {
+            "level": 32,
+            "learnedOnEvolution": false,
+            "move": "Taunt",
+            "moveId": "TAUNT",
+            "type": "Dark",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 36,
+            "learnedOnEvolution": false,
+            "move": "Shift Gear",
+            "moveId": "SHIFT_GEAR",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 40,
+            "learnedOnEvolution": false,
+            "move": "Thunderbolt",
+            "moveId": "THUNDERBOLT",
+            "type": "Electric",
+            "category": "Special",
+            "power": 90,
+            "isSignature": false
+          },
+          {
+            "level": 44,
+            "learnedOnEvolution": false,
+            "move": "Iron Defense",
+            "moveId": "IRON_DEFENSE",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 48,
+            "learnedOnEvolution": false,
+            "move": "Boomburst",
+            "moveId": "BOOMBURST",
+            "type": "Normal",
+            "category": "Special",
+            "power": 140,
+            "isSignature": false
+          },
+          {
+            "level": 52,
+            "learnedOnEvolution": false,
+            "move": "Steel Beam",
+            "moveId": "STEEL_BEAM",
+            "type": "Steel",
+            "category": "Special",
+            "power": 140,
+            "isSignature": false
+          }
+        ],
+        "tm": [
+          {
+            "move": "Thunderbolt",
+            "moveId": "THUNDERBOLT",
+            "type": "Electric"
+          },
+          {
+            "move": "Thunder",
+            "moveId": "THUNDER",
+            "type": "Electric"
+          },
+          {
+            "move": "Volt Switch",
+            "moveId": "VOLT_SWITCH",
+            "type": "Electric"
+          },
+          {
+            "move": "Discharge",
+            "moveId": "DISCHARGE",
+            "type": "Electric"
+          },
+          {
+            "move": "Rising Voltage",
+            "moveId": "RISING_VOLTAGE",
+            "type": "Electric"
+          },
+          {
+            "move": "Parabolic Charge",
+            "moveId": "PARABOLIC_CHARGE",
+            "type": "Electric"
+          },
+          {
+            "move": "Charge Beam",
+            "moveId": "CHARGE_BEAM",
+            "type": "Electric"
+          },
+          {
+            "move": "Wild Charge",
+            "moveId": "WILD_CHARGE",
+            "type": "Electric"
+          },
+          {
+            "move": "Thunder Wave",
+            "moveId": "THUNDER_WAVE",
+            "type": "Electric"
+          },
+          {
+            "move": "Electric Terrain",
+            "moveId": "ELECTRIC_TERRAIN",
+            "type": "Electric"
+          },
+          {
+            "move": "Flash Cannon",
+            "moveId": "FLASH_CANNON",
+            "type": "Steel"
+          },
+          {
+            "move": "Steel Beam",
+            "moveId": "STEEL_BEAM",
+            "type": "Steel"
+          },
+          {
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel"
+          },
+          {
+            "move": "Hyper Voice",
+            "moveId": "HYPER_VOICE",
+            "type": "Normal"
+          },
+          {
+            "move": "Uproar",
+            "moveId": "UPROAR",
+            "type": "Normal"
+          },
+          {
+            "move": "Boomburst",
+            "moveId": "BOOMBURST",
+            "type": "Normal"
+          },
+          {
+            "move": "Snarl",
+            "moveId": "SNARL",
+            "type": "Dark"
+          },
+          {
+            "move": "Focus Blast",
+            "moveId": "FOCUS_BLAST",
+            "type": "Fighting"
+          },
+          {
+            "move": "Taunt",
+            "moveId": "TAUNT",
+            "type": "Dark"
+          },
+          {
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal"
+          },
+          {
+            "move": "Substitute",
+            "moveId": "SUBSTITUTE",
+            "type": "Normal"
+          },
+          {
+            "move": "Rest",
+            "moveId": "REST",
+            "type": "Psychic"
+          },
+          {
+            "move": "Sleep Talk",
+            "moveId": "SLEEP_TALK",
+            "type": "Normal"
+          },
+          {
+            "move": "Facade",
+            "moveId": "FACADE",
+            "type": "Normal"
+          },
+          {
+            "move": "Tera Blast",
+            "moveId": "TERA_BLAST",
+            "type": "Normal"
+          }
+        ]
+      },
+      "recommendedSet": {
+        "name": "Choice-locked encore",
+        "item": "Choice Specs",
+        "ability": "Encore Amp",
+        "nature": "Rash",
+        "natureNote": "Rash (Amped). Use a Timid or Modest mint for the classic spread.",
+        "evs": {
+          "spAtk": 252,
+          "speed": 252,
+          "hp": 4
+        },
+        "moves": [
+          "Feedback Shred",
+          "Boomburst",
+          "Flash Cannon",
+          "Volt Switch"
+        ],
+        "note": "Choice Specs locks it into one move, which is exactly what Encore Amp wants. Volt Switch gets it out when the lock goes bad."
+      },
+      "notes": [
+        "Name: electric + encore, with a nod to the power core in its chest.",
+        "Swaps Toxtricity's Poison typing for Steel and keeps Electric.",
+        "Electric/Steel takes 4× damage from Ground, so Air Balloon is a strong alternative item."
+      ],
+      "sprite": "sprites/electric_oncore.png"
+    },
+    {
+      "id": "cataggron",
+      "internalName": "CATAGGRON",
+      "dexNumber": 3,
+      "name": "Cataggron",
+      "category": "Siegeworks Pokémon",
+      "types": [
+        "Steel",
+        "Rock"
+      ],
+      "paradox": null,
+      "basedOn": "Aggron",
+      "pokedexEntries": [
+        "Only Aggron that have guarded the same mountain for decades become Cataggron. The red light seeping from its back is the glow of iron it has eaten and smelted inside its body.",
+        "It reshapes its armor to suit the fight. To attack, it raises cannon vents from its shoulders. To defend, it thickens its plating until it can barely move."
+      ],
+      "profile": {
+        "heightM": 2.6,
+        "weightKg": 480,
+        "genderRatio": {
+          "malePercent": 50,
+          "femalePercent": 50
+        },
+        "eggGroups": [
+          "Monster"
+        ],
+        "catchRate": 25,
+        "evYield": {
+          "defense": 3
+        },
+        "baseExp": 300,
+        "growthRate": "Slow"
+      },
+      "evolution": {
+        "chain": [
+          "Aron",
+          "Lairon",
+          "Aggron",
+          "Cataggron"
+        ],
+        "from": "Aggron",
+        "trigger": "level_up",
+        "minLevel": 55,
+        "heldItem": "Metal Coat",
+        "description": "Level up Aggron at Lv. 55 or higher while it holds a Metal Coat.",
+        "notes": "Aron evolves at Lv. 32 and Lairon at Lv. 42, as usual."
+      },
+      "abilities": [
+        {
+          "id": "ADAPTIVE_PLATING",
+          "name": "Adaptive Plating",
+          "slot": "unique",
+          "isNew": true,
+          "description": "Changes form when its stats rise. A raise to Attack or Sp. Atk switches it to Attack Forme; a raise to Defense or Sp. Def switches it to Defence Forme. If one effect raises both, the bigger raise decides, and a tie keeps the current form. It returns to Standard Forme when it switches out or faints. This ability can't be copied, swapped or suppressed.",
+          "mechanics": {
+            "unsuppressable": true,
+            "uncopyable": true,
+            "effects": [
+              {
+                "kind": "form_change",
+                "on": "stat_raise",
+                "rules": [
+                  {
+                    "stats": [
+                      "attack",
+                      "spAtk"
+                    ],
+                    "toForm": "attack"
+                  },
+                  {
+                    "stats": [
+                      "defense",
+                      "spDef"
+                    ],
+                    "toForm": "defence"
+                  }
+                ],
+                "bothRaised": "larger_raise_wins_tie_keeps_current",
+                "revertOn": [
+                  "switch_out",
+                  "faint"
+                ],
+                "revertToForm": "standard"
+              }
+            ]
+          }
+        }
+      ],
+      "baseStats": {
+        "hp": 85,
+        "attack": 130,
+        "defense": 180,
+        "spAtk": 70,
+        "spDef": 80,
+        "speed": 55,
+        "total": 600
+      },
+      "forms": [
+        {
+          "id": "standard",
+          "name": "Standard Forme",
+          "isDefault": true,
+          "description": "Its default form. Red heat leaks from the plates on its back.",
+          "baseStats": {
+            "hp": 85,
+            "attack": 130,
+            "defense": 180,
+            "spAtk": 70,
+            "spDef": 80,
+            "speed": 55,
+            "total": 600
+          },
+          "sprite": "sprites/cataggron_standard.png"
+        },
+        {
+          "id": "attack",
+          "name": "Attack Forme",
+          "isDefault": false,
+          "description": "Two cannon vents rise from its shoulders and its armor thins to shed heat. Takes this form when its Attack or Sp. Atk rises.",
+          "baseStats": {
+            "hp": 85,
+            "attack": 165,
+            "defense": 130,
+            "spAtk": 100,
+            "spDef": 60,
+            "speed": 60,
+            "total": 600
+          },
+          "sprite": "sprites/cataggron_attack.png"
+        },
+        {
+          "id": "defence",
+          "name": "Defence Forme",
+          "isDefault": false,
+          "description": "Its plating thickens and glows blue at the seams. Takes this form when its Defense or Sp. Def rises.",
+          "baseStats": {
+            "hp": 85,
+            "attack": 95,
+            "defense": 230,
+            "spAtk": 60,
+            "spDef": 115,
+            "speed": 15,
+            "total": 600
+          },
+          "sprite": "sprites/cataggron_defence.png"
+        }
+      ],
+      "typeDefenses": {
+        "0": [
+          "Poison"
+        ],
+        "2": [
+          "Water"
+        ],
+        "4": [
+          "Fighting",
+          "Ground"
+        ],
+        "0.25": [
+          "Normal",
+          "Flying"
+        ],
+        "0.5": [
+          "Ice",
+          "Psychic",
+          "Bug",
+          "Rock",
+          "Dragon",
+          "Fairy"
+        ]
+      },
+      "signatureMove": {
+        "id": "CATACLYSM_CANNON",
+        "name": "Cataclysm Cannon",
+        "type": "Steel",
+        "category": "Physical",
+        "power": null,
+        "accuracy": 90,
+        "pp": 5,
+        "priority": 0,
+        "target": "single_adjacent",
+        "makesContact": false,
+        "flags": [],
+        "description": "Fires molten iron from its back. Its power and effect depend on Cataggron's current form. Other Pokémon that learn it through Mimic or Sketch use the Standard version.",
+        "effects": [],
+        "formVariants": {
+          "standard": {
+            "power": 100,
+            "effects": []
+          },
+          "attack": {
+            "power": 130,
+            "effects": [
+              {
+                "kind": "recoil",
+                "fractionOfDamage": "1/4"
+              }
+            ]
+          },
+          "defence": {
+            "power": 80,
+            "effects": [
+              {
+                "kind": "self_stat_change",
+                "stat": "defense",
+                "stages": 1,
+                "chance": 100
+              }
+            ]
+          }
+        },
+        "defaultVariant": "standard"
+      },
+      "learnset": {
+        "levelUp": [
+          {
+            "level": 0,
+            "learnedOnEvolution": true,
+            "move": "Cataclysm Cannon",
+            "moveId": "CATACLYSM_CANNON",
+            "type": "Steel",
+            "category": "Physical",
+            "power": null,
+            "isSignature": true
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tackle",
+            "moveId": "TACKLE",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Harden",
+            "moveId": "HARDEN",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Mud-Slap",
+            "moveId": "MUD_SLAP",
+            "type": "Ground",
+            "category": "Special",
+            "power": 20,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Headbutt",
+            "moveId": "HEADBUTT",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 70,
+            "isSignature": false
+          },
+          {
+            "level": 9,
+            "learnedOnEvolution": false,
+            "move": "Metal Claw",
+            "moveId": "METAL_CLAW",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 50,
+            "isSignature": false
+          },
+          {
+            "level": 12,
+            "learnedOnEvolution": false,
+            "move": "Rock Tomb",
+            "moveId": "ROCK_TOMB",
+            "type": "Rock",
+            "category": "Physical",
+            "power": 60,
+            "isSignature": false
+          },
+          {
+            "level": 15,
+            "learnedOnEvolution": false,
+            "move": "Roar",
+            "moveId": "ROAR",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 18,
+            "learnedOnEvolution": false,
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 21,
+            "learnedOnEvolution": false,
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 80,
+            "isSignature": false
+          },
+          {
+            "level": 24,
+            "learnedOnEvolution": false,
+            "move": "Rock Slide",
+            "moveId": "ROCK_SLIDE",
+            "type": "Rock",
+            "category": "Physical",
+            "power": 75,
+            "isSignature": false
+          },
+          {
+            "level": 28,
+            "learnedOnEvolution": false,
+            "move": "Take Down",
+            "moveId": "TAKE_DOWN",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 90,
+            "isSignature": false
+          },
+          {
+            "level": 33,
+            "learnedOnEvolution": false,
+            "move": "Metal Sound",
+            "moveId": "METAL_SOUND",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 37,
+            "learnedOnEvolution": false,
+            "move": "Iron Tail",
+            "moveId": "IRON_TAIL",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 100,
+            "isSignature": false
+          },
+          {
+            "level": 42,
+            "learnedOnEvolution": false,
+            "move": "Iron Defense",
+            "moveId": "IRON_DEFENSE",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 48,
+            "learnedOnEvolution": false,
+            "move": "Double-Edge",
+            "moveId": "DOUBLE_EDGE",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 120,
+            "isSignature": false
+          },
+          {
+            "level": 53,
+            "learnedOnEvolution": false,
+            "move": "Autotomize",
+            "moveId": "AUTOTOMIZE",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 58,
+            "learnedOnEvolution": false,
+            "move": "Heavy Slam",
+            "moveId": "HEAVY_SLAM",
+            "type": "Steel",
+            "category": "Physical",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 64,
+            "learnedOnEvolution": false,
+            "move": "Metal Burst",
+            "moveId": "METAL_BURST",
+            "type": "Steel",
+            "category": "Physical",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 70,
+            "learnedOnEvolution": false,
+            "move": "Head Smash",
+            "moveId": "HEAD_SMASH",
+            "type": "Rock",
+            "category": "Physical",
+            "power": 150,
+            "isSignature": false
+          },
+          {
+            "level": 76,
+            "learnedOnEvolution": false,
+            "move": "Swords Dance",
+            "moveId": "SWORDS_DANCE",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          }
+        ],
+        "tm": [
+          {
+            "move": "Swords Dance",
+            "moveId": "SWORDS_DANCE",
+            "type": "Normal"
+          },
+          {
+            "move": "Iron Defense",
+            "moveId": "IRON_DEFENSE",
+            "type": "Steel"
+          },
+          {
+            "move": "Body Press",
+            "moveId": "BODY_PRESS",
+            "type": "Fighting"
+          },
+          {
+            "move": "Earthquake",
+            "moveId": "EARTHQUAKE",
+            "type": "Ground"
+          },
+          {
+            "move": "High Horsepower",
+            "moveId": "HIGH_HORSEPOWER",
+            "type": "Ground"
+          },
+          {
+            "move": "Stone Edge",
+            "moveId": "STONE_EDGE",
+            "type": "Rock"
+          },
+          {
+            "move": "Rock Slide",
+            "moveId": "ROCK_SLIDE",
+            "type": "Rock"
+          },
+          {
+            "move": "Stealth Rock",
+            "moveId": "STEALTH_ROCK",
+            "type": "Rock"
+          },
+          {
+            "move": "Rock Polish",
+            "moveId": "ROCK_POLISH",
+            "type": "Rock"
+          },
+          {
+            "move": "Heavy Slam",
+            "moveId": "HEAVY_SLAM",
+            "type": "Steel"
+          },
+          {
+            "move": "Heat Crash",
+            "moveId": "HEAT_CRASH",
+            "type": "Fire"
+          },
+          {
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel"
+          },
+          {
+            "move": "Flash Cannon",
+            "moveId": "FLASH_CANNON",
+            "type": "Steel"
+          },
+          {
+            "move": "Superpower",
+            "moveId": "SUPERPOWER",
+            "type": "Fighting"
+          },
+          {
+            "move": "Ice Punch",
+            "moveId": "ICE_PUNCH",
+            "type": "Ice"
+          },
+          {
+            "move": "Thunder Punch",
+            "moveId": "THUNDER_PUNCH",
+            "type": "Electric"
+          },
+          {
+            "move": "Fire Punch",
+            "moveId": "FIRE_PUNCH",
+            "type": "Fire"
+          },
+          {
+            "move": "Dragon Claw",
+            "moveId": "DRAGON_CLAW",
+            "type": "Dragon"
+          },
+          {
+            "move": "Dragon Tail",
+            "moveId": "DRAGON_TAIL",
+            "type": "Dragon"
+          },
+          {
+            "move": "Outrage",
+            "moveId": "OUTRAGE",
+            "type": "Dragon"
+          },
+          {
+            "move": "Roar",
+            "moveId": "ROAR",
+            "type": "Normal"
+          },
+          {
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal"
+          },
+          {
+            "move": "Substitute",
+            "moveId": "SUBSTITUTE",
+            "type": "Normal"
+          },
+          {
+            "move": "Rest",
+            "moveId": "REST",
+            "type": "Psychic"
+          },
+          {
+            "move": "Giga Impact",
+            "moveId": "GIGA_IMPACT",
+            "type": "Normal"
+          },
+          {
+            "move": "Tera Blast",
+            "moveId": "TERA_BLAST",
+            "type": "Normal"
+          }
+        ]
+      },
+      "recommendedSet": {
+        "name": "Form-shifting tank",
+        "item": "Leftovers",
+        "ability": "Adaptive Plating",
+        "nature": "Adamant",
+        "natureNote": "Adamant",
+        "evs": {
+          "hp": 252,
+          "attack": 252,
+          "spDef": 4
+        },
+        "moves": [
+          "Iron Defense",
+          "Body Press",
+          "Swords Dance",
+          "Cataclysm Cannon"
+        ],
+        "note": "Iron Defense puts it in Defence Forme (230 Def) for Body Press. When the foe can't break through, Swords Dance flips it into Attack Forme for a 130-power Cataclysm Cannon."
+      },
+      "notes": [
+        "Name: cataclysm / catapult + Aggron.",
+        "Steel/Rock takes 4× damage from Fighting and Ground, so Body Press and Earthquake users are its biggest threats.",
+        "Every form totals 600 base stats; forms move points between offense and defense."
+      ],
+      "sprite": "sprites/cataggron_standard.png"
+    },
+    {
+      "id": "bastiodoom",
+      "internalName": "BASTIODOOM",
+      "dexNumber": 4,
+      "name": "Bastiodoom",
+      "category": "Ossuary Pokémon",
+      "types": [
+        "Rock",
+        "Poison"
+      ],
+      "paradox": null,
+      "basedOn": "Bastiodon",
+      "pokedexEntries": [
+        "Its face shield has fossilized into the shape of a skull. Toxic sludge seeps from cracks in the bone, and its glowing green spots have been mistaken for the eyes of something far larger.",
+        "It guards places where Pokémon have died, and nothing gets past it. Plants will not grow for several meters around a spot where it has slept."
+      ],
+      "profile": {
+        "heightM": 1.5,
+        "weightKg": 165,
+        "genderRatio": {
+          "malePercent": 87.5,
+          "femalePercent": 12.5
+        },
+        "eggGroups": [
+          "Monster"
+        ],
+        "catchRate": 45,
+        "evYield": {
+          "defense": 2,
+          "spDef": 1
+        },
+        "baseExp": 270,
+        "growthRate": "Erratic"
+      },
+      "evolution": {
+        "chain": [
+          "Shieldon",
+          "Bastiodon",
+          "Bastiodoom"
+        ],
+        "from": "Bastiodon",
+        "trigger": "level_up",
+        "minLevel": null,
+        "heldItem": "Black Sludge",
+        "description": "Level up Bastiodon while it holds Black Sludge.",
+        "notes": "Shieldon is revived from the Armor Fossil and evolves into Bastiodon at Lv. 30."
+      },
+      "abilities": [
+        {
+          "id": "STURDY",
+          "name": "Sturdy",
+          "slot": "standard",
+          "isNew": false,
+          "description": "It can't be knocked out by one hit from full HP, and one-hit KO moves fail."
+        },
+        {
+          "id": "PLAGUE_BULWARK",
+          "name": "Plague Bulwark",
+          "slot": "unique",
+          "isNew": true,
+          "description": "When hit by a contact move, the attacker has a 50% chance to be poisoned. It takes 25% less damage from poisoned or badly poisoned attackers.",
+          "mechanics": {
+            "effects": [
+              {
+                "kind": "on_contact_received",
+                "status": "poison",
+                "chance": 50
+              },
+              {
+                "kind": "damage_taken_multiplier",
+                "condition": "attacker_poisoned_or_badly_poisoned",
+                "multiplier": 0.75
+              }
+            ]
+          }
+        },
+        {
+          "id": "SOUNDPROOF",
+          "name": "Soundproof",
+          "slot": "hidden",
+          "isNew": false,
+          "description": "Gives full immunity to sound-based moves."
+        }
+      ],
+      "baseStats": {
+        "hp": 80,
+        "attack": 75,
+        "defense": 170,
+        "spAtk": 85,
+        "spDef": 140,
+        "speed": 30,
+        "total": 580
+      },
+      "typeDefenses": {
+        "2": [
+          "Water",
+          "Psychic",
+          "Steel"
+        ],
+        "4": [
+          "Ground"
+        ],
+        "0.5": [
+          "Normal",
+          "Fire",
+          "Flying",
+          "Bug",
+          "Fairy"
+        ],
+        "0.25": [
+          "Poison"
+        ]
+      },
+      "signatureMove": {
+        "id": "GRAVE_RAMPART",
+        "name": "Grave Rampart",
+        "type": "Poison",
+        "category": "Special",
+        "power": 80,
+        "accuracy": 100,
+        "pp": 10,
+        "priority": 0,
+        "target": "single_adjacent",
+        "makesContact": false,
+        "flags": [],
+        "description": "The user slams its sludge-soaked shield into the target. Damage is calculated with the user's Sp. Def instead of its Sp. Atk. 30% chance to poison the target.",
+        "synergyNote": "With 140 base Sp. Def, it hits like a 140 Sp. Atk attacker, and Calm Mind boosts it twice over.",
+        "effects": [
+          {
+            "kind": "use_stat_override",
+            "offensiveStat": "spDef"
+          },
+          {
+            "kind": "secondary_status",
+            "status": "poison",
+            "chance": 30
+          }
+        ]
+      },
+      "learnset": {
+        "levelUp": [
+          {
+            "level": 0,
+            "learnedOnEvolution": true,
+            "move": "Grave Rampart",
+            "moveId": "GRAVE_RAMPART",
+            "type": "Poison",
+            "category": "Special",
+            "power": 80,
+            "isSignature": true
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tackle",
+            "moveId": "TACKLE",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Smog",
+            "moveId": "SMOG",
+            "type": "Poison",
+            "category": "Special",
+            "power": 30,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Taunt",
+            "moveId": "TAUNT",
+            "type": "Dark",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 5,
+            "learnedOnEvolution": false,
+            "move": "Metal Sound",
+            "moveId": "METAL_SOUND",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 10,
+            "learnedOnEvolution": false,
+            "move": "Ancient Power",
+            "moveId": "ANCIENT_POWER",
+            "type": "Rock",
+            "category": "Special",
+            "power": 60,
+            "isSignature": false
+          },
+          {
+            "level": 15,
+            "learnedOnEvolution": false,
+            "move": "Iron Defense",
+            "moveId": "IRON_DEFENSE",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 20,
+            "learnedOnEvolution": false,
+            "move": "Clear Smog",
+            "moveId": "CLEAR_SMOG",
+            "type": "Poison",
+            "category": "Special",
+            "power": 50,
+            "isSignature": false
+          },
+          {
+            "level": 25,
+            "learnedOnEvolution": false,
+            "move": "Endure",
+            "moveId": "ENDURE",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 30,
+            "learnedOnEvolution": false,
+            "move": "Block",
+            "moveId": "BLOCK",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 36,
+            "learnedOnEvolution": false,
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 80,
+            "isSignature": false
+          },
+          {
+            "level": 42,
+            "learnedOnEvolution": false,
+            "move": "Acid Armor",
+            "moveId": "ACID_ARMOR",
+            "type": "Poison",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 48,
+            "learnedOnEvolution": false,
+            "move": "Wide Guard",
+            "moveId": "WIDE_GUARD",
+            "type": "Rock",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 54,
+            "learnedOnEvolution": false,
+            "move": "Sludge Bomb",
+            "moveId": "SLUDGE_BOMB",
+            "type": "Poison",
+            "category": "Special",
+            "power": 90,
+            "isSignature": false
+          },
+          {
+            "level": 60,
+            "learnedOnEvolution": false,
+            "move": "Heavy Slam",
+            "moveId": "HEAVY_SLAM",
+            "type": "Steel",
+            "category": "Physical",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 66,
+            "learnedOnEvolution": false,
+            "move": "Metal Burst",
+            "moveId": "METAL_BURST",
+            "type": "Steel",
+            "category": "Physical",
+            "power": null,
+            "isSignature": false
+          }
+        ],
+        "tm": [
+          {
+            "move": "Stealth Rock",
+            "moveId": "STEALTH_ROCK",
+            "type": "Rock"
+          },
+          {
+            "move": "Toxic",
+            "moveId": "TOXIC",
+            "type": "Poison"
+          },
+          {
+            "move": "Toxic Spikes",
+            "moveId": "TOXIC_SPIKES",
+            "type": "Poison"
+          },
+          {
+            "move": "Body Press",
+            "moveId": "BODY_PRESS",
+            "type": "Fighting"
+          },
+          {
+            "move": "Sludge Bomb",
+            "moveId": "SLUDGE_BOMB",
+            "type": "Poison"
+          },
+          {
+            "move": "Sludge Wave",
+            "moveId": "SLUDGE_WAVE",
+            "type": "Poison"
+          },
+          {
+            "move": "Venoshock",
+            "moveId": "VENOSHOCK",
+            "type": "Poison"
+          },
+          {
+            "move": "Hex",
+            "moveId": "HEX",
+            "type": "Ghost"
+          },
+          {
+            "move": "Shadow Ball",
+            "moveId": "SHADOW_BALL",
+            "type": "Ghost"
+          },
+          {
+            "move": "Power Gem",
+            "moveId": "POWER_GEM",
+            "type": "Rock"
+          },
+          {
+            "move": "Rock Slide",
+            "moveId": "ROCK_SLIDE",
+            "type": "Rock"
+          },
+          {
+            "move": "Stone Edge",
+            "moveId": "STONE_EDGE",
+            "type": "Rock"
+          },
+          {
+            "move": "Earth Power",
+            "moveId": "EARTH_POWER",
+            "type": "Ground"
+          },
+          {
+            "move": "Earthquake",
+            "moveId": "EARTHQUAKE",
+            "type": "Ground"
+          },
+          {
+            "move": "Flash Cannon",
+            "moveId": "FLASH_CANNON",
+            "type": "Steel"
+          },
+          {
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel"
+          },
+          {
+            "move": "Heavy Slam",
+            "moveId": "HEAVY_SLAM",
+            "type": "Steel"
+          },
+          {
+            "move": "Calm Mind",
+            "moveId": "CALM_MIND",
+            "type": "Psychic"
+          },
+          {
+            "move": "Roar",
+            "moveId": "ROAR",
+            "type": "Normal"
+          },
+          {
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal"
+          },
+          {
+            "move": "Substitute",
+            "moveId": "SUBSTITUTE",
+            "type": "Normal"
+          },
+          {
+            "move": "Rest",
+            "moveId": "REST",
+            "type": "Psychic"
+          },
+          {
+            "move": "Sleep Talk",
+            "moveId": "SLEEP_TALK",
+            "type": "Normal"
+          },
+          {
+            "move": "Tera Blast",
+            "moveId": "TERA_BLAST",
+            "type": "Normal"
+          }
+        ]
+      },
+      "recommendedSet": {
+        "name": "Hazard wall",
+        "item": "Black Sludge",
+        "ability": "Plague Bulwark",
+        "nature": "Calm",
+        "natureNote": "Calm",
+        "evs": {
+          "hp": 252,
+          "spDef": 252,
+          "defense": 4
+        },
+        "moves": [
+          "Stealth Rock",
+          "Grave Rampart",
+          "Body Press",
+          "Roar"
+        ],
+        "note": "Grave Rampart uses Sp. Def and Body Press uses Defense, so it can put all its EVs into bulk and still hit back. Black Sludge heals it because it's part Poison."
+      },
+      "notes": [
+        "Name: Bastiodon + doom.",
+        "Rock/Poison takes 4× damage from Ground. Its 30 base Speed makes Trick Room a good fit.",
+        "The skull motif and grave-guarding behavior hint at a Ghost connection, but its typing stays Rock/Poison."
+      ],
+      "sprite": "sprites/bastiodoom.png"
+    },
+    {
+      "id": "pyro_spirit",
+      "internalName": "PYRO_SPIRIT",
+      "dexNumber": 5,
+      "name": "Pyro Spirit",
+      "category": "Ember Sun Pokémon",
+      "types": [
+        "Psychic",
+        "Fire"
+      ],
+      "paradox": {
+        "era": "Ancient"
+      },
+      "basedOn": "Espeon",
+      "pokedexEntries": [
+        "It resembles a creature from an ancient myth that guided lost travelers with floating lanterns. The flames around its body move according to its thoughts.",
+        "The jewel on its forehead burns hotter than any of its flames. By reading the heat others give off, it senses what they intend to do before they move."
+      ],
+      "profile": {
+        "heightM": 0.9,
+        "weightKg": 24,
+        "genderRatio": {
+          "malePercent": 87.5,
+          "femalePercent": 12.5
+        },
+        "eggGroups": [
+          "Field"
+        ],
+        "catchRate": 30,
+        "evYield": {
+          "spAtk": 3
+        },
+        "baseExp": 270,
+        "growthRate": "Medium Fast"
+      },
+      "evolution": {
+        "chain": [
+          "Eevee",
+          "Pyro Spirit"
+        ],
+        "from": "Eevee",
+        "trigger": "level_up",
+        "minLevel": null,
+        "heldItem": "Booster Energy",
+        "friendship": "high",
+        "timeOfDay": "day",
+        "description": "Level up Eevee with high friendship during the day while it holds Booster Energy.",
+        "notes": "Without Booster Energy, the same conditions give Espeon. At night, Booster Energy gives Neon Moon."
+      },
+      "abilities": [
+        {
+          "id": "PROTOSYNTHESIS",
+          "name": "Protosynthesis",
+          "slot": "standard",
+          "isNew": false,
+          "description": "Boosts its highest stat by 30% (Speed by 50%) in harsh sunlight or while holding Booster Energy."
+        },
+        {
+          "id": "SOUL_KINDLING",
+          "name": "Soul Kindling",
+          "slot": "unique",
+          "isNew": true,
+          "description": "Its Psychic-type moves have a 20% chance to burn. Its Psychic-type moves deal 1.3× damage to burned targets.",
+          "mechanics": {
+            "effects": [
+              {
+                "kind": "secondary_status",
+                "appliesTo": {
+                  "type": "Psychic"
+                },
+                "status": "burn",
+                "chance": 20
+              },
+              {
+                "kind": "power_multiplier",
+                "appliesTo": {
+                  "type": "Psychic"
+                },
+                "condition": "target_burned",
+                "multiplier": 1.3
+              }
+            ]
+          }
+        }
+      ],
+      "baseStats": {
+        "hp": 80,
+        "attack": 60,
+        "defense": 70,
+        "spAtk": 140,
+        "spDef": 100,
+        "speed": 120,
+        "total": 570
+      },
+      "typeDefenses": {
+        "2": [
+          "Water",
+          "Ground",
+          "Rock",
+          "Ghost",
+          "Dark"
+        ],
+        "0.5": [
+          "Fire",
+          "Grass",
+          "Ice",
+          "Fighting",
+          "Psychic",
+          "Steel",
+          "Fairy"
+        ]
+      },
+      "signatureMove": {
+        "id": "MINDFLARE",
+        "name": "Mindflare",
+        "type": "Fire",
+        "category": "Special",
+        "power": 85,
+        "accuracy": 100,
+        "pp": 10,
+        "priority": 0,
+        "target": "single_adjacent",
+        "makesContact": false,
+        "flags": [],
+        "description": "It sets the target's mind alight. A special move that calculates damage against the target's Defense instead of its Sp. Def, like Psyshock. 10% chance to burn.",
+        "synergyNote": "Mindflare breaks through special walls such as Blissey, and Soul Kindling turns its Psychic moves into a second burn source.",
+        "effects": [
+          {
+            "kind": "target_defensive_stat_override",
+            "defensiveStat": "defense"
+          },
+          {
+            "kind": "secondary_status",
+            "status": "burn",
+            "chance": 10
+          }
+        ]
+      },
+      "learnset": {
+        "levelUp": [
+          {
+            "level": 0,
+            "learnedOnEvolution": true,
+            "move": "Mindflare",
+            "moveId": "MINDFLARE",
+            "type": "Fire",
+            "category": "Special",
+            "power": 85,
+            "isSignature": true
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tackle",
+            "moveId": "TACKLE",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tail Whip",
+            "moveId": "TAIL_WHIP",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Growl",
+            "moveId": "GROWL",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Helping Hand",
+            "moveId": "HELPING_HAND",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Covet",
+            "moveId": "COVET",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 60,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Ember",
+            "moveId": "EMBER",
+            "type": "Fire",
+            "category": "Special",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 5,
+            "learnedOnEvolution": false,
+            "move": "Sand Attack",
+            "moveId": "SAND_ATTACK",
+            "type": "Ground",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 10,
+            "learnedOnEvolution": false,
+            "move": "Quick Attack",
+            "moveId": "QUICK_ATTACK",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 15,
+            "learnedOnEvolution": false,
+            "move": "Baby-Doll Eyes",
+            "moveId": "BABY_DOLL_EYES",
+            "type": "Fairy",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 20,
+            "learnedOnEvolution": false,
+            "move": "Confusion",
+            "moveId": "CONFUSION",
+            "type": "Psychic",
+            "category": "Special",
+            "power": 50,
+            "isSignature": false
+          },
+          {
+            "level": 25,
+            "learnedOnEvolution": false,
+            "move": "Flame Charge",
+            "moveId": "FLAME_CHARGE",
+            "type": "Fire",
+            "category": "Physical",
+            "power": 50,
+            "isSignature": false
+          },
+          {
+            "level": 30,
+            "learnedOnEvolution": false,
+            "move": "Psybeam",
+            "moveId": "PSYBEAM",
+            "type": "Psychic",
+            "category": "Special",
+            "power": 65,
+            "isSignature": false
+          },
+          {
+            "level": 35,
+            "learnedOnEvolution": false,
+            "move": "Will-O-Wisp",
+            "moveId": "WILL_O_WISP",
+            "type": "Fire",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 40,
+            "learnedOnEvolution": false,
+            "move": "Morning Sun",
+            "moveId": "MORNING_SUN",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 45,
+            "learnedOnEvolution": false,
+            "move": "Mystical Fire",
+            "moveId": "MYSTICAL_FIRE",
+            "type": "Fire",
+            "category": "Special",
+            "power": 75,
+            "isSignature": false
+          },
+          {
+            "level": 50,
+            "learnedOnEvolution": false,
+            "move": "Psychic",
+            "moveId": "PSYCHIC",
+            "type": "Psychic",
+            "category": "Special",
+            "power": 90,
+            "isSignature": false
+          },
+          {
+            "level": 55,
+            "learnedOnEvolution": false,
+            "move": "Calm Mind",
+            "moveId": "CALM_MIND",
+            "type": "Psychic",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 60,
+            "learnedOnEvolution": false,
+            "move": "Future Sight",
+            "moveId": "FUTURE_SIGHT",
+            "type": "Psychic",
+            "category": "Special",
+            "power": 120,
+            "isSignature": false
+          }
+        ],
+        "tm": [
+          {
+            "move": "Flamethrower",
+            "moveId": "FLAMETHROWER",
+            "type": "Fire"
+          },
+          {
+            "move": "Fire Blast",
+            "moveId": "FIRE_BLAST",
+            "type": "Fire"
+          },
+          {
+            "move": "Heat Wave",
+            "moveId": "HEAT_WAVE",
+            "type": "Fire"
+          },
+          {
+            "move": "Overheat",
+            "moveId": "OVERHEAT",
+            "type": "Fire"
+          },
+          {
+            "move": "Mystical Fire",
+            "moveId": "MYSTICAL_FIRE",
+            "type": "Fire"
+          },
+          {
+            "move": "Burning Jealousy",
+            "moveId": "BURNING_JEALOUSY",
+            "type": "Fire"
+          },
+          {
+            "move": "Will-O-Wisp",
+            "moveId": "WILL_O_WISP",
+            "type": "Fire"
+          },
+          {
+            "move": "Sunny Day",
+            "moveId": "SUNNY_DAY",
+            "type": "Fire"
+          },
+          {
+            "move": "Psychic",
+            "moveId": "PSYCHIC",
+            "type": "Psychic"
+          },
+          {
+            "move": "Psyshock",
+            "moveId": "PSYSHOCK",
+            "type": "Psychic"
+          },
+          {
+            "move": "Expanding Force",
+            "moveId": "EXPANDING_FORCE",
+            "type": "Psychic"
+          },
+          {
+            "move": "Psychic Terrain",
+            "moveId": "PSYCHIC_TERRAIN",
+            "type": "Psychic"
+          },
+          {
+            "move": "Calm Mind",
+            "moveId": "CALM_MIND",
+            "type": "Psychic"
+          },
+          {
+            "move": "Trick Room",
+            "moveId": "TRICK_ROOM",
+            "type": "Psychic"
+          },
+          {
+            "move": "Reflect",
+            "moveId": "REFLECT",
+            "type": "Psychic"
+          },
+          {
+            "move": "Light Screen",
+            "moveId": "LIGHT_SCREEN",
+            "type": "Psychic"
+          },
+          {
+            "move": "Shadow Ball",
+            "moveId": "SHADOW_BALL",
+            "type": "Ghost"
+          },
+          {
+            "move": "Dazzling Gleam",
+            "moveId": "DAZZLING_GLEAM",
+            "type": "Fairy"
+          },
+          {
+            "move": "Solar Beam",
+            "moveId": "SOLAR_BEAM",
+            "type": "Grass"
+          },
+          {
+            "move": "Hyper Voice",
+            "moveId": "HYPER_VOICE",
+            "type": "Normal"
+          },
+          {
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal"
+          },
+          {
+            "move": "Substitute",
+            "moveId": "SUBSTITUTE",
+            "type": "Normal"
+          },
+          {
+            "move": "Rest",
+            "moveId": "REST",
+            "type": "Psychic"
+          },
+          {
+            "move": "Tera Blast",
+            "moveId": "TERA_BLAST",
+            "type": "Normal"
+          }
+        ]
+      },
+      "recommendedSet": {
+        "name": "Calm Mind attacker",
+        "item": "Heavy-Duty Boots",
+        "ability": "Soul Kindling",
+        "nature": "Timid",
+        "natureNote": "Timid",
+        "evs": {
+          "spAtk": 252,
+          "speed": 252,
+          "hp": 4
+        },
+        "moves": [
+          "Calm Mind",
+          "Mindflare",
+          "Psychic",
+          "Shadow Ball"
+        ],
+        "note": "Mindflare and Psychic hit opposite defensive stats. Shadow Ball covers other Psychic types. Boots protect it from Stealth Rock, which it's weak to."
+      },
+      "notes": [
+        "Name: pyro + spirit.",
+        "An Ancient Paradox counterpart to Espeon, paired with Neon Moon (Future) in the same way Espeon pairs with Umbreon.",
+        "Weak to Water, Ground, Rock, Ghost and Dark."
+      ],
+      "sprite": "sprites/pyro_spirit.png"
+    },
+    {
+      "id": "neon_moon",
+      "internalName": "NEON_MOON",
+      "dexNumber": 6,
+      "name": "Neon Moon",
+      "category": "Neon Ring Pokémon",
+      "types": [
+        "Dark",
+        "Steel"
+      ],
+      "paradox": {
+        "era": "Future"
+      },
+      "basedOn": "Umbreon",
+      "pokedexEntries": [
+        "It shares features with a machine pictured in an old paranormal magazine. On moonless nights its rings glow with a neon light visible from kilometers away.",
+        "Its body is plated in a dark alloy that soaks up light. It waits motionless in the dark, then lights all its rings at once to dazzle its prey."
+      ],
+      "profile": {
+        "heightM": 1,
+        "weightKg": 48,
+        "genderRatio": {
+          "malePercent": 87.5,
+          "femalePercent": 12.5
+        },
+        "eggGroups": [
+          "Field"
+        ],
+        "catchRate": 30,
+        "evYield": {
+          "spDef": 2,
+          "defense": 1
+        },
+        "baseExp": 270,
+        "growthRate": "Medium Fast"
+      },
+      "evolution": {
+        "chain": [
+          "Eevee",
+          "Neon Moon"
+        ],
+        "from": "Eevee",
+        "trigger": "level_up",
+        "minLevel": null,
+        "heldItem": "Booster Energy",
+        "friendship": "high",
+        "timeOfDay": "night",
+        "description": "Level up Eevee with high friendship at night while it holds Booster Energy.",
+        "notes": "Without Booster Energy, the same conditions give Umbreon. During the day, Booster Energy gives Pyro Spirit."
+      },
+      "abilities": [
+        {
+          "id": "QUARK_DRIVE",
+          "name": "Quark Drive",
+          "slot": "standard",
+          "isNew": false,
+          "description": "Boosts its highest stat by 30% (Speed by 50%) on Electric Terrain or while holding Booster Energy."
+        },
+        {
+          "id": "NEON_CIRCUIT",
+          "name": "Neon Circuit",
+          "slot": "unique",
+          "isNew": true,
+          "description": "Restores 1/16 of its max HP at the end of each turn. When an attacker makes contact with it, its rings flare and lower the attacker's accuracy by 1 stage.",
+          "mechanics": {
+            "effects": [
+              {
+                "kind": "end_of_turn_heal",
+                "fraction": "1/16"
+              },
+              {
+                "kind": "on_contact_received",
+                "statChange": {
+                  "target": "attacker",
+                  "stat": "accuracy",
+                  "stages": -1
+                },
+                "chance": 100
+              }
+            ]
+          }
+        }
+      ],
+      "baseStats": {
+        "hp": 100,
+        "attack": 85,
+        "defense": 125,
+        "spAtk": 70,
+        "spDef": 130,
+        "speed": 60,
+        "total": 570
+      },
+      "typeDefenses": {
+        "0": [
+          "Poison",
+          "Psychic"
+        ],
+        "2": [
+          "Fire",
+          "Ground"
+        ],
+        "4": [
+          "Fighting"
+        ],
+        "0.5": [
+          "Normal",
+          "Grass",
+          "Ice",
+          "Flying",
+          "Rock",
+          "Ghost",
+          "Dragon",
+          "Dark",
+          "Steel"
+        ]
+      },
+      "signatureMove": {
+        "id": "NEON_ECLIPSE",
+        "name": "Neon Eclipse",
+        "type": "Dark",
+        "category": "Physical",
+        "power": 75,
+        "accuracy": 100,
+        "pp": 10,
+        "priority": 0,
+        "target": "single_adjacent",
+        "makesContact": true,
+        "flags": [],
+        "description": "It charges with its rings blazing, then cuts them dark at the moment of impact. The user restores HP equal to half the damage it deals.",
+        "synergyNote": "Together with Neon Circuit and Leftovers, it recovers HP every turn whether it attacks or not.",
+        "effects": [
+          {
+            "kind": "drain",
+            "fractionOfDamage": "1/2"
+          }
+        ]
+      },
+      "learnset": {
+        "levelUp": [
+          {
+            "level": 0,
+            "learnedOnEvolution": true,
+            "move": "Neon Eclipse",
+            "moveId": "NEON_ECLIPSE",
+            "type": "Dark",
+            "category": "Physical",
+            "power": 75,
+            "isSignature": true
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tackle",
+            "moveId": "TACKLE",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Tail Whip",
+            "moveId": "TAIL_WHIP",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Growl",
+            "moveId": "GROWL",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Helping Hand",
+            "moveId": "HELPING_HAND",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Covet",
+            "moveId": "COVET",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 60,
+            "isSignature": false
+          },
+          {
+            "level": 1,
+            "learnedOnEvolution": false,
+            "move": "Metal Claw",
+            "moveId": "METAL_CLAW",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 50,
+            "isSignature": false
+          },
+          {
+            "level": 5,
+            "learnedOnEvolution": false,
+            "move": "Sand Attack",
+            "moveId": "SAND_ATTACK",
+            "type": "Ground",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 10,
+            "learnedOnEvolution": false,
+            "move": "Quick Attack",
+            "moveId": "QUICK_ATTACK",
+            "type": "Normal",
+            "category": "Physical",
+            "power": 40,
+            "isSignature": false
+          },
+          {
+            "level": 15,
+            "learnedOnEvolution": false,
+            "move": "Baby-Doll Eyes",
+            "moveId": "BABY_DOLL_EYES",
+            "type": "Fairy",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 20,
+            "learnedOnEvolution": false,
+            "move": "Confuse Ray",
+            "moveId": "CONFUSE_RAY",
+            "type": "Ghost",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 25,
+            "learnedOnEvolution": false,
+            "move": "Thunder Fang",
+            "moveId": "THUNDER_FANG",
+            "type": "Electric",
+            "category": "Physical",
+            "power": 65,
+            "isSignature": false
+          },
+          {
+            "level": 30,
+            "learnedOnEvolution": false,
+            "move": "Assurance",
+            "moveId": "ASSURANCE",
+            "type": "Dark",
+            "category": "Physical",
+            "power": 60,
+            "isSignature": false
+          },
+          {
+            "level": 35,
+            "learnedOnEvolution": false,
+            "move": "Screech",
+            "moveId": "SCREECH",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 40,
+            "learnedOnEvolution": false,
+            "move": "Moonlight",
+            "moveId": "MOONLIGHT",
+            "type": "Fairy",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 45,
+            "learnedOnEvolution": false,
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel",
+            "category": "Physical",
+            "power": 80,
+            "isSignature": false
+          },
+          {
+            "level": 50,
+            "learnedOnEvolution": false,
+            "move": "Mean Look",
+            "moveId": "MEAN_LOOK",
+            "type": "Normal",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          },
+          {
+            "level": 55,
+            "learnedOnEvolution": false,
+            "move": "Foul Play",
+            "moveId": "FOUL_PLAY",
+            "type": "Dark",
+            "category": "Physical",
+            "power": 95,
+            "isSignature": false
+          },
+          {
+            "level": 60,
+            "learnedOnEvolution": false,
+            "move": "Iron Defense",
+            "moveId": "IRON_DEFENSE",
+            "type": "Steel",
+            "category": "Status",
+            "power": null,
+            "isSignature": false
+          }
+        ],
+        "tm": [
+          {
+            "move": "Foul Play",
+            "moveId": "FOUL_PLAY",
+            "type": "Dark"
+          },
+          {
+            "move": "Crunch",
+            "moveId": "CRUNCH",
+            "type": "Dark"
+          },
+          {
+            "move": "Knock Off",
+            "moveId": "KNOCK_OFF",
+            "type": "Dark"
+          },
+          {
+            "move": "Dark Pulse",
+            "moveId": "DARK_PULSE",
+            "type": "Dark"
+          },
+          {
+            "move": "Snarl",
+            "moveId": "SNARL",
+            "type": "Dark"
+          },
+          {
+            "move": "Taunt",
+            "moveId": "TAUNT",
+            "type": "Dark"
+          },
+          {
+            "move": "Iron Head",
+            "moveId": "IRON_HEAD",
+            "type": "Steel"
+          },
+          {
+            "move": "Heavy Slam",
+            "moveId": "HEAVY_SLAM",
+            "type": "Steel"
+          },
+          {
+            "move": "Gyro Ball",
+            "moveId": "GYRO_BALL",
+            "type": "Steel"
+          },
+          {
+            "move": "Flash Cannon",
+            "moveId": "FLASH_CANNON",
+            "type": "Steel"
+          },
+          {
+            "move": "Iron Defense",
+            "moveId": "IRON_DEFENSE",
+            "type": "Steel"
+          },
+          {
+            "move": "Volt Switch",
+            "moveId": "VOLT_SWITCH",
+            "type": "Electric"
+          },
+          {
+            "move": "Wild Charge",
+            "moveId": "WILD_CHARGE",
+            "type": "Electric"
+          },
+          {
+            "move": "Thunder Fang",
+            "moveId": "THUNDER_FANG",
+            "type": "Electric"
+          },
+          {
+            "move": "Thunder Wave",
+            "moveId": "THUNDER_WAVE",
+            "type": "Electric"
+          },
+          {
+            "move": "Electric Terrain",
+            "moveId": "ELECTRIC_TERRAIN",
+            "type": "Electric"
+          },
+          {
+            "move": "Wish",
+            "moveId": "WISH",
+            "type": "Normal"
+          },
+          {
+            "move": "Yawn",
+            "moveId": "YAWN",
+            "type": "Normal"
+          },
+          {
+            "move": "Curse",
+            "moveId": "CURSE",
+            "type": "Ghost"
+          },
+          {
+            "move": "Toxic",
+            "moveId": "TOXIC",
+            "type": "Poison"
+          },
+          {
+            "move": "Protect",
+            "moveId": "PROTECT",
+            "type": "Normal"
+          },
+          {
+            "move": "Substitute",
+            "moveId": "SUBSTITUTE",
+            "type": "Normal"
+          },
+          {
+            "move": "Rest",
+            "moveId": "REST",
+            "type": "Psychic"
+          },
+          {
+            "move": "Sleep Talk",
+            "moveId": "SLEEP_TALK",
+            "type": "Normal"
+          },
+          {
+            "move": "Tera Blast",
+            "moveId": "TERA_BLAST",
+            "type": "Normal"
+          }
+        ]
+      },
+      "recommendedSet": {
+        "name": "Regenerating wall",
+        "item": "Leftovers",
+        "ability": "Neon Circuit",
+        "nature": "Careful",
+        "natureNote": "Careful",
+        "evs": {
+          "hp": 252,
+          "spDef": 252,
+          "defense": 4
+        },
+        "moves": [
+          "Neon Eclipse",
+          "Iron Head",
+          "Wish",
+          "Protect"
+        ],
+        "note": "Wish and Protect give it big heals on top of the steady recovery from Neon Circuit and Leftovers. Neon Eclipse keeps it healthy while it attacks."
+      },
+      "notes": [
+        "Name: neon + moon, from Umbreon's link to moonlight.",
+        "Dark/Steel is immune to Poison and Psychic, and only weak to Fighting, Ground and Fire.",
+        "A Future Paradox counterpart to Umbreon, paired with Pyro Spirit (Ancient)."
+      ],
+      "sprite": "sprites/neon_moon.png"
+    }
+  ]
+}

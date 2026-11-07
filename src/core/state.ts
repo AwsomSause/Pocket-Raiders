@@ -261,6 +261,9 @@ export const VolatileSchema = z.object({
   rollout: z.number().int().min(0).default(0),
   /** Fury Cutter hits in a row. */
   furyCutter: z.number().int().min(0).default(0),
+  /** Encore Amp: the sound move used on the last turns in a row, and how many times before this one. */
+  ampMove: z.string().nullable().default(null),
+  ampCount: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
   nightmare: z.boolean().default(false),
   /** Cursed by a Ghost's Curse. */
@@ -376,6 +379,8 @@ export const freshVolatile = (): Volatile => ({
   movesUsed: [],
   rollout: 0,
   furyCutter: 0,
+  ampMove: null,
+  ampCount: 0,
   nightmare: false,
   cursed: false,
   imprison: false,

@@ -19,7 +19,7 @@ def add(pic, id_, name, fam, desc, rarity, stacks, mx, how, effect):
 held = lambda *h: {'kind': 'held', 'hooks': list(h)}
 H = lambda n, **kw: {'hook': n, **kw}
 F = 'Battle held items (newer games)'
-PARADOX = 'great-tusk scream-tail brute-bonnet flutter-mane slither-wing sandy-shocks roaring-moon walking-wake gouging-fire raging-bolt iron-treads iron-bundle iron-hands iron-jugulis iron-moth iron-thorns iron-valiant iron-leaves iron-boulder iron-crown koraidon miraidon espeon-paradox umbreon-paradox toxtricity-future toxtricity-past'.split()
+PARADOX = 'great-tusk scream-tail brute-bonnet flutter-mane slither-wing sandy-shocks roaring-moon walking-wake gouging-fire raging-bolt iron-treads iron-bundle iron-hands iron-jugulis iron-moth iron-thorns iron-valiant iron-leaves iron-boulder iron-crown koraidon miraidon pyro-spirit neon-moon vine-riff electric-oncore'.split()
 add('weaknesspolicy', 'weakness-policy', 'Weakness Policy', F, 'Hit by a super-effective move: +2 Attack and +2 Sp. Atk, once per battle', 'rare', P, 1, 'held', held(H('weaknessPolicy')))
 add('blunderpolicy', 'blunder-policy', 'Blunder Policy', F, 'After one of its moves misses: +2 Speed, once per battle', 'uncommon', P, 1, 'held', held(H('blunderPolicy')))
 add('throatspray', 'throat-spray', 'Throat Spray', F, 'After it uses a sound move: +1 Sp. Atk, once per battle', 'uncommon', P, 1, 'held', held(H('throatSpray')))
