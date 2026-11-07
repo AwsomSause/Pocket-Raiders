@@ -9,6 +9,7 @@ import { chooseReward, resolveDecision, takeTurn, type TurnResult } from '../../
 import { forcedMoveIndex } from '../../src/core/battle/engine.ts';
 import { typeEffectiveness } from '../../src/core/battle/damage.ts';
 import type { step as Step } from '../../tests/unit/autoplay.ts';
+import { moveBlockReason } from '../../src/core/battle/moveBlock.ts';
 
 const RARITY = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
 
@@ -63,7 +64,25 @@ export function botStep(content: Content, run: RunState, step: typeof Step): { r
       }
     }
   }
+  // Never keep picking a move the game says is blocked (Torment, Disable, Taunt): that made 200-turn fights.
+  if (run.phase === 'battle' && !run.battle!.needsSwitch && !run.battle!.doubles && forcedMoveIndex(run.battle!, run.party) === null) {
+    const b = run.battle!;
+    const mon = run.party[b.activeIndex]!;
+    const blocked = mon.moves.map((_, i) => moveBlockReason(content, b, mon, i) !== null);
+    if (blocked.some(Boolean)) {
+      const foe = currentEnemy(b);
+      const fs = content.species.get(foe.speciesId)!;
+      const ms = content.species.get(mon.speciesId)!;
+      let bi = -1; let bs = -1;
+      mon.moves.forEach((m, i) => {
+        if (blocked[i] || m.pp <= 0) return;
+        const mv = content.moves.get(m.id);
+        const sc = mv ? (mv.power ?? 0) * (ms.types.includes(mv.type) ? 1.5 : 1) * typeEffectiveness(content.typeChart, mv.type, fs.types) * ((mv.accuracy ?? 100) / 100) : 0;
+        if (sc > bs) { bs = sc; bi = i; }
+      });
+      if (bi >= 0) { try { const t = takeTurn(content, run, { kind: 'move', index: bi }); return { run: t.run, turn: t }; } catch { /* fall through */ } }
+    }
+  }
   return step(content, run, true);
 }
 
-export { typeEffectiveness, currentEnemy };
