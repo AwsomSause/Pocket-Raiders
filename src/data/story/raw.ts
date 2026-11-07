@@ -18,5 +18,8 @@ import text from './text/en.json';
 import textThemes from './text/themes.json';
 import rivalsText from './text/rivals.en.json';
 import hash from './hash.json';
+import starterArcs from './starterArcs.json';
+import starterArcsText from './text/starterArcs.en.json';
+import { withStarterArcs } from './starterArcs';
 
-export const RAW_STORY: Record<string, unknown> = { characters, events, arcs, themes, remembrances, moveMoments, dialogue, lore, news, interactables, backstories, quiz, blueprintRules, rivals, rivalThemes, text: { ...text, ...rivalsText, ...textThemes }, hash: hash.hash };
+export const RAW_STORY: Record<string, unknown> = withStarterArcs({ characters, events, arcs, themes, remembrances, moveMoments, dialogue, lore, news, interactables, backstories, quiz, blueprintRules, rivals, rivalThemes, starterArcs, text: { ...text, ...rivalsText, ...starterArcsText, ...textThemes }, hash: hash.hash });

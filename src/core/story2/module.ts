@@ -187,16 +187,25 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
   // A Stop built for rivals plays the next rival scene due (the Primary first), whatever the gap.
   // It follows the Stop's own module scene (if any) instead of taking its place.
   const rivalDue = stop.slotTags.includes('rival_beat') ? dueRivalScene(content, run, stop.act, true, m.played, m.queue) : null;
-  if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) {
-    if (rivalDue) { m.active = rivalDue; m.activeStop = stopId; }
-    return;
-  }
   const mod = moduleOf(content.storyData, m.backstory);
   if (!mod) {
     if (rivalDue) { m.active = rivalDue; m.activeStop = stopId; }
     return;
   }
   const ctx = { ...resolveCtx(content, run), act: stop.act };
+  // The partner's own Starter arc (`arc_<Remembrance id>`) plays alongside any backstory: at Stops the backstory leaves free, and
+  // at the quiet Stops between backstory scenes (it never moves the backstory's gap; its steps are Act-gated).
+  const starterArc = v2.starter ? content.storyData.arcs.find((a) => a.id === `arc_${v2.starter!.lineId}`) : undefined;
+  const ownPick = (): StoryEvent | undefined => (starterArc?.steps ?? []).map((s) => eventOf(content.storyData, s.event)).find((e) => !!e && eligible(content, run, e, stop.act, ctx));
+  if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) {
+    // A rival Stop's scene comes first, whatever the gap; else the Starter arc may use the quiet Stop.
+    const own = rivalDue ?? ownPick()?.id;
+    if (own) {
+      m.active = own;
+      m.activeStop = stopId;
+    }
+    return;
+  }
   const slotEvent = v2.blueprint?.slots.find((s) => s.slot === stopId)?.event;
   const pool: string[] = [...mod.events];
   // The next step of an arc already begun is also a candidate, ahead of anything new.
@@ -211,8 +220,8 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     if (echo && condsPass(echo.requires as ResolveCond[], ctx)) pick = echo;
   }
   if (!pick) {
-    // Nothing from the module: a Secondary or Friendly rival scene that is due may take the Stop.
-    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue);
+    // Nothing from the module: a Secondary or Friendly rival scene that is due may take the Stop, else the Starter arc's next scene.
+    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue) ?? ownPick()?.id;
     if (due) { m.active = due; m.activeStop = stopId; }
     return;
   }
@@ -293,7 +302,8 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
     const text = scene.lines.map((l) => (l.speaker ? `${l.speaker}: ` : '') + l.text).join(' ').slice(0, 220);
     m.snapshots = [...m.snapshots, { event: e.id, stop: m.activeStop, act: resolveCtx(content, run).act ?? 0, text, choice: choice?.id ?? null }].slice(-content.balance.story.module.maxSnapshots);
   }
-  m.lastSceneStop = v2.stops.index;
+  // A Starter arc scene does not count toward the backstory's gap between scenes.
+  if (!e.tags.includes('starter_arc')) m.lastSceneStop = v2.stops.index;
 }
 
 /** Finishes the scene on screen: commits it (an ending was committed when reached) and clears the screen state. A choice scene needs a valid choice. */

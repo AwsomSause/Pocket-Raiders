@@ -150,3 +150,7 @@ grubbin|1|Dig Charge|electric|P|80|100|0|0|{"charge":{"semi":"underground"}}|con
 grubbin|2|Spark Burrow|bug|S|70|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":30}]}|
 blipbug|1|Signal Ping|psychic|S|65|100|0|0|{"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
 blipbug|2|Static Ping|bug|S|60|100|0|0|{"identify":"dark"}|
+vulpix|1|Six-Tail Flicker|fire|S|70|100|0|0|{"status":{"id":"brn","chance":30}}|
+vulpix|2|Will-o'-Lantern|fire|St|-|90|0|0|{"status":{"id":"brn","chance":100},"statChanges":[{"stat":"spe","stages":-1,"target":"enemy","chance":100}]}|
+psyduck|1|Headache Burst|psychic|S|75|95|0|0|{"confuse":{"chance":30}}|
+psyduck|2|Worry Wave|water|S|65|100|0|0|{"statChanges":[{"stat":"spa","stages":1,"target":"self","chance":100}]}|

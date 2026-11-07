@@ -22451,6 +22451,54 @@
       "flash": "#f85888",
       "hitStopMs": 107,
       "telegraph": "strong"
+    },
+    "sig-six-tail-flicker": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-will-o-lantern": {
+      "anim": "burning-bulwark",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "quick"
+    },
+    "sig-headache-burst": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-worry-wave": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-six-tail-flicker-keystone": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-headache-burst-keystone": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
     }
   },
   "commonPack": {

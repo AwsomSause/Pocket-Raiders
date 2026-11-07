@@ -250,10 +250,25 @@ export function directorInputs(content: Content, run: RunState): DirectorInputs 
 }
 
 /** A Story Run gets its v2 container and a frozen blueprint once; a missing or damaged blueprint is rebuilt (never a dropped save). */
+/**
+ * The run's starter is its Heartbond partner and names its Remembrance line (`v2.starter`), once, as soon as there is a
+ * starter: Heartbond, Feats, signature moves and the Starter arc all read these. A line is found by the starter's species.
+ */
+function bindPartner(content: Content, run: RunState): void {
+  const v2 = run.story.v2!;
+  const mon = run.party.find((m) => m.uid === run.log.starterUid) ?? run.party[0];
+  if (!mon) return;
+  v2.heartbond.partner ??= mon.uid;
+  if (v2.starter) return;
+  const r = content.storyData.remembrances.find((x) => x.line.includes(mon.speciesId));
+  if (r) v2.starter = { lineId: r.id, temperament: r.temperament, keystone: [] };
+}
+
 export function ensureStoryRun(content: Content, run: RunState): void {
   if (!isStoryCampaign(content, run.campaignId)) return;
   if (!run.story.v2) run.story.v2 = StoryV2Schema.parse({ mode: 'story_run' });
   const v2 = run.story.v2;
+  bindPartner(content, run);
   startBackstory(content, run);
   const bp = v2.blueprint;
   if (bp && bp.checksum === checksumOf(bp) && bp.stops.length === content.balance.story.stopsTotal) return;

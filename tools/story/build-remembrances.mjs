@@ -46,6 +46,7 @@ for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
     quizEligible: quiz,
   });
 }
-if (result.length !== 74) throw new Error(`expected 74 lines, got ${result.length}`);
+// 74 design lines plus Vulpix and Psyduck (director, 2026-11-07: they are Story Run starters).
+if (result.length !== 76) throw new Error(`expected 76 lines, got ${result.length}`);
 writeFileSync(new URL(out, root), JSON.stringify(result, null, 1) + '\n');
 console.log(`remembrances: ${result.length} lines (${result.filter((r) => byLine.has(r.line[0])).length} kept)`);

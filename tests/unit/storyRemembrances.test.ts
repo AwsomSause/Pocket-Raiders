@@ -7,15 +7,17 @@ const ROSTER = ['bulbasaur', 'charmander', 'squirtle', 'chikorita', 'cyndaquil',
   'dratini', 'larvitar', 'bagon', 'beldum', 'gible', 'deino', 'goomy', 'jangmo-o', 'dreepy', 'frigibax',
   'pichu', 'tuftin', 'magby', 'elekid', 'togepi', 'aron',
   'pidgey', 'hoothoot', 'taillow', 'starly', 'pidove', 'fletchling', 'pikipek', 'rookidee', 'wattrel',
-  'rhyhorn', 'porygon', 'mankey', 'gastly', 'abra', 'machop', 'magnemite', 'shinx', 'weedle', 'caterpie', 'nidoran-f', 'nidoran-m', 'poliwag', 'oddish', 'swinub', 'ralts', 'trapinch', 'duskull', 'sandile', 'pawniard', 'grubbin', 'blipbug'];
+  'rhyhorn', 'porygon', 'mankey', 'gastly', 'abra', 'machop', 'magnemite', 'shinx', 'weedle', 'caterpie', 'nidoran-f', 'nidoran-m', 'poliwag', 'oddish', 'swinub', 'ralts', 'trapinch', 'duskull', 'sandile', 'pawniard', 'grubbin', 'blipbug',
+  // Not in the design roster: added by the director (2026-11-07) because they are Story Run starters.
+  'vulpix', 'psyduck'];
 
 const lines = content.storyData.remembrances;
 
 describe('Remembrance roster', () => {
-  it('is the closed list of 74 lines, each 1 to 3 real stages', () => {
-    expect(ROSTER).toHaveLength(74);
+  it('is the closed list of 76 lines (74 from the design plus Vulpix and Psyduck), each 1 to 3 real stages', () => {
+    expect(ROSTER).toHaveLength(76);
     expect(lines.map((r) => r.line[0]).sort()).toEqual([...ROSTER].sort());
-    expect(new Set(lines.map((r) => r.id)).size).toBe(74);
+    expect(new Set(lines.map((r) => r.id)).size).toBe(76);
     for (const r of lines) {
       expect(r.line.length, r.id).toBeGreaterThanOrEqual(1);
       expect(r.line.length, r.id).toBeLessThanOrEqual(3);
@@ -24,10 +26,10 @@ describe('Remembrance roster', () => {
     }
   });
 
-  it('has the design rarity counts and a 52-line opening quiz pool', () => {
+  it('has the design rarity counts (plus 2 Familiar) and a 54-line opening quiz pool', () => {
     const count = (k: string) => lines.filter((r) => r.rarity === k).length;
-    expect([count('familiar'), count('unusual'), count('rare'), count('exceptional')]).toEqual([32, 20, 12, 10]);
-    expect(lines.filter((r) => r.quizEligible)).toHaveLength(52);
+    expect([count('familiar'), count('unusual'), count('rare'), count('exceptional')]).toEqual([34, 20, 12, 10]);
+    expect(lines.filter((r) => r.quizEligible)).toHaveLength(54);
   });
 
   it('the quiz gives 3 distinct lines from the real pool for many score sets', () => {

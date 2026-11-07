@@ -29,7 +29,7 @@ export interface Candidate {
 }
 
 /** Specificity score per condition kind (design doc table). */
-export const SPECIFICITY: Record<string, number> = { backstory: 10, backstoryInput: 15, relationship: 12, flag: 14, trait: 6, starter: 8, starterLine: 9, act: 3 };
+export const SPECIFICITY: Record<string, number> = { backstory: 10, backstoryInput: 15, relationship: 12, flag: 14, trait: 6, starter: 8, starterLine: 9, starter_line: 9, act: 3 };
 
 function compare(actual: unknown, op: ResolveCond['op'], expected: unknown): boolean {
   if (actual === undefined) return false;
@@ -52,7 +52,8 @@ function actualFor(c: ResolveCond, ctx: ResolveContext): unknown {
     case 'flag': return ctx.flags?.[c.key ?? ''];
     case 'trait': return ctx.traits?.[c.key ?? ''];
     case 'starter': return ctx.starter?.personality;
-    case 'starterLine': return ctx.starter?.line;
+    case 'starterLine':
+    case 'starter_line': return ctx.starter?.line; // data files use the snake_case spelling (ids are lower case)
     case 'act': return ctx.act;
     default: return undefined;
   }
