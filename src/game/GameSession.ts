@@ -51,6 +51,7 @@ import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
+import { answerRegionForm, regionFormOffers, type RegionFormOffer } from '../core/regionForms';
 import { useCapsule } from '../core/capsuleQuests';
 import { toggleCamp } from '../core/trainingCamp';
 import { applyMentorLesson, type MentorLesson } from '../core/mentorLesson';
@@ -687,6 +688,20 @@ export class GameSession {
   nursery(eggUid: string, choice: NurseryChoice): string {
     const run = structuredClone(this.requireRun());
     const message = applyNursery(this.content, run, eggUid, choice);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Region entry: the Pokémon that may take a regional form here (not yet asked). */
+  regionFormOffers(): RegionFormOffer[] {
+    return this.run ? regionFormOffers(this.content, this.run) : [];
+  }
+
+  /** Answers a regional form offer (target null = not now). Free; asked once per Pokémon per region. */
+  answerRegionForm(uid: string, target: string | null): string {
+    const run = structuredClone(this.requireRun());
+    const message = answerRegionForm(this.content, run, uid, target);
     this.run = run;
     this.persistRun();
     return message;

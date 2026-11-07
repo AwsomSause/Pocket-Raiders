@@ -31,13 +31,19 @@ export function applyFormShift(content: Content, run: RunState, uid: string, tar
   if (!mon) throw new Error('Choose a Pokémon');
   const problem = formShiftProblem(content, run, mon, target);
   if (problem) throw new Error(problem);
-  const share = mon.hp / maxHp(content, mon);
   const from = getSpecies(content, mon.speciesId).name;
   consumeItem(run.inventory, FORM_SHIFT.item);
+  const next = switchForm(content, run, mon, target);
+  return `${from} shifted into ${next.name}!`;
+}
+
+/** Swaps a Pokémon into another form of its species: level, moves, nature and bond stay, HP keeps its share, the new form is marked caught. No item cost; callers charge it. */
+export function switchForm(content: Content, run: RunState, mon: PokemonInstance, target: string) {
+  const share = mon.hp / maxHp(content, mon);
   mon.speciesId = target;
   const next = getSpecies(content, target);
   if (mon.abilitySlot >= next.abilities.normal.length || (mon.abilitySlot < 0 && !next.abilities.hidden)) mon.abilitySlot = 0;
   mon.hp = Math.max(1, Math.round(maxHp(content, mon) * share));
   discover(run, target, true);
-  return `${from} shifted into ${next.name}!`;
+  return next;
 }
