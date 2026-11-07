@@ -1,0 +1,5 @@
+# Story S15 follow-up: signature abilities and evolution conditions
+
+- Built: Wise Eye (Oracowl; ignores the foe's raised evasion and blocks accuracy drops), Eye of the Gale (Tempestwing; +1 Speed after surviving a super-effective hit), Grid Surfer (Megawattrel; double Speed on Electric Terrain, +1 Speed after landing an Electric move). Defined in `tools/build-story-species.ts` and merged into `content.abilities`. Evolutions now use `src/core/conditionEvolution.ts`: Tuftin to Eevee at Heartbond 3 (the level 12 route stays for non-Story runs), Noctowl to Oracowl at level 42 at night with Heartbond 6, Swellow to Tempestwing at level 46 and Kilowattrel to Megawattrel at level 52 after a win that ends in rain. Checked after won battles; no save version change.
+- Limits: the engine's only storm is rain, so "storm" and "thunderstorm" both mean rain (Nodes are not a source). Wise Eye does not yet reveal the foe's held item. Heartbond and night checks need a Story run (Heartbond) and the run clock (night).
+- Tests: `tests/unit/storySpeciesRules.test.ts`.
