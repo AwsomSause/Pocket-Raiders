@@ -109,10 +109,10 @@ export function stopArtFor(content: Content, ev: EventDef, hasAsset: (id: string
       ? { kind: 'trainer', assetId: cast }
       : givenMon
         ? { kind: 'pokemon', species: givenMon }
-        : item
-          ? { kind: 'item', assetId: item }
-          : wordTrainer
-            ? { kind: 'trainer', assetId: wordTrainer }
+        : wordTrainer
+          ? { kind: 'trainer', assetId: wordTrainer }
+          : item
+            ? { kind: 'item', assetId: item }
             : wordItem
               ? { kind: 'item', assetId: wordItem }
               : groupIcon && hasAsset(groupIcon)
