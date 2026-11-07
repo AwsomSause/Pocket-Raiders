@@ -382,3 +382,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `drive-learnset-pass.md`: 110 final-stage species got 695 missing moves from the Gen 9 Learnsets Compendium.
 - `drive-form-anims.md`: 115 still form sprites now animate (Drive strips).
 - `drive-music.md`: 18 Decades songs for battle and map variety.
+- `drive-overworld-npcs.md`: 43 generic Decades class NPC sheets added to the hub town crowd.
