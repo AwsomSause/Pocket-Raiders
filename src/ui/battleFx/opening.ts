@@ -194,32 +194,53 @@ export function dropIn(scene: Phaser.Scene, motion: MotionLevel, target: { y: nu
 /** How tall (px) every foe trainer stands on the arena, whatever size its art is drawn at. */
 export const FOE_TRAINER_HEIGHT = 190;
 
-/** The first and last rows of a frame that have visible pixels (cached). Null when the pixels cannot be read. */
-function opaqueRows(scene: Phaser.Scene, key: string, frame: string | number): { top: number; bottom: number; height: number } | null {
-  const cacheKey = `${key}#${frame}`;
-  const cached = rowCache.get(cacheKey);
+const median = (v: number[]): number => [...v].sort((a, b) => a - b)[Math.floor(v.length / 2)] ?? 0;
+
+/**
+ * The visible figure of a trainer picture: the first and last rows with visible pixels, as the median over all its
+ * animation frames (a strip's first frame can be a crouch or a wide pose). Cached. Null when the pixels cannot be read.
+ */
+function figureRows(scene: Phaser.Scene, key: string): { top: number; bottom: number; height: number } | null {
+  const cached = rowCache.get(key);
   if (cached !== undefined) return cached;
   let result: { top: number; bottom: number; height: number } | null = null;
   try {
-    const f = scene.textures.getFrame(key, frame as string);
-    const w = f.cutWidth;
-    const h = f.cutHeight;
-    let top = -1;
-    let bottom = -1;
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x += 2) {
-        if (scene.textures.getPixelAlpha(x, y, key, frame as string) > 20) {
-          if (top < 0) top = y;
-          bottom = y;
-          break;
+    const names = scene.textures.get(key).getFrameNames();
+    const list: Array<string | number> = names.length > 0 ? names : ['__BASE'];
+    const tops: number[] = [];
+    const bottoms: number[] = [];
+    let real = 0;
+    for (const name of list) {
+      const f = scene.textures.getFrame(key, name as string);
+      let top = -1;
+      let bottom = -1;
+      for (let y = 0; y < f.realHeight; y++) {
+        for (let x = 0; x < f.realWidth; x += 2) {
+          if (scene.textures.getPixelAlpha(x, y, key, name as string) > 20) {
+            if (top < 0) top = y;
+            bottom = y;
+            break;
+          }
         }
       }
+      // getPixelAlpha counts from the top of the original (untrimmed) box, which is how the sprite is drawn.
+      if (top >= 0) {
+        tops.push(top);
+        bottoms.push(bottom);
+        real = f.realHeight;
+      }
     }
-    if (top >= 0) result = { top, bottom, height: h };
+    if (tops.length > 0) {
+      // Strips start small (crouched or sliding in) and end standing: size by a tall pose so the figure fills the zone, feet at the usual line.
+      const heights = tops.map((t, i) => (bottoms[i] ?? t) - t + 1).sort((a, b) => a - b);
+      const tall = heights[Math.min(heights.length - 1, Math.floor(heights.length * 0.85))] ?? 1;
+      const bottom = median(bottoms);
+      result = { top: bottom - tall + 1, bottom, height: real };
+    }
   } catch {
     result = null;
   }
-  rowCache.set(cacheKey, result);
+  rowCache.set(key, result);
   return result;
 }
 const rowCache = new Map<string, { top: number; bottom: number; height: number } | null>();
@@ -231,9 +252,9 @@ const rowCache = new Map<string, { top: number; bottom: number; height: number }
 export function fitTrainer(scene: Phaser.Scene, visual: Phaser.GameObjects.GameObject, y: number, height = FOE_TRAINER_HEIGHT): void {
   const s = visual as Phaser.GameObjects.Sprite;
   if (!s.frame || typeof s.setScale !== 'function' || !s.texture) return;
-  const rows = opaqueRows(scene, s.texture.key, s.frame.name);
+  const rows = figureRows(scene, s.texture.key);
   if (!rows) return;
-  const figure = rows.bottom - rows.top + 1;
+  const figure = Math.max(8, rows.bottom - rows.top + 1);
   s.setScale(height / figure);
   s.setOrigin(s.originX, (rows.bottom + 1) / rows.height);
   s.setY(y);
