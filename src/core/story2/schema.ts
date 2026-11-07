@@ -294,6 +294,8 @@ export const StoryV2Schema = z.object({
   }).default(() => ({ latched: [], pending: [], keystoneReady: false, ledger: [] })),
   /** S7: the Dramatic Moments setting, copied here each turn (off: no Feats and no Charge). */
   dramatic: z.enum(['off', 'quiet', 'full', 'prompt']).default('full'),
+  /** The Story Intensity setting, copied here each turn: full plays every optional scene, streamlined skips camp and template scenes, minimal also skips Eevee offers. */
+  intensity: z.enum(['full', 'streamlined', 'minimal']).default('full'),
   /** S7: the partner's Resolve Charge (0 to 100), banked Feats, the Feats used (id, battle key, Act), Charge ledger keys, a player-armed Feat (Prompt mode), and the first Feat (Chronicle). */
   feats: z.object({
     charge: z.number().int().min(0).max(100).default(0),

@@ -587,6 +587,7 @@ export class GameSession {
     const v2 = this.run?.story.v2;
     if (v2) v2.autonomy = this.settings.story.autonomy;
     if (v2) v2.dramatic = this.settings.story.dramaticMoments;
+    if (v2) v2.intensity = this.settings.story.intensity;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {

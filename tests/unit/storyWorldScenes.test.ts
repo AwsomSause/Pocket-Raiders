@@ -112,6 +112,18 @@ describe('Eevee Crossroads', () => {
     expect(eevee.speciesId).toBe(id.replace('ev_eevee_', ''));
   });
 
+  it('Story intensity: streamlined skips template scenes, minimal also skips the Eevee offer', () => {
+    const run = storyRun('world-intensity');
+    run.party.push(createPokemon(content, 'eevee', 25, 'eevee-int'));
+    const recovery = { ...run.story.v2!.blueprint!.stops[0]!, category: 'recovery' as const };
+    const narrative = { ...recovery, category: 'narrative' as const };
+    run.story.v2!.intensity = 'streamlined';
+    expect(worldPick(content, run, recovery, 3, [], [])?.startsWith('ev_eevee_')).toBe(true);
+    expect(worldPick(content, run, narrative, 6, [], [])).toBeUndefined();
+    run.story.v2!.intensity = 'minimal';
+    expect(worldPick(content, run, recovery, 3, [], [])).toBeUndefined();
+  });
+
   it('no Eevee, or one under level 20, gets no offer', () => {
     const run = storyRun('world-no-eevee');
     run.party.push(createPokemon(content, 'eevee', 10, 'young-eevee'));
