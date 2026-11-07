@@ -238,7 +238,8 @@ describe('trainer battles', () => {
       run.party[0] = createPokemon(content, run.party[0]!.speciesId, 70, run.party[0]!.uid);
       while (run.battle?.kind !== 'trainer') {
         run = skipDecisions(fightOut(run).run);
-        if (run.phase === 'reward') run = toBattle(skipDecisions(chooseReward(content, run, 0).run));
+        // Take a reward that isn't a money item, so nothing (Amulet Coin II, Roto Prize Money...) changes the prize.
+        if (run.phase === 'reward') run = toBattle(skipDecisions(chooseReward(content, run, Math.max(0, run.draft!.findIndex((id) => { const e = content.rewards.get(id)!.effect; return e.kind !== 'catalog' || !/money|prize/i.test(JSON.stringify(content.catalog.get(e.entry)!)); }))).run));
       }
       const column = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.column;
       expect(column).toBe(run.stage!.map.trainerColumns[0]);
