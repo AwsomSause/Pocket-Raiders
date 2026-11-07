@@ -2762,6 +2762,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A Blissful Pokémon is in the party / a Shadow Pokémon is in the party (APPROVED.md §12-14). */
   z.object({ kind: z.literal('partyBlissful') }),
   z.object({ kind: z.literal('partyShadow') }),
+  /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
+  z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
   z.object({ kind: z.literal('bond') }),
   /** W10: Pokémon photographed at camp this run. */
