@@ -378,3 +378,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - early-deaths-difficulties.md: flatter early curve, second-wind healing, Casual/Brutal/Mythic difficulties, +1 HP per level.
 - `story-quest-unlocks.md`: 13 quest arcs unlock the 14 Rare and Exceptional starter lines that had no route.
 - `drive-leftovers.md`: Pokédex footprints, low-HP battle music, 28 more Decades battle arenas.
+- `content-audit-1.md`: Eelevate KO boost, Levitate now blocks Earthquake, Mega ability slot fix, battle-sim audit test for every ability, move and Pokémon.
