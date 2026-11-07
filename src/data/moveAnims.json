@@ -20648,6 +20648,1809 @@
       "flash": "#78c850",
       "hitStopMs": 90,
       "telegraph": "strong"
+    },
+    "sig-rootbound-stand": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-thorn-mend": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-tailfire-vow": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-ember-tether": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-shellback-rally": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-backwash": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-leaf-lullaby": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-soft-reprise": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-ember-whisper": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-smoke-signal": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-snap-jest": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-last-laugh": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-branch-gambit": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-leaf-feint": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-roosters-pride": {
+      "anim": "burning-bulwark",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "quick"
+    },
+    "sig-crow-call": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-mudsplash-wall": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-mud-roll": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-slow-bloom": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-seed-rooting": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-flame-sprint": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-tail-whip-spark": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-proud-plume": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-frost-brush": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-cool-rebuke": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-vine-grace": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-cinder-hug": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-warm-ember": {
+      "anim": "burning-bulwark",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "quick"
+    },
+    "sig-scalchop-oath": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-shell-parry": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-spine-guard": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-burr-wall": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-twig-spell": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-spark-rune": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-bubble-veil": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-quick-ripple": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-silent-feather": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-moonlit-glide": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-alley-claw": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-shadow-slink": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-seals-serenade": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-tide-chorus": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-drumline": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-beat-break": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-kickoff": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-hot-lap": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-teardrop-gambit": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-misty-eyes": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-catnip-trick": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-purr-snare": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-lazy-blaze": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-warm-doze": {
+      "anim": "burning-bulwark",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "quick"
+    },
+    "sig-tidewalk-step": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-fan-flourish": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-mist-coil": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-scale-hum": {
+      "anim": "clangorous-soul",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-gravel-heart": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-pebble-rain": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dreamwing-dive": {
+      "anim": "glaive-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-cloud-climb": {
+      "anim": "clangorous-soul",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-quiet-calculus": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-mag-net": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-sandbite-rush": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-ground-rumble": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-blind-maw": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dark-howl": {
+      "anim": "nasty-plot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-slick-comfort": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dewy-hold": {
+      "anim": "clangorous-soul",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-scale-song": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-rattle-stomp": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-haunting-orbit": {
+      "anim": "lick",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-lost-lantern": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-long-winter": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "sig-snow-swell": {
+      "anim": "ice-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "ice-burn-charging"
+    },
+    "sig-spark-promise": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-static-cuddle": {
+      "anim": "charge",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-many-roads": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-tuft-ruffle": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-coalheart": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-ember-rolls": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-static-dare": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-shock-jab": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-lucky-warmth": {
+      "anim": "aromatic-mist",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-wish-chime": {
+      "anim": "aromatic-mist",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-iron-appetite": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-rock-chew": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-courier-dash": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-gust-mail": {
+      "anim": "hurricane",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 77,
+      "telegraph": "strong"
+    },
+    "sig-dusk-meter": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-hush-hoot": {
+      "anim": "hyper-beam",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-brave-swallow": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-gale-dive": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-flock-cry": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-wing-rally": {
+      "anim": "defog",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-quiet-courier": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-station-hush": {
+      "anim": "hurricane",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 77,
+      "telegraph": "strong"
+    },
+    "sig-ember-flight": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-cinder-dart": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-drum-peck": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-roll-call": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-black-wing-oath": {
+      "anim": "defog",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-iron-perch": {
+      "anim": "autotomize",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-storm-skim": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-spark-surf": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-horn-drill-pledge": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-charge-plow": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-debug-loop": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-patch-update": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-rage-rally": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-pound-tantrum": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-prank-mist": {
+      "anim": "confuse-ray",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-boo-brew": {
+      "anim": "confuse-ray",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-short-nap-teleport": {
+      "anim": "agility",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-sleepwalk": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-training-montage": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-warm-up-set": {
+      "anim": "bulk-up",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-magnet-handshake": {
+      "anim": "autotomize",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-pole-flip": {
+      "anim": "autotomize",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-glint-pounce": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-eye-flash": {
+      "anim": "charge",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-stinger-debt": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-venom-needle": {
+      "anim": "gunk-shot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-silk-cradle": {
+      "anim": "defend-order",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-thread-net": {
+      "anim": "defend-order",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-mothers-spike": {
+      "anim": "acid-armor",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-burrow-wall": {
+      "anim": "sand-attack",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-challengers-horn": {
+      "anim": "gunk-shot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-poison-charge": {
+      "anim": "gunk-shot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-swirl-step": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-belly-whirl": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-midnight-pollen": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-dew-mist": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-truffle-hunter": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "sig-snow-sniff": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-heartlight": {
+      "anim": "agility",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-calm-pulse": {
+      "anim": "agility",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-antlion-pit": {
+      "anim": "sand-attack",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-sand-pit": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-lantern-vigil": {
+      "anim": "confuse-ray",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-candle-ward": {
+      "anim": "confuse-ray",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-dune-gleam": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-heat-haze": {
+      "anim": "sandsear-storm",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 73,
+      "telegraph": "strong"
+    },
+    "sig-hollow-edge": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dark-whet": {
+      "anim": "nasty-plot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dig-charge": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-spark-burrow": {
+      "anim": "bug-buzz",
+      "source": "type",
+      "shake": 2,
+      "flash": "#a8b820",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "sig-signal-ping": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-static-ping": {
+      "anim": "bug-buzz",
+      "source": "type",
+      "shake": 2,
+      "flash": "#a8b820",
+      "hitStopMs": 70,
+      "telegraph": "normal"
+    },
+    "sig-rootbound-stand-keystone": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-tailfire-vow-keystone": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-shellback-rally-keystone": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-leaf-lullaby-keystone": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-ember-whisper-keystone": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-snap-jest-keystone": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-branch-gambit-keystone": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-roosters-pride-keystone": {
+      "anim": "burning-bulwark",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "quick"
+    },
+    "sig-mudsplash-wall-keystone": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-slow-bloom-keystone": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-flame-sprint-keystone": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-proud-plume-keystone": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-cool-rebuke-keystone": {
+      "anim": "chloroblast",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-cinder-hug-keystone": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-scalchop-oath-keystone": {
+      "anim": "wave-crash",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-spine-guard-keystone": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-twig-spell-keystone": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-bubble-veil-keystone": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-silent-feather-keystone": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-alley-claw-keystone": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-seals-serenade-keystone": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-drumline-keystone": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-kickoff-keystone": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-teardrop-gambit-keystone": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-catnip-trick-keystone": {
+      "anim": "solar-blade",
+      "source": "type",
+      "shake": 3,
+      "flash": "#78c850",
+      "hitStopMs": 82,
+      "telegraph": "strong",
+      "chargeAnim": "solar-blade-charging"
+    },
+    "sig-lazy-blaze-keystone": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-tidewalk-step-keystone": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-mist-coil-keystone": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-gravel-heart-keystone": {
+      "anim": "rock-throw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8a038",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dreamwing-dive-keystone": {
+      "anim": "glaive-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-quiet-calculus-keystone": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-sandbite-rush-keystone": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-blind-maw-keystone": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-slick-comfort-keystone": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-scale-song-keystone": {
+      "anim": "dragon-breath",
+      "source": "type",
+      "shake": 3,
+      "flash": "#7038f8",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-haunting-orbit-keystone": {
+      "anim": "lick",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705898",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-long-winter-keystone": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "sig-spark-promise-keystone": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-many-roads-keystone": {
+      "anim": "explosion",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8a878",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-coalheart-keystone": {
+      "anim": "blast-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-static-dare-keystone": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-lucky-warmth-keystone": {
+      "anim": "aromatic-mist",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-iron-appetite-keystone": {
+      "anim": "metal-claw",
+      "source": "type",
+      "shake": 3,
+      "flash": "#b8b8d0",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-courier-dash-keystone": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-dusk-meter-keystone": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-brave-swallow-keystone": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-flock-cry-keystone": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-quiet-courier-keystone": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-ember-flight-keystone": {
+      "anim": "v-create",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f08030",
+      "hitStopMs": 100,
+      "telegraph": "strong"
+    },
+    "sig-drum-peck-keystone": {
+      "anim": "sky-attack",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a890f0",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "sky-attack-charging"
+    },
+    "sig-black-wing-oath-keystone": {
+      "anim": "defog",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-storm-skim-keystone": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-horn-drill-pledge-keystone": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-debug-loop-keystone": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-rage-rally-keystone": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-prank-mist-keystone": {
+      "anim": "confuse-ray",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-short-nap-teleport-keystone": {
+      "anim": "agility",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-training-montage-keystone": {
+      "anim": "focus-punch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#c03028",
+      "hitStopMs": 90,
+      "telegraph": "strong"
+    },
+    "sig-magnet-handshake-keystone": {
+      "anim": "autotomize",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-glint-pounce-keystone": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-stinger-debt-keystone": {
+      "anim": "megahorn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a8b820",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-silk-cradle-keystone": {
+      "anim": "defend-order",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-mothers-spike-keystone": {
+      "anim": "acid-armor",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-challengers-horn-keystone": {
+      "anim": "gunk-shot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-swirl-step-keystone": {
+      "anim": "aqua-ring",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-midnight-pollen-keystone": {
+      "anim": "aromatherapy",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-truffle-hunter-keystone": {
+      "anim": "freeze-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "freeze-shock-charging"
+    },
+    "sig-heartlight-keystone": {
+      "anim": "agility",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-antlion-pit-keystone": {
+      "anim": "sand-attack",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-lantern-vigil-keystone": {
+      "anim": "confuse-ray",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-dune-gleam-keystone": {
+      "anim": "headlong-rush",
+      "source": "type",
+      "shake": 3,
+      "flash": "#e0c068",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-hollow-edge-keystone": {
+      "anim": "bite",
+      "source": "type",
+      "shake": 3,
+      "flash": "#705848",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-dig-charge-keystone": {
+      "anim": "catastropika",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 110,
+      "telegraph": "strong"
+    },
+    "sig-signal-ping-keystone": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
     }
   },
   "commonPack": {

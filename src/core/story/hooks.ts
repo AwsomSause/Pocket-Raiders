@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { grantSignatureMoves } from '../story2/signature';
 import { periodOf } from '../clock';
 import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
@@ -77,6 +78,8 @@ export function recordBattleStarted(content: Content, run: RunState): void {
   const battle = run.battle!;
   applyAnomaly(content, run);
   run.story.majorCuesThisBattle = 0;
+  // Story S7d: the partner's signature moves join it for this battle.
+  grantSignatureMoves(content, run);
   const lead = run.party[battle.activeIndex]!;
   noteFought(run, lead.uid);
   emit(content, run, 'battleStarted', {

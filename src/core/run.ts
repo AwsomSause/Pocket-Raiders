@@ -190,6 +190,7 @@ import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
 import { clutchSurvived, heartbondTurn, heartbondVictory, recoveryScenes, takeBeat } from './story2/heartbond';
 import { renderTemplate } from './story2/templates';
+import { checkSignatures, endSignatureMoves, learnedLine } from './story2/signature';
 import { featGate, featLines, gainCharge, memoryPhrase, keystoneFeat, recordFeat, significantBattle, sparkShared } from './story2/feats';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
@@ -2165,8 +2166,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const heartbondScenes = recoveryScenes(run, content.storyData.text, (m) => displayName(content, m)).join(' ');
     // S7: the Keystone Memory's guaranteed Feat slot (once a run).
     if (run.story.v2?.heartbond.keystoneReady) keystoneFeat(content, run);
+    // S7d: Signature II (and the Keystone upgrade) are learned at a Recovery stop.
+    const sigPartner = run.party.find((m) => m.uid === run.story.v2?.heartbond.partner);
+    const sigLines = sigPartner ? checkSignatures(content, run, 'recovery').map((u) => learnedLine(content, run, displayName(content, sigPartner), u)).join(' ') : '';
     const camp = quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2620,6 +2624,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId));
   if (battle.outcome === 'win' && partnerUid && run.story.histories[partnerUid]?.lastBattle === run.encountersCompleted && significantBattle(battle)) gainCharge(content, run, 'win_significant');
+  // S7d: Signature I after a won boss, Gym, Elite, Champion or rival fight the partner fought in; Keystone when ready.
+  if (battle.outcome === 'win' && partnerMon && run.story.histories[partnerMon.uid]?.lastBattle === run.encountersCompleted) for (const u of checkSignatures(content, run, 'victory', isBossFight(battle) || Boolean(battle.rivalId))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: learnedLine(content, run, displayName(content, partnerMon), u), uid: partnerMon.uid });
   // S7: the Feat's line, then the memory it quotes (one spectacle line each; Quiet and Full both show them).
   if (featFired && partnerMon) for (const text of featLines(content.storyData.text, featFired, displayName(content, partnerMon), memoryPhrase(run, partnerMon.uid))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text, uid: partnerMon.uid });
   if (sparked && partnerMon) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: renderTemplate(content.storyData.text['feat.spark_shared.line'] ?? '', { pokemon: displayName(content, partnerMon) }), uid: sparked });
@@ -2658,6 +2664,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
     for (const mon of run.party) endHeldBattle(mon);
+    endSignatureMoves(run.party);
   }
 
   // Beta 4.4: Hyper slots end with the battle; after a win or catch each is offered to keep.

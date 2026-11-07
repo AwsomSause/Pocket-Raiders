@@ -3142,7 +3142,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
 
   // Metronome, Mirror Move, Copycat: use another move instead.
   if (fx.callMove) {
-    const pool = [...content.moves.values()].filter((m) => m.supported && !m.effects.callMove && !m.effects.charge && !m.effects.protect && !m.flags.includes('zmove') && !m.flags.includes('max') && !m.flags.includes('megasig')).map((m) => m.id).sort();
+    const pool = [...content.moves.values()].filter((m) => m.supported && !m.effects.callMove && !m.effects.charge && !m.effects.protect && !m.flags.includes('zmove') && !m.flags.includes('max') && !m.flags.includes('megasig') && !m.flags.includes('storysig')).map((m) => m.id).sort();
     const id = fx.callMove === 'metronome' ? (pool.length ? rng.pick(pool) : null) : (target.vol.lastMove ?? (fx.callMove === 'copycat' ? user.vol.lastMove : null));
     const called = id ? content.moves.get(id) : undefined;
     if (!called || called.effects.callMove) {

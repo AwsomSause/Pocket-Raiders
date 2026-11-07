@@ -352,7 +352,7 @@ export function randomSpecies(content: Content, run: Pick<RunState, 'rules' | 's
 /** Randomizer (S298): a random moveset for `mon` (two damaging moves of its own types when any exist, then two of any type). Mutates `mon`. */
 export function randomizeMoves(content: Content, run: Pick<RunState, 'rules' | 'seed'>, mon: PokemonInstance): void {
   if (!has(run.rules, (m) => m.randomMoves)) return;
-  const usable = [...content.moves.values()].filter((m) => m.supported && m.power !== null && m.power >= 30 && m.power <= 95 && !m.flags.some((f) => f === 'zmove' || f === 'max' || f === 'megasig')).sort((a, b) => a.id.localeCompare(b.id));
+  const usable = [...content.moves.values()].filter((m) => m.supported && m.power !== null && m.power >= 30 && m.power <= 95 && !m.flags.some((f) => f === 'zmove' || f === 'max' || f === 'megasig' || f === 'storysig')).sort((a, b) => a.id.localeCompare(b.id));
   if (usable.length < 4) return;
   const rng = new Rng(hashSeed(`${run.seed}::random-moves::${mon.uid}`));
   const own = getSpecies(content, mon.speciesId).types;
