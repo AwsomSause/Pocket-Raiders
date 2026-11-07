@@ -1461,6 +1461,8 @@ export const PerkSchema = z.discriminatedUnion('perk', [
   z.object({ perk: z.literal('extraStop'), kind: z.enum(['heal', 'shop', 'fish', 'event']), where: z.enum(['stage', 'nextNode']) }),
   /** Every hidden "?" stop shows what it is (Silph Scope). */
   z.object({ perk: z.literal('revealEvents') }),
+  /** Torch and Dungeon Key: nothing happens on their own; dungeon rooms (core/dungeon/compile.ts) offer to spend one. */
+  z.object({ perk: z.literal('dungeonSupply') }),
   /** The next event shows each choice's odds and outcome before you choose (Inquiry Mail). */
   z.object({ perk: z.literal('eventInsight') }),
   /** Key items and tickets: holding one opens its event stop (events.json `keyItem`). */
@@ -1534,7 +1536,9 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   /** A permanent percentage on one stat of one Pokémon, per copy (Wings). */
   z.object({ kind: z.literal('statBoost'), stat: StatNameSchema, percent: z.number().positive() }),
   /** One Pokémon gains friendship (negative: loses it), plus attribute changes. */
-  z.object({ kind: z.literal('feed'), friendship: z.number().int(), changes: AttributeChangesSchema }),
+  z.object({ kind: z.literal('feed'), friendship: z.number().int(), changes: AttributeChangesSchema, /** W5: EVs it adds (negative: removes), like Pomeg-style berries. */ evs: z.partialRecord(StatNameSchema, z.number().int()).optional() }),
+  /** W5 Bottle Caps: hyper-train the lowest IV (Bottle Cap) or every IV (Gold Bottle Cap) to count as 31. */
+  z.object({ kind: z.literal('hyperTrain'), mode: z.enum(['lowest', 'all']) }),
   /** Raises the max PP of one move the player picks (each up is +20%, at most 3 per move). */
   z.object({ kind: z.literal('ppUp'), ups: z.number().int().min(1).max(3) }),
   /** Changes one Pokémon's nature (Mints). */
@@ -2190,6 +2194,10 @@ export const BalanceSchema = z.object({
   /** Extra max HP per level for every Pokémon (both sides): with no IVs or EVs a high-level Pokémon would otherwise die to one or two hits. */
   hpPerLevel: z.number().min(0).default(0),
   vitaminMaxStacks: z.number().int().positive(),
+  /** W5 EVs: caps (main-series 252 per stat, 510 in all) and how many times a species' yield a knockout gives. */
+  evs: z
+    .object({ perStat: z.number().int().positive(), total: z.number().int().positive(), gainMultiplier: z.number().min(0) })
+    .default({ perStat: 252, total: 510, gainMultiplier: 2 }),
   /** Abilities (M8.75 part C3): the chance a new Pokémon has its hidden ability instead of a normal one. */
   abilities: z.object({ hiddenChance: z.number().min(0).max(1) }),
   /**

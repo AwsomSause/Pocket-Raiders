@@ -93,6 +93,13 @@ export function worldFor(run: RunState): string[] {
   return w.rumors.filter((r) => !r.shown).map((r) => r.text).slice(0, WORLD_SIM.budget.hintsPerNode);
 }
 
+/** Map-node hint: about one node in three carries the first unheard rumour (seeded by node, so hovering never rolls the run). */
+export function nodeHint(run: RunState, nodeId: string): string | null {
+  const hints = worldFor(run);
+  if (!hints.length) return null;
+  return new Rng(hashSeed(`${run.seed}::nodehint::${nodeId}`)).int(0, 2) === 0 ? hints[0]! : null;
+}
+
 /** The one write a node read may do: mark a rumour as shown. */
 export function markRumorShown(run: RunState, text: string): void {
   const r = run.story.sim?.rumors.find((x) => x.text === text);

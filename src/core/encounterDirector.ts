@@ -10,6 +10,7 @@
 
 import type { Content } from './contentSchema';
 import { createPokemon, getSpecies, isUsableMove } from './pokemon';
+import { speciesIvs } from './ivs';
 import type { PokemonInstance } from './state';
 import { threatBudget, threatOf, type ThreatTier } from './threat';
 
@@ -61,7 +62,7 @@ export function bstCeilingAt(content: Content, level: number): number {
 const bstOf = (content: Content, id: string) => Object.values(getSpecies(content, id).baseStats).reduce((a, b) => a + b, 0);
 
 /** A species built at `level` with its default moves, for checking (fixed uid: no RNG). */
-const probe = (content: Content, speciesId: string, level: number): PokemonInstance => createPokemon(content, speciesId, level, `director:${speciesId}`);
+const probe = (content: Content, speciesId: string, level: number): PokemonInstance => ({ ...createPokemon(content, speciesId, level, `director:${speciesId}`), ivs: speciesIvs() });
 
 function check(content: Content, speciesId: string, level: number, budget: number, ordinary: boolean): { reasons: RejectReason[]; threat: number } {
   if (!content.species.has(speciesId)) return { reasons: ['unknown-species'], threat: Infinity };

@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
 import { nookOf, renameNode } from '../core/hubNook';
@@ -52,7 +53,7 @@ import { commentaryLine } from '../core/tools/commentary';
 import { maxHp } from '../core/pokemon';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
-import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr } from '../ui/audio';
+import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr, playCue } from '../ui/audio';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
@@ -295,6 +296,7 @@ export class MapScene extends Phaser.Scene {
     this.index = 0;
     this.picker = null;
     this.busy = false;
+    if (league) playCue(this, 'st_league_gate', null);
     playMusicLazy(this, storyOr(storyRegionMusic(region.id, 'route'), mapTrack(region.id)));
 
     // ---------- backdrop: the stage's own arena, dimmed ----------
@@ -984,8 +986,10 @@ export class MapScene extends Phaser.Scene {
         const route = routeKind(services().session.run!, n);
         const storyStops = (n.storyStops ?? []).map((id) => runNow.story.v2?.blueprint?.stops.find((x) => x.id === id)).filter((x) => !!x && !runNow.story.v2!.stops.done.includes(x.id));
         const storyNote = storyStops.length ? `\n★ Story Stop: ${storyStops.map((x) => x!.category).join(', ')}` : '';
+        const hint = nodeHint(runNow, n.id);
+        const hintNote = hint ? `\nWord on the road: ${hint}` : '';
         const anomaly = stageAnomaly(services().session.content, services().session.run!);
-        return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${storyNote}${seen ? `\n${seen}` : ''}`;
+        return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${storyNote}${hintNote}${seen ? `\n${seen}` : ''}`;
       }
       case 'side':
         if (option.side.kind === 'plaza') return 'Trainer Plaza: the middle of the stage. Stalls, traders, a Battle Club, errands and gossip. Rest, shop and plan before you go on.';

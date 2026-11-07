@@ -50,6 +50,7 @@ import * as Mini from '../core/minigame/flow';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
+import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
 import { answerRegionForm, regionFormOffers, type RegionFormOffer } from '../core/regionForms';
@@ -369,8 +370,16 @@ export class GameSession {
     return was;
   }
 
+  /** Map hints (W8 world sim): a node that carries a rumour shows it once you travel there; it is then marked heard. */
+  hintFor(nodeId: string): string | null {
+    const run = this.run;
+    return run ? nodeHint(run, nodeId) : null;
+  }
+
   chooseNode(nodeId: string): RunState {
+    const heard = this.hintFor(nodeId);
     const moved = Run.chooseNodeWithNotes(this.content, this.requireRun(), nodeId);
+    if (heard) markRumorShown(moved.run, heard);
     this.run = moved.run;
     this.lastCrossing = moved.crossing;
     this.syncCalendar();

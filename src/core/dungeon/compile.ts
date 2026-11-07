@@ -54,9 +54,12 @@ export function room(d: RoomDef, nodeIndex: number): Raw {
       case 'boss':
         choices.push({ ...base, success: fx('"This is as far as you go."', [], { kind: 'trainer', ...(d.pseudo ? { pseudo: true } : {}), classId: d.boss!.classId, name: d.boss!.name, size: d.boss!.size, levelBonus: lvl + 2, win: [{ kind: 'money', amount: cfg.moneyPerTier * d.tier * 2 }, ...(d.pseudo ? [] : [{ kind: 'item', id: d.reward.item, count: d.reward.count }]), { kind: 'moment', text: `You beat ${d.boss!.name} in ${d.name}.`, importance: 55 }] }) });
         break;
-      case 'cache':
-        choices.push({ ...base, success: fx('Inside: supplies someone left behind.', [{ kind: 'item', id: cfg.potion[String(d.tier)]!, count: 1 }, { kind: 'item', id: d.supply.item, count: d.supply.count }]) });
+      case 'cache': {
+        // Deeper dungeons leave a Torch; themed ones (tier 3 and up) a whole supply pack: 2 Repels and an Escape Rope.
+        const extra: Raw[] = [...(d.tier >= 2 ? [{ kind: 'item', id: 'torch', count: 1 }] : []), ...(d.tier >= 3 ? [{ kind: 'item', id: 'repel', count: 2 }, { kind: 'item', id: 'escape-rope', count: 1 }] : [])];
+        choices.push({ ...base, success: fx(d.tier >= 3 ? 'Inside: a whole supply pack someone left behind.' : 'Inside: supplies someone left behind.', [{ kind: 'item', id: cfg.potion[String(d.tier)]!, count: 1 }, { kind: 'item', id: d.supply.item, count: d.supply.count }, ...extra]) });
         break;
+      }
       case 'rest':
         choices.push({ ...base, success: fx('You rest. Everyone recovers some strength.', [{ kind: 'heal', share: cfg.restHeal }]) });
         break;
@@ -76,6 +79,13 @@ export function room(d: RoomDef, nodeIndex: number): Raw {
         choices.push({ ...base, success: fx(`You leave ${d.name} with what you found.`, [{ kind: 'item', id: d.reward.item, count: d.reward.count }, { kind: 'money', amount: cfg.moneyPerTier * d.tier }, { kind: 'moment', text: `You explored ${d.name} and made it out.`, importance: 45 }]) });
         break;
     }
+  }
+  // Dark trap room: a Torch lights it, so nobody trips. A sealed room: a Dungeon Key opens it for one use.
+  if (n.kind === 'trap' && n.next[0]) {
+    choices.push({ label: 'Light a Torch and cross safely', requires: [{ kind: 'item', id: 'torch' }], success: { text: 'The torchlight shows every trigger plate. The torch burns out as you cross.', effects: [{ kind: 'loseItem', id: 'torch' }, open(n.next[0])] } });
+  }
+  for (const to of n.next) {
+    if (byId.get(to)?.kind === 'hidden') choices.push({ label: 'Use a Dungeon Key on the sealed door', requires: [{ kind: 'item', id: 'dungeon-key' }], success: { text: 'The key turns and crumbles to rust.', effects: [{ kind: 'loseItem', id: 'dungeon-key' }, open(to)] } });
   }
   // A trap can also be skipped with an Escape Rope (only when the choices still fit).
   if (n.kind === 'trap' && choices.length <= 3) {

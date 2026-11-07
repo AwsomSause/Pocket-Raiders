@@ -8,6 +8,7 @@
 
 import type { Content } from './contentSchema';
 import { abilityOf, calcStats, createPokemon, getSpecies } from './pokemon';
+import { speciesIvs } from './ivs';
 import type { PokemonInstance } from './state';
 
 export type ThreatTier = 'easy' | 'standard' | 'challenging' | 'elite';
@@ -62,7 +63,7 @@ export function threatOf(content: Content, mon: PokemonInstance): ThreatBreakdow
 
 /** The rating of a species at a level with its default moves and ability (no RNG: a fixed uid). */
 export function speciesThreat(content: Content, speciesId: string, level: number): number {
-  return threatOf(content, createPokemon(content, speciesId, level, `threat:${speciesId}`)).rating;
+  return threatOf(content, { ...createPokemon(content, speciesId, level, `threat:${speciesId}`), ivs: speciesIvs() }).rating;
 }
 
 /** The highest rating an encounter of `tier` may have at `level` (balance.threat.budgets: base + perLevel × level, capped; the cap rises past level 100). */

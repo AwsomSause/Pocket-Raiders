@@ -97,7 +97,7 @@ describe('boss teams', () => {
     expect(mon.moves.map((m) => m.id)).toEqual(['rock-throw', 'tackle']);
     expect(mon.vitamins.atk).toBe(3);
     expect(mon.vitamins.spe).toBe(1);
-    const plain = createPokemon(content, 'onix', 30, 'e2');
+    const plain = createPokemon(content, 'onix', 30, 'e1');
     expect(mon.hp).toBe(plain.hp);
   });
 

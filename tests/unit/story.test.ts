@@ -26,7 +26,7 @@ import { MemoryStorageProvider } from '../../src/save/storage';
 import { autoplay, gameplayFingerprint, step } from './autoplay';
 import { content, toBattle } from './helpers';
 
-const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
+const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
 // The Google Drive pack's items (tools/drive/build-items.py) came later too.
 import DRIVE_ITEMS from '../../tools/drive/items.json';
 import LIBRARY_ITEMS from '../../tools/drive/library-items.json';
@@ -67,15 +67,15 @@ describe('story foundation: random streams', () => {
   // effects slices 2 to 3b-3b (held, map, shop, money, map-movement, map-stop and draft items in drafts, bosses
   // holding items) M8.75 part C3 (every Pokémon has an ability) and the C2c move batch, which change
   // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts, and for the Beta 4.4 battle fixes (sleep 2-4 turns, the first rival on Stage 1 level 5, set boss aces, one Mega per battle, Choice locks only the move).
-  // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2).
+  // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2). Re-pinned for IVs and EVs (W5, ivs-evs.md).
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': '2a3c572317a12dd2',
-    'STORY2/0': '53fedcb9f2b99612',
-    'STORY4/0': '1cd090552bd25ef9',
-    'STORY5/0': 'c5d83f7ec8c4a3be',
-    'STORY6/0': 'fde7180ce8277871',
-    'STORY7/0': '079d2056bb17d052',
-    'STORY8/0': '50f75cf287aa13ea',
+    'STORY1/0': 'aa5757009e49ef9d',
+    'STORY2/0': '79c283333f2c7fe0',
+    'STORY4/0': 'f481a2ec3037edf4',
+    'STORY5/0': '08798645f42fc973',
+    'STORY6/0': '6ce622bca19ab896',
+    'STORY7/0': 'fbbc78718ba162d8',
+    'STORY8/0': 'e7ebd42a26b77690',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.
@@ -122,7 +122,7 @@ describe('story foundation: random streams', () => {
     regions: (RAW_CONTENT.regions as { custom?: boolean }[]).filter((r) => !r.custom),
     runPrep: { ...(RAW_CONTENT.runPrep as object), starterPools: (RAW_CONTENT.runPrep as { starterPools: { filter?: { region?: string } }[] }).starterPools.filter((p) => !['torren', 'frontier-isles', 'trial-archipelago'].includes(p.filter?.region ?? '')) },
     // The Major Update §1 rarity audit changed these items' rarity and stack limit; old seeds use the old values.
-    itemCatalog: catalog.filter((e) => (!eventItem(e) || e.id === 'key-charm') && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && e.id !== 'exp-charm' && e.id !== 'airship-pass' && !String(e.id).endsWith('-lure') && !NEW_FOSSILS.test(String(e.id)) && !LATE_ITEMS.has(e.id as string) && (e as { family?: string }).family !== 'Crests (species held)').map((e) => (e.id === 'key-charm' ? { ...e, status: 'pending', effect: undefined, needs: ['events'] } : PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)).map((e) => (!PRE_AUDIT[e.id as string] && (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] ? { ...e, rarity: (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] } : e)),
+    itemCatalog: catalog.filter((e) => (!eventItem(e) || e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key') && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && e.id !== 'exp-charm' && e.id !== 'airship-pass' && !String(e.id).endsWith('-lure') && !NEW_FOSSILS.test(String(e.id)) && !LATE_ITEMS.has(e.id as string) && (e as { family?: string }).family !== 'Crests (species held)').map((e) => (e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key' ? { ...e, status: 'pending', effect: undefined, needs: ['events'] } : PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)).map((e) => (!PRE_AUDIT[e.id as string] && (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] ? { ...e, rarity: (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] } : e)),
     // The draft deals (bundles, bargains, a risk) join the reward pool, which would change old seeds' drafts.
     rewards: [...(RAW_CONTENT.rewards as { id: string }[]).filter((r) => !r.id.startsWith('deal-') && !LIBRARY_ITEMS.includes(r.id) && r.id !== 'item:key-charm'), ...PRE_ITEM_REWORK.rewards].map((r) => ((r as { effect?: { kind: string } }).effect?.kind === 'vitamin' ? { ...r, rarity: PRE_ITEM_REWORK.vitaminRarity } : r)),
     // The Camp Council (one more rest spot) the Relic Shrine and the world events (milestones, rare sites, callbacks, legendary route, the exploration events, weather fronts, roamers and camps) would shift what an old seed meets, so they are left out too.

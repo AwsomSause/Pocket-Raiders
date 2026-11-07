@@ -106,6 +106,7 @@ import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
+import { hiddenPowerType } from '../ivs';
 
 export type Side = 'player' | 'enemy';
 
@@ -4545,12 +4546,8 @@ function specialMoveType(ctx: BattleContext, user: Combatant, move: Move, _weath
       case 'morpeko': return id.includes('hangry') ? 'dark' : 'electric';
     }
   }
-  if (fx.hiddenPower) {
-    const types = TYPE_NAMES.filter((t) => t !== 'normal' && t !== 'fairy');
-    let h = 0;
-    for (const ch of `hidden-power:${user.mon.uid}`) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-    return types[h % types.length]!;
-  }
+  // W5: Hidden Power's type comes from the user's real IVs (core/ivs.ts).
+  if (fx.hiddenPower) return hiddenPowerType(user.mon);
   if (fx.itemMove === 'naturalGift') {
     const berry = firstItem(Held.effectiveHeld(ctx, user.mon), (i) => i in BERRY_TYPE);
     return berry ? BERRY_TYPE[berry]! : null;

@@ -6,6 +6,7 @@ import { abilityStatus } from '../core/battle/abilities';
 import type { Content, StatName } from '../core/contentSchema';
 import { abilityOf, calcStats, getSpecies, maxPp } from '../core/pokemon';
 import { nextGoal, RANK_NAMES, speciesRank } from '../core/mastery';
+import { evsOf, evTotal, ivsOf } from '../core/ivs';
 import type { PokemonInstance, Profile, RunState } from '../core/state';
 
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);
@@ -22,7 +23,10 @@ export interface SummaryInfo {
   /** E.g. "Adamant (+Attack, −Sp. Atk)"; null for a Pokémon from before natures. */
   nature: string | null;
   held: { id: string; name: string; icon: string | null; count: number }[];
-  stats: { key: StatName; label: string; value: number; base: number; boosted: boolean }[];
+  /** iv: its real IV (0–31); hyper: a Bottle Cap makes it count as 31; ev: EVs earned. */
+  stats: { key: StatName; label: string; value: number; base: number; boosted: boolean; iv: number; hyper: boolean; ev: number }[];
+  /** E.g. "EVs 120/510". */
+  evLine: string;
   moves: { id: string; name: string; type: string; category: string; power: string; accuracy: string; pp: string; text: string }[];
   /** Battles, knockouts, bosses beaten this run, e.g. "12 battles · 9 KOs · 2 bosses". */
   record: string | null;
@@ -34,6 +38,8 @@ export interface SummaryInfo {
 export function summaryInfo(content: Content, run: RunState | null, mon: PokemonInstance): SummaryInfo {
   const species = getSpecies(content, mon.speciesId);
   const stats = calcStats(content, mon);
+  const ivs = ivsOf(mon);
+  const evs = evsOf(mon);
   const abilityId = abilityOf(content, mon);
   const ability = abilityId ? content.abilities.get(abilityId) : undefined;
   const history = run?.story.histories[mon.uid];
@@ -49,7 +55,8 @@ export function summaryInfo(content: Content, run: RunState | null, mon: Pokemon
     nature: effectiveNature(mon) ? `${natureName(effectiveNature(mon)!)} (${natureEffectText(effectiveNature(mon)!)})${mon.tempNature && mon.tempNature.battles > 0 ? ` · fleeting, ${mon.tempNature.battles} battle${mon.tempNature.battles === 1 ? '' : 's'} left` : ''}` : null,
     ability: ability ? { name: ability.name, text: `${ability.description}${abilityStatus(ability.id) === 'pending' ? ' (not working in battle yet)' : ''}` } : null,
     held: Object.entries(mon.held ?? {}).map(([id, count]) => ({ id, name: content.catalog.get(id)?.name ?? id, icon: content.items.get(id)?.iconAssetId ?? null, count })),
-    stats: (Object.keys(STAT_LABELS) as StatName[]).map((key) => ({ key, label: STAT_LABELS[key], value: stats[key], base: species.baseStats[key], boosted: (mon.vitamins[key] ?? 0) > 0 || (mon.statBoosts?.[key] ?? 0) > 0 })),
+    stats: (Object.keys(STAT_LABELS) as StatName[]).map((key) => ({ key, label: STAT_LABELS[key], value: stats[key], base: species.baseStats[key], boosted: (mon.vitamins[key] ?? 0) > 0 || (mon.statBoosts?.[key] ?? 0) > 0, iv: ivs[key], hyper: (mon.hyperTrained ?? []).includes(key), ev: evs[key] })),
+    evLine: `EVs ${evTotal(mon)}/${content.balance.evs.total}`,
     moves: mon.moves.map((slot) => {
       const m = content.moves.get(slot.id);
       const power = m?.power ? String(m.power) : '—';

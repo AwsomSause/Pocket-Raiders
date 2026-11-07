@@ -883,10 +883,12 @@ class PokemonScreen implements PickerLike {
     const info = summaryInfo(this.content, this.run, mon);
     const other = this.compareIdx !== null && this.compareIdx !== this.sel && this.compareIdx < this.party.length ? this.compareIdx : compareTarget(this.party, this.sel);
     const cmp = other === null ? null : compareStats(this.content, mon, this.party[other]!);
-    this.text(box, 0, 0, `Stats  ·  bar = base stat${cmp ? `  ·  compared with ${this.nameOf(this.party[other!]!)}${other === 0 ? ' (lead)' : ''}` : ''}`, 15, '#bfe9ff');
+    this.text(box, 0, 0, `Stats  ·  ${info.evLine}  ·  bar = base stat${cmp ? `  ·  compared with ${this.nameOf(this.party[other!]!)}${other === 0 ? ' (lead)' : ''}` : ''}`, 15, '#bfe9ff');
     info.stats.forEach((s, i) => {
       const y = 44 + i * 40;
-      this.text(box, 0, y, s.label, 18).setOrigin(0, 0.5);
+      this.text(box, 0, y - 6, s.label, 18).setOrigin(0, 0.5);
+      // W5: real IV (★ = hyper trained by a Bottle Cap) and EVs under the label.
+      this.text(box, 0, y + 11, `IV ${s.iv}${s.hyper ? '★' : ''} · EV ${s.ev}`, 11, s.iv >= 31 || s.hyper ? '#ffe08a' : '#9fb4c8').setOrigin(0, 0.5);
       this.text(box, 128, y, String(s.value), 20).setOrigin(1, 0.5);
       if (s.boosted && scene.textures.exists('pack.ebui.statArrows')) box.add(scene.add.image(144, y, 'pack.ebui.statArrows', 0).setScale(1));
       const bx = 160;

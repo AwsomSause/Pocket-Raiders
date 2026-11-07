@@ -1826,13 +1826,13 @@
    "thunder-shock"
   ],
   "keystone": "keystone_wattrel",
-  "status": "limited",
+  "status": "disabled",
   "role": "sweeper",
   "rarity": "unusual",
   "generation": 9,
   "branching": false,
   "baby": false,
-  "quizEligible": true
+  "quizEligible": false
  },
  {
   "v": 1,

@@ -38,6 +38,18 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   // A matching stone also works for time and weather routes; Eevee's day / night pair needs high friendship too.
   { from: 'eevee', to: 'espeon', minLevel: 1, stones: ['sun-stone'], stoneFriendship: true },
   { from: 'eevee', to: 'umbreon', minLevel: 1, stones: ['moon-stone', 'dusk-stone'], stoneFriendship: true },
+  // Day / night friendship routes.
+  { from: 'budew', to: 'roselia', minLevel: 1, stones: ['sun-stone'], stoneFriendship: true },
+  { from: 'riolu', to: 'lucario', minLevel: 1, stones: ['sun-stone'], stoneFriendship: true },
+  { from: 'chingling', to: 'chimecho', minLevel: 1, stones: ['moon-stone', 'dusk-stone'], stoneFriendship: true },
+  // Time-of-day level routes: the stone picks the form.
+  { from: 'rockruff', to: 'lycanroc', minLevel: 25, stones: ['sun-stone'] },
+  { from: 'rockruff', to: 'lycanroc-midnight', minLevel: 25, stones: ['moon-stone'] },
+  { from: 'rockruff', to: 'lycanroc-dusk', minLevel: 25, stones: ['dusk-stone'] },
+  { from: 'tyrunt', to: 'tyrantrum', minLevel: 39, stones: ['sun-stone'] },
+  { from: 'amaura', to: 'aurorus', minLevel: 39, stones: ['moon-stone', 'dusk-stone'] },
+  { from: 'cosmoem', to: 'solgaleo', minLevel: 53, stones: ['sun-stone'] },
+  { from: 'cosmoem', to: 'lunala', minLevel: 53, stones: ['moon-stone'] },
   { from: 'aipom', to: 'ambipom', minLevel: 20, condition: { kind: 'knowsMove', move: 'double-hit' } },
   { from: 'yanma', to: 'yanmega', minLevel: 20, condition: { kind: 'knowsMove', move: 'ancient-power' } },
   { from: 'tangela', to: 'tangrowth', minLevel: 20, condition: { kind: 'knowsMove', move: 'ancient-power' } },
@@ -51,7 +63,9 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'primeape', to: 'annihilape', minLevel: 25, condition: { kind: 'moveUses', move: 'rage-fist', count: 20 } },
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
   { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
-  { from: 'noctowl', to: 'oracowl', minLevel: 42, condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
+  { from: 'noctowl', to: 'oracowl', minLevel: 42, stones: ['moon-stone', 'dusk-stone'], condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
+  // Day form: the Sun Stone picks it (Night needs night, Heartbond 6 or a Moon / Dusk Stone above).
+  { from: 'noctowl', to: 'oracowl-day', minLevel: 42, stones: ['sun-stone'] },
   { from: 'swellow', to: 'tempestwing', minLevel: 46, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
   { from: 'kilowattrel', to: 'megawattrel', minLevel: 52, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
 ];

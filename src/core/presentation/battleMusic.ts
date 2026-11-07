@@ -42,11 +42,25 @@ function hashPick<T>(list: readonly T[], key: string): T {
   return list[h % list.length]!;
 }
 
+/** A region's own song for a boss role (gym, Elite Four, champion, rival); regions not listed keep the shared one. From Pokemon Decades. */
+const REGION_ROLE_TRACK: Record<string, Partial<Record<'gym' | 'elite' | 'champion' | 'rival', string>>> = {
+  johto: { champion: 'bgm.champion_hgss', rival: 'bgm.rival_hgss' },
+  sinnoh: { champion: 'bgm.champion_dppt', rival: 'bgm.rival_dppt' },
+  unova: { elite: 'bgm.elite_bw', champion: 'bgm.champion_bw', rival: 'bgm.rival_bw2' },
+  kalos: { gym: 'bgm.gym_xy', elite: 'bgm.elite_xy', champion: 'bgm.champion_xy' },
+  alola: { gym: 'bgm.gym_sm', elite: 'bgm.elite_sm' },
+  galar: { gym: 'bgm.gym_swsh', champion: 'bgm.champion_swsh' },
+  paldea: { gym: 'bgm.gym_sv', champion: 'bgm.champion_sv' },
+};
+export const REGION_ROLE_TRACK_IDS: readonly string[] = [...new Set(Object.values(REGION_ROLE_TRACK).flatMap((r) => Object.values(r)))];
+
 export function battleTrack(i: BattleMusicInput): string {
   if (i.raidTrack) return i.raidTrack;
   if (i.gbSounds) return 'bgm.battle_gb';
   const key = i.variantKey;
   if (i.role && i.role !== 'wild' && i.role !== 'trainer') {
+    const regional = REGION_ROLE_TRACK[i.regionId ?? '']?.[i.role as 'gym' | 'elite' | 'champion' | 'rival'];
+    if (regional && i.role !== 'final') return regional;
     const base = ROLE_TRACKS[i.role];
     if (key !== undefined && i.role === 'gym') return hashPick(GYM_TRACKS, key);
     if (key !== undefined && i.role === 'elite') return hashPick(ELITE_TRACKS, key);
@@ -118,11 +132,11 @@ export const EXPEDITION_TRACK_IDS: readonly string[] = [1, 2, 3, 4].map(expediti
 const REGION_ERA: Record<string, 'oras' | 'dppt' | 'hgss' | 'bw2'> = { johto: 'hgss', hoenn: 'oras', sinnoh: 'dppt', unova: 'bw2' };
 
 /** Map songs: Route 101 plus the pack's Bicycle and Surfing themes, and five route songs from Pokemon Decades. A region keeps one (string hash, never the gameplay RNG). */
-export const MAP_TRACKS = ['bgm.map', 'bgm.map_bike', 'bgm.map_surf', 'bgm.map_bw', 'bgm.map_oras', 'bgm.map_dppt', 'bgm.map_dppt2', 'bgm.map_hgss'] as const;
+export const MAP_TRACKS = ['bgm.map', 'bgm.map_bike', 'bgm.map_surf', 'bgm.map_bw', 'bgm.map_oras', 'bgm.map_dppt', 'bgm.map_dppt2', 'bgm.map_hgss', 'bgm.map_xy', 'bgm.map_bw2', 'bgm.forest_dppt', 'bgm.forest_oras', 'bgm.forest_swsh', 'bgm.town_dppt', 'bgm.town_xy', 'bgm.city_xy', 'bgm.city_bw', 'bgm.sky_oras'] as const;
 /** Each region's own map song (12 regions share 8 songs; every region keeps the same one every run). Story regions use their story route theme instead, see `regionMapMusic`. */
 const REGION_MAP_TRACK: Record<string, (typeof MAP_TRACKS)[number]> = {
-  kanto: 'bgm.map', johto: 'bgm.map_hgss', hoenn: 'bgm.map_oras', sinnoh: 'bgm.map_dppt', unova: 'bgm.map_bw', kalos: 'bgm.map_dppt2',
-  alola: 'bgm.map_surf', galar: 'bgm.map_bike', paldea: 'bgm.map_oras', torren: 'bgm.map_dppt2', 'frontier-isles': 'bgm.map_surf', 'trial-archipelago': 'bgm.map_bw', grand: 'bgm.map_hgss',
+  kanto: 'bgm.map', johto: 'bgm.map_hgss', hoenn: 'bgm.map_oras', sinnoh: 'bgm.map_dppt', unova: 'bgm.map_bw2', kalos: 'bgm.map_xy',
+  alola: 'bgm.map_surf', galar: 'bgm.forest_swsh', paldea: 'bgm.map_bike', torren: 'bgm.forest_dppt', 'frontier-isles': 'bgm.sky_oras', 'trial-archipelago': 'bgm.forest_oras', grand: 'bgm.city_xy',
 };
 /** Story region id to the slug used in story audio ids (mu_region_<slug>_town / _route / _tension). */
 const STORY_REGION_SLUG: Record<string, string> = { cairnmoor: 'cairnmoor', 'tidewrack-reaches': 'tidewrack', 'orrery-basin': 'orrery_basin' };

@@ -9,6 +9,7 @@ import { researchLines } from '../core/trainerResearch';
 import { BANK_MAX_TIER, bankTier, exchangeProblem, nextTier, tierProblem } from '../core/bank';
 import { notify } from '../ui/overlays';
 import { NOOK, collectWish, localLeaderboard, reputationOf, stampCeremony, stampsOwed, konamiJoke, konamiStep, cookieReady, crackCookie, donate, donationNext, donationProblem, fortuneFor, makeWish, nookOf, redeemCode, wishProblem, writeNote } from '../core/hubNook';
+import { questLog, questLogSummary } from '../core/questLog';
 import { BOOKS, bookComplete, bookKey, bookProgress, claimAllProfile, trackKey, trackPoints, trackTier } from '../core/collectionBooks';
 import { LEGACY, legacySummary, ascend, buyNode, contactProblem, intelLevel, legacyOf, networkSlots, nextPrestige, nodeProblem, nodeStatus, prestigeProblem, prestigeRank, regionBoard, serviceFor, shelfProblem, shelveSeed, toggleContact, trainMove, trainProblem, unshelveSeed } from '../core/legacy';
 import { showcaseOf } from '../core/social';
@@ -78,7 +79,7 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
@@ -105,6 +106,7 @@ const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'network', label: 'Trainer Network', blurb: 'Trainers you did not pick still send a small parcel when you start a run (Enter).' },
   { room: 'museum', label: 'Item Museum', blurb: 'Every item you ever carried through a run, with Research Point milestones.' },
   { room: 'books', label: 'Collection Books', blurb: 'Themed Pokémon sets and the Reward Track. Finish a book or climb a tier for credits and Research Points (Enter).' },
+  { room: 'chains', label: 'Quest Log', blurb: 'Every quest chain in one list: trainer quest lines and Mythical chains, with progress.' },
   { room: 'intel', label: 'Intelligence Board', blurb: 'What you know about each region and its League. Grows with visits and the Tree.' },
   { room: 'moves', label: 'Move Research', blurb: 'Your moves, their mastery, and training with Research Points (Enter).' },
   { room: 'seeds', label: 'Seed Shelf', blurb: 'Keep shared seed codes and start a run from one (Enter).' },
@@ -197,6 +199,7 @@ const ROOM_ICON: Partial<Record<Room, string>> = {
   network: 'item.pair_of_tickets',
   museum: 'item.map',
   books: 'item.map',
+  chains: 'item.scanner',
   intel: 'item.scanner',
   moves: 'item.exp_charm',
   seeds: 'item.mystery_egg',
@@ -694,6 +697,10 @@ export class HubScene extends Phaser.Scene {
       case 'tree':
       case 'prestige':
       case 'network':
+      case 'chains': {
+        const q = questLogSummary(questLog(c, p));
+        return `${q.finished} of ${q.total} chains finished`;
+      }
       case 'books':
         return `Track tier ${trackTier(p)} of ${BOOKS.track.tiers.length}, ${BOOKS.books.filter((b) => bookComplete(p, b)).length} of ${BOOKS.books.length} books`;
       case 'museum':
@@ -803,6 +810,7 @@ export class HubScene extends Phaser.Scene {
       case 'network':
       case 'museum':
       case 'books':
+      case 'chains':
       case 'intel':
       case 'moves':
       case 'seeds':
@@ -1610,6 +1618,13 @@ export class HubScene extends Phaser.Scene {
           const paid = !!p.claims[bookKey(b.id)];
           entries.push({ label: `${b.name}  ·  ${g.have}/${g.total}`, sub: `${b.blurb} Reward: ${b.reward.credits} credits, ${b.reward.rp} RP${b.reward.title ? `, title ${b.reward.title}` : ''}.${g.missing.length ? ` Missing: ${g.missing.map((m) => content.species.get(m)?.name ?? m).join(', ')}.` : ''}`, right: paid ? 'Paid' : g.missing.length ? '' : 'Ready', on: paid });
         }
+        break;
+      }
+      case 'chains': {
+        const rows = questLog(content, p);
+        const q = questLogSummary(rows);
+        title = `Quest Log  ·  ${q.finished} of ${q.total} finished`;
+        for (const r of rows) entries.push({ label: `${r.group === 'mythical' ? 'Mythical: ' : ''}${r.name}`, sub: r.detail, right: `${r.done}/${r.total}`, on: r.done >= r.total });
         break;
       }
       case 'intel':

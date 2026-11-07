@@ -70721,6 +70721,123 @@
      }
     }
    ]
+  },
+  {
+   "id": "spooky-lantern-festival",
+   "name": "The Lantern Festival",
+   "rarity": "uncommon",
+   "group": "Spooky Mode",
+   "types": [
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Autumn"
+     ]
+    }
+   ],
+   "mode": "spooky",
+   "modeStop": false,
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#281008",
+    "effect": "fire"
+   },
+   "intro": "It is autumn, and the Medium has hung lanterns along the path. \"The veil is thin tonight,\" she says. \"Light one for the keeper.\"",
+   "choices": [
+    {
+     "label": "Light a lantern",
+     "success": {
+      "text": "The flame turns pale blue. You feel braver, and something whispers a name.",
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spooky-clue",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy festival sweets",
+     "success": {
+      "text": "Pumpkin candy for the whole team.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spooky-costume-judge",
+   "name": "The Costume Judge",
+   "rarity": "rare",
+   "group": "Spooky Mode",
+   "types": [
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Autumn"
+     ]
+    }
+   ],
+   "mode": "spooky",
+   "modeStop": false,
+   "minStage": 1,
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac"
+    ],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "intro": "A judge in a tattered cloak holds a pumpkin trophy. \"Best costume wins the prize!\"",
+   "choices": [
+    {
+     "label": "Enter your team",
+     "success": {
+      "text": "The judge is thrilled. You win a prize and a little cash.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 400
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch",
+     "success": {
+      "text": "You enjoy the show.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }
