@@ -380,3 +380,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `drive-leftovers.md`: Pokédex footprints, low-HP battle music, 28 more Decades battle arenas.
 - `content-audit-1.md`: Eelevate KO boost, Levitate now blocks Earthquake, Mega ability slot fix, battle-sim audit test for every ability, move and Pokémon.
 - `drive-learnset-pass.md`: 110 final-stage species got 695 missing moves from the Gen 9 Learnsets Compendium.
+- `drive-form-anims.md`: 115 still form sprites now animate (Drive strips).
