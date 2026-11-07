@@ -4,7 +4,7 @@
 import { regionRules, regionalChart } from './battle/typeRules';
 import { z } from 'zod';
 import rulesJson from '../data/runRules.json';
-import type { Content, TypeName } from './contentSchema';
+import type { Content, Ruleset, TypeName } from './contentSchema';
 import { getSpecies, usableLearnset } from './pokemon';
 import { applyMutator, MUTATORS } from './mutators';
 import { hashSeed, Rng } from './rng';
@@ -62,6 +62,8 @@ export const RunRulesDataSchema = z.object({
       quickWin: z.object({ turns: z.number().int().min(1), money: z.number().int().min(1) }).optional(),
       /** Inverse Battle (S291): the type chart is reversed in every battle of the run. */
       inverseChart: z.boolean().optional(),
+      /** Decades rule options: battle ruleset flags this modifier switches on (see Ruleset.frostbite / drowsy / normalFollowsUser). */
+      rulesetFlags: z.object({ frostbite: z.boolean().optional(), drowsy: z.boolean().optional(), normalFollowsUser: z.boolean().optional() }).optional(),
       /** Elite Duelist (S275): every battle roll is the middle value (no crits, no lucky misses, fixed damage roll). */
       steady: z.boolean().optional(),
       gauntlet: z.boolean().optional(),
@@ -247,6 +249,9 @@ export const inverseChart = (rules: Pick<RunRules, 'modifierIds'>): boolean => h
 /** The tightest run-wide level cap a modifier sets (Level 50 Cup), or null. */
 export const modifierLevelCap = (rules: Pick<RunRules, 'modifierIds'>): number | null =>
   rules.modifierIds.reduce<number | null>((cap, id) => { const c = getModifier(id)?.levelCap; return c === undefined ? cap : cap === null ? c : Math.min(cap, c); }, null);
+/** The Decades ruleset flags the run's modifiers switch on. */
+export const rulesetFlagsOf = (rules: Pick<RunRules, 'modifierIds'>): Partial<Pick<Ruleset, 'frostbite' | 'drowsy' | 'normalFollowsUser'>> =>
+  Object.assign({}, ...rules.modifierIds.map((id) => getModifier(id)?.rulesetFlags ?? {}).map((f) => Object.fromEntries(Object.entries(f).filter(([, v]) => v))));
 const battleContents = new WeakMap<object, Map<string, Content>>();
 /**
  * Content as the battle engine should see it: with Inverse Battle the type chart is reversed (2 -> 0.5, 0.5 and 0 -> 2);
@@ -255,8 +260,10 @@ const battleContents = new WeakMap<object, Map<string, Content>>();
 export function battleContent(content: Content, rules: Pick<RunRules, 'modifierIds'>, regionId?: string | null): Content {
   const inverse = inverseChart(rules);
   const local = regionRules(content, regionId);
-  if (!inverse && local.length === 0) return content;
-  const key = `${inverse ? 'inv' : ''}|${local.length ? regionId : ''}`;
+  const flags = rulesetFlagsOf(rules);
+  const flagKey = Object.keys(flags).sort().join(',');
+  if (!inverse && local.length === 0 && !flagKey) return content;
+  const key = `${inverse ? 'inv' : ''}|${local.length ? regionId : ''}|${flagKey}`;
   let cache = battleContents.get(content);
   if (!cache) battleContents.set(content, (cache = new Map()));
   const cached = cache.get(key);
@@ -269,7 +276,7 @@ export function battleContent(content: Content, rules: Pick<RunRules, 'modifierI
     }
     typeChart = flipped;
   }
-  const out = { ...content, typeChart };
+  const out = { ...content, typeChart, ruleset: flagKey ? { ...content.ruleset, ...flags } : content.ruleset };
   cache.set(key, out);
   return out;
 }
