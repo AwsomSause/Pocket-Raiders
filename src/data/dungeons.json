@@ -1250,6 +1250,143 @@
     "name": "Star Keeper",
     "size": 5
    }
+  },
+  {
+   "id": "dg_forgotten_lab",
+   "name": "Forgotten Research Lab",
+   "kind": "themed",
+   "tier": 3,
+   "theme": "lab",
+   "types": [
+    "electric",
+    "steel",
+    "poison"
+   ],
+   "wild": [
+    "magnemite",
+    "voltorb",
+    "porygon",
+    "grimer"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "wild",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "puzzle",
+     "next": [
+      "c",
+      "d"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "trap",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "d",
+     "kind": "cache",
+     "next": [
+      "e"
+     ]
+    },
+    {
+     "id": "e",
+     "kind": "wild",
+     "next": [
+      "f"
+     ]
+    },
+    {
+     "id": "f",
+     "kind": "rest",
+     "next": [
+      "g"
+     ]
+    },
+    {
+     "id": "g",
+     "kind": "boss",
+     "next": [
+      "h"
+     ]
+    },
+    {
+     "id": "h",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "escape-rope",
+    "count": 1
+   },
+   "reward": {
+    "item": "up-grade",
+    "count": 1
+   },
+   "intro": "Dust, dead screens, and one machine that is still humming.",
+   "rare": [
+    "porygon2"
+   ],
+   "boss": {
+    "classId": "worker",
+    "name": "Lab Guardian",
+    "size": 3
+   }
+  },
+  {
+   "id": "dg_treasure_dig",
+   "name": "Treasure Dig",
+   "kind": "basic",
+   "tier": 2,
+   "theme": "dig",
+   "types": [
+    "ground"
+   ],
+   "wild": [
+    "diglett",
+    "sandshrew",
+    "geodude"
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "kind": "puzzle",
+     "next": [
+      "b"
+     ]
+    },
+    {
+     "id": "b",
+     "kind": "cache",
+     "next": [
+      "c"
+     ]
+    },
+    {
+     "id": "c",
+     "kind": "exit",
+     "next": []
+    }
+   ],
+   "supply": {
+    "item": "repel",
+    "count": 1
+   },
+   "reward": {
+    "item": "nugget",
+    "count": 2
+   },
+   "intro": "An old map scrap, an X, and a lot of loose soil."
   }
  ]
 }

@@ -2836,6 +2836,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A retired team: a past run that did not win left a team on record. */
   z.object({ kind: z.literal('retiredGhost') }),
   z.object({ kind: z.literal('hunt'), atLeast: z.number().int().min(0).default(0), atMost: z.number().int().min(0).default(99) }),
+  /** Rival milestones: how your last meeting with a rival ended (`win` you won, `lose` the rival won). */
+  z.object({ kind: z.literal('rivalLast'), result: z.enum(['win', 'lose']) }),
+  /** World layer (W8): a roaming Legendary has disturbed the land and nobody has calmed it yet. */
+  z.object({ kind: z.literal('disturbance') }),
   /** Exploration: a party member has one of these abilities (a secret path opens for it). */
   z.object({ kind: z.literal('partyAbility'), abilities: z.array(z.string()).min(1), label: z.string().min(1) }),
   /** Exploration: a roaming Legendary is on this stage's map right now. */
@@ -2981,6 +2985,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('feud'), choice: z.enum(['first', 'second', 'stay-out', 'exploit']) }),
   /** Grand-Enemy hunt: one more clue (`finish` ends the hunt and gives its title). */
   z.object({ kind: z.literal('hunt'), finish: z.boolean().default(false) }),
+  /** World layer (W8): the Legendary disturbance is settled (the world's unrest records are cleared). */
+  z.object({ kind: z.literal('calmDisturbance') }),
   /** An NPC trainer joins your roster for good (unlocked when the run ends; the run records it in `itemCounters["recruit:<id>"]`). */
   z.object({ kind: z.literal('recruit'), trainer: z.string().min(1) }),
   /** Mentors (spec section 15): moves mentor trust, loyalty or the rivalry with the fellow apprentice; `mission: start` takes the mentor's mission, `disagree` notes a disagreement. */

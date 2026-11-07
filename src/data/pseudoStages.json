@@ -439,7 +439,7 @@
       },
       "exit": "beat the boss",
       "countsAsStage": false,
-      "status": "disabled",
+      "status": "limited",
       "trainerClass": "veteran",
       "intro": "Floors become walls and the way back is somewhere else.",
       "boss": {

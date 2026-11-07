@@ -46,6 +46,11 @@ export function featuredRival(run: Pick<RunState, 'story'>): Rival | null {
 }
 
 /** A rival you beat in your last meeting (it has something to prove). */
+/** How your most recent meeting with a live rival ended (`win` you won, `lose` it won), or null before any (rival milestones). */
+export const rivalLastResult = (run: Pick<RunState, 'story'>): 'win' | 'lose' | null => {
+  const last = run.story.rivals.filter((r) => r.state !== 'retired' && r.memory?.lastBattle).sort((a, b) => b.encounters - a.encounters)[0];
+  return last?.memory?.lastBattle?.result ?? null;
+};
 export const rivalBeaten = (run: Pick<RunState, 'story'>): boolean => run.story.rivals.some((r) => r.state !== 'retired' && r.memory?.lastBattle?.result === 'win');
 
 /** The roster the rival fields in an event fight: its latest team, tuned by the path (a friend's is warmer, not weaker). */
