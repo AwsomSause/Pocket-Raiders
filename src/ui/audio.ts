@@ -67,6 +67,13 @@ export function storyOr(storyId: string | null, plain: string): string {
   return storyId && storyTrackIsMade(storyId, has) ? (storyAssetId(storyId, has) ?? plain) : plain;
 }
 
+/** A story cue (stinger or sound effect): the made story sound once its file exists, else the sound the game already plays here (so nothing changes until real audio is dropped in). */
+export function playCue(scene: Phaser.Scene, storyId: string, plain: string | null, volumeScale = 1): void {
+  const has = (a: string) => services().assets.has(a);
+  if (storyTrackIsMade(storyId, has)) playStorySfx(scene, storyId, volumeScale);
+  else if (plain) playSfxLazy(scene, plain, volumeScale);
+}
+
 let currentMusic: { id: string; sound: Phaser.Sound.BaseSound } | null = null;
 
 /** Adaptive music (ideas W1): the battle song plays a little faster as the HP of your Pokémon drops (1 = normal). */

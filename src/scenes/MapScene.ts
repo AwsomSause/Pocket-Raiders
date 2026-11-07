@@ -52,7 +52,7 @@ import { commentaryLine } from '../core/tools/commentary';
 import { maxHp } from '../core/pokemon';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
-import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr } from '../ui/audio';
+import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr, playCue } from '../ui/audio';
 import { notify } from '../ui/overlays';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
@@ -292,6 +292,7 @@ export class MapScene extends Phaser.Scene {
     this.index = 0;
     this.picker = null;
     this.busy = false;
+    if (league) playCue(this, 'st_league_gate', null);
     playMusicLazy(this, storyOr(storyRegionMusic(region.id, 'route'), mapTrack(region.id)));
 
     // ---------- backdrop: the stage's own arena, dimmed ----------
