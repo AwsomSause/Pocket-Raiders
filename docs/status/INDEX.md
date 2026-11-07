@@ -379,3 +379,7 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-quest-unlocks.md`: 13 quest arcs unlock the 14 Rare and Exceptional starter lines that had no route.
 - `drive-leftovers.md`: Pokédex footprints, low-HP battle music, 28 more Decades battle arenas.
 - `content-audit-1.md`: Eelevate KO boost, Levitate now blocks Earthquake, Mega ability slot fix, battle-sim audit test for every ability, move and Pokémon.
+- `drive-learnset-pass.md`: 110 final-stage species got 695 missing moves from the Gen 9 Learnsets Compendium.
+- `drive-form-anims.md`: 115 still form sprites now animate (Drive strips).
+- `drive-music.md`: 18 Decades songs for battle and map variety.
+- `drive-overworld-npcs.md`: 43 generic Decades class NPC sheets added to the hub town crowd.

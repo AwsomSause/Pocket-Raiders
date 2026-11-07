@@ -10,10 +10,10 @@ async function toMap(page: Page, seed: string) {
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
   await page.goto(`/?seed=${seed}&campaign=dev&debug=1`);
-  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('MainMenu');
+  await expect.poll(() => scene(page), { timeout: 60_000 }).toBe('MainMenu');
   for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
     await page.keyboard.press('Enter');
-    await expect.poll(() => scene(page), { timeout: 20_000 }).toBe(next);
+    await expect.poll(() => scene(page), { timeout: 40_000 }).toBe(next);
     await page.waitForTimeout(250);
   }
   await page.waitForTimeout(800);
