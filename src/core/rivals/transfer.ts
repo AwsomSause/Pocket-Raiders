@@ -68,14 +68,15 @@ export function rivalTransfers(content: Content, run: RunState, stageKey: string
     const roll = rng.float();
     const giveA = strained(a);
     const giveB = strained(b);
-    if (roll < T.rehomeChance && giveA && team(b).length < T.maxTeam && !team(b).includes(giveA)) {
+    if (roll < T.rehomeChance && giveA && a.bonds[giveA] && team(b).length < T.maxTeam && !team(b).includes(giveA)) {
       const bond = takeOut(a, giveA)!;
       b.memory.lastBattle.team = [...team(b), giveA];
       b.bonds[giveA] = { ...bond, trust: clamp(bond.trust - T.tradeTrustLoss), strain: 10 };
       nudge(a, 'empathy', T.rehomeEmpathy);
       rumor ??= `${who(content, a)} gave ${nameOf(content, giveA)} to ${who(content, b)}: it needed more than they could give`;
     } else if (roll >= 1 - T.tradeChance && giveA === null) {
-      const ids = (x: Rival, y: Rival) => team(x).filter((id) => !team(y).includes(id));
+      // Only a Pokémon with a bond can be traded (a roster entry without one used to crash the trade).
+      const ids = (x: Rival, y: Rival) => team(x).filter((id) => !team(y).includes(id) && x.bonds[id]);
       const offerA = ids(a, b).sort()[0];
       const offerB = ids(b, a).sort()[0];
       if (!offerA || !offerB) continue;
