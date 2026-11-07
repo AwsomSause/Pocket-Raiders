@@ -3,6 +3,7 @@
 
 import type { Content } from './contentSchema';
 import type { RunState } from './state';
+import { activeGameEvents } from './gameEvents';
 import { clockLabel, tideLabel } from './clock';
 import { stageBounty } from './bounties';
 import { getMutator } from './mutators';
@@ -17,7 +18,8 @@ export interface ContentRow {
   hint: string;
 }
 
-export function runContents(content: Content, run: RunState): ContentRow[] {
+/** `now` (optional) also lists the events on this week that the run did not start under. */
+export function runContents(content: Content, run: RunState, now?: Date): ContentRow[] {
   const rows: ContentRow[] = [];
   const rules = run.rules;
   const mode = getMode(rules.modeId);
@@ -47,6 +49,13 @@ export function runContents(content: Content, run: RunState): ContentRow[] {
     const id = edition.split('@')[0] ?? edition;
     const ev = content.gameEvents.get(id);
     rows.push({ group: 'Events', title: ev?.name ?? id, right: edition.split('@')[1] ?? '', hint: ev?.description ?? 'A weekly or holiday event this run started under.' });
+  }
+  if (now && run.rules.weeks) {
+    const listed = new Set(run.gameEvents.map((e) => e.split('@')[0]));
+    for (const a of activeGameEvents(content, now)) {
+      if (listed.has(a.event.id)) continue;
+      rows.push({ group: 'Events', title: a.event.name, right: 'This week', hint: a.event.description });
+    }
   }
   return rows;
 }

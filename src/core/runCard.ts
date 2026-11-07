@@ -5,10 +5,13 @@ import type { RunState } from './state';
 import { buildRecap } from './recap';
 import { getMode, getDifficulty } from './rules';
 
+/** A picture on the card: a region of a loaded texture, set by the scene. */
+export interface CardArt { source: CanvasImageSource; sx: number; sy: number; sw: number; sh: number }
+
 export interface RunCard {
   title: string;
   subtitle: string;
-  team: { speciesId: string; name: string; level: number; shiny: boolean }[];
+  team: { speciesId: string; name: string; level: number; shiny: boolean; art?: CardArt }[];
   stats: string[];
   highlights: string[];
   footer: string;

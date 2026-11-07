@@ -11,7 +11,7 @@ import { textStyle } from './theme';
 export function openRunContentsMenu(host: FieldMenuHost): void {
   const { session } = services();
   const content = session.content;
-  const rows = runContents(content, session.run!);
+  const rows = runContents(content, session.run!, new Date());
   const picker: Picker = new Picker(host.scene, {
     glass: true,
     title: "What's in this run",

@@ -33,16 +33,26 @@ export function drawRunCard(card: RunCard, won: boolean): HTMLCanvasElement {
   ctx.fillText(card.subtitle, 32, 108);
   ctx.fillStyle = '#ffffff';
   ctx.font = '22px sans-serif';
-  card.team.slice(0, 6).forEach((m, i) => ctx.fillText(`${m.shiny ? '★ ' : ''}${m.name}  Lv${m.level}`, 32 + (i % 2) * 250, 150 + Math.floor(i / 2) * 32));
+  ctx.imageSmoothingEnabled = false;
+  card.team.slice(0, 6).forEach((m, i) => {
+    const x = 32 + i * 125;
+    if (m.art) ctx.drawImage(m.art.source, m.art.sx, m.art.sy, m.art.sw, m.art.sh, x + 4, 124, 112, 112);
+    ctx.font = '16px sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(`${m.shiny ? '★' : ''}${m.name}`.slice(0, 13), x + 4, 252);
+    ctx.fillStyle = '#a9d8ff';
+    ctx.fillText(`Lv${m.level}`, x + 4, 270);
+  });
+  ctx.fillStyle = '#ffffff';
   ctx.fillStyle = '#d6e4ff';
   ctx.font = '20px sans-serif';
-  ctx.fillText(card.stats.join('   ·   '), 32, 270);
+  ctx.fillText(card.stats.join('   ·   '), 32, 304);
   ctx.font = '18px sans-serif';
-  let y = 305;
+  let y = 340;
   for (const h of card.highlights) y = wrap(ctx, `• ${h}`, 32, y, 736, 24);
   ctx.fillStyle = '#7f8fb0';
   ctx.font = '16px sans-serif';
-  ctx.fillText(card.footer, 32, 428);
+  ctx.fillText(card.footer, 32, 432);
   return c;
 }
 

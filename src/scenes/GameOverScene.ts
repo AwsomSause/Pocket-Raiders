@@ -13,6 +13,7 @@ import { attributeChanges } from '../core/attributes';
 import { topMoments } from '../core/story/record';
 import { buildRecap } from '../core/recap';
 import { buildRunCard } from '../core/runCard';
+import { pokemonAssetIds } from '../assets/catalog';
 import { saveRunCard } from '../ui/runCardImage';
 import { device } from '../game/deviceTools';
 import { formatMs, parseSplits, updateSplits } from '../core/tools/speedrun';
@@ -101,7 +102,22 @@ export class GameOverScene extends Phaser.Scene {
       this.input.keyboard?.on('keydown-T', () => copy(encodeTeamCode(run.party.map((m) => ({ speciesId: m.speciesId, level: m.level, shiny: !!m.shiny })))));
       this.input.keyboard?.on('keydown-C', () => copy(encodeChallengeCard({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules }, { from: 'A friend', title: `${archetype} run`, victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted })));
       // S saves a run card picture (core/runCard.ts) to share.
-      this.input.keyboard?.on('keydown-S', () => saveRunCard(buildRunCard(session.content, run), won));
+      const saveCard = (): void => {
+        const card = buildRunCard(session.content, run);
+        card.team.forEach((m) => {
+          const sp = session.content.species.get(m.speciesId);
+          const key = sp ? pokemonAssetIds(sp.assets).front : '';
+          if (!key || !this.textures.exists(key)) return;
+          const tex = this.textures.get(key);
+          const fr = tex.get(tex.getFrameNames().sort()[0]);
+          m.art = { source: fr.source.image as CanvasImageSource, sx: fr.cutX, sy: fr.cutY, sw: fr.cutWidth, sh: fr.cutHeight };
+        });
+        const ok = saveRunCard(card, won);
+        saveBtn.setText(ok ? 'Run card saved!' : 'Could not save the card');
+      };
+      this.input.keyboard?.on('keydown-S', saveCard);
+      const saveBtn = this.add.text(GAME_WIDTH - 16, 526, 'Save run card (S)', textStyle(16, '#a9d8ff')).setOrigin(1, 1).setDepth(50).setInteractive({ useHandCursor: true }).setName('save-run-card');
+      saveBtn.on('pointerdown', saveCard);
       // Speedrun timer (off unless switched on in Hub > Tools): close the run's splits and show the final time.
       let timeLine: string[] = [];
       const sp = device.speedrunOn() ? parseSplits(device.splits()) : null;
