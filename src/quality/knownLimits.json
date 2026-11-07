@@ -1,6 +1,10 @@
 {
  "_about": "Hand-kept notes for the content report (npm run report:content). An entry listed here is \"supported with documented limits\". moves: supported moves whose effect text has a part the battle engine leaves out on purpose (found with the same sentence rules as tools/import-moves.ts in the director's move list). species: anything the automatic checks cannot see.",
  "moves": {
+  "fire-pledge": ["the double-battle combination with another Pledge is not built; it is a plain hit"],
+  "grass-pledge": ["the double-battle combination with another Pledge is not built; it is a plain hit"],
+  "water-pledge": ["the double-battle combination with another Pledge is not built; it is a plain hit"],
+  "order-up": ["the stat boost from a Commander Tatsugiri is not built; it is a plain hit"],
   "boomburst": [
    "hits several targets in double battles (battles are one-on-one)"
   ],

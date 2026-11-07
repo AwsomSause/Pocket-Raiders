@@ -2994,6 +2994,7 @@ function executeMove(
   if (ctx.doublesTurn?.hit) ctx.doublesTurn.hit(user, target, move, movedFirst, events);
   else runMove(ctx, user, target, move, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
+  user.vol.furyCutter = move.effects.powerRule === 'furyCutter' && !user.vol.lastFailed ? (user.vol.furyCutter ?? 0) + 1 : 0;
   if (move.effects.powerRule === 'rollout') {
     if (user.vol.lastFailed) {
       user.vol.locked = null;
@@ -3095,6 +3096,7 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
     case 'retaliate': return ctx.battle.extra.allyFaintedTurn[user.side] === ctx.battle.turn - 1 ? base * 2 : base;
     case 'echoedVoice': return Math.min(200, base * Math.max(1, ctx.battle.extra.echo.n));
     case 'rollout': return base * 2 ** Math.min(4, user.vol.rollout);
+    case 'furyCutter': return Math.min(160, base * 2 ** Math.min(2, user.vol.furyCutter ?? 0));
     case 'fusionFire': return ctx.battle.extra.fusion.electric === ctx.battle.turn ? base * 2 : base;
     case 'fusionElectric': return ctx.battle.extra.fusion.fire === ctx.battle.turn ? base * 2 : base;
     case 'present': return presentPower;
@@ -4615,6 +4617,7 @@ function postHitExtras(ctx: BattleContext, user: Combatant, target: Combatant, m
     events.push({ type: 'cured', side: target.side });
   }
   if (fx.userFaint === 'finalGambit') faintSelf(ctx, user, events);
+  if (fx.confuseIfBoosted && target.mon.hp > 0 && Object.values(target.stages).some((v) => v > 0)) tryConfuse(ctx, user, target, events, false);
   if (fx.statusIfBoosted && target.mon.hp > 0 && Object.values(target.stages).some((v) => v > 0) && canGetStatus(ctx, user, target, fx.statusIfBoosted)) tryInflictStatus(ctx, user, target, fx.statusIfBoosted, undefined, events, false);
   if (fx.suppressIfMoved && target.mon.hp > 0 && movedFirst) {
     target.vol.abilityOverride = 'neutralized';

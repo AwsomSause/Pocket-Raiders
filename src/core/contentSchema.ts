@@ -147,7 +147,7 @@ export const PowerRuleSchema = z.enum([
   'electricTerrainDouble', 'electricTerrainBoost', 'mistyTerrainBoost', 'psychicTerrainBoost', 'needsTerrain',
   'statsRaised', 'targetStatsRaised', 'fallenAllies', 'friendship', 'frustration',
   'perHit', 'magnitude', 'sunBoost', 'doubleTargetHurt', 'doubleRandom', 'stockpile',
-  'rageFist', 'stompingTantrum', 'lashOut', 'retaliate', 'echoedVoice', 'rollout', 'fusionFire', 'fusionElectric', 'present', 'trumpCard', 'hardPress',
+  'rageFist', 'stompingTantrum', 'lashOut', 'retaliate', 'echoedVoice', 'rollout', 'furyCutter', 'fusionFire', 'fusionElectric', 'present', 'trumpCard', 'hardPress',
   'acrobatics', 'doubleDynamax', 'knockOff', 'terrainPulse', 'flingItem', 'targetWeight', 'weightRatio',
 ]);
 export type PowerRule = z.infer<typeof PowerRuleSchema>;
@@ -407,6 +407,8 @@ export const MoveSchema = z.object({
       wonderRoom: z.literal(true).optional(),
       /** Inflicts this status on the target if it has any raised stats (Burning Jealousy). */
       statusIfBoosted: StatusIdSchema.optional(),
+      /** Alluring Voice: confuses a target that has a raised stat. */
+      confuseIfBoosted: z.literal(true).optional(),
       /** Suppresses the target's ability if it has already moved this turn (Core Enforcer). */
       suppressIfMoved: z.literal(true).optional(),
       /** Ignores the target's ability (Sunsteel Strike). */

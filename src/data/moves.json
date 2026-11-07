@@ -1437,7 +1437,9 @@
    "contact",
    "slicing"
   ],
-  "effects": {}
+  "effects": {
+   "powerRule": "furyCutter"
+  }
  },
  {
   "id": "poison-jab",
@@ -1994,8 +1996,12 @@
   "priority": 0,
   "critStage": 0,
   "target": "enemy",
-  "flags": [],
-  "effects": {}
+  "flags": [
+   "sound"
+  ],
+  "effects": {
+   "confuseIfBoosted": true
+  }
  },
  {
   "id": "amnesia",
