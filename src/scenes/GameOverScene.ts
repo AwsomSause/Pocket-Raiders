@@ -116,7 +116,7 @@ export class GameOverScene extends Phaser.Scene {
         saveBtn.setText(ok ? 'Run card saved!' : 'Could not save the card');
       };
       this.input.keyboard?.on('keydown-S', saveCard);
-      const saveBtn = this.add.text(GAME_WIDTH - 16, 526, 'Save run card (S)', textStyle(16, '#a9d8ff')).setOrigin(1, 1).setDepth(50).setInteractive({ useHandCursor: true }).setName('save-run-card');
+      const saveBtn = this.add.text(GAME_WIDTH - 16, 528, 'Save run card (S)', textStyle(24, '#ffffff', { backgroundColor: '#1d5fa8', padding: { x: 14, y: 8 } })).setOrigin(1, 1).setDepth(50).setInteractive({ useHandCursor: true }).setName('save-run-card');
       saveBtn.on('pointerdown', saveCard);
       // Speedrun timer (off unless switched on in Hub > Tools): close the run's splits and show the final time.
       let timeLine: string[] = [];

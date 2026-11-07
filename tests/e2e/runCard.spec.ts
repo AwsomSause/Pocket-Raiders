@@ -20,11 +20,18 @@ test('Run menu opens and the run card saves from the run-end screen', async ({ p
     await waitForScene(page, key);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
-  await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('Map').scene.start('GameOver'); });
+  // A full team of six, so the card layout is checked at its widest.
+  await page.evaluate(() => {
+    const { session } = (window as any).__pkr;
+    const ids = ['pikachu', 'charizard', 'blastoise', 'venusaur', 'gengar'].filter((id) => session.content.species.get(id));
+    ids.forEach((id, i) => session.run.party.push({ ...structuredClone(session.run.party[0]), uid: `card-${i}`, speciesId: id, level: 30 + i, shiny: i === 1 }));
+    (window as any).__pkr.game.scene.getScene('Map').scene.start('GameOver');
+  });
   await waitForScene(page, 'GameOver');
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'test-results/runcard-gameover.png' });
   const [download] = await Promise.all([page.waitForEvent('download'), page.evaluate(() => { (window as any).__pkr.game.scene.getScene('GameOver').children.getByName('save-run-card').emit('pointerdown'); })]);
+  expect((await page.evaluate(() => (window as any).__pkr.session.run.party.length))).toBe(6);
   expect(download.suggestedFilename()).toBe('pocket-raiders-run.png');
   await download.saveAs('test-results/runcard.png');
   expect(errors).toEqual([]);
