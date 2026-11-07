@@ -337,7 +337,7 @@ export class BattleScene extends Phaser.Scene {
       const gb = itemCount(run.inventory, 'gb-sounds') > 0 ? ['bgm.battle_gb'] : [];
       const raid = this.raidTrack(run.battle);
       const wipe = this.wipeMask();
-      queueAssets(this, [...WEATHER_ASSET_IDS, ...(wipe ? [wipeAssetId(wipe)] : []), ...gb, ...(raid ? [raid] : []), victoryTrack({ trainer: run.battle.kind === 'trainer', boss: Boolean(this.boss()), role: this.battleRole() }), ...(this.battleRole() ? [battleTrack({ raidTrack: null, trainer: true, gbSounds: false, role: this.battleRole() })] : [])]);
+      queueAssets(this, [...WEATHER_ASSET_IDS, ...(wipe ? [wipeAssetId(wipe)] : []), ...gb, ...(raid ? [raid] : []), victoryTrack({ trainer: run.battle.kind === 'trainer', boss: Boolean(this.boss()), role: this.battleRole() }), ...(this.battleRole() ? [battleTrack({ raidTrack: null, trainer: true, gbSounds: false, role: this.battleRole(), regionId: run.regionOrder.length > 0 ? currentRegion(services().session.content, run).id : undefined })] : [])]);
     }
   }
 
