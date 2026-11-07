@@ -1,0 +1,1 @@
+{"textures": [{"image": "alolan-flygon-mega.png", "format": "RGBA8888", "size": {"w": 105, "h": 111}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 105, "h": 111}, "spriteSourceSize": {"x": 0, "y": 0, "w": 105, "h": 111}, "frame": {"x": 0, "y": 0, "w": 105, "h": 111}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

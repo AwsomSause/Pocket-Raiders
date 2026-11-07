@@ -11,6 +11,9 @@ import { services } from '../game/services';
 import { loadAssets } from './lazyAssets';
 import { COLORS, PIXEL_SCALE, TYPE_COLORS, textStyle } from './theme';
 
+/** Pokémon whose sprite animation bounces (ping-pong) instead of restarting from the first frame. */
+const BOUNCE_LOOP = /(^|[^a-z])(vine-riff|electric-oncore|neon-moon)([^a-z]|$)/;
+
 /** Builds a looping animation from every frame of a loaded atlas (once per atlas). */
 export function ensureAtlasAnimation(scene: Phaser.Scene, key: string, frameRate = 12): string | null {
   const animKey = `${key}.anim`;
@@ -22,6 +25,8 @@ export function ensureAtlasAnimation(scene: Phaser.Scene, key: string, frameRate
     .sort()
     .map((frame) => ({ key, frame }));
   if (frames.length === 0) return null;
+  // Bounce loop (forward, then back, without repeating the end frames) for these Pokémon.
+  if (BOUNCE_LOOP.test(key) && frames.length > 2) frames.push(...frames.slice(1, -1).reverse());
   scene.anims.create({ key: animKey, frames, frameRate, repeat: -1 });
   return animKey;
 }

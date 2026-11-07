@@ -51,7 +51,7 @@ for (const [first, stages, rarity, role, temperament, traits, route, held] of ro
     ...(held ? { held } : {}),
   });
 }
-// 74 design lines plus Vulpix and Psyduck (director, 2026-11-07: they are Story Run starters) plus the three Jet lines the Viking unlocks.
-if (result.length !== 79) throw new Error(`expected 79 lines, got ${result.length}`);
+// 74 design lines plus Vulpix and Psyduck (director, 2026-11-07: they are Story Run starters) plus the three Jet lines the Viking unlocks plus the five scout lines (Beta 4.4 batch).
+if (result.length !== 84) throw new Error(`expected 84 lines, got ${result.length}`);
 writeFileSync(new URL(out, root), JSON.stringify(result, null, 1) + '\n');
 console.log(`remembrances: ${result.length} lines (${result.filter((r) => byLine.has(r.line[0])).length} kept)`);

@@ -228,6 +228,8 @@ interface SpeciesFixes {
   learnsets: Record<string, { level: number; move: string }[]>;
   replaceMoves: Record<string, Record<string, string>>;
   evolutionGifts: { from: string; to: string; species: string; needsItem: string }[];
+  /** Plain evolutions that became condition routes (core/conditionEvolution.ts): Dartrix to Decidueye is now a daytime route. */
+  removeEvolutions?: Record<string, string[]>;
 }
 
 /**
@@ -255,12 +257,17 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
     if (!s.evolutions?.some((e) => e.to === g.to)) throw new Error(`speciesFixes.json: "${g.from}" does not evolve into "${g.to}"`);
     changed.set(g.from, { ...s, evolutions: s.evolutions.map((e) => (e.to === g.to ? { ...e, gives: { species: g.species, needsItem: g.needsItem } } : e)) });
   }
+  for (const [id, targets] of Object.entries(fixes.removeEvolutions ?? {})) {
+    const s = changed.get(id) ?? need(id);
+    for (const to of targets) if (!s.evolutions?.some((e) => e.to === to)) throw new Error(`speciesFixes.json: "${id}" does not evolve into "${to}"`);
+    changed.set(id, { ...s, evolutions: (s.evolutions ?? []).filter((e) => !targets.includes(e.to)) });
+  }
   return (species as Entry[]).map((s) => changed.get(s.id) ?? s);
 }
 
 export const RAW_CONTENT: RawContent = {
   species: applySpeciesFixes(
-    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions]), storySpeciesJson.patches),
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), storySpeciesJson.patches),
     speciesFixesJson,
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
@@ -275,8 +282,8 @@ export const RAW_CONTENT: RawContent = {
   gameEvents: gameEventsJson,
   runPrep: runPrepJson,
   // Mega Stones are generated (npm run data:megas) and kept in their own file.
-  rewards: [...rewardsJson, ...megaStonesJson.rewards],
-  items: [...itemsJson, ...megaStonesJson.items],
+  rewards: [...rewardsJson, ...megaStonesJson.rewards, ...jetSpeciesJson.rewards],
+  items: [...itemsJson, ...megaStonesJson.items, ...jetSpeciesJson.items],
   itemCatalog: [...itemCatalogJson, ...itemCatalogExtra],
   learnables: { ...learnablesJson, ...storySpeciesJson.learnables, ...jetSpeciesJson.learnables },
   trainers: [...trainersJson, ...trainersDriveJson],

@@ -25,6 +25,8 @@ export type EvoCondition =
   | { kind: 'nature'; natures: readonly string[] }
   /** Friendship has reached the evolution level (the same high friendship the friendship routes need). */
   | { kind: 'friendship' }
+  /** Another Pokémon of this species is in the party (Sableye to Gemgoyle). */
+  | { kind: 'partyHas'; species: string }
   /** Every part must hold. */
   | { kind: 'all'; of: EvoCondition[] };
 
@@ -78,6 +80,12 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'toxel', to: 'electric-oncore', minLevel: 30, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'nature', natures: JET_AMPED }] } },
   { from: 'eevee', to: 'pyro-spirit', minLevel: 1, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'day' }, { kind: 'friendship' }] } },
   { from: 'eevee', to: 'neon-moon', minLevel: 1, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'night' }, { kind: 'friendship' }] } },
+  // Beta 4.4 batch (docs/status/beta-4-4-pokemon.md). Rowlet's line: Decidueye by day from 34, the Assassian form by night from 36.
+  { from: 'dartrix', to: 'decidueye', minLevel: 34, condition: { kind: 'day' } },
+  { from: 'dartrix', to: 'decidueye-assassian', minLevel: 36, condition: { kind: 'night' } },
+  { from: 'sableye', to: 'gemgoyle', minLevel: 1, condition: { kind: 'partyHas', species: 'sableye' } },
+  { from: 'krookodile', to: 'dreadodile', minLevel: 55, condition: { kind: 'holds', item: 'hard-stone' } },
+  { from: 'benovolant-beak', to: 'tyrant-king', minLevel: 17, condition: { kind: 'holds', item: 'kings-rock' } },
   { from: 'bastiodon', to: 'bastiodoom', minLevel: 1, condition: { kind: 'holds', item: 'black-sludge' } },
   { from: 'aggron', to: 'cataggron', minLevel: 55, condition: { kind: 'holds', item: 'metal-coat' } },
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
@@ -106,6 +114,7 @@ export function conditionText(content: Content, c: EvoCondition): string {
   if (c.kind === 'day') return 'win by day';
   if (c.kind === 'nature') return `have a ${c.natures.length === 12 ? 'Low Key' : 'Amped'} nature`;
   if (c.kind === 'friendship') return 'be very friendly';
+  if (c.kind === 'partyHas') return `have another ${content.species.get(c.species)?.name ?? c.species} in the party`;
   if (c.kind === 'holds') return `hold ${c.item.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ')}`;
   if (c.kind === 'all') return c.of.map((x) => conditionText(content, x)).join(' and ');
   const name = content.moves.get(c.move)?.name ?? c.move;
@@ -113,10 +122,10 @@ export function conditionText(content: Content, c: EvoCondition): string {
 }
 
 /** What the run adds to a check: it unlocks the Heartbond and night conditions. */
-export interface EvoRunInfo { heartbond: number | null; night: boolean }
+export interface EvoRunInfo { heartbond: number | null; night: boolean; party?: readonly string[] }
 
 export function evoRunInfo(run: RunState, mon: PokemonInstance): EvoRunInfo {
-  return { heartbond: run.story.v2 ? heartbondLevel(heartbondScore(bondOf(run, mon.uid))) : null, night: periodOf(run) === 'night' };
+  return { heartbond: run.story.v2 ? heartbondLevel(heartbondScore(bondOf(run, mon.uid))) : null, night: periodOf(run) === 'night', party: run.party.map((m) => m.speciesId) };
 }
 
 function conditionMet(content: Content, c: EvoCondition, mon: PokemonInstance, weather: string | null, info: EvoRunInfo | undefined): boolean {
@@ -130,6 +139,7 @@ function conditionMet(content: Content, c: EvoCondition, mon: PokemonInstance, w
     case 'holds': return (mon.held?.[c.item] ?? 0) > 0;
     case 'nature': return mon.nature !== undefined && c.natures.includes(mon.nature);
     case 'friendship': return friendshipReady(content, mon);
+    case 'partyHas': return (info?.party ?? []).filter((id) => id === c.species).length >= 2;
     case 'all': return c.of.every((x) => conditionMet(content, x, mon, weather, info));
   }
 }

@@ -11,15 +11,17 @@ const ROSTER = ['bulbasaur', 'charmander', 'squirtle', 'chikorita', 'cyndaquil',
   // Not in the design roster: added by the director (2026-11-07) because they are Story Run starters.
   'vulpix', 'psyduck',
   // Jet the Viking's blessing (2026-11-07): Eevee and Toxel holding Booster Energy, Shieldon holding Black Sludge.
-  'eevee', 'toxel', 'shieldon'];
+  'eevee', 'toxel', 'shieldon',
+  // Pocket Town starter scouts (2026-11-07).
+  'sableye', 'promised-prince', 'alolan-trapinch', 'paldean-golett', 'alolan-dratini'];
 
 const lines = content.storyData.remembrances;
 
 describe('Remembrance roster', () => {
-  it('is the closed list of 79 lines (74 from the design, Vulpix and Psyduck, and the three Jet lines), each 1 to 3 real stages', () => {
-    expect(ROSTER).toHaveLength(79);
+  it('is the closed list of 84 lines (74 from the design, Vulpix and Psyduck, the three Jet lines and the five Pocket Town scout lines), each 1 to 3 real stages', () => {
+    expect(ROSTER).toHaveLength(84);
     expect(lines.map((r) => r.line[0]).sort()).toEqual([...ROSTER].sort());
-    expect(new Set(lines.map((r) => r.id)).size).toBe(79);
+    expect(new Set(lines.map((r) => r.id)).size).toBe(84);
     for (const r of lines) {
       expect(r.line.length, r.id).toBeGreaterThanOrEqual(1);
       expect(r.line.length, r.id).toBeLessThanOrEqual(3);
@@ -28,9 +30,9 @@ describe('Remembrance roster', () => {
     }
   });
 
-  it('has the design rarity counts (plus 2 Familiar and 3 Unusual Jet lines) and a 53-line opening quiz pool (Wattrel is no longer a starter)', () => {
+  it('has the design rarity counts (plus 2 Familiar, 3 Unusual Jet lines and 5 Unusual scout lines) and a 53-line opening quiz pool (Wattrel is no longer a starter)', () => {
     const count = (k: string) => lines.filter((r) => r.rarity === k).length;
-    expect([count('familiar'), count('unusual'), count('rare'), count('exceptional')]).toEqual([34, 23, 12, 10]);
+    expect([count('familiar'), count('unusual'), count('rare'), count('exceptional')]).toEqual([34, 28, 12, 10]);
     expect(lines.filter((r) => r.quizEligible)).toHaveLength(53);
   });
 

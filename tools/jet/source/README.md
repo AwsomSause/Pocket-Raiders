@@ -1,6 +1,6 @@
 # Jet Pokédex data
 
-Six Pokémon: 001 Vine Riff, 002 Electric Oncore, 003 Cataggron, 004 Bastiodoom, 005 Pyro Spirit, 006 Neon Moon.
+
 
 - `pokedex.json`: every Pokémon in one file.
 - `pokemon/`: one JSON file per Pokémon, same schema as an entry in `pokedex.json`.

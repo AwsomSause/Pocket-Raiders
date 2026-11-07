@@ -2786,5 +2786,183 @@
   "baby": false,
   "quizEligible": false,
   "held": "black-sludge"
+ },
+ {
+  "v": 1,
+  "id": "rm_sableye",
+  "line": [
+   "sableye",
+   "maliceye"
+  ],
+  "types": [
+   "dark",
+   "ghost"
+  ],
+  "temperament": "tm_mischievous",
+  "affinity": {
+   "curiosity": 3,
+   "independence": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "scout_opal"
+  },
+  "moves": [
+   "leer",
+   "scratch",
+   "foresight"
+  ],
+  "keystone": "keystone_sableye",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "unusual",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_promised_prince",
+  "line": [
+   "promised-prince",
+   "benovolant-beak",
+   "fallen-liege"
+  ],
+  "types": [
+   "water",
+   "electric"
+  ],
+  "temperament": "tm_competitive",
+  "affinity": {
+   "ambition": 3,
+   "courage": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "scout_reed"
+  },
+  "moves": [
+   "pound",
+   "growl",
+   "water-gun"
+  ],
+  "keystone": "keystone_promised_prince",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_alolan_trapinch",
+  "line": [
+   "alolan-trapinch",
+   "alolan-vibrava",
+   "alolan-flygon"
+  ],
+  "types": [
+   "bug",
+   "ground"
+  ],
+  "temperament": "tm_stubborn",
+  "affinity": {
+   "resolve": 3,
+   "instinct": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "scout_dune"
+  },
+  "moves": [
+   "sand-attack",
+   "astonish",
+   "mud-slap"
+  ],
+  "keystone": "keystone_alolan_trapinch",
+  "status": "limited",
+  "role": "trapper",
+  "rarity": "unusual",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_paldean_golett",
+  "line": [
+   "paldean-golett",
+   "paldean-golurk"
+  ],
+  "types": [
+   "rock",
+   "ghost"
+  ],
+  "temperament": "tm_serious",
+  "affinity": {
+   "loyalty": 3,
+   "resolve": 3,
+   "compassion": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "scout_rune"
+  },
+  "moves": [
+   "astonish",
+   "defense-curl",
+   "mud-slap"
+  ],
+  "keystone": "keystone_paldean_golett",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "unusual",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_alolan_dratini",
+  "line": [
+   "alolan-dratini",
+   "alolan-dragonair",
+   "alolan-dragonite"
+  ],
+  "types": [
+   "water",
+   "dragon"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "compassion": 3,
+   "adaptability": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "scout_coral"
+  },
+  "moves": [
+   "wrap",
+   "leer",
+   "water-gun"
+  ],
+  "keystone": "keystone_alolan_dratini",
+  "status": "limited",
+  "role": "support",
+  "rarity": "unusual",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
  }
 ]
