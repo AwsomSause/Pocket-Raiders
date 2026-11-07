@@ -6,7 +6,7 @@ One-page snapshot. Read this instead of CHECKLIST.md unless you need a milestone
 Current versions (`src/save/saveManager.ts` `CURRENT_VERSIONS`): profile 20, run 40, settings 40, meta 1. Next free versions: run 41, profile 21, settings 41 (check `origin/main` first; another thread may have taken them).
 
 ## Done and known limits
-The long "Done" list (about 140 bullets) and the older known-limits notes moved to `docs/archive/status-done-2026-10-30.md`; newer slice notes are in `docs/status/` (grep `docs/status/INDEX.md`, one line per note; do not read it whole). To check if a feature exists: `grep -il "<word>" docs/status/*.md docs/archive/status-done-2026-10-30.md` or grep `CHECKLIST.md`. Do not read either whole.
+The long "Done" list (about 140 bullets) and the older known-limits notes moved to `docs/archive/status-done-2026-10-30.md`; newer slice notes are in `docs/status/` (run `npm run status:find -- word`, or grep `docs/status/INDEX.md`, one line per note; do not read it whole). To check if a feature exists: `grep -il "<word>" docs/status/*.md docs/archive/status-done-2026-10-30.md` or grep `CHECKLIST.md`. Do not read either whole.
 
 ## In progress / next
 - Plan: `docs/plans/left-out-plan.md` (everything asked for but not built, in priority order; each item updates its row there). Waiting on Kice: regional forms mechanic, IVs/EVs + time of day, online co-op; branch protection on `main` (Settings > Branches, require `check`).
