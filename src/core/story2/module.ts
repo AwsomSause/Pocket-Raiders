@@ -4,6 +4,7 @@
 // its own seeded stream, and nothing here touches battle rules or gameplay RNG. Outcomes never depend on the screen that shows a scene.
 
 import { gainCharge } from './feats';
+import { emit } from '../story/record';
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
 import type { Profile, RunState } from '../state';
@@ -113,7 +114,7 @@ export function applyEffects(content: Content, run: RunState, effects: readonly 
       }
       case 'add_relationship': addRelationship(run, String(e.character), String(e.attr), Number(e.amount ?? 0)); break;
       case 'unlock': v2.facts[`unlock.${String(e.target)}`] = true; break;
-      case 'unlock_lore': v2.facts[`lore.${String(e.lore)}`] = String(e.state ?? 'known'); break;
+      case 'unlock_lore': v2.facts[`lore.${String(e.lore)}`] = String(e.state ?? 'known'); emit(content, run, 'loreUnlocked', { data: { lore: String(e.lore), state: String(e.state ?? 'known') } }); break;
       case 'give_item': v2.facts[`item.${String(e.item)}`] = true; break; // the item itself is named, not built (limit in the status note)
       case 'add_memory': v2.facts[`mem.${String(e.memory)}`] = true; break;
       case 'evolve_eevee': evolveCrossroads(content, run, String(e.form)); break;
@@ -316,6 +317,7 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
   applyEffects(content, run, e.outputs as Eff[]);
   m.played.push(e.id);
   v2.scenesDone.push(e.id);
+  emit(content, run, 'storyChoice', { data: { event: e.id, choice: choice?.id ?? null } });
   if (e.tags.includes('echo')) m.echoes += 1;
   if (choice?.goto && eventOf(content.storyData, choice.goto) && !m.played.includes(choice.goto)) m.queue.push(choice.goto);
   const arc = arcOf(content.storyData, e.id);
@@ -323,6 +325,7 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
     const i = arc.steps.findIndex((s) => s.event === e.id);
     const done = i === arc.steps.length - 1;
     v2.arcs[arc.id] = { state: done ? 'done' : 'active', step: i + 1, nodeCost: arc.nodeCost };
+    emit(content, run, 'arcState', { data: { arc: arc.id, state: done ? 'done' : 'active', step: i + 1 } });
     // S7: a beat of the partner's own Starter arc (`arc_<line>`) adds Resolve Charge, once per beat.
     if (v2.starter && arc.id === `arc_${v2.starter.lineId}`) gainCharge(content, run, 'arc_beat', `${arc.id}:${i}`);
     if (done) {

@@ -3257,6 +3257,16 @@ export type NpcStory = z.infer<typeof NpcStorySchema>;
 
 export const EventsFileSchema = z.object({ events: z.array(EventDefSchema).min(1) });
 
+/** Design v2 Part AF: one row per asset source, grouped into the credits page sections (in order). */
+export const AssetCreditsSchema = z.object({
+  sections: z.array(z.object({
+    id: z.string().regex(/^[a-z][a-z0-9_]*$/),
+    title: z.string().min(1),
+    entries: z.array(z.object({ name: z.string().min(1), role: z.string().min(1), licence: z.string().optional(), generated: z.boolean().optional(), placeholder: z.boolean().optional() })).min(1),
+  })).min(1),
+});
+export type AssetCredits = z.infer<typeof AssetCreditsSchema>;
+
 export interface Content {
   species: Map<string, Species>;
   moves: Map<string, Move>;
@@ -3297,6 +3307,8 @@ export interface Content {
   story: StoryConfig;
   /** Story Overhaul v2 data (empty until content slices fill src/data/story). */
   storyData: StoryData;
+  /** Design v2 Part AF: the credits page sources (assetCredits.json), read by the end credits and Settings > Asset credits. */
+  assetCredits: AssetCredits;
   /** Raid bosses and den placement (raids.json, core/raid). */
   raids: RaidFile;
   /** Map events (events.json, core/events.ts). */
