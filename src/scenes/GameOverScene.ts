@@ -12,6 +12,8 @@ import { gameRewardText } from '../core/gameEvents';
 import { attributeChanges } from '../core/attributes';
 import { topMoments } from '../core/story/record';
 import { buildRecap } from '../core/recap';
+import { buildRunCard } from '../core/runCard';
+import { saveRunCard } from '../ui/runCardImage';
 import { device } from '../game/deviceTools';
 import { formatMs, parseSplits, updateSplits } from '../core/tools/speedrun';
 import { encodeSeedCode } from '../core/seedCode';
@@ -98,6 +100,8 @@ export class GameOverScene extends Phaser.Scene {
       const copy = (code: string) => void navigator.clipboard?.writeText(code).catch(() => undefined);
       this.input.keyboard?.on('keydown-T', () => copy(encodeTeamCode(run.party.map((m) => ({ speciesId: m.speciesId, level: m.level, shiny: !!m.shiny })))));
       this.input.keyboard?.on('keydown-C', () => copy(encodeChallengeCard({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules }, { from: 'A friend', title: `${archetype} run`, victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted })));
+      // S saves a run card picture (core/runCard.ts) to share.
+      this.input.keyboard?.on('keydown-S', () => saveRunCard(buildRunCard(session.content, run), won));
       // Speedrun timer (off unless switched on in Hub > Tools): close the run's splits and show the final time.
       let timeLine: string[] = [];
       const sp = device.speedrunOn() ? parseSplits(device.splits()) : null;
@@ -119,7 +123,7 @@ export class GameOverScene extends Phaser.Scene {
           `Candies earned: ${run.candies}`,
           ...timeLine,
           ...(byName ? [`Defeated by ${byName}`] : []),
-          `Seed: ${run.seed}${record ? '  (G: ghost code)' : ''}  (T: team code, C: challenge card)`,
+          `Seed: ${run.seed}${record ? '  (G: ghost code)' : ''}  (T: team code, C: challenge card, S: save run card)`,
           `Seed code: ${encodeSeedCode({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules })}`,
           ...(ghost ? ghostLines(ghost, { victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted }, (id) => session.content.species.get(id)?.name ?? id).slice(0, 5) : []),
           ...(run.nuzlocke?.memorial.length ? ['Memorial:', ...memorialLines(session.content, run).slice(0, 6)] : []),
