@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dailyModifierId, dailySetup, dailyStarters } from '../../src/core/daily';
+import { dailyChampionId, dailyModifierId, dailySetup, dailyStarters } from '../../src/core/daily';
 import { defaultPrep } from '../../src/core/runPrep';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { dailySeed, getMode, makeRules, rulesProblem, rulesCampaign, STANDARD_CHOICE } from '../../src/core/rules';
@@ -44,5 +44,13 @@ describe('Daily Run format', () => {
     expect(setup.starters).toEqual(a);
     const run = createRun(content, { runId: 'd', seed: setup.seed, archetypeId: 'red', prep: setup.prep, rules: setup.rules, starterOverride: setup.starters });
     expect(run.starterChoices).toEqual(a);
+  });
+  it('the day fixes the final champion, shown in Run Prep, and the same for everyone', () => {
+    const seed = dailySeed('2026-11-07');
+    expect(dailyChampionId(content, seed)).toBe(dailyChampionId(content, seed));
+    const set = new Set(Array.from({ length: 20 }, (_, i) => dailyChampionId(content, dailySeed(`2026-12-${String(i + 1).padStart(2, '0')}`))));
+    expect(set.size).toBeGreaterThan(3);
+    const setup = dailySetup(content, '2026-11-07', defaultPrep(content), choice);
+    expect(setup.lines.join(' ')).toContain(content.bosses.get(dailyChampionId(content, seed))!.name);
   });
 });

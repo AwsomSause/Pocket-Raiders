@@ -390,7 +390,9 @@ function openBerries(host: ToolsHost): void {
 }
 
 async function openProvenance(host: ToolsHost): Promise<void> {
-  const { default: md } = await import('../../docs/quality/asset-provenance.md?raw');
+  const { default: main } = await import('../../docs/quality/asset-provenance.md?raw');
+  const frags = await Promise.all(Object.values(import.meta.glob<string>('../../docs/quality/provenance/*.md', { query: '?raw', import: 'default' })).map((load) => load()));
+  const md = [main, ...frags].join('\n');
   page(host, 'Asset sources', textRows(provenanceLines(provenanceSources(md))));
 }
 
