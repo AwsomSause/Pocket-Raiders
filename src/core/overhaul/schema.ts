@@ -186,7 +186,7 @@ export const SignatureMomentSchema = z.object({
 });
 
 /** `needs`: one flag an earlier stage of the same chain sets; the option only shows after that choice. */
-export const ChainOptionSchema = z.object({ id, label: text, outcome: text, sets: z.array(id), needs: id.optional() });
+export const ChainOptionSchema = z.object({ id, label: text, outcome: text, sets: z.array(id), needs: id.optional(), /** Overrides the label guess: true = this choice carries the chain on to the next stage. */ continues: z.boolean().optional() });
 export const ChainStageSchema = z.object({
   id,
   minNodesAfterPrevious: z.number().int().min(0),

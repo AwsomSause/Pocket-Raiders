@@ -19,6 +19,21 @@ describe('overhaul event chains', () => {
     expect(events.length).toBe(stats.stages);
   });
 
+  it('every chain can progress: each non-final stage has an option that sets the flag the next stage requires', () => {
+    const { events } = chainEvents(items);
+    const byId = new Map(events.map((e) => [e.id as string, e as any]));
+    const stuck: string[] = [];
+    for (const chain of overhaulCatalogs().event_chains.entries) {
+      chain.stages.slice(0, -1).forEach((st) => {
+        const ev = byId.get(`ovc-${st.id}`);
+        const writes = ev.choices.some((c: any) => c.success.effects.some((f: any) => f.kind === 'flag' && f.key === `ovc-${st.id}` && f.amount === 1));
+        if (!writes) stuck.push(st.id);
+      });
+    }
+    expect(stuck).toEqual([]);
+    for (const id of ['dig-up-s1', 'treasure-map-s1', 'silent-merchant-king-s2', 'the-last-trainer-of-town-s2', 'the-snow-globe-s2', 'legend-time-space-trial-s2', 'legend-ruin-quartet-shrine-s2']) expect(byId.get(`ovc-${id}`)).toBeDefined();
+  });
+
   it('can be switched off', () => {
     const off = buildContent({ ...RAW_CONTENT, balance: { ...(RAW_CONTENT.balance as object), overhaulChains: { enabled: false, legendaryMinStage: 7 } } });
     expect(off.events.has('ovc-roadside-stand-s1')).toBe(false);

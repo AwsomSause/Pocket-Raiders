@@ -148,7 +148,7 @@ export function chainEvents(items: readonly PoolItem[], config: ChainsConfig = D
         const mapped = mapOutcome(o.outcome, chain.rarity, pools, legendary && last && /^battle$/i.test(o.label.trim()) ? LEGEND_SPECIES[chain.id] : undefined);
         if (mapped.kind === 'none') stats.none++; else if (mapped.kind === 'story') stats.story++; else if (mapped.kind === 'battle') stats.battles++; else stats.mapped++;
         const effects: Effect[] = [...mapped.effects];
-        const continues = !last && o.sets.length > 0 && !END_LABEL.test(o.label.trim());
+        const continues = !last && o.sets.length > 0 && (o.continues ?? !END_LABEL.test(o.label.trim()));
         for (const f of o.sets) effects.push({ kind: 'flag', key: `ovp-${flagKey(f)}`, amount: 1 });
         if (continues) effects.push({ kind: 'flag', key: `ovc-${stage.id}`, amount: 1 }, { kind: 'flag', key: `ovt-${stage.id}`, amount: 0 });
         if (legendary && si === 0 && continues) effects.push({ kind: 'flag', key: 'ovc-legend', amount: 1 });
