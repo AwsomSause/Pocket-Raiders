@@ -17147,6 +17147,52 @@
   }
  },
  {
+  "id": "torch",
+  "name": "Torch",
+  "family": "Map and encounter items",
+  "description": "Spent inside a dungeon to light a dark trap room and walk through it safely",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "charcoal",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "dungeonSupply"
+    }
+   ]
+  }
+ },
+ {
+  "id": "dungeon-key",
+  "name": "Dungeon Key",
+  "family": "Map and encounter items",
+  "description": "Spent inside a dungeon to open a sealed room (a Key Charm opens them for free)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "passive",
+  "icon": "key-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "dungeonSupply"
+    }
+   ]
+  }
+ },
+ {
   "id": "clover-charm",
   "name": "Clover Charm",
   "family": "Charms (Drive pack)",

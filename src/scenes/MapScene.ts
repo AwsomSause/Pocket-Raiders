@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
 import { nookOf, renameNode } from '../core/hubNook';
@@ -977,8 +978,10 @@ export class MapScene extends Phaser.Scene {
         const route = routeKind(services().session.run!, n);
         const storyStops = (n.storyStops ?? []).map((id) => runNow.story.v2?.blueprint?.stops.find((x) => x.id === id)).filter((x) => !!x && !runNow.story.v2!.stops.done.includes(x.id));
         const storyNote = storyStops.length ? `\n★ Story Stop: ${storyStops.map((x) => x!.category).join(', ')}` : '';
+        const hint = nodeHint(runNow, n.id);
+        const hintNote = hint ? `\nWord on the road: ${hint}` : '';
         const anomaly = stageAnomaly(services().session.content, services().session.run!);
-        return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${storyNote}${seen ? `\n${seen}` : ''}`;
+        return `${named}${frontNote}${crossNote}${anomaly ? `${anomalyLine(anomaly)}\n` : ''}${route ? `[${ROUTE_LABELS[route]}]\n` : ''}${n.kind === 'elite' || n.kind === 'champion' ? 'Battle' : 'Level'} ${n.column}: ${kind}${risk}${sides.length ? `  ·  Has a ${sides.join(' and ')}` : ''}${storyNote}${hintNote}${seen ? `\n${seen}` : ''}`;
       }
       case 'side':
         if (option.side.kind === 'plaza') return 'Trainer Plaza: the middle of the stage. Stalls, traders, a Battle Club, errands and gossip. Rest, shop and plan before you go on.';
