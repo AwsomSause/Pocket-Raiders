@@ -3350,6 +3350,7 @@ export class BattleScene extends Phaser.Scene {
         case 'bindDamage':
         case 'seedDamage':
         case 'weatherDamage':
+        case 'seaOfFireDamage':
           if (e.hpAfter < mon!.hp && services().session.settings.damageNumbers) this.floatDamage(sprite, mon!.hp - e.hpAfter);
           if (e.type === 'damage' && e.hpAfter < mon!.hp) this.buzz(this.lastMoveType, e.effectiveness > 1);
           if (e.type === 'damage' && e.side === 'player' && (e.crit || e.effectiveness >= 2) && e.hpAfter < mon!.hp && this.trainerActor?.sprite.visible) void this.trainerActor.play('hit');
