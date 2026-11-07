@@ -1,0 +1,1 @@
+{"textures": [{"image": "decidueye-assassian.png", "format": "RGBA8888", "size": {"w": 78, "h": 97}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 78, "h": 97}, "spriteSourceSize": {"x": 0, "y": 0, "w": 78, "h": 97}, "frame": {"x": 0, "y": 0, "w": 78, "h": 97}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

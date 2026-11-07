@@ -17,7 +17,8 @@ import { Picker, type PickerRow } from '../ui/partyPanel';
 import { HubTownView } from '../ui/hubTown/townView';
 import { HubMinimap } from '../ui/hubTown/minimap';
 import { drawDaylight, startTownSound } from '../ui/hubTown/townTime';
-import { PocketFolk, folkAssets, pocketFolk } from '../ui/hubTown/pocketFolk';
+import type { StarterScout } from '../core/story2/starterScouts';
+import { PocketFolk, folkAssets, pocketFolk, pocketScouts } from '../ui/hubTown/pocketFolk';
 import { itemVisual, pokemonIcon } from '../ui/sprites';
 import { onInputAction } from '../ui/input';
 import type { TownPanelLike } from '../ui/townPanel';
@@ -30,6 +31,14 @@ const TRAIL_COLORS: Record<string, number[]> = {
 const T = POCKET_TOWN.tile;
 /** The plaza fountain's tile (the sound of it follows how near you stand). */
 const FOUNTAIN = { x: 36, y: 32 };
+
+/** What a starter scout says: the gift the first time, a reminder after. */
+export function scoutTalk(session: ReturnType<typeof services>['session'], scout: StarterScout): string {
+  const added = session.receiveScoutGift(scout.id);
+  const species = session.content.species.get(session.content.storyData.remembrances.find((r) => r.id === scout.line)?.line[0] ?? '');
+  const mon = species?.name ?? 'Pokémon';
+  return (added.length > 0 ? `${scout.give} (${mon} joins your Remembrance Archive as a Story Run starter.)` : scout.again).replace('{mon}', mon);
+}
 
 export class TownScene extends Phaser.Scene {
   private picker: TownPanelLike | null = null;
@@ -52,7 +61,7 @@ export class TownScene extends Phaser.Scene {
     const { session } = services();
     const list = pets(session.content, session.profile).slice(0, 3).map((x) => session.content.species.get(x.speciesId)!);
     preloadPokemon(this, list, { icon: true });
-    this.folkList = pocketFolk();
+    this.folkList = [...pocketFolk(), ...pocketScouts(session.profile.profileId)];
     queueAssets(this, [overworldAssetIds.tiles, overworldAssetIds.props, overworldAssetIds.follower(hubPokemon(session.profile).follower), ...folkAssets(this.folkList)]);
   }
 
@@ -89,7 +98,7 @@ export class TownScene extends Phaser.Scene {
       { follower: hubPokemon(p).follower, motion, map: POCKET_TOWN, mapId: 'pocket' },
     );
     this.drawSigns();
-    this.folk = new PocketFolk(this.town, this, session.content, p, this.folkList, { motion, window: crowdWindow(new Date(Date.now())), say: (line) => this.say(line) });
+    this.folk = new PocketFolk(this.town, this, session.content, p, this.folkList, { motion, window: crowdWindow(new Date(Date.now())), say: (line) => this.say(line), scout: (sc) => scoutTalk(session, sc) });
 
     // Sky and lighting over the map: the last run's weather, then the time of day (and the lamps after dark).
     const tint: Record<typeof weather, [number, number]> = { sun: [0xffd27a, 0.14], storm: [0x1d2447, 0.38], cloud: [0x8a93a6, 0.22], clear: [0x000000, 0] };

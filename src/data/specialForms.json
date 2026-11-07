@@ -1,6 +1,7 @@
 {
   "note": "Untitled doc §8: special forms are event-only discoveries. A species is a special form when it has one of these tags or is a regional form. They never appear in ordinary wild pools, generic trainer teams or starter pools; an event, trade, egg, research quest, boss reward, secret route or earned starter set must hand them out. `ordinary` lists forms that are a core species identity and stay in normal pools.",
   "families": {
+    "scout": { "name": "Scout starters (Pocket Town)", "tag": "scout", "routes": ["npcTrade"] },
     "delta": {
       "name": "Delta forms",
       "tag": "delta",

@@ -2,6 +2,7 @@
 // `npm run report:check` shows a count and tests/unit/storyGates.test.ts can seed one bad record per gate.
 // Empty story data passes every gate.
 import { JET_UNLOCK } from '../core/story2/jetBlessing';
+import { SCOUT_UNLOCKS } from '../core/story2/starterScouts';
 import type { Content } from '../core/contentSchema';
 import type { StoryData } from '../core/story2/schema';
 import { rivalAudit } from '../core/story2/storyRivals';
@@ -92,7 +93,7 @@ export function storyGates(data: StoryData, content: Pick<Content, 'species' | '
   add('story-quiz-balance', 'Quiz weights out of balance', 'Traits whose total weight is outside 18 +/- 1, or whose best-case score is more than 10 percent from another trait\'s.', quizBad);
 
   add('story-remembrance-unlock', 'Remembrances nobody can unlock', 'Remembrances whose unlock route needs an event or backstory that does not exist.',
-    data.remembrances.filter((r) => (r.unlock.kind === 'event' && r.unlock.arg !== JET_UNLOCK && !events.has(r.unlock.arg ?? '')) || (r.unlock.kind === 'backstory' && !backstories.has(r.unlock.arg ?? '')) || (r.unlock.kind === 'quiz' && !r.unlock.arg)).map((r) => `${r.id}: ${r.unlock.kind} ${r.unlock.arg ?? '(none)'}`));
+    data.remembrances.filter((r) => (r.unlock.kind === 'event' && r.unlock.arg !== JET_UNLOCK && !SCOUT_UNLOCKS.has(r.unlock.arg ?? '') && !events.has(r.unlock.arg ?? '')) || (r.unlock.kind === 'backstory' && !backstories.has(r.unlock.arg ?? '')) || (r.unlock.kind === 'quiz' && !r.unlock.arg)).map((r) => `${r.id}: ${r.unlock.kind} ${r.unlock.arg ?? '(none)'}`));
 
   add('story-romance-age', 'Romanceable characters under 18', 'Characters marked romanceable whose age is under 18.', data.characters.filter((c) => c.romanceable && c.age < 18).map((c) => `${c.id} (age ${c.age})`));
 

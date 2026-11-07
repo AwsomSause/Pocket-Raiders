@@ -21,3 +21,4 @@ The long "Done" list (about 140 bullets) and the older known-limits notes moved 
 - CI: `.github/workflows` runs `check` on every PR; branch protection is still off.
 
 - Empty battle arena fix (W2): a failing battle opening now still shows both Pokémon and boxes (`BattleScene.intro` catch + `recoverIntro`). Root cause on Kice's save not reproduced; error logs to console as "Battle intro failed". Tests in `tests/e2e/battleStyles.spec.ts`.
+- Beta 4.4 Pokémon + Pocket Town starter scouts (17 species, Mega Alolan Flygon, 5 scouts each giving one new Story Run starter line): `docs/status/beta-4-4-pokemon.md`.

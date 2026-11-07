@@ -395,6 +395,31 @@
    "sig1": "sig-sludge-bash",
    "sig2": "sig-iron-wall",
    "keystone": "sig-sludge-bash-keystone"
+  },
+  "sableye": {
+   "sig1": "sig-gem-glint",
+   "sig2": "sig-hoard-guard",
+   "keystone": "sig-gem-glint-keystone"
+  },
+  "promised-prince": {
+   "sig1": "sig-royal-splash",
+   "sig2": "sig-vow-of-the-tide",
+   "keystone": "sig-royal-splash-keystone"
+  },
+  "alolan-trapinch": {
+   "sig1": "sig-dune-snap",
+   "sig2": "sig-tidepool-burrow",
+   "keystone": "sig-dune-snap-keystone"
+  },
+  "paldean-golett": {
+   "sig1": "sig-relic-rap",
+   "sig2": "sig-rune-ward",
+   "keystone": "sig-relic-rap-keystone"
+  },
+  "alolan-dratini": {
+   "sig1": "sig-tide-scale",
+   "sig2": "sig-coral-mend",
+   "keystone": "sig-tide-scale-keystone"
   }
  },
  "descriptions": {
@@ -556,6 +581,16 @@
   "sig-venom-riff": "Toxel's line's second own move, born from the story the two of you lived.",
   "sig-sludge-bash": "A move only Shieldon's line and its Trainer share, first found in a hard-won fight.",
   "sig-iron-wall": "Shieldon's line's second own move, born from the story the two of you lived.",
+  "sig-gem-glint": "A move only Sableye's line and its Trainer share, first found in a hard-won fight.",
+  "sig-hoard-guard": "Sableye's line's second own move, born from the story the two of you lived.",
+  "sig-royal-splash": "A move only Promised Prince's line and its Trainer share, first found in a hard-won fight.",
+  "sig-vow-of-the-tide": "Promised Prince's line's second own move, born from the story the two of you lived.",
+  "sig-dune-snap": "A move only Alolan Trapinch's line and its Trainer share, first found in a hard-won fight.",
+  "sig-tidepool-burrow": "Alolan Trapinch's line's second own move, born from the story the two of you lived.",
+  "sig-relic-rap": "A move only Paldean Golett's line and its Trainer share, first found in a hard-won fight.",
+  "sig-rune-ward": "Paldean Golett's line's second own move, born from the story the two of you lived.",
+  "sig-tide-scale": "A move only Alolan Dratini's line and its Trainer share, first found in a hard-won fight.",
+  "sig-coral-mend": "Alolan Dratini's line's second own move, born from the story the two of you lived.",
   "sig-rootbound-stand-keystone": "Rootbound Stand grown stronger by the Keystone Memory. Only Bulbasaur's line knows it.",
   "sig-tailfire-vow-keystone": "Tailfire Vow grown stronger by the Keystone Memory. Only Charmander's line knows it.",
   "sig-shellback-rally-keystone": "Shellback Rally grown stronger by the Keystone Memory. Only Squirtle's line knows it.",
@@ -634,7 +669,12 @@
   "sig-headache-burst-keystone": "Headache Burst grown stronger by the Keystone Memory. Only Psyduck's line knows it.",
   "sig-paradox-pulse-keystone": "Paradox Pulse grown stronger by the Keystone Memory. Only Eevee's line knows it.",
   "sig-static-chord-keystone": "Static Chord grown stronger by the Keystone Memory. Only Toxel's line knows it.",
-  "sig-sludge-bash-keystone": "Sludge Bash grown stronger by the Keystone Memory. Only Shieldon's line knows it."
+  "sig-sludge-bash-keystone": "Sludge Bash grown stronger by the Keystone Memory. Only Shieldon's line knows it.",
+  "sig-gem-glint-keystone": "Gem Glint grown stronger by the Keystone Memory. Only Sableye's line knows it.",
+  "sig-royal-splash-keystone": "Royal Splash grown stronger by the Keystone Memory. Only Promised Prince's line knows it.",
+  "sig-dune-snap-keystone": "Dune Snap grown stronger by the Keystone Memory. Only Alolan Trapinch's line knows it.",
+  "sig-relic-rap-keystone": "Relic Rap grown stronger by the Keystone Memory. Only Paldean Golett's line knows it.",
+  "sig-tide-scale-keystone": "Tide Scale grown stronger by the Keystone Memory. Only Alolan Dratini's line knows it."
  },
  "moves": [
   {
@@ -4047,6 +4087,251 @@
    }
   },
   {
+   "id": "sig-gem-glint",
+   "name": "Gem Glint",
+   "type": "ghost",
+   "category": "special",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spd",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-hoard-guard",
+   "name": "Hoard Guard",
+   "type": "dark",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "def",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     },
+     {
+      "stat": "spd",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-royal-splash",
+   "name": "Royal Splash",
+   "type": "water",
+   "category": "special",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "par",
+     "chance": 20
+    }
+   }
+  },
+  {
+   "id": "sig-vow-of-the-tide",
+   "name": "Vow of the Tide",
+   "type": "water",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spa",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     },
+     {
+      "stat": "spd",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-dune-snap",
+   "name": "Dune Snap",
+   "type": "ground",
+   "category": "physical",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig",
+    "contact"
+   ],
+   "effects": {
+    "bind": true
+   }
+  },
+  {
+   "id": "sig-tidepool-burrow",
+   "name": "Tidepool Burrow",
+   "type": "ground",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "atk",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     },
+     {
+      "stat": "def",
+      "stages": 1,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-relic-rap",
+   "name": "Relic Rap",
+   "type": "ghost",
+   "category": "physical",
+   "power": 65,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig",
+    "contact"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "def",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-rune-ward",
+   "name": "Rune Ward",
+   "type": "rock",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 4,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "protect": true
+   }
+  },
+  {
+   "id": "sig-tide-scale",
+   "name": "Tide Scale",
+   "type": "water",
+   "category": "special",
+   "power": 65,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spe",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-coral-mend",
+   "name": "Coral Mend",
+   "type": "water",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "heal": 0.5
+   }
+  },
+  {
    "id": "sig-rootbound-stand-keystone",
    "name": "Rootbound Stand+",
    "type": "grass",
@@ -5714,6 +5999,122 @@
      "id": "psn",
      "chance": 30
     }
+   }
+  },
+  {
+   "id": "sig-gem-glint-keystone",
+   "name": "Gem Glint+",
+   "type": "ghost",
+   "category": "special",
+   "power": 85,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spd",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-royal-splash-keystone",
+   "name": "Royal Splash+",
+   "type": "water",
+   "category": "special",
+   "power": 80,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "status": {
+     "id": "par",
+     "chance": 20
+    }
+   }
+  },
+  {
+   "id": "sig-dune-snap-keystone",
+   "name": "Dune Snap+",
+   "type": "ground",
+   "category": "physical",
+   "power": 80,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig",
+    "contact"
+   ],
+   "effects": {
+    "bind": true
+   }
+  },
+  {
+   "id": "sig-relic-rap-keystone",
+   "name": "Relic Rap+",
+   "type": "ghost",
+   "category": "physical",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig",
+    "contact"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "def",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "sig-tide-scale-keystone",
+   "name": "Tide Scale+",
+   "type": "water",
+   "category": "special",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "storysig"
+   ],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spe",
+      "stages": -1,
+      "target": "enemy",
+      "chance": 30
+     }
+    ]
    }
   }
  ]

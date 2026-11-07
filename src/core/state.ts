@@ -264,6 +264,14 @@ export const VolatileSchema = z.object({
   /** Encore Amp: the sound move used on the last turns in a row, and how many times before this one. */
   ampMove: z.string().nullable().default(null),
   ampCount: z.number().int().min(0).default(0),
+  /** Dynamo Down: it took damage, so its next Electric move is stronger. */
+  dynamoBoost: z.boolean().default(false),
+  /** Rune Sigil: the first punch since switching in has landed. */
+  sigilUsed: z.boolean().default(false),
+  /** Silent Cloak: the first move since switching in has been used. */
+  cloakUsed: z.boolean().default(false),
+  /** Gem Orbit: gems shattered so far (4 per battle). */
+  gems: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
   nightmare: z.boolean().default(false),
   /** Cursed by a Ghost's Curse. */
@@ -381,6 +389,10 @@ export const freshVolatile = (): Volatile => ({
   furyCutter: 0,
   ampMove: null,
   ampCount: 0,
+  dynamoBoost: false,
+  sigilUsed: false,
+  cloakUsed: false,
+  gems: 0,
   nightmare: false,
   cursed: false,
   imprison: false,

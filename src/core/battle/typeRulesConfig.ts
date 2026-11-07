@@ -39,6 +39,7 @@ export type TypeRules = z.infer<typeof TypeRulesSchema>;
 export const DEFAULT_TYPE_RULES: TypeRules = {
   immunityBreakers: {
     'thousand-arrows': 'flying',
+    'quake-jaw': 'flying',
     'plasma-fists': 'ground',
     'bolt-strike': 'ground',
     'sacred-sword': 'ghost',
