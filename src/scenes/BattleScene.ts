@@ -56,7 +56,7 @@ import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
-import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity } from '../ui/audio';
+import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr } from '../ui/audio';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
@@ -93,7 +93,7 @@ import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { pickWipe, wipeAssetId } from '../ui/battleFx/ruleWipe';
 import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
-import { battleTrack, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
+import { battleTrack, storyBattleMusic, lowHpTrack, raidMusic, victoryTrack, type BattleRole } from '../core/presentation/battleMusic';
 import { itemCount } from '../core/items';
 import { planCues } from '../core/presentation/cues';
 import { applyCueHooks } from '../core/presentation/hooks';
@@ -362,13 +362,16 @@ export class BattleScene extends Phaser.Scene {
     // The same battle always gets the same look (salted by the run and how far it has come), so a reload never changes it.
     this.skinId = screenStyleOf('battle', session.settings.screenStyles, `${run.seed}:${run.log.battlesWon}:${run.log.rewardsTaken.length}`);
     this.skin = battleSkinFor(this.skinId);
-    this.baseTrack = battleTrack({
+    const gameTrack = battleTrack({
       raidTrack: this.raidTrack(battle),
       trainer: battle.kind === 'trainer',
       role: this.role,
       gbSounds: itemCount(run.inventory, 'gb-sounds') > 0,
       variantKey: `${run.seed}:${run.log.battlesWon}`,
+      regionId: run.regionOrder.length > 0 ? currentRegion(services().session.content, run).id : undefined,
     });
+    // A made story song (rival, leader, Elite Four, champion) replaces the shared song once its file exists; raids and GB Sounds keep theirs.
+    this.baseTrack = this.raidTrack(battle) || itemCount(run.inventory, 'gb-sounds') > 0 ? gameTrack : storyOr(storyBattleMusic(this.role, `${run.seed}:${run.log.battlesWon}`), gameTrack);
     this.playingTrack = this.baseTrack;
     // Extra songs load on demand; the default song plays until they arrive.
     const fallback = battleTrack({ raidTrack: null, trainer: battle.kind === 'trainer', role: this.role, gbSounds: false });
