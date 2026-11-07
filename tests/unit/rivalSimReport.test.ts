@@ -44,7 +44,8 @@ describe('rival simulation report', () => {
 
   it('autoplayed runs never break a rival rule', () => {
     for (const seed of ['rival-qa-1', 'rival-qa-2']) {
-      const run = autoplay({ seed, steps: 20000, healOnMap: true, smart: true, starterLevel: 40, rules: { modeId: 'standard', difficultyId: 'story', modifierIds: [], deathBlock: true } });
+      // 3000 steps: every seed met its rivals and lost well before this before IVs/EVs; a seed that now survives longer (W5) would otherwise run past the time limit.
+      const run = autoplay({ seed, steps: 3000, healOnMap: true, smart: true, starterLevel: 40, rules: { modeId: 'standard', difficultyId: 'story', modifierIds: [], deathBlock: true } });
       const s = rivalRunStats(run);
       expect(s.contradictions, seed).toEqual([]);
       expect(s.rivals, seed).toBeGreaterThan(0);

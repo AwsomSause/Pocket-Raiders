@@ -15,7 +15,8 @@ const BOSSES = ['gym-leader', 'elite-four', 'champion'] as const;
 function storyRun(seed = 'feat'): { run: RunState; uid: string } {
   const run = structuredClone(chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0));
   // A fixed partner (Charmander, Scratch only) so every scenario starts the same.
-  const lead = { ...createPokemon(content, 'charmander', 15, run.party[0]!.uid), moves: [{ id: 'scratch', pp: 99 }] };
+  // Fixed IVs too (W5): best for the partner, none for the foes, so speed order never depends on a roll.
+  const lead = { ...createPokemon(content, 'charmander', 15, run.party[0]!.uid), moves: [{ id: 'scratch', pp: 99 }], ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 } };
   run.party[0] = lead;
   openHistory(content, run, lead.uid, lead.speciesId, 'starter');
   const v2 = StoryV2Schema.parse({ mode: 'story_run' });
@@ -25,7 +26,7 @@ function storyRun(seed = 'feat'): { run: RunState; uid: string } {
 }
 
 function bossBattle(run: RunState, classId: string, foe = 'rattata', level = 5): RunState {
-  run.battle = createBattle('trainer', [createPokemon(content, foe, level, 'e1')], 0, run.party[0]!.uid, { classId, name: 'Boss', leaderId: null });
+  run.battle = createBattle('trainer', [{ ...createPokemon(content, foe, level, 'e1'), ivs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 } }], 0, run.party[0]!.uid, { classId, name: 'Boss', leaderId: null });
   run.battle.turn = 4;
   run.phase = 'battle';
   return run;

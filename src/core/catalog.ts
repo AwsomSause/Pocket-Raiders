@@ -15,7 +15,10 @@ import { natureEffectText, natureName, nudgeNature } from './natures';
 import { runPerks } from './archetypes';
 import { itemSlotLimit } from './trainerPerks';
 import { addRunAttribute, attributeText, runAttributeEffects } from './attributes';
-import { TYPE_NAMES, type AttributeKey, type CatalogEffect, type CatalogEntry, type Content } from './contentSchema';
+import { STAT_NAMES, TYPE_NAMES, type AttributeKey, type CatalogEffect, type CatalogEntry, type Content, type StatName } from './contentSchema';
+import { addEvs, hyperTrain, ivsOf, MAX_IV } from './ivs';
+
+const STAT_LABEL: Record<StatName, string> = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' };
 import { changeFriendship } from './friendship';
 import { addItem } from './items';
 import { abilityOf, createPokemon, getSpecies, MAX_PP_UPS, maxHp, maxPp } from './pokemon';
@@ -135,8 +138,16 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
       if (effect.cure && fainted) return 'That Pokémon has fainted.';
       return null;
     }
-    case 'feed':
-      return null;
+    case 'feed': {
+      // An EV berry only refuses when it would do nothing at all (no friendship change and no EVs to move).
+      const evs = Object.entries(effect.evs ?? {}) as [StatName, number][];
+      if (evs.length === 0 || effect.friendship !== 0) return null;
+      return evs.some(([s, n]) => (n < 0 ? (mon.evs?.[s] ?? 0) > 0 : true)) ? null : 'That Pokémon has no EVs there to lower.';
+    }
+    case 'hyperTrain': {
+      const real = ivsOf(mon);
+      return STAT_NAMES.some((s) => real[s] < MAX_IV && !(mon.hyperTrained ?? []).includes(s)) ? null : 'Its stats already count as the best they can be.';
+    }
     default:
       return null;
   }
@@ -258,6 +269,14 @@ export function applyCatalog(
       // Poffin Case doubles friendship from Berries; Pokéblock Case adds Charisma.
       const doubled = effect.friendship > 0 && passivePercent(content, run, 'feedFriendship') > 0;
       if (mon) befriend(mon, effect.friendship * (doubled ? 2 : 1));
+      if (mon && effect.evs) {
+        const before = maxHp(content, mon);
+        for (const [stat, n] of Object.entries(effect.evs) as [StatName, number][]) {
+          const moved = addEvs(content, mon, stat, n);
+          if (moved !== 0) messages.push(`${name(mon)}'s ${STAT_LABEL[stat]} EVs ${moved > 0 ? 'rose' : 'fell'} by ${Math.abs(moved)}.`);
+        }
+        if (mon.hp > 0) mon.hp = Math.max(1, Math.min(maxHp(content, mon), mon.hp + maxHp(content, mon) - before));
+      }
       if (mon && entry.family.startsWith('Berries')) noteMapGrowth(content, run, mon.uid, 'berryFeed');
       applyChanges(effect.changes);
       const blocks = passivePercent(content, run, 'feedCharisma');
@@ -276,6 +295,14 @@ export function applyCatalog(
       const abilities = getSpecies(content, mon.speciesId).abilities;
       mon.abilitySlot = effect.mode === 'hidden' ? -1 : (Math.max(0, mon.abilitySlot) + 1) % abilities.normal.length;
       messages.push(`${name(mon)}'s ability became ${(abilityOf(content, mon) ?? 'none').replace(/-/g, ' ')}.`);
+      break;
+    }
+    case 'hyperTrain': {
+      const mon = target!;
+      const before = maxHp(content, mon);
+      const trained = hyperTrain(mon, effect.mode);
+      messages.push(trained.length ? `${name(mon)} was hyper trained: ${trained.map((s) => STAT_LABEL[s]).join(', ')} now count${trained.length === 1 ? 's' : ''} as the best IV.` : `${name(mon)} is already at its best.`);
+      if (mon.hp > 0) mon.hp = Math.max(1, Math.min(maxHp(content, mon), mon.hp + maxHp(content, mon) - before));
       break;
     }
     case 'natureNudge': {
