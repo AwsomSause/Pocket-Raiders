@@ -10,7 +10,12 @@ const dataDir = join(import.meta.dirname, '..', 'src', 'data');
 const readJson = (file: string): unknown => JSON.parse(readFileSync(join(dataDir, file), 'utf8'));
 
 export function readCatalogInputs(): CatalogInputs {
-  const species = [...(readJson('species.json') as { assets: PokemonArt }[]), ...(readJson('customSpecies.json') as { assets: PokemonArt }[])];
+  const species = [
+    ...(readJson('species.json') as { assets: PokemonArt }[]),
+    ...(readJson('customSpecies.json') as { assets: PokemonArt }[]),
+    ...(readJson('storySpecies.json') as { species: { assets: PokemonArt }[] }).species,
+    ...(readJson('jetSpecies.json') as { species: { assets: PokemonArt }[] }).species,
+  ];
   const archetypes = readJson('archetypes.json') as { spriteAssetId: string }[];
   const rewards = readJson('rewards.json') as { iconAssetId: string }[];
   const megaStones = readJson('megaStones.json') as { items: { iconAssetId: string }[]; rewards: { iconAssetId: string }[] };
