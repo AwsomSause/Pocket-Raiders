@@ -1,0 +1,419 @@
+{
+ "events": [
+  {
+   "id": "plush-workshop-red",
+   "name": "Plush Workshop: Red Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall of stitched Canari pals. \"Bring me a red one and I will sew it up a level. Thread costs money, love is free.\"",
+   "choices": [
+    {
+     "label": "Lv.1 to Lv.2 (₽500)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "red-canari-pal-1"
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New stitching and a bigger bow. Lv.2!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "red-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "red-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lv.2 to Lv.3 (₽1200)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "red-canari-pal-2"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Gold thread at the seams. Lv.3!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "loseItem",
+        "id": "red-canari-pal-2"
+       },
+       {
+        "kind": "item",
+        "id": "red-canari-pal-3",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You wave at the little pals and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-blue",
+   "name": "Plush Workshop: Blue Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall of stitched Canari pals. \"Bring me a blue one and I will sew it up a level. Thread costs money, love is free.\"",
+   "choices": [
+    {
+     "label": "Lv.1 to Lv.2 (₽500)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "blue-canari-pal-1"
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New stitching and a bigger bow. Lv.2!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "blue-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "blue-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lv.2 to Lv.3 (₽1200)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "blue-canari-pal-2"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Gold thread at the seams. Lv.3!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "loseItem",
+        "id": "blue-canari-pal-2"
+       },
+       {
+        "kind": "item",
+        "id": "blue-canari-pal-3",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You wave at the little pals and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-green",
+   "name": "Plush Workshop: Green Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall of stitched Canari pals. \"Bring me a green one and I will sew it up a level. Thread costs money, love is free.\"",
+   "choices": [
+    {
+     "label": "Lv.1 to Lv.2 (₽500)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "green-canari-pal-1"
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New stitching and a bigger bow. Lv.2!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "green-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "green-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lv.2 to Lv.3 (₽1200)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "green-canari-pal-2"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Gold thread at the seams. Lv.3!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "loseItem",
+        "id": "green-canari-pal-2"
+       },
+       {
+        "kind": "item",
+        "id": "green-canari-pal-3",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You wave at the little pals and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-pink",
+   "name": "Plush Workshop: Pink Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall of stitched Canari pals. \"Bring me a pink one and I will sew it up a level. Thread costs money, love is free.\"",
+   "choices": [
+    {
+     "label": "Lv.1 to Lv.2 (₽500)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "pink-canari-pal-1"
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New stitching and a bigger bow. Lv.2!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "pink-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "pink-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lv.2 to Lv.3 (₽1200)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "pink-canari-pal-2"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Gold thread at the seams. Lv.3!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "loseItem",
+        "id": "pink-canari-pal-2"
+       },
+       {
+        "kind": "item",
+        "id": "pink-canari-pal-3",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You wave at the little pals and move on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-gold",
+   "name": "Plush Workshop: Gold Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall of stitched Canari pals. \"Bring me a gold one and I will sew it up a level. Thread costs money, love is free.\"",
+   "choices": [
+    {
+     "label": "Lv.1 to Lv.2 (₽500)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "gold-canari-pal-1"
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New stitching and a bigger bow. Lv.2!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "gold-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "gold-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lv.2 to Lv.3 (₽1200)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "gold-canari-pal-2"
+      },
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Gold thread at the seams. Lv.3!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "loseItem",
+        "id": "gold-canari-pal-2"
+       },
+       {
+        "kind": "item",
+        "id": "gold-canari-pal-3",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You wave at the little pals and move on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
