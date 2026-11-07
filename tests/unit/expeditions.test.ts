@@ -150,11 +150,12 @@ describe('expedition rules', () => {
   it('a real win on the route returns to the expedition, with no reward draft', () => {
     let run = beginExpedition(content, gateRun('e-win', 'ember-trail'), 'gate-test');
     run = chooseExpeditionNode(content, run, availableNodes(run.expedition!)[0]!.id);
-    run.battle!.enemyTeam[0]!.hp = 1;
+    for (const m of run.battle!.enemyTeam) m.hp = 1;
     run.party[0]!.level = 80;
     run.party[0]!.hp = 999;
     run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
-    const res = takeTurn(content, run, { kind: 'move', index: 0 });
+    let res = takeTurn(content, run, { kind: 'move', index: 0 });
+    for (let i = 0; i < 6 && !res.end; i++) res = takeTurn(content, res.run, { kind: 'move', index: 0 });
     expect(res.end?.outcome).toBe('win');
     expect(res.run.phase === 'expedition' || res.run.phase === 'decision').toBe(true);
     if (res.run.phase === 'expedition') expect(res.run.expedition!.battleResult).toBe('win');
