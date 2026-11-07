@@ -653,21 +653,21 @@ export class MapScene extends Phaser.Scene {
       if (n.row === 0) mapLayer.add(this.add.text(x, 84, String(n.column), textStyle(14, '#a69cb4')).setOrigin(0.5, 0));
       if (league && boss) mapLayer.add(this.add.text(x, y + r + 12, n.kind === 'champion' ? `★ ${boss.name} ★` : boss.name, textStyle(n.kind === 'champion' ? 17 : 15, n.kind === 'champion' ? '#ffe080' : COLORS.textLight)).setOrigin(0.5, 0));
       n.sides.forEach((side, i) => {
-        const sx = x + NODE_RADIUS + 4 + i * 22;
-        const sy = y - NODE_RADIUS - 2;
+        const sx = x + NODE_RADIUS + 4 + i * 50;
+        const sy = y - NODE_RADIUS - 12;
         const s = fog ? HIDDEN_STYLE : side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE : side.roamer ? ROAMER_STYLE : side.eventId === 'camp-checkpoint' ? CAMP_STYLE : side.kind === 'event' ? (stopIsHidden(content, run, n, side) ? HIDDEN_STYLE : stopStyle(content.events.get(side.eventId ?? '')?.stop)) : SIDE_STYLE[side.kind];
         const sg = this.add.graphics();
         sg.fillStyle(0x181818, side.used ? 0.3 : 1);
-        sg.fillRect(sx - 11, sy - 11, 22, 22);
+        sg.fillRect(sx - 25, sy - 25, 50, 50);
         sg.fillStyle(s.color, side.used ? 0.3 : 1);
-        sg.fillRect(sx - 9, sy - 9, 18, 18);
+        sg.fillRect(sx - 23, sy - 23, 46, 46);
         mapLayer.add(sg);
         const plain = side.kind === 'event' && !fog && !side.roamer && side.eventId !== 'camp-checkpoint' && !stopIsHidden(content, run, n, side);
         const ev = plain ? content.events.get(side.eventId ?? '') : undefined;
-        const art = ev ? stopArtFor(content, ev, (id) => services().assets.has(id)) : null;
+        const art = ev ? stopArtFor(content, ev, (id) => services().assets.has(id), true) : null;
         const drawn = art ? addStopArt(this, content, art, sx, sy, side.used ? 0.4 : 1) : null;
         if (drawn) mapLayer.add(drawn);
-        else mapLayer.add(this.add.text(sx, sy, s.glyph, textStyle(18, '#ffffff', { stroke: '#181818', strokeThickness: 3 })).setOrigin(0.5).setAlpha(side.used ? 0.4 : 1));
+        else mapLayer.add(this.add.text(sx, sy, s.glyph, textStyle(40, '#ffffff', { stroke: '#181818', strokeThickness: 5 })).setOrigin(0.5).setAlpha(side.used ? 0.4 : 1));
       });
       if (mapSkin?.labels && !fog) mapLayer.add(this.add.text(x, y + r * 0.95 + 9, KIND_STYLE[n.kind].label.split(' ')[0]!, textStyle(10, '#33475f')).setOrigin(0.5, 0));
       if (reachable && mapSkin?.cards) cardNodes.push(n);

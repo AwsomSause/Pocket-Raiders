@@ -73,11 +73,14 @@ export interface CastSpot {
   from?: 'left' | 'right';
 }
 
+/** Event cast and Pokémon are drawn this much larger than the layouts' base scale, so the picture is the scene's centrepiece. */
+const CAST_BOOST = 1.7;
+
 /** Places the cast (lazy-loaded) into `into`; they slide in, then bob gently unless motion is calm. */
 export function placeCast(ctx: EventCtx, spot: CastSpot, into: Phaser.GameObjects.Container): void {
   const { scene, calm } = ctx;
   const ids = ctx.castIds;
-  const tScale = spot.trainerScale ?? 2;
+  const tScale = (spot.trainerScale ?? 2) * CAST_BOOST;
   const show = () => {
     if (!into.active) return;
     ids.forEach((id, i) => {
@@ -94,7 +97,7 @@ export function placeCast(ctx: EventCtx, spot: CastSpot, into: Phaser.GameObject
   };
   void loadAssets(scene, ids).then(show);
   if (ctx.species) {
-    const mScale = spot.monScale ?? PIXEL_SCALE;
+    const mScale = (spot.monScale ?? PIXEL_SCALE) * CAST_BOOST;
     const mon = pokemonVisual(scene, ctx.species, 'front', calm ? spot.monX : spot.monX - 300, spot.ground, mScale) as unknown as Phaser.GameObjects.Sprite;
     mon.setOrigin?.(0.5, 1);
     into.add(mon);

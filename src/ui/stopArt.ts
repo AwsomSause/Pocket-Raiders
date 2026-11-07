@@ -81,10 +81,12 @@ function walk(node: unknown, found: { species?: string; item?: string }): void {
 /** True if one of the words starts a word in the text (so "net" does not match "magnet"). */
 const starts = (re: RegExp, text: string): boolean => new RegExp(`\\b(?:${re.source})`).test(text);
 
-const cache = new WeakMap<EventDef, StopArt | null>();
+const fullCache = new WeakMap<EventDef, StopArt | null>();
+const mapCache = new WeakMap<EventDef, StopArt | null>();
 
 /** The art for an event's map stop, or null when nothing fits (the glyph stays). `hasAsset` says which asset ids exist. */
-export function stopArtFor(content: Content, ev: EventDef, hasAsset: (id: string) => boolean): StopArt | null {
+export function stopArtFor(content: Content, ev: EventDef, hasAsset: (id: string) => boolean, noTrainer = false): StopArt | null {
+  const cache = noTrainer ? mapCache : fullCache;
   const hit = cache.get(ev);
   if (hit !== undefined) return hit;
   const found: { species?: string; item?: string } = {};
@@ -94,13 +96,13 @@ export function stopArtFor(content: Content, ev: EventDef, hasAsset: (id: string
     const icon = content.items.get(id)?.iconAssetId ?? content.rewards.get(`item:${id}`)?.iconAssetId ?? undefined;
     return icon && hasAsset(icon) ? icon : undefined;
   };
-  const cast = ev.scene.cast.find((id) => hasAsset(id));
+  const cast = noTrainer ? undefined : ev.scene.cast.find((id) => hasAsset(id));
   const sceneMon = ev.scene.pokemon && content.species.has(ev.scene.pokemon) ? ev.scene.pokemon : undefined;
   const givenMon = found.species && content.species.has(found.species) ? found.species : undefined;
   const item = itemIcon(found.item);
   const groupIcon = GROUP_ITEM[ev.group];
   const text = `${ev.id} ${ev.name}`.toLowerCase().replace(/[-_]/g, ' ');
-  const wordTrainer = TRAINER_WORDS.find(([re, id]) => starts(re, text) && hasAsset(id))?.[1];
+  const wordTrainer = noTrainer ? undefined : TRAINER_WORDS.find(([re, id]) => starts(re, text) && hasAsset(id))?.[1];
   const wordItem = ITEM_WORDS.find(([re, id]) => starts(re, text) && hasAsset(id))?.[1];
   const sceneId = `pack.memories.eventbg.${eventBackdrop(ev.types, ev.group, 'afternoon')}`;
   const art: StopArt | null = sceneMon
