@@ -85,7 +85,9 @@
     "data:legendary-events": "node tools/build-legendary-events.ts",
     "data:game-events": "node tools/build-game-events.ts",
     "report:levels": "node tools/report-levels.ts",
-    "report:rivals": "node tools/report-rivals.ts"
+    "report:rivals": "node tools/report-rivals.ts",
+    "sim:mass": "node tools/mass-sim.ts",
+    "sim:mass-report": "node tools/mass-report.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
