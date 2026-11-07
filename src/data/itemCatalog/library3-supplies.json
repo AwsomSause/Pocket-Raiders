@@ -1,0 +1,970 @@
+[
+ {
+  "id": "bitter-berry-juice",
+  "name": "Bitter Berry Juice",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals 30 HP, +1 Evil",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/berry-juice-bad",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 30,
+   "changes": {
+    "goodEvil": -1
+   }
+  }
+ },
+ {
+  "id": "sweet-berry-juice",
+  "name": "Sweet Berry Juice",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals 50 HP, friendship +3",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/berry-juice-good",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50,
+   "friendship": 3
+  }
+ },
+ {
+  "id": "great-butter",
+  "name": "Great Butter",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals 100 HP, +1 Strength",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/greatbutter",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 100,
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "hopo-berry",
+  "name": "Hopo Berry",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Restores PP to the move with the least",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hopoberry",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "ppMove": "lowest"
+  }
+ },
+ {
+  "id": "mythical-pecha-berry",
+  "name": "Mythical Pecha Berry",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals fully and cures status",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/mythicalpechaberry",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 9999,
+   "cure": true
+  }
+ },
+ {
+  "id": "pecha-berry-plus",
+  "name": "Pecha Berry Plus",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The holder eats it when poisoned or paralyzed and is cured",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/pechaberry2",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "berryCure",
+     "statuses": [
+      "psn",
+      "par"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "red-nectar",
+  "name": "Red Nectar",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals 40 HP, +1 Luck",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/rednectar",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 40,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "arboliva-oil",
+  "name": "Arboliva Oil",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals 70 HP, friendship +5",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/arbolivaoil",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 70,
+   "friendship": 5
+  }
+ },
+ {
+  "id": "super-vial",
+  "name": "Super Vial",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals 150 HP and cures status",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/supervial",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 150,
+   "cure": true
+  }
+ },
+ {
+  "id": "epice-noire",
+  "name": "Épice Noire",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals fully, +1 Evil",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/epicenoire",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 9999,
+   "changes": {
+    "goodEvil": -1
+   }
+  }
+ },
+ {
+  "id": "apophyll-pan",
+  "name": "Apophyll Pan",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Cooks a hearty meal: heals the whole team 35%, +1 Love",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/apophyllpan",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.35,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "origin-essence",
+  "name": "Origin Essence",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Heals the whole team 60% and wakes sleepers",
+  "rarity": "epic",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/originessencezyg",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.6,
+   "cureSleep": true
+  }
+ },
+ {
+  "id": "reborn-flower",
+  "name": "Reborn Flower",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Revives a fainted Pokémon with full HP",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/rebornflower",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 1,
+   "cure": true
+  }
+ },
+ {
+  "id": "pp-all",
+  "name": "PP All",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Restores all PP of the whole team",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/ppall",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "pp": -1
+  }
+ },
+ {
+  "id": "wl-max-elixir-2",
+  "name": "Max Elixir (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Restores 10 PP to every move of the whole team",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-max-elixir",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "pp": 10
+  }
+ },
+ {
+  "id": "fresh-start-mochi",
+  "name": "Fresh Start Mochi",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Wipes all of a Pokémon’s EVs so you can train it again",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/freshstartmochi",
+  "status": "supported",
+  "effect": {
+   "kind": "feed",
+   "friendship": 0,
+   "changes": {},
+   "evs": {
+    "hp": -252,
+    "atk": -252,
+    "def": -252,
+    "spa": -252,
+    "spd": -252,
+    "spe": -252
+   }
+  }
+ },
+ {
+  "id": "excite-scent",
+  "name": "Excite Scent",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The next 3 wild battles give 30% more EXP",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/excitescent",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "exp",
+     "percent": 30
+    }
+   ]
+  }
+ },
+ {
+  "id": "joy-scent",
+  "name": "Joy Scent",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The next 3 wild battles are 1.4x easier to catch, +1 Love",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/joyscent",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 1.4
+    }
+   ],
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "vivid-scent",
+  "name": "Vivid Scent",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The next 2 wild battles show a rare Pokémon of any type",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/vividscent",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 2
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    },
+    {
+     "mod": "anyType"
+    }
+   ]
+  }
+ },
+ {
+  "id": "faraway-essence",
+  "name": "Faraway Essence",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The next 3 wild battles: Pokémon are 1.5x as likely shiny",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/farawayessence",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "shiny",
+     "multiplier": 1.5
+    }
+   ]
+  }
+ },
+ {
+  "id": "emotion-powder",
+  "name": "Emotion Powder",
+  "family": "Supplies (Drive pack 3)",
+  "description": "+2 Love, +2 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/emotionpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 2,
+    "charisma": 2
+   }
+  }
+ },
+ {
+  "id": "smile-burst",
+  "name": "Smile Burst",
+  "family": "Supplies (Drive pack 3)",
+  "description": "+3 Charisma, +1 Luck",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/smileburst",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 3,
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "nightmare-fuel",
+  "name": "Nightmare Fuel",
+  "family": "Supplies (Drive pack 3)",
+  "description": "+3 Evil, +2 toward Rage",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/nightmarefuel",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "goodEvil": -3,
+    "ragePeace": 2
+   }
+  }
+ },
+ {
+  "id": "hoennian-salt",
+  "name": "Hoennian Salt",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Your whole team can't fall asleep in its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "library/hoenniansalt",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "immune",
+     "status": "slp"
+    }
+   ]
+  }
+ },
+ {
+  "id": "vial-of-glitter",
+  "name": "Vial of Glitter",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Sell for ₽700, +1 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/vialofglitter",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 700,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "gooci-bag",
+  "name": "Gooci Bag",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Sell for ₽900, +2 Charisma",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/goocibag",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 900,
+   "changes": {
+    "charisma": 2
+   }
+  }
+ },
+ {
+  "id": "sprinklotad",
+  "name": "Sprinklotad",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Between levels, water a Pokémon: friendship up (more than a Wailmer Pail)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/sprinklotad",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "pail",
+     "friendship": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "baby-monitor",
+  "name": "Baby Monitor",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Eggs hatch faster: every Egg gets one extra step toward hatching each time",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/babymonitor",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "ovalCharm"
+    }
+   ]
+  }
+ },
+ {
+  "id": "clefairy-doll",
+  "name": "Clefairy Doll",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The next 2 wild battles are skipped (the level still counts)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/clefairy-doll",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 2
+   },
+   "mods": [
+    {
+     "mod": "repel"
+    }
+   ]
+  }
+ },
+ {
+  "id": "wl-ability-urge",
+  "name": "Ability Urge (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Two Ability Urges go into your Bag: trigger the Pokémon in battle’s ability now",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/wl-ability-urge",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "ability-urge",
+   "count": 2
+  }
+ },
+ {
+  "id": "wl-item-urge",
+  "name": "Item Urge (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Two Item Urges go into your Bag: use the held Berry or Herb now",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/wl-item-urge",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "item-urge",
+   "count": 2
+  }
+ },
+ {
+  "id": "wl-reset-urge",
+  "name": "Reset Urge (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Two Reset Urges go into your Bag: reset every stat change in battle",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/wl-reset-urge",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "reset-urge",
+   "count": 2
+  }
+ },
+ {
+  "id": "wl-item-drop",
+  "name": "Item Drop (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Two Item Drops go into your Bag (see the Bag for what they do in battle)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/wl-item-drop",
+  "status": "supported",
+  "effect": {
+   "kind": "bagItem",
+   "item": "item-drop",
+   "count": 2
+  }
+ },
+ {
+  "id": "wl-guard-spec",
+  "name": "Guard Spec. (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Your whole team can't have its stats lowered for 6 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "use",
+  "icon": "library/wl-guard-spec",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "guard",
+     "turns": 6
+    }
+   ]
+  }
+ },
+ {
+  "id": "wl-custom-spliced",
+  "name": "Spliced Egg (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x2)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-custom-spliced",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 2
+  }
+ },
+ {
+  "id": "wl-custom-thief",
+  "name": "Sticky Fingers (Warp Lab)",
+  "family": "Supplies (Drive pack 3)",
+  "description": "The holder steals 20% of the foe’s prize money when it wins",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/wl-custom-thief",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "steal",
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "red-canari-pal-1",
+  "name": "Red Canari Pal Lv.1",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Prize money from trainers +5% (the Plush Workshop can upgrade it)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/redcanariplushlv1",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "trainerMoney",
+   "percent": 5
+  }
+ },
+ {
+  "id": "red-canari-pal-2",
+  "name": "Red Canari Pal Lv.2",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Prize money from trainers +10% (the Plush Workshop can upgrade it)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/redcanariplushlv2",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "trainerMoney",
+   "percent": 10
+  }
+ },
+ {
+  "id": "red-canari-pal-3",
+  "name": "Red Canari Pal Lv.3",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Prize money from trainers +18%",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/redcanariplushlv3",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "trainerMoney",
+   "percent": 18
+  }
+ },
+ {
+  "id": "blue-canari-pal-1",
+  "name": "Blue Canari Pal Lv.1",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Healing berries heal 15% more (the Plush Workshop can upgrade it)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bluecanariplushlv1",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryHeal",
+   "percent": 15
+  }
+ },
+ {
+  "id": "blue-canari-pal-2",
+  "name": "Blue Canari Pal Lv.2",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Healing berries heal 30% more (the Plush Workshop can upgrade it)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bluecanariplushlv2",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryHeal",
+   "percent": 30
+  }
+ },
+ {
+  "id": "blue-canari-pal-3",
+  "name": "Blue Canari Pal Lv.3",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Healing berries heal 50% more",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/bluecanariplushlv3",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "berryHeal",
+   "percent": 50
+  }
+ },
+ {
+  "id": "green-canari-pal-1",
+  "name": "Green Canari Pal Lv.1",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Feeding a Pokémon gives 25% more friendship (the Plush Workshop can upgrade it)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/greencanariplushlv1",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "feedFriendship",
+   "percent": 25
+  }
+ },
+ {
+  "id": "green-canari-pal-2",
+  "name": "Green Canari Pal Lv.2",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Feeding a Pokémon gives 50% more friendship (the Plush Workshop can upgrade it)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/greencanariplushlv2",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "feedFriendship",
+   "percent": 50
+  }
+ },
+ {
+  "id": "green-canari-pal-3",
+  "name": "Green Canari Pal Lv.3",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Feeding a Pokémon gives 100% more friendship",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/greencanariplushlv3",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "feedFriendship",
+   "percent": 100
+  }
+ },
+ {
+  "id": "pink-canari-pal-1",
+  "name": "Pink Canari Pal Lv.1",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Every stage cleared gives +1 Charisma (the Plush Workshop can upgrade it)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/pinkcanariplushlv1",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "stageCharisma",
+   "percent": 1
+  }
+ },
+ {
+  "id": "pink-canari-pal-2",
+  "name": "Pink Canari Pal Lv.2",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Every stage cleared gives +2 Charisma (the Plush Workshop can upgrade it)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/pinkcanariplushlv2",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "stageCharisma",
+   "percent": 2
+  }
+ },
+ {
+  "id": "pink-canari-pal-3",
+  "name": "Pink Canari Pal Lv.3",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Every stage cleared gives +3 Charisma",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/pinkcanariplushlv3",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "stageCharisma",
+   "percent": 3
+  }
+ },
+ {
+  "id": "gold-canari-pal-1",
+  "name": "Gold Canari Pal Lv.1",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Money from battles +5% (the Plush Workshop can upgrade it)",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/goldcanariplushlv1",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "money",
+   "percent": 5
+  }
+ },
+ {
+  "id": "gold-canari-pal-2",
+  "name": "Gold Canari Pal Lv.2",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Money from battles +10% (the Plush Workshop can upgrade it)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/goldcanariplushlv2",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "money",
+   "percent": 10
+  }
+ },
+ {
+  "id": "gold-canari-pal-3",
+  "name": "Gold Canari Pal Lv.3",
+  "family": "Canari Pals (upgrade line)",
+  "description": "Money from battles +20%",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/goldcanariplushlv3",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "money",
+   "percent": 20
+  }
+ }
+]

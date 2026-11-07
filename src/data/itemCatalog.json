@@ -27612,7 +27612,7 @@
   "id": "ladder",
   "name": "Ladder",
   "family": "Map gadgets (Drive pack 3)",
-  "description": "Next fork: add a bridge to a \"?\" event",
+  "description": "Next fork: add a bridge to a \"?\" event (one use)",
   "rarity": "uncommon",
   "stacksOn": "player",
   "max": 3,
@@ -27622,7 +27622,8 @@
   "effect": {
    "kind": "perk",
    "lasts": {
-    "for": "nextStage"
+    "for": "manual",
+    "count": 1
    },
    "perks": [
     {
