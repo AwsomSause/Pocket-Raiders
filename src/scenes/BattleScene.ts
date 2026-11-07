@@ -915,7 +915,7 @@ export class BattleScene extends Phaser.Scene {
     this.trainerAway = null;
     const s = actor.sprite;
     this.tweens.killTweensOf(s);
-    s.setVisible(true);
+    s.setVisible(true).setAlpha(1);
     if (s.x === this.trainerHomeX) return actor;
     if (this.motion === 'off') s.x = this.trainerHomeX;
     else await tween(this, { targets: s, x: this.trainerHomeX, duration: 520, ease: 'Sine.easeOut' });
@@ -931,9 +931,10 @@ export class BattleScene extends Phaser.Scene {
       this.trainerAway = null;
       const s = actor.sprite;
       if (!s.active) return;
-      const hide = () => s.setVisible(false).setX(TRAINER_OFF_X);
+      const hide = () => s.setVisible(false).setX(TRAINER_OFF_X).setAlpha(1);
+      // As in the reference, your trainer fades out and drifts off rather than sliding away at full strength.
       if (this.motion === 'off') hide();
-      else this.tweens.add({ targets: s, x: TRAINER_OFF_X, duration: 320, ease: 'Quad.easeIn', onComplete: hide });
+      else this.tweens.add({ targets: s, x: s.x - 60, alpha: 0, duration: 380, ease: 'Quad.easeIn', onComplete: hide });
     });
   }
 

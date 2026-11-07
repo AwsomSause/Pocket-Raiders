@@ -146,13 +146,21 @@ export class PlayerTrainerActor {
     const ball = opts.makeBall(from.x, from.y);
     ball.setDepth(this.sprite.depth + 1);
     this.ball = ball;
-    const dur = this.motion === 'full' ? 320 : 160;
-    this.scene.tweens.add({ targets: ball, x: target.x, duration: dur, ease: 'Linear' });
+    // The reference's throw: the trainer leans into it, and the ball flies a slow, high arc before it opens.
+    if (this.motion === 'full') this.scene.tweens.add({ targets: this.sprite, x: this.sprite.x + 14, y: this.sprite.y + 8, duration: 150, yoyo: true, ease: 'Sine.easeOut' });
+    const dur = this.motion === 'full' ? 700 : 200;
+    const flight = { p: 0 };
     this.scene.tweens.add({
-      targets: ball,
-      y: { from: from.y, to: target.y },
+      targets: flight,
+      p: 1,
       duration: dur,
-      ease: 'Sine.easeOut',
+      ease: 'Sine.easeInOut',
+      onUpdate: () => {
+        if (!ball.active) return;
+        const lift = this.motion === 'full' ? 120 : 30;
+        ball.setPosition(from.x + (target.x - from.x) * flight.p, from.y + (target.y - from.y) * flight.p - Math.sin(flight.p * Math.PI) * lift);
+        ball.setAngle(flight.p * 720);
+      },
       onComplete: () => {
         opts.onLand?.({ x: target.x, y: target.y });
         if (this.ball === ball) {
