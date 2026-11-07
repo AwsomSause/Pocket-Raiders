@@ -57,6 +57,10 @@ import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
 import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr, playCue } from '../ui/audio';
+import { storyTeamTrack } from '../core/presentation/storyMusic';
+import { isStoryCampaign } from '../core/campaign/circuit';
+import { storyAssetId } from '../core/storyAudio';
+import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
@@ -379,6 +383,9 @@ export class BattleScene extends Phaser.Scene {
     });
     // A made story song (rival, leader, Elite Four, champion) replaces the shared song once its file exists; raids and GB Sounds keep theirs.
     this.baseTrack = this.raidTrack(battle) || itemCount(run.inventory, 'gb-sounds') > 0 ? gameTrack : storyOr(storyBattleMusic(this.role, `${run.seed}:${run.log.battlesWon}`), gameTrack);
+    // Story Runs: an Evil Team battle plays that team's own song (Part AD), the leader its final arrangement.
+    const teamSong = this.storyTeamSong();
+    if (teamSong) this.baseTrack = teamSong;
     this.playingTrack = this.baseTrack;
     // Extra songs load on demand; the default song plays until they arrive.
     const fallback = battleTrack({ raidTrack: null, trainer: battle.kind === 'trainer', role: this.role, gbSounds: false });
@@ -842,6 +849,17 @@ export class BattleScene extends Phaser.Scene {
   /** The battle's normal song, and the one playing now (the low-HP song swaps in while the lead is in danger). */
   private baseTrack = '';
   private playingTrack = '';
+
+  /** The catalog song for a Story Run Evil Team battle (the trainer's name is the team rank's name), or null. Music only. */
+  private storyTeamSong(): string | null {
+    const { content } = services().session;
+    const name = this.run.battle?.trainer?.name;
+    if (!name || !isStoryCampaign(content, this.run.campaignId)) return null;
+    const team = evilTeam(content, this.run);
+    const rank = team ? Object.entries(team.ranks).find(([, r]) => r.name === name)?.[0] : undefined;
+    const id = team && rank ? storyTeamTrack(team.id, rank) : null;
+    return id ? storyAssetId(id, (a) => services().assets.has(a)) : null;
+  }
 
   /** Rival, gym leader, Elite Four, champion or final boss (null for wild and ordinary trainer fights). Music only. */
   private battleRole(): BattleRole | undefined {

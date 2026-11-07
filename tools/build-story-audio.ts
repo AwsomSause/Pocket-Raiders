@@ -15,10 +15,21 @@ const LEIT_REUSE = { calm: 'bgm.hub', tense: 'bgm.event', final: 'bgm.credits' }
 const TEAM_REUSE = { calm: 'bgm.event', tense: 'bgm.battle_trainer', final: 'bgm.battle_elite' } as const;
 for (const c of ['protagonist', 'ch_vance', 'ch_dara', 'ch_hale', 'ch_ines', 'ch_pip', 'ch_soren', 'ch_kael', 'ch_marisol', 'ch_gideon', 'ch_evander_ashgrove', 'ch_lysandra_quill', 'ch_marek_voss', 'ch_cass_verrin', 'ch_ilse_rennick', 'ch_selene_aurelian'])
   for (const [a, len] of ARR) add(`mu_lm_${c}_${a}`, 'loop', 'leitmotif', len, LEIT_REUSE[a], c);
-for (const t of ['mythic_marauders', 'hollow_choir', 'ironvein_combine', 'pale_cartographers', 'wildfire_accord', 'gilt_circle'])
-  for (const [a, len] of ARR) add(`mu_team_${t}_${a}`, 'loop', 'team', len, TEAM_REUSE[a], t);
-const REGION_REUSE = { town: 'bgm.hub', route: 'bgm.map', tension: 'bgm.event' } as const;
-for (const r of ['cairnmoor', 'tidewrack', 'orrery_basin']) for (const k of ['town', 'route', 'tension'] as const) add(`mu_region_${r}_${k}`, 'loop', 'region', 105, REGION_REUSE[k]);
+// Each team gets its own pair of existing battle songs (tense: grunts and admins, final: the boss) so the six sound apart until real music exists.
+const TEAM_SONGS: Record<string, { tense: string; final: string }> = {
+  mythic_marauders: { tense: 'bgm.battle_trainer_oras', final: 'bgm.battle_gym_oras' },
+  hollow_choir: { tense: 'bgm.battle_trainer_dppt', final: 'bgm.battle_gym_dppt' },
+  ironvein_combine: { tense: 'bgm.battle_trainer_hgss', final: 'bgm.battle_gym_hgss' },
+  pale_cartographers: { tense: 'bgm.battle_trainer_bw2', final: 'bgm.battle_elite_dppt' },
+  wildfire_accord: { tense: 'bgm.battle_trainer', final: 'bgm.battle_elite_oras' },
+  gilt_circle: { tense: 'bgm.battle_trainer_oras', final: 'bgm.battle_elite' },
+};
+for (const [t, songs] of Object.entries(TEAM_SONGS))
+  for (const [a, len] of ARR) add(`mu_team_${t}_${a}`, 'loop', 'team', len, a === 'calm' ? TEAM_REUSE.calm : songs[a], t);
+// Story regions: each route has its own existing map song (towns share the hub song, tension the event song).
+const REGION_REUSE = { town: 'bgm.hub', tension: 'bgm.event' } as const;
+const REGION_ROUTE: Record<string, string> = { cairnmoor: 'bgm.map_hgss', tidewrack: 'bgm.map_surf', orrery_basin: 'bgm.map_dppt' };
+for (const r of ['cairnmoor', 'tidewrack', 'orrery_basin']) for (const k of ['town', 'route', 'tension'] as const) add(`mu_region_${r}_${k}`, 'loop', 'region', 105, k === 'route' ? REGION_ROUTE[r]! : REGION_REUSE[k]);
 const BATTLE = { rival: 'bgm.battle_rival', leader: 'bgm.battle_leader', elite: 'bgm.battle_elite', champion: 'bgm.battle_elite', team_leader: 'bgm.battle_trainer', legendary: 'bgm.raid.ultra', alpha: 'bgm.raid.max' } as const;
 for (const [role, reuse] of Object.entries(BATTLE)) { add(`mu_battle_${role}_a`, 'loop', 'battle', 90, reuse); add(`mu_battle_${role}_b`, 'loop', 'battle', 60, reuse, undefined, 'phase B plays at +8 percent tempo'); }
 const ST: [string, number, string][] = [

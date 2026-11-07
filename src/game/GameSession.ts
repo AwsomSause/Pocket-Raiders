@@ -18,6 +18,7 @@ import { emit } from '../core/story/record';
 import { giveHeld, takeOffHeld } from '../core/bag';
 import { campAction, freshCampProfile, recordFirstUse, wearLauncher, type CampArgs } from '../core/camp';
 import { careAction, type CareAction } from '../core/care';
+import { careEmote } from '../core/presentation/storyMusic';
 import { interactionLog } from '../core/presentation/uiPrefs';
 import type { Achievement, Content } from '../core/contentSchema';
 import { finalizeRun, recordRunStarted } from '../core/profile';
@@ -818,10 +819,14 @@ export class GameSession {
     return result.message;
   }
 
+  /** The story emote icon the last care action shows (presentation only). */
+  lastCareEmote: string | null = null;
+
   /** A care action on a party Pokémon (pet, hug, feed, groom, lullaby, cheer, train, nickname, favourite, ace). */
   care(partyIndex: number, action: CareAction, arg?: string): string {
     const result = careAction(this.content, this.requireRun(), partyIndex, action, arg);
     this.run = result.run;
+    this.lastCareEmote = careEmote(action, result.snack ?? null);
     this.persistRun();
     return result.message;
   }

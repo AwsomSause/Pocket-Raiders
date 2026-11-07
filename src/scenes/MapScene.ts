@@ -53,7 +53,11 @@ import { commentaryLine } from '../core/tools/commentary';
 import { maxHp } from '../core/pokemon';
 import { newSplits, parseSplits, formatMs, updateSplits } from '../core/tools/speedrun';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
-import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr, playCue } from '../ui/audio';
+import { playCry, playMusic, playSfx, playSfxLazy, playMusicLazy, storyOr, playCue, playStoryMusic } from '../ui/audio';
+import { storyRegionTrack } from '../core/presentation/storyMusic';
+import { isStoryCampaign } from '../core/campaign/circuit';
+import { badgeIconId } from '../assets/storyIcons';
+import { storyIcon } from '../ui/storyIcon';
 import { notify } from '../ui/overlays';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
@@ -294,7 +298,10 @@ export class MapScene extends Phaser.Scene {
     this.picker = null;
     this.busy = false;
     if (league) playCue(this, 'st_league_gate', null);
-    playMusicLazy(this, storyOr(storyRegionMusic(region.id, 'route'), mapTrack(region.id)));
+    // Story Runs play the story region's own song (Part AD), other runs the made story song or the hashed map song.
+    const storySong = isStoryCampaign(content, run.campaignId) ? storyRegionTrack(region.id) : null;
+    if (storySong) playStoryMusic(this, storySong, mapTrack(region.id));
+    else playMusicLazy(this, storyOr(storyRegionMusic(region.id, 'route'), mapTrack(region.id)));
 
     // ---------- backdrop: the stage's own arena, dimmed ----------
     const arena = league ? undefined : arenaFor(content, theme);
@@ -381,9 +388,14 @@ export class MapScene extends Phaser.Scene {
     this.add
       .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
-    this.add
+    const hud = this.add
       .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
       .setOrigin(1, 0);
+    // Story Runs: the last few badges won, as type badges (story icon pack), left of the status line.
+    if (isStoryCampaign(content, run.campaignId)) {
+      const types = run.badges.slice(-8).map((id) => content.bosses.get(id)?.types[0]).flatMap((t) => (t && badgeIconId(t) ? [badgeIconId(t)!] : []));
+      types.forEach((icon, i) => storyIcon(this, icon, hud.x - hud.width - 18 - (types.length - 1 - i) * 26, 54, 24));
+    }
     // S156: this region's own type-chart rules, if it has any.
     const localRules = regionRules(content, run.regionOrder[run.regionIndex]);
     if (localRules.length > 0) {
