@@ -11,6 +11,7 @@ import type { PokemonInstance, RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import raidsJson from '../../src/data/raids.json';
+import { levelCap } from '../../src/core/regions';
 import { content } from './helpers';
 
 function fight(raidId: string, playerSpecies = 'pikachu') {
@@ -178,7 +179,7 @@ describe('raid runs', () => {
       const run = mapRun(`cap-${raid.id}`);
       run.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.id === 'raid-test')!.raidId = raid.id;
       run.money = 99999;
-      const cap = content.balance.difficulty.levelCapStep; // region 0 cap
+      const cap = levelCap(content, 0); // region 0 cap
       expect(raidPreview(content, run, 'raid-test').level).toBeLessThanOrEqual(cap);
     }
   });
