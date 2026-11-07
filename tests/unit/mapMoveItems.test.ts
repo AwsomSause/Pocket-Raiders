@@ -15,6 +15,7 @@ import {
   createRun,
   mapActions,
   mapChoices,
+  debugJumpToColumn,
   mapPreviews,
   nextGymLeaders,
   takeTurn,
@@ -103,6 +104,18 @@ describe('bikes', () => {
     run.stage!.index += 1;
     startStageEffects(run);
     expect(action(run, 'bicycle')!.problem).toBeNull();
+  });
+
+  it('a Bicycle ride set when only the gym is next just moves on (nothing to ride through)', () => {
+    let run = newRun();
+    const gymCol = Math.max(...run.stage!.map.nodes.map((n) => n.column));
+    run = debugJumpToColumn(run, gymCol);
+    run.moveMode = 'bicycle';
+    const choices = mapChoices(content, run);
+    expect(choices.every((n) => n.column === gymCol)).toBe(true);
+    run = chooseNode(content, run, choices[0]!.id);
+    expect(run.stage!.visited.at(-1)).toBe(choices[0]!.id);
+    expect(run.moveMode).toBeUndefined();
   });
 
   it('choosing a bike again puts it away without using it', () => {
