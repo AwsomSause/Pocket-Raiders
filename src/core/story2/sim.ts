@@ -11,7 +11,7 @@ export interface PacingRule { id: string; text: string; violations: number }
 const isDowntime = (s: StopContract): boolean => s.category === 'recovery' || s.slotTags.includes('downtime');
 /** A scene with a named character in it: a person Stop, a leader, a rival beat, an Elite Four scene or an evil executive. */
 const isPeopleStop = (s: StopContract): boolean => s.category === 'character' || s.category === 'relationship'
-  || s.slotTags.some((t) => ['leader_scene', 'rival_beat', 'elite_scene', 'executive', 'executive_returns'].includes(t));
+  || s.slotTags.some((t) => ['leader_scene', 'rival_beat', 'elite_scene', 'executive', 'executive_returns', 'recognition', 'champion'].includes(t));
 const ACT_END_OK = new Set<StopContract['category']>(['climax', 'recovery', 'resolution']);
 
 /** Longest run of consecutive Stops (in play order) for which `has` is false. */
@@ -114,7 +114,7 @@ export function backstoryEndingProblems(content: Content): string[] {
  * Rules the S4 Stop table does not keep yet, with the most violations it is allowed (what it has today, the same for every seed).
  * A rule listed here may not get worse; any other rule must be at 0. Lower a number when the table is fixed.
  */
-export const PACING_KNOWN_LIMITS: Readonly<Record<string, number>> = { people_cadence: 6, downtime_cadence: 5, act_endings: 3 };
+export const PACING_KNOWN_LIMITS: Readonly<Record<string, number>> = {};
 
 /** The rules this blueprint breaks beyond their allowance. Empty = pacing holds. */
 export function pacingFailures(content: Content, bp: StoryBlueprint): string[] {
