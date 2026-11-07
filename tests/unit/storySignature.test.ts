@@ -25,8 +25,8 @@ function storyRun(species = 'charmander'): { run: RunState; uid: string } {
 const LINES = content.storyData.remembrances.map((r) => r.line[0]!);
 
 describe('signature move data', () => {
-  it('gives every one of the 76 Remembrance lines a Signature I, a Signature II and a Keystone that exist as moves', () => {
-    expect(LINES).toHaveLength(76);
+  it('gives every one of the 79 Remembrance lines a Signature I, a Signature II and a Keystone that exist as moves', () => {
+    expect(LINES).toHaveLength(79);
     expect(Object.keys(signatureJson.byLine).sort()).toEqual([...LINES].sort());
     const ids = new Set<string>();
     for (const line of LINES) {
@@ -37,7 +37,7 @@ describe('signature move data', () => {
         ids.add(id);
       }
     }
-    expect(ids.size).toBe(228);
+    expect(ids.size).toBe(237);
   });
 
   it('keeps every move inside the balance caps and out of random pools', () => {

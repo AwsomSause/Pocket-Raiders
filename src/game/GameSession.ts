@@ -66,6 +66,7 @@ import { availableMentors } from '../core/mentors';
 import { rulesCampaign, type RulesChoice } from '../core/rules';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { clearNextRun, nextRunStart } from '../core/story2/intake';
+import { jetBlessing } from '../core/story2/jetBlessing';
 import type { LoadoutPreset, Profile, RunPrep, RunState, Settings } from '../core/state';
 import { SaveManager, SLOTS, readActiveSlot, writeActiveSlot, type LoadResult, type SlotNumber, type SlotPeek } from '../save/saveManager';
 import type { StorageProvider } from '../save/storage';
@@ -1099,6 +1100,16 @@ export class GameSession {
     this.profile = savePreset(this.content, this.profile, slot, preset);
     this.checkSave(this.saves.saveProfile(this.profile));
     this.changed();
+  }
+
+  /** Jet the Viking (Hub Town) unlocks the Jet starter lines in the Remembrance Archive; returns the lines newly unlocked. */
+  receiveJetBlessing(): string[] {
+    const { story, added } = jetBlessing(this.content.storyData, this.profile.story);
+    if (added.length === 0) return added;
+    this.profile = { ...this.profile, story };
+    this.checkSave(this.saves.saveProfile(this.profile));
+    this.changed();
+    return added;
   }
 
   setActiveTitle(title: string | null): void {

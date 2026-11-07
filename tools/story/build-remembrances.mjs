@@ -8,6 +8,7 @@ const root = new URL('../../', import.meta.url);
 const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
 const species = new Map(read('src/data/species.json').map((s) => [s.id, s]));
 for (const s of read('src/data/storySpecies.json').species) species.set(s.id, { ...species.get(s.evolvesFrom ?? '') , ...s });
+for (const s of read('src/data/jetSpecies.json').species) species.set(s.id, { ...species.get(s.evolvesFrom ?? ''), ...s });
 const out = 'src/data/story/remembrances.json';
 const existing = read(out);
 const byLine = new Map(existing.map((r) => [r.line[0], r]));
@@ -18,7 +19,7 @@ const BRANCHING = new Set(['tuftin', 'poliwag', 'oddish', 'ralts']);
 const DISABLED = new Set(['wattrel']);
 const BABY = new Set(['pichu', 'tuftin', 'magby', 'elekid', 'togepi']);
 const result = [];
-for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
+for (const [first, stages, rarity, role, temperament, traits, route, held] of rows) {
   const line = stages.split('/');
   for (const id of line) if (!species.has(id)) throw new Error(`unknown species ${id}`);
   const base = species.get(first);
@@ -36,7 +37,7 @@ for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
     types: old?.types ?? base.types,
     temperament: old?.temperament ?? `tm_${temperament}`,
     affinity,
-    unlock: quiz ? { kind: 'quiz', arg: rarity === 'familiar' ? 'initial' : 'low_weight' } : old?.unlock ?? { kind: 'win', arg: route },
+    unlock: quiz ? { kind: 'quiz', arg: rarity === 'familiar' ? 'initial' : 'low_weight' } : old?.unlock ?? (route.startsWith('event:') ? { kind: 'event', arg: route.slice(6) } : { kind: 'win', arg: route }),
     moves,
     keystone: old?.keystone ?? `keystone_${first.replace(/-/g, '_')}`,
     status: DISABLED.has(first) ? 'disabled' : 'limited',
@@ -46,9 +47,11 @@ for (const [first, stages, rarity, role, temperament, traits, route] of rows) {
     branching: BRANCHING.has(first),
     baby: BABY.has(first),
     quizEligible: quiz,
+    // Jet starters (Hub Town Viking): the Pokémon starts the run holding this item (8th column of the roster).
+    ...(held ? { held } : {}),
   });
 }
-// 74 design lines plus Vulpix and Psyduck (director, 2026-11-07: they are Story Run starters).
-if (result.length !== 76) throw new Error(`expected 76 lines, got ${result.length}`);
+// 74 design lines plus Vulpix and Psyduck (director, 2026-11-07: they are Story Run starters) plus the three Jet lines the Viking unlocks.
+if (result.length !== 79) throw new Error(`expected 79 lines, got ${result.length}`);
 writeFileSync(new URL(out, root), JSON.stringify(result, null, 1) + '\n');
 console.log(`remembrances: ${result.length} lines (${result.filter((r) => byLine.has(r.line[0])).length} kept)`);

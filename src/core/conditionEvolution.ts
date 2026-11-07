@@ -17,6 +17,10 @@ export type EvoCondition =
   | { kind: 'heartbond'; level: number }
   /** The run clock reads night. */
   | { kind: 'night' }
+  /** The run clock does not read night. */
+  | { kind: 'day' }
+  /** The Pokémon is holding this item (kept: it is not used up). Jet Pokémon: Booster Energy, Black Sludge. */
+  | { kind: 'holds'; item: string }
   /** Every part must hold. */
   | { kind: 'all'; of: EvoCondition[] };
 
@@ -61,6 +65,12 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'dunsparce', to: 'dudunsparce', minLevel: 20, condition: { kind: 'knowsMove', move: 'hyper-drill' } },
   { from: 'stantler', to: 'wyrdeer', minLevel: 20, condition: { kind: 'moveUses', move: 'psyshield-bash', count: 20 } },
   { from: 'primeape', to: 'annihilape', minLevel: 25, condition: { kind: 'moveUses', move: 'rage-fist', count: 20 } },
+  // Jet Pokémon (docs/status/jet-pokemon.md): holding the item from level 28 on, by day or by night. The item stays held.
+  { from: 'eevee', to: 'espeon-paradox', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'day' }] } },
+  { from: 'eevee', to: 'umbreon-paradox', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'night' }] } },
+  { from: 'toxel', to: 'toxtricity-past', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'day' }] } },
+  { from: 'toxel', to: 'toxtricity-future', minLevel: 28, condition: { kind: 'all', of: [{ kind: 'holds', item: 'booster-energy' }, { kind: 'night' }] } },
+  { from: 'shieldon', to: 'bastiodon-skull', minLevel: 28, condition: { kind: 'holds', item: 'black-sludge' } },
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
   { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
   { from: 'noctowl', to: 'oracowl', minLevel: 42, stones: ['moon-stone', 'dusk-stone'], condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
@@ -84,6 +94,8 @@ export function conditionText(content: Content, c: EvoCondition): string {
   if (c.kind === 'weather') return `win a battle that ends in ${c.weather}`;
   if (c.kind === 'heartbond') return `reach Heartbond ${c.level}`;
   if (c.kind === 'night') return 'win at night';
+  if (c.kind === 'day') return 'win by day';
+  if (c.kind === 'holds') return `hold ${c.item.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ')}`;
   if (c.kind === 'all') return c.of.map((x) => conditionText(content, x)).join(' and ');
   const name = content.moves.get(c.move)?.name ?? c.move;
   return c.kind === 'knowsMove' ? `know ${name}` : `use ${name} ${c.count} times`;
@@ -103,6 +115,8 @@ function conditionMet(c: EvoCondition, mon: PokemonInstance, weather: string | n
     case 'moveUses': return (mon.moveCounts?.[c.move] ?? 0) >= c.count;
     case 'heartbond': return (info?.heartbond ?? 0) >= c.level;
     case 'night': return info?.night === true;
+    case 'day': return info?.night === false;
+    case 'holds': return (mon.held?.[c.item] ?? 0) > 0;
     case 'all': return c.of.every((x) => conditionMet(x, mon, weather, info));
   }
 }

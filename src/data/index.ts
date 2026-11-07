@@ -76,6 +76,7 @@ import speciesFixesJson from './speciesFixes.json';
 import customEvolutionsJson from './customEvolutions.json';
 // Story Overhaul S15: ten new species (npm run data:story-species).
 import storySpeciesJson from './storySpecies.json';
+import jetSpeciesJson from './jetSpecies.json';
 import themesJson from './themes.json';
 import trainersJson from './trainers.json';
 // Every trainer class from the Google Drive packs (tools/drive/build-trainers.py): one class per sprite.
@@ -257,7 +258,7 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 
 export const RAW_CONTENT: RawContent = {
   species: applySpeciesFixes(
-    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions]), storySpeciesJson.patches),
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), storySpeciesJson.patches),
     speciesFixesJson,
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).

@@ -22499,6 +22499,78 @@
       "flash": "#f85888",
       "hitStopMs": 107,
       "telegraph": "strong"
+    },
+    "sig-paradox-pulse": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-energy-hold": {
+      "anim": "acupressure",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-static-chord": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-venom-riff": {
+      "anim": "belch",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-sludge-bash": {
+      "anim": "gunk-shot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
+    },
+    "sig-iron-wall": {
+      "anim": "autotomize",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
+    "sig-paradox-pulse-keystone": {
+      "anim": "light-that-burns-the-sky",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f85888",
+      "hitStopMs": 107,
+      "telegraph": "strong"
+    },
+    "sig-static-chord-keystone": {
+      "anim": "thunder-shock",
+      "source": "type",
+      "shake": 3,
+      "flash": "#f8d030",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "sig-sludge-bash-keystone": {
+      "anim": "gunk-shot",
+      "source": "type",
+      "shake": 3,
+      "flash": "#a040a0",
+      "hitStopMs": 80,
+      "telegraph": "strong"
     }
   },
   "commonPack": {

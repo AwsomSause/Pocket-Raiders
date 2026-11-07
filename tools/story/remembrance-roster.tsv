@@ -76,3 +76,6 @@ grubbin	grubbin/charjabug/vikavolt	unusual	pivot	curious	adaptability,curiosity,
 blipbug	blipbug/dottler/orbeetle	unusual	support	timid	intelligence,curiosity,compassion	quiz
 vulpix	vulpix/ninetales	familiar	disruptor	shy	curiosity,compassion,instinct	quiz
 psyduck	psyduck/golduck	familiar	pivot	anxious	instinct,adaptability,curiosity	quiz
+eevee	eevee/espeon-paradox	unusual	pivot	playful	adaptability,loyalty,curiosity	event:jet_viking	booster-energy
+toxel	toxel/toxtricity-future	unusual	disruptor	independent	independence,instinct,courage	event:jet_viking	booster-energy
+shieldon	shieldon/bastiodon-skull	unusual	tank	protective	resolve,loyalty,compassion	event:jet_viking	black-sludge
