@@ -2467,6 +2467,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     setStyle: isHardcore(run.rules),
     catchBlocked: nuzlockeCatchProblem(run.battle!),
     bondScore: (uid) => bondScoreOf(run.story.histories[uid]?.bond),
+    bondPartners: (uid) => run.story.relationships.filter((r) => r.open && r.kind === 'bond' && (r.a.id === uid || r.b.id === uid)).map((r) => (r.a.id === uid ? r.b.id : r.a.id)),
   };
 }
 
