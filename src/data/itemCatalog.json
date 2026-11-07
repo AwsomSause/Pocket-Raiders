@@ -24239,5 +24239,3180 @@
     }
    ]
   }
+ },
+ {
+  "id": "classic-ribbon-5",
+  "name": "Classic Ribbon (5)",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 5% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/classic-ribbon-5",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "classic-ribbon-10",
+  "name": "Classic Ribbon (10)",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 8% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/classic-ribbon-10",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "classic-ribbon-15",
+  "name": "Classic Ribbon (15)",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 11% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/classic-ribbon-15",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 11
+    }
+   ]
+  }
+ },
+ {
+  "id": "classic-ribbon",
+  "name": "Classic Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 3% more",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/classic-ribbon-default",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "common-ribbon",
+  "name": "Common Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 4% more",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/common-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 4
+    }
+   ]
+  }
+ },
+ {
+  "id": "great-ribbon",
+  "name": "Great Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 7% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/great-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 7
+    }
+   ]
+  }
+ },
+ {
+  "id": "ultra-ribbon",
+  "name": "Ultra Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 10% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/ultra-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "rogue-ribbon",
+  "name": "Rogue Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 12% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/rogue-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 12
+    }
+   ]
+  }
+ },
+ {
+  "id": "hardcore-ribbon",
+  "name": "Hardcore Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Moves of every type from the holder do 15% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/hardcore-ribbon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "friendship-ribbon",
+  "name": "Friendship Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "The holder grows fond of you 50% faster",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/ribbon-friendship",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "friendship",
+     "percent": 50
+    }
+   ]
+  }
+ },
+ {
+  "id": "typeless-ribbon",
+  "name": "Typeless Ribbon",
+  "family": "Ribbons (held, all types)",
+  "description": "Normal moves of the holder do 25% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/ribbon-typeless",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "normal"
+     ],
+     "percent": 25
+    }
+   ]
+  }
+ },
+ {
+  "id": "normal-memory",
+  "name": "Normal Memory",
+  "family": "Held items (Drive pack)",
+  "description": "Holder becomes Normal type (Silvally) / holds the Normal memory",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/normal-memory",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "memory",
+     "type": "normal"
+    }
+   ]
+  }
+ },
+ {
+  "id": "blast-powder",
+  "name": "Blast Powder",
+  "family": "Held items (Drive pack)",
+  "description": "Explosive Powder: the holder does 15% more damage and takes 5% of its max HP",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/blastpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "power",
+     "percent": 15,
+     "recoil": 0.05
+    }
+   ]
+  }
+ },
+ {
+  "id": "multi-lens",
+  "name": "Multi Lens",
+  "family": "Held items (Drive pack)",
+  "description": "The holder's accuracy goes up 10%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/multi-lens",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "accuracy",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "diffusion-lens",
+  "name": "Diffusion Lens",
+  "family": "Held items (Drive pack)",
+  "description": "The holder's moves hit 15% more often",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/diffusion-lens",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "accuracy",
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "mag-stone",
+  "name": "Mag Stone",
+  "family": "Held items (Drive pack)",
+  "description": "Steel moves of the holder do 20% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/magstone",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "steel"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "sparkling-stone",
+  "name": "Sparkling Stone",
+  "family": "Held items (Drive pack)",
+  "description": "Fairy and Psychic moves of the holder do 15% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/sparklingstone",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fairy",
+      "psychic"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "soul-stone",
+  "name": "Soul Stone",
+  "family": "Held items (Drive pack)",
+  "description": "Ghost moves of the holder do 20% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/soulstone",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "dark-core",
+  "name": "Dark Core",
+  "family": "Held items (Drive pack)",
+  "description": "Dark moves of the holder do 20% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/darkcore",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "dark"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "sound-gem",
+  "name": "Sound Gem",
+  "family": "Held items (Drive pack)",
+  "description": "One Normal move does 1.5x damage, then the gem is spent",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/soundgem",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "gem",
+     "type": "normal",
+     "multiplier": 1.5
+    }
+   ]
+  }
+ },
+ {
+  "id": "mystical-rock",
+  "name": "Mystical Rock",
+  "family": "Held items (Drive pack)",
+  "description": "Sun, rain, sand and snow set by the holder last 8 turns",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/mystical-rock",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "weatherTurns",
+     "weathers": [
+      "sun",
+      "rain",
+      "sand",
+      "snow"
+     ],
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "percival-glass",
+  "name": "Percival Glass",
+  "family": "Held items (Drive pack)",
+  "description": "Holder shrugs off 10% of damage from wild Pokémon",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/percivalglass",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "damageTaken",
+     "percent": -10,
+     "fromWild": true
+    }
+   ]
+  }
+ },
+ {
+  "id": "grubby-hanky",
+  "name": "Grubby Hanky",
+  "family": "Held items (Drive pack)",
+  "description": "Heals the holder 1/16 each turn",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/grubbyhanky",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "endTurn",
+     "fraction": 0.0625
+    }
+   ]
+  }
+ },
+ {
+  "id": "falconry-glove",
+  "name": "Falconry Glove",
+  "family": "Held items (Drive pack)",
+  "description": "Flying moves of the holder do 20% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/falconryglove",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "flying"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "talons-glove",
+  "name": "Talon's Glove",
+  "family": "Held items (Drive pack)",
+  "description": "Physical moves of the holder do 10% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/talonsglove",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "categoryPower",
+     "category": "physical",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "gear-amulet",
+  "name": "Gear Amulet",
+  "family": "Held items (Drive pack)",
+  "description": "Holder takes no weather damage",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/gearamulet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "weatherImmune",
+     "weathers": [
+      "sand",
+      "hail"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "id": "aqua-suit",
+  "name": "Aqua Suit",
+  "family": "Held items (Drive pack)",
+  "description": "Water moves of the holder do 20% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/aquasuit",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "water"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "magma-suit",
+  "name": "Magma Suit",
+  "family": "Held items (Drive pack)",
+  "description": "Fire moves of the holder do 20% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/magmasuit",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fire"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "damiens-scarf",
+  "name": "Damien's Scarf",
+  "family": "Held items (Drive pack)",
+  "description": "Flinches the foe 10% more often",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/damienscarf",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "flinch",
+     "percent": 10,
+     "bonus": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "black-lantern",
+  "name": "Black Lantern",
+  "family": "Held items (Drive pack)",
+  "description": "Ghost and Dark moves of the holder do 12% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/blacklantern",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost",
+      "dark"
+     ],
+     "percent": 12
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-lantern",
+  "name": "Golden Lantern",
+  "family": "Held items (Drive pack)",
+  "description": "Fire and Electric moves of the holder do 12% more",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/goldenlantern",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fire",
+      "electric"
+     ],
+     "percent": 12
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-claws",
+  "name": "Golden Claws",
+  "family": "Held items (Drive pack)",
+  "description": "Contact moves of the holder do 10% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 2,
+  "how": "held",
+  "icon": "library/goldenclaws",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "categoryPower",
+     "category": "physical",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-wings",
+  "name": "Golden Wings",
+  "family": "Held items (Drive pack)",
+  "description": "Flying moves of the holder do 25% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldenwings",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "flying"
+     ],
+     "percent": 25
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-hammer",
+  "name": "Golden Hammer",
+  "family": "Held items (Drive pack)",
+  "description": "Steel and Rock moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldenhammer",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "steel",
+      "rock"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-axe",
+  "name": "Golden Axe",
+  "family": "Held items (Drive pack)",
+  "description": "Grass and Bug moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldenaxe",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "grass",
+      "bug"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-punch",
+  "name": "Golden Punch",
+  "family": "Held items (Drive pack)",
+  "description": "Fighting moves of the holder do 20% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/golden-punch",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fighting"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-surfboard",
+  "name": "Golden Surfboard",
+  "family": "Held items (Drive pack)",
+  "description": "Water and Ice moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldensurfboard",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "water",
+      "ice"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-gauntlet",
+  "name": "Golden Gauntlet",
+  "family": "Held items (Drive pack)",
+  "description": "Every move of the holder does 8% more",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldengauntlet",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug",
+      "dark",
+      "dragon",
+      "electric",
+      "fairy",
+      "fighting",
+      "fire",
+      "flying",
+      "ghost",
+      "grass",
+      "ground",
+      "ice",
+      "normal",
+      "poison",
+      "psychic",
+      "rock",
+      "steel",
+      "water"
+     ],
+     "percent": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-scuba-gear",
+  "name": "Golden Scuba Gear",
+  "family": "Held items (Drive pack)",
+  "description": "Water and Ground moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldenscubagear",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "water",
+      "ground"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-jetpack",
+  "name": "Golden Jetpack",
+  "family": "Held items (Drive pack)",
+  "description": "Holder gets the first move more often",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldenjetpack",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "dodgeFirst"
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-driftboard",
+  "name": "Golden Driftboard",
+  "family": "Held items (Drive pack)",
+  "description": "Ice and Ground moves of the holder do 15% more",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "library/goldendriftboard",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ice",
+      "ground"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "attack-card",
+  "name": "Attack Card",
+  "family": "Battle boosters (X items, Dire Hit, Guard Spec.)",
+  "description": "+2 Attack for the first 8 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/atkcard",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "atk",
+     "stages": 2,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "defense-card",
+  "name": "Defense Card",
+  "family": "Battle boosters (X items, Dire Hit, Guard Spec.)",
+  "description": "+2 Defense for the first 8 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/defcard",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "def",
+     "stages": 2,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "sp-atk-card",
+  "name": "Sp. Atk Card",
+  "family": "Battle boosters (X items, Dire Hit, Guard Spec.)",
+  "description": "+2 Sp. Atk for the first 8 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/spatkcard",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "spa",
+     "stages": 2,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "sp-def-card",
+  "name": "Sp. Def Card",
+  "family": "Battle boosters (X items, Dire Hit, Guard Spec.)",
+  "description": "+2 Sp. Def for the first 8 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/spdefcard",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "spd",
+     "stages": 2,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "speed-card",
+  "name": "Speed Card",
+  "family": "Battle boosters (X items, Dire Hit, Guard Spec.)",
+  "description": "+2 Speed for the first 8 turns of its next battle",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "use",
+  "icon": "library/speedcard",
+  "status": "supported",
+  "effect": {
+   "kind": "battleBoost",
+   "boosts": [
+    {
+     "kind": "stage",
+     "stat": "spe",
+     "stages": 2,
+     "turns": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "hp-card",
+  "name": "HP Card",
+  "family": "Healing and status items",
+  "description": "Heals 50 HP",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hpcard",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50
+  }
+ },
+ {
+  "id": "wl-potion",
+  "name": "Potion (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Heals 20 HP",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-potion",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 20
+  }
+ },
+ {
+  "id": "wl-super-potion",
+  "name": "Super Potion (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Heals 60 HP",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-super-potion",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 60
+  }
+ },
+ {
+  "id": "wl-hyper-potion",
+  "name": "Hyper Potion (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Heals 120 HP",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-hyper-potion",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 120
+  }
+ },
+ {
+  "id": "wl-max-potion",
+  "name": "Max Potion (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Heals fully",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-max-potion",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 9999
+  }
+ },
+ {
+  "id": "wl-antidote",
+  "name": "Antidote (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-antidote",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true
+  }
+ },
+ {
+  "id": "wl-awakening",
+  "name": "Awakening (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-awakening",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true
+  }
+ },
+ {
+  "id": "wl-burn-heal",
+  "name": "Burn Heal (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-burn-heal",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true
+  }
+ },
+ {
+  "id": "wl-ice-heal",
+  "name": "Ice Heal (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-ice-heal",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true
+  }
+ },
+ {
+  "id": "wl-paralyze-heal",
+  "name": "Paralyze Heal (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-paralyze-heal",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true
+  }
+ },
+ {
+  "id": "paralyze-heal-2",
+  "name": "Paralyze Heal Plus",
+  "family": "Healing and status items",
+  "description": "Heals 20 HP and cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/paralyzeheal",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true,
+   "heal": 20
+  }
+ },
+ {
+  "id": "wl-full-heal",
+  "name": "Full Heal (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Heals 40 HP and cures status",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-full-heal",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true,
+   "heal": 40
+  }
+ },
+ {
+  "id": "wl-full-restore",
+  "name": "Full Restore (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Heals fully and cures status",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-full-restore",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "cure": true,
+   "heal": 9999
+  }
+ },
+ {
+  "id": "wl-revive",
+  "name": "Revive (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Revives a fainted Pokémon with half HP",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-revive",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 0.5
+  }
+ },
+ {
+  "id": "wl-max-revive",
+  "name": "Max Revive (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Revives a fainted Pokémon fully",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-max-revive",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 1
+  }
+ },
+ {
+  "id": "min-revive",
+  "name": "Min Revive",
+  "family": "Healing and status items",
+  "description": "Revives a fainted Pokémon with 10% HP",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/minrevive",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 0.1
+  }
+ },
+ {
+  "id": "defibrillator",
+  "name": "Defibrillator",
+  "family": "Healing and status items",
+  "description": "Revives a fainted Pokémon with half HP, a little scary",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/defibrillator",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "revive": 0.5,
+   "friendship": -5
+  }
+ },
+ {
+  "id": "ultra-potion",
+  "name": "Ultra Potion",
+  "family": "Healing and status items",
+  "description": "Heals 150 HP",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/ultrapotion",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 150
+  }
+ },
+ {
+  "id": "wl-elixir",
+  "name": "Elixir (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Restores PP to the move with the least",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-elixir",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "ppMove": "lowest"
+  }
+ },
+ {
+  "id": "wl-ether",
+  "name": "Ether (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Restores PP to the move with the least",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-ether",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "ppMove": "lowest"
+  }
+ },
+ {
+  "id": "wl-max-ether",
+  "name": "Max Ether (Warp Lab)",
+  "family": "Healing and status items",
+  "description": "Restores PP to the move with the least",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/wl-max-ether",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "ppMove": "lowest"
+  }
+ },
+ {
+  "id": "herbal-tea",
+  "name": "Herbal Tea",
+  "family": "Healing and status items",
+  "description": "Heals 30 HP and cures status",
+  "rarity": "common",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/herbaltea",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 30,
+   "cure": true
+  }
+ },
+ {
+  "id": "rose-tea",
+  "name": "Rose Tea",
+  "family": "Healing and status items",
+  "description": "Heals 60 HP, +1 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/rosetea",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 60,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "night-med",
+  "name": "Night Med",
+  "family": "Healing and status items",
+  "description": "Heals 80 HP, +1 Evil",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/nightmed",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 80,
+   "changes": {
+    "goodEvil": -1
+   }
+  }
+ },
+ {
+  "id": "magic-moomoo-milk",
+  "name": "Magic Moomoo Milk",
+  "family": "Healing and status items",
+  "description": "Heals 140 HP, +1 Love",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/magicmoomilk",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 140,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "max-soup",
+  "name": "Max Soup",
+  "family": "Healing and status items",
+  "description": "Heals 100 HP and cures status",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/maxsoup",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 100,
+   "cure": true
+  }
+ },
+ {
+  "id": "gourmet-treat",
+  "name": "Gourmet Treat",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 30%",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/gourmettreat",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.3
+  }
+ },
+ {
+  "id": "canari-bread",
+  "name": "Canari Bread",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 20%",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/canaribread",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.2
+  }
+ },
+ {
+  "id": "chinese-food",
+  "name": "Takeout",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 25%",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/chinesefood",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.25
+  }
+ },
+ {
+  "id": "funnel-cake",
+  "name": "Funnel Cake",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 15%",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/funnelcake",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.15
+  }
+ },
+ {
+  "id": "thin-mints",
+  "name": "Thin Mints",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 15%, +1 Love",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/thinmints",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.15,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "straw-cake",
+  "name": "Strawberry Cake",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 40%",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/strawcake",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.4
+  }
+ },
+ {
+  "id": "agol-isopodi-tea",
+  "name": "Agol Isopodi Tea",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 20% and restores 5 PP",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/agolisopoditea",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.2,
+   "pp": 5
+  }
+ },
+ {
+  "id": "gol-isopodi-tea",
+  "name": "Gol Isopodi Tea",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 30% and restores 10 PP",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/golisopoditea",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.3,
+   "pp": 10
+  }
+ },
+ {
+  "id": "chocolate-ice",
+  "name": "Chocolate Ice Cream",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 20% and wakes sleepers",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/chocolateic",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.2,
+   "cureSleep": true
+  }
+ },
+ {
+  "id": "vanilla-ice",
+  "name": "Vanilla Ice Cream",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 20% and wakes sleepers",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/vanillaic",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.2,
+   "cureSleep": true
+  }
+ },
+ {
+  "id": "strawberry-ice",
+  "name": "Strawberry Ice Cream",
+  "family": "Healing and status items",
+  "description": "Heals the whole team 20% and wakes sleepers",
+  "rarity": "common",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "library/strawbic",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.2,
+   "cureSleep": true
+  }
+ },
+ {
+  "id": "nice-butter",
+  "name": "Nice Butter",
+  "family": "Food",
+  "description": "Heals 40 HP, +1 Good",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/nicebutter",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 40,
+   "changes": {
+    "goodEvil": 1
+   }
+  }
+ },
+ {
+  "id": "amazing-butter",
+  "name": "Amazing Butter",
+  "family": "Food",
+  "description": "Heals 80 HP, +1 Luck",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/amazingbutter",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 80,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "supreme-butter",
+  "name": "Supreme Butter",
+  "family": "Food",
+  "description": "Heals 120 HP, +2 Love",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/supremebutter",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 120,
+   "changes": {
+    "love": 2
+   }
+  }
+ },
+ {
+  "id": "hyperspace-butter",
+  "name": "Hyperspace Butter",
+  "family": "Food",
+  "description": "Heals 200 HP, +2 Luck",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/hyperspacebutter",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 200,
+   "changes": {
+    "luck": 2
+   }
+  }
+ },
+ {
+  "id": "lumiosian-butter",
+  "name": "Lumiosian Butter",
+  "family": "Food",
+  "description": "Heals 60 HP, friendship +10",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/lumiosianbutter",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 60,
+   "friendship": 10
+  }
+ },
+ {
+  "id": "ice-root-carrot",
+  "name": "Ice Root Carrot",
+  "family": "Food",
+  "description": "Heals 50 HP, +1 Strength",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/icerootcarrot",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50,
+   "changes": {
+    "strength": 1
+   }
+  }
+ },
+ {
+  "id": "shade-root-carrot",
+  "name": "Shade Root Carrot",
+  "family": "Food",
+  "description": "Heals 50 HP, +1 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/shaderootcarrot",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 50,
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "spice-powder",
+  "name": "Spice Powder",
+  "family": "Food",
+  "description": "Heals 30 HP, +1 toward Peace",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/spicepowder",
+  "status": "supported",
+  "effect": {
+   "kind": "care",
+   "heal": 30,
+   "changes": {
+    "ragePeace": 1
+   }
+  }
+ },
+ {
+  "id": "pretty-feather",
+  "name": "Pretty Feather",
+  "family": "Valuables",
+  "description": "Sell for $200",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/prettyfeather",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 200,
+   "changes": {}
+  }
+ },
+ {
+  "id": "dark-feather",
+  "name": "Dark Feather",
+  "family": "Valuables",
+  "description": "Sell for $350",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/darkfeather",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 350,
+   "changes": {}
+  }
+ },
+ {
+  "id": "light-feather",
+  "name": "Light Feather",
+  "family": "Valuables",
+  "description": "Sell for $350",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/lightfeather",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 350,
+   "changes": {}
+  }
+ },
+ {
+  "id": "coupon",
+  "name": "Coupon",
+  "family": "Valuables",
+  "description": "Sell for $100",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/coupon",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 100,
+   "changes": {}
+  }
+ },
+ {
+  "id": "gift-card",
+  "name": "Gift Card",
+  "family": "Valuables",
+  "description": "Sell for $400",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/giftcard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 400,
+   "changes": {}
+  }
+ },
+ {
+  "id": "thank-you-card",
+  "name": "Thank-You Card",
+  "family": "Valuables",
+  "description": "Sell for $150, +1 Love",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/thankyoucard",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 150,
+   "changes": {
+    "love": 1
+   }
+  }
+ },
+ {
+  "id": "festival-ticket",
+  "name": "Festival Ticket",
+  "family": "Valuables",
+  "description": "Sell for $500, +1 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/festivalticket",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 500,
+   "changes": {
+    "charisma": 1
+   }
+  }
+ },
+ {
+  "id": "puppet-coin",
+  "name": "Puppet Coin",
+  "family": "Valuables",
+  "description": "Sell for $600",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/puppetcoin",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 600,
+   "changes": {}
+  }
+ },
+ {
+  "id": "wishing-chip",
+  "name": "Wishing Chip",
+  "family": "Valuables",
+  "description": "Sell for $800, +1 Luck",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/wishingchip",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 800,
+   "changes": {
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "golden-apple",
+  "name": "Golden Apple",
+  "family": "Valuables",
+  "description": "Sell for $1000",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/goldenapple",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1000,
+   "changes": {}
+  }
+ },
+ {
+  "id": "chestnut",
+  "name": "Chestnut",
+  "family": "Valuables",
+  "description": "Sell for $120",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/chestnut",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 120,
+   "changes": {}
+  }
+ },
+ {
+  "id": "pumpkin",
+  "name": "Pumpkin",
+  "family": "Valuables",
+  "description": "Sell for $250",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/pumpkin",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 250,
+   "changes": {}
+  }
+ },
+ {
+  "id": "hotel-key-2",
+  "name": "Hotel Voucher",
+  "family": "Valuables",
+  "description": "Sell for $300",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hotelkey",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {}
+  }
+ },
+ {
+  "id": "permit",
+  "name": "Permit",
+  "family": "Valuables",
+  "description": "Sell for $450",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/permit",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 450,
+   "changes": {}
+  }
+ },
+ {
+  "id": "train-pass",
+  "name": "Train Pass",
+  "family": "Valuables",
+  "description": "Sell for $350",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/trainpass",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 350,
+   "changes": {}
+  }
+ },
+ {
+  "id": "secret-patent",
+  "name": "Secret Patent",
+  "family": "Valuables",
+  "description": "Sell for $1200, +1 Intelligence",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/secretpatent",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1200,
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "updated-patent",
+  "name": "Updated Patent",
+  "family": "Valuables",
+  "description": "Sell for $900, +1 Intelligence",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/updatedpatent",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 900,
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "amber-slet",
+  "name": "Amber Bracelet",
+  "family": "Valuables",
+  "description": "Sell for $700",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/amberslet",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 700,
+   "changes": {}
+  }
+ },
+ {
+  "id": "space-pearl",
+  "name": "Space Pearl",
+  "family": "Valuables",
+  "description": "Sell for $1400",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/spaceaspearl",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1400,
+   "changes": {}
+  }
+ },
+ {
+  "id": "surge-badge",
+  "name": "Surge Badge (replica)",
+  "family": "Valuables",
+  "description": "Sell for $500",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/surgebadge",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 500,
+   "changes": {}
+  }
+ },
+ {
+  "id": "puzzle-box",
+  "name": "Puzzle Box",
+  "family": "Valuables",
+  "description": "Sell for $650, +1 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/puzzlebox",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 650,
+   "changes": {
+    "intelligence": 1
+   }
+  }
+ },
+ {
+  "id": "chipped-pot-2",
+  "name": "Chipped Pot Shard",
+  "family": "Valuables",
+  "description": "Sell for $220",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/chippedpot",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 220,
+   "changes": {}
+  }
+ },
+ {
+  "id": "masterpiece-teacup",
+  "name": "Masterpiece Teacup",
+  "family": "Valuables",
+  "description": "Sell for $1800",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/masterpieceteacup",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 1800,
+   "changes": {}
+  }
+ },
+ {
+  "id": "golden-exp-charm",
+  "name": "Golden EXP Charm",
+  "family": "Charms",
+  "description": "Next 5 battles give 50% more experience",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/golden-exp-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "exp",
+     "percent": 50
+    }
+   ]
+  }
+ },
+ {
+  "id": "super-exp-charm",
+  "name": "Super EXP Charm",
+  "family": "Charms",
+  "description": "Next 5 battles give 25% more experience",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/super-exp-charm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "exp",
+     "percent": 25
+    }
+   ]
+  }
+ },
+ {
+  "id": "super-lure-2",
+  "name": "Super Lure",
+  "family": "Charms",
+  "description": "The next 5 wild battles show a rare Pokémon",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/super-lure",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    }
+   ]
+  }
+ },
+ {
+  "id": "max-lure",
+  "name": "Max Lure",
+  "family": "Charms",
+  "description": "The next 8 wild battles show a rare Pokémon",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/maxlure",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 8
+   },
+   "mods": [
+    {
+     "mod": "rare"
+    }
+   ]
+  }
+ },
+ {
+  "id": "scented-lure",
+  "name": "Scented Lure",
+  "family": "Charms",
+  "description": "The next 3 wild battles are 1.5x easier to catch",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/scentedlure",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 1.5
+    }
+   ]
+  }
+ },
+ {
+  "id": "mirror-lure",
+  "name": "Mirror Lure",
+  "family": "Charms",
+  "description": "The next 3 wild battles show any type",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/mirrorlure",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "anyType"
+    }
+   ]
+  }
+ },
+ {
+  "id": "golden-net",
+  "name": "Golden Net",
+  "family": "Charms",
+  "description": "Every wild Pokémon is 1.3x easier to catch",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/golden-net",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "run"
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 1.3
+    }
+   ]
+  }
+ },
+ {
+  "id": "lucky-punch-great",
+  "name": "Lucky Punch (Great)",
+  "family": "Charms",
+  "description": "Next 3 wild battles: you move first free turn",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/lucky-punch-great",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "lucky-punch-ultra",
+  "name": "Lucky Punch (Ultra)",
+  "family": "Charms",
+  "description": "Next 5 wild battles: you get a free turn",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/lucky-punch-ultra",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "lucky-punch-master",
+  "name": "Lucky Punch (Master)",
+  "family": "Charms",
+  "description": "Next 8 wild battles: you get a free turn",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/lucky-punch-master",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 8
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "roaming-charm",
+  "name": "Roaming Charm",
+  "family": "Charms",
+  "description": "Next 5 wild battles: rare Pokémon are slower",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/roamingcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 5
+   },
+   "mods": [
+    {
+     "mod": "foeSpeed",
+     "stages": -1
+    }
+   ]
+  }
+ },
+ {
+  "id": "shaydas-charm",
+  "name": "Shayda's Charm",
+  "family": "Charms",
+  "description": "Next 3 wild battles: Pokémon are 2x as likely shiny",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "use",
+  "icon": "library/shaydascharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "shiny",
+     "multiplier": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "apricorn-charm",
+  "name": "Apricorn Charm",
+  "family": "Charms",
+  "description": "Next 3 throws x1.5 catch rate",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/apricorncharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "throws",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "catch",
+     "multiplier": 1.5
+    }
+   ]
+  }
+ },
+ {
+  "id": "level-cap-charm",
+  "name": "Level Cap Charm",
+  "family": "Charms",
+  "description": "Next 3 wild battles: wild Pokémon are 2 levels lower",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 3,
+  "how": "use",
+  "icon": "library/levelcapcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 3
+   },
+   "mods": [
+    {
+     "mod": "level",
+     "amount": -2
+    }
+   ]
+  }
+ },
+ {
+  "id": "effort-charm",
+  "name": "Effort Charm",
+  "family": "Charms",
+  "description": "+4 Strength",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/effortcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "strength": 4
+   }
+  }
+ },
+ {
+  "id": "hidden-charm",
+  "name": "Hidden Charm",
+  "family": "Charms",
+  "description": "+3 Luck",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/hiddencharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "luck": 3
+   }
+  }
+ },
+ {
+  "id": "balance-charm",
+  "name": "Balance Charm",
+  "family": "Charms",
+  "description": "+2 Love, +2 Good and +2 toward Peace",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/balancecharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 2,
+    "goodEvil": 2,
+    "ragePeace": 2
+   }
+  }
+ },
+ {
+  "id": "nature-charm",
+  "name": "Nature Charm",
+  "family": "Charms",
+  "description": "+3 Love",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/naturecharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 3
+   }
+  }
+ },
+ {
+  "id": "element-charm",
+  "name": "Element Charm",
+  "family": "Charms",
+  "description": "+3 Intelligence",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/elementcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 3
+   }
+  }
+ },
+ {
+  "id": "link-charm",
+  "name": "Link Charm",
+  "family": "Charms",
+  "description": "+4 Love",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/linkcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 4
+   }
+  }
+ },
+ {
+  "id": "twin-charm",
+  "name": "Twin Charm",
+  "family": "Charms",
+  "description": "+2 Love, +2 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/twincharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "love": 2,
+    "charisma": 2
+   }
+  }
+ },
+ {
+  "id": "viral-charm",
+  "name": "Viral Charm",
+  "family": "Charms",
+  "description": "+4 Charisma",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/viralcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "charisma": 4
+   }
+  }
+ },
+ {
+  "id": "triple-triad-charm",
+  "name": "Triple Triad Charm",
+  "family": "Charms",
+  "description": "+3 Intelligence, +1 Luck",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/triptriadcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "attributes",
+   "changes": {
+    "intelligence": 3,
+    "luck": 1
+   }
+  }
+ },
+ {
+  "id": "crafting-charm",
+  "name": "Crafting Charm",
+  "family": "Charms",
+  "description": "Prize money from trainers +15%",
+  "rarity": "uncommon",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "library/craftingcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "trainerMoney",
+   "percent": 15
+  }
+ },
+ {
+  "id": "slots-charm",
+  "name": "Slots Charm",
+  "family": "Charms",
+  "description": "Prize money from trainers +20%",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": 3,
+  "how": "passive",
+  "icon": "library/slotscharm",
+  "status": "supported",
+  "effect": {
+   "kind": "passive",
+   "passive": "trainerMoney",
+   "percent": 20
+  }
+ },
+ {
+  "id": "trading-charm",
+  "name": "Trading Charm",
+  "family": "Charms",
+  "description": "Shops sell 8% cheaper",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 2,
+  "how": "passive",
+  "icon": "library/tradingcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "discount",
+     "percent": 8
+    }
+   ]
+  }
+ },
+ {
+  "id": "points-charm",
+  "name": "Points Charm",
+  "family": "Charms",
+  "description": "Earn an extra point every 10 trainers",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/pointscharm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "points",
+     "every": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "promo-charm",
+  "name": "Promo Charm",
+  "family": "Charms",
+  "description": "Shops sell 10% cheaper",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/promocharm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "discount",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "mark-charm",
+  "name": "Mark Charm",
+  "family": "Charms",
+  "description": "Shows what the next trainers will bring",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/markcharm",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "trainers"
+    }
+   ]
+  }
+ },
+ {
+  "id": "common-egg",
+  "name": "Common Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 3 stages into a random first-stage Pokémon (shiny chance x1)",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/common-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 3,
+   "shiny": 1
+  }
+ },
+ {
+  "id": "rare-egg",
+  "name": "Rare Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 3 stages into a random first-stage Pokémon (shiny chance x3)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/rare-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 3,
+   "shiny": 3
+  }
+ },
+ {
+  "id": "epic-egg",
+  "name": "Epic Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x6)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/epic-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 6
+  }
+ },
+ {
+  "id": "legendary-egg",
+  "name": "Legendary Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x12)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/legendary-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 12
+  }
+ },
+ {
+  "id": "rogue-egg",
+  "name": "Rogue Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x8)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/rogue-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 8
+  }
+ },
+ {
+  "id": "golden-egg",
+  "name": "Golden Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x16)",
+  "rarity": "epic",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/golden-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 16
+  }
+ },
+ {
+  "id": "manaphy-egg",
+  "name": "Manaphy Egg",
+  "family": "Capture and party items",
+  "description": "Hatches after 2 stages into a random first-stage Pokémon (shiny chance x4)",
+  "rarity": "rare",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/manaphy-egg",
+  "status": "supported",
+  "effect": {
+   "kind": "egg",
+   "stages": 2,
+   "shiny": 4
+  }
  }
 ]
