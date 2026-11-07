@@ -7,7 +7,7 @@ import { periodOf } from '../clock';
 import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
-import type { Side } from '../battle/engine';
+import { isLastStanding, type Side } from '../battle/engine';
 import { applyMastery } from '../mastery';
 import type { Content } from '../contentSchema';
 import { CHAMPION_CLASS, ELITE_FOUR_CLASS, GYM_LEADER_CLASS } from '../encounters';
@@ -154,6 +154,8 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
 
   // Speedster: it moved before the foe this turn (singles). Rival Mirror: it shares a type with the foe (once per battle).
   if (!prior.doubles && firstMove?.type === 'move' && firstMove.side === 'player' && active.player) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['movedFirst']);
+  // Burrower: it ended the turn underground (Dig).
+  if (!prior.doubles && active.player && battle.playerVolatile?.semi === 'underground') bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['underground']);
   // Scout: it struck first against a foe that had just appeared and has a higher base Speed.
   if (!prior.doubles && firstMove?.type === 'move' && firstMove.side === 'player' && active.player && active.enemy && (prior.enemyVolatile?.turnsOut ?? 0) === 0) {
     const mine = content.species.get(mon(active.player)?.speciesId ?? '')?.baseStats.spe ?? 0;
@@ -272,6 +274,8 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         if (e.side === 'player' && active.player) {
           const h = run.story.histories[active.player];
           const cfg = content.balance.overhaulGrowth;
+          // Fossil Memory: it was left standing on exactly 1 HP.
+          if (e.hpAfter === 1) bumpGrowth(cfg, h, ['surviveOne']);
           // Vanguard: a Pokémon that just switched in took a hit from the foe's move.
           if (fresh && fresh.foeMoved && fresh.uid === active.player && e.hpAfter > 0) { bumpGrowth(cfg, h, ['vanguardHit']); fresh = null; }
           // Scale Guard: a resisted hit.
@@ -360,6 +364,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         break;
       case 'lastStand':
         if (e.side !== 'player' || !active.player) break;
+        bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['surviveOne']);
         emit(content, run, 'survivedFatal', {
           where,
           actors: [active.player],
@@ -917,5 +922,12 @@ function koSituation(content: Content, run: RunState, by: string, winner: Pokemo
     healthy: winner.hp >= maxHp(content, winner) * 0.8,
     scarf: movedFirst && Object.keys(winner.held ?? {}).some((id) => id.startsWith('choice-')),
     grudge: battle.grudgeMons?.includes(by) === true,
+    last: isLastStanding(run.party, winner),
+    // Shield Sibling: a bonded teammate that is still standing has hit the foe in this battle too.
+    pair: run.story.relationships.some((r) => {
+      if (!r.open || r.kind !== 'bond' || (r.a.id !== by && r.b.id !== by)) return false;
+      const other = r.a.id === by ? r.b.id : r.a.id;
+      return run.party.some((m) => m.uid === other && m.hp > 0) && (battle.growthMarks ?? []).includes(`hit:${other}`);
+    }),
   };
 }
