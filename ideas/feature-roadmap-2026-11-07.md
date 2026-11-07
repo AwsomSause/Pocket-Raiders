@@ -1,9 +1,10 @@
 # Feature roadmap: what we promised, and what should come next
 
-Written 2026-11-07 against `main` @ 0d7c0d47. Sources: every project thread and the project chat (through 11-07), Kice's decisions, `plans/` (Story Overhaul v2 + plan, Overhaul content pack, item rework, Mega roster, Drive assets), `reports/plans-audit-2026-11-07.md`, `docs/plans/left-out-plan.md`, STATUS.md and `docs/status/`. Status words: **built** (on main), **in PR** (open or draft PR), **not started**. Built/in-PR was checked against git history and thread reports, not play-tested.
+Written 2026-11-07 against `main` @ 0d7c0d47, then rewritten after a full read of all 92 threads (resolved ones included) and the whole project chat. Sources: every project thread and the project chat (through 11-07 18:26), Kice's decisions, `plans/` (Story Overhaul v2 + plan, Overhaul content pack, item rework, Mega roster, Drive assets), `reports/plans-audit-2026-11-07.md`, `docs/plans/left-out-plan.md`, STATUS.md and `docs/status/`. Status words: **built** (on main), **in PR** (open or draft PR), **not started**. Built/in-PR comes from git history and what the threads reported, not from play-testing. Many PRs were merged before CI finished, so "built" does not mean "green on main".
 
 ## Kice's decisions that shape both lists (do not re-propose)
-- **Off on purpose:** Capture Styles (disabled until Kice says), Triple Battle (deferred), zoom (removed), profile journal / collection journal (skipped unless asked), cross-run rival memory (Echo, familiar-face NPC, legend guest), romance, Free Spirit/Cheerleader, Rescue Ranger, Theme O, online co-op and cloud saves (recommended skip), AI "fatigue" rule (removed).
+- **Off on purpose:** Capture Styles (built in #750 but OFF, `captureStyles.enabled`, until Kice says), Triple Battle (Kice picked "Defer"), zoom (removed, #804 closed), menu/screen redesigns (Kice: "scrap these menu redesigns"), Evolution Encounters (#704 closed), "more currencies", Risky Evolutions, Free Spirit and Cheerleader growth paths ("skip for now"), respec (no EVs), profile journal / collection journal (skipped unless asked), cross-run rival memory (Echo, familiar-face NPC, legend guest), romance, Free Spirit/Cheerleader, Rescue Ranger, Theme O, online co-op and cloud saves (recommended skip), AI "fatigue" rule (removed).
+- **Also decided by Kice:** Berserk only for fitting Pokémon; no selling, 100-item cap, 6 revives per battle, money cap 999,999, 25 per item per stage; Hyper/Overdrive found moves use an extra slot with a keep-or-skip screen; Premier Ball per 2,000 spare XP; EXP candies removed, Luck nerfed; 8 difficulty types; menu speed work on hold; Mock 5 text box, Garden Village hub, Woodland Hamlets Pocket Town; trainer leaves the screen after the throw; every trainer from the packs imported "regardless of importance".
 - **Rules:** level cap 100 in region 1, +50 per region after. Rival and story losses never end a run. First rival fight is 2 Pokémon, ace at player level +2. 8 gym towns per region, 6 of 8 needed. Mega signature moves usable only while Mega Evolved. Max 1 cinematic moment per battle. Main rival only in Story modes.
 
 ---
@@ -29,15 +30,15 @@ Written 2026-11-07 against `main` @ 0d7c0d47. Sources: every project thread and 
 | Item | Status |
 |---|---|
 | All 30 slices, Living World (memories, environments, personality, chemistry, event chains, boss aftermath, rival roles) | built |
-| Growth paths | 98 of 106 playable at last report; remaining few were being finished by "Finish last growth paths" (verify) |
+| Growth paths | 104 of 106 playable (#940, #953, #957). The last 2 (Free Spirit, Cheerleader) stay off by Kice's choice; Rocky Helmet not counted for Thorn Warden |
 | Run modifiers (Bug Outbreak etc.), Mythical quest chains, region identities, rival Notebook, sprite-pose moments, moment dev tool | built |
 | Rarity tiers, Legendary roles, Tera/Z power budget, rarity caps (#984) | built |
 | 40 Delta scenes, 51 lore scenes, camp quirks by hour/festival (#984) | built |
 | Rival win-rate band | measured early fights only (59%); mid/late can't be measured because the bot dies first |
-| Beta 4.4 bug list (28 bugs), early-run deaths + difficulties, 10,000-run sim fixes | built (some questions to Kice about modifier mode, slow menus, battle won't load were left open) |
+| Beta 4.4 bug list (28 bugs), early-run deaths + 8 difficulties (#963–#974), 10,000-run sim fixes (#948–#958) | built. Still open from Kice's answers: Random Draft and modifier picks A/B/C failed to start (#758 fixed the crash; recheck), black battle screen only with non-default Battle UIs (never reproduced, needs style name), menu/info-screen speed (on hold by Kice) |
 
 ### C. Section-9 idea lists ("Build remaining ...")
-All built and merged: game modes (Randomizer, Streaks, Pity, Milestone Chests, Bounty Boards, Tag Team), economy (dynamic prices, wealth tax, Omens, charms, item sets, TM Deck), growth (Tuning Dust, bond paired moves, Training Camps, Mentors, Nursery, regional-form ritual, Ability Capsule quests, Diaries, friendship loafing), battle/AI (regional charts, elemental reactions, AI tricks, move fusion, doubles combos, crowd, field effects, learning bosses), run map (puzzle dungeons, Sky Route, Endless Tower, seasons, Treasure Hunt, World Boss Week), raids (17 ideas incl. co-op hot-seat), minigames (7+ games, Mystery Dungeon, Berry Blending, Contest, Frontier shop), presentation (camera, parallax, packs, stickers, ash), hub/meta (Airship, market swings, Dream Tower, Guide Pip, Social rank), social/tech (leaderboard, replay viewer, mod hooks), capture (Lure Crafting, Scent Trails, mastery rows), run events (about 25 trainer events). **Dropped by Kice:** Evolution Encounters (#704 closed). **Needs a file only Kice has:** `Amb-Birds.mp3` for town ambience.
+All built and merged: game modes (Randomizer, Streaks, Pity, Milestone Chests, Bounty Boards, Tag Team), economy (dynamic prices, wealth tax, Omens, charms, item sets, TM Deck), growth (Tuning Dust, bond paired moves, Training Camps, Mentors, Nursery, regional-form ritual, Ability Capsule quests, Diaries, friendship loafing), battle/AI (regional charts, elemental reactions, AI tricks, move fusion, doubles combos, crowd, field effects, learning bosses), run map (puzzle dungeons, Sky Route, Endless Tower, seasons, Treasure Hunt, World Boss Week), raids (17 ideas incl. co-op hot-seat), minigames (7+ games, Mystery Dungeon, Berry Blending, Contest, Frontier shop), presentation (camera, parallax, packs, stickers, ash), hub/meta (Airship, market swings, Dream Tower, Guide Pip, Social rank), social/tech (leaderboard, replay viewer, mod hooks), capture (Lure Crafting, Scent Trails, mastery rows), run events (about 25 trainer events). **Dropped by Kice:** Evolution Encounters (#704 closed). Real birdsong landed (#748), but its licence/provenance is unconfirmed. **Not built from these lists:** Collection Books / Quest Chains / Reward Tracks (named as next, outcome unknown), capture-style minigame screens and predator-take messages (Capture Styles roll like a ball throw), Randomizer for abilities, online or second-controller co-op, World Boss Week is local only, gimmick levels only show in battle messages, 10 Mythical chains (Arceus, Genesect, Magearna, Volcanion, Keldeo, Meltan, Zarude, Pecharunt, Darkrai, Phione) and the Mythical intro cinematic, region lore shown on no screen, no region-specific events.
 
 ### D. Items and Megas
 | Item | Status |
@@ -55,10 +56,10 @@ All built and merged: game modes (Randomizer, Streaks, Pity, Milestone Chests, B
 | 18 Decades songs for battle/map variety | in PR (#991) |
 | 43 class NPC overworld sprites | in PR (#992, draft) |
 | 115 animated form sprites | in PR (#989, draft) |
-| Remaining Drive items: more arenas (276 backgrounds, ~137 in), rest of 527 music tracks, Maliceye and Kice's own Pokémon | not started |
+| Remaining Drive items: more arenas (276 backgrounds, ~137 in), rest of 527 music tracks, Kice's own Pokémon from the Assets folder (blocked: folder not in the repo copy), ~640–738 unused library item pictures (Weakness Policy, Ability Patch, Nature/EV balls style items still need code) | not started |
 
 ### F. UI redesigns
-Text box (mockup 5, dimmed screen, trainer slide-in, typing, shake/jump/cry, faster-text setting), Battle UI polish, platform alignment (reverted by Kice, reason unknown), 9-screen UI sweep, trainer throw animation: built. Trainer shown in singles only; doubles, command/item/capture poses and reaction setting: not started.
+Text box (mockup 5, dimmed screen, trainer slide-in, typing, shake/jump/cry, faster-text setting), Battle UI polish, platform alignment (#808 merged, reverted by Kice in #809 two minutes later, no reason given; Koffing-type floaters still hover, request not re-landed), 9-screen UI sweep, trainer throw animation: built. Trainer shown in singles only; doubles, command/item/capture poses and reaction setting: not started. Male trainer look is a "COMING SOON" stub; the Hub plaza speckle fix (#937) was closed on Kice's "remove this stuff"; small text is still tiny on many screens and map quest text is hard to read.
 
 ### G. Still-promised Story Overhaul pieces that are NOT built (from the plans audit)
 - **Reachability:** quiz screen, reveal/inspect panel, backstory picker, first-partner screen, Look picker in Settings: not started (the thread "Make Story Run playable" is wiring some). Ending tables, lost-run endings, `resolveThemeEnding`, leader/Elite/Ashdown scenes, lieutenants, grunt lines, cutscene runner, news templates, Move Moments: data exists, no player path.
@@ -73,6 +74,9 @@ Text box (mockup 5, dimmed screen, trainer slide-in, typing, shake/jump/cry, fas
 - **Art volume:** about 660 art items (pose cards, props, backdrops, stills, grunts, walk/collapse/kneel clips).
 - **Perf (P9):** 28 files over 500 KB, 16.5 MB bundle, mp3 re-encode: not started.
 - **Left-out plan P1/P2 not confirmed built:** Bank tiers, Legacy & Live hub systems (Trainer Network, Research Tree, Prestige), levels above 100 (+50/region; cap work was a separate thread), Encounter Director extras, bond-based evolution outside battle, Daily Run as its own format, Spooky Mode content, Draft Lab / Regional Circuit modes, fuller catch reveal, settings (UI scale, color-blind markers), generic trainer classes as data, Advanced AI scripts (most of 47). Verify each against main before starting.
+- **Kice asked, never confirmed delivered:** live website deploy (sat queued behind the Actions backlog), Z-Move stage backgrounds (Z-Power art never found), full-pass UI polish (#927/#931/#945 landed, no final sign-off), healing-use / held-item / ball-throw caps from "other such changes", Pokémon alignment (above), phone sizes below 932x430 and text-fit sweeps, "Playtest 500" per-5-run comments.
+- **Track W leftovers:** 4 pseudo stages with no opener (Safari, Dreamscape, Evil Hideout, Celestial Expanse), map-node world hints, egg sparkle, dungeon items (torch, key, supply pack), Rival Interference, 14 of 24 rumours off, leaders: second leader per town and "taking the role" intro lines.
+- **Story species / audio:** 10 species use recoloured art, level-only evolutions, no signature abilities, no composed music, ~26 SFX and the barks missing, nothing plays the story audio ids; Journal extras (News, Mysteries, Adaptation Log, Replay) wait on systems that do not exist; 15 of 20 Keepsakes cannot be earned until events are tracked; some Story starters (Geodude, Growlithe...) have no Remembrance arcs; Nidoran-pair Remembrance blocked by id pattern.
 - **Open bugs from content audit:** Fury Cutter, Alluring Voice, Pledge combos, Order Up are plain hits; 5 Delta forms, Tatsugiri/Magearna Megas unreachable; 17 signature Z-Moves disabled.
 
 ---
@@ -107,14 +111,19 @@ Ranked by value to "a fun, replayable, complete game". Each respects the decisio
 19. **Audio pass:** per-region and per-boss themes from the 527-track pack, story music ids actually played, ambient town loop (needs `Amb-Birds.mp3`).
 20. **Performance:** lazy-load game data chunks, break the `run.ts` import cycle, compress oversize assets (P9 / repo audit).
 
-### Questions only Kice can answer (so threads stop guessing)
-- Regional forms as a real battle mechanic, or keep event-only?
-- IVs/EVs, time of day, weather evolutions: add or keep out? (This also decides Bottle Caps.)
-- Why was the platform alignment change (#808) reverted in #809?
-- When a battle "won't load", what do you see? Which part of Modifier mode breaks? Which menus feel slow?
-- Any appetite for the skipped profile/collection journal now that the Story Run has a Journal?
-- Should the 8 not-yet-playable growth paths get a stand-in rule, or wait for the systems that can count them? (Current rule: never invent one.)
-- Please add `Amb-Birds.mp3` to the repo if you want town birdsong.
+### Questions only Kice can answer (the rest are settled by the record)
+- Why was the platform alignment (#808) reverted in #809, and should it be re-landed (floaters like Koffing still hover)?
+- When a battle shows a black screen with a non-default Battle UI, which style and what were you doing? (Never reproduced.)
+- Which of the ~640 unused item picture groups should be built into items next?
+- Plaza speckle fix (#937) was closed on your "remove this stuff": redo it differently, or leave the plaza as is?
+- Wording of Decades rules Frostbite and Drowsy, and "1 of 6 abilities" now means "any of its own": OK?
+- The 3 story pacing rules the Stop table breaks on every seed (S19): accept, or fix?
+- Final art, cries, Dex text and poses for the 10 new story species, plus the Look B / male-trainer art and your own Pokémon from the Assets folder: these need files only you have.
+- Regional forms as a real battle mechanic, and IVs/EVs, time of day, weather evolutions (this also decides Bottle Caps)?
+- Did the website deploy go live?
+
+### Already settled by Kice (do not ask again)
+Profile journal: skipped unless asked. Capture Styles: stay off. Triple Battle: deferred. Free Spirit / Cheerleader: skip. Rival difficulty: answered (#904). Town names, evil beat 7, 6-of-8 gyms, level cap (100, +50 per region): answered. Birdsong: `Amb-Birds.mp3` was added (#748). Growth paths without a real mechanic: never invent a stand-in rule. Online co-op and cloud saves: skipped. Menu speed work: on hold.
 
 ## Confidence
-Built/in-PR marks come from merged PR titles, thread reports and the plans audit, not from play-testing. The audit was written before #984/#986 landed; those items are marked built here. Anything in "not confirmed built" should be grepped before a thread starts it.
+Built/in-PR marks come from merged PR titles, thread reports and the plans audit, not from play-testing. The audit was written before #984/#986 landed; those items are marked built here. All 92 threads and the full project chat were read (by five readers, each summarising a slice). Anything in "not confirmed built" should be grepped before a thread starts it.
