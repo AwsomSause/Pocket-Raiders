@@ -141,11 +141,17 @@ const MESSAGE_DELAYS = { short: 700, normal: 1400, long: 2400 } as const;
 const TEXT_MS = { faster: 6, fast: 12, normal: 28, slow: 50 } as const;
 /** Battle events whose lines advance on their own; everything else waits for a confirm press. */
 const AUTO_EVENTS = new Set<string>(['move', 'noPp', 'miss', 'damage', 'noEffect', 'fail']);
-// Where the Pokémon stand: on the arena's ground patches (PokeRogue's layout).
-const ENEMY_POS = { x: 648, y: 246 };
+// Where the Pokémon stand: on the arena's ground patches (PokeRogue's layout). The foe's feet rest a little in front of its
+// platform's middle (the patch art spans x 456-840, y 174-270); your Pokémon stands low in the foreground, its feet and
+// platform tucked behind the message bar (MESSAGE_Y; about 30 px of its feet are hidden), so it is nearer the camera than the foe.
+const ENEMY_POS = { x: 648, y: 240 };
 /** Where your trainer waits off screen between throws. */
 const TRAINER_OFF_X = -160;
-const PLAYER_POS = { x: 312, y: 400 };
+const PLAYER_POS = { x: 312, y: 428 };
+/** Where your trainer and the sticker row stand (just above the message bar, not under it). */
+const TRAINER_POS = { x: 312, y: 400 };
+/** How far a floating foe (Flying type or Levitate) hovers over its platform. */
+const FLOAT_LIFT = 14;
 /** The bottom message bar, and the command window on its right. */
 const MESSAGE_Y = 396;
 /** How long the first-time Hyper/Overdrive explanation ignores Continue, so it can't be skipped by accident. */
@@ -156,12 +162,13 @@ const AUTO_PICK_MS = 1100;
 /** Double battles: where each spot stands (left, right) and the databox spots. */
 const DUO_POS = {
   player: [
-    { x: 176, y: 414 },
-    { x: 392, y: 404 },
+    { x: 206, y: 430 },
+    { x: 416, y: 422 },
   ],
+  // Both foes stand on the one enemy platform: the left one a little further back.
   enemy: [
-    { x: 500, y: 212 },
-    { x: 668, y: 228 },
+    { x: 572, y: 228 },
+    { x: 726, y: 244 },
   ],
 } as const;
 const DUO_SCALE = { player: 0.72, enemy: 0.85 } as const;
@@ -378,7 +385,7 @@ export class BattleScene extends Phaser.Scene {
     playMusicLazy(this, this.baseTrack, fallback);
     this.startProceduralAudio(battle);
     // S256: emote stickers (Settings > Sticker reactions).
-    if (services().session.settings.stickers) addStickerRow(this, () => PLAYER_POS, this.motion);
+    if (services().session.settings.stickers) addStickerRow(this, () => TRAINER_POS, this.motion);
     this.menu = null;
     this.picker = null;
     this.advance = null;
@@ -653,13 +660,27 @@ export class BattleScene extends Phaser.Scene {
     for (const t of this.shadowTargets()) if (t.visual?.active) look(t.visual);
   }
 
-  private shadowTargets(): ShadowTarget[] {
+  private frontEdgeMask?: Phaser.Display.Masks.GeometryMask;
+
+  /** Clips your Pokémon at the arena's front edge (the top of the message bar). Built once per battle. */
+  private standMask(): Phaser.Display.Masks.GeometryMask {
+    if (!this.frontEdgeMask?.geometryMask?.scene) {
+      const shape = this.make.graphics({}, false).fillStyle(0xffffff).fillRect(-GAME_WIDTH, -GAME_HEIGHT, GAME_WIDTH * 3, GAME_HEIGHT + MESSAGE_Y);
+      this.frontEdgeMask = shape.createGeometryMask();
+    }
+    return this.frontEdgeMask;
+  }
+
+  /** Flying types and levitators hover over their platform (presentation only). */
+  private floats(mon: PokemonInstance | null | undefined): boolean {
+    if (!mon) return false;
     const content = services().session.content;
-    const floats = (mon: PokemonInstance | null | undefined) => {
-      if (!mon) return false;
-      const sp = content.species.get(mon.speciesId);
-      return Boolean(sp?.types.includes('flying') || ['levitate', 'eelevate'].includes(abilityOf(content, mon) ?? ''));
-    };
+    const sp = content.species.get(mon.speciesId);
+    return Boolean(sp?.types.includes('flying') || ['levitate', 'eelevate'].includes(abilityOf(content, mon) ?? ''));
+  }
+
+  private shadowTargets(): ShadowTarget[] {
+    const floats = (mon: PokemonInstance | null | undefined) => this.floats(mon);
     const list: ShadowTarget[] = [];
     for (const side of ['player', 'enemy'] as const) {
       const sprite = side === 'player' ? this.playerSprite : this.enemySprite;
@@ -906,8 +927,8 @@ export class BattleScene extends Phaser.Scene {
     const look = playerLookForBattle();
     this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      this.trainerHomeX = doubles ? 70 : PLAYER_POS.x - 175;
-      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, PLAYER_POS.y - 4, 190, this.motion, throwTint(art));
+      this.trainerHomeX = doubles ? 70 : TRAINER_POS.x - 175;
+      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, TRAINER_POS.y - 4, 190, this.motion, throwTint(art));
       // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
       this.field.addAt(actor.sprite, this.fieldBase);
       actor.idle();
@@ -966,7 +987,7 @@ export class BattleScene extends Phaser.Scene {
   private async ownBackThrow(): Promise<void> {
     const art = this.playerArt();
     if (!art || this.motion === 'off') return;
-    const back = trainerBackVisual(this, art, PLAYER_POS.x - 90, MESSAGE_Y + 4, 260);
+    const back = trainerBackVisual(this, art, TRAINER_POS.x - 90, MESSAGE_Y + 4, 260);
     if (!back) return;
     back.setDepth(5);
     await new Promise<void>((done) => this.time.delayedCall(this.motion === 'full' ? 520 : 200, done));
@@ -1026,8 +1047,12 @@ export class BattleScene extends Phaser.Scene {
     if (side === 'player') {
       this.dropSprite(this.playerSprite);
       const at = this.spotXY('player');
-      this.playerSprite = pokemonVisual(this, species, 'back', at.x, at.y, (PIXEL_SCALE + 1) * grow * (this.duo ? DUO_SCALE.player : 1), mon.shiny);
+      // Anchored on its feet too, so the same amount of every Pokémon (big or small) is hidden behind the message bar.
+      this.playerSprite = pokemonVisual(this, species, 'back', at.x, at.y, (PIXEL_SCALE + 1) * grow * (this.duo ? DUO_SCALE.player : 1), mon.shiny, {});
       this.field.add(this.playerSprite);
+      // It stands in the foreground, so its lower part is hidden at the arena's front edge (where the message bar starts),
+      // never drawn over the bar, even a see-through one. Styles with no bar (Ring, Cinematic, Ink) show it whole.
+      if (!this.skin || this.skin.layout.bar) this.playerSprite.setMask(this.standMask());
       this.skin?.sprite?.(this.playerSprite);
       this.prefetchMoves(mon);
       this.liven(this.playerSprite, cry);
@@ -1035,7 +1060,9 @@ export class BattleScene extends Phaser.Scene {
     }
     this.dropSprite(this.enemySprite);
     const at = this.spotXY('enemy');
-    this.enemySprite = pokemonVisual(this, species, 'front', at.x, at.y, PIXEL_SCALE * grow * (this.duo ? DUO_SCALE.enemy : 1), mon.shiny);
+    const scale = PIXEL_SCALE * grow * (this.duo ? DUO_SCALE.enemy : 1);
+    // The foe stands on its feet in the platform (not on its padded frame edge); floaters hover a little above it.
+    this.enemySprite = pokemonVisual(this, species, 'front', at.x, at.y, scale, mon.shiny, { lift: this.floats(mon) ? FLOAT_LIFT : 0 });
     // The foe stands behind the player's Pokémon.
     this.field.addAt(this.enemySprite, this.fieldBase);
     this.skin?.sprite?.(this.enemySprite);
