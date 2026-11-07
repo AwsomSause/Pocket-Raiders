@@ -925,7 +925,8 @@ export class BattleScene extends Phaser.Scene {
   private async duoThrowPose(): Promise<void> {
     if (this.trainerReady) await this.trainerReady;
     const duo = this.duo;
-    if (!duo || !this.trainerActor) return;
+    if (!duo) return;
+    if (!this.trainerActor) return this.ownBackThrow();
     const actor = await this.trainerIn();
     if (!actor) return;
     const focus = duo.focus.player;
@@ -955,6 +956,11 @@ export class BattleScene extends Phaser.Scene {
       await this.sendOutMoment(this.shown.player);
       return;
     }
+    await this.ownBackThrow();
+  }
+
+  /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
+  private async ownBackThrow(): Promise<void> {
     const art = this.playerArt();
     if (!art || this.motion === 'off') return;
     const back = trainerBackVisual(this, art, PLAYER_POS.x - 90, MESSAGE_Y + 4, 260);
