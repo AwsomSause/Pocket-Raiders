@@ -99,6 +99,11 @@ export function rewardFamily(reward: Reward): string {
   return reward.family ?? reward.category;
 }
 
+/** A charm: any reward whose name ends in "Charm" (Lucky Charm, Shiny Charm, Coin Charm…). */
+export function isCharmReward(reward: Pick<Reward, 'name'>): boolean {
+  return /\bCharm$/.test(reward.name);
+}
+
 /** How much a draft archetype (a prep token's `draftBias`) favours a family of rewards: its weight when any member is in a favoured category, otherwise 1. */
 export function biasWeight(bias: { categories: readonly string[]; weight: number } | null, members: readonly Reward[]): number {
   return bias && members.some((r) => bias.categories.includes(r.category)) ? bias.weight : 1;
@@ -118,7 +123,15 @@ export function generateDraft(
   const size = opts.size ?? content.balance.draftSize;
   const forced = [...new Set(opts.forced ?? [])].filter((id) => content.rewards.has(id) && isRewardEligible(content, run, content.rewards.get(id)!)).slice(0, size);
   const skip = new Set([...forced, ...(opts.exclude ?? [])]);
-  const allEligible = [...content.rewards.values()].filter((r) => !skip.has(r.id) && isRewardEligible(content, run, r));
+  const allEligibleRaw = [...content.rewards.values()].filter((r) => !skip.has(r.id) && isRewardEligible(content, run, r));
+  // Charms (Kice, 2026-11-07): a draft shows one only on a 1-in-10,000 roll (balance.itemRework.charmDraftChance).
+  // The roll uses its own seed (run seed + encounter), so re-rolling a draft can't fish for a charm.
+  const charms = content.balance.itemRework.charmGate ? allEligibleRaw.filter(isCharmReward) : [];
+  const allEligible = charms.length > 0 || content.balance.itemRework.charmGate ? allEligibleRaw.filter((r) => !isCharmReward(r)) : allEligibleRaw;
+  if (charms.length > 0 && !forced.some((id) => isCharmReward(content.rewards.get(id)!)) && forced.length < size) {
+    const gate = new Rng(hashSeed(`${run.seed}::charm::${run.encountersCompleted}`));
+    if (gate.chance(content.balance.itemRework.charmDraftChance)) forced.push(charms[gate.int(0, charms.length - 1)]!.id);
+  }
   // Situation weights (itemDistribution.ts): species items nobody can use leave the pool unless that would make it too small.
   const relevance = new Map(allEligible.map((r) => [r.id, rewardRelevance(content, run, r)]));
   const relevant = allEligible.filter((r) => relevance.get(r.id)! > 0);

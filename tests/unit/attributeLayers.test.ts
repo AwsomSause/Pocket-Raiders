@@ -34,9 +34,9 @@ describe('attribute layers', () => {
   });
   it('a reward that adds an attribute lands in the earned layer', () => {
     const run = newRun('red');
-    addRunAttribute(content, run, 'luck', 5);
+    addRunAttribute(content, run, 'strength', 5);
     const l = attributeLayers(content, run);
-    expect(l.earned.luck).toBe(5);
-    expect(l.effective.luck).toBe(l.baseline.luck + l.trainer.luck + 5);
+    expect(l.earned.strength).toBe(5);
+    expect(l.effective.strength).toBe(l.baseline.strength + l.trainer.strength + 5);
   });
 });

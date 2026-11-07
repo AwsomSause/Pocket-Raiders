@@ -26,7 +26,7 @@
   "recipes": [
     { "id": "potion", "name": "Brew a Potion", "cost": { "fiber": 2 }, "money": 0, "minBadges": 0, "gives": { "kind": "item", "item": "potion", "amount": 1 } },
     { "id": "super-potion", "name": "Brew a Super Potion", "cost": { "fiber": 4 }, "money": 0, "minBadges": 0, "gives": { "kind": "item", "item": "super-potion", "amount": 1 } },
-    { "id": "hyper-potion", "name": "Brew a Hyper Potion", "cost": { "fiber": 6, "tide": 2 }, "money": 0, "minBadges": 1, "gives": { "kind": "item", "item": "hyper-potion", "amount": 1 } },
+    { "id": "hyper-potion", "name": "Brew a Hyper Potion", "cost": { "fiber": 10, "tide": 4 }, "money": 0, "minBadges": 4, "gives": { "kind": "item", "item": "hyper-potion", "amount": 1 } },
     { "id": "revive", "name": "Craft a Revive", "cost": { "fiber": 2, "aether": 3 }, "money": 0, "minBadges": 0, "gives": { "kind": "item", "item": "revive", "amount": 1 } },
     { "id": "great-ball", "name": "Forge Great Balls", "cost": { "scrap": 3 }, "money": 0, "minBadges": 0, "gives": { "kind": "item", "item": "great-ball", "amount": 3 } },
     { "id": "ultra-ball", "name": "Forge Ultra Balls", "cost": { "scrap": 5, "ember": 2 }, "money": 0, "minBadges": 1, "gives": { "kind": "item", "item": "ultra-ball", "amount": 3 } },

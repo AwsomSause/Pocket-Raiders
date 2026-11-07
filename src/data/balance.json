@@ -477,17 +477,17 @@
   "charismaPriceCut": 0.3,
   "charismaExpGain": 0.5,
   "charismaFriendshipGain": 0.75,
-  "luckUncommonWeight": 0.25,
-  "luckRareWeight": 0.4,
-  "luckShinyChance": 0.5,
+  "luckUncommonWeight": 0.1,
+  "luckRareWeight": 0.15,
+  "luckShinyChance": 0.25,
   "rageDamageDealt": 1.0,
   "rageDamageTaken": 1.0,
   "peaceHealing": 1.0,
   "peaceDamageTakenCut": 0.35,
   "goodCatch": 1.0,
   "evilMoney": 0.5,
-  "luckEpicWeight": 0.5,
-  "luckDraftVariety": 0.5
+  "luckEpicWeight": 0.2,
+  "luckDraftVariety": 0.2
  },
  "events": {
   "perStage": [
@@ -548,14 +548,14 @@
   {
    "attribute": "luck",
    "counter": "pokemonCaught",
-   "per": 10,
+   "per": 50,
    "amount": 1
   },
   {
    "attribute": "luck",
    "counter": "shiniesFound",
    "per": 1,
-   "amount": 5
+   "amount": 1
   },
   {
    "attribute": "ragePeace",
@@ -900,5 +900,6 @@
    100
   ]
  },
-  "overlevel": { "xpPerItem": 400, "item": "hyper-potion" }
+  "itemRework": { "charmGate": true, "charmDraftChance": 0.0001, "luckGainScale": 0.25 },
+  "overlevel": { "xpPerItem": 1000, "item": "potion" }
 }
