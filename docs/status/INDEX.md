@@ -386,3 +386,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `content-audit-2.md`: Fury Cutter streak power, Alluring Voice confusion; Pledge combos and Order Up listed as limits.
 - `doubles-trainer-poses.md`: your trainer throws both balls and shows recall/win/defeat poses in doubles (W17).
 - `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
+- `collection-books.md`: Collection Books (11 species sets) and a 12-tier Reward Track, claim-ledger payouts, no save bump.
