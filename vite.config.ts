@@ -25,7 +25,11 @@ export default defineConfig(({ command }) => ({
       checks: { pluginTimings: false },
       // Phaser in its own file: it never changes between deploys, so browsers keep it cached while the game code and data update.
       // Story data (Design v2 Part XII lazy story loader, first step) in its own file too: it changes on its own schedule, so a code-only deploy keeps it cached.
-      output: { codeSplitting: { groups: [{ name: 'phaser', test: /node_modules[\\/]phaser/ }, { name: 'story', test: /src[\\/]data[\\/]story[\\/].*\.json$/ }] } },
+      output: { codeSplitting: { groups: [{ name: 'phaser', test: /node_modules[\\/]phaser/ }, { name: 'story', test: /src[\\/]data[\\/]story[\\/].*\.json$/ },
+        // The big content files each get their own cached file: a code-only deploy no longer makes players re-download about 14 MB of data (W16).
+        { name: 'data-bosses', test: /src[\\/]data[\\/]bossTeams\.json$/ },
+        { name: 'data-species', test: /src[\\/]data[\\/](species|customSpecies|learnables)\.json$/ },
+        { name: 'data-events', test: /src[\\/]data[\\/](events|legendaryEvents|gameEvents|trainerQuests|trainersDrive)\.json$/ }] } },
     },
   },
   test: {
