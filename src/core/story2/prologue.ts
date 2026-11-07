@@ -18,7 +18,7 @@ export const BEATS: { id: BeatId; label: string; built: boolean; owner: string }
   { id: 'reveal', label: 'Beat 6: The reveal', built: true, owner: 'quiz screens' },
   { id: 'backstory', label: 'Beat 7: Backstory', built: true, owner: 'backstory slice' },
   { id: 'starter', label: 'Beat 8: First partner', built: true, owner: 'starter slice' },
-  { id: 'field_trial', label: 'Beat 9: Field Trial', built: false, owner: 'S9' },
+  { id: 'field_trial', label: 'Beat 9: Field Trial', built: true, owner: 'FieldTrialScene (first Story Run)' },
   { id: 'briefing', label: 'Beat 10: Departure', built: true, owner: 'S2' },
 ];
 

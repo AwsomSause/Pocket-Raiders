@@ -23,6 +23,7 @@ import type { Achievement, Content } from '../core/contentSchema';
 import { finalizeRun, recordRunStarted } from '../core/profile';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
+import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
 import { awardLiveAchievements, claimTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
 import { setCardFrame, setCryTheme, setMenuArena } from '../core/wardrobe';
 import { buyNote } from '../core/researchNotes';
@@ -449,6 +450,26 @@ export class GameSession {
     this.run = result.run;
     this.persistRun();
     return result.message;
+  }
+
+  /** Beat 9: the Field Trial waits at the start of the first Story Run after a played (not skipped) prologue; once per save. */
+  fieldTrialDue(): boolean {
+    const p = this.profile.story.prologue;
+    return !!this.run && p.done && p.mode !== 'skipped' && !p.beatsSeen.includes('field_trial') && fieldTrialDue(this.content, this.run);
+  }
+
+  /** Beat 9 ends: writes the rival's first values, marks the beat seen, applies the Dramatic moments answer and saves. */
+  finishFieldTrial(dramatic?: 'full' | 'quiet' | 'off'): void {
+    const run = this.requireRun();
+    finishFieldTrial(run);
+    const p = this.profile.story.prologue;
+    if (!p.beatsSeen.includes('field_trial')) p.beatsSeen.push('field_trial');
+    this.checkSave(this.saves.saveProfile(this.profile));
+    if (dramatic && dramatic !== this.settings.story.dramaticMoments) {
+      this.saveSettings({ ...this.settings, story: { ...this.settings.story, dramaticMoments: dramatic } });
+      if (run.story.v2) run.story.v2.dramatic = dramatic;
+    }
+    this.persistRun();
   }
 
   /** S5: the backstory scene waiting to be shown, if any (reads state only). */
