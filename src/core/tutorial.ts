@@ -23,6 +23,7 @@ export const TUTORIAL_CATEGORIES: readonly TutorialCategory[] = [
     pages: [
       'Hello there! Pocket Raiders is a roguelike: you start a run with a starter, climb through regions, and every choice counts.',
       'The map shows your next stops: battles, shops, events, camps and trades. Pick a stop, resolve it, then pick the next one.',
+      'Open the map menu and pick Run to see everything switched on for this run: rules, picks, time, tide, the stage bounty and events. When a run ends, press S to save a run card picture.',
       'If your team faints, the run ends, but your Legacy, badges and unlocks stay. Each new run is another chance.',
     ],
   },
