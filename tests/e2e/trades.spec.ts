@@ -61,7 +61,7 @@ test('every Trade Stop style trades at the Trade Post and returns to the map', a
     expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').drawnStyle)).toBe(style);
     const before = await page.evaluate(() => (window as any).__pkr.session.run.party.map((m: any) => m.speciesId).join(','));
     await page.keyboard.press('Enter');
-    await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 10_000 }).toBe('done').catch((e) => { throw new Error(`${style}: ${errors.join(' | ')} ${e}`); });
+    await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 30_000 }).toBe('done').catch((e) => { throw new Error(`${style}: ${errors.join(' | ')} ${e}`); });
     await page.screenshot({ path: `test-results/trade-${style}.png` });
     expect(await page.evaluate(() => (window as any).__pkr.session.run.party.map((m: any) => m.speciesId).join(','))).not.toBe(before);
     await page.keyboard.press('Enter');

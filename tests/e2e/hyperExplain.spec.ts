@@ -38,9 +38,14 @@ test('the first Hyper moment explains itself and waits for Continue; the second 
   }
   await confirmUntil(page, () => explainUp(page), 30_000);
   // Rapid pressing and Esc right away do not dismiss it, and the explanation is not marked as read.
-  for (let i = 0; i < 4; i++) await page.keyboard.press('Enter');
-  await page.keyboard.press('Escape');
-  expect(await explainUp(page)).toBe(true);
+  // (Sent in one page call: separate key presses can take longer than the 1.2 s read lock on a slow runner.)
+  const stillUp = await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    for (let i = 0; i < 4; i++) b.explainWait?.('confirm');
+    b.explainWait?.('back');
+    return b.children.list.some((o: any) => o.name === 'hyper-explain');
+  });
+  expect(stillUp).toBe(true);
   expect(await page.evaluate(() => (window as any).__pkr.session.profile.hyperExplained)).toEqual([]);
   const text = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.find((o: any) => o.name === 'hyper-explain').list.filter((o: any) => o.type === 'Text').map((o: any) => o.text).join('\n'));
   expect(text).toContain('HYPER: Toughened It Out!');

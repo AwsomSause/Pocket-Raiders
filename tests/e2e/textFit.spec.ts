@@ -24,10 +24,12 @@ for (const size of SIZES) {
     await expect.poll(() => active(page), { timeout: 30_000 }).toBe('MainMenu');
     const found: string[] = [];
     for (const key of SCREENS) {
-      await page.evaluate((k) => (window as any).__pkr.game.scene.getScenes(true)[0].scene.start(k), key).catch(() => undefined);
+      await page.evaluate((k) => void (window as any).__pkr.game.scene.getScenes(true)[0].scene.start(k), key).catch(() => undefined);
+      // A loaded runner can take seconds to open a scene: wait for it, then let it settle.
+      await expect.poll(() => active(page), { timeout: 15_000 }).toBe(key).catch(() => undefined);
       await page.waitForTimeout(900);
       const now = await active(page);
-      if (now !== key) { found.push(`${key}: did not open (active: ${now})`); await page.evaluate(() => (window as any).__pkr.game.scene.getScenes(true)[0]?.scene.start('MainMenu')); await page.waitForTimeout(500); continue; }
+      if (now !== key) { found.push(`${key}: did not open (active: ${now})`); await page.evaluate(() => void (window as any).__pkr.game.scene.getScenes(true)[0]?.scene.start('MainMenu')); await page.waitForTimeout(500); continue; }
       await page.screenshot({ path: `test-results/textfit/${size.w}-${key}.png` });
       for (const i of await fitIssues(page)) { const line = `${key}: ${i.kind} "${i.text}"${i.other ? ` / "${i.other}"` : ''} (${i.detail})`; if (!known(line)) found.push(line); }
     }

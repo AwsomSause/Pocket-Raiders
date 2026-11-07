@@ -53,9 +53,11 @@ test('ability and text animations play, finish and restore the Pokémon', async 
       await new Promise((r) => setTimeout(r, 1800));
       return ['player', 'enemy'].map((s) => { const v = b.fx.opts.sprite(s); return [v.x, v.y, v.scaleX, v.scaleY, v.alpha]; });
     });
-    // Position and opacity come back exactly; scale is only checked loosely because the idle breathing moves it.
+    // Position (within 3 px: the idle animation moves a sprite about 1.4 px) and opacity come back; scale is only checked loosely because the idle breathing moves it.
     for (const [k, spot] of after.entries()) {
-      expect(spot.slice(0, 2).concat(spot[4]), `cue ${i} restores sprite ${k}`).toEqual(before[k]!.slice(0, 2).concat(before[k]![4]));
+      expect(Math.abs(spot[0]! - before[k]![0]!), `cue ${i} x of sprite ${k}`).toBeLessThan(3);
+      expect(Math.abs(spot[1]! - before[k]![1]!), `cue ${i} y of sprite ${k}`).toBeLessThan(3);
+      expect(spot[4], `cue ${i} alpha of sprite ${k}`).toBe(before[k]![4]);
       expect(Math.abs(spot[2]! - before[k]![2]!), `cue ${i} scale ${k}`).toBeLessThan(0.15);
     }
   }
