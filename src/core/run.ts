@@ -189,6 +189,7 @@ import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
 import { clutchSurvived, heartbondTurn, heartbondVictory, recoveryScenes, takeBeat } from './story2/heartbond';
+import { featGate, featLines, gainCharge, memoryPhrase, keystoneFeat, recordFeat, significantBattle } from './story2/feats';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
@@ -2161,6 +2162,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const nameOf = (m: { speciesId: string }) => content.species.get(m.speciesId)?.name ?? m.speciesId;
     // One line only: a quirk reaction first, else the pack's party narration (personality, type, species lore).
     const heartbondScenes = recoveryScenes(run, content.storyData.text, (m) => displayName(content, m)).join(' ');
+    // S7: the Keystone Memory's guaranteed Feat slot (once a run).
+    if (run.story.v2?.heartbond.keystoneReady) keystoneFeat(content, run);
     const camp = quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}` };
   }
@@ -2431,6 +2434,18 @@ export interface TurnResult {
 }
 
 /** The battle engine's view of the run's battle (the engine changes `run` in place). */
+/**
+ * S7 Resolve Charge from one turn (partner only, significant fights only): surviving a super-effective hit at a quarter
+ * HP or less, and taking a hit for an ally. Caps per battle live in balance.story.feats.charge.
+ */
+function storyChargeTurn(content: Content, run: RunState, partner: RunState['party'][number], events: readonly BattleEvent[]): void {
+  const battle = run.battle;
+  if (!run.story.v2 || !battle || !significantBattle(battle)) return;
+  const active = run.party[battle.activeIndex]?.uid === partner.uid;
+  if (active && partner.hp > 0 && partner.hp * 4 <= maxHp(content, partner) && events.some((e) => e.type === 'damage' && e.side === 'player' && e.effectiveness > 1)) gainCharge(content, run, 'survive_disadvantage');
+  if (events.some((e) => e.type === 'sacrifice' && e.uid === partner.uid)) gainCharge(content, run, 'protect_ally');
+}
+
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
   const archetype = runArchetype(content, run);
   syncHpPerks(content, archetype.modifiers, run.party);
@@ -2536,6 +2551,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const partnerUid = run.story.v2?.heartbond.partner;
   const partnerBefore = partnerUid ? run.party.find((m) => m.uid === partnerUid)?.hp ?? 0 : 0;
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
+  // S7: the Story Run partner's banked Impossible Feat (the engine checks the moment; no RNG).
+  turnCtx.feat = featGate(content, run) ?? undefined;
   const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
   engineEvents.push(...grantHyperMoves(content, run, engineEvents));
@@ -2558,7 +2575,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   updateBondsTurn(run, engineEvents);
   const partnerMon = partnerUid ? run.party.find((m) => m.uid === partnerUid) : undefined;
   const clutch = partnerMon && clutchSurvived(partnerBefore, partnerMon.hp, maxHp(content, partnerMon)) ? [{ type: 'clutch', side: 'player', uid: partnerMon.uid }] : [];
-  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, [...(engineEvents as { type: string; side?: string; uid?: string }[]), ...clutch]);
+  const featFired = turnCtx.feat?.fired && partnerMon && recordFeat(content, run, turnCtx.feat.fired) ? turnCtx.feat.fired : null;
+  const featEvent = featFired && partnerMon ? [{ type: 'feat', side: 'player', uid: partnerMon.uid }] : [];
+  heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, [...(engineEvents as { type: string; side?: string; uid?: string }[]), ...clutch, ...featEvent]);
+  if (partnerMon) storyChargeTurn(content, run, partnerMon, engineEvents);
   partyLifeTurn(content, run, engineEvents);
   run.rng.battle = rng.state;
   run.rng.capture = captureRng.state;
@@ -2596,6 +2616,9 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId));
+  if (battle.outcome === 'win' && partnerUid && run.story.histories[partnerUid]?.lastBattle === run.encountersCompleted && significantBattle(battle)) gainCharge(content, run, 'win_significant');
+  // S7: the Feat's line, then the memory it quotes (one spectacle line each; Quiet and Full both show them).
+  if (featFired && partnerMon) for (const text of featLines(content.storyData.text, featFired, displayName(content, partnerMon), memoryPhrase(run, partnerMon.uid))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text, uid: partnerMon.uid });
   if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);

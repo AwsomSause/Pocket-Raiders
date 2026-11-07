@@ -143,6 +143,7 @@ export function heartbondTurn(run: RunState, battleKey: string, turn: number, ev
     else if (e.type === 'faint') fired.push('faint_loss');
     else if (e.type === 'sacrifice') fired.push('guard_ally');
     else if (e.type === 'clutch') fired.push('clutch_survive');
+    else if (e.type === 'feat') fired.push('feat');
   }
   if (!fired.length) return { paid: [], folded: [] };
   const r = payHeartbond(run, partner, battleKey, turn, fired);

@@ -2542,6 +2542,16 @@ export const BalanceSchema = z.object({
       starts: z.record(z.string(), z.record(z.string(), z.number())).default({}),
       limits: z.record(z.string(), z.tuple([z.number(), z.number()])).default({}),
     }).default({ enabledBackstories: ['bs_viridian'], gapStops: 1, echoFromAct: 4, maxSnapshots: 40, rolls: {}, starts: {}, limits: {} }),
+    /** S7: Impossible Feats and the Resolve Charge (design Part II, Feats). Charge sources: points and a limit per scope (battle, act or a beat key). */
+    feats: z.object({
+      chargeMax: z.number().int().min(1),
+      bank: z.number().int().min(1), bankAtLevel9: z.number().int().min(1),
+      minTurn: z.number().int().min(1),
+      caps: z.object({ battle: z.number().int().min(1), act: z.number().int().min(1), run: z.number().int().min(1), sameFeat: z.number().int().min(1) }),
+      charge: z.record(z.string(), z.object({ points: z.number().int().min(1), limit: z.number().int().min(1), per: z.enum(['battle', 'act', 'key']) })),
+      /** Refuse to Fall: the share of max HP it recovers. */
+      refuseToFallHeal: z.number().min(0).max(1),
+    }).default({ chargeMax: 100, bank: 1, bankAtLevel9: 2, minTurn: 3, caps: { battle: 1, act: 2, run: 6, sameFeat: 2 }, charge: {}, refuseToFallHeal: 0.2 }),
   }),
   rival: z.object({ stage: z.number().int().min(0), /** Beta 4.4: the map level (column) of that stage where the first rival is met; the whole column is trainers. */ column: z.number().int().min(1).default(5), level: z.number().int().min(1), /** Harder rivals: the opener is the player level + this; the ace is the player level + aceOffset. */ openerOffset: z.number().int().default(0), aceOffset: z.number().int().default(2), /** 1 keeps the old single-Pokémon first rival (used to pin old-seed tests). */ members: z.number().int().min(1).max(2).default(2), /** False restores the old rule: a rival loss ends a non-Story run (used to pin old-seed tests). */ softLoss: z.boolean().default(true), /** False keeps the fixed level instead of following the player's level (old-seed tests). */ followPlayer: z.boolean().default(true), starters: z.array(z.string()).min(1), depth: z.boolean().default(true) }),
   /** Candies for releasing a caught Pokémon: perRelease + floor(level / perLevels). */

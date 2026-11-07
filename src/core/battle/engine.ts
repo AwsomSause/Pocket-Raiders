@@ -321,6 +321,16 @@ export interface BattleContext {
   doubleKoLoser?: Side;
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
+  /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
+  feat?: { uid: string; allowed: readonly string[]; final: boolean; boss: boolean; fired?: string };
+}
+
+/** S7: fires a Feat for the partner if it is allowed and none fired yet this turn. Never rolls RNG, so no other roll moves. */
+function tryFeat(ctx: BattleContext, c: Combatant, id: string): boolean {
+  const g = ctx.feat;
+  if (!g || g.fired || c.side !== 'player' || c.mon.uid !== g.uid || !g.allowed.includes(id)) return false;
+  g.fired = id;
+  return true;
 }
 
 /** What a double battle's turn needs from the shared engine code. */
@@ -2183,8 +2193,10 @@ function decideOrder(ctx: BattleContext, rng: Rng, player: Combatant, pMove: Mov
     { priority: priorityOf(ctx, player, pMove) + quickDraw(player, pMove) + Held.orderBracket(ctx, player) / 10 + firstStrikeBonus(ctx.perks, ctx.battle), speed: speedOf(ctx, player) * trickSign },
     { priority: priorityOf(ctx, enemy, eMove) + quickDraw(enemy, eMove) + Held.orderBracket(ctx, enemy) / 10, speed: speedOf(ctx, enemy) * trickSign },
   );
-  if (result === 'tie') return rng.chance(0.5) ? 'player' : 'enemy';
-  return result === 'a' ? 'player' : 'enemy';
+  const side: Side = result === 'tie' ? (rng.chance(0.5) ? 'player' : 'enemy') : result === 'a' ? 'player' : 'enemy';
+  // S7 Faster Than Fear: the partner acts before a foe at least 20 Speed faster (same priority, no Trick Room).
+  if (side === 'enemy' && trickSign > 0 && ctx.feat && priorityOf(ctx, player, pMove) === priorityOf(ctx, enemy, eMove) && speedOf(ctx, enemy) >= speedOf(ctx, player) + 20 && tryFeat(ctx, player, 'faster_than_fear')) return 'player';
+  return side;
 }
 
 /** Checks recharging, sleep, freeze, flinching, confusion and paralysis. Returns false if the Pokémon can't act. */
@@ -2285,7 +2297,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       }
     }
   }
-  if (user.mon.status?.id === 'par' && rng.chance(content.ruleset.fullParalysisChance)) {
+  if (user.mon.status?.id === 'par' && rng.chance(content.ruleset.fullParalysisChance) && !tryFeat(ctx, user, 'through_the_numbness')) {
     events.push({ type: 'cant', side: user.side, reason: 'par' });
     return false;
   }
@@ -2398,6 +2410,16 @@ function takeHp(
   let lastStand: string | null = null;
   let stand = false;
   if (c.vol.bide && lost > 0) c.vol.bide.damage += lost;
+  // S7 Refuse to Fall (a story-critical final fight) and Not Yet (boss or rival, not at full HP): the partner holds at 1 HP.
+  if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp && ctx.feat) {
+    const max = calcStats(ctx.content, c.mon).hp;
+    const refuse = tryFeat(ctx, c, 'refuse_to_fall');
+    if (refuse || (c.mon.hp < max && tryFeat(ctx, c, 'not_yet'))) {
+      lost = c.mon.hp - 1;
+      c.mon.hp = Math.min(max, 1 + (refuse ? Math.floor(max * ctx.content.balance.story.feats.refuseToFallHeal) : 0));
+      return { lost, lastStand: null, hyper: null, knockedDown: false };
+    }
+  }
   // A fatal hit from a move may be survived by a Hyper moment (decided before the charm).
   if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp) {
     const hyper = hyperKnockout(ctx, c, hit, amount);
@@ -3385,10 +3407,16 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     accuracy = 1;
     user.vol.sureHit = false;
   }
-  if (targetsEnemy && rng.float() >= accuracy) {
+  // S7 Blind Strike: the partner lands a missed attack while confused or with lowered accuracy.
+  if (targetsEnemy && rng.float() >= accuracy && !(baseAccuracy !== null && (user.stages.acc < 0 || user.vol.confusion > 0) && tryFeat(ctx, user, 'blind_strike'))) {
     events.push({ type: 'miss', side: user.side });
     Held.onMiss(ctx, user, events as Held.HeldEvent[]);
     if (fx.crashOnMiss) abilityHurt(ctx, user, Math.max(1, Math.floor(calcStats(content, user.mon).hp / 2)), events);
+    return;
+  }
+  // S7 Read the Room: the partner (Intelligent, or Heartbond 8) slips a foe's attack while at half HP or less.
+  if (targetsEnemy && user.side === 'enemy' && move.category !== 'status' && target.mon.hp * 2 <= calcStats(content, target.mon).hp && tryFeat(ctx, target, 'read_the_room')) {
+    events.push({ type: 'miss', side: user.side });
     return;
   }
 
@@ -3419,7 +3447,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     const vsFlying = typeEffectiveness(content.typeChart, moveType, ['flying']);
     if (vsFlying > 1) rawEff /= vsFlying;
   }
-  const effectiveness = move.flags.includes('typeless') ? 1 : Held.adjustEffectiveness(ctx, target, moveType, rawEff);
+  const typedEff = move.flags.includes('typeless') ? 1 : Held.adjustEffectiveness(ctx, target, moveType, rawEff);
+  // S7 Against the Odds: a super-effective hit on the partner lands as neutral (boss fight, or protecting an ally in doubles).
+  const effectiveness = typedEff > 1 && targetsEnemy && move.category !== 'status' && tryFeat(ctx, target, 'against_the_odds') ? 1 : typedEff;
   // Powder: a Fire move backfires.
   if (user.vol.powdered && moveType === 'fire') {
     user.vol.powdered = false;
@@ -3436,6 +3466,17 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (move.category === 'status') {
     applyStatusMove(ctx, user, target, move, events);
     return;
+  }
+  // S7 Crack the Barrier: at half HP or less the partner's hit breaks the foe's screens and Substitute first.
+  if (targetsEnemy && user.side === 'player') {
+    const tfx = ctx.battle.sideEffects[target.side];
+    const shielded = tfx.reflect > 0 || tfx.lightScreen > 0 || tfx.auroraVeil > 0 || target.vol.substitute > 0;
+    if (shielded && user.mon.hp * 2 <= calcStats(content, user.mon).hp && tryFeat(ctx, user, 'crack_the_barrier')) {
+      tfx.reflect = 0;
+      tfx.lightScreen = 0;
+      tfx.auroraVeil = 0;
+      target.vol.substitute = 0;
+    }
   }
 
   // Damaging move.
