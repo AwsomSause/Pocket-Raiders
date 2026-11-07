@@ -287,6 +287,17 @@ export const StoryV2Schema = z.object({
     keystoneReady: z.boolean().default(false),
     ledger: z.array(z.string()).max(600).default([]),
   }).default(() => ({ latched: [], pending: [], keystoneReady: false, ledger: [] })),
+  /** S7: the Dramatic Moments setting, copied here each turn (off: no Feats and no Charge). */
+  dramatic: z.enum(['off', 'quiet', 'full', 'prompt']).default('full'),
+  /** S7: the partner's Resolve Charge (0 to 100), banked Feats, the Feats used (id, battle key, Act), Charge ledger keys, a player-armed Feat (Prompt mode), and the first Feat (Chronicle). */
+  feats: z.object({
+    charge: z.number().int().min(0).max(100).default(0),
+    banked: z.number().int().min(0).max(2).default(0),
+    used: z.array(z.object({ id: z.string(), battle: z.string(), act: z.number().int().min(0) })).default([]),
+    gains: z.array(z.string()).max(400).default([]),
+    armed: z.boolean().default(false),
+    first: z.string().nullable().default(null),
+  }).default(() => ({ charge: 0, banked: 0, used: [], gains: [], armed: false, first: null })),
   cast: z.record(z.string(), z.object({
     stage: z.string(), attrs: z.record(z.string(), z.number()).default({}), memories: z.array(z.string()).default([]),
     /** S8 relationship record: flags (met, owes_player...), gate events passed, structured memories, the stage waiting to settle, last contact. */
