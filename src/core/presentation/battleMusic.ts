@@ -24,6 +24,8 @@ export interface BattleMusicInput {
   gbSounds: boolean;
   /** A stable string for this battle (run seed + battles won): ordinary fights then pick one of the extra songs by hash. Left off, the default song plays. */
   variantKey?: string;
+  /** The region being played: wild and ordinary trainer fights then lean on that region's own era songs. */
+  regionId?: string;
 }
 
 /** Extra songs from Pokemon Decades (ORAS, DPPT, HGSS, B2W2 battle themes), picked per battle by string hash (never the gameplay RNG). */
@@ -50,7 +52,13 @@ export function battleTrack(i: BattleMusicInput): string {
     if (key !== undefined && i.role === 'elite') return hashPick(ELITE_TRACKS, key);
     return base;
   }
-  if (key !== undefined) return hashPick(i.trainer ? TRAINER_TRACKS : WILD_TRACKS, key);
+  if (key !== undefined) {
+    const list = i.trainer ? TRAINER_TRACKS : WILD_TRACKS;
+    const era = REGION_ERA[i.regionId ?? ''];
+    // A region with an era keeps its own song for most fights (3 in 4) and still mixes in the others.
+    if (era && hashPick([0, 1, 2, 3], `${key}:era`) !== 0) return list.find((t) => t.endsWith(`_${era}`)) ?? hashPick(list, key);
+    return hashPick(list, key);
+  }
   return i.trainer ? 'bgm.battle_trainer' : 'bgm.battle';
 }
 
@@ -106,9 +114,34 @@ export function expeditionTrack(tier: number): string {
 }
 export const EXPEDITION_TRACK_IDS: readonly string[] = [1, 2, 3, 4].map(expeditionTrack);
 
+/** Which Decades era each region sounds like (battle songs end in _oras, _dppt, _hgss, _bw2). Kanto, Alola and the rest keep the plain mix. */
+const REGION_ERA: Record<string, 'oras' | 'dppt' | 'hgss' | 'bw2'> = { johto: 'hgss', hoenn: 'oras', sinnoh: 'dppt', unova: 'bw2' };
+
 /** Map songs: Route 101 plus the pack's Bicycle and Surfing themes, and five route songs from Pokemon Decades. A region keeps one (string hash, never the gameplay RNG). */
 export const MAP_TRACKS = ['bgm.map', 'bgm.map_bike', 'bgm.map_surf', 'bgm.map_bw', 'bgm.map_oras', 'bgm.map_dppt', 'bgm.map_dppt2', 'bgm.map_hgss'] as const;
+/** Each region's own map song (12 regions share 8 songs; every region keeps the same one every run). Story regions use their story route theme instead, see `regionMapMusic`. */
+const REGION_MAP_TRACK: Record<string, (typeof MAP_TRACKS)[number]> = {
+  kanto: 'bgm.map', johto: 'bgm.map_hgss', hoenn: 'bgm.map_oras', sinnoh: 'bgm.map_dppt', unova: 'bgm.map_bw', kalos: 'bgm.map_dppt2',
+  alola: 'bgm.map_surf', galar: 'bgm.map_bike', paldea: 'bgm.map_oras', torren: 'bgm.map_dppt2', 'frontier-isles': 'bgm.map_surf', 'trial-archipelago': 'bgm.map_bw', grand: 'bgm.map_hgss',
+};
+/** Story region id to the slug used in story audio ids (mu_region_<slug>_town / _route / _tension). */
+const STORY_REGION_SLUG: Record<string, string> = { cairnmoor: 'cairnmoor', 'tidewrack-reaches': 'tidewrack', 'orrery-basin': 'orrery_basin' };
+
+/** The story music id for a region mood, or null when the region has no story theme. */
+export function storyRegionMusic(regionId: string, mood: 'town' | 'route' | 'tension'): string | null {
+  const slug = STORY_REGION_SLUG[regionId];
+  return slug ? `mu_region_${slug}_${mood}` : null;
+}
+
+/** Rival, gym leader, Elite Four and champion story songs (two arrangements each, picked by hash). */
+export function storyBattleMusic(role: BattleRole | undefined, key: string): string | null {
+  const name = role === 'rival' ? 'rival' : role === 'gym' ? 'leader' : role === 'elite' ? 'elite' : role === 'champion' ? 'champion' : null;
+  return name ? `mu_battle_${name}_${hashPick(['a', 'b'], key)}` : null;
+}
+
 export function mapTrack(regionId: string): string {
+  const own = REGION_MAP_TRACK[regionId];
+  if (own) return own;
   let h = 0;
   for (const c of regionId) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   return MAP_TRACKS[h % MAP_TRACKS.length]!;

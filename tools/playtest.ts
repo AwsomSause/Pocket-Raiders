@@ -1,5 +1,6 @@
 // Mass playtest: the smart test bot plays many full runs across trainers, modes, difficulties and modifiers.
 // Each run is chosen from its index, so the same index always plays the same run.
+//   --deep: stronger bot + long budget to reach region 3+ (CI runs a few of these).
 //   node tools/playtest.ts <from> <count> [out.jsonl] [--heal]   append one JSON line per run (--heal: the bot heals on the map, so runs go deeper)
 // Flags per run: `error` (an exception), `stuck` (no progress for a long time), `bad` (broken numbers such as NaN HP).
 // Expeditions and minigames are not played by the bot; a run that reaches one is recorded as `skipped`.
@@ -35,8 +36,10 @@ const args = process.argv.filter((a) => !a.startsWith('--'));
 const [from, count, out] = [Number(args[2] ?? 0), Number(args[3] ?? 5), args[4]];
 const HEAL = process.argv.includes('--heal');
 const SIDES = process.argv.includes('--sides');
-const STEPS = 4000;
-const STUCK_STEPS = 1500;
+// --deep: a stronger bot (best switches, par-level party) and a long step budget, so runs reach region 3+ and the late game gets exercised too.
+const DEEP = process.argv.includes('--deep');
+const STEPS = DEEP ? 40000 : 4000;
+const STUCK_STEPS = DEEP ? 4000 : 1500;
 
 export function config(i: number) {
   const rng = new Rng(hashSeed(`playtest-${i}`));
@@ -53,9 +56,12 @@ export function config(i: number) {
   // Death-Block cannot be combined with a Nuzlocke mode (rulesProblem says so): only ask for it where it is allowed.
   const wantsBlock = rng.int(0, 4) === 0;
   const deathBlock = wantsBlock && rulesProblem({ modeId, difficultyId, modifierIds, deathBlock: true }) === null;
+  // Deep runs: the long multi-region mode, easy difficulty, no modifiers and Death-Block, so the run can reach later regions.
+  if (DEEP) return { i, seed: `pt${i}`, archetypeId, modeId: 'multi-region', difficultyId: 'casual', modifierIds: [], deathBlock: false };
   return { i, seed: `pt${i}`, archetypeId, modeId, difficultyId, modifierIds, deathBlock };
 }
 
+let deepest = 0;
 for (let i = from; i < from + count; i++) {
   const cfg = config(i);
   const t0 = Date.now();
@@ -74,6 +80,7 @@ for (let i = from; i < from + count; i++) {
       rules: { modeId: cfg.modeId, difficultyId: cfg.difficultyId, modifierIds: cfg.modifierIds, deathBlock: cfg.deathBlock },
       steps: STEPS,
       smart: true,
+      ...(DEEP ? { strong: true, parLevel: 25 } : {}),
       healOnMap: HEAL,
       onStep: (r0) => {
         const r = visit ? visit(r0) : r0;
@@ -100,10 +107,16 @@ for (let i = from; i < from + count; i++) {
   if (bad.length) rec.bad = bad;
   if (findings.length) rec.sides = findings.slice(0, 5);
   if (SIDES) rec.visits = visits;
+  deepest = Math.max(deepest, Number(rec.region ?? 0));
   rec.ms = Date.now() - t0;
   // `--strict` (CI): any crash, stuck run or broken number fails the process.
   if (process.argv.includes('--strict') && (rec.error || rec.stuck || rec.bad)) process.exitCode = 1;
   const line = JSON.stringify(rec);
   if (out) appendFileSync(out, line + '\n');
   else console.log(line);
+}
+// --deep --strict: the bot must reach the third region (index 2) at least once, or the late game is not being tested at all.
+if (DEEP && process.argv.includes('--strict') && deepest < 2) {
+  console.error(`deep playtest: deepest region reached was ${deepest}, expected 2 or more`);
+  process.exitCode = 1;
 }

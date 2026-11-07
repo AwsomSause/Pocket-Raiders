@@ -1,0 +1,33 @@
+{
+  "note": "Collection Books and the Reward Track (W15). Books are themed species lists checked against species caught over all runs; completing one pays once through the claim ledger. The Track turns everything you have done into points and pays a tier at each threshold. Nothing is ever taken away and no save version changes.",
+  "books": [
+    { "id": "kanto-starters", "name": "Kanto Starters", "blurb": "The three first partners of Kanto.", "species": ["bulbasaur", "charmander", "squirtle"], "reward": { "credits": 40, "rp": 20 } },
+    { "id": "johto-starters", "name": "Johto Starters", "blurb": "Chikorita, Cyndaquil and Totodile.", "species": ["chikorita", "cyndaquil", "totodile"], "reward": { "credits": 40, "rp": 20 } },
+    { "id": "hoenn-starters", "name": "Hoenn Starters", "blurb": "Treecko, Torchic and Mudkip.", "species": ["treecko", "torchic", "mudkip"], "reward": { "credits": 40, "rp": 20 } },
+    { "id": "eeveelutions", "name": "Eeveelution Album", "blurb": "Eevee and its first eight evolutions.", "species": ["eevee", "vaporeon", "jolteon", "flareon", "espeon", "umbreon", "leafeon", "glaceon", "sylveon"], "reward": { "credits": 120, "rp": 60, "title": "Eevee Fancier" } },
+    { "id": "legend-birds-beasts", "name": "Legendary Wanderers", "blurb": "The birds and beasts that roam the regions.", "species": ["articuno", "zapdos", "moltres", "raikou", "entei", "suicune"], "reward": { "credits": 150, "rp": 80 } },
+    { "id": "fossils", "name": "Fossil Shelf", "blurb": "Pokémon revived from the distant past.", "species": ["kabuto", "omanyte", "aerodactyl", "lileep", "anorith"], "reward": { "credits": 90, "rp": 50 } },
+    { "id": "pseudo-legends", "name": "Pseudo-Legend Club", "blurb": "Slow to raise, hard to stop.", "species": ["dragonite", "tyranitar", "salamence", "metagross", "garchomp", "hydreigon"], "reward": { "credits": 200, "rp": 100, "title": "Pseudo Collector" } },
+    { "id": "baby-pokemon", "name": "Nursery Book", "blurb": "Baby Pokémon.", "species": ["pichu", "togepi", "munchlax"], "reward": { "credits": 40, "rp": 20 } },
+    { "id": "legend-trio", "name": "Weather and Sea Legends", "blurb": "Kyogre, Groudon and Rayquaza.", "species": ["kyogre", "groudon", "rayquaza"], "reward": { "credits": 250, "rp": 120, "title": "Sky Warden" } },
+    { "id": "golems", "name": "The Regis", "blurb": "Regirock, Regice and Registeel.", "species": ["regirock", "regice", "registeel"], "reward": { "credits": 150, "rp": 80 } },
+    { "id": "creation-duo", "name": "Creation Duo", "blurb": "Mew and Mewtwo.", "species": ["mew", "mewtwo", "lugia", "ho-oh"], "reward": { "credits": 200, "rp": 100 } }
+  ],
+  "track": {
+    "weights": { "caught": 1, "shiny": 5, "achievement": 3, "runEnded": 2, "book": 15 },
+    "tiers": [
+      { "points": 25, "credits": 25, "rp": 10 },
+      { "points": 60, "credits": 40, "rp": 15 },
+      { "points": 110, "credits": 60, "rp": 25, "title": "Track: Rookie Collector" },
+      { "points": 170, "credits": 80, "rp": 30 },
+      { "points": 250, "credits": 100, "rp": 40 },
+      { "points": 350, "credits": 140, "rp": 50, "title": "Track: Field Researcher" },
+      { "points": 480, "credits": 180, "rp": 70 },
+      { "points": 650, "credits": 240, "rp": 90 },
+      { "points": 850, "credits": 300, "rp": 120, "title": "Track: Curator" },
+      { "points": 1100, "credits": 400, "rp": 150 },
+      { "points": 1400, "credits": 520, "rp": 200 },
+      { "points": 1800, "credits": 700, "rp": 260, "title": "Track: Grand Archivist" }
+    ]
+  }
+}

@@ -26,7 +26,9 @@ function expand(pattern: string): string[] {
   return m[1]!.split(',').flatMap((alt) => expand(pattern.replace(m[0], alt)));
 }
 
-const prov = readFileSync(join(root, 'docs/quality/asset-provenance.md'), 'utf8');
+// The main table plus one fragment file per PR (docs/quality/provenance/*.md), so PRs never edit the same file.
+const provDir = join(root, 'docs/quality/provenance');
+const prov = [readFileSync(join(root, 'docs/quality/asset-provenance.md'), 'utf8'), ...readdirSync(provDir).filter((f) => f.endsWith('.md')).sort().map((f) => readFileSync(join(provDir, f), 'utf8'))].join('\n');
 const covered = new Set<string>();
 for (const line of prov.split('\n')) {
   const cell = line.match(/^\| `([^`]+)` \|/);

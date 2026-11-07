@@ -29,6 +29,7 @@ import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
 import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
 import { buildPriceFactor, sabotageStep, wildEffect } from './battle/battleFlair';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
+import { applyInterference } from './rivals/interference';
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
@@ -169,7 +170,7 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
-import { castGymLeader, castLeague } from './rolePool';
+import { castGymLeader, castLeague, record } from './rolePool';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
@@ -214,6 +215,7 @@ import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spooky
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
+import { dailyChampionId } from './daily';
 import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
@@ -690,6 +692,13 @@ function enterLeague(content: Content, run: RunState): void {
   const region = currentRegion(content, run);
   withStream(run.rng, 'map', (r) => pickLeague(content, region, campaign, run.usedLeaders, r)); // rolled and dropped: keeps the 'map' stream where it was
   const league = isStoryCampaign(content, run.campaignId) ? castAuthoredLeague(content, run, run.regionIndex) : castLeague(content, run, campaign, run.regionIndex);
+  // Daily Run: the champion is the day's set final boss, whatever the region.
+  if (getMode(run.rules.modeId)?.dailySeed) {
+    const set = dailyChampionId(content, run.seed);
+    if (!league.eliteFour.includes(set)) league.champion = set;
+    run.roleCast = run.roleCast.filter((c) => c.role !== 'champion' || c.regionIndex !== run.regionIndex);
+    record(content, run, 'champion', run.regionIndex, 0, league.champion);
+  }
   const map = generateLeagueMap(campaign.eliteFourSize);
   const problems = validateLeagueMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid league map: ${problems.join('; ')}`);
@@ -2153,6 +2162,13 @@ export function rivalChallenge(content: Content, current: RunState, sideId: stri
   run.battle.rivalNote = `${run.story.rivals.find((r) => r.id === rival.id)!.name} cut in on you at ${where}! ${run.battle.rivalNote ?? ''}`.trim();
   recordBattleStart(content, run);
   return run;
+}
+
+/** Rival Interference (11.1): a rival steals from, blocks or helps at a stop without a fight. Null when nothing happens. */
+export function rivalInterfere(current: RunState, sideId: string): { run: RunState; text: string } | null {
+  if (current.phase !== 'map' || waitingTrainer(current)) return null;
+  const hit = applyInterference(current, sideId);
+  return hit ? { run: hit.run, text: hit.text } : null;
 }
 
 /** Uses a healing stop or enters a shop beside the current node. */

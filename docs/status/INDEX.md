@@ -1,6 +1,6 @@
 # Status notes index
 
-One line per note (first 110 characters). Grep this file (`grep -i word docs/status/INDEX.md`); never read it whole. Open a note only when its line matches your task. Add a line here when you add a note.
+Frozen: do not add lines (merge conflicts). Use `npm run status:find -- word`; new notes put their summary in their own first line. Older notes are listed below, grep this file only for those.
 
 - `aai-batch3.md`: Advanced AI batch 3 (`core/battle/aai.ts`, `trainerAi.aai.*`): held-item reads (Air Balloon, resist berries, s
 - `aai-prediction.md`: Advanced AI switch guessing (`aai.prediction`, `aaiPredictsSwitch` in `core/battle/aai.ts`): a trainer with a
@@ -386,4 +386,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `content-audit-2.md`: Fury Cutter streak power, Alluring Voice confusion; Pledge combos and Order Up listed as limits.
 - `doubles-trainer-poses.md`: your trainer throws both balls and shows recall/win/defeat poses in doubles (W17).
 - `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
-- `w18-move-ability-gaps.md`: Pledge combos, Order Up boost, Tatsugiri/Magearna Mega stones, five Delta battle forms.
+- `wire-a11y-text-quest.md`: Bigger small print and Map quest contrast settings (settings v41).
