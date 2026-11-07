@@ -1842,7 +1842,35 @@ export class BattleScene extends Phaser.Scene {
 
   // ---------- intro ----------
 
+  /** Plays the opening; if any part of the show fails, the Pokémon and boxes still appear and the battle goes on. */
   private async intro(): Promise<void> {
+    try {
+      await this.introShow();
+    } catch (e) {
+      console.warn('Battle intro failed; showing the fighters anyway', e);
+      await this.recoverIntro().catch((e2) => console.warn('Battle intro recovery failed', e2));
+      this.busy = false;
+      this.nextPrompt();
+    }
+  }
+
+  /** After a failed opening: the arena must never stay empty. Draws whoever is not on screen yet (presentation only). */
+  private async recoverIntro(): Promise<void> {
+    const battle = this.run.battle!;
+    if (this.duo) {
+      await this.showDuoSide('enemy', false);
+      await this.showDuoSide('player', false);
+      return;
+    }
+    if (!this.enemySprite?.active) this.showSprite('enemy', this.shown.enemy, false);
+    await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
+    if (!battle.needsSwitch) {
+      if (!this.playerSprite?.active) this.showSprite('player', this.shown.player, false);
+      await this.refreshInfoBox(this.playerBox, this.shown.player, false);
+    }
+  }
+
+  private async introShow(): Promise<void> {
     const battle = this.run.battle!;
     const title = this.trainerTitle();
     if (battle.turn === 1 && !battle.needsSwitch) {
