@@ -70,14 +70,16 @@ const BOLD_FROM = 18;
  */
 let fontScale = 1;
 let readingFont: string | null = null;
+let boostSmall = false;
 /** Text size multiplier and the optional reading font (Settings > Text size, Dyslexia-friendly font). Presentation only. */
-export function setTextPrefs(scale: number, dyslexiaFamily: string | null): void {
+export function setTextPrefs(scale: number, dyslexiaFamily: string | null, smallBoost = false): void {
   fontScale = scale;
+  boostSmall = smallBoost;
   readingFont = dyslexiaFamily;
 }
 
 export function pixelFont(requested: number): { family: string; size: number; grid: number } {
-  const size = requested * fontScale;
+  const size = Math.max(requested * fontScale, boostSmall ? BOLD_FROM : 0);
   if (readingFont) return { family: readingFont, size: Math.max(12, Math.round(size * 0.9)), grid: 1 };
   if (size < BOLD_FROM) return { family: FONT_FAMILY, size: 16, grid: 1 };
   const snapped = Math.max(16, Math.round((size * 0.75) / 8) * 8);

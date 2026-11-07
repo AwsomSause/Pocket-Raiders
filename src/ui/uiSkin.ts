@@ -13,8 +13,8 @@ let appliedTheme: Settings['uiTheme'] = 'classic';
 export const currentTheme = (): Settings['uiTheme'] => appliedTheme;
 
 /** Applies theme, text size and font from the settings. Safe to call often. */
-export function applyUiSkin(settings: Pick<Settings, 'uiTheme' | 'fontSize' | 'dyslexiaFont'>): void {
-  setTextPrefs(FONT_SCALE[settings.fontSize], settings.dyslexiaFont ? DYSLEXIA_FONT_FAMILY : null);
+export function applyUiSkin(settings: Pick<Settings, 'uiTheme' | 'fontSize' | 'dyslexiaFont'> & { smallTextBoost?: boolean }): void {
+  setTextPrefs(FONT_SCALE[settings.fontSize], settings.dyslexiaFont ? DYSLEXIA_FONT_FAMILY : null, !!settings.smallTextBoost);
   applyTheme(settings.uiTheme);
 }
 

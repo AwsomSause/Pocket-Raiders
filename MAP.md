@@ -9,7 +9,7 @@ Update this file when you add, move or delete a folder or a key file.
 | Path | What it is |
 |---|---|
 | `CLAUDE.md` | Router and short development directive. Start here. |
-| `STATUS.md` | Short current state: save versions and what is next (about 2 KB). Old Done list: `docs/archive/status-done-2026-10-30.md`; slice notes: `docs/status/INDEX.md` (grep it). |
+| `STATUS.md` | Short current state: save versions and what is next (about 2 KB). Old Done list: `docs/archive/status-done-2026-10-30.md`; slice notes: `npm run status:find -- word` (INDEX.md is frozen). |
 | `README.md` | How to run the game, URL flags (`?seed=`, `?campaign=dev`, `?debug=1`), F2 debug panel. |
 | `GAME_DESIGN.md` | Game rules and director decisions D1–D16, §1–§14 (360 lines). |
 | `IMPLEMENTATION_PLAN.md` | Architecture, folder plan, every milestone's scope (341 lines). |

@@ -5,6 +5,7 @@
 import type { Content } from './contentSchema';
 import type { PokemonInstance, RunState } from './state';
 import { periodOf } from './clock';
+import { friendshipReady } from './friendship';
 import { bondOf } from './bond';
 import { heartbondLevel, heartbondScore } from './story2/heartbond';
 
@@ -24,11 +25,19 @@ export interface ConditionEvolution {
   to: string;
   /** The earliest level this route works at. */
   minLevel: number;
-  condition: EvoCondition;
+  /** The natural route. Missing = this entry is a stone route only. */
+  condition?: EvoCondition;
+  /** Stones that do the same job from the Bag (a Sun Stone for a sunny route ...), at the same minimum level. */
+  stones?: string[];
+  /** The stone route also needs high friendship (Eevee to Espeon / Umbreon). */
+  stoneFriendship?: boolean;
 }
 
 export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
-  { from: 'sliggoo', to: 'goodra', minLevel: 40, condition: { kind: 'weather', weather: 'rain' } },
+  { from: 'sliggoo', to: 'goodra', minLevel: 40, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
+  // A matching stone also works for time and weather routes; Eevee's day / night pair needs high friendship too.
+  { from: 'eevee', to: 'espeon', minLevel: 1, stones: ['sun-stone'], stoneFriendship: true },
+  { from: 'eevee', to: 'umbreon', minLevel: 1, stones: ['moon-stone', 'dusk-stone'], stoneFriendship: true },
   { from: 'aipom', to: 'ambipom', minLevel: 20, condition: { kind: 'knowsMove', move: 'double-hit' } },
   { from: 'yanma', to: 'yanmega', minLevel: 20, condition: { kind: 'knowsMove', move: 'ancient-power' } },
   { from: 'tangela', to: 'tangrowth', minLevel: 20, condition: { kind: 'knowsMove', move: 'ancient-power' } },
@@ -43,12 +52,12 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   // Story Overhaul S15. The engine's only storm weather is rain, so "storm" and "thunderstorm" mean a win that ends in rain.
   { from: 'tuftin', to: 'eevee', minLevel: 1, condition: { kind: 'heartbond', level: 3 } },
   { from: 'noctowl', to: 'oracowl', minLevel: 42, condition: { kind: 'all', of: [{ kind: 'night' }, { kind: 'heartbond', level: 6 }] } },
-  { from: 'swellow', to: 'tempestwing', minLevel: 46, condition: { kind: 'weather', weather: 'rain' } },
-  { from: 'kilowattrel', to: 'megawattrel', minLevel: 52, condition: { kind: 'weather', weather: 'rain' } },
+  { from: 'swellow', to: 'tempestwing', minLevel: 46, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
+  { from: 'kilowattrel', to: 'megawattrel', minLevel: 52, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
 ];
 
 /** Moves whose uses are counted on the Pokémon (`moveCounts`) because a route needs them. */
-export const COUNTED_MOVES = new Set(CONDITION_EVOLUTIONS.flatMap((e) => (e.condition.kind === 'moveUses' ? [e.condition.move] : [])));
+export const COUNTED_MOVES = new Set(CONDITION_EVOLUTIONS.flatMap((e) => (e.condition?.kind === 'moveUses' ? [e.condition.move] : [])));
 
 /** Counts one use of a move by your Pokémon when a route needs it (mutates `mon`). */
 export function countMoveUse(mon: PokemonInstance, moveId: string): void {
@@ -88,8 +97,15 @@ function conditionMet(c: EvoCondition, mon: PokemonInstance, weather: string | n
 export function conditionEvolutionTarget(content: Content, mon: PokemonInstance, weather: string | null, info?: EvoRunInfo): string | null {
   if (mon.hp <= 0 || mon.care?.holdEvolve) return null;
   for (const e of CONDITION_EVOLUTIONS) {
-    if (e.from !== mon.speciesId || mon.level < e.minLevel || !content.species.has(e.to)) continue;
+    if (e.from !== mon.speciesId || mon.level < e.minLevel || !content.species.has(e.to) || !e.condition) continue;
     if (conditionMet(e.condition, mon, weather, info)) return e.to;
   }
   return null;
+}
+
+/** Species a stone from the Bag turns this Pokémon into through a time / weather route (Sun Stone: Eevee to Espeon at high friendship). */
+export function stoneRouteTargets(content: Content, mon: PokemonInstance, itemId: string): string[] {
+  return CONDITION_EVOLUTIONS
+    .filter((e) => e.from === mon.speciesId && e.stones?.includes(itemId) && mon.level >= e.minLevel && content.species.has(e.to) && (!e.stoneFriendship || friendshipReady(content, mon)))
+    .map((e) => e.to);
 }

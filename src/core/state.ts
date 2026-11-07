@@ -1747,6 +1747,10 @@ export const SettingsSchema = z.object({
   typeMarkers: z.boolean().default(false),
   /** How much of the window the game fills: full, 90% or 80%. */
   uiScale: z.enum(['full', 'medium', 'small']).default('full'),
+  /** Accessibility: fine print (under 18px) is drawn in the bigger bold font. */
+  smallTextBoost: z.boolean().default(false),
+  /** Accessibility: the pinned quest line on the map gets a dark plate and white text. */
+  questContrast: z.boolean().default(false),
   /** Off keeps menu icons and idle Pokémon still. */
   spriteAnimations: z.boolean().default(true),
   /** Floating damage numbers over the Pokémon that was hit. */

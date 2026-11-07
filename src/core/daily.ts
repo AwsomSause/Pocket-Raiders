@@ -29,6 +29,12 @@ export function starterSet(content: Content, seed: string): string[] {
   return new Rng(hashSeed(`${seed}::starters`)).shuffle(ids).slice(0, content.balance.starterChoices);
 }
 
+/** The day's set final boss: one champion from any region's champion list, picked by the date seed alone (same for everyone, shown in Run Prep). */
+export function dailyChampionId(content: Content, seed: string): string {
+  const ids = [...new Set([...content.regions.values()].flatMap((r) => r.champions))].filter((id) => content.bosses.get(id) && !content.bosses.get(id)!.story).sort();
+  return ids[new Rng(hashSeed(`${seed}::champion`)).int(0, ids.length - 1)]!;
+}
+
 export interface DailySetup {
   seed: string;
   /** The day's fixed starter set (the run's starter choices are replaced by these). */
@@ -49,6 +55,6 @@ export function dailySetup(content: Content, isoDate: string, prep: RunPrep, rul
     starters: dailyStarters(content, isoDate),
     prep: { ...prep, poolId: base.poolId, draftRuleId: base.draftRuleId, typeFocus: null, tokenId: null, loan: false, vaultItem: null },
     rules: { ...rules, difficultyId: 'standard', modifierIds: [modifierId], deathBlock: false },
-    lines: [`Daily modifier: ${modifier.name}`, `Starters today: ${dailyStarters(content, isoDate).map((id) => content.species.get(id)?.name ?? id).join(', ')}`, 'Route: one region, four gyms, then the champion'],
+    lines: [`Daily modifier: ${modifier.name}`, `Starters today: ${dailyStarters(content, isoDate).map((id) => content.species.get(id)?.name ?? id).join(', ')}`, `Route: one region, four gyms, then ${content.bosses.get(dailyChampionId(content, dailySeed(isoDate)))?.name ?? 'the champion'}`],
   };
 }

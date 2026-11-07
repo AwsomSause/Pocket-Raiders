@@ -61,7 +61,7 @@
       },
       "exit": "step budget used, or leave",
       "countsAsStage": false,
-      "status": "disabled",
+      "status": "limited",
       "trainerClass": "veteran",
       "intro": "A fenced preserve. No battles, only careful steps and good throws."
     },
@@ -306,7 +306,7 @@
       },
       "exit": "win the executive or expose",
       "countsAsStage": true,
-      "status": "disabled",
+      "status": "limited",
       "trainerClass": "veteran",
       "intro": "Cold air, hum of machines, and a lot of guards.",
       "boss": {
@@ -372,7 +372,7 @@
       },
       "exit": "wake at the last node",
       "countsAsStage": false,
-      "status": "disabled",
+      "status": "limited",
       "trainerClass": "veteran",
       "intro": "Everything is soft and slightly the wrong size."
     },
@@ -556,7 +556,7 @@
       },
       "exit": "follow the star path",
       "countsAsStage": false,
-      "status": "disabled",
+      "status": "limited",
       "trainerClass": "veteran",
       "intro": "A stair of light across a sky with no ground."
     },
