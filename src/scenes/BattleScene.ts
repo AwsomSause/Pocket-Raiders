@@ -82,6 +82,7 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
+import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
@@ -150,7 +151,10 @@ const AUTO_EVENTS = new Set<string>(['move', 'noPp', 'miss', 'damage', 'noEffect
 // platform tucked behind the message bar (MESSAGE_Y; about 30 px of its feet are hidden), so it is nearer the camera than the foe.
 const ENEMY_POS = { x: 648, y: 240 };
 /** Where your trainer waits off screen between throws. */
-const TRAINER_OFF_X = -160;
+const TRAINER_OFF_X = -260;
+/** Your trainer is drawn large in the foreground, its lower legs behind the message bar (the reference's N). */
+const PLAYER_TRAINER_HEIGHT = 330;
+const PLAYER_TRAINER_FEET = 560;
 const PLAYER_POS = { x: 312, y: 428 };
 /** Where your trainer and the sticker row stand (just above the message bar, not under it). */
 const TRAINER_POS = { x: 312, y: 400 };
@@ -914,7 +918,7 @@ export class BattleScene extends Phaser.Scene {
     s.setVisible(true);
     if (s.x === this.trainerHomeX) return actor;
     if (this.motion === 'off') s.x = this.trainerHomeX;
-    else await tween(this, { targets: s, x: this.trainerHomeX, duration: 220, ease: 'Quad.easeOut' });
+    else await tween(this, { targets: s, x: this.trainerHomeX, duration: 520, ease: 'Sine.easeOut' });
     return actor;
   }
 
@@ -945,11 +949,14 @@ export class BattleScene extends Phaser.Scene {
     const look = playerLookForBattle();
     this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
       if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      this.trainerHomeX = doubles ? 70 : TRAINER_POS.x - 175;
-      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, TRAINER_POS.y - 4, 190, this.motion, throwTint(art));
+      this.trainerHomeX = doubles ? 90 : 150;
+      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, PLAYER_TRAINER_FEET, PLAYER_TRAINER_HEIGHT, this.motion, throwTint(art));
       // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
       this.field.addAt(actor.sprite, this.fieldBase);
       actor.idle();
+      // Off screen until it walks in for the throw (the reference: your trainer only appears on your side).
+      actor.sprite.setVisible(false).setX(TRAINER_OFF_X);
+      if (!this.skin || this.skin.layout.bar) actor.sprite.setMask(this.standMask());
       this.trainerActor = actor;
     });
     const skip = (): void => this.trainerActor?.skip();
@@ -1923,33 +1930,44 @@ export class BattleScene extends Phaser.Scene {
     const title = this.trainerTitle();
     if (battle.turn === 1 && !battle.needsSwitch) {
       await this.playIntro();
+      // The foe trainer waits on the platform (a black shape at first) while the camera sweeps over the arena.
+      const openArt = this.trainerArt();
+      const openTitle = this.trainerTitle();
+      const foeTrainer = openTitle && openArt ? trainerVisual(this, openArt.assetId, openArt.label, ENEMY_POS.x, ENEMY_POS.y, 2.5) : null;
+      // Every foe trainer stands the same height on the platform (the reference's Red and N are the yardstick).
+      if (foeTrainer) fitTrainer(this, foeTrainer, ENEMY_POS.y);
+      await this.playBeat(openingReveal(this, this.motion, ENEMY_POS, foeTrainer));
       await this.skin?.intro?.(this, this.frameInfo());
       const modeLine = modeBattleLine(this.run.rules.modeId, !!battle.trainer && isBossClass(battle.trainer.classId));
       if (modeLine) await this.say(modeLine);
       const art = this.trainerArt();
-      if (title && art) {
-        const trainerSprite = trainerVisual(this, art.assetId, art.label, ENEMY_POS.x, ENEMY_POS.y, 2.5);
-        await this.say(isUltimateBattle(this.run) ? `${title}, your Ultimate Rival, blocks the way!` : battle.rivalId ? `${title} is back to beat you!` : battle.returning ? `${title} is back for a rematch!` : battle.nemesis ? `${title} is back, and so is your nemesis!` : battle.hunted ? `${title} came hunting for you!` : battle.rival ? `${title} challenges you to a rival battle!` : `${title} would like to battle!`);
+      let foeRow: BallRow | null = null;
+      if (title && art && foeTrainer) {
+        const trainerSprite = foeTrainer;
+        foeRow = partyBallRow(this, 'foe', battle.enemyTeam.map((m) => m.hp > 0), this.motion, 150);
+        await this.say(isUltimateBattle(this.run) ? `${title}, your Ultimate Rival, blocks the way!` : battle.rivalId ? `${title} is back to beat you!` : battle.returning ? `${title} is back for a rematch!` : battle.nemesis ? `${title} is back, and so is your nemesis!` : battle.hunted ? `${title} came hunting for you!` : battle.rival ? `${title} challenges you to a rival battle!` : `${title} would like to battle!`, true);
         const classLine = !battle.rival && !battle.rivalId && !battle.returning && !battle.nemesis && !battle.hunted ? services().session.content.trainers.get(battle.trainer?.classId ?? '')?.lines?.intro : undefined;
         if (classLine) await this.speak(battle.trainer?.name ?? title, classLine);
         await this.storyIntro();
-        await tween(this, { targets: trainerSprite, x: GAME_WIDTH + 120, duration: 350 });
-        trainerSprite.destroy();
+        // The trainer throws a ball up over the platform; the Pokémon appears in the burst and drops in.
+        await foeBallThrow(this, this.motion, { x: trainerSprite.x - 30, y: trainerSprite.y - 110 }, { x: ENEMY_POS.x, y: ENEMY_POS.y - 130 }, trainerSprite);
         if (this.duo) {
           await this.playBeat(stamp(this, 'DOUBLE BATTLE!', title, this.foeRim(), this.motion));
           await this.showDuoSide('enemy', true);
           const second = this.duo.other.enemy.mon;
           await this.say(`${title} sent out ${this.speciesName(this.shown.enemy)}${second ? ` and ${this.speciesName(second)}` : ''}!`);
         } else {
-          this.showSprite('enemy', this.shown.enemy);
+          const dropped = this.showSprite('enemy', this.shown.enemy);
+          dropIn(this, this.motion, dropped);
           await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
+          foeRow?.out();
           if (battle.rivalNote) await this.say(battle.rivalNote);
           const riskText = riskLine(services().session.content, battle, this.run.party);
           if (riskText) await this.say(riskText);
           if (battle.nemesisNote) await this.say(battle.nemesisNote);
           if (battle.memory?.note) await this.say(battle.memory.note);
           if (battle.memoryNote) await this.say(battle.memoryNote);
-          await this.say(`${title} sent out ${this.speciesName(this.shown.enemy)}!`);
+          await this.say(`${title} sent out ${this.speciesName(this.shown.enemy)}!`, true);
         }
       } else if (this.duo) {
         // Wild Pokémon in a pair.
@@ -1979,10 +1997,16 @@ export class BattleScene extends Phaser.Scene {
         const second = this.duo.other.player.mon;
         await this.say(`Go! ${this.speciesName(this.shown.player)}${second ? ` and ${this.speciesName(second)}` : ''}!`);
       } else {
+        // The camera looks across to your side while your trainer throws.
+        const playerRow = partyBallRow(this, 'player', this.run.party.map((m) => m.hp > 0), this.motion, MESSAGE_Y - 46);
+        cameraTo(this, this.motion, { x: 400, y: PLAYER_POS.y - 100 }, 1.2, 600);
+        const goLine = this.say(`Go! ${this.speciesName(this.shown.player)}!`, true);
         await this.throwPose();
         this.showSprite('player', this.shown.player);
+        cameraTo(this, this.motion, null, 1, 450);
         await this.refreshInfoBox(this.playerBox, this.shown.player, false);
-        await this.say(`Go! ${this.speciesName(this.shown.player)}!`);
+        playerRow.out();
+        await goLine;
       }
     } else if (this.duo) {
       await this.showDuoSide('enemy', false);
@@ -2057,6 +2081,7 @@ export class BattleScene extends Phaser.Scene {
     const st = services().session.settings;
     const foeName = this.boss()?.title ?? this.trainerTitle() ?? (battle.trainer ? 'The trainer' : this.speciesName(battle.enemyTeam[0]!));
     const recap = introRecap(kind, foeName);
+    if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') return;
     if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)), recap);
     else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined), recap);
     // Bosses and rivals get a title card: who they are and what they specialise in.

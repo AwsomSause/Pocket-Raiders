@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 # A newer push to the same PR, or to main, cancels the older run, so the runner queue does not back up.
 # The newest main run still finishes, and "CI ok" runs with if: always(), so it reports on cancelled runs.
@@ -13,7 +14,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Docs-only PRs (markdown, docs, plans, promo, reports, ideas) skip the heavy jobs; "CI ok" still reports.
+  changes:
+    # Draft PRs do not run CI (mark ready for review to run it); this halves runner load.
+    if: github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: diff
+        run: |
+          code=true
+          if [ "${{ github.event_name }}" = pull_request ]; then
+            files=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+            if [ -n "$files" ] && ! echo "$files" | grep -qvE '^(docs/|plans/|promo/|reports/|ideas/|[^/]+\.md$)'; then code=false; fi
+          fi
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+
   check:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -40,6 +64,8 @@ jobs:
 
   # Browser tests run in 4 parallel shards (the slowest part of CI used to be one long serial job).
   e2e:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     strategy:
@@ -53,7 +79,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Cache the browser download; the system packages still install every run.
+      - uses: actions/cache@v4
+        id: pw
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - run: npx playwright install --with-deps chromium
+        if: steps.pw.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps chromium
+        if: steps.pw.outputs.cache-hit == 'true'
       - run: npx playwright test --shard=${{ matrix.shard }}/4 --trace off
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -67,9 +102,12 @@ jobs:
   ci-ok:
     name: CI ok
     if: always()
-    needs: [check, e2e]
+    needs: [changes, check, e2e]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "check=${{ needs.check.result }} e2e=${{ needs.e2e.result }}"
+          echo "code=${{ needs.changes.outputs.code }} check=${{ needs.check.result }} e2e=${{ needs.e2e.result }}"
+          if [ "${{ needs.changes.result }}" = skipped ]; then echo "Draft PR: CI did not run. Mark it ready for review to run CI."; exit 1; fi
+          [ "${{ needs.changes.result }}" = success ] || exit 1
+          if [ "${{ needs.changes.outputs.code }}" = false ]; then exit 0; fi
           [ "${{ needs.check.result }}" = success ] && [ "${{ needs.e2e.result }}" = success ]

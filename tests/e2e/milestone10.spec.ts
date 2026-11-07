@@ -107,7 +107,7 @@ test('with battle animations off the arena has no ambience', async ({ page }) =>
   expect(errors).toEqual([]);
 });
 
-test('slice 2: the trainer VS intro can be skipped and the battle carries on', async ({ page }) => {
+test('slice 2: the trainer opening can be skipped and the battle carries on', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=m10-vs&debug=1');
@@ -122,12 +122,12 @@ test('slice 2: the trainer VS intro can be skipped and the battle carries on', a
     run.battle.enemyTeam[0].hp = 1;
     pkr.game.scene.getScene('Battle').scene.restart();
   });
-  // The VS screen is up (EBDX transition art on the display list) ...
+  // The opening is up (a black veil over the arena while the camera sweeps in) ...
   const vsUp = () =>
     page.evaluate(() =>
-      (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.list?.some((c: any) => String(c.texture?.key).startsWith('pack.ebdx.tr.'))),
+      (window as any).__pkr.game.scene.getScene('Battle').children.list.some((o: any) => o.depth === 1000 && o.type === 'Rectangle' && o.alpha > 0),
     );
-  await expect.poll(vsUp, { timeout: 8000, intervals: [100] }).toBe(true);
+  await expect.poll(vsUp, { timeout: 8000, intervals: [50] }).toBe(true);
   await page.screenshot({ path: 'test-results/m10-vs.png' });
   // ... and a key press skips it straight to the challenge line.
   await page.keyboard.press('Enter');
