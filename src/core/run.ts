@@ -189,7 +189,8 @@ import { rivalBond } from './drama/bond';
 import { recapLines } from './drama/recap';
 import { isBossFight } from './battle/spectacle';
 import { clutchSurvived, heartbondTurn, heartbondVictory, recoveryScenes, takeBeat } from './story2/heartbond';
-import { featGate, featLines, gainCharge, memoryPhrase, keystoneFeat, recordFeat, significantBattle } from './story2/feats';
+import { renderTemplate } from './story2/templates';
+import { featGate, featLines, gainCharge, memoryPhrase, keystoneFeat, recordFeat, significantBattle, sparkShared } from './story2/feats';
 import { bondEvolves, bondLessons, bondLevelHandover, bondVictory, enemyCombo, playerCombo, revealMove, shapeAction, updateBondsTurn } from './bond';
 import { trackFeelings } from './bond/feelings';
 import { openingDrama, planDrama, type DialogueFrequency, type DramaLine } from './drama';
@@ -2575,7 +2576,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   updateBondsTurn(run, engineEvents);
   const partnerMon = partnerUid ? run.party.find((m) => m.uid === partnerUid) : undefined;
   const clutch = partnerMon && clutchSurvived(partnerBefore, partnerMon.hp, maxHp(content, partnerMon)) ? [{ type: 'clutch', side: 'player', uid: partnerMon.uid }] : [];
-  const featFired = turnCtx.feat?.fired && partnerMon && recordFeat(content, run, turnCtx.feat.fired) ? turnCtx.feat.fired : null;
+  const featFired = turnCtx.feat?.fired && partnerMon && recordFeat(content, run, turnCtx.feat.fired, turnCtx.feat.detail) ? turnCtx.feat.fired : null;
+  const sparked = featFired ? sparkShared(run) : null;
   const featEvent = featFired && partnerMon ? [{ type: 'feat', side: 'player', uid: partnerMon.uid }] : [];
   heartbondTurn(run, `b${run.encountersCompleted}`, battle.turn, [...(engineEvents as { type: string; side?: string; uid?: string }[]), ...clutch, ...featEvent]);
   if (partnerMon) storyChargeTurn(content, run, partnerMon, engineEvents);
@@ -2619,6 +2621,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'win' && partnerUid && run.story.histories[partnerUid]?.lastBattle === run.encountersCompleted && significantBattle(battle)) gainCharge(content, run, 'win_significant');
   // S7: the Feat's line, then the memory it quotes (one spectacle line each; Quiet and Full both show them).
   if (featFired && partnerMon) for (const text of featLines(content.storyData.text, featFired, displayName(content, partnerMon), memoryPhrase(run, partnerMon.uid))) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text, uid: partnerMon.uid });
+  if (sparked && partnerMon) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: renderTemplate(content.storyData.text['feat.spark_shared.line'] ?? '', { pokemon: displayName(content, partnerMon) }), uid: sparked });
   if (battle.outcome === 'win') trainCampers(content, run);
   if (battle.outcome === 'win') recordCapsuleProgress(content, run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') partyLifeVictory(content, run);

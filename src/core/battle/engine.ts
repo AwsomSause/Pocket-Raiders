@@ -322,7 +322,7 @@ export interface BattleContext {
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
   /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
-  feat?: { uid: string; allowed: readonly string[]; final: boolean; boss: boolean; fired?: string };
+  feat?: { uid: string; allowed: readonly string[]; final: boolean; boss: boolean; fired?: string; /** Break the Rule: abilities already broken this run; `detail` is the one broken now. */ broke?: readonly string[]; detail?: string };
 }
 
 /** S7: fires a Feat for the partner if it is allowed and none fired yet this turn. Never rolls RNG, so no other roll moves. */
@@ -658,6 +658,16 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       battle.benchShout = true;
       events.push(say('player', 'benchShout', `${nameOf(ctx, support.mon)} cheers from the bench!`, support.mon.uid));
       applyStageChange(ctx, { side: 'player', mon: ctx.party[battle.activeIndex]!, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, support.stat, 1, events);
+    }
+  }
+  // S7 Call of the Wild (Viridian, or Rapport 6+): with the partner at half HP or less, a wild Pokémon strikes the foe for a fifth of its HP.
+  {
+    const me = ctx.party[battle.activeIndex]!;
+    const foe = currentEnemy(battle);
+    if (ctx.feat && foe.hp > 1 && me.hp > 0 && me.hp * 2 <= maxHp(content, me) && tryFeat(ctx, activeCombatants(ctx).player, 'call_of_the_wild')) {
+      const hit = Math.min(foe.hp - 1, Math.max(1, Math.floor(maxHp(content, foe) / 5)));
+      foe.hp -= hit;
+      events.push({ type: 'damage', side: 'enemy', amount: hit, hpAfter: foe.hp, effectiveness: 1, crit: false });
     }
   }
   // A Pokémon in the middle of a two-turn or lock-in move must carry on with it.
@@ -2090,6 +2100,17 @@ function statusCureAbility(ctx: BattleContext, c: Combatant, events: BattleEvent
  * and friends (take the move and heal or get stronger), Wonder Guard (only
  * super-effective hits), Soundproof. Returns true if the move was stopped.
  */
+/** S7: the target's ability that would block this damaging move (absorbs, Levitate, Wonder Guard, Soundproof, Bulletproof), or null. No side effects. */
+function abilityWouldBlock(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, moveType: TypeName, effectiveness: number): string | null {
+  const ability = targetAbility(ctx, user, target);
+  if (!ability) return null;
+  if (ABSORB[ability]?.type === moveType) return ability;
+  if ((ability === 'levitate' || ability === 'eelevate') && moveType === 'ground' && !move.effects.hitsSemi) return ability;
+  if (ability === 'wonder-guard' && effectiveness <= 1 && !move.flags.includes('typeless')) return ability;
+  if ((ability === 'soundproof' && move.flags.includes('sound')) || (ability === 'bulletproof' && move.flags.includes('bullet'))) return ability;
+  return null;
+}
+
 function abilityBlocksMove(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, moveType: TypeName, effectiveness: number, events: BattleEvent[]): boolean {
   const primal = ctx.battle.weather?.primal;
   if (primal && move.category !== 'status' && ((primal === 'desolate-land' && moveType === 'water') || (primal === 'primordial-sea' && moveType === 'fire'))) {
@@ -3469,11 +3490,29 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     events.push({ type: 'fail', side: user.side });
     return;
   }
-  if (targetsEnemy && abilityBlocksMove(ctx, user, target, move, moveType, effectiveness, events)) return;
+  // S7 Break the Rule: the partner's attack goes through an ability that would block it (once a run per ability).
+  const ruleBroken = targetsEnemy && user.side === 'player' && move.category !== 'status' && ctx.feat ? abilityWouldBlock(ctx, user, target, move, moveType, effectiveness) : null;
+  const brokeRule = ruleBroken !== null && !(ctx.feat!.broke ?? []).includes(ruleBroken) && tryFeat(ctx, user, 'break_the_rule');
+  if (brokeRule) ctx.feat!.detail = ruleBroken!;
+  if (targetsEnemy && !brokeRule && abilityBlocksMove(ctx, user, target, move, moveType, effectiveness, events)) return;
 
   if (move.category === 'status') {
     applyStatusMove(ctx, user, target, move, events);
     return;
+  }
+  // S7 Unmask the Illusion: the partner's hit ends a foe's Illusion or Disguise (the Disguise soaks nothing).
+  if (targetsEnemy && user.side === 'player' && ctx.feat) {
+    const disguised = abilityIn(ctx, target) === 'disguise' && !ctx.battle.extra.brokenFace.includes(target.mon.uid);
+    if ((target.vol.illusion || disguised) && tryFeat(ctx, user, 'unmask_the_illusion')) {
+      if (target.vol.illusion) {
+        events.push({ type: 'transform', side: target.side, uid: target.mon.uid, kind: 'illusion', from: target.vol.illusion, to: target.mon.speciesId, itemId: null, broken: true });
+        target.vol.illusion = null;
+      }
+      if (disguised) {
+        ctx.battle.extra.brokenFace.push(target.mon.uid);
+        swapForm(ctx, target, 'mimikyu-busted', events);
+      }
+    }
   }
   // S7 Crack the Barrier: at half HP or less the partner's hit breaks the foe's screens and Substitute first.
   if (targetsEnemy && user.side === 'player') {
@@ -3636,6 +3675,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         if (tfx.auroraVeil > 0 || (hitsDefense ? tfx.reflect > 0 : tfx.lightScreen > 0)) final *= 0.5;
       }
       if (userAbility === 'tinted-lens' && effectiveness < 1) final *= 2;
+      // S7 Old Style Surge (Remains of the Past): at half HP or less the partner's attack hits 1.5 times as hard, once.
+      if (user.side === 'player' && ctx.feat && user.mon.hp * 2 <= calcStats(content, user.mon).hp && tryFeat(ctx, user, 'old_style_surge')) final *= 1.5;
       if (userAbility === 'neuroforce' && effectiveness > 1) final *= 1.25;
       if (fx.superEffectiveBoost && effectiveness > 1) final *= 4 / 3;
       if (user.mon.awakened?.includes(move.id)) final *= content.story.awakening.boost;
@@ -3706,6 +3747,15 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (guard) {
       rivalSacrifice(ctx, target, guard, events);
       return;
+    }
+    // S7 Between Them and It (doubles): the partner takes a hit that would knock out its ally, at half damage.
+    if (target.side === 'player' && user.side === 'enemy' && ctx.feat && damage >= target.mon.hp && target.mon.uid !== ctx.feat.uid) {
+      const shield = allyCombatant(ctx, target);
+      if (shield && shield.mon.uid === ctx.feat.uid && tryFeat(ctx, shield, 'between_them_and_it')) {
+        const taken = takeHp(ctx, shield, Math.floor(damage / 2), landed);
+        events.push({ type: 'damage', side: shield.side, amount: taken.lost, hpAfter: shield.mon.hp, effectiveness, crit });
+        return;
+      }
     }
     const { lost, lastStand, hyper, knockedDown, stand } = takeHp(ctx, target, damage, landed);
     dealt += lost;
@@ -4746,6 +4796,8 @@ function content_maxPp(ctx: BattleContext, slot: { id: string; pp: number; ppUps
 function applyHazards(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const fx = ctx.battle.sideEffects[c.side];
   if (c.mon.hp <= 0 || !(fx.spikes || fx.toxicSpikes || fx.stealthRock || fx.stickyWeb)) return;
+  // S7 Old Tactics (Ex-Criminal): the partner steps around the hazards once.
+  if (tryFeat(ctx, c, 'old_tactics')) return;
   const grounded = isGrounded(ctx, c);
   // Tidy counts hazards it dodges: Heavy-Duty Boots, or in the air with no Stealth Rock down.
   if (Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots') || (!grounded && !fx.stealthRock)) { noteGrowthMark(ctx, c, 'avoid'); if (Held.hasHook(ctx, c.mon, c.side, 'heavyDutyBoots')) return; }
@@ -5444,6 +5496,16 @@ function tryInflictStatus(
   announceFailure: boolean,
 ): boolean {
   const { content, rng } = ctx;
+  // S7 Resonance Pulse (Aether): a foe's status on the partner is cancelled and the partner heals a little (a tenth).
+  if (source.side === 'enemy' && target.side === 'player' && target.mon.hp > 0 && tryFeat(ctx, target, 'resonance_pulse')) {
+    const max = calcStats(content, target.mon).hp;
+    const amount = Math.min(max - target.mon.hp, Math.max(1, Math.floor(max / 10)));
+    if (amount > 0) {
+      target.mon.hp += amount;
+      events.push({ type: 'heal', side: target.side, amount, hpAfter: target.mon.hp });
+    }
+    return false;
+  }
   const types = getSpecies(content, target.mon.speciesId).types;
   // S161: a second burn (or plain poison) on a Pokémon that already has it makes it worse instead of failing.
   if (stackableStatus(target.mon.status, status) && target.mon.hp > 0 && source !== target) {
