@@ -148,3 +148,24 @@ describe('party chemistry and camp scenes', () => {
     expect(text).not.toMatch(/\{\w+\}/);
   });
 });
+
+describe('backstory extra scenes (micro and chase)', () => {
+  it('plays the Viridian map moments and the Aether chase in a Story Run', () => {
+    const viridian = new Set<string>();
+    const aether = new Set<string>();
+    for (let i = 0; i < 6; i++) {
+      for (const id of playAll(storyRun(`extra-v${i}`, 'bs_viridian'))) viridian.add(id);
+      for (const id of playAll(storyRun(`extra-a${i}`, 'bs_aether'))) aether.add(id);
+    }
+    expect([...viridian].filter((id) => id.startsWith('ev_map_')).length).toBeGreaterThan(0);
+    expect(aether.has('ev_chase')).toBe(true);
+  });
+  it('applies each backstory modifier at the start', () => {
+    for (const bs of ['bs_ex_criminal', 'bs_champion_heir', 'bs_viridian', 'bs_aether', 'bs_hisui']) {
+      const run = storyRun(`mod-${bs}`, bs);
+      const mod = content.storyData.events.find((e) => e.backstory === bs && e.tags.includes('modifier'))!;
+      expect(mod, bs).toBeTruthy();
+      expect(Object.keys(run.story.v2!.facts).some((k) => k.startsWith('rel.class_')), bs).toBe(true);
+    }
+  });
+});

@@ -208,7 +208,7 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
   if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) {
     // A rival Stop's scene comes first, whatever the gap; else the Starter arc, else a quest arc that unlocks a Rare or
     // Exceptional line, may use the quiet Stop (neither moves the gap).
-    const own = rivalDue ?? ownPick()?.id ?? questPick(content, run, stop.act, ctx)?.id ?? worldPick(content, run, stop, stop.act, m.played, m.queue);
+    const own = rivalDue ?? ownPick()?.id ?? questPick(content, run, stop.act, ctx)?.id ?? (backstoryExtraPick(content, run, stop.act, ctx) ?? worldPick(content, run, stop, stop.act, m.played, m.queue));
     if (own) {
       m.active = own;
       m.activeStop = stopId;
@@ -231,13 +231,23 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
   if (!pick) {
     // Nothing from the module: a Secondary or Friendly rival scene that is due may take the Stop, else the Starter arc's
     // next scene, else a quest arc scene.
-    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue) ?? ownPick()?.id ?? questPick(content, run, stop.act, ctx)?.id ?? worldPick(content, run, stop, stop.act, m.played, m.queue);
+    const due = rivalDue ?? dueRivalScene(content, run, stop.act, false, m.played, m.queue) ?? ownPick()?.id ?? questPick(content, run, stop.act, ctx)?.id ?? (backstoryExtraPick(content, run, stop.act, ctx) ?? worldPick(content, run, stop, stop.act, m.played, m.queue));
     if (due) { m.active = due; m.activeStop = stopId; }
     return;
   }
   m.active = pick.id;
   m.activeStop = stopId;
   if (rivalDue) m.queue.push(rivalDue);
+}
+
+/**
+ * The backstory's small extra scenes (tags `micro` and `chase`: the Viridian map moments, the Aether chase). They sit outside the
+ * module's main list, so they play at Stops everything else left free, once each, when their Act and requirements hold.
+ */
+function backstoryExtraPick(content: Content, run: RunState, act: number, ctx: ResolveContext): string | undefined {
+  const m = run.story.v2?.module;
+  if (!m) return undefined;
+  return content.storyData.events.find((e) => e.backstory === m.backstory && (e.tags.includes('micro') || e.tags.includes('chase')) && eligible(content, run, e, act, ctx))?.id;
 }
 
 /** A stable per-run order for the quest arcs (a string hash; no RNG stream, so no roll ever moves). */

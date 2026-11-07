@@ -355,6 +355,7 @@
    "ev_calibration",
    "ev_subject_four",
    "ev_audio_log_1",
+   "ev_chase",
    "ev_decommission"
   ],
   "echoEvents": [
