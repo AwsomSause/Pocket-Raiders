@@ -188,7 +188,8 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
   const starterArc = v2.starter ? content.storyData.arcs.find((a) => a.id === `arc_${v2.starter!.lineId}`) : undefined;
   const ownPick = (): StoryEvent | undefined => (starterArc?.steps ?? []).map((s) => eventOf(content.storyData, s.event)).find((e) => !!e && eligible(content, run, e, stop.act, ctx));
   if (m.lastSceneStop > 0 && index - m.lastSceneStop <= content.balance.story.module.gapStops) {
-    const own = ownPick();
+    // Quiet Stops also carry the quest arcs that unlock Rare and Exceptional lines (they never move the gap either).
+    const own = ownPick() ?? questPick(content, run, stop.act, ctx);
     if (own) {
       m.active = own.id;
       m.activeStop = stopId;
@@ -209,9 +210,37 @@ export function queueStopScene(content: Content, run: RunState, stopId: string):
     const echo = eventOf(content.storyData, mod.echoEvents[m.echoes]!);
     if (echo && condsPass(echo.requires as ResolveCond[], ctx)) pick = echo;
   }
+  pick ??= questPick(content, run, stop.act, ctx);
   if (!pick) return;
   m.active = pick.id;
   m.activeStop = stopId;
+}
+
+/** A stable per-run order for the quest arcs (a string hash; no RNG stream, so no roll ever moves). */
+function questOrder(runId: string, id: string): number {
+  let h = 2166136261;
+  for (const ch of `${runId}:${id}`) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+  return h;
+}
+
+/**
+ * A quest arc scene for a Stop the backstory and the Starter arc left free: the next scene of the quest arc already begun, else
+ * the first scene of a new one. One quest arc at a time, and at most one started per Act from Act 2 (Design v2: at most one
+ * non-Starter arc per Act). The last scene unlocks a Rare or Exceptional Remembrance line (data/story/questArcs.ts).
+ */
+function questPick(content: Content, run: RunState, act: number, ctx: ResolveContext): StoryEvent | undefined {
+  const v2 = run.story.v2!;
+  const quests = content.storyData.arcs.filter((a) => a.id.startsWith('arc_qa_'));
+  const active = quests.find((a) => v2.arcs[a.id]?.state === 'active');
+  if (active) return active.steps.map((s) => eventOf(content.storyData, s.event)).find((e) => !!e && eligible(content, run, e, act, ctx));
+  const started = quests.filter((a) => v2.arcs[a.id]).length;
+  if (started >= act - 1) return undefined;
+  const fresh = quests.filter((a) => !v2.arcs[a.id]).sort((a, b) => questOrder(run.runId, a.id) - questOrder(run.runId, b.id));
+  for (const a of fresh) {
+    const e = eventOf(content.storyData, a.steps[0]!.event);
+    if (e && eligible(content, run, e, act, ctx)) return e;
+  }
+  return undefined;
 }
 
 // ---------- the scene a player sees ----------
@@ -287,7 +316,7 @@ function commit(content: Content, run: RunState, e: StoryEvent, choice: StoryEve
     m.snapshots = [...m.snapshots, { event: e.id, stop: m.activeStop, act: resolveCtx(content, run).act ?? 0, text, choice: choice?.id ?? null }].slice(-content.balance.story.module.maxSnapshots);
   }
   // A Starter arc scene does not count toward the backstory's gap between scenes.
-  if (!e.tags.includes('starter_arc')) m.lastSceneStop = v2.stops.index;
+  if (!e.tags.includes('starter_arc') && !e.tags.includes('quest_arc')) m.lastSceneStop = v2.stops.index;
 }
 
 /** Finishes the scene on screen: commits it (an ending was committed when reached) and clears the screen state. A choice scene needs a valid choice. */
