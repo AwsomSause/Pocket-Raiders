@@ -41,6 +41,8 @@ import { itemVisual, pokemonIcon } from './sprites';
 import { BASE_STAT_SCALE, growthInfo, summaryInfo } from './summaryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, STATUS_LABELS, textStyle } from './theme';
 import { Bar } from './widgets';
+import { storyIcon } from './storyIcon';
+import { storyIconId } from '../assets/storyIcons';
 
 export const POKEMON_TABS = ['Overview', 'Stats', 'Moves', 'Items', 'Bond', 'History', 'Traits'] as const;
 type Tab = (typeof POKEMON_TABS)[number];
@@ -111,6 +113,8 @@ class PokemonScreen implements PickerLike {
   private notice = 'Party order updated.';
   private closed = false;
   private flash = '';
+  /** The story emote over the Pokémon the last care action was for (presentation only). */
+  private emote: { uid: string; id: string } | null = null;
   private loadingKey = '';
   private readonly undo = new MoveUndo();
   /** A second Pokémon chosen with Ctrl-click or C to compare against (Stats tab). */
@@ -447,6 +451,7 @@ class PokemonScreen implements PickerLike {
         arg = answer;
       }
       this.flash = services().session.care(this.sel, id, arg);
+      this.emote = services().session.lastCareEmote ? { uid: this.mon.uid, id: services().session.lastCareEmote! } : null;
       this.notice = this.flash;
       this.reordered = true;
     } catch (e) {
@@ -808,6 +813,7 @@ class PokemonScreen implements PickerLike {
     const species = lookSpecies(this.content, mon);
     const icon = pokemonIcon(scene, species, 52, 52, 2.4);
     box.add(icon);
+    if (this.emote?.uid === mon.uid) storyIcon(scene, storyIconId('emote', this.emote.id), 92, 18, 32, box);
     if (this.motion === 'full') scene.tweens.add({ targets: icon, y: 46, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     const name = this.text(box, 110, 8, `${info.name}${mon.shiny ? ' ★' : ''}`, 28, '#ffffff');
     fitLine(name, 382 - 110 - 70);

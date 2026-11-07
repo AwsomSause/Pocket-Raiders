@@ -157,7 +157,7 @@ export function releaseGift(content: Content, level: number): number {
 }
 
 /** One care action on a party Pokémon. Returns a new run and a message; throws when not allowed. */
-export function careAction(content: Content, current: RunState, partyIndex: number, action: CareAction, arg?: string): { run: RunState; message: string } {
+export function careAction(content: Content, current: RunState, partyIndex: number, action: CareAction, arg?: string): { run: RunState; message: string; snack?: 'liked' | 'neutral' | 'hated' | null } {
   const problem = careProblem(content, current, partyIndex, action, arg);
   if (problem) throw new Error(problem);
   const run = structuredClone(current);
@@ -383,7 +383,7 @@ export function careAction(content: Content, current: RunState, partyIndex: numb
     const paid = heartbondCare(run, mon.uid, 'care_touch', `care${run.encountersCompleted}`, Object.values(care.done).reduce((a, n) => a + n, 0)).paid.length > 0;
     if (paid && snack === 'liked') adjustBond(bondOf(run, mon.uid), { affection: 1 });
   }
-  return { run, message };
+  return { run, message, snack };
 }
 
 /** After a won battle: the Pokémon that fought tire and grow; the others rest. `fought` is the uids that took part. */

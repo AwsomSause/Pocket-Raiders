@@ -450,7 +450,7 @@
    "group": "team",
    "lengthSec": 45,
    "source": "reuse",
-   "reuse": "bgm.battle_trainer",
+   "reuse": "bgm.battle_trainer_oras",
    "stemOf": "mythic_marauders"
   },
   {
@@ -459,7 +459,7 @@
    "group": "team",
    "lengthSec": 75,
    "source": "reuse",
-   "reuse": "bgm.battle_elite",
+   "reuse": "bgm.battle_gym_oras",
    "stemOf": "mythic_marauders"
   },
   {
@@ -477,7 +477,7 @@
    "group": "team",
    "lengthSec": 45,
    "source": "reuse",
-   "reuse": "bgm.battle_trainer",
+   "reuse": "bgm.battle_trainer_dppt",
    "stemOf": "hollow_choir"
   },
   {
@@ -486,7 +486,7 @@
    "group": "team",
    "lengthSec": 75,
    "source": "reuse",
-   "reuse": "bgm.battle_elite",
+   "reuse": "bgm.battle_gym_dppt",
    "stemOf": "hollow_choir"
   },
   {
@@ -504,7 +504,7 @@
    "group": "team",
    "lengthSec": 45,
    "source": "reuse",
-   "reuse": "bgm.battle_trainer",
+   "reuse": "bgm.battle_trainer_hgss",
    "stemOf": "ironvein_combine"
   },
   {
@@ -513,7 +513,7 @@
    "group": "team",
    "lengthSec": 75,
    "source": "reuse",
-   "reuse": "bgm.battle_elite",
+   "reuse": "bgm.battle_gym_hgss",
    "stemOf": "ironvein_combine"
   },
   {
@@ -531,7 +531,7 @@
    "group": "team",
    "lengthSec": 45,
    "source": "reuse",
-   "reuse": "bgm.battle_trainer",
+   "reuse": "bgm.battle_trainer_bw2",
    "stemOf": "pale_cartographers"
   },
   {
@@ -540,7 +540,7 @@
    "group": "team",
    "lengthSec": 75,
    "source": "reuse",
-   "reuse": "bgm.battle_elite",
+   "reuse": "bgm.battle_elite_dppt",
    "stemOf": "pale_cartographers"
   },
   {
@@ -567,7 +567,7 @@
    "group": "team",
    "lengthSec": 75,
    "source": "reuse",
-   "reuse": "bgm.battle_elite",
+   "reuse": "bgm.battle_elite_oras",
    "stemOf": "wildfire_accord"
   },
   {
@@ -585,7 +585,7 @@
    "group": "team",
    "lengthSec": 45,
    "source": "reuse",
-   "reuse": "bgm.battle_trainer",
+   "reuse": "bgm.battle_trainer_oras",
    "stemOf": "gilt_circle"
   },
   {
@@ -611,7 +611,7 @@
    "group": "region",
    "lengthSec": 105,
    "source": "reuse",
-   "reuse": "bgm.map"
+   "reuse": "bgm.map_hgss"
   },
   {
    "id": "mu_region_cairnmoor_tension",
@@ -635,7 +635,7 @@
    "group": "region",
    "lengthSec": 105,
    "source": "reuse",
-   "reuse": "bgm.map"
+   "reuse": "bgm.map_surf"
   },
   {
    "id": "mu_region_tidewrack_tension",
@@ -659,7 +659,7 @@
    "group": "region",
    "lengthSec": 105,
    "source": "reuse",
-   "reuse": "bgm.map"
+   "reuse": "bgm.map_dppt"
   },
   {
    "id": "mu_region_orrery_basin_tension",
