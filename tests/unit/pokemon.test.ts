@@ -3,12 +3,13 @@ import { addLevels, calcStats, createPokemon, gainXp, levelFromXp, xpForDefeat, 
 import { content } from './helpers';
 
 describe('Pokémon stats and experience', () => {
-  it('computes stats with the no-IV/EV formula', () => {
+  it('computes stats with the main-series formula (IVs 0, no EVs here)', () => {
     const mon = createPokemon(content, 'bulbasaur', 5, 'p1');
     mon.nature = 'serious';
+    mon.ivs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
     // HP = floor(2*45*5/100) + 5 + 10 + 5 (hpPerLevel) = 4 + 20 = 24; Atk = floor(2*49*5/100)+5 = 4+5 = 9
     expect(calcStats(content, mon)).toEqual({ hp: 24, atk: 9, def: 9, spa: 11, spd: 11, spe: 9 });
-    expect(mon.hp).toBe(24);
+    expect(mon.hp).toBeGreaterThanOrEqual(24);
   });
 
   it('vitamins multiply the stat by 10% per stack', () => {

@@ -55,6 +55,9 @@ test('the Pokémon screen shows tabs, explains held items and reorders the party
   await page.waitForTimeout(500);
   t = await texts(page);
   expect(t.some((s) => s.startsWith('Stats') && s.includes('compared with'))).toBe(true);
+  // W5: each stat shows its IV and EVs, and the header the EV total.
+  expect(t.filter((s) => /^IV \d+★? · EV \d+$/.test(s)).length).toBe(6);
+  expect(t.some((s) => /EVs \d+\/510/.test(s))).toBe(true);
   await page.screenshot({ path: 'test-results/pokemon-stats.png' });
   // Moves tab.
   await page.keyboard.press('ArrowRight');
