@@ -735,6 +735,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // 1. Switching and items go before any move.
   if (action.kind === 'switch') {
     battle.playerSwitches = (battle.playerSwitches ?? 0) + 1;
+    // Pivot counts a voluntary switch out after it has dealt damage.
+    if ((battle.growthMarks ?? []).includes(`dealt:${ctx.party[battle.activeIndex]!.uid}`)) noteGrowthMark(ctx, { side: 'player', mon: ctx.party[battle.activeIndex]! } as Combatant, 'pivotOut');
     events.push({ type: 'switchOut', side: 'player', uid: ctx.party[battle.activeIndex]!.uid });
     // Switching out ends a Dynamax.
     endDynamax(content, battle, 'player', ctx.party[battle.activeIndex]!, events as TransformStepEvent[]);
@@ -1595,6 +1597,12 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   const outgoing = ctx.party[battle.activeIndex];
   if (outgoing) leaveField(ctx, outgoing);
   const mon = ctx.party[partyIndex]!;
+  // Pivot: the Pokémon sent in right after a U-turn-style exit gets its edge for its first turn out.
+  if (battle.growthMarks?.length) {
+    const pivoted = battle.growthMarks.includes('pivoted');
+    battle.growthMarks = battle.growthMarks.filter((m) => m !== 'pivoted' && m !== `pivotIn:${mon.uid}` && m !== `dealt:${outgoing?.uid}`);
+    if (pivoted) battle.growthMarks.push(`pivotIn:${mon.uid}`);
+  }
   battle.activeIndex = partyIndex;
   battle.playerStages = freshStages();
   battle.playerVolatile = freshVolatile();
@@ -1685,7 +1693,7 @@ function foeContacted(ctx: BattleContext, foe: Combatant): boolean {
   return marks.includes(`contact:${foe.mon.uid}:${ctx.battle.turn}`) || marks.includes(`contact:${foe.mon.uid}:${ctx.battle.turn - 1}`);
 }
 /** Growth counters the story hooks pick up after the turn (marks `<counter>:<uid>`, one per event). */
-function noteGrowthMark(ctx: BattleContext, c: Combatant, counter: 'thorn' | 'avoid'): void {
+function noteGrowthMark(ctx: BattleContext, c: Combatant, counter: 'thorn' | 'avoid' | 'pivotOut'): void {
   if (c.side === 'player' && ctx.content.balance.overhaulGrowth.enabled) (ctx.battle.growthMarks ??= []).push(`${counter}:${c.mon.uid}`);
 }
 
@@ -2339,7 +2347,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
+  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), pivoted: user.vol.turnsOut <= 1 && (ctx.battle.growthMarks ?? []).includes(`pivotIn:${user.mon.uid}`), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3409,7 +3417,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
-      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, growthMove: user.mon.growthMove, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
+      if (user.side === 'player') accuracy *= growthAccuracyMultiplier(ctx.content.balance.overhaulGrowth, user.mon, move.accuracy, move.category, ctx.battle.weather?.id ?? null, move.type, Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0)), { moveId: move.id, growthMove: user.mon.growthMove, scout: target.vol.turnsOut <= 1, lowersSpe: Boolean(move.effects.statChanges?.some((c) => c.target === 'enemy' && c.stages < 0 && c.stat === 'spe')) });
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
@@ -3947,6 +3955,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     tryInflictStatus(ctx, user, target, rng.pick(extras.randomStatus), undefined, events, false);
   }
 
+  if (landed > 0 && user.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && !(ctx.battle.growthMarks ??= []).includes(`dealt:${user.mon.uid}`)) ctx.battle.growthMarks.push(`dealt:${user.mon.uid}`);
   if (landed > 0 && contact && user.side === 'enemy') (ctx.battle.growthMarks ??= []).push(`contact:${user.mon.uid}:${ctx.battle.turn}`);
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
@@ -4243,6 +4252,8 @@ function resolvePivots(ctx: BattleContext, player: Combatant, enemy: Combatant, 
   const mine = player.vol.pivot;
   player.vol.pivot = null;
   if (mine && player.mon.hp > 0 && !battle.needsSwitch && ctx.party.some((m, i) => i !== battle.activeIndex && m.hp > 0)) {
+    noteGrowthMark(ctx, player, 'pivotOut');
+    if (ctx.content.balance.overhaulGrowth.enabled) (battle.growthMarks ??= []).push('pivoted');
     battle.batonStages = mine.baton ? { ...battle.playerStages } : null;
     battle.needsSwitch = true;
   }
