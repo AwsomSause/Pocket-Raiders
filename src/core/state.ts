@@ -970,7 +970,7 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
     region: z.number().int().min(0),
     index: z.number().int().min(0),
     title: z.string(),
-    options: z.array(z.object({ label: z.string(), description: z.string(), action: z.enum(['door0', 'door1', 'pass', 'guest', 'skip']), leaderId: z.string().optional() })).min(1),
+    options: z.array(z.object({ label: z.string(), description: z.string(), action: z.enum(['door0', 'door1', 'pass', 'guest', 'skip']), leaderId: z.string().optional(), /** The Leader's portrait asset id (Fork Gate and Rematch Day menus). */ sprite: z.string().optional() })).min(1),
   }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),

@@ -239,7 +239,7 @@ import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart } from './evil/teams';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
-import { castAuthoredLeague, circuitLeader, noteGymWin } from './campaign/circuitCast';
+import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
 import { applyCircuitChoice, forkDecision, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
@@ -1876,7 +1876,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     let plan: TrainerPlan = roll((r) => {
       switch (node.kind) {
         case 'gym':
-          return planGymLeader(content, archetype, stage.leaderId, stageNumber, scale, r, bossRemix(run.rules));
+          return planGymLeader(content, archetype, stage.leaderId, stageNumber, scale, r, bossRemix(run.rules) || guestMatch(content, run), guestMatch(content, run) ? content.balance.story.guestMatchBonus : 0);
         case 'elite': {
           const memberId = stage.eliteFour[node.column - 1];
           if (!memberId) throw new Error(`No Elite Four member for column ${node.column}`);

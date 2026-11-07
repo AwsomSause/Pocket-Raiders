@@ -419,8 +419,8 @@ function planBoss(content: Content, archetype: Archetype, role: BossRole, bossId
 }
 
 /** The gym leader's team for the run's `stageNumber`-th stage (0-based). */
-export function planGymLeader(content: Content, archetype: Archetype, leaderId: string, stageNumber: number, scale: LevelScale, rng: Rng, remix = false): TrainerPlan {
-  return planBoss(content, archetype, 'gym', leaderId, stageNumber, scale, content.balance.difficulty.gymBonus, GYM_LEADER_CLASS, rng, remix);
+export function planGymLeader(content: Content, archetype: Archetype, leaderId: string, stageNumber: number, scale: LevelScale, rng: Rng, remix = false, extraBonus = 0): TrainerPlan {
+  return planBoss(content, archetype, 'gym', leaderId, stageNumber, scale, content.balance.difficulty.gymBonus + extraBonus, GYM_LEADER_CLASS, rng, remix);
 }
 
 /** An Elite Four member's team for region `regionIndex` (0-based). Teams get harder every region. */
