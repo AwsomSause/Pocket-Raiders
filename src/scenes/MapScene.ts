@@ -1091,6 +1091,12 @@ export class MapScene extends Phaser.Scene {
           this.time.delayedCall(260, () => this.scene.start(sceneForRun(cut)));
           break;
         }
+        const meddled = session.rivalInterfere(option.side.id);
+        if (meddled) {
+          this.busy = true;
+          this.scene.restart({ notice: meddled, focus: this.index });
+          break;
+        }
         if (option.side.kind === 'fish') {
           this.openFishing(option.side.id);
           break;

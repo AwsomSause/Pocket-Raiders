@@ -12,8 +12,8 @@ describe('W7 pseudo stage records', () => {
     expect(PSEUDO.records).toHaveLength(10);
     expect(validateAllPseudo()).toEqual([]);
     expect(PSEUDO.records.filter((r) => r.countsAsStage).map((r) => r.id)).toEqual(['ps_evil_hideout']);
-    // Five are opened by run events; Safari, Distortion World (reached from the Distortion Incident later), Dreamscape, Evil Hideout and Celestial Expanse have no entry yet, so they stay disabled.
-    expect(PSEUDO.records.filter((r) => r.status === 'disabled').map((r) => r.id).sort()).toEqual(['ps_celestial_expanse', 'ps_distortion_world', 'ps_dreamscape', 'ps_evil_hideout', 'ps_safari_zone']);
+    // Nine are opened by events (pseudo-openers.json adds Safari, Dreamscape, Evil Hideout, Celestial Expanse); Distortion World has no entry yet, so it stays disabled.
+    expect(PSEUDO.records.filter((r) => r.status === 'disabled').map((r) => r.id).sort()).toEqual(['ps_distortion_world']);
     expect(PSEUDO.records.filter((r) => r.status !== 'disabled').every((r) => r.status === 'limited')).toBe(true);
   });
   it('rejects a record that breaks the rules', () => {
