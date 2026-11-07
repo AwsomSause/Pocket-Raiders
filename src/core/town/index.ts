@@ -92,12 +92,15 @@ export function townProblem(content: Content, p: Profile, a: TownAction, now: Da
     if (!isNight(now)) return 'Fireflies only come out at night (8 pm to 6 am).';
     if (dayCount(t, a.id, today) >= (a.max ?? 5)) return 'The fireflies have gone for tonight.';
   }
+  if (a.kind === 'gacha' && (t.counts.gachaLock ?? 0) > 0) return GACHA_LOCKED;
   if (a.limit === 'run' && t.spent.includes(a.id)) return 'Done for now. It opens again when you start a run.';
   if (a.limit === 'day' && a.kind !== 'quiz' && a.kind !== 'gacha' && t.daily[a.id] === today) return 'Done for today. Come back tomorrow.';
   if (a.kind === 'quiz' && dayCount(t, a.id, today) >= (a.max ?? 3)) return 'Out of questions for today.';
   void content;
   return costProblem(p, a.cost);
 }
+
+export const GACHA_LOCKED = 'The capsule machine is empty until your next run ends.';
 
 // ---------- rewards ----------
 
@@ -529,23 +532,26 @@ export function statueTarget(t: TownProfile): number[] {
 
 function runGacha(c: Ctx): string {
   const cfg = TOWN.gacha;
-  const free = c.t.daily['gacha-free'] !== c.today;
-  if (!free) { const cp = costProblem(c.p, cfg.cost); if (cp) fail(cp); pay(c.p, c.t, cfg.cost); }
-  else c.t.daily['gacha-free'] = c.today;
+  // One spin per finished run: the lock opens again in recordTownRun.
+  if ((c.t.counts.gachaLock ?? 0) > 0) fail(GACHA_LOCKED);
   const rng = rngFor(c.t, 'gacha');
-  c.t.counter += 1;
-  c.t.counts.pity = (c.t.counts.pity ?? 0) + 1;
-  const forced = c.t.counts.pity >= cfg.pity;
+  const pity = (c.t.counts.pity ?? 0) + 1;
+  const forced = pity >= cfg.pity;
   const pools = forced ? cfg.pools.filter((x) => x.rarity !== 'common') : cfg.pools;
   const pool = rng.weighted(pools.map((x) => ({ item: x, weight: x.weight })));
-  if (pool.rarity !== 'common') c.t.counts.pity = 0;
+  const item = rng.pick(cfg.items[pool.rarity]);
+  if (Object.keys(c.t.boon.items).length >= TOWN.caps.boonItems && !(item.id in c.t.boon.items)) fail('Your pack is full of waiting items. Start a run first.');
+  c.t.counter += 1;
+  c.t.counts.pity = pool.rarity === 'common' ? pity : 0;
+  c.t.counts.gachaLock = 1;
+  addBoonItems(c.t, { [item.id]: 1 });
+  const head = `${pool.rarity.toUpperCase()}: ${item.label} will be in your pack next run.`;
+  // Rare and epic capsules also hold a keepsake (sticker, trail, track...); a duplicate turns into Research Points.
+  if (pool.rarity === 'common') return head;
   const prize = rng.pick(pool.goods);
-  const have = (c.t.sets[prize.set] ?? []).includes(prize.id) || (prize.set === 'decor' && false);
-  const tag = `${pool.rarity.toUpperCase()}: ${prize.label}`;
-  if (prize.set === 'tracks') (c.t.sets.tracks ??= []).includes(prize.id) || c.t.sets.tracks.push(prize.id);
-  if (have) return `${tag}. ${reward(c, cfg.dupe)}`;
-  if (prize.set !== 'tracks') (c.t.sets[prize.set] ??= []).push(prize.id);
-  return `${tag}! ${free ? '(free daily capsule)' : ''}`.trim();
+  const have = (c.t.sets[prize.set] ?? []).includes(prize.id);
+  if (!have) (c.t.sets[prize.set] ??= []).push(prize.id);
+  return have ? `${head} Bonus: ${prize.label}. ${reward(c, cfg.dupe)}` : `${head} Bonus: ${prize.label}!`;
 }
 
 function runDaily(c: Ctx): string {
@@ -724,6 +730,7 @@ export function spendTownStart(profile: Profile): Profile {
 export function recordTownRun(content: Content, profile: Profile, run: { runId: string; seed: string; victory: boolean; regionIndex?: number; inventory: Record<string, number>; camp?: { relics: { id: string; cursed: boolean }[]; stuff?: Record<string, number> }; badges?: string[]; nuzlocke?: { memorial: { speciesId: string; level: number; ace: boolean; cause: string }[] }; party?: { speciesId: string; level: number; hp: number; care?: { ace?: boolean } }[] }): void {
   const t = townOf(profile);
   profile.town = t;
+  delete t.counts.gachaLock;
   t.last = { victory: run.victory, cleared: run.regionIndex ?? 0, runId: run.runId };
   t.counts.season = (t.counts.season ?? 0) + (run.victory ? 3 : 1);
   for (const r of run.camp?.relics ?? []) {
