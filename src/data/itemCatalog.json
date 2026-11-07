@@ -4507,7 +4507,7 @@
   "name": "Sitrus Berry",
   "family": "Berries (held, eaten in battle)",
   "description": "Below 50% HP: heals 25% max HP",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 5,
   "how": "held",
@@ -5466,7 +5466,7 @@
   "name": "Pomeg Berry",
   "family": "Berries (held, eaten in battle)",
   "description": "Feed to a Pokémon: big friendship boost, +1 Love",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -5730,7 +5730,7 @@
   "name": "Magost Berry",
   "family": "Berries (held, eaten in battle)",
   "description": "+1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6128,7 +6128,7 @@
   "name": "Green Shard",
   "family": "Attribute items",
   "description": "+2 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6200,7 +6200,7 @@
   "name": "Sweet Heart",
   "family": "Attribute items",
   "description": "+3 Love, heals 20 HP",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6219,7 +6219,7 @@
   "name": "RageCandyBar",
   "family": "Attribute items",
   "description": "+3 toward Rage, heals 20 HP",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6463,7 +6463,7 @@
   "name": "Stardust",
   "family": "Valuables",
   "description": "+₽80, +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6482,7 +6482,7 @@
   "name": "Star Piece",
   "family": "Valuables",
   "description": "+₽400, +2 Luck",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6501,7 +6501,7 @@
   "name": "Comet Shard",
   "family": "Valuables",
   "description": "+₽1,000, +4 Luck",
-  "rarity": "rare",
+  "rarity": "epic",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6558,7 +6558,7 @@
   "name": "Balm Mushroom",
   "family": "Valuables",
   "description": "+₽500, heals the whole team 25%",
-  "rarity": "rare",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -6629,7 +6629,7 @@
   "name": "Relic Gold",
   "family": "Valuables",
   "description": "+₽500",
-  "rarity": "rare",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -7071,7 +7071,7 @@
   "name": "Lemonade",
   "family": "Healing and status items",
   "description": "Heals 70 HP, +1 Charisma",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -7148,7 +7148,7 @@
   "name": "Energy Root",
   "family": "Healing and status items",
   "description": "Heals 200 HP, very bitter: friendship down more",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -7201,7 +7201,7 @@
   "name": "Old Gateau",
   "family": "Healing and status items",
   "description": "Cures status, +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -10493,7 +10493,7 @@
   "name": "Fab Mail",
   "family": "Mail",
   "description": "+₽300 now (you sell it to a collector)",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -13409,7 +13409,7 @@
   "name": "Max Potion",
   "family": "Healing and status items",
   "description": "Fully restores one Pokémon's HP",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -13442,7 +13442,7 @@
   "name": "Big Malasada",
   "family": "Healing and status items",
   "description": "Heals 60 HP, +10 friendship",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -13459,7 +13459,7 @@
   "name": "Pewter Crunchies",
   "family": "Healing and status items",
   "description": "Heals 40 HP and cures status",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -15208,7 +15208,7 @@
   "name": "Adrenaline Orb",
   "family": "Battle boosters (X items, Dire Hit, Guard Spec.)",
   "description": "+1 Speed for 5 turns and wild Pokémon call for help far more (a second call may be answered)",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 2,
   "how": "use",
@@ -17297,7 +17297,7 @@
   "name": "Roto Friendship",
   "family": "Roto Powers (Drive pack)",
   "description": "A Pokémon of your choice gains a lot of friendship",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17475,7 +17475,7 @@
   "name": "Fruit Bunch",
   "family": "Food (Drive pack)",
   "description": "Heals 50 HP; +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17513,7 +17513,7 @@
   "name": "Moomoo Cheese",
   "family": "Food (Drive pack)",
   "description": "Heals 80 HP; +1 Love",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17570,7 +17570,7 @@
   "name": "Precooked Burger",
   "family": "Food (Drive pack)",
   "description": "Heals 70 HP; +1 Strength",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17683,7 +17683,7 @@
   "name": "Max Honey",
   "family": "Food (Drive pack)",
   "description": "Heals 120 HP and cures its status",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17757,7 +17757,7 @@
   "name": "Smoke-Poke Tail",
   "family": "Food (Drive pack)",
   "description": "Friendship up; +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17814,7 +17814,7 @@
   "name": "Rainbow Flower",
   "family": "Food (Drive pack)",
   "description": "Friendship up a lot; +1 Charisma",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -17898,7 +17898,7 @@
   "name": "Tiny Bamboo Shoot",
   "family": "Food (Drive pack)",
   "description": "Sell it for 250 money",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -18228,7 +18228,7 @@
   "name": "Red Gummy",
   "family": "Gummies (Drive pack)",
   "description": "Friendship up a lot; +1 Love",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -18351,7 +18351,7 @@
   "name": "Yellow Petal",
   "family": "Petals (Drive pack)",
   "description": "+1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -18712,7 +18712,7 @@
   "name": "Wishing Piece",
   "family": "Map items (Drive pack)",
   "description": "Next wild battle: the strongest of three Pokémon appears; +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": 3,
   "how": "use",
@@ -18856,7 +18856,7 @@
   "name": "Gimmighoul Coin",
   "family": "Valuables (Drive pack)",
   "description": "Worth 100 money; +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -19550,7 +19550,7 @@
   "name": "Hyper Pomeg Berry",
   "family": "Berries (held, eaten in battle)",
   "description": "Feed to a Pokémon: huge friendship boost, +2 Love",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -19908,7 +19908,7 @@
   "name": "Clover Sweet",
   "family": "Sweets",
   "description": "Feed to a Pokémon: friendship boost, +1 Luck",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "pokemon",
   "max": null,
   "how": "use",
@@ -20018,7 +20018,7 @@
   "name": "Tiempa's Diamond",
   "family": "Valuables",
   "description": "Worth 1500 money; +1 Luck",
-  "rarity": "rare",
+  "rarity": "epic",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20054,7 +20054,7 @@
   "name": "Black Shard",
   "family": "Valuables",
   "description": "Worth 300 money",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20071,7 +20071,7 @@
   "name": "Dark Shard",
   "family": "Valuables",
   "description": "Worth 600 money",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20088,7 +20088,7 @@
   "name": "Crystal Shard",
   "family": "Valuables",
   "description": "Worth 800 money",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20139,7 +20139,7 @@
   "name": "Meteorite Shard",
   "family": "Valuables",
   "description": "Worth 700 money",
-  "rarity": "uncommon",
+  "rarity": "rare",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20173,7 +20173,7 @@
   "name": "Star Shard (Red)",
   "family": "Valuables",
   "description": "Worth 250 money",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20190,7 +20190,7 @@
   "name": "Star Shard (Blue)",
   "family": "Valuables",
   "description": "Worth 250 money",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20207,7 +20207,7 @@
   "name": "Star Shard (Yellow)",
   "family": "Valuables",
   "description": "Worth 250 money",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20224,7 +20224,7 @@
   "name": "Star Shard (Green)",
   "family": "Valuables",
   "description": "Worth 250 money",
-  "rarity": "common",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20258,7 +20258,7 @@
   "name": "Jewel of Life",
   "family": "Valuables",
   "description": "Worth 2000 money; +2 Love",
-  "rarity": "epic",
+  "rarity": "rare",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -20277,7 +20277,7 @@
   "name": "Bug Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Bug moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20301,7 +20301,7 @@
   "name": "Dark Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Dark moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20325,7 +20325,7 @@
   "name": "Dragon Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Dragon moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20349,7 +20349,7 @@
   "name": "Electric Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Electric moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20373,7 +20373,7 @@
   "name": "Fairy Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Fairy moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20397,7 +20397,7 @@
   "name": "Fighting Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Fighting moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20421,7 +20421,7 @@
   "name": "Fire Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Fire moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20445,7 +20445,7 @@
   "name": "Flying Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Flying moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20469,7 +20469,7 @@
   "name": "Ghost Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Ghost moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20493,7 +20493,7 @@
   "name": "Grass Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Grass moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20517,7 +20517,7 @@
   "name": "Ground Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Ground moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20541,7 +20541,7 @@
   "name": "Ice Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Ice moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20565,7 +20565,7 @@
   "name": "Normal Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Normal moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20589,7 +20589,7 @@
   "name": "Poison Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Poison moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20613,7 +20613,7 @@
   "name": "Psychic Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Psychic moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20637,7 +20637,7 @@
   "name": "Rock Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Rock moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20661,7 +20661,7 @@
   "name": "Steel Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Steel moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -20685,7 +20685,7 @@
   "name": "Water Ribbon",
   "family": "Ribbons (held, one type)",
   "description": "Water moves of the holder do 10% more",
-  "rarity": "uncommon",
+  "rarity": "common",
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
@@ -21349,7 +21349,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "bashful-ball-pack",
   "name": "Bashful Ball x3",
   "family": "Capture and party items",
@@ -21366,7 +21366,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "bold-ball-pack",
   "name": "Bold Ball x3",
   "family": "Capture and party items",
@@ -21383,7 +21383,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "brave-ball-pack",
   "name": "Brave Ball x3",
   "family": "Capture and party items",
@@ -21400,7 +21400,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "calm-ball-pack",
   "name": "Calm Ball x3",
   "family": "Capture and party items",
@@ -21417,7 +21417,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "careful-ball-pack",
   "name": "Careful Ball x3",
   "family": "Capture and party items",
@@ -21434,7 +21434,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "docile-ball-pack",
   "name": "Docile Ball x3",
   "family": "Capture and party items",
@@ -21451,7 +21451,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "gentle-ball-pack",
   "name": "Gentle Ball x3",
   "family": "Capture and party items",
@@ -21468,7 +21468,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "hardy-ball-pack",
   "name": "Hardy Ball x3",
   "family": "Capture and party items",
@@ -21485,7 +21485,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "hasty-ball-pack",
   "name": "Hasty Ball x3",
   "family": "Capture and party items",
@@ -21502,7 +21502,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "impish-ball-pack",
   "name": "Impish Ball x3",
   "family": "Capture and party items",
@@ -21519,7 +21519,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "jolly-ball-pack",
   "name": "Jolly Ball x3",
   "family": "Capture and party items",
@@ -21536,7 +21536,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "lax-ball-pack",
   "name": "Lax Ball x3",
   "family": "Capture and party items",
@@ -21553,7 +21553,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "lonely-ball-pack",
   "name": "Lonely Ball x3",
   "family": "Capture and party items",
@@ -21570,7 +21570,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "mild-ball-pack",
   "name": "Mild Ball x3",
   "family": "Capture and party items",
@@ -21587,7 +21587,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "modest-ball-pack",
   "name": "Modest Ball x3",
   "family": "Capture and party items",
@@ -21604,7 +21604,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "naive-ball-pack",
   "name": "Naive Ball x3",
   "family": "Capture and party items",
@@ -21621,7 +21621,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "naughty-ball-pack",
   "name": "Naughty Ball x3",
   "family": "Capture and party items",
@@ -21638,7 +21638,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "quiet-ball-pack",
   "name": "Quiet Ball x3",
   "family": "Capture and party items",
@@ -21655,7 +21655,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "quirky-ball-pack",
   "name": "Quirky Ball x3",
   "family": "Capture and party items",
@@ -21672,7 +21672,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "rash-ball-pack",
   "name": "Rash Ball x3",
   "family": "Capture and party items",
@@ -21689,7 +21689,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "relaxed-ball-pack",
   "name": "Relaxed Ball x3",
   "family": "Capture and party items",
@@ -21706,7 +21706,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "sassy-ball-pack",
   "name": "Sassy Ball x3",
   "family": "Capture and party items",
@@ -21723,7 +21723,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "serious-ball-pack",
   "name": "Serious Ball x3",
   "family": "Capture and party items",
@@ -21740,7 +21740,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "timid-ball-pack",
   "name": "Timid Ball x3",
   "family": "Capture and party items",
@@ -21757,7 +21757,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "hp-training-ball-pack",
   "name": "HP Training Ball x3",
   "family": "Capture and party items",
@@ -21774,7 +21774,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "atk-training-ball-pack",
   "name": "Attack Training Ball x3",
   "family": "Capture and party items",
@@ -21791,7 +21791,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "def-training-ball-pack",
   "name": "Defense Training Ball x3",
   "family": "Capture and party items",
@@ -21808,7 +21808,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "spa-training-ball-pack",
   "name": "Sp. Atk Training Ball x3",
   "family": "Capture and party items",
@@ -21825,7 +21825,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "spd-training-ball-pack",
   "name": "Sp. Def Training Ball x3",
   "family": "Capture and party items",
@@ -21842,7 +21842,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "spe-training-ball-pack",
   "name": "Speed Training Ball x3",
   "family": "Capture and party items",
@@ -21859,7 +21859,7 @@
    "count": 3
   }
  },
-{
+ {
   "id": "master-tera-jewel",
   "name": "Master Tera Jewel",
   "family": "Tera Jewels",
@@ -21875,7 +21875,7 @@
    "mode": "secondary"
   }
  },
-{
+ {
   "id": "radiant-tera-jewel",
   "name": "Radiant Tera Jewel",
   "family": "Tera Jewels",
@@ -21891,7 +21891,7 @@
    "mode": "primary"
   }
  },
-{
+ {
   "id": "mystery-tera-jewel",
   "name": "Mystery Tera Jewel",
   "family": "Tera Jewels",

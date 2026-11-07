@@ -1,0 +1,307 @@
+[
+ {
+  "id": "sitrus-berry",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "pomeg-berry",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "magost-berry",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "green-shard",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "sweet-heart",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "ragecandybar",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "stardust",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "star-piece",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "comet-shard",
+  "from": "rare",
+  "to": "epic"
+ },
+ {
+  "id": "balmmushroom",
+  "from": "rare",
+  "to": "uncommon"
+ },
+ {
+  "id": "relic-gold",
+  "from": "rare",
+  "to": "uncommon"
+ },
+ {
+  "id": "lemonade",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "energy-root",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "old-gateau",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "fab-mail",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "max-potion",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "big-malasada",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "pewter-crunchies",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "adrenaline-orb",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "roto-friendship",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "fruit-bunch",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "moomoo-cheese",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "precooked-burger",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "max-honey",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "smoke-poke-tail",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "rainbow-flower",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "tiny-bamboo-shoot",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "red-gummy",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "yellow-petal",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "wishing-piece",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "gimmighoul-coin",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "hyper-pomeg-berry",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "clover-sweet",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "tiempas-diamond",
+  "from": "rare",
+  "to": "epic"
+ },
+ {
+  "id": "black-shard",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "blackshard-2",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "crystal-shard",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "meteorite-shard",
+  "from": "uncommon",
+  "to": "rare"
+ },
+ {
+  "id": "star-shard1",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "star-shard2",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "star-shard3",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "star-shard4",
+  "from": "common",
+  "to": "uncommon"
+ },
+ {
+  "id": "jewel-of-life",
+  "from": "epic",
+  "to": "rare"
+ },
+ {
+  "id": "bug-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "dark-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "dragon-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "electric-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "fairy-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "fighting-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "fire-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "flying-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "ghost-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "grass-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "ground-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "ice-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "normal-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "poison-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "psychic-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "rock-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "steel-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ },
+ {
+  "id": "water-ribbon",
+  "from": "uncommon",
+  "to": "common"
+ }
+]
