@@ -242,6 +242,9 @@ const ProfileStoryObject = z.object({
   chronicles: z.array(ChronicleRecordSchema).max(40).default([]),
   sceneSnapshots: z.array(z.unknown()).max(60).default([]),
   endingsSeen: z.array(z.string()).max(60).default([]),
+  /** S6: Keepsake ids unlocked, and the one worn per slot (any Pokémon shows the same outfit). */
+  keepsakes: z.array(z.string()).max(40).default([]),
+  worn: z.record(z.string(), z.string()).default({}),
   newBadges: z.array(z.string()).max(100).default([]),
   contentHashSeen: z.string().default(''),
 });
