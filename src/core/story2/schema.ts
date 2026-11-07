@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 export const Id = z.string().regex(/^[a-z][a-z0-9_]*$/);
 export const Key = z.string().regex(/^[a-z][a-z0-9_.]*$/);
+/** A species or move id from the game data (these use hyphens: nidoran-f, leech-seed). */
+export const GameId = z.string().regex(/^[a-z][a-z0-9_-]*$/);
 const Ver = z.number().int().min(1);
 const Scalar = z.union([z.boolean(), z.number(), z.string()]);
 
@@ -69,15 +71,17 @@ export const ThemeSchema = z.object({
 });
 
 export const RemembranceSchema = z.object({
-  id: Id, v: Ver, line: z.array(Id).min(1).max(3), types: z.array(Id).min(1).max(2), temperament: Id, affinity: z.record(Id, z.number()),
+  id: Id, v: Ver, line: z.array(GameId).min(1).max(3), types: z.array(Id).min(1).max(2), temperament: Id, affinity: z.record(Id, z.number()),
   unlock: z.object({ kind: z.enum(['start', 'quiz', 'win', 'mastery', 'event', 'backstory']), arg: z.string().optional() }),
-  moves: z.array(Id), keystone: Id, status: z.enum(['supported', 'limited', 'disabled']),
+  moves: z.array(GameId), keystone: Id, status: z.enum(['supported', 'limited', 'disabled']),
   /** Quiz fields (S3): combat role, generation of origin, whether the line branches, whether stage 1 is a baby, and whether the quiz may offer it. */
   role: z.enum(['sweeper', 'tank', 'support', 'disruptor', 'trapper', 'pivot', 'scout']).optional(),
   generation: z.number().int().min(1).optional(),
   branching: z.boolean().default(false),
   baby: z.boolean().default(false),
   quizEligible: z.boolean().default(true),
+  /** How hard the line is to discover (Design v2 Part II rarity table); not how strong it is. */
+  rarity: z.enum(['familiar', 'unusual', 'rare', 'exceptional', 'legendary', 'mythical', 'secret', 'extraordinary']).optional(),
 });
 
 export const MoveMomentSchema = z.object({

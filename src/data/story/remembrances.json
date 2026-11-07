@@ -1,239 +1,637 @@
 [
  {
   "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_sandile",
+  "id": "rm_bulbasaur",
   "line": [
-   "sandile",
-   "krokorok",
-   "krookodile"
-  ],
-  "types": [
-   "ground",
-   "dark"
-  ],
-  "temperament": "wary",
-  "moves": [
-   "crunch",
-   "taunt",
-   "leer"
-  ],
-  "keystone": "clipped_scale",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_tally_5"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_pawniard",
-  "line": [
-   "pawniard",
-   "bisharp"
-  ],
-  "types": [
-   "dark",
-   "steel"
-  ],
-  "temperament": "loyal",
-  "moves": [
-   "taunt",
-   "leer",
-   "scratch"
-  ],
-  "keystone": "abandoned_blade",
-  "unlock": {
-   "kind": "backstory",
-   "arg": "bs_ex_criminal"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_larvitar",
-  "line": [
-   "larvitar",
-   "pupitar",
-   "tyranitar"
-  ],
-  "types": [
-   "rock",
-   "ground"
-  ],
-  "temperament": "stubborn",
-  "moves": [
-   "crunch",
-   "leer",
-   "bite"
-  ],
-  "keystone": "bedrocks_heir",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_bedrock_4"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_caterpie",
-  "line": [
-   "caterpie",
-   "metapod",
-   "butterfree"
-  ],
-  "types": [
-   "bug",
-   "flying"
-  ],
-  "temperament": "regal",
-  "moves": [
-   "tackle",
-   "gust",
-   "harden"
-  ],
-  "keystone": "elder_butterfree",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_forest_remembers"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_weedle",
-  "line": [
-   "weedle",
-   "kakuna",
-   "beedrill"
-  ],
-  "types": [
-   "bug",
-   "poison"
-  ],
-  "temperament": "loyal",
-  "moves": [
-   "harden",
-   "tackle",
-   "leer"
-  ],
-  "keystone": "saved_weedle",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_old_friend_2"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_oddish",
-  "line": [
-   "oddish",
-   "gloom",
-   "vileplume"
+   "bulbasaur",
+   "ivysaur",
+   "venusaur"
   ],
   "types": [
    "grass",
    "poison"
   ],
-  "temperament": "calm",
-  "moves": [
-   "absorb",
-   "acid",
-   "growl"
-  ],
-  "keystone": "saved_roots",
+  "temperament": "tm_protective",
+  "affinity": {
+   "loyalty": 3,
+   "compassion": 3,
+   "resolve": 2
+  },
   "unlock": {
-   "kind": "event",
-   "arg": "ev_migration_5"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_poliwag",
-  "line": [
-   "poliwag",
-   "poliwhirl",
-   "poliwrath"
-  ],
-  "types": [
-   "water",
-   "fighting"
-  ],
-  "temperament": "playful",
-  "moves": [
-   "bubble",
-   "growl",
-   "tackle"
-  ],
-  "keystone": "pond_tune",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_map_pond"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_ralts",
-  "line": [
-   "ralts",
-   "kirlia",
-   "gardevoir"
-  ],
-  "types": [
-   "psychic",
-   "fairy"
-  ],
-  "temperament": "sensitive",
-  "moves": [
-   "growl",
-   "confusion",
-   "teleport"
-  ],
-  "keystone": "shared_perception",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_humanitys_question"
-  }
- },
- {
-  "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_porygon",
-  "line": [
-   "porygon",
-   "porygon2"
-  ],
-  "types": [
-   "normal"
-  ],
-  "temperament": "anxious",
+   "kind": "quiz",
+   "arg": "initial"
+  },
   "moves": [
    "tackle",
-   "sharpen",
-   "conversion"
+   "growl",
+   "leech-seed"
   ],
-  "keystone": "proto_loop",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_proto_4"
-  }
+  "keystone": "keystone_bulbasaur",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
  },
  {
   "v": 1,
-  "affinity": {},
+  "id": "rm_charmander",
+  "line": [
+   "charmander",
+   "charmeleon",
+   "charizard"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_brave",
+  "affinity": {
+   "courage": 3,
+   "ambition": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "growl",
+   "ember"
+  ],
+  "keystone": "keystone_charmander",
   "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_squirtle",
+  "line": [
+   "squirtle",
+   "wartortle",
+   "blastoise"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_playful",
+  "affinity": {
+   "adaptability": 3,
+   "loyalty": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "tail-whip",
+   "bubble"
+  ],
+  "keystone": "keystone_squirtle",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_chikorita",
+  "line": [
+   "chikorita",
+   "bayleef",
+   "meganium"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "compassion": 3,
+   "loyalty": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "growl",
+   "tackle",
+   "razor-leaf"
+  ],
+  "keystone": "keystone_chikorita",
+  "status": "limited",
+  "role": "support",
+  "rarity": "familiar",
+  "generation": 2,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_cyndaquil",
+  "line": [
+   "cyndaquil",
+   "quilava",
+   "typhlosion"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "brave",
+  "affinity": {
+   "instinct": 3,
+   "curiosity": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "leer",
+   "scratch"
+  ],
+  "keystone": "hisui_cyndaquil",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "familiar",
+  "generation": 2,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_totodile",
+  "line": [
+   "totodile",
+   "croconaw",
+   "feraligatr"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_mischievous",
+  "affinity": {
+   "ambition": 3,
+   "courage": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "leer",
+   "scratch",
+   "water-gun"
+  ],
+  "keystone": "keystone_totodile",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 2,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_treecko",
+  "line": [
+   "treecko",
+   "grovyle",
+   "sceptile"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_independent",
+  "affinity": {
+   "independence": 3,
+   "adaptability": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "leer",
+   "pound",
+   "leafage"
+  ],
+  "keystone": "keystone_treecko",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "familiar",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_torchic",
+  "line": [
+   "torchic",
+   "combusken",
+   "blaziken"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_competitive",
+  "affinity": {
+   "ambition": 3,
+   "resolve": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "growl",
+   "scratch",
+   "ember"
+  ],
+  "keystone": "keystone_torchic",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_mudkip",
+  "line": [
+   "mudkip",
+   "marshtomp",
+   "swampert"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_stubborn",
+  "affinity": {
+   "resolve": 3,
+   "loyalty": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "growl",
+   "tackle",
+   "rock-smash"
+  ],
+  "keystone": "keystone_mudkip",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "familiar",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_turtwig",
+  "line": [
+   "turtwig",
+   "grotle",
+   "torterra"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_serious",
+  "affinity": {
+   "compassion": 3,
+   "resolve": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "withdraw",
+   "leafage"
+  ],
+  "keystone": "keystone_turtwig",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "familiar",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_chimchar",
+  "line": [
+   "chimchar",
+   "monferno",
+   "infernape"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_energetic",
+  "affinity": {
+   "courage": 3,
+   "instinct": 3,
+   "ambition": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "leer",
+   "tackle",
+   "scratch"
+  ],
+  "keystone": "keystone_chimchar",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_piplup",
+  "line": [
+   "piplup",
+   "prinplup",
+   "empoleon"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_competitive",
+  "affinity": {
+   "ambition": 3,
+   "independence": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "pound",
+   "growl"
+  ],
+  "keystone": "keystone_piplup",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_snivy",
+  "line": [
+   "snivy",
+   "servine",
+   "serperior"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_intelligent",
+  "affinity": {
+   "intelligence": 3,
+   "independence": 3,
+   "ambition": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "leer",
+   "vine-whip"
+  ],
+  "keystone": "keystone_snivy",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "familiar",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_tepig",
+  "line": [
+   "tepig",
+   "pignite",
+   "emboar"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "loyalty": 3,
+   "instinct": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "tail-whip",
+   "ember"
+  ],
+  "keystone": "keystone_tepig",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "familiar",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_oshawott",
+  "line": [
+   "oshawott",
+   "dewott",
+   "samurott"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "brave",
+  "affinity": {
+   "curiosity": 3,
+   "loyalty": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "growl",
+   "scratch"
+  ],
+  "keystone": "hisui_oshawott",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_chespin",
+  "line": [
+   "chespin",
+   "quilladin",
+   "chesnaught"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_protective",
+  "affinity": {
+   "loyalty": 3,
+   "courage": 3,
+   "compassion": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "growl",
+   "vine-whip"
+  ],
+  "keystone": "keystone_chespin",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "familiar",
+  "generation": 6,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_fennekin",
+  "line": [
+   "fennekin",
+   "braixen",
+   "delphox"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_intelligent",
+  "affinity": {
+   "intelligence": 3,
+   "curiosity": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "tail-whip",
+   "ember"
+  ],
+  "keystone": "keystone_fennekin",
+  "status": "limited",
+  "role": "support",
+  "rarity": "familiar",
+  "generation": 6,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_froakie",
+  "line": [
+   "froakie",
+   "frogadier",
+   "greninja"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_mischievous",
+  "affinity": {
+   "adaptability": 3,
+   "instinct": 3,
+   "independence": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "pound",
+   "growl",
+   "bubble"
+  ],
+  "keystone": "keystone_froakie",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "familiar",
+  "generation": 6,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
   "id": "rm_rowlet",
   "line": [
    "rowlet",
@@ -245,65 +643,1972 @@
    "flying"
   ],
   "temperament": "brave",
+  "affinity": {
+   "curiosity": 3,
+   "independence": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
   "moves": [
    "tackle",
    "growl",
    "leer"
   ],
   "keystone": "hisui_rowlet",
-  "unlock": {
-   "kind": "event",
-   "arg": "ev_old_road"
-  }
+  "status": "limited",
+  "role": "scout",
+  "rarity": "familiar",
+  "generation": 7,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
  },
  {
   "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_cyndaquil",
+  "id": "rm_litten",
   "line": [
-   "cyndaquil",
-   "quilava",
-   "typhlosion"
+   "litten",
+   "torracat",
+   "incineroar"
   ],
   "types": [
    "fire"
   ],
-  "temperament": "brave",
-  "moves": [
-   "tackle",
-   "leer",
-   "scratch"
-  ],
-  "keystone": "hisui_cyndaquil",
+  "temperament": "tm_independent",
+  "affinity": {
+   "independence": 3,
+   "ambition": 3,
+   "courage": 2
+  },
   "unlock": {
-   "kind": "event",
-   "arg": "ev_old_road"
-  }
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "ember",
+   "growl"
+  ],
+  "keystone": "keystone_litten",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "familiar",
+  "generation": 7,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
  },
  {
   "v": 1,
-  "affinity": {},
-  "status": "limited",
-  "id": "rm_oshawott",
+  "id": "rm_popplio",
   "line": [
-   "oshawott",
-   "dewott",
-   "samurott"
+   "popplio",
+   "brionne",
+   "primarina"
   ],
   "types": [
    "water"
   ],
-  "temperament": "brave",
+  "temperament": "tm_playful",
+  "affinity": {
+   "compassion": 3,
+   "adaptability": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "pound",
+   "water-gun",
+   "growl"
+  ],
+  "keystone": "keystone_popplio",
+  "status": "limited",
+  "role": "support",
+  "rarity": "familiar",
+  "generation": 7,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_grookey",
+  "line": [
+   "grookey",
+   "thwackey",
+   "rillaboom"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_playful",
+  "affinity": {
+   "instinct": 3,
+   "adaptability": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "growl",
+   "branch-poke"
+  ],
+  "keystone": "keystone_grookey",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_scorbunny",
+  "line": [
+   "scorbunny",
+   "raboot",
+   "cinderace"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_reckless",
+  "affinity": {
+   "courage": 3,
+   "ambition": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
   "moves": [
    "tackle",
    "growl",
-   "scratch"
+   "ember"
   ],
-  "keystone": "hisui_oshawott",
+  "keystone": "keystone_scorbunny",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_sobble",
+  "line": [
+   "sobble",
+   "drizzile",
+   "inteleon"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_timid",
+  "affinity": {
+   "compassion": 3,
+   "adaptability": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "pound",
+   "growl",
+   "water-gun"
+  ],
+  "keystone": "keystone_sobble",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "familiar",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_sprigatito",
+  "line": [
+   "sprigatito",
+   "floragato",
+   "meowscarada"
+  ],
+  "types": [
+   "grass"
+  ],
+  "temperament": "tm_mischievous",
+  "affinity": {
+   "ambition": 3,
+   "independence": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "tail-whip",
+   "leafage"
+  ],
+  "keystone": "keystone_sprigatito",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "familiar",
+  "generation": 9,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_fuecoco",
+  "line": [
+   "fuecoco",
+   "crocalor",
+   "skeledirge"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_lazy",
+  "affinity": {
+   "loyalty": 3,
+   "resolve": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "leer",
+   "ember"
+  ],
+  "keystone": "keystone_fuecoco",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "familiar",
+  "generation": 9,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_quaxly",
+  "line": [
+   "quaxly",
+   "quaxwell",
+   "quaquaval"
+  ],
+  "types": [
+   "water"
+  ],
+  "temperament": "tm_serious",
+  "affinity": {
+   "resolve": 3,
+   "ambition": 3,
+   "intelligence": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "pound",
+   "growl",
+   "water-gun"
+  ],
+  "keystone": "keystone_quaxly",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 9,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_dratini",
+  "line": [
+   "dratini",
+   "dragonair",
+   "dragonite"
+  ],
+  "types": [
+   "dragon"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "compassion": 3,
+   "courage": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "stranded_dragonair"
+  },
+  "moves": [
+   "wrap",
+   "leer",
+   "thunder-wave"
+  ],
+  "keystone": "keystone_dratini",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "exceptional",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_larvitar",
+  "line": [
+   "larvitar",
+   "pupitar",
+   "tyranitar"
+  ],
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "temperament": "stubborn",
+  "affinity": {
+   "resolve": 3,
+   "independence": 3,
+   "courage": 2
+  },
   "unlock": {
    "kind": "event",
-   "arg": "ev_old_road"
-  }
+   "arg": "ev_bedrock_4"
+  },
+  "moves": [
+   "crunch",
+   "leer",
+   "bite"
+  ],
+  "keystone": "bedrocks_heir",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "exceptional",
+  "generation": 2,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_bagon",
+  "line": [
+   "bagon",
+   "shelgon",
+   "salamence"
+  ],
+  "types": [
+   "dragon"
+  ],
+  "temperament": "tm_reckless",
+  "affinity": {
+   "courage": 3,
+   "ambition": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "peak_alpha"
+  },
+  "moves": [
+   "rage",
+   "bite",
+   "leer"
+  ],
+  "keystone": "keystone_bagon",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "exceptional",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_beldum",
+  "line": [
+   "beldum",
+   "metang",
+   "metagross"
+  ],
+  "types": [
+   "steel",
+   "psychic"
+  ],
+  "temperament": "tm_intelligent",
+  "affinity": {
+   "intelligence": 3,
+   "independence": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "ironvein_prototype"
+  },
+  "moves": [
+   "tackle",
+   "take-down"
+  ],
+  "keystone": "keystone_beldum",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "exceptional",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_gible",
+  "line": [
+   "gible",
+   "gabite",
+   "garchomp"
+  ],
+  "types": [
+   "dragon",
+   "ground"
+  ],
+  "temperament": "tm_competitive",
+  "affinity": {
+   "ambition": 3,
+   "courage": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "fed_three_runs"
+  },
+  "moves": [
+   "tackle",
+   "sand-attack",
+   "twister"
+  ],
+  "keystone": "keystone_gible",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "exceptional",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_deino",
+  "line": [
+   "deino",
+   "zweilous",
+   "hydreigon"
+  ],
+  "types": [
+   "dark",
+   "dragon"
+  ],
+  "temperament": "tm_reckless",
+  "affinity": {
+   "instinct": 3,
+   "independence": 3,
+   "ambition": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "choir_ritual"
+  },
+  "moves": [
+   "tackle",
+   "dragon-rage",
+   "focus-energy"
+  ],
+  "keystone": "keystone_deino",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "exceptional",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_goomy",
+  "line": [
+   "goomy",
+   "sliggoo",
+   "goodra"
+  ],
+  "types": [
+   "dragon"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "compassion": 3,
+   "loyalty": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "rain_night"
+  },
+  "moves": [
+   "tackle",
+   "bubble",
+   "absorb"
+  ],
+  "keystone": "keystone_goomy",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "exceptional",
+  "generation": 6,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_jangmo_o",
+  "line": [
+   "jangmo-o",
+   "hakamo-o",
+   "kommo-o"
+  ],
+  "types": [
+   "dragon"
+  ],
+  "temperament": "tm_energetic",
+  "affinity": {
+   "courage": 3,
+   "resolve": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "training_camp"
+  },
+  "moves": [
+   "tackle",
+   "leer",
+   "protect"
+  ],
+  "keystone": "keystone_jangmo_o",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "exceptional",
+  "generation": 7,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_dreepy",
+  "line": [
+   "dreepy",
+   "drakloak",
+   "dragapult"
+  ],
+  "types": [
+   "dragon",
+   "ghost"
+  ],
+  "temperament": "tm_shy",
+  "affinity": {
+   "curiosity": 3,
+   "loyalty": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "lost_dreepy"
+  },
+  "moves": [
+   "astonish",
+   "infestation",
+   "quick-attack"
+  ],
+  "keystone": "keystone_dreepy",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "exceptional",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_frigibax",
+  "line": [
+   "frigibax",
+   "arctibax",
+   "baxcalibur"
+  ],
+  "types": [
+   "dragon",
+   "ice"
+  ],
+  "temperament": "tm_stubborn",
+  "affinity": {
+   "resolve": 3,
+   "independence": 3,
+   "ambition": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "long_winter"
+  },
+  "moves": [
+   "tackle",
+   "leer",
+   "dragon-tail"
+  ],
+  "keystone": "keystone_frigibax",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "exceptional",
+  "generation": 9,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_pichu",
+  "line": [
+   "pichu",
+   "pikachu",
+   "raichu"
+  ],
+  "types": [
+   "electric"
+  ],
+  "temperament": "tm_energetic",
+  "affinity": {
+   "instinct": 3,
+   "loyalty": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "thunder-shock",
+   "play-nice",
+   "tail-whip"
+  ],
+  "keystone": "keystone_pichu",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "familiar",
+  "generation": 2,
+  "branching": false,
+  "baby": true,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_tuftin",
+  "line": [
+   "tuftin",
+   "eevee"
+  ],
+  "types": [
+   "normal"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "adaptability": 3,
+   "curiosity": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "baby-doll-eyes",
+   "sand-attack"
+  ],
+  "keystone": "keystone_tuftin",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "familiar",
+  "generation": 9,
+  "branching": true,
+  "baby": true,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_magby",
+  "line": [
+   "magby",
+   "magmar",
+   "magmortar"
+  ],
+  "types": [
+   "fire"
+  ],
+  "temperament": "tm_reckless",
+  "affinity": {
+   "courage": 3,
+   "ambition": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "leer",
+   "smog",
+   "ember"
+  ],
+  "keystone": "keystone_magby",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 2,
+  "branching": false,
+  "baby": true,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_elekid",
+  "line": [
+   "elekid",
+   "electabuzz",
+   "electivire"
+  ],
+  "types": [
+   "electric"
+  ],
+  "temperament": "tm_competitive",
+  "affinity": {
+   "ambition": 3,
+   "courage": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "leer",
+   "quick-attack",
+   "thunder-shock"
+  ],
+  "keystone": "keystone_elekid",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 2,
+  "branching": false,
+  "baby": true,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_togepi",
+  "line": [
+   "togepi",
+   "togetic",
+   "togekiss"
+  ],
+  "types": [
+   "fairy"
+  ],
+  "temperament": "tm_affectionate",
+  "affinity": {
+   "compassion": 3,
+   "loyalty": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "egg_five_nodes"
+  },
+  "moves": [
+   "growl",
+   "tackle",
+   "pound"
+  ],
+  "keystone": "keystone_togepi",
+  "status": "limited",
+  "role": "support",
+  "rarity": "rare",
+  "generation": 2,
+  "branching": false,
+  "baby": true,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_aron",
+  "line": [
+   "aron",
+   "lairon",
+   "aggron"
+  ],
+  "types": [
+   "steel",
+   "rock"
+  ],
+  "temperament": "tm_stubborn",
+  "affinity": {
+   "resolve": 3,
+   "independence": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "tackle",
+   "harden",
+   "mud-slap"
+  ],
+  "keystone": "keystone_aron",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "unusual",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_pidgey",
+  "line": [
+   "pidgey",
+   "pidgeotto",
+   "pidgeot"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_energetic",
+  "affinity": {
+   "instinct": 3,
+   "adaptability": 3,
+   "independence": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "sand-attack",
+   "gust"
+  ],
+  "keystone": "keystone_pidgey",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_hoothoot",
+  "line": [
+   "hoothoot",
+   "noctowl",
+   "oracowl"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_intelligent",
+  "affinity": {
+   "intelligence": 3,
+   "curiosity": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "growl",
+   "tackle",
+   "foresight"
+  ],
+  "keystone": "keystone_hoothoot",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "unusual",
+  "generation": 2,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_taillow",
+  "line": [
+   "taillow",
+   "swellow",
+   "tempestwing"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_brave",
+  "affinity": {
+   "courage": 3,
+   "resolve": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "growl",
+   "peck",
+   "focus-energy"
+  ],
+  "keystone": "keystone_taillow",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_starly",
+  "line": [
+   "starly",
+   "staravia",
+   "staraptor"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_brave",
+  "affinity": {
+   "courage": 3,
+   "loyalty": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "growl",
+   "gust",
+   "tackle"
+  ],
+  "keystone": "keystone_starly",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_pidove",
+  "line": [
+   "pidove",
+   "tranquill",
+   "unfezant"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_timid",
+  "affinity": {
+   "compassion": 3,
+   "instinct": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "gust",
+   "growl",
+   "leer"
+  ],
+  "keystone": "keystone_pidove",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "unusual",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_fletchling",
+  "line": [
+   "fletchling",
+   "fletchinder",
+   "talonflame"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_competitive",
+  "affinity": {
+   "ambition": 3,
+   "courage": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "tackle",
+   "growl",
+   "quick-attack"
+  ],
+  "keystone": "keystone_fletchling",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 6,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_pikipek",
+  "line": [
+   "pikipek",
+   "trumbeak",
+   "toucannon"
+  ],
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "temperament": "tm_mischievous",
+  "affinity": {
+   "adaptability": 3,
+   "instinct": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "peck",
+   "growl",
+   "echoed-voice"
+  ],
+  "keystone": "keystone_pikipek",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "unusual",
+  "generation": 7,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_rookidee",
+  "line": [
+   "rookidee",
+   "corvisquire",
+   "corviknight"
+  ],
+  "types": [
+   "flying"
+  ],
+  "temperament": "tm_serious",
+  "affinity": {
+   "courage": 3,
+   "resolve": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "peck",
+   "leer",
+   "power-trip"
+  ],
+  "keystone": "keystone_rookidee",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "unusual",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_wattrel",
+  "line": [
+   "wattrel",
+   "kilowattrel",
+   "megawattrel"
+  ],
+  "types": [
+   "electric",
+   "flying"
+  ],
+  "temperament": "tm_playful",
+  "affinity": {
+   "curiosity": 3,
+   "adaptability": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "peck",
+   "growl",
+   "thunder-shock"
+  ],
+  "keystone": "keystone_wattrel",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 9,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_rhyhorn",
+  "line": [
+   "rhyhorn",
+   "rhydon",
+   "rhyperior"
+  ],
+  "types": [
+   "ground",
+   "rock"
+  ],
+  "temperament": "tm_stubborn",
+  "affinity": {
+   "resolve": 3,
+   "courage": 3,
+   "independence": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "horn-attack",
+   "sand-attack",
+   "tail-whip"
+  ],
+  "keystone": "keystone_rhyhorn",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "unusual",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_porygon",
+  "line": [
+   "porygon",
+   "porygon2",
+   "porygon-z"
+  ],
+  "types": [
+   "normal"
+  ],
+  "temperament": "anxious",
+  "affinity": {
+   "intelligence": 3,
+   "curiosity": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_proto_4"
+  },
+  "moves": [
+   "tackle",
+   "sharpen",
+   "conversion"
+  ],
+  "keystone": "proto_loop",
+  "status": "limited",
+  "role": "support",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_mankey",
+  "line": [
+   "mankey",
+   "primeape",
+   "annihilape"
+  ],
+  "types": [
+   "fighting"
+  ],
+  "temperament": "tm_reckless",
+  "affinity": {
+   "courage": 3,
+   "ambition": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "scratch",
+   "leer",
+   "covet"
+  ],
+  "keystone": "keystone_mankey",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_gastly",
+  "line": [
+   "gastly",
+   "haunter",
+   "gengar"
+  ],
+  "types": [
+   "ghost",
+   "poison"
+  ],
+  "temperament": "tm_mischievous",
+  "affinity": {
+   "independence": 3,
+   "instinct": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "lick",
+   "astonish",
+   "hypnosis"
+  ],
+  "keystone": "keystone_gastly",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "unusual",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_abra",
+  "line": [
+   "abra",
+   "kadabra",
+   "alakazam"
+  ],
+  "types": [
+   "psychic"
+  ],
+  "temperament": "tm_lazy",
+  "affinity": {
+   "intelligence": 3,
+   "independence": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "teleport"
+  ],
+  "keystone": "keystone_abra",
+  "status": "limited",
+  "role": "scout",
+  "rarity": "unusual",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_machop",
+  "line": [
+   "machop",
+   "machoke",
+   "machamp"
+  ],
+  "types": [
+   "fighting"
+  ],
+  "temperament": "tm_energetic",
+  "affinity": {
+   "resolve": 3,
+   "courage": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "initial"
+  },
+  "moves": [
+   "tackle",
+   "leer",
+   "low-kick"
+  ],
+  "keystone": "keystone_machop",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "familiar",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_magnemite",
+  "line": [
+   "magnemite",
+   "magneton",
+   "magnezone"
+  ],
+  "types": [
+   "electric",
+   "steel"
+  ],
+  "temperament": "tm_serious",
+  "affinity": {
+   "intelligence": 3,
+   "adaptability": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "tackle",
+   "thunder-shock",
+   "supersonic"
+  ],
+  "keystone": "keystone_magnemite",
+  "status": "limited",
+  "role": "support",
+  "rarity": "unusual",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_shinx",
+  "line": [
+   "shinx",
+   "luxio",
+   "luxray"
+  ],
+  "types": [
+   "electric"
+  ],
+  "temperament": "tm_brave",
+  "affinity": {
+   "courage": 3,
+   "instinct": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "quick-attack",
+   "tackle",
+   "leer"
+  ],
+  "keystone": "keystone_shinx",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "unusual",
+  "generation": 4,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_weedle",
+  "line": [
+   "weedle",
+   "kakuna",
+   "beedrill"
+  ],
+  "types": [
+   "bug",
+   "poison"
+  ],
+  "temperament": "loyal",
+  "affinity": {
+   "resolve": 3,
+   "instinct": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_old_friend_2"
+  },
+  "moves": [
+   "harden",
+   "tackle",
+   "leer"
+  ],
+  "keystone": "saved_weedle",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_caterpie",
+  "line": [
+   "caterpie",
+   "metapod",
+   "butterfree"
+  ],
+  "types": [
+   "bug",
+   "flying"
+  ],
+  "temperament": "regal",
+  "affinity": {
+   "compassion": 3,
+   "adaptability": 3,
+   "curiosity": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_forest_remembers"
+  },
+  "moves": [
+   "tackle",
+   "gust",
+   "harden"
+  ],
+  "keystone": "elder_butterfree",
+  "status": "limited",
+  "role": "support",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_nidoran_f",
+  "line": [
+   "nidoran-f",
+   "nidorina",
+   "nidoqueen"
+  ],
+  "types": [
+   "poison"
+  ],
+  "temperament": "tm_protective",
+  "affinity": {
+   "compassion": 3,
+   "resolve": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "twin_burrow"
+  },
+  "moves": [
+   "growl",
+   "tackle",
+   "scratch"
+  ],
+  "keystone": "keystone_nidoran_f",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_nidoran_m",
+  "line": [
+   "nidoran-m",
+   "nidorino",
+   "nidoking"
+  ],
+  "types": [
+   "poison"
+  ],
+  "temperament": "tm_reckless",
+  "affinity": {
+   "courage": 3,
+   "ambition": 3,
+   "instinct": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "twin_burrow"
+  },
+  "moves": [
+   "leer",
+   "tackle",
+   "peck"
+  ],
+  "keystone": "keystone_nidoran_m",
+  "status": "limited",
+  "role": "sweeper",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_poliwag",
+  "line": [
+   "poliwag",
+   "poliwhirl",
+   "poliwrath"
+  ],
+  "types": [
+   "water",
+   "fighting"
+  ],
+  "temperament": "playful",
+  "affinity": {
+   "adaptability": 3,
+   "instinct": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_map_pond"
+  },
+  "moves": [
+   "bubble",
+   "growl",
+   "tackle"
+  ],
+  "keystone": "pond_tune",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": true,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_oddish",
+  "line": [
+   "oddish",
+   "gloom",
+   "vileplume"
+  ],
+  "types": [
+   "grass",
+   "poison"
+  ],
+  "temperament": "calm",
+  "affinity": {
+   "curiosity": 3,
+   "compassion": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_migration_5"
+  },
+  "moves": [
+   "absorb",
+   "acid",
+   "growl"
+  ],
+  "keystone": "saved_roots",
+  "status": "limited",
+  "role": "support",
+  "rarity": "rare",
+  "generation": 1,
+  "branching": true,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_swinub",
+  "line": [
+   "swinub",
+   "piloswine",
+   "mamoswine"
+  ],
+  "types": [
+   "ice",
+   "ground"
+  ],
+  "temperament": "tm_stubborn",
+  "affinity": {
+   "instinct": 3,
+   "resolve": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "odor-sleuth",
+   "tackle",
+   "mud-sport"
+  ],
+  "keystone": "keystone_swinub",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "unusual",
+  "generation": 2,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_ralts",
+  "line": [
+   "ralts",
+   "kirlia",
+   "gardevoir"
+  ],
+  "types": [
+   "psychic",
+   "fairy"
+  ],
+  "temperament": "sensitive",
+  "affinity": {
+   "compassion": 3,
+   "instinct": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_humanitys_question"
+  },
+  "moves": [
+   "growl",
+   "confusion",
+   "teleport"
+  ],
+  "keystone": "shared_perception",
+  "status": "limited",
+  "role": "support",
+  "rarity": "rare",
+  "generation": 3,
+  "branching": true,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_trapinch",
+  "line": [
+   "trapinch",
+   "vibrava",
+   "flygon"
+  ],
+  "types": [
+   "ground"
+  ],
+  "temperament": "tm_serious",
+  "affinity": {
+   "independence": 3,
+   "resolve": 3,
+   "adaptability": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "astonish",
+   "bite",
+   "laser-focus"
+  ],
+  "keystone": "keystone_trapinch",
+  "status": "limited",
+  "role": "trapper",
+  "rarity": "unusual",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_duskull",
+  "line": [
+   "duskull",
+   "dusclops",
+   "dusknoir"
+  ],
+  "types": [
+   "ghost"
+  ],
+  "temperament": "tm_protective",
+  "affinity": {
+   "loyalty": 3,
+   "resolve": 3,
+   "compassion": 2
+  },
+  "unlock": {
+   "kind": "win",
+   "arg": "lantern_vigil"
+  },
+  "moves": [
+   "leer",
+   "absorb",
+   "night-shade"
+  ],
+  "keystone": "keystone_duskull",
+  "status": "limited",
+  "role": "tank",
+  "rarity": "rare",
+  "generation": 3,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_sandile",
+  "line": [
+   "sandile",
+   "krokorok",
+   "krookodile"
+  ],
+  "types": [
+   "ground",
+   "dark"
+  ],
+  "temperament": "wary",
+  "affinity": {
+   "independence": 3,
+   "resolve": 3,
+   "courage": 2
+  },
+  "unlock": {
+   "kind": "event",
+   "arg": "ev_tally_5"
+  },
+  "moves": [
+   "crunch",
+   "taunt",
+   "leer"
+  ],
+  "keystone": "clipped_scale",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "rare",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_pawniard",
+  "line": [
+   "pawniard",
+   "bisharp",
+   "kingambit"
+  ],
+  "types": [
+   "dark",
+   "steel"
+  ],
+  "temperament": "loyal",
+  "affinity": {
+   "ambition": 3,
+   "independence": 3,
+   "resolve": 2
+  },
+  "unlock": {
+   "kind": "backstory",
+   "arg": "bs_ex_criminal"
+  },
+  "moves": [
+   "taunt",
+   "leer",
+   "scratch"
+  ],
+  "keystone": "abandoned_blade",
+  "status": "limited",
+  "role": "disruptor",
+  "rarity": "rare",
+  "generation": 5,
+  "branching": false,
+  "baby": false,
+  "quizEligible": false
+ },
+ {
+  "v": 1,
+  "id": "rm_grubbin",
+  "line": [
+   "grubbin",
+   "charjabug",
+   "vikavolt"
+  ],
+  "types": [
+   "bug"
+  ],
+  "temperament": "tm_curious",
+  "affinity": {
+   "adaptability": 3,
+   "curiosity": 3,
+   "loyalty": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "vise-grip",
+   "mud-slap",
+   "string-shot"
+  ],
+  "keystone": "keystone_grubbin",
+  "status": "limited",
+  "role": "pivot",
+  "rarity": "unusual",
+  "generation": 7,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
+ },
+ {
+  "v": 1,
+  "id": "rm_blipbug",
+  "line": [
+   "blipbug",
+   "dottler",
+   "orbeetle"
+  ],
+  "types": [
+   "bug"
+  ],
+  "temperament": "tm_timid",
+  "affinity": {
+   "intelligence": 3,
+   "curiosity": 3,
+   "compassion": 2
+  },
+  "unlock": {
+   "kind": "quiz",
+   "arg": "low_weight"
+  },
+  "moves": [
+   "struggle-bug"
+  ],
+  "keystone": "keystone_blipbug",
+  "status": "limited",
+  "role": "support",
+  "rarity": "unusual",
+  "generation": 8,
+  "branching": false,
+  "baby": false,
+  "quizEligible": true
  }
 ]
