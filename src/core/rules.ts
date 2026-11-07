@@ -63,6 +63,8 @@ export const RunRulesDataSchema = z.object({
       /** Inverse Battle (S291): the type chart is reversed in every battle of the run. */
       inverseChart: z.boolean().optional(),
       /** Decades rule options: battle ruleset flags this modifier switches on (see Ruleset.frostbite / drowsy / normalFollowsUser). */
+      /** Ability Pick: the Camp's Ability Capsule is free and unlimited, so every Pokémon can take any of its own abilities. */
+      freeAbilities: z.boolean().optional(),
       rulesetFlags: z.object({ frostbite: z.boolean().optional(), drowsy: z.boolean().optional(), normalFollowsUser: z.boolean().optional() }).optional(),
       /** Elite Duelist (S275): every battle roll is the middle value (no crits, no lucky misses, fixed damage roll). */
       steady: z.boolean().optional(),
@@ -224,6 +226,7 @@ const product = (rules: Pick<RunRules, 'modifierIds'>, pick: (m: NonNullable<Ret
 
 export const blindMap = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.blind);
 export const noItemCaps = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noItemCaps);
+export const freeAbilities = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.freeAbilities);
 export const noRevives = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noRevives);
 export const noBattleItems = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.noBattleItems);
 /** The No Evolution contract is on. */

@@ -301,6 +301,15 @@
       "rulesetFlags": { "drowsy": true }
     },
     {
+      "id": "ability-pick",
+      "name": "Ability Pick",
+      "status": "supported",
+      "bonus": 0,
+      "blurb": "Camp's Ability Capsule is free and unlimited: every Pokémon can pick any of its own abilities, hidden one included.",
+      "group": "ability-pick",
+      "freeAbilities": true
+    },
+    {
       "id": "inverse-battle",
       "name": "Inverse Battle",
       "status": "supported",
