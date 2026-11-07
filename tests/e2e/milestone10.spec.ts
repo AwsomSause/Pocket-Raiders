@@ -320,7 +320,7 @@ test('slice 7: a Totem fight shows a NEW PHASE banner with its rule', async ({ p
   expect(errors).toEqual([]);
 });
 
-test('slice 7: a trainer line shows in a speech bubble that goes away with the line', async ({ page }) => {
+test('slice 7: a trainer line shows in the story box that goes away with the line', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=m10-speech');
@@ -331,11 +331,11 @@ test('slice 7: a trainer line shows in a speech bubble that goes away with the l
     const battle = (window as any).__pkr.game.scene.getScene('Battle');
     void battle.sayTrainer({ at: 0, speaker: 'Youngster Joey', text: 'My Rattata is in the top percentage!', category: 'taunt', tier: 'common', voice: 'cocky', eventId: 'm10' });
   });
-  await expect.poll(() => hasNamed(page, 'speech-bubble'), { timeout: 3000, intervals: [100] }).toBe(true);
+  await expect.poll(() => hasNamed(page, 'story-line'), { timeout: 3000, intervals: [100] }).toBe(true);
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'test-results/m10-speech.png' });
-  await page.keyboard.press('Enter');
-  await expect.poll(() => hasNamed(page, 'speech-bubble'), { timeout: 3000, intervals: [100] }).toBe(false);
+  // The first Enter may only finish the typing; keep pressing until the box closes.
+  await expect.poll(async () => { await page.keyboard.press('Enter'); return hasNamed(page, 'story-line'); }, { timeout: 8000, intervals: [300] }).toBe(false);
   expect(errors).toEqual([]);
 });
 
@@ -365,7 +365,7 @@ test('the Hall of Fame shows records, champion teams with epitaphs, shinies and 
   expect(texts.some((t) => t.startsWith('♛ Champion team'))).toBe(true);
   expect(texts.some((t) => t.includes('carried this journey'))).toBe(true);
   expect(texts.some((t) => t.includes('The Unbroken'))).toBe(true);
-  expect(texts).toContain('✦ Rare forms');
+  expect(texts).toContain('Rare forms');
   await page.screenshot({ path: 'test-results/m10-hall-of-fame.png' });
   await page.keyboard.press('Escape');
   await waitForScene(page, 'Hub');
