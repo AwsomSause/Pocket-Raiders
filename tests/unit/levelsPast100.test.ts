@@ -53,7 +53,9 @@ describe('levels past 100', () => {
   it('the Grand Region cap is the max level, and every region stays under it', () => {
     const regions = FULL.regularRegions + 1;
     expect(levelCap(content, regions - 1)).toBe(content.balance.difficulty.maxLevel);
-    for (let r = 1; r < regions; r++) expect(levelCap(content, r)).toBeGreaterThan(levelCap(content, r - 1));
+    expect(levelCap(content, 0)).toBe(100);
+    expect(levelCap(content, 1)).toBe(150);
+    for (let r = 1; r < regions; r++) expect(levelCap(content, r)).toBeGreaterThanOrEqual(levelCap(content, r - 1));
   });
 
   it('custom regions exist, use unique bosses, and have a starter pool and a regional item', () => {

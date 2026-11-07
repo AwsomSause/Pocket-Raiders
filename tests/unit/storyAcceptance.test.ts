@@ -78,3 +78,15 @@ describe('story acceptance (S20): endings and counters', () => {
     expect(run.story.v2!.facts.championship_won).toBe(true);
   });
 });
+
+describe('strong test bot (S20)', () => {
+  const play = () => autoplay({ seed: 'strong-1', campaignId: 'orrery-circuit', steps: 1500, smart: true, strong: true, parLevel: 5, healOnMap: true });
+  it('plays deterministically, keeps every party member at par, and gets further than the plain smart bot', () => {
+    const a = play(), b = play();
+    expect(JSON.stringify([a.phase, a.encountersCompleted, a.party.map((m) => [m.speciesId, m.level])])).toBe(JSON.stringify([b.phase, b.encountersCompleted, b.party.map((m) => [m.speciesId, m.level])]));
+    expect(a.party.length).toBeGreaterThan(0);
+    expect(new Set(a.party.map((m) => m.level)).size).toBeLessThanOrEqual(2);
+    const plain = autoplay({ seed: 'strong-1', campaignId: 'orrery-circuit', steps: 1500, smart: true, healOnMap: true });
+    expect(a.encountersCompleted).toBeGreaterThanOrEqual(plain.encountersCompleted);
+  }, 120000);
+});

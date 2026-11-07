@@ -205,7 +205,7 @@ import { npcShopFactor, secretTierEntries } from './npcShop';
 import { claimArea, nuzlockeCatchProblem, buryFallen, isHardcore } from './nuzlocke';
 import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mutatorXp, startRuleOffer } from './mutators';
 import { advanceStreak, applyPity } from './streaks';
-import { conditionEvolutionTarget } from './conditionEvolution';
+import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { noteBountyKills } from './bounties';
@@ -2487,6 +2487,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     setStyle: isHardcore(run.rules),
     catchBlocked: nuzlockeCatchProblem(run.battle!),
     bondScore: (uid) => bondScoreOf(run.story.histories[uid]?.bond),
+    bondPartners: (uid) => run.story.relationships.filter((r) => r.open && r.kind === 'bond' && (r.a.id === uid || r.b.id === uid)).map((r) => (r.a.id === uid ? r.b.id : r.a.id)),
   };
 }
 
@@ -3049,7 +3050,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       }
     }
     // S171: a route by weather, a known move or a move used often enough.
-    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null) : null;
+    const special = battle.outcome === 'win' && !evolutions.some((e) => e.uid === mon.uid) ? conditionEvolutionTarget(content, mon, battle.weather?.id ?? null, evoRunInfo(run, mon)) : null;
     if (special) {
       const evo = evolve(content, mon, special);
       evolutions.push({ ...evo, uid: mon.uid });

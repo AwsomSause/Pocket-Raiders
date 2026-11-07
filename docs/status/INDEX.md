@@ -373,3 +373,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `story-s7b-feats.md`: Story S7b: the other 8 Impossible Feats (doubles guard, ability break, unmask, spark, backstory Feats); all 16 built.
 - mass-sim-fix-rival-trade.md: rival trades skip Pokémon without a bond (crash found by the 10,000-run sim).
 - `story-s7d-signatures.md`: Story S7d: Signature I, II and Keystone moves for all 74 starter lines (222 moves), unlocks, naming.
+- level-cap-100.md: first region caps at 100, +50 per region; enemy curve unchanged.

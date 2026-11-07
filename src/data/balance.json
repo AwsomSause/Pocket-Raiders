@@ -143,6 +143,7 @@
   "curve": 1,
   "capMargin": 5,
   "levelCapStep": 50,
+    "levelCapStart": 100,
   "xpScale": 2,
   "autoBattleXp": 0.35,
   "stageCapMargin": 7,

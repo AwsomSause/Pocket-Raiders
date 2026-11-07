@@ -7,6 +7,7 @@ import { typeEffectiveness } from '../../src/core/battle/damage';
 import { forcedMoveIndex, itemProblem } from '../../src/core/battle/engine';
 import { nuzlockeCatchProblem } from '../../src/core/nuzlocke';
 import type { RulesChoice } from '../../src/core/rules';
+import { evolvedFormAt } from '../../src/core/encounters';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { buyItem, chooseReward, chooseStarter, createRun, debugHealParty, leaveShop, partyCapacity, resolveDecision, takeTurn, type TurnResult } from '../../src/core/run';
 import { currentEnemy, type PokemonInstance, type RunState } from '../../src/core/state';
@@ -27,13 +28,17 @@ export interface AutoplayOptions {
   steps: number;
   /** A smarter player: best-scoring move by type and STAB, potions when low, switching away from a bad matchup, and shopping for potions. */
   smart?: boolean;
+  /** S20: a stronger player on top of `smart`: best switch-in, earlier switching and potions, candies to the weakest Pokémon, stat boosters and healing before junk, and revives from the shop. */
+  strong?: boolean;
+  /** S20: on the map, raises every party member to (the highest foe level seen so far + this). Measures fights at par level, not the bot's levelling. */
+  parLevel?: number;
   /** Called after every action with the new run (and the turn result for battle turns). */
   onStep?: (run: RunState, turn: TurnResult | null) => RunState | void;
   content?: Content;
 }
 
 /** Picks the next action for `run` and plays it. */
-export function step(content: Content, run: RunState, smart = false): { run: RunState; turn: TurnResult | null } {
+export function step(content: Content, run: RunState, smart = false, strong = false): { run: RunState; turn: TurnResult | null } {
   switch (run.phase) {
     case 'expedition':
       throw new Error('Autoplay does not enter expeditions');
@@ -47,10 +52,10 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
       if (!smart) return { run: leaveShop(content, run), turn: null };
       let next = run;
       // Potions first, then balls: about half the money on healing.
-      for (const id of ['hyper-potion', 'super-potion', 'potion', 'poke-ball']) {
+      for (const id of strong ? ['hyper-potion', 'super-potion', 'potion', 'revive', 'poke-ball'] : ['hyper-potion', 'super-potion', 'potion', 'poke-ball']) {
         for (let n = 0; n < 6; n++) {
           const have = (next.inventory[id] ?? 0) + n;
-          if (id !== 'poke-ball' && have >= 8) break;
+          if (id !== 'poke-ball' && have >= (id === 'revive' ? 4 : 8)) break;
           try {
             next = buyItem(content, next, id).run;
           } catch {
@@ -65,7 +70,11 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
       if (battle.needsSwitch) {
         // Any healthy Pokémon not already in battle (a double battle has two out).
         const view = { battle: run.battle!, party: run.party };
-        const pick = run.battle!.doubles ? run.party.findIndex((_, i) => doublesSwitchProblem(view, i) === null) : run.party.findIndex((p) => p.hp > 0);
+        const foe = currentEnemy(battle);
+        const rank = (p: PokemonInstance): number => (strong ? bestScore(content, p, foe) * (p.hp / maxHp(content, p)) + p.level : 0);
+        const ok = (i: number): boolean => (run.battle!.doubles ? doublesSwitchProblem(view, i) === null : run.party[i]!.hp > 0);
+        let pick = -1;
+        run.party.forEach((p, i) => { if (ok(i) && (pick < 0 || rank(p) > rank(run.party[pick]!))) pick = i; });
         const turn = takeTurn(content, run, { kind: 'switch', partyIndex: pick });
         return { run: turn.run, turn };
       }
@@ -82,7 +91,7 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
       if (smart) {
         let smartTurn: TurnResult | null = null;
         try {
-          smartTurn = smartBattleTurn(content, run);
+          smartTurn = smartBattleTurn(content, run, strong);
         } catch {
           smartTurn = null; // e.g. trapped: the plain player below attacks instead
         }
@@ -101,6 +110,21 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
       if (d.kind === 'mentorship') return { run: resolveDecision(content, run, { kind: 'mentor', accept: false }).run, turn: null };
       if (d.kind === 'askLead') return { run: resolveDecision(content, run, { kind: 'askLead', accept: false }).run, turn: null };
       if (d.kind !== 'caught') return { run: resolveDecision(content, run, { kind: 'skipMove' }).run, turn: null };
+      if (strong && d.kind === 'caught') {
+        // Team building: keep strong Pokémon only, and swap out the weakest member for a clearly better catch.
+        const bst = (id: string): number => Object.values(content.species.get(id)?.baseStats ?? {}).reduce((a, n) => a + n, 0);
+        const full = run.party.length >= partyCapacity(content, run);
+        const got = bst(d.mon.speciesId);
+        let weakest = 0;
+        run.party.forEach((m, i) => { if (bst(m.speciesId) < bst(run.party[weakest]!.speciesId)) weakest = i; });
+        try {
+          if (!full && got >= (run.party.length < 4 ? 240 : 330)) return { run: resolveDecision(content, run, { kind: 'addToParty' }).run, turn: null };
+          if (full && got > bst(run.party[weakest]!.speciesId) + 60) return { run: resolveDecision(content, run, { kind: 'replace', partyIndex: weakest }).run, turn: null };
+        } catch {
+          // Refused by a modifier: let it go.
+        }
+        return { run: resolveDecision(content, run, { kind: 'release' }).run, turn: null };
+      }
       if (run.party.length < partyCapacity(content, run)) {
         try {
           return { run: resolveDecision(content, run, { kind: 'addToParty' }).run, turn: null };
@@ -110,9 +134,15 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
       }
       return { run: resolveDecision(content, run, { kind: 'release' }).run, turn: null };
     }
-    case 'reward':
-      for (let i = 0; i < (run.draft?.length ?? 0); i++) {
-        for (let t = 0; t < Math.max(1, run.party.length); t++) {
+    case 'reward': {
+      const order = [...(run.draft ?? []).keys()];
+      if (strong) order.sort((a, b) => rewardRank(content, run.draft![b]!) - rewardRank(content, run.draft![a]!));
+      // Candies go to the weakest Pokémon so the whole team keeps up; everything else tries the lead first.
+      const targets = [...run.party.keys()];
+      for (const i of order) {
+        const id = run.draft![i]!;
+        if (strong && /candy/.test(id)) targets.sort((a, b) => run.party[a]!.level - run.party[b]!.level);
+        for (const t of targets.length > 0 ? targets : [0]) {
           try {
             return { run: chooseReward(content, run, i, t).run, turn: null };
           } catch {
@@ -121,6 +151,7 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
         }
       }
       throw new Error('No reward could be taken');
+    }
     case 'over':
       return { run, turn: null };
   }
@@ -129,9 +160,19 @@ export function step(content: Content, run: RunState, smart = false): { run: Run
 export function autoplay(opts: AutoplayOptions): RunState {
   const content = opts.content ?? defaultContent;
   let run = createRun(content, { runId: `test-${opts.seed}`, seed: opts.seed, archetypeId: opts.archetypeId ?? 'red', campaignId: opts.campaignId ?? 'full', attributes: opts.attributes, rules: opts.rules });
+  let maxFoe = 0;
   for (let i = 0; i < opts.steps && run.phase !== 'over'; i++) {
+    if (run.battle) for (const e of run.battle.enemyTeam) maxFoe = Math.max(maxFoe, e.level);
+    if (opts.parLevel !== undefined && run.phase === 'map' && maxFoe > 0) {
+      const want = Math.max(1, maxFoe + opts.parLevel);
+      // Evolved the way trainers' Pokémon are for that level, so the party is not made of babies at level 80.
+      run.party = run.party.map((m) => {
+        const form = evolvedFormAt(content, m.speciesId, Math.max(m.level, want));
+        return m.level >= want && form === m.speciesId ? m : { ...createPokemon(content, form, Math.max(m.level, want), m.uid), friendship: m.friendship };
+      });
+    }
     if (opts.healOnMap && run.phase === 'map') run = debugHealParty(content, run);
-    const next = step(content, run, opts.smart === true);
+    const next = step(content, run, opts.smart === true, opts.strong === true);
     if (opts.starterLevel && run.phase === 'starter') {
       const mon = next.run.party[0]!;
       next.run.party[0] = { ...createPokemon(content, mon.speciesId, opts.starterLevel, mon.uid), friendship: mon.friendship };
@@ -169,15 +210,31 @@ function moveScore(content: Content, mon: PokemonInstance, moveId: string, enemy
 
 const bestScore = (content: Content, mon: PokemonInstance, enemy: PokemonInstance): number => Math.max(0, ...mon.moves.filter((m) => m.pp > 0).map((m) => moveScore(content, mon, m.id, enemy)));
 
+/** How much the strong player wants a reward: levels, stat boosters and healing before held items before everything else. */
+function rewardRank(content: Content, id: string): number {
+  if (/candy/.test(id)) return 100;
+  if (/^(calcium|protein|carbos|iron|zinc|hp-up)$/.test(id)) return 80;
+  if (/^(max-revive|revive|full-restore|hyper-potion|super-potion|potion|max-potion)$/.test(id)) return 70;
+  if (/^(item:)/.test(id)) return 5;
+  return content.catalog.get(id)?.effect?.kind === 'held' ? 40 : 20;
+}
+
 /** The smart player's choice for one battle turn, or null to fall back to the plain player. */
-function smartBattleTurn(content: Content, run: RunState): TurnResult | null {
+function smartBattleTurn(content: Content, run: RunState, strong = false): TurnResult | null {
   const battle = run.battle!;
   const enemy = currentEnemy(battle);
   const mon = run.party[battle.activeIndex]!;
   const hpShare = mon.hp / maxHp(content, mon);
   if (forcedMoveIndex(battle, run.party) !== null) return null;
-  const potion = ['hyper-potion', 'super-potion', 'potion'].find((id) => (run.inventory[id] ?? 0) > 0);
-  if (potion && hpShare < 0.35) return takeTurn(content, run, { kind: 'item', itemId: potion, targetIndex: battle.activeIndex });
+  const potion = (strong ? ['full-restore', 'max-potion', 'hyper-potion', 'super-potion', 'potion'] : ['hyper-potion', 'super-potion', 'potion']).find((id) => (run.inventory[id] ?? 0) > 0);
+  // The strong player revives a fallen teammate when two or more are down and the active Pokémon is healthy.
+  if (strong && hpShare >= 0.6 && (run.inventory['revive'] ?? 0) > 0) {
+    const down = run.party.findIndex((p) => p.hp <= 0);
+    if (down >= 0 && run.party.filter((p) => p.hp <= 0).length >= 2) {
+      try { return takeTurn(content, run, { kind: 'item', itemId: 'revive', targetIndex: down }); } catch { /* not allowed here: carry on */ }
+    }
+  }
+  if (potion && hpShare < (strong ? 0.5 : 0.35)) return takeTurn(content, run, { kind: 'item', itemId: potion, targetIndex: battle.activeIndex });
   // Leave a bad matchup for a healthy teammate that does much better.
   const mine = bestScore(content, mon, enemy);
   let bestIndex = -1;
@@ -187,7 +244,13 @@ function smartBattleTurn(content: Content, run: RunState): TurnResult | null {
     const score = bestScore(content, p, enemy);
     if (score > best) { best = score; bestIndex = i; }
   });
-  if (bestIndex >= 0 && battle.turn % 4 === 0 && mine < 60) return takeTurn(content, run, { kind: 'switch', partyIndex: bestIndex });
+  // The strong player also leaves when its Pokémon is nearly down and a healthy teammate is waiting.
+  if (strong && bestIndex < 0 && hpShare < 0.3 && !potion) {
+    let alt = -1;
+    run.party.forEach((p, i) => { if (i !== battle.activeIndex && p.hp / maxHp(content, p) >= 0.6 && (alt < 0 || bestScore(content, p, enemy) > bestScore(content, run.party[alt]!, enemy))) alt = i; });
+    if (alt >= 0) return takeTurn(content, run, { kind: 'switch', partyIndex: alt });
+  }
+  if (bestIndex >= 0 && (battle.turn % 4 === 0 || (strong && hpShare < 0.4)) && (mine < 60 || strong)) return takeTurn(content, run, { kind: 'switch', partyIndex: bestIndex });
   const index = mon.moves.reduce((bi, m, i) => (m.pp > 0 && moveScore(content, mon, m.id, enemy) > (bi < 0 ? -1 : moveScore(content, mon, mon.moves[bi]!.id, enemy)) ? i : bi), -1);
   return index >= 0 ? takeTurn(content, run, { kind: 'move', index }) : null;
 }

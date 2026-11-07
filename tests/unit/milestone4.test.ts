@@ -103,10 +103,11 @@ describe('regions', () => {
     expect(run.stage!.map.columns).toBe(DEV.columns);
   });
 
-  it('each region raises the level cap by 50, up to 500 in the Grand Region (D14)', () => {
-    expect(levelCap(content, 0)).toBe(50);
-    expect(levelCap(content, 1)).toBe(100);
-    expect(levelCap(content, 5)).toBe(300);
+  it('the first region caps at 100 and each region after adds 50, up to 500 (Kice 2026-11-07)', () => {
+    expect(levelCap(content, 0)).toBe(100);
+    expect(levelCap(content, 1)).toBe(150);
+    expect(levelCap(content, 5)).toBe(350);
+    expect(levelCap(content, 8)).toBe(500);
     expect(levelCap(content, 9)).toBe(500);
     expect(levelCap(content, 12)).toBe(500);
   });
@@ -255,7 +256,7 @@ describe('the dev campaign, start to finish', () => {
         expect(run.regionsCleared).toEqual([firstRegion]);
         expect(run.stage!.kind).toBe('stage');
         expect(run.stage!.index).toBe(0);
-        expect(levelCap(content, run.regionIndex)).toBe(100);
+        expect(levelCap(content, run.regionIndex)).toBe(150);
       }
     }
     expect(sawSecondRegion).toBe(true);

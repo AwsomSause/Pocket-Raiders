@@ -56,7 +56,7 @@ import { awakeningPower, countAbilityUse, focusAccuracy, focusCrit } from './gro
 import { classPassiveOf, passiveLine, passiveTypes } from './classPassives';
 import { countMoveUse } from '../conditionEvolution';
 import { moodLoafs } from '../mood';
-import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, growthBerryMultiplier, growthCritBonus, growthIncomingMultiplier, growthHazardMultiplier, growthVanguardMultiplier, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
+import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultiplier, growthEvasionMultiplier, growthHealMultiplier, growthOnce, growthSpeedMultiplier, growthStatusChance, growthBerryMultiplier, growthCritBonus, growthIncomingMultiplier, growthHazardMultiplier, growthWeatherChipMultiplier, growthChargeHoldMultiplier, growthVanguardMultiplier, turnFacts, waitedTurn, type HitFacts } from '../overhaul/growth';
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
@@ -302,6 +302,8 @@ export interface BattleContext {
   period?: 'morning' | 'afternoon' | 'evening' | 'night';
   /** Bond score (0 to 100) of one of your Pokémon: Last Stand and Revenge need a deep bond. Absent = 0. */
   bondScore?: (uid: string) => number;
+  /** The uids of a Pokémon's bonded teammates in the story (Shield Sibling). Absent = none. */
+  bondPartners?: (uid: string) => string[];
   /** Hyper moments for your Pokémon (none when absent). */
   hyper?: HyperContext;
   /** Set during a turn once a Hyper moment has changed the battle (one per turn). */
@@ -1670,7 +1672,7 @@ function switchOutAbility(ctx: BattleContext, mon: PokemonInstance): void {
 
 /** The weather that counts: Cloud Nine and Air Lock on either side switch its effects off (it still runs out). */
 /** What the field looks like for the growth paths that read it (Comeback, Duelist, Sweeper, Legend Hunter, Rival Mirror, Grudge Keeper). */
-function growthSituation(ctx: BattleContext, user: Combatant, target: Combatant): Pick<HitFacts, 'behind' | 'duel' | 'chain' | 'legend' | 'grudge' | 'mirror'> {
+function growthSituation(ctx: BattleContext, user: Combatant, target: Combatant): Pick<HitFacts, 'behind' | 'duel' | 'chain' | 'legend' | 'grudge' | 'mirror' | 'last' | 'pair'> {
   if (user.side !== 'player' || !ctx.content.balance.overhaulGrowth.enabled) return {};
   const mine = ctx.party.filter((m) => m.hp > 0).length;
   const theirs = ctx.battle.enemyTeam.filter((m) => m.hp > 0).length;
@@ -1683,6 +1685,8 @@ function growthSituation(ctx: BattleContext, user: Combatant, target: Combatant)
     legend: isLegendaryLike(foe),
     grudge: ctx.battle.grudgeMons?.includes(user.mon.uid) === true,
     mirror: foe.types.some((t) => types.includes(t)),
+    last: isLastStanding(ctx.party, user.mon),
+    pair: (ctx.bondPartners?.(user.mon.uid) ?? []).some((uid) => ctx.party.some((m) => m.uid === uid && m.hp > 0)),
   };
 }
 
@@ -1695,6 +1699,12 @@ function foeContacted(ctx: BattleContext, foe: Combatant): boolean {
 /** Growth counters the story hooks pick up after the turn (marks `<counter>:<uid>`, one per event). */
 function noteGrowthMark(ctx: BattleContext, c: Combatant, counter: 'thorn' | 'avoid' | 'pivotOut'): void {
   if (c.side === 'player' && ctx.content.balance.overhaulGrowth.enabled) (ctx.battle.growthMarks ??= []).push(`${counter}:${c.mon.uid}`);
+}
+
+/** Closer: it is the last Pokémon in the party order that is still standing (and not alone: that is Loner's case). */
+export function isLastStanding(party: readonly PokemonInstance[], mon: PokemonInstance): boolean {
+  const idx = party.indexOf(mon);
+  return idx > 0 && party.every((m, i) => i <= idx || m.hp <= 0) && party.some((m, i) => i < idx && m.hp > 0);
 }
 
 /** The player's Pokémon has this growth path (and the switch is on). */
@@ -2189,7 +2199,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
   if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0, koed: (ctx.battle.growthMarks ?? []).includes(`ko:${c.mon.uid}`) }));
-  if (ability === 'surge-surfer' && ctx.battle.terrain?.id === 'electric') speed *= 2;
+  if ((ability === 'surge-surfer' || ability === 'grid-surfer') && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
   return speed * (c.side === 'player' ? (ctx.attributes?.speed ?? 1) : 1);
 }
@@ -2302,7 +2312,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       events.push({ type: 'confusionEnd', side: user.side });
     } else {
       events.push({ type: 'confusion', side: user.side });
-      if (rng.chance(confusionHitChance)) {
+      if (rng.chance(confusionHitChance * (user.side === 'player' ? growthChargeHoldMultiplier(content.balance.overhaulGrowth, user.mon, user.vol.charging !== null) : 1))) {
         // It hits itself with a typeless 40-power physical attack (no critical hits).
         const stats = calcStats(content, user.mon);
         const damage = calcDamage(content.ruleset, {
@@ -2326,7 +2336,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       }
     }
   }
-  if (user.mon.status?.id === 'par' && rng.chance(content.ruleset.fullParalysisChance) && !tryFeat(ctx, user, 'through_the_numbness')) {
+  if (user.mon.status?.id === 'par' && rng.chance(content.ruleset.fullParalysisChance * (user.side === 'player' ? growthChargeHoldMultiplier(content.balance.overhaulGrowth, user.mon, user.vol.charging !== null) : 1)) && !tryFeat(ctx, user, 'through_the_numbness')) {
     events.push({ type: 'cant', side: user.side, reason: 'par' });
     return false;
   }
@@ -3411,7 +3421,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   } else {
     // Unaware ignores the other side's stages; Keen Eye ignores raised evasion.
     const accStage = foeAbility === 'unaware' ? 0 : user.stages.acc;
-    const keenEye = (userAbility === 'keen-eye' || userAbility === 'minds-eye') && target.stages.eva > 0;
+    const keenEye = (userAbility === 'keen-eye' || userAbility === 'minds-eye' || userAbility === 'wise-eye') && target.stages.eva > 0;
     const evaStage = fx.ignoreStages || userAbility === 'unaware' || keenEye ? 0 : target.stages.eva;
     accuracy = hitChance(baseAccuracy, accStage, evaStage) * itemAccuracy * perkAccuracy;
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
@@ -3772,6 +3782,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (hyper) events.push(hyper);
     if (stand) lastStandMoment(ctx, target, events);
     spectacleAfterHit(ctx, user, target, lost, effectiveness, events);
+    // Eye of the Gale: surviving a super-effective hit raises Speed.
+    if (effectiveness > 1 && target.mon.hp > 0 && target.stages.spe < 6 && abilityIn(ctx, target) === 'eye-of-the-gale') {
+      announce(target, 'eye-of-the-gale', events);
+      applyStageChange(ctx, target, 'spe', 1, events);
+    }
     if (target.side === 'player' && effectiveness > 1 && target.mon.hp > 0) {
       ctx.battle.hyper.superEffective[target.mon.uid] = (ctx.battle.hyper.superEffective[target.mon.uid] ?? 0) + 1;
     }
@@ -3781,6 +3796,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   if (fx.hits || fx.beatUp) events.push({ type: 'hits', side: target.side, count: landed });
+  // Grid Surfer: landing a Volt (Electric) move raises Speed.
+  if (landed > 0 && user.mon.hp > 0 && userAbility === 'grid-surfer' && moveType === 'electric' && user.stages.spe < 6) {
+    announce(user, 'grid-surfer', events);
+    applyStageChange(ctx, user, 'spe', 1, events);
+  }
   if (dealt > 0) {
     if (move.category === 'physical') target.vol.tookPhysical += dealt;
     else if (move.category === 'special') target.vol.tookSpecial += dealt;
@@ -3955,7 +3975,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     tryInflictStatus(ctx, user, target, rng.pick(extras.randomStatus), undefined, events, false);
   }
 
-  if (landed > 0 && user.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && !(ctx.battle.growthMarks ??= []).includes(`dealt:${user.mon.uid}`)) ctx.battle.growthMarks.push(`dealt:${user.mon.uid}`);
+  if (landed > 0 && user.side === 'player' && ctx.content.balance.overhaulGrowth.enabled && !(ctx.battle.growthMarks ??= []).includes(`dealt:${user.mon.uid}`)) ctx.battle.growthMarks.push(`dealt:${user.mon.uid}`, `hit:${user.mon.uid}`);
   if (landed > 0 && contact && user.side === 'enemy') (ctx.battle.growthMarks ??= []).push(`contact:${user.mon.uid}:${ctx.battle.turn}`);
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
@@ -5749,7 +5769,7 @@ function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEven
       const ability = abilityIn(ctx, c);
       if (ability && WEATHER_DAMAGE_IMMUNE[ability]?.includes(weather.id)) continue;
       if (Held.hooksOf(ctx, c.mon, c.side).some(({ hook }) => (hook.hook === 'weatherImmune' && hook.weathers.includes(weather.id)) || hook.hook === 'utilityUmbrella')) continue;
-      const chip = Math.max(1, Math.floor((calcStats(ctx.content, c.mon).hp / 16) * (1 - weatherCut(ctx.content, c.mon, weather.id))));
+      const chip = Math.max(1, Math.floor((calcStats(ctx.content, c.mon).hp / 16) * (1 - weatherCut(ctx.content, c.mon, weather.id)) * (c.side === 'player' ? growthWeatherChipMultiplier(ctx.content.balance.overhaulGrowth, c.mon) : 1)));
       c.mon.weatherEndured = { ...c.mon.weatherEndured, [weather.id]: (c.mon.weatherEndured?.[weather.id] ?? 0) + 1 };
       const { lost, lastStand } = takeHp(ctx, c, chip);
       events.push({ type: 'weatherDamage', side: c.side, weather: weather.id, amount: lost, hpAfter: c.mon.hp });
