@@ -20,6 +20,13 @@ summary.bh img.tr{height:64px;image-rendering:pixelated}.nm{font-size:17px;font-
 .m{text-align:center;font-size:10px;color:var(--m);width:96px}.m .im{display:flex;align-items:flex-end;justify-content:center;height:96px}
 .m img{image-rendering:pixelated;max-width:92px}.m.dyn{width:230px}.m.dyn .im{height:230px}.m.dyn img{max-width:none}
 .m u{text-decoration:none;font-weight:700;display:block}.hide{display:none!important}.note{color:var(--m);font-size:12px;margin:2px 0 8px}
+section.card{background:var(--p);border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:10px 14px 6px}
+.ch{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.ch .nm{min-width:0}
+.ring{position:relative;height:560px;max-width:980px;margin:0 auto;background:radial-gradient(ellipse at 50% 55%,#26304a 0,#161c28 62%,transparent 63%)}
+.ring .pos{position:absolute;transform:translate(-50%,-100%);text-align:center;font-size:10px;color:var(--m);width:130px}
+.ring .pos img{image-rendering:pixelated}.ring .pos u{display:block;text-decoration:none;font-weight:700}
+.ring .pos.dyn{width:260px}.ring .tr2{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);image-rendering:pixelated;filter:drop-shadow(0 4px 6px #000)}
+details.all>summary{cursor:pointer;color:var(--a);padding:6px 0}
 @media(max-width:800px){.order{margin-left:0}header,main{padding-left:14px;padding-right:14px}}
 </style></head><body>
 <header><h1>Pocket Raiders — Boss Gimmick Dex</h1>
@@ -59,14 +66,32 @@ function body(b,role){
   return `<div class="note">${ROLE[role]} teams for ${b.name}, weakest to strongest.</div>`+b[role].map((t,i)=>teamRow(role,t,i)).join('');
 }
 const list=document.getElementById('list');
-list.innerHTML=D.bosses.map((b,i)=>`<details class="b" data-i="${i}" data-n="${(b.name+' '+b.signature.join(' ')+' '+Object.values(b.mons).join(' ')).toLowerCase()}" data-o="${b.order[0]}">
-<summary class="bh">${D.trainers[b.id]?`<img class="tr" src="${D.trainers[b.id]}" alt="">`:'<span style="width:48px"></span>'}<span class="nm">${b.name}<br>${b.types.map(chip).join('')}</span>
-<span class="order">${b.order.map((k,j)=>`<span class="og">${img(b.mons[k])}<span><b class="k-${k}">${j+1}. ${KN[k]}</b><br>${D.names[b.mons[k]]||b.mons[k]}</span></span>`).join('')}</span></summary>
-<div class="body"><div class="tabs"><button class="on" data-r="gym">Gym Leader</button><button data-r="elite">Elite Four</button><button data-r="champion">Champion</button></div><div class="pane"></div></div></details>`).join('');
-list.addEventListener('toggle',e=>{const d=e.target;if(!d.open||d.dataset.done)return;d.dataset.done=1;show(d,'gym')},true);
-list.addEventListener('click',e=>{const b=e.target.closest('.tabs button');if(!b)return;const d=b.closest('details');d.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));show(d,b.dataset.r)});
+function ring(b){
+  const t=b.champion[b.champion.length-1],n=t.members.length;
+  const tr=D.trainers[b.id]?`<img class="tr2" src="${D.trainers[b.id]}" style="height:200px" alt="${b.name}">`:'';
+  const ms=t.members.map((m,i)=>{
+    const sp=m.f||m.s,s=D.sprites[sp]||D.sprites[m.s],cap=D.names[sp]||sp;
+    const ang=(-90+(i+0.5)*360/n)*Math.PI/180;
+    const x=50+41*Math.cos(ang),y=57+38*Math.sin(ang)+14;
+    const dyn=m.g==='dynamax',sc=dyn?2.3:1.15;
+    let st='';if(m.g==='zmove'){const c=TC[m.z]||'#fff';st=`filter:drop-shadow(0 0 7px ${c}) drop-shadow(0 0 14px ${c}) drop-shadow(0 0 3px ${c});`}
+    const lab=m.g?`<u class="k-${m.g}">${KN[m.g]}${m.g==='tera'?' '+m.t:''}${m.g==='zmove'?' '+m.z:''}</u>`:'';
+    const im=s?`<img src="${s[0]}" alt="${cap}" style="${st}width:${Math.round(s[1]*sc)}px;height:${Math.round(s[2]*sc)}px">`:'?';
+    return `<div class="pos${dyn?' dyn':''}" style="left:${x}%;top:${y}%">${im}${lab}${cap}</div>`;
+  }).join('');
+  return tr+ms;
+}
+list.innerHTML=D.bosses.map((b,i)=>`<section class="card" data-i="${i}" data-n="${(b.name+' '+b.signature.join(' ')+' '+Object.values(b.mons).join(' ')).toLowerCase()}" data-o="${b.order[0]}">
+<div class="ch"><span class="nm">${b.name}<br>${b.types.map(chip).join('')}</span>
+<span class="order">${b.order.map((k,j)=>`<span class="og">${img(b.mons[k])}<span><b class="k-${k}">${j+1}. ${KN[k]}</b><br>${D.names[b.mons[k]]||b.mons[k]}</span></span>`).join('')}</span></div>
+<div class="ring" data-r="1"><div class="note" style="padding:6px">Champion team 10 (Region 10, all four gimmicks)</div></div>
+<details class="all"><summary>All 36 teams (Gym, Elite Four, Champion)</summary><div class="body"><div class="tabs"><button class="on" data-r="gym">Gym Leader</button><button data-r="elite">Elite Four</button><button data-r="champion">Champion</button></div><div class="pane"></div></div></details></section>`).join('');
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const r=e.target;io.unobserve(r);r.innerHTML=ring(D.bosses[r.closest('section').dataset.i])}}),{rootMargin:'600px'});
+list.querySelectorAll('.ring').forEach(r=>io.observe(r));
+list.addEventListener('toggle',e=>{const d=e.target;if(!d.open||d.dataset.done)return;d.dataset.done=1;show(d.closest('section'),'gym')},true);
+list.addEventListener('click',e=>{const b=e.target.closest('.tabs button');if(!b)return;const d=b.closest('section');d.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));show(d,b.dataset.r)});
 function show(d,role){d.querySelector('.pane').innerHTML=body(D.bosses[d.dataset.i],role)}
 const q=document.getElementById('q'),f=document.getElementById('f'),cnt=document.getElementById('count');
-function filt(){const t=q.value.trim().toLowerCase();let n=0;list.querySelectorAll('details.b').forEach(d=>{const ok=(!t||d.dataset.n.includes(t))&&(!f.value||d.dataset.o===f.value);d.classList.toggle('hide',!ok);if(ok)n++});cnt.textContent=n+' shown'}
+function filt(){const t=q.value.trim().toLowerCase();let n=0;list.querySelectorAll('section.card').forEach(d=>{const ok=(!t||d.dataset.n.includes(t))&&(!f.value||d.dataset.o===f.value);d.classList.toggle('hide',!ok);if(ok)n++});cnt.textContent=n+' shown'}
 q.oninput=f.onchange=filt;filt();
 </script></body></html>
