@@ -3,6 +3,7 @@
 import { dailyChest } from '../ui/overlays';
 import { pokemonIcon } from '../ui/sprites';
 import Phaser from 'phaser';
+import { prologueGateActive } from '../core/story2/prologue';
 import { shouldWelcome } from './TutorialScene';
 import { services } from '../game/services';
 import { playMusic, stopMusic } from '../ui/audio';
@@ -33,6 +34,10 @@ export class MainMenuScene extends Phaser.Scene {
     // First visit to this version: patch notes, then the optional tutorial (skipped in automated browsers so tests reach the menu; ?welcome=1 forces it).
     if (shouldWelcome(session.settings)) {
       this.scene.start('Welcome', { phase: 'log', returnTo: 'MainMenu' });
+      return;
+    }
+    if (prologueGateActive(session.profile.story)) {
+      this.scene.start('Prologue');
       return;
     }
     playMusic(this, 'bgm.menu');
