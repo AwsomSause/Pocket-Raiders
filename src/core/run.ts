@@ -99,6 +99,7 @@ import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCa
 import { wildLuck } from './wildLuck';
 import { arenaFor } from './battle/w1Play';
 import { underdogXpMultiplier } from './battle/w1Rules';
+import { storyFirstRivalPlan, storyRivalLine, storyRivalPlan, storyRoles } from './story2/rivalPlan';
 import { expShareUnlocked, FIRST_RIVAL_FLAG } from './firstRival';
 import { bankOverflowXp, xpPolicyMultiplier } from './teamPolicy';
 import { trainCampers } from './trainingCamp';
@@ -1904,6 +1905,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
       plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))));
+      plan = storyFirstRivalPlan(content, run, plan) ?? plan;
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
     }
     // A trainer that vowed to return takes the place of the first ordinary trainer of a later stage.
@@ -1924,7 +1926,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (rule && rivalBack) {
       ensureAce(content, rivalBack);
       // §21 a major rival keeps its semi-canon team; §9/§10 its ace carries what it learned.
-      const ret = rivalReturn(content, run, rivalBack, canonPlan(content, rivalBack, plan), rule.effect);
+      const ret = rivalReturn(content, run, rivalBack, storyRivalPlan(content, run, rivalBack, canonPlan(content, rivalBack, plan), stageNumber), rule.effect);
       // W2 (14.6/14.7/14.5): the ace's ladder step, then the adaptation triggers (from what the rival saw), then the ace's coverage set.
       const ladder = withAceLadder(content, run, rivalBack, withSignatureAce(content, rivalBack, ret.plan));
       ret.plan = withAceProgress(content, rivalBack, ladder.plan);
@@ -2031,8 +2033,12 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       run.battle.firstRival = true;
       const who = characterOf(plan.name).data.home;
       run.battle.rivalNote = `${plan.name} from ${who} picked ${content.species.get(plan.members[0]!.speciesId)?.name ?? 'a starter'} too, and wants to see who's better. This won't be the last time.`;
+      const introLine = storyRoles(run)?.primary ? storyRivalLine(content, storyRoles(run)!.primary, 'intro') : null;
+      if (introLine) run.battle.rivalNote = `${plan.name}: "${introLine}"`;
     }
     if (rivalBack && rule) {
+      const returnLine = rivalBack.storyRival ? storyRivalLine(content, rivalBack.storyRival, 'rematch') : null;
+      if (returnLine) run.battle.rivalNote = [run.battle.rivalNote, `${plan.name}: "${returnLine}"`].filter(Boolean).join(' ');
       const ace = rivalBack.ace ? team.find((m) => familyId(content, m.speciesId) === rivalBack.ace) : undefined;
       // §10 studied moves are the ace's signature moves (they hit harder, like an awakened move).
       const signature = (rivalBack.studied ?? []).map((st) => st.moveId).filter((id) => ace?.moves.some((m) => m.id === id));

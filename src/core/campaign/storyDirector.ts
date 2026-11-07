@@ -4,7 +4,7 @@
 // stream: its draws come from `story_director` (a hash of the run seed and the pass number), so no existing roll moves.
 // Story events that fill the slots come from later slices (S5, S11); until then every slot plays its fallback line.
 
-import { rolesForTheme } from '../story2/storyRivals';
+import { pickStoryRivals, rolesForTheme } from '../story2/storyRivals';
 import type { Content } from '../contentSchema';
 import { evilEventId } from '../evil/content';
 import { evilOf, evilTeam, plannedEvilTeamId } from '../evil/teams';
@@ -99,6 +99,8 @@ export interface DirectorInputs {
   contentHash: string;
   antagonist: string;
   rivals: { primary: string; secondary: string; friendly: string };
+  /** The run's backstory id; a theme row may swap Primary and Secondary for it (S10). */
+  backstory?: string;
   /** Columns of a Circuit stage map, and the League's Elite Four size (the Champion's step is one after). */
   columns: number;
   eliteFourSize: number;
@@ -175,7 +177,7 @@ export function buildBlueprint(content: Content, inputs: DirectorInputs): StoryB
   const body: StoryBlueprint = {
     id: 'bp_pending', seed: inputs.seed, contentHash: inputs.contentHash, theme: toId(theme), antagonist: toId(inputs.antagonist),
     // S10 rival table: a theme with a row names its Primary, Secondary and Friendly rivals (list order, rule R1); otherwise the run's rivals.
-    rivals: (() => { const r = rolesForTheme(data, toId(theme)) ?? inputs.rivals; return { primary: toId(r.primary), secondary: toId(r.secondary), friendly: toId(r.friendly) }; })(),
+    rivals: (() => { const r = rolesForTheme(data, toId(theme), inputs.backstory) ?? inputs.rivals; return { primary: toId(r.primary), secondary: toId(r.secondary), friendly: toId(r.friendly) }; })(),
     slots, locks: stops.filter((s) => s.locked).map((s) => s.id), replans: [], stops, checksum: '',
   };
   body.id = `bp_${checksumOf(body).slice(0, 12)}`;
@@ -241,7 +243,8 @@ export function directorInputs(content: Content, run: RunState): DirectorInputs 
   const rivals = run.story.rivals;
   return {
     seed: run.seed, contentHash: content.storyData.hash, antagonist: plannedEvilTeamId(content, run) ?? 'none',
-    rivals: old?.rivals ?? { primary: rivals[0]?.id ?? 'none', secondary: rivals[1]?.id ?? 'none', friendly: rivals[2]?.id ?? 'none' },
+    rivals: old?.rivals ?? pickStoryRivals(content.storyData, run.seed) ?? { primary: rivals[0]?.id ?? 'none', secondary: rivals[1]?.id ?? 'none', friendly: rivals[2]?.id ?? 'none' },
+    backstory: run.story.v2?.protagonist?.backstory,
     columns: campaign.columns, eliteFourSize: campaign.eliteFourSize,
   };
 }

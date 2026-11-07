@@ -47,6 +47,7 @@ import { nemesisAfterBattle, noteNemesisBreakFree, noteNemesisFaint, noteRivalRe
 import type { Rival, StoryEventDefinition, StoryTriggerKind, Where } from './schema';
 import { rivalProgress } from '../rivals/progression';
 import { addReputation } from '../rivals/reputation';
+import { assignStoryRole, tagPrimary } from '../story2/rivalPlan';
 import { createMajorRival, learnFromBattle, recordAce, type Knockout } from '../rivals/major';
 import { maybeFormMonRival, monRivalAfterBattle, monRivalCandidate } from '../rivals/monRivals';
 import { recordSacrifice } from '../rivals/sacrifice';
@@ -716,6 +717,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   if (battle.firstRival && content.balance.rival.depth && trainer && (result === 'win' || result === 'lose')) {
     const major = createMajorRival(run, { classId: trainer.classId, name: trainer.name, team: battle.enemyTeam.slice(0, 6).map((m) => m.speciesId), ended, where, result: result === 'win' ? 'win' : 'lose', hpLeftShare: totalHp > 0 ? Math.round((hpLeft / totalHp) * 100) / 100 : 0, turns: battle.turn - 1, foes: fought }, content);
     if (major) {
+      tagPrimary(content, run, major);
       recordAce(content, major, battle.enemyTeam, result === 'lose');
       rivalProgress(content, run, major, result === 'win' ? 'lostToPlayer' : 'beatPlayer');
       emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, archetype: major.archetype, outcome: 'major' }, text: `${trainer.name} swore to keep up with you all the way. A rivalry for the whole journey has begun` });
@@ -738,6 +740,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
       ctx: pathContext(content, run, { where, team: battle.enemyTeam.slice(0, 6).map((m) => m.speciesId), hpLeftShare: totalHp > 0 ? hpLeft / totalHp : 0, turns: battle.turn - 1, ...(rivalBack ? { rival: rivalBack } : {}) }),
     });
     if (rival) {
+      assignStoryRole(content, run, rival);
       const title = `${content.trainers.get(trainer.classId)?.name ?? 'Trainer'} ${trainer.name}`;
       emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: rival.id, archetype: rival.archetype }, text: `${(RIVAL_PATHS.paths.find((p) => p.id === rival.origin.path)?.line ?? '{who} became your rival').replace('{who}', title)}` });
     }
