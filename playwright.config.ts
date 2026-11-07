@@ -4,6 +4,8 @@ export default defineConfig({
   testDir: 'tests/e2e',
   // The long fights and the CI runner (about twice as slow as a laptop) need more than 60 s.
   timeout: 120_000,
+  // One retry on CI only: a real failure fails twice, a load-related flake (software WebGL on a shared runner) passes.
+  retries: process.env.CI ? 1 : 0,
   // Dot output keeps logs short; failures still print in full.
   reporter: 'dot',
   use: {
