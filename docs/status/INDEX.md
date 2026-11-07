@@ -387,3 +387,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - `doubles-trainer-poses.md`: your trainer throws both balls and shows recall/win/defeat poses in doubles (W17).
 - `wire-dead-settings.md`: Story intensity, Camp activities, Subtitle size/style, Journal voice now do something.
 - `wire-a11y-text-quest.md`: Bigger small print and Map quest contrast settings (settings v41).
+- `battle-depth.md`: battle depth redo of #808: foe on its feet in its platform, your Pokémon clipped at the message bar, doubles.
