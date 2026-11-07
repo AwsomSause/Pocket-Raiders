@@ -22,10 +22,13 @@ summary.bh img.tr{height:64px;image-rendering:pixelated}.nm{font-size:17px;font-
 .m u{text-decoration:none;font-weight:700;display:block}.hide{display:none!important}.note{color:var(--m);font-size:12px;margin:2px 0 8px}
 section.card{background:var(--p);border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:10px 14px 6px}
 .ch{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.ch .nm{min-width:0}
-.ring{position:relative;height:560px;max-width:980px;margin:0 auto;background:radial-gradient(ellipse at 50% 55%,#26304a 0,#161c28 62%,transparent 63%)}
-.ring .pos{position:absolute;transform:translate(-50%,-100%);text-align:center;font-size:10px;color:var(--m);width:130px}
-.ring .pos img{image-rendering:pixelated}.ring .pos u{display:block;text-decoration:none;font-weight:700}
-.ring .pos.dyn{width:260px}.ring .tr2{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);image-rendering:pixelated;filter:drop-shadow(0 4px 6px #000)}
+.ring{position:relative;height:640px;max-width:1100px;margin:6px auto;overflow:hidden;border-radius:10px;background:radial-gradient(ellipse at 50% 100%,#4a5060 0,#1b2230 55%,#0e1220 100%)}
+.ring::before{content:"";position:absolute;inset:0;background:linear-gradient(#9a94c8aa,#9a94c800 85%);clip-path:polygon(32% 0,68% 0,100% 100%,0 100%)}
+.ring::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:radial-gradient(ellipse at 50% 20%,#00000066,transparent 70%)}
+.ring .pos{position:absolute;transform:translate(-50%,-100%);text-align:center;font-size:11px;color:#dfe6f5;line-height:1.15}
+.ring .pos img{image-rendering:pixelated;display:block;margin:0 auto;filter:drop-shadow(0 6px 5px #0009)}
+.ring .cap{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;text-shadow:0 1px 3px #000,0 0 6px #000;padding-top:2px}
+.ring .cap u{display:block;text-decoration:none;font-weight:700}
 details.all>summary{cursor:pointer;color:var(--a);padding:6px 0}
 @media(max-width:800px){.order{margin-left:0}header,main{padding-left:14px;padding-right:14px}}
 </style></head><body>
@@ -67,24 +70,29 @@ function body(b,role){
 }
 const list=document.getElementById('list');
 function ring(b){
-  const t=b.champion[b.champion.length-1],n=t.members.length;
-  const tr=D.trainers[b.id]?`<img class="tr2" src="${D.trainers[b.id]}" style="height:200px" alt="${b.name}">`:'';
-  const ms=t.members.map((m,i)=>{
-    const sp=m.f||m.s,s=D.sprites[sp]||D.sprites[m.s],cap=D.names[sp]||sp;
-    const ang=(-90+(i+0.5)*360/n)*Math.PI/180;
-    const x=50+41*Math.cos(ang),y=57+38*Math.sin(ang)+14;
-    const dyn=m.g==='dynamax',sc=dyn?2.3:1.15;
-    let st='';if(m.g==='zmove'){const c=TC[m.z]||'#fff';st=`filter:drop-shadow(0 0 7px ${c}) drop-shadow(0 0 14px ${c}) drop-shadow(0 0 3px ${c});`}
+  const t=b.champion[b.champion.length-1];
+  const sp=m=>D.sprites[m.f||m.s]||D.sprites[m.s];
+  const h=m=>(sp(m)?sp(m)[2]:50);
+  // Group portrait: the trainer stands in front at the centre; the biggest Pokémon stand behind, small ones in front. Dynamax towers at the back.
+  const slots=[[22,66],[78,64],[10,84],[90,84],[33,82],[67,82]];
+  const dyn=t.members.filter(m=>m.g==='dynamax'),rest=t.members.filter(m=>m.g!=='dynamax').sort((x,y)=>h(y)-h(x));
+  const placed=[];
+  dyn.forEach(m=>placed.push([m,50,60,3.6]));
+  rest.forEach((m,i)=>{const sl=slots[i%slots.length];placed.push([m,sl[0],sl[1],i<2?2.1:1.7])});
+  const tr=D.trainers[b.id]?`<div class="pos" style="left:50%;top:88%;z-index:90"><img src="${D.trainers[b.id]}" style="height:250px" alt="${b.name}"></div>`:'';
+  const ms=placed.map(([m,x,y,sc])=>{
+    const s=sp(m),cap=D.names[m.f||m.s]||m.s;
+    let st='';if(m.g==='zmove'){const c=TC[m.z]||'#fff';st=`filter:drop-shadow(0 0 8px ${c}) drop-shadow(0 0 16px ${c}) drop-shadow(0 0 4px ${c});`}
     const lab=m.g?`<u class="k-${m.g}">${KN[m.g]}${m.g==='tera'?' '+m.t:''}${m.g==='zmove'?' '+m.z:''}</u>`:'';
     const im=s?`<img src="${s[0]}" alt="${cap}" style="${st}width:${Math.round(s[1]*sc)}px;height:${Math.round(s[2]*sc)}px">`:'?';
-    return `<div class="pos${dyn?' dyn':''}" style="left:${x}%;top:${y}%">${im}${lab}${cap}</div>`;
+    return `<div class="pos" style="left:${x}%;top:${y+8}%;z-index:${Math.round(y)}">${im}<div class="cap">${lab}${cap}</div></div>`;
   }).join('');
-  return tr+ms;
+  return ms+tr;
 }
 list.innerHTML=D.bosses.map((b,i)=>`<section class="card" data-i="${i}" data-n="${(b.name+' '+b.signature.join(' ')+' '+Object.values(b.mons).join(' ')).toLowerCase()}" data-o="${b.order[0]}">
 <div class="ch"><span class="nm">${b.name}<br>${b.types.map(chip).join('')}</span>
 <span class="order">${b.order.map((k,j)=>`<span class="og">${img(b.mons[k])}<span><b class="k-${k}">${j+1}. ${KN[k]}</b><br>${D.names[b.mons[k]]||b.mons[k]}</span></span>`).join('')}</span></div>
-<div class="ring" data-r="1"><div class="note" style="padding:6px">Champion team 10 (Region 10, all four gimmicks)</div></div>
+<div class="note">Champion team 10 (Region 10, all four gimmicks)</div><div class="ring" data-r="1"></div>
 <details class="all"><summary>All 36 teams (Gym, Elite Four, Champion)</summary><div class="body"><div class="tabs"><button class="on" data-r="gym">Gym Leader</button><button data-r="elite">Elite Four</button><button data-r="champion">Champion</button></div><div class="pane"></div></div></details></section>`).join('');
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const r=e.target;io.unobserve(r);r.innerHTML=ring(D.bosses[r.closest('section').dataset.i])}}),{rootMargin:'600px'});
 list.querySelectorAll('.ring').forEach(r=>io.observe(r));
