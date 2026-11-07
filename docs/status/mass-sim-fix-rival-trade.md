@@ -1,0 +1,1 @@
+- Rival trade crash fix: `rivalTransfers` only trades/rehomes a Pokémon that has a bond (seed ms3505 crashed before). Test in `rivalTransfer.test.ts`. No save changes.
