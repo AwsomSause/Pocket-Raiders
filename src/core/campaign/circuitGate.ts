@@ -32,7 +32,7 @@ export function forkDecision(content: Content, run: RunState, region: number, in
   if (c.chosen[key] || c.passed.includes(key)) return null;
   const used = c.passed.filter((k) => Math.floor(Number(k) / TOWNS_PER_REGION) === region).length;
   const left = PASSES_PER_REGION - used;
-  const options: CircuitDecision['options'] = doors.map((id, i) => ({ ...describe(content, id), action: i === 0 ? 'door0' as const : 'door1' as const, leaderId: id }));
+  const options: CircuitDecision['options'] = doors.map((id, i) => ({ ...describe(content, id), action: i === 0 ? 'door0' as const : 'door1' as const, leaderId: id, sprite: content.bosses.get(id)?.sprites.default }));
   if (left > 0) options.push({ label: 'Pass this town', description: `Take no fight here; both Leaders are passed over. ${left} pass${left === 1 ? '' : 'es'} left in this region.`, action: 'pass' });
   return { kind: 'circuit', step: 'fork', region, index, title: `${townAt(region, index)?.town ?? 'The gym'}: two Leaders hold this gym. Choose a door.`, options };
 }
@@ -66,7 +66,7 @@ export function rematchDecision(content: Content, run: RunState, region: number)
   if (day.invitations.length === 0) return null;
   const options: CircuitDecision['options'] = day.invitations.map((id) => {
     const town = c.cast.findIndex((t) => t.doors.includes(id)) % TOWNS_PER_REGION;
-    return { label: `Guest Match: ${describe(content, id).label}`, description: `${townAt(region, town)?.town ?? 'Their town'}: one optional rematch for a Guest Badge and +1 Circuit Merit.`, action: 'guest' as const, leaderId: id };
+    return { label: `Guest Match: ${describe(content, id).label}`, description: `${townAt(region, town)?.town ?? 'Their town'}: a harder rematch (their rotating slots, +levels) for a Guest Badge and +1 Circuit Merit.`, action: 'guest' as const, leaderId: id, sprite: content.bosses.get(id)?.sprites.default };
   });
   options.push({ label: 'Move on', description: 'Decline every invitation and leave the region.', action: 'skip' });
   return { kind: 'circuit', step: 'rematch', region, index: 0, title: 'Rematch Day: the Leaders you passed over have sent invitations.', options };

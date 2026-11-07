@@ -268,6 +268,13 @@ describe('on the map', () => {
     expect(r.stage!.index).toBe(2);
     expect(r.stage!.leaderId).toBe(guest);
     expect(r.story.v2!.circuit!.guest['0']).toBe(guest);
+    // A Guest Match is harder: the same gym without the Guest Match has lower enemy levels.
+    const plain = structuredClone(r);
+    plain.story.v2!.circuit!.guest['0'] = 'someone-else';
+    const top = (run: RunState): number => Math.max(...run.battle!.enemyTeam.map((m) => m.level));
+    const hard = toGym(structuredClone(r), 'first');
+    expect(hard.battle).toBeTruthy();
+    expect(top(hard)).toBeGreaterThan(top(toGym(plain, 'first')));
     r = fight(toGym(r, 'first'));
     const done = r.story.v2!.circuit!;
     expect(done.badges.find((b) => b.leaderId === guest)).toMatchObject({ counted: false, source: 'guest' });

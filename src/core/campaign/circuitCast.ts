@@ -171,6 +171,12 @@ export function chooseGuestMatch(c: CircuitState, region: number, leaderId: stri
   return true;
 }
 
+/** True while the current stage's gym is a Rematch Day Guest Match: a harder fight with the Leader's rotating slots. */
+export function guestMatch(content: Content, run: RunState): boolean {
+  const c = run.story.v2?.circuit;
+  return !!c && !!run.stage && c.guest[String(run.regionIndex)] === run.stage.leaderId;
+}
+
 /** Called from run.ts when a gym leader is beaten: records the badge for a Story Run's Circuit leader. */
 export function noteGymWin(content: Content, run: RunState, leaderId: string): void {
   const c = ensureCircuit(content, run);

@@ -2503,6 +2503,8 @@ export const BalanceSchema = z.object({
   /** Story Overhaul S4: Narrative Director knobs (design Part V-B). Rules that need story content are checked by later slices (S11, S19). */
   story: z.object({
     stopsTotal: z.number().int().min(1),
+    /** S9c: extra enemy levels in a Rematch Day Guest Match (its team also uses the leader's rotating slots). */
+    guestMatchBonus: z.number().int().min(0).default(3),
     /** The last stage number of Acts 1 to 6 (Act 1 starts at stage 1). */
     actEndStages: z.array(z.number().int().min(1)).length(6),
     /** Stops per Act: Acts 1 to 6, then the Finale and the Epilogue (scene stops). */
