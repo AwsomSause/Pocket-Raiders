@@ -63,6 +63,8 @@ import { storyAssetId } from '../core/storyAudio';
 import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
+import { galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
+import { StadiumDirector } from '../ui/galar/stadiumDirector';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
@@ -377,6 +379,7 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.timeScale = speed;
     this.time.timeScale = speed;
     this.role = this.battleRole();
+    this.stadium = this.makeStadium();
     // The same battle always gets the same look (salted by the run and how far it has come), so a reload never changes it.
     this.skinId = screenStyleOf('battle', session.settings.screenStyles, `${run.seed}:${run.log.battlesWon}:${run.log.rewardsTaken.length}`);
     this.skin = battleSkinFor(this.skinId);
@@ -853,6 +856,8 @@ export class BattleScene extends Phaser.Scene {
 
   /** Set in `create`: the battle can be cleared from the run before the win song plays. */
   private role: BattleRole | undefined;
+  /** Galar Gym Challenge stadium presentation (crowd, camera cuts, Champion host); null elsewhere. */
+  private stadium: StadiumDirector | null = null;
   /** The battle's normal song, and the one playing now (the low-HP song swaps in while the lead is in danger). */
   private baseTrack = '';
   private playingTrack = '';
@@ -2159,6 +2164,56 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(rivalIntro(this, resolveAnim('rival.intro', animSettingsFrom(services().session.settings)), `${title.toUpperCase()} CHALLENGES YOU`, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined, ROLE_RIMS.rival));
       await this.playBeat(titleCard(this, 'RIVAL', title, ROLE_RIMS.rival, this.motion));
     }
+    await this.stadiumIntro();
+  }
+
+  /** Galar Gym Challenge: the stadium director for this battle (null in every other battle). */
+  private makeStadium(): StadiumDirector | null {
+    try {
+      const { session } = services();
+      const content = session.content;
+      if (!isGalarStadiumBattle(content, this.run)) return null;
+      const st = session.settings;
+      const alive = (team: readonly { hp: number }[]): number => team.filter((m) => m.hp > 0).length;
+      return new StadiumDirector(this, {
+        runSeed: this.run.seed,
+        battleId: `${this.run.seed}:${this.run.badges.length}:${this.run.log.battlesWon}`,
+        host: galarHost(content, this.run).name,
+        impressive: galarPerformance(content, this.run).lastWasImpressive,
+        rivalWatching: this.run.story.rivals.length > 0,
+        disableAnimations: () => st.disableAllAnimations || st.battleAnimations === 'off',
+        reduceMotion: () => st.battleAnimations === 'reduced',
+        setIntensity: (n) => setMusicIntensity(n),
+        finalMusic: (track) => {
+          if (!services().assets.has(track)) return;
+          this.baseTrack = track;
+          this.playingTrack = track;
+          playMusicLazy(this, track, track);
+        },
+        alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
+      });
+    } catch (e) {
+      console.warn('Galar stadium presentation unavailable', e);
+      return null;
+    }
+  }
+
+  /** Galar gym entrance: the Champion's one-time Dynamax Band scene (first gym), then a line for this gym. Presentation; the Band itself is granted by the core. */
+  private async stadiumIntro(): Promise<void> {
+    if (!this.stadium) return;
+    try {
+      const { session } = services();
+      const content = session.content;
+      const host = galarHost(content, this.run).name;
+      const band = session.claimGalarBandIntro();
+      if (band) for (const line of band.lines) await this.say(line);
+      else {
+        const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
+        await this.speak(host, line.text);
+      }
+    } catch (e) {
+      console.warn('Galar stadium intro failed', e);
+    }
   }
 
   /** The foe's rim: neon pink for wild Pokémon, orange for trainers, red for rivals, gold / violet / pale gold for bosses. */
@@ -3184,7 +3239,9 @@ export class BattleScene extends Phaser.Scene {
       this.nextPrompt();
       return;
     }
+    this.stadium?.startTurn(before.battle?.turn ?? 1);
     await this.playEvents(result.events, before, trainer, result.cues, result.drama);
+    await this.stadium?.afterTurn();
 
     if (result.end) {
       await this.finish(result, trainer, bossWin);
@@ -3444,6 +3501,7 @@ export class BattleScene extends Phaser.Scene {
       }
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
+      await this.stadium?.onEvent(e);
       const side = 'side' in e ? e.side : null;
       if (side === 'enemy' && (e.type === 'ability' || (e.type === 'held' && e.itemId !== 'poke-doll'))) this.noteFoeReveal(e.type === 'ability' ? { ability: e.ability } : { item: e.itemId });
       const box = side === 'enemy' ? this.enemyBox : this.playerBox;

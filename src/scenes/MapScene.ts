@@ -26,6 +26,7 @@ import Phaser from 'phaser';
 import { pinnedObjective } from '../core/objectives';
 import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
+import { bracketView } from '../core/galarTournament';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { FRAME_ASSET_IDS, headerBar } from '../ui/frames';
 import { currentColumn, findNode } from '../core/map';
@@ -802,6 +803,11 @@ export class MapScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
+    // Galar's Champion Tournament: B opens the bracket.
+    if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
+      this.input.keyboard?.on('keydown-B', () => this.toggleBracket());
+      this.add.text(GAME_WIDTH - 24, 386, 'B: tournament bracket', textStyle(12, '#ffe060')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('bracket-tag').on('pointerdown', () => this.toggleBracket());
+    }
     // A run continued from a save (ideas W4): a gentle welcome back, and the map glides to where you stand.
     if (session.takeResumed() && !data.notice) {
       const target = mapLayer.x;
@@ -814,7 +820,9 @@ export class MapScene extends Phaser.Scene {
       const regions = run.regionOrder.length;
       if (league) {
         const size = getCampaign(content, run.campaignId).eliteFourSize;
-        this.showBanner(region.name, 'Pokémon League', `Elite Four ×${size}, then ${leader.title}  ·  Healed after every battle`);
+        const tournament = region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0);
+        if (tournament) this.showBanner(region.name, 'Champion Tournament', `32 trainers, ${size + 1} wins to the title  ·  Healed after every round  ·  Ball Guy's shop after rounds 2 and 4`);
+        else this.showBanner(region.name, 'Pokémon League', `Elite Four ×${size}, then ${leader.title}  ·  Healed after every battle`);
       } else if (stage.index === 0) {
         this.showBanner(`Region ${run.regionIndex + 1} of ${regions}  ·  ${identity.motif}`, region.name, `${region.tagline ? `${region.tagline}  ·  ` : ''}Level cap ${cap}  ·  Stage 1: ${blindMap(run.rules) ? '???' : theme.name}  ·  ${leader.title}`);
       } else {
@@ -1698,6 +1706,38 @@ export class MapScene extends Phaser.Scene {
   }
 
   private legend: Phaser.GameObjects.Container | null = null;
+  private bracket: Phaser.GameObjects.Container | null = null;
+
+  /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
+  private toggleBracket(): void {
+    if (this.bracket) {
+      this.bracket.destroy();
+      this.bracket = null;
+      this.busy = false;
+      return;
+    }
+    if (this.busy || this.picker || this.legend) return;
+    const { session } = services();
+    const view = bracketView(session.content, session.run!);
+    const layer = this.add.container(0, 0).setDepth(85).setName('tournament-bracket');
+    layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive().on('pointerdown', () => this.toggleBracket()));
+    layer.add(drawGlass(this, 30, 30, GAME_WIDTH - 60, GAME_HEIGHT - 60, { tint: AERO.glassLow, rim: AERO.rim, radius: 18, alpha: 0.97 }));
+    layer.add(this.add.text(GAME_WIDTH / 2, 42, `Champion Tournament  ·  ${view.standing.length} of 32 still in  (B or click to close)`, textStyle(20, COLORS.gold)).setOrigin(0.5, 0));
+    const colW = (GAME_WIDTH - 80) / 5;
+    for (const r of view.rounds) {
+      const x = 40 + (r.round - 1) * colW;
+      const color = r.state === 'won' ? '#78d890' : r.state === 'next' ? '#ffe060' : '#a69cb4';
+      layer.add(this.add.text(x + colW / 2, 82, r.name, textStyle(16, color)).setOrigin(0.5, 0));
+      layer.add(this.add.text(x + colW / 2, 106, `${r.state === 'won' ? '✓ ' : r.state === 'next' ? '▶ ' : ''}${r.opponent.name}`, textStyle(15, '#ffffff')).setOrigin(0.5, 0));
+      layer.add(this.add.text(x + colW / 2, 128, r.opponent.style, textStyle(11, '#bfe9ff', { wordWrap: { width: colW - 10 }, align: 'center' })).setOrigin(0.5, 0));
+      const detail = r.state === 'next' ? r.opponent.intro : r.crowd ?? '';
+      if (detail) layer.add(this.add.text(x + colW / 2, 170, detail, textStyle(11, '#e8e0f0', { wordWrap: { width: colW - 14 }, align: 'center' })).setOrigin(0.5, 0));
+      if (r.upsets.length > 0) layer.add(this.add.text(x + colW / 2, 250, `Upset: ${r.upsets.slice(0, 2).join('; ')}`, textStyle(10, '#ff9860', { wordWrap: { width: colW - 14 }, align: 'center' })).setOrigin(0.5, 0));
+      layer.add(this.add.text(x + colW / 2, 330, `${r.remaining.length} left${r.shopAfter ? '\n🛒 Ball Guy after' : ''}`, textStyle(12, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
+    }
+    this.bracket = layer;
+    this.busy = true;
+  }
 
   /** The map legend (ideas W4, key L): what every node, stop, badge and obstacle icon means. Esc or L closes it. */
   private toggleLegend(): void {

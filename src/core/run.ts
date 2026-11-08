@@ -174,6 +174,7 @@ import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type S
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { castGymLeader, castLeague, record } from './rolePool';
+import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
@@ -705,7 +706,10 @@ function enterLeague(content: Content, run: RunState): void {
     run.roleCast = run.roleCast.filter((c) => c.role !== 'champion' || c.regionIndex !== run.regionIndex);
     record(content, run, 'champion', run.regionIndex, 0, league.champion);
   }
-  const map = generateLeagueMap(campaign.eliteFourSize);
+  // Galar: the League is the 32-trainer Champion Tournament (its opponents replace the cast Elite Four; Ball Guy's shop opens after rounds 2 and 4).
+  const tournament = usesGalarTournament(region.id, isStoryCampaign(content, run.campaignId), !!getMode(run.rules.modeId)?.dailySeed) && campaign.eliteFourSize === 4;
+  if (tournament) league.eliteFour = galarEliteFour(content, run, league.champion);
+  const map = generateLeagueMap(campaign.eliteFourSize, tournament ? { shopAfter: GALAR_SHOP_COLUMNS } : {});
   const problems = validateLeagueMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid league map: ${problems.join('; ')}`);
   run.usedLeaders.push(...league.eliteFour, league.champion);
@@ -2349,7 +2353,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
   // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
   const place = `${run.regionIndex}:${stage.index}:${stage.current}`;
-  run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
+  // Galar's tournament: Ball Guy runs the shop between rounds (its stock is his own, limited per visit).
+  const galarLeagueShop = stage.kind === 'league' && currentRegion(content, run).id === 'galar';
+  const visit = Math.max(0, Math.floor(findNode(stage.map, stage.current).column / 2) - 1);
+  if (galarLeagueShop) run.shop = { type: 'ballguy', place, visit, sold: {} };
+  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
   // A Bike Voucher is traded for its bike (or money, if the player already has one).
   const voucher = voucherOf(content, run);
   if (voucher) {
@@ -2382,6 +2390,7 @@ export function healParty(content: Content, run: RunState): void {
  * Key items you own aren't sold again.
  */
 export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'inventory' | 'rules' | 'perkEffects' | 'licenses' | 'story' | 'seed' | 'shop'>> & MapItemRun): Content['shop'] {
+  if (run.shop?.type === 'ballguy' && run.seed) return ballGuyStock(run.seed, run.shop.visit ?? 0, run.shop.sold) as Content['shop'];
   const noRevive = run.rules ? noRevives(run.rules) : false;
   const owned = (e: Content['shop'][number]) => !!run.inventory && ownsKeepsake(content, run.inventory, e.item);
   const open = (e: Content['shop'][number]) => run.badges.length >= shopBadgesNeeded(content, run, e);
@@ -2478,8 +2487,9 @@ export function capMoney(content: Content, run: Pick<RunState, 'money'>): void {
 /** Buys one of an item at the shop. */
 export function buyItem(content: Content, current: RunState, itemId: string): { run: RunState; message: string } {
   assertPhase(current, 'shop');
-  const entry = content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
-  if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
+  const ballGuy = current.shop?.type === 'ballguy';
+  const entry = ballGuy ? shopStock(content, current).find((e) => e.item === itemId) : content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
+  if (!entry) throw new Error(ballGuy && ballGuyLimit(current.seed, current.shop?.visit ?? 0, itemId) > 0 ? `Ball Guy is sold out of ${getItem(content, itemId).name}.` : `The shop doesn't sell "${itemId}"`);
   const item = getItem(content, itemId);
   if (ownsKeepsake(content, current.inventory, itemId)) throw new Error(`You already have the ${item.name}.`);
   if (item.effect.kind !== 'attribute' && itemCount(current.inventory, itemId) >= STACK_MAX) throw new Error(`You can't carry more than ${STACK_MAX} ${item.name}.`);
@@ -2493,6 +2503,7 @@ export function buyItem(content: Content, current: RunState, itemId: string): { 
   count(run, 'moneySpent', price);
   afterPurchase(content, run, priceMultiplierFromItems(content, current) === 0);
   noteRecentPurchase(run, itemId);
+  if (ballGuy && run.shop) run.shop.sold = { ...run.shop.sold, [itemId]: (run.shop.sold?.[itemId] ?? 0) + 1 };
   if (item.effect.kind === 'attribute') {
     // Attribute items work as soon as they're bought.
     const value = addItemAttribute(content, run, item.effect.attribute, item.effect.amount);
