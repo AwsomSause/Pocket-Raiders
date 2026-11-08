@@ -4,6 +4,7 @@
 // gameplay random numbers; everything comes from the Pokémon's histories.
 
 import raw from '../../data/mentorship.json';
+import megaMovesJson from '../../data/megaMoves.json';
 import { z } from 'zod';
 import type { Content } from '../contentSchema';
 import { adjustBond, bondOf } from '../bond';
@@ -18,7 +19,7 @@ const CfgSchema = z.object({
   compat: z.object({ rivalLevelGap: Num, rivalBattles: Num, protectorGap: Num, protectorKnockouts: Num, survivorScore: Num, prodigyIvTotal: Num, prodigyGap: Num, sharedBosses: Num, familyGap: Num }),
   chemistry: z.object({ perWin: Num, perBoss: Num, levels: z.array(Num).length(5), traitBonus: z.record(z.string(), Num) }),
   drift: z.object({ evPerWin: Num, evPerWinHigh: Num, highChemistry: Num, cap: Num, topStats: Num, naturalMargin: Num }),
-  moves: z.object({ maxInherited: Num, tiers: z.array(z.object({ minPower: Num, level: Num, chemistry: Num })), statusLevel: Num, outsideCoverageLevel: Num }),
+  moves: z.object({ signature: z.object({ level: Num, chemistry: Num, minPower: Num }), maxInherited: Num, tiers: z.array(z.object({ minPower: Num, level: Num, chemistry: Num })), statusLevel: Num, outsideCoverageLevel: Num }),
   events: z.object({ cooldownBattles: Num, chemistryGain: Num, chemistryLoss: Num }),
   lastResort: z.object({ hpShare: Num, pp: Num, minChemistry: Num }),
   graduation: z.object({ readyGap: Num, mutualChemistry: Num, mutualMargin: Num, rounds: Num, protegeEvReward: Num, mentorChemistryReward: Num, mutualChemistryReward: Num, mutualEvReward: Num }),
@@ -213,7 +214,30 @@ function runMentorEvent(content: Content, run: RunState, rel: RelationshipRecord
 
 // ---------- move inheritance outside the learnset ----------
 
-export interface InheritableMove { moveId: string; reason: string; needLevel: number; needChemistry: number; allowed: boolean; why: string | null }
+export interface InheritableMove { moveId: string; reason: string; needLevel: number; needChemistry: number; allowed: boolean; why: string | null; signature?: boolean }
+
+/**
+ * Signature-inspired techniques (doc 2.2): a Mega signature move itself never transfers (it only exists while Mega Evolved), but a
+ * mentor whose species has one can pass on an echo of it: the strongest ordinary move of the same type and category that the
+ * mentor's species can learn, a little weaker than the signature move. Returns [signature move, echo move] pairs, or [].
+ */
+export function signatureEchoes(content: Content, mentor: PokemonInstance): { signature: string; echo: string }[] {
+  const ms = getSpecies(content, mentor.speciesId);
+  const base = ms.form?.base ?? ms.id;
+  const pool = new Set([...(content.learnables.get(ms.id) ?? (ms.form ? content.learnables.get(ms.form.base) : undefined) ?? []), ...ms.learnset.map((e) => e.move)]);
+  const out: { signature: string; echo: string }[] = [];
+  for (const [formId, sigId] of Object.entries(megaMovesJson.byForm as Record<string, string>)) {
+    const form = content.species.get(formId);
+    const sig = content.moves.get(sigId);
+    if (!form || !sig || (form.form?.base ?? form.id) !== base || sig.power === null) continue;
+    const echo = [...pool]
+      .map((id) => content.moves.get(id))
+      .filter((m): m is NonNullable<typeof m> => !!m && m.supported === true && m.type === sig.type && m.category === sig.category && !m.flags.some((f) => ['zmove', 'max', 'megasig', 'storysig', 'jetform'].includes(f)) && (m.power ?? 0) >= MENTOR_CFG.moves.signature.minPower && (m.power ?? 0) < (sig.power ?? 0))
+      .sort((a, b) => (b.power ?? 0) - (a.power ?? 0) || a.id.localeCompare(b.id))[0];
+    if (echo) out.push({ signature: sigId, echo: echo.id });
+  }
+  return out;
+}
 
 /** The moves this mentor could hand down, with the rule that allows or blocks each (mentors teach only moves they know). */
 export function inheritableMoves(content: Content, run: RunState, bond: MentorBond): InheritableMove[] {
@@ -241,6 +265,19 @@ export function inheritableMoves(content: Content, run: RunState, bond: MentorBo
     else if (bond.chemistry < tier.chemistry) why = `Needs ${tier.chemistry} chemistry`;
     out.push({ moveId: mv.id, reason, needLevel, needChemistry: tier.chemistry, allowed: why === null, why });
   }
+  // The signature-inspired echo (one per protégé, mentorship level 5 and high chemistry).
+  if (!bond.events.echo) {
+    const sigCfg = cfg.signature;
+    for (const { signature, echo } of signatureEchoes(content, mentor)) {
+      if (prote.moves.some((k) => k.id === echo) || out.some((o) => o.moveId === echo)) continue;
+      let why: string | null = null;
+      if (bond.lessons.length >= cfg.maxInherited || total >= cfg.maxInherited) why = 'No room for more mentor moves';
+      else if (lvl < sigCfg.level) why = `Needs mentorship level ${sigCfg.level}`;
+      else if (bond.chemistry < sigCfg.chemistry) why = `Needs ${sigCfg.chemistry} chemistry`;
+      out.push({ moveId: echo, reason: `an echo of ${content.moves.get(signature)?.name ?? signature}, ${nm(content, mentor)}'s signature technique`, needLevel: sigCfg.level, needChemistry: sigCfg.chemistry, allowed: why === null, why, signature: true });
+      break;
+    }
+  }
   return out.sort((a, b) => Number(b.allowed) - Number(a.allowed) || a.moveId.localeCompare(b.moveId));
 }
 
@@ -262,6 +299,7 @@ export function teachInherited(content: Content, run: RunState, relId: string, m
     prote.moves[prote.moves.indexOf(weakest)] = slot;
   }
   bond.lessons.push(moveId);
+  if (opt.signature) bond.events.echo = 1;
   adjustBond(bondOf(run, prote.uid), { trust: 3, respect: 2 });
   return `${nm(content, mentor)} taught ${nm(content, prote)} ${move.name}${forgot ? ` (it forgot ${content.moves.get(forgot)?.name ?? forgot})` : ''}.`;
 }
