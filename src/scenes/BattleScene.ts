@@ -91,6 +91,8 @@ const SEEN_MOMENTS = new Set<string>();
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
+import { dynamaxScene } from '../ui/battleFx/dynamaxScene';
+import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
 import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
@@ -3974,6 +3976,33 @@ export class BattleScene extends Phaser.Scene {
                 backdropKey: this.arenaBgKey,
                 opposes: !mine,
                 onSwap: () => void swapForm(),
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
+          } else if ((cine === 'dynamax' || cine === 'gigantamax') && this.motion === 'full' && !services().session.settings.fastDynamax && mon && (e.side === 'player' ? this.playerArt() : this.run.battle?.trainer ? this.trainerArt() : null)) {
+            // The full reference scene (Fast Dynamax off): bare arena, trainer and Dynamax Band, pink ball, blue burst, silhouette, red giant.
+            const from = content.species.get(mon.speciesId)!;
+            const to = content.species.get(e.to) ?? from;
+            const mine = e.side === 'player';
+            const feel = this.cineFeel(cine);
+            const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
+            await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
+            const pArt = mine ? this.playerArt() : null;
+            const fArt = mine ? null : this.trainerArt();
+            await this.playBeat(
+              dynamaxScene(this, {
+                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeTrainer: (x, y) => (pArt ? trainerVisual(this, pArt, 'Trainer', x, y, 2) : trainerVisual(this, fArt!.assetId, fArt!.label, x, y, 2)) as Phaser.GameObjects.GameObject,
+                ballItem: mon.caughtBall ?? DEFAULT_BALL,
+                bandKey: keyItemFor(cine),
+                backdropKey: this.arenaBgKey,
+                opposes: !mine,
+                calyrex: mon.speciesId.startsWith('calyrex'),
+                ...(cine === 'gigantamax' ? { accent: TYPE_COLORS[to.types[0] ?? ''] ?? 0xffd24a, gmaxName: `G-MAX ${to.name.replace(/^Gigantamax /i, '').toUpperCase()}`.trim() } : {}),
+                onSwap: swapForm,
                 intensity: feel.intensity,
                 shake: feel.shake,
                 speed: feel.speed,
