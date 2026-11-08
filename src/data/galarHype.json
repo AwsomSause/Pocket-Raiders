@@ -2830,6 +2830,936 @@
    "cue": "crowd.roar",
    "weight": 1,
    "needs": []
+  },
+  {
+   "id": "shout-1",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Go {player}! Go go go!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-4",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Come on, {foe}! Don't let them win!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-6",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{myMon}! {myMon}! {myMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-8",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "My cousin trained {foeMon}! Let's go!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-14",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foe} has trained for years for this!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-15",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "I bet everything on {player}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-20",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "I knew {myMon} could do it!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-21",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Please be okay, {myMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-32",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Make it count, {player}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-37",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Don't give up, {myMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-38",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "That {foeMon} is no joke!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-45",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foe}! You've got this!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-57",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{player} is on fire today!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-67",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foeMon} has so much heart!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-68",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{myMon}, you're amazing!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "shout-s1",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{player} is ahead! Keep the pressure on {foe}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "ahead"
+   ]
+  },
+  {
+   "id": "shout-s2",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{myMon} is carrying this! {foe} is in trouble!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "ahead"
+   ]
+  },
+  {
+   "id": "shout-s3",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Look at {foe} sweating! {player} has the upper hand!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "ahead"
+   ]
+  },
+  {
+   "id": "shout-s4",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Don't let up now, {player}! You've got {foe} on the run!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "ahead"
+   ]
+  },
+  {
+   "id": "shout-s5",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Hang in there, {player}! {foe} is ahead, but it's not over!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "behind"
+   ]
+  },
+  {
+   "id": "shout-s6",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{myMon}, you can still turn this around!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "behind"
+   ]
+  },
+  {
+   "id": "shout-s7",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foe} is winning, but {player} has done more with less!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "behind"
+   ]
+  },
+  {
+   "id": "shout-s8",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Come on, {player}! One good turn and it's all different!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "behind"
+   ]
+  },
+  {
+   "id": "shout-s9",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "It's dead even! {player} and {foe} are neck and neck!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "even"
+   ]
+  },
+  {
+   "id": "shout-s10",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Neither side is giving way! {myMon} against {foeMon}, what a duel!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "even"
+   ]
+  },
+  {
+   "id": "shout-s11",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "I can't call this one! {player} or {foe}, anyone's game!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "even"
+   ]
+  },
+  {
+   "id": "shout-s12",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foeMon} is nearly done! One more hit, {player}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "foeLow"
+   ]
+  },
+  {
+   "id": "shout-s13",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foeMon} can barely stand! Finish it, {myMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "foeLow"
+   ]
+  },
+  {
+   "id": "shout-s14",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "That {foeMon} is on its last legs! Go for it!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "foeLow"
+   ]
+  },
+  {
+   "id": "shout-s15",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{myMon} is almost out of HP! Hang on, {myMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "meLow"
+   ]
+  },
+  {
+   "id": "shout-s16",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Careful, {player}! {myMon} can't take another hit like that!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "meLow"
+   ]
+  },
+  {
+   "id": "shout-s17",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{myMon} is running on fumes and it's still fighting!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "meLow"
+   ]
+  },
+  {
+   "id": "shout-s18",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "That's a perfect matchup! {myMon} has {foeMon} right where it wants it!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "typeAdv"
+   ]
+  },
+  {
+   "id": "shout-s19",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Super effective! {player} picked the right Pokémon for {foeMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "typeAdv"
+   ]
+  },
+  {
+   "id": "shout-s20",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foeMon} has the type advantage on {myMon}! {player}, switch it up!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "typeDis"
+   ]
+  },
+  {
+   "id": "shout-s21",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Tough matchup for {myMon}! {player} needs a plan!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "typeDis"
+   ]
+  },
+  {
+   "id": "shout-s22",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{foe} is down to the last Pokémon! This is it!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "foeAce"
+   ]
+  },
+  {
+   "id": "shout-s23",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "That's {foe}'s ace out there! {foeMon} is the one to beat!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "foeAce"
+   ]
+  },
+  {
+   "id": "shout-s24",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "This fight is going the distance! {player} and {foe} are not slowing down!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "late"
+   ]
+  },
+  {
+   "id": "shout-s25",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Look at this stamina! {myMon} and {foeMon} are still going strong!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "late"
+   ]
+  },
+  {
+   "id": "shout-s26",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Turn after turn, and neither of them blinks! Incredible, {player}, {foe}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "late"
+   ]
+  },
+  {
+   "id": "shout-s27",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Here we go! {foe} sends out {foeMon}, and {player} answers with {myMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "early"
+   ]
+  },
+  {
+   "id": "shout-s28",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "The match has just started and it's already tense! {myMon} versus {foeMon}!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "early"
+   ]
+  },
+  {
+   "id": "shout-s29",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Great opening, {player}! {foeMon} is already feeling it!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "early"
+   ]
+  },
+  {
+   "id": "shout-s30",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{player} has all {badges} badges! Imagine how that feels!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "shout-s31",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{rivalName} is somewhere in this crowd watching {player}! I know it!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "shout-s32",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{starter} is still with {player} after all this way! What a bond!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "shout-s33",
+   "trigger": "shout",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "{wins} wins and counting! {player} is the real deal!"
+   ],
+   "cue": "crowd.cheer",
+   "weight": 2,
+   "needs": [
+    "manyWins"
+   ]
   }
  ]
 }

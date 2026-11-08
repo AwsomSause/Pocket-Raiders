@@ -77,3 +77,17 @@ describe('Champion journey lines', () => {
     expect(pickHype('journeyOpen', { ...base, scope: 'gym' })).toBeNull();
   });
 });
+
+describe('Galar interviews and shouts', () => {
+  it('has plenty of shouts and interviews, all from friendly characters', async () => {
+    const { GALAR_HYPE } = await import('../../src/core/galarCrowd');
+    const interviews = (await import('../../src/data/galarInterviews.json')).default as { pre: unknown[]; postWin: unknown[]; postLose: unknown[] };
+    expect(GALAR_HYPE.filter((h) => h.trigger === 'shout').length).toBeGreaterThanOrEqual(40);
+    expect(interviews.pre.length).toBeGreaterThanOrEqual(20);
+    expect(interviews.postWin.length).toBeGreaterThanOrEqual(15);
+    expect(interviews.postLose.length).toBeGreaterThanOrEqual(15);
+    const { CROWD_SPRITES } = await import('../../src/ui/galar/cutArt');
+    expect(CROWD_SPRITES.length).toBeGreaterThanOrEqual(60);
+    expect(CROWD_SPRITES.some((id) => /grunt|rocket|magma|aqua|galactic|plasma|flare|skull|macro|aether|star_/.test(id))).toBe(false);
+  });
+});

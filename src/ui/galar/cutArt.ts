@@ -27,6 +27,11 @@ function person(g: Phaser.GameObjects.Graphics, x: number, y: number, s: number,
 export const CROWD_SPRITES: readonly string[] = [
   'youngster_f', 'school_kid_m', 'school_kid_f', 'camper_m', 'camper_f', 'ace_trainer_m', 'ace_trainer_f', 'pokefan_m', 'pokefan_f',
   'backpacker_m', 'backpacker_f', 'breeder_m', 'breeder_f', 'bird_keeper_f', 'ranger_m', 'ranger_f', 'scientist_m', 'scientist_f',
+  'artist', 'baker', 'beauty_2', 'bug_type_superfan', 'cyclist_f', 'cyclist_m', 'dancer', 'doctor_f', 'doctor_m', 'expert_pokemon_breeder',
+  'hoopster', 'infielder', 'janitor', 'linebacker', 'maid', 'musician', 'nursery_aide', 'officer', 'parasol_lady', 'pilot',
+  'preschooler_f', 'preschooler_m', 'psychic_f', 'rich_kid_f', 'rich_kid_m', 'scuba_diver_f', 'scuba_diver_m', 'smasher', 'striker',
+  'twins', 'waiter_f', 'waiter_m', 'worker_f', 'young_couple', 'clerk_f', 'clerk_m', 'black_belt_f', 'rich_f', 'rich_m', 'veteran_f', 'veteran_m',
+  'collector', 'backers_f', 'backers_m', 'ruin_maniac', 'victor', 'victoria', 'rival_f', 'rival_m',
 ].map((n) => `trainer.pr/${n}`);
 /** The challengers watching from the stands and the people in the private box. */
 const WATCHERS = ['ace_trainer_m', 'ace_trainer_f', 'ranger_m', 'ranger_f', 'backpacker_m', 'backpacker_f', 'camper_m', 'camper_f'].map((n) => `trainer.pr/${n}`);
@@ -43,6 +48,8 @@ export interface CutArtKit {
   rival: string;
   /** The person talking in a 'speaker' cut: their picture id. */
   speaker?: string;
+  /** Other people crowding in beside the speaker (a shout from the stands has a few friends). */
+  also?: string[];
 }
 
 type Sized = Phaser.GameObjects.GameObject & { height: number; setScale: (n: number) => unknown };
@@ -110,6 +117,7 @@ export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, dur
       dim.fillStyle(0x0a1020, 0.6);
       dim.fillRect(0, 130, GAME_WIDTH, GAME_HEIGHT - 170);
       layer.add(dim);
+      (kit?.also ?? []).slice(0, 2).forEach((id, i) => portrait(id, GAME_WIDTH / 2 + (i === 0 ? -300 : 300), 450, 230));
       if (!portrait(kit?.speaker ?? '', GAME_WIDTH / 2, 470, 330)) person(g, GAME_WIDTH / 2, 400, 3.2);
       break;
     }
