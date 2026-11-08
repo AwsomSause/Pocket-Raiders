@@ -399,6 +399,12 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
   );
 }
 
+/** An event gated to the region the run is in (a `region` requirement that names it). */
+function regionOnly(e: EventDef, run: RunState): boolean {
+  const id = run.regionOrder[run.regionIndex];
+  return !!id && e.requires.some((c) => c.kind === 'region' && c.ids.includes(id));
+}
+
 function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>): EventDef | null {
   const theme = run.stage ? getTheme(content, run.stage.themeId) : null;
   const cfg = content.balance.events;
@@ -411,6 +417,7 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
         (cfg.rarityWeights[e.rarity] ?? 0) *
         (theme && e.types.some((t) => theme.types.includes(t)) ? cfg.themeWeight : 1) *
         (featured.has(e.id) || e.gameEvent || e.mode ? cfg.gameEventWeight : 1) *
+        (regionOnly(e, run) ? cfg.regionEventWeight : 1) *
         modifierEventWeight(content, run, e.types),
     }))
     .filter((p) => p.weight > 0);

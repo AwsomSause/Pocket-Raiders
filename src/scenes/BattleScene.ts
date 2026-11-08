@@ -65,6 +65,7 @@ import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
+import { currentTournamentRound } from '../core/galarTournament';
 import { StadiumDirector } from '../ui/galar/stadiumDirector';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
@@ -2192,6 +2193,7 @@ export class BattleScene extends Phaser.Scene {
           playMusicLazy(this, track, track);
         },
         alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
+        say: (text) => this.say(text),
       });
     } catch (e) {
       console.warn('Galar stadium presentation unavailable', e);
@@ -2206,6 +2208,13 @@ export class BattleScene extends Phaser.Scene {
       const { session } = services();
       const content = session.content;
       const host = galarHost(content, this.run).name;
+      // League battles of the Champion Tournament: round card, the opponent's introduction and a crowd line; the final is a bigger moment.
+      const round = currentTournamentRound(content, this.run);
+      if (round) {
+        await this.stadium.tournamentIntro(round);
+        return;
+      }
+      if (this.boss()?.role !== 'gym') return; // Story-run League fights get the crowd and cuts, not the gym host
       const band = session.claimGalarBandIntro();
       if (band) for (const line of band.lines) await this.say(line);
       else {

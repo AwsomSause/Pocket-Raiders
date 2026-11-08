@@ -1735,6 +1735,7 @@ export class MapScene extends Phaser.Scene {
       if (r.upsets.length > 0) layer.add(this.add.text(x + colW / 2, 250, `Upset: ${r.upsets.slice(0, 2).join('; ')}`, textStyle(10, '#ff9860', { wordWrap: { width: colW - 14 }, align: 'center' })).setOrigin(0.5, 0));
       layer.add(this.add.text(x + colW / 2, 330, `${r.remaining.length} left${r.shopAfter ? '\n🛒 Ball Guy after' : ''}`, textStyle(12, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
     }
+    view.featured.slice(-2).forEach((f, i) => layer.add(this.add.text(GAME_WIDTH / 2, 372 + i * 18, f.text, textStyle(13, f.upset ? '#ff9860' : '#bfe9ff')).setOrigin(0.5, 0)));
     this.bracket = layer;
     this.busy = true;
   }

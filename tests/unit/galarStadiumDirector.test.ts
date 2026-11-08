@@ -3,7 +3,7 @@ import { StadiumDirector } from '../../src/ui/galar/stadiumDirector';
 
 const hooks = (alive = { player: 3, foe: 3 }) => ({
   runSeed: 'S', battleId: 'b', host: 'Leon', impressive: false, rivalWatching: false,
-  disableAnimations: () => true, reduceMotion: () => false, setIntensity: () => {}, finalMusic: () => {}, alive: () => alive,
+  disableAnimations: () => true, reduceMotion: () => false, setIntensity: () => {}, finalMusic: () => {}, alive: () => alive, say: async () => {},
 });
 
 describe('StadiumDirector beats', () => {
