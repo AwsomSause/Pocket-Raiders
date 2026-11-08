@@ -81,6 +81,10 @@ import { rivalIntro } from '../ui/battleFx/storyFx';
 import { poseMoment } from '../ui/dialogue/poseMoment';
 import { poseForMoments } from '../core/presentation/poses';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { bossIntroMoment, defaultMoment, planMoment, rivalMoment, type MomentKind } from '../core/cinematic/moments';
+import { playMoment } from '../ui/cinematic/momentPlayer';
+/** Moments already played this session (repeatable ones play shorter next time). Not saved: presentation only. */
+const SEEN_MOMENTS = new Set<string>();
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
@@ -2135,7 +2139,10 @@ export class BattleScene extends Phaser.Scene {
     const st = services().session.settings;
     const foeName = this.boss()?.title ?? this.trainerTitle() ?? (battle.trainer ? 'The trainer' : this.speciesName(battle.enemyTeam[0]!));
     const recap = introRecap(kind, foeName);
-    if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') return;
+    if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
+      await this.playContextMoment();
+      return;
+    }
     if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)), recap);
     else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined), recap);
     // Bosses and rivals get a title card: who they are and what they specialise in.
@@ -2154,6 +2161,8 @@ export class BattleScene extends Phaser.Scene {
         },
       );
     }
+    // M7: the Champion gets the big presentation (long tier S card) before the usual title card.
+    if (boss && battle.trainer && boss.role === 'champion') await this.bigMoment(bossIntroMoment({ role: 'champion' }), `championIntro.${boss.title}`, 'THE CHAMPION', boss.title);
     // The entrance already named the boss; the title card is for when it was skipped.
     if (boss && !cinematic) {
       const types = boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
@@ -2165,7 +2174,44 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(rivalIntro(this, resolveAnim('rival.intro', animSettingsFrom(services().session.settings)), `${title.toUpperCase()} CHALLENGES YOU`, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined, ROLE_RIMS.rival));
       await this.playBeat(titleCard(this, 'RIVAL', title, ROLE_RIMS.rival, this.motion));
     }
+    await this.playContextMoment();
     await this.stadiumIntro();
+  }
+
+  /** Beta 0.5 M7: a big-moment card through the cinematic framework. Presentation only; any failure is ignored. */
+  private async bigMoment(kind: MomentKind, id: string, title: string, subtitle: string): Promise<void> {
+    try {
+      const st = services().session.settings;
+      const spec = defaultMoment(kind, id, 'enemy');
+      const plan = planMoment(spec, { reduceMotion: this.motion === 'reduced', disableAnimations: this.motion === 'off' || st.disableAllAnimations, seen: SEEN_MOMENTS });
+      await playMoment(this, spec, plan, { title, subtitle });
+      SEEN_MOMENTS.add(id);
+    } catch {
+      // never block the battle
+    }
+  }
+
+  /** Raid, evil-team and returning-rival scenes picked from the battle and the encounter history. */
+  private async playContextMoment(): Promise<void> {
+    const battle = this.run.battle!;
+    const { content } = services().session;
+    if (battle.raid) {
+      await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!));
+      return;
+    }
+    if (!battle.trainer) return;
+    const rid = battle.rivalId;
+    if (rid) {
+      const w = Number(this.run.story.flags[`rivalW:${rid}`] ?? 0);
+      const l = Number(this.run.story.flags[`rivalL:${rid}`] ?? 0);
+      const kind = rivalMoment({ fights: w + l, lastResult: w + l === 0 ? undefined : l > 0 && w === 0 ? 'playerLost' : 'playerWon', playerStreak: l > 0 ? 0 : w });
+      if (kind === 'rivalFirst') return;
+      const label = kind === 'rivalRevenge' ? 'REVENGE' : kind === 'rivalReunion' ? 'REUNION' : 'REMATCH';
+      await this.bigMoment(kind, `${kind}.${rid}.${w}.${l}`, label, this.trainerTitle() ?? battle.trainer.name);
+      return;
+    }
+    const team = evilTeam(content, this.run);
+    if (team && Object.values(team.ranks).some((r) => r.name === battle.trainer!.name)) await this.bigMoment(bossIntroMoment({ role: 'evil' }), `evil.${team.id}.${battle.trainer.name}`, team.name ?? battle.trainer.name, battle.trainer.name);
   }
 
   /** Galar Gym Challenge: the stadium director for this battle (null in every other battle). */
@@ -3333,6 +3379,9 @@ export class BattleScene extends Phaser.Scene {
       }
       await this.say(`You defeated ${trainer}!`);
     }
+    // M7: a raid boss falling and a Champion's defeat each get a framework card (presentation only).
+    if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!));
+    else if (end.outcome === 'win' && bossWin) await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, bossWin.boss.role === 'champion' ? 'CHAMPION DEFEATED' : bossWin.boss.role === 'elite' ? 'ELITE FOUR DEFEATED' : 'LEADER DEFEATED', bossWin.boss.title);
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);
       this.assistAfter = null;
