@@ -64,6 +64,8 @@ type PartyScene = PartyLife.Scene;
 import * as Svc from '../core/services/flow';
 import * as Plz from '../core/plaza/flow';
 import { availableMentors } from '../core/mentors';
+import { holdSpar } from '../core/story/graduation';
+import { teachInherited } from '../core/story/mentorBond';
 import { rulesCampaign, type RulesChoice } from '../core/rules';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { clearNextRun, nextRunStart } from '../core/story2/intake';
@@ -719,6 +721,24 @@ export class GameSession {
   mentorLesson(lesson: MentorLesson): string {
     const run = structuredClone(this.requireRun());
     const message = applyMentorLesson(this.content, run, lesson);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor bonds: hand a mentor move down (Beta 0.5). */
+  mentorInherit(relId: string, moveId: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = teachInherited(this.content, run, relId, moveId);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor bonds: the graduation spar (Beta 0.5). */
+  mentorSpar(relId: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = holdSpar(this.content, run, relId).join(' ');
     this.run = run;
     this.persistRun();
     return message;
