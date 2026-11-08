@@ -20,7 +20,7 @@ const press = async (page: Page, key: string, n = 1) => {
   }
 };
 
-test('Prologue: Look B is locked, Quick Start saves name, pronouns and Tone', async ({ page }) => {
+test('Prologue: no Look B entry, Quick Start saves name, pronouns and Tone', async ({ page }) => {
   test.setTimeout(90_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -30,9 +30,12 @@ test('Prologue: Look B is locked, Quick Start saves name, pronouns and Tone', as
   await page.evaluate(() => { (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Prologue'); });
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Prologue');
   await page.waitForTimeout(500);
-  expect(await texts(page)).toMatch(/Look B +\(COMING SOON\)/);
+  const look = await texts(page);
+  expect(look).not.toMatch(/Look B|COMING SOON/);
+  expect(look).toContain('Hilda');
+  expect(look).toContain('Nate');
   await press(page, 'ArrowDown');
-  await press(page, 'Enter'); // Look B must not be selectable; this lands on Look A at most
+  await press(page, 'Enter'); // Look A is the only Look
   expect(await page.evaluate(() => (window as any).__pkr.session.profile.story.protagonist.look)).toBe('look_a');
   expect(await texts(page)).toContain('Quick Start');
   await press(page, 'ArrowDown');
