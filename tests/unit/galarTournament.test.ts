@@ -93,3 +93,67 @@ describe('Galar tournament', () => {
     for (let r = 1; r <= 5; r++) expect(crowdLine(b, r).length).toBeGreaterThan(5);
   });
 });
+
+import { buyItem, chooseStarter, createRun, debugJumpToLeague, leaveShop, visitSide } from '../../src/core/run';
+import { GALAR_SHOP_COLUMNS, ballGuyStock } from '../../src/core/galarTournament';
+import { RunStateSchema } from '../../src/core/state';
+
+describe('Galar League is the tournament', () => {
+  const content = getContent();
+  const galarLeague = (seed: string) => {
+    let run = createRun(content, { runId: 'r', seed, archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    run = chooseStarter(content, run, 0);
+    return debugJumpToLeague(content, run);
+  };
+
+  it('uses the tournament path as the Elite Four, with the cast champion last, and shops after rounds 2 and 4', () => {
+    const run = galarLeague('LEAGUE1');
+    const stage = run.stage!;
+    expect(stage.kind).toBe('league');
+    expect(stage.eliteFour).toHaveLength(4);
+    expect(new Set([...stage.eliteFour!, stage.leaderId]).size).toBe(5);
+    const b = buildBracket({ runSeed: run.seed, championId: stage.leaderId });
+    expect(stage.eliteFour).toEqual(playerPath(b).slice(0, 4));
+    expect(stage.map.nodes.filter((n) => n.sides.length > 0).map((n) => n.column)).toEqual([...GALAR_SHOP_COLUMNS]);
+    expect(RunStateSchema.safeParse(run).success).toBe(true);
+    // the Elite Four casting record matches the new opponents
+    expect(run.roleCast.filter((c) => c.role === 'elite' && c.regionIndex === 0).sort((x, y) => x.slot - y.slot).map((c) => c.id)).toEqual(stage.eliteFour);
+  });
+
+  it('is the same for the same seed (reload-safe) and does not move other streams', () => {
+    expect(galarLeague('LEAGUE2').stage!.eliteFour).toEqual(galarLeague('LEAGUE2').stage!.eliteFour);
+  });
+
+  it('other regions keep their normal League', () => {
+    let run = createRun(content, { runId: 'r', seed: 'KANTO', archetypeId: 'red' });
+    run.regionOrder = ['kanto', ...run.regionOrder.filter((r) => r !== 'kanto')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    expect(run.stage!.map.nodes.every((n) => n.sides.length === 0)).toBe(true);
+  });
+
+  it("Ball Guy's shop sells only his limited stock at his prices and sells out", () => {
+    let run = galarLeague('LEAGUE3');
+    const node = run.stage!.map.nodes.find((n) => n.column === 2)!;
+    run.stage!.current = node.id;
+    run.money = 100000;
+    const res = visitSide(content, run, 's1');
+    run = res.run;
+    expect(run.phase).toBe('shop');
+    expect(run.shop!.type).toBe('ballguy');
+    const stock = ballGuyStock(run.seed, 0);
+    expect(stock).toHaveLength(4);
+    const first = stock.find((s) => s.item !== 'kings-rock' && s.item !== 'metal-coat') ?? stock[0]!;
+    expect(() => buyItem(content, run, 'poke-ball')).toThrow();
+    const limit = shopOffers(run.seed, 0).find((o) => o.id === first.item)!.stock;
+    for (let i = 0; i < limit; i++) {
+      try { run = buyItem(content, run, first.item).run; } catch { break; }
+    }
+    expect(run.shop!.sold![first.item]).toBeLessThanOrEqual(limit);
+    expect(() => buyItem(content, run, first.item)).toThrow();
+    run = leaveShop(content, run);
+    expect(run.phase).toBe('map');
+  });
+});

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import type { Content } from './contentSchema';
+import type { RunState } from './state';
 import tournamentJson from '../data/galarTournament.json';
 import { hashSeed, Rng } from './rng';
 
@@ -179,4 +181,36 @@ export function crowdLine(b: Bracket, round: number): string {
   const rng = streamFor(b.seed, `crowd${round}`);
   if (round === GALAR_TOURNAMENT.rounds) return rng.pick(lines.final);
   return rng.pick(otherMatches(b, round).some((m) => m.upset) ? lines.upset : lines.win);
+}
+
+// ---------- wiring helpers: the League stage of a Galar run becomes this tournament ----------
+
+/** Rounds after which Ball Guy's shop opens as a side stop on the League map (columns of the League line). */
+export const GALAR_SHOP_COLUMNS: readonly number[] = [2, 4].filter(shopOpenAfter);
+
+/** The Galar League is the tournament: not in a Story or Daily run (they cast their own League). */
+export function usesGalarTournament(regionId: string, story: boolean, daily: boolean): boolean {
+  return regionId === 'galar' && !story && !daily;
+}
+
+/**
+ * The tournament's first four opponents replace the cast Elite Four (round 5 is the cast champion, who always wins the other half). Rewrites the
+ * Elite Four casting record to match. Uses its own seeded stream, so no gameplay roll moves. Returns the new Elite Four ids (battle order).
+ */
+export function galarEliteFour(content: Content, run: RunState, champion: string): string[] {
+  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
+  const bracket = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  const four = playerPath(bracket).slice(0, 4).map((id) => (content.bosses.has(id) ? id : GALAR_TOURNAMENT.roster[0]!.bossId));
+  run.roleCast = run.roleCast.map((c) => (c.role === 'elite' && c.regionIndex === run.regionIndex ? { ...c, id: four[c.slot] ?? c.id } : c));
+  return four;
+}
+
+/** Ball Guy's stock for the current visit, minus what this visit already sold out. */
+export function ballGuyStock(runSeed: string, visit: number, sold: Readonly<Record<string, number>> = {}): { item: string; price: number; minBadges: number }[] {
+  return shopOffers(runSeed, visit).filter((o) => (sold[o.id] ?? 0) < o.stock).map((o) => ({ item: o.id, price: o.price, minBadges: 0 }));
+}
+
+/** How many of an item Ball Guy may sell in a visit. */
+export function ballGuyLimit(runSeed: string, visit: number, itemId: string): number {
+  return shopOffers(runSeed, visit).find((o) => o.id === itemId)?.stock ?? 0;
 }

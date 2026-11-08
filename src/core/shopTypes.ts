@@ -6,7 +6,7 @@
 
 import { hashSeed } from './rng';
 
-export const SHOP_TYPE_IDS = ['mart', 'boutique', 'bazaar', 'depot', 'pokenet', 'night'] as const;
+export const SHOP_TYPE_IDS = ['mart', 'boutique', 'bazaar', 'depot', 'pokenet', 'night', 'ballguy'] as const;
 export type ShopTypeId = (typeof SHOP_TYPE_IDS)[number];
 
 export const SHOP_TYPE_LABELS: Record<ShopTypeId, string> = {
@@ -16,13 +16,14 @@ export const SHOP_TYPE_LABELS: Record<ShopTypeId, string> = {
   depot: 'Supply Depot',
   pokenet: 'PokéNet Shop',
   night: 'Night Market',
+  ballguy: "Ball Guy's Tournament Shop",
 };
 
 /** The types with a built screen (all six since shops redesign slice 3). */
-export const SHOP_TYPES_READY: readonly ShopTypeId[] = SHOP_TYPE_IDS;
+export const SHOP_TYPES_READY: readonly ShopTypeId[] = SHOP_TYPE_IDS.filter((t) => t !== 'ballguy');
 
 /** How often each daytime type turns up (Night Market is decided by the clock, not by weight). */
-export const SHOP_TYPE_WEIGHTS: Record<Exclude<ShopTypeId, 'night'>, number> = { mart: 40, boutique: 15, bazaar: 15, depot: 15, pokenet: 15 };
+export const SHOP_TYPE_WEIGHTS: Record<Exclude<ShopTypeId, 'night' | 'ballguy'>, number> = { mart: 40, boutique: 15, bazaar: 15, depot: 15, pokenet: 15 };
 
 export interface ShopPlace {
   seed: string;
@@ -71,7 +72,7 @@ type ShopTypeBalance = {
 };
 interface StockRun {
   seed?: string;
-  shop?: { type: string; place: string; haggle?: { item: string; won: boolean } };
+  shop?: { type: string; place: string; haggle?: { item: string; won: boolean }; sold?: Record<string, number>; visit?: number };
 }
 export interface StockEntry {
   item: string;
@@ -115,6 +116,8 @@ export function typedStock<E extends StockEntry>(content: StockContent, run: Sto
       return open.filter((e) => b.depot.categories.includes(category(e)));
     case 'pokenet':
       return [...open, ...locked.slice(0, b.pokenet.early)];
+    case 'ballguy':
+      return open;
     case 'night': {
       const listed = new Set(content.shop.map((e) => e.item));
       const pool = [...content.items.entries()]
