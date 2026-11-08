@@ -215,6 +215,9 @@ export interface PlannedMember {
   friendship?: number;
   mastered?: string[];
   bondSlot?: number;
+  /** Rebalance: IVs (0-31) and EVs (0-255) per stat for bosses and rivals (core/bossGear.ts). */
+  ivs?: Partial<Record<StatName, number>>;
+  evs?: Partial<Record<StatName, number>>;
 }
 
 export interface TrainerPlan {
@@ -243,6 +246,8 @@ export function createPlannedPokemon(content: Content, member: PlannedMember, ui
   if (moves.length > 0) mon.moves = moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
   for (const [stat, stacks] of Object.entries(member.training ?? {})) mon.vitamins[stat as StatName] = stacks;
   if (member.held) mon.held = { ...member.held };
+  if (member.ivs) mon.ivs = { ...mon.ivs, ...member.ivs };
+  if (member.evs) mon.evs = { ...member.evs };
   if (member.friendship !== undefined) mon.friendship = member.friendship;
   if (member.mastered && member.mastered.length > 0) mon.mastered = member.mastered.filter((id) => mon.moves.some((m) => m.id === id));
   mon.hp = maxHp(content, mon);

@@ -1,16 +1,16 @@
 // Sweep benchmark: one player Pokémon alone vs a boss team at the same level. Prints sweep rate (all foes KO'd).
 //   node tools/sweepbench.ts <playerSpecies> <bossId> <role> <teamIdx> <level> [trials] [ai]
-import type * as Sim from '../src/quality/balanceSim.ts';
+import type * as SimT from '../src/quality/balanceSim.ts';
 import type * as Data from '../src/data/index.ts';
-import type * as Enc from '../src/core/encounters.ts';
-import type * as Poke from '../src/core/pokemon.ts';
+import type * as EncT from '../src/core/encounters.ts';
+import type * as PokeT from '../src/core/pokemon.ts';
 import type * as Battle from '../src/core/battle/engine.ts';
 import { closeModules, loadModule } from './lib/gameModules.ts';
 
 const { getContent } = await loadModule<typeof Data>('/src/data/index.ts');
-const Sim = await loadModule<typeof Sim>('/src/quality/balanceSim.ts');
-const Enc = await loadModule<typeof Enc>('/src/core/encounters.ts');
-const Poke = await loadModule<typeof Poke>('/src/core/pokemon.ts');
+const Sim = await loadModule<typeof SimT>('/src/quality/balanceSim.ts');
+const Enc = await loadModule<typeof EncT>('/src/core/encounters.ts');
+const Poke = await loadModule<typeof PokeT>('/src/core/pokemon.ts');
 
 const c = getContent();
 const [sp, bossId, role, idx, lv, trials = '200', aiArg] = process.argv.slice(2);
@@ -23,6 +23,8 @@ const plan = Enc.planChampion(c, RED, bossId!, regionIdx, Enc.leagueScale(c, reg
 const ai = aiArg ? Number(aiArg) : process.env.REAL ? plan.ai : team.ai;
 if (process.env.BOSSTRAIN) { const n = Number(process.env.BOSSTRAIN); for (const m of plan.members) m.training = Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((k) => [k, n])) as any; }
 if (process.env.BOSSITEM) for (const m of plan.members) m.held = { [process.env.BOSSITEM]: 1 } as any;
+const Gear = await loadModule<typeof import('../src/core/bossGear.ts')>('/src/core/bossGear.ts');
+if (process.env.GEAR) plan.members = Gear.gearTeam(c, plan.members, process.env.GEAR as any, Number(process.env.ITEMS ?? 1));
 const enemy = process.env.REAL ? () => plan.members.map((m: any, i: number) => Enc.createPlannedPokemon(c, m, `e${i}`)) : () => team.members.map((m: any, i: number) => Enc.createPlannedPokemon(c, { speciesId: m.speciesId, level, moves: m.moves, training: m.training }, `e${i}`));
 let sweeps = 0, wins = 0, hpLeft = 0, kos = 0, turns = 0;
 for (let t = 0; t < Number(trials); t++) {
