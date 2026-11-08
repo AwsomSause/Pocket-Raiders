@@ -99,6 +99,7 @@ import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
+import { enemyLastResort } from './lastResort';
 import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
 import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, shoutDamage, throwCatch, type SkillInput } from './w1Play';
@@ -4353,6 +4354,8 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   const cfg = content.balance.trainerAi;
   const mon = enemy.mon;
   if (mon.hp <= 0 || mon.dynamaxed) return false;
+  const lent = enemyLastResort(content, battle);
+  if (lent) events.push(...lent);
   const max = calcStats(content, mon).hp;
   const wealth = battle.trainerWealth;
   const kit = wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;

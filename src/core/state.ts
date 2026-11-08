@@ -794,6 +794,8 @@ export const BattleStateSchema = z.object({
   hyperMoved: z.array(z.string()).optional(),
   /** Beta 0.5: Mentor's Last Resort was used this battle (once per battle). */
   lastResort: z.object({ mentorUid: z.string(), proteUid: z.string(), moveId: z.string() }).optional(),
+  /** Beta 0.5 M1: the trainer side's Mentor's Last Resort this battle (battle/lastResort.ts enemyLastResort). Optional, no save bump. */
+  enemyLastResort: z.object({ mentorUid: z.string(), proteUid: z.string(), moveId: z.string() }).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
   narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60), /** The rival's last Pokémon already held on once; the next knockout sticks. */ refused: z.boolean().optional() }).optional(),
   /** Nemesis system: the nemesis back for its Return or Reckoning, and the telegraphed change told in the intro. */

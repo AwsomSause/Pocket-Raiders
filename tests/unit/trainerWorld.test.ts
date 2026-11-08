@@ -155,3 +155,38 @@ describe('trainer parity in play', () => {
     expect(survived).toBeLessThan(40);
   });
 });
+
+describe("trainer Mentor's Last Resort", () => {
+  it('a bonded higher-level teammate lends its strongest move to a hurt protégé, once', async () => {
+    const { enemyLastResort } = await import('../../src/core/battle/lastResort');
+    const { maxHp } = await import('../../src/core/pokemon');
+    const prote = createPokemon(content, 'riolu', 20, 'e0');
+    const mentor = createPokemon(content, 'lucario', 40, 'e1');
+    prote.bondWith = mentor.uid;
+    mentor.bondWith = prote.uid;
+    prote.hp = Math.floor(maxHp(content, prote) * 0.4);
+    const player = createPokemon(content, 'pidgey', 10, 'p1');
+    const battle = createBattle('trainer', [prote, mentor], 0, player.uid, { classId: 'youngster', name: 'J', leaderId: null });
+    const lines = enemyLastResort(content, battle);
+    expect(lines?.length).toBe(3);
+    expect(prote.moves.some((m) => m.lent)).toBe(true);
+    expect(battle.enemyLastResort?.mentorUid).toBe('e1');
+    expect(enemyLastResort(content, battle)).toBeNull();
+  });
+
+  it('does nothing when the protégé is healthy, the mentor is weaker, or it is a wild battle', async () => {
+    const { enemyLastResort } = await import('../../src/core/battle/lastResort');
+    const a = createPokemon(content, 'riolu', 20, 'e0');
+    const b = createPokemon(content, 'lucario', 40, 'e1');
+    a.bondWith = b.uid;
+    const player = createPokemon(content, 'pidgey', 10, 'p1');
+    const healthy = createBattle('trainer', [a, b], 0, player.uid, { classId: 'youngster', name: 'J', leaderId: null });
+    expect(enemyLastResort(content, healthy)).toBeNull();
+    a.hp = 1;
+    a.level = 60;
+    expect(enemyLastResort(content, healthy)).toBeNull();
+    a.level = 20;
+    const wild = createBattle('wild', [a, b], 0, player.uid);
+    expect(enemyLastResort(content, wild)).toBeNull();
+  });
+});
