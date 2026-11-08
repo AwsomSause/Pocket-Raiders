@@ -1,0 +1,15 @@
+import { writeFileSync } from 'node:fs';
+import type * as Data from '../src/data/index.ts';
+import { closeModules, loadModule } from './lib/gameModules.ts';
+import { createRequire } from 'node:module';
+const { buildContent } = await loadModule<typeof Data>('/src/data/index.ts');
+await closeModules();
+const c = buildContent();
+const require = createRequire(import.meta.url);
+const custom = new Set<string>(Object.values(require('../src/data/customSpecies.json')).map((s: any) => s.id));
+const out: Record<string, unknown> = {};
+for (const [id, s] of c.species) out[id] = { name: s.name, types: s.types, tags: s.tags, custom: custom.has(id), stage: (s as any).evolutionStage, dex: s.dex, form: (s as any).form?.kind ?? null };
+const items: Record<string, string> = {};
+for (const [id, i] of (c as any).items ?? []) items[id] = i.name;
+writeFileSync(process.argv[2]!, JSON.stringify({ species: out, items, bossGimmick: null }));
+console.log(Object.keys(out).length, [...custom].length);
