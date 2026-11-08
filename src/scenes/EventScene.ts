@@ -10,6 +10,7 @@
 // (core choiceRisk), and an outcome that visibly lands: chips pop with a
 // burst and the money pill counts to the new total.
 
+import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
 import { eventView, type ChoiceView, type EventResult } from '../core/events';
@@ -72,6 +73,9 @@ export class EventScene extends Phaser.Scene {
     const backdrop = `pack.memories.eventbg.${eventBackdrop(theme?.types ?? [], view.event.group, periodOf(run))}`;
     const arenaId = theme ? arenaFor(content, theme) : undefined;
     const arena = services().assets.has(backdrop) ? backdrop : arenaId;
+    // An event that names no cast or Pokémon borrows the picture its map stop shows (never the scene backdrop or an item).
+    const picked = scene.cast.some((id) => services().assets.has(id)) || scene.pokemon ? null : stopArtFor(content, view.event, (id) => services().assets.has(id));
+    const fallback = picked && (picked.kind === 'trainer' || picked.kind === 'pokemon') ? picked : null;
     const tint = Phaser.Display.Color.HexStringToColor(scene.tint ?? '#1d1a24').color;
     const layers = { back: this.add.container(0, 0).setDepth(0), fx: this.add.container(0, 0).setDepth(5), front: this.add.container(0, 0).setDepth(10) };
     let area: Rect = { x: 0, y: 0, w: GAME_WIDTH, h: GAME_HEIGHT };
@@ -82,8 +86,8 @@ export class EventScene extends Phaser.Scene {
       rim: COLORS.rarity[view.event.rarity] ?? AERO.rim,
       tint,
       arena: arena && services().assets.has(arena) ? arena : undefined,
-      castIds: scene.cast.filter((id) => services().assets.has(id)),
-      species: scene.pokemon ? content.species.get(scene.pokemon) : undefined,
+      castIds: scene.cast.filter((id) => services().assets.has(id)).length ? scene.cast.filter((id) => services().assets.has(id)) : fallback?.kind === 'trainer' ? [fallback.assetId] : [],
+      species: scene.pokemon ? content.species.get(scene.pokemon) : fallback?.kind === 'pokemon' ? content.species.get(fallback.species) : undefined,
       introSeen: session.settings.skipSeenDialogue && session.profile.npcMemory.seenEvents.includes(view.event.id),
       layers,
       dress: (r) => {
