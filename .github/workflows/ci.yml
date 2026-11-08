@@ -68,7 +68,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -90,7 +90,7 @@ jobs:
         if: steps.pw.outputs.cache-hit != 'true'
       - run: npx playwright install-deps chromium
         if: steps.pw.outputs.cache-hit == 'true'
-      - run: npx playwright test --shard=${{ matrix.shard }}/4 --trace off
+      - run: npx playwright test --shard=${{ matrix.shard }}/4 --trace off --reporter=list
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
