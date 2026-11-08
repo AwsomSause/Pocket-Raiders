@@ -3951,6 +3951,7 @@ export class BattleScene extends Phaser.Scene {
                 y: at.y - 80,
                 sprite: e.side === 'player' ? this.playerSprite : this.enemySprite,
                 tint: glowColor,
+                ...(mon?.caughtBall ? { ball: mon.caughtBall } : {}),
                 ...(cine === 'gigantamax' ? { accent: TYPE_COLORS[content.species.get(e.to)?.types[0] ?? ''] ?? 0xffd24a, gmaxName: `G-MAX ${(content.species.get(e.to)?.name ?? '').replace(/^Gigantamax /i, '').toUpperCase()}`.trim() } : {}),
                 crystal: e.kind === 'primal' ? (e.to.includes('kyogre') ? 'alpha' : 'omega') : 'mega',
                 title: zMove?.name,
