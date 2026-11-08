@@ -54,7 +54,8 @@ test('every Bag and Camp look opens, switches pockets and closes', async ({ page
 });
 
 test('every run-end look opens', async ({ page }) => {
-  test.setTimeout(240_000);
+  // 11 looks, each a full game boot plus six scene steps: about 180 s on a laptop, so 240 s was too tight for the (slower) CI runner.
+  test.setTimeout(720_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => { console.log('PE', e.message, e.stack?.split('\n').slice(0,4).join(' ; ')); errors.push(e.message); });
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
