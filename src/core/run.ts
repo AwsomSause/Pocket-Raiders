@@ -696,6 +696,29 @@ function enterStage(content: Content, run: RunState, index: number): void {
   takeCheckpoint(run);
 }
 
+/**
+ * Dev tools (tools/savegen.ts): moves a fresh run to Region `regionIndex`, Stage `stageIndex` (both 0-based) of the full campaign,
+ * walking every earlier stage and League so the used leaders, themes and cast stay consistent. Returns the gym badges earned on the way.
+ */
+export function fastForwardToStage(content: Content, run: RunState, regionIndex: number, stageIndex: number): string[] {
+  const campaign = getCampaign(content, run.campaignId);
+  const badges: string[] = [];
+  for (let r = 0; r <= regionIndex; r++) {
+    run.regionIndex = r;
+    const last = r < regionIndex ? campaign.stagesPerRegion - 1 : stageIndex;
+    for (let i = r === 0 && run.stage?.index === 0 ? 1 : 0; i <= last; i++) {
+      enterStage(content, run, i);
+      if (r < regionIndex || i < stageIndex) badges.push(run.stage!.leaderId);
+    }
+    if (r < regionIndex) {
+      enterLeague(content, run);
+      run.regionsCleared.push(run.regionOrder[r]!);
+    }
+  }
+  run.phase = 'map';
+  return badges;
+}
+
 /** Starts the region's Pokémon League (mutates `run`): picks the Elite Four and champion and heals the party. */
 function enterLeague(content: Content, run: RunState): void {
   fillRegionOrder(content, run);

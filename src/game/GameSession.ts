@@ -1191,14 +1191,15 @@ export class GameSession {
     return this.saves.exportSave();
   }
 
-  /** Replaces the profile and settings with an exported save. Returns a message for the player. */
+  /** Replaces the profile, settings and run (when the file has one) with an exported save. Returns a message for the player. */
   importSave(text: string): string {
     const result = this.saves.importSave(text);
     if (!result.ok) return `Import failed: ${result.reason}`;
     this.profile = result.profile;
     if (result.settings) this.settings = result.settings;
+    if (result.run) this.run = result.run;
     this.changed();
-    return `Save imported.${result.backup ? ' Your previous profile was kept as a backup.' : ''}`;
+    return `Save imported${result.run ? ' with its run in progress (press Continue)' : ''}.${result.backup ? ' Your previous profile was kept as a backup.' : ''}`;
   }
 
   saveSettings(settings: Settings): void {

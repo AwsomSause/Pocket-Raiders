@@ -801,20 +801,20 @@ export class SaveManager {
 
   // ---------- export / import ----------
 
-  /** The profile and settings as one JSON text, for a file the player keeps. */
+  /** The profile, settings and run in progress (if any) as one JSON text, for a file the player keeps. */
   exportSave(): string {
     const envelope = (record: RecordName) => {
       const raw = this.storage.get(this.key(record));
       return raw === null ? null : (JSON.parse(raw) as unknown);
     };
-    return JSON.stringify({ format: SAVE_FORMAT, kind: 'export', exportedAt: this.now().toISOString(), profile: envelope('profile'), settings: envelope('settings') }, null, 1);
+    return JSON.stringify({ format: SAVE_FORMAT, kind: 'export', exportedAt: this.now().toISOString(), profile: envelope('profile'), settings: envelope('settings'), run: envelope('run') }, null, 1);
   }
 
   /**
    * Reads an exported save. Nothing is written unless the whole file checks
    * out; the profile it replaces is kept under a backup key.
    */
-  importSave(text: string): { ok: true; profile: Profile; settings: Settings | null; backup: string | null } | { ok: false; reason: string } {
+  importSave(text: string): { ok: true; profile: Profile; settings: Settings | null; run: RunState | null; backup: string | null } | { ok: false; reason: string } {
     let file: Json;
     try {
       file = JSON.parse(text) as Json;
@@ -826,8 +826,19 @@ export class SaveManager {
     if (profile.status !== 'ok') return { ok: false, reason: 'reason' in profile ? profile.reason : 'The profile in that file is missing.' };
     const settings = file.settings ? this.decode('settings', JSON.stringify(file.settings), SettingsSchema) : null;
     if (settings && settings.status !== 'ok') return { ok: false, reason: 'reason' in settings ? settings.reason : 'The settings in that file are damaged.' };
+    // An exported run in progress (older export files have none) must pass the same checks as a loaded one.
+    let run: RunState | null = null;
+    if (file.run) {
+      const decoded = this.decode('run', JSON.stringify(file.run), RunStateSchema);
+      if (decoded.status !== 'ok') return { ok: false, reason: `The run in that file is damaged: ${'reason' in decoded ? decoded.reason : 'unreadable.'}` };
+      const problem = this.findRunReferenceProblem(decoded.data);
+      if (problem) return { ok: false, reason: `The run in that file cannot be used: ${problem}` };
+      run = decoded.data;
+    }
     let backup: string | null = null;
     try {
+      const currentRun = run ? this.storage.get(this.key('run')) : null;
+      if (currentRun !== null) this.storage.set(`${this.key('run')}.before-import.${this.now().getTime()}`, currentRun);
       const current = this.storage.get(this.key('profile'));
       if (current !== null) {
         backup = `${this.key('profile')}.before-import.${this.now().getTime()}`;
@@ -839,7 +850,11 @@ export class SaveManager {
     const saved = this.saveProfile(profile.data);
     if (!saved.ok) return { ok: false, reason: saved.reason };
     if (settings?.status === 'ok') this.saveSettings(settings.data);
-    return { ok: true, profile: profile.data, settings: settings?.status === 'ok' ? settings.data : null, backup };
+    if (run) {
+      const savedRun = this.saveRun(run);
+      if (!savedRun.ok) return { ok: false, reason: savedRun.reason };
+    }
+    return { ok: true, profile: profile.data, settings: settings?.status === 'ok' ? settings.data : null, run, backup };
   }
 
   // ---------- settings ----------
