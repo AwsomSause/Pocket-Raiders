@@ -30,3 +30,4 @@ Cinematics M6: no save bump.
 
 ## Known limits / open items
 
+- Galar: bracket screen now has a watchable match (W): a short auto-played replay with HP bars and commentary, skippable. Save: none.
