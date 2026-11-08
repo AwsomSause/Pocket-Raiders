@@ -66,7 +66,7 @@ import { storyAssetId } from '../core/storyAudio';
 import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
-import { galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
+import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
 import { currentTournamentRound } from '../core/galarTournament';
 import { StadiumDirector } from '../ui/galar/stadiumDirector';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
@@ -404,6 +404,8 @@ export class BattleScene extends Phaser.Scene {
     // Story Runs: an Evil Team battle plays that team's own song (Part AD), the leader its final arrangement.
     const teamSong = this.storyTeamSong();
     if (teamSong) this.baseTrack = teamSong;
+    // Galar's stadium: gym and League fights play the Galar gym song (it builds turn by turn); the Champion plays the finale song.
+    if (this.stadium && !teamSong && services().assets.has(GALAR_STADIUM.music.battle)) this.baseTrack = this.role === 'champion' ? GALAR_STADIUM.music.finalMon : GALAR_STADIUM.music.buildUp;
     this.playingTrack = this.baseTrack;
     // Extra songs load on demand; the default song plays until they arrive.
     const fallback = battleTrack({ raidTrack: null, trainer: battle.kind === 'trainer', role: this.role, gbSounds: false });
@@ -2251,6 +2253,8 @@ export class BattleScene extends Phaser.Scene {
         },
         alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
         say: (text) => this.say(text),
+        portrait: (id, x, y) => trainerVisual(this, id, 'Trainer', x, y, 2),
+        bandArt: (x, y) => itemVisual(this, services().session.content.items.get('dynamax-band')?.iconAssetId ?? 'item.dynamax_band', x, y, 3),
       });
     } catch (e) {
       console.warn('Galar stadium presentation unavailable', e);
@@ -2273,7 +2277,10 @@ export class BattleScene extends Phaser.Scene {
       }
       if (this.boss()?.role !== 'gym') return; // Story-run League fights get the crowd and cuts, not the gym host
       const band = session.claimGalarBandIntro();
-      if (band) for (const line of band.lines) await this.say(line);
+      if (band) {
+        if (band.grantsItem) await this.stadium.bandScene();
+        for (const line of band.lines) await this.say(line);
+      }
       else {
         const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
         await this.speak(host, line.text);

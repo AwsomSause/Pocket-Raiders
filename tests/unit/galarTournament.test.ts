@@ -233,3 +233,20 @@ describe('match replay', () => {
     expect(matchReplay(content, run, 5)).toBeNull();
   });
 });
+
+describe('the rival is the last challenger', () => {
+  it('is always the round 4 opponent, before the Champion final, for any seed', () => {
+    for (let i = 0; i < 40; i++) {
+      const b = buildBracket({ runSeed: `rival${i}`, rivalIds: ['blue', 'silver'] });
+      const path = playerPath(b);
+      expect(path[3]).toBe('blue');
+      expect(path[4]).toBe(b.champion);
+      expect(path.slice(0, 3)).not.toContain('blue');
+    }
+  });
+  it('changes nothing without a rival', () => {
+    const b = buildBracket({ runSeed: 'norival' });
+    expect(b.lastRival).toBeUndefined();
+    expect(playerPath(b)[4]).toBe(b.champion);
+  });
+});
