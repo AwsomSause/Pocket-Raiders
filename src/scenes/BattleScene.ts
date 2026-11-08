@@ -3993,6 +3993,7 @@ export class BattleScene extends Phaser.Scene {
             const fArt = mine ? null : this.trainerArt();
             await this.playBeat(
               dynamaxScene(this, {
+                kind: cine,
                 makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
                 makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
                 makeTrainer: (x, y) => (pArt ? trainerVisual(this, pArt, 'Trainer', x, y, 2) : trainerVisual(this, fArt!.assetId, fArt!.label, x, y, 2)) as Phaser.GameObjects.GameObject,
