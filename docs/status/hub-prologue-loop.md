@@ -1,1 +1,2 @@
 - Hub unreachable fix: Hub and Save Slots sent players with an unfinished opening to the title, which no longer replays it, so Enter the Hub looped. They now go to the Prologue to finish it.
+- Hub gate follow-up: automated browsers (Playwright) skip the Hub opening gate again unless ?gate=1, so e2e profiles reach the Hub.
