@@ -3309,6 +3309,9 @@ export class BattleScene extends Phaser.Scene {
       }
       await this.say(`You defeated ${trainer}!`);
     }
+    // M7: a raid boss falling and a Champion's defeat each get a framework card (presentation only).
+    if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!));
+    else if (end.outcome === 'win' && bossWin && bossWin.boss.role === 'champion') await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, 'CHAMPION DEFEATED', bossWin.boss.title);
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);
       this.assistAfter = null;
