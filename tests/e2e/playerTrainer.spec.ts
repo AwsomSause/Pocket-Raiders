@@ -25,6 +25,13 @@ async function startBattle(page: Page, seed: string): Promise<string[]> {
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
+  // Nate and Hilda throw with their own back sprites; the generic player pose is still used by any other trainer, so test that one.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    pkr.session.run.archetypeId = 'red';
+    pkr.game.scene.getScene('Battle').scene.restart();
+  });
+  await confirmToMenu(page);
   return errors;
 }
 
