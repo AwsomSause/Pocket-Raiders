@@ -8,6 +8,6 @@ import { night } from './night';
 import { pokenet } from './pokenet';
 import type { ShopLayout } from './types';
 
-export const SHOP_LAYOUTS: Record<ShopTypeId, ShopLayout> = { mart, boutique: carousel, bazaar, depot, pokenet, night };
+export const SHOP_LAYOUTS: Record<ShopTypeId, ShopLayout> = { mart, boutique: carousel, bazaar, depot, pokenet, night, ballguy: mart };
 
 export const shopLayout = (type: ShopTypeId): ShopLayout => SHOP_LAYOUTS[type] ?? mart;

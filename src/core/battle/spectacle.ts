@@ -22,6 +22,8 @@ export const SpectacleBattleSchema = z.object({
   rallyOn: z.boolean().default(false),
   /** Pokémon that used their Last Stand this battle. */
   lastStands: z.array(z.string()).default([]),
+  /** Beta 0.5 M1: Pokémon on the trainer's side that held on through a fatal hit this battle (their own cap, apart from yours). */
+  enemyStands: z.array(z.string()).default([]),
   /** The Pokémon of yours that fainted last (for the Revenge Moment). */
   fallen: z.string().nullable().default(null),
   revenged: z.number().int().min(0).default(0),
@@ -76,13 +78,16 @@ export interface LastStandInput {
   bond: number;
   /** No other Pokémon of yours can still fight. */
   lastStanding: boolean;
+  /** Beta 0.5 M1: the trainer's side uses the same rule with its own cap. */
+  side?: 'player' | 'enemy';
 }
 
 /** A fatal move hit on your Pokémon: does it hold on at 1 HP? Limited per battle; a deep bond (or being the last one standing) is needed. */
 export function rollLastStand(content: Content, i: LastStandInput): boolean {
   const spec = spectacleOf(content, i.battle);
   const cfg = cfgOf(content).lastStand;
-  if (!spec || spec.lastStands.length >= cfg.perBattle || spec.lastStands.includes(i.mon.uid)) return false;
+  const stood = i.side === 'enemy' ? spec?.enemyStands : spec?.lastStands;
+  if (!spec || !stood || stood.length >= cfg.perBattle || stood.includes(i.mon.uid)) return false;
   if (i.bond + (i.lastStanding ? cfg.lastMonBonus : 0) < cfg.minBond) return false;
   const enemy = i.battle.enemyTeam[0]?.uid ?? '';
   return spectacleRoll(`laststand::${i.mon.uid}::${enemy}::${i.battle.turn}`, cfg.chance);

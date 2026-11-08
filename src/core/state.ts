@@ -129,6 +129,10 @@ export const PokemonInstanceSchema = z.object({
   blissful: z.object({ aura: z.string().min(1) }).optional(),
   /** Care & party life (core/care): mood, fatigue, journal counters, nickname, talent, training. */
   care: CareSchema.optional(),
+  /** Beta 0.5 M1: uid of the teammate this Pokémon is bonded with (trainer-side chemistry; core/trainerWorld). Optional, no save bump. */
+  bondWith: z.string().optional(),
+  /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
+  mastered: z.array(z.string()).optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 
@@ -734,6 +738,14 @@ export const BattleStateSchema = z.object({
   /** A smart trainer's potions and deliberate switches so far this battle. */
   enemyItemsUsed: z.number().int().min(0).default(0),
   enemySwitches: z.number().int().min(0).default(0),
+  /** Beta 0.5 M1: the trainer's wealth (0-3) sets how many potions it carries and how strong they are (core/trainerWorld). Missing = the old fixed rule. */
+  trainerWealth: z.number().int().min(0).max(3).optional(),
+  /** Beta 0.5 M1: the trainer's battle consumables left (status cure, X-item for the ace, saved full restore; core/trainerWorld/behavior.ts). */
+  trainerKit: z.object({ cure: z.number().int().min(0), boost: z.number().int().min(0), restore: z.number().int().min(0), boostStat: z.enum(['atk', 'spa', 'def', 'spd', 'spe']) }).optional(),
+  /** Beta 0.5 M1: the trainer's specialization id; steers its AI style. */
+  specialization: z.string().optional(),
+  /** Beta 0.5 M1: one-off trainer moments already shown this battle (protect:<uid>, refuse:<uid>). */
+  enemyMoments: z.array(z.string()).optional(),
   /** Battle-scope story effects already used this battle (e.g. "toughened-it-out@p1"); see core/story/ledger.ts. */
   storyEffects: z.array(z.string()),
   /** Hyper counters: the current low-HP stand and super-effective hits survived (core/battle/hyper.ts). */
@@ -788,6 +800,8 @@ export const BattleStateSchema = z.object({
   hyperMoved: z.array(z.string()).optional(),
   /** Beta 0.5: Mentor's Last Resort was used this battle (once per battle). */
   lastResort: z.object({ mentorUid: z.string(), proteUid: z.string(), moveId: z.string() }).optional(),
+  /** Beta 0.5 M1: the trainer side's Mentor's Last Resort this battle (battle/lastResort.ts enemyLastResort). Optional, no save bump. */
+  enemyLastResort: z.object({ mentorUid: z.string(), proteUid: z.string(), moveId: z.string() }).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
   narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60), /** The rival's last Pokémon already held on once; the next knockout sticks. */ refused: z.boolean().optional() }).optional(),
   /** Nemesis system: the nemesis back for its Return or Reckoning, and the telegraphed change told in the intro. */
@@ -1312,7 +1326,7 @@ export const RunStateSchema = z.object({
   /** Bank licenses owned when the run began (Scavenger, Fortune, Survival work inside the run). Older runs have none. */
   licenses: z.array(z.string()).optional(),
   /** The shop being visited (shops redesign): its kind and this visit's haggle. Set on entering, cleared on leaving; older saves have none (Poké Mart). */
-  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional() }).optional(),
+  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional(), /** Ball Guy's tournament shop: copies bought this visit, per item (limited stock). Optional: no save bump. */ sold: z.record(z.string(), z.number().int().min(0)).optional(), /** Ball Guy: which visit (0 = after round 2, 1 = after round 4). */ visit: z.number().int().min(0).optional() }).optional(),
   /** Nuzlocke and Hardcore Nuzlocke: areas whose one catch is spent and the fallen (core/nuzlocke.ts). */
   nuzlocke: z.object({
     areas: z.array(z.string()),

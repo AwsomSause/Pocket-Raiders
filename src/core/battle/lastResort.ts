@@ -6,7 +6,7 @@
 import type { Content } from '../contentSchema';
 import { adjustBond, bondOf } from '../bond';
 import { getSpecies, isUsableMove, maxHp } from '../pokemon';
-import type { PokemonInstance, RunState } from '../state';
+import type { BattleState, PokemonInstance, RunState } from '../state';
 import { MENTOR_CFG, bondForProtege, chemistryLevel } from '../story/mentorBond';
 import type { BattleEvent } from './engine';
 
@@ -71,5 +71,30 @@ export function useLastResort(content: Content, run: RunState, commanded?: Pokem
 
 /** When a battle ends: every lent slot goes away. (The mentorship records the moment.) */
 export function endLastResort(run: RunState): void {
-  for (const mon of run.party) if (mon.moves.some((m) => m.lent)) mon.moves = mon.moves.filter((m) => !m.lent);
+  for (const mon of [...run.party, ...(run.battle?.enemyTeam ?? [])]) if (mon.moves.some((m) => m.lent)) mon.moves = mon.moves.filter((m) => !m.lent);
+}
+
+/**
+ * Beta 0.5 M1 (trainer parity): the same rule for a trainer's team. Its bonded pair (core/trainerWorld) is a mentor and a protégé
+ * when one is the higher level. Once per battle, when the protégé on the field is at or below the HP share and the mentor can still
+ * fight, the mentor lends its strongest move. Returns the lines to show, or null when nothing happens.
+ */
+export function enemyLastResort(content: Content, battle: BattleState): BattleEvent[] | null {
+  if (battle.kind !== 'trainer' || battle.enemyLastResort || battle.outcome || battle.raid || battle.totem || battle.doubles) return null;
+  const prote = battle.enemyTeam[battle.enemyIndex];
+  if (!prote?.bondWith) return null;
+  const mentor = battle.enemyTeam.find((m) => m.uid === prote.bondWith);
+  if (!mentor || mentor.level <= prote.level || mentor.uid === prote.uid || !lastResortEligible(content, prote, mentor, false)) return null;
+  const moveId = borrowedMove(content, mentor, prote)!;
+  const move = content.moves.get(moveId)!;
+  const pp = Math.min(move.pp, MENTOR_CFG.lastResort.pp);
+  prote.moves.push({ id: moveId, pp, lent: true });
+  battle.enemyLastResort = { mentorUid: mentor.uid, proteUid: prote.uid, moveId };
+  const mn = getSpecies(content, mentor.speciesId).name;
+  const pn = getSpecies(content, prote.speciesId).name;
+  return [
+    { type: 'spectacle', kind: 'signature', side: 'enemy', uid: prote.uid, text: `${pn} struggles to keep its footing...` },
+    { type: 'spectacle', kind: 'signature', side: 'enemy', uid: mentor.uid, text: `${mn} will not let ${pn} fall! It lends its strength.` },
+    { type: 'spectacle', kind: 'signature', side: 'enemy', uid: prote.uid, text: `${pn} channels ${mn}'s power: ${move.name}!` },
+  ];
 }

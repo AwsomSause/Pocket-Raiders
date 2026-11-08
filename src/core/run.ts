@@ -174,7 +174,10 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
+import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
+import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
@@ -708,7 +711,10 @@ function enterLeague(content: Content, run: RunState): void {
     run.roleCast = run.roleCast.filter((c) => c.role !== 'champion' || c.regionIndex !== run.regionIndex);
     record(content, run, 'champion', run.regionIndex, 0, league.champion);
   }
-  const map = generateLeagueMap(campaign.eliteFourSize);
+  // Galar: the League is the 32-trainer Champion Tournament (its opponents replace the cast Elite Four; Ball Guy's shop opens after rounds 2 and 4).
+  const tournament = usesGalarTournament(region.id, isStoryCampaign(content, run.campaignId), !!getMode(run.rules.modeId)?.dailySeed) && campaign.eliteFourSize === 4;
+  if (tournament) league.eliteFour = galarEliteFour(content, run, league.champion);
+  const map = generateLeagueMap(campaign.eliteFourSize, tournament ? { shopAfter: GALAR_SHOP_COLUMNS } : {});
   const problems = validateLeagueMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid league map: ${problems.join('; ')}`);
   run.usedLeaders.push(...league.eliteFour, league.champion);
@@ -2063,6 +2069,14 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       plan = { ...plan, members: trained.members };
       trainingIndex = trained.index;
     }
+    // Beta 0.5 M2: an ordinary trainer that lost to you before plans for it (its ace may evolve; its team gets answers).
+    const returningNotes: string[] = [];
+    if (!plan.leaderId && !rivalBack && !takeover) {
+      const prior = run.story.trainers?.[trainerKey({ classId: plan.classId, name: plan.name, leaderId: null })];
+      const back = returningPlan(content, plan, prior, (prior?.beatenBy?.types ?? []) as TypeName[]);
+      plan = back.plan;
+      returningNotes.push(...back.notes);
+    }
     const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
@@ -2072,12 +2086,25 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (!plan.leaderId) randomizeMoves(content, run, mon);
       return mon;
     });
+    // Beta 0.5 M1: this trainer follows the player's systems (friendship, bond, mastered moves, specialization), kept in its record.
+    const parityLines: string[] = [];
+    const parity = applyTrainerParity(content, run, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId }, built, rivalBack?.id ?? takeover?.id ?? null, parityLines);
+    if (parity) {
+      const history = trainerHistoryLine(content, parity, run.party.map((m) => m.speciesId));
+      const notes = [...returningNotes, ...parityLines, ...(plan.memoryNote ? [] : history ? [history] : [])];
+      plan = { ...plan, specialization: parity.specialization, ...(notes.length > 0 ? { memoryNote: [plan.memoryNote, ...notes].filter(Boolean).join(' ') } : {}) };
+    }
     // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
+    if (parity) {
+      run.battle.trainerWealth = parity.wealth;
+      run.battle.specialization = parity.specialization;
+      run.battle.trainerKit = trainerKit(content, team, parity.specialization, parity.wealth);
+    }
     if (plan.strategy) run.battle.strategy = plan.strategy;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
@@ -2146,6 +2173,10 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const gimmickPlan = role
       ? planBossGimmicks(content, run.battle.trainer?.leaderId, run.battle.enemyTeam, gimmickSlots(run.regionIndex, role === 'gym' ? stage.index + 1 : null, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics)
       : {};
+    // Beta 0.5 M1: a rival uses gimmicks by the same schedule as a boss (at most two), on its ace first.
+    if (!role && (rivalBack || takeover || isRival) && parity) {
+      Object.assign(gimmickPlan, planTrainerGimmicks(content, parity.key, run.battle.enemyTeam, gimmickSlots(run.regionIndex, stage.index + 1, content.balance.transformations.bossGimmickAfterStage), 2, run.disabledMechanics));
+    }
     run.battle.transform.bossPlan = gimmickPlan;
     run.battle.transform.enemyMechanics = [...new Set(Object.values(gimmickPlan))];
     // Meteor's Prophecy: every third boss also gains a random second type (its own seed, so no other roll changes).
@@ -2352,7 +2383,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
   // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
   const place = `${run.regionIndex}:${stage.index}:${stage.current}`;
-  run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
+  // Galar's tournament: Ball Guy runs the shop between rounds (its stock is his own, limited per visit).
+  const galarLeagueShop = stage.kind === 'league' && currentRegion(content, run).id === 'galar';
+  const visit = Math.max(0, Math.floor(findNode(stage.map, stage.current).column / 2) - 1);
+  if (galarLeagueShop) run.shop = { type: 'ballguy', place, visit, sold: {} };
+  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
   // A Bike Voucher is traded for its bike (or money, if the player already has one).
   const voucher = voucherOf(content, run);
   if (voucher) {
@@ -2385,6 +2420,7 @@ export function healParty(content: Content, run: RunState): void {
  * Key items you own aren't sold again.
  */
 export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'inventory' | 'rules' | 'perkEffects' | 'licenses' | 'story' | 'seed' | 'shop'>> & MapItemRun): Content['shop'] {
+  if (run.shop?.type === 'ballguy' && run.seed) return ballGuyStock(run.seed, run.shop.visit ?? 0, run.shop.sold) as Content['shop'];
   const noRevive = run.rules ? noRevives(run.rules) : false;
   const owned = (e: Content['shop'][number]) => !!run.inventory && ownsKeepsake(content, run.inventory, e.item);
   const open = (e: Content['shop'][number]) => run.badges.length >= shopBadgesNeeded(content, run, e);
@@ -2481,8 +2517,9 @@ export function capMoney(content: Content, run: Pick<RunState, 'money'>): void {
 /** Buys one of an item at the shop. */
 export function buyItem(content: Content, current: RunState, itemId: string): { run: RunState; message: string } {
   assertPhase(current, 'shop');
-  const entry = content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
-  if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
+  const ballGuy = current.shop?.type === 'ballguy';
+  const entry = ballGuy ? shopStock(content, current).find((e) => e.item === itemId) : content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
+  if (!entry) throw new Error(ballGuy && ballGuyLimit(current.seed, current.shop?.visit ?? 0, itemId) > 0 ? `Ball Guy is sold out of ${getItem(content, itemId).name}.` : `The shop doesn't sell "${itemId}"`);
   const item = getItem(content, itemId);
   if (ownsKeepsake(content, current.inventory, itemId)) throw new Error(`You already have the ${item.name}.`);
   if (item.effect.kind !== 'attribute' && itemCount(current.inventory, itemId) >= STACK_MAX) throw new Error(`You can't carry more than ${STACK_MAX} ${item.name}.`);
@@ -2496,6 +2533,7 @@ export function buyItem(content: Content, current: RunState, itemId: string): { 
   count(run, 'moneySpent', price);
   afterPurchase(content, run, priceMultiplierFromItems(content, current) === 0);
   noteRecentPurchase(run, itemId);
+  if (ballGuy && run.shop) run.shop.sold = { ...run.shop.sold, [itemId]: (run.shop.sold?.[itemId] ?? 0) + 1 };
   if (item.effect.kind === 'attribute') {
     // Attribute items work as soon as they're bought.
     const value = addItemAttribute(content, run, item.effect.attribute, item.effect.amount);
