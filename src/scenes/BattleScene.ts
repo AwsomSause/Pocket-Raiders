@@ -3851,7 +3851,7 @@ export class BattleScene extends Phaser.Scene {
               if (bossNow?.role === 'champion') {
                 // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
                 const finalTrack = 'bgm.raid.tera3';
-                if (services().assets.has(finalTrack)) {
+                if (services().assets.has(finalTrack) && !this.stadium) {
                   this.baseTrack = finalTrack;
                   this.playingTrack = finalTrack;
                   playMusicLazy(this, finalTrack, finalTrack);
