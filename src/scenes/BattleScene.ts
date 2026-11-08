@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
@@ -2760,6 +2761,9 @@ export class BattleScene extends Phaser.Scene {
     const hotbar = services().session.settings.hotbar.filter((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id) && content.items.get(id)!.target !== 'party' && content.items.get(id)!.target !== 'fainted' && itemProblem(this.battleCtx(), id) === null).slice(0, 4);
     const hotbarAt = options.length;
     for (const id of hotbar) options.push({ label: `Quick: ${content.items.get(id)!.name}` });
+    // Beta 0.5 (M4): Mentor's Last Resort, once per battle, when a protégé at half HP has its mentor in the party.
+    const lastResortAt = !this.duo && lastResortOffer(content, this.run) ? options.length : -1;
+    if (lastResortAt >= 0) options.push({ label: "Mentor's help" });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -2796,7 +2800,14 @@ export class BattleScene extends Phaser.Scene {
           this.showRootMenu();
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
-        else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
+        else if (i === lastResortAt) {
+          const lines = useLastResort(content, this.run).map((e) => (e.type === 'spectacle' ? e.text : ''));
+          this.clearMenus();
+          this.message.setVisible(true);
+          this.message.setText(lines.join('\n'));
+          if (this.motion !== 'off') this.cameras.main.flash(260, 255, 230, 160);
+          this.time.delayedCall(this.motion === 'off' ? 600 : 2200, () => this.showMoveMenu());
+        } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
           this.rallyChoice = !this.rallyChoice;
           this.showRootMenu();
@@ -2887,7 +2898,7 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const name = (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).

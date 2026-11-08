@@ -19,6 +19,9 @@ import type { Content } from '../core/contentSchema';
 import { calcStats, getSpecies, MAX_PP_UPS, maxPp } from '../core/pokemon';
 import type { DecisionChoice } from '../core/run';
 import { pathName, type MentorPath } from '../core/story/mentorship';
+import { mentorAccepts } from '../core/story/returnProtege';
+import { TYPE_NAMES, TYPE_BLURB } from '../core/story/mentorBond';
+import type { MentorType } from '../core/story/schema';
 import { askLeadText } from '../core/story/askLead';
 
 const PATH_BLURB: Record<MentorPath, string> = {
@@ -103,8 +106,9 @@ export class DecisionScene extends Phaser.Scene {
     else if (decision.kind === 'signature') this.buildSignature(decision.title, decision.options);
     else if (decision.kind === 'mutator') this.buildMutator(decision.choices);
     else if (decision.kind === 'circuit') this.buildCircuit(decision.title, decision.options);
-    else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path);
+    else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path, decision.types);
     else if (decision.kind === 'askLead') this.buildAskLead(decision.uid, decision.reason);
+    else if (decision.kind === 'returnProtege') this.buildReturn(decision.mon, decision.mentorUid, decision.reason);
     else this.buildPpUp(decision.uid, decision.itemName, decision.ups);
   }
 
@@ -326,7 +330,7 @@ export class DecisionScene extends Phaser.Scene {
     });
   }
 
-  private buildMentorship(mentorUid: string, proteUid: string, path: MentorPath): void {
+  private buildMentorship(mentorUid: string, proteUid: string, path: MentorPath, types: readonly MentorType[] = []): void {
     const { session } = services();
     const content = session.content;
     const party = session.run!.party;
@@ -342,7 +346,8 @@ export class DecisionScene extends Phaser.Scene {
     pokemonVisual(this, p, 'front', 150, 460, 2, prote.shiny);
     this.add.text(300, 40, `${p.name} looks up to ${m.name}.`, textStyle(30, COLORS.textLight, { wordWrap: { width: 640 } }));
     this.add.text(300, 110, `${pathName(path)}: ${PATH_BLURB[path]}`, textStyle(22, '#d8d0e0', { wordWrap: { width: 640 } }));
-    this.add.text(300, 190, 'A mentorship ends when the protégé evolves or catches up. It shapes stories and tactics, not raw stats.', textStyle(18, '#a69cb4', { wordWrap: { width: 640 } }));
+    const why = types.length ? types.map((t) => `${TYPE_NAMES[t]}: ${TYPE_BLURB[t]}`).join('\n') : '';
+    this.add.text(300, 150, `${why}${why ? '\n' : ''}Chemistry grows with every win together: it shifts the protégé's stats toward its mentor, unlocks mentor moves, and lets the mentor step in once per battle. When the protégé catches up, the pair can hold a graduation spar.`, textStyle(16, '#a69cb4', { wordWrap: { width: 640 } }));
     drawPanel(this, 300, 270, 620, 150);
     this.menu = new Menu(this, {
       x: 316,
@@ -352,6 +357,46 @@ export class DecisionScene extends Phaser.Scene {
       itemWidth: 580,
       fontSize: 26,
       onSelect: (i) => this.resolve({ kind: 'mentor', accept: i === 0 }),
+    });
+  }
+
+  /** M5: a Pokémon you defeated comes back and asks to be taught. Unskippable: no back button, one button per beat. */
+  private buildReturn(foe: PokemonInstance, mentorUid: string, reason: string): void {
+    const { session } = services();
+    const content = session.content;
+    const run = session.run!;
+    const mentor = run.party.find((p) => p.uid === mentorUid);
+    if (!mentor) {
+      this.resolve({ kind: 'returnProtege' });
+      return;
+    }
+    const m = getSpecies(content, mentor.speciesId);
+    const f = getSpecies(content, foe.speciesId);
+    pokemonVisual(this, m, 'front', 150, 260, 3, mentor.shiny);
+    const foeSprite = pokemonVisual(this, f, 'front', 150, 470, 2, foe.shiny);
+    void foeSprite;
+    const accepts = mentorAccepts(run, mentorUid, foe.speciesId);
+    const beats = [
+      `A ${f.name} steps out of the grass. It looks right at ${m.name}.`,
+      reason,
+      `${f.name} wants to get stronger. It asks ${m.name} to teach it.`,
+      accepts ? `${m.name} looks it over, then nods. ${f.name} will join as its protégé.` : `${m.name} turns away. It is not ready to teach anyone.`,
+    ];
+    const text = this.add.text(300, 60, beats[0]!, textStyle(28, COLORS.textLight, { wordWrap: { width: 640 } }));
+    drawPanel(this, 300, 270, 620, 150);
+    let step = 0;
+    this.menu = new Menu(this, {
+      x: 316,
+      y: 284,
+      options: [{ label: 'Continue' }],
+      itemHeight: 56,
+      itemWidth: 580,
+      fontSize: 26,
+      onSelect: () => {
+        step += 1;
+        if (step < beats.length) text.setText(beats[step]!);
+        else this.resolve({ kind: 'returnProtege' });
+      },
     });
   }
 
