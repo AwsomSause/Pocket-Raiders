@@ -14,4 +14,4 @@ Nothing is written unless the game's own importer accepts it; every problem is l
 Add it to `SaveSpecSchema` and apply it in `buildMon`, `buildProfile` or `buildRun`. Until then, `patch` sets any path, e.g. `"patch": {"stats.battlesWon": 77}`.
 
 ## The page
-`savegen.html` is a form for the same spec: tabs for Run, Party, Account and raw Spec JSON, presets, live validation, Download save / Download spec / Load. Open it with `npm run dev` at `/savegen.html` (it is also built next to the game). The fields are rows in `RUN_FIELDS`, `PROFILE_FIELDS` and `MON_FIELDS` in `src/devtools/saveCreator.ts`.
+`savegen.html` is a form for the same spec: tabs for Run, Party, Account and raw Spec JSON, presets, live validation, Download save / Download spec / Load. Open it with `npm run dev` at `/savegen.html` (`npm run build:savegen` builds it alone into `dist-savegen/`; it is not part of the game build). The fields are rows in `RUN_FIELDS`, `PROFILE_FIELDS` and `MON_FIELDS` in `src/devtools/saveCreator.ts`.
