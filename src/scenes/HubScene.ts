@@ -260,7 +260,7 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(data: { notice?: string; focus?: number } = {}): void {
-    if (prologueGateActive(services().session.profile.story, true)) { this.scene.start('MainMenu'); return; }
+    if (prologueGateActive(services().session.profile.story, true)) { this.scene.start('Prologue'); return; }
     this.archiveOpen = false;
     if (!data.notice) data = { ...data, notice: hubArrivalNotice()?.text };
     this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => {
