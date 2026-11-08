@@ -82,7 +82,7 @@ export function simulateBattle(content: Content, playerTeam: PokemonInstance[], 
 /** Like simulateBattle, but also reports how many foes are left and the player's HP fraction (bench tools). */
 export function simulateBattleDetail(content: Content, playerTeam: PokemonInstance[], enemyTeam: PokemonInstance[], enemyAi: number, seed: string): BattleOutcome & { enemyAlive: number; enemyTeamSize: number; playerHpFrac: number } {
   const party = structuredClone(playerTeam);
-  const battle = createBattle('trainer', structuredClone(enemyTeam), 0, party[0]!.uid, { classId: 'sim', name: 'Sim', leaderId: null });
+  const battle = createBattle('trainer', structuredClone(enemyTeam), 0, party[0]!.uid, { classId: 'sim', name: 'Sim', leaderId: 'sim-boss' });
   battle.ai = enemyAi;
   const ctx: BattleContext = { content, battle, party, inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}#capture`)), catchMultiplier: 1 };
   const choices = new Rng(hashSeed(`${seed}#player`));

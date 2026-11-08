@@ -32,7 +32,7 @@ for (let t = 0; t < Number(trials); t++) {
   if (process.env.HELD) p.held = { [process.env.HELD]: 1 } as any;
   if (process.env.MOVES) p.moves = process.env.MOVES.split(',').map((id) => ({ id, pp: c.moves.get(id)!.pp }));
   p.hp = Poke.maxHp(c, p);
-  const r = Sim.simulateBattleDetail(c, [p], enemy(), ai, `sb${t}`);
+  const r = Sim.simulateBattleDetail(c, process.env.BENCH ? [p, Poke.createPokemon(c, 'magikarp', level, 'p1')] : [p], enemy(), ai, `sb${t}`);
   if (r.winner === 'player') { wins++; hpLeft += r.playerHpFrac; }
   if (r.enemyAlive === 0) sweeps++;
   kos += r.enemyTeamSize - r.enemyAlive; turns += r.turns;
