@@ -10,7 +10,7 @@ describe('character profile view', () => {
     expect(v.named).toBe(false);
     expect(Object.fromEntries(v.lines.map((l) => [l.label, l.value]))).toMatchObject({ Name: 'Not chosen yet', Pronouns: 'they/them', Look: 'Look A', 'Vance speaks': 'Not decided yet', Prologue: 'Not played yet', 'Story Runs told': '0' });
   });
-  it('shows a chosen name, tone, totals and a wanted Look that is not ready', () => {
+  it('shows a chosen name, tone, totals (no Look B line)', () => {
     const p = profile();
     Object.assign(p.story.protagonist, { name: 'Ash', nameSet: true, pronouns: { subj: 'xe', obj: 'xem', poss: 'xyr', reflexive: 'xemself' }, lookRequested: 'look_b' });
     p.story.prologue.vanceTone = 'playful';
@@ -22,7 +22,7 @@ describe('character profile view', () => {
     const v = characterProfile(p);
     const m = Object.fromEntries(v.lines.map((l) => [l.label, l.value]));
     expect(v.named).toBe(true);
-    expect(m).toMatchObject({ Name: 'Ash', Pronouns: 'xe/xem', 'Vance speaks': 'Playful', Prologue: 'Done (quick start)', 'Endings seen': '2', 'Remembrances unlocked': '1', 'Look wanted': 'Look B (coming soon)' });
+    expect(m).toMatchObject({ Name: 'Ash', Pronouns: 'xe/xem', 'Vance speaks': 'Playful', Prologue: 'Done (quick start)', 'Endings seen': '2', 'Remembrances unlocked': '1' });
   });
   it('turns the stored short pronouns into text', () => {
     expect(pronounsText('she')).toBe('she/her');

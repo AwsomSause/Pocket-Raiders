@@ -18,7 +18,7 @@ test('Modifiers page: toggle, category filter, and back to the desk keeps the ch
   await waitFor(page, 'TrainerSelect');
   await page.keyboard.press('Enter');
   await waitFor(page, 'RunPrep');
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(3)); // the Modifiers tab
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(2)); // the Modifiers tab
   await waitFor(page, 'RunModifiers');
   await page.keyboard.press('Enter'); // first modifier on
   await page.keyboard.press('ArrowRight'); // next category

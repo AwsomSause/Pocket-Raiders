@@ -348,6 +348,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
     'gym_sm', 'gym_swsh', 'gym_xy', 'gym_sv', 'elite_sm', 'elite_xy', 'elite_bw',
     'champion_bw', 'champion_dppt', 'champion_xy', 'champion_swsh', 'champion_sv', 'champion_hgss', 'rival_dppt', 'rival_bw2', 'rival_hgss',
   ].map((n): AssetEntry => ({ id: `bgm.${n}`, kind: 'audio', category: 'music', path: `audio/bgm/${n}.mp3`, lazy: true })),
+  // Galar stadium battle song (Kice's upload, SwSh Gym Leader Battle from 4:19, trimmed to 112 kbps): every Galar gym, tournament and Champion battle. Loads on demand with the battle.
+  { id: 'bgm.galar_battle', kind: 'audio', category: 'music', path: 'audio/bgm/galar_battle.mp3', lazy: true },
   // Jingles (UIE "ME" folder): item, key item, badge, new Pokémon, evolution, healing, save, TM, berry, forgotten move.
   ...Object.entries({ item_get: 'item_get', key_item: 'key_item', badge: 'badge', pkmn_get: 'pkmn_get', evo_start: 'evo_start', evo_success: 'evo_success', heal: 'heal', save: 'save', tm_get: 'tm_get', berry: 'berry', forget_move: 'forget_move' }).map(
     ([id, file]): AssetEntry => ({ id: `me.${id}`, kind: 'audio', category: 'sound', path: `audio/me/${file}.ogg`, lazy: true }),
@@ -355,6 +357,10 @@ export const FIXED_ASSETS: AssetEntry[] = [
   // Interface and battle sounds (UIE "SE" folder). `ui.select` and `ui.error` are the pack's decision and buzzer.
   ...['cursor', 'cancel', 'menu_open', 'menu_close', 'party_switch', 'save_choice', 'ability', 'item', 'flee', 'recall', 'use_item', 'buy', 'pc_open', 'pc_close', 'exclaim', 'vs_flash', 'vs_sword', 'page', 'door', 'poison_step'].map(
     (n): AssetEntry => ({ id: `ui.${n}`, kind: 'audio', category: 'sound', path: `audio/se/ui_${n}.ogg` }),
+  ),
+  // Galar stadium crowd (Pokemon-Decades-main: Applause.ogg, Uproar.ogg, and 12 s of the Colosseum battle crowd noise as mp3).
+  ...Object.entries({ applause: 'crowd_applause.ogg', uproar: 'crowd_uproar.ogg', murmur: 'crowd_murmur.mp3' }).map(
+    ([id, file]): AssetEntry => ({ id: `se.crowd_${id}`, kind: 'audio', category: 'sound', path: `audio/se/${file}`, lazy: true }),
   ),
   // Stat and status sounds reuse the pack's move-animation clips.
   ...Object.entries({ stat_up: 'ess-up', stat_down: 'ess-take-down', brn: 'prsfx-burn', psn: 'ess-poison', par: 'ess-paralyze1', slp: 'ess-sleep', frz: 'prsfx-freeze-dry1' }).map(

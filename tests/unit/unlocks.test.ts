@@ -11,13 +11,13 @@ describe('grantUnlocks', () => {
     const profile = createProfile(content, 'p1');
     const pts = RUN_RULES.duplicateCompensation.researchPoints;
     const before = profile.researchPoints;
-    expect(grantUnlocks(profile, { pool: 'spooky', trainer: 'hex-maniac', title: 'Ghost Hunter' })).toBe(0);
+    expect(grantUnlocks(profile, { trainer: 'hex-maniac', title: 'Ghost Hunter' })).toBe(0);
     expect(profile.researchPoints).toBe(before);
-    expect(profile.unlockedPools).toContain('spooky');
+    expect(profile.unlockedArchetypes).toContain('hex-maniac');
     expect(profile.titles).toContain('Ghost Hunter');
-    expect(grantUnlocks(profile, { pool: 'spooky', trainer: 'hex-maniac', title: 'Ghost Hunter' })).toBe(3);
-    expect(profile.researchPoints).toBe(before + 3 * pts);
-    expect(profile.unlockedPools.filter((p) => p === 'spooky')).toHaveLength(1);
+    expect(grantUnlocks(profile, { trainer: 'hex-maniac', title: 'Ghost Hunter' })).toBe(2);
+    expect(profile.researchPoints).toBe(before + 2 * pts);
+    expect(profile.unlockedArchetypes.filter((a) => a === 'hex-maniac')).toHaveLength(1);
   });
   it('a reward with nothing to unlock pays nothing', () => {
     const profile = createProfile(content, 'p1');

@@ -11,8 +11,9 @@ describe('shop types (shops redesign)', () => {
   it('the same place always gives the same type, and places spread over every daytime type', () => {
     expect(shopTypeAt(place())).toBe(shopTypeAt(place()));
     const seen = new Set(Array.from({ length: 200 }, (_, i) => shopTypeAt(place({ nodeId: `n${i}` }))));
-    for (const t of SHOP_TYPE_IDS.filter((t) => t !== 'night')) expect(seen.has(t)).toBe(true);
+    for (const t of SHOP_TYPE_IDS.filter((t) => t !== 'night' && t !== 'ballguy')) expect(seen.has(t)).toBe(true);
     expect(seen.has('night')).toBe(false);
+    expect(seen.has('ballguy')).toBe(false); // Ball Guy's shop is only ever entered in Galar's tournament
   });
 
   it('night time and the Black Market make it a Night Market', () => {
@@ -22,7 +23,7 @@ describe('shop types (shops redesign)', () => {
   });
 
   it('every type has its own screen; a bad override falls back to the real type', () => {
-    expect([...SHOP_TYPES_READY]).toEqual([...SHOP_TYPE_IDS]);
+    expect([...SHOP_TYPES_READY]).toEqual(SHOP_TYPE_IDS.filter((t) => t !== 'ballguy')); // Ball Guy draws with the Mart screen
     for (let i = 0; i < 50; i++) expect(SHOP_TYPES_READY).toContain(shopScreenType(shopTypeAt(place({ nodeId: i }))));
     expect(shopScreenType('mart', 'boutique')).toBe('boutique');
     expect(shopScreenType('mart', 'nonsense')).toBe('mart');

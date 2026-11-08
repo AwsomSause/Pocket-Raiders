@@ -84,7 +84,10 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
       let guard = 0;
       while (session.run.phase === 'battle' && guard++ < 200) {
         const battle = session.run.battle;
-        if (strong) battle.enemyTeam[battle.enemyIndex].hp = 1;
+        if (strong) {
+          battle.enemyTeam[battle.enemyIndex].hp = 1;
+          session.run.party[battle.activeIndex].moves[0] = { id: 'swift', pp: 20 }; // the drawn starter may open with a status move; Swift never misses
+        }
         else {
           const lead = session.run.party[battle.activeIndex];
           lead.hp = 1;
@@ -135,9 +138,7 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Hub').lobby?.focus('run', false));
   await page.keyboard.press('Enter'); // Start a run
   await waitForScene(page, 'TrainerSelect');
-  // Brock's slot depends on where Trainer Evolutions sit, so look it up instead of counting.
-  const brockSlot = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('TrainerSelect').slots.findIndex((s: any) => s?.archetype.id === 'brock'));
-  for (let i = 0; i < brockSlot; i++) await page.keyboard.press('ArrowRight');
+  // Only Nate and Hilda are playable now, so the claimed Brock stays a profile unlock and the run starts as Nate.
   await page.waitForTimeout(200);
   await page.screenshot({ path: 'test-results/m5-trainer-select.png' });
   await page.keyboard.press('Enter');
@@ -145,7 +146,6 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   await page.keyboard.press('Enter'); // Roll starters
   await waitForScene(page, 'StarterSelect');
   const r = await page.evaluate(() => (window as any).__pkr.session.run);
-  expect(r.archetypeId).toBe('brock');
-  expect(r.inventory.potion).toBeGreaterThanOrEqual(3);
+  expect(r.archetypeId).toBe('nate');
   expect(errors).toEqual([]);
 });

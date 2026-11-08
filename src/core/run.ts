@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
@@ -73,14 +74,14 @@ import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
 import { applyReward, generateDraft, rewardTargetProblem, type RewardResult } from './rewards';
 import { pickRunQuest } from './quests';
-import { familyId, masteredStarters, runMasteryPerks } from './mastery';
+import { familyId, runMasteryPerks } from './mastery';
 import { rememberPick, varietyWeight } from './variety';
 import { gameEventModifiers } from './gameEvents';
 import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -99,7 +100,8 @@ import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
-import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
+import { endLastResort } from './battle/lastResort';
+import { defaultPrep, startingResources } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
 import { wildLuck } from './wildLuck';
 import { arenaFor } from './battle/w1Play';
@@ -173,7 +175,10 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
+import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
+import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
   ensureHistories,
@@ -214,7 +219,7 @@ import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mut
 import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
-import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
@@ -250,7 +255,7 @@ import { freshSpectacle } from './battle/spectacle';
 import { memoryPick } from './memories/encounters';
 import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
-import { evilStageStart } from './evil/teams';
+import { evilStageStart, evilTeam } from './evil/teams';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
@@ -260,6 +265,8 @@ import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playSt
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis, Rival } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
+import { mentorshipsAfterBattle } from './story/mentorBond';
+import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
@@ -322,12 +329,10 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   for (const [id, n] of Object.entries(resources.items)) addItem(inventory, id, scale < 1 ? Math.floor(n * scale) : n);
   const campaign = getCampaign(content, rulesCampaign(rules) ?? prep.campaignId);
   if (wantsGenerationLock(rules)) rules.lockGeneration = pickGeneration(content, opts.seed);
-  if (wantsRandomDraft(rules)) Object.assign(prep, randomDraft(content, opts.seed, prep));
   const rng = createStreams(opts.seed);
-  const mastered = masteredStarters(content, opts);
-  const draft = withStream(rng, 'starter', (r) => draftStarters(content, r, prep, mastered));
   // Used once here, so its own seed-derived generator needs no saved stream.
-  const starterChoices = opts.starterOverride?.length ? [...opts.starterOverride] : withSignatureStarter(content, new Rng(hashSeed(`${opts.seed}::signature`)), archetype, prep, draft.choices, mastered);
+  // Starter Remembrances are the only starter system: the quiz's three (or, with no quiz, a seeded draw by the same rules).
+  const starterChoices = opts.starterOverride?.length ? [...opts.starterOverride] : drawRemembranceStarters(content, opts.seed);
   const regionOrder = withStream(rng, 'map', (r) => generateRegionOrder(content, campaign, r, rules.regionId));
   const run: RunState = {
     runId: opts.runId,
@@ -336,7 +341,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     archetypeId: opts.archetypeId,
     phase: 'starter',
     starterChoices,
-    prep: { ...prep, campaignId: campaign.id, note: draft.note },
+    prep: { ...prep, campaignId: campaign.id },
     party: [],
     eggs: [],
     history: {},
@@ -690,6 +695,29 @@ function enterStage(content: Content, run: RunState, index: number): void {
   takeCheckpoint(run);
 }
 
+/**
+ * Dev tools (tools/savegen.ts): moves a fresh run to Region `regionIndex`, Stage `stageIndex` (both 0-based) of the full campaign,
+ * walking every earlier stage and League so the used leaders, themes and cast stay consistent. Returns the gym badges earned on the way.
+ */
+export function fastForwardToStage(content: Content, run: RunState, regionIndex: number, stageIndex: number): string[] {
+  const campaign = getCampaign(content, run.campaignId);
+  const badges: string[] = [];
+  for (let r = 0; r <= regionIndex; r++) {
+    run.regionIndex = r;
+    const last = r < regionIndex ? campaign.stagesPerRegion - 1 : stageIndex;
+    for (let i = r === 0 && run.stage?.index === 0 ? 1 : 0; i <= last; i++) {
+      enterStage(content, run, i);
+      if (r < regionIndex || i < stageIndex) badges.push(run.stage!.leaderId);
+    }
+    if (r < regionIndex) {
+      enterLeague(content, run);
+      run.regionsCleared.push(run.regionOrder[r]!);
+    }
+  }
+  run.phase = 'map';
+  return badges;
+}
+
 /** Starts the region's Pokémon League (mutates `run`): picks the Elite Four and champion and heals the party. */
 function enterLeague(content: Content, run: RunState): void {
   fillRegionOrder(content, run);
@@ -705,7 +733,10 @@ function enterLeague(content: Content, run: RunState): void {
     run.roleCast = run.roleCast.filter((c) => c.role !== 'champion' || c.regionIndex !== run.regionIndex);
     record(content, run, 'champion', run.regionIndex, 0, league.champion);
   }
-  const map = generateLeagueMap(campaign.eliteFourSize);
+  // Galar: the League is the 32-trainer Champion Tournament (its opponents replace the cast Elite Four; Ball Guy's shop opens after rounds 2 and 4).
+  const tournament = usesGalarTournament(region.id, isStoryCampaign(content, run.campaignId), !!getMode(run.rules.modeId)?.dailySeed) && campaign.eliteFourSize === 4;
+  if (tournament) league.eliteFour = galarEliteFour(content, run, league.champion);
+  const map = generateLeagueMap(campaign.eliteFourSize, tournament ? { shopAfter: GALAR_SHOP_COLUMNS } : {});
   const problems = validateLeagueMap(map);
   if (problems.length > 0) throw new Error(`Generated an invalid league map: ${problems.join('; ')}`);
   run.usedLeaders.push(...league.eliteFour, league.champion);
@@ -2060,6 +2091,14 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       plan = { ...plan, members: trained.members };
       trainingIndex = trained.index;
     }
+    // Beta 0.5 M2: an ordinary trainer that lost to you before plans for it (its ace may evolve; its team gets answers).
+    const returningNotes: string[] = [];
+    if (!plan.leaderId && !rivalBack && !takeover) {
+      const prior = run.story.trainers?.[trainerKey({ classId: plan.classId, name: plan.name, leaderId: null })];
+      const back = returningPlan(content, plan, prior, (prior?.beatenBy?.types ?? []) as TypeName[]);
+      plan = back.plan;
+      returningNotes.push(...back.notes);
+    }
     const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
@@ -2069,12 +2108,25 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (!plan.leaderId) randomizeMoves(content, run, mon);
       return mon;
     });
+    // Beta 0.5 M1: this trainer follows the player's systems (friendship, bond, mastered moves, specialization), kept in its record.
+    const parityLines: string[] = [];
+    const parity = applyTrainerParity(content, run, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId }, built, rivalBack?.id ?? takeover?.id ?? null, parityLines);
+    if (parity) {
+      const history = trainerHistoryLine(content, parity, run.party.map((m) => m.speciesId));
+      const notes = [...returningNotes, ...parityLines, ...(plan.memoryNote ? [] : history ? [history] : [])];
+      plan = { ...plan, specialization: parity.specialization, ...(notes.length > 0 ? { memoryNote: [plan.memoryNote, ...notes].filter(Boolean).join(' ') } : {}) };
+    }
     // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
+    if (parity) {
+      run.battle.trainerWealth = parity.wealth;
+      run.battle.specialization = parity.specialization;
+      run.battle.trainerKit = trainerKit(content, team, parity.specialization, parity.wealth);
+    }
     if (plan.strategy) run.battle.strategy = plan.strategy;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
@@ -2143,6 +2195,10 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const gimmickPlan = role
       ? planBossGimmicks(content, run.battle.trainer?.leaderId, run.battle.enemyTeam, gimmickSlots(run.regionIndex, role === 'gym' ? stage.index + 1 : null, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics)
       : {};
+    // Beta 0.5 M1: a rival uses gimmicks by the same schedule as a boss (at most two), on its ace first.
+    if (!role && (rivalBack || takeover || isRival) && parity) {
+      Object.assign(gimmickPlan, planTrainerGimmicks(content, parity.key, run.battle.enemyTeam, gimmickSlots(run.regionIndex, stage.index + 1, content.balance.transformations.bossGimmickAfterStage), 2, run.disabledMechanics));
+    }
     run.battle.transform.bossPlan = gimmickPlan;
     run.battle.transform.enemyMechanics = [...new Set(Object.values(gimmickPlan))];
     // Meteor's Prophecy: every third boss also gains a random second type (its own seed, so no other roll changes).
@@ -2349,7 +2405,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
   // Which kind of shop this is (shops redesign): fixed by the run seed and the stop's place, Night Market after dark.
   const place = `${run.regionIndex}:${stage.index}:${stage.current}`;
-  run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
+  // Galar's tournament: Ball Guy runs the shop between rounds (its stock is his own, limited per visit).
+  const galarLeagueShop = stage.kind === 'league' && currentRegion(content, run).id === 'galar';
+  const visit = Math.max(0, Math.floor(findNode(stage.map, stage.current).column / 2) - 1);
+  if (galarLeagueShop) run.shop = { type: 'ballguy', place, visit, sold: {} };
+  else run.shop = { type: shopTypeAt({ seed: run.seed, regionIndex: run.regionIndex, stageIndex: stage.index, nodeId: stage.current, period: periodOf(run), blackMarket: blackMarketMarkup(runPerks(content, run)) !== null }), place };
   // A Bike Voucher is traded for its bike (or money, if the player already has one).
   const voucher = voucherOf(content, run);
   if (voucher) {
@@ -2382,6 +2442,7 @@ export function healParty(content: Content, run: RunState): void {
  * Key items you own aren't sold again.
  */
 export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'archetypeId'> & Partial<Pick<RunState, 'inventory' | 'rules' | 'perkEffects' | 'licenses' | 'story' | 'seed' | 'shop'>> & MapItemRun): Content['shop'] {
+  if (run.shop?.type === 'ballguy' && run.seed) return ballGuyStock(run.seed, run.shop.visit ?? 0, run.shop.sold) as Content['shop'];
   const noRevive = run.rules ? noRevives(run.rules) : false;
   const owned = (e: Content['shop'][number]) => !!run.inventory && ownsKeepsake(content, run.inventory, e.item);
   const open = (e: Content['shop'][number]) => run.badges.length >= shopBadgesNeeded(content, run, e);
@@ -2478,8 +2539,9 @@ export function capMoney(content: Content, run: Pick<RunState, 'money'>): void {
 /** Buys one of an item at the shop. */
 export function buyItem(content: Content, current: RunState, itemId: string): { run: RunState; message: string } {
   assertPhase(current, 'shop');
-  const entry = content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
-  if (!entry) throw new Error(`The shop doesn't sell "${itemId}"`);
+  const ballGuy = current.shop?.type === 'ballguy';
+  const entry = ballGuy ? shopStock(content, current).find((e) => e.item === itemId) : content.shop.find((e) => e.item === itemId) ?? bankShopEntries(content, current.licenses).find((e) => e.item === itemId) ?? shopStock(content, current).find((e) => e.item === itemId);
+  if (!entry) throw new Error(ballGuy && ballGuyLimit(current.seed, current.shop?.visit ?? 0, itemId) > 0 ? `Ball Guy is sold out of ${getItem(content, itemId).name}.` : `The shop doesn't sell "${itemId}"`);
   const item = getItem(content, itemId);
   if (ownsKeepsake(content, current.inventory, itemId)) throw new Error(`You already have the ${item.name}.`);
   if (item.effect.kind !== 'attribute' && itemCount(current.inventory, itemId) >= STACK_MAX) throw new Error(`You can't carry more than ${STACK_MAX} ${item.name}.`);
@@ -2493,6 +2555,7 @@ export function buyItem(content: Content, current: RunState, itemId: string): { 
   count(run, 'moneySpent', price);
   afterPurchase(content, run, priceMultiplierFromItems(content, current) === 0);
   noteRecentPurchase(run, itemId);
+  if (ballGuy && run.shop) run.shop.sold = { ...run.shop.sold, [itemId]: (run.shop.sold?.[itemId] ?? 0) + 1 };
   if (item.effect.kind === 'attribute') {
     // Attribute items work as soon as they're bought.
     const value = addItemAttribute(content, run, item.effect.attribute, item.effect.amount);
@@ -2853,6 +2916,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
 
   // Beta 4.4: Hyper slots end with the battle; after a win or catch each is offered to keep.
+  if (battle.outcome) endLastResort(run);
   if (battle.outcome) endHyperMoves(run, (battle.outcome === 'win' || battle.outcome === 'caught') && !battle.raid?.practice);
   if (battle.outcome === 'win' && !run.party.some((m) => m.hp > 0)) {
     // A double KO that the player wins (recoil, Explosion by the foe) must not leave a team that cannot fight again.
@@ -3406,16 +3470,35 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     count(run, 'reunions');
   }
   // A veteran may offer to mentor a younger teammate.
+  // Beta 0.5: mentorships grow (chemistry, stat drift, events), a defeated foe may come back as a protégé.
+  if (battle.outcome === 'win') {
+    recordDefeats(content, run);
+    mentorshipsAfterBattle(content, run, !!battle.trainer?.leaderId);
+  }
   graduateMentorships(content, run);
   const mentorOffer = !run.victory ? planMentorship(content, run) : null;
   if (mentorOffer) run.pending.push({ kind: 'mentorship', ...mentorOffer });
+  const returnOffer = !run.victory && battle.outcome === 'win' && !mentorOffer ? planReturn(content, run) : null;
+  if (returnOffer) run.pending.push({ kind: 'returnProtege', mon: returningPokemon(content, run, returnOffer, nextUid(run, 'p')), mentorUid: returnOffer.mentorUid, reason: returnOffer.reason });
   const leadAsk = !run.victory && battle.outcome === 'win' && !mentorOffer ? planAskLead(content, run) : null;
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
   const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : [];
+  // The Betrayal: beating an Evil Team's leader sends you straight into a catchable fight with the Legendary they chased.
+  const evilT = outcome === 'win' && battle.trainer ? evilTeam(content, run) : null;
+  const betrayal = !!evilT && battle.trainer?.name === evilT.ranks.leader.name && run.story.flags[BETRAYAL_FLAG] === undefined && (run.story.evil?.end === 'defeated' || run.story.evil?.end === 'exposed');
+  if (betrayal && evilT) {
+    const pool = evilT.legendary.filter((id) => content.species.has(id));
+    const pick = pool.length ? new Rng(hashSeed(`${run.seed}::betrayal::${evilT.id}`)).pick(pool) : null;
+    if (pick) {
+      run.story.flags[BETRAYAL_FLAG] = `pending:${pick}:${Math.max(...battle.enemyTeam.map((m) => m.level)) + 5}`;
+      run.story.flags['ev:evil-legend'] = 1; // the team's own "A Legend Stirs" stop is spent
+    }
+  }
+  const betrayalNow = typeof run.story.flags[BETRAYAL_FLAG] === 'string' && String(run.story.flags[BETRAYAL_FLAG]).startsWith('pending:');
   // A fished Pokémon is an extra catch, and an event battle has its own rewards: no reward draft after them.
-  run.afterDecisions = chained ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
+  run.afterDecisions = chained || betrayalNow ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
   continueAfterDecisions(content, run);
   return { outcome, moneyGained, itemsFound, caughtSpeciesId, shadowPurified, shadowStages, rescued, blissfulHealed, aftermath: [...((raidWin as { notes?: string[] } | null)?.notes ?? []), ...momentNarration(content, run, outcome, evolutions.length > 0, hatchedNow.length > 0)], evolutions, bondTaught, recap, badge, regionCleared, finale, victory: run.victory, eventRewards, voiceJoined, materials: materialsGained };
 }
@@ -3575,6 +3658,7 @@ export type DecisionChoice =
   | { kind: 'teachMove'; moveIndex: number }
   | { kind: 'ppUpMove'; moveIndex: number }
   | { kind: 'mentor'; accept: boolean }
+  | { kind: 'returnProtege' }
   | { kind: 'askLead'; accept: boolean }
   | { kind: 'circuit'; optionIndex: number };
 
@@ -3682,6 +3766,9 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   } else if (decision.kind === 'mentorship') {
     if (choice.kind !== 'mentor') throw new Error('Accept or decline the mentorship');
     message = answerMentorship(content, run, decision, choice.accept);
+  } else if (decision.kind === 'returnProtege') {
+    if (choice.kind !== 'returnProtege') throw new Error('Continue the scene');
+    message = answerReturn(content, run, decision);
   } else if (decision.kind === 'askLead') {
     if (choice.kind !== 'askLead') throw new Error('Say yes or not now');
     message = answerAskLead(content, run, decision, choice.accept);

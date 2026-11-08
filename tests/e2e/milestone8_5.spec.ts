@@ -167,6 +167,17 @@ test('Z-Move from the battle menu', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+// A late Enter from confirmToMenu can land on Fight and open the move list; step back to the main menu.
+async function toRootMenu(page: Page) {
+  await expect
+    .poll(async () => {
+      const labels = await menuLabels(page);
+      if (!labels.includes('Fight')) await page.keyboard.press('Escape');
+      return labels.includes('Fight');
+    }, { timeout: 15_000 })
+    .toBe(true);
+}
+
 test('Gigantamax from the battle menu', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -188,6 +199,7 @@ test('Gigantamax from the battle menu', async ({ page }) => {
   });
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
+  await toRootMenu(page);
   await expect.poll(() => menuLabels(page), { timeout: 15_000 }).toEqual(['Fight', 'Bag', 'Pokémon', 'Max: OFF']);
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowDown');
@@ -201,7 +213,8 @@ test('Gigantamax from the battle menu', async ({ page }) => {
   const species = () => page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId);
   await seeCinematic(page, 'gigantamax', 'm8_5-gmax-cinematic', 600);
   await expect.poll(species, { timeout: 15_000 }).toBe('charizard-gmax');
-  await expect.poll(() => textureOf(page), { timeout: 15_000 }).toBe('pokemon.back.6-gigantamax');
+  // The scene runs 12.5 s of game time and the swap comes at its end; on a slow software-WebGL runner that stretches, so give it the same room as the Mega test.
+  await expect.poll(() => textureOf(page), { timeout: 45_000 }).toBe('pokemon.back.6-gigantamax');
   await page.waitForTimeout(2500);
   await page.screenshot({ path: 'test-results/m8_5-gigantamax.png' });
   expect(errors).toEqual([]);

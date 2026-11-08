@@ -148,7 +148,7 @@ export function teraScene(scene: Phaser.Scene, o: TeraSceneOptions): Beat {
   let orb: Phaser.GameObjects.Image | null = null;
   if (o.makeTrainer) {
     trainer = add(o.makeTrainer(trainerStartX, cy + 130)) as Phaser.GameObjects.Sprite;
-    trainer.setDepth(depth + 4).setVisible(false);
+    trainer.setDepth(depth + 2.5).setVisible(false);
     if (has(o.orbKey)) {
       orb = add(scene.add.image(trainerX, cy - 40, o.orbKey!).setDepth(depth + 5).setVisible(false).setAlpha(0));
       orb.setScale(64 / Math.max(orb.width, orb.height));

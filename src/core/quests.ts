@@ -72,7 +72,7 @@ function payReward(profile: Profile, trainerId: string, reward: QuestReward, now
   profile.lifetimeBankCredits += reward.bankCredits;
   profile.researchPoints += reward.researchPoints;
   profile.candies += reward.candies;
-  grantUnlocks(profile, { pool: reward.pool, trainer: reward.trainer, title: reward.title });
+  grantUnlocks(profile, { trainer: reward.trainer, title: reward.title });
   if (reward.evolution) claim(profile, evolutionKey(trainerId), now);
 }
 

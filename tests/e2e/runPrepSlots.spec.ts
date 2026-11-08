@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-// The reworked Preparation Desk (five pages, Weeks toggle) and the three save slots (Continue, Save Slots screen).
+// The reworked Preparation Desk (four pages, Weeks toggle) and the three save slots (Continue, Save Slots screen).
 
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 const prep = async (page: Page) => ({ page: await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page as number) });
@@ -15,7 +15,7 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test('the Preparation Desk has five pages and a Weeks toggle that sticks for the run', async ({ page }) => {
+test('the Preparation Desk has four pages and a Weeks toggle that sticks for the run', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto('/?seed=e2e-weeks&debug=1');
@@ -26,16 +26,16 @@ test('the Preparation Desk has five pages and a Weeks toggle that sticks for the
   await waitForScene(page, 'TrainerSelect');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'RunPrep');
-  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(4); // opens on the Overview
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(3); // opens on the Overview
 
   // Q from the Overview opens the Modifiers page, its own scrolling scene; Esc comes back to the Overview.
   await page.keyboard.press('KeyQ');
   await waitForScene(page, 'RunModifiers');
   await page.keyboard.press('Escape');
   await waitForScene(page, 'RunPrep');
-  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(4);
-  // The Starters and Modifiers tabs are their own scenes; each hands the desk back on Escape.
-  for (const [i, key] of [[2, 'RunStarters'], [3, 'RunModifiers']] as const) {
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page)).toBe(3);
+  // The Modifiers tab is its own scene; it hands the desk back on Escape.
+  for (const [i, key] of [[2, 'RunModifiers']] as const) {
     await page.evaluate((n) => (window as any).__pkr.game.scene.getScene('RunPrep').goPage(n), i);
     await waitForScene(page, key);
     await page.keyboard.press('Escape');

@@ -627,8 +627,6 @@ export type Achievement = z.infer<typeof AchievementSchema>;
 
 /** What a trainer quest step pays out, once (its claim key is `quest:<trainer>:<step>`). */
 export const QuestRewardSchema = UnlockRewardSchema.extend({
-  /** A Starter Laboratory set unlocked for free. */
-  pool: z.string().optional(),
   /** The last step of a special trainer's line unlocks their Trainer Evolution. */
   evolution: z.boolean().default(false),
   /** A trainer unlocked for free (the Spooky pack's Hex Maniac). */
@@ -966,8 +964,6 @@ export const ArchetypeSchema = z.object({
   signatureTypes: z.array(TypeNameSchema).max(2).default([]),
   /** Species (any stage) more likely among the three starters, never forced. */
   signatureSpecies: z.array(z.string()).default([]),
-  /** The trainer's own starter set in the Starter Laboratory. */
-  signaturePool: z.string().nullable().default(null),
   /** A fixed four-move set per signature species, used when that species is picked as the starter (never forced onto other Pokémon). */
   signatureMovesets: z.record(z.string(), z.array(z.string()).min(1).max(4)).default({}),
   /** Tags events and dialogue can react to (e.g. "pacifist" closes aggressive event choices). */
@@ -983,54 +979,6 @@ export const ArchetypeSchema = z.object({
 export type Archetype = z.infer<typeof ArchetypeSchema>;
 
 // ---------- Run-Prep (GAME_DESIGN.md §14.5, §14.7) ----------
-
-/**
- * A pool of starters for the Starter Laboratory. Species that aren't in the
- * game yet are skipped, so a pool can list species ahead of the full Pokédex;
- * a pool with too few known first-stage species shows as "coming later".
- */
-export const STARTER_POOL_CATEGORIES = ['classic', 'region', 'type', 'role', 'trainer', 'evilTeam', 'league', 'spinOff', 'research', 'rare', 'event', 'challenge', 'special'] as const;
-export type StarterPoolCategory = (typeof STARTER_POOL_CATEGORIES)[number];
-
-export const StarterPoolSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  description: z.string(),
-  /** The Starter Laboratory groups pools by category. */
-  category: z.enum(STARTER_POOL_CATEGORIES).default('classic'),
-  /** Listed species; an evolved one stands for its first stage (Charizard means Charmander). */
-  species: z.array(z.string()).default([]),
-  /** Adds the signature Pokémon of these bosses (as first stages). */
-  bosses: z.array(z.string()).default([]),
-  /** Adds every starter-eligible species of these types, or native to this region. */
-  filter: z.object({ types: z.array(TypeNameSchema).optional(), region: z.string().optional() }).optional(),
-  unlockedByDefault: z.boolean().default(false),
-  /** What must happen before the pool can be bought (null: nothing). */
-  unlock: RequirementSchema.nullable().default(null),
-  unlockText: z.string().default(''),
-  /** A Bank license that must be owned before the pool can be bought. */
-  license: z.string().nullable().default(null),
-  /** Research Points to unlock the pool. */
-  researchCost: z.number().int().min(0).default(0),
-  /** The "Mastered" set: its species are the ones you raised to Silver mastery or better (core/mastery.ts). */
-  mastered: z.boolean().default(false),
-  /** An earned set that may hold special forms (Spooky forms...), which every other pool leaves out (core/specialForms.ts). */
-  specialForms: z.boolean().default(false),
-  /** Special Specimen set: may list legendary and mythical first stages (see balance.specialSpecimen for the restrictions). */
-  specimens: z.boolean().default(false),
-}).refine((p) => p.species.length > 0 || p.bosses.length > 0 || p.filter !== undefined || p.mastered, { message: 'a starter pool needs species, bosses, a filter or mastered' });
-export type StarterPool = z.infer<typeof StarterPoolSchema>;
-
-/** How the three starters are drawn from the pool. Rules change the choice, not the power. */
-export const DRAFT_RULE_KINDS = ['standard', 'typeFocus', 'balanced', 'blind', 'expanded', 'regional', 'rareSpecimen', 'evolution'] as const;
-export const DraftRuleSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  description: z.string(),
-  kind: z.enum(DRAFT_RULE_KINDS),
-  license: z.string().nullable().default(null),
-});
-export type DraftRule = z.infer<typeof DraftRuleSchema>;
 
 /** A preparation choice: one per run, chosen on the Preparation Desk. */
 export const PrepTokenSchema = z.object({
@@ -1065,8 +1013,6 @@ export const LicenseSchema = z.object({
 export type License = z.infer<typeof LicenseSchema>;
 
 export const RunPrepFileSchema = z.object({
-  starterPools: z.array(StarterPoolSchema).min(1),
-  draftRules: z.array(DraftRuleSchema).min(1),
   tokens: z.array(PrepTokenSchema),
   licenses: z.array(LicenseSchema),
 });
@@ -1916,6 +1862,28 @@ export const RulesetSchema = z.object({
 });
 export type Ruleset = z.infer<typeof RulesetSchema>;
 
+/** Beta 0.5 M1/M2 (core/trainerWorld): every trainer follows the player's systems. Tuning in balance.json `trainerWorld`. */
+export const TrainerWorldConfigSchema = z.object({
+  enabled: z.boolean(),
+  /** Starting friendship range (min, max) for an ordinary trainer's and a boss's/rival's Pokémon. */
+  friendshipOrdinary: z.tuple([z.number().int().min(0).max(255), z.number().int().min(0).max(255)]),
+  friendshipBoss: z.tuple([z.number().int().min(0).max(255), z.number().int().min(0).max(255)]),
+  /** Friendship a trainer's Pokémon gain per earlier meeting with the player (the bond deepens off screen too). */
+  friendshipPerMeeting: z.number().int().min(0),
+  /** Two teammates this friendly and above count as bonded. */
+  bondMinFriendship: z.number().int().min(0).max(255),
+  /** Move uses (same ranks as the player's Move Mastery) that make a trainer's move mastered, and the most mastered moves one Pokémon has. */
+  masteryUses: z.number().int().min(1),
+  maxMastered: z.number().int().min(0),
+  /** Share the power of a mastered move rises by, for trainer and player alike (0.1 = +10%). */
+  masteryPower: z.number().min(0).max(0.5),
+  /** Reputation moved by a result, and the most notes a record keeps. */
+  reputationWin: z.number().int(),
+  reputationLoss: z.number().int(),
+  notesKept: z.number().int().min(1),
+});
+export type TrainerWorldConfig = z.infer<typeof TrainerWorldConfigSchema>;
+
 export const TrainerAiSchema = z.object({
   /** A smart trainer (a boss) heals once its Pokémon is under this share of its max HP. */
   healBelow: z.number().min(0).max(1),
@@ -2020,6 +1988,7 @@ export type WorldBalance = z.infer<typeof WorldBalanceSchema>;
 
 export const BalanceSchema = z.object({
   trainerAi: TrainerAiSchema,
+  trainerWorld: TrainerWorldConfigSchema,
   /** S160: stacked critical-hit sources count `excessFactor` of the way past `softCap` (1 = off). */
   critScaling: z.object({ softCap: z.number().min(0).max(1), excessFactor: z.number().min(0).max(1) }).default({ softCap: 0.5, excessFactor: 0.5 }),
   /** S168: every `turnsPerLevel` chip turns endured in a weather cut that weather's chip damage by `cutPerLevel`, up to `maxLevels` levels. */
@@ -2071,6 +2040,8 @@ export const BalanceSchema = z.object({
   heldEvolution: z.object({ enabled: z.boolean(), level: z.number().int().min(2).max(100) }).default({ enabled: true, level: 28 }),
   /** Rival battle styles (berserker, revenge-striker, last-stand) do something in the fight (Living Rivalry §3). */
   styleTricks: z.boolean().default(true),
+  /** Beta 0.5: the mentor rework (all ten mentorship types, chemistry, stat drift, events, spar, returning protégés). Off = the old veteran-only Protégé system. */
+  mentorRework: z.boolean().default(true),
   /** Gym Leader Personalities (S126): a leader's mood of the day nudges the opening order and lead level. */
   leaderMoods: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
@@ -2157,7 +2128,6 @@ export const BalanceSchema = z.object({
   starterLevel: z.number().int().positive(),
   starterChoices: z.number().int().positive(),
   /** The chance a trainer's signature species takes the last starter slot when none was drawn (own RNG stream). */
-  signatureStarterChance: z.number().min(0).max(1),
   wildPool: z.array(z.string()).min(1),
   draftSize: z.number().int().positive(),
   rarityWeights: z.record(RaritySchema, z.number().min(0)),
@@ -2387,6 +2357,8 @@ export const BalanceSchema = z.object({
     explorerItems: z.array(z.string()).min(1),
     /** Map events a running game event features (gameEvents.json mapEvents) are this many times as likely. */
     gameEventWeight: z.number().min(1),
+    /** Events that only appear in the current region (a `region` requirement, e.g. the Galar set) are this many times as likely there, so a region's own events show up. */
+    regionEventWeight: z.number().min(1).default(1),
   }),
   /** Exploration (core/world.ts): fog of war, weather fronts, roaming Legendaries and checkpoint camps. */
   world: WorldBalanceSchema,
@@ -2469,8 +2441,6 @@ export const BalanceSchema = z.object({
   }).default({ aceMax: { early: 1, mid: 2, late: 2, champion: 2 }, teamMax: 3, teamMaxChampion: 4, openWeaknesses: 2, wideHits: 4, observedBattles: 3, desperationSetbacks: 2, phaseStarts: { mid: 2, late: 5, champion: 9 } }),
   overhaulRivalRoles: z.object({ enabled: z.boolean(), additionalCounters: z.number().int().min(0) }).default({ enabled: true, additionalCounters: 1 }),
   overhaulGrowth: z.object({ enabled: z.boolean(), bonus: z.number().min(0).max(0.3), minKos: z.number().int().min(1), minCloseCalls: z.number().int().min(1), minRoleKos: z.number().int().min(1).default(4) }).default({ enabled: true, bonus: 0.05, minKos: 8, minCloseCalls: 2, minRoleKos: 4 }),
-  /** Archived Starter Sets (Story Overhaul S.6): off hides the Starter Laboratory and the starter pool picker; data, code and saves stay. */
-  starterSets: z.object({ enabled: z.boolean() }).default({ enabled: false }),
   overhaulChains: z.object({ enabled: z.boolean(), legendaryMinStage: z.number().int().min(1) }).default({ enabled: true, legendaryMinStage: 7 }),
   mythicalChains: z.object({ enabled: z.boolean(), minStage: z.number().int().min(1) }).default({ enabled: true, minStage: 9 }),
   overhaulField: z.object({ powerCap: z.number().min(0).max(1), envChance: z.number().min(0).max(1), conditionChance: z.object({ mid: z.number().min(0).max(1), late: z.number().min(0).max(1), boss: z.number().min(0).max(1) }) }).default({ powerCap: 0.3, envChance: 0.6, conditionChance: { mid: 0.15, late: 0.25, boss: 0.35 } }),
@@ -3318,8 +3288,6 @@ export interface Content {
   runQuests: Map<string, RunQuest>;
   /** Weekly, holiday and themed game events (gameEvents.json), in file order. */
   gameEvents: Map<string, GameEvent>;
-  starterPools: Map<string, StarterPool>;
-  draftRules: Map<string, DraftRule>;
   prepTokens: Map<string, PrepToken>;
   licenses: Map<string, License>;
   rewards: Map<string, Reward>;

@@ -2,6 +2,9 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
+import { mentorMoment } from '../core/story/mentorMoments';
+import { mentorScene } from '../ui/battleFx/mentorScene';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
@@ -63,6 +66,9 @@ import { storyAssetId } from '../core/storyAudio';
 import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
+import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
+import { currentTournamentRound } from '../core/galarTournament';
+import { StadiumDirector } from '../ui/galar/stadiumDirector';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
@@ -78,11 +84,17 @@ import { rivalIntro } from '../ui/battleFx/storyFx';
 import { poseMoment } from '../ui/dialogue/poseMoment';
 import { poseForMoments } from '../core/presentation/poses';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
+import { bossIntroMoment, defaultMoment, planMoment, rivalMoment, type MomentKind } from '../core/cinematic/moments';
+import { playMoment } from '../ui/cinematic/momentPlayer';
+/** Moments already played this session (repeatable ones play shorter next time). Not saved: presentation only. */
+const SEEN_MOMENTS = new Set<string>();
 import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
+import { dynamaxScene } from '../ui/battleFx/dynamaxScene';
+import { keyItemFor } from '../ui/battleFx/cineLook';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
-import { ballFlight, cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
+import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
@@ -377,6 +389,7 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.timeScale = speed;
     this.time.timeScale = speed;
     this.role = this.battleRole();
+    this.stadium = this.makeStadium();
     // The same battle always gets the same look (salted by the run and how far it has come), so a reload never changes it.
     this.skinId = screenStyleOf('battle', session.settings.screenStyles, `${run.seed}:${run.log.battlesWon}:${run.log.rewardsTaken.length}`);
     this.skin = battleSkinFor(this.skinId);
@@ -393,6 +406,8 @@ export class BattleScene extends Phaser.Scene {
     // Story Runs: an Evil Team battle plays that team's own song (Part AD), the leader its final arrangement.
     const teamSong = this.storyTeamSong();
     if (teamSong) this.baseTrack = teamSong;
+    // Galar's stadium: gym and League fights play the Galar gym song (it builds turn by turn); the Champion plays the finale song.
+    if (this.stadium && !teamSong && services().assets.has(GALAR_STADIUM.music.battle)) this.baseTrack = this.role === 'champion' ? GALAR_STADIUM.music.finalMon : GALAR_STADIUM.music.buildUp;
     this.playingTrack = this.baseTrack;
     // Extra songs load on demand; the default song plays until they arrive.
     const fallback = battleTrack({ raidTrack: null, trainer: battle.kind === 'trainer', role: this.role, gbSounds: false });
@@ -853,6 +868,8 @@ export class BattleScene extends Phaser.Scene {
 
   /** Set in `create`: the battle can be cleared from the run before the win song plays. */
   private role: BattleRole | undefined;
+  /** Galar Gym Challenge stadium presentation (crowd, camera cuts, Champion host); null elsewhere. */
+  private stadium: StadiumDirector | null = null;
   /** The battle's normal song, and the one playing now (the low-HP song swaps in while the lead is in danger). */
   private baseTrack = '';
   private playingTrack = '';
@@ -893,11 +910,18 @@ export class BattleScene extends Phaser.Scene {
     return services().session.content.archetypes.get(this.run.archetypeId)?.spriteAssetId ?? null;
   }
 
-  /** Sending a Pokémon out: its own caught ball flies in from off screen to its spot and opens there (no trainer animation). */
+  /** The throw for sending a Pokémon out: its own caught ball flies to its spot and opens there. */
   private async sendOutMoment(mon: PokemonInstance): Promise<void> {
     const ball = mon.caughtBall ?? DEFAULT_BALL;
     const at = this.spotXY('player');
-    await ballFlight(this, this.motion, { x: -50, y: at.y + 10 }, { x: at.x, y: at.y - 50 }, ball, 3);
+    const actor = await this.trainerIn();
+    if (!actor) return;
+    await actor.play('sendOut', {
+      target: { x: at.x, y: at.y - 50 },
+      makeBall: (x, y) => ballVisual(this, ball, x, y),
+      onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+    });
+    this.trainerOut();
   }
 
   /**
@@ -967,19 +991,29 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
-  /** Doubles opening: one ball flies in from off screen to each of your two spots. Presentation only. */
+  /** Doubles opening: your trainer throws one ball to each of your two spots, then steps off. Presentation only. */
   private async duoThrowPose(): Promise<void> {
+    if (this.trainerReady) await this.trainerReady;
     const duo = this.duo;
     if (!duo) return;
+    if (!this.trainerActor) return this.ownBackThrow();
+    const actor = await this.trainerIn();
+    if (!actor) return;
     const focus = duo.focus.player;
     const throws: Array<{ mon: PokemonInstance; spot: 0 | 1 }> = [{ mon: this.shown.player, spot: focus }];
     if (duo.other.player.mon) throws.push({ mon: duo.other.player.mon, spot: focus === 0 ? 1 : 0 });
     throws.sort((a, b) => a.spot - b.spot);
     for (const t of throws) {
       if (t.mon.hp <= 0) continue;
+      const ball = t.mon.caughtBall ?? DEFAULT_BALL;
       const at = DUO_POS.player[t.spot];
-      await ballFlight(this, this.motion, { x: -50, y: at.y + 10 }, { x: at.x, y: at.y - 50 }, t.mon.caughtBall ?? DEFAULT_BALL, 3);
+      await actor.play('sendOut', {
+        target: { x: at.x, y: at.y - 50 },
+        makeBall: (x, y) => ballVisual(this, ball, x, y),
+        onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+      });
     }
+    this.trainerOut();
   }
 
   /**
@@ -987,7 +1021,24 @@ export class BattleScene extends Phaser.Scene {
    * Presentation only: skipped when motion is off or the trainer has no back sprite.
    */
   private async throwPose(): Promise<void> {
-    await this.sendOutMoment(this.shown.player);
+    if (this.trainerReady) await this.trainerReady;
+    if (this.trainerActor) {
+      await this.sendOutMoment(this.shown.player);
+      return;
+    }
+    await this.ownBackThrow();
+  }
+
+  /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
+  private async ownBackThrow(): Promise<void> {
+    const art = this.playerArt();
+    if (!art || this.motion === 'off') return;
+    const back = trainerBackVisual(this, art, TRAINER_POS.x - 90, MESSAGE_Y + 4, 260);
+    if (!back) return;
+    back.setDepth(5);
+    await new Promise<void>((done) => this.time.delayedCall(this.motion === 'full' ? 520 : 200, done));
+    await tween(this, { targets: back, x: -200, alpha: 0, duration: 320, ease: 'Quad.easeIn' });
+    back.destroy();
   }
 
   /** The opposing trainer's sprite asset and a fallback label. */
@@ -2129,7 +2180,10 @@ export class BattleScene extends Phaser.Scene {
     const st = services().session.settings;
     const foeName = this.boss()?.title ?? this.trainerTitle() ?? (battle.trainer ? 'The trainer' : this.speciesName(battle.enemyTeam[0]!));
     const recap = introRecap(kind, foeName);
-    if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') return;
+    if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
+      await this.playContextMoment();
+      return;
+    }
     if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)), recap);
     else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined), recap);
     // Bosses and rivals get a title card: who they are and what they specialise in.
@@ -2148,6 +2202,8 @@ export class BattleScene extends Phaser.Scene {
         },
       );
     }
+    // M7: the Champion gets the big presentation (long tier S card) before the usual title card.
+    if (boss && battle.trainer && boss.role === 'champion') await this.bigMoment(bossIntroMoment({ role: 'champion' }), `championIntro.${boss.title}`, 'THE CHAMPION', boss.title);
     // The entrance already named the boss; the title card is for when it was skipped.
     if (boss && !cinematic) {
       const types = boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
@@ -2158,6 +2214,135 @@ export class BattleScene extends Phaser.Scene {
       // The rival's own entrance (6.5) comes before the usual title card.
       await this.playBeat(rivalIntro(this, resolveAnim('rival.intro', animSettingsFrom(services().session.settings)), `${title.toUpperCase()} CHALLENGES YOU`, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined, ROLE_RIMS.rival));
       await this.playBeat(titleCard(this, 'RIVAL', title, ROLE_RIMS.rival, this.motion));
+    }
+    await this.playContextMoment();
+    await this.stadiumIntro();
+  }
+
+  /** Beta 0.5 M7: a big-moment card through the cinematic framework. Presentation only; any failure is ignored. */
+  private async bigMoment(kind: MomentKind, id: string, title: string, subtitle: string, longer = false): Promise<void> {
+    try {
+      const st = services().session.settings;
+      const spec = defaultMoment(kind, id, 'enemy');
+      if (longer) spec.phases = { situation: 400, anticipation: 700, moment: 900, reaction: 500, transition: 400 };
+      const plan = planMoment(spec, { reduceMotion: this.motion === 'reduced', disableAnimations: this.motion === 'off' || st.disableAllAnimations, seen: SEEN_MOMENTS });
+      await playMoment(this, spec, plan, { title, subtitle });
+      SEEN_MOMENTS.add(id);
+    } catch {
+      // never block the battle
+    }
+  }
+
+  /** True when the trainer just beaten is the Evil Team's leader (the Betrayal scene follows). */
+  private evilLeaderBeaten(name: string | undefined): boolean {
+    const team = evilTeam(services().session.content, this.run);
+    return Boolean(team && name && team.ranks.leader.name === name);
+  }
+
+  /** Raid, evil-team and returning-rival scenes picked from the battle and the encounter history. */
+  private async playContextMoment(): Promise<void> {
+    const battle = this.run.battle!;
+    const { content } = services().session;
+    if (battle.raid) {
+      await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!));
+      return;
+    }
+    if (!battle.trainer) return;
+    const rid = battle.rivalId;
+    if (rid) {
+      const w = Number(this.run.story.flags[`rivalW:${rid}`] ?? 0);
+      const l = Number(this.run.story.flags[`rivalL:${rid}`] ?? 0);
+      const kind = rivalMoment({ fights: w + l, lastResult: w + l === 0 ? undefined : l > 0 && w === 0 ? 'playerLost' : 'playerWon', playerStreak: l > 0 ? 0 : w });
+      if (kind === 'rivalFirst') return;
+      const label = kind === 'rivalRevenge' ? 'REVENGE' : kind === 'rivalReunion' ? 'REUNION' : 'REMATCH';
+      await this.bigMoment(kind, `${kind}.${rid}.${w}.${l}`, label, this.trainerTitle() ?? battle.trainer.name);
+      return;
+    }
+    const team = evilTeam(content, this.run);
+    if (team && Object.values(team.ranks).some((r) => r.name === battle.trainer!.name)) await this.bigMoment(bossIntroMoment({ role: 'evil' }), `evil.${team.id}.${battle.trainer.name}`, team.name ?? battle.trainer.name, battle.trainer.name);
+  }
+
+  /** Galar Gym Challenge: the stadium director for this battle (null in every other battle). */
+  private makeStadium(): StadiumDirector | null {
+    try {
+      const { session } = services();
+      const content = session.content;
+      if (!isGalarStadiumBattle(content, this.run)) return null;
+      const st = session.settings;
+      const alive = (team: readonly { hp: number }[]): number => team.filter((m) => m.hp > 0).length;
+      return new StadiumDirector(this, {
+        runSeed: this.run.seed,
+        battleId: `${this.run.seed}:${this.run.badges.length}:${this.run.log.battlesWon}`,
+        host: galarHost(content, this.run).name,
+        impressive: galarPerformance(content, this.run).lastWasImpressive,
+        rivalWatching: this.run.story.rivals.length > 0,
+        disableAnimations: () => st.disableAllAnimations || st.battleAnimations === 'off',
+        reduceMotion: () => st.battleAnimations === 'reduced',
+        setIntensity: (n) => setMusicIntensity(n),
+        crowdSound: (cue, intensity) => {
+          const v = Math.min(1, 0.3 + intensity * 0.12);
+          if (cue === 'crowd.roar') {
+            playSfxLazy(this, 'se.crowd_applause', v);
+            if (intensity >= 4) playSfxLazy(this, 'se.crowd_uproar', v * 0.8);
+          } else if (cue === 'crowd.swell') playSfxLazy(this, 'se.crowd_applause', 0.5);
+          else if (cue === 'crowd.murmur') playSfxLazy(this, 'se.crowd_murmur', 0.3);
+        },
+        finalMusic: (track) => {
+          if (!services().assets.has(track)) return;
+          this.baseTrack = track;
+          this.playingTrack = track;
+          playMusicLazy(this, track, track);
+        },
+        alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
+        say: (text) => this.say(text),
+        portrait: (id, x, y) => {
+          // Fit the picture to the card so no character is cropped, whatever size its sprite is.
+          const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
+          if (v.height > 0) v.setScale(Math.min(340 / v.height, 6));
+          return v as unknown as Phaser.GameObjects.GameObject;
+        },
+        art: {
+          sprite: (id, x, y, scale) => (this.textures.exists(id) ? trainerVisual(this, id, 'Trainer', x, y, scale) : null),
+          preload: (ids) => loadAssets(this, ids),
+          cast: () => {
+            const host = content.bosses.get(galarHost(content, this.run).id)?.sprites.default ?? '';
+            const rival = this.run.story.rivals[0];
+            return { host, opponent: this.trainerArt()?.assetId ?? '', rival: (rival && this.rivalArt(rival)?.assetId) || '' };
+          },
+        },
+        bandArt: (x, y) => itemVisual(this, services().session.content.items.get('dynamax-band')?.iconAssetId ?? 'item.dynamax_band', x, y, 3),
+      });
+    } catch (e) {
+      console.warn('Galar stadium presentation unavailable', e);
+      return null;
+    }
+  }
+
+  /** Galar gym entrance: the Champion's one-time Dynamax Band scene (first gym), then a line for this gym. Presentation; the Band itself is granted by the core. */
+  private async stadiumIntro(): Promise<void> {
+    if (!this.stadium) return;
+    try {
+      const { session } = services();
+      const content = session.content;
+      const host = galarHost(content, this.run).name;
+      // League battles of the Champion Tournament: round card, the opponent's introduction and a crowd line; the final is a bigger moment.
+      const round = currentTournamentRound(content, this.run);
+      if (round) {
+        await this.stadium.tournamentIntro(round);
+        return;
+      }
+      if (this.boss()?.role !== 'gym') return; // Story-run League fights get the crowd and cuts, not the gym host
+      const band = session.claimGalarBandIntro();
+      if (band) {
+        if (band.grantsItem) await this.stadium.bandScene();
+        for (const line of band.lines) await this.say(line);
+      }
+      else {
+        const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
+        await this.speak(host, line.text);
+      }
+    } catch (e) {
+      console.warn('Galar stadium intro failed', e);
     }
   }
 
@@ -2726,6 +2911,10 @@ export class BattleScene extends Phaser.Scene {
     const hotbar = services().session.settings.hotbar.filter((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id) && content.items.get(id)!.target !== 'party' && content.items.get(id)!.target !== 'fainted' && itemProblem(this.battleCtx(), id) === null).slice(0, 4);
     const hotbarAt = options.length;
     for (const id of hotbar) options.push({ label: `Quick: ${content.items.get(id)!.name}` });
+    // Beta 0.5 (M4): Mentor's Last Resort, once per battle, when a protégé at half HP has its mentor in the party.
+    const lastResortOffered = lastResortOffer(content, this.run, this.activeMon());
+    const lastResortAt = lastResortOffered ? options.length : -1;
+    if (lastResortAt >= 0) options.push({ label: "Mentor ♥" });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -2762,7 +2951,9 @@ export class BattleScene extends Phaser.Scene {
           this.showRootMenu();
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
-        else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
+        else if (i === lastResortAt) {
+          void this.playLastResort();
+        } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
           this.rallyChoice = !this.rallyChoice;
           this.showRootMenu();
@@ -2791,6 +2982,35 @@ export class BattleScene extends Phaser.Scene {
       onBack: this.duo && this.cmdSpot === 1 && this.commands[0] ? () => this.promptSpot(0) : undefined,
     });
     this.showTabs(null);
+  }
+
+  /** Mentor's Last Resort (Beta 0.5 §2.4): the lend happens first (state), then the mentor scene plays over it (presentation only). */
+  private async playLastResort(): Promise<void> {
+    const content = services().session.content;
+    const mon = this.activeMon();
+    const offer = lastResortOffer(content, this.run, mon);
+    if (!offer) return;
+    const mentor = this.run.party.find((m) => m.uid === offer.mentorUid)!;
+    const lines = useLastResort(content, this.run, mon).map((e) => (e.type === 'spectacle' ? e.text : ''));
+    this.clearMenus();
+    this.message.setVisible(true);
+    this.message.setText(lines[0] ?? '');
+    const spec = mentorMoment('mentorAssist');
+    const plan = planMoment(spec, { reduceMotion: this.motion === 'reduced', disableAnimations: this.motion === 'off', seen: new Set() });
+    const ms = content.species.get(mentor.speciesId)!;
+    const ps = content.species.get(mon.speciesId)!;
+    const move = content.moves.get(offer.moveId)!;
+    try {
+      await playMoment(this, spec, plan, {
+        title: "Mentor's help",
+        subtitle: `${ms.name} lends ${ps.name} ${move.name}`,
+        inner: () => this.playBeat(mentorScene(this, { mode: 'assist', makeMentor: (x, y) => pokemonVisual(this, ms, 'front', x, y, PIXEL_SCALE * 1.4, mentor.shiny), makeProte: (x, y) => pokemonVisual(this, ps, 'front', x, y, PIXEL_SCALE * 1.4, mon.shiny), caption: lines[1] ?? '', speed: 1 / animationTimeScale(services().session.settings) })),
+      });
+    } catch {
+      /* presentation failure never corrupts the battle */
+    }
+    this.message.setText(lines.slice(1).join('\n'));
+    this.time.delayedCall(this.motion === 'off' ? 300 : 900, () => this.showMoveMenu());
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */
@@ -2853,7 +3073,7 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const name = (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -3184,7 +3404,9 @@ export class BattleScene extends Phaser.Scene {
       this.nextPrompt();
       return;
     }
+    this.stadium?.startTurn(before.battle?.turn ?? 1);
     await this.playEvents(result.events, before, trainer, result.cues, result.drama);
+    await this.stadium?.afterTurn();
 
     if (result.end) {
       await this.finish(result, trainer, bossWin);
@@ -3265,6 +3487,14 @@ export class BattleScene extends Phaser.Scene {
       }
       await this.say(`You defeated ${trainer}!`);
     }
+    // M7: a raid boss falling and a Champion's defeat each get a framework card (presentation only).
+    if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!));
+    else if (end.outcome === 'win' && !bossWin && this.evilLeaderBeaten(trainer ?? undefined)) {
+      // The Betrayal: with the leader beaten, the Legendary they chased turns on them. The catch is the team's 'A Legend Stirs' stop.
+      const team = evilTeam(services().session.content, this.run);
+      await this.bigMoment('evilBetrayal', `evilBetrayal.${team?.id ?? 'team'}`, 'THE BETRAYAL', `The Legendary turns on ${trainer}`, true);
+    }
+    else if (end.outcome === 'win' && bossWin) await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, bossWin.boss.role === 'champion' ? 'CHAMPION DEFEATED' : bossWin.boss.role === 'elite' ? 'ELITE FOUR DEFEATED' : 'LEADER DEFEATED', bossWin.boss.title);
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);
       this.assistAfter = null;
@@ -3381,6 +3611,18 @@ export class BattleScene extends Phaser.Scene {
    * Story Portrait box, and the line types like speech. A shouted line shakes the box, the trainer
    * jumps and their Pokémon cries. Presentation only; the line also goes to the battle log.
    */
+  /** The Champion host's own picture when the Galar host is the one speaking (null for anyone else). */
+  private hostArtFor(speaker: string): string | null {
+    try {
+      if (!this.stadium) return null;
+      const content = services().session.content;
+      const host = galarHost(content, this.run);
+      return host.name === speaker ? content.bosses.get(host.id)?.sprites.default ?? null : null;
+    } catch {
+      return null;
+    }
+  }
+
   private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
@@ -3404,7 +3646,7 @@ export class BattleScene extends Phaser.Scene {
       role,
       text: shout && !/\[shake\]/.test(text) ? `[shake]${text}[/shake]` : text,
       voice,
-      artId: isFoe ? art?.assetId ?? null : null,
+      artId: isFoe ? art?.assetId ?? null : this.hostArtFor(speaker),
       rim: this.foeRim(),
       motion: this.motion,
       speed: settings.speechSpeed,
@@ -3444,6 +3686,7 @@ export class BattleScene extends Phaser.Scene {
       }
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
+      await this.stadium?.onEvent(e);
       const side = 'side' in e ? e.side : null;
       if (side === 'enemy' && (e.type === 'ability' || (e.type === 'held' && e.itemId !== 'poke-doll'))) this.noteFoeReveal(e.type === 'ability' ? { ability: e.ability } : { item: e.itemId });
       const box = side === 'enemy' ? this.enemyBox : this.playerBox;
@@ -3604,7 +3847,18 @@ export class BattleScene extends Phaser.Scene {
             if (e.side === 'enemy' && this.run.battle?.trainer && team.length > 1 && team[team.length - 1]!.uid === e.uid) {
               void burstReveal(this, ENEMY_POS.x, ENEMY_POS.y - 80, this.foeRim(), this.motion);
               if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
-              await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
+              const bossNow = this.boss();
+              if (bossNow?.role === 'champion') {
+                // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
+                const finalTrack = 'bgm.raid.tera3';
+                if (services().assets.has(finalTrack) && !this.stadium) {
+                  this.baseTrack = finalTrack;
+                  this.playingTrack = finalTrack;
+                  playMusicLazy(this, finalTrack, finalTrack);
+                }
+                await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true);
+              } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`);
+              else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
             }
           }
           break;
@@ -3656,7 +3910,7 @@ export class BattleScene extends Phaser.Scene {
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const art = mine ? this.playerArt() : null;
+            const art = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const crystalId = e.itemId ?? (zBase ? ownedZCrystal(content, this.run.inventory, zBase.type) : null);
             const feel = this.cineFeel('zmove');
             await this.playBeat(
@@ -3683,7 +3937,7 @@ export class BattleScene extends Phaser.Scene {
             // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const playerArt = mine ? this.playerArt() : null;
+            const playerArt = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const feel = this.cineFeel('tera');
             const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
             await this.playBeat(
@@ -3727,6 +3981,34 @@ export class BattleScene extends Phaser.Scene {
                 speed: feel.speed,
               }),
             );
+          } else if ((cine === 'dynamax' || cine === 'gigantamax') && this.motion === 'full' && !services().session.settings.fastDynamax && mon && (e.side === 'player' ? this.playerArt() : this.run.battle?.trainer ? this.trainerArt() : null)) {
+            // The full reference scene (Fast Dynamax off): bare arena, trainer and Dynamax Band, pink ball, blue burst, silhouette, red giant.
+            const from = content.species.get(mon.speciesId)!;
+            const to = content.species.get(e.to) ?? from;
+            const mine = e.side === 'player';
+            const feel = this.cineFeel(cine);
+            const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
+            await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
+            const pArt = mine ? this.playerArt() : null;
+            const fArt = mine ? null : this.trainerArt();
+            await this.playBeat(
+              dynamaxScene(this, {
+                kind: cine,
+                makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeGiantFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
+                makeTrainer: (x, y) => (pArt ? trainerVisual(this, pArt, 'Trainer', x, y, 2) : trainerVisual(this, fArt!.assetId, fArt!.label, x, y, 2)) as Phaser.GameObjects.GameObject,
+                ballItem: mon.caughtBall ?? DEFAULT_BALL,
+                bandKey: keyItemFor(cine),
+                backdropKey: this.arenaBgKey,
+                opposes: !mine,
+                calyrex: mon.speciesId.startsWith('calyrex'),
+                ...(cine === 'gigantamax' ? { accent: TYPE_COLORS[to.types[0] ?? ''] ?? 0xffd24a, gmaxName: `G-MAX ${to.name.replace(/^Gigantamax /i, '').toUpperCase()}`.trim() } : {}),
+                onSwap: swapForm,
+                intensity: feel.intensity,
+                shake: feel.shake,
+                speed: feel.speed,
+              }),
+            );
           } else if (cine) {
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
             await this.playBeat(
@@ -3736,6 +4018,8 @@ export class BattleScene extends Phaser.Scene {
                 y: at.y - 80,
                 sprite: e.side === 'player' ? this.playerSprite : this.enemySprite,
                 tint: glowColor,
+                ...(mon?.caughtBall ? { ball: mon.caughtBall } : {}),
+                ...(cine === 'gigantamax' ? { accent: TYPE_COLORS[content.species.get(e.to)?.types[0] ?? ''] ?? 0xffd24a, gmaxName: `G-MAX ${(content.species.get(e.to)?.name ?? '').replace(/^Gigantamax /i, '').toUpperCase()}`.trim() } : {}),
                 crystal: e.kind === 'primal' ? (e.to.includes('kyogre') ? 'alpha' : 'omega') : 'mega',
                 title: zMove?.name,
                 titleId: zMove?.id,

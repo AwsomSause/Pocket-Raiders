@@ -3,7 +3,8 @@
 // the short one-region route (campaign "daily-route", set by the mode). Pure: no RNG stream is touched.
 
 import type { Content } from './contentSchema';
-import { defaultPrep, eligibleSpecies, pickDistinctRegions } from './runPrep';
+import { defaultPrep } from './runPrep';
+import { drawRemembranceStarters } from './story2/starterDraw';
 import type { RunPrep } from './state';
 import { dailySeed, RUN_RULES, type RulesChoice } from './rules';
 import { Rng, hashSeed } from './rng';
@@ -32,11 +33,8 @@ export function dailyModifierId(isoDate: string): string {
 /** The day's three starters: curated from the region and type sets whether or not the player owns them, so everyone gets the same ones. */
 export const dailyStarters = (content: Content, isoDate: string): string[] => starterSet(content, dailySeed(isoDate));
 
-/** Three starters drawn from the shared Classic/region/type pools by a seed alone (Daily and Weekly use it). */
-export function starterSet(content: Content, seed: string): string[] {
-  const ids = [...new Set([...content.starterPools.values()].filter((p) => ['classic', 'region', 'type'].includes(p.category) && !p.mastered && !p.specimens).flatMap((p) => eligibleSpecies(content, p)))].sort();
-  return pickDistinctRegions(content, new Rng(hashSeed(`${seed}::starters`)).shuffle(ids), content.balance.starterChoices);
-}
+/** Three Remembrance starters (three regions) drawn by a seed alone; Daily and Weekly use it, so everyone gets the same three. */
+export const starterSet = (content: Content, seed: string): string[] => drawRemembranceStarters(content, seed);
 
 /** The day's set final boss: one champion from any region's champion list, picked by the date seed alone (same for everyone, shown in Run Prep). */
 export function dailyChampionId(content: Content, seed: string): string {
@@ -62,7 +60,7 @@ export function dailySetup(content: Content, isoDate: string, prep: RunPrep, rul
   return {
     seed: dailySeed(isoDate),
     starters: dailyStarters(content, isoDate),
-    prep: { ...prep, poolId: base.poolId, draftRuleId: base.draftRuleId, typeFocus: null, tokenId: null, loan: false, vaultItem: null },
+    prep: { ...prep, tokenId: null, loan: false, vaultItem: null },
     rules: { ...rules, difficultyId: 'standard', modifierIds: [modifierId], deathBlock: false },
     lines: [`Daily modifier: ${modifier.name}`, `Starters today: ${dailyStarters(content, isoDate).map((id) => content.species.get(id)?.name ?? id).join(', ')}`, `Route: one region, four gyms, then ${content.bosses.get(dailyChampionId(content, dailySeed(isoDate)))?.name ?? 'the champion'}`],
   };

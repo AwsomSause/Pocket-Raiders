@@ -6,7 +6,8 @@ import Phaser from 'phaser';
 import { playStoryMusic } from '../ui/audio';
 import { VANCE_ANIMS, VANCE_FRAMES, type VanceAnim } from '../assets/catalog';
 import { services } from '../game/services';
-import { queueAssets } from '../ui/lazyAssets';
+import { loadAssets, queueAssets } from '../ui/lazyAssets';
+import { trainerVisual } from '../ui/sprites';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
@@ -207,14 +208,23 @@ export class PrologueScene extends Phaser.Scene {
   private stepLook(): void {
     this.title('This is how you appear');
     const y = this.body(['Choose your Look. Your name and pronouns come later, and the Look never changes them. You can change the Look in Settings.']);
-    this.add.text(60, y + 4, 'Look B animations are still in the works.', textStyle(15, '#8a7f96'));
-    const options: MenuOption[] = LOOKS.map((l) => ({ label: l.status === 'ready' ? l.label : `${l.label}  (COMING SOON)`, disabled: !lookReady(l.id) }));
+    // Previews of the two player characters (Beta 0.5).
+    const cast = [{ id: 'hilda', name: 'Hilda' }, { id: 'nate', name: 'Nate' }];
+    void loadAssets(this, cast.map((c) => `boss.${c.id}`)).then(() => {
+      if (!this.sys.isActive()) return;
+      cast.forEach((c, n) => {
+        const x = GAME_WIDTH - 260 + n * 170;
+        trainerVisual(this, `boss.${c.id}`, c.name, x, 380, 2);
+        this.add.text(x, 400, c.name, textStyle(20, COLORS.text)).setOrigin(0.5, 0);
+      });
+    });
+    const looks = LOOKS.filter((l) => lookReady(l.id));
+    const options: MenuOption[] = looks.map((l) => ({ label: l.label }));
     this.choose(options, (i) => {
-      const look = LOOKS[i]!;
-      if (!lookReady(look.id)) return;
+      const look = looks[i]!;
       this.edit((st) => setLook(st, look.id).story);
       this.go(quickStartOffered(this.story) ? 'mode' : this.startBeats());
-    }, y + 34, () => this.leave());
+    }, y + 10, () => this.leave());
   }
 
   private startBeats(): Step {

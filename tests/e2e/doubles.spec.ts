@@ -47,6 +47,7 @@ test('a double battle takes two commands a turn and survives a reload', async ({
     const { session, game } = (window as any).__pkr;
     session.content.balance.doubles = { chance: 1, fromStage: 0 };
     const run = session.run;
+    run.archetypeId = 'red'; // Nate and Hilda use their own back sprites; this test is about the generic player pose
     const twin = structuredClone(run.party[0]);
     twin.uid = 'p-dbl';
     run.party.push(twin);

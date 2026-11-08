@@ -5,7 +5,6 @@ import rulesJson from '../data/runRules.json';
 import type { Profile } from './state';
 
 export interface Unlocks {
-  pool?: string | null;
   trainer?: string | null;
   title?: string | null;
 }
@@ -18,7 +17,6 @@ export function grantUnlocks(profile: Profile, unlocks: Unlocks): number {
     if (list.includes(id)) duplicates += 1;
     else list.push(id);
   };
-  give(profile.unlockedPools, unlocks.pool);
   give(profile.unlockedArchetypes, unlocks.trainer);
   give(profile.titles, unlocks.title);
   profile.researchPoints += duplicates * rulesJson.duplicateCompensation.researchPoints;

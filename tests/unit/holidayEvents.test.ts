@@ -10,7 +10,6 @@ import { createPokemon } from '../../src/core/pokemon';
 import { createProfile, finalizeRun } from '../../src/core/profile';
 import { trainerStatus } from '../../src/core/progress';
 import { spookyWild } from '../../src/core/rules';
-import { eligibleSpecies, poolStatus } from '../../src/core/runPrep';
 import { chooseStarter, createRun, takeTurn, type TurnResult } from '../../src/core/run';
 import { specialFamily } from '../../src/core/specialForms';
 import type { RunState } from '../../src/core/state';
@@ -139,24 +138,17 @@ describe('the Spooky pack in a run', () => {
 });
 
 describe('Spooky Season rewards', () => {
-  it('the Spooky Set and the Hex Maniac are locked until every objective is done, then unlocked once', () => {
+  it('the Hex Maniac is locked until every objective is done, then unlocked once', () => {
     let p = createProfile(content, 'p');
-    const spooky = content.starterPools.get('spooky')!;
     const hex = content.archetypes.get('hex-maniac')!;
-    expect(poolStatus(content, p, spooky)).toBe('locked');
     expect(trainerStatus(p, hex)).toBe('locked');
     p = finalizeRun(content, p, finished(['spooky-season@2026'], { ...ALL_SPOOKY, eventFinalesWon: 0 }, 'a'), NOW).profile;
     expect(rewardEarned(p, 'spooky-season')).toBe(false);
     const done = finalizeRun(content, p, finished(['spooky-season@2026'], { eventFinalesWon: 1 }, 'b'), NOW);
     p = done.profile;
     expect(done.summary!.gameEvents[0]!.final).toMatchObject({ fallback: false });
-    expect(poolStatus(content, p, spooky)).toBe('unlocked');
     expect(trainerStatus(p, hex)).toBe('unlocked');
     expect(p.titles).toContain('Spooky Champion');
-    // The Spooky Set offers the seven Spooky first stages.
-    const ids = eligibleSpecies(content, spooky);
-    expect(ids).toHaveLength(7);
-    for (const id of ids) expect(specialFamily(content.species.get(id)!)).toBe('spooky');
     // A duplicate later (next year, or from the Archive) pays the fallback instead.
     const again = finalizeRun(content, p, finished(['spooky-season@archive-2027-W10'], ALL_SPOOKY, 'c'), NOW);
     expect(again.summary!.gameEvents[0]!.final).toMatchObject({ fallback: true });

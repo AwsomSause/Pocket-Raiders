@@ -6,9 +6,11 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { playerTrainerFor } from '../core/archetypes';
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
 import { dexCaughtCount } from '../core/dexRewards';
+import { claimBandIntro } from '../core/galarStadium';
 import { changeFriendship } from '../core/friendship';
 import { spendTownStart, townAction, visitBuilding, type TownArgs, type TownResult } from '../core/town';
 import type { Grade } from '../core/interaction/prompt';
@@ -40,7 +42,7 @@ import * as Timeline from '../core/timeline/genesis';
 import { captureOrigin, timelineOutcome } from '../core/timeline/frontRunner';
 import { buyCandyPerk } from '../core/candyShop';
 import { loanProblem, runBankFlags, vaultTake, buyTier, exchange, type ExchangeDirection } from '../core/bank';
-import { buyLicense, savePreset, unlockPool } from '../core/runPrep';
+import { buyLicense, savePreset } from '../core/runPrep';
 import type { PlayerAction } from '../core/battle/engine';
 import { autoCommands } from '../core/battle/doubles';
 import { chooseAutoAction, setStance, type AutoPick, type Stance } from '../core/battle/autoBattle';
@@ -63,6 +65,8 @@ type PartyScene = PartyLife.Scene;
 import * as Svc from '../core/services/flow';
 import * as Plz from '../core/plaza/flow';
 import { availableMentors } from '../core/mentors';
+import { holdSpar } from '../core/story/graduation';
+import { teachInherited } from '../core/story/mentorBond';
 import { rulesCampaign, type RulesChoice } from '../core/rules';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { clearNextRun, nextRunStart } from '../core/story2/intake';
@@ -256,7 +260,8 @@ export class GameSession {
    * Starts a new run. `campaignId` picks a shorter campaign such as "dev" (default "full");
    * `prep` carries the Preparation Desk's choices (and its campaign) and is remembered for next time.
    */
-  newRun(archetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
+  newRun(requestedArchetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
+    const archetypeId = this.content.archetypes.has(requestedArchetypeId) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
     // A saved preset can name a loan or Vault item the profile no longer has.
     if (prep) prep = { ...prep, loan: prep.loan && !loanProblem(this.content, this.profile), vaultItem: prep.vaultItem && this.profile.vault.includes(prep.vaultItem) ? prep.vaultItem : null, mentorId: availableMentors(this.profile).some((m) => m.id === prep!.mentorId) ? prep.mentorId : null };
     // Story Run: the prologue's identity, and the backstory and Starter line picked in Beats 7-8 or the Short Intake (used once).
@@ -358,6 +363,14 @@ export class GameSession {
     this.run = hit.run;
     this.persistRun();
     return hit;
+  }
+
+  /** Galar Gym Challenge: the Champion's one-time Dynamax Band scene. Marks it seen, gives a Band if the player has none, saves; null if already seen. */
+  claimGalarBandIntro(): ReturnType<typeof claimBandIntro> {
+    const run = this.requireRun();
+    const intro = claimBandIntro(this.content, run);
+    if (intro) this.persistRun();
+    return intro;
   }
 
   /** A rival may steal, block or help at a stop without a fight; returns the line to show, or null. */
@@ -715,6 +728,24 @@ export class GameSession {
     return message;
   }
 
+  /** Camp > Mentor bonds: hand a mentor move down (Beta 0.5). */
+  mentorInherit(relId: string, moveId: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = teachInherited(this.content, run, relId, moveId);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor bonds: the graduation spar (Beta 0.5). */
+  mentorSpar(relId: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = holdSpar(this.content, run, relId).join(' ');
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
   /** Camp > Nursery: one parent move or one ability pick for an Egg (ideas S49). */
   nursery(eggUid: string, choice: NurseryChoice): string {
     const run = structuredClone(this.requireRun());
@@ -1040,12 +1071,6 @@ export class GameSession {
     this.changed();
   }
 
-  unlockPool(poolId: string): void {
-    this.profile = unlockPool(this.content, this.profile, poolId);
-    this.checkSave(this.saves.saveProfile(this.profile));
-    this.changed();
-  }
-
   buyLicense(licenseId: string): void {
     this.profile = buyLicense(this.content, this.profile, licenseId);
     this.checkSave(this.saves.saveProfile(this.profile));
@@ -1160,14 +1185,15 @@ export class GameSession {
     return this.saves.exportSave();
   }
 
-  /** Replaces the profile and settings with an exported save. Returns a message for the player. */
+  /** Replaces the profile, settings and run (when the file has one) with an exported save. Returns a message for the player. */
   importSave(text: string): string {
     const result = this.saves.importSave(text);
     if (!result.ok) return `Import failed: ${result.reason}`;
     this.profile = result.profile;
     if (result.settings) this.settings = result.settings;
+    if (result.run) this.run = result.run;
     this.changed();
-    return `Save imported.${result.backup ? ' Your previous profile was kept as a backup.' : ''}`;
+    return `Save imported${result.run ? ' with its run in progress (press Continue)' : ''}.${result.backup ? ' Your previous profile was kept as a backup.' : ''}`;
   }
 
   saveSettings(settings: Settings): void {

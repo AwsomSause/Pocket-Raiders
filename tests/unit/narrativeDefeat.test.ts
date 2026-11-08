@@ -1,5 +1,6 @@
 // M12 narrative rival defeats: NARRATIVE_DEFEAT is not STANDARD_DEFEAT.
 
+const KANTO = ['charmander', 'squirtle', 'bulbasaur'];
 import { describe, expect, it } from 'vitest';
 import { chooseStarter, createRun, debugReplaceEnemy, takeTurn } from '../../src/core/run';
 import { dueNarrativeDefeat, foreshadowNote, getNarrativeDef, narrativeFlag, narrativeLossFlag, narrativeWon, NARRATIVE_CONFIG } from '../../src/core/rivals/narrativeDefeat';
@@ -9,7 +10,7 @@ import type { Rival } from '../../src/core/story/schema';
 import { content, toBattle } from './helpers';
 
 const DEF = NARRATIVE_CONFIG.defs[0]!;
-const start = (seed: string, rules: Partial<RulesChoice> = {}): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', rules: { ...STANDARD_CHOICE, ...rules } }), 0);
+const start = (seed: string, rules: Partial<RulesChoice> = {}): RunState => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', starterOverride: KANTO, rules: { ...STANDARD_CHOICE, ...rules } }), 0);
 const fakeRival = (encounters: number) => ({ id: 'rv1', name: 'Joey', encounters }) as unknown as Rival;
 
 function narrativeBattle(run: RunState): RunState {

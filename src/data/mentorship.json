@@ -1,0 +1,101 @@
+{
+  "note": "Beta 0.5 mentor/prot\u00e9g\u00e9 rework (doc section 2). Numbers for core/story/mentorBond.ts, lastResort.ts, graduation.ts and returnProtege.ts. Edit freely; the module validates it.",
+  "compat": {
+    "rivalLevelGap": 3,
+    "rivalBattles": 6,
+    "protectorGap": 6,
+    "protectorKnockouts": 4,
+    "survivorScore": 2,
+    "prodigyIvTotal": 150,
+    "prodigyGap": 3,
+    "sharedBosses": 1,
+    "familyGap": 5
+  },
+  "chemistry": {
+    "perWin": 1,
+    "perBoss": 3,
+    "levels": [
+      0,
+      20,
+      45,
+      70,
+      90
+    ],
+    "traitBonus": {
+      "competitiveSpirit": 1,
+      "heatedRivalry": 1,
+      "teachersPride": 1,
+      "heroWorship": 1
+    }
+  },
+  "drift": {
+    "evPerWin": 2,
+    "evPerWinHigh": 3,
+    "highChemistry": 60,
+    "cap": 60,
+    "topStats": 2,
+    "naturalMargin": 1.2
+  },
+  "moves": {
+    "maxInherited": 2,
+    "tiers": [
+      {
+        "minPower": 120,
+        "level": 5,
+        "chemistry": 90
+      },
+      {
+        "minPower": 90,
+        "level": 4,
+        "chemistry": 0
+      },
+      {
+        "minPower": 60,
+        "level": 3,
+        "chemistry": 0
+      },
+      {
+        "minPower": 1,
+        "level": 1,
+        "chemistry": 0
+      }
+    ],
+    "statusLevel": 2,
+    "outsideCoverageLevel": 4,
+    "signature": {
+      "level": 5,
+      "chemistry": 90,
+      "minPower": 60
+    }
+  },
+  "events": {
+    "cooldownBattles": 2,
+    "chemistryGain": 3,
+    "chemistryLoss": 2
+  },
+  "lastResort": {
+    "hpShare": 0.5,
+    "pp": 3,
+    "minChemistry": 20
+  },
+  "graduation": {
+    "readyGap": 2,
+    "mutualChemistry": 85,
+    "mutualMargin": 0.12,
+    "rounds": 6,
+    "protegeEvReward": 12,
+    "mentorChemistryReward": 10,
+    "mutualChemistryReward": 100,
+    "mutualEvReward": 6
+  },
+  "return": {
+    "minBattlesAfter": 3,
+    "cooldownBattles": 6,
+    "maxReturns": 3,
+    "bossMinChemistry": 40,
+    "minFoeLevelShare": 0.5,
+    "keep": 40,
+    "chance": 0.35,
+    "rareMinBosses": 3
+  }
+}

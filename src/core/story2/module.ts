@@ -3,6 +3,7 @@
 // Scenes play on Story Stops (the Director's `playStop` calls `queueStopScene`). Pure and deterministic: the only roll (the module's hidden flags) uses
 // its own seeded stream, and nothing here touches battle rules or gameplay RNG. Outcomes never depend on the screen that shows a scene.
 
+import { winUnlocks } from './winUnlocks';
 import { gainCharge } from './feats';
 import { emit } from '../story/record';
 import type { Content } from '../contentSchema';
@@ -398,9 +399,15 @@ export function finishScene(content: Content, run: RunState, choiceId?: string):
  * snapshots), then the Starter's Remembrance Mastery and the Keepsakes (which read the folded Archive and Lore).
  * Called with the Chronicle. `storyData` gives the Grass-type lines for the Leaf Crown.
  */
-export function foldModuleIntoProfile(profile: Profile, run: RunState, storyData?: Pick<StoryData, 'remembrances'>): void {
+export function foldModuleIntoProfile(profile: Profile, run: RunState, storyData?: Pick<StoryData, 'remembrances'>, typesOf?: (speciesId: string) => readonly string[]): void {
   foldModuleResults(profile, run);
   if (!run.story.v2) return;
+  if (storyData && typesOf) {
+    for (const id of winUnlocks(storyData, run, typesOf)) {
+      const prev = profile.story.remembrance[id];
+      profile.story.remembrance[id] = { state: 'unlocked', firstSeenRun: prev?.firstSeenRun ?? null, runs: prev?.runs ?? 0, mastery: prev?.mastery ?? 0 };
+    }
+  }
   foldStarterMastery(profile, run);
   foldKeepsakes(profile, run, (storyData?.remembrances ?? []).filter((r) => r.types.includes('grass')).map((r) => r.id));
 }

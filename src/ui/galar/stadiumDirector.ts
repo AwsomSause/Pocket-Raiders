@@ -1,0 +1,195 @@
+// Galar Gym Challenge stadium presentation (Beta 0.5 M8): the Champion host, crowd banners and brief camera cuts during a Galar gym battle.
+// Presentation only: it reads the finished turn's events, decides with core/galarStadium.ts (own seeded streams, never gameplay RNG)
+// and draws; a failure here is swallowed so the battle never waits on it.
+
+import type Phaser from 'phaser';
+import type { RunEvent } from '../../core/run';
+import { defaultMoment, planMoment } from '../../core/cinematic/moments';
+import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../../core/galarStadium';
+import { GAME_WIDTH, textStyle } from '../theme';
+import { playMoment } from '../cinematic/momentPlayer';
+import { CUT_ART_PRELOAD, drawCutArt, playBandCard, playIntroCard, type CutArtKit } from './cutArt';
+
+export interface StadiumHooks {
+  runSeed: string;
+  battleId: string;
+  /** Champion host: shown before the battle. */
+  host: string;
+  /** Does the Champion watch with interest? (the player is doing well); lets the champion silhouette cut appear. */
+  impressive: boolean;
+  rivalWatching: boolean;
+  disableAnimations: () => boolean;
+  reduceMotion: () => boolean;
+  /** Music: bump the intensity, or swap to the finale track for the last Pokémon on a side. */
+  setIntensity: (n: number) => void;
+  finalMusic: (track: string) => void;
+  /** How many Pokémon each side still has standing (read after the turn). */
+  alive: () => { player: number; foe: number };
+  /** Narration line (the scene's message box). */
+  say: (text: string) => Promise<void>;
+  /** Draws a trainer portrait / the Dynamax Band art for the intro cards (null = use the drawn fallback). */
+  portrait?: (spriteId: string, x: number, y: number) => Phaser.GameObjects.GameObject | null;
+  bandArt?: (x: number, y: number) => Phaser.GameObjects.GameObject | null;
+  /** Crowd sound for a cue (crowd.roar, crowd.hush, crowd.swell, crowd.murmur). Optional; sound only, never changes the battle. */
+  crowdSound?: (cue: string, intensity: number) => void;
+  /** Real trainer art for the camera cuts: a picture if it is loaded (else null), a loader for the crowd pictures, and who the host / opponent / rival are. */
+  art?: {
+    sprite: (assetId: string, x: number, y: number, scale: number) => Phaser.GameObjects.GameObject | null;
+    preload: (ids: readonly string[]) => Promise<void>;
+    cast: () => { host: string; opponent: string; rival: string };
+  };
+}
+
+export class StadiumDirector {
+  private shown = 0;
+  private lastCutTurn: number | null = null;
+  private turn = 0;
+  private finalSides = new Set<string>();
+  private banner: Phaser.GameObjects.Text | null = null;
+
+  constructor(private readonly scene: Phaser.Scene, private readonly h: StadiumHooks) {
+    // Crowd pictures load in the background; a cut drawn before they arrive uses the drawn silhouettes.
+    void this.h.art?.preload([...CUT_ART_PRELOAD, ...Object.values(this.kitIds()).filter(Boolean)]).catch(() => undefined);
+  }
+
+  private kitIds(): { host: string; opponent: string; rival: string } {
+    try {
+      return this.h.art?.cast() ?? { host: '', opponent: '', rival: '' };
+    } catch {
+      return { host: '', opponent: '', rival: '' };
+    }
+  }
+
+  private kit(): CutArtKit | undefined {
+    const art = this.h.art;
+    return art ? { sprite: art.sprite, ...this.kitIds() } : undefined;
+  }
+
+  /** Call once per player turn, before its events play. */
+  startTurn(turn: number): void {
+    this.turn = turn;
+    // The music builds: each turn the song picks up a little (up to the cap), and the crowd's cues add on top.
+    this.h.setIntensity(1 + Math.min(Math.max(turn - 1, 0), 6) * 0.012);
+  }
+
+  /** The Dynamax Band handover scene (before the host's lines). Never throws. */
+  async bandScene(): Promise<void> {
+    try {
+      if (this.h.disableAnimations()) return;
+      this.h.crowdSound?.('crowd.swell', 3);
+      await playBandCard(this.scene, !this.h.reduceMotion(), (x, y) => this.h.bandArt?.(x, y) ?? null);
+    } catch {
+      // decoration only
+    }
+  }
+
+  /** The beat this event is, or null. Hits are judged by how much of the target's HP they took. */
+  beatFor(e: RunEvent): CrowdBeat | null {
+    if (e.type === 'damage') {
+      const before = e.hpAfter + e.amount;
+      const share = before > 0 ? e.amount / before : 0;
+      if (e.side === 'enemy' && e.effectiveness > 1 && share >= 0.4) return this.behind() ? 'comeback' : 'bigHit';
+      if (e.side === 'player' && e.hpAfter > 0 && e.hpAfter / before <= 0.15) return 'survived';
+      return null;
+    }
+    if (e.type === 'transform' && e.kind === 'dynamax') return 'dynamax';
+    if (e.type === 'faint') return 'knockOut';
+    return null;
+  }
+
+  private behind(): boolean {
+    const a = this.h.alive();
+    return a.player < a.foe;
+  }
+
+  /** Reacts to one event of the turn. Never throws. */
+  async onEvent(e: RunEvent): Promise<void> {
+    try {
+      const beat = this.beatFor(e);
+      if (!beat) return;
+      await this.react(beat);
+    } catch {
+      // Presentation failure never touches the battle.
+    }
+  }
+
+  /** After the turn: the last Pokémon on a side changes the atmosphere (once per side). */
+  async afterTurn(): Promise<void> {
+    try {
+      const a = this.h.alive();
+      for (const [side, n] of [['player', a.player], ['foe', a.foe]] as const) {
+        if (n === 1 && !this.finalSides.has(side)) {
+          this.finalSides.add(side);
+          const r = crowdReaction('lastMon');
+          this.h.setIntensity(1 + r.intensity * 0.05);
+          this.h.finalMusic(r.music);
+          await this.react('lastMon');
+        }
+      }
+    } catch {
+      // see above
+    }
+  }
+
+  private async react(beat: CrowdBeat): Promise<void> {
+    if (this.h.disableAnimations()) return;
+    const r = crowdReaction(beat);
+    this.h.setIntensity(1 + r.intensity * 0.03);
+    this.h.crowdSound?.(r.cue, r.intensity);
+    this.showBanner(r.cue.endsWith('hush') ? 'The crowd goes quiet...' : r.cue.endsWith('swell') ? 'The crowd swells!' : r.intensity >= 4 ? 'The stadium ERUPTS!' : 'The crowd roars!', r.intensity);
+    const cut = pickCameraCut({ runSeed: this.h.runSeed, battleId: this.h.battleId, turn: this.turn, beat, shown: this.shown, lastCutTurn: this.lastCutTurn, impressive: this.h.impressive, rivalWatching: this.h.rivalWatching });
+    if (!cut) return;
+    this.shown++;
+    this.lastCutTurn = this.turn;
+    const spec = defaultMoment('stadiumCut', `stadium-${cut.id}`);
+    spec.phases = { situation: 150, anticipation: 200, moment: cut.durationMs - 700 > 200 ? cut.durationMs - 700 : 400, reaction: 200, transition: 150 };
+    const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
+    if (plan.play) {
+      try {
+        drawCutArt(this.scene, cut.id, `${this.h.battleId}:${this.turn}`, cut.durationMs, !this.h.reduceMotion(), this.kit());
+      } catch {
+        // art is decoration; a drawing problem never blocks the battle
+      }
+    }
+    await playMoment(this.scene, spec, plan, { title: cut.label, subtitle: cut.caption });
+  }
+
+  /** Test/preview hook: draws one named cut's art right now (no gameplay effect). Returns whether it drew. */
+  previewCut(id: string): boolean {
+    const cut = GALAR_STADIUM.cameraCuts.find((c) => c.id === id);
+    if (!cut) return false;
+    drawCutArt(this.scene, cut.id, `preview:${id}`, 1600, !this.h.reduceMotion(), this.kit());
+    return true;
+  }
+
+  private showBanner(text: string, intensity: number): void {
+    this.banner?.destroy();
+    const t = this.scene.add.text(GAME_WIDTH / 2, 70, text, textStyle(18 + intensity * 2, intensity >= 3 ? '#ffe060' : '#aab4c0', { stroke: '#101820', strokeThickness: 5 })).setOrigin(0.5).setDepth(1700).setAlpha(0);
+    this.banner = t;
+    this.scene.tweens.add({ targets: t, alpha: 1, y: 60, duration: 220, yoyo: true, hold: 650, onComplete: () => { t.destroy(); if (this.banner === t) this.banner = null; } });
+  }
+
+  /** A tournament round's opening: a round card with the opponent, their introduction, and a bigger staging for the final. Never throws. */
+  async tournamentIntro(round: { round: number; name: string; opponent: string; intro: string; final: boolean; style?: string; sprite?: string }): Promise<void> {
+    try {
+      if (!this.h.disableAnimations()) {
+        const spec = defaultMoment(round.final ? 'championIntro' : 'e4Intro', `galar-tournament-${round.round}`);
+        spec.mandatory = round.final;
+        if (round.final) spec.phases = { situation: 600, anticipation: 1000, moment: 1400, reaction: 800, transition: 500 };
+        const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
+        this.h.setIntensity(round.final ? 1.2 : 1.05);
+        await playMoment(this.scene, spec, plan, { title: round.final ? 'THE FINAL' : round.name, subtitle: `vs ${round.opponent}` });
+        this.h.crowdSound?.(round.final ? 'crowd.roar' : 'crowd.swell', round.final ? 5 : 3);
+        await playIntroCard(this.scene, { tag: round.final ? 'THE FINAL' : round.name.toUpperCase(), name: round.opponent, style: round.style ?? '', line: round.intro, sprite: round.sprite ?? '', final: round.final }, `${this.h.battleId}:${round.round}`, !this.h.reduceMotion(), (x, y) => (round.sprite ? this.h.portrait?.(round.sprite, x, y) ?? null : null));
+      }
+      await this.h.say(round.intro);
+      if (round.final) await this.h.say('The whole stadium is on its feet. This is the match the season has been building to.');
+    } catch {
+      // Presentation failure never touches the battle.
+    }
+  }
+
+  get musicTrack(): string {
+    return GALAR_STADIUM.music.battle;
+  }
+}

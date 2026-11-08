@@ -107,7 +107,7 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng)
  * The Pokémon League: one straight line of Elite Four members, then the champion.
  * There are no forks or side stops; the party is fully healed between battles.
  */
-export function generateLeagueMap(eliteFourSize: number): StageMap {
+export function generateLeagueMap(eliteFourSize: number, opts: { shopAfter?: readonly number[] } = {}): StageMap {
   const columns = eliteFourSize + 1;
   const nodes: MapNode[] = [];
   for (let col = 1; col <= columns; col++) {
@@ -119,7 +119,8 @@ export function generateLeagueMap(eliteFourSize: number): StageMap {
       kind,
       harder: false,
       next: col < columns ? [nodeId(col + 1, 0)] : [],
-      sides: [],
+      // Galar's tournament: Ball Guy's shop opens after the listed rounds (a side stop; the party is healed every round anyway).
+      sides: opts.shopAfter?.includes(col) && col < columns ? [{ id: 's1', kind: 'shop', used: false }] : [],
       note: kind === 'champion' ? 'champion (last)' : `Elite Four member ${col} of ${eliteFourSize}`,
     });
   }

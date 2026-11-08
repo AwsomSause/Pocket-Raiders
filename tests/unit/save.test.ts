@@ -16,7 +16,7 @@ function enterBattle(session: GameSession): void {
 }
 
 function makeRun() {
-  return chooseStarter(content, createRun(content, { runId: 'run-a', seed: 'save-seed', archetypeId: 'green' }), 0);
+  return chooseStarter(content, createRun(content, { runId: 'run-a', seed: 'save-seed', archetypeId: 'green', starterOverride: ['charmander', 'squirtle', 'bulbasaur'] }), 0);
 }
 
 describe('save manager', () => {
@@ -130,7 +130,7 @@ describe('profile and run end', () => {
     const reloaded = new GameSession(content, storage);
     expect(reloaded.profile.stats.runsStarted).toBe(1);
     expect(reloaded.profile.stats.runsEnded).toBe(1);
-    expect(reloaded.profile.unlockedArchetypes).toEqual(['red', 'blue', 'green']);
+    expect(reloaded.profile.unlockedArchetypes).toEqual(['red', 'blue', 'green', 'nate', 'hilda']);
   });
 });
 

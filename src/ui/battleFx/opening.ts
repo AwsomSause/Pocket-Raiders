@@ -145,26 +145,18 @@ export function foeBallThrow(scene: Phaser.Scene, motion: MotionLevel, from: { x
     if (motion === 'off') trainer.destroy();
     else scene.tweens.add({ targets: trainer, alpha: 0, duration: 260, delay: 120, onComplete: () => trainer.destroy() });
   }
-  return ballFlight(scene, motion, from, to, ball);
-}
-
-/**
- * A ball flies in an arc from `from` (it may be off screen) to `to`, then bursts into light and opens. Resolves at the burst,
- * when the Pokémon should appear. Used for the foe's throw and for sending out yours: no trainer animation, just the ball.
- */
-export function ballFlight(scene: Phaser.Scene, motion: MotionLevel, from: { x: number; y: number }, to: { x: number; y: number }, ball: string = DEFAULT_BALL, scale = 2): Promise<void> {
   if (motion === 'off') return Promise.resolve();
   return new Promise<void>((resolve) => {
-    const img = ballVisual(scene, ball, from.x, from.y, scale).setDepth(DEPTH_ROW);
+    const img = ballVisual(scene, ball, from.x, from.y, 2).setDepth(DEPTH_ROW);
     const arc = { p: 0 };
-    const ms = motion === 'full' ? 650 : 260;
+    const ms = motion === 'full' ? 520 : 260;
     scene.tweens.add({
       targets: arc,
       p: 1,
       duration: ms,
       ease: 'Sine.easeOut',
       onUpdate: () => {
-        img.setPosition(from.x + (to.x - from.x) * arc.p, from.y + (to.y - from.y) * arc.p - Math.sin(arc.p * Math.PI) * 90);
+        img.setPosition(from.x + (to.x - from.x) * arc.p, from.y + (to.y - from.y) * arc.p - Math.sin(arc.p * Math.PI) * 70);
         img.setAngle(arc.p * 540);
       },
       onComplete: () => {

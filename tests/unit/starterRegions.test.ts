@@ -1,40 +1,40 @@
-// Kice 2026-11-08: the three starter choices always come from three different regions (Regional Research is the one rule that asks for one region).
+// Kice 2026-11-08: the three starter choices always come from three different regions (generation = region).
 import { describe, expect, it } from 'vitest';
-import { hashSeed, Rng } from '../../src/core/rng';
-import { defaultPrep, draftStarters, homeRegionOf, pickDistinctRegions, eligibleSpecies } from '../../src/core/runPrep';
 import { starterSet } from '../../src/core/daily';
+import { createRun } from '../../src/core/run';
+import { drawRemembranceStarters } from '../../src/core/story2/starterDraw';
 import { content } from './helpers';
 
-const regionsOf = (ids: string[]) => ids.map((id) => homeRegionOf(content, id));
+/** The region of a starter line: its Remembrance's generation. */
+const regionOf = (id: string) => content.storyData.remembrances.find((r) => r.line[0] === id)?.generation ?? `own:${id}`;
+const regionsOf = (ids: string[]) => ids.map(regionOf);
 
 describe('starter choices from different regions', () => {
-  it('every pool that spans three or more regions drafts three different regions, for 40 seeds each', () => {
-    let checked = 0;
-    for (const p of content.starterPools.values()) {
-      if (p.mastered) continue;
-      const ids = eligibleSpecies(content, p);
-      if (ids.length < 3 || new Set(regionsOf(ids)).size < 3) continue;
-      checked++;
-      const prep = { ...defaultPrep(content), poolId: p.id };
-      for (let i = 0; i < 40; i++) {
-        const draft = draftStarters(content, new Rng(hashSeed(`starter-regions-${p.id}-${i}`)), prep);
-        expect(new Set(regionsOf(draft.choices)).size, `${p.id}: ${draft.choices.join()}`).toBe(3);
-      }
+  it('the seeded Remembrance draw gives three different regions for 200 seeds, the same every time', () => {
+    for (let i = 0; i < 200; i++) {
+      const a = drawRemembranceStarters(content, `starter-regions-${i}`);
+      expect(a).toHaveLength(3);
+      expect(new Set(regionsOf(a)).size, a.join()).toBe(3);
+      expect(drawRemembranceStarters(content, `starter-regions-${i}`)).toEqual(a);
     }
-    expect(checked).toBeGreaterThan(10);
   });
 
   it('Daily and Weekly starter sets use three different regions', () => {
     for (let i = 0; i < 100; i++) expect(new Set(regionsOf(starterSet(content, `seed-${i}`))).size).toBe(3);
   });
 
-  it('pickDistinctRegions prefers new regions, keeps order, and fills when the list has too few regions', () => {
-    const pool = [...content.starterPools.values()].find((p) => p.category === 'classic')!;
-    const ids = eligibleSpecies(content, pool);
-    const out = pickDistinctRegions(content, ids, 3);
-    expect(out).toHaveLength(3);
-    const oneRegion = ids.filter((id) => homeRegionOf(content, id) === homeRegionOf(content, ids[0]!));
-    expect(pickDistinctRegions(content, oneRegion, 3)).toEqual(oneRegion.slice(0, 3));
-    expect(pickDistinctRegions(content, [], 3)).toEqual([]);
+  it('every new run, with or without a quiz, starts from three different regions', () => {
+    for (let i = 0; i < 40; i++) {
+      const run = createRun(content, { runId: 'r', seed: `run-${i}`, archetypeId: 'red' });
+      expect(new Set(regionsOf(run.starterChoices)).size, run.starterChoices.join()).toBe(3);
+    }
+  });
+});
+
+describe('the starters shown for a Daily or Weekly seed are the ones the run gets', () => {
+  it('starterSet(seed) equals the starters of a run on that seed', () => {
+    for (const seed of ['2026-11-08', 'weekly-2026-W45', 'abc']) {
+      expect(createRun(content, { runId: 'r', seed, archetypeId: 'red' }).starterChoices).toEqual(starterSet(content, seed));
+    }
   });
 });

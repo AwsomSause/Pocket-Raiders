@@ -160,15 +160,6 @@
       "group": "supplies"
     },
     {
-      "id": "random-draft",
-      "name": "Random Draft",
-      "status": "supported",
-      "bonus": 0.05,
-      "blurb": "Your draft rule is picked at random (from the ones with no license).",
-      "randomDraft": true,
-      "group": "draft"
-    },
-    {
       "id": "boss-rush",
       "name": "Boss Rush",
       "status": "supported",
@@ -480,17 +471,6 @@
       "spookyChance": 0.25
     },
     {
-      "id": "draft-lab",
-      "name": "Draft Lab",
-      "status": "supported",
-      "progressionEligible": false,
-      "checkpoints": false,
-      "blurb": "A place to experiment: the starter set and draft rule are random every run. No permanent rewards.",
-      "bundles": [
-        "random-draft"
-      ]
-    },
-    {
       "id": "story-run",
       "name": "Story Run",
       "status": "supported",
@@ -615,8 +595,8 @@
       },
       "claim": "daily:fourth-gym",
       "once": {
-        "pool": "daily-set",
-        "text": "Daily Set starter pool unlocked"
+        "bankCredits": 50,
+        "text": "+50 Bank Credits, first time"
       },
       "repeat": {
         "bankCredits": 100,
@@ -631,9 +611,8 @@
       },
       "claim": "mode:spooky:fourth-gym",
       "once": {
-        "pool": "spooky",
         "trainer": "hex-maniac",
-        "text": "Spooky Set and Hex Maniac unlocked"
+        "text": "Hex Maniac unlocked"
       },
       "repeat": {
         "candies": 3,

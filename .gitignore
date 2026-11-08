@@ -1,5 +1,6 @@
 node_modules
 dist/
+dist-savegen/
 test-results/
 playwright-report/
 .vite/

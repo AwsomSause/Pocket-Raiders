@@ -155,8 +155,8 @@ test('slice 4: a gym leader gets a title card, an ace beat and a victory stamp',
   // Turn it into a gym battle against Brock with two weak Pokémon (the second is the ace).
   await page.evaluate(() => {
     const pkr = (window as any).__pkr;
-    // A fixed Normal-type foe: the random first enemy can be a Ghost that Scratch cannot hurt.
-    pkr.session.debugReplaceEnemy('rattata', 5);
+    // A fixed Water-type foe: both Normal and Ghost moves hurt it (the seed's starter can be either, and a Normal foe is immune to Ghost moves).
+    pkr.session.debugReplaceEnemy('magikarp', 5);
     pkr.session.run.stage.themeId = 'poison-steel'; // The Chemical Plant: lab light panels (the seed's own first stage varies with the region list)
     const battle = pkr.session.run.battle;
     battle.trainer = { classId: 'gym-leader', name: 'Brock', leaderId: 'brock' };

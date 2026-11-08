@@ -26,8 +26,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-red"
+      "researchPoints": 75
      }
     },
     {
@@ -99,8 +98,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-blue"
+      "researchPoints": 75
      }
     },
     {
@@ -172,8 +170,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-green"
+      "researchPoints": 75
      }
     },
     {
@@ -244,8 +241,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brock"
+      "researchPoints": 75
      }
     },
     {
@@ -316,8 +312,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-misty"
+      "researchPoints": 75
      }
     },
     {
@@ -388,8 +383,7 @@
       "atLeast": 30000
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-giovanni"
+      "researchPoints": 75
      }
     },
     {
@@ -461,8 +455,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cynthia"
+      "researchPoints": 75
      }
     },
     {
@@ -534,8 +527,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-oak"
+      "researchPoints": 75
      }
     },
     {
@@ -607,8 +599,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-n"
+      "researchPoints": 75
      }
     },
     {
@@ -680,8 +671,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-aaron"
+      "researchPoints": 75
      }
     },
     {
@@ -752,8 +742,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-acerola"
+      "researchPoints": 75
      }
     },
     {
@@ -824,8 +813,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-adaman"
+      "researchPoints": 75
      }
     },
     {
@@ -896,8 +884,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-agatha-lgpe"
+      "researchPoints": 75
      }
     },
     {
@@ -968,8 +955,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-alain"
+      "researchPoints": 75
      }
     },
     {
@@ -1040,8 +1026,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-alder"
+      "researchPoints": 75
      }
     },
     {
@@ -1112,8 +1097,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-allister"
+      "researchPoints": 75
      }
     },
     {
@@ -1184,8 +1168,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-anabel-gen-7"
+      "researchPoints": 75
      }
     },
     {
@@ -1256,8 +1239,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-archie-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -1328,8 +1310,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-archie-usum"
+      "researchPoints": 75
      }
     },
     {
@@ -1400,8 +1381,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-arezu"
+      "researchPoints": 75
      }
     },
     {
@@ -1472,8 +1452,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ash-kalos"
+      "researchPoints": 75
      }
     },
     {
@@ -1544,8 +1523,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ash"
+      "researchPoints": 75
      }
     },
     {
@@ -1616,8 +1594,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-az"
+      "researchPoints": 75
      }
     },
     {
@@ -1688,8 +1665,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ball-guy"
+      "researchPoints": 75
      }
     },
     {
@@ -1760,8 +1736,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-barry"
+      "researchPoints": 75
      }
     },
     {
@@ -1832,8 +1807,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bea"
+      "researchPoints": 75
      }
     },
     {
@@ -1904,8 +1878,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bede"
+      "researchPoints": 75
      }
     },
     {
@@ -1976,8 +1949,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-benga"
+      "researchPoints": 75
      }
     },
     {
@@ -2048,8 +2020,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bianca-pwt"
+      "researchPoints": 75
      }
     },
     {
@@ -2120,8 +2091,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bill"
+      "researchPoints": 75
      }
     },
     {
@@ -2192,8 +2162,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-blaine-lgpe"
+      "researchPoints": 75
      }
     },
     {
@@ -2264,8 +2233,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-blaine"
+      "researchPoints": 75
      }
     },
     {
@@ -2336,8 +2304,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-blue-gen-3-champion"
+      "researchPoints": 75
      }
     },
     {
@@ -2408,8 +2375,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-blue-gen-7"
+      "researchPoints": 75
      }
     },
     {
@@ -2480,8 +2446,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-blue-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -2552,8 +2517,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brassius"
+      "researchPoints": 75
      }
     },
     {
@@ -2624,8 +2588,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brawly-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -2696,8 +2659,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brendan-emerald"
+      "researchPoints": 75
      }
     },
     {
@@ -2768,8 +2730,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brendan-ruby-sapphire"
+      "researchPoints": 75
      }
     },
     {
@@ -2840,8 +2801,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brigette"
+      "researchPoints": 75
      }
     },
     {
@@ -2912,8 +2872,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brock-masters"
+      "researchPoints": 75
      }
     },
     {
@@ -2984,8 +2943,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-brock-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -3056,8 +3014,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bruno-gen-3"
+      "researchPoints": 75
      }
     },
     {
@@ -3128,8 +3085,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bruno"
+      "researchPoints": 75
      }
     },
     {
@@ -3200,8 +3156,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-bugsy"
+      "researchPoints": 75
      }
     },
     {
@@ -3272,8 +3227,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-byron"
+      "researchPoints": 75
      }
     },
     {
@@ -3344,8 +3298,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-caitlin"
+      "researchPoints": 75
      }
     },
     {
@@ -3416,8 +3369,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-calem"
+      "researchPoints": 75
      }
     },
     {
@@ -3488,8 +3440,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-canari"
+      "researchPoints": 75
      }
     },
     {
@@ -3560,8 +3511,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-carmine"
+      "researchPoints": 75
      }
     },
     {
@@ -3632,8 +3582,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cheren"
+      "researchPoints": 75
      }
     },
     {
@@ -3704,8 +3653,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cheryl"
+      "researchPoints": 75
      }
     },
     {
@@ -3776,8 +3724,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-chili"
+      "researchPoints": 75
      }
     },
     {
@@ -3848,8 +3795,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-chuck"
+      "researchPoints": 75
      }
     },
     {
@@ -3920,8 +3866,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cilan"
+      "researchPoints": 75
      }
     },
     {
@@ -3992,8 +3937,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-clair"
+      "researchPoints": 75
      }
     },
     {
@@ -4064,8 +4008,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-clay"
+      "researchPoints": 75
      }
     },
     {
@@ -4136,8 +4079,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-clemont"
+      "researchPoints": 75
      }
     },
     {
@@ -4208,8 +4150,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cogita"
+      "researchPoints": 75
      }
     },
     {
@@ -4280,8 +4221,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-colress"
+      "researchPoints": 75
      }
     },
     {
@@ -4352,8 +4292,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-crasher-wake"
+      "researchPoints": 75
      }
     },
     {
@@ -4424,8 +4363,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cress"
+      "researchPoints": 75
      }
     },
     {
@@ -4496,8 +4434,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cynthia-gen-7"
+      "researchPoints": 75
      }
     },
     {
@@ -4568,8 +4505,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cynthia-masters"
+      "researchPoints": 75
      }
     },
     {
@@ -4640,8 +4576,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cynthia-masters-4"
+      "researchPoints": 75
      }
     },
     {
@@ -4712,8 +4647,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-cyrus"
+      "researchPoints": 75
      }
     },
     {
@@ -4784,8 +4718,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-dawn-gen-4-platinum"
+      "researchPoints": 75
      }
     },
     {
@@ -4856,8 +4789,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-dawn"
+      "researchPoints": 75
      }
     },
     {
@@ -4928,8 +4860,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-diantha"
+      "researchPoints": 75
      }
     },
     {
@@ -5426,8 +5357,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-drake-gen-3"
+      "researchPoints": 75
      }
     },
     {
@@ -5498,8 +5428,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-drasna"
+      "researchPoints": 75
      }
     },
     {
@@ -5570,8 +5499,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-drayden"
+      "researchPoints": 75
      }
     },
     {
@@ -5642,8 +5570,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-elesa-gen-5-bw2"
+      "researchPoints": 75
      }
     },
     {
@@ -5714,8 +5641,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-elio-usum"
+      "researchPoints": 75
      }
     },
     {
@@ -5786,8 +5712,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-elm"
+      "researchPoints": 75
      }
     },
     {
@@ -5858,8 +5783,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-emmet"
+      "researchPoints": 75
      }
     },
     {
@@ -5930,8 +5854,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-erika-gen-3"
+      "researchPoints": 75
      }
     },
     {
@@ -6002,8 +5925,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-erika"
+      "researchPoints": 75
      }
     },
     {
@@ -6074,8 +5996,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ethan"
+      "researchPoints": 75
      }
     },
     {
@@ -6146,8 +6067,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-eusine"
+      "researchPoints": 75
      }
     },
     {
@@ -6218,8 +6138,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-falkner"
+      "researchPoints": 75
      }
     },
     {
@@ -6290,8 +6209,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-fantina"
+      "researchPoints": 75
      }
     },
     {
@@ -6362,8 +6280,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-flannery"
+      "researchPoints": 75
      }
     },
     {
@@ -6434,8 +6351,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-flint"
+      "researchPoints": 75
      }
     },
     {
@@ -6506,8 +6422,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-gardenia"
+      "researchPoints": 75
      }
     },
     {
@@ -6578,8 +6493,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-geeta"
+      "researchPoints": 75
      }
     },
     {
@@ -6650,8 +6564,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ghetsis"
+      "researchPoints": 75
      }
     },
     {
@@ -6722,8 +6635,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-giacomo"
+      "researchPoints": 75
      }
     },
     {
@@ -6794,8 +6706,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ginter"
+      "researchPoints": 75
      }
     },
     {
@@ -6866,8 +6777,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-tate-liza-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -6938,8 +6848,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-team-rocket"
+      "researchPoints": 75
      }
     },
     {
@@ -7010,8 +6919,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-the-royal"
+      "researchPoints": 75
      }
     },
     {
@@ -7082,8 +6990,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-thorton"
+      "researchPoints": 75
      }
     },
     {
@@ -7154,8 +7061,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-tierno"
+      "researchPoints": 75
      }
     },
     {
@@ -7226,8 +7132,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-todd-snap"
+      "researchPoints": 75
      }
     },
     {
@@ -7298,8 +7203,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-trace"
+      "researchPoints": 75
      }
     },
     {
@@ -7370,8 +7274,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-trevor"
+      "researchPoints": 75
      }
     },
     {
@@ -7442,8 +7345,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-valerie"
+      "researchPoints": 75
      }
     },
     {
@@ -7514,8 +7416,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-volkner"
+      "researchPoints": 75
      }
     },
     {
@@ -7586,8 +7487,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-volo"
+      "researchPoints": 75
      }
     },
     {
@@ -7658,8 +7558,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-wallace-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -7730,8 +7629,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-wally"
+      "researchPoints": 75
      }
     },
     {
@@ -7802,8 +7700,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-wattson"
+      "researchPoints": 75
      }
     },
     {
@@ -7874,8 +7771,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-whitney"
+      "researchPoints": 75
      }
     },
     {
@@ -7946,8 +7842,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-wicke"
+      "researchPoints": 75
      }
     },
     {
@@ -8018,8 +7913,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-winona-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -8090,8 +7984,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-wulfric"
+      "researchPoints": 75
      }
     },
     {
@@ -8162,8 +8055,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-yellow"
+      "researchPoints": 75
      }
     },
     {
@@ -8234,8 +8126,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-zinnia"
+      "researchPoints": 75
      }
     },
     {
@@ -8306,8 +8197,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-sabrina-lgpe"
+      "researchPoints": 75
      }
     },
     {
@@ -8378,8 +8268,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-selene"
+      "researchPoints": 75
      }
     },
     {
@@ -8450,8 +8339,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-serena"
+      "researchPoints": 75
      }
     },
     {
@@ -8522,8 +8410,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-shauna"
+      "researchPoints": 75
      }
     },
     {
@@ -8594,8 +8481,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-shelly"
+      "researchPoints": 75
      }
     },
     {
@@ -8666,8 +8552,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-sidney"
+      "researchPoints": 75
      }
     },
     {
@@ -8738,8 +8623,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-silver"
+      "researchPoints": 75
      }
     },
     {
@@ -8810,8 +8694,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-skyla"
+      "researchPoints": 75
      }
     },
     {
@@ -8882,8 +8765,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-sonia"
+      "researchPoints": 75
      }
     },
     {
@@ -8954,8 +8836,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-sophocles"
+      "researchPoints": 75
      }
     },
     {
@@ -9026,8 +8907,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-sordward-shielbert"
+      "researchPoints": 75
      }
     },
     {
@@ -9098,8 +8978,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-spr-hgss-ethan"
+      "researchPoints": 75
      }
     },
     {
@@ -9170,8 +9049,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-spr-hgss-silver"
+      "researchPoints": 75
      }
     },
     {
@@ -9242,8 +9120,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-spr-pt-barry"
+      "researchPoints": 75
      }
     },
     {
@@ -9314,8 +9191,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-spr-pt-dawn"
+      "researchPoints": 75
      }
     },
     {
@@ -9386,8 +9262,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-spr-pt-looker"
+      "researchPoints": 75
      }
     },
     {
@@ -9458,8 +9333,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-spr-pt-lucas"
+      "researchPoints": 75
      }
     },
     {
@@ -9530,8 +9404,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-steven-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -9602,8 +9475,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-sycamore"
+      "researchPoints": 75
      }
     },
     {
@@ -9674,8 +9546,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-tabitha"
+      "researchPoints": 75
      }
     },
     {
@@ -9746,8 +9617,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-olympia"
+      "researchPoints": 75
      }
     },
     {
@@ -9818,8 +9688,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-opal"
+      "researchPoints": 75
      }
     },
     {
@@ -9890,8 +9759,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ortega"
+      "researchPoints": 75
      }
     },
     {
@@ -9962,8 +9830,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-palmer"
+      "researchPoints": 75
      }
     },
     {
@@ -10034,8 +9901,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-peonia"
+      "researchPoints": 75
      }
     },
     {
@@ -10106,8 +9972,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-peony"
+      "researchPoints": 75
      }
     },
     {
@@ -10178,8 +10043,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-phoebe-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -10250,8 +10114,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-piers"
+      "researchPoints": 75
      }
     },
     {
@@ -10322,8 +10185,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-plumeria"
+      "researchPoints": 75
      }
     },
     {
@@ -10394,8 +10256,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-pryce"
+      "researchPoints": 75
      }
     },
     {
@@ -10466,8 +10327,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-raihan"
+      "researchPoints": 75
      }
     },
     {
@@ -10538,8 +10398,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-red-masters"
+      "researchPoints": 75
      }
     },
     {
@@ -10610,8 +10469,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-red-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -10682,8 +10540,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-rei"
+      "researchPoints": 75
      }
     },
     {
@@ -10754,8 +10611,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-riley"
+      "researchPoints": 75
      }
     },
     {
@@ -10826,8 +10682,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-rosa"
+      "researchPoints": 75
      }
     },
     {
@@ -10898,8 +10753,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-rowan"
+      "researchPoints": 75
      }
     },
     {
@@ -10970,8 +10824,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-roxanne-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -11042,8 +10895,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-roxie-masters"
+      "researchPoints": 75
      }
     },
     {
@@ -11114,8 +10966,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ryuki"
+      "researchPoints": 75
      }
     },
     {
@@ -11186,8 +11037,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-magnus"
+      "researchPoints": 75
      }
     },
     {
@@ -11258,8 +11108,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-mallow"
+      "researchPoints": 75
      }
     },
     {
@@ -11330,8 +11179,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-marley"
+      "researchPoints": 75
      }
     },
     {
@@ -11402,8 +11250,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-marlon"
+      "researchPoints": 75
      }
     },
     {
@@ -11474,8 +11321,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-marnie-masters-4"
+      "researchPoints": 75
      }
     },
     {
@@ -11546,8 +11392,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-matt"
+      "researchPoints": 75
      }
     },
     {
@@ -11618,8 +11463,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-maxie-gen-6"
+      "researchPoints": 75
      }
     },
     {
@@ -11690,8 +11534,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-may-emerald"
+      "researchPoints": 75
      }
     },
     {
@@ -11762,8 +11605,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-may-ruby-sapphire"
+      "researchPoints": 75
      }
     },
     {
@@ -11834,8 +11676,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-maylene"
+      "researchPoints": 75
      }
     },
     {
@@ -11906,8 +11747,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-melony"
+      "researchPoints": 75
      }
     },
     {
@@ -11978,8 +11818,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-milo"
+      "researchPoints": 75
      }
     },
     {
@@ -12050,8 +11889,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-mina"
+      "researchPoints": 75
      }
     },
     {
@@ -12122,8 +11960,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-misty-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -12194,8 +12031,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-molayne"
+      "researchPoints": 75
      }
     },
     {
@@ -12266,8 +12102,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-morty"
+      "researchPoints": 75
      }
     },
     {
@@ -12338,8 +12173,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-mr-fuji-gen-3"
+      "researchPoints": 75
      }
     },
     {
@@ -12410,8 +12244,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-n-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -12482,8 +12315,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-nanu"
+      "researchPoints": 75
      }
     },
     {
@@ -12554,8 +12386,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-nate"
+      "researchPoints": 75
      }
     },
     {
@@ -12626,8 +12457,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-nemona-v"
+      "researchPoints": 75
      }
     },
     {
@@ -12698,8 +12528,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-nessa"
+      "researchPoints": 75
      }
     },
     {
@@ -12770,8 +12599,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-noland"
+      "researchPoints": 75
      }
     },
     {
@@ -12842,8 +12670,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-norman"
+      "researchPoints": 75
      }
     },
     {
@@ -12914,8 +12741,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-oak-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -12986,8 +12812,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-olivia"
+      "researchPoints": 75
      }
     },
     {
@@ -13058,8 +12883,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-glacia"
+      "researchPoints": 75
      }
     },
     {
@@ -13130,8 +12954,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-gladion-masters-2"
+      "researchPoints": 75
      }
     },
     {
@@ -13202,8 +13025,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-gladion-stance"
+      "researchPoints": 75
      }
     },
     {
@@ -13274,8 +13096,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-gloria-league"
+      "researchPoints": 75
      }
     },
     {
@@ -13346,8 +13167,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-grace"
+      "researchPoints": 75
      }
     },
     {
@@ -13418,8 +13238,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-grant"
+      "researchPoints": 75
      }
     },
     {
@@ -13490,8 +13309,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-green-classic"
+      "researchPoints": 75
      }
     },
     {
@@ -13562,8 +13380,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-grimsley-gen-7"
+      "researchPoints": 75
      }
     },
     {
@@ -13634,8 +13451,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-grusha"
+      "researchPoints": 75
      }
     },
     {
@@ -13706,8 +13522,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-guzma"
+      "researchPoints": 75
      }
     },
     {
@@ -13778,8 +13593,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hala"
+      "researchPoints": 75
      }
     },
     {
@@ -13850,8 +13664,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hapu"
+      "researchPoints": 75
      }
     },
     {
@@ -13922,8 +13735,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-harmony"
+      "researchPoints": 75
      }
     },
     {
@@ -13994,8 +13806,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hau-stance"
+      "researchPoints": 75
      }
     },
     {
@@ -14066,8 +13877,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hilbert"
+      "researchPoints": 75
      }
     },
     {
@@ -14138,8 +13948,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hilda"
+      "researchPoints": 75
      }
     },
     {
@@ -14210,8 +14019,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hop"
+      "researchPoints": 75
      }
     },
     {
@@ -14282,8 +14090,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-hugh"
+      "researchPoints": 75
      }
     },
     {
@@ -14354,8 +14161,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ilima"
+      "researchPoints": 75
      }
     },
     {
@@ -14426,8 +14232,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-ingo"
+      "researchPoints": 75
      }
     },
     {
@@ -14570,8 +14375,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lana"
+      "researchPoints": 75
      }
     },
     {
@@ -14642,8 +14446,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lance"
+      "researchPoints": 75
      }
     },
     {
@@ -14714,8 +14517,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-leaf-gen-3"
+      "researchPoints": 75
      }
     },
     {
@@ -14786,8 +14588,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-leon-masters"
+      "researchPoints": 75
      }
     },
     {
@@ -14858,8 +14659,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lillie-z"
+      "researchPoints": 75
      }
     },
     {
@@ -14930,8 +14730,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lisia"
+      "researchPoints": 75
      }
     },
     {
@@ -15002,8 +14801,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lorelei-lgpe"
+      "researchPoints": 75
      }
     },
     {
@@ -15074,8 +14872,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lt-surge"
+      "researchPoints": 75
      }
     },
     {
@@ -15146,8 +14943,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lucas-gen-4-platinum"
+      "researchPoints": 75
      }
     },
     {
@@ -15218,8 +15014,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lucas"
+      "researchPoints": 75
      }
     },
     {
@@ -15290,8 +15085,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lyra"
+      "researchPoints": 75
      }
     },
     {
@@ -15362,8 +15156,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lysandre"
+      "researchPoints": 75
      }
     },
     {
@@ -15434,8 +15227,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-iono"
+      "researchPoints": 75
      }
     },
     {
@@ -15506,8 +15298,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-irida"
+      "researchPoints": 75
      }
     },
     {
@@ -15578,8 +15369,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-iris-gen-5-bw2"
+      "researchPoints": 75
      }
     },
     {
@@ -15650,8 +15440,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-jacinthe"
+      "researchPoints": 75
      }
     },
     {
@@ -15722,8 +15511,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-janine"
+      "researchPoints": 75
      }
     },
     {
@@ -15794,8 +15582,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-jasmine"
+      "researchPoints": 75
      }
     },
     {
@@ -15866,8 +15653,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-juan"
+      "researchPoints": 75
      }
     },
     {
@@ -15938,8 +15724,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-juniper"
+      "researchPoints": 75
      }
     },
     {
@@ -16010,8 +15795,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-kabu"
+      "researchPoints": 75
      }
     },
     {
@@ -16082,8 +15866,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-kahili"
+      "researchPoints": 75
      }
     },
     {
@@ -16154,8 +15937,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-karen"
+      "researchPoints": 75
      }
     },
     {
@@ -16226,8 +16008,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-katy"
+      "researchPoints": 75
      }
     },
     {
@@ -16298,8 +16079,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-kiawe"
+      "researchPoints": 75
      }
     },
     {
@@ -16370,8 +16150,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-klara"
+      "researchPoints": 75
      }
     },
     {
@@ -16442,8 +16221,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-koga-lgpe"
+      "researchPoints": 75
      }
     },
     {
@@ -16514,8 +16292,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-koga"
+      "researchPoints": 75
      }
     },
     {
@@ -16586,8 +16363,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-korrina"
+      "researchPoints": 75
      }
     },
     {
@@ -16658,8 +16434,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-kris"
+      "researchPoints": 75
      }
     },
     {
@@ -16730,8 +16505,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-kukui"
+      "researchPoints": 75
      }
     },
     {
@@ -16802,8 +16576,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-kurt"
+      "researchPoints": 75
      }
     },
     {
@@ -16874,8 +16647,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lusamine-masters"
+      "researchPoints": 75
      }
     },
     {
@@ -16946,8 +16718,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-lusamine-nihilego"
+      "researchPoints": 75
      }
     },
     {
@@ -17018,8 +16789,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-youngster-joey"
+      "researchPoints": 75
      }
     },
     {
@@ -17090,8 +16860,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-lass-janice"
+      "researchPoints": 75
      }
     },
     {
@@ -17162,8 +16931,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-bug-catcher-wade"
+      "researchPoints": 75
      }
     },
     {
@@ -17234,8 +17002,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-camper-liam"
+      "researchPoints": 75
      }
     },
     {
@@ -17306,8 +17073,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-picnicker-gina"
+      "researchPoints": 75
      }
     },
     {
@@ -17378,8 +17144,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-hiker-anthony"
+      "researchPoints": 75
      }
     },
     {
@@ -17450,8 +17215,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-fisherman-elliot"
+      "researchPoints": 75
      }
     },
     {
@@ -17522,8 +17286,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-bird-keeper-perry"
+      "researchPoints": 75
      }
     },
     {
@@ -17594,8 +17357,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-black-belt-kenji"
+      "researchPoints": 75
      }
     },
     {
@@ -17666,8 +17428,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-biker-ryder"
+      "researchPoints": 75
      }
     },
     {
@@ -17738,8 +17499,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-burglar-quinn"
+      "researchPoints": 75
      }
     },
     {
@@ -17810,8 +17570,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-channeler-hester"
+      "researchPoints": 75
      }
     },
     {
@@ -17882,8 +17641,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-cooltrainer-marcus"
+      "researchPoints": 75
      }
     },
     {
@@ -17954,8 +17712,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-cooltrainer-selene"
+      "researchPoints": 75
      }
     },
     {
@@ -18026,8 +17783,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-crush-girl-tamsin"
+      "researchPoints": 75
      }
     },
     {
@@ -18098,8 +17854,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-crush-kin-ivan-and-mira"
+      "researchPoints": 75
      }
     },
     {
@@ -18170,8 +17925,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-cue-ball-dutch"
+      "researchPoints": 75
      }
     },
     {
@@ -18242,8 +17996,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-engineer-baxter"
+      "researchPoints": 75
      }
     },
     {
@@ -18314,8 +18067,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-gambler-lucky"
+      "researchPoints": 75
      }
     },
     {
@@ -18386,8 +18138,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-gentleman-alfred"
+      "researchPoints": 75
      }
     },
     {
@@ -18458,8 +18209,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-juggler-pierre"
+      "researchPoints": 75
      }
     },
     {
@@ -18530,8 +18280,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-lady-cordelia"
+      "researchPoints": 75
      }
     },
     {
@@ -18602,8 +18351,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-painter-vera"
+      "researchPoints": 75
      }
     },
     {
@@ -18674,8 +18422,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-poke-maniac-rex"
+      "researchPoints": 75
      }
     },
     {
@@ -18746,8 +18493,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-pokemon-breeder-delia"
+      "researchPoints": 75
      }
     },
     {
@@ -18818,8 +18564,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-pokemon-ranger-hal"
+      "researchPoints": 75
      }
     },
     {
@@ -18890,8 +18635,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-pokemon-ranger-willa"
+      "researchPoints": 75
      }
     },
     {
@@ -18962,8 +18706,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-psychic-edmund"
+      "researchPoints": 75
      }
     },
     {
@@ -19034,8 +18777,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-psychic-lorna"
+      "researchPoints": 75
      }
     },
     {
@@ -19106,8 +18848,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-rocker-axel"
+      "researchPoints": 75
      }
     },
     {
@@ -19178,8 +18919,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-ruin-maniac-hadrian"
+      "researchPoints": 75
      }
     },
     {
@@ -19250,8 +18990,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-sailor-murphy"
+      "researchPoints": 75
      }
     },
     {
@@ -19322,8 +19061,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-scientist-dr-orson"
+      "researchPoints": 75
      }
     },
     {
@@ -19394,8 +19132,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-sis-and-bro-amy-and-tim"
+      "researchPoints": 75
      }
     },
     {
@@ -19466,8 +19203,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-super-nerd-miles"
+      "researchPoints": 75
      }
     },
     {
@@ -19538,8 +19274,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-swimmer-kai"
+      "researchPoints": 75
      }
     },
     {
@@ -19610,8 +19345,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-swimmer-marina"
+      "researchPoints": 75
      }
     },
     {
@@ -19682,8 +19416,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-swimmer-finn"
+      "researchPoints": 75
      }
     },
     {
@@ -19754,8 +19487,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-swimmer-coral"
+      "researchPoints": 75
      }
     },
     {
@@ -19826,8 +19558,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-tamer-garrett"
+      "researchPoints": 75
      }
     },
     {
@@ -19898,8 +19629,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-team-rocket-grunt-boris"
+      "researchPoints": 75
      }
     },
     {
@@ -19970,8 +19700,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-team-rocket-grunt-jessa"
+      "researchPoints": 75
      }
     },
     {
@@ -20042,8 +19771,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-tuber-pip"
+      "researchPoints": 75
      }
     },
     {
@@ -20114,8 +19842,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-tuber-dot"
+      "researchPoints": 75
      }
     },
     {
@@ -20186,8 +19913,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-tuber-rudy"
+      "researchPoints": 75
      }
     },
     {
@@ -20258,8 +19984,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-tuber-sunny"
+      "researchPoints": 75
      }
     },
     {
@@ -20330,8 +20055,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-twins-nia-and-mia"
+      "researchPoints": 75
      }
     },
     {
@@ -20402,8 +20126,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-young-couple-dan-and-eri"
+      "researchPoints": 75
      }
     },
     {
@@ -20474,8 +20197,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-beauty-bianca"
+      "researchPoints": 75
      }
     },
     {
@@ -20546,8 +20268,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-aroma-lady-rosalind"
+      "researchPoints": 75
      }
     },
     {
@@ -20618,8 +20339,7 @@
       "atLeast": 2
      },
      "reward": {
-      "researchPoints": 75,
-      "pool": "trainer-npc-cool-couple-leon-and-sky"
+      "researchPoints": 75
      }
     },
     {

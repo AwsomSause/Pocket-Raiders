@@ -96,7 +96,7 @@ export class ShopScene extends Phaser.Scene {
         content,
         view,
         type: this.shopType,
-        title: SHOP_TYPE_LABELS[this.shopType],
+        title: SHOP_TYPE_LABELS[currentShopType(run) === 'ballguy' ? 'ballguy' : this.shopType],
         clock: `${clockLabel(run)}${hours === 1 ? '' : hours < 1 ? ' (midday sale)' : ' (after-hours prices)'}`,
         party: run.party,
         motion: uiMotionLevel(session.settings),

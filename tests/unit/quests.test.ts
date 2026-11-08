@@ -78,7 +78,6 @@ describe('quest lines', () => {
     expect(questLineView(content, p, 'red')!.steps.map((s) => s.progress.met)).toEqual([true, true, true, true, true]);
     expect(stepsDone(content, p, 'red')).toBe(5);
     expect(evolutionUnlocked(p, 'red')).toBe(true);
-    expect(p.unlockedPools).toContain('trainer-red');
   });
 
   it('a reloaded profile keeps its claims', () => {

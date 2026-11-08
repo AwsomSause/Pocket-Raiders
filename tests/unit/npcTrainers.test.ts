@@ -31,8 +31,6 @@ describe('early-game NPC trainers', () => {
       const file = join(__dirname, '../../public/assets/images/bosses', `${a.spriteAssetId.slice('boss.'.length)}.png`);
       expect(existsSync(file), a.id).toBe(true);
       expect(a.signatureSpecies, a.id).toHaveLength(5);
-      const pool = content.starterPools.get(a.signaturePool!);
-      expect(pool?.species, a.id).toEqual(a.signatureSpecies);
       expect(trainerRegion(a)).not.toBe('Other');
       expect(trainerGame(a)).not.toBe('Other');
     }

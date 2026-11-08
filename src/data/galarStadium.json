@@ -1,0 +1,63 @@
+{
+ "hostDefault": "leon",
+ "music": {
+  "buildUp": "bgm.galar_battle",
+  "battle": "bgm.galar_battle",
+  "finalMon": "bgm.galar_battle",
+  "note": "Crowd ambience and cheers have no audio files yet (limited): the cue ids below are ready for the Drive packs."
+ },
+ "cameraBalance": { "maxPerBattle": 3, "minTurnsBetween": 3, "durationMs": 1400, "skippable": true },
+ "crowd": {
+  "bigHit": { "cue": "crowd.roar", "intensity": 3 },
+  "survived": { "cue": "crowd.roar", "intensity": 3 },
+  "evolve": { "cue": "crowd.roar", "intensity": 4 },
+  "dynamax": { "cue": "crowd.roar", "intensity": 5 },
+  "comeback": { "cue": "crowd.roar", "intensity": 4 },
+  "knockOut": { "cue": "crowd.hush", "intensity": 1 },
+  "tense": { "cue": "crowd.hush", "intensity": 1 },
+  "lastMon": { "cue": "crowd.swell", "intensity": 4 },
+  "calm": { "cue": "crowd.murmur", "intensity": 2 }
+ },
+ "cameraCuts": [
+  { "id": "crowd-cheer", "label": "The crowd on its feet", "beats": ["bigHit", "dynamax", "evolve"], "weight": 5, "caption": "The stadium roars!" },
+  { "id": "fan-group", "label": "A very enthusiastic group of fans", "beats": ["bigHit", "survived", "comeback"], "weight": 4, "caption": "That row of fans lost its mind." },
+  { "id": "trainers-watching", "label": "Challengers watch from the stands", "beats": ["bigHit", "knockOut", "lastMon"], "weight": 3, "caption": "Other challengers lean in to study every move." },
+  { "id": "private-box", "label": "Important faces in the private seats", "beats": ["dynamax", "lastMon", "comeback"], "weight": 3, "caption": "Up in the private box, someone takes notes." },
+  { "id": "commentator", "label": "The commentators react", "beats": ["comeback", "survived", "evolve"], "weight": 4, "caption": "\"I did NOT see that coming!\"" },
+  { "id": "opponent-closeup", "label": "Close-up of the opposing trainer", "beats": ["knockOut", "lastMon", "tense"], "weight": 4, "caption": "The other trainer grips the sleeve of their jacket." },
+  { "id": "champion-silhouette", "label": "A silhouette in the champion's seat", "beats": ["comeback", "bigHit", "dynamax"], "weight": 3, "needsImpressive": true, "caption": "A figure in the champion's box stands up slowly." },
+  { "id": "rival-silhouette", "label": "A rival's silhouette at the rail", "beats": ["comeback", "lastMon"], "weight": 2, "needsRival": true, "caption": "A familiar silhouette watches from the rail." }
+ ],
+ "bandIntro": {
+  "flag": "galar-band-intro",
+  "grantsItem": "dynamax-band",
+  "hasBand": [
+   "{host} waves from the champion's box. \"Is that a Dynamax Band? Then you already know the stage you're standing on.\"",
+   "\"Show me what it can do. The whole country is watching.\""
+  ],
+  "givesBand": [
+   "{host} walks down from the champion's box and the stadium goes silent. \"Every challenger needs one of these.\"",
+   "\"It lets a Pokémon grow huge for a few turns. It's the heart of the Gym Challenge. Wear it well.\"",
+   "{host} fastens the Dynamax Band around your wrist. \"Welcome to the Gym Challenge. Make it a battle people remember.\""
+  ]
+ },
+ "hostLines": [
+  { "id": "welcome-1", "phase": "welcome", "variant": "any", "text": "Welcome to the stage! Don't mind the cameras. They'll love you." },
+  { "id": "welcome-2", "phase": "welcome", "variant": "any", "text": "Every great challenger started right where you're standing." },
+  { "id": "early-1", "phase": "early", "variant": "any", "text": "Another stadium, another roar. You're settling in nicely." },
+  { "id": "early-2", "phase": "early", "variant": "any", "text": "Keep smiling. The crowd can tell when a challenger is enjoying it." },
+  { "id": "early-struggle", "phase": "early", "variant": "struggling", "text": "A rough one last time? It happens. The crowd remembers how you get back up." },
+  { "id": "early-impressive", "phase": "early", "variant": "impressive", "text": "That last match had the whole stadium talking. Do it again." },
+  { "id": "mid-1", "phase": "mid", "variant": "any", "text": "I've been watching your matches. You're getting better every round." },
+  { "id": "mid-2", "phase": "mid", "variant": "any", "text": "People are starting to say your name in the stands." },
+  { "id": "mid-struggle", "phase": "mid", "variant": "struggling", "text": "Tough stretch. I won't make it easier, but I'm still rooting for you." },
+  { "id": "mid-impressive", "phase": "mid", "variant": "impressive", "text": "That was not a challenger's win. That was a statement." },
+  { "id": "late-1", "phase": "late", "variant": "any", "text": "You don't fight like someone who's just here for the badges anymore." },
+  { "id": "late-2", "phase": "late", "variant": "any", "text": "Only a few challengers ever make it this far. You're one of them." },
+  { "id": "late-struggle", "phase": "late", "variant": "struggling", "text": "You've lost before and kept going. That is exactly what a champion does." },
+  { "id": "late-impressive", "phase": "late", "variant": "impressive", "text": "Flawless. I'd say I'm worried, but I'm mostly excited." },
+  { "id": "peer-1", "phase": "peer", "variant": "any", "text": "I'll stop calling you a challenger. You're a competitor. See you in the tournament." },
+  { "id": "peer-struggle", "phase": "peer", "variant": "struggling", "text": "Nobody gets here without a few scars. I'm still expecting a great match from you." },
+  { "id": "peer-impressive", "phase": "peer", "variant": "impressive", "text": "If you keep this up, we'll be facing each other soon. I can't wait." }
+ ]
+}

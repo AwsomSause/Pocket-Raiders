@@ -1,5 +1,5 @@
 // Adds the ordinary-NPC trainers (Youngster, Lass, Bug Catcher...) to src/data/archetypes.json and their
-// starter pools to src/data/runPrep.json, and copies their Essentials class sprites to images/bosses/.
+// and copies their Essentials class sprites to images/bosses/.
 // Safe to re-run: entries with the `npc-` id prefix are replaced, nothing else is touched.
 // Run: npm run data:npc-trainers --  [path to Graphics/Trainers]
 import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -93,10 +93,7 @@ const LADDER: Array<[string, number, string]> = [
 
 const slug = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const aPath = join(root, 'src/data/archetypes.json');
-const rPath = join(root, 'src/data/runPrep.json');
 const arch: Array<{ id: string }> = JSON.parse(readFileSync(aPath, 'utf8')).filter((a: { id: string }) => !a.id.startsWith('npc-'));
-const prep = JSON.parse(readFileSync(rPath, 'utf8'));
-prep.starterPools = prep.starterPools.filter((p: { id: string }) => !p.id.startsWith('trainer-npc-'));
 
 ROWS.forEach((row, i) => {
   const id = `npc-${slug(`${row.cls}-${row.first}`)}`;
@@ -118,15 +115,10 @@ ROWS.forEach((row, i) => {
     id, name: `${row.cls} ${row.first}`, title: `The ${row.cls}`,
     description: `${perk.pro} — ${perk.con}.`, pros: [perk.pro], cons: [perk.con],
     unlockedByDefault: false, unlock, unlockText, unlockCost: cost, spriteAssetId: `boss.${sprite}`,
-    modifiers: perk.mods(type), signatureTypes: row.types, signatureSpecies: row.species, signaturePool: `trainer-${id}`,
+    modifiers: perk.mods(type), signatureTypes: row.types, signatureSpecies: row.species,
     eventTags: ['npc'], signatureMechanic: null, unlockFlavor: `"${row.line}"`, unlockStatus: 'supported',
   } as never);
-  prep.starterPools.push({
-    id: `trainer-${id}`, name: `${row.cls} ${row.first}’s Team`, description: `The ${row.cls}’s everyday team, as first stages.`,
-    category: 'trainer', species: row.species, unlock, unlockText,
-  });
 });
 
 writeFileSync(aPath, JSON.stringify(arch, null, 2) + '\n');
-writeFileSync(rPath, JSON.stringify(prep, null, 1) + '\n');
 console.log(`npc trainers: ${ROWS.length}`);

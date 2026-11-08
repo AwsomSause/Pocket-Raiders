@@ -3319,6 +3319,14 @@
    "slot": "legend",
    "event": {
     "name": "A Legend Stirs",
+    "requires": [
+     {
+      "kind": "flag",
+      "key": "evil-legend",
+      "atLeast": 0,
+      "atMost": 0
+     }
+    ],
     "group": "Evil Teams",
     "stop": "event",
     "rarity": "rare",
