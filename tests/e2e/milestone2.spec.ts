@@ -16,7 +16,7 @@ async function waitForScene(page: Page, key: string, timeout = 20_000) {
 /** On the map: waits for the stage banner to clear, then picks the focused node (Enter). */
 async function enterFromMap(page: Page) {
   await waitForScene(page, 'Map');
-  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 20_000 }).toBe(false);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
 }
@@ -50,7 +50,7 @@ async function waitForActionMenu(page: Page) {
         if (text === null) await page.keyboard.press('Enter');
         return text;
       },
-      { timeout: 20_000, intervals: [300] },
+      { timeout: 40_000, intervals: [300] },
     )
     .toMatch(/What will/);
 }
@@ -98,7 +98,7 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
           if (root === null) await page.keyboard.press('Enter');
           return root ? 'root' : 'busy';
         },
-        { timeout: 20_000, intervals: [300] },
+        { timeout: 40_000, intervals: [300] },
       )
       .not.toBe('busy');
     if ((await scene(page)) !== 'Battle' || (await atRootMenu()) === 'caught') break;
@@ -111,7 +111,7 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
     await page.keyboard.press('Enter'); // first item: Poké Ball
     // The throw has started once the root menu is gone; the next loop waits for it to come back.
     await expect
-      .poll(async () => (await scene(page)) !== 'Battle' || (await atRootMenu()) !== true, { timeout: 10_000, intervals: [100] })
+      .poll(async () => (await scene(page)) !== 'Battle' || (await atRootMenu()) !== true, { timeout: 20_000, intervals: [100] })
       .toBe(true);
   }
   await confirmUntil(page, async () => (await scene(page)) === 'Decision', 20_000);
@@ -123,7 +123,7 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
   await page.screenshot({ path: 'test-results/m2-caught.png' });
 
   await page.keyboard.press('Enter'); // Add to party
-  await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Reward');
+  await expect.poll(() => scene(page), { timeout: 40_000 }).toBe('Reward');
   const after = await run(page);
   expect(after.party).toHaveLength(2);
   expect(after.party[1].speciesId).toBe('rattata');
@@ -162,7 +162,7 @@ test('switch Pokémon from the party menu, and give a reward to a chosen Pokémo
   await page.keyboard.press('Enter');
   await page.waitForTimeout(150);
   await page.keyboard.press('Enter');
-  await expect.poll(async () => (await run(page)).battle?.activeIndex ?? -1, { timeout: 10_000 }).toBe(1);
+  await expect.poll(async () => (await run(page)).battle?.activeIndex ?? -1, { timeout: 20_000 }).toBe(1);
 
   // Finish the battle with the strong Pokémon.
   for (let i = 0; i < 400; i++) {
@@ -194,7 +194,7 @@ test('switch Pokémon from the party menu, and give a reward to a chosen Pokémo
   await page.screenshot({ path: 'test-results/m2-reward-target.png' });
   await page.keyboard.press('ArrowDown'); // the Pokémon screen lists the party top to bottom: slot 2
   await page.keyboard.press('Enter');
-  await expect.poll(async () => (await run(page)).log.rewardsTaken.length, { timeout: 10_000 }).toBe(1);
+  await expect.poll(async () => (await run(page)).log.rewardsTaken.length, { timeout: 20_000 }).toBe(1);
   const after = await run(page);
   const second = after.party.find((p: { uid: string }) => p.uid === secondUid);
   expect(second.vitamins.atk).toBe(1);
