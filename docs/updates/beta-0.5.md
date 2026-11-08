@@ -22,5 +22,7 @@ Cinematics M6: no save bump.
 
 (newest first: PR, one line on what the player gets)
 
+- Cinematics M7 slice 1: raid, Evil Team and returning-rival intro cards through the cinematic framework (no save bump).
+
 ## Known limits / open items
 
