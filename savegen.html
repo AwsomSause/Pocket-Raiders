@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Save Creator</title>
+<style>
+:root{--bg:#14161c;--card:#1d212b;--line:#343b4d;--text:#e8ebf2;--dim:#98a2b8;--acc:#5aa9ff;--ok:#5fd08b;--bad:#ff7a7a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,sans-serif}
+header{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+h1{font-size:18px;margin:0 12px 0 0}main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px;padding:16px;max-width:1300px;margin:auto}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+button,select,input,textarea{font:inherit;color:var(--text);background:#10131a;border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+button{cursor:pointer;background:var(--card)}button:hover{border-color:var(--acc)}button.on{background:var(--acc);color:#04101f;border-color:var(--acc)}
+button.go{background:var(--ok);color:#04140b;border-color:var(--ok);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--dim)}label input,label select,label textarea{color:var(--text);font-size:14px;width:100%}
+label.chk{flex-direction:row;align-items:center;gap:8px}label.chk input{width:auto}
+textarea{min-height:60px;resize:vertical}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.side{position:sticky;top:8px;align-self:start}#msg{white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace;max-height:42vh;overflow:auto}
+.ok{color:var(--ok)}.bad{color:var(--bad)}#json{width:100%;min-height:240px;font:12px ui-monospace,monospace}small{color:var(--dim)}
+</style>
+</head>
+<body>
+<header><h1>Save Creator</h1><small>Build a save, download it, then in the game: Settings &rarr; Import save from a file &rarr; Continue.</small></header>
+<main><div><nav id="tabs"></nav><div id="panel"></div></div>
+<aside class="side card"><h3>Result</h3><div id="actions" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div><div id="msg"></div></aside></main>
+<script type="module" src="./src/devtools/saveCreator.ts"></script>
+</body>
+</html>
