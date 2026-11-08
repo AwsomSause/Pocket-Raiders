@@ -24,11 +24,13 @@ describe('player characters (Beta 0.5)', () => {
 import archetypes from '../../src/data/archetypes.json';
 describe('Hilda and Nate are a mirrored pair', () => {
   const get = (id: string) => (archetypes as any[]).find((a) => a.id === id);
-  it('swap first-attack and later-attack damage, with fire against water', () => {
+  it('trade first-attack for later-attack damage, with fire against water', () => {
     const h = get('hilda').modifiers.find((m: any) => m.kind === 'firstAttackDamage');
     const n = get('nate').modifiers.find((m: any) => m.kind === 'firstAttackDamage');
-    expect(h.first).toBe(n.later);
-    expect(h.later).toBe(n.first);
+    expect(h.first).toBe(1.3);
+    expect(n.later).toBe(1.15);
+    expect(h.later).toBeLessThan(1);
+    expect(n.first).toBeLessThan(1);
     expect(get('hilda').signatureTypes).toEqual(['fire']);
     expect(get('nate').signatureTypes).toEqual(['water']);
     expect(get('hilda').unlockedByDefault && get('nate').unlockedByDefault).toBe(true);
