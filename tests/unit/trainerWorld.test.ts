@@ -1,6 +1,9 @@
 // Beta 0.5 M1/M2: trainers use the player's systems and keep a record (core/trainerWorld).
 import { describe, expect, it } from 'vitest';
-import { content } from './helpers';
+import { content, toBattle } from './helpers';
+import { trainerHistoryLine, friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../../src/core/trainerWorld/trainerWorld';
+import { rollLastStand, spectacleOf } from '../../src/core/battle/spectacle';
+import { createBattle } from '../../src/core/battle/engine';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { createPokemon } from '../../src/core/pokemon';
 import { applyTrainerParity, battleTrainerKey, noteTrainerMove, recordTrainerResult, specializationOf, trainerKey } from '../../src/core/trainerWorld/trainerWorld';
@@ -76,5 +79,79 @@ describe('trainer parity', () => {
     const old = createStoryState() as Record<string, unknown>;
     delete old.trainers;
     expect(StoryStateSchema.safeParse(old).success).toBe(true);
+  });
+});
+
+describe('trainer history lines', () => {
+  it('a first meeting says nothing; a return reads the record', () => {
+    const run = fresh();
+    const rec = applyTrainerParity(content, run, t, team(2))!;
+    expect(trainerHistoryLine(content, rec)).toBeNull();
+    rec.meetings = 2; rec.losses = 2; rec.ace = 'pidgey';
+    expect(trainerHistoryLine(content, rec)).toContain('Joey');
+    rec.wins = 3; rec.losses = 0;
+    expect(trainerHistoryLine(content, rec)).toContain('remembers beating you');
+    rec.reputation = 60;
+    expect(trainerHistoryLine(content, rec)).toContain('name people know');
+  });
+});
+
+describe('trainer parity in play', () => {
+  it('a trainer battle built by the run carries friendship, a record and a wealth', () => {
+    // Walk the map until a trainer battle opens (the first few nodes may be wild).
+    let run = fresh();
+    for (let i = 0; i < 6 && run.battle?.kind !== 'trainer'; i++) {
+      run = fresh();
+      run.seed = `tw-${i}`;
+      run = toBattle(run);
+    }
+    if (run.battle?.kind !== 'trainer') return; // no trainer node reachable with these seeds
+    expect(run.battle.trainerWealth).toBeGreaterThanOrEqual(0);
+    expect(run.battle.enemyTeam.every((m) => m.friendship > 0)).toBe(true);
+    expect(Object.keys(run.story.trainers ?? {}).length).toBe(1);
+  });
+
+  it('the trainer side has its own Last Stand cap and a fixed scale', () => {
+    const mons = team(2);
+    const battle = createBattle('trainer', mons, 0, 'p', { classId: 'youngster', name: 'Joey', leaderId: null });
+    const spec = spectacleOf(content, battle)!;
+    spec.lastStands.push('x');
+    spec.enemyStands.push(mons[0]!.uid);
+    expect(rollLastStand(content, { battle, mon: mons[0]!, bond: 100, lastStanding: true, side: 'enemy' })).toBe(false);
+    expect(friendshipBond(255)).toBe(100);
+    expect(WEALTH_POTIONS.length).toBe(4);
+    expect(WEALTH_HEAL.length).toBe(4);
+  });
+
+  it('a mastered move hits harder; a bonded foe holds on at 1 HP once', async () => {
+    const { resolveTurn } = await import('../../src/core/battle/engine');
+    const { Rng, hashSeed } = await import('../../src/core/rng');
+    const hit = (mastered: boolean) => {
+      const player = createPokemon(content, 'garchomp', 50, 'p1');
+      player.moves = [{ id: 'earthquake', pp: 10 }];
+      if (mastered) player.mastered = ['earthquake'];
+      const foe = createPokemon(content, 'snorlax', 60, 'e1');
+      const before = foe.hp;
+      const battle = createBattle('trainer', [foe], 0, player.uid);
+      const ctx = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('m')), captureRng: new Rng(hashSeed('c')), catchMultiplier: 1 };
+      resolveTurn(ctx, { kind: 'move', index: 0 });
+      return before - foe.hp;
+    };
+    const plain = hit(false);
+    expect(hit(true)).toBeGreaterThan(plain);
+    // A bonded last foe at full friendship survives a hit that would faint it, once per battle.
+    let survived = 0;
+    for (let i = 0; i < 40; i++) {
+      const player = createPokemon(content, 'garchomp', 100, 'p1');
+      player.moves = [{ id: 'earthquake', pp: 10 }];
+      const foe = createPokemon(content, 'rattata', 5, `e${i}`);
+      foe.friendship = 255;
+      const battle = createBattle('trainer', [foe], 0, player.uid, { classId: 'youngster', name: 'J', leaderId: null });
+      const ctx = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(`s${i}`)), captureRng: new Rng(hashSeed('c')), catchMultiplier: 1 };
+      resolveTurn(ctx, { kind: 'move', index: 0 });
+      if (foe.hp === 1) survived += 1;
+    }
+    expect(survived).toBeGreaterThan(0);
+    expect(survived).toBeLessThan(40);
   });
 });

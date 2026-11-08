@@ -148,3 +148,22 @@ export function recordTrainerResult(content: Content, run: RunState, stage: numb
 }
 
 export { SPECIALIZATIONS };
+
+/** A trainer's Pokémon's friendship (0-255) on the 0-100 bond scale the player's Last Stand uses. */
+export const friendshipBond = (friendship: number): number => Math.floor((friendship * 100) / 255);
+
+/** Potions a trainer carries by wealth (0 struggling .. 3 wealthy), and the share of max HP each restores. */
+export const WEALTH_POTIONS = [0, 1, 1, 2] as const;
+export const WEALTH_HEAL = [0.3, 0.4, 0.5, 0.6] as const;
+
+/** M2: one line a returning trainer says before the fight, read from their record (no randomness), or null for a first meeting. */
+export function trainerHistoryLine(content: Content, rec: TrainerRecord): string | null {
+  if (rec.meetings <= 0) return null;
+  const nameOf = (id: string | null) => (id ? content.species.get(id)?.name ?? id : null);
+  const ace = nameOf(rec.ace);
+  if (rec.reputation >= 40) return `${rec.name} is a name people know by now. This is not a trainer to take lightly.`;
+  if (rec.wins > rec.losses) return `${rec.name} remembers beating you before, and ${ace ? `${ace} is ready to do it again` : 'is ready to do it again'}.`;
+  if (rec.losses >= 2 && rec.bond) return `${rec.name} has kept training since you last met. ${nameOf(rec.bond.a)} and ${nameOf(rec.bond.b)} are closer than ever.`;
+  if (rec.losses > 0) return `${rec.name} lost to you before and has been training${ace ? `. ${ace} looks sharper` : ''}.`;
+  return null;
+}

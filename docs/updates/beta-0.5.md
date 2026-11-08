@@ -20,7 +20,7 @@ Everything below ships to `main` as ONE PR from branch `beta-0.5`. Threads open 
 
 (newest first: PR, one line on what the player gets)
 
-- Trainer parity part 1: every trainer now has a record (meetings, wins, reputation, ace, bond) and their Pokémon get friendship, bonds and mastered moves like yours. Not visible in battle yet. No save bump (`run.story.trainers` is optional); old-save load test in `tests/unit/trainerWorld.test.ts`.
+- Trainer parity part 1: every trainer now has a record (meetings, wins, reputation, ace, bond) and their Pokémon get friendship, bonds and mastered moves like yours. Battles now use it: mastered moves hit 10% harder (you too), bonded trainer Pokémon can hold on at 1 HP, richer trainers carry more potions, and returning trainers greet you from their record. No save bump (`run.story.trainers` is optional); old-save load test in `tests/unit/trainerWorld.test.ts`.
 
 ## Known limits / open items
 

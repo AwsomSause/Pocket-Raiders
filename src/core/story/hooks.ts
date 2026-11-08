@@ -224,6 +224,12 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
           if (mv && me) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], moveCounters({ accuracy: mv.accuracy, category: mv.category, type: mv.type, flags: mv.flags, hpFrac: me.hp / Math.max(1, maxHp(content, me)), night: periodOf(run) === 'night' }));
         }
         emit(content, run, 'moveUsed', { where, actors: active[e.side] ? [active[e.side]!] : [], data: { side: e.side, moveId: e.moveId } });
+        // Beta 0.5 M1: your Pokémon master a move by the same rule as a trainer's (balance trainerWorld.masteryUses uses this run).
+        if (e.side === 'player' && active.player) {
+          const me = mon(active.player);
+          const tw = content.balance.trainerWorld;
+          if (me && tw.enabled && (run.story.histories[active.player]?.moves[e.moveId] ?? 0) >= tw.masteryUses && !me.mastered?.includes(e.moveId) && (me.mastered?.length ?? 0) < tw.maxMastered) me.mastered = [...(me.mastered ?? []), e.moveId];
+        }
         if (e.side === 'player' && active.player) {
           const t = signatureMove(content, run, active.player, e.moveId, i, triggers.length);
           if (t) triggers.push(t);

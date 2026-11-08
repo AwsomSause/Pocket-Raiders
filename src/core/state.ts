@@ -736,6 +736,8 @@ export const BattleStateSchema = z.object({
   /** A smart trainer's potions and deliberate switches so far this battle. */
   enemyItemsUsed: z.number().int().min(0).default(0),
   enemySwitches: z.number().int().min(0).default(0),
+  /** Beta 0.5 M1: the trainer's wealth (0-3) sets how many potions it carries and how strong they are (core/trainerWorld). Missing = the old fixed rule. */
+  trainerWealth: z.number().int().min(0).max(3).optional(),
   /** Battle-scope story effects already used this battle (e.g. "toughened-it-out@p1"); see core/story/ledger.ts. */
   storyEffects: z.array(z.string()),
   /** Hyper counters: the current low-HP stand and super-effective hits survived (core/battle/hyper.ts). */
