@@ -10,8 +10,11 @@ import { holdSpar, simulateSpar, sparReady } from '../../src/core/story/graduati
 import { answerReturn, mentorAccepts, planReturn, returningPokemon } from '../../src/core/story/returnProtege';
 import { endLastResort, lastResortEligible, lastResortOffer, useLastResort } from '../../src/core/battle/lastResort';
 import { openHistory } from '../../src/core/story/record';
-import { MIGRATIONS } from '../../src/save/saveManager';
+import { MIGRATIONS, SaveManager } from '../../src/save/saveManager';
+import { MemoryStorageProvider } from '../../src/save/storage';
 import { content, toBattle } from './helpers';
+
+const envelope = (record: string, v: number, data: unknown) => JSON.stringify({ format: 'pkmn-roguelike', record, schemaVersion: v, savedAt: '', data });
 
 function team(seed: string) {
   const run = structuredClone(chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0));
@@ -239,6 +242,17 @@ describe('defeated Pokémon return as protégés (M5)', () => {
 });
 
 describe('save migration run v41 -> v42', () => {
+  it('run_v41_loads_to_v42: an old save without story.mentoring loads with an empty record', () => {
+    const r = structuredClone(chooseStarter(content, createRun(content, { runId: 'm42', seed: 'm42', archetypeId: 'red' }), 0)) as unknown as { story: Record<string, unknown> };
+    delete r.story.mentoring;
+    const storage = new MemoryStorageProvider();
+    storage.set('pkr.run', envelope('run', 41, r));
+    const loaded = new SaveManager(storage, content).loadRun();
+    expect(loaded.status).toBe('ok');
+    if (loaded.status !== 'ok') return;
+    expect(loaded.migratedFrom).toBe(41);
+    expect(loaded.data.story.mentoring).toEqual({ bonds: {}, defeated: [], returned: [], lastReturnBattle: null, returns: 0 });
+  });
   it('adds an empty mentoring record and keeps the rest of the story', () => {
     const out = MIGRATIONS.run[41]!({ story: { seq: 3, flags: { a: true } } }) as { story: { seq: number; mentoring: { bonds: object; defeated: unknown[] } } };
     expect(out.story.seq).toBe(3);
