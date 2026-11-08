@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
@@ -73,7 +74,7 @@ import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
 import { applyReward, generateDraft, rewardTargetProblem, type RewardResult } from './rewards';
 import { pickRunQuest } from './quests';
-import { familyId, masteredStarters, runMasteryPerks } from './mastery';
+import { familyId, runMasteryPerks } from './mastery';
 import { rememberPick, varietyWeight } from './variety';
 import { gameEventModifiers } from './gameEvents';
 import { bumpEventCounters } from './eventToolkit';
@@ -100,7 +101,7 @@ import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
-import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
+import { defaultPrep, startingResources } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
 import { wildLuck } from './wildLuck';
 import { arenaFor } from './battle/w1Play';
@@ -330,10 +331,9 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   if (wantsGenerationLock(rules)) rules.lockGeneration = pickGeneration(content, opts.seed);
   if (wantsRandomDraft(rules)) Object.assign(prep, randomDraft(content, opts.seed, prep));
   const rng = createStreams(opts.seed);
-  const mastered = masteredStarters(content, opts);
-  const draft = withStream(rng, 'starter', (r) => draftStarters(content, r, prep, mastered));
   // Used once here, so its own seed-derived generator needs no saved stream.
-  const starterChoices = opts.starterOverride?.length ? [...opts.starterOverride] : withSignatureStarter(content, new Rng(hashSeed(`${opts.seed}::signature`)), archetype, prep, draft.choices, mastered);
+  // Starter Remembrances are the only starter system: the quiz's three (or, with no quiz, a seeded draw by the same rules).
+  const starterChoices = opts.starterOverride?.length ? [...opts.starterOverride] : drawRemembranceStarters(content, opts.seed);
   const regionOrder = withStream(rng, 'map', (r) => generateRegionOrder(content, campaign, r, rules.regionId));
   const run: RunState = {
     runId: opts.runId,
@@ -342,7 +342,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     archetypeId: opts.archetypeId,
     phase: 'starter',
     starterChoices,
-    prep: { ...prep, campaignId: campaign.id, note: draft.note },
+    prep: { ...prep, campaignId: campaign.id, note: null },
     party: [],
     eggs: [],
     history: {},
