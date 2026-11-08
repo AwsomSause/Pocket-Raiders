@@ -5,18 +5,24 @@
 
 import { registerAnims } from './animRegistry';
 
-export type OverdriveAnimKind = 'toughened' | 'hung' | 'rise' | 'bond' | 'rivalry' | 'flair' | 'emotion' | 'rage' | 'moment';
+export type OverdriveAnimKind = 'toughened' | 'hung' | 'rise' | 'bond' | 'rivalry' | 'flair' | 'emotion' | 'rage' | 'evolvedEarly' | 'megaDetermination' | 'overcameFear' | 'refusedToLose' | 'protectedTrainer' | 'awakened' | 'moment';
 
 const HYPER_BY_KIND: Record<Exclude<OverdriveAnimKind, 'moment'>, string> = {
   toughened: 'toughened-it-out defiance',
-  hung: 'hung-in-there pushed-beyond-limits second-wind not-given-up remembered-training broke-limits something-awakened instincts-took-over refused-weakness turned-pain',
+  hung: 'hung-in-there pushed-beyond-limits second-wind remembered-training broke-limits instincts-took-over turned-pain',
   rise: 'pushed-back-up',
   bond:
-    'felt-a-bond make-you-proud protective-instinct came-to-aid more-than-teammates knows-you-believe learned-something student-surpassed last-lesson different-ways understand-each-other wont-let-friend-fight wants-to-prove feels-left-out',
+    'felt-a-bond make-you-proud came-to-aid more-than-teammates knows-you-believe learned-something student-surpassed last-lesson different-ways understand-each-other wont-let-friend-fight wants-to-prove feels-left-out',
   rivalry: 'heated-rivalry friendly-competition bitter-rivalry rivalry-mutual friendly-tag generational-rivalry',
-  flair: 'mega-overdrive all-of-its-heart giant-resolve true-colors signature-awakening evolved-beyond',
+  flair: 'all-of-its-heart giant-resolve true-colors',
+  evolvedEarly: 'evolved-beyond',
+  megaDetermination: 'mega-overdrive',
+  overcameFear: 'overdrive-bravery rival-fear',
+  refusedToLose: 'refused-weakness not-given-up',
+  protectedTrainer: 'protective-instinct',
+  awakened: 'something-awakened signature-awakening',
   emotion:
-    'overdrive-determination overdrive-bravery overdrive-justice overdrive-kindness overdrive-patience overdrive-integrity overdrive-perseverance dual-emotion emotional-clash emotional-awakening',
+    'overdrive-determination overdrive-justice overdrive-kindness overdrive-patience overdrive-integrity overdrive-perseverance dual-emotion emotional-clash emotional-awakening',
   rage: 'enemy-riled-up anger-dangerous fighting-beyond-limits lost-composure rival-resentment',
 };
 
@@ -36,6 +42,12 @@ registerAnims([
   { id: 'overdrive.flair', category: 'overdrive', ms: 1500, color: '#ffd040', glyph: '★', shakes: true, flashes: true, particles: true },
   { id: 'overdrive.emotion', category: 'overdrive', ms: 1200, color: '#b890ff', glyph: '✺', flashes: true, particles: true },
   { id: 'overdrive.rage', category: 'overdrive', ms: 1100, color: '#ff3048', glyph: '!', shakes: true, flashes: true },
+  { id: 'overdrive.evolvedEarly', category: 'overdrive', ms: 2000, color: '#9fe8ff', glyph: '✺', shakes: true, flashes: true, particles: true },
+  { id: 'overdrive.megaDetermination', category: 'overdrive', ms: 2200, color: '#d070ff', glyph: '◆', shakes: true, flashes: true, particles: true },
+  { id: 'overdrive.overcameFear', category: 'overdrive', ms: 1600, color: '#a8d8ff', glyph: '☀', flashes: true, particles: true },
+  { id: 'overdrive.refusedToLose', category: 'overdrive', ms: 1500, color: '#ff8a3c', glyph: '✊', shakes: true, flashes: true, particles: true },
+  { id: 'overdrive.protectedTrainer', category: 'overdrive', ms: 1500, color: '#78d8ff', glyph: '⛨', flashes: true, particles: true },
+  { id: 'overdrive.awakened', category: 'overdrive', ms: 2000, color: '#fff2a8', glyph: '✧', shakes: true, flashes: true, particles: true },
   { id: 'overdrive.moment', category: 'overdrive', ms: 800, color: '#fff2a8', glyph: '•', particles: true },
   // 6.3 Interactions: short, rewarding, never slows play down much.
   { id: 'interaction.enter', category: 'interaction', ms: 600, color: '#9fe8ff', glyph: '✦', particles: true },

@@ -23,9 +23,16 @@ describe('Hyper/Overdrive, interaction and rival animations', () => {
     expect(hyperAnimId('felt-a-bond')).toBe('overdrive.bond');
     expect(hyperAnimId('heated-rivalry')).toBe('overdrive.rivalry');
     expect(hyperAnimId('no-such-moment')).toBe('overdrive.moment');
+    // The ten moments named in the Beta 0.5 doc (4.2) each play their own flourish.
+    const ten: Record<string, string> = {
+      'toughened-it-out': 'toughened', 'hung-in-there': 'hung', 'felt-a-bond': 'bond', 'evolved-beyond': 'evolvedEarly', 'mega-overdrive': 'megaDetermination',
+      'pushed-back-up': 'rise', 'overdrive-bravery': 'overcameFear', 'refused-weakness': 'refusedToLose', 'protective-instinct': 'protectedTrainer', 'something-awakened': 'awakened',
+    };
+    for (const [id, kind] of Object.entries(ten)) expect(hyperAnimId(id), id).toBe(`overdrive.${kind}`);
+    expect(new Set(Object.values(ten)).size).toBe(10);
   });
   it('registers the interaction and rival groups', () => {
-    expect(animsIn('overdrive').length).toBe(9);
+    expect(animsIn('overdrive').length).toBe(15);
     expect(animsIn('interaction').map((d) => d.id)).toEqual(expect.arrayContaining(['interaction.enter', 'interaction.item', 'interaction.catch']));
     expect(animsIn('rival').map((d) => d.id)).toEqual(['rival.intro', 'rival.ace', 'rival.win', 'rival.lose']);
   });

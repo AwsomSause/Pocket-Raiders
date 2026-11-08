@@ -136,6 +136,72 @@ export async function playStoryAnim(t: StoryTools): Promise<void> {
       sparks(t, 'up', 8);
       flash(t, 0.2);
       break;
+    case 'overdrive.evolvedEarly':
+      // It starts to glow mid-battle: two swelling pulses, then a white burst as the form changes.
+      flash(t, 0.25);
+      bounce(t, 1.15, 200);
+      await pause(t.scene, 180);
+      ring(t, x, y, 20, 110, 500);
+      bounce(t, 1.22, 220);
+      await pause(t.scene, 200);
+      flash(t, 0.8);
+      ring(t, x, y, 20, 200, 700);
+      sparks(t, 'out', 14);
+      t.shake(Math.round(4 * t.plan.shake));
+      break;
+    case 'overdrive.megaDetermination':
+      // Resolve first: slow rings close in on the Pokémon, then the Mega light breaks out.
+      ring(t, x, y, 170, 40, 700);
+      await pause(t.scene, 350);
+      ring(t, x, y, 170, 40, 600);
+      await pause(t.scene, 300);
+      flash(t, 0.7);
+      ring(t, x, y, 20, 190, 800);
+      ring(t, x, y, 20, 190, 800, 160);
+      sparks(t, 'out', 16);
+      t.shake(Math.round(7 * t.plan.shake));
+      bounce(t, 1.15, 260);
+      break;
+    case 'overdrive.overcameFear':
+      // It trembles, goes still, then a calm light rises as it squares up.
+      tremble(t, 5, 8);
+      await pause(t.scene, 300);
+      ring(t, x, y, 110, 20, 600);
+      await pause(t.scene, 200);
+      flash(t, 0.35);
+      sparks(t, 'up', 10);
+      bounce(t, 1.1, 240);
+      break;
+    case 'overdrive.refusedToLose':
+      // Digs in: a hard stomp, hot rings and sparks flying outward.
+      bounce(t, 0.92, 140);
+      t.shake(Math.round(8 * t.plan.shake));
+      flash(t, 0.4);
+      ring(t, x, y, 30, 150, 500);
+      ring(t, x, y, 30, 150, 500, 120);
+      ring(t, x, y, 30, 150, 500, 240);
+      sparks(t, 'out', 12);
+      bounce(t, 1.12, 200);
+      break;
+    case 'overdrive.protectedTrainer':
+      // A shield of light spreads wide around the Pokémon, drawn in toward its trainer.
+      ring(t, x, y, 160, 60, 600);
+      ring(t, x, y, 160, 60, 600, 150);
+      sparks(t, 'in', 10);
+      flash(t, 0.2);
+      bounce(t, 1.06, 240);
+      break;
+    case 'overdrive.awakened':
+      // Stillness, then hidden power wakes: a bright flash, three rings and light rising.
+      await pause(t.scene, 300);
+      flash(t, 0.75);
+      ring(t, x, y, 20, 170, 800);
+      ring(t, x, y, 20, 170, 800, 140);
+      ring(t, x, y, 20, 170, 800, 280);
+      sparks(t, 'up', 14);
+      t.shake(Math.round(5 * t.plan.shake));
+      bounce(t, 1.14, 260);
+      break;
     case 'overdrive.rage':
       ring(t, x, y, 150, 30, 500);
       flash(t, 0.3);
