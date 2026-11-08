@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { applyCatalog } from '../../src/core/catalog';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { addEvs, evTotal, evYield, hiddenPowerType, hyperTrain, ivsOf, rollIvs, statIvsOf } from '../../src/core/ivs';
-import { calcStats, createPokemon, getSpecies } from '../../src/core/pokemon';
+import { calcStats, createPokemon, getSpecies, hpLevelMultiplier } from '../../src/core/pokemon';
 import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
 import { currentEnemy } from '../../src/core/state';
 import { MIGRATIONS, SaveManager } from '../../src/save/saveManager';
@@ -36,7 +36,7 @@ describe('IVs', () => {
     const s = calcStats(content, mon);
     expect(s.atk).toBe(2 * base.atk + 0 + 63 + 5);
     expect(s.def).toBe(2 * base.def + 31 + 5);
-    expect(s.hp).toBe(2 * base.hp + 31 + 100 + 10 + Math.floor(100 * content.balance.hpPerLevel));
+    expect(s.hp).toBe(Math.floor((2 * base.hp + 31 + 100 + 10 + Math.floor(100 * content.balance.hpPerLevel)) * hpLevelMultiplier(content, 100)));
   });
 });
 

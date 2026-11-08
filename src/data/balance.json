@@ -37,6 +37,7 @@
  },
  "vitaminMultiplierPerStack": 0.1,
  "hpPerLevel": 1,
+ "hpLevelBonus": 0.5,
  "vitaminMaxStacks": 3,
  "evs": {
   "perStat": 252,
