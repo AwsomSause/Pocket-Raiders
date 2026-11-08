@@ -76,7 +76,7 @@ function penalty(r: Remembrance, picked: readonly Remembrance[]): number {
   return p / 100;
 }
 
-/** The three hard constraints over a full pick: 2+ roles, 3+ primary types, at most one baby line. Each is only required when the pool allows it. */
+/** The hard constraints over a full pick: 2+ roles, 3+ primary types, at most one baby line, three different regions. Each is only required when the pool allows it. */
 function constraintsOk(picks: readonly Remembrance[], pool: readonly Remembrance[]): boolean {
   const roles = new Set(picks.map((p) => p.role)).size;
   const types = new Set(picks.map((p) => p.types[0])).size;
@@ -84,7 +84,10 @@ function constraintsOk(picks: readonly Remembrance[], pool: readonly Remembrance
   const roleOk = roles >= 2 || new Set(pool.map((p) => p.role)).size < 2;
   const typeOk = types >= 3 || new Set(pool.map((p) => p.types[0])).size < 3;
   const babyOk = babies <= 1 || pool.filter((p) => !p.baby).length < 3;
-  return roleOk && typeOk && babyOk;
+  // Kice 2026-11-08: the three starter choices always come from three different regions (a line's generation is its region).
+  const regions = new Set(picks.map((p) => p.generation ?? `own:${p.id}`)).size;
+  const regionOk = regions >= 3 || new Set(pool.map((p) => p.generation ?? `own:${p.id}`)).size < 3;
+  return roleOk && typeOk && babyOk && regionOk;
 }
 
 /**

@@ -263,6 +263,33 @@ export interface StarterDraft {
   note: string | null;
 }
 
+/** The region a starter is native to (the first real region whose natives include it); a species with none counts as its own region. */
+export function homeRegionOf(content: Content, id: string): string {
+  const s = content.species.get(id);
+  const region = s ? [...content.regions.values()].find((r) => r.id !== 'grand' && !r.story && isNative(content, s, r.id)) : undefined;
+  return region ? region.id : `none:${id}`;
+}
+
+/**
+ * Takes up to `n` from `list` (in order), preferring species whose home region is not used yet (`used` holds regions already taken).
+ * If the list has fewer distinct regions than `n`, it fills the rest in order. No random draw, so a roll that already
+ * had three regions comes out exactly as before.
+ */
+export function pickDistinctRegions(content: Content, list: readonly string[], n: number, used: readonly string[] = []): string[] {
+  const seen = new Set(used);
+  const out: string[] = [];
+  for (const id of list) {
+    if (out.length === n) break;
+    const r = homeRegionOf(content, id);
+    if (!seen.has(r)) { seen.add(r); out.push(id); }
+  }
+  for (const id of list) {
+    if (out.length === n) break;
+    if (!out.includes(id)) out.push(id);
+  }
+  return out;
+}
+
 /**
  * Draws the starters from the pool under the draft rule. A rule that the pool
  * can't satisfy never rerolls forever: the draft fills the rest at random and
@@ -277,14 +304,17 @@ export function draftStarters(content: Content, rng: Rng, prep: RunPrep, mastere
   const shuffled = rng.shuffle(eligible);
   const rule = content.draftRules.get(prep.draftRuleId) ?? standardRule(content);
   const typesOf = (id: string) => content.species.get(id)!.types;
+  const regionOf = (id: string) => homeRegionOf(content, id);
+  // Kice 2026-11-08: the three starters always come from three different regions (Regional Research is the one rule that asks for the opposite).
+  const pick = (list: readonly string[]) => pickDistinctRegions(content, list, n);
 
   if (rule.kind === 'typeFocus' && prep.typeFocus) {
     const type = prep.typeFocus;
     const matching = shuffled.filter((id) => typesOf(id).includes(type));
-    if (matching.length >= n) return { choices: matching.slice(0, n), note: null };
+    if (matching.length >= n) return { choices: pick(matching), note: null };
     const rest = shuffled.filter((id) => !matching.includes(id));
     return {
-      choices: [...matching, ...rest].slice(0, n),
+      choices: [...matching, ...pickDistinctRegions(content, rest, n - matching.length, matching.map(regionOf))],
       note: `This pool has only ${matching.length} ${typeName(type)}-type starter${matching.length === 1 ? '' : 's'}; the rest are random.`,
     };
   }
@@ -292,7 +322,7 @@ export function draftStarters(content: Content, rng: Rng, prep: RunPrep, mastere
   if (rule.kind === 'expanded') {
     const extra = content.starterPools.get('research');
     const wide = rng.shuffle([...new Set([...eligible, ...(extra ? eligibleSpecies(content, extra) : [])])]);
-    return { choices: wide.slice(0, n), note: null };
+    return { choices: pick(wide), note: null };
   }
   // Regional Research: all starters come from one region (the first drawn species' home).
   if (rule.kind === 'regional') {
@@ -309,27 +339,35 @@ export function draftStarters(content: Content, rng: Rng, prep: RunPrep, mastere
   if (rule.kind === 'rareSpecimen') {
     const rare = content.starterPools.get('rare');
     const rareIds = rare ? eligibleSpecies(content, rare).filter((id) => !shuffled.slice(0, n - 1).includes(id)) : [];
-    if (rareIds.length === 0) return { choices: shuffled.slice(0, n), note: 'The Rare pool has no specimen to add; the starters are random.' };
-    return { choices: [...shuffled.slice(0, n - 1), rng.pick(rareIds)], note: 'One starter is a rare specimen.' };
+    if (rareIds.length === 0) return { choices: pick(shuffled), note: 'The Rare pool has no specimen to add; the starters are random.' };
+    const base = pick(shuffled).slice(0, n - 1);
+    const fresh = rareIds.filter((id) => !base.map(regionOf).includes(regionOf(id)));
+    return { choices: [...base, rng.pick(fresh.length ? fresh : rareIds)], note: 'One starter is a rare specimen.' };
   }
   // Evolution Specialist: only species that evolve twice (three-stage lines).
   if (rule.kind === 'evolution') {
     const chain = (id: string) => (content.species.get(id)!.evolutions ?? []).some((e) => (content.species.get(e.to)?.evolutions ?? []).length > 0);
     const lines = shuffled.filter(chain);
-    if (lines.length >= n) return { choices: lines.slice(0, n), note: 'Every starter evolves twice.' };
-    return { choices: [...lines, ...shuffled.filter((id) => !lines.includes(id))].slice(0, n), note: `This pool has only ${lines.length} three-stage line${lines.length === 1 ? '' : 's'}; the rest are random.` };
+    if (lines.length >= n) return { choices: pick(lines), note: 'Every starter evolves twice.' };
+    return { choices: [...lines, ...pickDistinctRegions(content, shuffled.filter((id) => !lines.includes(id)), n - lines.length, lines.map(regionOf))], note: `This pool has only ${lines.length} three-stage line${lines.length === 1 ? '' : 's'}; the rest are random.` };
   }
   if (rule.kind === 'balanced') {
-    const picked: string[] = [];
-    for (const id of shuffled) {
-      if (picked.length === n) break;
-      if (picked.every((p) => !typesOf(p).some((t) => typesOf(id).includes(t)))) picked.push(id);
-    }
+    // First try for no shared type and no shared region; if the pool cannot do both, drop the region part.
+    const draw = (needRegions: boolean): string[] => {
+      const got: string[] = [];
+      for (const id of shuffled) {
+        if (got.length === n) break;
+        if (got.every((p) => !typesOf(p).some((t) => typesOf(id).includes(t)) && (!needRegions || regionOf(p) !== regionOf(id)))) got.push(id);
+      }
+      return got;
+    };
+    const withRegions = draw(true);
+    const picked = withRegions.length === n ? withRegions : draw(false);
     if (picked.length === n) return { choices: picked, note: null };
     const rest = shuffled.filter((id) => !picked.includes(id));
-    return { choices: [...picked, ...rest].slice(0, n), note: 'This pool can\'t give three starters with no shared types; some share a type.' };
+    return { choices: [...picked, ...pickDistinctRegions(content, rest, n - picked.length, picked.map(regionOf))], note: 'This pool can\'t give three starters with no shared types; some share a type.' };
   }
-  return { choices: shuffled.slice(0, n), note: null };
+  return { choices: pick(shuffled), note: null };
 }
 
 /**
@@ -349,7 +387,11 @@ export function withSignatureStarter(content: Content, rng: Rng, archetype: Arch
   );
   if (candidates.length === 0 || choices.some((id) => candidates.includes(id))) return choices;
   if (!rng.chance(content.balance.signatureStarterChance)) return choices;
-  return [...choices.slice(0, -1), rng.pick(candidates)];
+  // The signature Pokémon takes the last slot only if its region is not already among the other starters.
+  const keptRegions = choices.slice(0, -1).map((id) => homeRegionOf(content, id));
+  // Only enforced when the other starters already span two regions (a pool inside one region cannot offer a different one).
+  const fresh = new Set(keptRegions).size >= 2 ? candidates.filter((id) => !keptRegions.includes(homeRegionOf(content, id))) : candidates;
+  return fresh.length ? [...choices.slice(0, -1), rng.pick(fresh)] : choices;
 }
 
 // ---------- starting resources and the build summary ----------

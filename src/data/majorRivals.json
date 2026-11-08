@@ -98,8 +98,8 @@
     },
     "Bede": {
       "home": "Galar",
-      "personality": "prodigy",
-      "style": "ace-centric",
+      "personality": "control-freak",
+      "style": "trapper",
       "pool": [
         "hatenna",
         "ponyta",
@@ -116,7 +116,7 @@
     "Hau": {
       "home": "Alola",
       "personality": "golden-retriever",
-      "style": "trust-fighter",
+      "style": "conductor",
       "pool": [
         "pikipek",
         "eevee",
@@ -132,8 +132,8 @@
     },
     "Gladion": {
       "home": "Alola",
-      "personality": "avenger",
-      "style": "revenge-striker",
+      "personality": "loner",
+      "style": "specialist",
       "pool": [
         "type-null",
         "zorua",
@@ -150,8 +150,8 @@
     },
     "Cheren": {
       "home": "Unova",
-      "personality": "prodigy",
-      "style": "snowball",
+      "personality": "traditionalist",
+      "style": "fortress",
       "pool": [
         "purrloin",
         "lillipup",
@@ -167,8 +167,8 @@
     },
     "Bianca": {
       "home": "Unova",
-      "personality": "golden-retriever",
-      "style": "trust-fighter",
+      "personality": "people-pleaser",
+      "style": "rotating-ensemble",
       "pool": [
         "munna",
         "minccino",
@@ -184,8 +184,8 @@
     },
     "Wally": {
       "home": "Hoenn",
-      "personality": "golden-retriever",
-      "style": "trust-fighter",
+      "personality": "underdog",
+      "style": "counterpuncher",
       "pool": [
         "ralts",
         "budew",
@@ -201,8 +201,8 @@
     },
     "Calem": {
       "home": "Kalos",
-      "personality": "social-climber",
-      "style": "ace-centric",
+      "personality": "idealist",
+      "style": "protector",
       "pool": [
         "fletchling",
         "flabebe",
@@ -218,8 +218,8 @@
     },
     "Nemona": {
       "home": "Paldea",
-      "personality": "speedrunner",
-      "style": "blitz",
+      "personality": "showboat",
+      "style": "combo-artist",
       "pool": [
         "pawmi",
         "lechonk",
@@ -235,8 +235,8 @@
     },
     "Hugh": {
       "home": "Unova",
-      "personality": "prodigy",
-      "style": "snowball",
+      "personality": "caretaker",
+      "style": "guardian",
       "pool": [
         "snivy",
         "tepig",
@@ -254,8 +254,8 @@
     },
     "Brendan": {
       "home": "Hoenn",
-      "personality": "golden-retriever",
-      "style": "trust-fighter",
+      "personality": "natural-talent",
+      "style": "improviser",
       "pool": [
         "treecko",
         "swellow",
@@ -272,8 +272,8 @@
     },
     "May": {
       "home": "Hoenn",
-      "personality": "golden-retriever",
-      "style": "trust-fighter",
+      "personality": "innovator",
+      "style": "improviser",
       "pool": [
         "torchic",
         "beautifly",
@@ -328,8 +328,8 @@
     },
     "Lillie": {
       "home": "Alola",
-      "personality": "golden-retriever",
-      "style": "trust-fighter",
+      "personality": "reluctant-battler",
+      "style": "fortress",
       "pool": [
         "vulpix",
         "clefairy",

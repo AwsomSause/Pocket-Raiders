@@ -14,8 +14,9 @@ export const storyLossFlag = (rivalId: string): string => `sv2:loss:${rivalId}`;
  * a rival or story loss never wipes a run: rivals, nemesis, Pokémon rivals, and event fights against a rival, an evil team or a ghost), except Adventure (checkpoints) and Death-Block, which keep their own wipe rules.
  * (Story event fights join this test when the event slices add them.)
  */
-export function storyLossApplies(run: Pick<RunState, 'story' | 'rules'>, battle: Pick<BattleState, 'rivalId' | 'rival' | 'firstRival' | 'nemesis' | 'monRival'>, content?: Pick<Content, 'balance'>, storyEvent = false): boolean {
-  if (!(battle.rivalId || battle.rival || battle.firstRival || battle.nemesis || battle.monRival || storyEvent)) return false;
+export function storyLossApplies(run: Pick<RunState, 'story' | 'rules'>, battle: Pick<BattleState, 'rivalId' | 'rival' | 'firstRival' | 'nemesis' | 'monRival'> & { trainer?: { classId: string } | null }, content?: Pick<Content, 'balance'>, storyEvent = false): boolean {
+  // A trainer of the "rival" class is a rival fight even when it carries no rival flag (the Story Run cast turns up as ordinary route trainers).
+  if (!(battle.rivalId || battle.rival || battle.firstRival || battle.nemesis || battle.monRival || battle.trainer?.classId === 'rival' || storyEvent)) return false;
   if (run.story.v2?.mode === 'story_run') return true;
   if (content && !content.balance.rival.softLoss) return false;
   return !run.rules?.deathBlock && getMode(run.rules?.modeId ?? '')?.checkpoints !== true;
