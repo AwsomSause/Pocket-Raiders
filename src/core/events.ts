@@ -1318,6 +1318,17 @@ export function isPseudoBattle(content: Content, event: EventBattleRef): boolean
 
 /** A detour's next battle (`chain`): same stop, no healing in between. Called once decisions from the last fight are done. */
 export function continueEventChain(content: Content, run: RunState): void {
+  // The Betrayal: right after an Evil Team leader falls, the Legendary they chased turns on them and fights you (no scene change).
+  const betrayal = run.story.flags[BETRAYAL_FLAG];
+  if (typeof betrayal === 'string' && betrayal.startsWith('pending:') && run.party.some((p) => p.hp > 0)) {
+    const [, species, lvl] = betrayal.split(':');
+    run.story.flags[BETRAYAL_FLAG] = `done:${species}`;
+    const level = Math.min(levelCap(content, run.regionIndex), Math.max(1, Number(lvl) || 1));
+    const activeIndex = run.party.findIndex((p) => p.hp > 0);
+    const enemy = newMon(content, run, species!, level, 'e');
+    run.battle = createBattle('wild', [enemy], activeIndex, run.party[activeIndex]!.uid);
+    return;
+  }
   const ref = run.eventChain;
   delete run.eventChain;
   const node = run.stage && run.stage.current !== null ? run.stage.map.nodes.find((n) => n.id === run.stage!.current) : undefined;
@@ -1330,6 +1341,9 @@ export function continueEventChain(content: Content, run: RunState): void {
   if (battle.kind === 'trainer' && battle.chainHeal) for (const mon of run.party) if (mon.hp > 0) mon.hp = Math.min(maxHp(content, mon), mon.hp + Math.ceil(maxHp(content, mon) * battle.chainHeal));
   startEventBattle(content, run, node, battle, rng, ref);
 }
+
+/** Story flag: `pending:<species>:<level>` until the Betrayal's Legendary fight starts, then `done:<species>`. */
+export const BETRAYAL_FLAG = 'evil:betrayal';
 
 /** Whether a won event battle leads into another of its chain (a detour). Sets up `run.eventChain` if so. */
 export function eventChainNext(content: Content, run: RunState, event: EventBattleRef): boolean {

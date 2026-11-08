@@ -81,7 +81,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -255,7 +255,7 @@ import { freshSpectacle } from './battle/spectacle';
 import { memoryPick } from './memories/encounters';
 import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
-import { evilStageStart } from './evil/teams';
+import { evilStageStart, evilTeam } from './evil/teams';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
@@ -3485,8 +3485,20 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
   const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : [];
+  // The Betrayal: beating an Evil Team's leader sends you straight into a catchable fight with the Legendary they chased.
+  const evilT = outcome === 'win' && battle.trainer ? evilTeam(content, run) : null;
+  const betrayal = !!evilT && battle.trainer?.name === evilT.ranks.leader.name && run.story.flags[BETRAYAL_FLAG] === undefined && (run.story.evil?.end === 'defeated' || run.story.evil?.end === 'exposed');
+  if (betrayal && evilT) {
+    const pool = evilT.legendary.filter((id) => content.species.has(id));
+    const pick = pool.length ? new Rng(hashSeed(`${run.seed}::betrayal::${evilT.id}`)).pick(pool) : null;
+    if (pick) {
+      run.story.flags[BETRAYAL_FLAG] = `pending:${pick}:${Math.max(...battle.enemyTeam.map((m) => m.level)) + 5}`;
+      run.story.flags['ev:evil-legend'] = 1; // the team's own "A Legend Stirs" stop is spent
+    }
+  }
+  const betrayalNow = typeof run.story.flags[BETRAYAL_FLAG] === 'string' && String(run.story.flags[BETRAYAL_FLAG]).startsWith('pending:');
   // A fished Pokémon is an extra catch, and an event battle has its own rewards: no reward draft after them.
-  run.afterDecisions = chained ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
+  run.afterDecisions = chained || betrayalNow ? 'eventChain' : battle.expedition ? 'expedition' : battle.fishing || battle.event ? 'map' : 'reward';
   continueAfterDecisions(content, run);
   return { outcome, moneyGained, itemsFound, caughtSpeciesId, shadowPurified, shadowStages, rescued, blissfulHealed, aftermath: [...((raidWin as { notes?: string[] } | null)?.notes ?? []), ...momentNarration(content, run, outcome, evolutions.length > 0, hatchedNow.length > 0)], evolutions, bondTaught, recap, badge, regionCleared, finale, victory: run.victory, eventRewards, voiceJoined, materials: materialsGained };
 }
