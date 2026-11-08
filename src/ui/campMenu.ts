@@ -6,6 +6,7 @@ import { freeAbilities } from '../core/rules';
 import { benchList, bagBerryChoices, campOf, campProblem, CAMP, comboList, cursedRelics, gadgetUses, getAction, hasGadget, marketLeft, marketSlots, mysteryOdds, shelfMoves, shelfTypes, slotChoices, usedHere, type CampArgs } from '../core/camp';
 import { campers, campProblem as boxCampProblem, CAMP_RULES } from '../core/trainingCamp';
 import { mentorLessons } from '../core/mentorLesson';
+import { TRAIT_NAMES, TYPE_NAMES, chemistryLevel, inheritableMoves } from '../core/story/mentorBond';
 import { nurseryChoices } from '../core/nursery';
 import { formShiftProblem, formShiftTargets } from '../core/formShift';
 import { capsuleCount, capsuleSlots, questViews } from '../core/capsuleQuests';
@@ -24,6 +25,7 @@ const VIEWS: Record<string, { name: string; desc: string; group: string }> = {
   'view:cookbook': { name: 'Cookbook', desc: 'Every recipe you know, and the ones still hidden.', group: 'kitchen' },
   'view:album': { name: 'Photo Album', desc: 'Species you have photographed (kept across runs).', group: 'gadgets' },
   'view:journal': { name: 'Item Journal', desc: 'The first time you used each item.', group: 'workshop' },
+  'view:bonds': { name: 'Mentor bonds', desc: 'See each mentor and protégé, hand down mentor moves, and hold the graduation spar.', group: 'camp' },
   'view:mentor': { name: 'Mentor lesson', desc: 'A more evolved teammate teaches a younger one a move (once each).', group: 'camp' },
   'view:nursery': { name: 'Nursery', desc: 'Before an Egg hatches: a parent passes on one move, or you pick its ability.', group: 'camp' },
   'view:formshift': { name: 'Form shift', desc: 'Swap a Pokémon with its regional variant (costs a Moon Stone; swap back any time).', group: 'camp' },
@@ -161,6 +163,20 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
       const egg = eggs[i]!;
       const options = nurseryChoices(content, run, egg);
       choose(host, `Nursery: ${nm(egg.speciesId)} Egg`, options.map((c) => (c.kind === 'move' ? { label: `Move: ${content.moves.get(c.moveId)?.name ?? c.moveId}`, desc: 'Passed on by a parent' } : { label: `Ability: ${c.name}`, desc: c.slot < 0 ? 'Hidden ability' : 'Normal ability' })), (j) => back(session.nursery(egg.uid, options[j]!)), again);
+    }, again);
+  }
+  if (id === 'view:bonds') {
+    const bonds = Object.values(run.story.mentoring.bonds).filter((b) => run.story.relationships.some((r) => r.id === b.relId && r.open) && run.party.some((m) => m.uid === b.proteUid));
+    if (bonds.length === 0) return back('No mentorship yet. Win battles with a veteran and a younger teammate and one may be offered.');
+    const who = (uid: string) => content.species.get(run.party.find((m) => m.uid === uid)?.speciesId ?? '')?.name ?? uid;
+    return choose(host, 'Mentor bonds', bonds.map((b) => ({ label: `${who(b.proteUid)} / ${who(b.mentorUid)}`, desc: `${b.types.map((t) => TYPE_NAMES[t]).join(', ')} · ${TRAIT_NAMES[b.trait]} · chemistry ${b.chemistry} (Lv${chemistryLevel(b.chemistry)})${b.ready ? ' · READY to graduate' : ''}` })), (i) => {
+      const bond = bonds[i]!;
+      const moves = inheritableMoves(content, run, bond);
+      const rows = [
+        ...moves.map((o) => ({ label: `Learn ${content.moves.get(o.moveId)?.name ?? o.moveId}`, desc: o.reason, problem: o.why ?? undefined })),
+        { label: 'Graduation spar', desc: 'A private practice match. Nothing is risked.', problem: bond.ready ? undefined : 'The protégé has not caught up yet' },
+      ];
+      choose(host, `${who(bond.proteUid)} and ${who(bond.mentorUid)}`, rows, (j) => back(j < moves.length ? session.mentorInherit(bond.relId, moves[j]!.moveId) : session.mentorSpar(bond.relId)), again);
     }, again);
   }
   if (id === 'view:mentor') {

@@ -15,7 +15,7 @@ import { TownProfileSchema } from './town/schema';
 import { ArchetypeModifierSchema, EventRuleSchema, ATTRIBUTE_KEYS, BattleBoostSchema, BoostStatSchema, SemiSchema, StatNameSchema, StatusIdSchema, TerrainSchema, TransformKindSchema, TypeNameSchema, WeatherSchema } from './contentSchema';
 import { LineageSchema, BattleReplaySchema, MemoriesSchema, PastDigestSchema, WorldMemorySchema } from './memories/schema';
 import { STREAM_NAMES, hashSeed, type StreamName } from './rng';
-import { ArchivedRivalSchema, StoryStateSchema } from './story/schema';
+import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/schema';
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
@@ -35,6 +35,8 @@ export const MoveSlotSchema = z.object({
   ppUps: z.number().int().min(0).max(3).optional(),
   /** Beta 4.4: a move a Hyper/Overdrive moment unlocked for this battle only (the extra slot; +power). Removed when the battle ends. */
   hyper: z.literal(true).optional(),
+  /** Beta 0.5: a move lent by a mentor in Mentor's Last Resort; removed when the battle ends (battle/lastResort.ts). */
+  lent: z.literal(true).optional(),
   /** Overhaul slice 27: a Mega signature move, added when the Pokémon Mega Evolves and removed when the battle ends (battle/megaMove.ts). */
   megaSig: z.literal(true).optional(),
   /** Story S7d: a Story Run signature move, added to the partner when a battle starts and removed when it ends (story2/signature.ts). */
@@ -127,6 +129,10 @@ export const PokemonInstanceSchema = z.object({
   blissful: z.object({ aura: z.string().min(1) }).optional(),
   /** Care & party life (core/care): mood, fatigue, journal counters, nickname, talent, training. */
   care: CareSchema.optional(),
+  /** Beta 0.5 M1: uid of the teammate this Pokémon is bonded with (trainer-side chemistry; core/trainerWorld). Optional, no save bump. */
+  bondWith: z.string().optional(),
+  /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
+  mastered: z.array(z.string()).optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 
@@ -732,6 +738,14 @@ export const BattleStateSchema = z.object({
   /** A smart trainer's potions and deliberate switches so far this battle. */
   enemyItemsUsed: z.number().int().min(0).default(0),
   enemySwitches: z.number().int().min(0).default(0),
+  /** Beta 0.5 M1: the trainer's wealth (0-3) sets how many potions it carries and how strong they are (core/trainerWorld). Missing = the old fixed rule. */
+  trainerWealth: z.number().int().min(0).max(3).optional(),
+  /** Beta 0.5 M1: the trainer's battle consumables left (status cure, X-item for the ace, saved full restore; core/trainerWorld/behavior.ts). */
+  trainerKit: z.object({ cure: z.number().int().min(0), boost: z.number().int().min(0), restore: z.number().int().min(0), boostStat: z.enum(['atk', 'spa', 'def', 'spd', 'spe']) }).optional(),
+  /** Beta 0.5 M1: the trainer's specialization id; steers its AI style. */
+  specialization: z.string().optional(),
+  /** Beta 0.5 M1: one-off trainer moments already shown this battle (protect:<uid>, refuse:<uid>). */
+  enemyMoments: z.array(z.string()).optional(),
   /** Battle-scope story effects already used this battle (e.g. "toughened-it-out@p1"); see core/story/ledger.ts. */
   storyEffects: z.array(z.string()),
   /** Hyper counters: the current low-HP stand and super-effective hits survived (core/battle/hyper.ts). */
@@ -784,6 +798,10 @@ export const BattleStateSchema = z.object({
   playerSwitches: z.number().int().min(0).optional(),
   /** Beta 4.4: your Pokémon that already got a Hyper slot this battle (once each). */
   hyperMoved: z.array(z.string()).optional(),
+  /** Beta 0.5: Mentor's Last Resort was used this battle (once per battle). */
+  lastResort: z.object({ mentorUid: z.string(), proteUid: z.string(), moveId: z.string() }).optional(),
+  /** Beta 0.5 M1: the trainer side's Mentor's Last Resort this battle (battle/lastResort.ts enemyLastResort). Optional, no save bump. */
+  enemyLastResort: z.object({ mentorUid: z.string(), proteUid: z.string(), moveId: z.string() }).optional(),
   /** Narrative rival defeat (M12): losing this rival fight is part of the story and does not end the run (rivals/narrativeDefeat.ts). */
   narrative: z.object({ id: z.string(), maxTurns: z.number().int().min(1).default(60), /** The rival's last Pokémon already held on once; the next knockout sticks. */ refused: z.boolean().optional() }).optional(),
   /** Nemesis system: the nemesis back for its Return or Reckoning, and the telegraphed change told in the intro. */
@@ -996,7 +1014,9 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   /** A Pokémon from a past run wants to join (story slice 5, core/story/reunion.ts); `hallOfFame`: it won a past run with you. */
   z.object({ kind: z.literal('reunion'), mon: PokemonInstanceSchema, hallOfFame: z.boolean() }),
   /** A veteran offers to mentor a younger teammate (core/story/mentorship.ts). */
-  z.object({ kind: z.literal('mentorship'), mentorUid: z.string(), proteUid: z.string(), path: z.enum(['guardian', 'striker', 'strategist', 'survivor', 'challenger', 'bonded']) }),
+  z.object({ kind: z.literal('mentorship'), mentorUid: z.string(), proteUid: z.string(), path: z.enum(['guardian', 'striker', 'strategist', 'survivor', 'challenger', 'bonded']), types: z.array(z.enum(MENTOR_TYPES)).default([]) }),
+  /** Beta 0.5 (M5): a Pokémon you once defeated returns and asks to be the protégé of the one that beat it (core/story/returnProtege.ts). */
+  z.object({ kind: z.literal('returnProtege'), mon: PokemonInstanceSchema, mentorUid: z.string(), reason: z.string() }),
   /** A benched Pokémon asks to lead (core/story/askLead.ts). */
   z.object({ kind: z.literal('askLead'), uid: z.string(), reason: z.enum(['leftOut', 'campfire']) }),
   /** Story Overhaul S9: the Gym Fork (two doors, or pass the town) and Rematch Day (a Guest Match, or move on) of the Orrery Circuit (core/campaign/circuitGate.ts). */
@@ -1306,7 +1326,7 @@ export const RunStateSchema = z.object({
   /** Bank licenses owned when the run began (Scavenger, Fortune, Survival work inside the run). Older runs have none. */
   licenses: z.array(z.string()).optional(),
   /** The shop being visited (shops redesign): its kind and this visit's haggle. Set on entering, cleared on leaving; older saves have none (Poké Mart). */
-  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional() }).optional(),
+  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional(), /** Ball Guy's tournament shop: copies bought this visit, per item (limited stock). Optional: no save bump. */ sold: z.record(z.string(), z.number().int().min(0)).optional(), /** Ball Guy: which visit (0 = after round 2, 1 = after round 4). */ visit: z.number().int().min(0).optional() }).optional(),
   /** Nuzlocke and Hardcore Nuzlocke: areas whose one catch is spent and the fallen (core/nuzlocke.ts). */
   nuzlocke: z.object({
     areas: z.array(z.string()),

@@ -1,0 +1,957 @@
+{
+ "events": [
+  {
+   "stop": "event",
+   "rarity": "rare",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-kubfu-disciple",
+   "name": "The Wandering Disciple",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "intro": "An old martial arts instructor sits cross-legged by the road, a small bear cub copying his stance. \"This is Kubfu. It does not follow the strong. It follows the sincere. Prove which you are.\"",
+   "choices": [
+    {
+     "label": "Take the disciple's trial (3 sparring rounds)",
+     "success": {
+      "text": "Kubfu watches every round. When the last bout ends it steps to your side and bows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-kubfu-trusted"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dojo Disciples",
+       "size": 2,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 2,
+       "chain": 3,
+       "chainHeal": 0.25,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "kubfu"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "galar-kubfu-tower"
+        },
+        {
+         "kind": "moment",
+         "text": "Earned the trust of Kubfu",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Share your food with Kubfu (Love)",
+     "check": "love",
+     "success": {
+      "text": "It sniffs the offering, then curls up against your bag. The instructor smiles: \"Trust, then. That is also a path.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "kubfu"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "galar-kubfu-tower"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-kubfu-trusted"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Kubfu hisses and hides behind the instructor. \"Not yet.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Bow and walk on",
+     "success": {
+      "text": "The instructor nods. \"The road is long. Perhaps we meet again.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "rare",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "partySpecies",
+     "species": "kubfu"
+    }
+   ],
+   "id": "galar-kubfu-tower",
+   "name": "The Tower Choice",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#2a3a7a",
+    "effect": "float"
+   },
+   "intro": "Two towers rise above the mist, one dark and one flowing with water. The instructor will not choose for you. \"Kubfu learns the style of the tower you walk into. Choose, and it is Urshifu for life.\"",
+   "choices": [
+    {
+     "label": "Enter the Tower of Darkness (Single Strike Style)",
+     "success": {
+      "text": "Kubfu climbs alone and returns changed. It meets your eyes: Urshifu, Single Strike Style.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "kubfu",
+        "to": "urshifu"
+       },
+       {
+        "kind": "choice",
+        "id": "galar-urshifu-style",
+        "pick": "single-strike",
+        "text": "Chose the Tower of Darkness for Kubfu",
+        "weight": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Kubfu became Urshifu (Single Strike)",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Enter the Tower of Waters (Rapid Strike Style)",
+     "success": {
+      "text": "Kubfu dives through the falls and returns in a flurry. Urshifu, Rapid Strike Style.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "kubfu",
+        "to": "urshifu-rapid-strike"
+       },
+       {
+        "kind": "choice",
+        "id": "galar-urshifu-style",
+        "pick": "rapid-strike",
+        "text": "Chose the Tower of Waters for Kubfu",
+        "weight": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Kubfu became Urshifu (Rapid Strike)",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet",
+     "success": {
+      "text": "Kubfu waits, a little disappointed. The towers will still be there.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -3,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "rare",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Trainer"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-swordbert-shieldbert",
+   "name": "Swordbert & Shieldbert",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.sordward-shielbert"
+    ],
+    "tint": "#802020",
+    "effect": "glint"
+   },
+   "intro": "Two identical men in dramatic cloaks leap out from behind a rock. \"We are THE Swordbert and Shieldbert, founders of the whole Gym Challenge!\" \"Probably.\" \"Definitely. Pay respects. Or battle.\"",
+   "choices": [
+    {
+     "label": "Listen to the history lecture",
+     "success": {
+      "text": "Forty minutes. Every fact is wrong. But they give you a \"historic\" relic as thanks.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sweet-apple"
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Heard the Swordbert & Shieldbert history lecture",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accept their battle challenge",
+     "success": {
+      "text": "They bicker over who gets to lead. You win anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "bossId": "sordward-shielbert",
+       "name": "Swordbert & Shieldbert",
+       "size": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "item",
+         "id": "metal-coat"
+        },
+        {
+         "kind": "moment",
+         "text": "Beat Swordbert & Shieldbert",
+         "importance": 40
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Buy a \"legendary sword\" (400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "chance": 0.4,
+     "success": {
+      "text": "It is a very old tart apple on a stick. Somehow useful.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "tart-apple"
+       },
+       {
+        "kind": "item",
+        "id": "cracked-pot"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a stick. They are gone before you can complain.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "common",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Pokémon"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-runaway-wooloo",
+   "name": "Runaway Wooloo",
+   "scene": {
+    "cast": [],
+    "pokemon": "wooloo",
+    "tint": "#d8d0c0",
+    "effect": "float"
+   },
+   "intro": "A Wooloo is rolling down the route, scattering travellers and a farmer's fence. A shepherd chases it, out of breath: \"Please! It does this every Tuesday!\"",
+   "choices": [
+    {
+     "label": "Catch it with a quick dash (Speed)",
+     "check": "speed",
+     "success": {
+      "text": "You scoop it up. The farmer rewards you with Wooloo wool padding, which friends love.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "friendship",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galar-wooloo-saved"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You trip over the fence. Wooloo rolls over you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it into stopping",
+     "success": {
+      "text": "It stops, dizzy.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wooloo",
+        "dubwool"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 200
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Offer to adopt it",
+     "success": {
+      "text": "The shepherd laughs and hands you a ribbon. \"Take it, please.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "wooloo"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "common",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Pokémon",
+    "Relationship"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-lost-pokemon",
+   "name": "The Lost Pokémon",
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#486898",
+    "effect": "rain"
+   },
+   "intro": "A trainer holds a damp sign: \"LOST: Yamper. Answers to Biscuit.\" They grip your sleeve. \"Please. I have looked since the match last night.\"",
+   "choices": [
+    {
+     "label": "Search the route together (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "You find a small wet Yamper under a bench with a stolen sandwich. The trainer weeps with joy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "galar-found-biscuit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You look until dark with no luck. At least you tried.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon sniff it out",
+     "requires": [
+      {
+       "kind": "friendship",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Your lead tracks the scent right away. The trainer cannot thank you enough.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "friendship",
+        "amount": 6
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wish them luck",
+     "success": {
+      "text": "You walk on. The sign flaps behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "uncommon",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Mystery",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-dynamax-investigator",
+   "name": "The Dynamax Investigator",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "intro": "A researcher crouches over a humming meter. \"The Dynamax energy in this area is climbing and I cannot explain why. Do you mind helping me take readings?\"",
+   "choices": [
+    {
+     "label": "Help take readings (Intelligence)",
+     "check": "intelligence",
+     "success": {
+      "text": "The readings point to a hidden source nearby. She marks it on your map.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "flag",
+        "key": "galar-energy-lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The meter sparks and goes dark. She laughs it off.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point the meter at your Dynamax Band",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "dynamax-band"
+      }
+     ],
+     "success": {
+      "text": "The needle spins wildly. \"That cannot be right... it matches the source!\" She hands you a spare Ether for the data.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ether"
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galar-energy-lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it",
+     "success": {
+      "text": "You leave her to her meter.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "rare",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Combat",
+    "Pokémon"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-gigantamax-sighting",
+   "name": "Gigantamax Sighting",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "pokemon": "copperajah",
+    "tint": "#b87333",
+    "effect": "shake"
+   },
+   "intro": "The ground shakes. Over the ridge, a Pokémon towers into the clouds, swirling with red energy: a Gigantamax form, unlike any wild monster you have seen.",
+   "choices": [
+    {
+     "label": "Face the giant",
+     "success": {
+      "text": "It crashes down at last. You will tell this story for years.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "copperajah-gmax",
+        "centiskorch-gmax",
+        "rillaboom-gmax",
+        "corviknight-gmax",
+        "drednaw-gmax"
+       ],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Observe from a safe distance",
+     "success": {
+      "text": "You sketch the creature. The sketch is surprisingly good.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run!",
+     "success": {
+      "text": "You run until your legs ache. Nothing follows.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "uncommon",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Trainer"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-local-tournament",
+   "name": "Local Tournament",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#c8a028",
+    "effect": "sparkle"
+   },
+   "intro": "A hand-painted banner reads \"LOCAL TRAINERS CUP\". A table sells sausages. A small crowd cheers. A scoreboard has room for your name.",
+   "choices": [
+    {
+     "label": "Enter (3 rounds)",
+     "success": {
+      "text": "The crowd chants for you by the final round. The sausage vendor gives you a free one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-local-cup-won"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Local Cup Finalists",
+       "size": 2,
+       "levelBonus": 1,
+       "chain": 3,
+       "chainHeal": 0.2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "item",
+         "id": "ultra-ball",
+         "count": 3
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Local Trainers Cup",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cheer from the sidelines",
+     "success": {
+      "text": "You eat a sausage and watch the match. A fine afternoon.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "common",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Relationship"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "badges",
+     "atLeast": 2
+    }
+   ],
+   "id": "galar-autograph-fans",
+   "name": "Autograph Fans",
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#d83878",
+    "effect": "hearts"
+   },
+   "intro": "A group of fans in matching jerseys with your face on them squeal as you pass. \"It's you! From the stadium! Please sign something!\"",
+   "choices": [
+    {
+     "label": "Sign everything",
+     "success": {
+      "text": "Your wrist hurts, but they are thrilled. They press snacks and a few coins into your hand.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "friendship",
+        "amount": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign one and keep moving",
+     "success": {
+      "text": "A short smile and a quick signature. Fair.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull a funny face for the photo",
+     "chance": 0.5,
+     "success": {
+      "text": "The photo goes everywhere. The crowd loves your style.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     },
+     "failure": {
+      "text": "The photo is unflattering and goes everywhere.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "rare",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Combat",
+    "Mystery"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-dynamax-disturbance",
+   "name": "Dynamax Disturbance",
+   "minStage": 5,
+   "scene": {
+    "cast": [],
+    "pokemon": "eternatus",
+    "tint": "#5a1a6a",
+    "effect": "flicker"
+   },
+   "intro": "A red column of energy tears out of the ground near a Power Spot. Wild Pokémon nearby grow huge and furious. This is a Dynamax Adventure, and it is fully underway.",
+   "choices": [
+    {
+     "label": "Fight the raid (2 rounds)",
+     "success": {
+      "text": "The energy fades and the Power Spot settles. A glittering Ether is left behind.",
+      "effects": [
+       {
+        "kind": "calmDisturbance"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "dragon",
+        "dark",
+        "steel",
+        "fighting"
+       ],
+       "levelBonus": 5,
+       "chain": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "ether"
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Ended a Dynamax disturbance",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Absorb the energy with your Band",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "dynamax-band"
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "The Band glows. Your team feels surges of power.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The energy rejects the Band and knocks you flat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave before it grows",
+     "success": {
+      "text": "You retreat. The glow stays on the horizon for hours.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,373 @@
+{
+ "rounds": 5,
+ "entrants": 32,
+ "shopEvery": 2,
+ "healBetweenRounds": true,
+ "champion": "leon",
+ "roundNames": [
+  "Round of 32",
+  "Round of 16",
+  "Quarterfinal",
+  "Semifinal",
+  "Final"
+ ],
+ "roundLevelBonus": [
+  0,
+  2,
+  4,
+  6,
+  9
+ ],
+ "introduceLine": "{name} steps onto the stadium floor.",
+ "roster": [
+  {
+   "bossId": "milo",
+   "kind": "familiar",
+   "strength": 6,
+   "style": "Grass-type farmer",
+   "intro": "Milo tips his cap. \"Time to see how your team grows.\""
+  },
+  {
+   "bossId": "nessa",
+   "kind": "familiar",
+   "strength": 6,
+   "style": "Water-type model",
+   "intro": "Nessa waves at the cameras. \"Try to keep up with the tide.\""
+  },
+  {
+   "bossId": "kabu",
+   "kind": "familiar",
+   "strength": 6,
+   "style": "Fire-type veteran",
+   "intro": "Kabu stretches. \"Experience beats flash, kid.\""
+  },
+  {
+   "bossId": "bea",
+   "kind": "familiar",
+   "strength": 7,
+   "style": "Fighting-type monk",
+   "intro": "Bea bows. \"Let our fists do the talking.\""
+  },
+  {
+   "bossId": "allister",
+   "kind": "familiar",
+   "strength": 6,
+   "style": "Ghost-type recluse",
+   "intro": "Allister peeks from behind his mask. \"...hello.\""
+  },
+  {
+   "bossId": "opal",
+   "kind": "familiar",
+   "strength": 5,
+   "style": "Fairy-type sage",
+   "intro": "Opal beams. \"Let me guess your favourite colour.\""
+  },
+  {
+   "bossId": "gordie",
+   "kind": "familiar",
+   "strength": 6,
+   "style": "Rock-type brawler",
+   "intro": "Gordie cracks his knuckles. \"Don't get crushed.\""
+  },
+  {
+   "bossId": "melony",
+   "kind": "familiar",
+   "strength": 7,
+   "style": "Ice-type mother",
+   "intro": "Melony smiles. \"Cold hearts make warm victories.\""
+  },
+  {
+   "bossId": "piers",
+   "kind": "familiar",
+   "strength": 7,
+   "style": "Dark-type rocker",
+   "intro": "Piers grins. \"Let's make some noise!\""
+  },
+  {
+   "bossId": "raihan",
+   "kind": "familiar",
+   "strength": 8,
+   "style": "Dragon-type streamer",
+   "intro": "Raihan raises his phone. \"Smile for the stream!\""
+  },
+  {
+   "bossId": "marnie",
+   "kind": "familiar",
+   "strength": 6,
+   "style": "Dark-type challenger",
+   "intro": "Marnie shrugs. \"Don't expect me to go easy.\""
+  },
+  {
+   "bossId": "bede",
+   "kind": "familiar",
+   "strength": 5,
+   "style": "Fairy-type snob",
+   "intro": "Bede sniffs. \"I'm going to enjoy this.\""
+  },
+  {
+   "bossId": "hop",
+   "kind": "familiar",
+   "strength": 7,
+   "style": "Allrounder rival",
+   "intro": "Hop punches the air. \"I'm not losing to you!\""
+  },
+  {
+   "bossId": "gloria",
+   "kind": "familiar",
+   "strength": 8,
+   "style": "Prodigy challenger",
+   "intro": "Gloria rolls her shoulders. \"Ready when you are.\""
+  },
+  {
+   "bossId": "sonia",
+   "kind": "familiar",
+   "strength": 4,
+   "style": "Researcher",
+   "intro": "Sonia adjusts her glasses. \"I've been taking notes.\""
+  },
+  {
+   "bossId": "klara",
+   "kind": "familiar",
+   "strength": 4,
+   "style": "Poison-type trickster",
+   "intro": "Klara blows a kiss. \"Poison is such a pretty colour.\""
+  },
+  {
+   "bossId": "mustard",
+   "kind": "familiar",
+   "strength": 8,
+   "style": "Master of martial arts",
+   "intro": "Mustard laughs. \"Show an old master something new.\""
+  },
+  {
+   "bossId": "cynthia",
+   "kind": "guest",
+   "strength": 9,
+   "style": "Champion from Sinnoh",
+   "intro": "Cynthia nods. \"I came to see what Galar is made of.\""
+  },
+  {
+   "bossId": "steven",
+   "kind": "guest",
+   "strength": 9,
+   "style": "Champion from Hoenn",
+   "intro": "Steven studies the field. \"Stone and steel. Let's begin.\""
+  },
+  {
+   "bossId": "lance",
+   "kind": "guest",
+   "strength": 9,
+   "style": "Dragon Master",
+   "intro": "Lance folds his cape. \"Dragons love a stage.\""
+  },
+  {
+   "bossId": "diantha",
+   "kind": "guest",
+   "strength": 8,
+   "style": "Champion from Kalos",
+   "intro": "Diantha smiles for the cameras. \"Grace under pressure.\""
+  },
+  {
+   "bossId": "iris",
+   "kind": "guest",
+   "strength": 8,
+   "style": "Dragon trainer",
+   "intro": "Iris bounces on her heels. \"I love a big battle!\""
+  },
+  {
+   "bossId": "alder",
+   "kind": "guest",
+   "strength": 8,
+   "style": "Veteran champion",
+   "intro": "Alder chuckles. \"Let's find out what you've learned.\""
+  },
+  {
+   "bossId": "wallace",
+   "kind": "guest",
+   "strength": 8,
+   "style": "Water-type artist",
+   "intro": "Wallace twirls. \"Make it beautiful.\""
+  },
+  {
+   "bossId": "blue",
+   "kind": "guest",
+   "strength": 9,
+   "style": "Kanto champion",
+   "intro": "Blue smirks. \"Smell ya later, if you lose.\""
+  },
+  {
+   "bossId": "geeta",
+   "kind": "guest",
+   "strength": 7,
+   "style": "Paldea champion",
+   "intro": "Geeta folds her arms. \"Show me your best.\""
+  },
+  {
+   "bossId": "nemona",
+   "kind": "guest",
+   "strength": 6,
+   "style": "Battle fanatic",
+   "intro": "Nemona bounces in. \"Finally, a real fight!\""
+  },
+  {
+   "bossId": "kukui",
+   "kind": "guest",
+   "strength": 6,
+   "style": "Professor and fighter",
+   "intro": "Kukui flexes. \"Alola! Let's battle!\""
+  },
+  {
+   "bossId": "hau",
+   "kind": "guest",
+   "strength": 4,
+   "style": "Cheerful newcomer",
+   "intro": "Hau beams. \"Whatever happens, this is gonna be fun!\""
+  },
+  {
+   "bossId": "grusha",
+   "kind": "guest",
+   "strength": 6,
+   "style": "Ice snowboarder",
+   "intro": "Grusha shrugs off his scarf. \"Cold enough for you?\""
+  }
+ ],
+ "crowdLines": {
+  "upset": [
+   "The crowd gasps. The favourite is OUT!",
+   "What an upset! Nobody saw that coming!",
+   "Seeded trainers fall, and the stands erupt!"
+  ],
+  "win": [
+   "Another round for the challenger! The crowd chants your name.",
+   "A clean win, and the cameras follow you off the floor."
+  ],
+  "final": [
+   "This is it. The final. The whole country is on its feet."
+  ],
+  "watchOther": [
+   "On the big screen, a rival match goes to the last Pokémon.",
+   "You watch the other bracket from the tunnel."
+  ]
+ },
+ "shop": {
+  "keeper": "ballguy",
+  "visits": [
+   {
+    "picks": 4,
+    "offers": [
+     {
+      "id": "ultra-ball",
+      "stock": 8,
+      "price": 300
+     },
+     {
+      "id": "dusk-ball",
+      "stock": 6,
+      "price": 420
+     },
+     {
+      "id": "quick-ball",
+      "stock": 6,
+      "price": 420
+     },
+     {
+      "id": "timer-ball",
+      "stock": 4,
+      "price": 380
+     },
+     {
+      "id": "full-restore",
+      "stock": 2,
+      "price": 2500
+     },
+     {
+      "id": "ether",
+      "stock": 3,
+      "price": 1800
+     },
+     {
+      "id": "kings-rock",
+      "stock": 1,
+      "price": 4000
+     },
+     {
+      "id": "metal-coat",
+      "stock": 1,
+      "price": 4000
+     }
+    ]
+   },
+   {
+    "picks": 5,
+    "offers": [
+     {
+      "id": "luxury-ball",
+      "stock": 4,
+      "price": 500
+     },
+     {
+      "id": "net-ball",
+      "stock": 4,
+      "price": 420
+     },
+     {
+      "id": "dive-ball",
+      "stock": 4,
+      "price": 420
+     },
+     {
+      "id": "revive",
+      "stock": 2,
+      "price": 3000
+     },
+     {
+      "id": "full-restore",
+      "stock": 2,
+      "price": 2800
+     },
+     {
+      "id": "razor-claw",
+      "stock": 1,
+      "price": 5000
+     },
+     {
+      "id": "protector",
+      "stock": 1,
+      "price": 5000
+     },
+     {
+      "id": "galarica-cuff",
+      "stock": 1,
+      "price": 6000
+     },
+     {
+      "id": "galarica-wreath",
+      "stock": 1,
+      "price": 6000
+     },
+     {
+      "id": "dubious-disc",
+      "stock": 1,
+      "price": 5500
+     },
+     {
+      "id": "fire-stone",
+      "stock": 1,
+      "price": 3800
+     },
+     {
+      "id": "thunder-stone",
+      "stock": 1,
+      "price": 3800
+     },
+     {
+      "id": "water-stone",
+      "stock": 1,
+      "price": 3800
+     }
+    ]
+   }
+  ],
+  "line": "Ball Guy leans over the counter. \"Everything must go, and nothing is quite what it seems.\""
+ }
+}

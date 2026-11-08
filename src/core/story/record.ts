@@ -7,6 +7,7 @@
 // save grow without bound.
 
 import { publish } from './bus';
+import { freshMentoring } from './schema';
 import type { Content } from '../contentSchema';
 import { findNode } from '../map';
 import { freshWorld } from '../memories/schema';
@@ -28,7 +29,7 @@ import type {
 } from './schema';
 
 export function createStoryState(): StoryState {
-  return { seq: 0, events: [], histories: {}, relationships: [], enemyProfiles: [], rivals: [], rivalGraph: [], standing: { sponsor: null, factions: {}, bosses: 0, debts: [] }, chronicle: [], appliedEffects: [], flags: {}, majorCuesThisBattle: 0, nemeses: [], replays: [], world: freshWorld(), evil: freshEvil(), choices: [] };
+  return { seq: 0, events: [], histories: {}, relationships: [], enemyProfiles: [], rivals: [], rivalGraph: [], mentoring: freshMentoring(), standing: { sponsor: null, factions: {}, bosses: 0, debts: [] }, chronicle: [], appliedEffects: [], flags: {}, majorCuesThisBattle: 0, nemeses: [], replays: [], world: freshWorld(), evil: freshEvil(), choices: [] };
 }
 
 /** Which battle of the run this is (counted from 0). Lost battles end the run, so this never repeats. */

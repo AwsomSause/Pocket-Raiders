@@ -31,7 +31,7 @@ export function gimmickSlots(regionIndex: number, stageInRegion: number | null, 
 }
 
 /** Can this Pokémon carry the gimmick in this battle? */
-function canCarry(content: Content, mon: PokemonInstance, kind: BossGimmick): boolean {
+export function canCarry(content: Content, mon: PokemonInstance, kind: BossGimmick): boolean {
   if (kind === 'mega') return stoneForms(content, mon.speciesId, false).length > 0;
   if (kind === 'zmove') return bossZMove(content, mon) !== null;
   return true;

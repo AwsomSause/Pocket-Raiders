@@ -9,6 +9,7 @@
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
 import { dexCaughtCount } from '../core/dexRewards';
+import { claimBandIntro } from '../core/galarStadium';
 import { changeFriendship } from '../core/friendship';
 import { spendTownStart, townAction, visitBuilding, type TownArgs, type TownResult } from '../core/town';
 import type { Grade } from '../core/interaction/prompt';
@@ -63,6 +64,8 @@ type PartyScene = PartyLife.Scene;
 import * as Svc from '../core/services/flow';
 import * as Plz from '../core/plaza/flow';
 import { availableMentors } from '../core/mentors';
+import { holdSpar } from '../core/story/graduation';
+import { teachInherited } from '../core/story/mentorBond';
 import { rulesCampaign, type RulesChoice } from '../core/rules';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { clearNextRun, nextRunStart } from '../core/story2/intake';
@@ -358,6 +361,14 @@ export class GameSession {
     this.run = hit.run;
     this.persistRun();
     return hit;
+  }
+
+  /** Galar Gym Challenge: the Champion's one-time Dynamax Band scene. Marks it seen, gives a Band if the player has none, saves; null if already seen. */
+  claimGalarBandIntro(): ReturnType<typeof claimBandIntro> {
+    const run = this.requireRun();
+    const intro = claimBandIntro(this.content, run);
+    if (intro) this.persistRun();
+    return intro;
   }
 
   /** A rival may steal, block or help at a stop without a fight; returns the line to show, or null. */
@@ -710,6 +721,24 @@ export class GameSession {
   mentorLesson(lesson: MentorLesson): string {
     const run = structuredClone(this.requireRun());
     const message = applyMentorLesson(this.content, run, lesson);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor bonds: hand a mentor move down (Beta 0.5). */
+  mentorInherit(relId: string, moveId: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = teachInherited(this.content, run, relId, moveId);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
+  /** Camp > Mentor bonds: the graduation spar (Beta 0.5). */
+  mentorSpar(relId: string): string {
+    const run = structuredClone(this.requireRun());
+    const message = holdSpar(this.content, run, relId).join(' ');
     this.run = run;
     this.persistRun();
     return message;

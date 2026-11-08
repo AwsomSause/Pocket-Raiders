@@ -38,7 +38,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 41, settings: 41, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 42, settings: 41, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -375,6 +375,13 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     // v41 (W5 IVs and EVs): every Pokémon anywhere in the run gets its IVs written down (the roll for its uid,
     // the same value the game used to fall back on) and starts with no EVs. Nothing else changes.
     40: (data) => withIvs(data),
+    // v42 (Beta 0.5 mentor rework): the story gets its `mentoring` record (bond per mentorship, defeated foes, returns). Open
+    // mentorships from older saves get their bond on the next won battle; nothing else changes.
+    41: (data) => {
+      const run = data as Json;
+      const story = (run.story ?? {}) as Json;
+      return { ...run, story: { ...story, mentoring: story.mentoring ?? { bonds: {}, defeated: [], returned: [], lastReturnBattle: null, returns: 0 } } };
+    },
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.

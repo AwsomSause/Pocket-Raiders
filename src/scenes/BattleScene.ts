@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
@@ -63,6 +64,8 @@ import { storyAssetId } from '../core/storyAudio';
 import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
+import { galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
+import { StadiumDirector } from '../ui/galar/stadiumDirector';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
@@ -381,6 +384,7 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.timeScale = speed;
     this.time.timeScale = speed;
     this.role = this.battleRole();
+    this.stadium = this.makeStadium();
     // The same battle always gets the same look (salted by the run and how far it has come), so a reload never changes it.
     this.skinId = screenStyleOf('battle', session.settings.screenStyles, `${run.seed}:${run.log.battlesWon}:${run.log.rewardsTaken.length}`);
     this.skin = battleSkinFor(this.skinId);
@@ -857,6 +861,8 @@ export class BattleScene extends Phaser.Scene {
 
   /** Set in `create`: the battle can be cleared from the run before the win song plays. */
   private role: BattleRole | undefined;
+  /** Galar Gym Challenge stadium presentation (crowd, camera cuts, Champion host); null elsewhere. */
+  private stadium: StadiumDirector | null = null;
   /** The battle's normal song, and the one playing now (the low-HP song swaps in while the lead is in danger). */
   private baseTrack = '';
   private playingTrack = '';
@@ -2169,6 +2175,7 @@ export class BattleScene extends Phaser.Scene {
       await this.playBeat(titleCard(this, 'RIVAL', title, ROLE_RIMS.rival, this.motion));
     }
     await this.playContextMoment();
+    await this.stadiumIntro();
   }
 
   /** Beta 0.5 M7: a big-moment card through the cinematic framework. Presentation only; any failure is ignored. */
@@ -2205,6 +2212,55 @@ export class BattleScene extends Phaser.Scene {
     }
     const team = evilTeam(content, this.run);
     if (team && Object.values(team.ranks).some((r) => r.name === battle.trainer!.name)) await this.bigMoment(bossIntroMoment({ role: 'evil' }), `evil.${team.id}.${battle.trainer.name}`, team.name ?? battle.trainer.name, battle.trainer.name);
+  }
+
+  /** Galar Gym Challenge: the stadium director for this battle (null in every other battle). */
+  private makeStadium(): StadiumDirector | null {
+    try {
+      const { session } = services();
+      const content = session.content;
+      if (!isGalarStadiumBattle(content, this.run)) return null;
+      const st = session.settings;
+      const alive = (team: readonly { hp: number }[]): number => team.filter((m) => m.hp > 0).length;
+      return new StadiumDirector(this, {
+        runSeed: this.run.seed,
+        battleId: `${this.run.seed}:${this.run.badges.length}:${this.run.log.battlesWon}`,
+        host: galarHost(content, this.run).name,
+        impressive: galarPerformance(content, this.run).lastWasImpressive,
+        rivalWatching: this.run.story.rivals.length > 0,
+        disableAnimations: () => st.disableAllAnimations || st.battleAnimations === 'off',
+        reduceMotion: () => st.battleAnimations === 'reduced',
+        setIntensity: (n) => setMusicIntensity(n),
+        finalMusic: (track) => {
+          if (!services().assets.has(track)) return;
+          this.baseTrack = track;
+          this.playingTrack = track;
+          playMusicLazy(this, track, track);
+        },
+        alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
+      });
+    } catch (e) {
+      console.warn('Galar stadium presentation unavailable', e);
+      return null;
+    }
+  }
+
+  /** Galar gym entrance: the Champion's one-time Dynamax Band scene (first gym), then a line for this gym. Presentation; the Band itself is granted by the core. */
+  private async stadiumIntro(): Promise<void> {
+    if (!this.stadium) return;
+    try {
+      const { session } = services();
+      const content = session.content;
+      const host = galarHost(content, this.run).name;
+      const band = session.claimGalarBandIntro();
+      if (band) for (const line of band.lines) await this.say(line);
+      else {
+        const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
+        await this.speak(host, line.text);
+      }
+    } catch (e) {
+      console.warn('Galar stadium intro failed', e);
+    }
   }
 
   /** The foe's rim: neon pink for wild Pokémon, orange for trainers, red for rivals, gold / violet / pale gold for bosses. */
@@ -2772,6 +2828,9 @@ export class BattleScene extends Phaser.Scene {
     const hotbar = services().session.settings.hotbar.filter((id) => (this.run.inventory[id] ?? 0) > 0 && content.items.get(id) && content.items.get(id)!.target !== 'party' && content.items.get(id)!.target !== 'fainted' && itemProblem(this.battleCtx(), id) === null).slice(0, 4);
     const hotbarAt = options.length;
     for (const id of hotbar) options.push({ label: `Quick: ${content.items.get(id)!.name}` });
+    // Beta 0.5 (M4): Mentor's Last Resort, once per battle, when a protégé at half HP has its mentor in the party.
+    const lastResortAt = !this.duo && lastResortOffer(content, this.run) ? options.length : -1;
+    if (lastResortAt >= 0) options.push({ label: "Mentor's help" });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -2808,7 +2867,14 @@ export class BattleScene extends Phaser.Scene {
           this.showRootMenu();
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
-        else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
+        else if (i === lastResortAt) {
+          const lines = useLastResort(content, this.run).map((e) => (e.type === 'spectacle' ? e.text : ''));
+          this.clearMenus();
+          this.message.setVisible(true);
+          this.message.setText(lines.join('\n'));
+          if (this.motion !== 'off') this.cameras.main.flash(260, 255, 230, 160);
+          this.time.delayedCall(this.motion === 'off' ? 600 : 2200, () => this.showMoveMenu());
+        } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
           this.rallyChoice = !this.rallyChoice;
           this.showRootMenu();
@@ -2899,7 +2965,7 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const name = (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -3230,7 +3296,9 @@ export class BattleScene extends Phaser.Scene {
       this.nextPrompt();
       return;
     }
+    this.stadium?.startTurn(before.battle?.turn ?? 1);
     await this.playEvents(result.events, before, trainer, result.cues, result.drama);
+    await this.stadium?.afterTurn();
 
     if (result.end) {
       await this.finish(result, trainer, bossWin);
@@ -3493,6 +3561,7 @@ export class BattleScene extends Phaser.Scene {
       }
       await this.fx.play(cues[index] ?? []);
       this.reactPortrait(e);
+      await this.stadium?.onEvent(e);
       const side = 'side' in e ? e.side : null;
       if (side === 'enemy' && (e.type === 'ability' || (e.type === 'held' && e.itemId !== 'poke-doll'))) this.noteFoeReveal(e.type === 'ability' ? { ability: e.ability } : { item: e.itemId });
       const box = side === 'enemy' ? this.enemyBox : this.playerBox;
