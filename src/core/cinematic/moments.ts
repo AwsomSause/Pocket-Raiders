@@ -85,14 +85,20 @@ export interface EncounterHistory {
   lastResult?: 'playerWon' | 'playerLost' | 'draw';
   /** Player wins in a row against this character (0 if the last fight was lost). */
   playerStreak: number;
-  /** Runs since the last meeting (0 = same run). */
+  /** Finished runs since the character was last met in an EARLIER run (1 = the previous run); undefined if never met. */
   runsSince?: number;
+}
+
+/** How many finished runs ago this character was last met (1 = the previous run), from the profile's run records, newest first. */
+export function runsSinceMet(records: readonly { rivals: readonly { name: string; encounters: number }[] }[], name: string): number | undefined {
+  const i = records.findIndex((r) => r.rivals.some((x) => x.name === name && x.encounters > 0));
+  return i < 0 ? undefined : i + 1;
 }
 
 /** Which rival scene to play. Deterministic: depends only on the shared history. */
 export function rivalMoment(h: EncounterHistory): MomentKind {
-  if (h.fights === 0) return 'rivalFirst';
-  if ((h.runsSince ?? 0) >= 2) return 'rivalReunion';
+  // Not fought yet this run: a character from an earlier run is a reunion, anyone else a first meeting.
+  if (h.fights === 0) return (h.runsSince ?? 0) >= 1 ? 'rivalReunion' : 'rivalFirst';
   if (h.lastResult === 'playerLost') return 'rivalRevenge';
   return 'rivalRematch';
 }

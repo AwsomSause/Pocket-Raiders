@@ -84,7 +84,7 @@ import { rivalIntro } from '../ui/battleFx/storyFx';
 import { poseMoment } from '../ui/dialogue/poseMoment';
 import { poseForMoments } from '../core/presentation/poses';
 import { zMoveScene } from '../ui/battleFx/zMoveScene';
-import { bossIntroMoment, defaultMoment, planMoment, rivalMoment, type MomentKind } from '../core/cinematic/moments';
+import { bossIntroMoment, defaultMoment, planMoment, rivalMoment, runsSinceMet, type MomentKind } from '../core/cinematic/moments';
 import { playMoment } from '../ui/cinematic/momentPlayer';
 /** Moments already played this session (repeatable ones play shorter next time). Not saved: presentation only. */
 const SEEN_MOMENTS = new Set<string>();
@@ -2207,7 +2207,7 @@ export class BattleScene extends Phaser.Scene {
     if (rid) {
       const w = Number(this.run.story.flags[`rivalW:${rid}`] ?? 0);
       const l = Number(this.run.story.flags[`rivalL:${rid}`] ?? 0);
-      const kind = rivalMoment({ fights: w + l, lastResult: w + l === 0 ? undefined : l > 0 && w === 0 ? 'playerLost' : 'playerWon', playerStreak: l > 0 ? 0 : w });
+      const kind = rivalMoment({ fights: w + l, lastResult: w + l === 0 ? undefined : l > 0 && w === 0 ? 'playerLost' : 'playerWon', playerStreak: l > 0 ? 0 : w, runsSince: runsSinceMet(services().session.profile.legacyRuns, battle.trainer.name) });
       if (kind === 'rivalFirst') return;
       const label = kind === 'rivalRevenge' ? 'REVENGE' : kind === 'rivalReunion' ? 'REUNION' : 'REMATCH';
       await this.bigMoment(kind, `${kind}.${rid}.${w}.${l}`, label, this.trainerTitle() ?? battle.trainer.name);

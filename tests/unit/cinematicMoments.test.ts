@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bossIntroMoment, canSkip, defaultMoment, planMoment, rivalMoment, MomentSpecSchema } from '../../src/core/cinematic/moments';
+import { bossIntroMoment, canSkip, defaultMoment, planMoment, rivalMoment, runsSinceMet, MomentSpecSchema } from '../../src/core/cinematic/moments';
 
 const none = new Set<string>();
 const full = { reduceMotion: false, disableAnimations: false, seen: none };
@@ -41,8 +41,16 @@ describe('history scenes', () => {
     expect(rivalMoment({ fights: 0, playerStreak: 0 })).toBe('rivalFirst');
     expect(rivalMoment({ fights: 2, lastResult: 'playerLost', playerStreak: 0 })).toBe('rivalRevenge');
     expect(rivalMoment({ fights: 2, lastResult: 'playerWon', playerStreak: 2 })).toBe('rivalRematch');
-    expect(rivalMoment({ fights: 2, lastResult: 'playerWon', playerStreak: 2, runsSince: 3 })).toBe('rivalReunion');
+    expect(rivalMoment({ fights: 0, playerStreak: 0, runsSince: 2 })).toBe('rivalReunion');
+    expect(rivalMoment({ fights: 0, playerStreak: 0 })).toBe('rivalFirst');
+    expect(rivalMoment({ fights: 2, lastResult: 'playerWon', playerStreak: 2, runsSince: 3 })).toBe('rivalRematch');
   });
+  it('counts runs since a character was last met, newest record first', () => {
+    const recs = [{ rivals: [{ name: 'Hugh', encounters: 0 }] }, { rivals: [{ name: 'Hugh', encounters: 2 }, { name: 'May', encounters: 1 }] }];
+    expect(runsSinceMet(recs, 'Hugh')).toBe(2);
+    expect(runsSinceMet(recs, 'May')).toBe(2);
+    expect(runsSinceMet(recs, 'N')).toBeUndefined();
+    expect(runsSinceMet([], 'Hugh')).toBeUndefined();  });
   it('picks boss intros, ace entrance first', () => {
     expect(bossIntroMoment({ role: 'gym' })).toBe('gymIntro');
     expect(bossIntroMoment({ role: 'champion', isAce: true })).toBe('aceEntrance');
