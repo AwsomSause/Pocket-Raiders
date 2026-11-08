@@ -99,6 +99,8 @@ import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
+import { enemyLastResort } from './lastResort';
+import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
 import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, shoutDamage, throwCatch, type SkillInput } from './w1Play';
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
@@ -2534,6 +2536,15 @@ function takeHp(
       stand = true;
     }
   }
+  // Beta 0.5 M1: a trainer's deeply bonded Pokémon holds on the same way (its friendship is its bond), once per battle each side.
+  if (hit !== null && c.side === 'enemy' && ctx.battle.kind === 'trainer' && ctx.content.balance.trainerWorld.enabled && lost > 0 && lost >= c.mon.hp) {
+    const last = !ctx.battle.enemyTeam.some((p) => p.uid !== c.mon.uid && p.hp > 0);
+    if (rollLastStand(ctx.content, { battle: ctx.battle, mon: c.mon, bond: friendshipBond(c.mon.friendship), lastStanding: last, side: 'enemy' })) {
+      spectacleOf(ctx.content, ctx.battle)!.enemyStands.push(c.mon.uid);
+      lost = c.mon.hp - 1;
+      stand = true;
+    }
+  }
   if (c.side === 'player' && lost > 0 && lost >= c.mon.hp && !ctx.battle.lastStandUsed) {
     const charm = lastStandItemId(ctx.content);
     const othersHealthy = ctx.party.some((p) => p.uid !== c.mon.uid && p.hp > 0);
@@ -3779,6 +3790,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'neuroforce' && effectiveness > 1) final *= 1.25;
       if (fx.superEffectiveBoost && effectiveness > 1) final *= 4 / 3;
       if (user.mon.awakened?.includes(move.id)) final *= content.story.awakening.boost;
+      if (user.mon.mastered?.includes(move.id)) final *= 1 + content.balance.trainerWorld.masteryPower;
       if (user.side === 'player' && ctx.battle.comboUid === user.mon.uid) final *= content.balance.w1.play.combo.bonus;
       if (user.side === 'player') final *= shoutDamage(content, ctx.battle.skill, !!user.mon.awakened?.includes(move.id));
       if ((foeAbility === 'fluffy' || foeAbility === 'aura-guard') && contact) final *= 0.5;
@@ -4342,9 +4354,13 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   const cfg = content.balance.trainerAi;
   const mon = enemy.mon;
   if (mon.hp <= 0 || mon.dynamaxed) return false;
+  const lent = enemyLastResort(content, battle);
+  if (lent) events.push(...lent);
   const max = calcStats(content, mon).hp;
-  if (battle.enemyItemsUsed < cfg.maxItems && mon.hp / max < cfg.healBelow) {
-    const gain = Math.min(max - mon.hp, Math.floor(max * cfg.healFraction));
+  const wealth = battle.trainerWealth;
+  const kit = wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
+  if (battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
+    const gain = Math.min(max - mon.hp, Math.floor(max * (wealth === undefined ? cfg.healFraction : WEALTH_HEAL[wealth]!)));
     if (gain > 0) {
       battle.enemyItemsUsed += 1;
       mon.hp += gain;
@@ -6374,7 +6390,7 @@ function berserkEndOfTurn(ctx: BattleContext, spec: NonNullable<BattleState['spe
 
 /** Last Stand: it held on at 1 HP and rallies (stat boosts from the balance numbers). */
 function lastStandMoment(ctx: BattleContext, target: Combatant, events: BattleEvent[]): void {
-  events.push(say('player', 'lastStand', `${nameOf(ctx, target.mon)} refuses to fall! Last Stand!`, target.mon.uid));
+  events.push(say(target.side, 'lastStand', `${nameOf(ctx, target.mon)} refuses to fall! Last Stand!`, target.mon.uid));
   for (const [stat, n] of Object.entries(spectacleCfg(ctx.content).lastStand.boost)) applyStageChange(ctx, target, stat as BoostStat, n, events);
 }
 

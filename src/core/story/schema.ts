@@ -6,6 +6,7 @@
 // Definitions describe what CAN happen (data); records describe what DID
 // happen in this run (saved with the run).
 
+import { TrainerWorldSchema } from '../trainerWorld/schema';
 import { StoryV2Schema } from '../story2/schema';
 import { WorldSimSchema } from '../worldSim/schema';
 import { z } from 'zod';
@@ -518,6 +519,8 @@ export const StoryStateSchema = z.object({
   eventQueue: z.array(z.object({ id: z.string(), since: z.number().int().min(0) })).max(4).optional(),
   /** W8: the world simulation's own records (core/worldSim/tick.ts). Optional, so no save bump. */
   sim: WorldSimSchema.optional(),
+  /** Beta 0.5 M1/M2: every trainer's record (core/trainerWorld). Optional, so no save bump. */
+  trainers: TrainerWorldSchema.optional(),
 });
 export type StoryState = z.infer<typeof StoryStateSchema>;
 

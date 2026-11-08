@@ -174,6 +174,7 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
+import { applyTrainerParity, trainerHistoryLine } from './trainerWorld/trainerWorld';
 import { castGymLeader, castLeague, record } from './rolePool';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
@@ -2076,12 +2077,16 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (!plan.leaderId) randomizeMoves(content, run, mon);
       return mon;
     });
+    // Beta 0.5 M1: this trainer follows the player's systems (friendship, bond, mastered moves, specialization), kept in its record.
+    const parity = applyTrainerParity(content, run, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId }, built, rivalBack?.id ?? takeover?.id ?? null);
+    if (parity) plan = { ...plan, specialization: parity.specialization, ...(plan.memoryNote ? {} : (() => { const l = trainerHistoryLine(content, parity); return l ? { memoryNote: l } : {}; })()) };
     // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
+    if (parity) run.battle.trainerWealth = parity.wealth;
     if (plan.strategy) run.battle.strategy = plan.strategy;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
