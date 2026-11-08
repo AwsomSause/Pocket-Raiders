@@ -1916,6 +1916,28 @@ export const RulesetSchema = z.object({
 });
 export type Ruleset = z.infer<typeof RulesetSchema>;
 
+/** Beta 0.5 M1/M2 (core/trainerWorld): every trainer follows the player's systems. Tuning in balance.json `trainerWorld`. */
+export const TrainerWorldConfigSchema = z.object({
+  enabled: z.boolean(),
+  /** Starting friendship range (min, max) for an ordinary trainer's and a boss's/rival's Pokémon. */
+  friendshipOrdinary: z.tuple([z.number().int().min(0).max(255), z.number().int().min(0).max(255)]),
+  friendshipBoss: z.tuple([z.number().int().min(0).max(255), z.number().int().min(0).max(255)]),
+  /** Friendship a trainer's Pokémon gain per earlier meeting with the player (the bond deepens off screen too). */
+  friendshipPerMeeting: z.number().int().min(0),
+  /** Two teammates this friendly and above count as bonded. */
+  bondMinFriendship: z.number().int().min(0).max(255),
+  /** Move uses (same ranks as the player's Move Mastery) that make a trainer's move mastered, and the most mastered moves one Pokémon has. */
+  masteryUses: z.number().int().min(1),
+  maxMastered: z.number().int().min(0),
+  /** Share the power of a mastered move rises by, for trainer and player alike (0.1 = +10%). */
+  masteryPower: z.number().min(0).max(0.5),
+  /** Reputation moved by a result, and the most notes a record keeps. */
+  reputationWin: z.number().int(),
+  reputationLoss: z.number().int(),
+  notesKept: z.number().int().min(1),
+});
+export type TrainerWorldConfig = z.infer<typeof TrainerWorldConfigSchema>;
+
 export const TrainerAiSchema = z.object({
   /** A smart trainer (a boss) heals once its Pokémon is under this share of its max HP. */
   healBelow: z.number().min(0).max(1),
@@ -2020,6 +2042,7 @@ export type WorldBalance = z.infer<typeof WorldBalanceSchema>;
 
 export const BalanceSchema = z.object({
   trainerAi: TrainerAiSchema,
+  trainerWorld: TrainerWorldConfigSchema,
   /** S160: stacked critical-hit sources count `excessFactor` of the way past `softCap` (1 = off). */
   critScaling: z.object({ softCap: z.number().min(0).max(1), excessFactor: z.number().min(0).max(1) }).default({ softCap: 0.5, excessFactor: 0.5 }),
   /** S168: every `turnsPerLevel` chip turns endured in a weather cut that weather's chip damage by `cutPerLevel`, up to `maxLevels` levels. */

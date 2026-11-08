@@ -725,6 +725,19 @@
   "pokenet": { "priceFactor": 1.05, "early": 1, "dealDiscount": 0.2 },
   "night": { "mystery": 2, "mysteryPrice": { "rare": 1800, "epic": 3600 } }
  },
+ "trainerWorld": {
+  "enabled": true,
+  "friendshipOrdinary": [40, 130],
+  "friendshipBoss": [140, 230],
+  "friendshipPerMeeting": 12,
+  "bondMinFriendship": 150,
+  "masteryUses": 10,
+  "maxMastered": 2,
+  "masteryPower": 0.1,
+  "reputationWin": 6,
+  "reputationLoss": -4,
+  "notesKept": 12
+ },
  "trainerAi": {
   "healBelow": 0.3,
   "healFraction": 0.5,

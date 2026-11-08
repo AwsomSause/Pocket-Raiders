@@ -44,6 +44,7 @@ import { clearMomentFlags, detectMoments } from './moments';
 import { noteCodex } from './codex';
 import { noteRivalryLoss, noteRivalryWin } from './rivalryKinds';
 import { memoryAfterBattle } from '../memories/encounters';
+import { noteTrainerMove, recordTrainerResult } from '../trainerWorld/trainerWorld';
 import { nemesisAfterBattle, noteNemesisBreakFree, noteNemesisFaint, noteRivalResult } from './nemesis';
 import type { Rival, StoryEventDefinition, StoryTriggerKind, Where } from './schema';
 import { rivalProgress } from '../rivals/progression';
@@ -213,6 +214,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
         lastMove[e.side] = e.moveId;
         lastMover = e.side;
         if (e.side === 'enemy' && fresh) fresh.foeMoved = true;
+        if (e.side === 'enemy') noteTrainerMove(content, run, battle, e.moveId);
         healer = e.side === 'player' && content.moves.get(e.moveId)?.effects.healTarget ? active.player : undefined;
         if (e.side === 'player' && active.player && prior.doubles && GUARD_MOVES.has(e.moveId)) bumpGrowth(content.balance.overhaulGrowth, run.story.histories[active.player], ['guardAlly']);
         if (e.side === 'player' && active.player) {
@@ -444,6 +446,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   if (battle.outcome === 'win') trainerVow(content, run, triggers, events.length - 1, where);
   if (battle.outcome) {
     memoryAfterBattle(content, run);
+    recordTrainerResult(content, run, where.stage ?? 0);
     for (const m of nemesisAfterBattle(content, run, where)) {
       const def = content.story.definitions.find((d) => d.triggerConditions.trigger === m.trigger);
       if (def) triggers.push({ ...makeTrigger(run, def, events.length - 1, triggers.length, m.names, null, m.uid), side: m.side, combat: false });

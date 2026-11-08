@@ -211,6 +211,10 @@ export interface PlannedMember {
   training?: Partial<Record<StatName, number>>;
   /** Held items (item id → copies): bosses past level 100 (bossBands.ts) and trainer tiers (trainerTiers.ts). */
   held?: Record<string, number>;
+  /** Beta 0.5 M1 (trainerWorld): how much it likes its trainer (0-255), the move ids it has mastered, and the slot of the teammate it is bonded with. */
+  friendship?: number;
+  mastered?: string[];
+  bondSlot?: number;
 }
 
 export interface TrainerPlan {
@@ -228,6 +232,8 @@ export interface TrainerPlan {
   ai: number;
   /** Trainer tiers: a line told in the intro when the trainer remembers you (core/trainerTiers.ts). */
   memoryNote?: string;
+  /** Beta 0.5 M1 (trainerWorld): the trainer's specialization id, shown and used by its AI. */
+  specialization?: string;
 }
 
 /** Creates a planned Pokémon, with a boss's moves and training when it has them. */
@@ -237,6 +243,8 @@ export function createPlannedPokemon(content: Content, member: PlannedMember, ui
   if (moves.length > 0) mon.moves = moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
   for (const [stat, stacks] of Object.entries(member.training ?? {})) mon.vitamins[stat as StatName] = stacks;
   if (member.held) mon.held = { ...member.held };
+  if (member.friendship !== undefined) mon.friendship = member.friendship;
+  if (member.mastered && member.mastered.length > 0) mon.mastered = member.mastered.filter((id) => mon.moves.some((m) => m.id === id));
   mon.hp = maxHp(content, mon);
   return mon;
 }

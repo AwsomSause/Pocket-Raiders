@@ -173,6 +173,7 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
+import { applyTrainerParity } from './trainerWorld/trainerWorld';
 import { castGymLeader, castLeague, record } from './rolePool';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
@@ -2069,6 +2070,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (!plan.leaderId) randomizeMoves(content, run, mon);
       return mon;
     });
+    // Beta 0.5 M1: this trainer follows the player's systems (friendship, bond, mastered moves, specialization), kept in its record.
+    const parity = applyTrainerParity(content, run, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId }, built, rivalBack?.id ?? takeover?.id ?? null);
+    if (parity) plan = { ...plan, specialization: parity.specialization };
     // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);

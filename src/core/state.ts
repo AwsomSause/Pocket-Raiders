@@ -127,6 +127,10 @@ export const PokemonInstanceSchema = z.object({
   blissful: z.object({ aura: z.string().min(1) }).optional(),
   /** Care & party life (core/care): mood, fatigue, journal counters, nickname, talent, training. */
   care: CareSchema.optional(),
+  /** Beta 0.5 M1: uid of the teammate this Pokémon is bonded with (trainer-side chemistry; core/trainerWorld). Optional, no save bump. */
+  bondWith: z.string().optional(),
+  /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
+  mastered: z.array(z.string()).optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 
