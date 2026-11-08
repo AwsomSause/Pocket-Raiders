@@ -174,6 +174,15 @@ describe("trainer Mentor's Last Resort", () => {
     expect(enemyLastResort(content, battle)).toBeNull();
   });
 
+  it('parity pairs the strongest Pokémon with a lower-level teammate as mentor and protégé', () => {
+    const mons = [createPokemon(content, 'lucario', 40, 'm0'), createPokemon(content, 'riolu', 20, 'm1'), createPokemon(content, 'pidgey', 20, 'm2')];
+    applyTrainerParity(content, fresh(), t, mons);
+    const mentor = mons[0]!;
+    const prote = mons.find((m) => m.uid === mentor.bondWith)!;
+    expect(prote.level).toBeLessThan(mentor.level);
+    expect(prote.bondWith).toBe(mentor.uid);
+  });
+
   it('does nothing when the protégé is healthy, the mentor is weaker, or it is a wild battle', async () => {
     const { enemyLastResort } = await import('../../src/core/battle/lastResort');
     const a = createPokemon(content, 'riolu', 20, 'e0');
