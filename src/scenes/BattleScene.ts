@@ -2182,10 +2182,11 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Beta 0.5 M7: a big-moment card through the cinematic framework. Presentation only; any failure is ignored. */
-  private async bigMoment(kind: MomentKind, id: string, title: string, subtitle: string): Promise<void> {
+  private async bigMoment(kind: MomentKind, id: string, title: string, subtitle: string, longer = false): Promise<void> {
     try {
       const st = services().session.settings;
       const spec = defaultMoment(kind, id, 'enemy');
+      if (longer) spec.phases = { situation: 400, anticipation: 700, moment: 900, reaction: 500, transition: 400 };
       const plan = planMoment(spec, { reduceMotion: this.motion === 'reduced', disableAnimations: this.motion === 'off' || st.disableAllAnimations, seen: SEEN_MOMENTS });
       await playMoment(this, spec, plan, { title, subtitle });
       SEEN_MOMENTS.add(id);
@@ -3766,7 +3767,18 @@ export class BattleScene extends Phaser.Scene {
             if (e.side === 'enemy' && this.run.battle?.trainer && team.length > 1 && team[team.length - 1]!.uid === e.uid) {
               void burstReveal(this, ENEMY_POS.x, ENEMY_POS.y - 80, this.foeRim(), this.motion);
               if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
-              await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
+              const bossNow = this.boss();
+              if (bossNow?.role === 'champion') {
+                // M7: the Champion's final Pokémon changes the music and gets the long ace sequence.
+                const finalTrack = 'bgm.raid.tera3';
+                if (services().assets.has(finalTrack)) {
+                  this.baseTrack = finalTrack;
+                  this.playingTrack = finalTrack;
+                  playMusicLazy(this, finalTrack, finalTrack);
+                }
+                await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'FINAL POKÉMON', this.speciesName(this.shown.enemy), true);
+              } else if (bossNow) await this.bigMoment('aceEntrance', `ace.${bossNow.title}`, 'ACE!', `${bossNow.title}: ${this.speciesName(this.shown.enemy)}`);
+              else await this.playBeat(stamp(this, 'ACE!', this.speciesName(this.shown.enemy), this.foeRim(), this.motion));
             }
           }
           break;
