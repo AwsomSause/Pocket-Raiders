@@ -2262,6 +2262,574 @@
    "cue": "crowd.swell",
    "weight": 1,
    "needs": []
+  },
+  {
+   "id": "evo-me-1",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "EVOLUTION!",
+   "lines": [
+    "WAIT! {myMon} was finished, and it's EVOLVING! Right in the middle of the fight! I have never seen anything like it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-2",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "EVOLUTION!",
+   "lines": [
+    "Look at it glow! It wouldn't go down, it grew up instead! That's my new favourite Pokémon!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-3",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "EVOLUTION!",
+   "lines": [
+    "Impossible! It should have fainted, but it's evolved on the spot! The stadium is going absolutely wild!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-4",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "EVOLUTION!",
+   "lines": [
+    "It evolved to survive! Did you see that? Did you SEE that?!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-5",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "EVOLUTION!",
+   "lines": [
+    "Seriously? It evolved mid-battle just to stay up?! Of course it did. That's {player} for you."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-6",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "EVOLUTION!",
+   "lines": [
+    "A bright light fills the arena! {myMon} has evolved and it is NOT done fighting!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-1",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "No way! {foeMon} should be down, but it's evolving! The challenger's in trouble now!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-2",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "It's glowing! {foe}'s Pokémon evolved right when it needed to! Unreal!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-3",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "Evolution in the middle of the fight! {foeMon} refuses to go down!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-4",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "Ha! That's the strength of a Pokémon that believes in its trainer. Come on, show me what you do next, {player}!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-5",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "Whoa, whoa, whoa! Did that thing just evolve to survive?! This match is wild!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-6",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "It evolved?! Come on, {player}, don't let that stop you!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-1",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "BY A THREAD!",
+   "lines": [
+    "It's hanging on by a thread! A single point of health! How is it still standing?!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-2",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "BY A THREAD!",
+   "lines": [
+    "One HP! ONE HP! {foeMon} will not go down!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-3",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "BY A THREAD!",
+   "lines": [
+    "That should have been the end, folks, and yet {foeMon} is somehow still up!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-4",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "BY A THREAD!",
+   "lines": [
+    "It survived!! Nobody survives that!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-5",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "BY A THREAD!",
+   "lines": [
+    "A thread. That's all it has left. Don't give it a second chance, {player}!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-6",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "BY A THREAD!",
+   "lines": [
+    "Well done, {foeMon}! There's the spirit! This is why I love this stage!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-1",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "What was THAT move?! {foeMon} doesn't learn that! It reached beyond its training to stop the sweep!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-2",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "Hold on, that's not in its moves! It just pulled out something new!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-3",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "Unbelievable! {foeMon} dug deeper than anyone knew it could, and that was a move it shouldn't have!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-4",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "Where did it learn that?! {foe} had a hidden trick ready the whole time!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-5",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "It cheated! It cheated! No, wait, it's just that good!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-6",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "I always say the best trainers have one more trick in their back pocket. {foe} just proved it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-1",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "They were on the ropes, and now look! {myMon} has the whole stadium on its feet!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-2",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "Don't count {player} out! Never count {player} out!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-3",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "I told them. I TOLD them {player} always has one more play."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-4",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "A comeback for the ages! Down to almost nothing, and still swinging!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-5",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "Come on, {myMon}! You can do it! You can do it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-6",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "Now THAT is a comeback. {player}, you're wearing the crowd like a banner out there."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-7",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "The momentum has completely shifted! The whole arena can feel it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-8",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "I'm shaking! That's the greatest comeback I've ever seen!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
   }
  ]
 }

@@ -2194,7 +2194,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Gym number counted from the start of the run (1 = the first gym).
     // Designated gimmicks (core/battle/bossGimmicks.ts): none up to Stage 5 of Region 1, then one more every region.
     const gimmickPlan = role
-      ? planBossGimmicks(content, run.battle.trainer?.leaderId, run.battle.enemyTeam, gimmickSlots(run.regionIndex, role === 'gym' ? stage.index + 1 : null, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics)
+      ? planBossGimmicks(content, run.battle.trainer?.leaderId, run.battle.enemyTeam, role === 'champion' && galarScope(content, run) === 'champion' ? 4 : gimmickSlots(run.regionIndex, role === 'gym' ? stage.index + 1 : null, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics)
       : {};
     // Beta 0.5 M1: a rival uses gimmicks by the same schedule as a boss (at most two), on its ace first.
     if (!role && (rivalBack || takeover || isRival) && parity) {
@@ -2735,6 +2735,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     perks: archetype.modifiers,
     gimmicks: gimmickContext(content, run),
     lastStand: () => galarLastStandMon(content, run),
+    galar: galarScope(content, run) ?? undefined,
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,

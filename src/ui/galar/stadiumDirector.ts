@@ -54,7 +54,7 @@ export interface StadiumHooks {
     /** Who this speaker is for this moment: display name and picture id (a seeded pick for crowd members). */
     cast: (speaker: HypeSpeaker, seed: string) => { name: string; assetId: string };
     /** Shows the line as trainer text with that speaker's own sprite. */
-    say: (name: string, assetId: string, text: string) => Promise<void>;
+    say: (name: string, assetId: string, text: string, look?: 'crowd' | 'champion') => Promise<void>;
     /** The foe's active Pokémon HP share (0-1). */
     foeShare: () => number;
   };
@@ -147,7 +147,10 @@ export class StadiumDirector {
       const beat = this.beatFor(e);
       if (beat) await this.react(beat);
       const trigger = this.hypeFor(e);
-      if (trigger && this.turnHype < 2 && (await this.hype(trigger))) this.turnHype++;
+      // The big comeback specials always play (they are the point of the moment); the rest are spaced out.
+      const special = trigger === 'evolveSave' || trigger === 'foeEvolveSave' || trigger === 'thread' || trigger === 'cheat';
+      if (trigger && special) await this.hype(trigger, true);
+      else if (trigger && this.turnHype < 2 && (await this.hype(trigger))) this.turnHype++;
       // In the Champion battle the Champion also speaks about the player's own road.
       if (this.h.hype?.scope === 'champion' && trigger && this.turnHype < 2) {
         const j: HypeTrigger | null = trigger === 'playerBigHit' ? 'journeyBig' : trigger === 'foeFirstKo' || trigger === 'foeKoStreak' ? 'journeyDown' : null;
@@ -219,7 +222,7 @@ export class StadiumDirector {
       const seed = `${this.h.battleId}:${this.turn}:${cutId}`;
       const avail = hy.available();
       const who = hy.cast(avail.has(speaker) ? speaker : 'crowdTrainer', seed);
-      await hy.say(who.name, who.assetId, fillHype(lines[this.pickLine(seed, lines.length)]!, hy.facts()));
+      await hy.say(who.name, who.assetId, fillHype(lines[this.pickLine(seed, lines.length)]!, hy.facts()), speaker === 'host' && hy.scope === 'champion' ? 'champion' : 'crowd');
     } catch {
       // commentary is decoration only
     }
@@ -336,6 +339,11 @@ export class StadiumDirector {
       if (e.side === 'enemy' && e.kind === 'mega' && this.fired.has('lastStand')) return 'bondMega';
       return null;
     }
+    if (e.type === 'spectacle' && typeof e.text === 'string') {
+      if (e.text.includes('It is EVOLVING!')) return e.side === 'player' ? 'evolveSave' : 'foeEvolveSave';
+      if (e.text.includes('holds on by a thread')) return 'thread';
+      if (e.text.includes('reaches beyond its training')) return 'cheat';
+    }
     if (e.type === 'spectacle' && e.side === 'enemy' && typeof e.text === 'string' && e.text.includes('is not done!')) {
       this.fired.add('lastStand');
       return 'lastStand';
@@ -408,7 +416,7 @@ export class StadiumDirector {
     }
     const text = fillHype(m.lines[this.pickLine(seed, m.lines.length)]!, hy.facts());
     try {
-      await hy.say(who.name, who.assetId, text);
+      await hy.say(who.name, who.assetId, text, m.speaker === 'host' && hy.scope === 'champion' ? 'champion' : 'crowd');
     } finally {
       const l = layer;
       if (l) this.scene.tweens.add({ targets: l, alpha: 0, duration: 220, onComplete: () => l.destroy() });

@@ -502,6 +502,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
+  galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
   fairyLock: -9,
@@ -717,6 +718,8 @@ export const BattleStateSchema = z.object({
     wonderRoom: z.number().int().default(0),
     /** Pokémon whose Disguise / Ice Face is already used up. */
     brokenFace: z.array(z.string()).default([]),
+    /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
+    galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
     mimic: z.record(z.string(), z.object({ kind: z.enum(['mimic', 'transform']), slot: z.number().int(), moves: z.array(z.object({ id: z.string(), pp: z.number().int() })) })).default({}),
     fairyLock: z.number().int().default(-9),

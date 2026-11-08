@@ -773,10 +773,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Loads a species' front art (and cry) now, for a Pokémon that was not known when the battle started (the Champion's last stand). */
-  private async ensureArt(speciesId: string): Promise<void> {
+  private async ensureArt(speciesId: string, back = false): Promise<void> {
     try {
       const sp = services().session.content.species.get(speciesId);
-      if (sp) await loadAssets(this, pokemonArtIds([sp], { front: true, shiny: true, cry: true }));
+      if (sp) await loadAssets(this, pokemonArtIds([sp], { front: !back, back, shiny: true, cry: true }));
     } catch {
       /* the picture just stays a placeholder */
     }
@@ -2421,7 +2421,7 @@ export class BattleScene extends Phaser.Scene {
             flags: () => this.journeyFlags(),
             available: () => this.hypeSpeakers(),
             cast: (speaker, seed) => this.hypeCast(speaker, seed),
-            say: (name, assetId, text) => this.speakWithArt(name, assetId, text),
+            say: (name, assetId, text, look) => this.speakWithArt(name, assetId, text, look),
             foeShare: () => {
               const f = this.run.battle?.enemyTeam[this.run.battle.enemyIndex];
               return f ? f.hp / Math.max(1, maxHp(content, f)) : 1;
@@ -3744,13 +3744,13 @@ export class BattleScene extends Phaser.Scene {
    * jumps and their Pokémon cries. Presentation only; the line also goes to the battle log.
    */
   /** Galar hype moments: a line as trainer text with this person's own picture (loaded first). Never throws. */
-  private async speakWithArt(name: string, assetId: string, text: string): Promise<void> {
+  private async speakWithArt(name: string, assetId: string, text: string, look?: 'crowd' | 'champion'): Promise<void> {
     try {
       if (assetId) await loadAssets(this, [assetId]).catch(() => undefined);
     } catch {
       /* the line shows without a picture */
     }
-    await this.speak(name, text, 'calm', false, assetId ? { assetId } : undefined);
+    await this.speak(name, text, 'calm', false, assetId ? { assetId, look } : undefined);
   }
 
   /** The people who can speak in a hype moment right now. */
@@ -3884,7 +3884,7 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string }): Promise<void> {
+  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string; look?: 'crowd' | 'champion' }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
     // After the last blow the run's battle is gone: the foe's name and picture are kept from while it lasted, so the leader's closing lines still show them.
@@ -3906,13 +3906,16 @@ export class BattleScene extends Phaser.Scene {
       if (species) playCry(this, species);
       void hop(this, this.enemySprite, this.motion);
     };
+    const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
     const line = storyLine(this, {
       speaker,
       role,
       text: shout && !/\[shake\]/.test(text) ? `[shake]${text}[/shake]` : text,
       voice,
       artId: artOverride?.assetId ?? (isFoe ? art?.assetId ?? null : this.hostArtFor(speaker)),
-      rim: this.foeRim(),
+      rim: look === 'champion' ? 0xe0503c : look === 'crowd' ? 0x4ad0e8 : this.foeRim(),
+      look,
+      dim: look === 'crowd' ? false : undefined,
       motion: this.motion,
       speed: settings.speechSpeed,
       onShout: cry,
@@ -4161,6 +4164,7 @@ export class BattleScene extends Phaser.Scene {
           break;
         }
         case 'transform': {
+          if (e.kind === 'ability') await this.ensureArt(e.to, e.side === 'player');
           // Presentation only: a cinematic for the big moments (battleFx/cinematics.ts), then the new form's sprite.
           if (e.kind === 'mega' && e.itemId) await this.say(`${this.speciesName(mon!)}'s ${content.items.get(e.itemId)?.name ?? 'Mega Stone'} is reacting to your Mega Ring!`);
           // A Z-Move flashes in its type's colour.

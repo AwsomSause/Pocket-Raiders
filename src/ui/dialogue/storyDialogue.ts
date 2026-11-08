@@ -177,6 +177,8 @@ export interface StoryLineOpts {
   /** Dim the screen behind (battle cut-in). */
   dim?: boolean;
   depth?: number;
+  /** A box made for broadcast speech: 'crowd' (someone in the stands, a reporter) or 'champion'. Drawn with a header band and a corner tag, above everything else. */
+  look?: 'crowd' | 'champion';
   /** Called once when the line is shouted (the box shakes): play a cry, make a Pokémon hop... */
   onShout?: () => void;
 }
@@ -194,7 +196,7 @@ const BOX = { x: 230, y: 330, w: 716, h: 196 };
 
 /** Shows one spoken line in the Story Portrait look and waits for the player to go on. */
 export function storyLine(scene: Phaser.Scene, o: StoryLineOpts): StoryLine {
-  const depth = o.depth ?? 1600;
+  const depth = o.depth ?? (o.look ? 1990 : 1600);
   const motion = o.motion;
   const plan = planSpeech(o.text, LETTER_MS.normal, o.voice ?? 'calm');
   const hz = voicePitch(o.speaker, o.voice ?? 'calm');
@@ -232,10 +234,19 @@ export function storyLine(scene: Phaser.Scene, o: StoryLineOpts): StoryLine {
   // Story > Subtitle style/size (presentation only): plain text fades the box back, size scales the font.
   const sub = services().session.settings.story;
   if (sub.subtitleStyle === 'plain') g.setAlpha(0.4);
+  if (o.look) {
+    const band = o.look === 'champion' ? 0xe0503c : 0x4ad0e8;
+    g.fillStyle(band, 1).fillRect(0, 0, BOX.w, 10);
+    g.lineStyle(2, 0xffffff, 0.5).strokeRect(8, 18, BOX.w - 16, BOX.h - 26);
+  }
   const plate = namePlate(scene, o.speaker, o.role, o.rim ?? STORY_GOLD).setPosition(26, -20);
   const body = scene.add.text(32, 30, '', textStyle({ small: 24, medium: 28, large: 32 }[sub.subtitleSize] ?? 28, COLORS.textLight, { wordWrap: { width: BOX.w - 70 }, lineSpacing: 10, ...(sub.subtitleStyle === 'plain' ? { stroke: '#000000', strokeThickness: 4 } : {}) }));
   const cue = nextCue(scene, BOX.w - 16, BOX.h - 10, motion);
   box.add([g, plate, body, cue]);
+  if (o.look) {
+    const tag = scene.add.text(BOX.w - 18, -22, o.look === 'champion' ? 'CHAMPION' : 'LIVE · STANDS', textStyle(16, '#ffffff', { stroke: '#101820', strokeThickness: 4 })).setOrigin(1, 0.5);
+    box.add(tag);
+  }
   root.add(box);
 
   // Entrances.
