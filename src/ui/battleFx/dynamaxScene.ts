@@ -203,15 +203,15 @@ export function dynamaxScene(scene: Phaser.Scene, o: DynamaxSceneOptions): Beat 
   const makePlat = (dark = false): Phaser.GameObjects.Graphics => {
     const g = scene.add.graphics();
     const ring = (rx: number, ry: number, j: number) =>
-      Array.from({ length: 40 }, (_, i) => {
-        const a = (i / 40) * Math.PI * 2;
+      Array.from({ length: 64 }, (_, i) => {
+        const a = (i / 64) * Math.PI * 2;
         const r = 1 + (j * (((i * 7) % 5) - 2)) / 10;
         return new Phaser.Math.Vector2(Math.cos(a) * rx * r, Math.sin(a) * ry * r);
       });
-    g.fillStyle(dark ? 0x180822 : 0x2b2c63, 1).fillPoints(ring(100, 26, 0.3), true);
+    g.fillStyle(dark ? 0x180822 : 0x2b2c63, 1).fillPoints(ring(100, 26, 0.38), true);
     g.fillStyle(dark ? 0x2a0e34 : 0x4a4c9e, 1).fillPoints(ring(92, 19, 0.05), true);
     g.fillStyle(dark ? 0x32123e : 0x5658b0, 1).fillEllipse(0, 0, 150, 20);
-    g.lineStyle(2, dark ? 0x0c0412 : 0x1c1d3d, 1).strokePoints(ring(100, 26, 0.3), true);
+    g.lineStyle(2, dark ? 0x0c0412 : 0x1c1d3d, 1).strokePoints(ring(100, 26, 0.38), true);
     return g;
   };
   const platY = H * 0.654;
@@ -281,7 +281,7 @@ export function dynamaxScene(scene: Phaser.Scene, o: DynamaxSceneOptions): Beat 
   const outFit = fit(redOut);
   const red = add(giantMake(cx, platY)) as Phaser.GameObjects.Sprite;
   red.setDepth(depth + 9).setVisible(false).setAlpha(0);
-  shade(red, o.calyrex ? 0x9ff0f0 : 0xff8494);
+  shade(red, o.calyrex ? 0x9ff0f0 : 0xff6a98);
   const redFit = fit(red);
   const giantFeetY = H * 0.79;
   const giantX = xs(7);
@@ -497,7 +497,7 @@ export function dynamaxScene(scene: Phaser.Scene, o: DynamaxSceneOptions): Beat 
   }
 
   // 11100-12000: the top goes dark, then the whole scene fades to black; the battle (with the giant) is behind it.
-  if (vignette) tw({ targets: vignette, alpha: 1, duration: 420, delay: 11100 });
+  if (vignette) tw({ targets: vignette, alpha: 1, duration: 500, delay: 10700 });
   tw({ targets: fade, fillAlpha: 1, duration: 500, delay: 11500 });
   at(12000, () => {
     swap();
