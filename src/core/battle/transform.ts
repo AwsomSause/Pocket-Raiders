@@ -118,6 +118,9 @@ export interface FormOption {
   itemId: string | null;
 }
 
+/** Lore: which Mega form a boss's Pokémon takes when its stones offer several (Giovanni's Mewtwo is Mega Y). */
+export const BOSS_MEGA_FORM: Readonly<Record<string, string>> = { giovanni: 'mewtwo-mega-y' };
+
 /** Every Mega (or, with `primal`, Primal) form this species can take, with the item for each, in data order. */
 export function stoneForms(content: Content, speciesId: string, primal: boolean): FormOption[] {
   const out: FormOption[] = [];
@@ -466,7 +469,8 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
       ...extra,
     });
   const fireMega = (): boolean => {
-    const option = may('mega') ? stoneForms(content, enemy.speciesId, false)[0] : undefined;
+    const stones = may('mega') ? stoneForms(content, enemy.speciesId, false) : [];
+    const option = stones.find((o) => o.formId === BOSS_MEGA_FORM[battle.trainer?.leaderId ?? '']) ?? stones[0];
     if (!option) return false;
     changeForm(ctx, 'enemy', enemy, 'mega', { ...option, itemId: null }, events);
     battle.transform.used.enemy.push('mega');

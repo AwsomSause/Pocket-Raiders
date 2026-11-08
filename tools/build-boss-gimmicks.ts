@@ -12,6 +12,8 @@ const { stoneForms, gmaxFormFor } = await loadModule<typeof Transform>('/src/cor
 await closeModules();
 const content = buildContent();
 const hash = (s: string) => [...s].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
+// Lore: this boss's Mega is this Pokémon (Giovanni's Mega Mewtwo Y; the form is set in core/battle/bossGimmicks.ts).
+const PIN_MEGA: Record<string, string> = { giovanni: 'mewtwo' };
 const KINDS = ['mega', 'tera', 'zmove', 'dynamax'] as const;
 
 const out: Record<string, { order: string[]; mons: Record<string, string> }> = {};
@@ -39,8 +41,13 @@ for (const boss of [...content.bosses.values()].sort((a, b) => a.id.localeCompar
     dynamax: [...pool].sort((a, b) => Number(sig.includes(b)) - Number(sig.includes(a)) || Number(!!gmaxFormFor(content, b)) - Number(!!gmaxFormFor(content, a)) || sp(b).baseStats.hp - sp(a).baseStats.hp),
     tera: [...sig, ...pool].filter((s) => sp(s).types.includes(type0)).concat(pool),
   };
+  const pin = PIN_MEGA[boss.id];
+  if (pin && pool.includes(pin) && cand.mega!.includes(pin)) {
+    cand.mega = [pin, ...cand.mega!.filter((x) => x !== pin)];
+    for (const k of ['zmove', 'dynamax', 'tera']) if (cand[k]!.length > 1) cand[k] = cand[k]!.filter((x) => x !== pin);
+  }
   const score: Record<string, number> = {
-    mega: cand.mega!.length === 0 ? -1 : sig.includes(cand.mega![0]!) ? 65 : 45,
+    mega: cand.mega!.length === 0 ? -1 : sig.includes(cand.mega![0]!) || cand.mega![0] === pin ? 65 : 45,
     zmove: cand.zmove!.length === 0 ? -1 : attackTypes.get(cand.zmove![0]!)?.has(type0) ? 60 : 45,
     dynamax: cand.dynamax!.length === 0 ? -1 : 40 + (gmaxFormFor(content, cand.dynamax![0]!) ? 25 : 0) + (sp(cand.dynamax![0]!).baseStats.hp >= 100 ? 10 : 0),
     tera: cand.tera!.length === 0 ? -1 : 40 + (sp(cand.tera![0]!).types.includes(type0) ? 20 : 0),
