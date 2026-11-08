@@ -31,12 +31,15 @@ export function lastResortEligible(content: Content, prote: PokemonInstance, men
 
 export interface LastResortOffer { mentorUid: string; proteUid: string; moveId: string }
 
-/** Is the option on the battle menu right now? (Singles and doubles: the active player Pokémon is the protégé.) */
-export function lastResortOffer(content: Content, run: RunState): LastResortOffer | null {
+/**
+ * Is the option on the battle menu right now? The protégé is the Pokémon being commanded: in singles the active one, in doubles
+ * the caller passes the Pokémon in the spot being commanded. The mentor can be any able teammate (it may be the partner on the field).
+ */
+export function lastResortOffer(content: Content, run: RunState, commanded?: PokemonInstance): LastResortOffer | null {
   const battle = run.battle;
-  if (!battle || battle.outcome || battle.lastResort || battle.doubles) return null;
-  const prote = run.party[battle.activeIndex];
-  if (!prote) return null;
+  if (!battle || battle.outcome || battle.lastResort) return null;
+  const prote = commanded ?? run.party[battle.activeIndex];
+  if (!prote || !run.party.some((m) => m.uid === prote.uid)) return null;
   const bond = bondForProtege(run, prote.uid);
   if (!bond || bond.chemistry < MENTOR_CFG.lastResort.minChemistry) return null;
   const mentor = run.party.find((m) => m.uid === bond.mentorUid);
@@ -45,8 +48,8 @@ export function lastResortOffer(content: Content, run: RunState): LastResortOffe
 }
 
 /** Lends the move. Returns the lines for the presentation (the scene plays them in order). */
-export function useLastResort(content: Content, run: RunState): BattleEvent[] {
-  const offer = lastResortOffer(content, run);
+export function useLastResort(content: Content, run: RunState, commanded?: PokemonInstance): BattleEvent[] {
+  const offer = lastResortOffer(content, run, commanded);
   if (!offer) throw new Error("Mentor's Last Resort is not available.");
   const battle = run.battle!;
   const mentor = run.party.find((m) => m.uid === offer.mentorUid)!;
