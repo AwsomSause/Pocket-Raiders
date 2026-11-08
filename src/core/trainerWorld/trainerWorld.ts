@@ -7,6 +7,8 @@ import type { Content } from '../contentSchema';
 import { Rng, hashSeed } from '../rng';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { getSpecies } from '../pokemon';
+import { borrowedMove } from '../battle/lastResort';
+import { chooseSpecialization, giveTrainerItems, steerTeam, teachReturning } from './behavior';
 import { SPECIALIZATIONS, TRAINER_NOTES_KEPT, type Specialization, type TrainerNote, type TrainerRecord } from './schema';
 
 type TrainerRef = { classId: string; name: string; leaderId: string | null };
@@ -61,7 +63,7 @@ export function ensureRecord(run: RunState, t: TrainerRef, rivalId?: string | nu
   return (world[key] ??= {
     key, name: t.name, classId: t.classId, leaderId: t.leaderId,
     specialization: 'balanced', wealth: bossLike(t) ? 3 : 1,
-    meetings: 0, wins: 0, losses: 0, lastStage: -1, ace: null, bond: null, moveUses: {}, reputation: 0, notes: [],
+    meetings: 0, wins: 0, losses: 0, lastStage: -1, ace: null, bond: null, moveUses: {}, reputation: 0, notes: [], beatenBy: null,
   });
 }
 
@@ -76,7 +78,7 @@ function addNote(content: Content, rec: TrainerRecord, note: TrainerNote): void 
  * Mutates the Pokémon (friendship, bondWith, mastered) and the trainer's record; returns the record.
  * Call it once per trainer battle, after the team is built and before it is shown.
  */
-export function applyTrainerParity(content: Content, run: RunState, t: TrainerRef, team: PokemonInstance[], rivalId?: string | null): TrainerRecord | null {
+export function applyTrainerParity(content: Content, run: RunState, t: TrainerRef, team: PokemonInstance[], rivalId?: string | null, lines?: string[]): TrainerRecord | null {
   const cfg = content.balance.trainerWorld;
   if (!cfg.enabled || team.length === 0) return null;
   const rec = ensureRecord(run, t, rivalId);
@@ -102,6 +104,16 @@ export function applyTrainerParity(content: Content, run: RunState, t: TrainerRe
     if (!rec.bond || rec.bond.a !== fond[0]!.speciesId || rec.bond.b !== fond[1]!.speciesId) addNote(content, rec, { kind: 'bonded', stage: Math.max(0, rec.lastStage), subject: fond[0]!.speciesId });
     rec.bond = { a: fond[0]!.speciesId, b: fond[1]!.speciesId, friendship: Math.min(fond[0]!.friendship, fond[1]!.friendship) };
   }
+  // Specialization (M1): a trainer keeps the style it had; a new one is read from its team, then its team is fitted to it.
+  const wealth = wealthOf(t, seedKey);
+  const spec = rec.meetings > 0 ? rec.specialization : chooseSpecialization(specializationOf(content, team, seedKey), seedKey);
+  // Authored boss teams keep their moves and items; everyone else is fitted to their style.
+  if (!bossLike(t)) {
+    steerTeam(content, team, spec);
+    giveTrainerItems(content, team, spec, wealth);
+    const taught = teachReturning(content, team, rec, borrowedMove.bind(null, content));
+    if (lines) lines.push(...taught);
+  }
   // Move mastery: moves used often enough in earlier meetings; a boss's ace starts with its strongest attack mastered.
   for (const mon of team) {
     const earned = mon.moves
@@ -113,8 +125,8 @@ export function applyTrainerParity(content: Content, run: RunState, t: TrainerRe
     const list = [...new Set([...(strongest && (content.moves.get(strongest)?.power ?? 0) > 0 ? [strongest] : []), ...earned])].slice(0, cfg.maxMastered);
     if (list.length > 0) mon.mastered = list;
   }
-  rec.specialization = specializationOf(content, team, seedKey);
-  rec.wealth = wealthOf(t, seedKey);
+  rec.specialization = spec;
+  rec.wealth = wealth;
   rec.ace = ace.speciesId;
   return rec;
 }
@@ -140,6 +152,8 @@ export function recordTrainerResult(content: Content, run: RunState, stage: numb
   rec.meetings += 1;
   rec.lastStage = stage;
   const playerWon = battle.outcome === 'win';
+  const lead = run.party[battle.activeIndex];
+  if (playerWon && lead) rec.beatenBy = { speciesId: lead.speciesId, types: [...getSpecies(content, lead.speciesId).types] };
   if (playerWon) { rec.losses += 1; rec.reputation = Math.max(-100, rec.reputation + cfg.reputationLoss); }
   else { rec.wins += 1; rec.reputation = Math.min(100, rec.reputation + cfg.reputationWin); }
   addNote(content, rec, { kind: playerWon ? 'lost' : 'won', stage });
@@ -157,10 +171,11 @@ export const WEALTH_POTIONS = [0, 1, 1, 2] as const;
 export const WEALTH_HEAL = [0.3, 0.4, 0.5, 0.6] as const;
 
 /** M2: one line a returning trainer says before the fight, read from their record (no randomness), or null for a first meeting. */
-export function trainerHistoryLine(content: Content, rec: TrainerRecord): string | null {
+export function trainerHistoryLine(content: Content, rec: TrainerRecord, partySpecies: readonly string[] = []): string | null {
   if (rec.meetings <= 0) return null;
   const nameOf = (id: string | null) => (id ? content.species.get(id)?.name ?? id : null);
   const ace = nameOf(rec.ace);
+  if (rec.beatenBy && partySpecies.includes(rec.beatenBy.speciesId)) return `${rec.name} recognizes your ${nameOf(rec.beatenBy.speciesId)} from last time${ace ? `, and ${ace} has not forgotten it either` : ''}.`;
   if (rec.reputation >= 40) return `${rec.name} is a name people know by now. This is not a trainer to take lightly.`;
   if (rec.wins > rec.losses) return `${rec.name} remembers beating you before, and ${ace ? `${ace} is ready to do it again` : 'is ready to do it again'}.`;
   if (rec.losses >= 2 && rec.bond) return `${rec.name} has kept training since you last met. ${nameOf(rec.bond.a)} and ${nameOf(rec.bond.b)} are closer than ever.`;

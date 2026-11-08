@@ -44,6 +44,8 @@ export const TrainerRecordSchema = z.object({
   /** -100 (infamous) to 100 (famous): how the world rates them, moved by wins, losses and big results. */
   reputation: z.number().int().min(-100).max(100).default(0),
   notes: z.array(TrainerNoteSchema).default([]),
+  /** The Pokémon of yours that last beat them (species and its types): they remember it and plan for it. */
+  beatenBy: z.object({ speciesId: z.string(), types: z.array(z.string()) }).nullable().default(null),
 });
 export type TrainerRecord = z.infer<typeof TrainerRecordSchema>;
 

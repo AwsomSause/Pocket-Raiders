@@ -101,6 +101,7 @@ import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
 import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
+import { specializationBonus, specializationPersonality } from '../trainerWorld/behavior';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
 import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, shoutDamage, throwCatch, type SkillInput } from './w1Play';
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
@@ -503,7 +504,9 @@ export function moveValue(brain: EnemyBrain, user: PokemonInstance, moveId: stri
   const value = moveValueBase(brain, user, moveId);
   const move = brain.content.moves.get(moveId);
   if (!move || value <= 0 || brain.raw || (brain.side ?? 'enemy') !== 'enemy' || brain.battle?.kind !== 'trainer' || !brain.content.balance.trainerAi.aai.personality) return value;
-  return value * personalityFactor(aaiPersonality(brain.content, brain.battle.enemyTeam), move);
+  const spec = brain.battle.specialization;
+  const personality = specializationPersonality(spec, brain.battle.turn) ?? aaiPersonality(brain.content, brain.battle.enemyTeam);
+  return value * personalityFactor(personality, move) * specializationBonus(spec, move);
 }
 
 function moveValueBase(brain: EnemyBrain, user: PokemonInstance, moveId: string): number {
@@ -4368,8 +4371,18 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
       return true;
     }
   }
+  const kitTurn = trainerKitTurn(ctx, enemy, max, events);
+  if (kitTurn) return true;
   if (battle.ai <= 0) return false; // S271: ordinary trainers only heal
+  const moment = trainerBondMoment(ctx, enemy, max, events);
+  if (moment) return true;
   if (battle.enemySwitches >= cfg.maxSwitches || enemy.vol.turnsOut < 1 || enemy.vol.trapped || enemy.vol.bound > 0) return false;
+  if ((mon.friendship ?? 0) >= 230 && !(battle.enemyMoments ??= []).includes(`refuse:${mon.uid}`) && mon.hp / max >= 0.2) {
+    battle.enemyMoments.push(`refuse:${mon.uid}`);
+    events.push(say('enemy', 'rally', `${getSpecies(content, mon.speciesId).name} refuses to leave the fight!`, mon.uid));
+    applyStageChange(ctx, enemy, 'atk', 1, events);
+    return false;
+  }
   const target = ctx.party[battle.activeIndex]!;
   // Danger switch (Advanced AI "Switch Logic"): leave when the player's best move would KO, for a teammate that takes it well.
   if (cfg.dangerSwitch > 0) {
@@ -4395,6 +4408,57 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   battle.enemySwitches += 1;
   swapInEnemy(ctx, pick.i, events);
   return true;
+}
+
+/** Beta 0.5 M1: a trainer with means spends its saved Full Heal, X item and Full Restore the way a player would. */
+function trainerKitTurn(ctx: BattleContext, enemy: Combatant, max: number, events: BattleEvent[]): boolean {
+  const { battle, content } = ctx;
+  const kit = battle.trainerKit;
+  const mon = enemy.mon;
+  if (!kit) return false;
+  const name = getSpecies(content, mon.speciesId).name;
+  const last = battle.enemyTeam.filter((m) => m.hp > 0).length <= 1;
+  if (kit.restore > 0 && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
+    kit.restore -= 1;
+    mon.hp = max;
+    mon.status = null;
+    events.push({ type: 'item', itemId: 'full-restore', targetUid: mon.uid, message: `The trainer used a Full Restore on ${name}!`, hpAfter: mon.hp });
+    return true;
+  }
+  if (kit.cure > 0 && mon.status) {
+    kit.cure -= 1;
+    mon.status = null;
+    events.push({ type: 'item', itemId: 'full-heal', targetUid: mon.uid, message: `The trainer used a Full Heal on ${name}!`, hpAfter: mon.hp });
+    return true;
+  }
+  if (kit.boost > 0 && enemy.vol.turnsOut <= 1 && mon.hp / max > 0.5) {
+    kit.boost -= 1;
+    applyStageChange(ctx, enemy, kit.boostStat, 1, events);
+    events.push({ type: 'item', itemId: `x-${kit.boostStat === 'spa' ? 'sp-atk' : kit.boostStat === 'spd' ? 'sp-def' : kit.boostStat === 'atk' ? 'attack' : kit.boostStat === 'def' ? 'defense' : 'speed'}`, targetUid: mon.uid, message: `The trainer used an X item on ${name}!`, hpAfter: mon.hp });
+    return true;
+  }
+  return false;
+}
+
+/** Beta 0.5 M1: bonded partners protect each other, and a deeply bonded Pokémon refuses to be pulled back. */
+function trainerBondMoment(ctx: BattleContext, enemy: Combatant, max: number, events: BattleEvent[]): boolean {
+  const { battle, content } = ctx;
+  const mon = enemy.mon;
+  const moments = (battle.enemyMoments ??= []);
+  const bondMin = content.balance.trainerWorld.bondMinFriendship;
+  const name = getSpecies(content, mon.speciesId).name;
+  if (!moments.includes('protect') && mon.hp / max < 0.3 && enemy.vol.turnsOut >= 1 && !enemy.vol.trapped) {
+    const friend = battle.enemyTeam
+      .map((m, i) => ({ m, i }))
+      .filter(({ m, i }) => i !== battle.enemyIndex && m.hp > 0 && m.hp / calcStats(content, m).hp > 0.7 && m.level >= mon.level && (m.friendship ?? 0) >= bondMin && (mon.friendship ?? 0) >= bondMin)[0];
+    if (friend) {
+      moments.push('protect');
+      events.push(say('enemy', 'rally', `${getSpecies(content, friend.m.speciesId).name} steps forward to protect ${name}!`, friend.m.uid));
+      swapInEnemy(ctx, friend.i, events);
+      return true;
+    }
+  }
+  return false;
 }
 
 function swapInEnemy(ctx: BattleContext, index: number, events: BattleEvent[]): void {
