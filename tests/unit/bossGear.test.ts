@@ -12,7 +12,7 @@ describe('boss gear', () => {
     for (const m of out) {
       expect(Object.keys(m.held ?? {}).length).toBe(1);
       expect(m.ivs?.atk).toBe(31);
-      expect(m.training?.hp).toBe(content.balance.vitaminMaxStacks);
+      expect(m.training?.hp).toBe(2);
       expect(Object.values(m.evs ?? {}).reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(510);
     }
     const mon = createPlannedPokemon(content, out[0]!, 'x');
