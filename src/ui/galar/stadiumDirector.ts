@@ -116,6 +116,14 @@ export class StadiumDirector {
     await playMoment(this.scene, spec, plan, { title: cut.label, subtitle: cut.caption });
   }
 
+  /** Test/preview hook: draws one named cut's art right now (no gameplay effect). Returns whether it drew. */
+  previewCut(id: string): boolean {
+    const cut = GALAR_STADIUM.cameraCuts.find((c) => c.id === id);
+    if (!cut) return false;
+    drawCutArt(this.scene, cut.id, `preview:${id}`, 1600, !this.h.reduceMotion());
+    return true;
+  }
+
   private showBanner(text: string, intensity: number): void {
     this.banner?.destroy();
     const t = this.scene.add.text(GAME_WIDTH / 2, 70, text, textStyle(18 + intensity * 2, intensity >= 3 ? '#ffe060' : '#aab4c0', { stroke: '#101820', strokeThickness: 5 })).setOrigin(0.5).setDepth(1700).setAlpha(0);
