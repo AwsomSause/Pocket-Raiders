@@ -3,9 +3,7 @@
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
-import { planMoment } from '../core/cinematic/moments';
 import { mentorMoment } from '../core/story/mentorMoments';
-import { playMoment } from '../ui/cinematic/momentPlayer';
 import { mentorScene } from '../ui/battleFx/mentorScene';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
