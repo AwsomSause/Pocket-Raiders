@@ -31,7 +31,7 @@ export const CROWD_SPRITES: readonly string[] = [
   'hoopster', 'infielder', 'janitor', 'linebacker', 'maid', 'musician', 'nursery_aide', 'officer', 'parasol_lady', 'pilot',
   'preschooler_f', 'preschooler_m', 'psychic_f', 'rich_kid_f', 'rich_kid_m', 'scuba_diver_f', 'scuba_diver_m', 'smasher', 'striker',
   'twins', 'waiter_f', 'waiter_m', 'worker_f', 'young_couple', 'clerk_f', 'clerk_m', 'black_belt_f', 'rich_f', 'rich_m', 'veteran_f', 'veteran_m',
-  'collector', 'backers_f', 'backers_m', 'ruin_maniac', 'victor', 'victoria', 'rival_f', 'rival_m',
+  'collector', 'backers_f', 'backers_m', 'ruin_maniac',
 ].map((n) => `trainer.pr/${n}`);
 /** The challengers watching from the stands and the people in the private box. */
 const WATCHERS = ['ace_trainer_m', 'ace_trainer_f', 'ranger_m', 'ranger_f', 'backpacker_m', 'backpacker_f', 'camper_m', 'camper_f'].map((n) => `trainer.pr/${n}`);
