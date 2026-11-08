@@ -426,6 +426,59 @@ export const StandingSchema = z.object({
 });
 export type Standing = z.infer<typeof StandingSchema>;
 
+// ---------- Beta 0.5 mentor / protégé rework (core/story/mentorBond.ts) ----------
+export const MENTOR_TYPES = ['veteran', 'rival', 'protector', 'specialist', 'familyFigure', 'survivor', 'formerEnemy', 'prodigy', 'unlikelyPair', 'sharedExperience'] as const;
+export type MentorType = (typeof MENTOR_TYPES)[number];
+export const CHEMISTRY_TRAITS = ['mutualRespect', 'competitiveSpirit', 'protectiveInstinct', 'familialBond', 'unlikelyFriendship', 'professionalPartnership', 'sharedTrauma', 'heroWorship', 'heatedRivalry', 'quietUnderstanding', 'teachersPride', 'growingIndependence'] as const;
+export type ChemistryTrait = (typeof CHEMISTRY_TRAITS)[number];
+
+/** What a mentorship adds to its relationship record (keyed by the relationship id). */
+export const MentorBondSchema = z.object({
+  relId: z.string(),
+  mentorUid: z.string(),
+  proteUid: z.string(),
+  types: z.array(z.enum(MENTOR_TYPES)).min(1),
+  trait: z.enum(CHEMISTRY_TRAITS),
+  chemistry: z.number().int().min(0).max(100),
+  /** Moves handed down outside the learnset. */
+  lessons: z.array(z.string()),
+  /** EV points nudged toward the mentor's strengths, by stat. */
+  drift: z.record(z.string(), z.number().int().min(0)).default({}),
+  /** The protégé has caught up: a graduation spar can be held. */
+  ready: z.boolean().default(false),
+  /** How the graduation spar ended (the mentorship closes after a protégé win or a mutual result). */
+  outcome: z.enum(['protege', 'mentor', 'mutual']).nullable().default(null),
+  /** Mentorship events already told (id -> times). */
+  events: z.record(z.string(), z.number().int().min(0)).default({}),
+  lastEventBattle: z.number().int().nullable().default(null),
+  /** Battles the pair has spent together since the last chemistry check. */
+  battlesTogether: z.number().int().min(0).default(0),
+});
+export type MentorBond = z.infer<typeof MentorBondSchema>;
+
+/** A foe one of your Pokémon knocked out, kept so it can come back and ask to be taught (M5). */
+export const DefeatedFoeSchema = z.object({
+  foeSpecies: z.string(),
+  level: z.number().int().min(1),
+  byUid: z.string(),
+  battle: z.number().int().min(0),
+  boss: z.boolean(),
+  trainerId: z.string().nullable(),
+  moves: z.array(z.string()).default([]),
+});
+export type DefeatedFoe = z.infer<typeof DefeatedFoeSchema>;
+
+export const MentoringSchema = z.object({
+  bonds: z.record(z.string(), MentorBondSchema),
+  defeated: z.array(DefeatedFoeSchema),
+  /** "species:byUid" pairs that already came back (never twice). */
+  returned: z.array(z.string()),
+  lastReturnBattle: z.number().int().nullable(),
+  returns: z.number().int().min(0),
+});
+export type Mentoring = z.infer<typeof MentoringSchema>;
+export const freshMentoring = (): Mentoring => ({ bonds: {}, defeated: [], returned: [], lastReturnBattle: null, returns: 0 });
+
 export const StoryStateSchema = z.object({
   /** Last sequence number used (event ids are seed + seq). */
   seq: z.number().int().min(0),
@@ -439,6 +492,8 @@ export const StoryStateSchema = z.object({
   /** How rivals feel about each other: enemies, friends or training partners. */
   standing: StandingSchema.default({ sponsor: null, factions: {}, bosses: 0, debts: [] }),
   rivalGraph: z.array(z.object({ a: z.string(), b: z.string(), kind: z.enum(['enemies', 'friends', 'partners']) })).default([]),
+  /** Beta 0.5: mentor bonds, chemistry and the defeated foes that may return as protégés (run v42). */
+  mentoring: MentoringSchema.default(freshMentoring),
   chronicle: z.array(ChronicleEntrySchema),
   /** Ids of run-scope effects already applied: applying one again does nothing. */
   appliedEffects: z.array(z.string()),
