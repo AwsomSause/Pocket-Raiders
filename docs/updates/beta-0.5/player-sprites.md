@@ -5,3 +5,4 @@
 - Player ball-throw sprites are back on send-outs (singles and doubles); reverts "Send-outs: no player throw animation". Nate and Hilda use their own back sprites.
 - Removed the "Look B coming soon" text and menu entry in the prologue, and the "Look wanted" profile line.
 - Tests: `tests/unit/playerTrainers.test.ts`; `trainerSprites.spec.ts` waits for the Hilda throw pose again.
+- The prologue Look step shows previews of Nate and Hilda.
