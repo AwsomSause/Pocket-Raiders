@@ -2222,8 +2222,8 @@ export const BalanceSchema = z.object({
   }),
   /** Battle transformations (M8.5): which bosses may use them. */
   transformations: z.object({
-    /** Gym leaders use them from this gym of the run on (1 = the first gym). */
-    bossGymFrom: z.number().int().min(1),
+    /** Bosses get their first designated gimmick after this stage of the first region; one more every region (core/battle/bossGimmicks.ts). */
+    bossGimmickAfterStage: z.number().int().min(1),
     /** Elite Four members and champions always may. */
     league: z.boolean(),
     /** Turns a Dynamax lasts, counting the turn it starts. */
