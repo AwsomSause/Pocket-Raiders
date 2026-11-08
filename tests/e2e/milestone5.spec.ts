@@ -138,7 +138,7 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Hub').lobby?.focus('run', false));
   await page.keyboard.press('Enter'); // Start a run
   await waitForScene(page, 'TrainerSelect');
-  // Only Nate and Hilda are playable now, so the claimed Brock stays a profile unlock and the run starts as Nate.
+  // Only Red, Blue, Green, Hilda and Nate are playable, so the claimed Brock stays a profile unlock and the run starts as the first one, Red.
   await page.waitForTimeout(200);
   await page.screenshot({ path: 'test-results/m5-trainer-select.png' });
   await page.keyboard.press('Enter');
@@ -146,6 +146,6 @@ test('a lost run pays Bank Credits and earns achievements; a claimed trainer can
   await page.keyboard.press('Enter'); // Roll starters
   await waitForScene(page, 'StarterSelect');
   const r = await page.evaluate(() => (window as any).__pkr.session.run);
-  expect(r.archetypeId).toBe('nate');
+  expect(r.archetypeId).toBe('red');
   expect(errors).toEqual([]);
 });
