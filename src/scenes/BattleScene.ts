@@ -2293,7 +2293,21 @@ export class BattleScene extends Phaser.Scene {
         },
         alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
         say: (text) => this.say(text),
-        portrait: (id, x, y) => trainerVisual(this, id, 'Trainer', x, y, 2),
+        portrait: (id, x, y) => {
+          // Fit the picture to the card so no character is cropped, whatever size its sprite is.
+          const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
+          if (v.height > 0) v.setScale(Math.min(340 / v.height, 6));
+          return v as unknown as Phaser.GameObjects.GameObject;
+        },
+        art: {
+          sprite: (id, x, y, scale) => (this.textures.exists(id) ? trainerVisual(this, id, 'Trainer', x, y, scale) : null),
+          preload: (ids) => loadAssets(this, ids),
+          cast: () => {
+            const host = content.bosses.get(galarHost(content, this.run).id)?.sprites.default ?? '';
+            const rival = this.run.story.rivals[0];
+            return { host, opponent: this.trainerArt()?.assetId ?? '', rival: (rival && this.rivalArt(rival)?.assetId) || '' };
+          },
+        },
         bandArt: (x, y) => itemVisual(this, services().session.content.items.get('dynamax-band')?.iconAssetId ?? 'item.dynamax_band', x, y, 3),
       });
     } catch (e) {
@@ -3595,6 +3609,18 @@ export class BattleScene extends Phaser.Scene {
    * Story Portrait box, and the line types like speech. A shouted line shakes the box, the trainer
    * jumps and their Pokémon cries. Presentation only; the line also goes to the battle log.
    */
+  /** The Champion host's own picture when the Galar host is the one speaking (null for anyone else). */
+  private hostArtFor(speaker: string): string | null {
+    try {
+      if (!this.stadium) return null;
+      const content = services().session.content;
+      const host = galarHost(content, this.run);
+      return host.name === speaker ? content.bosses.get(host.id)?.sprites.default ?? null : null;
+    } catch {
+      return null;
+    }
+  }
+
   private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
@@ -3618,7 +3644,7 @@ export class BattleScene extends Phaser.Scene {
       role,
       text: shout && !/\[shake\]/.test(text) ? `[shake]${text}[/shake]` : text,
       voice,
-      artId: isFoe ? art?.assetId ?? null : null,
+      artId: isFoe ? art?.assetId ?? null : this.hostArtFor(speaker),
       rim: this.foeRim(),
       motion: this.motion,
       speed: settings.speechSpeed,

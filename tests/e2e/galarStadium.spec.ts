@@ -50,8 +50,8 @@ test('a Galar gym battle shows every stadium camera cut', async ({ page }) => {
   }
   // Trainer introductions, the bigger final and the Dynamax Band scene.
   const shots: Array<[string, string, number]> = [
-    ['intro-round', `b.stadium.tournamentIntro({ round: 2, name: 'Round 2', opponent: 'Marnie', intro: 'Do not expect me to go easy.', final: false, style: 'Dark types', sprite: '' })`, 3600],
-    ['intro-final', `b.stadium.tournamentIntro({ round: 5, name: 'The Final', opponent: 'Leon', intro: 'Let us have a champion time!', final: true, style: 'Unbeaten', sprite: '' })`, 6800],
+    ['intro-round', `b.stadium.tournamentIntro({ round: 2, name: 'Round 2', opponent: 'Marnie', intro: 'Do not expect me to go easy.', final: false, style: 'Dark types', sprite: 'boss.marnie-masters4' })`, 3600],
+    ['intro-final', `b.stadium.tournamentIntro({ round: 5, name: 'The Final', opponent: 'Leon', intro: 'Let us have a champion time!', final: true, style: 'Unbeaten', sprite: 'boss.leon-masters' })`, 6800],
     ['band', `b.stadium.bandScene()`, 1400],
   ];
   for (const [name, call, delay] of shots) {
