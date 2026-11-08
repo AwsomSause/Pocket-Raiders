@@ -10,6 +10,7 @@ import { animAssetIds } from '../../assets/catalog';
 import { services } from '../../game/services';
 import { ballVisual } from '../ballArt';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
+import { cameraForScene } from './opening';
 import type { Beat } from './spectacle';
 
 type Pic = Phaser.GameObjects.Sprite | Phaser.GameObjects.Container;
@@ -50,6 +51,8 @@ const hex = (c: number) => `#${c.toString(16).padStart(6, '0')}`;
 
 export function dynamaxScene(scene: Phaser.Scene, o: DynamaxSceneOptions): Beat {
   const depth = o.depth ?? 900;
+  // A zoomed or panned battle camera (the Galar stadium's close-ups) would leave the scene short of the screen edges: stop any move and show the whole arena.
+  cameraForScene(scene);
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];
   const canvasKeys: string[] = [];
