@@ -32,8 +32,7 @@ test('Prologue: no Look B entry, Quick Start saves name, pronouns and Tone', asy
   await page.waitForTimeout(500);
   const look = await texts(page);
   expect(look).not.toMatch(/Look B|COMING SOON/);
-  expect(look).toContain('Hilda');
-  expect(look).toContain('Nate');
+  for (const n of ['Red', 'Blue', 'Green', 'Hilda', 'Nate']) expect(look).toContain(n);
   await press(page, 'ArrowDown');
   await press(page, 'Enter'); // Look A is the only Look
   expect(await page.evaluate(() => (window as any).__pkr.session.profile.story.protagonist.look)).toBe('look_a');

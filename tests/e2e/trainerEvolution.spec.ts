@@ -21,7 +21,7 @@ const texts = (page: Page, key: string) =>
     return out.join('\n');
   }, key);
 
-test('only Nate and Hilda can be chosen (Trainer Evolutions are not offered)', async ({ page }) => {
+test('an unlocked Trainer Evolution can be chosen', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -32,13 +32,19 @@ test('only Nate and Hilda can be chosen (Trainer Evolutions are not offered)', a
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Hub');
 
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').scene.start('TrainerSelect'));
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    pkr.session.profile.claims = { 'evolution:red': { at: '2026-10-30T00:00:00.000Z' } };
+    pkr.game.scene.getScene('Hub').scene.start('TrainerSelect');
+  });
   await waitForScene(page, 'TrainerSelect');
+  expect(await texts(page, 'TrainerSelect')).toContain('★ EVOLVED');
+  await page.keyboard.press('ArrowRight'); // Champion Red sits right after Red
+  await page.waitForTimeout(500);
   const shown = await texts(page, 'TrainerSelect');
-  expect(shown).toContain('Nate');
-  expect(shown).toContain('Hilda');
-  expect(shown).not.toContain('★ EVOLVED');
-  expect(shown).not.toContain('Champion Red');
+  expect(shown).toContain('Champion Red');
+  expect(shown).toContain('Last Stand');
+  await page.screenshot({ path: 'test-results/trainer-evolution.png' });
   await page.keyboard.press('Enter');
   await waitForScene(page, 'RunPrep');
   expect(errors).toEqual([]);

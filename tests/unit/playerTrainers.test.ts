@@ -3,19 +3,34 @@ import { PLAYER_TRAINER_IDS, isPlayerTrainer, playerTrainerFor } from '../../src
 import { LOOKS, lookReady } from '../../src/core/story2/identity';
 
 describe('player characters (Beta 0.5)', () => {
-  it('are only Nate and Hilda', () => {
-    expect([...PLAYER_TRAINER_IDS]).toEqual(['nate', 'hilda']);
-    expect(isPlayerTrainer('red')).toBe(false);
+  it('are Red, Blue, Green, Hilda and Nate', () => {
+    expect([...PLAYER_TRAINER_IDS]).toEqual(['red', 'blue', 'green', 'hilda', 'nate']);
+    expect(isPlayerTrainer('cynthia')).toBe(false);
+    expect(isPlayerTrainer('evolved-red')).toBe(true);
   });
-  it('keeps Nate and Hilda, and maps every other id to one of them, always the same one', () => {
+  it('keeps Nate and Hilda, and maps every other id to one of the five, always the same one', () => {
     expect(playerTrainerFor('nate')).toBe('nate');
     expect(playerTrainerFor('hilda')).toBe('hilda');
-    for (const id of ['red', 'cynthia', 'evolved-red', 'npc-tuber-pip', '']) {
+    for (const id of ['cynthia', 'evolved-cynthia', 'npc-tuber-pip', '']) {
       expect(isPlayerTrainer(playerTrainerFor(id))).toBe(true);
       expect(playerTrainerFor(id)).toBe(playerTrainerFor(id));
     }
   });
   it('shows no unready Look in the picker', () => {
     expect(LOOKS.filter((l) => lookReady(l.id)).map((l) => l.id)).toEqual(['look_a']);
+  });
+});
+
+import archetypes from '../../src/data/archetypes.json';
+describe('Hilda and Nate are a mirrored pair', () => {
+  const get = (id: string) => (archetypes as any[]).find((a) => a.id === id);
+  it('swap first-attack and later-attack damage, with fire against water', () => {
+    const h = get('hilda').modifiers.find((m: any) => m.kind === 'firstAttackDamage');
+    const n = get('nate').modifiers.find((m: any) => m.kind === 'firstAttackDamage');
+    expect(h.first).toBe(n.later);
+    expect(h.later).toBe(n.first);
+    expect(get('hilda').signatureTypes).toEqual(['fire']);
+    expect(get('nate').signatureTypes).toEqual(['water']);
+    expect(get('hilda').unlockedByDefault && get('nate').unlockedByDefault).toBe(true);
   });
 });
