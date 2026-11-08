@@ -4,6 +4,8 @@
 //   2. every Champion team of region 6 and later (champion index 5..9) gets at least one Legendary.
 // Designated gimmick Pokémon (bossGimmicks.json) are never removed, except a non-Mega one whose whole
 // family is swapped for its custom form, in which case the designation moves with it.
+//   3. LORE: each Champion's Legendaries are picked to fit the trainer (Hau: Tapu Koko, Cynthia: Cresselia).
+// Run `npm run data:boss-gimmicks` afterwards (it owns bossGimmicks.json).
 //   node tools/build-boss-forms.ts      (deterministic; running it twice changes nothing)
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -81,6 +83,31 @@ function ranked(boss: (typeof bosses)[number], teamSpecies: Set<string>): Sp[] {
     .map((x) => x.s);
 }
 
+
+// Lore picks, best first. The first goes on every Champion team from region 6; the second joins from region 9.
+// Bosses not listed keep the type-matched Legendary chosen above.
+const LORE: Record<string, string[]> = {
+  misty: ['manaphy', 'suicune'], 'lt-surge': ['zapdos', 'raikou'], erika: ['celebi', 'shaymin'], blaine: ['moltres', 'entei'],
+  giovanni: ['mewtwo', 'landorus'], lorelei: ['articuno', 'regice'], agatha: ['giratina', 'spectrier'], lance: ['rayquaza', 'reshiram'],
+  sabrina: ['uxie', 'mew'], 'mr-fuji': ['mew'], clair: ['rayquaza'], ethan: ['ho-oh', 'lugia'], kris: ['lugia', 'ho-oh'], lyra: ['suicune', 'entei'],
+  elm: ['celebi'], eusine: ['suicune', 'raikou'], roxanne: ['regirock', 'diancie'], flannery: ['heatran', 'entei'], norman: ['regigigas', 'arceus'],
+  winona: ['rayquaza', 'tornadus'], juan: ['kyogre', 'manaphy'], phoebe: ['spectrier', 'giratina'], glacia: ['regice', 'articuno'],
+  drake: ['rayquaza', 'dialga'], steven: ['regirock', 'registeel'], wallace: ['kyogre', 'manaphy'], brendan: ['latios'], may: ['latias'],
+  maxie: ['groudon'], archie: ['kyogre'], shelly: ['kyogre'], zinnia: ['rayquaza'],
+  cynthia: ['cresselia', 'arceus'], palmer: ['regigigas', 'cresselia'], cyrus: ['dialga', 'palkia'], rowan: ['arceus', 'dialga'],
+  lucian: ['uxie', 'mesprit'], flint: ['heatran', 'entei'], volkner: ['raikou', 'zekrom'], byron: ['dialga', 'registeel'],
+  candice: ['regice', 'glastrier'], maylene: ['terrakion', 'cobalion'], gardenia: ['shaymin', 'virizion'], roark: ['regirock', 'diancie'],
+  'crasher-wake': ['manaphy', 'kyogre'], barry: ['latios'], dawn: ['jirachi', 'mesprit'],
+  n: ['reshiram', 'zekrom'], ghetsis: ['kyurem'], colress: ['genesect'], hilbert: ['zekrom'], hilda: ['reshiram'], cilan: ['virizion'],
+  korrina: ['zygarde'], lysandre: ['yveltal'],
+  hau: ['tapu-koko'], hala: ['tapu-koko'], olivia: ['tapu-lele'], nanu: ['tapu-bulu'], hapu: ['tapu-fini'], lana: ['tapu-fini'], mallow: ['tapu-bulu'],
+  sophocles: ['tapu-koko', 'zeraora'], mina: ['tapu-lele'], gladion: ['silvally'], lillie: ['lunala', 'solgaleo'], lusamine: ['lunala'],
+  elio: ['solgaleo'], selene: ['lunala'],
+  leon: ['zacian', 'eternatus'], hop: ['zamazenta'], gloria: ['zacian'], raihan: ['eternatus'], rose: ['eternatus'], oleana: ['eternatus'],
+  arven: ['koraidon', 'miraidon'], nemona: ['koraidon'], turo: ['miraidon'], sada: ['koraidon'], iono: ['miraidon'], kieran: ['ogerpon'],
+  volo: ['giratina'], ash: ['ho-oh', 'lugia'], red: ['mew', 'arceus'],
+};
+
 const legends = [...species.values()].filter((s) => isLegend(s) && !s.form && !(s.tags ?? []).includes('baby'));
 let customAdded = 0, legendAdded = 0, remapped = 0, skipped = 0;
 
@@ -138,6 +165,26 @@ for (const boss of bosses) {
       }
     });
   }
+  // Lore Legendaries for the late Champions: swap out a type-matched Legendary first, else the weakest free slot.
+  const wanted = LORE[boss.id];
+  if (wanted) {
+    const keep = new Set([...wanted, ...boss.signature]);
+    bt.champion.forEach((team, index) => {
+      if (index < 5) return;
+      for (const id of wanted.slice(0, index >= 8 ? 2 : 1)) {
+        if (team.members.some((m) => parseSp(m) === id) || !species.has(id)) continue;
+        const ids = team.members.map(parseSp);
+        const stray = ids.findIndex((x, i) => i < ids.length - 1 && isLegend(species.get(x) ?? ({} as Sp)) && !keep.has(x));
+        if (stray >= 0) {
+          team.members[stray] = text(id, pickMoves(species.get(id)!, team.level), parseTraining(team.members[stray]!));
+        } else {
+          const custom = ids.filter((x) => customIds.has(x));
+          const lore = new Set([...custom, ...wanted, ...(megaMon ? [megaMon] : [])]);
+          if (!place(team, id, team.level, new Set([...designated, ...lore]))) place(team, id, team.level, lore);
+        }
+      }
+    });
+  }
   // A designated Pokémon whose whole family was swapped away: the designation follows to the custom form.
   if (gim) {
     const present = new Set(all.flatMap((t) => t.members.map(parseSp)));
@@ -163,5 +210,4 @@ const lines = Object.entries(teams).map(([id, roles]) => {
   return ` ${JSON.stringify(id)}: {\n${roleText}\n }`;
 });
 writeFileSync(join(dataDir, 'bossTeams.json'), `{\n${lines.join(',\n')}\n}\n`);
-writeFileSync(join(dataDir, 'bossGimmicks.json'), JSON.stringify(gimmicks, null, 1) + '\n');
 console.log(`custom forms added: ${customAdded}, legendaries added: ${legendAdded}, gimmick designations moved: ${remapped}, skipped: ${skipped}`);
