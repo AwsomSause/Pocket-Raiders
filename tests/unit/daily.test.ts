@@ -9,7 +9,7 @@ const choice = { ...STANDARD_CHOICE, modeId: 'daily' };
 
 describe('Daily Run format', () => {
   it('the same date gives the same seed, modifier and starter set, whatever the player had chosen', () => {
-    const mine = { ...defaultPrep(content), poolId: 'johto', draftRuleId: 'expanded-research', tokenId: 'scout-report', loan: true };
+    const mine = { ...defaultPrep(content), tokenId: 'scout-report', loan: true };
     const a = dailySetup(content, '2026-10-31T10:00:00Z', mine, { ...choice, difficultyId: 'elite', modifierIds: ['monotype'] });
     const b = dailySetup(content, '2026-10-31T23:59:00Z', defaultPrep(content), choice);
     expect(a.seed).toBe(dailySeed('2026-10-31'));

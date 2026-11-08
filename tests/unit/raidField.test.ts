@@ -169,7 +169,7 @@ describe('raid memories', () => {
   });
 
   it('a won raid records memories and friendship for contributors', () => {
-    const run = chooseStarter(content, createRun(content, { runId: 'rm', seed: 'rm', archetypeId: 'red' }), 0);
+    const run = chooseStarter(content, createRun(content, { runId: 'rm', seed: 'rm', archetypeId: 'red', starterOverride: ['charmander', 'squirtle', 'bulbasaur'] }), 0);
     const node = run.stage!.map.nodes.find((n) => n.column === 1)!;
     node.sides.push({ id: 'raid-m', kind: 'raid', raidId: 'sleeping-snorlax', used: false });
     run.stage!.current = node.id;

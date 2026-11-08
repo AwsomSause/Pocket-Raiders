@@ -33,12 +33,12 @@ for (const size of [{ width: 932, height: 430 }, { width: 844, height: 390 }, { 
       await page.keyboard.press('Enter');
       await waitForScene(page, 'RunPrep');
       const pageIdx = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('RunPrep').page as number);
-      expect(await pageIdx()).toBe(4); // opens on the Overview
+      expect(await pageIdx()).toBe(3); // opens on the Overview
       expect(await fitIssues(page), 'Overview text fit').toEqual([]);
       await page.screenshot({ path: `test-results/prep-phone-${size.width}-overview.png` });
 
       // Page chips: x0 = (960 - (5*172 + 4*8)) / 2, 172 wide, 38 high at y 48. Tap the first (Run Setup).
-      const x0 = (960 - (5 * 172 + 4 * 8)) / 2;
+      const x0 = (960 - (4 * 172 + 3 * 8)) / 2;
       const tap = await toPage(page, x0 + 86, 67);
       const chipPx = 50 * tap.scale; // the tap zone is 50 canvas units tall (the drawn chip is 38)
       console.log(`chip height on screen: ${chipPx.toFixed(1)}px at ${size.width}x${size.height}`);

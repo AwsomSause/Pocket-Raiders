@@ -57,7 +57,7 @@ test('Spooky Season shows in the Event Hall and a new run starts in it', async (
   expect(errors).toEqual([]);
 });
 
-test('after Spooky Season the Hex Maniac is playable with the Spooky Set', async ({ page }) => {
+test('after Spooky Season the Hex Maniac stays unlocked and the event leaves the hall', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -81,16 +81,8 @@ test('after Spooky Season the Hex Maniac is playable with the Spooky Set', async
   await page.keyboard.press('Escape');
   await page.waitForTimeout(300);
 
-  await page.evaluate(() => {
-    (window as any).__pkr.game.scene.getScene('Hub').scene.start('TrainerSelect');
-  });
-  await waitForScene(page, 'TrainerSelect');
-  const hex = await page.evaluate(() => {
-    const ts = (window as any).__pkr.game.scene.getScene('TrainerSelect');
-    const slot = ts.slots.find((sl: any) => sl?.archetype.id === 'hex-maniac');
-    return slot?.status ?? null;
-  });
-  expect(hex).toBe('unlocked');
+  // Only Nate and Hilda are playable now and the Spooky Set is gone, so the Hex Maniac stays an unlocked profile entry.
+  expect(await page.evaluate(() => (window as any).__pkr.session.profile.unlockedArchetypes)).toContain('hex-maniac');
   await page.screenshot({ path: 'test-results/hex-maniac.png' });
   expect(errors).toEqual([]);
 });

@@ -28,7 +28,7 @@ describe('Cross-system check: every species and form', () => {
   it('every species a player can own survives a save and reload (in parties of six)', () => {
     const saves = new SaveManager(new MemoryStorageProvider(), content);
     const ids = [...meetableSpecies(content)].filter((id) => !isTransformation(content.species.get(id)!)).sort();
-    expect(ids.length).toBeGreaterThan(1000);
+    expect(ids.length).toBeGreaterThan(900); // Starter Sets are gone, so pool-only species no longer count as meetable
     for (let i = 0; i < ids.length; i += 6) {
       const run = baseRun();
       run.party = ids.slice(i, i + 6).map((id, j) => createPokemon(content, id, 1 + ((i + j) % 100), `p${i + j}`, `cross:${id}`));
