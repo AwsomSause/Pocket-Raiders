@@ -2103,7 +2103,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     // Rebalance: bosses and rivals get held items, IVs, EVs and training like a player's team (core/bossGear.ts).
     const gearTier: GearTier | null = rivalBack || takeover || firstRival || isRival ? 'rival' : node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? node.kind : null;
-    if (gearTier) plan = { ...plan, members: gearTeam(content, plan.members, gearTier, playerItemsPer(run.party)) };
+    if (gearTier && content.balance.bossGear) plan = { ...plan, members: gearTeam(content, plan.members, gearTier, playerItemsPer(run.party)) };
     const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
