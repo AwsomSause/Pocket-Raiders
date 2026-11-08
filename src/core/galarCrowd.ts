@@ -60,6 +60,8 @@ export const HYPE_TRIGGERS = [
   'turn1', 'playerBigHit', 'foeBigHit', 'comeback', 'playerFirstKo', 'foeFirstKo', 'playerKoStreak', 'foeKoStreak', 'playerLast', 'foeLast',
   'playerDynamax', 'foeDynamax', 'midBattle', 'lateBattle', 'favorToPlayer', 'favorToFoe', 'evenMatch', 'lowFoe', 'lastStand', 'bondMega',
   'playerMega', 'underdog', 'playerSweep', 'foeSweep', 'flawless',
+  // The Champion talking about the player's own road through Galar (Champion battles only).
+  'journeyOpen', 'journeyMid', 'journeyLate', 'journeyDown', 'journeyFoeLow', 'journeyBig',
 ] as const;
 export type HypeTrigger = (typeof HYPE_TRIGGERS)[number];
 export const HYPE_SPEAKERS = ['reporter', 'crowdTrainer', 'rival', 'futureLeader', 'futureOpponent', 'host'] as const;
@@ -76,6 +78,8 @@ const HypeSchema = z.object({
     lines: z.array(z.string().min(1)).min(1),
     cue: z.string(),
     weight: z.number().positive(),
+    /** Facts about the player's journey that must all be true for this line (see journeyFlags in BattleScene). */
+    needs: z.array(z.string()).default([]),
   })).min(50),
 });
 export type HypeMoment = z.infer<typeof HypeSchema>['moments'][number];
@@ -90,17 +94,19 @@ export interface HypeContext {
   seen: ReadonlySet<string>;
   /** Which speakers can be cast right now (a rival only if one watches, and so on). */
   available: ReadonlySet<HypeSpeaker>;
+  /** True facts about the player's journey (a starter still in the party, a rival met, many wins...). */
+  flags?: ReadonlySet<string>;
 }
 
 /** The moment for a trigger, or null when none fits (all seen, wrong scope, nobody to speak). Own seeded stream: never touches a gameplay roll. */
 export function pickHype(trigger: HypeTrigger, ctx: HypeContext): HypeMoment | null {
-  const options = GALAR_HYPE.filter((h) => h.trigger === trigger && h.scopes.includes(ctx.scope) && !ctx.seen.has(h.id) && ctx.available.has(h.speaker));
+  const options = GALAR_HYPE.filter((h) => h.trigger === trigger && h.scopes.includes(ctx.scope) && !ctx.seen.has(h.id) && ctx.available.has(h.speaker) && h.needs.every((n) => ctx.flags?.has(n) ?? false));
   if (options.length === 0) return null;
   const rng = new Rng(hashSeed(`galar-hype:${ctx.runSeed}:${ctx.battleId}:${trigger}:${ctx.turn}`));
   return rng.weighted(options.map((o) => ({ item: o, weight: o.weight })));
 }
 
-/** Fills {player} {foe} {foeMon} {myMon} {host} {rival} {leader} in a line ({FOE} gives the foe's name in capitals). */
+/** Fills {player} {foe} {foeMon} {myMon} {host} {rival} {leader} {starter} {ace} {badges} {wins} {rivalName} in a line ({FOE} gives the foe's name in capitals). */
 export function fillHype(text: string, vars: Readonly<Record<string, string>>): string {
   return text.replace(/\{(\w+)\}/g, (all, key: string) => {
     if (key === 'FOE') return (vars.foe ?? '').toUpperCase();

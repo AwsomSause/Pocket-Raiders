@@ -59,3 +59,21 @@ describe('Galar hype moments and crowd favour', () => {
     expect(pickCounterSpecies(content, target, 'a')).toBe(id);
   });
 });
+
+describe('Champion journey lines', () => {
+  it('has many Champion-only journey lines, and flagged ones only play when the flag is true', async () => {
+    const { GALAR_HYPE, pickHype } = await import('../../src/core/galarCrowd');
+    const journey = GALAR_HYPE.filter((h) => h.trigger.startsWith('journey'));
+    expect(journey.length).toBeGreaterThanOrEqual(50);
+    expect(journey.every((h) => h.scopes.length === 1 && h.scopes[0] === 'champion' && h.speaker === 'host')).toBe(true);
+    const base = { runSeed: 'S', battleId: 'b', turn: 2, scope: 'champion' as const, seen: new Set<string>(), available: new Set(['host', 'reporter', 'crowdTrainer'] as const) };
+    for (let t = 0; t < 40; t++) {
+      const m = pickHype('journeyOpen', { ...base, turn: t, flags: new Set() });
+      expect(m?.needs ?? []).toEqual([]);
+    }
+    const seen = new Set<string>();
+    for (let t = 0; t < 80; t++) seen.add(pickHype('journeyOpen', { ...base, turn: t, flags: new Set(['starterAlive']) })!.id);
+    expect([...seen].some((id) => GALAR_HYPE.find((h) => h.id === id)!.needs.includes('starterAlive'))).toBe(true);
+    expect(pickHype('journeyOpen', { ...base, scope: 'gym' })).toBeNull();
+  });
+});

@@ -119,7 +119,7 @@
     "evolutionStage": {
      "1": 2000
     },
-    "threatAvg": 54.848,
+    "threatAvg": 54.846,
     "threatMax": 108,
     "budgetAvg": 102.96,
     "rejectionRate": 0.221,
@@ -159,19 +159,19 @@
      ],
      [
       "sandile",
-      152
+      154
      ],
      [
       "snom",
-      151
+      152
      ],
      [
       "bramblin",
-      143
+      144
      ],
      [
       "barboach",
-      137
+      140
      ],
      [
       "impidimp",
@@ -179,18 +179,18 @@
      ]
     ],
     "rarity": {
-     "common": 9037,
+     "common": 9035,
      "rare": 325,
      "veryRare": 121,
-     "uncommon": 517
+     "uncommon": 519
     },
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 54.842,
-    "threatMax": 91,
+    "threatAvg": 54.684,
+    "threatMax": 90,
     "budgetAvg": 91.189,
-    "rejectionRate": 0.016,
+    "rejectionRate": 0.02,
     "fallbacks": 0,
     "invalid": 0,
     "lockedPicks": 0,
@@ -248,8 +248,8 @@
      "1": 3943,
      "2": 57
     },
-    "threatAvg": 56.013,
-    "threatMax": 105,
+    "threatAvg": 56,
+    "threatMax": 106,
     "budgetAvg": 110.767,
     "rejectionRate": 0.005,
     "fallbacks": 0,
@@ -316,8 +316,8 @@
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 58.643,
-    "threatMax": 98,
+    "threatAvg": 58.625,
+    "threatMax": 99,
     "budgetAvg": 97.594,
     "rejectionRate": 0.004,
     "fallbacks": 0,
@@ -378,8 +378,8 @@
      "2": 23,
      "3": 30
     },
-    "threatAvg": 60.172,
-    "threatMax": 113,
+    "threatAvg": 60.089,
+    "threatMax": 114,
     "budgetAvg": 121.197,
     "rejectionRate": 0.004,
     "fallbacks": 0,
@@ -446,7 +446,7 @@
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 62.811,
+    "threatAvg": 62.747,
     "threatMax": 105,
     "budgetAvg": 103.993,
     "rejectionRate": 0.009,
@@ -508,7 +508,7 @@
      "2": 311,
      "3": 54
     },
-    "threatAvg": 66.945,
+    "threatAvg": 66.872,
     "threatMax": 134,
     "budgetAvg": 131.58,
     "rejectionRate": 0.009,

@@ -1196,6 +1196,1072 @@
    ],
    "cue": "crowd.hush",
    "weight": 1
+  },
+  {
+   "id": "j-journeyOpen-1",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "I have watched every step of your road through Galar, {player}. Today I find out what it built."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyOpen-2",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{badges} badges, {wins} battles won. Don't tell me you came all this way just to be polite."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyOpen-3",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "Every challenger thinks the road ends here. I want to see what {player} does when it really counts."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyOpen-4",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{starter} has been with you since the very beginning. I can tell. You fight like a pair."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-5",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "I heard {starter} isn't at your side anymore. A trainer carries that with them. Show me what it taught you."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterGone"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-6",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{rivalName} told me about you, you know. Said you never quit. Let's see if that holds up."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-7",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "A full set of Galar badges and still standing. The crowd has waited a long time for this one."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-8",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "A full team, every member earned along the way. That is the mark of a real trainer."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "bigParty"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-9",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "So few Pokémon beside you, and still you made it here. That takes nerve."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-10",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "Win after win after win. Dozens of battles on the road. And I'm the one you were walking toward."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-11",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{ace} carries the strength of a hundred battles. I'd like to meet it head on."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-12",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "No cheering for me today, {player}. I've seen your road. Everyone here is cheering for the story you wrote."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-1",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "Good. Better than I hoped. I knew the road would sharpen you, {player}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-2",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "This is what a long journey does to a trainer. You don't flinch anymore."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-3",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "Every gym, every rival, every bad night on the road. It's all in how you command {myMon}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-4",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "{starter} still moves like it did on day one, only faster. Bonds like that don't fade."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyMid-5",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "{rivalName} would be proud to see you here. I might tell them how this goes."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyMid-6",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "Those badges aren't decoration. You earned every one of them, and today it shows."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyMid-7",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "That many wins teaches you rhythm. You have it. I can hear it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyMid-8",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "A small team, and you wring everything out of it. I respect that."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyMid-9",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "A deep bench and you use all of it. You didn't leave anyone behind on the road."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "bigParty"
+   ]
+  },
+  {
+   "id": "j-journeyMid-10",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "{ace} is stronger than anything I expected to meet today. I'm not complaining."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyMid-11",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "I've fought a lot of challengers. Few brought their whole journey with them. You did."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-12",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "The crowd has gone quiet. They know they are watching something rare."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-1",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Remember the first gym? You were nervous. Look at you now."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-2",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{wins} wins to get here. I won't let that be for nothing, and neither will you."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-3",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "I don't hold back, {player}. Not for the Champion's pride, and not for the road you walked."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-4",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{starter} and you, from the first step to this one. That is a story worth finishing."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyLate-5",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{rivalName} will hear about this fight, win or lose. They'll want to know how you looked."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyLate-6",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "All those badges, all that time. And now it comes down to this."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyLate-7",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Tired? You should be. {wins} battles is a lot. And you're still on your feet."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyLate-8",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Each Pokémon you have left carries the whole journey. I can feel it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyLate-9",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{ace} has been through everything with you. It knows it, and so do I."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyLate-10",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Whatever happens, this is the best fight I've had in years."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-1",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "Don't let that one bother you. It fought for the whole road, and it fought well."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-2",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "A fallen Pokémon is not a lost battle. You taught me that when you stood back up in the gyms."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-3",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "That one gave you everything. Make it count, {player}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-4",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "Hold on. {starter} is still out there. You've never counted it out, so don't start now."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyDown-5",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "You've lost one before. You know how to keep going. Go on."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterGone"
+   ]
+  },
+  {
+   "id": "j-journeyDown-6",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "{rivalName} would tell you not to stop. So I'll say it too."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyDown-7",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "Few Pokémon left, I know. You've been in worse spots on the road."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyDown-8",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "You have plenty behind that one. The whole team stands with you."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "bigParty"
+   ]
+  },
+  {
+   "id": "j-journeyDown-9",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "You've been knocked down before and won anyway. Remember that."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyDown-10",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "The crowd is on its feet for you. Don't hear the ones who doubt."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-1",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "Ha. You see that? That's what the journey was for."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-2",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "I'm nearly beaten, and I couldn't be happier. Make it a clean finish."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-3",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "Is this how it feels to be on the other side? I like it, {player}. You earned it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-4",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{starter} stood next to you for all of it, and now here we are. Finish this."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-5",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{rivalName} always said you'd get here. They never said you'd get this far."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-6",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "Eight badges' worth of lessons, all pointing at this moment."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-7",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{wins} battles built that. Don't doubt it now."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-8",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "A small team, and it's about to take down a Champion. Remember that one."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-9",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{ace} is not holding back, and neither am I. Not yet."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-10",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "One more good hit, and it all pays off. Let's see it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-1",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "There it is. That's the hit the whole road was training you for."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-2",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "{myMon} hits like a trainer who knows exactly why they're here."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-3",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "Excellent! Not luck. You've done that a hundred times on the way here."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-4",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "That has {starter}'s fire in it. I'd know that anywhere."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyBig-5",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "{rivalName} should have been here to see that one."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyBig-6",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "You've practised that over {wins} battles. It shows."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyBig-7",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "{ace} just proved why you trusted it for so long."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyBig-8",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "The stadium shook. That's the sound of a journey landing."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
   }
  ]
 }

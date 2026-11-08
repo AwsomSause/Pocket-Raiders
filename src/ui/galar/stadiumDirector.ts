@@ -9,7 +9,10 @@ import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../
 import { fillHype, pickHype, type GalarScope, type HypeMoment, type HypeSpeaker, type HypeTrigger } from '../../core/galarCrowd';
 import { GAME_WIDTH, textStyle } from '../theme';
 import { playMoment } from '../cinematic/momentPlayer';
+import commentaryJson from '../../data/galarCommentary.json';
 import { CUT_ART_PRELOAD, drawCutArt, playBandCard, playIntroCard, type CutArtKit } from './cutArt';
+
+const COMMENTARY = (commentaryJson as { beats: Record<string, string[]> }).beats;
 
 export interface StadiumHooks {
   runSeed: string;
@@ -40,6 +43,7 @@ export interface StadiumHooks {
   opponentSays?: (name: string, assetId: string, text: string) => Promise<void>;
   /** Hype moments and the favour bar (Galar only). */
   hype?: {
+    flags?: () => ReadonlySet<string>;
     scope: GalarScope;
     /** Crowd favour 5-95 (50 even, above 50 favours the player), read from the battle state. */
     favor: () => number | null;
@@ -144,6 +148,11 @@ export class StadiumDirector {
       if (beat) await this.react(beat);
       const trigger = this.hypeFor(e);
       if (trigger && this.turnHype < 2 && (await this.hype(trigger))) this.turnHype++;
+      // In the Champion battle the Champion also speaks about the player's own road.
+      if (this.h.hype?.scope === 'champion' && trigger && this.turnHype < 2) {
+        const j: HypeTrigger | null = trigger === 'playerBigHit' ? 'journeyBig' : trigger === 'foeFirstKo' || trigger === 'foeKoStreak' ? 'journeyDown' : null;
+        if (j && (await this.hype(j))) this.turnHype++;
+      }
     } catch {
       // Presentation failure never touches the battle.
     }
@@ -196,6 +205,24 @@ export class StadiumDirector {
       }
     }
     await playMoment(this.scene, spec, plan, { title: cut.label, subtitle: cut.caption });
+    await this.commentate(cut.id, beat);
+  }
+
+  /** Every camera cut has someone talking: the person on screen (or the reporter) says something about what just happened, as trainer text. */
+  private async commentate(cutId: string, beat: CrowdBeat): Promise<void> {
+    try {
+      const hy = this.h.hype;
+      if (!hy) return;
+      const speaker: HypeSpeaker = ({ 'crowd-cheer': 'crowdTrainer', 'fan-group': 'crowdTrainer', 'trainers-watching': 'futureLeader', 'private-box': 'futureOpponent', commentator: 'reporter', 'opponent-closeup': 'reporter', 'champion-silhouette': 'host', 'rival-silhouette': 'rival' } as Record<string, HypeSpeaker>)[cutId] ?? 'reporter';
+      const lines = COMMENTARY[beat] ?? COMMENTARY.calm ?? [];
+      if (lines.length === 0) return;
+      const seed = `${this.h.battleId}:${this.turn}:${cutId}`;
+      const avail = hy.available();
+      const who = hy.cast(avail.has(speaker) ? speaker : 'crowdTrainer', seed);
+      await hy.say(who.name, who.assetId, fillHype(lines[this.pickLine(seed, lines.length)]!, hy.facts()));
+    } catch {
+      // commentary is decoration only
+    }
   }
 
   /** Test/preview hook: draws one named cut's art right now (no gameplay effect). Returns whether it drew. */
@@ -340,6 +367,12 @@ export class StadiumDirector {
     if (this.turn >= 4) await once('mid', 'midBattle');
     if (this.turn >= 9) await once('late', 'lateBattle');
     if (hy.foeShare() < 0.2) await once('lowFoe', 'lowFoe');
+    if (hy.scope === 'champion') {
+      if (this.turn >= 2) await once('jOpen', 'journeyOpen');
+      if (this.turn >= 5) await once('jMid', 'journeyMid');
+      if (this.turn >= 9) await once('jLate', 'journeyLate');
+      if (hy.foeShare() < 0.3) await once('jLow', 'journeyFoeLow');
+    }
     const a = this.h.alive();
     if (this.turn >= 3 && a.player < a.foe) await once('underdog', 'underdog');
   }
@@ -350,7 +383,7 @@ export class StadiumDirector {
       const hy = this.h.hype;
       if (!hy || this.h.disableAnimations()) return false;
       if (!always && this.hypeShown >= 16) return false;
-      const m = pickHype(trigger, { runSeed: this.h.runSeed, battleId: this.h.battleId, turn: this.turn, scope: hy.scope, seen: this.seenHype, available: hy.available() });
+      const m = pickHype(trigger, { runSeed: this.h.runSeed, battleId: this.h.battleId, turn: this.turn, scope: hy.scope, seen: this.seenHype, available: hy.available(), flags: hy.flags?.() });
       if (!m) return false;
       this.seenHype.add(m.id);
       this.hypeShown++;
@@ -361,7 +394,7 @@ export class StadiumDirector {
     }
   }
 
-  private async playHype(m: HypeMoment): Promise<void> {
+  private async playHype(m: HypeMoment, artId = 'speaker'): Promise<void> {
     const hy = this.h.hype!;
     this.h.crowdSound?.(m.cue, 4);
     this.showBanner(m.title, 4);
@@ -369,7 +402,7 @@ export class StadiumDirector {
     const who = hy.cast(m.speaker, seed);
     let layer: Phaser.GameObjects.Container | null = null;
     try {
-      layer = drawCutArt(this.scene, 'speaker', seed, 120000, !this.h.reduceMotion(), { ...(this.kit() ?? { sprite: () => null, host: '', opponent: '', rival: '' }), speaker: who.assetId });
+      layer = drawCutArt(this.scene, artId, seed, 120000, !this.h.reduceMotion(), { ...(this.kit() ?? { sprite: () => null, host: '', opponent: '', rival: '' }), speaker: who.assetId });
     } catch {
       layer = null;
     }

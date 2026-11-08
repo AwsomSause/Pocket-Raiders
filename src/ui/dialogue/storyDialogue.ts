@@ -205,13 +205,23 @@ export function storyLine(scene: Phaser.Scene, o: StoryLineOpts): StoryLine {
   root.add([dim, vignette]);
 
   // The portrait: the trainer's art, big, standing on the bottom-left corner.
-  const portrait = scene.add.container(150, GAME_HEIGHT + 6);
+  const PORT_X = 122;
+  const portrait = scene.add.container(PORT_X, GAME_HEIGHT + 6);
   if (o.artId) {
     const art = trainerVisual(scene, o.artId, o.speaker, 0, 0, 4);
     const b = art.getBounds();
     // Containers (placeholders) are centred; sprites stand on their feet.
     if (art instanceof Phaser.GameObjects.Container) art.setY(-b.height / 2);
     portrait.add(art);
+    // Fit the picture into the strip beside the box (never behind it, never taller than the screen allows): wide or tall trainers shrink to fit.
+    try {
+      const w = Math.max(1, b.width);
+      const h = Math.max(1, b.height);
+      const fit = Math.min(1, 236 / w, 390 / h);
+      if (fit < 1) portrait.setScale(fit);
+    } catch {
+      /* the picture just stays at its normal size */
+    }
   }
   root.add(portrait);
 
@@ -234,7 +244,7 @@ export function storyLine(scene: Phaser.Scene, o: StoryLineOpts): StoryLine {
     vignette.setAlpha(0);
     scene.tweens.add({ targets: [dim, vignette], alpha: 1, duration: 220 });
     portrait.x = -220;
-    scene.tweens.add({ targets: portrait, x: 150, duration: 340, ease: 'Back.easeOut' });
+    scene.tweens.add({ targets: portrait, x: PORT_X, duration: 340, ease: 'Back.easeOut' });
     box.y = BOX.y + 80;
     box.setAlpha(0);
     scene.tweens.add({ targets: box, y: BOX.y, alpha: 1, duration: 260, ease: 'Cubic.easeOut', delay: 80 });
