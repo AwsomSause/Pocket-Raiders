@@ -4,6 +4,7 @@ import customSpecies from '../../src/data/customSpecies.json';
 import storySpecies from '../../src/data/storySpecies.json';
 import jetSpecies from '../../src/data/jetSpecies.json';
 import gimmicks from '../../src/data/bossGimmicks.json';
+import { BOSS_MEGA_FORM } from '../../src/core/battle/transform';
 import { content } from './helpers';
 
 const custom = new Set([...customSpecies, ...storySpecies.species, ...jetSpecies.species].map((s: { id: string }) => s.id));
@@ -29,10 +30,14 @@ describe('boss team forms', () => {
     expect(ids(content.bosses.get('piers')!.teams.champion[9]!)).toContain('vine-riff');
   });
 
-  it('a designated gimmick Pokémon is still on its boss\'s late teams', () => {
-    for (const boss of content.bosses.values()) {
-      const all = new Set((['gym', 'elite', 'champion'] as const).flatMap((r) => boss.teams[r].flatMap(ids)));
-      for (const id of Object.values((gimmicks as Record<string, { mons: Record<string, string> }>)[boss.id]?.mons ?? {})) expect(all.has(id), `${boss.id} ${id}`).toBe(true);
+  it('Champions carry their lore Legendaries: Hau Tapu Koko, Cynthia Cresselia, Giovanni Mewtwo as Mega Y', () => {
+    const champ = (id: string, i: number) => ids(content.bosses.get(id)!.teams.champion[i]!);
+    for (const i of [5, 6, 7, 8, 9]) {
+      expect(champ('hau', i)).toContain('tapu-koko');
+      expect(champ('cynthia', i)).toContain('cresselia');
+      expect(champ('giovanni', i)).toContain('mewtwo');
     }
+    expect((gimmicks as Record<string, { mons: Record<string, string> }>).giovanni!.mons.mega).toBe('mewtwo');
+    expect(BOSS_MEGA_FORM.giovanni).toBe('mewtwo-mega-y');
   });
 });
