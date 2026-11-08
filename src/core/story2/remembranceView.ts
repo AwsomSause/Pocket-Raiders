@@ -2,6 +2,7 @@
 // Locked entries show "???" only. Seen ones show the line and types. Unlocked ones show everything plus mastery pips (0 to 3).
 // A disabled entry is not listed. Display only; nothing here changes a save.
 
+import { winHint } from './winUnlocks';
 import type { Profile } from '../state';
 import type { StoryData } from './schema';
 
@@ -31,7 +32,7 @@ export function remembranceArchive(
     if (state === 'unlocked') unlocked += 1;
     const line = r.line.map(nameOf).join(' > ');
     if (state === 'locked') {
-      entries.push({ id: r.id, state, title: '???', right: 'Locked', detail: spoilerGuard ? 'Not found yet.' : `${UNLOCK[r.unlock.kind] ?? 'Not found yet.'}` });
+      entries.push({ id: r.id, state, title: '???', right: 'Locked', detail: spoilerGuard ? 'Not found yet.' : r.unlock.kind === 'win' ? winHint(r.unlock.arg) : `${UNLOCK[r.unlock.kind] ?? 'Not found yet.'}` });
       continue;
     }
     const types = r.types.map(cap).join(' / ');

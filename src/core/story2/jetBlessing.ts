@@ -1,7 +1,7 @@
-// Jet, the Viking in Hub Town, blesses you with four new Story Run starters (Remembrance lines): Eevee and Toxel holding
-// Booster Energy, Shieldon holding Black Sludge, and Aron. Talking to him unlocks them in the Remembrance Archive; later
-// talks change nothing. Pure: returns the new story record and the lines that were newly unlocked. No save version needed
-// (the Archive record already holds any line id).
+// Jet, the Viking in Hub Town, blesses you with a Story Run starter: Aron, holding Black Sludge. (Eevee, Toxel and Shieldon now each
+// have their own quest arc instead.) Talking to him unlocks the line in the Remembrance Archive; later talks change nothing. Pure:
+// returns the new story record and the lines that were newly unlocked. No save version needed (the Archive record already holds
+// any line id).
 
 import type { ProfileStory, StoryData } from './schema';
 
@@ -9,7 +9,7 @@ import type { ProfileStory, StoryData } from './schema';
 export const JET_UNLOCK = 'jet_viking';
 
 /** The lines Jet unlocks (Aron was already offered by the quiz; the blessing adds it to the Archive too). */
-export const JET_LINES = ['rm_eevee', 'rm_toxel', 'rm_shieldon', 'rm_aron'] as const;
+export const JET_LINES = ['rm_aron'] as const;
 
 export function jetBlessing(data: Pick<StoryData, 'remembrances'>, story: ProfileStory): { story: ProfileStory; added: string[] } {
   const added: string[] = [];
