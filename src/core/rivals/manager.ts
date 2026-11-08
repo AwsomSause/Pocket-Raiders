@@ -28,6 +28,17 @@ export interface SparkInput {
 }
 
 /** How much the player's win raised this trainer's rival potential. */
+/** How many personalities offer each style: a style on many lists is picked less often per list, so styles come out about even overall. */
+const STYLE_LISTS: Record<string, number> = {};
+for (const p of Object.values(RIVAL_PROFILES.personalities)) for (const st of p.styles) STYLE_LISTS[st] = (STYLE_LISTS[st] ?? 0) + 1;
+/** Picks a style from a personality's list with weight 1 / (lists the style is on); `roll` is one float in [0, 1). */
+export function pickStyle(styles: readonly string[], roll: number): string {
+  const w = styles.map((st) => 1 / (STYLE_LISTS[st] ?? 1));
+  let x = roll * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < styles.length; i++) { x -= w[i]!; if (x < 0) return styles[i]!; }
+  return styles[styles.length - 1]!;
+}
+
 export function sparkGain(input: Pick<SparkInput, 'hpLeftShare' | 'flawless'>): number {
   const cfg = RIVAL_CONFIG.spark;
   if (input.flawless) return cfg.flawlessGain;
@@ -54,7 +65,7 @@ export function maybeSpark(run: RunState, input: SparkInput): Rival | null {
   const rng = new Rng(hashSeed(`${run.seed}::rival::${id}`));
   const personalityId = rng.pick(Object.keys(RIVAL_PROFILES.personalities).sort());
   const personality = RIVAL_PROFILES.personalities[personalityId]!;
-  const styleId = rng.pick(personality.styles);
+  const styleId = pickStyle(personality.styles, rng.float());
   const spread = RIVAL_CONFIG.traitSpread;
   const traits = Object.fromEntries(TRAIT_KEYS.map((k) => [k, Math.max(0, Math.min(100, personality.traits[k] + rng.int(-spread, spread)))])) as Traits;
   // Which path led here: the first one whose conditions the battle and the character meet.
@@ -95,7 +106,11 @@ export function maybeSpark(run: RunState, input: SparkInput): Rival | null {
     origin: { eventId: input.ended.id, where: input.where, path: path.id },
     memory: { lastBattle: { eventId: input.ended.id, result: 'win', hpLeftShare: input.hpLeftShare, turns: input.turns, team: input.team } },
   };
-  const arc = RIVAL_ARCS.arcs.find((a) => a.personalities.includes(personalityId) || a.styles.includes(styleId) || a.paths.includes(path.id));
+  // Every arc that fits is a candidate and its own seeded stream picks one, so the first arcs in the list do not win every time.
+  // An arc written for the personality comes first (a prodigy keeps the humility arc); otherwise any arc for the style or path.
+  const own = RIVAL_ARCS.arcs.filter((a) => a.personalities.includes(personalityId));
+  const fits = own.length ? own : RIVAL_ARCS.arcs.filter((a) => a.styles.includes(styleId) || a.paths.includes(path.id));
+  const arc = fits.length ? fits[Math.floor(new Rng(hashSeed(`${run.seed}::rival-arc::${id}`)).float() * fits.length)] : undefined;
   if (arc) rival.arc = { id: arc.id, stage: 0, ticks: 0, resolution: null };
   applyLegacy(run, rival);
   rivals.push(rival);

@@ -393,3 +393,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - beta-4-4-pokemon.md: 17 Beta 4.4 Pokémon, Mega Alolan Flygon, and five Pocket Town starter scouts (one new Story Run starter line each).
 - event-stop-art.md: map event stops show art (Pokémon, cast, item, scene) instead of the plain "!" glyph.
 - 2026-11-08 boss-forms: custom form on every boss team, Legendary on Champion regions 6+ (docs/status/boss-forms.md)
+- rival-spread-starter-regions.md: rival style/arc spread, canon rival personalities, rival-class losses never end a run, starter choices from three regions; Starter Sets removal planned.

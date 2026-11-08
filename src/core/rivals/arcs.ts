@@ -5,6 +5,7 @@ import { hashSeed, Rng } from '../rng';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { emit } from '../story/record';
+import { fnv1a } from '../story/moments';
 import type { Rival, Traits } from '../story/schema';
 import { RIVAL_ARCS } from './schema';
 
@@ -73,10 +74,12 @@ export function triggerFits(rival: Rival, arc: Arc): boolean {
   return bonds.some((b) => (!t.traits || t.traits.includes(b.trait)) && Object.entries(t.bond!).every(([k, range]) => inRange((b as unknown as Record<string, number>)[k]!, range)));
 }
 
-/** The first bond or Overdrive arc whose trigger fits and that this rival has not lived yet. */
+/** A bond or Overdrive arc whose trigger fits and that this rival has not lived yet (chosen among the fitting ones by a seeded hash). */
 export function triggeredArc(rival: Rival): Arc | undefined {
   const done = new Set([...(rival.arcsDone ?? []), ...(rival.arc ? [rival.arc.id] : [])]);
-  return RIVAL_ARCS.arcs.find((a) => a.trigger && !done.has(a.id) && triggerFits(rival, a));
+  // Every arc that fits is a candidate; a seeded hash of the rival (its id, name and origin event) picks one, so the first arcs in the list do not win every time.
+  const fits = RIVAL_ARCS.arcs.filter((a) => a.trigger && !done.has(a.id) && triggerFits(rival, a));
+  return fits.length ? fits[fnv1a(`${rival.id}|${rival.name}|${rival.origin?.eventId ?? ''}|${done.size}`) % fits.length] : undefined;
 }
 
 /** When a rival has no arc (or has finished one) and its bonds fit a bond or Overdrive arc, that arc begins. */

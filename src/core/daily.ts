@@ -3,7 +3,7 @@
 // the short one-region route (campaign "daily-route", set by the mode). Pure: no RNG stream is touched.
 
 import type { Content } from './contentSchema';
-import { defaultPrep, eligibleSpecies } from './runPrep';
+import { defaultPrep, eligibleSpecies, pickDistinctRegions } from './runPrep';
 import type { RunPrep } from './state';
 import { dailySeed, RUN_RULES, type RulesChoice } from './rules';
 import { Rng, hashSeed } from './rng';
@@ -35,7 +35,7 @@ export const dailyStarters = (content: Content, isoDate: string): string[] => st
 /** Three starters drawn from the shared Classic/region/type pools by a seed alone (Daily and Weekly use it). */
 export function starterSet(content: Content, seed: string): string[] {
   const ids = [...new Set([...content.starterPools.values()].filter((p) => ['classic', 'region', 'type'].includes(p.category) && !p.mastered && !p.specimens).flatMap((p) => eligibleSpecies(content, p)))].sort();
-  return new Rng(hashSeed(`${seed}::starters`)).shuffle(ids).slice(0, content.balance.starterChoices);
+  return pickDistinctRegions(content, new Rng(hashSeed(`${seed}::starters`)).shuffle(ids), content.balance.starterChoices);
 }
 
 /** The day's set final boss: one champion from any region's champion list, picked by the date seed alone (same for everyone, shown in Run Prep). */
