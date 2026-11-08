@@ -92,7 +92,7 @@ import { pokemonHeightM, trainerHeightM } from '../core/heights';
 import { teraScene } from '../ui/battleFx/teraScene';
 import { megaScene } from '../ui/battleFx/megaScene';
 import { ballOpenEffect, ballVisual, preloadBallFx } from '../ui/ballArt';
-import { ballFlight, cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
+import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow, type BallRow } from '../ui/battleFx/opening';
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
@@ -908,11 +908,18 @@ export class BattleScene extends Phaser.Scene {
     return services().session.content.archetypes.get(this.run.archetypeId)?.spriteAssetId ?? null;
   }
 
-  /** Sending a Pokémon out: its own caught ball flies in from off screen to its spot and opens there (no trainer animation). */
+  /** The throw for sending a Pokémon out: its own caught ball flies to its spot and opens there. */
   private async sendOutMoment(mon: PokemonInstance): Promise<void> {
     const ball = mon.caughtBall ?? DEFAULT_BALL;
     const at = this.spotXY('player');
-    await ballFlight(this, this.motion, { x: -50, y: at.y + 10 }, { x: at.x, y: at.y - 50 }, ball, 3);
+    const actor = await this.trainerIn();
+    if (!actor) return;
+    await actor.play('sendOut', {
+      target: { x: at.x, y: at.y - 50 },
+      makeBall: (x, y) => ballVisual(this, ball, x, y),
+      onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+    });
+    this.trainerOut();
   }
 
   /**
@@ -982,19 +989,29 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
-  /** Doubles opening: one ball flies in from off screen to each of your two spots. Presentation only. */
+  /** Doubles opening: your trainer throws one ball to each of your two spots, then steps off. Presentation only. */
   private async duoThrowPose(): Promise<void> {
+    if (this.trainerReady) await this.trainerReady;
     const duo = this.duo;
     if (!duo) return;
+    if (!this.trainerActor) return this.ownBackThrow();
+    const actor = await this.trainerIn();
+    if (!actor) return;
     const focus = duo.focus.player;
     const throws: Array<{ mon: PokemonInstance; spot: 0 | 1 }> = [{ mon: this.shown.player, spot: focus }];
     if (duo.other.player.mon) throws.push({ mon: duo.other.player.mon, spot: focus === 0 ? 1 : 0 });
     throws.sort((a, b) => a.spot - b.spot);
     for (const t of throws) {
       if (t.mon.hp <= 0) continue;
+      const ball = t.mon.caughtBall ?? DEFAULT_BALL;
       const at = DUO_POS.player[t.spot];
-      await ballFlight(this, this.motion, { x: -50, y: at.y + 10 }, { x: at.x, y: at.y - 50 }, t.mon.caughtBall ?? DEFAULT_BALL, 3);
+      await actor.play('sendOut', {
+        target: { x: at.x, y: at.y - 50 },
+        makeBall: (x, y) => ballVisual(this, ball, x, y),
+        onLand: (p) => ballOpenEffect(this, ball, p.x, p.y, this.motion),
+      });
     }
+    this.trainerOut();
   }
 
   /**
@@ -1002,7 +1019,24 @@ export class BattleScene extends Phaser.Scene {
    * Presentation only: skipped when motion is off or the trainer has no back sprite.
    */
   private async throwPose(): Promise<void> {
-    await this.sendOutMoment(this.shown.player);
+    if (this.trainerReady) await this.trainerReady;
+    if (this.trainerActor) {
+      await this.sendOutMoment(this.shown.player);
+      return;
+    }
+    await this.ownBackThrow();
+  }
+
+  /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
+  private async ownBackThrow(): Promise<void> {
+    const art = this.playerArt();
+    if (!art || this.motion === 'off') return;
+    const back = trainerBackVisual(this, art, TRAINER_POS.x - 90, MESSAGE_Y + 4, 260);
+    if (!back) return;
+    back.setDepth(5);
+    await new Promise<void>((done) => this.time.delayedCall(this.motion === 'full' ? 520 : 200, done));
+    await tween(this, { targets: back, x: -200, alpha: 0, duration: 320, ease: 'Quad.easeIn' });
+    back.destroy();
   }
 
   /** The opposing trainer's sprite asset and a fallback label. */
