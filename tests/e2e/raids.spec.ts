@@ -93,10 +93,19 @@ test('a co-op raid names the player in command and shows both players\' cheers',
   await waitForScene(page, 'Battle');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').status.text), { timeout: 10_000 }).toContain('CO-OP P1 3 cheers · P2 3 cheers');
   const msg = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').message.text as string);
-  for (let i = 0; i < 8 && !(await msg()).includes('PLAYER'); i++) {
-    await page.keyboard.press('Enter'); // clear the intro lines until the command menu shows
-    await page.waitForTimeout(700);
+  // Watch every message as it passes (Enter may skip past the line within one slow poll), and only press Enter on pending battle text.
+  let seen = false;
+  const end = Date.now() + 25_000;
+  while (!seen && Date.now() < end) {
+    const m = await msg();
+    if (m.includes('PLAYER 1')) { seen = true; break; }
+    const textUp = await page.evaluate(() => {
+      const b = (window as any).__pkr.game.scene.getScene('Battle');
+      return Boolean(b?.scene?.isActive() && !b.menu && b.advance);
+    });
+    if (textUp) await page.keyboard.press('Enter');
+    await page.waitForTimeout(120);
   }
-  expect(await msg()).toContain('PLAYER 1');
+  expect(seen, `PLAYER 1 never shown; last message: ${await msg()}`).toBe(true);
   expect(errors).toEqual([]);
 });
