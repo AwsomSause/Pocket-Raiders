@@ -40,6 +40,8 @@ export interface Bracket {
   /** 32 slots; slot 0 is the player. Neighbouring slots meet in round 1, neighbouring pairs in round 2, and so on. */
   slots: string[];
   roster: Record<string, RosterEntry>;
+  /** The rival who always reaches the player's last challenger round (round 4, just before the Champion's final). Undefined when the run has no rival. */
+  lastRival?: string;
 }
 
 export interface BuildOptions {
@@ -72,16 +74,20 @@ export function buildBracket(opts: BuildOptions): Bracket {
   const roster = entries.slice(0, 30);
   const rng = streamFor(opts.runSeed, 'seeding');
   const ordered = roster.map((e) => ({ e, key: e.strength + rng.float() * 4 })).sort((a, b) => a.key - b.key || a.e.bossId.localeCompare(b.e.bossId)).map((x) => x.e.bossId);
+  // The first active rival is always the last challenger: seated in the block of eight the player meets in round 4, and unbeatable there (see playMatch).
+  const lastRival = (opts.rivalIds ?? []).find((r) => r !== champion && roster.some((e) => e.bossId === r));
+  const rest = lastRival ? ordered.filter((id) => id !== lastRival) : ordered;
   const slots = new Array<string>(32);
   slots[0] = PLAYER_SLOT;
   let next = 0;
   for (let i = 1; i < 32; i++) {
     if (i === 16) slots[i] = champion;
-    else slots[i] = ordered[next++]!;
+    else if (i === 8 && lastRival) slots[i] = lastRival;
+    else slots[i] = rest[next++]!;
   }
   const byId: Record<string, RosterEntry> = {};
   for (const e of roster) byId[e.bossId] = e;
-  return { seed: opts.runSeed, champion, slots, roster: byId };
+  return { seed: opts.runSeed, champion, slots, roster: byId, lastRival };
 }
 
 function strengthOf(b: Bracket, id: string): number {
@@ -96,6 +102,8 @@ function playMatch(b: Bracket, round: number, index: number, a: string, c: strin
   let winner: string;
   if (a === b.champion) winner = a;
   else if (c === b.champion) winner = c;
+  else if (a === b.lastRival) winner = a; // the rival always reaches round 4
+  else if (c === b.lastRival) winner = c;
   else {
     const sa = strengthOf(b, a) ** 2;
     const sc = strengthOf(b, c) ** 2;
