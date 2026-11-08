@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SPLASH_ID, splashDue } from '../../src/ui/updateSplash';
+import { SPLASH_ID, splashDue } from '../../src/ui/updateSplashGate';
 
 const env = (o: Partial<{ seen: string | null; webdriver: boolean; search: string }> = {}) => ({ seen: null, webdriver: false, search: '', ...o });
 
