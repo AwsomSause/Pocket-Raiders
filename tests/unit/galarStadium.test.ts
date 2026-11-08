@@ -38,15 +38,15 @@ describe('Galar stadium presentation', () => {
     for (let turn = 1; turn <= 40; turn++) {
       const cut = pickCameraCut(ctx({ turn, shown, lastCutTurn: last }));
       if (cut) {
-        expect(cut.durationMs).toBeLessThanOrEqual(2000);
+        expect(cut.durationMs).toBeLessThanOrEqual(4000);
         expect(cut.skippable).toBe(true);
         shown++;
         last = turn;
       }
     }
     expect(shown).toBeLessThanOrEqual(GALAR_STADIUM.cameraBalance.maxPerBattle);
-    expect(pickCameraCut(ctx({ shown: 3 }))).toBeNull();
-    expect(pickCameraCut(ctx({ lastCutTurn: 4, turn: 5 }))).toBeNull();
+    expect(pickCameraCut(ctx({ shown: GALAR_STADIUM.cameraBalance.maxPerBattle }))).toBeNull();
+    expect(pickCameraCut(ctx({ lastCutTurn: 5, turn: 5 }))).toBeNull();
   });
 
   it('is deterministic, and silhouettes only appear in context', () => {

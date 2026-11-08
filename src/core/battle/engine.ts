@@ -331,6 +331,8 @@ export interface BattleContext {
    * once (the user of Explosion loses; the user of a recoil move wins).
    */
   doubleKoLoser?: Side;
+  /** Galar Champion battles: once, when the Champion's last Pokémon falls, a final Pokémon may step in (galarCrowd.ts). Returns it, already built, or null. */
+  lastStand?: () => PokemonInstance | null;
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
   /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
@@ -6143,6 +6145,20 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
         battle.narrative.refused = true;
         enemy.hp = 1;
         events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.speciesId).name} refuses to go down!` });
+        return;
+      }
+      // Galar's Champion refuses to be done: one last Pokémon steps in, chosen to counter yours (galarCrowd.ts).
+      const stand = !playerOut && !battle.doubles ? ctx.lastStand?.() ?? null : null;
+      if (stand) {
+        battle.enemyTeam.push(stand);
+        battle.enemyIndex = battle.enemyTeam.length - 1;
+        battle.enemyStages = freshStages();
+        battle.enemyVolatile = freshVolatile();
+        const lead = ctx.party[battle.activeIndex]!;
+        battle.participants = lead.hp > 0 ? [lead.uid] : [];
+        events.push({ type: 'spectacle', kind: 'arena', side: 'enemy', text: `${battle.trainer?.name ?? 'The Champion'} is not done! One last Pokémon steps out: ${getSpecies(ctx.content, stand.speciesId).name}!`, uid: stand.uid });
+        events.push({ type: 'switchIn', side: 'enemy', uid: stand.uid, speciesId: stand.speciesId, level: stand.level });
+        battle.pendingEntry = [...(battle.pendingEntry ?? []).filter((side) => side !== 'enemy'), 'enemy'];
         return;
       }
       battle.outcome = playerOut && ctx.doubleKoLoser === 'player' ? 'lose' : 'win';

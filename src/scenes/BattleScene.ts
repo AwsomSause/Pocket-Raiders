@@ -67,8 +67,10 @@ import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
-import { currentTournamentRound } from '../core/galarTournament';
-import { StadiumDirector } from '../ui/galar/stadiumDirector';
+import { bracketView, currentTournamentRound } from '../core/galarTournament';
+import { StadiumDirector, type StadiumHooks } from '../ui/galar/stadiumDirector';
+import { INTERVIEWERS_SPRITE, CROWD_SPRITES } from '../ui/galar/cutArt';
+import { crowdFavor, galarScope, type HypeSpeaker } from '../core/galarCrowd';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
@@ -370,6 +372,7 @@ export class BattleScene extends Phaser.Scene {
     const battle = run.battle!;
     this.history = [];
     this.historyView = null;
+    this.startCameraWatchdog();
     this.input.keyboard?.on('keydown-H', () => this.toggleHistory());
     this.input.keyboard?.on('keydown-P', () => {
       const id = this.bagIds[(this.picker as Picker | null)?.current ?? -1];
@@ -1111,6 +1114,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemySprite = pokemonVisual(this, species, 'front', at.x, at.y, scale, mon.shiny, { lift: this.floats(mon) ? FLOAT_LIFT : 0 });
     // The foe stands behind the player's Pokémon.
     this.field.addAt(this.enemySprite, this.fieldBase);
+    this.fitFoeInFrame(this.enemySprite);
     this.skin?.sprite?.(this.enemySprite);
     // A boss's last Pokémon turns the arena light a warning red.
     const b = this.run.battle;
@@ -1118,6 +1122,18 @@ export class BattleScene extends Phaser.Scene {
     this.prefetchMoves(mon);
     this.liven(this.enemySprite, cry);
     return this.enemySprite;
+  }
+
+  /** A sent-out foe is always whole on the screen: a very tall one is scaled down so its top stays below the header, never cropped by the frame. */
+  private fitFoeInFrame(visual: Visual): void {
+    try {
+      const o = visual as unknown as { y: number; displayHeight?: number; scaleX: number; setScale: (n: number) => unknown };
+      const h = o.displayHeight ?? 0;
+      const room = o.y - 28;
+      if (h > room && room > 40) o.setScale((o.scaleX * room) / h);
+    } catch {
+      /* presentation only */
+    }
   }
 
   private dropSprite(visual: Visual | null): void {
@@ -1706,6 +1722,67 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private camBusy = false;
+  /** The foe trainer's name, picture and title, kept for the closing lines after the battle is over. */
+  private lastFoe: { name: string; art: { assetId: string; label: string }; title: string | null; role?: string } | null = null;
+  /** Real-clock time the camera has sat off the wide view with no move running (for the watchdog below); 0 = on the wide view or moving. */
+  private camOffSince = 0;
+  /** While set (a scene that holds the camera on purpose, such as the opening), the watchdog leaves it alone. */
+  private camPinned = false;
+
+  /**
+   * The camera bug (every version): a push-in whose pull-back timer never fired (scene time paused, a move cut short by another move) left the
+   * battle zoomed in for good. This watchdog, on the real clock, eases the camera back to the wide view whenever it has sat off it with no move
+   * running for a couple of seconds. Presentation only; it never touches the battle.
+   */
+  private startCameraWatchdog(): void {
+    this.camOffSince = 0;
+    this.camPinned = false;
+    const check = (): void => {
+      try {
+        const cam = this.cameras.main;
+        const moving = cam.zoomEffect.isRunning || cam.panEffect.isRunning || this.tweens.getTweensOf(cam).length > 0;
+        const off = Math.abs(cam.zoom - 1) > 0.01 || Math.abs((cam as unknown as { rotation: number }).rotation) > 0.002 || Math.abs(cam.midPoint.x - GAME_WIDTH / 2) > 2 || Math.abs(cam.midPoint.y - GAME_HEIGHT / 2) > 2;
+        if (!off || moving || this.camPinned) {
+          this.camOffSince = 0;
+          return;
+        }
+        const now = performance.now();
+        if (this.camOffSince === 0) this.camOffSince = now;
+        else if (now - this.camOffSince > 2200) {
+          this.camOffSince = 0;
+          this.camBusy = false;
+          this.restoreCamera(450);
+        }
+      } catch {
+        /* presentation only */
+      }
+    };
+    const timer = window.setInterval(check, 400);
+    this.events.once('shutdown', () => {
+      window.clearInterval(timer);
+      try {
+        this.restoreCamera(0);
+      } catch {
+        /* scene already gone */
+      }
+    });
+  }
+
+  /** Eases the camera back to the whole arena (instantly for 0 ms). */
+  private restoreCamera(ms: number): void {
+    const cam = this.cameras.main;
+    this.tweens.killTweensOf(cam);
+    cam.zoomEffect.reset();
+    cam.panEffect.reset();
+    cam.setRotation(0);
+    if (ms <= 0) {
+      cam.setZoom(1);
+      cam.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+      return;
+    }
+    cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, ms, 'Sine.easeInOut', true);
+    cam.zoomTo(1, ms, 'Sine.easeInOut', true);
+  }
 
   /** S240: a short push-in toward the target of a big moment, then back. Presentation only; one shot at a time. */
   private cameraMove(e: RunEvent): boolean {
@@ -1726,6 +1803,11 @@ export class BattleScene extends Phaser.Scene {
         cam.zoomTo(1, shot.moveMs);
         this.time.delayedCall(shot.moveMs, () => { this.camBusy = false; });
       });
+      // The scene clock can pause (dialogue, scene changes): the real clock brings the camera back anyway.
+      window.setTimeout(() => {
+        if (!this.sys?.isActive()) return;
+        this.camBusy = false;
+      }, shot.moveMs * 2 + shot.holdMs + 300);
       return true;
     } catch {
       this.camBusy = false;
@@ -2053,7 +2135,8 @@ export class BattleScene extends Phaser.Scene {
           await this.say(`${title} sent out ${this.speciesName(this.shown.enemy)}${second ? ` and ${this.speciesName(second)}` : ''}!`);
         } else {
           const dropped = this.showSprite('enemy', this.shown.enemy);
-          dropIn(this, this.motion, dropped);
+          const top = (dropped as unknown as { y: number; displayHeight?: number }).y - ((dropped as unknown as { displayHeight?: number }).displayHeight ?? 0);
+          dropIn(this, this.motion, dropped, Math.max(0, Math.min(110, top - 12)));
           // The foe's box slides in a beat after it lands (the reference).
           if (this.motion === 'full') await sleep(this, 550);
           await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
@@ -2096,6 +2179,7 @@ export class BattleScene extends Phaser.Scene {
       } else {
         // The camera looks across to your side while your trainer throws.
         const playerRow = partyBallRow(this, 'player', this.run.party.map((m) => m.hp > 0), this.motion, MESSAGE_Y - 46);
+        this.camPinned = true;
         cameraTo(this, this.motion, { x: 400, y: PLAYER_POS.y - 100 }, 1.2, 600);
         const goLine = this.say(`Go! ${this.speciesName(this.shown.player)}!`, true);
         await this.throwPose();
@@ -2103,6 +2187,7 @@ export class BattleScene extends Phaser.Scene {
         // The camera pulls back and your box slides in a beat after your Pokémon lands.
         if (this.motion === 'full') await sleep(this, 400);
         cameraTo(this, this.motion, null, 1, 450);
+        this.camPinned = false;
         await this.refreshInfoBox(this.playerBox, this.shown.player, false);
         playerRow.out();
         await goLine;
@@ -2295,12 +2380,30 @@ export class BattleScene extends Phaser.Scene {
         },
         alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
         say: (text) => this.say(text),
+        announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text),
+        opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text),
         portrait: (id, x, y) => {
           // Fit the picture to the card so no character is cropped, whatever size its sprite is.
           const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
           if (v.height > 0) v.setScale(Math.min(340 / v.height, 6));
           return v as unknown as Phaser.GameObjects.GameObject;
         },
+        hype: ((): StadiumHooks['hype'] => {
+          const scope = galarScope(content, this.run);
+          if (!scope) return undefined;
+          return {
+            scope,
+            favor: () => crowdFavor(content, this.run),
+            facts: () => this.hypeFacts(),
+            available: () => this.hypeSpeakers(),
+            cast: (speaker, seed) => this.hypeCast(speaker, seed),
+            say: (name, assetId, text) => this.speakWithArt(name, assetId, text),
+            foeShare: () => {
+              const f = this.run.battle?.enemyTeam[this.run.battle.enemyIndex];
+              return f ? f.hp / Math.max(1, maxHp(content, f)) : 1;
+            },
+          };
+        })(),
         art: {
           sprite: (id, x, y, scale) => (this.textures.exists(id) ? trainerVisual(this, id, 'Trainer', x, y, scale) : null),
           preload: (ids) => loadAssets(this, ids),
@@ -2333,9 +2436,13 @@ export class BattleScene extends Phaser.Scene {
       }
       if (this.boss()?.role !== 'gym') return; // Story-run League fights get the crowd and cuts, not the gym host
       const band = session.claimGalarBandIntro();
+      // The news reporter opens the match (trainer text with the reporter's own sprite), then the Champion host speaks.
+      const leader = this.run.battle?.trainer?.name ?? 'the Gym Leader';
+      const who = content.archetypes.get(this.run.archetypeId)?.name ?? 'the challenger';
+      await this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, `Welcome, everyone, to gym match number ${galarGymNumber(this.run)} of the Gym Challenge! ${who} steps onto the field to face ${leader}!`);
       if (band) {
         if (band.grantsItem) await this.stadium.bandScene();
-        for (const line of band.lines) await this.say(line);
+        for (const line of band.lines) await this.speak(host, line);
       }
       else {
         const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
@@ -2435,6 +2542,7 @@ export class BattleScene extends Phaser.Scene {
 
   private nextPrompt(): void {
     this.refreshMusicState();
+    if (!this.camBusy) this.restoreCamera(250); // a new turn always starts on the whole arena
     if (this.duo) {
       if (this.autoOn && !autoBattleProblem(this.run)) void this.runAuto();
       else if (this.run.battle?.needsSwitch) this.openPartyPicker(true);
@@ -3611,6 +3719,95 @@ export class BattleScene extends Phaser.Scene {
    * Story Portrait box, and the line types like speech. A shouted line shakes the box, the trainer
    * jumps and their Pokémon cries. Presentation only; the line also goes to the battle log.
    */
+  /** Galar hype moments: a line as trainer text with this person's own picture (loaded first). Never throws. */
+  private async speakWithArt(name: string, assetId: string, text: string): Promise<void> {
+    try {
+      if (assetId) await loadAssets(this, [assetId]).catch(() => undefined);
+    } catch {
+      /* the line shows without a picture */
+    }
+    await this.speak(name, text, 'calm', false, assetId ? { assetId } : undefined);
+  }
+
+  /** The people who can speak in a hype moment right now. */
+  private hypeSpeakers(): ReadonlySet<HypeSpeaker> {
+    const out = new Set<HypeSpeaker>(['reporter', 'crowdTrainer', 'host']);
+    try {
+      const content = services().session.content;
+      const rival = this.run.story.rivals[0];
+      if (rival && this.rivalArt(rival)) out.add('rival');
+      const scope = galarScope(content, this.run);
+      if (scope === 'gym' && this.futureFoe('gym')) out.add('futureLeader');
+      if (scope === 'tournament' && this.futureFoe('tournament')) out.add('futureOpponent');
+    } catch {
+      /* the basic cast is enough */
+    }
+    return out;
+  }
+
+  /** The next gym leader (gym battles) or the next opponent in the bracket (tournament): someone this player will face later. */
+  private futureFoe(kind: 'gym' | 'tournament'): { name: string; assetId: string } | null {
+    const content = services().session.content;
+    let id: string | undefined;
+    if (kind === 'gym') {
+      const current = this.run.battle?.trainer?.leaderId;
+      id = this.run.roleCast
+        .filter((c) => c.role === 'gym' && c.regionIndex === this.run.regionIndex && c.id !== current && !this.run.badges.includes(c.id))
+        .sort((a, b) => a.slot - b.slot)[0]?.id;
+    } else {
+      id = bracketView(content, this.run).rounds.find((r) => r.state === 'later')?.opponent.id;
+    }
+    const boss = id ? content.bosses.get(id) : undefined;
+    return boss ? { name: boss.name, assetId: boss.sprites.default } : null;
+  }
+
+  /** Who a speaker is for one moment: a name and a picture id. Crowd members are a seeded pick of everyday trainers. */
+  private hypeCast(speaker: HypeSpeaker, seed: string): { name: string; assetId: string } {
+    const content = services().session.content;
+    try {
+      if (speaker === 'reporter') return { name: 'Reporter', assetId: INTERVIEWERS_SPRITE };
+      if (speaker === 'host') {
+        const host = galarHost(content, this.run);
+        return { name: host.name, assetId: content.bosses.get(host.id)?.sprites.default ?? '' };
+      }
+      if (speaker === 'rival') {
+        const rival = this.run.story.rivals[0];
+        const art = rival ? this.rivalArt(rival) : null;
+        if (art) return { name: rival!.name, assetId: art.assetId };
+      }
+      if (speaker === 'futureLeader' || speaker === 'futureOpponent') {
+        const f = this.futureFoe(speaker === 'futureLeader' ? 'gym' : 'tournament');
+        if (f) return f;
+      }
+    } catch {
+      /* fall back to a crowd member */
+    }
+    let h = 0;
+    for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    const id = CROWD_SPRITES[h % CROWD_SPRITES.length]!;
+    const first = ['Joey', 'Mia', 'Ken', 'Lily', 'Sam', 'Rhea', 'Tom', 'Ava', 'Nico', 'Ivy'][(h >>> 5) % 10]!;
+    const cls = id.split('/')[1]!.replace(/_(m|f|2)$/, '').split('_').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ');
+    return { name: `${cls} ${first}`, assetId: id };
+  }
+
+  /** The names that fill a hype moment's line. */
+  private hypeFacts(): Record<string, string> {
+    const content = services().session.content;
+    const battle = this.run.battle;
+    const foeMon = battle?.enemyTeam[battle.enemyIndex];
+    const myMon = this.run.party[battle?.activeIndex ?? 0];
+    const rival = this.run.story.rivals[0];
+    return {
+      player: content.archetypes.get(this.run.archetypeId)?.name ?? 'the challenger',
+      foe: battle?.trainer?.name ?? this.lastFoe?.name ?? 'the opponent',
+      foeMon: foeMon ? this.speciesName(foeMon) : 'their Pokémon',
+      myMon: myMon ? this.speciesName(myMon) : 'your Pokémon',
+      host: galarHost(content, this.run).name,
+      rival: rival?.name ?? 'your rival',
+      leader: this.futureFoe('gym')?.name ?? 'the next leader',
+    };
+  }
+
   /** The Champion host's own picture when the Galar host is the one speaking (null for anyone else). */
   private hostArtFor(speaker: string): string | null {
     try {
@@ -3623,14 +3820,18 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false): Promise<void> {
+  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
-    const trainer = this.run.battle?.trainer;
-    const art = this.trainerArt();
-    const isFoe = Boolean(trainer && (speaker === trainer.name || speaker === art?.label || this.trainerTitle()?.endsWith(speaker)));
+    // After the last blow the run's battle is gone: the foe's name and picture are kept from while it lasted, so the leader's closing lines still show them.
+    const live = this.run.battle?.trainer;
+    const liveArt = this.trainerArt();
+    if (live && liveArt) { const b = this.boss(); this.lastFoe = { name: live.name, art: liveArt, title: this.trainerTitle(), role: b ? b.title.replace(b.name, '').trim() || undefined : content.trainers.get(live.classId)?.name }; }
+    const trainer = live ?? (this.lastFoe ? { name: this.lastFoe.name, classId: '' } : undefined);
+    const art = liveArt ?? this.lastFoe?.art ?? null;
+    const isFoe = Boolean(trainer && (speaker === trainer.name || speaker === art?.label || (this.trainerTitle() ?? this.lastFoe?.title)?.endsWith(speaker)));
     const boss = this.boss();
-    const role = !isFoe ? undefined : boss ? (boss.title.replace(boss.name, '').trim() || undefined) : content.trainers.get(trainer?.classId ?? '')?.name;
+    const role = !isFoe ? undefined : !live && this.lastFoe ? this.lastFoe.role : boss ? (boss.title.replace(boss.name, '').trim() || undefined) : content.trainers.get(trainer?.classId ?? '')?.name;
     const plain = stripSpeechTags(text);
     this.history.push(`${speaker}: “${plain}”`);
     if (this.history.length > 60) this.history.shift();
@@ -3646,7 +3847,7 @@ export class BattleScene extends Phaser.Scene {
       role,
       text: shout && !/\[shake\]/.test(text) ? `[shake]${text}[/shake]` : text,
       voice,
-      artId: isFoe ? art?.assetId ?? null : this.hostArtFor(speaker),
+      artId: artOverride?.assetId ?? (isFoe ? art?.assetId ?? null : this.hostArtFor(speaker)),
       rim: this.foeRim(),
       motion: this.motion,
       speed: settings.speechSpeed,

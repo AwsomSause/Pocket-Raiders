@@ -58,6 +58,8 @@ test('a Galar gym battle shows every stadium camera cut', async ({ page }) => {
     await page.evaluate((c) => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
       b.say = async () => undefined;
+      b.speakWithArt = async () => undefined;
+      b.speak = async () => undefined;
       (window as any).__done = false;
       void Promise.resolve(new Function('b', `return ${c}`)(b)).then(() => ((window as any).__done = true));
     }, call);

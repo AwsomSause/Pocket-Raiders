@@ -238,7 +238,9 @@ export interface BracketRound {
   round: number;
   name: string;
   state: 'won' | 'next' | 'later';
-  opponent: { id: string; name: string; style: string; intro: string };
+  opponent: { id: string; name: string; style: string; intro: string; /** Their type speciality, picture id and best known Pokémon (up to six), for the bracket screen. */ types: string[]; sprite: string; team: string[] };
+  /** How many levels stronger this round's field is than the first. */
+  levelBonus: number;
   /** Entrants still in after this round (names, the player as "You"). */
   remaining: string[];
   /** Other matches of the round that were upsets (winner beat a stronger entrant). Shown once the round is won. */
@@ -268,7 +270,8 @@ export function bracketView(content: Content, run: RunState): BracketView {
       round,
       name: roundName(round),
       state: won ? 'won' : round === wins + 1 ? 'next' : 'later',
-      opponent: { id, name: name(id), style: id === b.champion ? 'Galar Champion' : (entry?.style ?? 'Challenger'), intro: id === b.champion ? `${name(id)} raises a hand to the roaring stadium.` : (entry?.intro ?? GALAR_TOURNAMENT.introduceLine.replace('{name}', name(id))) },
+      levelBonus: roundLevelBonus(round),
+      opponent: { id, name: name(id), types: content.bosses.get(id)?.types ?? [], sprite: content.bosses.get(id)?.sprites.default ?? '', team: (content.bosses.get(id)?.signature ?? []).slice(0, 6), style: id === b.champion ? 'Galar Champion' : (entry?.style ?? 'Challenger'), intro: id === b.champion ? `${name(id)} raises a hand to the roaring stadium.` : (entry?.intro ?? GALAR_TOURNAMENT.introduceLine.replace('{name}', name(id))) },
       remaining: remaining(b, round).map(name),
       upsets: won ? otherMatches(b, round).filter((m) => m.upset).map((m) => `${name(m.winner)} beat ${name(m.winner === m.a ? m.b : m.a)}`) : [],
       crowd: won ? crowdLine(b, round) : null,

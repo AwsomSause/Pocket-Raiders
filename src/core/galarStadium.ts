@@ -111,8 +111,8 @@ export function pickCameraCut(ctx: CutContext): CameraCut | null {
   const options = GALAR_STADIUM.cameraCuts.filter((c) => c.beats.includes(ctx.beat) && (!c.needsImpressive || ctx.impressive) && (!c.needsRival || ctx.rivalWatching));
   if (options.length === 0) return null;
   const rng = new Rng(hashSeed(`galar-stadium:cut:${ctx.runSeed}:${ctx.battleId}:${ctx.turn}`));
-  // Not every beat gets a cut: roughly one in three, so the battle camera stays the main view.
-  if (!rng.chance(0.35)) return null;
+  // Not every beat gets a cut: roughly two in three, so the battle camera stays the main view.
+  if (!rng.chance(0.7)) return null;
   const cut = rng.weighted(options.map((o) => ({ item: o, weight: o.weight })));
   return { id: cut.id, label: cut.label, caption: cut.caption, durationMs: bal.durationMs, skippable: bal.skippable };
 }

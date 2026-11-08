@@ -6,7 +6,7 @@
   "finalMon": "bgm.galar_battle",
   "note": "Crowd ambience and cheers have no audio files yet (limited): the cue ids below are ready for the Drive packs."
  },
- "cameraBalance": { "maxPerBattle": 3, "minTurnsBetween": 3, "durationMs": 1400, "skippable": true },
+ "cameraBalance": { "maxPerBattle": 8, "minTurnsBetween": 1, "durationMs": 2600, "skippable": true },
  "crowd": {
   "bigHit": { "cue": "crowd.roar", "intensity": 3 },
   "survived": { "cue": "crowd.roar", "intensity": 3 },

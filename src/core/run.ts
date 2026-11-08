@@ -178,6 +178,7 @@ import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
 import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import { galarScope, lastStandUsed, markLastStand, pickCounterSpecies } from './galarCrowd';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
 import {
@@ -2689,6 +2690,24 @@ function storyChargeTurn(content: Content, run: RunState, partner: RunState['par
   if (events.some((e) => e.type === 'sacrifice' && e.uid === partner.uid)) gainCharge(content, run, 'protect_ally');
 }
 
+/** Galar Champion battles: the one-time last Pokémon (galarCrowd.ts). Counters the player's strongest Pokémon and may Mega Evolve "from pure bond". */
+function galarLastStandMon(content: Content, run: RunState): PokemonInstance | null {
+  const battle = run.battle;
+  if (!battle || battle.kind !== 'trainer' || galarScope(content, run) !== 'champion' || lastStandUsed(run)) return null;
+  const alive = run.party.filter((m) => m.hp > 0);
+  const target = [...(alive.length > 0 ? alive : run.party)].sort((a, b) => b.level - a.level || maxHp(content, b) - maxHp(content, a))[0];
+  if (!target) return null;
+  const id = pickCounterSpecies(content, target, `${run.seed}:${run.encountersCompleted}`);
+  if (!id) return null;
+  const mon = newMon(content, run, id, Math.max(...battle.enemyTeam.map((m) => m.level)) + 3, 'e');
+  mon.hp = maxHp(content, mon);
+  markLastStand(run);
+  battle.transform.bossPlan[mon.uid] = 'mega';
+  if (!battle.transform.enemyMechanics.includes('mega')) battle.transform.enemyMechanics.push('mega');
+  battle.transform.used.enemy = battle.transform.used.enemy.filter((k) => k !== 'mega');
+  return mon;
+}
+
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
   const archetype = runArchetype(content, run);
   syncHpPerks(content, archetype.modifiers, run.party);
@@ -2715,6 +2734,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: archetype.modifiers,
     gimmicks: gimmickContext(content, run),
+    lastStand: () => galarLastStandMon(content, run),
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,

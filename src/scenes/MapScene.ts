@@ -1721,24 +1721,59 @@ export class MapScene extends Phaser.Scene {
     const view = bracketView(session.content, session.run!);
     const layer = this.add.container(0, 0).setDepth(85).setName('tournament-bracket');
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive().on('pointerdown', () => this.toggleBracket()));
-    layer.add(drawGlass(this, 30, 30, GAME_WIDTH - 60, GAME_HEIGHT - 60, { tint: AERO.glassLow, rim: AERO.rim, radius: 18, alpha: 0.97 }));
-    layer.add(this.add.text(GAME_WIDTH / 2, 42, `Champion Tournament  ·  ${view.standing.length} of 32 still in  (B or click to close)`, textStyle(20, COLORS.gold)).setOrigin(0.5, 0));
-    const colW = (GAME_WIDTH - 80) / 5;
+    layer.add(drawGlass(this, 20, 20, GAME_WIDTH - 40, GAME_HEIGHT - 40, { tint: AERO.glassLow, rim: AERO.rim, radius: 18, alpha: 0.97 }));
+    layer.add(this.add.text(GAME_WIDTH / 2, 30, 'Champion Tournament', textStyle(24, COLORS.gold)).setOrigin(0.5, 0));
+    layer.add(this.add.text(GAME_WIDTH / 2, 60, `${view.standing.length} of 32 still in  ·  B or click to close`, textStyle(14, '#bfe9ff')).setOrigin(0.5, 0));
+    // Five cards, evenly spaced and centred on the screen: each one a challenger's full profile.
+    const cardW = 170;
+    const gap = 12;
+    const left = (GAME_WIDTH - (5 * cardW + 4 * gap)) / 2;
+    const content = session.content;
     for (const r of view.rounds) {
-      const x = 40 + (r.round - 1) * colW;
+      const x = left + (r.round - 1) * (cardW + gap);
+      const cx = x + cardW / 2;
       const color = r.state === 'won' ? '#78d890' : r.state === 'next' ? '#ffe060' : '#a69cb4';
-      layer.add(this.add.text(x + colW / 2, 82, r.name, textStyle(16, color)).setOrigin(0.5, 0));
-      layer.add(this.add.text(x + colW / 2, 106, `${r.state === 'won' ? '✓ ' : r.state === 'next' ? '▶ ' : ''}${r.opponent.name}`, textStyle(15, '#ffffff')).setOrigin(0.5, 0));
-      layer.add(this.add.text(x + colW / 2, 128, r.opponent.style, textStyle(11, '#bfe9ff', { wordWrap: { width: colW - 10 }, align: 'center' })).setOrigin(0.5, 0));
-      const detail = r.state === 'next' ? r.opponent.intro : r.crowd ?? '';
-      if (detail) layer.add(this.add.text(x + colW / 2, 170, detail, textStyle(11, '#e8e0f0', { wordWrap: { width: colW - 14 }, align: 'center' })).setOrigin(0.5, 0));
-      if (r.upsets.length > 0) layer.add(this.add.text(x + colW / 2, 250, `Upset: ${r.upsets.slice(0, 2).join('; ')}`, textStyle(10, '#ff9860', { wordWrap: { width: colW - 14 }, align: 'center' })).setOrigin(0.5, 0));
-      layer.add(this.add.text(x + colW / 2, 330, `${r.remaining.length} left${r.shopAfter ? '\n🛒 Ball Guy after' : ''}`, textStyle(12, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
+      const edge = r.state === 'won' ? 0x3c8a5a : r.state === 'next' ? 0xd9b45a : 0x50486a;
+      const card = this.add.graphics();
+      card.fillStyle(0x10182c, r.state === 'next' ? 0.95 : 0.8).fillRoundedRect(x, 88, cardW, 372, 10);
+      card.lineStyle(r.state === 'next' ? 3 : 2, edge, 1).strokeRoundedRect(x, 88, cardW, 372, 10);
+      layer.add(card);
+      layer.add(this.add.text(cx, 96, r.name, textStyle(16, color)).setOrigin(0.5, 0));
+      layer.add(this.add.text(cx, 116, r.state === 'won' ? '✓ BEATEN' : r.state === 'next' ? '▶ NEXT OPPONENT' : 'AHEAD', textStyle(12, color)).setOrigin(0.5, 0));
+      const pic = r.opponent.sprite ? (trainerVisual(this, r.opponent.sprite, r.opponent.name, cx, 232, 1) as unknown as { height: number; setScale: (n: number) => unknown }) : null;
+      if (pic) {
+        if (pic.height > 0) pic.setScale(Math.min(100 / pic.height, 4));
+        layer.add(pic as unknown as Phaser.GameObjects.GameObject);
+        if (r.state === 'later') (pic as unknown as { setAlpha?: (a: number) => unknown }).setAlpha?.(0.8);
+      }
+      layer.add(this.add.text(cx, 240, r.opponent.name, textStyle(17, '#ffffff', { align: 'center', wordWrap: { width: cardW - 12 } })).setOrigin(0.5, 0));
+      layer.add(this.add.text(cx, 264, r.opponent.style, textStyle(12, '#bfe9ff', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
+      // Type speciality chips, centred as a row.
+      const types = r.opponent.types.slice(0, 2);
+      types.forEach((t, i) => {
+        const tx = cx + (i - (types.length - 1) / 2) * 62;
+        layer.add(this.add.rectangle(tx, 304, 56, 18, TYPE_COLORS[t] ?? 0x808080, 1).setStrokeStyle(1, 0x101820));
+        layer.add(this.add.text(tx, 304, t.toUpperCase(), textStyle(12, '#ffffff', { stroke: '#101820', strokeThickness: 2 })).setOrigin(0.5));
+      });
+      // Their best-known team, as a row of icons.
+      const team = r.opponent.team;
+      team.forEach((id, i) => {
+        const sp = content.species.get(id);
+        if (!sp) return;
+        const ix = cx + (i - (team.length - 1) / 2) * 26;
+        layer.add(pokemonIcon(this, sp, ix, 334, 0.8));
+      });
+      layer.add(this.add.text(cx, 354, team.length > 0 ? 'known team' : '', textStyle(11, '#a69cb4')).setOrigin(0.5, 0));
+      layer.add(this.add.text(cx, 372, `Field strength: +${r.levelBonus} levels`, textStyle(12, '#e8e0f0', { align: 'center' })).setOrigin(0.5, 0));
+      const detail = r.state === 'next' ? `"${r.opponent.intro}"` : r.crowd ?? '';
+      if (detail) layer.add(this.add.text(cx, 392, detail, textStyle(11, '#e8e0f0', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
+      if (r.upsets.length > 0) layer.add(this.add.text(cx, 430, `Upset: ${r.upsets.slice(0, 1).join('; ')}`, textStyle(10, '#ff9860', { wordWrap: { width: cardW - 16 }, align: 'center' })).setOrigin(0.5, 0));
+      layer.add(this.add.text(cx, 446, `${r.remaining.length} left${r.shopAfter ? '  ·  🛒 Ball Guy after' : ''}`, textStyle(11, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
     }
-    view.featured.slice(-2).forEach((f, i) => layer.add(this.add.text(GAME_WIDTH / 2, 372 + i * 18, f.text, textStyle(13, f.upset ? '#ff9860' : '#bfe9ff')).setOrigin(0.5, 0)));
+    view.featured.slice(-2).forEach((f, i) => layer.add(this.add.text(GAME_WIDTH / 2, 466 + i * 16, f.text, textStyle(12, f.upset ? '#ff9860' : '#bfe9ff')).setOrigin(0.5, 0)));
     const watchRound = view.rounds.filter((r) => r.state === 'won').length;
     if (watchRound > 0) {
-      layer.add(this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 60, `W: watch a round ${watchRound} match`, textStyle(14, '#ffe060')).setOrigin(0.5, 0).setName('watch-match').setInteractive({ useHandCursor: true }).on('pointerdown', () => this.watchMatch(watchRound)));
+      layer.add(this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 34, `W: watch a round ${watchRound} match`, textStyle(14, '#ffe060')).setOrigin(0.5, 0).setName('watch-match').setInteractive({ useHandCursor: true }).on('pointerdown', () => this.watchMatch(watchRound)));
       const key = this.input.keyboard?.addKey('W');
       key?.once('down', () => { if (this.bracket === layer) this.watchMatch(watchRound); });
     }
