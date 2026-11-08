@@ -1,6 +1,6 @@
 // Plays a planned cinematic moment (core/cinematic/moments.ts): letterbox, title card, five beats. Presentation only:
 // it returns when the moment ends or is skipped and never touches battle state. A drawing failure resolves quietly.
-// `inner` lets a caller run an existing scene (megaScene, teraScene, bossCinematic...) during the reveal/impact beats.
+// `inner` lets a caller run an existing scene (megaScene, teraScene, bossCinematic...) during the moment/reaction beats.
 
 import type Phaser from 'phaser';
 import { MOMENT_PHASES, type MomentPlan, type MomentSpec } from '../../core/cinematic/moments';
@@ -9,7 +9,7 @@ import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 export interface MomentEnv {
   title?: string;
   subtitle?: string;
-  /** Runs once, at the start of the reveal beat. Awaited, but cut short if the player skips. */
+  /** Runs once, at the start of the moment beat. Awaited, but cut short if the player skips. */
   inner?: () => Promise<void>;
   /** Called when the player skips (so the caller can remember it). */
   onSkip?: () => void;
@@ -53,10 +53,10 @@ export function playMoment(scene: Phaser.Scene, spec: MomentSpec, plan: MomentPl
       try {
         for (const phase of MOMENT_PHASES) {
           if (over) return;
-          if (phase === 'anticipation') bars.forEach((b, i) => scene.tweens.add({ targets: b, y: i === 0 ? 40 : GAME_HEIGHT - 40, duration: Math.max(1, plan.ms.anticipation) }));
-          if (phase === 'buildup') scene.tweens.add({ targets: title, alpha: 1, duration: Math.max(1, plan.ms.buildup) });
-          if (phase === 'reveal') {
-            scene.tweens.add({ targets: sub, alpha: 1, duration: Math.max(1, plan.ms.reveal / 2) });
+          if (phase === 'situation') bars.forEach((b, i) => scene.tweens.add({ targets: b, y: i === 0 ? 40 : GAME_HEIGHT - 40, duration: Math.max(1, plan.ms.situation) }));
+          if (phase === 'anticipation') scene.tweens.add({ targets: title, alpha: 1, duration: Math.max(1, plan.ms.anticipation) });
+          if (phase === 'moment') {
+            scene.tweens.add({ targets: sub, alpha: 1, duration: Math.max(1, plan.ms.moment / 2) });
             if (env.inner) await Promise.race([env.inner(), new Promise<void>((r) => scene.time.delayedCall(6000, r))]);
           }
           await wait(plan.ms[phase]);

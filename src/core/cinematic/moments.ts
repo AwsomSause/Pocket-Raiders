@@ -3,13 +3,13 @@
 // (ui/cinematic/momentPlayer.ts) draws it. No Phaser, no random numbers: the same spec and settings give the same plan, and
 // the battle result never waits on a moment.
 //
-// Every moment has five beats: anticipation -> buildup -> reveal -> impact -> aftermath.
+// Every moment has five beats: situation -> anticipation -> moment -> reaction -> transition.
 // Rules: mandatory moments cannot be skipped; others can be skipped, and a repeatable one is shortened after the first time.
 // `disableAnimations` leaves only the title card; reduced motion halves the beats.
 
 import { z } from 'zod';
 
-export const MOMENT_PHASES = ['anticipation', 'buildup', 'reveal', 'impact', 'aftermath'] as const;
+export const MOMENT_PHASES = ['situation', 'anticipation', 'moment', 'reaction', 'transition'] as const;
 export type MomentPhase = (typeof MOMENT_PHASES)[number];
 
 export const TRANSFORM_MOMENTS = ['mega', 'primal', 'dynamax', 'gigantamax', 'zmove', 'tera', 'evolve', 'hyper', 'overdrive'] as const;
@@ -21,11 +21,11 @@ export const MOMENT_KINDS = [
 export type MomentKind = (typeof MOMENT_KINDS)[number];
 
 const Phases = z.object({
-  anticipation: z.number().int().min(0).default(300),
-  buildup: z.number().int().min(0).default(500),
-  reveal: z.number().int().min(0).default(700),
-  impact: z.number().int().min(0).default(400),
-  aftermath: z.number().int().min(0).default(300),
+  situation: z.number().int().min(0).default(300),
+  anticipation: z.number().int().min(0).default(500),
+  moment: z.number().int().min(0).default(700),
+  reaction: z.number().int().min(0).default(400),
+  transition: z.number().int().min(0).default(300),
 });
 
 export const MomentSpecSchema = z.object({
@@ -40,7 +40,7 @@ export const MomentSpecSchema = z.object({
   repeatable: z.boolean().default(false),
   titleKey: z.string().optional(),
   subtitleKey: z.string().optional(),
-  phases: Phases.default({ anticipation: 300, buildup: 500, reveal: 700, impact: 400, aftermath: 300 }),
+  phases: Phases.default({ situation: 300, anticipation: 500, moment: 700, reaction: 400, transition: 300 }),
 });
 export type MomentSpec = z.infer<typeof MomentSpecSchema>;
 
@@ -122,6 +122,6 @@ export function defaultMoment(kind: MomentKind, id: string, side: 'player' | 'en
     id, kind, side,
     tier: big ? 'S' : transform || kind === 'aceEntrance' ? 'A' : 'B',
     repeatable: transform,
-    phases: big ? { anticipation: 500, buildup: 800, reveal: 1000, impact: 600, aftermath: 400 } : undefined,
+    phases: big ? { situation: 500, anticipation: 800, moment: 1000, reaction: 600, transition: 400 } : undefined,
   });
 }
