@@ -9,6 +9,7 @@
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
 import { dexCaughtCount } from '../core/dexRewards';
+import { claimBandIntro } from '../core/galarStadium';
 import { changeFriendship } from '../core/friendship';
 import { spendTownStart, townAction, visitBuilding, type TownArgs, type TownResult } from '../core/town';
 import type { Grade } from '../core/interaction/prompt';
@@ -360,6 +361,14 @@ export class GameSession {
     this.run = hit.run;
     this.persistRun();
     return hit;
+  }
+
+  /** Galar Gym Challenge: the Champion's one-time Dynamax Band scene. Marks it seen, gives a Band if the player has none, saves; null if already seen. */
+  claimGalarBandIntro(): ReturnType<typeof claimBandIntro> {
+    const run = this.requireRun();
+    const intro = claimBandIntro(this.content, run);
+    if (intro) this.persistRun();
+    return intro;
   }
 
   /** A rival may steal, block or help at a stop without a fight; returns the line to show, or null. */

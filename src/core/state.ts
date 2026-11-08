@@ -1320,7 +1320,7 @@ export const RunStateSchema = z.object({
   /** Bank licenses owned when the run began (Scavenger, Fortune, Survival work inside the run). Older runs have none. */
   licenses: z.array(z.string()).optional(),
   /** The shop being visited (shops redesign): its kind and this visit's haggle. Set on entering, cleared on leaving; older saves have none (Poké Mart). */
-  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional() }).optional(),
+  shop: z.object({ type: z.string(), place: z.string(), haggle: z.object({ item: z.string(), won: z.boolean() }).optional(), /** Ball Guy's tournament shop: copies bought this visit, per item (limited stock). Optional: no save bump. */ sold: z.record(z.string(), z.number().int().min(0)).optional(), /** Ball Guy: which visit (0 = after round 2, 1 = after round 4). */ visit: z.number().int().min(0).optional() }).optional(),
   /** Nuzlocke and Hardcore Nuzlocke: areas whose one catch is spent and the fallen (core/nuzlocke.ts). */
   nuzlocke: z.object({
     areas: z.array(z.string()),
