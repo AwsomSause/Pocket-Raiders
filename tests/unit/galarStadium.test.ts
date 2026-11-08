@@ -75,3 +75,38 @@ describe('Galar stadium presentation', () => {
     expect(content.bosses.has(GALAR_STADIUM.hostDefault)).toBe(true);
   });
 });
+
+import { claimBandIntro, galarGymNumber, galarHost, galarPerformance, isGalarStadiumBattle } from '../../src/core/galarStadium';
+import { createRun } from '../../src/core/run';
+
+describe('Galar stadium wiring helpers', () => {
+  const content = getContent();
+  const galarRun = () => {
+    const run = createRun(content, { runId: 'r', seed: 'GALARSEED', archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    return run;
+  };
+  it('gives the Dynamax Band once, only when missing', () => {
+    const run = galarRun();
+    delete run.inventory['dynamax-band'];
+    const first = claimBandIntro(content, run)!;
+    expect(first.grantsItem).toBe('dynamax-band');
+    expect(run.inventory['dynamax-band']).toBe(1);
+    expect(claimBandIntro(content, run)).toBeNull();
+    expect(run.inventory['dynamax-band']).toBe(1);
+  });
+  it('acknowledges a Band the player already has without a second one', () => {
+    const run = galarRun();
+    run.inventory['dynamax-band'] = 1;
+    expect(claimBandIntro(content, run)!.grantsItem).toBeNull();
+    expect(run.inventory['dynamax-band']).toBe(1);
+  });
+  it('knows the host, gym number and that no battle is a stadium battle outside one', () => {
+    const run = galarRun();
+    expect(galarGymNumber(run)).toBe(1);
+    expect(galarHost(content, run).name.length).toBeGreaterThan(0);
+    expect(isGalarStadiumBattle(content, run)).toBe(false);
+    expect(galarPerformance(content, run)).toEqual({ recentLosses: 0, lastWasImpressive: false });
+  });
+});

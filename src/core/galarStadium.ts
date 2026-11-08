@@ -1,6 +1,13 @@
 import { z } from 'zod';
 import stadiumJson from '../data/galarStadium.json';
+import { hasKeyItem } from './battle/transform';
+import type { Content } from './contentSchema';
+import { bossRoleForClass } from './encounters';
+import { addItem } from './items';
+import { maxHp } from './pokemon';
+import { currentRegion } from './regions';
 import { hashSeed, Rng } from './rng';
+import type { RunState } from './state';
 
 /**
  * Galar Gym Challenge presentation (Beta 0.5, section 1.1 and 1.2): a televised stadium event.
@@ -108,4 +115,48 @@ export function pickCameraCut(ctx: CutContext): CameraCut | null {
   if (!rng.chance(0.35)) return null;
   const cut = rng.weighted(options.map((o) => ({ item: o, weight: o.weight })));
   return { id: cut.id, label: cut.label, caption: cut.caption, durationMs: bal.durationMs, skippable: bal.skippable };
+}
+
+// ---------- wiring helpers (read the run; the only write is the Band intro) ----------
+
+/** A Galar Gym Challenge battle: a gym leader fight in the Galar region (the stadium shows only there). */
+export function isGalarStadiumBattle(content: Content, run: RunState): boolean {
+  if (run.regionOrder.length === 0 || run.battle?.trainer == null) return false;
+  if (bossRoleForClass(run.battle.trainer.classId) !== 'gym') return false;
+  return currentRegion(content, run).id === 'galar';
+}
+
+/** Which gym of the Challenge this is (1 = first): badges won so far plus this one. */
+export function galarGymNumber(run: RunState): number {
+  return run.badges.length + 1;
+}
+
+/** How the player arrives: hurt (fainted Pokémon or low HP) reads as struggling, an untouched healthy party as impressive. Derived from the party, so nothing extra is saved. */
+export function galarPerformance(content: Content, run: RunState): Performance {
+  const party = run.party;
+  if (party.length === 0) return { recentLosses: 0, lastWasImpressive: false };
+  const share = party.reduce((n, m) => n + m.hp / Math.max(1, maxHp(content, m)), 0) / party.length;
+  const fainted = party.filter((m) => m.hp <= 0).length;
+  return { recentLosses: fainted > 0 || share < 0.5 ? 1 : 0, lastWasImpressive: fainted === 0 && share >= 0.9 && run.badges.length >= 2 };
+}
+
+/** The Champion who hosts this run's Challenge: the run's Galar champion if cast, else Leon. */
+export function galarHost(content: Content, run: RunState): { id: string; name: string } {
+  const id = run.roleCast.find((c) => c.role === 'champion' && c.regionIndex === run.regionIndex)?.id ?? GALAR_STADIUM.hostDefault;
+  return { id, name: content.bosses.get(id)?.name ?? 'The Champion' };
+}
+
+const BAND_FLAG = () => GALAR_STADIUM.bandIntro.flag;
+
+/**
+ * Plays the first-gym Band intro once: marks it seen and, if the player has no Dynamax Band, gives one. Returns the lines to show, or null if already seen.
+ * Mutates `run`; the caller saves it.
+ */
+export function claimBandIntro(content: Content, run: RunState): BandIntro | null {
+  const flags: Record<string, number> = { [BAND_FLAG()]: Number(run.story.flags[BAND_FLAG()] ?? 0) };
+  const intro = bandIntro(hasKeyItem(content, run.inventory, 'dynamax'), flags, galarHost(content, run).name);
+  if (!intro) return null;
+  run.story.flags[intro.flag] = 1;
+  if (intro.grantsItem) addItem(run.inventory, intro.grantsItem, 1);
+  return intro;
 }

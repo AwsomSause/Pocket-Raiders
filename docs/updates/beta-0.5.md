@@ -23,7 +23,7 @@ Cinematics M6: no save bump.
 
 (newest first: PR, one line on what the player gets)
 
-- Galar slice 1: 10 Galar-only events (Kubfu to Urshifu, Swordbert & Shieldbert, Wooloo, Gigantamax, raid...), plus tested rules for the 32-trainer Champion Tournament, Ball Guy's shop and the stadium Champion/crowd/camera presentation. Not yet wired into the League stage and battle screen.
+- Galar slice 1: 10 Galar-only events (Kubfu to Urshifu, Swordbert & Shieldbert, Wooloo, Gigantamax, raid...), plus tested rules for the 32-trainer Champion Tournament, Ball Guy's shop and the stadium Champion/crowd/camera presentation. Stadium presentation is wired into Galar gym battles; tournament League not yet.
 
 
 ## Known limits / open items
