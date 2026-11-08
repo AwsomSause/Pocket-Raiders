@@ -45,6 +45,7 @@ describe('Remembrance roster', () => {
       expect(new Set(picks.map((p) => p.id)).size).toBe(3);
       expect(picks.every((p) => p.quizEligible)).toBe(true);
       expect(new Set(picks.map((p) => p.role)).size).toBeGreaterThanOrEqual(2);
+      expect(new Set(picks.map((p) => p.generation)).size, picks.map((p) => p.id).join()).toBe(3); // three different regions
     }
   });
 });

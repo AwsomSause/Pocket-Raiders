@@ -2224,6 +2224,8 @@ export const BalanceSchema = z.object({
   vitaminMultiplierPerStack: z.number().positive(),
   /** Extra max HP per level for every Pokémon (both sides): with no IVs or EVs a high-level Pokémon would otherwise die to one or two hits. */
   hpPerLevel: z.number().min(0).default(0),
+  /** Extra HP fraction at level 100+ (ramps in linearly below that): 0.2 = ×1.2. */
+  hpLevelBonus: z.number().min(0).default(0),
   vitaminMaxStacks: z.number().int().positive(),
   /** W5 EVs: caps (main-series 252 per stat, 510 in all) and how many times a species' yield a knockout gives. */
   evs: z
