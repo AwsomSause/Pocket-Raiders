@@ -45,21 +45,19 @@ describe('S2 pronoun tokens', () => {
   });
 });
 
-describe('S2 Look lock', () => {
-  it('rejects Look B and keeps the request', () => {
+describe('S2 Looks', () => {
+  it('lets the player pick Look B and stores it', () => {
     const r = setLook(freshProfileStory(), 'look_b');
-    expect(r.result).toBe('look_locked');
-    expect(r.story.protagonist.look).toBe('look_a');
-    expect(r.story.protagonist.lookRequested).toBe('look_b');
-    expect(setLook(freshProfileStory(), 'look_a').result).toBe('ok');
+    expect(r.result).toBe('ok');
+    expect(r.story.protagonist.look).toBe('look_b');
+    expect(r.story.protagonist.lookRequested).toBeUndefined();
   });
-  it('downgrades a loaded Look B and survives a save round trip', () => {
+  it('keeps a loaded Look B and survives a save round trip', () => {
     const loaded = ProfileStorySchema.parse({ protagonist: { look: 'look_b' } });
     const n = normalizeLook(loaded);
-    expect(n.downgraded).toBe(true);
-    expect(n.story.protagonist).toMatchObject({ look: 'look_a', lookRequested: 'look_b' });
-    expect(ProfileStorySchema.parse(JSON.parse(JSON.stringify(n.story))).protagonist.lookRequested).toBe('look_b');
-    expect(resolveLook('look_a').downgraded).toBe(false);
+    expect(n.downgraded).toBe(false);
+    expect(ProfileStorySchema.parse(JSON.parse(JSON.stringify(n.story))).protagonist.look).toBe('look_b');
+    expect(resolveLook('look_b').downgraded).toBe(false);
   });
 });
 
@@ -126,5 +124,17 @@ describe('S2 prologue shell', () => {
   it('an old profile without the new fields loads with defaults', () => {
     const old = ProfileStorySchema.parse({ prologue: { done: true, mode: 'full', beatsSeen: [] } });
     expect(old.prologue).toMatchObject({ modeChosen: false, vanceGettingToIt: false });
+  });
+});
+
+describe('Prologue gate shows once', () => {
+  it('forces the opening on a fresh profile only, not after the player has started it', async () => {
+    const { prologueGateActive, markBeat, finishPrologue } = await import('../../src/core/story2/prologue');
+    const fresh = freshProfileStory();
+    expect(prologueGateActive(fresh)).toBe(true);
+    expect(prologueGateActive(markBeat(fresh, 'look'))).toBe(false);
+    expect(prologueGateActive({ ...fresh, protagonist: { ...fresh.protagonist, nameSet: true } })).toBe(false);
+    expect(prologueGateActive(markBeat(fresh, 'look'), true)).toBe(true); // Hub and slots stay closed
+    expect(prologueGateActive(finishPrologue(fresh))).toBe(false);
   });
 });

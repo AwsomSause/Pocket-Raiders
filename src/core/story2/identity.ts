@@ -8,7 +8,7 @@ import { graphemeCount, sanitizeName, type ProfileStory } from './schema';
 export type LookId = 'look_a' | 'look_b';
 export const LOOKS: { id: LookId; label: string; status: 'ready' | 'coming_soon' }[] = [
   { id: 'look_a', label: 'Look A', status: 'ready' },
-  { id: 'look_b', label: 'Look B', status: 'coming_soon' },
+  { id: 'look_b', label: 'Look B', status: 'ready' },
 ];
 export const lookReady = (id: LookId): boolean => LOOKS.find((l) => l.id === id)?.status === 'ready';
 
