@@ -105,8 +105,8 @@
    "mega"
   ],
   "mons": {
-   "zmove": "mimikyu",
-   "tera": "gengar",
+   "zmove": "gengar",
+   "tera": "mimikyu",
    "dynamax": "cursola",
    "mega": "gengar-z"
   }
@@ -304,7 +304,7 @@
    "dynamax": "slither-wing",
    "tera": "sawsbuck",
    "zmove": "archeops",
-   "mega": "aerodactyl"
+   "mega": "dragonite"
   }
  },
  "az": {
@@ -514,7 +514,7 @@
    "mega": "raichu",
    "zmove": "dedenne",
    "dynamax": "pikachu",
-   "tera": "megawattrel"
+   "tera": "emolga-spooky"
   }
  },
  "brassius": {
@@ -1197,10 +1197,10 @@
    "tera"
   ],
   "mons": {
-   "zmove": "druddigon",
+   "zmove": "haxorus",
    "dynamax": "garchomp",
    "mega": "flygon",
-   "tera": "haxorus"
+   "tera": "druddigon"
   }
  },
  "drayton": {
