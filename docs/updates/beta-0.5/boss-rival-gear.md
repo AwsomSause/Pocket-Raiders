@@ -8,3 +8,6 @@ Gym Leaders, Elite Four, Champions and Rivals now get held items, IVs, EVs and t
 ## Win rates (tools/wincurve.ts, random trained party, 20 trials per slot, before gear / after)
 R1: gym 96/88, Elite 100/65, Champion 75/25. R2: gym 86/65, Champion 65/10. R3: gym 67/40, Champion 30/15. R5: gym 44/25, Champion 5/0. R10: gym 28/29, Champion 10/30.
 The sim party plays no tactics, so real players do better. Later regions are already very hard for it (check separately).
+
+## Switch
+`balance.bossGear` (default true) turns the gear off; the "old seeds play exactly as before" test in story.test.ts freezes it off (it fixed the STORY1/0 fingerprint change from #1122).
