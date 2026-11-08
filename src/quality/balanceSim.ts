@@ -18,6 +18,7 @@
 //
 // Read-only: nothing here changes game rules or data.
 
+import { gearTeam, type GearTier } from '../core/bossGear';
 import { chooseEnemyMove, createBattle, resolveTurn, type BattleContext } from '../core/battle/engine';
 import { transformProblem, type TransformRequest } from '../core/battle/transform';
 import type { Archetype, Content } from '../core/contentSchema';
@@ -140,12 +141,24 @@ export interface CurveRow {
 /** Party size at the run's `stageNumber`-th gym: three at the first gym, six from the fourth. */
 export const partySizeAt = (stageNumber: number) => Math.min(6, 3 + stageNumber);
 
+/** Bench switch: give the simulated player party max-cap training and an item, like an invested player. */
+export const partyOptions = { trained: false };
+
 function randomParty(content: Content, pool: string[], size: number, level: number, rng: Rng, tag: string): PokemonInstance[] {
-  return Array.from({ length: size }, (_, i) => createPokemon(content, evolvedFormAt(content, rng.pick(pool), level, rng), level, `${tag}-p${i}`));
+  return Array.from({ length: size }, (_, i) => {
+    const mon = createPokemon(content, evolvedFormAt(content, rng.pick(pool), level, rng), level, `${tag}-p${i}`);
+    if (partyOptions.trained) {
+      for (const k of ['hp', 'atk', 'spa', 'spe', 'def', 'spd'] as const) mon.vitamins[k] = content.balance.vitaminMaxStacks;
+      mon.held = { leftovers: 1 };
+      mon.hp = maxHp(content, mon);
+    }
+    return mon;
+  });
 }
 
-function bossTeam(content: Content, plan: TrainerPlan, tag: string): PokemonInstance[] {
-  return plan.members.map((m, i) => createPlannedPokemon(content, m, `${tag}-e${i}`));
+function bossTeam(content: Content, plan: TrainerPlan, tag: string, gear?: GearTier): PokemonInstance[] {
+  const members = gear ? gearTeam(content, plan.members, gear) : plan.members;
+  return members.map((m, i) => createPlannedPokemon(content, m, `${tag}-e${i}`));
 }
 
 /**
@@ -153,14 +166,14 @@ function bossTeam(content: Content, plan: TrainerPlan, tag: string): PokemonInst
  * of each region, one Elite Four member and the champion. `trials` battles
  * per slot, each against a seeded random boss.
  */
-export function difficultyCurve(content: Content, seed: string, trials = 40, campaignId = 'full', kit = false): CurveRow[] {
+export function difficultyCurve(content: Content, seed: string, trials = 40, campaignId = 'full', kit = false, gearBosses = true): CurveRow[] {
   const campaign = content.campaigns.get(campaignId)!;
   const archetype: Archetype = content.archetypes.get('red') ?? [...content.archetypes.values()][0]!;
   const regions = campaign.regularRegions + (campaign.grandRegion ? 1 : 0);
   const bosses = [...content.bosses.keys()].sort();
   const pool = wildEligibleSpecies(content).map((s) => s.id);
   const rows: CurveRow[] = [];
-  const run = (region: number, slot: string, stageNumber: number, plan: (rng: Rng) => TrainerPlan, playerLevel: number) => {
+  const run = (region: number, slot: string, stageNumber: number, tier: GearTier, plan: (rng: Rng) => TrainerPlan, playerLevel: number) => {
     let wins = 0;
     let lo = Infinity;
     let hi = 0;
@@ -171,7 +184,7 @@ export function difficultyCurve(content: Content, seed: string, trials = 40, cam
       const p = plan(rng);
       for (const m of p.members) (lo = Math.min(lo, m.level)), (hi = Math.max(hi, m.level));
       const party = randomParty(content, pool, size, playerLevel, rng, tag);
-      if (simulateBattle(content, party, bossTeam(content, p, tag), p.ai, tag, kit).winner === 'player') wins++;
+      if (simulateBattle(content, party, bossTeam(content, p, tag, gearBosses ? tier : undefined), p.ai, tag, kit).winner === 'player') wins++;
     }
     rows.push({ region: region + 1, slot, playerLevel, enemyLevels: [lo, hi], partySize: size, winRate: wins / trials, battles: trials });
   };
@@ -180,12 +193,12 @@ export function difficultyCurve(content: Content, seed: string, trials = 40, cam
       const stageNumber = r * campaign.stagesPerRegion + s;
       const scale = levelScale(content, campaign, r, s, campaign.columns);
       const playerLevel = curveLevel(content, scale);
-      run(r, `gym ${s + 1}`, stageNumber, (rng) => planGymLeader(content, archetype, rng.pick(bosses), stageNumber, scale, rng), playerLevel);
+      run(r, `gym ${s + 1}`, stageNumber, 'gym', (rng) => planGymLeader(content, archetype, rng.pick(bosses), stageNumber, scale, rng), playerLevel);
     }
     const scale = leagueScale(content, r);
     const last = (r + 1) * campaign.stagesPerRegion;
-    run(r, 'Elite Four', last, (rng) => planEliteFour(content, archetype, rng.pick(bosses), r, scale, rng), curveLevel(content, scale));
-    run(r, 'champion', last, (rng) => planChampion(content, archetype, rng.pick(bosses), r, scale, rng), curveLevel(content, scale));
+    run(r, 'Elite Four', last, 'elite', (rng) => planEliteFour(content, archetype, rng.pick(bosses), r, scale, rng), curveLevel(content, scale));
+    run(r, 'champion', last, 'champion', (rng) => planChampion(content, archetype, rng.pick(bosses), r, scale, rng), curveLevel(content, scale));
   }
   return rows;
 }

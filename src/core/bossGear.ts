@@ -12,8 +12,8 @@ export type GearTier = 'gym' | 'elite' | 'champion' | 'rival';
 const TIERS: Record<GearTier, { iv: number; ev: number; stacks: number }> = {
   gym: { iv: 20, ev: 128, stacks: 1 },
   elite: { iv: 26, ev: 192, stacks: 2 },
-  champion: { iv: 31, ev: 252, stacks: 3 },
-  rival: { iv: 31, ev: 252, stacks: 3 },
+  champion: { iv: 31, ev: 192, stacks: 2 },
+  rival: { iv: 31, ev: 192, stacks: 2 },
 };
 
 /** Items in order of preference for a Pokémon; the first `count` not already held are used. */
