@@ -8,6 +8,7 @@ import Phaser from 'phaser';
 import { services } from '../../game/services';
 import { GAME_HEIGHT, GAME_WIDTH } from '../theme';
 import { animAssetIds } from '../../assets/catalog';
+import { cameraForScene } from './opening';
 import type { Beat } from './spectacle';
 
 /** One frame of the original animation (it counts in frames; the original runs at 20 per second). */
@@ -39,6 +40,7 @@ export interface MegaSceneOptions {
 }
 
 export function megaScene(scene: Phaser.Scene, o: MegaSceneOptions): Beat {
+  cameraForScene(scene);
   const depth = o.depth ?? 900;
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];
