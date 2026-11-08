@@ -38,7 +38,7 @@ export const MonSpecSchema = z.object({
 export const SaveSpecSchema = z.object({
   preset: z.string().optional().describe('Name of a file in tools/savegen/presets/ to start from (this spec overrides it)'),
   seed: z.string().optional(),
-  trainer: z.string().optional().describe('Archetype id: "nate", "hilda", "red"...'),
+  trainer: z.string().optional().describe('Player trainer: "nate" (default) or "hilda"'),
   mode: z.string().optional(),
   difficulty: z.string().optional(),
   modifiers: z.array(z.string()).optional(),
@@ -211,7 +211,7 @@ function buildProfile(content: Content, spec: SaveSpec, problems: string[]): Pro
 }
 
 function buildRun(content: Content, spec: SaveSpec, problems: string[]): RunState | null {
-  const trainer = spec.trainer ?? 'red';
+  const trainer = spec.trainer ?? 'nate';
   if (!content.archetypes.has(trainer)) { problems.push(`unknown trainer "${trainer}"`); return null; }
   const seed = spec.seed ?? 'generated-run';
   const rules = { modeId: spec.mode ?? 'standard', difficultyId: spec.difficulty ?? 'standard', modifierIds: spec.modifiers ?? [], deathBlock: spec.deathBlock ?? false };
