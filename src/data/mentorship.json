@@ -61,7 +61,12 @@
       }
     ],
     "statusLevel": 2,
-    "outsideCoverageLevel": 4
+    "outsideCoverageLevel": 4,
+    "signature": {
+      "level": 5,
+      "chemistry": 90,
+      "minPower": 60
+    }
   },
   "events": {
     "cooldownBattles": 2,

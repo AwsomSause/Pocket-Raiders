@@ -288,3 +288,26 @@ describe('Last Resort in doubles and the mentor moments (follow-up)', () => {
     expect(planMoment(mentorMoment('mentorGraduation'), s).skippable).toBe(true);
   });
 });
+
+describe('signature-inspired inheritance', () => {
+  it('a mentor whose species has a Mega signature move can pass on a weaker echo of it, once, at the top level', async () => {
+    const { signatureEchoes } = await import('../../src/core/story/mentorBond');
+    const { run, mentor, rookie, rel, bond } = bonded('rework-echo');
+    // Find any species in the roster whose Mega has a signature move and an echo, and make the mentor that species.
+    const candidates = [...content.species.values()].filter((s) => !s.form && signatureEchoes(content, { ...mentor, speciesId: s.id }).length > 0);
+    expect(candidates.length).toBeGreaterThan(0);
+    mentor.speciesId = candidates[0]!.id;
+    const [{ signature, echo }] = signatureEchoes(content, mentor);
+    expect(content.moves.get(echo)!.power!).toBeLessThan(content.moves.get(signature)!.power!);
+    expect(content.moves.get(echo)!.flags).not.toContain('megasig');
+    bond.chemistry = 20;
+    let opt = inheritableMoves(content, run, bond).find((o) => o.signature);
+    expect(opt?.allowed).toBe(false);
+    bond.chemistry = 100;
+    opt = inheritableMoves(content, run, bond).find((o) => o.signature);
+    expect(opt?.allowed).toBe(true);
+    teachInherited(content, run, rel.id, opt!.moveId);
+    expect(rookie.moves.some((m) => m.id === opt!.moveId)).toBe(true);
+    expect(inheritableMoves(content, run, bond).some((o) => o.signature)).toBe(false);
+  });
+});
