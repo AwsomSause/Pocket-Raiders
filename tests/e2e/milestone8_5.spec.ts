@@ -213,7 +213,8 @@ test('Gigantamax from the battle menu', async ({ page }) => {
   const species = () => page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId);
   await seeCinematic(page, 'gigantamax', 'm8_5-gmax-cinematic', 600);
   await expect.poll(species, { timeout: 15_000 }).toBe('charizard-gmax');
-  await expect.poll(() => textureOf(page), { timeout: 15_000 }).toBe('pokemon.back.6-gigantamax');
+  // The scene runs 12.5 s of game time and the swap comes at its end; on a slow software-WebGL runner that stretches, so give it the same room as the Mega test.
+  await expect.poll(() => textureOf(page), { timeout: 45_000 }).toBe('pokemon.back.6-gigantamax');
   await page.waitForTimeout(2500);
   await page.screenshot({ path: 'test-results/m8_5-gigantamax.png' });
   expect(errors).toEqual([]);
