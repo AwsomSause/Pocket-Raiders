@@ -157,3 +157,27 @@ describe('Galar League is the tournament', () => {
     expect(run.phase).toBe('map');
   });
 });
+
+import { bracketView } from '../../src/core/galarTournament';
+
+describe('bracket view', () => {
+  const content = getContent();
+  it('shows five rounds, halving field, the next opponent and Ball Guy marks', () => {
+    let run = createRun(content, { runId: 'r', seed: 'VIEW1', archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    const v = bracketView(content, run);
+    expect(v.rounds.map((r) => r.state)).toEqual(['next', 'later', 'later', 'later', 'later']);
+    expect(v.rounds.map((r) => r.remaining.length)).toEqual([16, 8, 4, 2, 1]);
+    expect(v.rounds[4]!.opponent.id).toBe(run.stage!.leaderId);
+    expect(v.rounds.map((r) => r.shopAfter)).toEqual([false, true, false, true, false]);
+    expect(v.rounds[0]!.crowd).toBeNull();
+    run.stage!.visited = ['a', 'b'];
+    const v2 = bracketView(content, run);
+    expect(v2.rounds.map((r) => r.state)).toEqual(['won', 'won', 'next', 'later', 'later']);
+    expect(v2.rounds[0]!.crowd).not.toBeNull();
+    expect(v2.standing).toHaveLength(8);
+    expect(v2.standing).toContain('You');
+  });
+});

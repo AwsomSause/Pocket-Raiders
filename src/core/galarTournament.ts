@@ -214,3 +214,47 @@ export function ballGuyStock(runSeed: string, visit: number, sold: Readonly<Reco
 export function ballGuyLimit(runSeed: string, visit: number, itemId: string): number {
   return shopOffers(runSeed, visit).find((o) => o.id === itemId)?.stock ?? 0;
 }
+
+// ---------- the bracket screen's data (pure) ----------
+
+export interface BracketRound {
+  round: number;
+  name: string;
+  state: 'won' | 'next' | 'later';
+  opponent: { id: string; name: string; style: string; intro: string };
+  /** Entrants still in after this round (names, the player as "You"). */
+  remaining: string[];
+  /** Other matches of the round that were upsets (winner beat a stronger entrant). Shown once the round is won. */
+  upsets: string[];
+  crowd: string | null;
+  shopAfter: boolean;
+}
+
+export interface BracketView { rounds: BracketRound[]; wins: number; standing: string[] }
+
+/** What the bracket screen draws: five rounds, the player's opponent and the field. `wins` = rounds the player has won. */
+export function bracketView(content: Content, run: RunState): BracketView {
+  const stage = run.stage;
+  const champion = stage?.leaderId ?? GALAR_TOURNAMENT.champion;
+  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
+  const b = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  const wins = Math.min(GALAR_TOURNAMENT.rounds, stage?.visited.length ?? 0);
+  const name = (id: string): string => (id === PLAYER_SLOT ? 'You' : (content.bosses.get(id)?.name ?? id));
+  const rounds: BracketRound[] = [];
+  for (let round = 1; round <= GALAR_TOURNAMENT.rounds; round++) {
+    const id = opponentFor(b, round);
+    const entry = b.roster[id];
+    const won = round <= wins;
+    rounds.push({
+      round,
+      name: roundName(round),
+      state: won ? 'won' : round === wins + 1 ? 'next' : 'later',
+      opponent: { id, name: name(id), style: id === b.champion ? 'Galar Champion' : (entry?.style ?? 'Challenger'), intro: id === b.champion ? `${name(id)} raises a hand to the roaring stadium.` : (entry?.intro ?? GALAR_TOURNAMENT.introduceLine.replace('{name}', name(id))) },
+      remaining: remaining(b, round).map(name),
+      upsets: won ? otherMatches(b, round).filter((m) => m.upset).map((m) => `${name(m.winner)} beat ${name(m.winner === m.a ? m.b : m.a)}`) : [],
+      crowd: won ? crowdLine(b, round) : null,
+      shopAfter: shopOpenAfter(round),
+    });
+  }
+  return { rounds, wins, standing: remaining(b, wins).map(name) };
+}
