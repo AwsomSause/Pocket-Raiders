@@ -1,0 +1,16 @@
+{
+  "seed": "restored-run-186",
+  "trainer": "red",
+  "region": 4,
+  "stage": 4,
+  "money": 30000,
+  "levelCapCheck": false,
+  "party": [
+    { "species": "annihilape", "level": 186, "nature": "adamant", "ability": "hidden", "moves": ["rage-fist", "close-combat", "drain-punch", "bulk-up"], "ivs": 31, "evs": { "hp": 85, "atk": 85, "def": 85, "spa": 85, "spd": 85, "spe": 80 }, "friendship": 220 },
+    { "species": "overqwil", "level": 185, "nature": "jolly", "ability": "hidden", "moves": ["crunch", "gunk-shot", "swords-dance", "destiny-bond"], "ivs": 31, "evs": { "hp": 85, "atk": 85, "def": 85, "spa": 85, "spd": 85, "spe": 80 }, "friendship": 220 },
+    { "species": "zekrom", "level": 188, "nature": "adamant", "moves": ["bolt-strike", "outrage", "wild-charge", "dragon-dance"], "ivs": 31, "evs": { "hp": 85, "atk": 85, "def": 85, "spa": 85, "spd": 85, "spe": 80 }, "friendship": 220 },
+    { "species": "aggron", "level": 186, "nature": "impish", "ability": "sturdy", "moves": ["iron-head", "earthquake", "stone-edge", "heavy-slam"], "held": "mega-stone", "ivs": 31, "evs": { "hp": 85, "atk": 85, "def": 85, "spa": 85, "spd": 85, "spe": 80 }, "friendship": 220 },
+    { "species": "bastiodon", "level": 184, "nature": "bold", "ability": "sturdy", "moves": ["iron-head", "stone-edge", "body-press", "stealth-rock"], "ivs": 31, "evs": { "hp": 85, "atk": 85, "def": 85, "spa": 85, "spd": 85, "spe": 80 }, "friendship": 220 },
+    { "species": "meowstic-female", "level": 187, "gender": "female", "nature": "timid", "ability": "hidden", "moves": ["psychic", "shadow-ball", "thunderbolt", "calm-mind"], "held": "mega-stone", "ivs": 31, "evs": { "hp": 85, "atk": 85, "def": 85, "spa": 85, "spd": 85, "spe": 80 }, "friendship": 220 }
+  ]
+}

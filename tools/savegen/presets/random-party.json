@@ -1,0 +1,8 @@
+{
+  "seed": "random-demo",
+  "trainer": "nate",
+  "region": 2,
+  "stage": 3,
+  "money": 5000,
+  "party": [{ "species": "charizard", "level": 70 }, { "species": "lucario", "level": 70, "gender": "male", "shiny": true }, { "species": "gardevoir", "level": 70, "gender": "female" }]
+}
