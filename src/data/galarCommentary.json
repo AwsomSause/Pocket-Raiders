@@ -1,0 +1,76 @@
+{
+ "beats": {
+  "bigHit": [
+   "What a hit! The whole stand felt that one!",
+   "Did you see that? {myMon} came in like thunder!",
+   "That one's going on the highlight reel for sure!",
+   "Oh, that landed! {foeMon} is rattled!",
+   "Folks, I've never seen the crowd move like that!",
+   "Huge! Absolutely huge! {myMon} is not messing around!"
+  ],
+  "survived": [
+   "Hanging on! It should be down, but it's not!",
+   "Unbelievable! {myMon} refuses to go down!",
+   "Barely holding on, and the crowd loves it!",
+   "That is determination right there! Look at that fight!",
+   "How is it still standing? Pure heart!",
+   "One hit from the end, and they're still going!"
+  ],
+  "evolve": [
+   "Wait, is it changing? Look at that glow!",
+   "Right in the middle of the match! Unreal!",
+   "The whole arena is lit up by it!",
+   "Folks, we are watching a Pokémon grow up live!",
+   "The crowd can't believe it! It's evolving!",
+   "What a moment to level up!"
+  ],
+  "dynamax": [
+   "It's GROWING! The whole stadium is shaking!",
+   "Dynamax! The crowd is going wild!",
+   "Look at the size of that thing! Can you believe it?",
+   "The Dynamax Band is lighting up the entire arena!",
+   "Everyone is on their feet for that one!",
+   "A giant on the field! This is the Galar League!"
+  ],
+  "comeback": [
+   "A comeback?! Don't count them out yet!",
+   "From the brink! This match isn't over!",
+   "They were down and now look at them!",
+   "The crowd is roaring! It's a comeback!",
+   "Absolutely not giving up! I love it!",
+   "Turning the tide in front of everyone!"
+  ],
+  "knockOut": [
+   "Down it goes! What a knockout!",
+   "One Pokémon fewer, and the stands erupt!",
+   "That's one out of the fight! What a battle!",
+   "The crowd is split between cheers and gasps!",
+   "Someone's out! This is getting intense!",
+   "And that's a knockout! No time to rest!"
+  ],
+  "tense": [
+   "You could hear a pin drop in here.",
+   "The whole stadium is holding its breath.",
+   "Both sides are one mistake from losing it all.",
+   "So tense! I can barely watch!",
+   "The crowd is silent. Anything could happen.",
+   "It's anyone's match right now!"
+  ],
+  "lastMon": [
+   "Last Pokémon! Everything rides on this one!",
+   "Down to the final one! The crowd is on its feet!",
+   "This is it! The last Pokémon on the field!",
+   "One left each way? What a finish this is!",
+   "The final stretch! Everyone, stay with them!",
+   "Last one standing wins it all!"
+  ],
+  "calm": [
+   "Quiet moment out there. Both trainers are thinking.",
+   "A breather in the match. What happens next?",
+   "The crowd is catching its breath.",
+   "Calm before the next big move.",
+   "Everyone is watching to see who blinks first.",
+   "Some strategy at work here, folks."
+  ]
+ }
+}

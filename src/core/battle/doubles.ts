@@ -1099,8 +1099,17 @@ function settle(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
   const { battle } = ctx;
   const d = battle.doubles!;
   faintCheck(ctx, field, events);
-  const enemyLeft = battle.enemyTeam.some((m) => m.hp > 0);
+  let enemyLeft = battle.enemyTeam.some((m) => m.hp > 0);
   const playerLeft = ctx.party.some((m) => m.hp > 0 && m.uid !== battle.loaner);
+  // Galar's Champion refuses to be done: one last Pokémon joins the bench and is sent out below (galarCrowd.ts).
+  if (!enemyLeft && playerLeft) {
+    const stand = ctx.lastStand?.() ?? null;
+    if (stand) {
+      battle.enemyTeam.push(stand);
+      enemyLeft = true;
+      events.push({ type: 'spectacle', kind: 'arena', side: 'enemy', text: `${battle.trainer?.name ?? 'The Champion'} is not done! One last Pokémon steps out: ${getSpecies(ctx.content, stand.speciesId).name}!`, uid: stand.uid });
+    }
+  }
   if (!enemyLeft) {
     battle.outcome = !playerLeft && ctx.doubleKoLoser === 'player' ? 'lose' : 'win';
     return;

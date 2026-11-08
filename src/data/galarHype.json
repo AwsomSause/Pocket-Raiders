@@ -1,0 +1,2835 @@
+{
+ "moments": [
+  {
+   "id": "t1-reporter",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "FIRST EXCHANGE",
+   "lines": [
+    "That is the first exchange! {foe} sent out {foeMon} and {player} answered with {myMon}. Folks, this one is going to be a show."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-crowd-fan",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FROM THE STANDS",
+   "lines": [
+    "Did you see how {myMon} moved? I came to study {foe}, but I am watching {player} instead."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-rival",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "A RIVAL WATCHES",
+   "lines": [
+    "So that is how {player} opens. Hmph. I have seen better. ...Okay, not much better."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-future-leader",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureLeader",
+   "title": "A FUTURE FOE",
+   "lines": [
+    "I will be facing the winner of this. {myMon} versus {foeMon}... I am taking notes on every move."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-future-opponent",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureOpponent",
+   "title": "NEXT IN THE BRACKET",
+   "lines": [
+    "Whoever walks away from this meets me next. {foeMon} looks scary, but {myMon} has the nerve."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-host",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE HOST WATCHES",
+   "lines": [
+    "{host}: Good opening. Let us see if you can hold that tempo against {foe}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-crowd-kid",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "LITTLE FAN",
+   "lines": [
+    "Wow! {myMon} is so cool! Is it going to beat {foeMon}? It has to!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "t1-reporter-2",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "LIVE FROM THE FIELD",
+   "lines": [
+    "{foe} against {player}, {foeMon} against {myMon}! The odds board is flashing. Nobody in this stadium is sitting down."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-bighit-1",
+   "trigger": "playerBigHit",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "WHAT A HIT!",
+   "lines": [
+    "That was a perfect read! {myMon} just hit {foeMon} right where it hurts!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-bighit-2",
+   "trigger": "playerBigHit",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "CRUSHING BLOW",
+   "lines": [
+    "Incredible! {foeMon} is reeling! The crowd is on its feet for {player}!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-bighit-3",
+   "trigger": "playerBigHit",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "THE RIVAL FLINCHES",
+   "lines": [
+    "Tch. That hit was clean. Do not let it go to your head, {player}."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-bighit-4",
+   "trigger": "playerBigHit",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureLeader",
+   "title": "TAKING NOTES",
+   "lines": [
+    "That type matchup was no accident. I will have to watch out for that move."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-bighit-1",
+   "trigger": "foeBigHit",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "OUCH!",
+   "lines": [
+    "{foeMon} hit {myMon} hard! Hang on, {player}!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "f-bighit-2",
+   "trigger": "foeBigHit",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE TIDE TURNS",
+   "lines": [
+    "{foe} lands a huge hit! {myMon} is in trouble, and you can hear the stadium hold its breath."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "f-bighit-3",
+   "trigger": "foeBigHit",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "A WARNING",
+   "lines": [
+    "{host}: That is what a real {foe} attack looks like. Respond or be swept."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "f-bighit-4",
+   "trigger": "foeBigHit",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureOpponent",
+   "title": "NOT GOOD",
+   "lines": [
+    "If {foeMon} keeps hitting like that, I would rather face {player} later than {foe} now."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "comeback-1",
+   "trigger": "comeback",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "HANGING ON!",
+   "lines": [
+    "{myMon} is down to its last sliver and refuses to fall! Ladies and gentlemen, this is why we watch!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "comeback-2",
+   "trigger": "comeback",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "DO NOT GIVE UP!",
+   "lines": [
+    "Come on, {myMon}! {player} believes in you and so does every person in this stadium!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "comeback-3",
+   "trigger": "comeback",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "GRUDGING RESPECT",
+   "lines": [
+    "You are still standing? ...Good. I would hate for my rival to lose to anyone but me."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "comeback-4",
+   "trigger": "comeback",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE HOST LEANS IN",
+   "lines": [
+    "{host}: {myMon} should have fallen. It did not. That is the sort of heart this stage was built for."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "comeback-5",
+   "trigger": "comeback",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureLeader",
+   "title": "SPIRIT",
+   "lines": [
+    "I have seen leaders wobble at that kind of HP. {player} grips harder. Respect."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-ko-1",
+   "trigger": "playerFirstKo",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "FIRST BLOOD",
+   "lines": [
+    "{player} takes the first knockout! {foe} will have to rethink everything."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-ko-1",
+   "trigger": "foeFirstKo",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "FIRST BLOOD FOR {FOE}",
+   "lines": [
+    "{foe} draws first blood! {player} has to answer, and fast."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "p-streak-1",
+   "trigger": "playerKoStreak",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "UNSTOPPABLE",
+   "lines": [
+    "Two in a row! {player} has a rhythm and {foe} cannot break it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-streak-2",
+   "trigger": "playerKoStreak",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "LOOK AT THAT",
+   "lines": [
+    "Another one down. ...Fine, {player}. You have my full attention now."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-streak-3",
+   "trigger": "playerKoStreak",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureOpponent",
+   "title": "ALARM BELLS",
+   "lines": [
+    "That is a streak. If {player} reaches me, I will need my best plan."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-streak-1",
+   "trigger": "foeKoStreak",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "{FOE} ROLLS ON",
+   "lines": [
+    "Back to back knockouts from {foe}! {player} is being pushed to the edge!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "f-streak-2",
+   "trigger": "foeKoStreak",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THIS IS BAD",
+   "lines": [
+    "They keep falling! Somebody, anybody, stop {foeMon}!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "f-streak-3",
+   "trigger": "foeKoStreak",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ODDS SHIFT",
+   "lines": [
+    "{host}: {foe} has the momentum. Now we find out what {player} does under pressure."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "p-last-1",
+   "trigger": "playerLast",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "LAST ONE STANDING",
+   "lines": [
+    "{player} is down to {myMon}! One Pokémon left and the whole stadium is on its feet!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-last-2",
+   "trigger": "playerLast",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "ALL IN",
+   "lines": [
+    "It is all on {myMon} now! {player}, you can do this!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-last-3",
+   "trigger": "playerLast",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "I REMEMBER THIS",
+   "lines": [
+    "Last Pokémon... that is exactly where I beat you before. Show me something different."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-last-4",
+   "trigger": "playerLast",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE HOST STANDS",
+   "lines": [
+    "{host} rises from the champion's seat. \"One Pokémon left. This is where legends are made.\""
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "f-last-1",
+   "trigger": "foeLast",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE ACE APPEARS",
+   "lines": [
+    "{foe} is down to the final Pokémon! You can feel the pressure rise!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "f-last-2",
+   "trigger": "foeLast",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "ONE MORE!",
+   "lines": [
+    "Just {foeMon} left! Bring it down, {player}!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "f-last-3",
+   "trigger": "foeLast",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureLeader",
+   "title": "THE ACE",
+   "lines": [
+    "{foe} always keeps the best for last. I have seen what {foeMon} can do. Be careful."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "f-last-4",
+   "trigger": "foeLast",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "A DEEP BREATH",
+   "lines": [
+    "{host}: {foe}'s final Pokémon is the one they trust most. Every great battle comes down to this."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-dmax-1",
+   "trigger": "playerDynamax",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE BAND GLOWS",
+   "lines": [
+    "{myMon} Dynamaxes! The whole stadium is shaking! Can anything stand against that?!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-dmax-2",
+   "trigger": "playerDynamax",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "HUGE!",
+   "lines": [
+    "{myMon} is giant! I felt that in my feet!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-dmax-1",
+   "trigger": "foeDynamax",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "{FOE} GOES BIG",
+   "lines": [
+    "{foe} Dynamaxes {foeMon}! This is the Galar way, and the roar is deafening!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-dmax-2",
+   "trigger": "foeDynamax",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ANSWER",
+   "lines": [
+    "{host}: Dynamax is a pressure test. Find the opening and strike, {player}."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-dmax-3",
+   "trigger": "foeDynamax",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "NO WAY",
+   "lines": [
+    "That is enormous! Is {player} going to be okay?!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "mid-1",
+   "trigger": "midBattle",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "HALFTIME BUZZ",
+   "lines": [
+    "Turn after turn and nobody blinks! {player} and {foe} are putting on the best match of the season!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "mid-2",
+   "trigger": "midBattle",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "EDGE OF MY SEAT",
+   "lines": [
+    "I cannot look! ...Okay I can look. Go {player}!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "mid-3",
+   "trigger": "midBattle",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureOpponent",
+   "title": "SCOUTING REPORT",
+   "lines": [
+    "{foe} has that switch pattern, {player} reads it every time. This is a battle of minds."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "mid-4",
+   "trigger": "midBattle",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "HOLD ON",
+   "lines": [
+    "I came to see you lose and I am running out of excuses. Keep going."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "long-1",
+   "trigger": "lateBattle",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "A MARATHON",
+   "lines": [
+    "This one is going long! The stadium clock is ticking and nobody is leaving their seat!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "long-2",
+   "trigger": "lateBattle",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE HOST CHECKS THE CLOCK",
+   "lines": [
+    "{host}: Slow and steady. The longer it goes, the more the crowd decides."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "swing-p-1",
+   "trigger": "favorToPlayer",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE CROWD TURNS",
+   "lines": [
+    "Listen to that! The whole stadium is chanting for {player}! The favour has swung their way!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "swing-p-2",
+   "trigger": "favorToPlayer",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "WE ARE WITH YOU",
+   "lines": [
+    "{player}! {player}! {player}! The whole stadium is behind you now!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "swing-f-1",
+   "trigger": "favorToFoe",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE CROWD SHIFTS",
+   "lines": [
+    "The mood changes! The stadium leans toward {foe}. {player} will have to win them back."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "swing-f-2",
+   "trigger": "favorToFoe",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "UNDERDOG TIME",
+   "lines": [
+    "The crowd is on {foe}'s side now... but I love an underdog, {player}!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "even-1",
+   "trigger": "evenMatch",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "DEAD EVEN",
+   "lines": [
+    "The favour bar is dead even! This stadium cannot decide who to cheer, and neither can I!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "even-2",
+   "trigger": "evenMatch",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "EVEN GROUND",
+   "lines": [
+    "{host}: A match like this is rare. Savour it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "lowfoe-1",
+   "trigger": "lowFoe",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "FINISH IT!",
+   "lines": [
+    "{foeMon} is nearly out! Do not let it breathe, {player}!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "lowfoe-2",
+   "trigger": "lowFoe",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "ON THE ROPES",
+   "lines": [
+    "{foeMon} is on the ropes! One more clean hit and this one is over!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "champ-open-1",
+   "trigger": "turn1",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION SPEAKS",
+   "lines": [
+    "{host}: This is a final. No holding back, no safety net. Give the crowd your absolute best."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "champ-ace-1",
+   "trigger": "foeLast",
+   "side": "foe",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION GRINS",
+   "lines": [
+    "{host}: There it is. The last Pokémon. Now we will see what you are really made of."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "champ-comeback-1",
+   "trigger": "comeback",
+   "side": "player",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION IS IMPRESSED",
+   "lines": [
+    "{host}: Still on your feet? I expected nothing less. But I am not done yet."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "champ-laststand",
+   "trigger": "lastStand",
+   "side": "foe",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "ONE LAST POKÉMON!",
+   "lines": [
+    "{foe} is not done! \"I refuse to lose here! Go, {foeMon}!\""
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "champ-bond-mega",
+   "trigger": "bondMega",
+   "side": "foe",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "PURE BOND!",
+   "lines": [
+    "The bond between {foe} and {foeMon} is pure! It surges with Mega Evolution power!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-first-move",
+   "trigger": "playerMega",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "TRANSFORMATION!",
+   "lines": [
+    "{myMon} transforms! That kind of power on this stage is something special!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-chant",
+   "trigger": "favorToPlayer",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THEY CHANT YOUR NAME",
+   "lines": [
+    "Everyone is chanting for {player}! The stands are shaking!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-underdog",
+   "trigger": "underdog",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE UNDERDOG",
+   "lines": [
+    "{player} is down on numbers but not on spirit! The stadium loves an underdog!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-underdog-2",
+   "trigger": "underdog",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE HOST SMILES",
+   "lines": [
+    "{host}: Down on Pokémon and still fighting. That is what a challenger looks like."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1
+  },
+  {
+   "id": "p-sweep",
+   "trigger": "playerSweep",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "CLEAN SWEEP",
+   "lines": [
+    "Three knockouts in a row! {player} is sweeping {foe} off the field!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "p-flawless",
+   "trigger": "flawless",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "FLAWLESS",
+   "lines": [
+    "{host}: Not one of your Pokémon has fallen. That is a performance people will talk about for years."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "f-sweep",
+   "trigger": "foeSweep",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE SWEEP",
+   "lines": [
+    "{foe} has taken three! The stadium is in shock!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "rival-cheer",
+   "trigger": "favorToPlayer",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "AN UNEXPECTED CHEER",
+   "lines": [
+    "Do not get used to it, but... go, {player}!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "future-leader-wow",
+   "trigger": "playerBigHit",
+   "side": "player",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureLeader",
+   "title": "THAT MOVE!",
+   "lines": [
+    "A hit like that would shake even my team. {player} is the real thing."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1
+  },
+  {
+   "id": "future-opp-worry",
+   "trigger": "foeKoStreak",
+   "side": "foe",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "futureOpponent",
+   "title": "WORRIED GLANCE",
+   "lines": [
+    "Two knockouts for {foe}. I hope I do not meet them in the next round."
+   ],
+   "cue": "crowd.hush",
+   "weight": 1
+  },
+  {
+   "id": "j-journeyOpen-1",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "I have watched every step of your road through Galar, {player}. Today I find out what it built."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyOpen-2",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{badges} badges, {wins} battles won. Don't tell me you came all this way just to be polite."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyOpen-3",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "Every challenger thinks the road ends here. I want to see what {player} does when it really counts."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyOpen-4",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{starter} has been with you since the very beginning. I can tell. You fight like a pair."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-5",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "I heard {starter} isn't at your side anymore. A trainer carries that with them. Show me what it taught you."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterGone"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-6",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{rivalName} told me about you, you know. Said you never quit. Let's see if that holds up."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-7",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "A full set of Galar badges and still standing. The crowd has waited a long time for this one."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-8",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "A full team, every member earned along the way. That is the mark of a real trainer."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "bigParty"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-9",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "So few Pokémon beside you, and still you made it here. That takes nerve."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-10",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "Win after win after win. Dozens of battles on the road. And I'm the one you were walking toward."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-11",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "{ace} carries the strength of a hundred battles. I'd like to meet it head on."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyOpen-12",
+   "trigger": "journeyOpen",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "YOUR JOURNEY",
+   "lines": [
+    "No cheering for me today, {player}. I've seen your road. Everyone here is cheering for the story you wrote."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-1",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "Good. Better than I hoped. I knew the road would sharpen you, {player}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-2",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "This is what a long journey does to a trainer. You don't flinch anymore."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-3",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "Every gym, every rival, every bad night on the road. It's all in how you command {myMon}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-4",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "{starter} still moves like it did on day one, only faster. Bonds like that don't fade."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyMid-5",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "{rivalName} would be proud to see you here. I might tell them how this goes."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyMid-6",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "Those badges aren't decoration. You earned every one of them, and today it shows."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyMid-7",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "That many wins teaches you rhythm. You have it. I can hear it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyMid-8",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "A small team, and you wring everything out of it. I respect that."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyMid-9",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "A deep bench and you use all of it. You didn't leave anyone behind on the road."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "bigParty"
+   ]
+  },
+  {
+   "id": "j-journeyMid-10",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "{ace} is stronger than anything I expected to meet today. I'm not complaining."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyMid-11",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "I've fought a lot of challengers. Few brought their whole journey with them. You did."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyMid-12",
+   "trigger": "journeyMid",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE SAW THIS COMING",
+   "lines": [
+    "The crowd has gone quiet. They know they are watching something rare."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-1",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Remember the first gym? You were nervous. Look at you now."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-2",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{wins} wins to get here. I won't let that be for nothing, and neither will you."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-3",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "I don't hold back, {player}. Not for the Champion's pride, and not for the road you walked."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyLate-4",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{starter} and you, from the first step to this one. That is a story worth finishing."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyLate-5",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{rivalName} will hear about this fight, win or lose. They'll want to know how you looked."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyLate-6",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "All those badges, all that time. And now it comes down to this."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyLate-7",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Tired? You should be. {wins} battles is a lot. And you're still on your feet."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyLate-8",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Each Pokémon you have left carries the whole journey. I can feel it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyLate-9",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "{ace} has been through everything with you. It knows it, and so do I."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyLate-10",
+   "trigger": "journeyLate",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE ROAD SO FAR",
+   "lines": [
+    "Whatever happens, this is the best fight I've had in years."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-1",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "Don't let that one bother you. It fought for the whole road, and it fought well."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-2",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "A fallen Pokémon is not a lost battle. You taught me that when you stood back up in the gyms."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-3",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "That one gave you everything. Make it count, {player}."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyDown-4",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "Hold on. {starter} is still out there. You've never counted it out, so don't start now."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyDown-5",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "You've lost one before. You know how to keep going. Go on."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterGone"
+   ]
+  },
+  {
+   "id": "j-journeyDown-6",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "{rivalName} would tell you not to stop. So I'll say it too."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyDown-7",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "Few Pokémon left, I know. You've been in worse spots on the road."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyDown-8",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "You have plenty behind that one. The whole team stands with you."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "bigParty"
+   ]
+  },
+  {
+   "id": "j-journeyDown-9",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "You've been knocked down before and won anyway. Remember that."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyDown-10",
+   "trigger": "journeyDown",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE FEELS IT",
+   "lines": [
+    "The crowd is on its feet for you. Don't hear the ones who doubt."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-1",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "Ha. You see that? That's what the journey was for."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-2",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "I'm nearly beaten, and I couldn't be happier. Make it a clean finish."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-3",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "Is this how it feels to be on the other side? I like it, {player}. You earned it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyFoeLow-4",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{starter} stood next to you for all of it, and now here we are. Finish this."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-5",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{rivalName} always said you'd get here. They never said you'd get this far."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-6",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "Eight badges' worth of lessons, all pointing at this moment."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-7",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{wins} battles built that. Don't doubt it now."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-8",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "A small team, and it's about to take down a Champion. Remember that one."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "smallParty"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-9",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "{ace} is not holding back, and neither am I. Not yet."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyFoeLow-10",
+   "trigger": "journeyFoeLow",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE CHAMPION FALTERS",
+   "lines": [
+    "One more good hit, and it all pays off. Let's see it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-1",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "There it is. That's the hit the whole road was training you for."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-2",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "{myMon} hits like a trainer who knows exactly why they're here."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-3",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "Excellent! Not luck. You've done that a hundred times on the way here."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "j-journeyBig-4",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "That has {starter}'s fire in it. I'd know that anywhere."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "id": "j-journeyBig-5",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "{rivalName} should have been here to see that one."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "id": "j-journeyBig-6",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "You've practised that over {wins} battles. It shows."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "manyWins"
+   ]
+  },
+  {
+   "id": "j-journeyBig-7",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "{ace} just proved why you trusted it for so long."
+   ],
+   "cue": "crowd.swell",
+   "weight": 3,
+   "needs": [
+    "aceHigh"
+   ]
+  },
+  {
+   "id": "j-journeyBig-8",
+   "trigger": "journeyBig",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "HE NODS",
+   "lines": [
+    "The stadium shook. That's the sound of a journey landing."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-1",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "EVOLUTION!",
+   "lines": [
+    "WAIT! {myMon} was finished, and it's EVOLVING! Right in the middle of the fight! I have never seen anything like it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-2",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "EVOLUTION!",
+   "lines": [
+    "Look at it glow! It wouldn't go down, it grew up instead! That's my new favourite Pokémon!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-3",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "EVOLUTION!",
+   "lines": [
+    "Impossible! It should have fainted, but it's evolved on the spot! The stadium is going absolutely wild!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-4",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "EVOLUTION!",
+   "lines": [
+    "It evolved to survive! Did you see that? Did you SEE that?!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-5",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "EVOLUTION!",
+   "lines": [
+    "Seriously? It evolved mid-battle just to stay up?! Of course it did. That's {player} for you."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-me-6",
+   "trigger": "evolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "EVOLUTION!",
+   "lines": [
+    "A bright light fills the arena! {myMon} has evolved and it is NOT done fighting!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-1",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "No way! {foeMon} should be down, but it's evolving! The challenger's in trouble now!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-2",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "It's glowing! {foe}'s Pokémon evolved right when it needed to! Unreal!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-3",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "Evolution in the middle of the fight! {foeMon} refuses to go down!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-4",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "Ha! That's the strength of a Pokémon that believes in its trainer. Come on, show me what you do next, {player}!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-5",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "Whoa, whoa, whoa! Did that thing just evolve to survive?! This match is wild!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "evo-foe-6",
+   "trigger": "foeEvolveSave",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "IT EVOLVES!",
+   "lines": [
+    "It evolved?! Come on, {player}, don't let that stop you!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-1",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "BY A THREAD!",
+   "lines": [
+    "It's hanging on by a thread! A single point of health! How is it still standing?!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-2",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "BY A THREAD!",
+   "lines": [
+    "One HP! ONE HP! {foeMon} will not go down!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-3",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "BY A THREAD!",
+   "lines": [
+    "That should have been the end, folks, and yet {foeMon} is somehow still up!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-4",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "BY A THREAD!",
+   "lines": [
+    "It survived!! Nobody survives that!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-5",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "BY A THREAD!",
+   "lines": [
+    "A thread. That's all it has left. Don't give it a second chance, {player}!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "thread-6",
+   "trigger": "thread",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "BY A THREAD!",
+   "lines": [
+    "Well done, {foeMon}! There's the spirit! This is why I love this stage!"
+   ],
+   "cue": "crowd.hush",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-1",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "What was THAT move?! {foeMon} doesn't learn that! It reached beyond its training to stop the sweep!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-2",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "Hold on, that's not in its moves! It just pulled out something new!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-3",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "Unbelievable! {foeMon} dug deeper than anyone knew it could, and that was a move it shouldn't have!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-4",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "Where did it learn that?! {foe} had a hidden trick ready the whole time!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-5",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "It cheated! It cheated! No, wait, it's just that good!"
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "cheat-6",
+   "trigger": "cheat",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "A NEW MOVE!",
+   "lines": [
+    "I always say the best trainers have one more trick in their back pocket. {foe} just proved it."
+   ],
+   "cue": "crowd.swell",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-1",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "They were on the ropes, and now look! {myMon} has the whole stadium on its feet!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-2",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "Don't count {player} out! Never count {player} out!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-3",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "rival",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "I told them. I TOLD them {player} always has one more play."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-4",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "A comeback for the ages! Down to almost nothing, and still swinging!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-5",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "Come on, {myMon}! You can do it! You can do it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-6",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "champion"
+   ],
+   "speaker": "host",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "Now THAT is a comeback. {player}, you're wearing the crowd like a banner out there."
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-7",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "reporter",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "The momentum has completely shifted! The whole arena can feel it!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  },
+  {
+   "id": "comeback-x-8",
+   "trigger": "comeback",
+   "side": "both",
+   "scopes": [
+    "gym",
+    "tournament",
+    "champion"
+   ],
+   "speaker": "crowdTrainer",
+   "title": "THE COMEBACK!",
+   "lines": [
+    "I'm shaking! That's the greatest comeback I've ever seen!"
+   ],
+   "cue": "crowd.roar",
+   "weight": 1,
+   "needs": []
+  }
+ ]
+}

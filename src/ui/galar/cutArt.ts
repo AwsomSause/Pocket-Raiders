@@ -41,6 +41,8 @@ export interface CutArtKit {
   host: string;
   opponent: string;
   rival: string;
+  /** The person talking in a 'speaker' cut: their picture id. */
+  speaker?: string;
 }
 
 type Sized = Phaser.GameObjects.GameObject & { height: number; setScale: (n: number) => unknown };
@@ -101,6 +103,16 @@ export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, dur
       g.fillStyle(0xffd040, 0.9);
       for (let i = 0; i < 6; i++) g.fillTriangle(120 + i * 140, 250, 108 + i * 140, 285, 132 + i * 140, 285); // foam fingers / banners
       break;
+    case 'speaker': {
+      // Someone from the crowd (or the host, the rival, a reporter) turns to the camera: the stands behind them, dimmed, and their own picture large.
+      crowd(2, false, false, false);
+      const dim = scene.add.graphics();
+      dim.fillStyle(0x0a1020, 0.6);
+      dim.fillRect(0, 130, GAME_WIDTH, GAME_HEIGHT - 170);
+      layer.add(dim);
+      if (!portrait(kit?.speaker ?? '', GAME_WIDTH / 2, 470, 330)) person(g, GAME_WIDTH / 2, 400, 3.2);
+      break;
+    }
     case 'trainers-watching':
       crowd(2, false, true, false, WATCHERS);
       break;
@@ -236,7 +248,7 @@ export async function playIntroCard(scene: Phaser.Scene, spec: IntroCardSpec, se
   layer.add(scene.add.text(x, 290, `"${spec.line}"`, textStyle(16, '#e8e0f0', { wordWrap: { width: GAME_WIDTH * 0.42 } })));
   layer.add(scene.add.text(36, GAME_HEIGHT - 76, 'GALAR CHAMPIONSHIP  ·  NOW ENTERING', textStyle(13, '#ffffff')));
   scene.tweens.add({ targets: layer, alpha: 1, duration: 250 });
-  await wait(scene, spec.final ? 3600 : 2400);
+  await wait(scene, spec.final ? 5400 : 3800);
   scene.tweens.add({ targets: layer, alpha: 0, duration: 250, onComplete: () => layer.destroy() });
   await wait(scene, 260);
 }
@@ -266,7 +278,7 @@ export async function playBandCard(scene: Phaser.Scene, animate: boolean, makeBa
   layer.add(scene.add.text(GAME_WIDTH / 2, 430, 'Power that makes a Pokémon tower over the stadium.', textStyle(16, '#e8e0f0')).setOrigin(0.5));
   if (animate) for (const [i, r] of rings.entries()) scene.tweens.add({ targets: r, scale: 1.5, alpha: 0, duration: 1300, delay: i * 350, repeat: -1 });
   scene.tweens.add({ targets: layer, alpha: 1, duration: 250 });
-  await wait(scene, 2600);
+  await wait(scene, 4000);
   scene.tweens.add({ targets: layer, alpha: 0, duration: 250, onComplete: () => layer.destroy() });
   await wait(scene, 260);
 }

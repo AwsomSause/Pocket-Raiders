@@ -331,6 +331,10 @@ export interface BattleContext {
    * once (the user of Explosion loses; the user of a recoil move wins).
    */
   doubleKoLoser?: Side;
+  /** Galar Champion battles: once, when the Champion's last Pokémon falls, a final Pokémon may step in (galarCrowd.ts). Returns it, already built, or null. */
+  lastStand?: () => PokemonInstance | null;
+  /** Galar gym / tournament / Champion battles: the comeback moments below are on (set by run.ts, never in other regions). */
+  galar?: 'gym' | 'tournament' | 'champion';
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
   /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
@@ -3204,6 +3208,84 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
   }
 }
 
+// ---------- Galar comeback moments (gym, tournament and Champion battles only) ----------
+
+/** The player has beaten two or more of the foe's team without losing anyone, and has a spare Pokémon: a sweep in progress. */
+function galarSweeping(ctx: BattleContext): boolean {
+  const mine = ctx.party.filter((m) => m.uid !== ctx.battle.loaner);
+  return ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length >= 2 && mine.length >= 2 && mine.every((m) => m.hp > 0);
+}
+
+/**
+ * A hit that would knock out: (1) an unevolved Pokémon on either side survives it, once each (it evolves right after, see galarAfterHit);
+ * (2) the foe's Pokémon holds on by a thread when the player's Pokémon is sweeping, once per battle. Never when it is the player's last Pokémon.
+ */
+function galarHold(ctx: BattleContext, user: Combatant, target: Combatant, damage: number): number {
+  if (!ctx.galar || user === target) return damage;
+  const used = ctx.battle.extra.galar;
+  const ko = `cheatKo:${target.mon.uid}`;
+  if (used.includes(ko)) {
+    ctx.battle.extra.galar = used.filter((k) => k !== ko);
+    return Math.max(damage, target.mon.hp);
+  }
+  if (target.mon.hp <= 1 || damage < target.mon.hp) return damage;
+  const uid = target.mon.uid;
+  const evo = ctx.content.species.get(target.mon.speciesId)?.evolutions.find((e) => ctx.content.species.has(e.to));
+  if (evo && !used.includes(`evo:${uid}`) && !ctx.battle.transform.forms[uid]) {
+    used.push(`evo:${uid}`, `evoNow:${uid}`);
+    return target.mon.hp - 1;
+  }
+  if (target.side === 'enemy' && user.side === 'player' && galarSweeping(ctx) && !used.includes('thread')) {
+    used.push('thread', `threadNow:${uid}`);
+    return target.mon.hp - 1;
+  }
+  return damage;
+}
+
+/** Plays out what galarHold set up: the survivor evolves and stands at 30% HP, or just hangs on at 1 HP. */
+function galarAfterHit(ctx: BattleContext, target: Combatant, events: BattleEvent[]): void {
+  const used = ctx.battle.extra.galar;
+  const uid = target.mon.uid;
+  const name = getSpecies(ctx.content, target.mon.speciesId).name;
+  if (used.includes(`evoNow:${uid}`)) {
+    ctx.battle.extra.galar = used.filter((k) => k !== `evoNow:${uid}`);
+    const evo = ctx.content.species.get(target.mon.speciesId)?.evolutions.find((e) => ctx.content.species.has(e.to));
+    if (!evo || target.mon.hp <= 0) return;
+    events.push({ type: 'spectacle', kind: 'arena', side: target.side, uid, text: `${name} refuses to fall! It is EVOLVING!` });
+    swapForm(ctx, target, evo.to, events);
+    const max = calcStats(ctx.content, target.mon).hp;
+    target.mon.hp = Math.max(target.mon.hp, Math.ceil(max * 0.3));
+    events.push({ type: 'spectacle', kind: 'arena', side: target.side, uid, text: `${getSpecies(ctx.content, target.mon.speciesId).name} evolved and is back on its feet!` });
+  } else if (used.includes(`threadNow:${uid}`)) {
+    ctx.battle.extra.galar = used.filter((k) => k !== `threadNow:${uid}`);
+    events.push({ type: 'spectacle', kind: 'arena', side: target.side, uid, text: `${name} holds on by a thread!` });
+  }
+}
+
+/**
+ * While the player's Pokémon is sweeping, the Champion's (or leader's) Pokémon reaches for a strong move it would not normally learn and
+ * hits it down, once per battle. Never against the player's last Pokémon.
+ */
+function galarCheat(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, events: BattleEvent[]): Move | null {
+  if (!ctx.galar || user.side !== 'enemy' || target.side !== 'player' || move.category === 'status' || !galarSweeping(ctx)) return null;
+  const used = ctx.battle.extra.galar;
+  if (used.includes('cheat')) return null;
+  const types = getSpecies(ctx.content, target.mon.speciesId).types as TypeName[];
+  const stats = calcStats(ctx.content, user.mon);
+  const cat = stats.atk >= stats.spa ? 'physical' : 'special';
+  const pool = [...ctx.content.moves.values()]
+    .filter((m) => m.supported && m.category === cat && (m.power ?? 0) >= 85 && (m.power ?? 0) <= 120 && (m.accuracy ?? 100) >= 90 && Object.keys(m.effects).length === 0 && m.flags.length === 0 && typeEffectiveness(ctx.content.typeChart, m.type, types) > 1 && m.id !== move.id)
+    .sort((a, b) => (b.power ?? 0) - (a.power ?? 0) || a.id.localeCompare(b.id));
+  const pick = pool[0];
+  if (!pick) return null;
+  used.push('cheat');
+  events.push({ type: 'spectacle', kind: 'arena', side: 'enemy', uid: user.mon.uid, text: `${getSpecies(ctx.content, user.mon.speciesId).name} reaches beyond its training and uses ${pick.name}!` });
+  events.push({ type: 'move', side: user.side, moveId: pick.id });
+  // The strike is meant to end the sweep: it lands as a knockout (the foe was not otherwise going to take the Pokémon down).
+  ctx.battle.extra.galar.push(`cheatKo:${target.mon.uid}`);
+  return pick;
+}
+
 /** What a move does once its user has acted: accuracy, then its status effect or its damage and side effects. */
 function runMove(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, movedFirst: boolean, events: BattleEvent[]): void {
   moveIgnoresAbility = Boolean(move.effects.ignoreAbility) || (move.category === 'status' && abilityIn(ctx, user) === 'mycelium-might');
@@ -3214,7 +3296,8 @@ function runMove(ctx: BattleContext, user: Combatant, target: Combatant, move: M
     // Pushed Beyond Its Limits: it reaches for a stronger move it does not know.
     const reached = limitBreakDamage > 0 ? limitBreakMove(ctx, move) : null;
     if (reached) events.push({ type: 'move', side: user.side, moveId: reached.id });
-    runMoveInner(ctx, user, target, reached ?? move, movedFirst, events);
+    const cheat = reached ? null : galarCheat(ctx, user, target, move, events);
+    runMoveInner(ctx, user, target, reached ?? cheat ?? move, movedFirst, events);
   } finally {
     moveIgnoresAbility = false;
     limitBreakDamage = 0;
@@ -3840,6 +3923,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
+    damage = galarHold(ctx, user, target, damage);
     if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare || ctx.battle.eventRule?.contest) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
@@ -3884,6 +3968,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     // Pushed Itself Back Up: the hit knocks it down first, then it gets up.
     events.push({ type: 'damage', side: target.side, amount: lost, hpAfter: knockedDown ? 0 : target.mon.hp, effectiveness, crit });
     if (sturdy) announce(target, 'sturdy', events);
+    galarAfterHit(ctx, target, events);
     if (target.mon.hp <= 0 && target.vol.destinyBond && user.mon.hp > 0) {
       user.mon.hp = 0;
       events.push({ type: 'selfKo', side: user.side });
@@ -6143,6 +6228,20 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
         battle.narrative.refused = true;
         enemy.hp = 1;
         events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.speciesId).name} refuses to go down!` });
+        return;
+      }
+      // Galar's Champion refuses to be done: one last Pokémon steps in, chosen to counter yours (galarCrowd.ts).
+      const stand = !playerOut && !battle.doubles ? ctx.lastStand?.() ?? null : null;
+      if (stand) {
+        battle.enemyTeam.push(stand);
+        battle.enemyIndex = battle.enemyTeam.length - 1;
+        battle.enemyStages = freshStages();
+        battle.enemyVolatile = freshVolatile();
+        const lead = ctx.party[battle.activeIndex]!;
+        battle.participants = lead.hp > 0 ? [lead.uid] : [];
+        events.push({ type: 'spectacle', kind: 'arena', side: 'enemy', text: `${battle.trainer?.name ?? 'The Champion'} is not done! One last Pokémon steps out: ${getSpecies(ctx.content, stand.speciesId).name}!`, uid: stand.uid });
+        events.push({ type: 'switchIn', side: 'enemy', uid: stand.uid, speciesId: stand.speciesId, level: stand.level });
+        battle.pendingEntry = [...(battle.pendingEntry ?? []).filter((side) => side !== 'enemy'), 'enemy'];
         return;
       }
       battle.outcome = playerOut && ctx.doubleKoLoser === 'player' ? 'lose' : 'win';

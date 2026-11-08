@@ -67,8 +67,10 @@ import { evilTeam } from '../core/evil/teams';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
-import { currentTournamentRound } from '../core/galarTournament';
-import { StadiumDirector } from '../ui/galar/stadiumDirector';
+import { bracketView, currentTournamentRound } from '../core/galarTournament';
+import { StadiumDirector, type StadiumHooks } from '../ui/galar/stadiumDirector';
+import { INTERVIEWERS_SPRITE, CROWD_SPRITES } from '../ui/galar/cutArt';
+import { crowdFavor, galarScope, type HypeSpeaker } from '../core/galarCrowd';
 import { ambienceFor, musicState } from '../core/presentation/musicLayers';
 import { eventText, fixedDamageLabel, type Names } from '../ui/battleText';
 import { onInputAction, type InputAction } from '../ui/input';
@@ -106,7 +108,7 @@ import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
-import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
+import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { pickWipe, wipeAssetId } from '../ui/battleFx/ruleWipe';
 import { sosEntry } from '../core/battle/sos';
 import { WEATHER_ASSET_IDS, WeatherLayer } from '../ui/battleFx/weather';
@@ -134,7 +136,6 @@ import { actionTab, type ActionTab } from '../ui/actionTab';
 import { DYNAMAX_SCALE } from '../ui/battleFx/cineLook';
 import { dynamaxPatternKey, STATUS_PULSE, statusPatternKey, TERA_ICON_ROW, teraPatternKey } from '../ui/battleFx/formLook';
 import { dropPattern, wearPattern, wornPattern } from '../ui/battleFx/formPattern';
-import { loadAssets } from '../ui/lazyAssets';
 import { tweenDone } from '../ui/tweenDone';
 import { legendMusic } from '../core/legendary/identity';
 import { legendKit, legendLook } from '../core/legendary/visuals';
@@ -370,6 +371,7 @@ export class BattleScene extends Phaser.Scene {
     const battle = run.battle!;
     this.history = [];
     this.historyView = null;
+    this.startCameraWatchdog();
     this.input.keyboard?.on('keydown-H', () => this.toggleHistory());
     this.input.keyboard?.on('keydown-P', () => {
       const id = this.bagIds[(this.picker as Picker | null)?.current ?? -1];
@@ -770,6 +772,16 @@ export class BattleScene extends Phaser.Scene {
     for (const v of [mine, o.sprite]) if (v) breathe(this, v, this.motion, 0);
   }
 
+  /** Loads a species' front art (and cry) now, for a Pokémon that was not known when the battle started (the Champion's last stand). */
+  private async ensureArt(speciesId: string, back = false): Promise<void> {
+    try {
+      const sp = services().session.content.species.get(speciesId);
+      if (sp) await loadAssets(this, pokemonArtIds([sp], { front: !back, back, shiny: true, cry: true }));
+    } catch {
+      /* the picture just stays a placeholder */
+    }
+  }
+
   /** Brings both spots' boxes and sprites in line with the battle after a turn. */
   private async syncDuo(): Promise<void> {
     const duo = this.duo;
@@ -791,6 +803,14 @@ export class BattleScene extends Phaser.Scene {
       } else {
         o.mon = structuredClone(real);
         this.disguise(side, o.mon);
+        // A Pokémon that came into the other spot mid-battle gets its picture too (it used to show a box and nothing else).
+        if (o.mon.hp > 0 && !o.sprite && side === 'enemy') {
+          await this.ensureArt(o.mon.speciesId);
+          const keep = this.shown[side].uid;
+          this.focusOn(side, o.mon.uid);
+          this.showSprite(side, this.shown[side], true);
+          this.focusOn(side, keep);
+        }
         if (o.mon.hp > 0) await this.refreshInfoBox(o.box, o.mon, false);
       }
       const cur = monAt(view, side, duo.focus[side]);
@@ -1111,6 +1131,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemySprite = pokemonVisual(this, species, 'front', at.x, at.y, scale, mon.shiny, { lift: this.floats(mon) ? FLOAT_LIFT : 0 });
     // The foe stands behind the player's Pokémon.
     this.field.addAt(this.enemySprite, this.fieldBase);
+    this.fitFoeInFrame(this.enemySprite);
     this.skin?.sprite?.(this.enemySprite);
     // A boss's last Pokémon turns the arena light a warning red.
     const b = this.run.battle;
@@ -1118,6 +1139,18 @@ export class BattleScene extends Phaser.Scene {
     this.prefetchMoves(mon);
     this.liven(this.enemySprite, cry);
     return this.enemySprite;
+  }
+
+  /** A sent-out foe is always whole on the screen: a very tall one is scaled down so its top stays below the header, never cropped by the frame. */
+  private fitFoeInFrame(visual: Visual): void {
+    try {
+      const o = visual as unknown as { y: number; displayHeight?: number; scaleX: number; setScale: (n: number) => unknown };
+      const h = o.displayHeight ?? 0;
+      const room = o.y - 28;
+      if (h > room && room > 40) o.setScale((o.scaleX * room) / h);
+    } catch {
+      /* presentation only */
+    }
   }
 
   private dropSprite(visual: Visual | null): void {
@@ -1706,6 +1739,67 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private camBusy = false;
+  /** The foe trainer's name, picture and title, kept for the closing lines after the battle is over. */
+  private lastFoe: { name: string; art: { assetId: string; label: string }; title: string | null; role?: string } | null = null;
+  /** Real-clock time the camera has sat off the wide view with no move running (for the watchdog below); 0 = on the wide view or moving. */
+  private camOffSince = 0;
+  /** While set (a scene that holds the camera on purpose, such as the opening), the watchdog leaves it alone. */
+  private camPinned = false;
+
+  /**
+   * The camera bug (every version): a push-in whose pull-back timer never fired (scene time paused, a move cut short by another move) left the
+   * battle zoomed in for good. This watchdog, on the real clock, eases the camera back to the wide view whenever it has sat off it with no move
+   * running for a couple of seconds. Presentation only; it never touches the battle.
+   */
+  private startCameraWatchdog(): void {
+    this.camOffSince = 0;
+    this.camPinned = false;
+    const check = (): void => {
+      try {
+        const cam = this.cameras.main;
+        const moving = cam.zoomEffect.isRunning || cam.panEffect.isRunning || this.tweens.getTweensOf(cam).length > 0;
+        const off = Math.abs(cam.zoom - 1) > 0.01 || Math.abs((cam as unknown as { rotation: number }).rotation) > 0.002 || Math.abs(cam.midPoint.x - GAME_WIDTH / 2) > 2 || Math.abs(cam.midPoint.y - GAME_HEIGHT / 2) > 2;
+        if (!off || moving || this.camPinned) {
+          this.camOffSince = 0;
+          return;
+        }
+        const now = performance.now();
+        if (this.camOffSince === 0) this.camOffSince = now;
+        else if (now - this.camOffSince > 2200) {
+          this.camOffSince = 0;
+          this.camBusy = false;
+          this.restoreCamera(450);
+        }
+      } catch {
+        /* presentation only */
+      }
+    };
+    const timer = window.setInterval(check, 400);
+    this.events.once('shutdown', () => {
+      window.clearInterval(timer);
+      try {
+        this.restoreCamera(0);
+      } catch {
+        /* scene already gone */
+      }
+    });
+  }
+
+  /** Eases the camera back to the whole arena (instantly for 0 ms). */
+  private restoreCamera(ms: number): void {
+    const cam = this.cameras.main;
+    this.tweens.killTweensOf(cam);
+    cam.zoomEffect.reset();
+    cam.panEffect.reset();
+    cam.setRotation(0);
+    if (ms <= 0) {
+      cam.setZoom(1);
+      cam.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+      return;
+    }
+    cam.pan(GAME_WIDTH / 2, GAME_HEIGHT / 2, ms, 'Sine.easeInOut', true);
+    cam.zoomTo(1, ms, 'Sine.easeInOut', true);
+  }
 
   /** S240: a short push-in toward the target of a big moment, then back. Presentation only; one shot at a time. */
   private cameraMove(e: RunEvent): boolean {
@@ -1726,6 +1820,11 @@ export class BattleScene extends Phaser.Scene {
         cam.zoomTo(1, shot.moveMs);
         this.time.delayedCall(shot.moveMs, () => { this.camBusy = false; });
       });
+      // The scene clock can pause (dialogue, scene changes): the real clock brings the camera back anyway.
+      window.setTimeout(() => {
+        if (!this.sys?.isActive()) return;
+        this.camBusy = false;
+      }, shot.moveMs * 2 + shot.holdMs + 300);
       return true;
     } catch {
       this.camBusy = false;
@@ -2045,8 +2144,13 @@ export class BattleScene extends Phaser.Scene {
         if (classLine) await this.speak(battle.trainer?.name ?? title, classLine);
         await this.storyIntro();
         // The trainer throws a ball up over the platform; the Pokémon appears in the burst and drops in.
+        // The camera swings over to the foe's side while the ball is thrown, then settles back as the Pokémon lands.
+        this.camPinned = true;
+        cameraTo(this, this.motion, { x: 560, y: ENEMY_POS.y - 20 }, 1.15, 500);
         await foeBallThrow(this, this.motion, { x: trainerSprite.x - 30, y: trainerSprite.y - 110 }, { x: ENEMY_POS.x, y: ENEMY_POS.y - 130 }, trainerSprite);
         if (this.duo) {
+          cameraTo(this, this.motion, null, 1, 300);
+          this.camPinned = false;
           await this.playBeat(stamp(this, 'DOUBLE BATTLE!', title, this.foeRim(), this.motion));
           await this.showDuoSide('enemy', true);
           const second = this.duo.other.enemy.mon;
@@ -2056,6 +2160,8 @@ export class BattleScene extends Phaser.Scene {
           dropIn(this, this.motion, dropped);
           // The foe's box slides in a beat after it lands (the reference).
           if (this.motion === 'full') await sleep(this, 550);
+          cameraTo(this, this.motion, null, 1, 450);
+          this.camPinned = false;
           await this.refreshInfoBox(this.enemyBox, this.shown.enemy, false);
           foeRow?.out();
           if (battle.rivalNote) await this.say(battle.rivalNote);
@@ -2096,6 +2202,7 @@ export class BattleScene extends Phaser.Scene {
       } else {
         // The camera looks across to your side while your trainer throws.
         const playerRow = partyBallRow(this, 'player', this.run.party.map((m) => m.hp > 0), this.motion, MESSAGE_Y - 46);
+        this.camPinned = true;
         cameraTo(this, this.motion, { x: 400, y: PLAYER_POS.y - 100 }, 1.2, 600);
         const goLine = this.say(`Go! ${this.speciesName(this.shown.player)}!`, true);
         await this.throwPose();
@@ -2103,6 +2210,7 @@ export class BattleScene extends Phaser.Scene {
         // The camera pulls back and your box slides in a beat after your Pokémon lands.
         if (this.motion === 'full') await sleep(this, 400);
         cameraTo(this, this.motion, null, 1, 450);
+        this.camPinned = false;
         await this.refreshInfoBox(this.playerBox, this.shown.player, false);
         playerRow.out();
         await goLine;
@@ -2295,12 +2403,31 @@ export class BattleScene extends Phaser.Scene {
         },
         alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
         say: (text) => this.say(text),
+        announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text),
+        opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text),
         portrait: (id, x, y) => {
           // Fit the picture to the card so no character is cropped, whatever size its sprite is.
           const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
           if (v.height > 0) v.setScale(Math.min(340 / v.height, 6));
           return v as unknown as Phaser.GameObjects.GameObject;
         },
+        hype: ((): StadiumHooks['hype'] => {
+          const scope = galarScope(content, this.run);
+          if (!scope) return undefined;
+          return {
+            scope,
+            favor: () => crowdFavor(content, this.run),
+            facts: () => this.hypeFacts(),
+            flags: () => this.journeyFlags(),
+            available: () => this.hypeSpeakers(),
+            cast: (speaker, seed) => this.hypeCast(speaker, seed),
+            say: (name, assetId, text, look) => this.speakWithArt(name, assetId, text, look),
+            foeShare: () => {
+              const f = this.run.battle?.enemyTeam[this.run.battle.enemyIndex];
+              return f ? f.hp / Math.max(1, maxHp(content, f)) : 1;
+            },
+          };
+        })(),
         art: {
           sprite: (id, x, y, scale) => (this.textures.exists(id) ? trainerVisual(this, id, 'Trainer', x, y, scale) : null),
           preload: (ids) => loadAssets(this, ids),
@@ -2333,9 +2460,13 @@ export class BattleScene extends Phaser.Scene {
       }
       if (this.boss()?.role !== 'gym') return; // Story-run League fights get the crowd and cuts, not the gym host
       const band = session.claimGalarBandIntro();
+      // The news reporter opens the match (trainer text with the reporter's own sprite), then the Champion host speaks.
+      const leader = this.run.battle?.trainer?.name ?? 'the Gym Leader';
+      const who = content.archetypes.get(this.run.archetypeId)?.name ?? 'the challenger';
+      await this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, `Welcome, everyone, to gym match number ${galarGymNumber(this.run)} of the Gym Challenge! ${who} steps onto the field to face ${leader}!`);
       if (band) {
         if (band.grantsItem) await this.stadium.bandScene();
-        for (const line of band.lines) await this.say(line);
+        for (const line of band.lines) await this.speak(host, line);
       }
       else {
         const line = hostLine(this.run.seed, galarGymNumber(this.run), galarPerformance(content, this.run), host);
@@ -2435,6 +2566,7 @@ export class BattleScene extends Phaser.Scene {
 
   private nextPrompt(): void {
     this.refreshMusicState();
+    if (!this.camBusy && !this.camPinned) this.restoreCamera(250); // a new turn always starts on the whole arena
     if (this.duo) {
       if (this.autoOn && !autoBattleProblem(this.run)) void this.runAuto();
       else if (this.run.battle?.needsSwitch) this.openPartyPicker(true);
@@ -3611,6 +3743,135 @@ export class BattleScene extends Phaser.Scene {
    * Story Portrait box, and the line types like speech. A shouted line shakes the box, the trainer
    * jumps and their Pokémon cries. Presentation only; the line also goes to the battle log.
    */
+  /** Galar hype moments: a line as trainer text with this person's own picture (loaded first). Never throws. */
+  private async speakWithArt(name: string, assetId: string, text: string, look?: 'crowd' | 'champion'): Promise<void> {
+    try {
+      if (assetId) await loadAssets(this, [assetId]).catch(() => undefined);
+    } catch {
+      /* the line shows without a picture */
+    }
+    await this.speak(name, text, 'calm', false, assetId ? { assetId, look } : undefined);
+  }
+
+  /** The people who can speak in a hype moment right now. */
+  private hypeSpeakers(): ReadonlySet<HypeSpeaker> {
+    const out = new Set<HypeSpeaker>(['reporter', 'crowdTrainer', 'host']);
+    try {
+      const content = services().session.content;
+      const rival = this.run.story.rivals[0];
+      if (rival && this.rivalArt(rival)) out.add('rival');
+      const scope = galarScope(content, this.run);
+      if ((scope === 'gym' || scope === 'champion') && this.futureFoe('gym')) out.add('futureLeader');
+      if (scope === 'tournament' && this.futureFoe('tournament')) out.add('futureOpponent');
+    } catch {
+      /* the basic cast is enough */
+    }
+    return out;
+  }
+
+  /** The next gym leader (gym battles) or the next opponent in the bracket (tournament): someone this player will face later. */
+  private futureFoe(kind: 'gym' | 'tournament'): { name: string; assetId: string } | null {
+    const content = services().session.content;
+    let id: string | undefined;
+    if (kind === 'gym') {
+      const current = this.run.battle?.trainer?.leaderId;
+      id = this.run.roleCast
+        .filter((c) => c.role === 'gym' && c.regionIndex === this.run.regionIndex && c.id !== current && !this.run.badges.includes(c.id))
+        .sort((a, b) => a.slot - b.slot)[0]?.id;
+      // In the Champion battle every leader is behind you: one of the leaders you beat comes to watch.
+      if (!id) id = this.run.roleCast.filter((c) => c.role === 'gym' && c.regionIndex === this.run.regionIndex && this.run.badges.includes(c.id)).sort((a, b) => b.slot - a.slot)[0]?.id;
+    } else {
+      id = bracketView(content, this.run).rounds.find((r) => r.state === 'later')?.opponent.id;
+    }
+    const boss = id ? content.bosses.get(id) : undefined;
+    return boss ? { name: boss.name, assetId: boss.sprites.default } : null;
+  }
+
+  /** Who a speaker is for one moment: a name and a picture id. Crowd members are a seeded pick of everyday trainers. */
+  private hypeCast(speaker: HypeSpeaker, seed: string): { name: string; assetId: string } {
+    const content = services().session.content;
+    try {
+      if (speaker === 'reporter') return { name: 'Reporter', assetId: INTERVIEWERS_SPRITE };
+      if (speaker === 'host') {
+        const host = galarHost(content, this.run);
+        return { name: host.name, assetId: content.bosses.get(host.id)?.sprites.default ?? '' };
+      }
+      if (speaker === 'rival') {
+        const rival = this.run.story.rivals[0];
+        const art = rival ? this.rivalArt(rival) : null;
+        if (art) return { name: rival!.name, assetId: art.assetId };
+      }
+      if (speaker === 'futureLeader' || speaker === 'futureOpponent') {
+        const f = this.futureFoe(speaker === 'futureLeader' ? 'gym' : 'tournament');
+        if (f) return f;
+      }
+    } catch {
+      /* fall back to a crowd member */
+    }
+    let h = 0;
+    for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    const id = CROWD_SPRITES[h % CROWD_SPRITES.length]!;
+    const first = ['Joey', 'Mia', 'Ken', 'Lily', 'Sam', 'Rhea', 'Tom', 'Ava', 'Nico', 'Ivy'][(h >>> 5) % 10]!;
+    const cls = id.split('/')[1]!.replace(/_(m|f|2)$/, '').split('_').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ');
+    return { name: `${cls} ${first}`, assetId: id };
+  }
+
+  /** The names that fill a hype moment's line. */
+  private hypeFacts(): Record<string, string> {
+    const content = services().session.content;
+    const battle = this.run.battle;
+    const foeMon = battle?.enemyTeam[battle.enemyIndex];
+    const myMon = this.run.party[battle?.activeIndex ?? 0];
+    const rival = this.run.story.rivals[0];
+    return {
+      player: content.archetypes.get(this.run.archetypeId)?.name ?? 'the challenger',
+      foe: battle?.trainer?.name ?? this.lastFoe?.name ?? 'the opponent',
+      foeMon: foeMon ? this.speciesName(foeMon) : 'their Pokémon',
+      myMon: myMon ? this.speciesName(myMon) : 'your Pokémon',
+      host: galarHost(content, this.run).name,
+      rival: rival?.name ?? 'your rival',
+      leader: this.futureFoe('gym')?.name ?? 'the next leader',
+      ...this.journeyFacts(),
+    };
+  }
+
+  /** The player's road through the run, as words for the Champion's lines: starter, strongest Pokémon, badges, wins, rival. */
+  private journeyFacts(): Record<string, string> {
+    const run = this.run;
+    const starter = run.party.find((m) => m.uid === run.log.starterUid);
+    const ace = [...run.party].sort((a, b) => b.level - a.level)[0];
+    const rival = run.story.rivals[0];
+    return {
+      starter: starter ? this.speciesName(starter) : 'your first partner',
+      ace: ace ? this.speciesName(ace) : 'your strongest Pokémon',
+      badges: String(run.badges.length),
+      wins: String(run.log.battlesWon),
+      rivalName: rival?.name ?? 'your rival',
+    };
+  }
+
+  /** True things about the player's journey; the Champion's lines that need one only play when it holds. */
+  private journeyFlags(): ReadonlySet<string> {
+    const out = new Set<string>();
+    try {
+      const run = this.run;
+      const starter = run.party.find((m) => m.uid === run.log.starterUid);
+      if (starter && starter.hp > 0) out.add('starterAlive');
+      else if (run.log.starterUid) out.add('starterGone');
+      if ((run.story.rivals[0]?.encounters ?? 0) > 0) out.add('rivalMet');
+      if (run.badges.length >= 8) out.add('badges8');
+      if (run.log.battlesWon >= 30) out.add('manyWins');
+      if (run.party.length >= 5) out.add('bigParty');
+      if (run.party.length <= 3) out.add('smallParty');
+      const top = Math.max(0, ...run.party.map((m) => m.level));
+      const foeTop = Math.max(0, ...(run.battle?.enemyTeam ?? []).map((m) => m.level));
+      if (top >= foeTop) out.add('aceHigh');
+    } catch {
+      /* no flags: only the plain lines play */
+    }
+    return out;
+  }
+
   /** The Champion host's own picture when the Galar host is the one speaking (null for anyone else). */
   private hostArtFor(speaker: string): string | null {
     try {
@@ -3623,14 +3884,18 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false): Promise<void> {
+  private async speak(speaker: string, text: string, voice: SpeechVoice = 'calm', shout = false, artOverride?: { assetId: string; look?: 'crowd' | 'champion' }): Promise<void> {
     const settings = services().session.settings;
     const content = services().session.content;
-    const trainer = this.run.battle?.trainer;
-    const art = this.trainerArt();
-    const isFoe = Boolean(trainer && (speaker === trainer.name || speaker === art?.label || this.trainerTitle()?.endsWith(speaker)));
+    // After the last blow the run's battle is gone: the foe's name and picture are kept from while it lasted, so the leader's closing lines still show them.
+    const live = this.run.battle?.trainer;
+    const liveArt = this.trainerArt();
+    if (live && liveArt) { const b = this.boss(); this.lastFoe = { name: live.name, art: liveArt, title: this.trainerTitle(), role: b ? b.title.replace(b.name, '').trim() || undefined : content.trainers.get(live.classId)?.name }; }
+    const trainer = live ?? (this.lastFoe ? { name: this.lastFoe.name, classId: '' } : undefined);
+    const art = liveArt ?? this.lastFoe?.art ?? null;
+    const isFoe = Boolean(trainer && (speaker === trainer.name || speaker === art?.label || (this.trainerTitle() ?? this.lastFoe?.title)?.endsWith(speaker)));
     const boss = this.boss();
-    const role = !isFoe ? undefined : boss ? (boss.title.replace(boss.name, '').trim() || undefined) : content.trainers.get(trainer?.classId ?? '')?.name;
+    const role = !isFoe ? undefined : !live && this.lastFoe ? this.lastFoe.role : boss ? (boss.title.replace(boss.name, '').trim() || undefined) : content.trainers.get(trainer?.classId ?? '')?.name;
     const plain = stripSpeechTags(text);
     this.history.push(`${speaker}: “${plain}”`);
     if (this.history.length > 60) this.history.shift();
@@ -3641,13 +3906,16 @@ export class BattleScene extends Phaser.Scene {
       if (species) playCry(this, species);
       void hop(this, this.enemySprite, this.motion);
     };
+    const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
     const line = storyLine(this, {
       speaker,
       role,
       text: shout && !/\[shake\]/.test(text) ? `[shake]${text}[/shake]` : text,
       voice,
-      artId: isFoe ? art?.assetId ?? null : this.hostArtFor(speaker),
-      rim: this.foeRim(),
+      artId: artOverride?.assetId ?? (isFoe ? art?.assetId ?? null : this.hostArtFor(speaker)),
+      rim: look === 'champion' ? 0xe0503c : look === 'crowd' ? 0x4ad0e8 : this.foeRim(),
+      look,
+      dim: look === 'crowd' ? false : undefined,
       motion: this.motion,
       speed: settings.speechSpeed,
       onShout: cry,
@@ -3839,8 +4107,19 @@ export class BattleScene extends Phaser.Scene {
           if (incoming) {
             this.shown[e.side] = structuredClone(incoming);
             if (e.side === 'player' && this.trainerActor) await this.sendOutMoment(this.shown.player);
+            const lookAt = e.side === 'enemy' ? { x: 560, y: ENEMY_POS.y - 20 } : { x: 400, y: PLAYER_POS.y - 100 };
+            if (!this.camBusy && !this.camPinned) {
+              this.camPinned = true;
+              cameraTo(this, this.motion, lookAt, 1.12, 350);
+            }
+            if (e.side === 'enemy') await this.ensureArt(this.shown.enemy!.speciesId);
             this.showSprite(e.side, this.shown[e.side]);
             this.applyTeraTint(e.side, this.shown[e.side]);
+            if (this.camPinned) await sleep(this, this.motion === 'full' ? 500 : 0);
+            if (this.camPinned) {
+              cameraTo(this, this.motion, null, 1, 350);
+              this.camPinned = false;
+            }
             await this.refreshInfoBox(e.side === 'enemy' ? this.enemyBox : this.playerBox, this.shown[e.side], false);
             // A trainer's last Pokémon is their ace: one special beat when it comes out.
             const team = this.run.battle?.enemyTeam ?? [];
@@ -3885,6 +4164,7 @@ export class BattleScene extends Phaser.Scene {
           break;
         }
         case 'transform': {
+          if (e.kind === 'ability') await this.ensureArt(e.to, e.side === 'player');
           // Presentation only: a cinematic for the big moments (battleFx/cinematics.ts), then the new form's sprite.
           if (e.kind === 'mega' && e.itemId) await this.say(`${this.speciesName(mon!)}'s ${content.items.get(e.itemId)?.name ?? 'Mega Stone'} is reacting to your Mega Ring!`);
           // A Z-Move flashes in its type's colour.

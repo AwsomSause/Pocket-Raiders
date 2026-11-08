@@ -10,6 +10,7 @@ import type { Content } from '../contentSchema';
 import { currentEmotion } from './emotions';
 import { Rng } from '../rng';
 import { bonusFriendship, hyperChancePerk, isBossClass } from '../trainerPerks';
+import { crowdBoost } from '../galarFavor';
 import { activationFactor, previousUses, turnsOnField } from './hyperRules';
 import type { RunState } from '../state';
 import type { HyperChance, PokemonHistory, StoryEffectSpec, StoryTriggerKind } from './schema';
@@ -94,7 +95,7 @@ export function buildHyperContext(content: Content, run: RunState, rng: Rng): Hy
       // Overhaul slice 9: Hyper/Overdrive rules (too fresh, repeats, big fights) only scale the chance; the roll itself is unchanged.
       // Moments with no chance (a rivalry forming on the third meeting) are story beats, not rolls, so the rules leave them alone.
       const family = def.family;
-      const factor = family && def.chance && run.battle ? activationFactor(content, def, { turnsOnField: turnsOnField(run, mon.uid), previousUses: previousUses(content, run, mon.uid, family, def.id), intense: intenseBattle(run) }) : 1;
+      const factor = family && def.chance && run.battle ? activationFactor(content, def, { turnsOnField: turnsOnField(run, mon.uid), previousUses: previousUses(content, run, mon.uid, family, def.id), intense: intenseBattle(run) }) * crowdBoost(content, run) : 1;
       if (factor === 0) return null;
       return { def, chance: def.chance ? Math.min(1, hyperChance(def.chance, attrs, again) * hyperChancePerk(perks) * content.story.rarity.hyperScale * factor) : 1, variant: again ? 'again' : null };
     },
