@@ -276,3 +276,46 @@ export function bracketView(content: Content, run: RunState): BracketView {
   }
   return { rounds, wins, standing: remaining(b, wins).map(name), featured };
 }
+
+// ---------- watching another match (a short deterministic replay) ----------
+
+export interface ReplayBeat { text: string; hpA: number; hpB: number }
+export interface MatchReplay {
+  round: number;
+  a: { id: string; name: string; sprite: string };
+  b: { id: string; name: string; sprite: string };
+  winner: 'a' | 'b';
+  upset: boolean;
+  beats: ReplayBeat[];
+}
+
+/** A short, presentation-only replay of the featured match of a won round: HP bars and commentary. Same bracket, same replay; never touches gameplay rolls. */
+export function matchReplay(content: Content, run: RunState, round: number): MatchReplay | null {
+  const stage = run.stage;
+  const champion = stage?.leaderId ?? GALAR_TOURNAMENT.champion;
+  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
+  const b = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
+  const matches = otherMatches(b, round);
+  if (matches.length === 0) return null;
+  const pick = matches.find((m) => m.upset) ?? matches[0]!;
+  const info = (id: string) => ({ id, name: content.bosses.get(id)?.name ?? id, sprite: content.bosses.get(id)?.sprites.default ?? '' });
+  const winner = pick.winner === pick.a ? 'a' : 'b';
+  const rng = streamFor(b.seed, `replay${round}`);
+  const A = info(pick.a);
+  const B = info(pick.b);
+  const win = winner === 'a' ? A : B;
+  const lose = winner === 'a' ? B : A;
+  // HP shares (0..1) after each beat; the loser ends at 0. In an upset the eventual loser leads at first.
+  const steps = pick.upset ? [[0.6, 1], [0.5, 0.6], [0.3, 0.5], [0.15, 0.2], [0, 0.1]] : [[1, 0.7], [0.8, 0.5], [0.7, 0.25], [0.55, 0.1], [0.45, 0]];
+  const lines = pick.upset
+    ? [`${lose.name} opens with a huge hit!`, `${win.name} hangs on by a thread.`, `The crowd gasps: ${win.name} turns it around!`, `${lose.name} is cornered.`, `${win.name} wins it! A shocking upset!`]
+    : [`${win.name} takes the early lead.`, `${lose.name} fights back.`, `A clean hit from ${win.name}.`, `${lose.name} is running low.`, `${win.name} takes the round.`];
+  const beats: ReplayBeat[] = steps.map(([w, l], i) => {
+    const jitter = i < 4 ? (rng.float() - 0.5) * 0.06 : 0;
+    const wHp = Math.min(1, Math.max(0.03, w! + jitter));
+    const lHp = i === 4 && !pick.upset ? 0 : Math.max(i === steps.length - 1 ? 0 : 0.03, l! - Math.abs(jitter));
+    const loserHp = i === steps.length - 1 ? 0 : lHp;
+    return winner === 'a' ? { text: lines[i]!, hpA: wHp, hpB: loserHp } : { text: lines[i]!, hpA: loserHp, hpB: wHp };
+  });
+  return { round, a: A, b: B, winner, upset: pick.upset, beats };
+}

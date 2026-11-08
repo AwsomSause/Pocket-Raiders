@@ -211,3 +211,25 @@ describe('tournament round during a battle', () => {
     expect(currentTournamentRound(content, run)).toBeNull();
   });
 });
+
+import { matchReplay } from '../../src/core/galarTournament';
+
+describe('match replay', () => {
+  const content = getContent();
+  it('is deterministic, ends with the winner standing and the loser at 0', () => {
+    let run = createRun(content, { runId: 'r', seed: 'REPLAY', archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    for (let r = 1; r <= 4; r++) {
+      const a = matchReplay(content, run, r)!;
+      expect(matchReplay(content, run, r)).toEqual(a);
+      const last = a.beats[a.beats.length - 1]!;
+      const [w, l] = a.winner === 'a' ? [last.hpA, last.hpB] : [last.hpB, last.hpA];
+      expect(l).toBe(0);
+      expect(w).toBeGreaterThan(0);
+      expect(a.beats.every((b) => b.hpA >= 0 && b.hpA <= 1 && b.hpB >= 0 && b.hpB <= 1)).toBe(true);
+    }
+    expect(matchReplay(content, run, 5)).toBeNull();
+  });
+});

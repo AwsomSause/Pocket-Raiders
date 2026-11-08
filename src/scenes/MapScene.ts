@@ -26,7 +26,7 @@ import Phaser from 'phaser';
 import { pinnedObjective } from '../core/objectives';
 import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
-import { bracketView } from '../core/galarTournament';
+import { bracketView, matchReplay } from '../core/galarTournament';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { FRAME_ASSET_IDS, headerBar } from '../ui/frames';
 import { currentColumn, findNode } from '../core/map';
@@ -1736,8 +1736,49 @@ export class MapScene extends Phaser.Scene {
       layer.add(this.add.text(x + colW / 2, 330, `${r.remaining.length} left${r.shopAfter ? '\n🛒 Ball Guy after' : ''}`, textStyle(12, '#a69cb4', { align: 'center' })).setOrigin(0.5, 0));
     }
     view.featured.slice(-2).forEach((f, i) => layer.add(this.add.text(GAME_WIDTH / 2, 372 + i * 18, f.text, textStyle(13, f.upset ? '#ff9860' : '#bfe9ff')).setOrigin(0.5, 0)));
+    const watchRound = view.rounds.filter((r) => r.state === 'won').length;
+    if (watchRound > 0) {
+      layer.add(this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 60, `W: watch a round ${watchRound} match`, textStyle(14, '#ffe060')).setOrigin(0.5, 0).setName('watch-match').setInteractive({ useHandCursor: true }).on('pointerdown', () => this.watchMatch(watchRound)));
+      const key = this.input.keyboard?.addKey('W');
+      key?.once('down', () => { if (this.bracket === layer) this.watchMatch(watchRound); });
+    }
     this.bracket = layer;
     this.busy = true;
+  }
+
+  /** Watch another match: a short auto-played replay (HP bars drain, commentary). Presentation only; any key or click skips. */
+  private watchMatch(round: number): void {
+    const { session } = services();
+    const replay = matchReplay(session.content, session.run!, round);
+    if (!replay || !this.bracket) return;
+    const layer = this.add.container(0, 0).setDepth(90).setName('match-watch');
+    const close = (): void => { timer.remove(false); layer.destroy(); };
+    layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x05020c, 0.92).setOrigin(0).setInteractive().on('pointerdown', close));
+    layer.add(this.add.text(GAME_WIDTH / 2, 30, `Round ${round}: ${replay.a.name} vs ${replay.b.name}${replay.upset ? '  (upset!)' : ''}`, textStyle(20, COLORS.gold)).setOrigin(0.5, 0));
+    const bar = (x: number, who: typeof replay.a): Phaser.GameObjects.Rectangle => {
+      layer.add(trainerVisual(this, who.sprite, who.name, x, 190, 1));
+      layer.add(this.add.text(x, 262, who.name, textStyle(16, '#ffffff')).setOrigin(0.5, 0));
+      layer.add(this.add.rectangle(x, 296, 204, 14, 0x222222).setOrigin(0.5));
+      const fill = this.add.rectangle(x - 100, 296, 200, 10, 0x78d890).setOrigin(0, 0.5);
+      layer.add(fill);
+      return fill;
+    };
+    const fa = bar(GAME_WIDTH * 0.25, replay.a);
+    const fb = bar(GAME_WIDTH * 0.75, replay.b);
+    const line = this.add.text(GAME_WIDTH / 2, 350, '', textStyle(16, '#bfe9ff', { wordWrap: { width: GAME_WIDTH - 120 }, align: 'center' })).setOrigin(0.5, 0);
+    layer.add(line);
+    layer.add(this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 40, 'any key or click to skip', textStyle(12, '#a69cb4')).setOrigin(0.5, 0));
+    let i = 0;
+    const step = (): void => {
+      const beat = replay.beats[i++];
+      if (!beat) { close(); return; }
+      line.setText(beat.text);
+      this.tweens.add({ targets: fa, scaleX: Math.max(0, beat.hpA), duration: 500 });
+      this.tweens.add({ targets: fb, scaleX: Math.max(0, beat.hpB), duration: 500 });
+    };
+    const timer = this.time.addEvent({ delay: 1500, loop: true, callback: step });
+    step();
+    this.input.keyboard?.once('keydown', close);
   }
 
   /** The map legend (ideas W4, key L): what every node, stop, badge and obstacle icon means. Esc or L closes it. */
