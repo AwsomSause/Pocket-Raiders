@@ -138,7 +138,7 @@ export function graduateMentorships(content: Content, run: RunState, evolved?: s
     const caughtUp = !mentor || prote.uid === evolved || prote.level >= mentor.level - content.story.mentorship.graduateGap;
     if (!caughtUp) continue;
     // Beta 0.5: with the mentor still in the party, the protégé is "ready" and the pair may hold the graduation spar (camp menu).
-    const bond = mentor ? ensureBond(content, run, rel) : undefined;
+    const bond = mentor && content.balance.mentorRework ? ensureBond(content, run, rel) : undefined;
     if (mentor && bond) {
       const retry = (bond.events.spar ?? 0) > 0 && bond.battlesTogether < 3;
       if (!bond.ready && !retry) {
