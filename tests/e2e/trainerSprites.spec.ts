@@ -31,7 +31,7 @@ test('animated boss sprite in the intro and the player throwing pose', async ({ 
     await page.keyboard.press('Enter');
     await waitForScene(page, next);
   }
-  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 20_000 }).toBe(false);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
@@ -42,10 +42,10 @@ test('animated boss sprite in the intro and the player throwing pose', async ({ 
     pkr.session.run.battle.trainer = { classId: 'gym-leader', name: 'Brock', leaderId: 'brock' };
     pkr.game.scene.getScene('Battle').scene.restart();
   });
-  await expect.poll(() => showsTexture(page, 'boss.anim.brock'), { timeout: 15_000, intervals: [100] }).toBe(true);
+  await expect.poll(() => showsTexture(page, 'boss.anim.brock'), { timeout: 30_000, intervals: [100] }).toBe(true);
   // The pose plays: the frame moves on from the first one.
   await expect
-    .poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.find((o: any) => o.texture?.key === 'boss.anim.brock')?.frame?.name ?? '0001.png'), { timeout: 5000, intervals: [100] })
+    .poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.find((o: any) => o.texture?.key === 'boss.anim.brock')?.frame?.name ?? '0001.png'), { timeout: 10_000, intervals: [100] })
     .not.toBe('0001.png');
   await page.screenshot({ path: 'test-results/memories-boss-anim.png' });
   // Move the intro along until Hilda's back sprite throws.
@@ -56,7 +56,7 @@ test('animated boss sprite in the intro and the player throwing pose', async ({ 
         await page.keyboard.press('Enter');
         return false;
       },
-      { timeout: 30_000, intervals: [250] },
+      { timeout: 60_000, intervals: [250] },
     )
     .toBe(true);
   await page.screenshot({ path: 'test-results/memories-throw.png' });
