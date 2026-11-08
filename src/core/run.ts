@@ -2288,7 +2288,7 @@ export function finishStepInDuel(content: Content, run: RunState, outcome: 'win'
     run.phase = 'battle';
     return { lines: [stepInLine(run, rival, 'duel.won', vars)], rival: who, won: true, next: 'battle', speciesId: foe.speciesId };
   }
-  const wild = catchable(queued);
+  const wild = catchable(content, queued);
   const legend = wild ? legendKind(content, foe.speciesId) : undefined;
   const lines: string[] = [];
   if (wild) {

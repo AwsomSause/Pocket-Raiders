@@ -9,6 +9,7 @@
 import { z } from 'zod';
 import json from '../../data/rivalStepIn.json';
 import type { Content } from '../contentSchema';
+import { isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from '../events';
 import { hashSeed, Rng } from '../rng';
 import type { BattleState, RunState } from '../state';
 import { familyId } from '../mastery';
@@ -72,10 +73,12 @@ export function eligibleBattle(run: RunState, b: BattleState): boolean {
   return !node || (node.kind !== 'gym' && node.kind !== 'elite' && node.kind !== 'champion');
 }
 
-/** Wild Pokémon that rivals may catch: plain map encounters (not event or quest fights, shadow or Blissful ones). */
-export function catchable(b: BattleState): boolean {
+/** Wild Pokémon that rivals may catch: map and event encounters (not story-critical event fights, shadow or Blissful ones). */
+export function catchable(content: Content, b: BattleState): boolean {
   const foe = b.enemyTeam[b.enemyIndex];
-  return b.kind === 'wild' && !b.trainer && !b.event && !!foe && !foe.shadow && !foe.blissful && b.enemyTeam.length === 1;
+  // Event wild fights count too, except story-critical ones (story events, apprentice, pseudo-stage and Battle Club fights).
+  if (b.event && (b.event.eventId === 'plaza:club' || isStoryEventBattle(content, b.event) || isPseudoBattle(content, b.event) || isApprenticeBattle(content, b.event))) return false;
+  return b.kind === 'wild' && !b.trainer && !!foe && !foe.shadow && !foe.blissful && b.enemyTeam.length === 1;
 }
 
 /** What would happen at this battle, or null. Pure: it does not change the run. */
@@ -89,7 +92,7 @@ export function planStepIn(content: Content, run: RunState): StepInPlan | null {
   const rollC = rng.float();
   const rollAB = rng.float();
   const rollKind = rng.float();
-  if (catchable(b) && hostile(rival) && Number(run.story.flags[stepInFlag(run, 'c')] ?? 0) < STEP_IN.perStageCatch) {
+  if (catchable(content, b) && hostile(rival) && Number(run.story.flags[stepInFlag(run, 'c')] ?? 0) < STEP_IN.perStageCatch) {
     const legend = legendKind(content, b.enemyTeam[b.enemyIndex]!.speciesId);
     if (rollC < (legend ? STEP_IN.legendCatchChance : STEP_IN.catchChance)) return { kind: 'catch', rivalId: rival.id, ...(legend ? { legend } : {}) };
   }
