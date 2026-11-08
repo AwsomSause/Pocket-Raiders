@@ -23,8 +23,30 @@ function person(g: Phaser.GameObjects.Graphics, x: number, y: number, s: number,
   }
 }
 
+/** Everyday trainers the stadium crowd is made of (images/trainer/pr). Basic classes only: no gym leaders or bosses in the stands. */
+export const CROWD_SPRITES: readonly string[] = [
+  'youngster_f', 'school_kid_m', 'school_kid_f', 'camper_m', 'camper_f', 'ace_trainer_m', 'ace_trainer_f', 'pokefan_m', 'pokefan_f',
+  'backpacker_m', 'backpacker_f', 'breeder_m', 'breeder_f', 'bird_keeper_f', 'ranger_m', 'ranger_f', 'scientist_m', 'scientist_f',
+].map((n) => `trainer.pr/${n}`);
+/** The challengers watching from the stands and the people in the private box. */
+const WATCHERS = ['ace_trainer_m', 'ace_trainer_f', 'ranger_m', 'ranger_f', 'backpacker_m', 'backpacker_f', 'camper_m', 'camper_f'].map((n) => `trainer.pr/${n}`);
+const VIPS = ['rich_m', 'rich_f', 'collector', 'veteran_m', 'veteran_f', 'pokefan_f'].map((n) => `trainer.pr/${n}`);
+export const INTERVIEWERS_SPRITE = 'trainer.pr/interviewers';
+export const CUT_ART_PRELOAD: readonly string[] = [...new Set([...CROWD_SPRITES, ...WATCHERS, ...VIPS, INTERVIEWERS_SPRITE])];
+
+/** Real character art for the cuts. `sprite` returns null until a picture is loaded (the drawn silhouettes cover that). */
+export interface CutArtKit {
+  sprite: (assetId: string, x: number, y: number, scale: number) => Phaser.GameObjects.GameObject | null;
+  /** The Champion host, the opposing trainer and the watching rival: boss / trainer picture ids ('' when unknown). */
+  host: string;
+  opponent: string;
+  rival: string;
+}
+
+type Sized = Phaser.GameObjects.GameObject & { height: number; setScale: (n: number) => unknown };
+
 /** Draws one cut's art and fades it out after `durationMs`. Returns the container so the caller can clean up early. */
-export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, durationMs: number, animate: boolean): Phaser.GameObjects.Container {
+export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, durationMs: number, animate: boolean, kit?: CutArtKit): Phaser.GameObjects.Container {
   const rng = new Rng(hashSeed(`galar-cutart:${seed}:${cutId}`));
   const layer = scene.add.container(0, 0).setDepth(1795).setScrollFactor(0).setAlpha(0);
   const back = scene.add.graphics();
@@ -34,18 +56,39 @@ export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, dur
   const g = scene.add.graphics();
   layer.add(g);
   const bob: Phaser.GameObjects.Graphics[] = [];
+  const fr = scene.add.graphics(); // the broadcast frame, drawn last so pictures never cover it
 
-  const crowd = (rows: number, arms: boolean, cap: boolean, hot: boolean): void => {
+  /** One real trainer picture, or null if it isn't loaded. Pictures are scaled to a target height so none is cropped by the frame. */
+  const place = (id: string, x: number, y: number, scale: number, flip = false): Phaser.GameObjects.GameObject | null => {
+    const o = kit?.sprite(id, x, y, scale) ?? null;
+    if (o && flip && 'setFlipX' in o) (o as unknown as Phaser.GameObjects.Sprite).setFlipX(true);
+    return o;
+  };
+  /** A big single portrait (boss pictures vary in size): fitted to `height` pixels tall, feet at (x, y). */
+  const portrait = (id: string, x: number, y: number, height: number): boolean => {
+    if (!id) return false;
+    const o = place(id, x, y, 1) as Sized | null;
+    if (!o) return false;
+    if (o.height > 0) o.setScale(Math.min(height / o.height, 6));
+    layer.add(o);
+    return true;
+  };
+  const crowd = (rows: number, arms: boolean, cap: boolean, hot: boolean, pool: readonly string[] = CROWD_SPRITES): void => {
     for (let r = 0; r < rows; r++) {
-      const row = scene.add.graphics();
-      const y = 310 + r * 50;
-      const s = 1 + r * 0.18;
-      for (let x = -10 + rng.int(0, 20); x < GAME_WIDTH + 20; x += 54 * s) {
-        const color = hot && rng.float() < 0.15 ? 0xe05a3c : SIL;
-        person(row, x, y, s, { arms: arms && rng.float() < 0.7, cap: cap && rng.float() < 0.5, color });
+      const s = 1.3 + r * 0.4;
+      const y = 480 - (rows - 1 - r) * 62;
+      const row = scene.add.container(0, 0);
+      const silhouettes = scene.add.graphics();
+      row.add(silhouettes);
+      for (let x = -10 + rng.int(0, 20); x < GAME_WIDTH + 20; x += (arms ? 46 : 52) * s) {
+        const id = pool[rng.int(0, pool.length - 1)]!;
+        const flip = rng.float() < 0.5;
+        const pic = place(id, x, y, s, flip);
+        if (pic) row.add(pic);
+        else person(silhouettes, x, y - 30 * s + 30, s * 0.9, { arms: arms && rng.float() < 0.7, cap: cap && rng.float() < 0.5, color: hot && rng.float() < 0.15 ? 0xe05a3c : SIL });
       }
       layer.add(row);
-      bob.push(row);
+      bob.push(row as unknown as Phaser.GameObjects.Graphics);
     }
   };
 
@@ -59,63 +102,73 @@ export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, dur
       for (let i = 0; i < 6; i++) g.fillTriangle(120 + i * 140, 250, 108 + i * 140, 285, 132 + i * 140, 285); // foam fingers / banners
       break;
     case 'trainers-watching':
-      crowd(2, false, true, false);
+      crowd(2, false, true, false, WATCHERS);
       break;
     case 'private-box': {
       g.fillStyle(0x141a2b, 1);
       g.fillRoundedRect(250, 190, 460, 230, 14);
-      g.lineStyle(4, 0xd9b45a, 1);
-      g.strokeRoundedRect(250, 190, 460, 230, 14);
-      for (let i = 0; i < 4; i++) person(g, 310 + i * 110, 360, 1.5, { cap: i === 1 });
+      for (let i = 0; i < 4; i++) {
+        const pic = place(VIPS[(i + rng.int(0, VIPS.length - 1)) % VIPS.length]!, 315 + i * 110, 412, 2.1, i % 2 === 1);
+        if (pic) layer.add(pic);
+        else person(g, 310 + i * 110, 360, 1.5, { cap: i === 1 });
+      }
+      fr.lineStyle(4, 0xd9b45a, 1);
+      fr.strokeRoundedRect(250, 190, 460, 230, 14);
       break;
     }
     case 'commentator': {
-      g.fillStyle(0x1a2234, 1);
-      g.fillRect(240, 340, 480, 70);
-      g.lineStyle(3, 0x78b8e8, 1);
-      g.strokeRect(240, 340, 480, 70);
-      person(g, 360, 350, 1.8, { headset: true });
-      person(g, 600, 350, 1.8, { headset: true });
+      // A reporter and a cameraman: the "interviewers" picture, large and centred.
+      if (!portrait(INTERVIEWERS_SPRITE, GAME_WIDTH / 2, 472, 330)) {
+        g.fillStyle(0x1a2234, 1);
+        g.fillRect(240, 340, 480, 70);
+        person(g, 360, 350, 1.8, { headset: true });
+        person(g, 600, 350, 1.8, { headset: true });
+      }
       break;
     }
     case 'opponent-closeup':
-      g.fillStyle(SKIN, 1);
-      g.fillCircle(GAME_WIDTH / 2, 280, 85);
-      g.fillRoundedRect(GAME_WIDTH / 2 - 150, 350, 300, 160, 40);
-      g.fillStyle(SIL, 1);
-      g.fillRect(GAME_WIDTH / 2 - 95, 210, 190, 34); // cap brim
+      if (!portrait(kit?.opponent ?? '', GAME_WIDTH / 2, 480, 340)) {
+        g.fillStyle(SKIN, 1);
+        g.fillCircle(GAME_WIDTH / 2, 280, 85);
+        g.fillRoundedRect(GAME_WIDTH / 2 - 150, 350, 300, 160, 40);
+        g.fillStyle(SIL, 1);
+        g.fillRect(GAME_WIDTH / 2 - 95, 210, 190, 34); // cap brim
+      }
       break;
     case 'champion-silhouette': {
       g.fillStyle(0xfff0b0, 0.18);
-      g.fillTriangle(GAME_WIDTH / 2 - 30, 60, GAME_WIDTH / 2 + 30, 60, GAME_WIDTH / 2 + 180, 470); // spotlight cone
-      g.fillTriangle(GAME_WIDTH / 2 - 30, 60, GAME_WIDTH / 2 - 180, 470, GAME_WIDTH / 2 + 180, 470);
-      person(g, GAME_WIDTH / 2, 400, 3.2);
-      g.fillStyle(SIL, 1);
-      g.fillTriangle(GAME_WIDTH / 2 - 50, 340, GAME_WIDTH / 2 + 50, 340, GAME_WIDTH / 2, 470); // cape
+      g.fillTriangle(GAME_WIDTH / 2 - 30, 60, GAME_WIDTH / 2 + 30, 60, GAME_WIDTH / 2 + 180, 480); // spotlight cone
+      g.fillTriangle(GAME_WIDTH / 2 - 30, 60, GAME_WIDTH / 2 - 180, 480, GAME_WIDTH / 2 + 180, 480);
+      if (!portrait(kit?.host ?? '', GAME_WIDTH / 2, 480, 330)) {
+        person(g, GAME_WIDTH / 2, 400, 3.2);
+        g.fillStyle(SIL, 1);
+        g.fillTriangle(GAME_WIDTH / 2 - 50, 340, GAME_WIDTH / 2 + 50, 340, GAME_WIDTH / 2, 470); // cape
+      }
       break;
     }
     case 'rival-silhouette':
-      g.lineStyle(6, 0x3a4660, 1);
-      g.lineBetween(0, 400, GAME_WIDTH, 400); // rail
-      person(g, 640, 380, 2.4, { color: 0x151b2c });
+      if (!portrait(kit?.rival ?? '', 640, 478, 300)) person(g, 640, 380, 2.4, { color: 0x151b2c });
+      fr.lineStyle(6, 0x3a4660, 1);
+      fr.lineBetween(0, 410, GAME_WIDTH, 410); // rail, in front of the rival
       break;
     default:
       crowd(2, true, false, false);
   }
 
-  // Broadcast-style frame: corner marks, LIVE tag and a lower-third.
-  g.lineStyle(3, 0xffffff, 0.5);
+  // Broadcast-style frame: corner marks, LIVE tag and a lower-third (on top of the pictures).
+  layer.add(fr);
+  fr.lineStyle(3, 0xffffff, 0.5);
   for (const [x, y, dx, dy] of [[24, 56, 1, 1], [GAME_WIDTH - 24, 56, -1, 1], [24, GAME_HEIGHT - 56, 1, -1], [GAME_WIDTH - 24, GAME_HEIGHT - 56, -1, -1]] as const) {
-    g.lineBetween(x, y, x + 30 * dx, y);
-    g.lineBetween(x, y, x, y + 30 * dy);
+    fr.lineBetween(x, y, x + 30 * dx, y);
+    fr.lineBetween(x, y, x, y + 30 * dy);
   }
-  g.fillStyle(0xd02828, 1);
-  g.fillRoundedRect(36, 66, 62, 24, 6);
+  fr.fillStyle(0xd02828, 1);
+  fr.fillRoundedRect(36, 66, 62, 24, 6);
   layer.add(scene.add.text(67, 78, 'LIVE', textStyle(14, '#ffffff')).setOrigin(0.5));
-  g.fillStyle(0x10203a, 0.92);
-  g.fillRect(0, 100, GAME_WIDTH * 0.45, 26);
-  g.fillStyle(0xffd040, 1);
-  g.fillRect(0, 100, 8, 26);
+  fr.fillStyle(0x10203a, 0.92);
+  fr.fillRect(0, 100, GAME_WIDTH * 0.45, 26);
+  fr.fillStyle(0xffd040, 1);
+  fr.fillRect(0, 100, 8, 26);
   layer.add(scene.add.text(22, 113, 'GALAR CHAMPIONSHIP  ·  STADIUM CAM', textStyle(13, '#ffffff')).setOrigin(0, 0.5));
 
   scene.tweens.add({ targets: layer, alpha: 1, duration: 180 });
@@ -168,7 +221,7 @@ export async function playIntroCard(scene: Phaser.Scene, spec: IntroCardSpec, se
   back.fillRect(0, GAME_HEIGHT - 44, GAME_WIDTH, 4);
   layer.add(back);
   if (spec.final) finalDressing(scene, layer, seed, animate);
-  const portrait = makePortrait(GAME_WIDTH * 0.3, 300);
+  const portrait = makePortrait(GAME_WIDTH * 0.3, 480);
   if (portrait) {
     layer.add(portrait);
   } else {

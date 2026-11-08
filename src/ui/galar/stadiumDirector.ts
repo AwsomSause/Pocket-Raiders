@@ -8,7 +8,7 @@ import { defaultMoment, planMoment } from '../../core/cinematic/moments';
 import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../../core/galarStadium';
 import { GAME_WIDTH, textStyle } from '../theme';
 import { playMoment } from '../cinematic/momentPlayer';
-import { drawCutArt, playBandCard, playIntroCard } from './cutArt';
+import { CUT_ART_PRELOAD, drawCutArt, playBandCard, playIntroCard, type CutArtKit } from './cutArt';
 
 export interface StadiumHooks {
   runSeed: string;
@@ -32,6 +32,12 @@ export interface StadiumHooks {
   bandArt?: (x: number, y: number) => Phaser.GameObjects.GameObject | null;
   /** Crowd sound for a cue (crowd.roar, crowd.hush, crowd.swell, crowd.murmur). Optional; sound only, never changes the battle. */
   crowdSound?: (cue: string, intensity: number) => void;
+  /** Real trainer art for the camera cuts: a picture if it is loaded (else null), a loader for the crowd pictures, and who the host / opponent / rival are. */
+  art?: {
+    sprite: (assetId: string, x: number, y: number, scale: number) => Phaser.GameObjects.GameObject | null;
+    preload: (ids: readonly string[]) => Promise<void>;
+    cast: () => { host: string; opponent: string; rival: string };
+  };
 }
 
 export class StadiumDirector {
@@ -41,7 +47,23 @@ export class StadiumDirector {
   private finalSides = new Set<string>();
   private banner: Phaser.GameObjects.Text | null = null;
 
-  constructor(private readonly scene: Phaser.Scene, private readonly h: StadiumHooks) {}
+  constructor(private readonly scene: Phaser.Scene, private readonly h: StadiumHooks) {
+    // Crowd pictures load in the background; a cut drawn before they arrive uses the drawn silhouettes.
+    void this.h.art?.preload([...CUT_ART_PRELOAD, ...Object.values(this.kitIds()).filter(Boolean)]).catch(() => undefined);
+  }
+
+  private kitIds(): { host: string; opponent: string; rival: string } {
+    try {
+      return this.h.art?.cast() ?? { host: '', opponent: '', rival: '' };
+    } catch {
+      return { host: '', opponent: '', rival: '' };
+    }
+  }
+
+  private kit(): CutArtKit | undefined {
+    const art = this.h.art;
+    return art ? { sprite: art.sprite, ...this.kitIds() } : undefined;
+  }
 
   /** Call once per player turn, before its events play. */
   startTurn(turn: number): void {
@@ -124,7 +146,7 @@ export class StadiumDirector {
     const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
     if (plan.play) {
       try {
-        drawCutArt(this.scene, cut.id, `${this.h.battleId}:${this.turn}`, cut.durationMs, !this.h.reduceMotion());
+        drawCutArt(this.scene, cut.id, `${this.h.battleId}:${this.turn}`, cut.durationMs, !this.h.reduceMotion(), this.kit());
       } catch {
         // art is decoration; a drawing problem never blocks the battle
       }
@@ -136,7 +158,7 @@ export class StadiumDirector {
   previewCut(id: string): boolean {
     const cut = GALAR_STADIUM.cameraCuts.find((c) => c.id === id);
     if (!cut) return false;
-    drawCutArt(this.scene, cut.id, `preview:${id}`, 1600, !this.h.reduceMotion());
+    drawCutArt(this.scene, cut.id, `preview:${id}`, 1600, !this.h.reduceMotion(), this.kit());
     return true;
   }
 
