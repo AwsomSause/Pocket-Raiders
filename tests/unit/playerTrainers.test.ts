@@ -16,8 +16,8 @@ describe('player characters (Beta 0.5)', () => {
       expect(playerTrainerFor(id)).toBe(playerTrainerFor(id));
     }
   });
-  it('shows no unready Look in the picker', () => {
-    expect(LOOKS.filter((l) => lookReady(l.id)).map((l) => l.id)).toEqual(['look_a']);
+  it('offers both Looks in the picker', () => {
+    expect(LOOKS.filter((l) => lookReady(l.id)).map((l) => l.id)).toEqual(['look_a', 'look_b']);
   });
 });
 

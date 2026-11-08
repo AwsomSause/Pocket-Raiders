@@ -133,7 +133,7 @@ export class SaveSlotsScene extends Phaser.Scene {
     const card = this.cards[i]!;
     if (card.status === 'damaged') return this.say(`Slot ${card.slot} is damaged. Delete it to start over (a copy is kept).`);
     session.switchSlot(card.slot as SlotNumber);
-    if (prologueGateActive(session.profile.story)) return void this.scene.start('MainMenu');
+    if (prologueGateActive(session.profile.story, true)) return void this.scene.start('MainMenu');
     if (session.canContinue) {
       const run = session.continueRun();
       return void this.scene.start(sceneForRun(run));

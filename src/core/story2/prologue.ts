@@ -43,8 +43,11 @@ export function canSkipPrologue(story: ProfileStory): boolean {
 }
 
 /** Automated browsers (Playwright) skip the gate so tests reach the menu; ?gate=1 forces it. */
-export function prologueGateActive(story: ProfileStory): boolean {
+export function prologueGateActive(story: ProfileStory, strict = false): boolean {
   if (!prologueRequired(story)) return false;
+  if (strict) return true; // the Hub and save slots stay closed until the opening is finished
+  // Launch shows it once: a player who got as far as setting a name or a first beat is not sent back on every launch (Prologue stays on the title menu).
+  if (story.protagonist.nameSet || story.prologue.beatsSeen.length > 0) return false;
   if (typeof navigator !== 'undefined' && navigator.webdriver && !location.search.includes('gate=1')) return false;
   return true;
 }

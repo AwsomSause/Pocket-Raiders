@@ -7,8 +7,6 @@ import { playStoryMusic } from '../ui/audio';
 import { VANCE_ANIMS, VANCE_FRAMES, type VanceAnim } from '../assets/catalog';
 import { services } from '../game/services';
 import { loadAssets, queueAssets } from '../ui/lazyAssets';
-import { trainerVisual } from '../ui/sprites';
-import { PLAYER_TRAINER_IDS } from '../core/archetypes';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
@@ -16,6 +14,7 @@ import { drawBackdrop } from '../ui/widgets';
 import type { ProfileStory, StoryData } from '../core/story2/schema';
 import { chooseNextBackstory, chooseNextLine, intakeChoices, quizQuestions, revealPicks, saveQuizResult } from '../core/story2/intake';
 import { enabledBackstories } from '../core/story2/module';
+import { playerAnimId } from '../assets/playerArt';
 import { LOOKS, lookReady, previewSentence, renderTokens, vanceTone, type PronounSet, type Tone } from '../core/story2/identity';
 import { BEATS, beatsFor, canSkipPrologue, chooseMode, prologueRequired, finishPrologue, markBeat, quickStartOffered, requiredObjects, setIdentity, setLook, setTone, shortIntake, type BeatId, type PrologueMode } from '../core/story2/prologue';
 import { BACKSTORY_PITCH, BACKSTORY_PROMPT, INTAKE_STARTER_PROMPT, QUICK_QUIZ_INTRO, QUIZ_INTRO, REVEAL_INTRO, REVEAL_LABELS, STARTER_PROMPT, BRIEFING, FIRST_NAME_USE, MONTAGE, OBJECTS, PRONOUN_PROMPT, QUICK_OBJECTS, VANCE_CLOSING, VANCE_NAME_PROMPT, VANCE_OPENING, VANCE_QUESTIONS } from '../core/story2/prologueText';
@@ -208,18 +207,19 @@ export class PrologueScene extends Phaser.Scene {
 
   private stepLook(): void {
     this.title('This is how you appear');
+    this.edit((st) => markBeat(st, 'look')); // the opening is only forced on a launch until this screen has been seen once
     const y = this.body(['Choose your Look. Your name and pronouns come later, and the Look never changes them. You can change the Look in Settings.']);
-    // Previews of the five starting trainers (Beta 0.5).
-    const cast = PLAYER_TRAINER_IDS.map((id) => ({ id, name: services().session.content.archetypes.get(id)?.name ?? id, art: services().session.content.archetypes.get(id)?.spriteAssetId ?? `boss.${id}` }));
-    void loadAssets(this, cast.map((c) => c.art)).then(() => {
+    // A portrait preview above each Look, lined up with its menu entry.
+    const looks = LOOKS.filter((l) => lookReady(l.id));
+    const ids = looks.map((l) => playerAnimId(l.id === 'look_b' ? 'b' : 'a', 'portrait'));
+    void loadAssets(this, ids).then(() => {
       if (!this.sys.isActive()) return;
-      cast.forEach((c, n) => {
-        const x = 150 + n * ((GAME_WIDTH - 300) / (cast.length - 1));
-        trainerVisual(this, c.art, c.name, x, 380, 2);
-        this.add.text(x, 400, c.name, textStyle(20, COLORS.text)).setOrigin(0.5, 0);
+      looks.forEach((l, n) => {
+        const x = GAME_WIDTH / 2 + (n - (looks.length - 1) / 2) * 220;
+        this.add.image(x, 400, ids[n]!, '0001.png').setOrigin(0.5, 1).setScale(1.5);
+        this.add.text(x, 410, l.label, textStyle(20, COLORS.text)).setOrigin(0.5, 0);
       });
     });
-    const looks = LOOKS.filter((l) => lookReady(l.id));
     const options: MenuOption[] = looks.map((l) => ({ label: l.label }));
     this.choose(options, (i) => {
       const look = looks[i]!;

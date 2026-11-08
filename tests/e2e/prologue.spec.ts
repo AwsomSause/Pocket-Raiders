@@ -20,7 +20,7 @@ const press = async (page: Page, key: string, n = 1) => {
   }
 };
 
-test('Prologue: no Look B entry, Quick Start saves name, pronouns and Tone', async ({ page }) => {
+test('Prologue: Look A and Look B, Quick Start saves name, pronouns and Tone', async ({ page }) => {
   test.setTimeout(90_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -31,10 +31,10 @@ test('Prologue: no Look B entry, Quick Start saves name, pronouns and Tone', asy
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Prologue');
   await page.waitForTimeout(500);
   const look = await texts(page);
-  expect(look).not.toMatch(/Look B|COMING SOON/);
-  for (const n of ['Red', 'Blue', 'Green', 'Hilda', 'Nate']) expect(look).toContain(n);
-  await press(page, 'ArrowDown');
-  await press(page, 'Enter'); // Look A is the only Look
+  expect(look).toContain('Look A');
+  expect(look).toContain('Look B');
+  expect(look).not.toMatch(/COMING SOON/);
+  await press(page, 'Enter'); // Look A
   expect(await page.evaluate(() => (window as any).__pkr.session.profile.story.protagonist.look)).toBe('look_a');
   expect(await texts(page)).toContain('Quick Start');
   await press(page, 'ArrowDown');
