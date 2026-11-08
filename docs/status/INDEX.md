@@ -392,3 +392,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - gacha-item.md: Capsule Corner fix; one starting item per spin, one spin per finished run.
 - beta-4-4-pokemon.md: 17 Beta 4.4 Pokémon, Mega Alolan Flygon, and five Pocket Town starter scouts (one new Story Run starter line each).
 - event-stop-art.md: map event stops show art (Pokémon, cast, item, scene) instead of the plain "!" glyph.
+- 2026-11-08 boss-forms: custom form on every boss team, Legendary on Champion regions 6+ (docs/status/boss-forms.md)

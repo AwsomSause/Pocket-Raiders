@@ -8,7 +8,7 @@
   ],
   "mons": {
    "mega": "heracross",
-   "tera": "vespiquen",
+   "tera": "combee-delta",
    "zmove": "drapion",
    "dynamax": "yanmega"
   }
@@ -21,7 +21,7 @@
    "zmove"
   ],
   "mons": {
-   "dynamax": "drifblim",
+   "dynamax": "drifloon-delta",
    "mega": "froslass",
    "tera": "palossand",
    "zmove": "mimikyu"
@@ -37,7 +37,7 @@
   "mons": {
    "mega": "lopunny",
    "zmove": "vaporeon",
-   "tera": "leafeon",
+   "tera": "snorlax-delta-winter",
    "dynamax": "ursaluna"
   }
  },
@@ -79,7 +79,7 @@
   "mons": {
    "zmove": "volcarona",
    "tera": "bouffalant",
-   "dynamax": "krookodile",
+   "dynamax": "dreadodile",
    "mega": "dragonite"
   }
  },
@@ -105,7 +105,7 @@
    "mega"
   ],
   "mons": {
-   "zmove": "gengar",
+   "zmove": "haunter-z",
    "tera": "mimikyu",
    "dynamax": "cursola",
    "mega": "chandelure"
@@ -135,7 +135,7 @@
   "mons": {
    "dynamax": "snorlax",
    "tera": "alakazam",
-   "zmove": "espeon",
+   "zmove": "pyro-spirit",
    "mega": "metagross"
   }
  },
@@ -205,7 +205,7 @@
   "mons": {
    "tera": "lilligant",
    "mega": "salamence",
-   "zmove": "arcanine",
+   "zmove": "growlithe-delta",
    "dynamax": "braviary"
   }
  },
@@ -262,7 +262,7 @@
    "mega": "greninja",
    "dynamax": "charizard",
    "zmove": "pikachu",
-   "tera": "lucario"
+   "tera": "riolu-delta"
   }
  },
  "atticus": {
@@ -386,7 +386,7 @@
   ],
   "mons": {
    "tera": "hatterene",
-   "zmove": "mawile",
+   "zmove": "mawile-delta",
    "mega": "gardevoir",
    "dynamax": "sylveon"
   }
@@ -401,7 +401,7 @@
   "mons": {
    "mega": "metagross",
    "tera": "alakazam",
-   "zmove": "espeon",
+   "zmove": "pyro-spirit",
    "dynamax": "gardevoir"
   }
  },
@@ -485,7 +485,7 @@
   "mons": {
    "tera": "arcanine",
    "mega": "magmortar",
-   "zmove": "rapidash",
+   "zmove": "ponyta-spooky",
    "dynamax": "typhlosion"
   }
  },
@@ -500,7 +500,7 @@
    "mega": "pidgeot",
    "zmove": "alakazam",
    "dynamax": "rhyperior",
-   "tera": "arcanine"
+   "tera": "growlithe-delta"
   }
  },
  "bonnie": {
@@ -668,7 +668,7 @@
    "zmove": "leavanny",
    "tera": "scolipede",
    "mega": "whimsicott",
-   "dynamax": "volcarona"
+   "dynamax": "larvesta-delta"
   }
  },
  "byron": {
@@ -681,7 +681,7 @@
   "mons": {
    "zmove": "bastiodon",
    "tera": "magneton",
-   "dynamax": "empoleon",
+   "dynamax": "prinplup-z",
    "mega": "steelix"
   }
  },
@@ -722,7 +722,7 @@
   ],
   "mons": {
    "mega": "electivire",
-   "tera": "electrode",
+   "tera": "voltorb-z",
    "dynamax": "dedenne",
    "zmove": "jolteon"
   }
@@ -735,7 +735,7 @@
    "dynamax"
   ],
   "mons": {
-   "tera": "froslass",
+   "tera": "snorunt-spooky",
    "mega": "abomasnow",
    "zmove": "mamoswine",
    "dynamax": "weavile"
@@ -779,8 +779,8 @@
   "mons": {
    "dynamax": "garbodor",
    "mega": "audino",
-   "tera": "huntail",
-   "zmove": "clamperl"
+   "tera": "clamperl-delta",
+   "zmove": "clamperl-delta"
   }
  },
  "celosia": {
@@ -861,7 +861,7 @@
    "zmove"
   ],
   "mons": {
-   "dynamax": "snorlax",
+   "dynamax": "munchlax-delta",
    "tera": "spinda",
    "mega": "gallade",
    "zmove": "donphan"
@@ -918,7 +918,7 @@
   ],
   "mons": {
    "tera": "excadrill",
-   "zmove": "krookodile",
+   "zmove": "dreadodile",
    "mega": "golurk",
    "dynamax": "seismitoad"
   }
@@ -962,7 +962,7 @@
    "zmove": "klinklang",
    "tera": "magnezone",
    "mega": "metagross",
-   "dynamax": "beheeyem"
+   "dynamax": "elgyem-delta"
   }
  },
  "concordia": {
@@ -990,7 +990,7 @@
    "tera": "houndoom",
    "mega": "excadrill",
    "zmove": "shiftry",
-   "dynamax": "krookodile"
+   "dynamax": "dreadodile"
   }
  },
  "crasher-wake": {
@@ -1197,7 +1197,7 @@
    "tera"
   ],
   "mons": {
-   "zmove": "haxorus",
+   "zmove": "fraxure-delta",
    "dynamax": "garchomp",
    "mega": "flygon",
    "tera": "druddigon"
@@ -1213,7 +1213,7 @@
   "mons": {
    "tera": "archaludon",
    "mega": "flygon",
-   "zmove": "sceptile",
+   "zmove": "grovyle-delta",
    "dynamax": "haxorus"
   }
  },
@@ -1298,7 +1298,7 @@
    "zmove": "annihilape",
    "mega": "lucario",
    "tera": "passimian",
-   "dynamax": "conkeldurr"
+   "dynamax": "gurdurr-spooky"
   }
  },
  "erika": {
@@ -1311,7 +1311,7 @@
   "mons": {
    "tera": "vileplume",
    "mega": "victreebel",
-   "dynamax": "tangrowth",
+   "dynamax": "tangela-spooky",
    "zmove": "bellossom"
   }
  },
@@ -1366,7 +1366,7 @@
   ],
   "mons": {
    "mega": "pidgeot",
-   "tera": "noctowl",
+   "tera": "noctowl-z",
    "zmove": "xatu",
    "dynamax": "honchkrow"
   }
@@ -1438,7 +1438,7 @@
    "tera": "roserade",
    "mega": "abomasnow",
    "zmove": "cherrim",
-   "dynamax": "tangrowth"
+   "dynamax": "tangela-spooky"
   }
  },
  "geeta": {
@@ -1536,7 +1536,7 @@
    "mega": "lucario",
    "zmove": "silvally",
    "tera": "weavile",
-   "dynamax": "umbreon"
+   "dynamax": "neon-moon"
   }
  },
  "gloria": {
@@ -1564,7 +1564,7 @@
    "zmove": "blastoise",
    "dynamax": "machamp",
    "mega": "venusaur",
-   "tera": "skarmory"
+   "tera": "skarmory-z"
   }
  },
  "gordie": {
@@ -1604,7 +1604,7 @@
   ],
   "mons": {
    "dynamax": "lapras",
-   "zmove": "rapidash",
+   "zmove": "ponyta-spooky",
    "tera": "gogoat",
    "mega": "baxcalibur"
   }
@@ -1729,7 +1729,7 @@
    "dynamax"
   ],
   "mons": {
-   "zmove": "sylveon",
+   "zmove": "neon-moon",
    "mega": "clefable",
    "tera": "togekiss",
    "dynamax": "florges"
@@ -1746,7 +1746,7 @@
    "tera": "baxcalibur",
    "dynamax": "flapple",
    "mega": "dragalge",
-   "zmove": "noivern"
+   "zmove": "noibat-delta"
   }
  },
  "hau": {
@@ -1813,7 +1813,7 @@
    "zmove"
   ],
   "mons": {
-   "dynamax": "snorlax",
+   "dynamax": "munchlax-delta",
    "tera": "inteleon",
    "mega": "feraligatr",
    "zmove": "rillaboom"
@@ -1870,7 +1870,7 @@
   ],
   "mons": {
    "zmove": "bellibolt",
-   "tera": "kilowattrel",
+   "tera": "megawattrel",
    "mega": "electivire",
    "dynamax": "luxray"
   }
@@ -1886,7 +1886,7 @@
    "mega": "froslass",
    "zmove": "flareon",
    "dynamax": "sneasler",
-   "tera": "glaceon"
+   "tera": "volcarona-delta"
   }
  },
  "iris": {
@@ -1897,7 +1897,7 @@
    "tera"
   ],
   "mons": {
-   "zmove": "haxorus",
+   "zmove": "fraxure-delta",
    "dynamax": "lapras",
    "mega": "dragonite",
    "tera": "hydreigon"
@@ -2082,7 +2082,7 @@
    "zmove": "hydrapple",
    "mega": "dragonite",
    "tera": "ogerpon",
-   "dynamax": "kingambit"
+   "dynamax": "pawniard-delta"
   }
  },
  "kingambit": {
@@ -2206,7 +2206,7 @@
   ],
   "mons": {
    "mega": "whimsicott",
-   "tera": "granbull",
+   "tera": "granbull-z",
    "zmove": "primarina",
    "dynamax": "excadrill"
   }
@@ -2235,7 +2235,7 @@
   "mons": {
    "tera": "dragonite",
    "mega": "gyarados",
-   "dynamax": "charizard",
+   "dynamax": "charmeleon-delta",
    "zmove": "salamence"
   }
  },
@@ -2289,7 +2289,7 @@
    "tera"
   ],
   "mons": {
-   "dynamax": "charizard",
+   "dynamax": "charmeleon-delta",
    "mega": "baxcalibur",
    "zmove": "aegislash",
    "tera": "dragapult"
@@ -2375,7 +2375,7 @@
   "mons": {
    "mega": "raichu",
    "tera": "electrode",
-   "dynamax": "electivire",
+   "dynamax": "electivire-z",
    "zmove": "magnezone"
   }
  },
@@ -2404,7 +2404,7 @@
    "tera": "bronzong",
    "mega": "alakazam",
    "dynamax": "girafarig",
-   "zmove": "espeon"
+   "zmove": "pyro-spirit"
   }
  },
  "lucy": {
@@ -2417,7 +2417,7 @@
   "mons": {
    "mega": "gyarados",
    "zmove": "milotic",
-   "dynamax": "serperior",
+   "dynamax": "servine-delta",
    "tera": "magikarp"
   }
  },
@@ -2558,7 +2558,7 @@
    "mega": "swampert",
    "zmove": "jellicent",
    "tera": "carracosta",
-   "dynamax": "wailord"
+   "dynamax": "wailmer-delta"
   }
  },
  "marnie": {
@@ -2585,7 +2585,7 @@
   "mons": {
    "zmove": "electivire",
    "mega": "kangaskhan",
-   "dynamax": "yanmega",
+   "dynamax": "yanma-delta",
    "tera": "purugly"
   }
  },
@@ -2611,7 +2611,7 @@
    "zmove"
   ],
   "mons": {
-   "tera": "sharpedo",
+   "tera": "sharpedo-z",
    "mega": "milotic",
    "dynamax": "wailord",
    "zmove": "kingdra"
@@ -2712,7 +2712,7 @@
    "dynamax": "wigglytuff",
    "tera": "ribombee",
    "mega": "gardevoir",
-   "zmove": "granbull"
+   "zmove": "granbull-z"
   }
  },
  "mira": {
@@ -2754,7 +2754,7 @@
    "mega": "starmie",
    "tera": "gyarados",
    "zmove": "lapras",
-   "dynamax": "vaporeon"
+   "dynamax": "neon-moon"
   }
  },
  "molayne": {
@@ -2768,7 +2768,7 @@
    "zmove": "magnezone",
    "tera": "metagross",
    "mega": "dugtrio",
-   "dynamax": "skarmory"
+   "dynamax": "skarmory-z"
   }
  },
  "morty": {
@@ -2810,7 +2810,7 @@
    "zmove": "slowking",
    "mega": "gengar",
    "dynamax": "hypno",
-   "tera": "alakazam"
+   "tera": "kadabra-z"
   }
  },
  "mr-stone": {
@@ -2878,7 +2878,7 @@
   ],
   "mons": {
    "mega": "absol",
-   "tera": "krookodile",
+   "tera": "dreadodile",
    "dynamax": "honchkrow",
    "zmove": "persian"
   }
@@ -2905,7 +2905,7 @@
    "zmove"
   ],
   "mons": {
-   "dynamax": "dudunsparce",
+   "dynamax": "dunsparce-delta",
    "mega": "garchomp",
    "tera": "lycanroc",
    "zmove": "pawmot"
@@ -3157,7 +3157,7 @@
    "dynamax"
   ],
   "mons": {
-   "zmove": "alakazam",
+   "zmove": "kadabra-z",
    "tera": "espeon",
    "mega": "metagross",
    "dynamax": "reuniclus"
@@ -3200,7 +3200,7 @@
   ],
   "mons": {
    "mega": "golem",
-   "zmove": "rhyperior",
+   "zmove": "rhyperior-z",
    "tera": "tyranitar",
    "dynamax": "terrakion"
   }
@@ -3213,7 +3213,7 @@
    "dynamax"
   ],
   "mons": {
-   "zmove": "empoleon",
+   "zmove": "prinplup-z",
    "mega": "scizor",
    "tera": "bastiodon",
    "dynamax": "magnezone"
@@ -3230,7 +3230,7 @@
    "mega": "gardevoir",
    "zmove": "togekiss",
    "tera": "clefable",
-   "dynamax": "sylveon"
+   "dynamax": "pyro-spirit"
   }
  },
  "orig-rhodri": {
@@ -3255,7 +3255,7 @@
    "zmove"
   ],
   "mons": {
-   "dynamax": "snorlax",
+   "dynamax": "munchlax-delta",
    "mega": "gardevoir",
    "tera": "togekiss",
    "zmove": "milotic"
@@ -3286,7 +3286,7 @@
    "mega": "lucario",
    "dynamax": "machamp",
    "zmove": "hitmontop",
-   "tera": "conkeldurr"
+   "tera": "gurdurr-spooky"
   }
  },
  "orig-tolliver": {
@@ -3369,7 +3369,7 @@
   "mons": {
    "zmove": "umbreon",
    "mega": "tyranitar",
-   "tera": "sylveon",
+   "tera": "dreadodile",
    "dynamax": "vaporeon"
   }
  },
@@ -3423,7 +3423,7 @@
    "mega"
   ],
   "mons": {
-   "tera": "raticate",
+   "tera": "bruticate",
    "zmove": "gliscor",
    "dynamax": "golbat",
    "mega": "gengar"
@@ -3592,7 +3592,7 @@
   ],
   "mons": {
    "zmove": "clodsire",
-   "tera": "dugtrio",
+   "tera": "dugtrio-z",
    "mega": "camerupt",
    "dynamax": "whiscash"
   }
@@ -3607,7 +3607,7 @@
   "mons": {
    "mega": "lucario",
    "zmove": "magnezone",
-   "tera": "steelix",
+   "tera": "onix-z",
    "dynamax": "weavile"
   }
  },
@@ -3649,7 +3649,7 @@
   "mons": {
    "mega": "dragonite",
    "zmove": "serperior",
-   "tera": "emolga",
+   "tera": "emolga-spooky",
    "dynamax": "reuniclus"
   }
  },
@@ -3748,7 +3748,7 @@
    "tera": "kommo-o",
    "zmove": "garchomp",
    "mega": "salamence",
-   "dynamax": "noivern"
+   "dynamax": "noibat-delta"
   }
  },
  "sabrina": {
@@ -3760,7 +3760,7 @@
   ],
   "mons": {
    "tera": "alakazam",
-   "zmove": "espeon",
+   "zmove": "pyro-spirit",
    "mega": "slowbro",
    "dynamax": "metagross"
   }
@@ -3801,7 +3801,7 @@
    "mega"
   ],
   "mons": {
-   "tera": "alakazam",
+   "tera": "kadabra-z",
    "dynamax": "rhyperior",
    "zmove": "bronzong",
    "mega": "magmortar"
@@ -3844,7 +3844,7 @@
   ],
   "mons": {
    "mega": "delphox",
-   "tera": "sylveon",
+   "tera": "neon-moon",
    "zmove": "pancham",
    "dynamax": "pangoro"
   }
@@ -3900,7 +3900,7 @@
   ],
   "mons": {
    "zmove": "absol",
-   "tera": "mightyena",
+   "tera": "alphayena",
    "mega": "shiftry",
    "dynamax": "cacturne"
   }
@@ -3929,7 +3929,7 @@
   "mons": {
    "mega": "feraligatr",
    "tera": "weavile",
-   "dynamax": "gengar",
+   "dynamax": "haunter-z",
    "zmove": "crobat"
   }
  },
@@ -3999,7 +3999,7 @@
   "mons": {
    "mega": "metagross",
    "tera": "skarmory",
-   "zmove": "aggron",
+   "zmove": "cataggron",
    "dynamax": "cradily"
   }
  },
@@ -4042,7 +4042,7 @@
    "tera": "solrock",
    "mega": "gardevoir",
    "zmove": "lunatone",
-   "dynamax": "metagross"
+   "dynamax": "metang-delta-spider"
   }
  },
  "taylor": {
@@ -4056,7 +4056,7 @@
    "dynamax": "blastoise",
    "zmove": "pachirisu",
    "mega": "charizard",
-   "tera": "electivire"
+   "tera": "electivire-z"
   }
  },
  "team-rocket": {
@@ -4070,7 +4070,7 @@
    "zmove": "arbok",
    "dynamax": "meowth",
    "mega": "victreebel",
-   "tera": "weezing"
+   "tera": "koffing-delta"
   }
  },
  "terrel": {
@@ -4097,7 +4097,7 @@
   "mons": {
    "tera": "hawlucha",
    "dynamax": "machamp",
-   "zmove": "conkeldurr",
+   "zmove": "gurdurr-spooky",
    "mega": "gallade"
   }
  },
@@ -4168,7 +4168,7 @@
    "dynamax": "charizard",
    "mega": "aerodactyl",
    "zmove": "florges",
-   "tera": "raichu"
+   "tera": "pikachu-delta"
   }
  },
  "tulip": {
@@ -4194,7 +4194,7 @@
   ],
   "mons": {
    "zmove": "iron-hands",
-   "tera": "gallade",
+   "tera": "kirlia-delta",
    "dynamax": "miraidon",
    "mega": "electivire"
   }
@@ -4207,7 +4207,7 @@
    "dynamax"
   ],
   "mons": {
-   "tera": "sylveon",
+   "tera": "pyro-spirit",
    "zmove": "mawile",
    "mega": "clefable",
    "dynamax": "aromatisse"
@@ -4252,7 +4252,7 @@
    "zmove": "swellow",
    "tera": "taillow",
    "mega": "salamence",
-   "dynamax": "linoone"
+   "dynamax": "linoone-z"
   }
  },
  "victoria": {
@@ -4266,7 +4266,7 @@
    "tera": "roserade",
    "mega": "sceptile",
    "dynamax": "roselia",
-   "zmove": "tangrowth"
+   "zmove": "tangela-spooky"
   }
  },
  "viola": {
@@ -4364,7 +4364,7 @@
    "mega": "milotic",
    "dynamax": "wailord",
    "zmove": "gyarados",
-   "tera": "ludicolo"
+   "tera": "lombre-delta"
   }
  },
  "wally": {
@@ -4404,7 +4404,7 @@
   ],
   "mons": {
    "mega": "tyranitar",
-   "dynamax": "umbreon",
+   "dynamax": "pyro-spirit",
    "tera": "hydreigon",
    "zmove": "kingambit"
   }
