@@ -7,7 +7,7 @@
 // balance.json `threat`. Pure and deterministic: no RNG.
 
 import type { Content } from './contentSchema';
-import { abilityOf, calcStats, createPokemon, getSpecies } from './pokemon';
+import { abilityOf, calcStats, createPokemon, hpLevelMultiplier, getSpecies } from './pokemon';
 import { speciesIvs } from './ivs';
 import type { PokemonInstance } from './state';
 
@@ -25,7 +25,7 @@ export interface ThreatBreakdown {
 }
 
 const refStat = (level: number) => Math.floor((2 * 70 * level) / 100) + 5;
-const refHp = (content: Content, level: number) => Math.floor((2 * 70 * level) / 100) + level + 10 + Math.floor(level * content.balance.hpPerLevel);
+const refHp = (content: Content, level: number) => Math.floor((Math.floor((2 * 70 * level) / 100) + level + 10 + Math.floor(level * content.balance.hpPerLevel)) * hpLevelMultiplier(content, level));
 
 /** The rating of a built Pokémon (its moves, level and ability as they are). */
 export function threatOf(content: Content, mon: PokemonInstance): ThreatBreakdown {

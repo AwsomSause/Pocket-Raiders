@@ -31,6 +31,11 @@ export function lookSpecies(content: Content, mon: Pick<PokemonInstance, 'specie
  *   HP    = core + Level + 10 + floor(Level × hpPerLevel)
  *   Other = floor((core + 5) × nature)
  */
+/** Extra HP multiplier that ramps in with level (balance.hpLevelBonus at level 100 and up) so late-game hits don't one-shot neutral targets. */
+export function hpLevelMultiplier(content: Content, level: number): number {
+  return 1 + (content.balance.hpLevelBonus ?? 0) * Math.min(1, Math.max(0, level) / 100);
+}
+
 export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
   const species = getSpecies(content, mon.speciesId);
   const perStack = content.balance.vitaminMultiplierPerStack;
@@ -42,7 +47,7 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
     const core = Math.floor(((2 * species.baseStats[stat] + ivs[stat] + Math.floor(evs[stat] / 4)) * mon.level) / 100);
     const raw =
       stat === 'hp'
-        ? core + mon.level + 10 + Math.floor(mon.level * content.balance.hpPerLevel)
+        ? Math.floor((core + mon.level + 10 + Math.floor(mon.level * content.balance.hpPerLevel)) * hpLevelMultiplier(content, mon.level))
         : Math.floor(((core + 5) * Math.round(natureMultiplier(effectiveNature(mon), stat) * 100)) / 100);
     const stacks = mon.vitamins[stat] ?? 0;
     const boost = ((mon.statBoosts?.[stat] ?? 0) + (stat === 'hp' ? mon.perkHp ?? 0 : 0)) / 100;
