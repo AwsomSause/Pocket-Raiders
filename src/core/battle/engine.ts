@@ -1012,7 +1012,7 @@ function finaleAssistStrike(ctx: BattleContext, player: Combatant, enemy: Combat
   if (!assist || assist.strikesLeft <= 0 || battle.outcome || player.mon.hp <= 0 || enemy.mon.hp <= 1) return;
   const hit = finaleStrikeDamage(content, assist, enemy.mon);
   assist.strikesLeft -= 1;
-  events.push({ type: 'raid', tone: 'info', text: `${assist.name}'s ${getSpecies(content, assist.speciesId).name} strikes the boss!` });
+  events.push({ type: 'raid', tone: 'info', text: `${assist.name}'s ${getSpecies(content, assist.speciesId).name} strikes ${battle.trainer?.leaderId ? 'the boss' : battle.kind === 'wild' ? 'the wild Pokémon' : 'your opponent'}!` });
   const amount = Math.min(enemy.mon.hp - 1, absorbHit(content, battle, enemy.mon, hit.amount));
   if (amount > 0) {
     enemy.mon.hp -= amount;

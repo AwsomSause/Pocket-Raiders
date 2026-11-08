@@ -30,6 +30,7 @@ import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
 import { buildPriceFactor, sabotageStep, wildEffect } from './battle/battleFlair';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
 import { applyInterference } from './rivals/interference';
+import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordRivalCatch, stepInFlag, stepInLine, STEPIN_FORCE, STEP_IN, withCaughtMembers, type StepInKind } from './rivals/stepIn';
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
@@ -169,7 +170,7 @@ import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
-import { currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
+import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { castGymLeader, castLeague, record } from './rolePool';
@@ -257,7 +258,7 @@ import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './cam
 import { applyCircuitChoice, forkDecision, isCircuitRun, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
-import type { Nemesis } from './story/schema';
+import type { Nemesis, Rival } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
 import { PSEUDO } from './dungeon/pseudo';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
@@ -1651,9 +1652,9 @@ function storyLossEnd(content: Content, run: RunState): void {
 }
 
 /** The shared tail of a lost fight the run survives: party healed, node done, no prize or win counters. */
-function softLossEnd(content: Content, run: RunState): void {
+function softLossEnd(content: Content, run: RunState, narrative = true): void {
   healParty(content, run);
-  count(run, 'narrativeDefeats');
+  if (narrative) count(run, 'narrativeDefeats');
   run.hype = 0;
   run.battle = null;
   delete run.recorder;
@@ -1960,8 +1961,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       run.story.flags[returnFlag(back.id)] = 'returned';
     }
     // A rival that sparked earlier takes the first ordinary trainer slot once per region.
-    const gauntlet = rule && !back ? gauntletRival(content, run) : null;
-    const rivalBack = rule && !back ? (gauntlet ?? waitingRival(run, content)) : null;
+    const forcedRival = rule && !back ? forcedStepInRival(run) : null;
+    const gauntlet = rule && !back && !forcedRival ? gauntletRival(content, run) : null;
+    const rivalBack = rule && !back ? (forcedRival ?? gauntlet ?? waitingRival(run, content)) : null;
     if (gauntlet) markGauntletFight(run, gauntlet);
     let rivalNote: string | null = null;
     let narrativeDef: ReturnType<typeof dueNarrativeDefeat> = null;
@@ -1986,6 +1988,11 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         const mr = monRivalMember(content, carried, top);
         const keep = ret.plan.members.length >= 6 ? ret.plan.members.filter((_, i) => i !== ret.plan.members.findIndex((m) => familyId(content, m.speciesId) !== rivalBack.ace)) : ret.plan.members;
         const members = [...keep, { speciesId: mr.speciesId, level: mr.level, moves: mr.moves }];
+        ret.plan = { ...ret.plan, members, levelInfo: members.map((_, i) => ret.plan.levelInfo[Math.min(i, ret.plan.levelInfo.length - 1)]!) };
+      }
+      // Rival step-in: everything this rival caught before you stays on its team (the ace still goes last).
+      if ((rivalBack.caught ?? []).length > 0) {
+        const members = withCaughtMembers(content, rivalBack, ret.plan.members, Math.max(...ret.plan.members.map((m) => m.level)));
         ret.plan = { ...ret.plan, members, levelInfo: members.map((_, i) => ret.plan.levelInfo[Math.min(i, ret.plan.levelInfo.length - 1)]!) };
       }
       const said = majorNote(content, rivalBack, ret.plan.members.find((m) => familyId(content, m.speciesId) === rivalBack.ace)?.speciesId ?? null);
@@ -2179,6 +2186,124 @@ export function rivalInterfere(current: RunState, sideId: string): { run: RunSta
   if (current.phase !== 'map' || waitingTrainer(current)) return null;
   const hit = applyInterference(current, sideId);
   return hit ? { run: hit.run, text: hit.text } : null;
+}
+
+export interface StepInResult {
+  run: RunState;
+  kind: StepInKind;
+  rival: { id: string; name: string; classId: string };
+  /** What is said first (the step-in itself). */
+  lines: string[];
+  /** The Pokémon involved (the wild one, for a catch) and the rival's own. */
+  speciesId: string;
+  aceId: string | null;
+  legend?: 'legendary' | 'mythical';
+  /** Assist only: what the rival says once the battle is won. */
+  afterLine?: string;
+  /** `continue`: the same battle goes on; `battle`: the rival's duel battle starts; `map`: the encounter is over. */
+  next: 'continue' | 'battle' | 'map';
+}
+
+export interface StepInEnd { lines: string[]; rival: { id: string; name: string; classId: string }; won: boolean; next: 'battle' | 'map'; legend?: 'legendary' | 'mythical'; speciesId: string | null }
+
+const rivalRef = (r: Rival) => ({ id: r.id, name: r.name, classId: r.classId });
+
+/**
+ * Rival step-in (core/rivals/stepIn.ts): called when a fresh battle is about to begin. One of your active rivals may help
+ * you (A), battle you first (B) or throw a ball at the wild Pokémon before you (C). Null when nobody steps in (the run is untouched).
+ */
+export function rivalStepIn(content: Content, current: RunState): StepInResult | null {
+  const plan = planStepIn(content, current);
+  if (!plan) return null;
+  const run = structuredClone(current);
+  const rival = run.story.rivals.find((r) => r.id === plan.rivalId)!;
+  const battle = run.battle!;
+  const foe = battle.enemyTeam[battle.enemyIndex]!;
+  const ace = rivalAce(content, run, rival);
+  const vars = { mon: speciesName(content, foe.speciesId), ace: ace ? speciesName(content, ace.speciesId) : 'their partner' };
+  const base = { rival: rivalRef(rival), speciesId: foe.speciesId, aceId: ace?.speciesId ?? null };
+  const bump = (group: 'ab' | 'c') => { run.story.flags[stepInFlag(run, group)] = Number(run.story.flags[stepInFlag(run, group)] ?? 0) + 1; };
+  const at = `${run.regionIndex}.${run.stage?.index ?? 0}`;
+  if (plan.kind === 'assist') {
+    if (!ace) return null;
+    bump('ab');
+    battle.stepIn = { kind: 'assist', rivalId: rival.id };
+    battle.finaleAssist = { id: rival.id, name: rival.name, speciesId: ace.speciesId, level: ace.level, strikesLeft: STEP_IN.assistStrikes };
+    return { run, kind: 'assist', ...base, lines: [stepInLine(run, rival, battle.kind === 'trainer' ? 'assist.trainer' : 'assist.wild', vars)], afterLine: stepInLine(run, rival, 'assist.after', vars), next: 'continue' };
+  }
+  if (plan.kind === 'catch') {
+    bump('c');
+    recordRivalCatch(rival, foe.speciesId, foe.level, at, plan.legend);
+    const lines = [stepInLine(run, rival, plan.legend === 'mythical' ? 'catch.mythical' : plan.legend ? 'catch.legendary' : 'catch.normal', vars)];
+    if (plan.legend) {
+      rival.rivalPotential += 25;
+      rival.traits.ambition = Math.min(100, rival.traits.ambition + 10);
+      if (STEP_IN.legendRareCandies > 0) addItem(run.inventory, 'rare-candy', STEP_IN.legendRareCandies);
+      lines.push(stepInLine(run, rival, 'catch.legendAfter', vars));
+      run.story.flags[`stepin:legend:${rival.id}`] = foe.speciesId;
+      emit(content, run, 'storyMoment', { data: { rivalCaught: foe.speciesId, rival: rival.id, legend: plan.legend }, importance: 90, text: `${rival.name} caught the ${plan.legend} ${vars.mon} before you could. It stays with ${rival.name} for good.` });
+    } else {
+      emit(content, run, 'storyMoment', { data: { rivalCaught: foe.speciesId, rival: rival.id }, importance: 55, text: `${rival.name} caught a ${vars.mon} before you could.` });
+    }
+    run.battle = null;
+    run.phase = 'map';
+    softLossEnd(content, run, false);
+    return { run, kind: 'catch', ...base, lines, ...(plan.legend ? { legend: plan.legend } : {}), next: 'map' };
+  }
+  // Duel: the real battle waits behind the rival's.
+  if (waitingTrainer(run) || !run.stage || run.stage.current === null) return null;
+  const queued = structuredClone(battle);
+  const node = findNode(run.stage.map, run.stage.current);
+  run.story.flags[STEPIN_FORCE] = rival.id;
+  try {
+    startEncounter(content, run, { ...node, kind: 'trainer' });
+  } finally {
+    delete run.story.flags[STEPIN_FORCE];
+  }
+  if (run.battle?.rivalId !== rival.id) return null;
+  bump('ab');
+  run.battle.stepIn = { kind: 'duel', rivalId: rival.id, queued };
+  run.battle.narrative = undefined;
+  run.battle.rivalNote = undefined;
+  recordBattleStart(content, run);
+  return { run, kind: 'duel', ...base, lines: [stepInLine(run, rival, 'duel.intro', vars)], next: 'battle' };
+}
+
+/** The rival's duel is decided. Win: your team is healed and the real battle begins. Lose: the rival takes the fight and the run goes on. */
+export function finishStepInDuel(content: Content, run: RunState, outcome: 'win' | 'lose'): StepInEnd {
+  const duel = run.battle!;
+  const info = duel.stepIn!;
+  const rival = run.story.rivals.find((r) => r.id === info.rivalId)!;
+  const queued = BattleStateSchema.parse(info.queued);
+  const foe = queued.enemyTeam[queued.enemyIndex]!;
+  const ace = rivalAce(content, run, rival);
+  const vars = { mon: speciesName(content, foe.speciesId), ace: ace ? speciesName(content, ace.speciesId) : 'their partner' };
+  const who = rivalRef(rival);
+  if (outcome === 'win') {
+    healParty(content, run);
+    queued.stepIn = { kind: 'done', rivalId: rival.id };
+    queued.activeIndex = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+    queued.participants = run.party[queued.activeIndex] ? [run.party[queued.activeIndex]!.uid] : [];
+    run.battle = queued;
+    run.phase = 'battle';
+    return { lines: [stepInLine(run, rival, 'duel.won', vars)], rival: who, won: true, next: 'battle', speciesId: foe.speciesId };
+  }
+  const wild = catchable(queued);
+  const legend = wild ? legendKind(content, foe.speciesId) : undefined;
+  const lines: string[] = [];
+  if (wild) {
+    recordRivalCatch(rival, foe.speciesId, foe.level, `${run.regionIndex}.${run.stage?.index ?? 0}`, legend);
+    lines.push(stepInLine(run, rival, 'duel.lostWild', vars));
+    if (legend) {
+      rival.rivalPotential += 25;
+      lines.push(stepInLine(run, rival, legend === 'mythical' ? 'catch.mythical' : 'catch.legendary', vars, 'duel'));
+      run.story.flags[`stepin:legend:${rival.id}`] = foe.speciesId;
+      emit(content, run, 'storyMoment', { data: { rivalCaught: foe.speciesId, rival: rival.id, legend }, importance: 90, text: `${rival.name} beat you and caught the ${legend} ${vars.mon}. It stays with ${rival.name} for good.` });
+    }
+  } else lines.push(stepInLine(run, rival, 'duel.lostTrainer', vars));
+  run.battle = null;
+  softLossEnd(content, run, false);
+  return { lines, rival: who, won: false, next: 'map', ...(legend ? { legend } : {}), speciesId: wild ? foe.speciesId : null };
 }
 
 /** Uses a healing stop or enters a shop beside the current node. */
@@ -2482,6 +2607,8 @@ export interface TurnResult {
   wiped?: boolean;
   /** A narrative rival defeat (M12): the battle was lost for the story, the party is healed and the run goes on. Never a game over. */
   narrativeDefeat?: { id: string; defeatLine: string; victoryLine: string };
+  /** A rival's warm-up duel ended: what was said, and whether the real battle follows (`next: 'battle'`) or the rival took it (`next: 'map'`). */
+  stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
   drama: DramaLine[];
 }
@@ -2738,6 +2865,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     run.phase = 'map';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
+  }
+  if (battle.stepIn?.kind === 'duel' && (battle.outcome === 'win' || battle.outcome === 'lose')) {
+    const stepIn = finishStepInDuel(content, run, battle.outcome);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, stepIn };
   }
   if (battle.outcome === 'win' || battle.outcome === 'caught') {
     const end = finishBattle(content, run);

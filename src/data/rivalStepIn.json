@@ -1,0 +1,72 @@
+{
+  "note": "Rival step-ins: a battle is about to start and one of your rivals joins in. A = helps you, B = battles you first, C = throws a ball at a wild Pokémon before you. Odds are per eligible battle; each is seeded per stop so reloads agree. Dialogue tones: fierce (nemesis, contender, grudge), cocky (everyone else), warm (ally, kind). Tokens: {rival}, {mon} (the Pokémon involved), {ace} (the rival's own Pokémon).",
+  "minEncounters": 3,
+  "assistChance": 0.09,
+  "duelChance": 0.06,
+  "catchChance": 0.2,
+  "legendCatchChance": 0.2,
+  "perStageDuelAssist": 1,
+  "perStageCatch": 2,
+  "assistStrikes": 2,
+  "legendLevelBonus": 3,
+  "caughtLevelBehind": 2,
+  "legendRareCandies": 2,
+  "teamSize": 6,
+  "lines": {
+    "assist.wild": {
+      "fierce": ["{rival} crashes in beside you. \"Don't think this means we're even. I just hate seeing a {mon} get away.\"", "{rival} sends {ace} in at your side. \"Take the shot, then I'm taking you down myself.\""],
+      "cocky": ["{rival} jumps in: \"Need a hand? Kidding, you obviously do!\" {ace} lines up beside you.", "{rival} grins. \"Let me show you how it's done!\" {ace} joins the fight."],
+      "warm": ["{rival} waves and runs over. \"There you are! Let's take this {mon} together!\"", "{rival} smiles. \"I saw it from the hill. {ace} and I have your back!\""]
+    },
+    "assist.trainer": {
+      "fierce": ["{rival} steps out of the shadows. \"That trainer's mine to beat later. Today I'm fighting at your side.\"", "{rival} glares at your opponent. \"Nobody beats you but me. {ace}, go!\""],
+      "cocky": ["{rival} cuts in with a smirk. \"Two against one? Seems fair to me, or at least fun!\"", "{rival} struts over. \"Don't worry, I'll make you look good out there.\""],
+      "warm": ["{rival} runs up, out of breath. \"Sorry I'm late! Let's win this one together!\"", "{rival} bumps your shoulder. \"We're a team today. Ready?\""]
+    },
+    "assist.after": {
+      "fierce": ["{rival} turns away. \"Next time we meet, there's no help. Remember that.\""],
+      "cocky": ["{rival} shrugs. \"You're welcome. You owe me one, rival!\""],
+      "warm": ["{rival} beams. \"We make a great team! See you down the road!\""]
+    },
+    "duel.intro": {
+      "fierce": ["{rival} blocks your path. \"You're not facing that until you get through me first!\"", "{rival} steps in front of you. \"I want you worn down. Show me what you've got!\""],
+      "cocky": ["{rival} slides in. \"Hold on! Warm-up round first. Let's see if you're still any good!\"", "{rival} grins. \"Whoa, that's mine to deal with... right after I beat you!\""],
+      "warm": ["{rival} jogs up. \"Before you go on, how about a quick friendly battle? Come on!\"", "{rival} laughs. \"I can't let you pass without a battle! Ready?\""]
+    },
+    "duel.won": {
+      "fierce": ["{rival} grits their teeth. \"Fine. Take it. Go on, your team is patched up.\" Your Pokémon feel fully restored!", "\"Hmph. Don't get used to winning.\" {rival} tosses you a spray as a parting shot. Your team is healed!"],
+      "cocky": ["{rival} laughs it off. \"Okay, okay, you win! Here, patch your team up.\" Your Pokémon are fully healed!", "\"Not bad at all!\" {rival} sprays your team with a Potion. Everyone is healed!"],
+      "warm": ["{rival} hugs {ace}. \"That was amazing! Let me heal your team, you'll need it.\" Your Pokémon are fully healed!", "\"Great battle!\" {rival} tends to your team. Everyone feels refreshed!"]
+    },
+    "duel.lostWild": {
+      "fierce": ["{rival} smirks. \"Too slow. That {mon} is mine now.\" A ball clicks shut: {mon} joins {rival}'s team for good!", "\"You lost, so I take the prize.\" {rival} catches the wild {mon} and keeps it!"],
+      "cocky": ["{rival} twirls a Poké Ball. \"Thanks for the warm-up! I'll take that {mon}.\" Click! {rival} catches it!", "\"Better luck next time!\" {rival} throws a ball and the {mon} is caught for good!"],
+      "warm": ["{rival} looks sorry. \"I didn't want to win like this... but I'll take good care of this {mon}.\" It joins {rival}'s team.", "\"Sorry! I'll look after it, promise!\" {rival} gently catches the {mon}."]
+    },
+    "duel.lostTrainer": {
+      "fierce": ["{rival} walks up to your opponent. \"You're finished. I'll finish this.\" They win in a few moves and leave you behind.", "\"Watch and learn.\" {rival} beats your opponent without effort. There's no prize for you here."],
+      "cocky": ["{rival} shrugs. \"Guess I'll handle this one!\" Moments later your opponent is beaten and the prize is gone.", "\"Don't sweat it, I got it!\" {rival} wins the battle in your place and rides off."],
+      "warm": ["{rival} sighs. \"Rest up, I'll take care of them.\" {rival} wins the battle for you, and your team is healed.", "\"You did your best. Let me do the rest!\" {rival} beats your opponent. Your team is healed."]
+    },
+    "catch.normal": {
+      "fierce": ["A ball flies over your shoulder! \"Mine,\" says {rival}. The wild {mon} is caught and joins their team for good!", "{rival} steps out. \"Too slow again.\" The ball shakes... click! {mon} belongs to {rival} now!"],
+      "cocky": ["Whoosh! A Poké Ball sails past your head and snaps the wild {mon} up. \"Thanks for finding it!\" calls {rival}.", "\"Finders keepers!\" {rival} throws a ball first. Click! {mon} is caught and stays on {rival}'s team forever!"],
+      "warm": ["A ball flies in from nowhere! {rival} peeks out. \"Oops, I didn't see you there! It's okay, I'll take good care of it.\" {mon} joins {rival}'s team.", "{rival} giggles. \"Sorry, I was faster this time!\" The wild {mon} is caught and becomes {rival}'s partner."]
+    },
+    "catch.legendary": {
+      "fierce": ["The air goes still. {rival} walks past you with a single ball in hand. \"Legends don't wait for slow trainers.\" Click! The legendary {mon} is {rival}'s, and it will never leave their side.", "\"I've waited my whole life for this.\" {rival} captures the legendary {mon}. The sky itself seems to bow. This changes everything."],
+      "cocky": ["\"Is that... a legend?!\" {rival} doesn't hesitate and throws a ball. Click! The legendary {mon} is caught. \"I'm unstoppable now!\"", "{rival} steals the spotlight: the legendary {mon} is caught! \"Next time, bring a faster ball!\""],
+      "warm": ["{rival} gasps and trembles. \"It chose me... I'll protect it, I promise!\" The legendary {mon} joins {rival} and will never be released.", "\"I can't believe it!\" {rival} holds the ball tight. The legendary {mon} is theirs now. They look at you, almost apologetic."]
+    },
+    "catch.mythical": {
+      "fierce": ["A strange hush falls. {rival} raises a ball. \"Mythical or not, it's mine.\" Click! The mythical {mon} vanishes into the ball. {rival} will never let it go.", "\"Nobody sees that Pokémon twice.\" {rival} catches the mythical {mon} before you can blink, and a chill runs down your spine."],
+      "cocky": ["\"A mythical?! No way!\" {rival} throws a ball, and the {mon} is caught. \"Tell everyone: I caught a myth!\"", "{rival} winks and snaps the mythical {mon} into a ball. \"Rare doesn't even cover it!\""],
+      "warm": ["{rival} whispers, \"Is this real?\" A gentle click: the mythical {mon} is theirs, and it looks calm. \"I'll treasure it.\"", "\"It wanted to come with me,\" says {rival}, glowing. The mythical {mon} joins their team for good."]
+    },
+    "catch.legendAfter": {
+      "fierce": ["{rival} stands taller. \"Next time we battle, you'll face a legend. Train hard.\"", "{rival} points at you. \"Beat me if you can, and maybe I'll share the glory.\""],
+      "cocky": ["{rival} tosses you something. \"Here, a little consolation prize. I'll be waiting for the rematch!\"", "\"Don't look so sad!\" {rival} says. \"Here, take these. Come beat me for it!\""],
+      "warm": ["{rival} pushes some candy into your hands. \"Please take these. I know it hurts. Let's both become stronger!\"", "\"I feel bad. Here's a gift,\" says {rival}. \"We'll meet again, and I'll try to be worthy of it.\""]
+    }
+  }
+}

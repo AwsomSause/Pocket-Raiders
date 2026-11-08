@@ -367,6 +367,8 @@ export const RivalSchema = z.object({
   counters: z.array(z.object({ target: z.string(), targetName: z.string(), moveId: z.string(), at: z.string() })).optional(),
   /** §11 the Pokémon rival (story.monRivals id) it caught: always on its team from then on. */
   monRival: z.string().optional(),
+  /** Pokémon this rival caught before you at a battle (core/rivals/stepIn.ts). It keeps them for the rest of the run and fields them in later fights; a Legendary or Mythical sets `legend`. */
+  caught: z.array(z.object({ speciesId: z.string(), level: z.number().int().min(1), at: z.string(), legend: z.enum(['legendary', 'mythical']).optional() })).optional(),
   /** What it remembers of its last battle with you. */
   memory: z.object({
     lastBattle: z.object({

@@ -351,6 +351,15 @@ export class GameSession {
     return run;
   }
 
+  /** A rival may step into the battle that is about to start (help, duel, or catch the wild Pokémon first); null when nobody does. */
+  rivalStepIn(): Run.StepInResult | null {
+    const hit = Run.rivalStepIn(this.content, this.requireRun());
+    if (!hit) return null;
+    this.run = hit.run;
+    this.persistRun();
+    return hit;
+  }
+
   /** A rival may steal, block or help at a stop without a fight; returns the line to show, or null. */
   rivalInterfere(sideId: string): string | null {
     const hit = Run.rivalInterfere(this.requireRun(), sideId);
