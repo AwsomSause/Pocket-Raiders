@@ -1000,8 +1000,8 @@
    "courage": 2
   },
   "unlock": {
-   "kind": "event",
-   "arg": "ev_bedrock_4"
+   "kind": "win",
+   "arg": "type:rock"
   },
   "moves": [
    "crunch",
@@ -1889,7 +1889,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_proto_4"
+   "arg": "ev_qa_debug_lounge_2"
   },
   "moves": [
    "tackle",
@@ -2135,7 +2135,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_old_friend_2"
+   "arg": "ev_qa_hive_edge_camp_2"
   },
   "moves": [
    "harden",
@@ -2171,7 +2171,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_forest_remembers"
+   "arg": "ev_qa_cocoon_season_2"
   },
   "moves": [
    "tackle",
@@ -2241,7 +2241,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_qa_twin_burrow_2"
+   "arg": "ev_qa_challengers_horn_2"
   },
   "moves": [
    "leer",
@@ -2277,7 +2277,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_childhood_map"
+   "arg": "ev_qa_tadpole_races_2"
   },
   "moves": [
    "bubble",
@@ -2313,7 +2313,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_migration_5"
+   "arg": "ev_qa_midnight_bloom_2"
   },
   "moves": [
    "absorb",
@@ -2385,7 +2385,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_humanitys_question"
+   "arg": "ev_qa_hollow_station_2"
   },
   "moves": [
    "growl",
@@ -2491,7 +2491,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "ev_tally_5"
+   "arg": "ev_qa_scarred_hide_2"
   },
   "moves": [
    "crunch",
@@ -2697,7 +2697,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "jet_viking"
+   "arg": "ev_qa_crowded_shelter_2"
   },
   "moves": [
    "tackle",
@@ -2733,7 +2733,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "jet_viking"
+   "arg": "ev_qa_static_lullaby_2"
   },
   "moves": [
    "belch",
@@ -2770,7 +2770,7 @@
   },
   "unlock": {
    "kind": "event",
-   "arg": "jet_viking"
+   "arg": "ev_qa_fossil_in_the_wall_2"
   },
   "moves": [
    "protect",

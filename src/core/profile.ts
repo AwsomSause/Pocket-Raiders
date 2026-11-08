@@ -115,7 +115,7 @@ export function finalizeRun(
   claimPast(next, run);
   next.npcMemory = foldNpcMemory(content, next.npcMemory, run);
   recordChronicle(next, run, now);
-  foldModuleIntoProfile(next, run, content.storyData);
+  foldModuleIntoProfile(next, run, content.storyData, (id) => content.species.get(id)?.types ?? []);
   next.treasureHunt = foldTreasureHunt(next.treasureHunt, run);
   next.finalizedRunIds = [...next.finalizedRunIds, run.runId].slice(-FINALIZED_HISTORY);
   return { profile: next, applied: true, summary };
