@@ -122,7 +122,8 @@ export function pickCameraCut(ctx: CutContext): CameraCut | null {
 /** A Galar Gym Challenge battle: a gym leader fight in the Galar region (the stadium shows only there). */
 export function isGalarStadiumBattle(content: Content, run: RunState): boolean {
   if (run.regionOrder.length === 0 || run.battle?.trainer == null) return false;
-  if (bossRoleForClass(run.battle.trainer.classId) !== 'gym') return false;
+  const role = bossRoleForClass(run.battle.trainer.classId);
+  if (role !== 'gym' && role !== 'elite' && role !== 'champion') return false;
   return currentRegion(content, run).id === 'galar';
 }
 

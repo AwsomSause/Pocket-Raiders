@@ -24,6 +24,8 @@ export interface StadiumHooks {
   finalMusic: (track: string) => void;
   /** How many Pokémon each side still has standing (read after the turn). */
   alive: () => { player: number; foe: number };
+  /** Narration line (the scene's message box). */
+  say: (text: string) => Promise<void>;
 }
 
 export class StadiumDirector {
@@ -108,6 +110,24 @@ export class StadiumDirector {
     const t = this.scene.add.text(GAME_WIDTH / 2, 70, text, textStyle(18 + intensity * 2, intensity >= 3 ? '#ffe060' : '#aab4c0', { stroke: '#101820', strokeThickness: 5 })).setOrigin(0.5).setDepth(1700).setAlpha(0);
     this.banner = t;
     this.scene.tweens.add({ targets: t, alpha: 1, y: 60, duration: 220, yoyo: true, hold: 650, onComplete: () => { t.destroy(); if (this.banner === t) this.banner = null; } });
+  }
+
+  /** A tournament round's opening: a round card with the opponent, their introduction, and a bigger staging for the final. Never throws. */
+  async tournamentIntro(round: { round: number; name: string; opponent: string; intro: string; final: boolean }): Promise<void> {
+    try {
+      if (!this.h.disableAnimations()) {
+        const spec = defaultMoment(round.final ? 'championIntro' : 'e4Intro', `galar-tournament-${round.round}`);
+        spec.mandatory = round.final;
+        if (round.final) spec.phases = { situation: 600, anticipation: 1000, moment: 1400, reaction: 800, transition: 500 };
+        const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
+        this.h.setIntensity(round.final ? 1.2 : 1.05);
+        await playMoment(this.scene, spec, plan, { title: round.final ? 'THE FINAL' : round.name, subtitle: `vs ${round.opponent}` });
+      }
+      await this.h.say(round.intro);
+      if (round.final) await this.h.say('The whole stadium is on its feet. This is the match the season has been building to.');
+    } catch {
+      // Presentation failure never touches the battle.
+    }
   }
 
   get musicTrack(): string {

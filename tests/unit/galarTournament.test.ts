@@ -181,3 +181,55 @@ describe('bracket view', () => {
     expect(v2.standing).toContain('You');
   });
 });
+
+import { currentTournamentRound } from '../../src/core/galarTournament';
+
+describe('tournament round during a battle', () => {
+  const content = getContent();
+  it('names the round, opponent and intro; battle in progress does not count as won; featured match appears after wins', () => {
+    let run = createRun(content, { runId: 'r', seed: 'ROUND1', archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    expect(currentTournamentRound(content, run)!.round).toBe(1);
+    run.stage!.visited = ['n1'];
+    run.battle = {} as never; // a battle is running for the first node: round 1 is not won yet
+    expect(currentTournamentRound(content, run)!.round).toBe(1);
+    run.stage!.visited = ['n1', 'n2', 'n3', 'n4', 'n5'];
+    expect(currentTournamentRound(content, run)).toMatchObject({ round: 5, final: true });
+    run.battle = null;
+    run.stage!.visited = ['n1', 'n2'];
+    const view = bracketView(content, run);
+    expect(view.featured.map((f) => f.round)).toEqual([1, 2]);
+    expect(view.featured[0]!.text).toContain('On the big screen');
+  });
+  it('is null outside the Galar tournament', () => {
+    let run = createRun(content, { runId: 'r', seed: 'ROUND2', archetypeId: 'red' });
+    run.regionOrder = ['kanto', ...run.regionOrder.filter((r) => r !== 'kanto')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    expect(currentTournamentRound(content, run)).toBeNull();
+  });
+});
+
+import { matchReplay } from '../../src/core/galarTournament';
+
+describe('match replay', () => {
+  const content = getContent();
+  it('is deterministic, ends with the winner standing and the loser at 0', () => {
+    let run = createRun(content, { runId: 'r', seed: 'REPLAY', archetypeId: 'red' });
+    run.regionOrder = ['galar', ...run.regionOrder.filter((r) => r !== 'galar')];
+    run.regionIndex = 0;
+    run = debugJumpToLeague(content, chooseStarter(content, run, 0));
+    for (let r = 1; r <= 4; r++) {
+      const a = matchReplay(content, run, r)!;
+      expect(matchReplay(content, run, r)).toEqual(a);
+      const last = a.beats[a.beats.length - 1]!;
+      const [w, l] = a.winner === 'a' ? [last.hpA, last.hpB] : [last.hpB, last.hpA];
+      expect(l).toBe(0);
+      expect(w).toBeGreaterThan(0);
+      expect(a.beats.every((b) => b.hpA >= 0 && b.hpA <= 1 && b.hpB >= 0 && b.hpB <= 1)).toBe(true);
+    }
+    expect(matchReplay(content, run, 5)).toBeNull();
+  });
+});
