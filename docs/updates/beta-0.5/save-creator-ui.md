@@ -1,0 +1,4 @@
+# Save Creator page (dev tool)
+**Player gets:** nothing in the game. A page, `savegen.html` (next to the game; `npm run dev` then open `/savegen.html`), where you fill in a run (trainer, mode, region, stage, money, items, badges, flags), up to 6 Pokémon (species/form, gender, shiny, level, nature, ability, moves, held items, Tera type, IVs/EVs, friendship, nickname, HP, status) and account progress (Bank, Research, Prestige, Remembrances, unlocks, dex), pick a preset, see every validation problem live, and download a save to import in the game (Settings, Import save from a file, Continue). Also loads/downloads the spec JSON, which the `node tools/savegen.ts` CLI reads too.
+**Save:** none.
+**Limits:** same as the generator (full campaign, stage start). Add a field by adding one row to the field tables in `src/devtools/saveCreator.ts` plus the key in `SaveSpecSchema`; see `tools/savegen/README.md`.
