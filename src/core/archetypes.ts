@@ -125,11 +125,12 @@ export function runPerks(content: Content, run: { archetypeId: string; perkEffec
   return archetype ? resolveCounterPerks([...archetype.modifiers, ...(run.perkEffects ?? [])], run) : undefined;
 }
 
-/** The only player characters (Beta 0.5). Every other archetype stays in the data for old saves and stats, but cannot be picked. */
-export const PLAYER_TRAINER_IDS = ['nate', 'hilda'] as const;
-export const isPlayerTrainer = (id: string): boolean => (PLAYER_TRAINER_IDS as readonly string[]).includes(id);
+/** The starting trainers (Beta 0.5): Red, Blue, Green, Hilda and Nate. Every other archetype stays in the data for old saves and stats, but cannot be picked. */
+export const PLAYER_TRAINER_IDS = ['red', 'blue', 'green', 'hilda', 'nate'] as const;
+/** A starting trainer, or that trainer's Trainer Evolution ("evolved-red"). */
+export const isPlayerTrainer = (id: string): boolean => (PLAYER_TRAINER_IDS as readonly string[]).includes(id.startsWith('evolved-') ? id.slice('evolved-'.length) : id);
 
-/** Old saves and codes that name another trainer become Nate or Hilda (fixed by the id's letters, so it never changes). */
+/** Old saves and codes that name another trainer become one of the five (fixed by the id's letters, so it never changes). */
 export function playerTrainerFor(id: string): string {
   if (isPlayerTrainer(id)) return id;
   let sum = 0;

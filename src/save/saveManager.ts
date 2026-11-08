@@ -2,6 +2,7 @@
 // and metadata. Every record is wrapped in an envelope with a schema version,
 // checked against its schema on load, and migrated if it is older.
 
+import { bossRoleForClass } from '../core/encounters';
 import { isPlayerTrainer, playerTrainerFor } from '../core/archetypes';
 import type { z } from 'zod';
 import { ATTRIBUTE_KEYS, type Content } from '../core/contentSchema';
@@ -679,7 +680,8 @@ export class SaveManager {
       if (!run.battle.enemyTeam[run.battle.enemyIndex]) return 'Battle data is damaged in the save.';
       const t = run.battle.trainer;
       if (t?.leaderId && !isBoss(c, t.leaderId)) return `Unknown gym leader, Elite Four member or champion "${t.leaderId}" in save.`;
-      if (t && !t.leaderId && !c.trainers.has(t.classId)) return `Unknown trainer class "${t.classId}" in save.`;
+      // A boss's ace back as a nemesis keeps the boss class (gym-leader...) with no leader id.
+      if (t && !t.leaderId && !c.trainers.has(t.classId) && !bossRoleForClass(t.classId)) return `Unknown trainer class "${t.classId}" in save.`;
     }
     if (run.phase === 'decision' && run.pending.length === 0) return 'The save is waiting on a decision that is missing.';
     if (run.stage) {

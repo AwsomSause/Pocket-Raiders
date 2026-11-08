@@ -8238,47 +8238,51 @@
   {
     "id": "nate",
     "name": "Nate",
-    "title": "The Specialist",
-    "description": "Pokémon gain 15% EXP — Pokémon take 5% more damage.",
+    "title": "The Anchor",
+    "description": "Builds up: your first attack is weaker, later ones are a bit stronger. Water-types hit harder and the party recovers after battles — Pokémon take 5% more damage.",
     "pros": [
-      "Pokémon gain 15% EXP",
-      "physical moves deal 10% more damage"
+      "Later attacks deal 15% more damage",
+      "Water-type moves deal 15% more damage",
+      "Party heals 5% after each battle"
     ],
     "cons": [
+      "First attack deals 5% less damage",
       "Pokémon take 5% more damage"
     ],
     "unlockedByDefault": true,
-    "unlock": {
-      "kind": "total",
-      "counter": "trainersDefeated",
-      "atLeast": 1540
-    },
-    "unlockText": "Defeat 1540 trainers in total across your runs",
-    "unlockCost": 300,
     "spriteAssetId": "boss.nate",
     "modifiers": [
       {
-        "kind": "xpMultiplier",
+        "kind": "firstAttackDamage",
+        "first": 0.95,
+        "later": 1.15
+      },
+      {
+        "kind": "typeDamageMultiplier",
+        "type": "water",
         "value": 1.15
       },
       {
-        "kind": "damageMultiplier",
-        "category": "physical",
-        "value": 1.1
+        "kind": "postBattleHeal",
+        "percent": 5
       },
       {
         "kind": "damageTakenMultiplier",
         "value": 1.05
       }
     ],
-    "signatureTypes": [],
-    "signatureSpecies": [
-      "emboar",
-      "krookodile",
-      "galvantula",
-      "chandelure"
+    "signatureTypes": [
+      "water"
     ],
-    "eventTags": [],
+    "signatureSpecies": [
+      "samurott",
+      "jellicent",
+      "seismitoad",
+      "zekrom"
+    ],
+    "eventTags": [
+      "caretaker"
+    ],
     "signatureMechanic": null
   },
   {
@@ -9267,49 +9271,51 @@
   {
     "id": "hilda",
     "name": "Hilda",
-    "title": "The Fire Specialist",
-    "description": "Fire-types and physical attackers deal 15% more damage — Pokémon take 10% more damage.",
+    "title": "The Spark",
+    "description": "Opens with a burst: your first attack is stronger, later ones weaker. Fire-types hit harder and crits come more often — Pokémon take 5% more damage.",
     "pros": [
-      "Fire-types and physical attackers deal 15% more damage"
+      "First attack deals 30% more damage",
+      "Fire-type moves deal 15% more damage",
+      "+10% critical hit chance"
     ],
     "cons": [
-      "Pokémon take 10% more damage"
+      "Later attacks deal 5% less damage",
+      "Pokémon take 5% more damage"
     ],
     "unlockedByDefault": true,
-    "unlock": {
-      "kind": "total",
-      "counter": "trainersDefeated",
-      "atLeast": 960
-    },
-    "unlockText": "Defeat 960 trainers in total across your runs",
-    "unlockCost": 300,
     "spriteAssetId": "boss.hilda",
     "modifiers": [
       {
-        "kind": "damageMultiplier",
+        "kind": "firstAttackDamage",
+        "first": 1.3,
+        "later": 0.95
+      },
+      {
+        "kind": "typeDamageMultiplier",
         "type": "fire",
         "value": 1.15
       },
       {
-        "kind": "damageMultiplier",
-        "category": "physical",
-        "value": 1.15
+        "kind": "critChanceBonus",
+        "value": 0.1
       },
       {
         "kind": "damageTakenMultiplier",
-        "value": 1.1
+        "value": 1.05
       }
     ],
     "signatureTypes": [
       "fire"
     ],
     "signatureSpecies": [
-      "serperior",
-      "zoroark",
-      "conkeldurr",
-      "carracosta"
+      "emboar",
+      "chandelure",
+      "volcarona",
+      "reshiram"
     ],
-    "eventTags": [],
+    "eventTags": [
+      "bold"
+    ],
     "signatureMechanic": null
   },
   {

@@ -8,6 +8,7 @@ import { VANCE_ANIMS, VANCE_FRAMES, type VanceAnim } from '../assets/catalog';
 import { services } from '../game/services';
 import { loadAssets, queueAssets } from '../ui/lazyAssets';
 import { trainerVisual } from '../ui/sprites';
+import { PLAYER_TRAINER_IDS } from '../core/archetypes';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
@@ -208,13 +209,13 @@ export class PrologueScene extends Phaser.Scene {
   private stepLook(): void {
     this.title('This is how you appear');
     const y = this.body(['Choose your Look. Your name and pronouns come later, and the Look never changes them. You can change the Look in Settings.']);
-    // Previews of the two player characters (Beta 0.5).
-    const cast = [{ id: 'hilda', name: 'Hilda' }, { id: 'nate', name: 'Nate' }];
-    void loadAssets(this, cast.map((c) => `boss.${c.id}`)).then(() => {
+    // Previews of the five starting trainers (Beta 0.5).
+    const cast = PLAYER_TRAINER_IDS.map((id) => ({ id, name: services().session.content.archetypes.get(id)?.name ?? id, art: services().session.content.archetypes.get(id)?.spriteAssetId ?? `boss.${id}` }));
+    void loadAssets(this, cast.map((c) => c.art)).then(() => {
       if (!this.sys.isActive()) return;
       cast.forEach((c, n) => {
-        const x = GAME_WIDTH - 260 + n * 170;
-        trainerVisual(this, `boss.${c.id}`, c.name, x, 380, 2);
+        const x = 150 + n * ((GAME_WIDTH - 300) / (cast.length - 1));
+        trainerVisual(this, c.art, c.name, x, 380, 2);
         this.add.text(x, 400, c.name, textStyle(20, COLORS.text)).setOrigin(0.5, 0);
       });
     });
