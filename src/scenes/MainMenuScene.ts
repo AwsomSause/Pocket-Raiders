@@ -28,7 +28,7 @@ export class MainMenuScene extends Phaser.Scene {
     super('MainMenu');
   }
 
-  create(data?: { focus?: number }): void {
+  create(data?: { focus?: number; afterSplash?: boolean }): void {
     const { session } = services();
     session.closeRun();
     // First visit to this version: patch notes, then the optional tutorial (skipped in automated browsers so tests reach the menu; ?welcome=1 forces it).
@@ -38,6 +38,12 @@ export class MainMenuScene extends Phaser.Scene {
     }
     if (prologueGateActive(session.profile.story)) {
       this.scene.start('Prologue');
+      return;
+    }
+    if (data?.afterSplash && session.savedRun.status !== 'corrupt' && session.savedRun.status !== 'incompatible') {
+      // Update splash just ended: skip the menu, resume the latest run or enter the hub.
+      if (session.latestRunSlot() !== null) this.continueRun();
+      else this.scene.start('Hub');
       return;
     }
     playMusic(this, 'bgm.menu');

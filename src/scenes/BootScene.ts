@@ -17,9 +17,11 @@ import { queueAsset } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { buildLoading, LOADING_LOOKS, type LoadingLook } from '../ui/loadingLooks';
 import { loadingTip, loadingTipFor } from '../core/presentation/uiPrefs';
+import { playUpdateSplash, readSplashEnv, splashDue, type SplashHandle } from '../ui/updateSplash';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
 export class BootScene extends Phaser.Scene {
+  private splash: SplashHandle | null = null;
   constructor() {
     super('Boot');
   }
@@ -49,6 +51,8 @@ export class BootScene extends Phaser.Scene {
     }
 
     await this.loadFont(assets);
+    // First load of a new update: the splash covers the loading screen; assets keep loading behind it.
+    if (splashDue(readSplashEnv())) this.splash = await playUpdateSplash(this, session.settings);
     this.loadAssets(assets);
   }
 
@@ -112,7 +116,11 @@ export class BootScene extends Phaser.Scene {
       console.warn(`Failed to load asset ${file.key} (${String(file.url)})`);
       assets.markFailed(file.key);
     });
-    this.load.once('complete', () => this.scene.start('MainMenu'));
+    this.load.once('complete', () => {
+      if (!this.splash) return this.scene.start('MainMenu');
+      // After the splash the main menu is skipped: straight into the saved run or the hub.
+      void this.splash.ended.then(() => this.scene.start('MainMenu', { afterSplash: true }));
+    });
     this.load.start();
   }
 
