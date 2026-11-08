@@ -5,3 +5,4 @@
 - The foe's Dynamax mirrors it. Wild Pokémon and Fast Dynamax keep the short scene. Tera scene and its trainer layering are untouched.
 - Presentation only: no save change, no RNG.
 - Checked by recording the game and comparing side by side with the reference at the same timestamps.
+- Enemy-trainer check (all gimmicks recorded in a real browser): Dynamax, Gigantamax and Mega already showed the foe trainer; Tera and Z-Move did not. They now show the foe trainer on the right, like the player's side.

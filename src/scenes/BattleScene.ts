@@ -3910,7 +3910,7 @@ export class BattleScene extends Phaser.Scene {
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const art = mine ? this.playerArt() : null;
+            const art = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const crystalId = e.itemId ?? (zBase ? ownedZCrystal(content, this.run.inventory, zBase.type) : null);
             const feel = this.cineFeel('zmove');
             await this.playBeat(
@@ -3937,7 +3937,7 @@ export class BattleScene extends Phaser.Scene {
             // The full reference scene (Fast Tera off): Pokémon turned to face you, trainer and Tera Orb, crystals, white-out, shatter, rainbow pulse.
             const sp = content.species.get(mon.speciesId)!;
             const mine = e.side === 'player';
-            const playerArt = mine ? this.playerArt() : null;
+            const playerArt = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const feel = this.cineFeel('tera');
             const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
             await this.playBeat(
