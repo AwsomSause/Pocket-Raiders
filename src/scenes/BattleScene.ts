@@ -2423,7 +2423,7 @@ export class BattleScene extends Phaser.Scene {
             cast: (speaker, seed) => this.hypeCast(speaker, seed),
             say: (name, assetId, text, look) => this.speakWithArt(name, assetId, text, look),
             foeShare: () => {
-              const f = this.run.battle?.enemyTeam[this.run.battle.enemyIndex];
+              const f = this.shown?.enemy ?? this.run.battle?.enemyTeam[this.run.battle.enemyIndex];
               return f ? f.hp / Math.max(1, maxHp(content, f)) : 1;
             },
           };
@@ -3825,8 +3825,9 @@ export class BattleScene extends Phaser.Scene {
   private hypeFacts(): Record<string, string> {
     const content = services().session.content;
     const battle = this.run.battle;
-    const foeMon = battle?.enemyTeam[battle.enemyIndex];
-    const myMon = this.run.party[battle?.activeIndex ?? 0];
+    // What is on the screen now, not the battle state: the turn is already worked out before it is shown, so the state is ahead of the picture.
+    const foeMon = this.shown?.enemy ?? battle?.enemyTeam[battle.enemyIndex];
+    const myMon = this.shown?.player ?? this.run.party[battle?.activeIndex ?? 0];
     const rival = this.run.story.rivals[0];
     return {
       player: content.archetypes.get(this.run.archetypeId)?.name ?? 'the challenger',
@@ -3864,8 +3865,8 @@ export class BattleScene extends Phaser.Scene {
       const content = services().session.content;
       const battle = this.run.battle;
       if (!battle) return this.flagsSeen.size > 0 ? this.flagsSeen : out;
-      const foe = battle.enemyTeam[battle.enemyIndex];
-      const me = this.run.party[battle.activeIndex];
+      const foe = this.shown?.enemy ?? battle.enemyTeam[battle.enemyIndex];
+      const me = this.shown?.player ?? this.run.party[battle.activeIndex];
       const favor = crowdFavor(content, this.run) ?? 50;
       if (favor >= 58) out.add('ahead');
       else if (favor <= 42) out.add('behind');

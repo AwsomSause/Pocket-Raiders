@@ -88,6 +88,6 @@ describe('Galar interviews and shouts', () => {
     expect(interviews.postLose.length).toBeGreaterThanOrEqual(15);
     const { CROWD_SPRITES } = await import('../../src/ui/galar/cutArt');
     expect(CROWD_SPRITES.length).toBeGreaterThanOrEqual(60);
-    expect(CROWD_SPRITES.some((id) => /grunt|rocket|magma|aqua|galactic|plasma|flare|skull|macro|aether|star_/.test(id))).toBe(false);
+    expect(CROWD_SPRITES.some((id) => /grunt|rocket|magma|aqua|galactic|plasma|flare|skull|macro|aether|star_|victor|victoria|rival_|red$|blue$|green$|hilda|nate/.test(id))).toBe(false);
   });
 });
