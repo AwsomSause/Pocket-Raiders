@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { playerTrainerFor } from '../core/archetypes';
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
 import { dexCaughtCount } from '../core/dexRewards';
@@ -259,7 +260,8 @@ export class GameSession {
    * Starts a new run. `campaignId` picks a shorter campaign such as "dev" (default "full");
    * `prep` carries the Preparation Desk's choices (and its campaign) and is remembered for next time.
    */
-  newRun(archetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
+  newRun(requestedArchetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
+    const archetypeId = this.content.archetypes.has(requestedArchetypeId) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
     // A saved preset can name a loan or Vault item the profile no longer has.
     if (prep) prep = { ...prep, loan: prep.loan && !loanProblem(this.content, this.profile), vaultItem: prep.vaultItem && this.profile.vault.includes(prep.vaultItem) ? prep.vaultItem : null, mentorId: availableMentors(this.profile).some((m) => m.id === prep!.mentorId) ? prep.mentorId : null };
     // Story Run: the prologue's identity, and the backstory and Starter line picked in Beats 7-8 or the Short Intake (used once).

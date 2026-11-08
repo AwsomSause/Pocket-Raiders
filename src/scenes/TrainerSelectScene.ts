@@ -3,6 +3,7 @@
 // on the right. Locked trainers show as a "?" silhouette that tells you how to
 // unlock them.
 
+import { isPlayerTrainer } from '../core/archetypes';
 import { backstoryFor } from '../core/npcMemory';
 import Phaser from 'phaser';
 import type { Archetype } from '../core/contentSchema';
@@ -106,7 +107,7 @@ export class TrainerSelectScene extends Phaser.Scene {
   private applySort(): void {
     const { session } = services();
     const p = session.profile;
-    const all = [...session.content.archetypes.values()];
+    const all = [...session.content.archetypes.values()].filter((a) => isPlayerTrainer(a.id));
     const data = all.filter((a) => !a.evolvedFrom).flatMap((a) => [a, ...all.filter((e) => e.evolvedFrom === a.id)]);
     const ordered = sortTrainers(data, this.sortKey, p, this.sortReverse);
     this.slots = ordered.map((a) => ({ archetype: a, status: trainerStatus(p, a) }));

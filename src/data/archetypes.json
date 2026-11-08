@@ -8421,7 +8421,7 @@
     "cons": [
       "Pokémon take 5% more damage"
     ],
-    "unlockedByDefault": false,
+    "unlockedByDefault": true,
     "unlock": {
       "kind": "total",
       "counter": "trainersDefeated",
@@ -9471,7 +9471,7 @@
     "cons": [
       "Pokémon take 10% more damage"
     ],
-    "unlockedByDefault": false,
+    "unlockedByDefault": true,
     "unlock": {
       "kind": "total",
       "counter": "trainersDefeated",

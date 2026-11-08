@@ -2,6 +2,7 @@
 // and metadata. Every record is wrapped in an envelope with a schema version,
 // checked against its schema on load, and migrated if it is older.
 
+import { isPlayerTrainer, playerTrainerFor } from '../core/archetypes';
 import type { z } from 'zod';
 import { ATTRIBUTE_KEYS, type Content } from '../core/contentSchema';
 import { validateLeagueMap, validateStageMap } from '../core/map';
@@ -653,6 +654,8 @@ export class SaveManager {
   loadRun(): LoadResult<RunState> {
     const result = this.read('run', RunStateSchema);
     if (result.status !== 'ok') return result;
+    // Beta 0.5: only Nate and Hilda are player characters; a run saved as anyone else carries on as one of them.
+    if (!isPlayerTrainer(result.data.archetypeId) && this.content.archetypes.has(result.data.archetypeId)) result.data = { ...result.data, archetypeId: playerTrainerFor(result.data.archetypeId) };
     const problem = this.findRunReferenceProblem(result.data);
     if (problem) return { status: 'corrupt', reason: problem };
     return result;

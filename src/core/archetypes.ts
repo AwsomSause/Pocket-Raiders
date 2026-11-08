@@ -124,3 +124,15 @@ export function runPerks(content: Content, run: { archetypeId: string; perkEffec
   const archetype = content.archetypes.get(run.archetypeId);
   return archetype ? resolveCounterPerks([...archetype.modifiers, ...(run.perkEffects ?? [])], run) : undefined;
 }
+
+/** The only player characters (Beta 0.5). Every other archetype stays in the data for old saves and stats, but cannot be picked. */
+export const PLAYER_TRAINER_IDS = ['nate', 'hilda'] as const;
+export const isPlayerTrainer = (id: string): boolean => (PLAYER_TRAINER_IDS as readonly string[]).includes(id);
+
+/** Old saves and codes that name another trainer become Nate or Hilda (fixed by the id's letters, so it never changes). */
+export function playerTrainerFor(id: string): string {
+  if (isPlayerTrainer(id)) return id;
+  let sum = 0;
+  for (const ch of id) sum += ch.charCodeAt(0);
+  return PLAYER_TRAINER_IDS[sum % PLAYER_TRAINER_IDS.length]!;
+}
