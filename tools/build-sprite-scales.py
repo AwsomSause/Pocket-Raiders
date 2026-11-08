@@ -17,12 +17,13 @@ D = os.path.join(root, 'src', 'data')
 
 TARGETS = {
     # Jet (reference: Toxtricity 84 px, Espeon-sized Eeveelutions ~58, Bastiodon 59, Aggron 69)
-    'vine-riff': 76, 'electric-oncore': 80, 'pyro-spirit': 58, 'neon-moon': 60, 'bastiodoom': 72,
-    'cataggron': 75, 'cataggron-attack': 75, 'cataggron-defence': 75,
+    'vine-riff': 84, 'electric-oncore': 90, 'pyro-spirit': 58, 'neon-moon': 60, 'bastiodoom': 80,
+    'cataggron': 85, 'cataggron-attack': 85, 'cataggron-defence': 85,
     # Beta 4.4 (reference: Sableye 46, Krookodile ~72, Trapinch 40, Vibrava 50, Flygon 69, Golurk 79, Dratini 44, Dragonair 72, Dragonite 78)
-    'benovolant-beak': 55, 'tyrant-king': 75, 'fallen-liege': 75, 'maliceye': 52, 'gemgoyle': 72, 'dreadodile': 76,
+    'benovolant-beak': 55, 'tyrant-king': 85, 'fallen-liege': 85, 'maliceye': 80, 'gemgoyle': 96, 'dreadodile': 96,
     'alolan-trapinch': 42, 'alolan-vibrava': 55, 'alolan-flygon': 70, 'alolan-flygon-mega': 74,
-    'paldean-golett': 56, 'paldean-golurk': 78, 'alolan-dratini': 44, 'alolan-dragonair': 70, 'alolan-dragonite': 80,
+    'paldean-golett': 56, 'paldean-golurk': 88, 'alolan-dratini': 44, 'alolan-dragonair': 70, 'alolan-dragonite': 90,
+    # Fully evolved bruisers were bumped up on Kice's request (2026-11-08): Maliceye/Gemgoyle/Dreadodile and the other final forms read as bigger than their base lines.
     # Story Pokémon (reference: Noctowl 65, Swellow 59, Kilowattrel 67)
     'oracowl': 68, 'oracowl-day': 68, 'tempestwing': 62, 'megawattrel': 70,
 }
