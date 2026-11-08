@@ -21,7 +21,6 @@ export function characterProfile(profile: Pick<Profile, 'story'>): { named: bool
     { label: 'Name', value: named ? pr.name : 'Not chosen yet' },
     { label: 'Pronouns', value: pronounsText(pr.pronouns) },
     { label: 'Look', value: pr.look === 'look_b' ? 'Look B' : 'Look A' },
-    ...(pr.lookRequested && pr.lookRequested !== pr.look ? [{ label: 'Look wanted', value: `${pr.lookRequested === 'look_b' ? 'Look B' : 'Look A'} (coming soon)` }] : []),
     { label: 'Vance speaks', value: s.prologue.vanceTone ? cap(s.prologue.vanceTone) : 'Not decided yet' },
     { label: 'Prologue', value: s.prologue.done ? (s.prologue.mode === 'quick' ? 'Done (quick start)' : s.prologue.mode === 'skipped' ? 'Skipped' : 'Done') : 'Not played yet' },
     { label: 'Story Runs told', value: String(s.chronicles.length) },
