@@ -2128,7 +2128,6 @@ export const BalanceSchema = z.object({
   starterLevel: z.number().int().positive(),
   starterChoices: z.number().int().positive(),
   /** The chance a trainer's signature species takes the last starter slot when none was drawn (own RNG stream). */
-  signatureStarterChance: z.number().min(0).max(1),
   wildPool: z.array(z.string()).min(1),
   draftSize: z.number().int().positive(),
   rarityWeights: z.record(RaritySchema, z.number().min(0)),
