@@ -8,6 +8,7 @@
     "dev": "vite",
     "prebuild": "npm run assets:manifest",
     "build": "tsc --noEmit && vite build",
+    "build:savegen": "vite build --config vite.savegen.config.ts",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "pretest": "npm run assets:manifest",

@@ -1,6 +1,5 @@
 /// <reference types="vitest/config" />
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string };
@@ -24,8 +23,6 @@ export default defineConfig(({ command }) => ({
     // Hide rolldown's plugin-timing printout: build noise that every check and e2e run repeats.
     rolldownOptions: {
       checks: { pluginTimings: false },
-      // Dev tool page (Save Creator, savegen.html) next to the game.
-      input: { main: fileURLToPath(new URL('./index.html', import.meta.url)), savegen: fileURLToPath(new URL('./savegen.html', import.meta.url)) },
       // Phaser in its own file: it never changes between deploys, so browsers keep it cached while the game code and data update.
       // Story data (Design v2 Part XII lazy story loader, first step) in its own file too: it changes on its own schedule, so a code-only deploy keeps it cached.
       output: { codeSplitting: { groups: [{ name: 'phaser', test: /node_modules[\\/]phaser/ }, { name: 'story', test: /src[\\/]data[\\/]story[\\/].*\.json$/ },
