@@ -26,6 +26,8 @@ export interface StadiumHooks {
   alive: () => { player: number; foe: number };
   /** Narration line (the scene's message box). */
   say: (text: string) => Promise<void>;
+  /** Crowd sound for a cue (crowd.roar, crowd.hush, crowd.swell, crowd.murmur). Optional; sound only, never changes the battle. */
+  crowdSound?: (cue: string, intensity: number) => void;
 }
 
 export class StadiumDirector {
@@ -94,6 +96,7 @@ export class StadiumDirector {
     if (this.h.disableAnimations()) return;
     const r = crowdReaction(beat);
     this.h.setIntensity(1 + r.intensity * 0.03);
+    this.h.crowdSound?.(r.cue, r.intensity);
     this.showBanner(r.cue.endsWith('hush') ? 'The crowd goes quiet...' : r.cue.endsWith('swell') ? 'The crowd swells!' : r.intensity >= 4 ? 'The stadium ERUPTS!' : 'The crowd roars!', r.intensity);
     const cut = pickCameraCut({ runSeed: this.h.runSeed, battleId: this.h.battleId, turn: this.turn, beat, shown: this.shown, lastCutTurn: this.lastCutTurn, impressive: this.h.impressive, rivalWatching: this.h.rivalWatching });
     if (!cut) return;

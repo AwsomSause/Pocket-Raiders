@@ -2234,6 +2234,14 @@ export class BattleScene extends Phaser.Scene {
         disableAnimations: () => st.disableAllAnimations || st.battleAnimations === 'off',
         reduceMotion: () => st.battleAnimations === 'reduced',
         setIntensity: (n) => setMusicIntensity(n),
+        crowdSound: (cue, intensity) => {
+          const v = Math.min(1, 0.3 + intensity * 0.12);
+          if (cue === 'crowd.roar') {
+            playSfxLazy(this, 'se.crowd_applause', v);
+            if (intensity >= 4) playSfxLazy(this, 'se.crowd_uproar', v * 0.8);
+          } else if (cue === 'crowd.swell') playSfxLazy(this, 'se.crowd_applause', 0.5);
+          else if (cue === 'crowd.murmur') playSfxLazy(this, 'se.crowd_murmur', 0.3);
+        },
         finalMusic: (track) => {
           if (!services().assets.has(track)) return;
           this.baseTrack = track;
