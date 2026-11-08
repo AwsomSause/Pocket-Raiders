@@ -16,6 +16,7 @@ import { animAssetIds, zTitleAssetId } from '../../assets/catalog';
 import { services } from '../../game/services';
 import type { MotionLevel } from '../aero';
 import { loadAssets } from '../lazyAssets';
+import { ballVisual, DEFAULT_BALL } from '../ballArt';
 import { screenStyleOf } from '../../core/presentation/screenStyles';
 import { evolveLook } from './evolveStyles';
 import type { Visual } from '../sprites';
@@ -54,6 +55,8 @@ export interface CineOptions {
   trainer?: () => Visual | null;
   /** Dynamax (full version): the trainer's front-facing sprite, who turns to face the player and raises the Dynamax Band. */
   trainerFront?: () => Visual | null;
+  /** Dynamax: the ball item the Pokémon was caught in (its own Poké Ball picture is shown); defaults to the plain Poké Ball. */
+  ball?: string;
   /** "Fast Dynamax": play the short cutscene instead of the full one. */
   fast?: boolean;
   /** The Pokémon is the foe's: the trainer comes in from the right and the scene mirrors. */
@@ -71,10 +74,12 @@ export interface CineOptions {
 export function prefetchCinematics(scene: Phaser.Scene): void {
   const { assets, session } = services();
   if (session.settings.battleAnimations === 'off') return;
-  void loadAssets(scene, [...CINE_ASSETS, ...FORM_LOOK_ASSETS, ...CINE_SOUNDS.map(animAssetIds.sound)].filter((id) => assets.has(id))).catch(() => undefined);
+  void loadAssets(scene, ['ball.pb', ...CINE_ASSETS, ...FORM_LOOK_ASSETS, ...CINE_SOUNDS.map(animAssetIds.sound)].filter((id) => assets.has(id))).catch(() => undefined);
 }
 
 export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
+  const ballIcon = o.ball ? services().session.content.items.get(o.ball)?.iconAssetId : undefined;
+  if (ballIcon && services().assets.has(ballIcon) && !scene.textures.exists(ballIcon)) void loadAssets(scene, [ballIcon]).catch(() => undefined);
   let swapped = false;
   let newVisual: Visual | null = null;
   /** Put back when the cinematic ends. */
@@ -499,13 +504,16 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   function giantBallLong(): void {
     const grow = o.kind === 'gigantamax' ? 1.3 : DYNAMAX_SCALE;
     const swapAt = DYNAMAX_LONG_SWAP_AT;
-    const ballKey = 'pack.ebdx.tr.ball';
+    // The real Poké Ball picture (a 12x16 icon, so it is scaled up from the pack ball's 256 px size).
+    const ballItem = o.ball ?? DEFAULT_BALL;
+    const ballKey = has('ball.pb') ? 'ball.pb' : 'pack.ebdx.tr.ball';
+    const bk = has(ballKey) ? 256 / scene.textures.get(ballKey).getSourceImage().height : 1;
     const ground = o.y + 70;
     bars();
     sound('ess-flash2', 0.5);
     // 0-700: the ball opens and the Pokémon, flushed pale pink, is called back into it.
     const ball = has(ballKey)
-      ? add(scene.add.image(o.x + sideX * 20, ground, ballKey).setDepth(depth + 5).setScale(0.3).setAlpha(0))
+      ? add(ballVisual(scene, ballItem, o.x + sideX * 20, ground, 0.3 * bk).setDepth(depth + 5).setAlpha(0))
       : add(scene.add.circle(o.x + sideX * 20, ground, 14, 0xff3060).setDepth(depth + 5).setAlpha(0));
     tw({ targets: ball, alpha: 1, duration: 120, delay: 200 });
     if (oldSprite?.active) {
@@ -538,7 +546,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     }
     // 1900-2300: the ball swells and turns pink.
     at(2000, () => sound('ess-flash2', 0.8));
-    tw({ targets: ball, scale: has(ballKey) ? 0.45 : 1.5, duration: 300, delay: 2000, ease: 'Back.easeOut' });
+    tw({ targets: ball, scale: has(ballKey) ? 0.45 * bk : 1.5, duration: 300, delay: 2000, ease: 'Back.easeOut' });
     at(2000, () => (ball as Phaser.GameObjects.Image).setTint?.(o.calyrex ? 0x00cccc : 0xff3399));
     // The pink field, rays and the darkness it fades back from.
     const pink = add(scene.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, fieldColor, 0).setDepth(depth));
@@ -549,7 +557,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     });
     // 2700-3300: the ball falls from above and slams down; the screen shakes four times.
     at(2700, () => {
-      ball.setPosition(o.x, -80).setScale(has(ballKey) ? 0.45 : 1.5).setAlpha(1);
+      ball.setPosition(o.x, -80).setScale(has(ballKey) ? 0.45 * bk : 1.5).setAlpha(1);
       tw({ targets: ball, y: ground - 10, duration: 260, ease: 'Quad.easeIn' });
     });
     for (const [i, t] of [2960, 3060, 3160, 3240].entries()) {
@@ -580,7 +588,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     }
     at(3300, () => tw({ targets: ball, alpha: 0, scale: 0.9, duration: 260 }));
     if (has('pack.dbk.burst')) {
-      const glow = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3).setAlpha(0));
+      const glow = add(scene.add.image(o.x, o.y, 'pack.dbk.burst').setTint(0xff3060).setBlendMode('ADD').setDepth(depth + 2).setScale(0.3 * bk).setAlpha(0));
       tw({ targets: glow, scale: 2.4, alpha: 0.8, duration: 800, delay: 3300, yoyo: true });
     }
     // 4100: the giant Pokémon is there; it roars with the pulse, flashing and shaking.
