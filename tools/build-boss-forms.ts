@@ -209,19 +209,20 @@ const majors = readJson<{ entries: { bossId?: string; aceId?: string }[] }>('ove
 for (const e of majors) {
   const bt = e.bossId ? teams[e.bossId] : undefined;
   if (!bt || !e.aceId || !species.has(e.aceId)) continue;
-  if ((['gym', 'elite', 'champion'] as const).some((r) => bt[r].some((t) => t.members.some((m) => parseSp(m) === e.aceId)))) continue;
+  const aceId: string = e.aceId;
+  if ((['gym', 'elite', 'champion'] as const).some((r) => bt[r].some((t) => t.members.some((m) => parseSp(m) === aceId)))) continue;
   // Latest team first (the ace is a boss's top-tier Pokémon); the first one with room and no relative of the ace takes it.
   for (const team of (['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r]).reverse()) {
     const keep = new Set([...Object.values(gimmicks[e.bossId!]?.mons ?? {}), ...team.members.map(parseSp).filter((id) => customIds.has(id) || isLegend(species.get(id) ?? ({} as Sp)))]);
-    if (place(team, e.aceId, team.level, keep)) break;
+    if (place(team, aceId, team.level, keep)) break;
     // Its own line is already there as a custom form (Blastoise-Delta): the plain ace takes that slot, and another custom form joins.
-    const at = team.members.findIndex((m, i) => i < team.members.length - 1 && customIds.has(parseSp(m)) && family(parseSp(m)) === family(e.aceId));
+    const at = team.members.findIndex((m, i) => i < team.members.length - 1 && customIds.has(parseSp(m)) && family(parseSp(m)) === family(aceId));
     if (at < 0) continue;
     const boss = bosses.find((b) => b.id === e.bossId)!;
     const before = [...team.members];
-    team.members[at] = text(e.aceId, pickMoves(species.get(e.aceId)!, team.level), parseTraining(before[at]!));
-    const others = ranked(boss, new Set(team.members.map(parseSp))).filter((c) => family(c.id) !== family(e.aceId));
-    const done = others.some((c) => { const st = stageFor(c, team.level); return st && place(team, st.id, team.level, new Set([...keep, e.aceId])); });
+    team.members[at] = text(aceId, pickMoves(species.get(aceId)!, team.level), parseTraining(before[at]!));
+    const others = ranked(boss, new Set(team.members.map(parseSp))).filter((c) => family(c.id) !== family(aceId));
+    const done = others.some((c) => { const st = stageFor(c, team.level); return st && place(team, st.id, team.level, new Set([...keep, aceId])); });
     if (done) break;
     team.members = before;
   }
