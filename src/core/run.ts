@@ -99,6 +99,7 @@ import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
+import { endLastResort } from './battle/lastResort';
 import { defaultPrep, draftStarters, startingResources, withSignatureStarter } from './runPrep';
 import { currentRegion, generateRegionOrder, getCampaign, pickLeague, runLevelCap } from './regions';
 import { wildLuck } from './wildLuck';
@@ -261,6 +262,8 @@ import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playSt
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
 import type { Nemesis, Rival } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
+import { mentorshipsAfterBattle } from './story/mentorBond';
+import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
@@ -2864,6 +2867,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
 
   // Beta 4.4: Hyper slots end with the battle; after a win or catch each is offered to keep.
+  if (battle.outcome) endLastResort(run);
   if (battle.outcome) endHyperMoves(run, (battle.outcome === 'win' || battle.outcome === 'caught') && !battle.raid?.practice);
   if (battle.outcome === 'win' && !run.party.some((m) => m.hp > 0)) {
     // A double KO that the player wins (recoil, Explosion by the foe) must not leave a team that cannot fight again.
@@ -3417,9 +3421,16 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     count(run, 'reunions');
   }
   // A veteran may offer to mentor a younger teammate.
+  // Beta 0.5: mentorships grow (chemistry, stat drift, events), a defeated foe may come back as a protégé.
+  if (battle.outcome === 'win') {
+    recordDefeats(content, run);
+    mentorshipsAfterBattle(content, run, !!battle.trainer?.leaderId);
+  }
   graduateMentorships(content, run);
   const mentorOffer = !run.victory ? planMentorship(content, run) : null;
   if (mentorOffer) run.pending.push({ kind: 'mentorship', ...mentorOffer });
+  const returnOffer = !run.victory && battle.outcome === 'win' && !mentorOffer ? planReturn(content, run) : null;
+  if (returnOffer) run.pending.push({ kind: 'returnProtege', mon: returningPokemon(content, run, returnOffer, nextUid(run, 'p')), mentorUid: returnOffer.mentorUid, reason: returnOffer.reason });
   const leadAsk = !run.victory && battle.outcome === 'win' && !mentorOffer ? planAskLead(content, run) : null;
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
   // An event battle you won pays its own rewards.
@@ -3586,6 +3597,7 @@ export type DecisionChoice =
   | { kind: 'teachMove'; moveIndex: number }
   | { kind: 'ppUpMove'; moveIndex: number }
   | { kind: 'mentor'; accept: boolean }
+  | { kind: 'returnProtege' }
   | { kind: 'askLead'; accept: boolean }
   | { kind: 'circuit'; optionIndex: number };
 
@@ -3693,6 +3705,9 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   } else if (decision.kind === 'mentorship') {
     if (choice.kind !== 'mentor') throw new Error('Accept or decline the mentorship');
     message = answerMentorship(content, run, decision, choice.accept);
+  } else if (decision.kind === 'returnProtege') {
+    if (choice.kind !== 'returnProtege') throw new Error('Continue the scene');
+    message = answerReturn(content, run, decision);
   } else if (decision.kind === 'askLead') {
     if (choice.kind !== 'askLead') throw new Error('Say yes or not now');
     message = answerAskLead(content, run, decision, choice.accept);
