@@ -44,6 +44,7 @@ export const SaveSpecSchema = z.object({
   modifiers: z.array(z.string()).optional(),
   deathBlock: z.boolean().optional(),
   campaign: z.literal('full').optional(),
+  startRegion: z.string().optional().describe('Region id that comes first in the run (e.g. galar); swapped with its seeded slot'),
   region: z.number().int().min(1).optional().describe('1-based region number'),
   stage: z.number().int().min(1).optional().describe('1-based stage number inside the region'),
   money: z.number().int().min(0).optional(),
@@ -214,6 +215,14 @@ function buildRun(content: Content, spec: SaveSpec, problems: string[]): RunStat
   const seed = spec.seed ?? 'generated-run';
   const rules = { modeId: spec.mode ?? 'standard', difficultyId: spec.difficulty ?? 'standard', modifierIds: spec.modifiers ?? [], deathBlock: spec.deathBlock ?? false };
   let run = createRun(content, { archetypeId: trainer, seed, runId: `gen-${seed}`, rules } as Parameters<typeof createRun>[1]);
+  if (spec.startRegion) {
+    if (!content.regions.has(spec.startRegion)) { problems.push(`unknown startRegion "${spec.startRegion}"`); return null; }
+    const order = [...run.regionOrder];
+    const at = order.indexOf(spec.startRegion);
+    if (at > 0) [order[0], order[at]] = [order[at]!, order[0]!];
+    else if (at < 0) order[0] = spec.startRegion;
+    run.regionOrder = order;
+  }
   run = chooseStarter(content, run, 0);
   const regionIdx = (spec.region ?? 1) - 1;
   const stageIdx = (spec.stage ?? 1) - 1;
