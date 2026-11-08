@@ -23,6 +23,8 @@ const base = readJson<Sp[]>('species.json');
 const custom = readJson<Sp[]>('customSpecies.json');
 const story = readJson<{ species: Sp[]; moves?: Mv[] }>('storySpecies.json');
 const jet = readJson<{ species: Sp[]; moves?: Mv[] }>('jetSpecies.json');
+// The Story Overhaul species (S15) are later additions: old-seed tests strip them from the game, so no boss team may use them.
+const STORY = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
 const customIds = new Set([...custom, ...story.species, ...jet.species].map((s) => s.id));
 const species = new Map([...base, ...custom, ...story.species, ...jet.species].map((s) => [s.id, s]));
 const moves = new Map([...readJson<Mv[]>('moves.json'), ...(story.moves ?? []), ...(jet.moves ?? [])].filter((m) => m.supported !== false).map((m) => [m.id, m]));
@@ -65,7 +67,7 @@ const text = (id: string, mv: string[], training?: string) => [id, mv.join(' '),
 
 // ---------------------------------------------------------------- custom candidates
 const EXCLUDED = /-(mega|active|crystal|attack|defence|day|fired|armor)(-|$)|^ditto|^silvally/;
-const finals = [...species.values()].filter((s) => customIds.has(s.id) && !isLegend(s) && !(s.tags ?? []).includes('baby') && !EXCLUDED.test(s.id) && !/mega|battle/.test(s.form?.kind ?? '') && !children.has(s.id));
+const finals = [...species.values()].filter((s) => customIds.has(s.id) && !STORY.has(s.id) && !isLegend(s) && !(s.tags ?? []).includes('baby') && !EXCLUDED.test(s.id) && !/mega|battle/.test(s.form?.kind ?? '') && !children.has(s.id));
 /** A species' own line, from the first stage up to `s`. */
 const lineTo = (s: Sp): Sp[] => { const out = [s]; for (let g = 0; g < 4 && out[0]!.evolvesFrom && species.get(out[0]!.evolvesFrom!); g++) out.unshift(species.get(out[0]!.evolvesFrom!)!); return out; };
 const bstCap = (level: number) => balance.levelBst.base + balance.levelBst.perLevel * level + 100;
@@ -108,7 +110,7 @@ const LORE: Record<string, string[]> = {
   volo: ['giratina'], ash: ['ho-oh', 'lugia'], red: ['mew', 'arceus'],
 };
 
-const legends = [...species.values()].filter((s) => isLegend(s) && !s.form && !(s.tags ?? []).includes('baby'));
+const legends = [...species.values()].filter((s) => isLegend(s) && !STORY.has(s.id) && !s.form && !(s.tags ?? []).includes('baby'));
 let customAdded = 0, legendAdded = 0, remapped = 0, skipped = 0;
 
 const place = (team: Team, newId: string, level: number, protect: Set<string>, preferFamily?: string, includeAce = false): boolean => {
@@ -124,6 +126,25 @@ const place = (team: Team, newId: string, level: number, protect: Set<string>, p
   return true;
 };
 
+
+// Evict story species from boss teams (earlier runs of this tool may have placed them): a plain same-type stand-in
+// takes the slot, and the passes below put a custom form or Legendary back where one is due.
+const standIns = base.filter((s) => !s.form && !children.has(s.id) && !isLegend(s) && !(s.tags ?? []).includes('baby') && !customIds.has(s.id));
+for (const boss of bosses) {
+  const bt = teams[boss.id];
+  if (!bt) continue;
+  for (const team of (['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r])) {
+    team.members.forEach((m, i) => {
+      const old = species.get(parseSp(m));
+      if (!old || !STORY.has(old.id)) return;
+      const have = new Set(team.members.map((x) => family(parseSp(x))));
+      const pick = standIns
+        .filter((c) => !have.has(family(c.id)) && (boss.types.length === 0 || c.types.some((t) => boss.types.includes(t))) && bst(c) <= bstCap(team.level) && pickMoves(c, team.level).length > 0)
+        .sort((a, b) => Math.abs(bst(a) - bst(old)) - Math.abs(bst(b) - bst(old)) || a.id.localeCompare(b.id))[0];
+      if (pick) team.members[i] = text(pick.id, pickMoves(pick, team.level), parseTraining(m));
+    });
+  }
+}
 
 for (const boss of bosses) {
   const bt = teams[boss.id];
