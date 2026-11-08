@@ -31,3 +31,4 @@ Cinematics M6: no save bump.
 ## Known limits / open items
 
 - Galar: bracket screen now has a watchable match (W): a short auto-played replay with HP bars and commentary, skippable. Save: none.
+- Trainer behavior follow-up (stacks on #1069): specialization steers AI and teams, wealth kit items, bond protect/refuse-to-recall, rival gimmicks, returning trainers adapt. No save bump.

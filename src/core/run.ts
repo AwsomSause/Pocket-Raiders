@@ -174,7 +174,8 @@ import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPur
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
-import { applyTrainerParity, trainerHistoryLine } from './trainerWorld/trainerWorld';
+import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
+import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
@@ -2068,6 +2069,14 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       plan = { ...plan, members: trained.members };
       trainingIndex = trained.index;
     }
+    // Beta 0.5 M2: an ordinary trainer that lost to you before plans for it (its ace may evolve; its team gets answers).
+    const returningNotes: string[] = [];
+    if (!plan.leaderId && !rivalBack && !takeover) {
+      const prior = run.story.trainers?.[trainerKey({ classId: plan.classId, name: plan.name, leaderId: null })];
+      const back = returningPlan(content, plan, prior, (prior?.beatenBy?.types ?? []) as TypeName[]);
+      plan = back.plan;
+      returningNotes.push(...back.notes);
+    }
     const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).
@@ -2078,15 +2087,24 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       return mon;
     });
     // Beta 0.5 M1: this trainer follows the player's systems (friendship, bond, mastered moves, specialization), kept in its record.
-    const parity = applyTrainerParity(content, run, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId }, built, rivalBack?.id ?? takeover?.id ?? null);
-    if (parity) plan = { ...plan, specialization: parity.specialization, ...(plan.memoryNote ? {} : (() => { const l = trainerHistoryLine(content, parity); return l ? { memoryNote: l } : {}; })()) };
+    const parityLines: string[] = [];
+    const parity = applyTrainerParity(content, run, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId }, built, rivalBack?.id ?? takeover?.id ?? null, parityLines);
+    if (parity) {
+      const history = trainerHistoryLine(content, parity, run.party.map((m) => m.speciesId));
+      const notes = [...returningNotes, ...parityLines, ...(plan.memoryNote ? [] : history ? [history] : [])];
+      plan = { ...plan, specialization: parity.specialization, ...(notes.length > 0 ? { memoryNote: [plan.memoryNote, ...notes].filter(Boolean).join(' ') } : {}) };
+    }
     // S272 team roles: an ordinary trainer leads with its hazard setter (or fastest) and saves its ace for last.
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
-    if (parity) run.battle.trainerWealth = parity.wealth;
+    if (parity) {
+      run.battle.trainerWealth = parity.wealth;
+      run.battle.specialization = parity.specialization;
+      run.battle.trainerKit = trainerKit(content, team, parity.specialization, parity.wealth);
+    }
     if (plan.strategy) run.battle.strategy = plan.strategy;
     run.battle.levelInfo = order.every((i, n) => i === n) ? plan.levelInfo : order.map((i) => plan.levelInfo[i]!).filter(Boolean);
     if (rematch) run.battle.rematch = true;
@@ -2155,6 +2173,10 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const gimmickPlan = role
       ? planBossGimmicks(content, run.battle.trainer?.leaderId, run.battle.enemyTeam, gimmickSlots(run.regionIndex, role === 'gym' ? stage.index + 1 : null, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics)
       : {};
+    // Beta 0.5 M1: a rival uses gimmicks by the same schedule as a boss (at most two), on its ace first.
+    if (!role && (rivalBack || takeover || isRival) && parity) {
+      Object.assign(gimmickPlan, planTrainerGimmicks(content, parity.key, run.battle.enemyTeam, gimmickSlots(run.regionIndex, stage.index + 1, content.balance.transformations.bossGimmickAfterStage), 2, run.disabledMechanics));
+    }
     run.battle.transform.bossPlan = gimmickPlan;
     run.battle.transform.enemyMechanics = [...new Set(Object.values(gimmickPlan))];
     // Meteor's Prophecy: every third boss also gains a random second type (its own seed, so no other roll changes).
