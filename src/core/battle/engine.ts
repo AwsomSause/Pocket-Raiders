@@ -4462,6 +4462,13 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   if (battle.ai <= 0) return false; // S271: ordinary trainers only heal
   const moment = trainerBondMoment(ctx, enemy, max, events);
   if (moment) return true;
+  // Sweep guard: a boss or rival whose team keeps falling to one Pokémon braces each new Pokémon (+Defence, +Sp. Def, +Speed) when the player has other Pokémon left.
+  const guard = cfg.sweepGuard;
+  if (guard.kos > 0 && (battle.trainer?.leaderId || battle.rival) && battle.sweep && battle.sweep.kos >= guard.kos && battle.sweep.braced !== mon.uid && ctx.party.filter((p) => p.hp > 0).length > 1) {
+    battle.sweep = { ...battle.sweep, braced: mon.uid, used: battle.sweep.used + 1 };
+    events.push(say('enemy', 'rally', `${getSpecies(content, mon.speciesId).name} steels itself to stop the winning streak!`, mon.uid));
+    for (const stat of guard.stats) applyStageChange(ctx, enemy, stat, guard.stages, events);
+  }
   if (battle.enemySwitches >= cfg.maxSwitches || enemy.vol.turnsOut < 1 || enemy.vol.trapped || enemy.vol.bound > 0) return false;
   if ((mon.friendship ?? 0) >= 230 && !(battle.enemyMoments ??= []).includes(`refuse:${mon.uid}`) && mon.hp / max >= 0.2) {
     battle.enemyMoments.push(`refuse:${mon.uid}`);
@@ -6208,6 +6215,8 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
     events.push({ type: 'faint', side: c.side, uid: c.mon.uid, participants });
     spectacleFaint(ctx, c.side, c.mon.uid, events);
     if (c.side === 'enemy' && player.mon.uid === ctx.party[ctx.battle.activeIndex]?.uid) friendlyFinish(ctx, player.mon, events);
+    if (c.side === 'enemy' && player.mon.hp > 0) ctx.battle.sweep = { uid: player.mon.uid, kos: (ctx.battle.sweep?.uid === player.mon.uid ? ctx.battle.sweep.kos : 0) + 1, used: ctx.battle.sweep?.used ?? 0, ...(ctx.battle.sweep?.braced ? { braced: ctx.battle.sweep.braced } : {}) };
+    else if (c.side === 'player' && ctx.battle.sweep?.uid === c.mon.uid) ctx.battle.sweep = { uid: '', kos: 0, used: ctx.battle.sweep.used };
   }
 }
 

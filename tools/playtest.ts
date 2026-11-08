@@ -26,7 +26,9 @@ const { Rng, hashSeed } = await loadModule<typeof RngMod>('/src/core/rng.ts');
 const sideMods = { run: await loadModule<typeof RunMod>('/src/core/run.ts'), exp: await loadModule<typeof Expedition>('/src/core/expedition/flow.ts'), mini: await loadModule<typeof Minigame>('/src/core/minigame/flow.ts'), events: await loadModule<typeof Events>('/src/core/events.ts'), services: await loadModule<typeof Services>('/src/core/services/flow.ts'), plaza: await loadModule<typeof Plaza>('/src/core/plaza/flow.ts'), auto: await loadModule<typeof Auto>('/tests/unit/autoplay.ts') };
 await closeModules();
 
-const content = buildContent();
+const builtContent = buildContent();
+// The deep bot plays no tactics, so the sweep-answering difficulty (boss gear, sweep guard) would stop it before region 3; it plays with them off (the other runs use the shipped settings).
+const content = process.argv.includes('--deep') ? { ...builtContent, balance: { ...builtContent.balance, bossGear: false, trainerAi: { ...builtContent.balance.trainerAi, sweepGuard: { ...builtContent.balance.trainerAi.sweepGuard, kos: 0 } } } } : builtContent;
 const archetypes = [...content.archetypes.values()].filter((a) => a.available !== false).map((a) => a.id);
 const modes = RUN_RULES.modes.filter((m) => m.status === 'supported').map((m) => m.id);
 const difficulties = RUN_RULES.difficulties.map((d) => d.id);
@@ -75,6 +77,7 @@ for (let i = from; i < from + count; i++) {
   const visit = SIDES ? sideBot(sideMods, content, new Set(), findings, visits) : null;
   try {
     const run = autoplay({
+      content,
       seed: cfg.seed,
       archetypeId: cfg.archetypeId,
       rules: { modeId: cfg.modeId, difficultyId: cfg.difficultyId, modifierIds: cfg.modifierIds, deathBlock: cfg.deathBlock },

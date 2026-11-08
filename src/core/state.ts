@@ -741,6 +741,8 @@ export const BattleStateSchema = z.object({
   /** A smart trainer's potions and deliberate switches so far this battle. */
   enemyItemsUsed: z.number().int().min(0).default(0),
   enemySwitches: z.number().int().min(0).default(0),
+  /** Sweep guard: the player's Pokémon on a KO streak (uid, KOs in a row) and how many times the boss has braced (balance.trainerAi.sweepGuard). */
+  sweep: z.object({ uid: z.string(), kos: z.number().int().min(0), used: z.number().int().min(0), braced: z.string().optional() }).optional(),
   /** Beta 0.5 M1: the trainer's wealth (0-3) sets how many potions it carries and how strong they are (core/trainerWorld). Missing = the old fixed rule. */
   trainerWealth: z.number().int().min(0).max(3).optional(),
   /** Beta 0.5 M1: the trainer's battle consumables left (status cure, X-item for the ace, saved full restore; core/trainerWorld/behavior.ts). */
