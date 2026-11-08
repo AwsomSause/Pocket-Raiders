@@ -4,6 +4,8 @@
 //   2. every Champion team of region 6 and later (champion index 5..9) gets at least one Legendary.
 // Designated gimmick Pokémon (bossGimmicks.json) are never removed, except a non-Mega one whose whole
 // family is swapped for its custom form, in which case the designation moves with it.
+//   3. LORE: each Champion's Legendaries are picked to fit the trainer (Hau: Tapu Koko, Cynthia: Cresselia).
+// Run `npm run data:boss-gimmicks` afterwards (it owns bossGimmicks.json).
 //   node tools/build-boss-forms.ts      (deterministic; running it twice changes nothing)
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -21,6 +23,8 @@ const base = readJson<Sp[]>('species.json');
 const custom = readJson<Sp[]>('customSpecies.json');
 const story = readJson<{ species: Sp[]; moves?: Mv[] }>('storySpecies.json');
 const jet = readJson<{ species: Sp[]; moves?: Mv[] }>('jetSpecies.json');
+// The Story Overhaul species (S15) are later additions: old-seed tests strip them from the game, so no boss team may use them.
+const STORY = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
 const customIds = new Set([...custom, ...story.species, ...jet.species].map((s) => s.id));
 const species = new Map([...base, ...custom, ...story.species, ...jet.species].map((s) => [s.id, s]));
 const moves = new Map([...readJson<Mv[]>('moves.json'), ...(story.moves ?? []), ...(jet.moves ?? [])].filter((m) => m.supported !== false).map((m) => [m.id, m]));
@@ -63,7 +67,7 @@ const text = (id: string, mv: string[], training?: string) => [id, mv.join(' '),
 
 // ---------------------------------------------------------------- custom candidates
 const EXCLUDED = /-(mega|active|crystal|attack|defence|day|fired|armor)(-|$)|^ditto|^silvally/;
-const finals = [...species.values()].filter((s) => customIds.has(s.id) && !isLegend(s) && !(s.tags ?? []).includes('baby') && !EXCLUDED.test(s.id) && !/mega|battle/.test(s.form?.kind ?? '') && !children.has(s.id));
+const finals = [...species.values()].filter((s) => customIds.has(s.id) && !STORY.has(s.id) && !isLegend(s) && !(s.tags ?? []).includes('baby') && !EXCLUDED.test(s.id) && !/mega|battle/.test(s.form?.kind ?? '') && !children.has(s.id));
 /** A species' own line, from the first stage up to `s`. */
 const lineTo = (s: Sp): Sp[] => { const out = [s]; for (let g = 0; g < 4 && out[0]!.evolvesFrom && species.get(out[0]!.evolvesFrom!); g++) out.unshift(species.get(out[0]!.evolvesFrom!)!); return out; };
 const bstCap = (level: number) => balance.levelBst.base + balance.levelBst.perLevel * level + 100;
@@ -81,8 +85,66 @@ function ranked(boss: (typeof bosses)[number], teamSpecies: Set<string>): Sp[] {
     .map((x) => x.s);
 }
 
-const legends = [...species.values()].filter((s) => isLegend(s) && !s.form && !(s.tags ?? []).includes('baby'));
+
+// Lore picks, best first. The first goes on every Champion team from region 6; the second joins from region 9.
+// Bosses not listed keep the type-matched Legendary chosen above.
+const LORE: Record<string, string[]> = {
+  misty: ['manaphy', 'suicune'], 'lt-surge': ['zapdos', 'raikou'], erika: ['celebi', 'shaymin'], blaine: ['moltres', 'entei'],
+  giovanni: ['mewtwo', 'landorus'], lorelei: ['articuno', 'regice'], agatha: ['giratina', 'spectrier'], lance: ['rayquaza', 'reshiram'],
+  sabrina: ['uxie', 'mew'], 'mr-fuji': ['mew'], clair: ['rayquaza'], ethan: ['ho-oh', 'lugia'], kris: ['lugia', 'ho-oh'], lyra: ['suicune', 'entei'],
+  elm: ['celebi'], eusine: ['suicune', 'raikou'], roxanne: ['regirock', 'diancie'], flannery: ['heatran', 'entei'], norman: ['regigigas', 'arceus'],
+  winona: ['rayquaza', 'tornadus'], juan: ['kyogre', 'manaphy'], phoebe: ['spectrier', 'giratina'], glacia: ['regice', 'articuno'],
+  drake: ['rayquaza', 'dialga'], steven: ['regirock', 'registeel'], wallace: ['kyogre', 'manaphy'], brendan: ['latios'], may: ['latias'],
+  maxie: ['groudon'], archie: ['kyogre'], shelly: ['kyogre'], zinnia: ['rayquaza'],
+  cynthia: ['cresselia', 'arceus'], palmer: ['regigigas', 'cresselia'], cyrus: ['dialga', 'palkia'], rowan: ['arceus', 'dialga'],
+  lucian: ['uxie', 'mesprit'], flint: ['heatran', 'entei'], volkner: ['raikou', 'zekrom'], byron: ['dialga', 'registeel'],
+  candice: ['regice', 'glastrier'], maylene: ['terrakion', 'cobalion'], gardenia: ['shaymin', 'virizion'], roark: ['regirock', 'diancie'],
+  'crasher-wake': ['manaphy', 'kyogre'], barry: ['latios'], dawn: ['jirachi', 'mesprit'],
+  n: ['reshiram', 'zekrom'], ghetsis: ['kyurem'], colress: ['genesect'], hilbert: ['zekrom'], hilda: ['reshiram'], cilan: ['virizion'],
+  korrina: ['zygarde'], lysandre: ['yveltal'],
+  hau: ['tapu-koko'], hala: ['tapu-koko'], olivia: ['tapu-lele'], nanu: ['tapu-bulu'], hapu: ['tapu-fini'], lana: ['tapu-fini'], mallow: ['tapu-bulu'],
+  sophocles: ['tapu-koko', 'zeraora'], mina: ['tapu-lele'], gladion: ['silvally'], lillie: ['lunala', 'solgaleo'], lusamine: ['lunala'],
+  elio: ['solgaleo'], selene: ['lunala'],
+  leon: ['zacian', 'eternatus'], hop: ['zamazenta'], gloria: ['zacian'], raihan: ['eternatus'], rose: ['eternatus'], oleana: ['eternatus'],
+  arven: ['koraidon', 'miraidon'], nemona: ['koraidon'], turo: ['miraidon'], sada: ['koraidon'], iono: ['miraidon'], kieran: ['ogerpon'],
+  volo: ['giratina'], ash: ['ho-oh', 'lugia'], red: ['mew', 'arceus'],
+};
+
+const legends = [...species.values()].filter((s) => isLegend(s) && !STORY.has(s.id) && !s.form && !(s.tags ?? []).includes('baby'));
 let customAdded = 0, legendAdded = 0, remapped = 0, skipped = 0;
+
+const place = (team: Team, newId: string, level: number, protect: Set<string>, preferFamily?: string, includeAce = false): boolean => {
+  const ns = species.get(newId)!;
+  const fam = family(newId);
+  const idxs = team.members.map((m, i) => ({ id: parseSp(m), i })).slice(0, includeAce ? undefined : -1);
+  let slot = preferFamily ? idxs.find((x) => family(x.id) === preferFamily && !protect.has(x.id)) : undefined;
+  // A team that already holds this family elsewhere would end up with a duplicate: skip.
+  if (!slot && team.members.some((m) => family(parseSp(m)) === fam)) return false;
+  slot ??= idxs.filter((x) => !protect.has(x.id)).sort((a, b) => bst(species.get(a.id) ?? ns) - bst(species.get(b.id) ?? ns))[0];
+  if (!slot) return false;
+  team.members[slot.i] = text(newId, pickMoves(ns, level), parseTraining(team.members[slot.i]!));
+  return true;
+};
+
+
+// Evict story species from boss teams (earlier runs of this tool may have placed them): a plain same-type stand-in
+// takes the slot, and the passes below put a custom form or Legendary back where one is due.
+const standIns = base.filter((s) => !s.form && !children.has(s.id) && !isLegend(s) && !(s.tags ?? []).includes('baby') && !customIds.has(s.id));
+for (const boss of bosses) {
+  const bt = teams[boss.id];
+  if (!bt) continue;
+  for (const team of (['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r])) {
+    team.members.forEach((m, i) => {
+      const old = species.get(parseSp(m));
+      if (!old || !STORY.has(old.id)) return;
+      const have = new Set(team.members.map((x) => family(parseSp(x))));
+      const pick = standIns
+        .filter((c) => !have.has(family(c.id)) && (boss.types.length === 0 || c.types.some((t) => boss.types.includes(t))) && bst(c) <= bstCap(team.level) && pickMoves(c, team.level).length > 0)
+        .sort((a, b) => Math.abs(bst(a) - bst(old)) - Math.abs(bst(b) - bst(old)) || a.id.localeCompare(b.id))[0];
+      if (pick) team.members[i] = text(pick.id, pickMoves(pick, team.level), parseTraining(m));
+    });
+  }
+}
 
 for (const boss of bosses) {
   const bt = teams[boss.id];
@@ -94,19 +156,6 @@ for (const boss of bosses) {
   const cands = ranked(boss, new Set(all.flatMap((t) => t.members.map(parseSp))));
   // One signature custom line per boss: its family swaps in wherever that family already appears.
   const main = cands.find((c) => !megaMon || family(c.id) !== family(megaMon)) ?? cands[0]!;
-
-  const place = (team: Team, newId: string, level: number, protect: Set<string>, preferFamily?: string, includeAce = false): boolean => {
-    const ns = species.get(newId)!;
-    const fam = family(newId);
-    const idxs = team.members.map((m, i) => ({ id: parseSp(m), i })).slice(0, includeAce ? undefined : -1);
-    let slot = preferFamily ? idxs.find((x) => family(x.id) === preferFamily && !protect.has(x.id)) : undefined;
-    // A team that already holds this family elsewhere would end up with a duplicate: skip.
-    if (!slot && team.members.some((m) => family(parseSp(m)) === fam)) return false;
-    slot ??= idxs.filter((x) => !protect.has(x.id)).sort((a, b) => bst(species.get(a.id) ?? ns) - bst(species.get(b.id) ?? ns))[0];
-    if (!slot) return false;
-    team.members[slot.i] = text(newId, pickMoves(ns, level), parseTraining(team.members[slot.i]!));
-    return true;
-  };
 
   for (const role of ['gym', 'elite', 'champion'] as const) {
     bt[role].forEach((team, index) => {
@@ -138,6 +187,26 @@ for (const boss of bosses) {
       }
     });
   }
+  // Lore Legendaries for the late Champions: swap out a type-matched Legendary first, else the weakest free slot.
+  const wanted = LORE[boss.id];
+  if (wanted) {
+    const keep = new Set([...wanted, ...boss.signature]);
+    bt.champion.forEach((team, index) => {
+      if (index < 5) return;
+      for (const id of wanted.slice(0, index >= 8 ? 2 : 1)) {
+        if (team.members.some((m) => parseSp(m) === id) || !species.has(id)) continue;
+        const ids = team.members.map(parseSp);
+        const stray = ids.findIndex((x, i) => i < ids.length - 1 && isLegend(species.get(x) ?? ({} as Sp)) && !keep.has(x));
+        if (stray >= 0) {
+          team.members[stray] = text(id, pickMoves(species.get(id)!, team.level), parseTraining(team.members[stray]!));
+        } else {
+          const custom = ids.filter((x) => customIds.has(x));
+          const lore = new Set([...custom, ...wanted, ...(megaMon ? [megaMon] : [])]);
+          if (!place(team, id, team.level, new Set([...designated, ...lore]))) place(team, id, team.level, lore);
+        }
+      }
+    });
+  }
   // A designated Pokémon whose whole family was swapped away: the designation follows to the custom form.
   if (gim) {
     const present = new Set(all.flatMap((t) => t.members.map(parseSp)));
@@ -155,6 +224,62 @@ for (const boss of bosses) {
   }
 }
 
+// ---------------------------------------------------------------- repairs
+// A major trainer's ace (src/data/overhaul/major_trainers.json) must stay on its boss's teams.
+const majors = readJson<{ entries: { bossId?: string; aceId?: string }[] }>('overhaul/major_trainers.json').entries;
+for (const e of majors) {
+  const bt = e.bossId ? teams[e.bossId] : undefined;
+  if (!bt || !e.aceId || !species.has(e.aceId)) continue;
+  const aceId: string = e.aceId;
+  if ((['gym', 'elite', 'champion'] as const).some((r) => bt[r].some((t) => t.members.some((m) => parseSp(m) === aceId)))) continue;
+  // Latest team first (the ace is a boss's top-tier Pokémon); the first one with room and no relative of the ace takes it.
+  for (const team of (['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r]).reverse()) {
+    const keep = new Set([...Object.values(gimmicks[e.bossId!]?.mons ?? {}), ...team.members.map(parseSp).filter((id) => customIds.has(id) || isLegend(species.get(id) ?? ({} as Sp)))]);
+    if (place(team, aceId, team.level, keep)) break;
+    // Its own line is already there as a custom form (Blastoise-Delta): the plain ace takes that slot, and another custom form joins.
+    const at = team.members.findIndex((m, i) => i < team.members.length - 1 && customIds.has(parseSp(m)) && family(parseSp(m)) === family(aceId));
+    if (at < 0) continue;
+    const boss = bosses.find((b) => b.id === e.bossId)!;
+    const before = [...team.members];
+    team.members[at] = text(aceId, pickMoves(species.get(aceId)!, team.level), parseTraining(before[at]!));
+    const others = ranked(boss, new Set(team.members.map(parseSp))).filter((c) => family(c.id) !== family(aceId));
+    const done = others.some((c) => { const st = stageFor(c, team.level); return st && place(team, st.id, team.level, new Set([...keep, aceId])); });
+    if (done) break;
+    team.members = before;
+  }
+}
+
+// No two boss teams may be the same fight (same species and moves, training aside): a repeat swaps its custom form for the boss's next-best one.
+const seenTeams = new Set<string>();
+let deduped = 0;
+for (const boss of bosses) {
+  const bt = teams[boss.id];
+  if (!bt) continue;
+  const cands = ranked(boss, new Set((['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r].flatMap((t) => t.members.map(parseSp)))));
+  for (const role of ['gym', 'elite', 'champion'] as const) {
+    for (const team of bt[role]) {
+      const lineup = () => team.members.map((m) => m.split(' / ').slice(0, 2).join(' / ')).join('|');
+      let key = lineup();
+      if (seenTeams.has(key)) {
+        const at = team.members.findIndex((m, i) => i < team.members.length - 1 && customIds.has(parseSp(m)) && !isLegend(species.get(parseSp(m)) ?? ({} as Sp)));
+        if (at >= 0) {
+          const old = team.members[at]!;
+          for (const c of cands) {
+            const st = stageFor(c, team.level);
+            if (!st || team.members.some((m, i) => i !== at && family(parseSp(m)) === family(st.id))) continue;
+            team.members[at] = text(st.id, pickMoves(st, team.level), parseTraining(old));
+            if (!seenTeams.has(lineup())) { deduped++; break; }
+            team.members[at] = old;
+          }
+        }
+        key = lineup();
+      }
+      seenTeams.add(key);
+    }
+  }
+}
+console.log(`repeated teams fixed: ${deduped}`);
+
 // One team per line keeps the file readable and its diffs small (same layout as build-boss-teams.ts).
 const lines = Object.entries(teams).map(([id, roles]) => {
   const roleText = (Object.keys(roles) as (keyof typeof roles)[])
@@ -163,5 +288,4 @@ const lines = Object.entries(teams).map(([id, roles]) => {
   return ` ${JSON.stringify(id)}: {\n${roleText}\n }`;
 });
 writeFileSync(join(dataDir, 'bossTeams.json'), `{\n${lines.join(',\n')}\n}\n`);
-writeFileSync(join(dataDir, 'bossGimmicks.json'), JSON.stringify(gimmicks, null, 1) + '\n');
 console.log(`custom forms added: ${customAdded}, legendaries added: ${legendAdded}, gimmick designations moved: ${remapped}, skipped: ${skipped}`);
