@@ -66,6 +66,7 @@ export function mentorTypesFor(content: Content, run: RunState, mentor: PokemonI
   const gap = mentor.level - prote.level;
   const shared = ms.types.filter((t) => ps.types.includes(t));
   const out: MentorType[] = [];
+  if (!content.balance.mentorRework) return gap >= rule.levelGap && hm.battles >= rule.mentorBattles && hm.bossesBeaten >= 1 ? ['veteran'] : [];
   if (gap >= rule.levelGap && hm.battles >= rule.mentorBattles && hm.bossesBeaten >= 1) out.push('veteran');
   if (Math.abs(gap) <= c.rivalLevelGap && hm.battles >= c.rivalBattles && hp.battles >= c.rivalBattles && (shared.length > 0 || (hm.finishTrades[prote.uid] ?? 0) >= 2 || (hp.finishTrades[mentor.uid] ?? 0) >= 2)) out.push('rival');
   if (gap >= c.protectorGap && hm.knockoutsDealt >= c.protectorKnockouts && hp.knockoutsTaken >= 1) out.push('protector');
@@ -153,6 +154,7 @@ export function applyDrift(content: Content, bond: MentorBond, mentor: PokemonIn
 /** After a won battle: every open mentorship whose pair both stand in the party gains chemistry and drift. Returns lines for the log. */
 export function mentorshipsAfterBattle(content: Content, run: RunState, boss: boolean): string[] {
   const lines: string[] = [];
+  if (!content.balance.mentorRework) return lines;
   const index = run.encountersCompleted;
   for (const rel of run.story.relationships) {
     if (!rel.open || rel.kind !== 'mentorship') continue;

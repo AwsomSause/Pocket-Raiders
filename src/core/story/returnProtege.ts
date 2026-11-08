@@ -19,7 +19,7 @@ const nm = (content: Content, id: string) => content.species.get(id)?.name ?? id
 /** After a won battle: keep the foes your Pokémon knocked out (the ones still alive in your party). */
 export function recordDefeats(content: Content, run: RunState): void {
   const battle = run.battle;
-  if (!battle || battle.outcome !== 'win') return;
+  if (!content.balance.mentorRework || !battle || battle.outcome !== 'win') return;
   const index = run.encountersCompleted;
   const m = run.story.mentoring;
   for (const k of run.story.events) {
@@ -54,7 +54,7 @@ export function planReturn(content: Content, run: RunState): ReturnOffer | null 
   const m = run.story.mentoring;
   const cfg = MENTOR_CFG.return;
   const index = run.encountersCompleted;
-  if (run.victory || m.returns >= cfg.maxReturns || run.pending.some((p) => p.kind === 'returnProtege')) return null;
+  if (!content.balance.mentorRework || run.victory || m.returns >= cfg.maxReturns || run.pending.some((p) => p.kind === 'returnProtege')) return null;
   if (m.lastReturnBattle !== null && index - m.lastReturnBattle < cfg.cooldownBattles) return null;
   const open = run.story.relationships.filter((r) => r.open && r.kind === 'mentorship');
   const busy = new Set(open.flatMap((r) => [r.a.id, r.b.id]));
