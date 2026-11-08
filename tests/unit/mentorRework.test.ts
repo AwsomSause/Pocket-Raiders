@@ -297,7 +297,8 @@ describe('signature-inspired inheritance', () => {
     const candidates = [...content.species.values()].filter((s) => !s.form && signatureEchoes(content, { ...mentor, speciesId: s.id }).length > 0);
     expect(candidates.length).toBeGreaterThan(0);
     mentor.speciesId = candidates[0]!.id;
-    const [{ signature, echo }] = signatureEchoes(content, mentor);
+    const first = signatureEchoes(content, mentor)[0]!;
+    const { signature, echo } = first;
     expect(content.moves.get(echo)!.power!).toBeLessThan(content.moves.get(signature)!.power!);
     expect(content.moves.get(echo)!.flags).not.toContain('megasig');
     bond.chemistry = 20;
