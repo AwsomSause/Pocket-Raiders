@@ -113,10 +113,10 @@ export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, dur
   g.fillRoundedRect(36, 66, 62, 24, 6);
   layer.add(scene.add.text(67, 78, 'LIVE', textStyle(14, '#ffffff')).setOrigin(0.5));
   g.fillStyle(0x10203a, 0.92);
-  g.fillRect(0, GAME_HEIGHT - 96, GAME_WIDTH * 0.62, 30);
+  g.fillRect(0, 100, GAME_WIDTH * 0.45, 26);
   g.fillStyle(0xffd040, 1);
-  g.fillRect(0, GAME_HEIGHT - 96, 8, 30);
-  layer.add(scene.add.text(22, GAME_HEIGHT - 81, 'GALAR CHAMPIONSHIP  ·  STADIUM CAM', textStyle(14, '#ffffff')).setOrigin(0, 0.5));
+  g.fillRect(0, 100, 8, 26);
+  layer.add(scene.add.text(22, 113, 'GALAR CHAMPIONSHIP  ·  STADIUM CAM', textStyle(13, '#ffffff')).setOrigin(0, 0.5));
 
   scene.tweens.add({ targets: layer, alpha: 1, duration: 180 });
   if (animate) for (const row of bob) scene.tweens.add({ targets: row, y: -6, duration: 260 + rng.int(0, 120), yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -124,4 +124,96 @@ export function drawCutArt(scene: Phaser.Scene, cutId: string, seed: string, dur
     scene.tweens.add({ targets: layer, alpha: 0, duration: 200, onComplete: () => layer.destroy() });
   });
   return layer;
+}
+
+const wait = (scene: Phaser.Scene, ms: number): Promise<void> => new Promise((r) => scene.time.delayedCall(ms, r));
+
+/** Confetti and sweeping spotlights for the tournament final. Returns the objects so the caller can fade them with the card. */
+function finalDressing(scene: Phaser.Scene, layer: Phaser.GameObjects.Container, seed: string, animate: boolean): void {
+  const rng = new Rng(hashSeed(`galar-final:${seed}`));
+  const beams = scene.add.graphics();
+  beams.fillStyle(0xfff0b0, 0.14);
+  for (const x of [200, 480, 760]) {
+    beams.fillTriangle(x - 20, 40, x + 20, 40, x + 160, GAME_HEIGHT - 40);
+    beams.fillTriangle(x - 20, 40, x - 160, GAME_HEIGHT - 40, x + 160, GAME_HEIGHT - 40);
+  }
+  layer.add(beams);
+  if (animate) scene.tweens.add({ targets: beams, x: 40, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+  const colors = [0xffd040, 0xe05a3c, 0x78b8e8, 0xffffff, 0x78d890];
+  for (let i = 0; i < 50; i++) {
+    const c = scene.add.rectangle(rng.int(0, GAME_WIDTH), rng.int(40, 120), 8, 12, colors[i % colors.length]!).setAngle(rng.int(0, 180));
+    layer.add(c);
+    if (animate) scene.tweens.add({ targets: c, y: GAME_HEIGHT - 40, angle: c.angle + 360, duration: 1400 + rng.int(0, 1600), delay: rng.int(0, 900), repeat: -1 });
+  }
+}
+
+export interface IntroCardSpec {
+  tag: string;
+  name: string;
+  style: string;
+  line: string;
+  /** Boss portrait asset id, or '' for a silhouette. */
+  sprite: string;
+  final: boolean;
+}
+
+/** A broadcast-style trainer introduction: portrait, name, battle style and the announcer's line. Resolves when it has faded. */
+export async function playIntroCard(scene: Phaser.Scene, spec: IntroCardSpec, seed: string, animate: boolean, makePortrait: (x: number, y: number) => Phaser.GameObjects.GameObject | null): Promise<void> {
+  const layer = scene.add.container(0, 0).setDepth(1795).setScrollFactor(0).setAlpha(0);
+  const back = scene.add.graphics();
+  back.fillStyle(spec.final ? 0x1a0f2a : 0x0a1020, 0.9);
+  back.fillRect(0, 40, GAME_WIDTH, GAME_HEIGHT - 80);
+  back.fillStyle(spec.final ? 0xffd040 : 0x78b8e8, 1);
+  back.fillRect(0, 40, GAME_WIDTH, 4);
+  back.fillRect(0, GAME_HEIGHT - 44, GAME_WIDTH, 4);
+  layer.add(back);
+  if (spec.final) finalDressing(scene, layer, seed, animate);
+  const portrait = makePortrait(GAME_WIDTH * 0.3, 300);
+  if (portrait) {
+    layer.add(portrait);
+  } else {
+    const g = scene.add.graphics();
+    person(g, GAME_WIDTH * 0.3, 330, 4.5);
+    layer.add(g);
+  }
+  const x = GAME_WIDTH * 0.52;
+  layer.add(scene.add.text(x, 130, spec.tag, textStyle(spec.final ? 26 : 20, spec.final ? '#ffd040' : '#78b8e8')));
+  layer.add(scene.add.text(x, 170, spec.name, textStyle(spec.final ? 44 : 36, '#ffffff', { stroke: '#101820', strokeThickness: 6 })));
+  layer.add(scene.add.text(x, 228, spec.style, textStyle(16, '#bfe9ff', { wordWrap: { width: GAME_WIDTH * 0.42 } })));
+  layer.add(scene.add.text(x, 290, `"${spec.line}"`, textStyle(16, '#e8e0f0', { wordWrap: { width: GAME_WIDTH * 0.42 } })));
+  layer.add(scene.add.text(36, GAME_HEIGHT - 76, 'GALAR CHAMPIONSHIP  ·  NOW ENTERING', textStyle(13, '#ffffff')));
+  scene.tweens.add({ targets: layer, alpha: 1, duration: 250 });
+  await wait(scene, spec.final ? 3600 : 2400);
+  scene.tweens.add({ targets: layer, alpha: 0, duration: 250, onComplete: () => layer.destroy() });
+  await wait(scene, 260);
+}
+
+/** The Dynamax Band handover: a glowing band with pulsing rings. Resolves when it has faded. */
+export async function playBandCard(scene: Phaser.Scene, animate: boolean, makeBand: (x: number, y: number) => Phaser.GameObjects.GameObject | null): Promise<void> {
+  const layer = scene.add.container(0, 0).setDepth(1795).setScrollFactor(0).setAlpha(0);
+  const back = scene.add.graphics();
+  back.fillStyle(0x2a0a14, 0.92);
+  back.fillRect(0, 40, GAME_WIDTH, GAME_HEIGHT - 80);
+  layer.add(back);
+  const rings: Phaser.GameObjects.Arc[] = [];
+  for (let i = 0; i < 3; i++) {
+    const ring = scene.add.circle(GAME_WIDTH / 2, 250, 60 + i * 40, 0xe05a3c, 0).setStrokeStyle(4, 0xe05a3c, 0.8 - i * 0.2);
+    layer.add(ring);
+    rings.push(ring);
+  }
+  const band = makeBand(GAME_WIDTH / 2, 250);
+  if (band) layer.add(band);
+  else {
+    const b = scene.add.graphics();
+    b.lineStyle(14, 0xe05a3c, 1);
+    b.strokeCircle(GAME_WIDTH / 2, 250, 40);
+    layer.add(b);
+  }
+  layer.add(scene.add.text(GAME_WIDTH / 2, 380, 'DYNAMAX BAND', textStyle(36, '#ffd040', { stroke: '#101820', strokeThickness: 6 })).setOrigin(0.5));
+  layer.add(scene.add.text(GAME_WIDTH / 2, 430, 'Power that makes a Pokémon tower over the stadium.', textStyle(16, '#e8e0f0')).setOrigin(0.5));
+  if (animate) for (const [i, r] of rings.entries()) scene.tweens.add({ targets: r, scale: 1.5, alpha: 0, duration: 1300, delay: i * 350, repeat: -1 });
+  scene.tweens.add({ targets: layer, alpha: 1, duration: 250 });
+  await wait(scene, 2600);
+  scene.tweens.add({ targets: layer, alpha: 0, duration: 250, onComplete: () => layer.destroy() });
+  await wait(scene, 260);
 }

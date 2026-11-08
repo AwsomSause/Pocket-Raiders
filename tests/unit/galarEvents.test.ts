@@ -31,6 +31,7 @@ describe('Galar events', () => {
 });
 
 import { chooseStarter, createRun } from '../../src/core/run';
+import { chooseEvent, eventView } from '../../src/core/events';
 
 describe('Galar events spawn on the map', () => {
   const content = getContent();
@@ -50,4 +51,43 @@ describe('Galar events spawn on the map', () => {
     }
     expect(inGalar).toBeGreaterThan(8); // stage 1 only has the early ones; later stages add the rest
   });
+});
+
+describe('Galar events 1-4 play through', () => {
+  const content = getContent();
+  const first4 = ['galar-kubfu-disciple', 'galar-swordbert-shieldbert', 'galar-runaway-wooloo', 'galar-lost-pokemon'];
+  // Finds a Galar run whose first stage offers this event, standing at the event's side stop.
+  const findRun = (eventId: string) => {
+    for (let i = 0; i < 600; i++) {
+      let run = createRun(content, { runId: 'r', seed: `P${i}`, archetypeId: 'red' });
+      // Galar as the third region, so the later stage gates (Kubfu from stage 3, Swordbert from 2) are open.
+      const others = run.regionOrder.filter((r) => r !== 'galar');
+      run.regionOrder = [others[0]!, others[1]!, 'galar', ...others.slice(2)];
+      run.regionIndex = 2;
+      run = chooseStarter(content, run, 0);
+      for (const n of run.stage!.map.nodes) {
+        const side = n.sides.find((s) => s.kind === 'event' && s.eventId === eventId);
+        if (side) return { run, sideId: side.id, nodeId: n.id };
+      }
+    }
+    return null;
+  };
+  for (const id of first4) {
+    it(`${id} shows up on a map and every choice resolves`, () => {
+      const found = findRun(id);
+      expect(found, `${id} never appeared in 600 Galar runs`).not.toBeNull();
+      const start = structuredClone(found!.run);
+      start.stage!.current = found!.nodeId;
+      const view = eventView(content, start, found!.sideId);
+      expect(view.choices.length).toBeGreaterThan(0);
+      let resolved = 0;
+      for (const [c, choice] of view.choices.entries()) {
+        if (choice.locked) continue; // needs an item, money or a Pokemon this run lacks
+        const res = chooseEvent(content, structuredClone(start), found!.sideId, c);
+        expect(res.text.length).toBeGreaterThan(0);
+        resolved++;
+      }
+      expect(resolved).toBeGreaterThan(0);
+    });
+  }
 });

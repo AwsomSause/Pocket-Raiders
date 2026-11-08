@@ -48,5 +48,22 @@ test('a Galar gym battle shows every stadium camera cut', async ({ page }) => {
     await page.screenshot({ path: `test-results/galar-cut-${i}-${id}.png` });
     await page.waitForTimeout(1800);
   }
+  // Trainer introductions, the bigger final and the Dynamax Band scene.
+  const shots: Array<[string, string, number]> = [
+    ['intro-round', `b.stadium.tournamentIntro({ round: 2, name: 'Round 2', opponent: 'Marnie', intro: 'Do not expect me to go easy.', final: false, style: 'Dark types', sprite: '' })`, 3600],
+    ['intro-final', `b.stadium.tournamentIntro({ round: 5, name: 'The Final', opponent: 'Leon', intro: 'Let us have a champion time!', final: true, style: 'Unbeaten', sprite: '' })`, 6800],
+    ['band', `b.stadium.bandScene()`, 1400],
+  ];
+  for (const [name, call, delay] of shots) {
+    await page.evaluate((c) => {
+      const b = (window as any).__pkr.game.scene.getScene('Battle');
+      b.say = async () => undefined;
+      (window as any).__done = false;
+      void Promise.resolve(new Function('b', `return ${c}`)(b)).then(() => ((window as any).__done = true));
+    }, call);
+    await page.waitForTimeout(delay);
+    await page.screenshot({ path: `test-results/galar-${name}.png` });
+    await expect.poll(() => page.evaluate(() => (window as any).__done), { timeout: 15_000 }).toBe(true);
+  }
   expect(errors).toEqual([]);
 });

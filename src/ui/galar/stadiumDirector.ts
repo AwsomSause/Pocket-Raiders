@@ -8,7 +8,7 @@ import { defaultMoment, planMoment } from '../../core/cinematic/moments';
 import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../../core/galarStadium';
 import { GAME_WIDTH, textStyle } from '../theme';
 import { playMoment } from '../cinematic/momentPlayer';
-import { drawCutArt } from './cutArt';
+import { drawCutArt, playBandCard, playIntroCard } from './cutArt';
 
 export interface StadiumHooks {
   runSeed: string;
@@ -27,6 +27,9 @@ export interface StadiumHooks {
   alive: () => { player: number; foe: number };
   /** Narration line (the scene's message box). */
   say: (text: string) => Promise<void>;
+  /** Draws a trainer portrait / the Dynamax Band art for the intro cards (null = use the drawn fallback). */
+  portrait?: (spriteId: string, x: number, y: number) => Phaser.GameObjects.GameObject | null;
+  bandArt?: (x: number, y: number) => Phaser.GameObjects.GameObject | null;
   /** Crowd sound for a cue (crowd.roar, crowd.hush, crowd.swell, crowd.murmur). Optional; sound only, never changes the battle. */
   crowdSound?: (cue: string, intensity: number) => void;
 }
@@ -43,6 +46,19 @@ export class StadiumDirector {
   /** Call once per player turn, before its events play. */
   startTurn(turn: number): void {
     this.turn = turn;
+    // The music builds: each turn the song picks up a little (up to the cap), and the crowd's cues add on top.
+    this.h.setIntensity(1 + Math.min(Math.max(turn - 1, 0), 6) * 0.012);
+  }
+
+  /** The Dynamax Band handover scene (before the host's lines). Never throws. */
+  async bandScene(): Promise<void> {
+    try {
+      if (this.h.disableAnimations()) return;
+      this.h.crowdSound?.('crowd.swell', 3);
+      await playBandCard(this.scene, !this.h.reduceMotion(), (x, y) => this.h.bandArt?.(x, y) ?? null);
+    } catch {
+      // decoration only
+    }
   }
 
   /** The beat this event is, or null. Hits are judged by how much of the target's HP they took. */
@@ -132,7 +148,7 @@ export class StadiumDirector {
   }
 
   /** A tournament round's opening: a round card with the opponent, their introduction, and a bigger staging for the final. Never throws. */
-  async tournamentIntro(round: { round: number; name: string; opponent: string; intro: string; final: boolean }): Promise<void> {
+  async tournamentIntro(round: { round: number; name: string; opponent: string; intro: string; final: boolean; style?: string; sprite?: string }): Promise<void> {
     try {
       if (!this.h.disableAnimations()) {
         const spec = defaultMoment(round.final ? 'championIntro' : 'e4Intro', `galar-tournament-${round.round}`);
@@ -141,6 +157,8 @@ export class StadiumDirector {
         const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
         this.h.setIntensity(round.final ? 1.2 : 1.05);
         await playMoment(this.scene, spec, plan, { title: round.final ? 'THE FINAL' : round.name, subtitle: `vs ${round.opponent}` });
+        this.h.crowdSound?.(round.final ? 'crowd.roar' : 'crowd.swell', round.final ? 5 : 3);
+        await playIntroCard(this.scene, { tag: round.final ? 'THE FINAL' : round.name.toUpperCase(), name: round.opponent, style: round.style ?? '', line: round.intro, sprite: round.sprite ?? '', final: round.final }, `${this.h.battleId}:${round.round}`, !this.h.reduceMotion(), (x, y) => (round.sprite ? this.h.portrait?.(round.sprite, x, y) ?? null : null));
       }
       await this.h.say(round.intro);
       if (round.final) await this.h.say('The whole stadium is on its feet. This is the match the season has been building to.');

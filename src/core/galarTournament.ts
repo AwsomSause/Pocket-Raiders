@@ -216,12 +216,12 @@ export function ballGuyLimit(runSeed: string, visit: number, itemId: string): nu
 }
 
 /** The tournament round the current League battle is (1 to 5), or null outside the Galar tournament. */
-export function currentTournamentRound(content: Content, run: RunState): { round: number; name: string; opponent: string; intro: string; final: boolean } | null {
+export function currentTournamentRound(content: Content, run: RunState): { round: number; name: string; opponent: string; intro: string; final: boolean; style: string; sprite: string } | null {
   const stage = run.stage;
   if (!stage || stage.kind !== 'league' || run.regionOrder[run.regionIndex] !== 'galar' || !stage.map.nodes.some((n) => n.sides.length > 0)) return null;
   const view = bracketView(content, run);
   const r = view.rounds[Math.min(view.wins, GALAR_TOURNAMENT.rounds - 1)]!;
-  return { round: r.round, name: r.name, opponent: r.opponent.name, intro: r.opponent.intro, final: r.round === GALAR_TOURNAMENT.rounds };
+  return { round: r.round, name: r.name, opponent: r.opponent.name, intro: r.opponent.intro, final: r.round === GALAR_TOURNAMENT.rounds, style: r.opponent.style, sprite: content.bosses.get(r.opponent.id)?.sprites.default ?? '' };
 }
 
 // ---------- the bracket screen's data (pure) ----------
