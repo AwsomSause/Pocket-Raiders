@@ -1,0 +1,1 @@
+- Hub unreachable fix: Hub and Save Slots sent players with an unfinished opening to the title, which no longer replays it, so Enter the Hub looped. They now go to the Prologue to finish it.
