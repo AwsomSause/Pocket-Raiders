@@ -525,7 +525,8 @@
    "great-ball",
    "full-heal"
   ],
-  "gameEventWeight": 4
+  "gameEventWeight": 4,
+  "regionEventWeight": 6
  },
  "attributeGrowth": [
   {

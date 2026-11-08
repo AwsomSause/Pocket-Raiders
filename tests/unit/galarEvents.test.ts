@@ -29,3 +29,25 @@ describe('Galar events', () => {
     }
   });
 });
+
+import { chooseStarter, createRun } from '../../src/core/run';
+
+describe('Galar events spawn on the map', () => {
+  const content = getContent();
+  const galarIds = new Set(['galar-kubfu-disciple', 'galar-swordbert-shieldbert', 'galar-runaway-wooloo', 'galar-lost-pokemon', 'galar-dynamax-investigator', 'galar-gigantamax-sighting', 'galar-local-tournament', 'galar-autograph-fans', 'galar-dynamax-disturbance']);
+  const seen = (region: string, seed: string): string[] => {
+    let run = createRun(content, { runId: 'r', seed, archetypeId: 'red' });
+    run.regionOrder = [region, ...run.regionOrder.filter((r) => r !== region)];
+    run.regionIndex = 0;
+    run = chooseStarter(content, run, 0);
+    return run.stage!.map.nodes.flatMap((n) => n.sides).filter((s) => s.kind === 'event').map((s) => s.eventId ?? '');
+  };
+  it('turn up in Galar and never elsewhere', () => {
+    let inGalar = 0;
+    for (let i = 0; i < 80; i++) {
+      inGalar += seen('galar', `G${i}`).filter((id) => galarIds.has(id)).length;
+      expect(seen('kanto', `G${i}`).filter((id) => id.startsWith('galar-'))).toEqual([]);
+    }
+    expect(inGalar).toBeGreaterThan(8); // stage 1 only has the early ones; later stages add the rest
+  });
+});

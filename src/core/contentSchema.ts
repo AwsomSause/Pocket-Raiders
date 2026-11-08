@@ -2385,6 +2385,8 @@ export const BalanceSchema = z.object({
     explorerItems: z.array(z.string()).min(1),
     /** Map events a running game event features (gameEvents.json mapEvents) are this many times as likely. */
     gameEventWeight: z.number().min(1),
+    /** Events that only appear in the current region (a `region` requirement, e.g. the Galar set) are this many times as likely there, so a region's own events show up. */
+    regionEventWeight: z.number().min(1).default(1),
   }),
   /** Exploration (core/world.ts): fog of war, weather fronts, roaming Legendaries and checkpoint camps. */
   world: WorldBalanceSchema,

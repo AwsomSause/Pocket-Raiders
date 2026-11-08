@@ -215,6 +215,15 @@ export function ballGuyLimit(runSeed: string, visit: number, itemId: string): nu
   return shopOffers(runSeed, visit).find((o) => o.id === itemId)?.stock ?? 0;
 }
 
+/** The tournament round the current League battle is (1 to 5), or null outside the Galar tournament. */
+export function currentTournamentRound(content: Content, run: RunState): { round: number; name: string; opponent: string; intro: string; final: boolean } | null {
+  const stage = run.stage;
+  if (!stage || stage.kind !== 'league' || run.regionOrder[run.regionIndex] !== 'galar' || !stage.map.nodes.some((n) => n.sides.length > 0)) return null;
+  const view = bracketView(content, run);
+  const r = view.rounds[Math.min(view.wins, GALAR_TOURNAMENT.rounds - 1)]!;
+  return { round: r.round, name: r.name, opponent: r.opponent.name, intro: r.opponent.intro, final: r.round === GALAR_TOURNAMENT.rounds };
+}
+
 // ---------- the bracket screen's data (pure) ----------
 
 export interface BracketRound {
@@ -230,7 +239,8 @@ export interface BracketRound {
   shopAfter: boolean;
 }
 
-export interface BracketView { rounds: BracketRound[]; wins: number; standing: string[] }
+export interface FeaturedMatch { round: number; text: string; upset: boolean }
+export interface BracketView { rounds: BracketRound[]; wins: number; standing: string[]; /** One other match per won round, for "watching another battle". */ featured: FeaturedMatch[] }
 
 /** What the bracket screen draws: five rounds, the player's opponent and the field. `wins` = rounds the player has won. */
 export function bracketView(content: Content, run: RunState): BracketView {
@@ -238,7 +248,8 @@ export function bracketView(content: Content, run: RunState): BracketView {
   const champion = stage?.leaderId ?? GALAR_TOURNAMENT.champion;
   const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
   const b = buildBracket({ runSeed: run.seed, championId: champion, rivalIds });
-  const wins = Math.min(GALAR_TOURNAMENT.rounds, stage?.visited.length ?? 0);
+  // The node is added to `visited` when its battle starts, so during a battle the current round is not won yet.
+  const wins = Math.min(GALAR_TOURNAMENT.rounds, Math.max(0, (stage?.visited.length ?? 0) - (run.battle ? 1 : 0)));
   const name = (id: string): string => (id === PLAYER_SLOT ? 'You' : (content.bosses.get(id)?.name ?? id));
   const rounds: BracketRound[] = [];
   for (let round = 1; round <= GALAR_TOURNAMENT.rounds; round++) {
@@ -256,5 +267,12 @@ export function bracketView(content: Content, run: RunState): BracketView {
       shopAfter: shopOpenAfter(round),
     });
   }
-  return { rounds, wins, standing: remaining(b, wins).map(name) };
+  const featured: FeaturedMatch[] = [];
+  for (let round = 1; round <= wins && round < GALAR_TOURNAMENT.rounds; round++) {
+    const matches = otherMatches(b, round);
+    const pick = matches.find((m) => m.upset) ?? matches.reduce((best, m) => (strengthOf(b, m.winner) + strengthOf(b, m.a === m.winner ? m.b : m.a) > strengthOf(b, best.winner) + strengthOf(b, best.a === best.winner ? best.b : best.a) ? m : best), matches[0]!);
+    const loser = pick.winner === pick.a ? pick.b : pick.a;
+    featured.push({ round, upset: pick.upset, text: pick.upset ? `On the big screen: ${name(pick.winner)} stuns ${name(loser)}!` : `On the big screen: ${name(pick.winner)} edges out ${name(loser)} in a close one.` });
+  }
+  return { rounds, wins, standing: remaining(b, wins).map(name), featured };
 }
