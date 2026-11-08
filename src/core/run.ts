@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
@@ -2099,6 +2100,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       plan = back.plan;
       returningNotes.push(...back.notes);
     }
+    // Rebalance: bosses and rivals get held items, IVs, EVs and training like a player's team (core/bossGear.ts).
+    const gearTier: GearTier | null = rivalBack || takeover || firstRival || isRival ? 'rival' : node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? node.kind : null;
+    if (gearTier) plan = { ...plan, members: gearTeam(content, plan.members, gearTier, playerItemsPer(run.party)) };
     const built = plan.members.map((m, i) => {
       const uid = nextUid(run, 'e');
       // Difficulty raises every enemy; Single Region Dex swaps ordinary trainers' species for ones from the locked generation (bosses keep theirs).

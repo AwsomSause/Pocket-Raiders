@@ -22,7 +22,7 @@ import { chooseEnemyMove, createBattle, resolveTurn, type BattleContext } from '
 import { transformProblem, type TransformRequest } from '../core/battle/transform';
 import type { Archetype, Content } from '../core/contentSchema';
 import { createPlannedPokemon, evolvedFormAt, leagueScale, levelScale, planChampion, planEliteFour, planGymLeader, type TrainerPlan } from '../core/encounters';
-import { abilityOf, createPokemon } from '../core/pokemon';
+import { abilityOf, createPokemon, maxHp } from '../core/pokemon';
 import { hashSeed, Rng } from '../core/rng';
 import type { PokemonInstance } from '../core/state';
 import { wildEligibleSpecies } from '../core/themes';
@@ -76,6 +76,23 @@ export function simulateBattle(content: Content, playerTeam: PokemonInstance[], 
   }
   const winner = battle.outcome === 'win' ? 'player' : battle.outcome === 'lose' ? 'enemy' : 'draw';
   return { winner, turns: battle.turn - 1 };
+}
+
+/** Like simulateBattle, but also reports how many foes are left and the player's HP fraction (bench tools). */
+export function simulateBattleDetail(content: Content, playerTeam: PokemonInstance[], enemyTeam: PokemonInstance[], enemyAi: number, seed: string): BattleOutcome & { enemyAlive: number; enemyTeamSize: number; playerHpFrac: number } {
+  const party = structuredClone(playerTeam);
+  const battle = createBattle('trainer', structuredClone(enemyTeam), 0, party[0]!.uid, { classId: 'sim', name: 'Sim', leaderId: null });
+  battle.ai = enemyAi;
+  const ctx: BattleContext = { content, battle, party, inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}#capture`)), catchMultiplier: 1 };
+  const choices = new Rng(hashSeed(`${seed}#player`));
+  while (!battle.outcome && battle.turn <= MAX_TURNS) {
+    if (battle.needsSwitch) { resolveTurn(ctx, { kind: 'switch', partyIndex: party.findIndex((p) => p.hp > 0) }); continue; }
+    const index = chooseEnemyMove(party[battle.activeIndex]!, choices, { content, ai: PLAYER_AI, target: battle.enemyTeam[battle.enemyIndex]!, stages: battle.playerStages });
+    resolveTurn(ctx, { kind: 'move', index });
+  }
+  const winner = battle.outcome === 'win' ? 'player' : battle.outcome === 'lose' ? 'enemy' : 'draw';
+  const total = party.reduce((a, p) => a + maxHp(content, p), 0);
+  return { winner, turns: battle.turn - 1, enemyAlive: battle.enemyTeam.filter((m) => m.hp > 0).length, enemyTeamSize: battle.enemyTeam.length, playerHpFrac: party.reduce((a, p) => a + p.hp, 0) / total };
 }
 
 /** The fully evolved form of every wild-eligible line at `level` (first branch when there are several). */
