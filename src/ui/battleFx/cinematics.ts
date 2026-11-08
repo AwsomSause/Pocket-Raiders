@@ -21,6 +21,7 @@ import { screenStyleOf } from '../../core/presentation/screenStyles';
 import { evolveLook } from './evolveStyles';
 import type { Visual } from '../sprites';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
+import { cameraForScene } from './opening';
 import type { Beat } from './spectacle';
 import { CINE_ASSETS, CINE_MS, DYNAMAX_SCALE, DYNAMAX_LONG_MS, DYNAMAX_LONG_SWAP_AT, CINE_SOUNDS, SWAP_AT, keyItemFor, type CineKind } from './cineLook';
 import { FORM_LOOK_ASSETS } from './formLook';
@@ -98,6 +99,7 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
     swap();
     return { done: Promise.resolve(), skip: () => undefined };
   }
+  cameraForScene(scene);
   const depth = o.depth ?? 900;
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];

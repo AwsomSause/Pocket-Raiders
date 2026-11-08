@@ -29,6 +29,13 @@ export function cameraTo(scene: Phaser.Scene, motion: MotionLevel, at: { x: numb
   scene.tweens.add({ targets: cam, rotation: at ? -0.03 : 0, duration: ms, ease: 'Sine.easeInOut' });
 }
 
+/** Stops any camera move and shows the whole arena, so a full-screen scene (Dynamax, Mega, Tera, Z-Move) always covers the screen. */
+export function cameraForScene(scene: Phaser.Scene): void {
+  scene.cameras.main.zoomEffect?.reset?.();
+  scene.cameras.main.panEffect?.reset?.();
+  cameraReset(scene);
+}
+
 /** Puts the camera back on the whole arena at once. */
 export function cameraReset(scene: Phaser.Scene): void {
   const cam = scene.cameras.main;

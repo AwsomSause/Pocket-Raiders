@@ -8,6 +8,7 @@ import { services } from '../../game/services';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../theme';
 import { zTitleAssetId, animAssetIds } from '../../assets/catalog';
 import { loadAssets } from '../lazyAssets';
+import { cameraForScene } from './opening';
 import type { Beat } from './spectacle';
 import { sizePair } from '../../core/heights';
 
@@ -44,6 +45,7 @@ export interface ZSceneOptions {
 }
 
 export function zMoveScene(scene: Phaser.Scene, o: ZSceneOptions): Beat {
+  cameraForScene(scene);
   const depth = o.depth ?? 900;
   const objs: Phaser.GameObjects.GameObject[] = [];
   const timers: Phaser.Time.TimerEvent[] = [];
