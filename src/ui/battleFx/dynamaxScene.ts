@@ -18,6 +18,8 @@ type Pic = Phaser.GameObjects.Sprite | Phaser.GameObjects.Container;
 export const DYNAMAX_SCENE_MS = 12500;
 
 export interface DynamaxSceneOptions {
+  /** Names the scene's objects `cine-<kind>`, which the browser tests and other code look for. */
+  kind: 'dynamax' | 'gigantamax';
   /** The Pokémon's front picture before Dynamaxing, and the giant form (the same art unless it Gigantamaxes). */
   makeFront: (x: number, y: number) => Pic;
   makeGiantFront?: (x: number, y: number) => Pic;
@@ -54,7 +56,7 @@ export function dynamaxScene(scene: Phaser.Scene, o: DynamaxSceneOptions): Beat 
   const has = (k: string | null | undefined) => Boolean(k) && scene.textures.exists(k!);
   const at = (ms: number, fn: () => void) => timers.push(scene.time.delayedCall(ms / o.speed, fn));
   const add = <T extends Phaser.GameObjects.GameObject>(g: T): T => {
-    g.setName('cine-dynamax');
+    g.setName(`cine-${o.kind}`);
     objs.push(g);
     return g;
   };
