@@ -9,6 +9,7 @@ import { bossAnimId, bossBackId, pokemonAssetIds } from '../assets/catalog';
 import type { Species } from '../core/contentSchema';
 import { services } from '../game/services';
 import { loadAssets } from './lazyAssets';
+import spriteScalesJson from '../data/spriteScales.json';
 import { COLORS, PIXEL_SCALE, TYPE_COLORS, textStyle } from './theme';
 
 /** Pokémon whose sprite animation bounces (ping-pong) instead of restarting from the first frame. */
@@ -127,6 +128,9 @@ function placeholder(scene: Phaser.Scene, x: number, y: number, size: number, co
   return scene.add.container(x, y, [g, text]);
 }
 
+/** Size multipliers for custom Pokémon drawn bigger or smaller than the base art (tools/build-sprite-scales.py). */
+const SPRITE_SCALES: Record<string, number> = (spriteScalesJson as { scales: Record<string, number> }).scales;
+
 export type Visual = Phaser.GameObjects.Sprite | Phaser.GameObjects.Container;
 
 /** True if the art exists in the pack but hasn't been loaded into this game yet. */
@@ -135,7 +139,8 @@ function notLoadedYet(scene: Phaser.Scene, key: string): boolean {
 }
 
 /** A Pokémon's battle sprite. Shiny Pokémon use the shiny art when it exists, otherwise the normal art. */
-export function pokemonVisual(scene: Phaser.Scene, species: Species, side: 'front' | 'back', x: number, y: number, scale = PIXEL_SCALE, shiny = false, stance?: Stance): Visual {
+export function pokemonVisual(scene: Phaser.Scene, species: Species, side: 'front' | 'back', x: number, y: number, baseScale = PIXEL_SCALE, shiny = false, stance?: Stance): Visual {
+  const scale = baseScale * (SPRITE_SCALES[species.id] ?? 1);
   const ids = pokemonAssetIds(species.assets);
   const key = side === 'front' ? ids.front : ids.back;
   const shinyKey = side === 'front' ? ids.shinyFront : ids.shinyBack;
