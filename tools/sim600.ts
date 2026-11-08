@@ -134,7 +134,7 @@ function playOne(n: number): Record<string, unknown> {
     finalParty: run.party.map((p) => ({ ...monInfo(p), f: p.friendship })), partyN: run.party.length,
     lostTo: run.log.defeatedBy, rewards: run.log.rewardsTaken, counters: run.log.counters, speciesCaughtLog: run.log.speciesCaught, shinyLog: run.log.speciesShiny,
     money: run.money, inv: run.inventory, gimUses: run.gimmicks?.uses ?? {},
-    rivals: run.story.rivals.map((r) => ({ id: r.id, name: r.name, classId: r.classId, archetype: r.archetype, style: r.style, state: r.state, enc: r.encounters, setbacks: r.setbacks, ace: r.ace ?? null, faction: r.faction ?? null, caught: r.caught ?? [], origin: (r as {origin?: unknown}).origin ?? null, major: !!(r as {major?: boolean}).major, arc: (r as {arc?: string}).arc ?? null, voice: (r as {voice?: string}).voice ?? null, rank: (r as {rank?: string}).rank ?? null })),
+    rivals: run.story.rivals.map((r) => ({ id: r.id, name: r.name, classId: r.classId, archetype: r.archetype, style: r.style, state: r.state, enc: r.encounters, setbacks: r.setbacks, ace: r.ace ?? null, faction: r.faction ?? null, caught: r.caught ?? [], origin: (r as {origin?: unknown}).origin ?? null, major: !!(r as {major?: boolean}).major, arc: (r as { arc?: { id?: string } | null }).arc?.id ?? null, voice: (r as {voice?: string}).voice ?? null, rank: (r as {rank?: string}).rank ?? null })),
     storyRivalFlags: Object.fromEntries(Object.entries(run.story.flags).filter(([k]) => /rival|stepin/i.test(k)).slice(0, 40)),
     notes: (run.story.v2?.notes ?? []).map((x) => ({ k: x.kicker, l: x.lines })).slice(0, 60),
   });
