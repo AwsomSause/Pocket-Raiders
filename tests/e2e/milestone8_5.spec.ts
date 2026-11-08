@@ -167,6 +167,17 @@ test('Z-Move from the battle menu', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+// A late Enter from confirmToMenu can land on Fight and open the move list; step back to the main menu.
+async function toRootMenu(page: Page) {
+  await expect
+    .poll(async () => {
+      const labels = await menuLabels(page);
+      if (!labels.includes('Fight')) await page.keyboard.press('Escape');
+      return labels.includes('Fight');
+    }, { timeout: 15_000 })
+    .toBe(true);
+}
+
 test('Gigantamax from the battle menu', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -188,6 +199,7 @@ test('Gigantamax from the battle menu', async ({ page }) => {
   });
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
+  await toRootMenu(page);
   await expect.poll(() => menuLabels(page), { timeout: 15_000 }).toEqual(['Fight', 'Bag', 'Pokémon', 'Max: OFF']);
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowDown');
