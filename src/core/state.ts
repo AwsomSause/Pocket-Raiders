@@ -740,6 +740,12 @@ export const BattleStateSchema = z.object({
   enemySwitches: z.number().int().min(0).default(0),
   /** Beta 0.5 M1: the trainer's wealth (0-3) sets how many potions it carries and how strong they are (core/trainerWorld). Missing = the old fixed rule. */
   trainerWealth: z.number().int().min(0).max(3).optional(),
+  /** Beta 0.5 M1: the trainer's battle consumables left (status cure, X-item for the ace, saved full restore; core/trainerWorld/behavior.ts). */
+  trainerKit: z.object({ cure: z.number().int().min(0), boost: z.number().int().min(0), restore: z.number().int().min(0), boostStat: z.enum(['atk', 'spa', 'def', 'spd', 'spe']) }).optional(),
+  /** Beta 0.5 M1: the trainer's specialization id; steers its AI style. */
+  specialization: z.string().optional(),
+  /** Beta 0.5 M1: one-off trainer moments already shown this battle (protect:<uid>, refuse:<uid>). */
+  enemyMoments: z.array(z.string()).optional(),
   /** Battle-scope story effects already used this battle (e.g. "toughened-it-out@p1"); see core/story/ledger.ts. */
   storyEffects: z.array(z.string()),
   /** Hyper counters: the current low-HP stand and super-effective hits survived (core/battle/hyper.ts). */

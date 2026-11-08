@@ -30,3 +30,4 @@ Cinematics M6: no save bump.
 
 ## Known limits / open items
 
+- Trainer behavior follow-up (stacks on #1069): specialization steers AI and teams, wealth kit items, bond protect/refuse-to-recall, rival gimmicks, returning trainers adapt. No save bump.
