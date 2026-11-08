@@ -8,6 +8,7 @@ import { defaultMoment, planMoment } from '../../core/cinematic/moments';
 import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../../core/galarStadium';
 import { GAME_WIDTH, textStyle } from '../theme';
 import { playMoment } from '../cinematic/momentPlayer';
+import { drawCutArt } from './cutArt';
 
 export interface StadiumHooks {
   runSeed: string;
@@ -105,6 +106,13 @@ export class StadiumDirector {
     const spec = defaultMoment('stadiumCut', `stadium-${cut.id}`);
     spec.phases = { situation: 150, anticipation: 200, moment: cut.durationMs - 700 > 200 ? cut.durationMs - 700 : 400, reaction: 200, transition: 150 };
     const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
+    if (plan.play) {
+      try {
+        drawCutArt(this.scene, cut.id, `${this.h.battleId}:${this.turn}`, cut.durationMs, !this.h.reduceMotion());
+      } catch {
+        // art is decoration; a drawing problem never blocks the battle
+      }
+    }
     await playMoment(this.scene, spec, plan, { title: cut.label, subtitle: cut.caption });
   }
 
