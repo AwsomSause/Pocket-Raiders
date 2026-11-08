@@ -38,7 +38,7 @@ const LIBRARY3_ITEMS = Object.values(import.meta.glob('../../tools/drive/library
 const LOVE = { love: 100 };
 
 function freshRun(seed = 'story-seed'): RunState {
-  return chooseStarter(content, createRun(content, { runId: `run-${seed}`, seed, archetypeId: 'red', attributes: LOVE }), 0);
+  return chooseStarter(content, createRun(content, { runId: `run-${seed}`, seed, archetypeId: 'hilda', attributes: LOVE }), 0);
 }
 
 /** A battle where the enemy always knocks out the player's Pokémon in one hit. */
@@ -70,15 +70,15 @@ describe('story foundation: random streams', () => {
   // holding items) M8.75 part C3 (every Pokémon has an ability) and the C2c move batch, which change
   // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts, and for the Beta 4.4 battle fixes (sleep 2-4 turns, the first rival on Stage 1 level 5, set boss aces, one Mega per battle, Choice locks only the move).
   // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2). Re-pinned for IVs and EVs (W5, ivs-evs.md) and for the second library item batch (#1021: 3,000+ lines of new catalog items change drafts, shops and rewards).
-  // Re-pinned for the boss teams (custom forms, lore Legendaries; #1063/#1066/boss-forms fix): STORY1, 2, 5 and 8 meet a changed gym.
+  // Re-pinned for starters drawn from Remembrances (all seven change: the starter draw is new). Re-pinned for the boss teams (custom forms, lore Legendaries; #1063/#1066/boss-forms fix): STORY1, 2, 5 and 8 meet a changed gym.
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': '6ff3ba2bc5446462',
-    'STORY2/0': '21d5d9485fabd116',
-    'STORY4/0': '726eae3900865633',
-    'STORY5/0': '37efc46b341d7377',
-    'STORY6/0': 'a762fcf429692622',
-    'STORY7/0': '2ebdc99af85d69d3',
-    'STORY8/0': 'bc8360c253eb4fac',
+    'STORY1/0': '1dda0e89a180298f',
+    'STORY2/0': '17ec338222cb9993',
+    'STORY4/0': '927fbd65e715ebbc',
+    'STORY5/0': '263a2d257a85102f',
+    'STORY6/0': '0c52384788070d65',
+    'STORY7/0': '2db6e08d823e4f4c',
+    'STORY8/0': '2fa3b04267e0313a',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:
   // what is left must still match main exactly, which proves the story and hyper streams moved no other roll.
@@ -333,8 +333,8 @@ describe('story foundation: saves', () => {
   it('saving and reloading after every action plays exactly like never reloading', () => {
     const storage = new MemoryStorageProvider();
     const saves = new SaveManager(storage, content);
-    const straight = autoplay({ seed: 'RELOAD', steps: 250, healOnMap: true, starterLevel: 30, attributes: LOVE });
-    let run = createRun(content, { runId: 'test-RELOAD', seed: 'RELOAD', archetypeId: 'red', campaignId: 'full', attributes: LOVE });
+    const straight = autoplay({ seed: 'RELOAD', archetypeId: 'hilda', steps: 250, healOnMap: true, starterLevel: 30, attributes: LOVE });
+    let run = createRun(content, { runId: 'test-RELOAD', seed: 'RELOAD', archetypeId: 'hilda', campaignId: 'full', attributes: LOVE });
     for (let i = 0; i < 250 && run.phase !== 'over'; i++) {
       // Same steps as autoplay(), with a save and a load in between every one.
       expect(saves.saveRun(run)).toEqual({ ok: true });
