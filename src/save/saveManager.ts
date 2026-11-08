@@ -655,7 +655,8 @@ export class SaveManager {
     const result = this.read('run', RunStateSchema);
     if (result.status !== 'ok') return result;
     // Beta 0.5: only Nate and Hilda are player characters; a run saved as anyone else carries on as one of them.
-    if (!isPlayerTrainer(result.data.archetypeId) && this.content.archetypes.has(result.data.archetypeId)) result.data = { ...result.data, archetypeId: playerTrainerFor(result.data.archetypeId) };
+    // Only saves from before the current format (every pre-Beta 0.5 save, since run v42 is Beta 0.5) are converted, so a save and reload of a current run never changes it.
+    if (result.migratedFrom !== undefined && !isPlayerTrainer(result.data.archetypeId) && this.content.archetypes.has(result.data.archetypeId)) result.data = { ...result.data, archetypeId: playerTrainerFor(result.data.archetypeId) };
     const problem = this.findRunReferenceProblem(result.data);
     if (problem) return { status: 'corrupt', reason: problem };
     return result;
