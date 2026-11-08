@@ -104,6 +104,19 @@ export function applyTrainerParity(content: Content, run: RunState, t: TrainerRe
     if (!rec.bond || rec.bond.a !== fond[0]!.speciesId || rec.bond.b !== fond[1]!.speciesId) addNote(content, rec, { kind: 'bonded', stage: Math.max(0, rec.lastStage), subject: fond[0]!.speciesId });
     rec.bond = { a: fond[0]!.speciesId, b: fond[1]!.speciesId, friendship: Math.min(fond[0]!.friendship, fond[1]!.friendship) };
   }
+  // Mentor and protégé: a lower-level teammate follows the team's strongest Pokémon, so Last Resort can really happen.
+  const mentorOf = (m: PokemonInstance) => team.find((x) => x.uid === m.bondWith);
+  if (team.length >= 2 && !team.some((m) => m.bondWith && mentorOf(m) && mentorOf(m)!.level > m.level && borrowedMove(content, mentorOf(m)!, m))) {
+    const mentor = ace;
+    const prote = team.filter((m) => m !== mentor && m.level < mentor.level && borrowedMove(content, mentor, m)).sort((x, y) => y.friendship - x.friendship || x.uid.localeCompare(y.uid))[0];
+    if (prote) {
+      for (const m of team) if (m.bondWith === mentor.uid || m.bondWith === prote.uid) delete m.bondWith;
+      mentor.bondWith = prote.uid;
+      prote.bondWith = mentor.uid;
+      mentor.friendship = Math.max(mentor.friendship, cfg.bondMinFriendship);
+      prote.friendship = Math.max(prote.friendship, cfg.bondMinFriendship);
+    }
+  }
   // Specialization (M1): a trainer keeps the style it had; a new one is read from its team, then its team is fitted to it.
   const wealth = wealthOf(t, seedKey);
   const spec = rec.meetings > 0 ? rec.specialization : chooseSpecialization(specializationOf(content, team, seedKey), seedKey);
