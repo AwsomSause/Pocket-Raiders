@@ -1240,8 +1240,8 @@ export const RunStateSchema = z.object({
   archetypeId: z.string(),
   phase: RunPhaseSchema,
   starterChoices: z.array(z.string()),
-  /** How the run was prepared, and a note when the draft rule had to fall back. */
-  prep: RunPrepSchema.extend({ note: z.string().nullable() }),
+  /** How the run was prepared. */
+  prep: RunPrepSchema,
   party: z.array(PokemonInstanceSchema),
   money: z.number().int().min(0),
   /** Bag contents: item id → count. */
@@ -1543,7 +1543,7 @@ export const LegacyRunSchema = z.object({
   archetypeId: z.string(),
   campaignId: z.string(),
   /** The Preparation Desk choices and rules the run started with (null for rebuilt records). */
-  prep: RunPrepSchema.extend({ note: z.string().nullable() }).nullable(),
+  prep: RunPrepSchema.nullable(),
   rules: RunRulesSchema.nullable(),
   starter: z.object({ speciesId: z.string(), choices: z.array(z.string()) }).nullable(),
   regionOrder: z.array(z.string()),

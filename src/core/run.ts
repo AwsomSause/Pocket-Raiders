@@ -341,7 +341,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     archetypeId: opts.archetypeId,
     phase: 'starter',
     starterChoices,
-    prep: { ...prep, campaignId: campaign.id, note: null },
+    prep: { ...prep, campaignId: campaign.id },
     party: [],
     eggs: [],
     history: {},

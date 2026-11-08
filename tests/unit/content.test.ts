@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { buildContent, ContentError, RAW_CONTENT } from '../../src/data';
 import { content } from './helpers';
 import { movesAtLevel } from '../../src/core/pokemon';
-import { eligibleSpecies } from '../../src/core/runPrep';
 import { wildEligibleSpecies } from '../../src/core/themes';
 
 describe('game data', () => {
@@ -26,10 +25,8 @@ describe('game data', () => {
     for (const s of wildEligibleSpecies(content)) {
       expect(movesAtLevel(content, s, 1).length, s.id).toBeGreaterThan(0);
     }
-    for (const pool of content.starterPools.values()) {
-      for (const id of eligibleSpecies(content, pool)) {
-        expect(movesAtLevel(content, content.species.get(id)!, content.balance.starterLevel).length, `${pool.id}: ${id}`).toBeGreaterThan(0);
-      }
+    for (const r of content.storyData.remembrances) {
+      expect(movesAtLevel(content, content.species.get(r.line[0]!)!, content.balance.starterLevel).length, `${r.id}: ${r.line[0]}`).toBeGreaterThan(0);
     }
   });
 

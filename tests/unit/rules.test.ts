@@ -5,7 +5,7 @@ import { finalizeRun, createProfile } from '../../src/core/profile';
 import { chooseStarter, createRun, debugReplaceEnemy, resolveDecision, shopStock, takeTurn } from '../../src/core/run';
 import { isRewardEligible } from '../../src/core/rewards';
 import { awardModeRewards } from '../../src/core/modeRewards';
-import { dailyClaimKey, dailySeed, extendEndless, joinProblem, lockSpecies, partyCap, pickGeneration, randomDraft, spookyWild } from '../../src/core/rules';
+import { dailyClaimKey, dailySeed, extendEndless, joinProblem, lockSpecies, partyCap, pickGeneration, spookyWild } from '../../src/core/rules';
 import { specialFamily } from '../../src/core/specialForms';
 import { getSpecies } from '../../src/core/pokemon';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -136,7 +136,7 @@ describe('the 10 other modifiers', () => {
   it('every modifier is supported and the unsupported list is empty', () => {
     expect(RUN_RULES.modifiers.filter((m) => m.status !== 'supported').map((m) => m.id)).toEqual(['quick-route']); // retired: Quick Route is a mode now
     // 10 challenge modifiers, 3 Challenge Contracts (Empty Bag, No Rest, No Evolution), Solo Run and the retired Quick Route, Pacifist, Time Attack, the randomizers, and Elite Duelist (S275).
-    expect(RUN_RULES.modifiers).toHaveLength(35);
+    expect(RUN_RULES.modifiers).toHaveLength(34);
   });
 
   it('Limited Party caps the party at 4', () => {
@@ -200,14 +200,6 @@ describe('the 10 other modifiers', () => {
     expect(shop(run).some((id) => revives.includes(id))).toBe(false);
     const reward = [...content.rewards.values()].find((r) => r.effect.kind === 'addItem' && revives.includes(r.effect.item));
     if (reward) expect(isRewardEligible(content, run, reward)).toBe(false);
-  });
-
-  it('Random Draft picks a licence-free draft rule from the seed, the same every time', () => {
-    const run = start('rd', { modifierIds: ['random-draft'] });
-    const again = start('rd', { modifierIds: ['random-draft'] });
-    expect(run.prep.draftRuleId).toBe(again.prep.draftRuleId);
-    expect(randomDraft(content, 'rd', run.prep).draftRuleId).toBe(run.prep.draftRuleId);
-    expect(content.draftRules.get(run.prep.draftRuleId)!.license).toBeNull();
   });
 
   it('Boss Rush uses the short campaign and its gyms come twice as often', () => {
@@ -278,27 +270,24 @@ describe('mode rewards', () => {
     run.rules = { ...run.rules, ...extra };
     return run;
   };
-  it('the Daily fourth-gym reward unlocks the Daily Set once, then pays a repeat reward', () => {
+  it('the Daily fourth-gym reward pays once, then pays a repeat reward', () => {
     const profile = createProfile(content, 'p');
     const first = awardModeRewards(profile, finished('daily'), 'now');
     expect(first).toMatchObject([{ id: 'daily-fourth-gym', first: true }]);
-    expect(profile.unlockedPools).toContain('daily-set');
     const credits = profile.bankCredits;
     const again = awardModeRewards(profile, finished('daily'), 'later');
     expect(again[0]!.first).toBe(false);
     expect(profile.bankCredits).toBe(credits + 100);
-    expect(profile.unlockedPools.filter((p) => p === 'daily-set')).toHaveLength(1);
   });
   it('needs the badges, and Adventure or reward-free runs earn nothing', () => {
     const profile = createProfile(content, 'p');
     expect(awardModeRewards(profile, finished('daily', {}, 3), 'now')).toEqual([]);
     expect(awardModeRewards(profile, finished('daily', { progressionEligible: false }), 'now')).toEqual([]);
-    expect(profile.unlockedPools).toEqual([]);
+    expect(profile.unlockedArchetypes).not.toContain('hex-maniac');
   });
-  it('Spooky unlocks its pool and trainer; Endless pays by laps', () => {
+  it('Spooky unlocks its trainer; Endless pays by laps', () => {
     const profile = createProfile(content, 'p');
     awardModeRewards(profile, finished('spooky'), 'now');
-    expect(profile.unlockedPools).toContain('spooky');
     expect(profile.unlockedArchetypes).toContain('hex-maniac');
     expect(awardModeRewards(profile, finished('endless', { loops: 0 }), 'now')).toEqual([]);
     expect(awardModeRewards(profile, finished('endless', { loops: 1 }), 'now').map((r) => r.id)).toEqual(['endless-lap-1']);

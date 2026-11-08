@@ -19,7 +19,6 @@ import {
 import { createPokemon } from '../../src/core/pokemon';
 import { createProfile, finalizeRun } from '../../src/core/profile';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { poolStatus } from '../../src/core/runPrep';
 import type { MasteryRecord, Profile, RunState } from '../../src/core/state';
 import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
@@ -151,18 +150,6 @@ describe('unlocks', () => {
     const a = runWith(withMastery({ [FAMILY]: GOLD }), FAMILY, 'same');
     const b2 = runWith(withMastery({ [FAMILY]: GOLD }), FAMILY, 'same');
     expect(JSON.stringify(a)).toBe(JSON.stringify(b2));
-  });
-});
-
-describe('the Mastered starter set', () => {
-  it('opens once three species are Silver and draws only from them', () => {
-    const pool = content.starterPools.get('mastered')!;
-    expect(poolStatus(content, withMastery({ charmander: SILVER, squirtle: SILVER }), pool)).toBe('locked');
-    const p = withMastery({ charizard: { ...SILVER, battles: b.silverBattles }, squirtle: SILVER, bulbasaur: SILVER });
-    expect(poolStatus(content, p, pool)).toBe('unlocked');
-    expect(masteredStarters(content, p)).toEqual(['bulbasaur', 'charmander', 'squirtle']);
-    const run = createRun(content, { runId: 'r', seed: 'ms', archetypeId: 'red', mastery: p.mastery, prep: { ...createRun(content, { runId: 'x', seed: 'x', archetypeId: 'red' }).prep, poolId: 'mastered', campaignId: 'full' } });
-    for (const id of run.starterChoices) expect(['bulbasaur', 'charmander', 'squirtle']).toContain(id);
   });
 });
 
