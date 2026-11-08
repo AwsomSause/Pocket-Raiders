@@ -2155,6 +2155,8 @@ export class BattleScene extends Phaser.Scene {
         },
       );
     }
+    // M7: the Champion gets the big presentation (long tier S card) before the usual title card.
+    if (boss && battle.trainer && boss.role === 'champion') await this.bigMoment(bossIntroMoment({ role: 'champion' }), `championIntro.${boss.title}`, 'THE CHAMPION', boss.title);
     // The entrance already named the boss; the title card is for when it was skipped.
     if (boss && !cinematic) {
       const types = boss.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ');
@@ -3311,7 +3313,7 @@ export class BattleScene extends Phaser.Scene {
     }
     // M7: a raid boss falling and a Champion's defeat each get a framework card (presentation only).
     if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!));
-    else if (end.outcome === 'win' && bossWin && bossWin.boss.role === 'champion') await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, 'CHAMPION DEFEATED', bossWin.boss.title);
+    else if (end.outcome === 'win' && bossWin) await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, bossWin.boss.role === 'champion' ? 'CHAMPION DEFEATED' : bossWin.boss.role === 'elite' ? 'ELITE FOUR DEFEATED' : 'LEADER DEFEATED', bossWin.boss.title);
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);
       this.assistAfter = null;
