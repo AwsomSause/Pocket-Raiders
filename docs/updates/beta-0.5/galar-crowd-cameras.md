@@ -3,3 +3,4 @@
 **Save:** none. Presentation only.
 **Checked:** every camera cut screenshotted in the browser (tests/e2e/galarStadium.spec.ts); frame, LIVE tag and corners now draw on top of the pictures.
 **Limits:** crowd pictures load in the background; a cut drawn before they arrive uses the old silhouettes. Players are only Nate and Hilda, so no player sprites are used in the stands.
+**Music:** every Galar gym, tournament and Champion battle plays Kice's SwSh Gym Leader Battle song from 4:19 with a 1 second fade-in (trimmed file `galar_battle.mp3`, 1.9 MB; provenance in public/assets/audio/bgm/PROVENANCE.md). One song the whole fight, so the last-Pokémon and Champion final song swaps are off in Galar.

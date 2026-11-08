@@ -28,7 +28,7 @@ describe('Galar stadium presentation', () => {
 
   it('has a crowd reaction for every beat; the last Pokémon changes the music', () => {
     for (const beat of CROWD_BEATS) expect(crowdReaction(beat).cue).toMatch(/^crowd\./);
-    expect(crowdReaction('lastMon').music).not.toBe(crowdReaction('calm').music);
+    expect(crowdReaction('lastMon').music).toBe(crowdReaction('calm').music); // one song for the whole Galar battle (Kice's pick)
     expect(crowdReaction('dynamax').intensity).toBeGreaterThan(crowdReaction('knockOut').intensity);
   });
 

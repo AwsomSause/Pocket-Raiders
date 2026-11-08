@@ -82,6 +82,9 @@ export function setMusicIntensity(rate: number): void {
   if (sound?.setRate) sound.setRate(Math.max(1, Math.min(1.12, rate)));
 }
 
+/** Songs that fade in from silence when they start. */
+const MUSIC_FADE_IN_MS: Record<string, number> = { 'bgm.galar_battle': 1000 };
+
 export function playMusic(scene: Phaser.Scene, id: string): void {
   const { session, assets } = services();
   if (currentMusic?.id === id && currentMusic.sound.isPlaying) return;
@@ -89,9 +92,13 @@ export function playMusic(scene: Phaser.Scene, id: string): void {
   stopMusic();
   if (!assets.has(id) || session.settings.muted) return;
   try {
-    const sound = scene.sound.add(id, { loop: true, volume: session.settings.musicVolume });
+    const fade = MUSIC_FADE_IN_MS[id] ?? 0;
+    const volume = session.settings.musicVolume;
+    const sound = scene.sound.add(id, { loop: true, volume: fade > 0 ? 0 : volume });
     sound.play();
     currentMusic = { id, sound };
+    // A song that fades in (the Galar stadium song): volume climbs from 0 to the music setting over the fade; presentation only.
+    if (fade > 0) scene.tweens.addCounter({ from: 0, to: 1, duration: fade, onUpdate: (t) => { if (currentMusic?.sound === sound) (sound as Phaser.Sound.BaseSound & { setVolume?: (v: number) => void }).setVolume?.(session.settings.musicVolume * t.getValue()!); } });
   } catch {
     currentMusic = null;
   }

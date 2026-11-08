@@ -348,6 +348,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
     'gym_sm', 'gym_swsh', 'gym_xy', 'gym_sv', 'elite_sm', 'elite_xy', 'elite_bw',
     'champion_bw', 'champion_dppt', 'champion_xy', 'champion_swsh', 'champion_sv', 'champion_hgss', 'rival_dppt', 'rival_bw2', 'rival_hgss',
   ].map((n): AssetEntry => ({ id: `bgm.${n}`, kind: 'audio', category: 'music', path: `audio/bgm/${n}.mp3`, lazy: true })),
+  // Galar stadium battle song (Kice's upload, SwSh Gym Leader Battle from 4:19, trimmed to 112 kbps): every Galar gym, tournament and Champion battle. Loads on demand with the battle.
+  { id: 'bgm.galar_battle', kind: 'audio', category: 'music', path: 'audio/bgm/galar_battle.mp3', lazy: true },
   // Jingles (UIE "ME" folder): item, key item, badge, new Pokémon, evolution, healing, save, TM, berry, forgotten move.
   ...Object.entries({ item_get: 'item_get', key_item: 'key_item', badge: 'badge', pkmn_get: 'pkmn_get', evo_start: 'evo_start', evo_success: 'evo_success', heal: 'heal', save: 'save', tm_get: 'tm_get', berry: 'berry', forget_move: 'forget_move' }).map(
     ([id, file]): AssetEntry => ({ id: `me.${id}`, kind: 'audio', category: 'sound', path: `audio/me/${file}.ogg`, lazy: true }),
