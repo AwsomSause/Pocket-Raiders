@@ -21,7 +21,7 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test('animated boss sprite in the intro and the player throwing pose', async ({ page }) => {
+test('animated boss sprite in the intro', async ({ page }) => {
   test.setTimeout(120_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -48,17 +48,6 @@ test('animated boss sprite in the intro and the player throwing pose', async ({ 
     .poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').children.list.find((o: any) => o.texture?.key === 'boss.anim.brock')?.frame?.name ?? '0001.png'), { timeout: 10_000, intervals: [100] })
     .not.toBe('0001.png');
   await page.screenshot({ path: 'test-results/memories-boss-anim.png' });
-  // Move the intro along until Hilda's back sprite throws.
-  await expect
-    .poll(
-      async () => {
-        if (await showsTexture(page, 'boss.back.hilda')) return true;
-        await page.keyboard.press('Enter');
-        return false;
-      },
-      { timeout: 60_000, intervals: [250] },
-    )
-    .toBe(true);
-  await page.screenshot({ path: 'test-results/memories-throw.png' });
+  // The player no longer throws on screen (send-outs: the ball flies in from off screen, f525dc7e), so there is no throwing pose to wait for.
   expect(errors).toEqual([]);
 });
