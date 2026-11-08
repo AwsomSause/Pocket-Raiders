@@ -263,3 +263,28 @@ describe('save migration run v41 -> v42', () => {
     expect((MIGRATIONS.run[41]!({ story: { mentoring: m } }) as { story: { mentoring: unknown } }).story.mentoring).toBe(m);
   });
 });
+
+describe('Last Resort in doubles and the mentor moments (follow-up)', () => {
+  it("works for the commanded Pokémon in a double battle, once per battle", () => {
+    const { run, mentor, rookie, bond } = bonded('rework-lr-doubles');
+    bond.chemistry = 50;
+    run.battle = toBattle(run).battle;
+    // A different Pokémon is active; the rookie is the one being commanded (the other spot).
+    run.battle!.activeIndex = run.party.indexOf(mentor);
+    rookie.hp = 1;
+    expect(lastResortOffer(content, run)).toBeNull();
+    const offer = lastResortOffer(content, run, rookie);
+    expect(offer?.proteUid).toBe(rookie.uid);
+    useLastResort(content, run, rookie);
+    expect(rookie.moves.some((m) => m.lent)).toBe(true);
+    expect(lastResortOffer(content, run, rookie)).toBeNull();
+  });
+  it('the return moment cannot be skipped; the assist and graduation moments can', async () => {
+    const { mentorMoment } = await import('../../src/core/story/mentorMoments');
+    const { planMoment } = await import('../../src/core/cinematic/moments');
+    const s = { reduceMotion: false, disableAnimations: false, seen: new Set<string>() };
+    expect(planMoment(mentorMoment('protegeReturn'), s).skippable).toBe(false);
+    expect(planMoment(mentorMoment('mentorAssist'), s).skippable).toBe(true);
+    expect(planMoment(mentorMoment('mentorGraduation'), s).skippable).toBe(true);
+  });
+});

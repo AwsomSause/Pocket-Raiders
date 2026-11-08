@@ -3,6 +3,10 @@
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
+import { planMoment } from '../core/cinematic/moments';
+import { mentorMoment } from '../core/story/mentorMoments';
+import { playMoment } from '../ui/cinematic/momentPlayer';
+import { mentorScene } from '../ui/battleFx/mentorScene';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
@@ -2838,8 +2842,9 @@ export class BattleScene extends Phaser.Scene {
     const hotbarAt = options.length;
     for (const id of hotbar) options.push({ label: `Quick: ${content.items.get(id)!.name}` });
     // Beta 0.5 (M4): Mentor's Last Resort, once per battle, when a protégé at half HP has its mentor in the party.
-    const lastResortAt = !this.duo && lastResortOffer(content, this.run) ? options.length : -1;
-    if (lastResortAt >= 0) options.push({ label: "Mentor's help" });
+    const lastResortOffered = lastResortOffer(content, this.run, this.activeMon());
+    const lastResortAt = lastResortOffered ? options.length : -1;
+    if (lastResortAt >= 0) options.push({ label: "Mentor ♥" });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -2877,12 +2882,7 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === scanAt) void this.scanFoe();
         else if (i === lastResortAt) {
-          const lines = useLastResort(content, this.run).map((e) => (e.type === 'spectacle' ? e.text : ''));
-          this.clearMenus();
-          this.message.setVisible(true);
-          this.message.setText(lines.join('\n'));
-          if (this.motion !== 'off') this.cameras.main.flash(260, 255, 230, 160);
-          this.time.delayedCall(this.motion === 'off' ? 600 : 2200, () => this.showMoveMenu());
+          void this.playLastResort();
         } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
         else if (i === rallyAt) {
           this.rallyChoice = !this.rallyChoice;
@@ -2912,6 +2912,35 @@ export class BattleScene extends Phaser.Scene {
       onBack: this.duo && this.cmdSpot === 1 && this.commands[0] ? () => this.promptSpot(0) : undefined,
     });
     this.showTabs(null);
+  }
+
+  /** Mentor's Last Resort (Beta 0.5 §2.4): the lend happens first (state), then the mentor scene plays over it (presentation only). */
+  private async playLastResort(): Promise<void> {
+    const content = services().session.content;
+    const mon = this.activeMon();
+    const offer = lastResortOffer(content, this.run, mon);
+    if (!offer) return;
+    const mentor = this.run.party.find((m) => m.uid === offer.mentorUid)!;
+    const lines = useLastResort(content, this.run, mon).map((e) => (e.type === 'spectacle' ? e.text : ''));
+    this.clearMenus();
+    this.message.setVisible(true);
+    this.message.setText(lines[0] ?? '');
+    const spec = mentorMoment('mentorAssist');
+    const plan = planMoment(spec, { reduceMotion: this.motion === 'reduced', disableAnimations: this.motion === 'off', seen: new Set() });
+    const ms = content.species.get(mentor.speciesId)!;
+    const ps = content.species.get(mon.speciesId)!;
+    const move = content.moves.get(offer.moveId)!;
+    try {
+      await playMoment(this, spec, plan, {
+        title: "Mentor's help",
+        subtitle: `${ms.name} lends ${ps.name} ${move.name}`,
+        inner: () => this.playBeat(mentorScene(this, { mode: 'assist', makeMentor: (x, y) => pokemonVisual(this, ms, 'front', x, y, PIXEL_SCALE * 1.4, mentor.shiny), makeProte: (x, y) => pokemonVisual(this, ps, 'front', x, y, PIXEL_SCALE * 1.4, mon.shiny), caption: lines[1] ?? '', speed: 1 / animationTimeScale(services().session.settings) })),
+      });
+    } catch {
+      /* presentation failure never corrupts the battle */
+    }
+    this.message.setText(lines.slice(1).join('\n'));
+    this.time.delayedCall(this.motion === 'off' ? 300 : 900, () => this.showMoveMenu());
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */

@@ -20,6 +20,7 @@ import { calcStats, getSpecies, MAX_PP_UPS, maxPp } from '../core/pokemon';
 import type { DecisionChoice } from '../core/run';
 import { pathName, type MentorPath } from '../core/story/mentorship';
 import { mentorAccepts } from '../core/story/returnProtege';
+import { playMentorMoment } from '../ui/cinematic/mentorMoments';
 import { TYPE_NAMES, TYPE_BLURB } from '../core/story/mentorBond';
 import type { MentorType } from '../core/story/schema';
 import { askLeadText } from '../core/story/askLead';
@@ -372,9 +373,6 @@ export class DecisionScene extends Phaser.Scene {
     }
     const m = getSpecies(content, mentor.speciesId);
     const f = getSpecies(content, foe.speciesId);
-    pokemonVisual(this, m, 'front', 150, 260, 3, mentor.shiny);
-    const foeSprite = pokemonVisual(this, f, 'front', 150, 470, 2, foe.shiny);
-    void foeSprite;
     const accepts = mentorAccepts(run, mentorUid, foe.speciesId);
     const beats = [
       `A ${f.name} steps out of the grass. It looks right at ${m.name}.`,
@@ -382,21 +380,27 @@ export class DecisionScene extends Phaser.Scene {
       `${f.name} wants to get stronger. It asks ${m.name} to teach it.`,
       accepts ? `${m.name} looks it over, then nods. ${f.name} will join as its protégé.` : `${m.name} turns away. It is not ready to teach anyone.`,
     ];
-    const text = this.add.text(300, 60, beats[0]!, textStyle(28, COLORS.textLight, { wordWrap: { width: 640 } }));
-    drawPanel(this, 300, 270, 620, 150);
-    let step = 0;
-    this.menu = new Menu(this, {
-      x: 316,
-      y: 284,
-      options: [{ label: 'Continue' }],
-      itemHeight: 56,
-      itemWidth: 580,
-      fontSize: 26,
-      onSelect: () => {
-        step += 1;
-        if (step < beats.length) text.setText(beats[step]!);
-        else this.resolve({ kind: 'returnProtege' });
-      },
+    // The mandatory return moment (cannot be skipped) plays first; then the lines, one button per beat.
+    void playMentorMoment(this, content, 'protegeReturn', mentor, foe, { title: 'A familiar face', subtitle: `${f.name} returns`, caption: beats[0]! }).then(() => {
+      if (this.done) return;
+      pokemonVisual(this, m, 'front', 150, 260, 3, mentor.shiny);
+      pokemonVisual(this, f, 'front', 150, 470, 2, foe.shiny);
+      const text = this.add.text(300, 60, beats[0]!, textStyle(28, COLORS.textLight, { wordWrap: { width: 640 } }));
+      drawPanel(this, 300, 270, 620, 150);
+      let step = 0;
+      this.menu = new Menu(this, {
+        x: 316,
+        y: 284,
+        options: [{ label: 'Continue' }],
+        itemHeight: 56,
+        itemWidth: 580,
+        fontSize: 26,
+        onSelect: () => {
+          step += 1;
+          if (step < beats.length) text.setText(beats[step]!);
+          else this.resolve({ kind: 'returnProtege' });
+        },
+      });
     });
   }
 

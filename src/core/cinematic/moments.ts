@@ -17,6 +17,7 @@ export const MOMENT_KINDS = [
   ...TRANSFORM_MOMENTS,
   'gymIntro', 'e4Intro', 'championIntro', 'aceEntrance', 'raidIntro', 'raidDefeat', 'bossDefeat',
   'rivalFirst', 'rivalRematch', 'rivalRevenge', 'rivalReunion', 'evilTeam', 'stadiumCut',
+  'mentorAssist', 'mentorGraduation', 'protegeReturn',
 ] as const;
 export type MomentKind = (typeof MOMENT_KINDS)[number];
 

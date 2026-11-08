@@ -6,6 +6,7 @@ import { freeAbilities } from '../core/rules';
 import { benchList, bagBerryChoices, campOf, campProblem, CAMP, comboList, cursedRelics, gadgetUses, getAction, hasGadget, marketLeft, marketSlots, mysteryOdds, shelfMoves, shelfTypes, slotChoices, usedHere, type CampArgs } from '../core/camp';
 import { campers, campProblem as boxCampProblem, CAMP_RULES } from '../core/trainingCamp';
 import { mentorLessons } from '../core/mentorLesson';
+import { playMentorMoment } from './cinematic/mentorMoments';
 import { TRAIT_NAMES, TYPE_NAMES, chemistryLevel, inheritableMoves } from '../core/story/mentorBond';
 import { nurseryChoices } from '../core/nursery';
 import { formShiftProblem, formShiftTargets } from '../core/formShift';
@@ -176,7 +177,13 @@ function runAction(host: FieldMenuHost, id: string, group: number, back: Back): 
         ...moves.map((o) => ({ label: `Learn ${content.moves.get(o.moveId)?.name ?? o.moveId}`, desc: o.reason, problem: o.why ?? undefined })),
         { label: 'Graduation spar', desc: 'A private practice match. Nothing is risked.', problem: bond.ready ? undefined : 'The protégé has not caught up yet' },
       ];
-      choose(host, `${who(bond.proteUid)} and ${who(bond.mentorUid)}`, rows, (j) => back(j < moves.length ? session.mentorInherit(bond.relId, moves[j]!.moveId) : session.mentorSpar(bond.relId)), again);
+      choose(host, `${who(bond.proteUid)} and ${who(bond.mentorUid)}`, rows, (j) => {
+        if (j < moves.length) return back(session.mentorInherit(bond.relId, moves[j]!.moveId));
+        const m = run.party.find((x) => x.uid === bond.mentorUid)!;
+        const p = run.party.find((x) => x.uid === bond.proteUid)!;
+        const msg = session.mentorSpar(bond.relId);
+        void playMentorMoment(host.scene, content, 'mentorGraduation', m, p, { title: 'Graduation spar', subtitle: `${who(p.uid)} and ${who(m.uid)}`, caption: msg.split('. ')[0] ?? msg }).then(() => back(msg));
+      }, again);
     }, again);
   }
   if (id === 'view:mentor') {
