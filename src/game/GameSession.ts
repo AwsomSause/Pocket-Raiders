@@ -42,7 +42,7 @@ import * as Timeline from '../core/timeline/genesis';
 import { captureOrigin, timelineOutcome } from '../core/timeline/frontRunner';
 import { buyCandyPerk } from '../core/candyShop';
 import { loanProblem, runBankFlags, vaultTake, buyTier, exchange, type ExchangeDirection } from '../core/bank';
-import { buyLicense, savePreset, unlockPool } from '../core/runPrep';
+import { buyLicense, savePreset } from '../core/runPrep';
 import type { PlayerAction } from '../core/battle/engine';
 import { autoCommands } from '../core/battle/doubles';
 import { chooseAutoAction, setStance, type AutoPick, type Stance } from '../core/battle/autoBattle';
@@ -1067,12 +1067,6 @@ export class GameSession {
   /** Chooses a family's Species Mastery egg moves or ability. */
   setMasteryPicks(family: string, picks: { eggMoves?: string[]; abilitySlot?: number }): void {
     this.profile = setMasteryPicks(this.content, this.profile, family, picks);
-    this.checkSave(this.saves.saveProfile(this.profile));
-    this.changed();
-  }
-
-  unlockPool(poolId: string): void {
-    this.profile = unlockPool(this.content, this.profile, poolId);
     this.checkSave(this.saves.saveProfile(this.profile));
     this.changed();
   }

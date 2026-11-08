@@ -1051,10 +1051,6 @@ export type PendingDecision = z.infer<typeof PendingDecisionSchema>;
 /** The choices made on the Preparation Desk before a run (GAME_DESIGN.md §14.7). */
 export const RunPrepSchema = z.object({
   campaignId: z.string(),
-  poolId: z.string(),
-  draftRuleId: z.string(),
-  /** The chosen type, for the Type Focus draft rule. */
-  typeFocus: TypeNameSchema.nullable(),
   /** The preparation token for this run, or none. */
   tokenId: z.string().nullable(),
   /** The Research Directive (plan Part 5): a type to study this run for bonus Research Points, or none. */
@@ -1701,8 +1697,6 @@ export const ProfileSchema = z.object({
   runHistory: z.array(RunRecordSchema),
   /** What the last finished run paid out (shown on the run-end screen and in the Bank). */
   lastPayout: PayoutSchema.nullable(),
-  /** Starter pools bought in the Starter Laboratory (pools unlocked from the start aren't listed). */
-  unlockedPools: z.array(z.string()),
   /** Bank licenses owned. */
   licenses: z.array(z.string()),
   /** Loadout presets by slot (null: empty slot). */

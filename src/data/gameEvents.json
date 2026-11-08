@@ -70,8 +70,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Delta Researcher",
-    "pool": "rare"
+    "title": "Delta Researcher"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -149,8 +148,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Rival of the Week",
-    "pool": "trainer-blue"
+    "title": "Rival of the Week"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -224,8 +222,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Circuit Champion",
-    "pool": "league-kanto"
+    "title": "Circuit Champion"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -301,8 +298,7 @@
    "reward": {
     "researchPoints": 250,
     "candies": 30,
-    "title": "Egg Expedition Leader",
-    "pool": "late-bloomers"
+    "title": "Egg Expedition Leader"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -377,8 +373,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Carnival Catcher",
-    "pool": "tricksters"
+    "title": "Carnival Catcher"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -452,8 +447,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Raid Rallier",
-    "pool": "bulwarks"
+    "title": "Raid Rallier"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -532,8 +526,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Dragon Week Hero",
-    "pool": "type-dragon"
+    "title": "Dragon Week Hero"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -610,8 +603,7 @@
    "reward": {
     "researchPoints": 200,
     "bankCredits": 3000,
-    "title": "Market Mogul",
-    "pool": "glass-cannons"
+    "title": "Market Mogul"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -690,8 +682,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Gauntlet Victor",
-    "pool": "league-johto"
+    "title": "Gauntlet Victor"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -775,8 +766,7 @@
    ],
    "reward": {
     "researchPoints": 450,
-    "title": "Beast Tracker",
-    "pool": "rare"
+    "title": "Beast Tracker"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -853,8 +843,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Fireside Keeper",
-    "pool": "research"
+    "title": "Fireside Keeper"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -940,8 +929,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Liberator",
-    "pool": "team-plasma"
+    "title": "Liberator"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1024,8 +1012,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Pathfinder",
-    "pool": "rare"
+    "title": "Pathfinder"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1106,8 +1093,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Dungeon Delver",
-    "pool": "spin-mystery-dungeon"
+    "title": "Dungeon Delver"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1184,8 +1170,7 @@
    ],
    "reward": {
     "researchPoints": 500,
-    "title": "Legend Climber",
-    "pool": "grand"
+    "title": "Legend Climber"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1295,7 +1280,6 @@
    "reward": {
     "researchPoints": 400,
     "title": "Spooky Champion",
-    "pool": "spooky",
     "trainer": "hex-maniac"
    },
    "repeatPolicy": "oncePerEvent",
@@ -1381,8 +1365,7 @@
    "reward": {
     "researchPoints": 300,
     "candies": 20,
-    "title": "Harvest Hero",
-    "pool": "type-grass"
+    "title": "Harvest Hero"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1481,8 +1464,7 @@
    ],
    "reward": {
     "researchPoints": 350,
-    "title": "Winter Star",
-    "pool": "type-ice"
+    "title": "Winter Star"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1652,8 +1634,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Lucky Lantern",
-    "pool": "type-fire"
+    "title": "Lucky Lantern"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1737,8 +1718,7 @@
    "reward": {
     "researchPoints": 300,
     "candies": 20,
-    "title": "Best Friends",
-    "pool": "type-fairy"
+    "title": "Best Friends"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1820,8 +1800,7 @@
    ],
    "reward": {
     "researchPoints": 350,
-    "title": "Day One Fan",
-    "pool": "classic"
+    "title": "Day One Fan"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -1911,8 +1890,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Spring Sprout",
-    "pool": "late-bloomers"
+    "title": "Spring Sprout"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2006,8 +1984,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Earth Keeper",
-    "pool": "type-ground"
+    "title": "Earth Keeper"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2092,8 +2069,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Summer Splasher",
-    "pool": "type-water"
+    "title": "Summer Splasher"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2176,8 +2152,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Stargazer",
-    "pool": "type-psychic"
+    "title": "Stargazer"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2259,8 +2234,7 @@
    ],
    "reward": {
     "researchPoints": 350,
-    "title": "Honor Student",
-    "pool": "research"
+    "title": "Honor Student"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2356,8 +2330,7 @@
    "reward": {
     "researchPoints": 350,
     "candies": 25,
-    "title": "Berry Baron",
-    "pool": "type-grass"
+    "title": "Berry Baron"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2441,8 +2414,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Fire Maniac",
-    "pool": "type-fire"
+    "title": "Fire Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2544,8 +2516,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Water Maniac",
-    "pool": "type-water"
+    "title": "Water Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2628,8 +2599,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Grass Maniac",
-    "pool": "type-grass"
+    "title": "Grass Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2729,8 +2699,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Electric Maniac",
-    "pool": "type-electric"
+    "title": "Electric Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2818,8 +2787,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Ice Maniac",
-    "pool": "type-ice"
+    "title": "Ice Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2903,8 +2871,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Fighting Maniac",
-    "pool": "type-fighting"
+    "title": "Fighting Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -2994,8 +2961,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Poison Maniac",
-    "pool": "type-poison"
+    "title": "Poison Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3078,8 +3044,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Ground Maniac",
-    "pool": "type-ground"
+    "title": "Ground Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3163,8 +3128,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Flying Maniac",
-    "pool": "type-flying"
+    "title": "Flying Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3247,8 +3211,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Psychic Maniac",
-    "pool": "type-psychic"
+    "title": "Psychic Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3331,8 +3294,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Bug Maniac",
-    "pool": "type-bug"
+    "title": "Bug Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3417,8 +3379,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Rock Maniac",
-    "pool": "type-rock"
+    "title": "Rock Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3497,8 +3458,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Ghost Maniac",
-    "pool": "type-ghost"
+    "title": "Ghost Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3581,8 +3541,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Dark Maniac",
-    "pool": "type-dark"
+    "title": "Dark Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3671,8 +3630,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Steel Maniac",
-    "pool": "type-steel"
+    "title": "Steel Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3759,8 +3717,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Fairy Maniac",
-    "pool": "type-fairy"
+    "title": "Fairy Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -3863,8 +3820,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Normal Maniac",
-    "pool": "type-normal"
+    "title": "Normal Maniac"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -4138,8 +4094,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Starter Fan",
-    "pool": "classic"
+    "title": "Starter Fan"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -4533,8 +4488,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Duo Partner",
-    "pool": "type-fairy"
+    "title": "Duo Partner"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -4689,8 +4643,7 @@
    ],
    "reward": {
     "researchPoints": 300,
-    "title": "Blossom Friend",
-    "pool": "type-grass"
+    "title": "Blossom Friend"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -7201,8 +7154,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Rocket Stopper",
-    "pool": "team-rocket"
+    "title": "Rocket Stopper"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -7287,8 +7239,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Showdown Referee",
-    "pool": "team-aqua"
+    "title": "Showdown Referee"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -7367,8 +7318,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Spacetime Guardian",
-    "pool": "team-galactic"
+    "title": "Spacetime Guardian"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -7446,8 +7396,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Liberator",
-    "pool": "team-plasma"
+    "title": "Liberator"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -7525,8 +7474,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Experiment Survivor",
-    "pool": "team-flare"
+    "title": "Experiment Survivor"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -7604,8 +7552,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "Aether Rescuer",
-    "pool": "team-aether"
+    "title": "Aether Rescuer"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {
@@ -12785,8 +12732,7 @@
    ],
    "reward": {
     "researchPoints": 400,
-    "title": "World Boss Slayer",
-    "pool": "bulwarks"
+    "title": "World Boss Slayer"
    },
    "repeatPolicy": "oncePerEvent",
    "fallbackReward": {

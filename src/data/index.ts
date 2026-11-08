@@ -366,13 +366,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const quests = parse(TrainerQuestsFileSchema, raw.trainerQuests, 'trainerQuests.json', problems);
   const gameEventsFile = parse(GameEventsFileSchema, raw.gameEvents, 'gameEvents.json', problems);
   const runPrepRaw = parse(RunPrepFileSchema, raw.runPrep, 'runPrep.json', problems);
-  const runPrep = runPrepRaw && {
-    ...runPrepRaw,
-    starterPools: runPrepRaw.starterPools.map((pool) => {
-      const u = pool.id.startsWith('trainer-') ? unlockById.get(pool.id.slice('trainer-'.length)) : undefined;
-      return u ? { ...pool, unlock: u.requirement, unlockText: u.text } : pool;
-    }),
-  };
+  const runPrep = runPrepRaw;
   const rewards = parse(z.array(RewardSchema), raw.rewards, 'rewards.json', problems);
   const items = parse(z.array(ItemSchema), raw.items, 'items.json', problems);
   const itemCatalog = parse(z.array(CatalogEntrySchema), raw.itemCatalog, 'itemCatalog.json', problems);
@@ -431,8 +425,6 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     questLines: new Map(quests.lines.map((l) => [l.trainerId, l])),
     runQuests: toMap(quests.runQuests, 'trainerQuests.json runQuests', problems),
     gameEvents: toMap(gameEventsFile.events, 'gameEvents.json', problems),
-    starterPools: toMap(runPrep.starterPools, 'runPrep.json starterPools', problems),
-    draftRules: toMap(runPrep.draftRules, 'runPrep.json draftRules', problems),
     prepTokens: toMap(runPrep.tokens, 'runPrep.json tokens', problems),
     licenses: toMap(runPrep.licenses, 'runPrep.json licenses', problems),
     rewards: toMap(rewards, 'rewards.json', problems),
@@ -743,7 +735,6 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       if (!a.signatureSpecies.includes(id)) problems.push(`trainer "${a.id}" has a moveset for "${id}", which is not a signature species`);
       for (const m of moves) if (content.moves.get(m)?.supported !== true) problems.push(`trainer "${a.id}" moveset for "${id}" uses unsupported move "${m}"`);
     }
-    if (a.signaturePool && !content.starterPools.has(a.signaturePool)) problems.push(`trainer "${a.id}" has unknown signature pool "${a.signaturePool}"`);
   }
   if (![...content.archetypes.values()].some((a) => a.unlockedByDefault)) problems.push('archetypes.json has no starting trainer');
   // Roaming Legendaries (balance.world): each needs a species and its own stop (event "roamer-<species>").
@@ -799,7 +790,6 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       if (m.kind === 'priceMultiplier') for (const id of m.items ?? []) if (!content.items.has(id)) problems.push(`${where} prices unknown item "${id}"`);
     }
     for (const r of [ge.reward, ge.fallbackReward, ...ge.objectives.map((o) => o.reward)]) {
-      if (r.pool && !content.starterPools.has(r.pool)) problems.push(`${where} gives unknown starter set "${r.pool}"`);
       if (r.trainer && !content.archetypes.has(r.trainer)) problems.push(`${where} gives unknown trainer "${r.trainer}"`);
     }
     if (new Set(ge.objectives.map((o) => o.id)).size !== ge.objectives.length) problems.push(`${where} has two objectives with the same id`);
@@ -827,7 +817,6 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     if (!content.archetypes.has(line.trainerId)) problems.push(`${where} is for an unknown trainer`);
     line.steps.forEach((step, i) => {
       checkRequirement(step.requirement, `${where} step ${i + 1}`);
-      if (step.reward.pool && !content.starterPools.has(step.reward.pool)) problems.push(`${where} step ${i + 1} gives unknown starter set "${step.reward.pool}"`);
       if (step.reward.trainer && !content.archetypes.has(step.reward.trainer)) problems.push(`${where} step ${i + 1} gives unknown trainer "${step.reward.trainer}"`);
       if (step.reward.evolution && i !== line.steps.length - 1) problems.push(`${where} step ${i + 1}: only the last step unlocks a Trainer Evolution`);
     });
@@ -844,24 +833,6 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const checkLicense = (id: string | null, where: string) => {
     if (id !== null && !content.licenses.has(id)) problems.push(`${where} needs unknown license "${id}"`);
   };
-  for (const pool of content.starterPools.values()) {
-    checkRequirement(pool.unlock, `starter pool "${pool.id}"`);
-    checkLicense(pool.license, `starter pool "${pool.id}"`);
-    // Listed species may be evolved (they stand for their first stage) but must exist; so must bosses and the filter's region.
-    for (const id of pool.species) if (!content.species.has(id)) problems.push(`starter pool "${pool.id}" lists unknown species "${id}"`);
-    for (const id of pool.bosses) if (!content.bosses.has(id)) problems.push(`starter pool "${pool.id}" lists unknown boss "${id}"`);
-    if (pool.filter?.region && !content.regions.has(pool.filter.region)) problems.push(`starter pool "${pool.id}" filters on unknown region "${pool.filter.region}"`);
-  }
-  const startingPools = [...content.starterPools.values()].filter((pool) => pool.unlockedByDefault);
-  if (startingPools.length === 0) problems.push('runPrep.json has no starter pool unlocked from the start');
-  for (const pool of startingPools) {
-    const known = new Set(pool.species.filter((id) => content.species.has(id)));
-    if (known.size < balance.starterChoices) problems.push(`starting starter pool "${pool.id}" has ${known.size} species but ${balance.starterChoices} are needed`);
-  }
-  if ([...content.draftRules.values()].filter((r) => r.kind === 'standard' && r.license === null).length !== 1) {
-    problems.push('runPrep.json needs exactly one standard draft rule that needs no license');
-  }
-  for (const r of content.draftRules.values()) checkLicense(r.license, `draft rule "${r.id}"`);
   for (const t of content.prepTokens.values()) {
     checkRequirement(t.unlock, `preparation "${t.id}"`);
     checkLicense(t.license, `preparation "${t.id}"`);

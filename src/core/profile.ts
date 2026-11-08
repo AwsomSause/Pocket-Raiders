@@ -47,7 +47,6 @@ export function createProfile(content: Content, profileId: string): Profile {
     candyPerks: [],
     runHistory: [],
     lastPayout: null,
-    unlockedPools: [],
     licenses: [],
     presets: [],
     lastPrep: null,

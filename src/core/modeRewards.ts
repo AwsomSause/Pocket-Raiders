@@ -25,7 +25,7 @@ export function awardModeRewards(profile: Profile, run: RunState, now: string): 
     if (r.needs.loops !== undefined && run.rules.loops < r.needs.loops) continue;
     if (claim(profile, r.claim, now)) {
       const o = r.once;
-      grantUnlocks(profile, { pool: o.pool, trainer: o.trainer, title: o.title });
+      grantUnlocks(profile, { trainer: o.trainer, title: o.title });
       profile.bankCredits += o.bankCredits ?? 0;
       profile.lifetimeBankCredits += o.bankCredits ?? 0;
       out.push({ id: r.id, first: true, text: o.text });
