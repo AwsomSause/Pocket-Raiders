@@ -356,6 +356,10 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...['cursor', 'cancel', 'menu_open', 'menu_close', 'party_switch', 'save_choice', 'ability', 'item', 'flee', 'recall', 'use_item', 'buy', 'pc_open', 'pc_close', 'exclaim', 'vs_flash', 'vs_sword', 'page', 'door', 'poison_step'].map(
     (n): AssetEntry => ({ id: `ui.${n}`, kind: 'audio', category: 'sound', path: `audio/se/ui_${n}.ogg` }),
   ),
+  // Galar stadium crowd (Pokemon-Decades-main: Applause.ogg, Uproar.ogg, and 12 s of the Colosseum battle crowd noise as mp3).
+  ...Object.entries({ applause: 'crowd_applause.ogg', uproar: 'crowd_uproar.ogg', murmur: 'crowd_murmur.mp3' }).map(
+    ([id, file]): AssetEntry => ({ id: `se.crowd_${id}`, kind: 'audio', category: 'sound', path: `audio/se/${file}`, lazy: true }),
+  ),
   // Stat and status sounds reuse the pack's move-animation clips.
   ...Object.entries({ stat_up: 'ess-up', stat_down: 'ess-take-down', brn: 'prsfx-burn', psn: 'ess-poison', par: 'ess-paralyze1', slp: 'ess-sleep', frz: 'prsfx-freeze-dry1' }).map(
     ([id, file]): AssetEntry => ({ id: `se.${id}`, kind: 'audio', category: 'sound', path: `audio/battle_anims/${file}.m4a`, lazy: true }),
