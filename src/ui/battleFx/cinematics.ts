@@ -58,6 +58,10 @@ export interface CineOptions {
   fast?: boolean;
   /** The Pokémon is the foe's: the trainer comes in from the right and the scene mirrors. */
   enemySide?: boolean;
+  /** Gigantamax: the species' own colour for the ring, sparks and banner (defaults to gold). */
+  accent?: number;
+  /** Gigantamax: the banner text (e.g. "G-MAX CHARIZARD"). */
+  gmaxName?: string;
   /** Calyrex's riders: the scene runs teal instead of pink, as in the reference. */
   calyrex?: boolean;
   depth?: number;
@@ -131,15 +135,16 @@ export function cinematic(scene: Phaser.Scene, o: CineOptions): Beat {
   const gmaxFlourish = () => {
     if (reduced) return;
     const swap = longDx ? DYNAMAX_LONG_SWAP_AT : SWAP_AT.gigantamax;
+    const accent = o.accent ?? 0xffd24a;
     at(swap, () => {
       sound('ess-flash2', 0.7);
-      const ring = add(scene.add.circle(o.x, o.y, 30, 0xffd24a, 0).setStrokeStyle(8, 0xffd24a, 1).setDepth(depth + 6));
+      const ring = add(scene.add.circle(o.x, o.y, 30, accent, 0).setStrokeStyle(8, accent, 1).setDepth(depth + 6));
       tw({ targets: ring, scale: 7, alpha: 0, duration: 700, ease: 'Cubic.easeOut' });
       for (let i = 0; i < 10; i++) {
-        const spark = add(scene.add.star(o.x + (i - 5) * 22, o.y + 30, 5, 3, 8, 0xfff2a8).setDepth(depth + 7).setAlpha(0.95));
+        const spark = add(scene.add.star(o.x + (i - 5) * 22, o.y + 30, 5, 3, 8, accent).setDepth(depth + 7).setAlpha(0.95));
         tw({ targets: spark, y: o.y - 160 - (i % 3) * 40, alpha: 0, angle: 180, duration: 900, delay: i * 40 });
       }
-      const banner = add(scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 90, 'G-MAX!', textStyle(64, '#ffd24a', { stroke: '#3a1a00', strokeThickness: 10 })).setOrigin(0.5).setDepth(depth + 8).setAlpha(0).setScale(2.2));
+      const banner = add(scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 90, o.gmaxName ?? 'G-MAX!', textStyle(o.gmaxName ? 44 : 64, `#${accent.toString(16).padStart(6, '0')}`, { stroke: '#3a1a00', strokeThickness: 10 })).setOrigin(0.5).setDepth(depth + 8).setAlpha(0).setScale(2.2));
       tw({ targets: banner, alpha: 1, scale: 1, duration: 320, ease: 'Back.easeOut' });
       tw({ targets: banner, alpha: 0, duration: 400, delay: 900 });
     });
