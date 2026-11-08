@@ -2231,6 +2231,12 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** True when the trainer just beaten is the Evil Team's leader (the Betrayal scene follows). */
+  private evilLeaderBeaten(name: string | undefined): boolean {
+    const team = evilTeam(services().session.content, this.run);
+    return Boolean(team && name && team.ranks.leader.name === name);
+  }
+
   /** Raid, evil-team and returning-rival scenes picked from the battle and the encounter history. */
   private async playContextMoment(): Promise<void> {
     const battle = this.run.battle!;
@@ -3467,6 +3473,11 @@ export class BattleScene extends Phaser.Scene {
     }
     // M7: a raid boss falling and a Champion's defeat each get a framework card (presentation only).
     if (end.outcome === 'win' && this.run.battle?.raid) await this.bigMoment('raidDefeat', `raidDefeat.${this.run.battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID CLEARED', this.speciesName(this.run.battle.enemyTeam[0]!));
+    else if (end.outcome === 'win' && !bossWin && this.evilLeaderBeaten(trainer ?? undefined)) {
+      // The Betrayal: with the leader beaten, the Legendary they chased turns on them. The catch is the team's 'A Legend Stirs' stop.
+      const team = evilTeam(services().session.content, this.run);
+      await this.bigMoment('evilBetrayal', `evilBetrayal.${team?.id ?? 'team'}`, 'THE BETRAYAL', `The Legendary turns on ${trainer}`, true);
+    }
     else if (end.outcome === 'win' && bossWin) await this.bigMoment('bossDefeat', `bossDefeat.${bossWin.boss.title}`, bossWin.boss.role === 'champion' ? 'CHAMPION DEFEATED' : bossWin.boss.role === 'elite' ? 'ELITE FOUR DEFEATED' : 'LEADER DEFEATED', bossWin.boss.title);
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);

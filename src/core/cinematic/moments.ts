@@ -16,7 +16,7 @@ export const TRANSFORM_MOMENTS = ['mega', 'primal', 'dynamax', 'gigantamax', 'zm
 export const MOMENT_KINDS = [
   ...TRANSFORM_MOMENTS,
   'gymIntro', 'e4Intro', 'championIntro', 'aceEntrance', 'raidIntro', 'raidDefeat', 'bossDefeat',
-  'rivalFirst', 'rivalRematch', 'rivalRevenge', 'rivalReunion', 'evilTeam', 'stadiumCut',
+  'rivalFirst', 'rivalRematch', 'rivalRevenge', 'rivalReunion', 'evilTeam', 'evilBetrayal', 'stadiumCut',
   'mentorAssist', 'mentorGraduation', 'protegeReturn',
 ] as const;
 export type MomentKind = (typeof MOMENT_KINDS)[number];
@@ -118,7 +118,7 @@ export function bossIntroMoment(c: BossContext): MomentKind {
 /** Defaults per kind so scene authors only override what differs. */
 export function defaultMoment(kind: MomentKind, id: string, side: 'player' | 'enemy' = 'player'): MomentSpec {
   const transform = (TRANSFORM_MOMENTS as readonly string[]).includes(kind);
-  const big = kind === 'championIntro' || kind === 'raidIntro' || kind === 'gigantamax';
+  const big = kind === 'championIntro' || kind === 'raidIntro' || kind === 'gigantamax' || kind === 'evilBetrayal';
   return MomentSpecSchema.parse({
     id, kind, side,
     tier: big ? 'S' : transform || kind === 'aceEntrance' ? 'A' : 'B',
