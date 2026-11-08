@@ -105,8 +105,8 @@
    "mega"
   ],
   "mons": {
-   "zmove": "mimikyu",
-   "tera": "gengar",
+   "zmove": "gengar",
+   "tera": "mimikyu",
    "dynamax": "cursola",
    "mega": "gengar-z"
   }
@@ -1197,10 +1197,10 @@
    "tera"
   ],
   "mons": {
-   "zmove": "druddigon",
+   "zmove": "haxorus",
    "dynamax": "garchomp",
    "mega": "flygon",
-   "tera": "haxorus"
+   "tera": "druddigon"
   }
  },
  "drayton": {

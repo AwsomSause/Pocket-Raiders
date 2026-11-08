@@ -111,6 +111,20 @@ const LORE: Record<string, string[]> = {
 const legends = [...species.values()].filter((s) => isLegend(s) && !s.form && !(s.tags ?? []).includes('baby'));
 let customAdded = 0, legendAdded = 0, remapped = 0, skipped = 0;
 
+const place = (team: Team, newId: string, level: number, protect: Set<string>, preferFamily?: string, includeAce = false): boolean => {
+  const ns = species.get(newId)!;
+  const fam = family(newId);
+  const idxs = team.members.map((m, i) => ({ id: parseSp(m), i })).slice(0, includeAce ? undefined : -1);
+  let slot = preferFamily ? idxs.find((x) => family(x.id) === preferFamily && !protect.has(x.id)) : undefined;
+  // A team that already holds this family elsewhere would end up with a duplicate: skip.
+  if (!slot && team.members.some((m) => family(parseSp(m)) === fam)) return false;
+  slot ??= idxs.filter((x) => !protect.has(x.id)).sort((a, b) => bst(species.get(a.id) ?? ns) - bst(species.get(b.id) ?? ns))[0];
+  if (!slot) return false;
+  team.members[slot.i] = text(newId, pickMoves(ns, level), parseTraining(team.members[slot.i]!));
+  return true;
+};
+
+
 for (const boss of bosses) {
   const bt = teams[boss.id];
   if (!bt) continue;
@@ -121,19 +135,6 @@ for (const boss of bosses) {
   const cands = ranked(boss, new Set(all.flatMap((t) => t.members.map(parseSp))));
   // One signature custom line per boss: its family swaps in wherever that family already appears.
   const main = cands.find((c) => !megaMon || family(c.id) !== family(megaMon)) ?? cands[0]!;
-
-  const place = (team: Team, newId: string, level: number, protect: Set<string>, preferFamily?: string, includeAce = false): boolean => {
-    const ns = species.get(newId)!;
-    const fam = family(newId);
-    const idxs = team.members.map((m, i) => ({ id: parseSp(m), i })).slice(0, includeAce ? undefined : -1);
-    let slot = preferFamily ? idxs.find((x) => family(x.id) === preferFamily && !protect.has(x.id)) : undefined;
-    // A team that already holds this family elsewhere would end up with a duplicate: skip.
-    if (!slot && team.members.some((m) => family(parseSp(m)) === fam)) return false;
-    slot ??= idxs.filter((x) => !protect.has(x.id)).sort((a, b) => bst(species.get(a.id) ?? ns) - bst(species.get(b.id) ?? ns))[0];
-    if (!slot) return false;
-    team.members[slot.i] = text(newId, pickMoves(ns, level), parseTraining(team.members[slot.i]!));
-    return true;
-  };
 
   for (const role of ['gym', 'elite', 'champion'] as const) {
     bt[role].forEach((team, index) => {
@@ -201,6 +202,61 @@ for (const boss of bosses) {
     }
   }
 }
+
+// ---------------------------------------------------------------- repairs
+// A major trainer's ace (src/data/overhaul/major_trainers.json) must stay on its boss's teams.
+const majors = readJson<{ entries: { bossId?: string; aceId?: string }[] }>('overhaul/major_trainers.json').entries;
+for (const e of majors) {
+  const bt = e.bossId ? teams[e.bossId] : undefined;
+  if (!bt || !e.aceId || !species.has(e.aceId)) continue;
+  if ((['gym', 'elite', 'champion'] as const).some((r) => bt[r].some((t) => t.members.some((m) => parseSp(m) === e.aceId)))) continue;
+  // Latest team first (the ace is a boss's top-tier Pokémon); the first one with room and no relative of the ace takes it.
+  for (const team of (['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r]).reverse()) {
+    const keep = new Set([...Object.values(gimmicks[e.bossId!]?.mons ?? {}), ...team.members.map(parseSp).filter((id) => customIds.has(id) || isLegend(species.get(id) ?? ({} as Sp)))]);
+    if (place(team, e.aceId, team.level, keep)) break;
+    // Its own line is already there as a custom form (Blastoise-Delta): the plain ace takes that slot, and another custom form joins.
+    const at = team.members.findIndex((m, i) => i < team.members.length - 1 && customIds.has(parseSp(m)) && family(parseSp(m)) === family(e.aceId));
+    if (at < 0) continue;
+    const boss = bosses.find((b) => b.id === e.bossId)!;
+    const before = [...team.members];
+    team.members[at] = text(e.aceId, pickMoves(species.get(e.aceId)!, team.level), parseTraining(before[at]!));
+    const others = ranked(boss, new Set(team.members.map(parseSp))).filter((c) => family(c.id) !== family(e.aceId));
+    const done = others.some((c) => { const st = stageFor(c, team.level); return st && place(team, st.id, team.level, new Set([...keep, e.aceId])); });
+    if (done) break;
+    team.members = before;
+  }
+}
+
+// No two boss teams may be the same fight (same species and moves, training aside): a repeat swaps its custom form for the boss's next-best one.
+const seenTeams = new Set<string>();
+let deduped = 0;
+for (const boss of bosses) {
+  const bt = teams[boss.id];
+  if (!bt) continue;
+  const cands = ranked(boss, new Set((['gym', 'elite', 'champion'] as const).flatMap((r) => bt[r].flatMap((t) => t.members.map(parseSp)))));
+  for (const role of ['gym', 'elite', 'champion'] as const) {
+    for (const team of bt[role]) {
+      const lineup = () => team.members.map((m) => m.split(' / ').slice(0, 2).join(' / ')).join('|');
+      let key = lineup();
+      if (seenTeams.has(key)) {
+        const at = team.members.findIndex((m, i) => i < team.members.length - 1 && customIds.has(parseSp(m)) && !isLegend(species.get(parseSp(m)) ?? ({} as Sp)));
+        if (at >= 0) {
+          const old = team.members[at]!;
+          for (const c of cands) {
+            const st = stageFor(c, team.level);
+            if (!st || team.members.some((m, i) => i !== at && family(parseSp(m)) === family(st.id))) continue;
+            team.members[at] = text(st.id, pickMoves(st, team.level), parseTraining(old));
+            if (!seenTeams.has(lineup())) { deduped++; break; }
+            team.members[at] = old;
+          }
+        }
+        key = lineup();
+      }
+      seenTeams.add(key);
+    }
+  }
+}
+console.log(`repeated teams fixed: ${deduped}`);
 
 // One team per line keeps the file readable and its diffs small (same layout as build-boss-teams.ts).
 const lines = Object.entries(teams).map(([id, roles]) => {
