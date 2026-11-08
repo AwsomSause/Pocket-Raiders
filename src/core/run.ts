@@ -219,7 +219,7 @@ import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mut
 import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
-import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, randomDraft, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsRandomDraft, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
@@ -329,7 +329,6 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   for (const [id, n] of Object.entries(resources.items)) addItem(inventory, id, scale < 1 ? Math.floor(n * scale) : n);
   const campaign = getCampaign(content, rulesCampaign(rules) ?? prep.campaignId);
   if (wantsGenerationLock(rules)) rules.lockGeneration = pickGeneration(content, opts.seed);
-  if (wantsRandomDraft(rules)) Object.assign(prep, randomDraft(content, opts.seed, prep));
   const rng = createStreams(opts.seed);
   // Used once here, so its own seed-derived generator needs no saved stream.
   // Starter Remembrances are the only starter system: the quiz's three (or, with no quiz, a seeded draw by the same rules).
@@ -342,7 +341,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     archetypeId: opts.archetypeId,
     phase: 'starter',
     starterChoices,
-    prep: { ...prep, campaignId: campaign.id, note: null },
+    prep: { ...prep, campaignId: campaign.id },
     party: [],
     eggs: [],
     history: {},

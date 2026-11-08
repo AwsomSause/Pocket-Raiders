@@ -71,7 +71,6 @@ test('after Spooky Season the Hex Maniac is playable with the Spooky Set', async
   await page.evaluate(() => {
     const p = (window as any).__pkr.session.profile;
     p.unlockedArchetypes.push('hex-maniac');
-    p.unlockedPools.push('spooky');
     p.claims['event:spooky-season:reward'] = { at: '2026-10-31T00:00:00.000Z' };
   });
   await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').openEventHall());

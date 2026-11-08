@@ -50,7 +50,7 @@ export function weeklySetup(content: Content, isoDate: string, prep: RunPrep, ru
   return {
     seed,
     starters,
-    prep: { ...prep, poolId: base.poolId, draftRuleId: base.draftRuleId, typeFocus: null, tokenId: null, loan: false, vaultItem: null },
+    prep: { ...prep, tokenId: null, loan: false, vaultItem: null },
     rules: { ...rules, modeId: theme.modeId, difficultyId: 'standard', modifierIds: theme.modifierIds, deathBlock: false },
     lines: [`This week: ${theme.name}`, `Starters: ${starters.map((id) => content.species.get(id)?.name ?? id).join(', ')}`, `Rules: ${RUN_RULES.modes.find((m) => m.id === theme.modeId)?.name}${theme.modifierIds.length ? ' + ' + theme.modifierIds.join(', ') : ''}`],
   };

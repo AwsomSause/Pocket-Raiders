@@ -8,7 +8,6 @@ import type { Content, Ruleset, TypeName } from './contentSchema';
 import { getSpecies, usableLearnset } from './pokemon';
 import { applyMutator, MUTATORS } from './mutators';
 import { hashSeed, Rng } from './rng';
-import { poolTypes } from './runPrep';
 import type { PokemonInstance, RunRules, RunState } from './state';
 import { specialFamily } from './specialForms';
 import { wildEligibleSpecies } from './themes';
@@ -45,7 +44,6 @@ export const RunRulesDataSchema = z.object({
       researchScale: z.number().min(0).optional(),
       blind: z.boolean().optional(),
       noRevives: z.boolean().optional(),
-      randomDraft: z.boolean().optional(),
       campaignId: z.string().optional(),
       eventChance: z.number().min(0).optional(),
       partyCap: z.number().int().min(1).max(6).optional(),
@@ -91,7 +89,7 @@ export const RunRulesDataSchema = z.object({
     id: z.string(),
     needs: z.object({ badges: z.number().int().optional(), loops: z.number().int().optional() }),
     claim: z.string(),
-    once: z.object({ pool: z.string().optional(), trainer: z.string().optional(), title: z.string().optional(), bankCredits: z.number().int().optional(), text: z.string() }),
+    once: z.object({ trainer: z.string().optional(), title: z.string().optional(), bankCredits: z.number().int().optional(), text: z.string() }),
     repeat: z.object({ bankCredits: z.number().int().optional(), candies: z.number().int().optional(), text: z.string() }),
   })),
   modes: z.array(z.object({ id: z.string(), name: z.string(), status: Status, progressionEligible: z.boolean(), checkpoints: z.boolean(), wipeMoneyLoss: z.number().min(0).max(1).optional(), dailySeed: z.boolean().optional(), weeklySeed: z.boolean().optional(), loopLevelBonus: z.number().int().optional(), loopLimit: z.number().int().min(1).optional(), /** Endless Tower (S14): each new lap also takes a seeded curse (core/mutators.ts), so every floor climb gets harder. */ loopCurse: z.boolean().optional(), maxWipes: z.number().int().min(1).optional(), xpScale: z.number().positive().optional(), spookyChance: z.number().min(0).max(1).optional(), campaignId: z.string().optional(), bundles: z.array(z.string()).optional(), rewardScale: z.number().min(0).max(1).optional(), /** Nuzlocke / Modifier Run: added to the reward multiplier. */ rewardBonus: z.number().min(0).optional(), /** Nuzlocke rules (core/nuzlocke.ts). */ nuzlocke: z.enum(['standard', 'hardcore']).optional(), /** Modifier Run: a blessing/curse pick every N completed encounters (core/mutators.ts). */ mutatorEvery: z.number().int().min(1).optional(), /** Rule Draft: pick 1 of 3 run-wide rules once the starter is chosen (core/mutators.ts startRuleOffer). */ startDraft: z.boolean().optional(), /** Time Pressure (S20): the mode's reward bonus melts by `perDay` for every in-game day past `daysPerRegion` x regions entered (core/clock.ts timePressureTick). */ timePressure: z.object({ daysPerRegion: z.number().int().min(1), perDay: z.number().positive() }).optional(), blurb: z.string() })).min(1),
@@ -155,7 +153,7 @@ export function rewardMultiplier(choice: RulesChoice): number {
   return Math.round(total * 100) / 100;
 }
 
-/** The modifiers a run plays by: the mode's own bundle (Draft Lab's random draft, Research Expedition's scarce supplies...) and the player's. */
+/** The modifiers a run plays by: the mode's own bundle (Research Expedition's scarce supplies...) and the player's. */
 export const modeModifiers = (choice: Pick<RulesChoice, 'modeId' | 'modifierIds'>): string[] => [...new Set([...(getMode(choice.modeId)?.bundles ?? []), ...choice.modifierIds])];
 
 /** The snapshot stored in the run. Throws on a choice that cannot start. */
@@ -295,7 +293,6 @@ export const noHealStops = (rules: Pick<RunRules, 'modifierIds'>): boolean => ha
 export const battleMoneyScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.battleMoney);
 export const researchScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.researchScale);
 export const eventChanceScale = (rules: Pick<RunRules, 'modifierIds'>): number => product(rules, (m) => m.eventChance);
-export const wantsRandomDraft = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.randomDraft);
 export const wantsGenerationLock = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.lockGeneration);
 export const wantsTypeLock = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.lockType);
 /** A modifier's own campaign (Boss Rush), or null. */
@@ -375,15 +372,6 @@ export function randomizeMoves(content: Content, run: Pick<RunState, 'rules' | '
   };
   take(stab); take(stab); take(usable); take(usable);
   mon.moves = picked.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
-}
-
-/** Random Draft: a draft rule with no license, picked from the seed (a Type Focus rule also gets a type from the pool). */
-export function randomDraft(content: Content, seed: string, prep: { poolId: string }): { draftRuleId: string; typeFocus: TypeName | null } {
-  const rules = [...content.draftRules.values()].filter((r) => r.license === null && r.kind !== 'blind');
-  const rng = new Rng(hashSeed(`${seed}::random-draft`));
-  const rule = rules[rng.int(0, rules.length - 1)]!;
-  const types = rule.kind === 'typeFocus' ? poolTypes(content, content.starterPools.get(prep.poolId)!) : [];
-  return { draftRuleId: rule.id, typeFocus: types.length > 0 ? types[rng.int(0, types.length - 1)]! : null };
 }
 
 // ---------- Daily Run, Endless, Spooky ----------

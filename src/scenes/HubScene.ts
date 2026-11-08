@@ -28,7 +28,7 @@ import { openCharacterProfile } from '../ui/profileMenu';
 import { openRemembranceArchive, remembranceSummary } from '../ui/remembranceMenu';
 import { openStoryArchive, storyArchiveCount } from '../ui/storyArchiveMenu';
 import { ATTRIBUTE_LABELS, attributeEffectText, attributeRange, attributeText, growthProgress, growthText, isMeter, readAttributes } from '../core/attributes';
-import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, STARTER_POOL_CATEGORIES, type Achievement, type Archetype, type QuestReward, type Species, type StarterPoolCategory } from '../core/contentSchema';
+import { ACHIEVEMENT_CATEGORIES, ATTRIBUTE_KEYS, type Achievement, type Archetype, type QuestReward, type Species } from '../core/contentSchema';
 import { claimProblem, requirementParts, requirementProgress, trainerStatus, type TrainerStatus } from '../core/progress';
 import { activeGameEvents, durationText, gameRewardText, holidayCalendar, objectiveViews, rewardEarned, scheduleText, upcomingWeekly } from '../core/gameEvents';
 import { moveLore, moveRank, topMoves } from '../core/moveMastery';
@@ -40,7 +40,7 @@ import { eggChart, eggGroupName } from '../core/eggGroupChart';
 import { abilityChoices, atLeast, eggMoveOptions, masteredStarters, familyId, familyMembers, familyPerk, familyRank, nextGoal, rankIndex, RANK_BADGES, RANK_NAMES, speciesRank, type MasteryRank } from '../core/mastery';
 import { evolutionUnlocked, questLineView, stepsDone } from '../core/quests';
 import { getContent } from '../data';
-import { eligibleSpecies, licenseProblem, licenseStatus, poolProblem, poolStatus, starterSetsEnabled, type LicenseStatus, type PoolStatus } from '../core/runPrep';
+import { licenseProblem, licenseStatus, type LicenseStatus } from '../core/runPrep';
 import type { Profile, RunRecord } from '../core/state';
 import { services } from '../game/services';
 import { playMusic, playSfx, playMusicLazy } from '../ui/audio';
@@ -81,14 +81,13 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'lab' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
   { room: 'archive', label: 'Trainer Archive', blurb: 'Every trainer, what they change, and how to unlock them.' },
   { room: 'achievements', label: 'Achievement Hall', blurb: 'Milestones and their rewards. Progress counts automatically.' },
   { room: 'bank', label: 'Bank', blurb: 'Your permanent currencies, what your last run paid, and licenses to buy (Enter).' },
-  { room: 'lab', label: 'Starter Laboratory', blurb: 'Starter sets by category: regions, types, teams, leagues and more (Enter).' },
   { room: 'attributes', label: 'Attributes', blurb: 'Your permanent attributes, what they do, and how they grow (Enter for details).' },
   { room: 'history', label: 'Run History', blurb: 'Your recent runs: how far they got and what ended them.' },
   { room: 'quests', label: 'Trainer Quests', blurb: 'Each trainer\'s five-step quest line, done across runs (Enter for the steps).' },
@@ -123,8 +122,7 @@ const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'hubtown', label: 'Hub Town', blurb: 'Walk the town as your Pokémon: every room is a building (Settings > Hub style makes it the Hub).' },
   { room: 'lobby', label: 'Arena Lobby', blurb: 'Back to the Arena Lobby menu.' },
 ];
-/** The Starter Laboratory is part of the archived Starter Sets (balance.starterSets.enabled). */
-const ROOMS = ALL_ROOMS.filter((r) => r.room !== 'lab' || starterSetsEnabled(getContent()));
+const ROOMS = ALL_ROOMS;
 
 const RANK_COLOR: Record<MasteryRank, string> = {
   none: COLORS.textMuted,
@@ -149,30 +147,6 @@ const STATUS_LABEL: Record<TrainerStatus, string> = {
   comingLater: 'Coming later',
 };
 
-const POOL_CATEGORY_LABEL: Record<StarterPoolCategory, string> = {
-  classic: 'Classic',
-  region: 'Regions',
-  type: 'Types',
-  role: 'Roles',
-  trainer: 'Trainers',
-  evilTeam: 'Villainous Teams',
-  league: 'Pokémon League',
-  spinOff: 'Spin-off Games',
-  event: 'Event Sets',
-  research: 'Research',
-  rare: 'Rare',
-  challenge: 'Challenge Sets',
-  special: 'Special Specimens',
-};
-
-const POOL_LABEL: Record<PoolStatus, string> = {
-  unlocked: 'Unlocked',
-  buyable: 'Ready to unlock',
-  needsLicense: 'Needs a license',
-  locked: 'Locked',
-  comingLater: 'Arrives with the full Pokédex',
-};
-
 const LICENSE_LABEL: Record<LicenseStatus, string> = { owned: 'Owned', buyable: 'For sale', locked: 'Locked' };
 
 const CATEGORY_LABEL: Record<(typeof ACHIEVEMENT_CATEGORIES)[number], string> = {
@@ -190,7 +164,6 @@ const CATEGORY_LABEL: Record<(typeof ACHIEVEMENT_CATEGORIES)[number], string> = 
 const ROOM_ICON: Partial<Record<Room, string>> = {
   achievements: 'item.master_ribbon',
   bank: 'item.coin_case',
-  lab: 'item.mystery_egg',
   attributes: 'item.exp_charm',
   mastery: 'item.master_ribbon',
   research: 'item.scanner',
@@ -690,10 +663,6 @@ export class HubScene extends Phaser.Scene {
         const ready = all.filter((a) => trainerStatus(p, a) === 'claimable').length;
         return `${all.filter((a) => trainerStatus(p, a) === 'unlocked').length}/${all.length} unlocked${ready ? ` · ${ready} ready to claim` : ''}`;
       }
-      case 'lab': {
-        const pools = [...c.starterPools.values()];
-        return `${pools.filter((pool) => poolStatus(c, p, pool) === 'unlocked').length}/${pools.length} sets unlocked · ${p.researchPoints} RP`;
-      }
       case 'achievements':
         return `${Object.keys(p.achievements).length} of ${c.achievements.size} earned`;
       case 'quests': {
@@ -769,9 +738,6 @@ export class HubScene extends Phaser.Scene {
         break;
       case 'bank':
         this.openLicenses();
-        break;
-      case 'lab':
-        this.openLab();
         break;
       case 'attributes':
         this.openAttributes();
@@ -1793,79 +1759,6 @@ export class HubScene extends Phaser.Scene {
     });
   }
 
-  /** The Starter Laboratory: first the categories of starter sets, then the sets in one. */
-  private openLab(): void {
-    const { session } = services();
-    const p = session.profile;
-    const content = session.content;
-    const categories = STARTER_POOL_CATEGORIES.filter((c) => [...content.starterPools.values()].some((pool) => pool.category === c));
-    const rows: PickerRow[] = categories.map((c) => {
-      const pools = [...content.starterPools.values()].filter((pool) => pool.category === c);
-      const open = pools.filter((pool) => poolStatus(content, p, pool) === 'unlocked').length;
-      const ready = pools.filter((pool) => poolStatus(content, p, pool) === 'buyable').length;
-      return {
-        problem: null,
-        hint: `${POOL_CATEGORY_LABEL[c]}: ${pools.length} starter set${pools.length === 1 ? '' : 's'}.${ready ? `  ${ready} ready to unlock.` : ''}`,
-        draw: (scene, box, w, h) => {
-          box.add(scene.add.text(12, h / 2, POOL_CATEGORY_LABEL[c], textStyle(19)).setOrigin(0, 0.5));
-          box.add(scene.add.text(w - 12, h / 2, `${open}/${pools.length} unlocked${ready ? `  ·  ${ready} ready` : ''}`, textStyle(16, ready ? COLORS.good : COLORS.textMuted)).setOrigin(1, 0.5));
-        },
-      };
-    });
-    this.openPicker({
-      title: `Starter Laboratory  ·  ${p.researchPoints} Research Points`,
-      rows,
-      columns: 2,
-      rowHeight: 48,
-      onSelect: (i) => {
-        this.closePicker();
-        this.openLabCategory(categories[i]!);
-      },
-      onBack: () => this.closePicker(),
-    });
-  }
-
-  private openLabCategory(category: StarterPoolCategory): void {
-    const { session } = services();
-    const p = session.profile;
-    const content = session.content;
-    const pools = [...content.starterPools.values()].filter((pool) => pool.category === category);
-    const rows: PickerRow[] = pools.map((pool) => {
-      const status = poolStatus(content, p, pool);
-      const species = eligibleSpecies(content, pool, masteredStarters(content, p));
-      const problem = status === 'unlocked' ? null : poolProblem(content, p, pool);
-      return {
-        problem: null,
-        hint: `${pool.description}  ·  ${status === 'buyable' && !problem ? `Enter: unlock for ${pool.researchCost} Research Points.` : (problem ?? `${species.length} species.`)}`,
-        draw: (scene, box, w, h) => {
-          box.add(scene.add.text(12, 6, `${pool.name}  ·  ${POOL_LABEL[status]}`, textStyle(19, status === 'unlocked' ? COLORS.good : COLORS.text)));
-          species.slice(0, 10).forEach((id, i) => box.add(pokemonIcon(scene, content.species.get(id)!, 24 + i * 40, h - 16, 0.75)));
-          if (status !== 'unlocked' && pool.researchCost) box.add(scene.add.text(w - 12, 16, `${pool.researchCost} RP`, textStyle(17, COLORS.textMuted)).setOrigin(1, 0.5));
-        },
-      };
-    });
-    this.openPicker({
-      title: `${POOL_CATEGORY_LABEL[category]}  ·  ${p.researchPoints} Research Points`,
-      rows,
-      columns: 1,
-      rowHeight: 64,
-      onSelect: (i) => {
-        const pool = pools[i]!;
-        if (poolProblem(content, session.profile, pool)) {
-          playSfx(this, 'ui.error', 0.5);
-          return;
-        }
-        session.unlockPool(pool.id);
-        playSfx(this, 'se.level_up', 0.6);
-        this.restart(`The ${pool.name} pool is unlocked. Choose it on the Preparation Desk.`, 'lab');
-      },
-      onBack: () => {
-        this.closePicker();
-        this.openLab();
-      },
-    });
-  }
-
   private openAttributes(): void {
     const { session } = services();
     const content = session.content;
@@ -2121,7 +2014,6 @@ function questRewardText(r: QuestReward): string {
   if (r.bankCredits) parts.push(`${r.bankCredits} Bank Credits`);
   if (r.candies) parts.push(`${r.candies} candies`);
   if (r.title) parts.push(`title "${r.title}"`);
-  if (r.pool) parts.push('a starter set');
   if (r.evolution) parts.push('Trainer Evolution');
   return parts.join(', ') || 'nothing';
 }

@@ -13,11 +13,8 @@ const source = readFileSync(join(root, 'tools', 'sources', 'trainers.md'), 'utf8
 const modifiers: Record<string, unknown[]> = JSON.parse(readFileSync(join(root, 'tools', 'data', 'trainer-perk-modifiers.json'), 'utf8'));
 const signatures: Record<string, string> = JSON.parse(readFileSync(join(root, 'tools', 'data', 'trainer-signatures.json'), 'utf8'));
 const limits: Record<string, string> = JSON.parse(readFileSync(join(root, 'tools', 'data', 'trainer-perk-limits.json'), 'utf8'));
-const poolExtras: Record<string, string[]> = JSON.parse(readFileSync(join(root, 'tools', 'data', 'trainer-pool-extras.json'), 'utf8'));
 const archetypesPath = join(root, 'src', 'data', 'archetypes.json');
 const archetypes: Array<Record<string, unknown> & { id: string }> = JSON.parse(readFileSync(archetypesPath, 'utf8'));
-const runPrepPath = join(root, 'src', 'data', 'runPrep.json');
-const runPrep: { starterPools: Array<Record<string, unknown> & { id: string }> } = JSON.parse(readFileSync(runPrepPath, 'utf8'));
 const bosses: Array<{ id: string; sprites: Record<string, string>; signature: string[] }> = JSON.parse(readFileSync(join(root, 'src', 'data', 'bosses.json'), 'utf8'));
 
 /** The original hand-made trainers keep their ids; a Trainers.md trainer with the same plain name gets "-classic". */
@@ -88,24 +85,9 @@ for (const e of entries) {
     modifiers: mods,
     signatureTypes: typesOf(mods),
     signatureSpecies: bossFor(e)?.signature.slice(0, 4) ?? [],
-    signaturePool: `trainer-${e.id}`,
     eventTags: [],
     signatureMechanic: signatures[e.id] ?? null,
   };
-  const pool = {
-    id: `trainer-${e.id}`,
-    name: `${e.name}’s Team`,
-    description: `Pokémon from ${e.name}’s team, as first stages.`,
-    category: 'trainer',
-    bosses: bossFor(e) ? [bossFor(e)!.id] : [],
-    // A pool needs three starters: a boss with a short signature list also gets its types, or listed extras.
-    ...(poolExtras[e.id] ? { species: poolExtras[e.id] } : {}),
-    filter: (bossFor(e)?.signature.length ?? 0) >= 3 || poolExtras[e.id] || typesOf(mods).length === 0 ? undefined : { types: typesOf(mods) },
-    unlock: entry_unlock(need),
-    unlockText: `Defeat ${need} trainers in total across your runs`,
-  };
-  const pAt = runPrep.starterPools.findIndex((p) => p.id === pool.id);
-  if (pAt >= 0) runPrep.starterPools[pAt] = pool; else runPrep.starterPools.push(pool);
   const at = archetypes.findIndex((a) => a.id === e.id);
   if (at >= 0) archetypes[at] = entry; else archetypes.push(entry);
   added++;
@@ -113,7 +95,6 @@ for (const e of entries) {
 const unknown = Object.keys(modifiers).filter((id) => !entries.some((e) => e.id === id));
 if (unknown.length) throw new Error(`modifiers for unknown trainers: ${unknown.join(', ')}`);
 writeFileSync(archetypesPath, JSON.stringify(archetypes, null, 2) + '\n');
-writeFileSync(runPrepPath, JSON.stringify(runPrep, null, 1) + '\n');
 const rows = entries.map((e) => `- [${modifiers[e.id] ? 'x' : ' '}] ${e.name} (\`${e.id}\`)${signatures[e.id] ? ` — signature: ${signatures[e.id]}` : ''}${limits[e.id] ? ` — limited: ${limits[e.id]}` : ''}`);
 writeFileSync(
   join(root, 'docs', 'plans', 'trainers-coverage.md'),

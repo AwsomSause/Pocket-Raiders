@@ -60,7 +60,7 @@ export function dailySetup(content: Content, isoDate: string, prep: RunPrep, rul
   return {
     seed: dailySeed(isoDate),
     starters: dailyStarters(content, isoDate),
-    prep: { ...prep, poolId: base.poolId, draftRuleId: base.draftRuleId, typeFocus: null, tokenId: null, loan: false, vaultItem: null },
+    prep: { ...prep, tokenId: null, loan: false, vaultItem: null },
     rules: { ...rules, difficultyId: 'standard', modifierIds: [modifierId], deathBlock: false },
     lines: [`Daily modifier: ${modifier.name}`, `Starters today: ${dailyStarters(content, isoDate).map((id) => content.species.get(id)?.name ?? id).join(', ')}`, `Route: one region, four gyms, then ${content.bosses.get(dailyChampionId(content, dailySeed(isoDate)))?.name ?? 'the champion'}`],
   };

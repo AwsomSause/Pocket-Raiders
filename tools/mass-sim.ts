@@ -38,7 +38,7 @@ const add = (n: number, s: Scn) => { for (let i = 0; i < n; i++) scns.push(s); }
 add(1800, { id: 'classic-standard', group: 'classic', modeId: 'standard', difficultyId: 'standard' });
 for (const d of ['veteran', 'champion', 'nightmare']) add(400, { id: `classic-${d}`, group: 'classic', modeId: 'standard', difficultyId: d });
 for (const b of backstories) add(Math.round(3000 / backstories.length), { id: `story-${b}`, group: 'story', modeId: 'standard', difficultyId: 'standard', campaignId: 'orrery-circuit', backstory: b });
-const OTHER = ['quick-route', 'adventure', 'daily', 'endless', 'endless-tower', 'spooky', 'draft-lab', 'regional-circuit', 'multi-region', 'research-expedition', 'nuzlocke', 'hardcore-nuzlocke', 'modifier-run', 'rule-draft', 'time-pressure', 'weekly'];
+const OTHER = ['quick-route', 'adventure', 'daily', 'endless', 'endless-tower', 'spooky', 'regional-circuit', 'multi-region', 'research-expedition', 'nuzlocke', 'hardcore-nuzlocke', 'modifier-run', 'rule-draft', 'time-pressure', 'weekly'];
 for (const m of OTHER) add(Math.round(4000 / OTHER.length), { id: `mode-${m}`, group: 'other', modeId: m, difficultyId: 'standard' });
 // A fixed shuffle so every prefix of the plan is a fair mix.
 let sd = 12345;

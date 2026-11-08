@@ -238,7 +238,7 @@ function pay(profile: Profile, reward: QuestReward): void {
   profile.lifetimeBankCredits += reward.bankCredits;
   profile.researchPoints += reward.researchPoints;
   profile.candies += reward.candies;
-  grantUnlocks(profile, { pool: reward.pool, trainer: reward.trainer, title: reward.title });
+  grantUnlocks(profile, { trainer: reward.trainer, title: reward.title });
 }
 
 export interface GameEventPayout {
@@ -293,7 +293,6 @@ export function gameRewardText(content: Content, r: QuestReward): string {
   if (r.bankCredits) parts.push(`${r.bankCredits} Bank Credits`);
   if (r.candies) parts.push(`${r.candies} candies`);
   if (r.title) parts.push(`title "${r.title}"`);
-  if (r.pool) parts.push(`the ${content.starterPools.get(r.pool)?.name ?? r.pool} starter set`);
   if (r.trainer) parts.push(`the trainer ${content.archetypes.get(r.trainer)?.name ?? r.trainer}`);
   return parts.join(', ') || 'nothing';
 }

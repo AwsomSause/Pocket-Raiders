@@ -93,7 +93,6 @@ describe('objectives and rewards', () => {
     expect(result.summary!.gameEvents[0]!.final).toMatchObject({ fallback: false });
     expect(rewardEarned(p, 'gym-circuit')).toBe(true);
     expect(p.titles).toContain('Circuit Champion');
-    expect(p.unlockedPools).toContain('league-kanto');
     // The same run again pays nothing; a later edition pays the fallback once.
     expect(finalizeRun(content, p, finished([ed], { gymLeadersDefeated: 5 }, 'b'), NOW).applied).toBe(false);
     const rp = p.researchPoints;

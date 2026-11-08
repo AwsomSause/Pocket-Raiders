@@ -12,13 +12,9 @@ import { TYPE_NAMES, type TypeName } from '../core/contentSchema';
 import {
   buildSummary,
   defaultPrep,
-  draftRuleAvailable,
-  poolStatus,
-  poolTypes,
   presetIn,
   presetParts,
   resolvePrep,
-  starterSetsEnabled,
   tokenAvailable,
   tokenLockText,
 } from '../core/runPrep';
@@ -37,7 +33,6 @@ import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
 import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
 import { isClaimed } from '../core/quests';
 import type { RunModifiersData } from './RunModifiersScene';
-import type { RunStartersData } from './RunStartersScene';
 import type { RunSeedData } from './RunSeedScene';
 import type { ChoicesGroup, RunChoicesData } from './RunChoicesScene';
 
@@ -60,7 +55,7 @@ export interface RunPrepData {
   slide?: 1 | -1;
 }
 
-type Row = 'start' | 'trainer' | 'campaign' | 'pool' | 'draft' | 'type' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'heat' | 'weeks' | 'practice' | 'modifier' | 'deathBlock' | 'seed' | 'save' | 'load';
+type Row = 'start' | 'trainer' | 'campaign' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'heat' | 'weeks' | 'practice' | 'modifier' | 'deathBlock' | 'seed' | 'save' | 'load';
 
 interface PageDef {
   id: string;
@@ -74,7 +69,6 @@ interface PageDef {
 const PAGES: PageDef[] = [
   { id: 'config', title: 'Run Setup', blurb: 'Mode, region, difficulty, campaign, Weeks and seed.', tint: 0x2f80d0, rows: ['mode', 'region', 'difficulty', 'heat', 'campaign', 'weeks', 'practice', 'seed'] },
   { id: 'trainer', title: 'Trainer', blurb: 'Who you are and what you bring: preparation, directive, license, loan, Vault, mentor.', tint: 0x2fa080, rows: ['trainer', 'token', 'directive', 'license', 'loan', 'vault', 'mentor'] },
-  { id: 'starters', title: 'Starters', blurb: 'The starter pool and how the starters are drafted.', tint: 0xd0902f, rows: [...(starterSetsEnabled(getContent()) ? (['pool'] as Row[]) : []), 'draft', 'type'] },
   { id: 'modifiers', title: 'Modifiers', blurb: 'Special rules, challenges and Death-Block.', tint: 0xb050c0, rows: ['modifier'] },
   { id: 'overview', title: 'Overview', blurb: 'Check everything, keep a preset, then roll the starters.', tint: 0xd04a5a, rows: ['start', 'seed', 'save', 'load'] },
 ];
@@ -82,12 +76,9 @@ const OVERVIEW = PAGES.length - 1;
 
 /** What each row changes, shown beside the list while it is focused. */
 const ROW_HELP: Record<Row, string> = {
-  start: 'Rolls your starters from the pool and begins the run with everything on this desk.',
+  start: 'Begins the run with everything on this desk.',
   trainer: 'The Trainer you play: their Pokémon leanings, strengths and weaknesses. ←/→ changes it.',
   campaign: 'How many regions the run covers. Shorter campaigns are for testing and do not count for progress.',
-  pool: 'Which Pokémon your starters are drawn from. Unlock more pools in the Starter Laboratory.',
-  draft: 'How you pick your starters: choose from a few, a blind draft, or focus on one type.',
-  type: 'Type Focus only: the type your starter choices lean toward.',
   token: 'One preparation for the run (extra items, money or a hint). More unlock with achievements and licenses.',
   directive: 'Study one type this run for bonus Research Points when you defeat or catch its Pokémon.',
   license: 'A Field License gives one exploration hint for the whole run.',
@@ -163,16 +154,11 @@ export class RunPrepScene extends Phaser.Scene {
     this.add.text(36, 104, def.blurb, textStyle(14, COLORS.textMuted, { wordWrap: { width: 400 } }));
 
     const archetype = content.archetypes.get(this.archetypeId)!;
-    const pool = content.starterPools.get(this.prep.poolId)!;
-    const rule = content.draftRules.get(this.prep.draftRuleId)!;
     const token = this.prep.tokenId ? content.prepTokens.get(this.prep.tokenId) : undefined;
     const labels: Record<Row, string> = {
       start: 'Roll starters  ▶',
       trainer: `Trainer: ${archetype.name}`,
       campaign: `Campaign: ${content.campaigns.get(this.prep.campaignId)?.name ?? this.prep.campaignId}`,
-      pool: `Starters: ${pool.name}`,
-      draft: `Draft: ${rule.name}`,
-      type: `Focus type: ${this.prep.typeFocus ? capitalise(this.prep.typeFocus) : '—'}`,
       token: `Preparation: ${token?.name ?? 'none'}`,
       directive: `Research Directive: ${this.prep.directive ? capitalise(this.prep.directive) : 'none'}`,
       license: `Field License: ${this.prep.license ? licenseName(this.prep.license) : 'none'}`,
@@ -191,7 +177,7 @@ export class RunPrepScene extends Phaser.Scene {
       save: 'Save as preset…',
       load: 'Load a preset…',
     };
-    const disabled = (r: Row): boolean => (r === 'type' && rule.kind !== 'typeFocus') || (r === 'region' && getMode(this.rules.modeId)?.campaignId !== 'regional-circuit') || (r === 'practice' && !getMode(this.rules.modeId)?.dailySeed);
+    const disabled = (r: Row): boolean => (r === 'region' && getMode(this.rules.modeId)?.campaignId !== 'regional-circuit') || (r === 'practice' && !getMode(this.rules.modeId)?.dailySeed);
     this.menu = new Menu(this, {
       x: 34,
       y: 134,
@@ -238,9 +224,7 @@ export class RunPrepScene extends Phaser.Scene {
       }
       if (getMode(this.rules.modeId)?.dailySeed) for (const l of boardLines(profile, 'daily', dailySeed(dailyDate(new Date(), this.practiceDays)))) line(l, 14, '#c8d8a0');
       y += 6;
-      line(`${rule.description}`, 15, '#d8d0e0');
       const locked = [
-        ...[...content.draftRules.values()].filter((r) => !draftRuleAvailable(profile, r)).map((r) => `${r.name} (needs the ${content.licenses.get(r.license!)?.name})`),
         ...[...content.prepTokens.values()].filter((t) => !tokenAvailable(profile, t)).map((t) => `${t.name} (${tokenLockText(content, t)})`),
         ...(MENTORS.some((m) => !mentorUnlocked(m, profile)) ? [`${MENTORS.filter((m) => !mentorUnlocked(m, profile)).length} more mentors (Hub, Events, Mentors)`] : []),
       ];
@@ -262,7 +246,7 @@ export class RunPrepScene extends Phaser.Scene {
         `Mode: ${getMode(this.rules.modeId)?.name} · ${getDifficulty(this.rules.difficultyId)?.name}`,
         `Campaign: ${content.campaigns.get(this.prep.campaignId)?.name ?? this.prep.campaignId}`,
         `Weeks: ${this.rules.weeks === false ? 'off' : 'on'}`,
-        `Starters: ${pool.name}, ${rule.name}`,
+        'Starters: your Remembrance quiz picks',
         `Preparation: ${token?.name ?? 'none'}`,
         `Modifiers: ${mods.length > 0 ? mods.join(', ') : 'none'}${this.rules.deathBlock ? ' · Death-Block' : ''}`,
         `Seed: ${this.seed ?? 'random'}`,
@@ -327,7 +311,6 @@ export class RunPrepScene extends Phaser.Scene {
     const page = Math.max(0, Math.min(OVERVIEW, index));
     if (page === this.page) return;
     if (PAGES[page]!.id === 'modifiers') return this.openModifiers();
-    if (PAGES[page]!.id === 'starters') return this.openStarters();
     if (PAGES[page]!.id === 'config' || PAGES[page]!.id === 'trainer') return this.openChoices(PAGES[page]!.id as ChoicesGroup);
     this.scene.restart({ archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, modCursor: this.modCursor, page, slide: page > this.page ? 1 : -1 } satisfies RunPrepData);
   }
@@ -336,12 +319,6 @@ export class RunPrepScene extends Phaser.Scene {
   private openModifiers(): void {
     const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: this.page === PAGES.findIndex((p) => p.id === 'modifiers') ? OVERVIEW : this.page };
     this.scene.start('RunModifiers', { desk, rules: this.rules } satisfies RunModifiersData);
-  }
-
-  /** The Starters page is its own scene; it hands the pool, draft rule and type back on leaving. */
-  private openStarters(): void {
-    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: PAGES[this.page]!.id === 'starters' ? OVERVIEW : this.page };
-    this.scene.start('RunStarters', { desk, prep: this.prep } satisfies RunStartersData);
   }
 
   /** The seed and share codes have their own page (a real text box that works by touch). */
@@ -376,20 +353,6 @@ export class RunPrepScene extends Phaser.Scene {
         const ids = [...content.campaigns.values()].filter((c) => c.countsForProgress || testing).map((c) => c.id);
         if (ids.length < 2) return playSfx(this, 'ui.error', 0.4);
         return this.refresh({ campaignId: next(ids, this.prep.campaignId) });
-      }
-      case 'pool': {
-        const ids = [...content.starterPools.values()].filter((p) => poolStatus(content, profile, p) === 'unlocked').map((p) => p.id);
-        if (ids.length < 2) return this.refresh({}, { notice: 'Unlock more starter pools in the Starter Laboratory.' });
-        return this.refresh({ poolId: next(ids, this.prep.poolId) });
-      }
-      case 'draft': {
-        const ids = [...content.draftRules.values()].filter((r) => draftRuleAvailable(profile, r)).map((r) => r.id);
-        return this.refresh({ draftRuleId: next(ids, this.prep.draftRuleId) });
-      }
-      case 'type': {
-        if (this.prep.typeFocus === null) return playSfx(this, 'ui.error', 0.4);
-        const types = poolTypes(content, content.starterPools.get(this.prep.poolId)!);
-        return this.refresh({ typeFocus: next<TypeName>(types, this.prep.typeFocus) });
       }
       case 'token': {
         const ids: (string | null)[] = [null, ...[...content.prepTokens.values()].filter((t) => tokenAvailable(profile, t)).map((t) => t.id)];
@@ -544,8 +507,6 @@ function presetText(p: LoadoutPreset): string {
   const parts = [
     content.archetypes.get(p.archetypeId)?.name ?? p.archetypeId,
     content.campaigns.get(p.campaignId)?.name ?? p.campaignId,
-    `${content.starterPools.get(p.poolId)?.name ?? p.poolId} pool`,
-    `${content.draftRules.get(p.draftRuleId)?.name ?? p.draftRuleId}${p.typeFocus ? ` (${p.typeFocus})` : ''}`,
     p.tokenId ? (content.prepTokens.get(p.tokenId)?.name ?? p.tokenId) : 'no preparation',
   ];
   return parts.join('  ·  ');

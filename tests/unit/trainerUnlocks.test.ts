@@ -85,8 +85,4 @@ describe('challenge progress and claiming', () => {
     expect(requirementParts(createProfile(content, 'p'), ash.unlock!).map((x) => x.label).some((l) => l === 'Catch Pikachu')).toBe(true);
   });
 
-  it('the Starter Laboratory set of a trainer follows their challenge', () => {
-    const pool = content.starterPools.get('trainer-brock-classic')!;
-    expect(pool.unlock).toEqual(content.archetypes.get('brock-classic')!.unlock);
-  });
 });

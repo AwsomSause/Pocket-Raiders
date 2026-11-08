@@ -220,13 +220,13 @@
  },
  {
   "id": "run-prep",
-  "name": "Run-Prep, starter sets and the Starter Laboratory",
+  "name": "Run-Prep: preparation tokens, licenses and Remembrance starters",
   "status": "supported",
   "code": [
    "src/core/runPrep.ts"
   ],
   "tests": [
-   "tests/unit/starterSets.test.ts"
+   "tests/unit/starterRegions.test.ts"
   ]
  },
  {

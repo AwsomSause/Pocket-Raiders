@@ -1051,10 +1051,6 @@ export type PendingDecision = z.infer<typeof PendingDecisionSchema>;
 /** The choices made on the Preparation Desk before a run (GAME_DESIGN.md §14.7). */
 export const RunPrepSchema = z.object({
   campaignId: z.string(),
-  poolId: z.string(),
-  draftRuleId: z.string(),
-  /** The chosen type, for the Type Focus draft rule. */
-  typeFocus: TypeNameSchema.nullable(),
   /** The preparation token for this run, or none. */
   tokenId: z.string().nullable(),
   /** The Research Directive (plan Part 5): a type to study this run for bonus Research Points, or none. */
@@ -1244,8 +1240,8 @@ export const RunStateSchema = z.object({
   archetypeId: z.string(),
   phase: RunPhaseSchema,
   starterChoices: z.array(z.string()),
-  /** How the run was prepared, and a note when the draft rule had to fall back. */
-  prep: RunPrepSchema.extend({ note: z.string().nullable() }),
+  /** How the run was prepared. */
+  prep: RunPrepSchema,
   party: z.array(PokemonInstanceSchema),
   money: z.number().int().min(0),
   /** Bag contents: item id → count. */
@@ -1547,7 +1543,7 @@ export const LegacyRunSchema = z.object({
   archetypeId: z.string(),
   campaignId: z.string(),
   /** The Preparation Desk choices and rules the run started with (null for rebuilt records). */
-  prep: RunPrepSchema.extend({ note: z.string().nullable() }).nullable(),
+  prep: RunPrepSchema.nullable(),
   rules: RunRulesSchema.nullable(),
   starter: z.object({ speciesId: z.string(), choices: z.array(z.string()) }).nullable(),
   regionOrder: z.array(z.string()),
@@ -1701,8 +1697,6 @@ export const ProfileSchema = z.object({
   runHistory: z.array(RunRecordSchema),
   /** What the last finished run paid out (shown on the run-end screen and in the Bank). */
   lastPayout: PayoutSchema.nullable(),
-  /** Starter pools bought in the Starter Laboratory (pools unlocked from the start aren't listed). */
-  unlockedPools: z.array(z.string()),
   /** Bank licenses owned. */
   licenses: z.array(z.string()),
   /** Loadout presets by slot (null: empty slot). */

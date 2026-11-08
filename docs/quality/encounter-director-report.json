@@ -119,7 +119,7 @@
     "evolutionStage": {
      "1": 2000
     },
-    "threatAvg": 54.846,
+    "threatAvg": 54.848,
     "threatMax": 108,
     "budgetAvg": 102.96,
     "rejectionRate": 0.221,
@@ -159,19 +159,19 @@
      ],
      [
       "sandile",
-      154
-     ],
-     [
-      "snom",
       152
      ],
      [
+      "snom",
+      151
+     ],
+     [
       "bramblin",
-      144
+      143
      ],
      [
       "barboach",
-      140
+      137
      ],
      [
       "impidimp",
@@ -179,18 +179,18 @@
      ]
     ],
     "rarity": {
-     "common": 9035,
+     "common": 9037,
      "rare": 325,
      "veryRare": 121,
-     "uncommon": 519
+     "uncommon": 517
     },
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 54.684,
-    "threatMax": 90,
+    "threatAvg": 54.842,
+    "threatMax": 91,
     "budgetAvg": 91.189,
-    "rejectionRate": 0.02,
+    "rejectionRate": 0.016,
     "fallbacks": 0,
     "invalid": 0,
     "lockedPicks": 0,
@@ -248,8 +248,8 @@
      "1": 3943,
      "2": 57
     },
-    "threatAvg": 56,
-    "threatMax": 106,
+    "threatAvg": 56.013,
+    "threatMax": 105,
     "budgetAvg": 110.767,
     "rejectionRate": 0.005,
     "fallbacks": 0,
@@ -316,8 +316,8 @@
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 58.801,
-    "threatMax": 99,
+    "threatAvg": 58.643,
+    "threatMax": 98,
     "budgetAvg": 97.594,
     "rejectionRate": 0.004,
     "fallbacks": 0,
@@ -378,8 +378,8 @@
      "2": 23,
      "3": 30
     },
-    "threatAvg": 60.244,
-    "threatMax": 114,
+    "threatAvg": 60.172,
+    "threatMax": 113,
     "budgetAvg": 121.197,
     "rejectionRate": 0.004,
     "fallbacks": 0,
@@ -438,16 +438,16 @@
      ]
     ],
     "rarity": {
-     "common": 7861,
-     "uncommon": 1286,
+     "common": 7854,
+     "uncommon": 1285,
      "veryRare": 656,
-     "rare": 197
+     "rare": 205
     },
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 62.801,
-    "threatMax": 104,
+    "threatAvg": 62.811,
+    "threatMax": 105,
     "budgetAvg": 103.993,
     "rejectionRate": 0.009,
     "fallbacks": 0,
@@ -508,7 +508,7 @@
      "2": 311,
      "3": 54
     },
-    "threatAvg": 67.027,
+    "threatAvg": 66.945,
     "threatMax": 134,
     "budgetAvg": 131.58,
     "rejectionRate": 0.009,

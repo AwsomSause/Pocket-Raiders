@@ -15,7 +15,7 @@ describe('Daily Run format', () => {
     expect(a.seed).toBe(dailySeed('2026-10-31'));
     expect(a.rules.modifierIds).toEqual(b.rules.modifierIds);
     expect(a.rules.modifierIds).toEqual([dailyModifierId('2026-10-31')]);
-    expect(a.prep).toMatchObject({ poolId: defaultPrep(content).poolId, draftRuleId: defaultPrep(content).draftRuleId, tokenId: null, loan: false });
+    expect(a.prep).toMatchObject({ tokenId: null, loan: false });
     expect(rulesProblem(a.rules)).toBeNull();
     const draft = (d: typeof a) => createRun(content, { runId: 'd', seed: d.seed, archetypeId: 'red', prep: d.prep, rules: d.rules }).starterChoices;
     expect(draft(a)).toEqual(draft(b));

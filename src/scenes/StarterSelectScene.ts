@@ -52,11 +52,8 @@ export class StarterSelectScene extends Phaser.Scene {
     const dark = L.ink === '#ffffff';
 
     this.add.text(GAME_WIDTH / 2, 36, 'Choose your starter', textStyle(44, L.head)).setOrigin(0.5).setDepth(5);
-    const pool = content.starterPools.get(run.prep.poolId);
-    const rule = content.draftRules.get(run.prep.draftRuleId);
-    const blind = rule?.kind === 'blind';
     this.add
-      .text(GAME_WIDTH / 2, 74, run.prep.note ?? `Trainer: ${archetype.name}  ·  ${pool?.name ?? ''} pool  ·  ${rule?.name ?? ''}  ·  Seed: ${run.seed}`, textStyle(18, run.prep.note ? (dark || look === 'original' ? '#f0e0a0' : '#8a5a00') : look === 'original' ? '#a69cb4' : L.head))
+      .text(GAME_WIDTH / 2, 74, `Trainer: ${archetype.name}  ·  Remembrance starters  ·  Seed: ${run.seed}`, textStyle(18, look === 'original' ? '#a69cb4' : L.head))
       .setOrigin(0.5)
       .setDepth(5);
 
@@ -65,7 +62,7 @@ export class StarterSelectScene extends Phaser.Scene {
       const species = getSpecies(content, speciesId);
       const preview = createPokemon(content, speciesId, content.balance.starterLevel, 'preview');
       const moves = preview.moves.map((m) => content.moves.get(m.id)!.name).join(', ');
-      const info = { species, preview, moves, blind: !!blind };
+      const info = { species, preview, moves };
       if (L.mode === 'focus') this.buildFocus(i, info);
       else this.buildCard(i, info, look);
     });
@@ -84,7 +81,7 @@ export class StarterSelectScene extends Phaser.Scene {
 
   private buildCard(i: number, info: Info, look: string): void {
     const L = this.lay;
-    const { species, preview, moves, blind } = info;
+    const { species, preview, moves } = info;
     const g = L.card(i);
     const motion = services().session.settings.battleAnimations;
     const box = this.add.container(g.x + g.w / 2, g.y + g.h / 2).setAngle(g.rot);
@@ -132,10 +129,7 @@ export class StarterSelectScene extends Phaser.Scene {
 
     const compact = L.brief || g.h < 340;
     const cy = L.shape === 'egg' ? -g.h * 0.12 : L.shape === 'none' ? ly + g.h - 130 : ly + g.h * (compact ? 0.4 : 0.34);
-    if (blind) {
-      box.add(this.add.text(0, cy, '?', textStyle(110, L.ink === '#ffffff' ? COLORS.textMuted : L.muted)).setOrigin(0.5));
-      box.add(this.add.text(0, cy + 100, 'A hidden starter', textStyle(24, L.ink)).setOrigin(0.5, 0));
-    } else {
+    {
       const vis = fitHeight(this, pokemonVisual(this, species, 'front', 0, cy, 3.5), 150 * (L.spriteK ?? 1)) as unknown as Phaser.GameObjects.GameObject;
       // Tall Pokémon (Squirtle) never poke out of the top of a card.
       const top = (vis as unknown as Phaser.GameObjects.Image).getBounds?.().top;
@@ -174,7 +168,7 @@ export class StarterSelectScene extends Phaser.Scene {
   /** Spotlight and Type Triangle: three Pokémon on the stage, one detail panel for the focused one. */
   private buildFocus(i: number, info: Info): void {
     const L = this.lay;
-    const { species, preview, moves, blind } = info;
+    const { species, preview, moves } = info;
     const s = { ...L.spot!(L.circle ? i : i), k: 1 };
     const box = this.add.container(s.x, s.y).setDepth(4);
     this.boxes.push(box);
@@ -182,8 +176,7 @@ export class StarterSelectScene extends Phaser.Scene {
       const r = 70 * s.k;
       box.add(this.add.circle(0, -r * 0.6, r, 0xffffff, 0.28).setStrokeStyle(4, 0xffffff, 0.8));
     } else box.add(this.add.ellipse(0, 0, 150 * s.k, 24 * s.k, 0x000000, 0.35));
-    if (blind) box.add(this.add.text(0, -60 * s.k, '?', textStyle(Math.round(90 * s.k), COLORS.textMuted)).setOrigin(0.5));
-    else {
+    {
       const vis = fitHeight(this, pokemonVisual(this, species, 'front', 0, -10 * s.k, 3.5), 130 * s.k) as unknown as Phaser.GameObjects.GameObject;
       box.add(vis);
     }
@@ -195,7 +188,7 @@ export class StarterSelectScene extends Phaser.Scene {
     });
     box.add(hit);
     // Detail text is rebuilt on focus; keep the data on the box.
-    box.setData('info', { name: blind ? '???' : species.name, types: blind ? [] : species.types, stats: species.baseStats, moves, level: preview.level });
+    box.setData('info', { name: species.name, types: species.types, stats: species.baseStats, moves, level: preview.level });
   }
 
   private focus(i: number): void {
@@ -240,5 +233,4 @@ interface Info {
   species: ReturnType<typeof getSpecies>;
   preview: ReturnType<typeof createPokemon>;
   moves: string;
-  blind: boolean;
 }

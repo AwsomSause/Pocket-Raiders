@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { enemyLevelOffset, getArchetype, moneyMultiplier, xpMultiplier, captureMultiplier } from '../../src/core/archetypes';
 import { enemyLevel } from '../../src/core/encounters';
-import { defaultPrep, draftStarters } from '../../src/core/runPrep';
+import { drawRemembranceStarters } from '../../src/core/story2/starterDraw';
 import { createPokemon, getSpecies, xpForDefeat } from '../../src/core/pokemon';
 import { applyReward, generateDraft, RewardConfigError } from '../../src/core/rewards';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -39,11 +39,11 @@ function skipDecisions(run: RunState): RunState {
 describe('starters', () => {
   it('generates three distinct, eligible, first-stage species', () => {
     for (let i = 0; i < 100; i++) {
-      const { choices } = draftStarters(content, new Rng(hashSeed(`starter-${i}`)), defaultPrep(content));
+      const choices = drawRemembranceStarters(content, `starter-${i}`);
       expect(choices).toHaveLength(3);
       expect(new Set(choices).size).toBe(3);
       for (const id of choices) {
-        expect(content.starterPools.get('classic')!.species).toContain(id);
+        expect(content.storyData.remembrances.some((r) => r.line[0] === id)).toBe(true);
         expect(getSpecies(content, id).evolutionStage).toBe(1);
       }
     }

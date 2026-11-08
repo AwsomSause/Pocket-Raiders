@@ -37,8 +37,6 @@ export class BriefingScene extends Phaser.Scene {
     const run = session.run!;
     const archetype = getArchetype(content, run.archetypeId);
     const campaign = getCampaign(content, run.campaignId);
-    const pool = content.starterPools.get(run.prep.poolId);
-    const rule = content.draftRules.get(run.prep.draftRuleId);
     const token = run.prep.tokenId ? content.prepTokens.get(run.prep.tokenId) : undefined;
     const lead = run.party[0]!;
 
@@ -62,7 +60,7 @@ export class BriefingScene extends Phaser.Scene {
       line('First stage', `${theme.name} (${theme.types.map(capitalise).join(' / ')}), level cap ${runLevelCap(content, run)}`);
     }
     line('Starting with', `₽${run.money}; ${itemsText(content, run.inventory) || 'an empty Bag'}`);
-    line('Rules', `${pool?.name ?? run.prep.poolId} pool, ${rule?.name ?? run.prep.draftRuleId}${run.prep.typeFocus ? ` (${capitalise(run.prep.typeFocus)})` : ''}; preparation: ${token?.name ?? 'none'}`);
+    line('Rules', `Remembrance starters; preparation: ${token?.name ?? 'none'}`);
     line('Attributes', attributesLine(effectiveAttributes(content, run)));
     if (run.prep.directive) line('Directive', directiveText(content, run.prep.directive));
     if (run.prep.license) line('Field License', licenseName(run.prep.license));

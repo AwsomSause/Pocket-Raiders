@@ -15,7 +15,6 @@ import type { Ability, Content, Evolution, Item, Move, Species } from '../core/c
 import { ABILITY_FORMS, abilityStatus } from '../core/battle/abilities';
 import { isUsableMove, usableLearnset } from '../core/pokemon';
 import { isWildEligible } from '../core/themes';
-import { eligibleSpecies } from '../core/runPrep';
 import { pokemonEntries, filesOf } from '../assets/catalog';
 import knownLimits from './knownLimits.json';
 
@@ -85,7 +84,7 @@ export function meetableSpecies(content: Content, withBosses = false): Set<strin
     }
   };
   for (const s of content.species.values()) if (isWildEligible(content, s)) add(s.id);
-  for (const pool of content.starterPools.values()) for (const id of eligibleSpecies(content, pool)) add(id);
+  for (const r of content.storyData.remembrances) if (r.status !== 'disabled') add(r.line[0]!);
   if (withBosses) for (const boss of content.bosses.values()) for (const role of ['gym', 'elite', 'champion'] as const) for (const t of boss.teams[role]) for (const m of t.members) add(m.speciesId);
   while (queue.length > 0) {
     const s = content.species.get(queue.pop()!)!;
