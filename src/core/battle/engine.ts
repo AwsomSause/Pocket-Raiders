@@ -3231,7 +3231,8 @@ function galarHold(ctx: BattleContext, user: Combatant, target: Combatant, damag
   if (target.mon.hp <= 1 || damage < target.mon.hp) return damage;
   const uid = target.mon.uid;
   const evo = ctx.content.species.get(target.mon.speciesId)?.evolutions.find((e) => ctx.content.species.has(e.to));
-  if (evo && !used.includes(`evo:${uid}`) && !ctx.battle.transform.forms[uid]) {
+  // Unevolved Pokémon surviving and evolving: gym and Champion battles; the tournament rounds keep every other moment but not this one.
+  if (evo && ctx.galar !== 'tournament' && !used.includes(`evo:${uid}`) && !ctx.battle.transform.forms[uid]) {
     used.push(`evo:${uid}`, `evoNow:${uid}`);
     return target.mon.hp - 1;
   }

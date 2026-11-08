@@ -15,7 +15,7 @@ function setup(galar: BattleContext['galar'], playerIds: string[], enemyIds: str
 const moves = (m: PokemonInstance, ...ids: string[]) => { m.moves = ids.map((id) => ({ id, pp: content.moves.get(id)!.pp })); };
 
 describe('Galar comeback moments', () => {
-  it('an unevolved Pokémon that would faint survives, evolves and stands at 30% (Galar only)', () => {
+  it('an unevolved Pokémon that would faint survives, evolves and stands at 30% (Galar gyms and Champion; not tournament rounds)', () => {
     const { party, enemies, ctx } = setup('gym', ['garchomp'], ['charmander', 'rattata'], [60, 5]);
     moves(party[0]!, 'dragon-claw');
     const events = resolveTurn(ctx, { kind: 'move', index: 0 });

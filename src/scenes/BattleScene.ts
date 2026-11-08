@@ -2403,8 +2403,8 @@ export class BattleScene extends Phaser.Scene {
         },
         alive: () => ({ player: alive(this.run.party), foe: alive(this.run.battle?.enemyTeam ?? []) }),
         say: (text) => this.say(text),
-        announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text),
-        opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text),
+        announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text, 'crowd'),
+        opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text, 'crowd'),
         portrait: (id, x, y) => {
           // Fit the picture to the card so no character is cropped, whatever size its sprite is.
           const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
@@ -2418,7 +2418,7 @@ export class BattleScene extends Phaser.Scene {
             scope,
             favor: () => crowdFavor(content, this.run),
             facts: () => this.hypeFacts(),
-            flags: () => this.journeyFlags(),
+            flags: () => this.hypeFlags(),
             available: () => this.hypeSpeakers(),
             cast: (speaker, seed) => this.hypeCast(speaker, seed),
             say: (name, assetId, text, look) => this.speakWithArt(name, assetId, text, look),
@@ -2464,6 +2464,7 @@ export class BattleScene extends Phaser.Scene {
       const leader = this.run.battle?.trainer?.name ?? 'the Gym Leader';
       const who = content.archetypes.get(this.run.archetypeId)?.name ?? 'the challenger';
       await this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, `Welcome, everyone, to gym match number ${galarGymNumber(this.run)} of the Gym Challenge! ${who} steps onto the field to face ${leader}!`);
+      await this.stadium.interview('pre');
       if (band) {
         if (band.grantsItem) await this.stadium.bandScene();
         for (const line of band.lines) await this.speak(host, line);
@@ -3573,6 +3574,7 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    if (this.stadium && (result.wiped || result.defeated)) await this.stadium.interview('post', false);
     if (result.wiped || result.defeated) void this.trainerIn().then((a) => a?.play('defeat'));
     if (result.wiped) {
       await this.say(result.run.phase === 'battle' ? 'The VS Recorder rewinds the tape... the battle starts again!' : result.run.rules.modeId === 'adventure' ? 'Your party fainted... you return to the start of the stage, healed.' : 'Death-Block! You return to the start of the stage with your party healed.');
@@ -3631,6 +3633,8 @@ export class BattleScene extends Phaser.Scene {
       await this.say(this.assistAfter);
       this.assistAfter = null;
     }
+    // Galar: a reporter interviews a different random character about how the match went.
+    if (this.stadium && end.outcome === 'win') await this.stadium.interview('post', true);
     if (end.moneyGained > 0) await this.say(`You got ₽${end.moneyGained}!`);
     for (const id of end.itemsFound) await this.say(`You found a ${content.items.get(id)?.name ?? id}!`);
     const mats = Object.entries(end.materials ?? {});
@@ -3811,7 +3815,8 @@ export class BattleScene extends Phaser.Scene {
     let h = 0;
     for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
     const id = CROWD_SPRITES[h % CROWD_SPRITES.length]!;
-    const first = ['Joey', 'Mia', 'Ken', 'Lily', 'Sam', 'Rhea', 'Tom', 'Ava', 'Nico', 'Ivy'][(h >>> 5) % 10]!;
+    const names = ['Joey', 'Mia', 'Ken', 'Lily', 'Sam', 'Rhea', 'Tom', 'Ava', 'Nico', 'Ivy', 'Hana', 'Leo', 'Zoe', 'Max', 'Nora', 'Kai', 'Ella', 'Owen', 'Piper', 'Ravi', 'Tess', 'Finn', 'Cleo', 'Jonah', 'Wren', 'Theo', 'Mara', 'Dex', 'Luna', 'Ollie'];
+    const first = names[(h >>> 5) % names.length]!;
     const cls = id.split('/')[1]!.replace(/_(m|f|2)$/, '').split('_').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ');
     return { name: `${cls} ${first}`, assetId: id };
   }
@@ -3848,6 +3853,43 @@ export class BattleScene extends Phaser.Scene {
       wins: String(run.log.battlesWon),
       rivalName: rival?.name ?? 'your rival',
     };
+  }
+
+  private flagsSeen: ReadonlySet<string> = new Set();
+
+  /** What is true of the fight right now, plus the player's journey: lines that need one of these only play when it holds. The last picture is kept for after the battle. */
+  private hypeFlags(): ReadonlySet<string> {
+    const out = new Set(this.journeyFlags());
+    try {
+      const content = services().session.content;
+      const battle = this.run.battle;
+      if (!battle) return this.flagsSeen.size > 0 ? this.flagsSeen : out;
+      const foe = battle.enemyTeam[battle.enemyIndex];
+      const me = this.run.party[battle.activeIndex];
+      const favor = crowdFavor(content, this.run) ?? 50;
+      if (favor >= 58) out.add('ahead');
+      else if (favor <= 42) out.add('behind');
+      else out.add('even');
+      if (foe && foe.hp / Math.max(1, maxHp(content, foe)) < 0.3) out.add('foeLow');
+      if (me && me.hp / Math.max(1, maxHp(content, me)) < 0.3) out.add('meLow');
+      const turn = battle.turn ?? 1;
+      if (turn <= 3) out.add('early');
+      if (turn >= 8) out.add('late');
+      const foesAlive = battle.enemyTeam.filter((m) => m.hp > 0).length;
+      if (battle.enemyTeam.length > 1 && foesAlive === 1) out.add('foeAce');
+      if (foe && me) {
+        const mine = getSpecies(content, me.speciesId).types;
+        const theirs = getSpecies(content, foe.speciesId).types;
+        const adv = mine.some((t) => typeEffectiveness(content.typeChart, t as TypeName, theirs as TypeName[]) > 1);
+        const dis = theirs.some((t) => typeEffectiveness(content.typeChart, t as TypeName, mine as TypeName[]) > 1);
+        if (adv && !dis) out.add('typeAdv');
+        else if (dis && !adv) out.add('typeDis');
+      }
+      this.flagsSeen = out;
+    } catch {
+      /* only the plain lines play */
+    }
+    return out;
   }
 
   /** True things about the player's journey; the Champion's lines that need one only play when it holds. */

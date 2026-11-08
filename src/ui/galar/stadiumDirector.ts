@@ -9,9 +9,12 @@ import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../
 import { fillHype, pickHype, type GalarScope, type HypeMoment, type HypeSpeaker, type HypeTrigger } from '../../core/galarCrowd';
 import { GAME_WIDTH, textStyle } from '../theme';
 import { playMoment } from '../cinematic/momentPlayer';
+import interviewsJson from '../../data/galarInterviews.json';
 import commentaryJson from '../../data/galarCommentary.json';
 import { CUT_ART_PRELOAD, drawCutArt, playBandCard, playIntroCard, type CutArtKit } from './cutArt';
 
+type Interview = { q: string; a: string; needs?: string[] };
+const INTERVIEWS = interviewsJson as { pre: Interview[]; postWin: Interview[]; postLose: Interview[] };
 const COMMENTARY = (commentaryJson as { beats: Record<string, string[]> }).beats;
 
 export interface StadiumHooks {
@@ -146,6 +149,7 @@ export class StadiumDirector {
     try {
       const beat = this.beatFor(e);
       if (beat) await this.react(beat);
+      if (beat === 'bigHit' || beat === 'knockOut' || beat === 'survived' || beat === 'comeback') await this.shout(`ev:${this.turn}:${this.shouts}:${beat}`, 55);
       const trigger = this.hypeFor(e);
       // The big comeback specials always play (they are the point of the moment); the rest are spaced out.
       const special = trigger === 'evolveSave' || trigger === 'foeEvolveSave' || trigger === 'thread' || trigger === 'cheat';
@@ -166,6 +170,7 @@ export class StadiumDirector {
     try {
       this.updateFavor();
       await this.turnHypeMoments();
+      if (this.turn >= 2) await this.shout(`turn:${this.turn}`, 65);
     } catch {
       // presentation only
     }
@@ -260,6 +265,7 @@ export class StadiumDirector {
       await reporter(round.final ? `Ladies and gentlemen, this is it: the final! ${round.opponent} stands in the champion's circle and the whole stadium is on its feet!` : `${round.name}! Next up: ${round.opponent}${round.style ? `, ${round.style}` : ''}. The crowd is getting loud!`);
       if (this.h.opponentSays) await this.h.opponentSays(round.opponent, round.sprite ?? '', round.intro);
       else await this.h.say(round.intro);
+      await this.interview('pre');
     } catch {
       // Presentation failure never touches the battle.
     }
@@ -385,6 +391,53 @@ export class StadiumDirector {
     if (this.turn >= 3 && a.player < a.foe) await once('underdog', 'underdog');
   }
 
+  private guests: string[] = [];
+  private shouts = 0;
+
+  /** A reporter's interview with a random character about the battle: before it starts, or after it ends (a different guest each time). Never throws. */
+  async interview(kind: 'pre' | 'post', won = true): Promise<void> {
+    let layer: Phaser.GameObjects.Container | null = null;
+    try {
+      const hy = this.h.hype;
+      if (!hy || this.h.disableAnimations()) return;
+      const flags = hy.flags?.() ?? new Set<string>();
+      const all = kind === 'pre' ? INTERVIEWS.pre : won ? INTERVIEWS.postWin : INTERVIEWS.postLose;
+      // Situational questions (the matchup, who is ahead, a rival met...) come first when they fit; the rest are about this battle's names.
+      const fitting = all.filter((e) => (e.needs ?? []).length > 0 && (e.needs ?? []).every((n) => flags.has(n)));
+      const list = fitting.length > 0 && this.pickLine(`${this.h.battleId}:fit:${kind}`, 100) < 70 ? fitting : all.filter((e) => (e.needs ?? []).every((n) => flags.has(n)));
+      const seed = `${this.h.battleId}:interview:${kind}`;
+      const pair = list[this.pickLine(seed, list.length)]!;
+      let who = hy.cast('crowdTrainer', seed);
+      for (let i = 0; i < 8 && this.guests.includes(who.name); i++) who = hy.cast('crowdTrainer', `${seed}:${i}`);
+      this.guests.push(who.name);
+      this.h.crowdSound?.('crowd.swell', 2);
+      this.showBanner(kind === 'pre' ? 'PREGAME INTERVIEW' : 'POSTGAME INTERVIEW', 3);
+      try {
+        layer = drawCutArt(this.scene, 'speaker', seed, 120000, !this.h.reduceMotion(), { ...(this.kit() ?? { sprite: () => null, host: '', opponent: '', rival: '' }), speaker: who.assetId });
+      } catch {
+        layer = null;
+      }
+      const facts = hy.facts();
+      await (this.h.announce ? this.h.announce(fillHype(pair.q, facts)) : hy.say('Reporter', '', fillHype(pair.q, facts)));
+      await hy.say(who.name, who.assetId, fillHype(pair.a, facts), 'crowd');
+    } catch {
+      // presentation only
+    } finally {
+      const l = layer;
+      if (l) this.scene.tweens.add({ targets: l, alpha: 0, duration: 220, onComplete: () => l.destroy() });
+    }
+  }
+
+  /** A shout or interruption from the stands, with a few characters in the shot. Often, but capped per battle. */
+  private async shout(roll: string, chance: number): Promise<void> {
+    try {
+      if (this.shouts >= 20 || this.pickLine(`${this.h.battleId}:${roll}`, 100) >= chance) return;
+      if (await this.hype('shout', true)) this.shouts++;
+    } catch {
+      // presentation only
+    }
+  }
+
   /** Plays one hype moment for a trigger (a cut to the speaker, their line as trainer text). Returns whether one played. Never throws. */
   private async hype(trigger: HypeTrigger, always = false): Promise<boolean> {
     try {
@@ -410,7 +463,9 @@ export class StadiumDirector {
     const who = hy.cast(m.speaker, seed);
     let layer: Phaser.GameObjects.Container | null = null;
     try {
-      layer = drawCutArt(this.scene, artId, seed, 120000, !this.h.reduceMotion(), { ...(this.kit() ?? { sprite: () => null, host: '', opponent: '', rival: '' }), speaker: who.assetId });
+      // A shout from the stands brings a couple of friends into the shot.
+      const also = m.trigger === 'shout' ? [1, 2].map((i) => hy.cast('crowdTrainer', `${seed}:friend${i}`).assetId) : undefined;
+      layer = drawCutArt(this.scene, artId, seed, 120000, !this.h.reduceMotion(), { ...(this.kit() ?? { sprite: () => null, host: '', opponent: '', rival: '' }), speaker: who.assetId, also });
     } catch {
       layer = null;
     }

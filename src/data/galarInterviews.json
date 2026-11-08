@@ -1,0 +1,438 @@
+{
+ "pre": [
+  {
+   "q": "Quick word before you go out there! How are you feeling about {foe}?",
+   "a": "Nervous and excited, honestly. {foe} is exactly the kind of challenger I wanted today.",
+   "needs": []
+  },
+  {
+   "q": "What's the plan for {player}, do you think?",
+   "a": "Stay calm, trust {myMon}, and don't get rattled by the crowd.",
+   "needs": []
+  },
+  {
+   "q": "Who's your pick for tonight's match?",
+   "a": "I'm not even pretending: {player}, all the way.",
+   "needs": []
+  },
+  {
+   "q": "You've watched {foe} fight before. Any advice?",
+   "a": "Watch the opening. {foe} always tries to set the pace, so break it early.",
+   "needs": []
+  },
+  {
+   "q": "What does a match like this mean to you?",
+   "a": "Everything. I've been saving up to come see a battle like this.",
+   "needs": []
+  },
+  {
+   "q": "Any last words for {player} before the match?",
+   "a": "Believe in {myMon}. It's been with you the whole way.",
+   "needs": []
+  },
+  {
+   "q": "Is this the kind of match you've been waiting for?",
+   "a": "Absolutely. Two trainers who both want it badly? That's the best kind.",
+   "needs": []
+  },
+  {
+   "q": "{foe} has a lot of fans here. Are you one of them?",
+   "a": "Maybe a little. But today I'm cheering for whoever surprises me.",
+   "needs": []
+  },
+  {
+   "q": "What's the secret to a good battle, in your opinion?",
+   "a": "Respect. You can feel it between these two before anyone's moved.",
+   "needs": []
+  },
+  {
+   "q": "How do you think {foeMon} will do?",
+   "a": "It's tougher than it looks. {player} will have to watch for it.",
+   "needs": []
+  },
+  {
+   "q": "Do you think the crowd will make a difference?",
+   "a": "The crowd always does. A loud stadium gives Pokémon something extra.",
+   "needs": []
+  },
+  {
+   "q": "Who do you think holds the advantage here?",
+   "a": "On paper, it's even. In practice, it'll come down to nerve.",
+   "needs": []
+  },
+  {
+   "q": "What brought you to the stadium today?",
+   "a": "I trained here as a kid. I wanted to see how far the next generation can go.",
+   "needs": []
+  },
+  {
+   "q": "Do you have a message for the trainers?",
+   "a": "Have fun out there. It's a battle, but it's also a celebration.",
+   "needs": []
+  },
+  {
+   "q": "Any predictions for how long this will go?",
+   "a": "Longer than people think. Neither side is going to give an inch.",
+   "needs": []
+  },
+  {
+   "q": "What would a win mean for {player}?",
+   "a": "A step toward something huge. You can see it in how they carry themselves.",
+   "needs": []
+  },
+  {
+   "q": "{foe} is known for a certain style. Think {player} can handle it?",
+   "a": "If anyone can adapt on the fly, it's {player}.",
+   "needs": []
+  },
+  {
+   "q": "How do you think {myMon} is feeling?",
+   "a": "Ready. Pokémon can always tell when their trainer is ready.",
+   "needs": []
+  },
+  {
+   "q": "Will you be cheering loud tonight?",
+   "a": "I already lost my voice at the last match. I'm going for round two.",
+   "needs": []
+  },
+  {
+   "q": "What's your favourite thing about Galar battles?",
+   "a": "The roar. You feel it in your chest before the first move.",
+   "needs": []
+  },
+  {
+   "q": "Anything the trainers should watch out for?",
+   "a": "Weather, terrain, and big sudden swings. This stadium loves a swing.",
+   "needs": []
+  },
+  {
+   "q": "Are you hoping for an upset?",
+   "a": "I'm hoping for a great fight. If there's an upset too, even better.",
+   "needs": []
+  },
+  {
+   "q": "One word to describe tonight?",
+   "a": "Electric.",
+   "needs": []
+  },
+  {
+   "q": "If you could give {player} one tip, what would it be?",
+   "a": "Don't forget to enjoy it. The best moves come from relaxed trainers.",
+   "needs": []
+  },
+  {
+   "q": "{player}'s up against {foe}'s {foeMon} first. Any thoughts on that opener?",
+   "a": "{foeMon} is no pushover. {myMon} will have to stay sharp from the first turn.",
+   "needs": []
+  },
+  {
+   "q": "What do you think of the matchup between {myMon} and {foeMon}?",
+   "a": "{myMon} has the edge on type, but {foe} won't let that decide it.",
+   "needs": [
+    "typeAdv"
+   ]
+  },
+  {
+   "q": "{foeMon} could be trouble for {myMon}. How should {player} handle it?",
+   "a": "Swap if they have to. Pride is cheap, and {foe} will punish a bad matchup.",
+   "needs": [
+    "typeDis"
+   ]
+  },
+  {
+   "q": "{player} has all {badges} badges. Does that change how you see this battle?",
+   "a": "It does. Anyone who's come this far knows how to handle pressure.",
+   "needs": [
+    "badges8"
+   ]
+  },
+  {
+   "q": "{player} met {rivalName} on the road. Will that rivalry show up today?",
+   "a": "It always does. Rivals sharpen you, and {player} has been sharpened a lot.",
+   "needs": [
+    "rivalMet"
+   ]
+  },
+  {
+   "q": "{starter} has been with {player} from the very beginning. Does that matter here?",
+   "a": "More than anything. You can't fake a bond like theirs.",
+   "needs": [
+    "starterAlive"
+   ]
+  },
+  {
+   "q": "{player} has won {wins} battles on the way here. Is {foe} ready for that?",
+   "a": "{foe} better be. That's a lot of experience walking onto the field.",
+   "needs": [
+    "manyWins"
+   ]
+  }
+ ],
+ "postWin": [
+  {
+   "q": "That's a wrap! What did you make of {player}'s win?",
+   "a": "Incredible! {myMon} just wouldn't quit. I'm still shaking!",
+   "needs": []
+  },
+  {
+   "q": "Which moment will you remember from that fight?",
+   "a": "The moment {myMon} stood back up. The whole stadium rose with it.",
+   "needs": []
+  },
+  {
+   "q": "How did {foe} look out there?",
+   "a": "Tough as nails. {player} had to earn every inch of that win.",
+   "needs": []
+  },
+  {
+   "q": "Did you think {player} would pull it off?",
+   "a": "Not for a second, and that's why it was so good!",
+   "needs": []
+  },
+  {
+   "q": "What does this win mean for {player}?",
+   "a": "Everything. You could see it in the way they held their head up.",
+   "needs": []
+  },
+  {
+   "q": "Anything to say to {foe} after that fight?",
+   "a": "Great battle! You made {player} dig deep. Come back stronger!",
+   "needs": []
+  },
+  {
+   "q": "What was the turning point, in your eyes?",
+   "a": "That one big swing from {myMon}. After that, the crowd was in it.",
+   "needs": []
+  },
+  {
+   "q": "How was the atmosphere in the stands?",
+   "a": "Electric! I lost my voice in the first five minutes.",
+   "needs": []
+  },
+  {
+   "q": "What do you think of {myMon} after that?",
+   "a": "A star. I want to train one just like it.",
+   "needs": []
+  },
+  {
+   "q": "Was it as close as it looked from up here?",
+   "a": "Closer! My heart's still racing.",
+   "needs": []
+  },
+  {
+   "q": "Who impressed you most today?",
+   "a": "Both trainers, honestly. But {player} had that extra fire.",
+   "needs": []
+  },
+  {
+   "q": "Will you tell your friends about this one?",
+   "a": "Tell them? I'll be telling people about this for years.",
+   "needs": []
+  },
+  {
+   "q": "What was your favourite play?",
+   "a": "That last exchange. Pure nerve, from both sides.",
+   "needs": []
+  },
+  {
+   "q": "Is this the best battle you've seen?",
+   "a": "Top three, easily. Maybe top one.",
+   "needs": []
+  },
+  {
+   "q": "Did the crowd help {player} win?",
+   "a": "Without a doubt. We were loud enough to shake the roof!",
+   "needs": []
+  },
+  {
+   "q": "What do you want to say to {player} right now?",
+   "a": "Thank you! That was the best entertainment of my year.",
+   "needs": []
+  },
+  {
+   "q": "How do you think {foe} will bounce back?",
+   "a": "Fast. People like {foe} turn a loss into fuel.",
+   "needs": []
+  },
+  {
+   "q": "What did you learn watching that?",
+   "a": "That patience beats panic. {player} never rushed.",
+   "needs": []
+  },
+  {
+   "q": "Any last thoughts on the match?",
+   "a": "Just wow. I need to sit down.",
+   "needs": []
+  },
+  {
+   "q": "What's the mood in the stadium right now?",
+   "a": "Pure joy. Everyone's hugging strangers.",
+   "needs": []
+  },
+  {
+   "q": "{player} finished with {myMon} still up. How did it do it?",
+   "a": "Patience, mostly. {myMon} picked its spots, and {foe} never got a clean read.",
+   "needs": [
+    "ahead"
+   ]
+  },
+  {
+   "q": "{player} was nearly out at one point! What got them through?",
+   "a": "{myMon} refused to quit. That bond held the whole fight together.",
+   "needs": [
+    "meLow"
+   ]
+  },
+  {
+   "q": "{player} beat {foe} with the type advantage. Smart play?",
+   "a": "Very. {myMon} made {foeMon} look slow, and {player} never wasted it.",
+   "needs": [
+    "typeAdv"
+   ]
+  },
+  {
+   "q": "That fight went the distance. How does {player} feel after all those turns?",
+   "a": "Exhausted, I bet. But {foe} had them working for every turn.",
+   "needs": [
+    "late"
+   ]
+  },
+  {
+   "q": "{player} just beat {foe} and ran their {badges} badge streak! Thoughts?",
+   "a": "Everything about {player} says this is only the beginning.",
+   "needs": [
+    "badges8"
+   ]
+  }
+ ],
+ "postLose": [
+  {
+   "q": "That was a tough one for {player}. What did you think?",
+   "a": "Brave. They fought until the last second. I respect that a lot.",
+   "needs": []
+  },
+  {
+   "q": "What do you say to {player} right now?",
+   "a": "Hold your head high! That was a great battle, even if the ending wasn't.",
+   "needs": []
+  },
+  {
+   "q": "How did {foe} manage to win?",
+   "a": "By staying calm when it mattered. {foe} didn't blink.",
+   "needs": []
+  },
+  {
+   "q": "Was there a moment {player} nearly turned it around?",
+   "a": "Yes! When {myMon} landed that big hit I thought it was over. So close.",
+   "needs": []
+  },
+  {
+   "q": "What do you make of {foe}'s performance?",
+   "a": "Strong and steady. They earned that win.",
+   "needs": []
+  },
+  {
+   "q": "Will {player} be back, do you think?",
+   "a": "Definitely. You can tell that fire isn't going out.",
+   "needs": []
+  },
+  {
+   "q": "What was the moment that stuck with you?",
+   "a": "{myMon} refusing to quit. That'll stay with me.",
+   "needs": []
+  },
+  {
+   "q": "How's the crowd taking it?",
+   "a": "Everyone's applauding both of them. It was that kind of fight.",
+   "needs": []
+  },
+  {
+   "q": "Does a loss like that hurt a trainer?",
+   "a": "Sure, but the good ones use it. I think {player} will.",
+   "needs": []
+  },
+  {
+   "q": "What advice do you have for {player}?",
+   "a": "Rest, eat, then come back and show them what you learned.",
+   "needs": []
+  },
+  {
+   "q": "Who surprised you most today?",
+   "a": "{myMon}. It gave everything and then some.",
+   "needs": []
+  },
+  {
+   "q": "Any thoughts on how the match went?",
+   "a": "A real back-and-forth. It could have gone either way.",
+   "needs": []
+  },
+  {
+   "q": "What's your favourite memory from that fight?",
+   "a": "The early game, when {player} had the whole stadium on its feet.",
+   "needs": []
+  },
+  {
+   "q": "Did you expect that result?",
+   "a": "Honestly, no. {foe} is good, but {player} was better than people said.",
+   "needs": []
+  },
+  {
+   "q": "What do you think {player} learned out there?",
+   "a": "That the next step is about timing. They already have the heart.",
+   "needs": []
+  },
+  {
+   "q": "Any words for the folks at home?",
+   "a": "Don't write {player} off. This is just one chapter.",
+   "needs": []
+  },
+  {
+   "q": "How do you think {myMon} is doing right now?",
+   "a": "Tired, but proud. You can tell by the way it looks at {player}.",
+   "needs": []
+  },
+  {
+   "q": "What was the mood after the final blow?",
+   "a": "Silent, then a huge round of applause. It was beautiful.",
+   "needs": []
+  },
+  {
+   "q": "Would you watch that match again?",
+   "a": "In a heartbeat. Win or lose, that was a great one.",
+   "needs": []
+  },
+  {
+   "q": "How would you describe {player} after that?",
+   "a": "Resilient. A fighter. They'll be fine.",
+   "needs": []
+  },
+  {
+   "q": "{player} fell to {foe}'s {foeMon} in the end. Was that the difference?",
+   "a": "{foeMon} had the matchup. {player} fought well but couldn't crack it.",
+   "needs": [
+    "typeDis"
+   ]
+  },
+  {
+   "q": "{foe} came out ahead from the start. Was {player} ever in it?",
+   "a": "Absolutely! {myMon} nearly turned it around more than once.",
+   "needs": [
+    "behind"
+   ]
+  },
+  {
+   "q": "{player} lost a long one to {foe}. What stuck with you?",
+   "a": "The stamina. Both of them fought to the bitter end.",
+   "needs": [
+    "late"
+   ]
+  },
+  {
+   "q": "{rivalName} will hear about this one. How will {player} take it?",
+   "a": "They'll shake it off. {rivalName} has seen them come back before.",
+   "needs": [
+    "rivalMet"
+   ]
+  }
+ ]
+}

@@ -61,7 +61,7 @@ export const HYPE_TRIGGERS = [
   'playerDynamax', 'foeDynamax', 'midBattle', 'lateBattle', 'favorToPlayer', 'favorToFoe', 'evenMatch', 'lowFoe', 'lastStand', 'bondMega',
   'playerMega', 'underdog', 'playerSweep', 'foeSweep', 'flawless',
   // The Champion talking about the player's own road through Galar (Champion battles only).
-  'evolveSave', 'foeEvolveSave', 'thread', 'cheat',
+  'evolveSave', 'foeEvolveSave', 'thread', 'cheat', 'shout',
   'journeyOpen', 'journeyMid', 'journeyLate', 'journeyDown', 'journeyFoeLow', 'journeyBig',
 ] as const;
 export type HypeTrigger = (typeof HYPE_TRIGGERS)[number];
