@@ -68,7 +68,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -90,7 +90,11 @@ jobs:
         if: steps.pw.outputs.cache-hit != 'true'
       - run: npx playwright install-deps chromium
         if: steps.pw.outputs.cache-hit == 'true'
-      - run: npx playwright test --shard=${{ matrix.shard }}/4 --trace off --reporter=list
+      # The perf project depends on main, which makes Playwright keep everything in one shard (shard 1 ran all 254 tests,
+      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 4.
+      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/4 --trace off --reporter=list
+      - run: npx playwright test --project=perf --no-deps --trace off --reporter=list
+        if: matrix.shard == 4
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

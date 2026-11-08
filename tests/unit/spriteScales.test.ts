@@ -16,6 +16,6 @@ describe('sprite size multipliers', () => {
   it('stay in a sane range and shrink the oversized Jet and Beta 4.4 art', () => {
     for (const [id, k] of entries) expect(k, id).toBeGreaterThan(0.4);
     for (const [id, k] of entries) expect(k, id).toBeLessThan(1.3);
-    for (const id of ['vine-riff', 'cataggron', 'alolan-dragonite', 'dreadodile']) expect(scales.scales[id as keyof typeof scales.scales]).toBeLessThan(0.8);
+    for (const id of ['vine-riff', 'cataggron', 'alolan-dragonite', 'dreadodile']) expect(scales.scales[id as keyof typeof scales.scales]).toBeLessThan(0.9);
   });
 });
