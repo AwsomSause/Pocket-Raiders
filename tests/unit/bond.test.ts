@@ -2,6 +2,7 @@
 // Refusal, New Move, Unplanned Combination, Rival Interruption, Pokémon Takes Initiative,
 // Pokémon Recognition and the Emotional Turning Point.
 
+const KANTO = ['charmander', 'squirtle', 'bulbasaur'];
 import { describe, expect, it } from 'vitest';
 import { endHyperMoves } from '../../src/core/battle/hyperMove';
 import { adjustBond, bondLevelHandover, bondMood, pairedMoveName, bondVictory, pairBondLevel, bondOf, enemyCombo, freshBond, playerCombo, revealMove, revealableMove, shapeAction, traitOf, wouldRefuse } from '../../src/core/bond';
@@ -15,7 +16,7 @@ import { openHistory } from '../../src/core/story/record';
 import { content, toBattle } from './helpers';
 
 function battleRun(enemy = 'rattata', kind: 'wild' | 'trainer' = 'wild'): RunState {
-  const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'bd', seed: 'bond', archetypeId: 'red' }), 0));
+  const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'bd', seed: 'bond', archetypeId: 'red', starterOverride: KANTO }), 0));
   const lead = run.party[0]!;
   openHistory(content, run, lead.uid, lead.speciesId, 'starter');
   run.battle = createBattle(kind, [createPokemon(content, enemy, 10, 'e1')], 0, lead.uid, kind === 'trainer' ? { classId: 'youngster', name: 'Joey', leaderId: null } : null);
@@ -61,7 +62,7 @@ describe('Refusal', () => {
     expect(shapeAction(content, calm, { kind: 'move', index: 0 }).action).toEqual({ kind: 'move', index: 0 });
   });
   it('a refused turn still plays: the foe moves, nothing explodes, the battle goes on', () => {
-    let run = toBattle(chooseStarter(content, createRun(content, { runId: 'rf', seed: 'refuse', archetypeId: 'red' }), 0));
+    let run = toBattle(chooseStarter(content, createRun(content, { runId: 'rf', seed: 'refuse', archetypeId: 'red', starterOverride: KANTO }), 0));
     openHistory(content, run, run.party[0]!.uid, run.party[0]!.speciesId, 'starter');
     run.party[0]!.moves = [{ id: 'explosion', pp: 5 }];
     Object.assign(bondOf(run, run.party[0]!.uid), { autonomy: 90, trust: 10 });

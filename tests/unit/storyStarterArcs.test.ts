@@ -8,8 +8,8 @@ import { activeScene, chooseBackstory, finishScene, queueStopScene } from '../..
 import { checkSignatures, signatureMoves } from '../../src/core/story2/signature';
 import { content } from './helpers';
 
-const storyRun = (seed: string, backstory = 'bs_viridian'): RunState => {
-  const run = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', campaignId: 'orrery-circuit' }), 0);
+const storyRun = (seed: string, backstory = 'bs_viridian', lead = 'charmander'): RunState => {
+  const run = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', campaignId: 'orrery-circuit', starterOverride: [lead, 'squirtle', 'bulbasaur'] }), 0);
   chooseBackstory(content, run, backstory);
   return run;
 };
@@ -68,10 +68,10 @@ describe('Starter arcs', () => {
     const run = storyRun('s14');
     expect(run.story.v2!.heartbond.partner).toBe(run.party[0]!.uid);
     expect(run.story.v2!.starter).toMatchObject({ lineId: 'rm_charmander', temperament: 'tm_brave' });
-    const vulpix = storyRun('s1');
+    const vulpix = storyRun('s1', 'bs_viridian', 'vulpix');
     expect(vulpix.party[0]!.speciesId).toBe('vulpix');
     expect(vulpix.story.v2!.starter?.lineId).toBe('rm_vulpix');
-    const other = storyRun('s4'); // Geodude: not a Remembrance line
+    const other = storyRun('s4', 'bs_viridian', 'geodude'); // Geodude: not a Remembrance line
     expect(other.party[0]!.speciesId).toBe('geodude');
     expect(other.story.v2!.heartbond.partner).toBe(other.party[0]!.uid);
     expect(other.story.v2!.starter).toBeUndefined();

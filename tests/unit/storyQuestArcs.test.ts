@@ -10,7 +10,7 @@ import { content } from './helpers';
 import { keepsakeMark } from '../../src/core/story2/keepsakes';
 
 const storyRun = (seed: string, backstory: string): RunState => {
-  const run = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', campaignId: 'orrery-circuit' }), 0);
+  const run = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', campaignId: 'orrery-circuit', starterOverride: ['geodude', 'squirtle', 'bulbasaur'] }), 0);
   chooseBackstory(content, run, backstory);
   return run;
 };
@@ -60,7 +60,7 @@ describe('Rare and Exceptional unlock quests', () => {
     let finished = 0;
     let gifts = 0;
     for (const bs of content.balance.story.module.enabledBackstories) {
-      for (const seed of ['q1', 'q2']) {
+      for (const seed of ['q1', 'q2', 'q3', 'q4']) {
         const run = storyRun(`${seed}-${bs}`, bs);
         const played = playAll(run);
         const v2 = run.story.v2!;

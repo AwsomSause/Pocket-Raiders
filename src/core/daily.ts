@@ -34,7 +34,7 @@ export function dailyModifierId(isoDate: string): string {
 export const dailyStarters = (content: Content, isoDate: string): string[] => starterSet(content, dailySeed(isoDate));
 
 /** Three Remembrance starters (three regions) drawn by a seed alone; Daily and Weekly use it, so everyone gets the same three. */
-export const starterSet = (content: Content, seed: string): string[] => drawRemembranceStarters(content, `${seed}::starters`);
+export const starterSet = (content: Content, seed: string): string[] => drawRemembranceStarters(content, seed);
 
 /** The day's set final boss: one champion from any region's champion list, picked by the date seed alone (same for everyone, shown in Run Prep). */
 export function dailyChampionId(content: Content, seed: string): string {

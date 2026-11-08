@@ -69,7 +69,6 @@ export const SaveSpecSchema = z.object({
     titles: z.array(z.string()).optional(),
     unlockAllTrainers: z.boolean().optional(),
     unlockedArchetypes: z.array(z.string()).optional(),
-    unlockedPools: z.array(z.string()).optional(),
     dexAll: z.boolean().optional().describe('Every species seen and caught'),
     remembrances: z.record(z.string(), z.enum(['locked', 'seen', 'unlocked'])).optional(),
     protagonistName: z.string().max(16).optional(),
@@ -198,7 +197,6 @@ function buildProfile(content: Content, spec: SaveSpec, problems: string[]): Pro
   if (p.licenses) profile.licenses = p.licenses;
   if (p.candyPerks) profile.candyPerks = p.candyPerks;
   if (p.titles) profile.titles = p.titles;
-  if (p.unlockedPools) profile.unlockedPools = p.unlockedPools;
   if (p.unlockAllTrainers) profile.unlockedArchetypes = [...content.archetypes.keys()];
   if (p.unlockedArchetypes) profile.unlockedArchetypes = [...new Set([...profile.unlockedArchetypes, ...p.unlockedArchetypes])];
   for (const id of profile.unlockedArchetypes) if (!content.archetypes.has(id)) problems.push(`profile: unknown trainer "${id}"`);

@@ -30,3 +30,11 @@ describe('starter choices from different regions', () => {
     }
   });
 });
+
+describe('the starters shown for a Daily or Weekly seed are the ones the run gets', () => {
+  it('starterSet(seed) equals the starters of a run on that seed', () => {
+    for (const seed of ['2026-11-08', 'weekly-2026-W45', 'abc']) {
+      expect(createRun(content, { runId: 'r', seed, archetypeId: 'red' }).starterChoices).toEqual(starterSet(content, seed));
+    }
+  });
+});
