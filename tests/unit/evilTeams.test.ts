@@ -1,6 +1,6 @@
 // Evil Teams (spec §16) and Permanent Run Choices (spec §17).
 import { describe, expect, it } from 'vitest';
-import { chooseEvent, conditionMet, eligibleEvents } from '../../src/core/events';
+import { BETRAYAL_FLAG, chooseEvent, conditionMet, continueEventChain, eligibleEvents } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { evilBattle, evilOf, evilStageStart, evilSummary, evilTeam, villainLine } from '../../src/core/evil/teams';
@@ -283,5 +283,18 @@ describe('run save v32', () => {
     if (loaded.status !== 'ok') return;
     expect(loaded.data.story.evil).toEqual(run.story.evil);
     expect(loaded.data.story.choices).toEqual(run.story.choices);
+  });
+});
+
+describe('The Betrayal', () => {
+  it('a pending Betrayal starts a wild Legendary battle straight away, once', () => {
+    const run = withTeam('betrayal');
+    const team = evilTeam(content, run)!;
+    const species = team.legendary.find((id) => content.species.has(id))!;
+    run.story.flags[BETRAYAL_FLAG] = `pending:${species}:30`;
+    continueEventChain(content, run);
+    expect(run.battle?.kind).toBe('wild');
+    expect(run.battle?.enemyTeam[0]?.speciesId).toBe(species);
+    expect(run.story.flags[BETRAYAL_FLAG]).toBe(`done:${species}`);
   });
 });
