@@ -660,9 +660,13 @@
   "exempt": { "eternatus-eternamax": "Boss-only form (Eternamax Eternatus is never owned)." }
  },
  "rarityCaps": { "offRegionShift": 1, "trade": "epic", "shopItem": "rare", "rewardItem": [{ "badges": 0, "max": "rare" }, { "badges": 2, "max": "epic" }] },
+ "wildDampeners": { "enabled": true, "perMeet": 0.6, "perFamilyMeet": 0.8, "noRepeatFirst": 6, "oddOneOutStages": 3, "oddOneOutOffWeight": 0.02 },
+ "trainerPools": { "enabled": true, "minSlotSpecies": 8, "maxPerRegion": 2 },
  "variety": {
   "penalty": 0.35,
   "window": {
+   "wildMet": 50,
+   "trainerRegion": 50,
    "wild": 5,
    "egg": 3,
    "trade": 3,
