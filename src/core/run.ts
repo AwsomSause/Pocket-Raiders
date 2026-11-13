@@ -330,7 +330,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full' };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -433,7 +433,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.grandArc) startGrandArc(run);
   }

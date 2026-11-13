@@ -58,6 +58,9 @@ import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
+import { advanceTrack, trackStep } from './expansion/trackRun';
+import { scheduleStage, spacedColumns } from './expansion/scheduler';
+import { fnv1a } from './expansion/hash';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
@@ -175,6 +178,12 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       const g = grandArcOf(run);
       return !!g && (!c.missingRom || !romsHeld(g).includes(c.missingRom));
     }
+    case 'track': {
+      const step = trackStep(run, currentRegion(content, run).id);
+      return step >= c.atLeast && step <= c.atMost;
+    }
+    case 'xevents':
+      return run.expansion?.density !== undefined;
     case 'storyRun':
       return !!run.story.v2;
     case 'oldFoe':
@@ -329,6 +338,10 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a Shadow Pokémon in your party';
     case 'grandArc':
       return 'Needs something you have not done yet';
+    case 'track':
+      return 'Needs the world to have changed more';
+    case 'xevents':
+      return 'Only with the Kanto story events on';
     case 'storyRun':
       return 'Only in a Story Run';
     case 'oldFoe':
@@ -429,7 +442,8 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
   const cfg = content.balance.events;
   const featured = featuredMapEvents(content, run);
   const pool = eligibleEvents(content, run)
-    .filter((e) => !taken.has(e.id) && !e.forced)
+    // Story events (`xe.*`) are placed by the quiet-node scheduler, never drawn at random.
+    .filter((e) => !taken.has(e.id) && !e.forced && !e.id.startsWith('xe.'))
     .map((e) => ({
       item: e,
       weight:
@@ -474,6 +488,13 @@ export function addEventStops(content: Content, run: RunState): void {
     taken.add(id);
     place(id, false);
   }
+  // E3 quiet-node scheduler: the Kanto saga's story events (`xe.*`), by density, anchor first, never on neighbouring columns.
+  scheduleExpansionStops(content, run, open, taken, (id, column) => {
+    const nodes = candidates.filter((n) => n.column === column);
+    const node = nodes[fnv1a(`${run.seed}::xe:node::${stageKey(run)}::${id}`) % Math.max(1, nodes.length)] ?? candidates[0]!;
+    taken.add(id);
+    node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+  });
   // W5 Event Priority Manager: Critical (forced) events are never random. They take a stop now, or wait in a queue of 4.
   const wanted = [...content.events.values()].filter((e) => e.forced && open.has(e.id) && !taken.has(e.id)).map((e) => e.id);
   const step = stepQueue({
@@ -515,6 +536,35 @@ export function addEventStops(content: Content, run: RunState): void {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
     if (hidden) delete hidden.hidden;
   }
+}
+
+/** The columns of this stage that hold a story event (`xe.*`) stop, for the spacing rule. */
+export function xeColumns(run: RunState): number[] {
+  const map = run.stage?.map;
+  return map ? map.nodes.filter((n) => n.sides.some((s) => s.eventId?.startsWith('xe.'))).map((n) => n.column) : [];
+}
+
+/**
+ * Places this stage's share of the region's story events (design X8.2). `open` are the eligible event ids. Returns the ids placed.
+ * Uses no gameplay RNG: ties and columns come from hashes of the seed, so nothing else's rolls change.
+ */
+export function scheduleExpansionStops(content: Content, run: RunState, open: ReadonlySet<string>, taken: Set<string>, put: (id: string, column: number) => void): string[] {
+  const density = run.expansion?.density;
+  const stage = run.stage;
+  if (!density || !stage || stage.kind !== 'stage') return [];
+  const candidates = [...open].filter((id) => id.startsWith('xe.') && !taken.has(id) && !run.expansion?.eventsSeen?.includes(id)).map((id) => content.events.get(id)!).filter((e) => !!e).map((e) => ({ id: e.id, priority: priorityOf(e), anchor: e.priority === 100 }));
+  if (candidates.length === 0) return [];
+  const regionId = currentRegion(content, run).id;
+  const sched = scheduleStage({
+    candidates, quota: content.balance.expansionEvents.density[density], placedInRegion: run.expansion?.xe?.[regionId] ?? 0,
+    stagesLeft: getCampaign(content, run.campaignId).stagesPerRegion - stage.index, seed: run.seed, stageKey: stageKey(run) ?? '',
+  });
+  if (sched.ids.length === 0) return [];
+  const cols = spacedColumns(stage.map.nodes.filter((n) => n.column < stage.map.columns).map((n) => n.column), sched.ids.length, xeColumns(run), `${run.seed}::${stageKey(run)}`);
+  sched.ids.forEach((id, i) => put(id, cols[i] ?? cols[0]!));
+  // `eventsSeen` remembers every story event already given a stop, so none is placed twice in a run.
+  run.expansion = { ...run.expansion, eventsSeen: [...(run.expansion?.eventsSeen ?? []), ...sched.ids], xe: { ...(run.expansion?.xe ?? {}), [regionId]: (run.expansion?.xe?.[regionId] ?? 0) + sched.ids.length } };
+  return sched.ids;
 }
 
 /** Bridge Mail V: an event stop beside the node just reached. */
@@ -830,6 +880,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
       return '';
+    case 'track':
+      return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
       return 'a Shadow Pokémon is offered to you';
     case 'mentor':
@@ -1079,6 +1131,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'track': {
+      // The key is this node, so one stop moves the track once however often it is replayed.
+      const before = trackStep(run, currentRegion(content, run).id);
+      const after = advanceTrack(run, currentRegion(content, run).id, e.input, `event:${run.regionIndex}:${run.stage?.index ?? 0}:${run.stage?.current ?? ''}`);
+      return after === before ? '' : after > before ? 'The Ledger fills a little more.' : 'The Ledger loses a line.';
+    }
     case 'namedShadow': {
       const name = grantNamedShadow(content, run, e.id, e.level);
       return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';

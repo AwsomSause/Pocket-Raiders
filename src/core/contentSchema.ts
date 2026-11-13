@@ -2323,6 +2323,8 @@ export const BalanceSchema = z.object({
   }),
   /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
   expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
+  /** Beta 0.6 E3: story events per region by density (core/expansion/scheduler.ts). */
+  expansionEvents: z.object({ density: z.object({ low: z.number().int().min(0), normal: z.number().int().min(0), full: z.number().int().min(0) }) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
@@ -2824,6 +2826,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyShadow') }),
   /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
   z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
+  /** Beta 0.6 E2: the current region's world-state track is at least / at most this step (no track = step 0). */
+  z.object({ kind: z.literal('track'), atLeast: z.number().int().min(0).max(5).default(0), atMost: z.number().int().min(0).max(5).default(5) }),
+  /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
+  z.object({ kind: z.literal('xevents') }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -3002,6 +3008,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('legacyEgg') }),
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
+  /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
