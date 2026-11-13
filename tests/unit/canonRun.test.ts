@@ -19,7 +19,7 @@ describe('Kanto canon stops in a run', () => {
       expect(canonSlotOf(content, run)).toBe('stage-1');
       const stops = canonStops(run);
       expect(stops.length).toBeGreaterThan(0);
-      expect(stops.length).toBeLessThanOrEqual(3); // Veridian Forest plus up to two rolled events
+      expect(stops.length).toBeLessThanOrEqual(4); // Veridian Forest, Mt. Moon and up to two rolled events
       expect(run.expansion!.canon!.menus['stage-1']!.slice(0, 2)).toEqual(['cs.kanto.pewter.forest', 'cs.kanto.pewter.moon']);
       for (const s of stops) expect(content.events.get(s.eventId!)!.canon).not.toBeNull();
       seen += stops.length;
@@ -111,5 +111,52 @@ describe('Veridian Forest extras and consolation', () => {
     const gate = content.events.get('cs-kanto-pewter-forest')!.choices[0]!;
     expect(gate.chance).toBe(0.8);
     expect(content.events.get('cs-kanto-pewter-forest-twist')!.choices[0]!.chance).toBe(0.5);
+  });
+});
+
+describe('Mt. Moon', () => {
+  const room = (id: string) => content.events.get(id)!;
+  it('is a 7-node cave whose rooms all open from the gate', () => {
+    const ids = [...content.events.keys()].filter((id) => id.startsWith('cs-kanto-pewter-moon'));
+    expect(ids.length).toBe(11); // gate, n1-n3, three Moon Watching prompts, the gift, n5-n7
+    const reach = new Set<string>(['cs-kanto-pewter-moon']);
+    for (let again = true; again;) {
+      again = false;
+      for (const id of [...reach]) for (const c of room(id).choices) for (const o of [c.success, c.failure]) for (const eff of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (eff.kind === 'addEvent' && !reach.has(eff.eventId)) { reach.add(eff.eventId); again = true; }
+    }
+    expect([...reach].sort()).toEqual([...ids].sort());
+  });
+  it('Moon Watching: three right answers give the Clefairy with Moonblast; fewer give a Moon Stone', () => {
+    const play = (right: number) => {
+      const base = begin('MOON', true);
+      base.story.flags['ev:kanto-moon-clefairy-right'] = right;
+      const { run, sideId } = debugForceEvent(content, structuredClone(base), 'cs-kanto-pewter-moon-n4d');
+      const choice = right >= 3 ? 0 : right === 2 ? 1 : 2;
+      return chooseEvent(content, run, sideId, choice).run;
+    };
+    const three = play(3);
+    const clef = three.pending.flatMap((p) => (p.kind === 'caught' && p.mon.speciesId === 'clefairy' ? [p.mon] : []))[0]!;
+    expect(clef.moves.some((m) => m.id === 'moonblast')).toBe(true);
+    expect(three.story.flags['ev:kanto-moon-clefairy']).toBe(1);
+    expect(three.expansion!.canon!.completed).toContain('cs.kanto.pewter.moon.clefairy');
+    const none = play(0);
+    expect(none.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'clefairy')).toBe(false);
+    expect(none.inventory['moon-stone']).toBe(1);
+  });
+  it('Fossil Recovery is a 3-Pokémon fight and pays a fossil weighted 70% Kanto', () => {
+    const fight = room('cs-kanto-pewter-moon-n5').choices[0]!.success.battle!;
+    expect(fight).toMatchObject({ kind: 'trainer', team: ['magnemite', 'voltorb', 'koffing'] });
+    const ids = (fight.win.find((e) => e.kind === 'itemFrom') as { ids: string[] }).ids;
+    const kanto = ids.filter((i) => ['helix-fossil', 'dome-fossil', 'old-amber'].includes(i)).length;
+    expect(kanto / ids.length).toBeCloseTo(0.7, 5);
+    expect(fight.win).toContainEqual({ kind: 'flag', key: 'xk-fossil-registered', amount: 1 });
+  });
+  it('the mine needs a Fighting move or 200, and its stone table sums to 100', () => {
+    const mine = room('cs-kanto-pewter-moon-n6');
+    expect(mine.choices[0]!.requires).toContainEqual({ kind: 'partyMoveType', type: 'fighting' });
+    expect(mine.choices[1]!.requires).toContainEqual({ kind: 'money', atLeast: 200 });
+    const stones = (mine.choices[1]!.success.effects.find((e) => e.kind === 'itemFrom') as { ids: string[] }).ids;
+    expect(stones.length).toBe(100);
+    expect(stones.filter((s) => s === 'moon-stone').length).toBe(22);
   });
 });

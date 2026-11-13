@@ -2775,6 +2775,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('evoEncounters'), /** Also needs a party Pokémon within this many levels of a level evolution. */ nearEvolution: z.number().int().min(0).max(20).optional() }),
   /** Field moves (S416): a party member knows this move (Cut, Surf, Flash ...). */
   z.object({ kind: z.literal('partyMove'), move: z.string() }),
+  /** A conscious party Pokémon knows a damaging move of this type. */
+  z.object({ kind: z.literal('partyMoveType'), type: TypeNameSchema }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
   z.object({ kind: z.literal('emotion'), id: z.enum(['determination', 'bravery', 'justice', 'kindness', 'patience', 'integrity', 'perseverance']) }),
   /** An event that has already been played this run. */
@@ -2967,7 +2969,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** The lead learns one of its family's egg moves it doesn't know yet. */
   z.object({ kind: z.literal('eggMove') }),
   /** A party Pokémon learns a move: the first conscious one of `type`, else the lead. A full moveset loses its last move. */
-  z.object({ kind: z.literal('teachMove'), move: z.string().min(1), type: TypeNameSchema.optional() }),
+  z.object({ kind: z.literal('teachMove'), move: z.string().min(1), type: TypeNameSchema.optional(), /** Teach this species instead (the Clefairy you just got). */ species: z.string().optional() }),
   /** The next reward draft uses the gym leader's odds and offers `extra` more choices. */
   z.object({ kind: z.literal('betterDraft'), extra: z.number().int().min(0).default(0) }),
   /** The map shows this stage's gym leader's whole team. */
