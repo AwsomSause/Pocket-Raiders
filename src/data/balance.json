@@ -179,7 +179,8 @@
    "heal": 2,
    "shop": 1
   },
-  "healBeforeGym": true
+  "healBeforeGym": true,
+  "pacing": { "windows": [[3, 5], [7, 9], [11, 13], [15, 17], [18, 19]], "totalMin": 4, "totalMax": 5, "avoidableMin": 1, "avoidableMax": 2, "aceTopBonus": 3, "aceRestBonus": 1, "doublesFromRegion": 1, "expMultiplier": 0.8 }
  },
  "minThemePool": 3,
  "dualTypeWeight": 3,
@@ -660,9 +661,13 @@
   "exempt": { "eternatus-eternamax": "Boss-only form (Eternamax Eternatus is never owned)." }
  },
  "rarityCaps": { "offRegionShift": 1, "trade": "epic", "shopItem": "rare", "rewardItem": [{ "badges": 0, "max": "rare" }, { "badges": 2, "max": "epic" }] },
+ "wildDampeners": { "enabled": true, "perMeet": 0.6, "perFamilyMeet": 0.8, "noRepeatFirst": 6, "oddOneOutStages": 3, "oddOneOutOffWeight": 0.02 },
+ "trainerPools": { "enabled": true, "minSlotSpecies": 8, "maxPerRegion": 2 },
  "variety": {
   "penalty": 0.35,
   "window": {
+   "wildMet": 50,
+   "trainerRegion": 50,
    "wild": 5,
    "egg": 3,
    "trade": 3,

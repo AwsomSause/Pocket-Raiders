@@ -237,6 +237,8 @@ export type BattleEvent =
   | { type: 'focus'; side: Side; uid: string }
   /** Ally Switch: the two Pokémon on `side` traded spots. */
   | { type: 'allySwitch'; side: Side }
+  /** Triple battles: a Pokémon moved from one spot to another (the Shift command, or both sides' last Pokémon moving to the centre). */
+  | { type: 'shift'; side: Side; uid: string; from: number; to: number }
   | { type: 'item'; itemId: string; targetUid: string; message: string; hpAfter: number }
   | { type: 'ball'; itemId: string; shakes: number; caught: boolean }
   | Held.HeldEvent
@@ -261,10 +263,11 @@ export type PlayerAction =
   | { kind: 'double'; commands: (SlotCommand | null)[] };
 
 /** One Pokémon's command in a double battle, and which Pokémon its move is aimed at. */
-export type SlotAction = Exclude<PlayerAction, { kind: 'double' }>;
+export type SlotAction = Exclude<PlayerAction, { kind: 'double' }> | { kind: 'shift' };
 export interface SlotCommand {
   action: SlotAction;
-  target?: { side: Side; spot: 0 | 1 };
+  /** Spot 0 left, 1 right (doubles) or 0 left, 1 centre, 2 right (triples). */
+  target?: { side: Side; spot: 0 | 1 | 2 };
 }
 
 export interface Combatant {

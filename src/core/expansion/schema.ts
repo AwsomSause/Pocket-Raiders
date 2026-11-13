@@ -3,6 +3,7 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -32,6 +33,12 @@ export const ExpansionSettingsSchema = z.object({
   /** Rocket "what-if" casts (rocket.x.triad and the other what-if switches). */
   whatIfCasts: z.boolean().default(true),
   kantoSevii: z.boolean().default(true),
+  /** B6 stage pacing: 4–5 trainer fights per stage (1–2 skippable), an ace trainer, doubles from region 2, EXP −20%. Read when a run starts. */
+  stagePacing: z.boolean().default(true),
+  /** B9 Evolution Encounters: evolution-themed events and wild pre-evolutions meeting their stone. Risky Evolutions stay off. */
+  evolutionEncounters: z.boolean().default(true),
+  /** B7 E4 counter-pick: register 6 at the League door, swap 1. */
+  leagueCounterPick: z.boolean().default(true),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -53,6 +60,16 @@ export const ExpansionRunSchema = z.object({
   siege: z.record(z.string(), z.unknown()).optional(),
   apex: z.record(z.string(), z.unknown()).optional(),
   friend: z.record(z.string(), z.unknown()).optional(),
+  /** Rival overhaul state by rival id (R1-R3, R10; core/rivals/overhaul.ts). */
+  rival: z.record(z.string(), RivalOverhaulStateSchema).optional(),
   rescue: z.record(z.string(), z.unknown()).optional(),
+  /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
+  pacing: z.boolean().optional(),
+  /** Runs with Evolution Encounters on (B9). */
+  evoEncounters: z.boolean().optional(),
+  /** Runs with the E4 counter-pick on (B7). */
+  counterPick: z.boolean().optional(),
+  /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
+  league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

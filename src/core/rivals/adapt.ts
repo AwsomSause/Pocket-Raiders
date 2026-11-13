@@ -3,6 +3,7 @@
 // It remembers its team, comes back stronger, and swaps ONE member for a Pokémon from the
 // planned team that resists the type of attack you use most; the player is told which.
 
+import { pityFor } from './overhaul';
 import { counterCap, rivalRoleOf, SPAR_NOTE } from '../overhaul/rivalRoles';
 import { focusIs, RIVAL_FOCUS_GAP_CUT } from '../campaign/focus';
 import { runPerks } from '../archetypes';
@@ -117,7 +118,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   };
   const mods = rivalMods(rival);
   // Personality: vindictive rivals return stronger. Style: how sharp its move choice is.
-  const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) }), ai: Math.max(plan.ai, mods.ai) };
+  const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) + pityFor(run, rival.id).levelDelta }), ai: Math.max(plan.ai, mods.ai) };
   const perks = runPerks(content, run);
   const type = mostUsedType(content, run, rival);
   const seen = bondNote(rival);

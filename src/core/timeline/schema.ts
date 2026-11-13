@@ -41,6 +41,8 @@ export const RunGenesisSchema = z.object({
   licenses: z.array(z.string()).default([]),
   candyPerks: z.array(z.string()).default([]),
   ownedTrainers: z.array(z.string()).default([]),
+  /** Beta 0.6: the expansion settings the run started with (stage pacing, Evolution Encounters, League counter-pick). */
+  expansion: z.object({ stagePacing: z.boolean().optional(), evolutionEncounters: z.boolean().optional(), leagueCounterPick: z.boolean().optional() }).optional(),
   /** Results of the archive picks made at the start. */
   legacyRival: RunStateSchema.shape.legacyRival,
   reunion: z.object({ mon: PastPokemonSchema, afterEncounters: z.number().int().min(1), done: z.boolean() }).nullable().default(null),

@@ -1,0 +1,196 @@
+{
+ "events": [
+  {
+   "id": "evo-eevee-couldnt-choose",
+   "name": "The Eevee Who Couldn't Choose",
+   "group": "Evolution Encounters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "evoEncounters"
+    },
+    {
+     "kind": "partySpecies",
+     "species": "eevee"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a3a",
+    "effect": "glint",
+    "pokemon": "eevee"
+   },
+   "intro": "Your Eevee circles three smooth stones in a stream, sniffing each, unable to pick. It looks back at you.",
+   "choices": [
+    {
+     "label": "Water Stone",
+     "success": {
+      "text": "The stone glows blue in the shallows. You pocket it; the choice is yours when you are both ready.",
+      "effects": [
+       {
+        "kind": "evoEncounter",
+        "mode": "stone",
+        "item": "water-stone",
+        "species": "eevee"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thunder Stone",
+     "success": {
+      "text": "Sparks crawl over the stone. You pocket it for later.",
+      "effects": [
+       {
+        "kind": "evoEncounter",
+        "mode": "stone",
+        "item": "thunder-stone",
+        "species": "eevee"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fire Stone",
+     "success": {
+      "text": "The stone is warm as a coal. You pocket it for later.",
+      "effects": [
+       {
+        "kind": "evoEncounter",
+        "mode": "stone",
+        "item": "fire-stone",
+        "species": "eevee"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it keep choosing",
+     "success": {
+      "text": "Eevee lies down in the sun, content for now.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evo-pokemon-that-wouldnt-evolve",
+   "name": "The Pokémon That Wouldn't Evolve",
+   "group": "Evolution Encounters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "evoEncounters"
+    },
+    {
+     "kind": "evoEncounters",
+     "nearEvolution": 8
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a3a",
+    "effect": "glint"
+   },
+   "intro": "One of your Pokémon stands at the edge of a glowing meadow, shaking its head every time the light pulses. It is almost ready. It is not sure it wants to be.",
+   "choices": [
+    {
+     "label": "Give it a nudge",
+     "success": {
+      "text": "You wait with it. The light wins.",
+      "effects": [
+       {
+        "kind": "evoEncounter",
+        "mode": "nudge",
+        "within": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it decide in its own time",
+     "success": {
+      "text": "You sit with it a while. It leans on you, calmer.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evo-pidgeys-resolve",
+   "name": "Pidgey's Resolve",
+   "group": "Evolution Encounters",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "evoEncounters"
+    },
+    {
+     "kind": "partySpecies",
+     "species": "pidgey"
+    },
+    {
+     "kind": "evoEncounters",
+     "nearEvolution": 8
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a3a",
+    "effect": "glint",
+    "pokemon": "pidgey"
+   },
+   "intro": "A small Pidgey on your team has been practising the same short flight all morning. The wind is wrong. It tries again anyway.",
+   "choices": [
+    {
+     "label": "Cheer it on",
+     "success": {
+      "text": "On the tenth try it catches the wind, and keeps climbing as something bigger.",
+      "effects": [
+       {
+        "kind": "evoEncounter",
+        "mode": "nudge",
+        "species": "pidgey",
+        "within": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it rest",
+     "success": {
+      "text": "It folds its wings and naps in your hat.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

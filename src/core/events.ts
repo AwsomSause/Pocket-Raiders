@@ -27,6 +27,7 @@ import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
 import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
+import { evolve } from './evolution';
 import { makeDoubles } from './battle/doubles';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
@@ -107,6 +108,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return milestoneToday(content, run);
     case 'partySpecies':
       return run.party.some((m) => m.speciesId === c.species);
+    case 'evoEncounters':
+      return run.expansion?.evoEncounters === true && (c.nearEvolution === undefined || run.party.some((m) => m.hp > 0 && nearLevelEvolution(content, m, c.nearEvolution!)));
     case 'partyMove':
       return run.party.some((m) => m.hp > 0 && m.moves.some((mv) => mv.id === c.move));
     case 'starter': {
@@ -258,6 +261,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
     case 'partyMove':
       return `Needs a Pokémon that knows ${content.moves.get(c.move)?.name ?? c.move}`;
+    case 'evoEncounters':
+      return 'Needs Evolution Encounters turned on';
     case 'partySpecies':
       return `Needs ${content.species.get(c.species)?.name ?? c.species} in your party`;
     case 'emotion':
@@ -798,6 +803,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return e.weight >= 3 ? 'a run-defining choice' : e.weight === 2 ? 'a lasting choice' : '';
     case 'formChange':
       return 'a Pokémon changes form';
+    case 'evoEncounter':
+      return e.mode === 'stone' ? 'an evolution stone' : 'a Pokémon evolves';
     case 'crisis':
       return e.amount < 0 ? 'the crisis eases' : 'the crisis grows';
     case 'aid':
@@ -1019,6 +1026,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (!id || !teachEggMove(content, lead, id, [])) return '';
       return `${content.species.get(lead.speciesId)?.name ?? lead.speciesId} learned the egg move ${content.moves.get(id)!.name}!`;
     }
+    case 'evoEncounter':
+      return applyEvoEncounter(content, run, e);
     case 'formChange': {
       const mon = run.party.find((m) => m.speciesId === e.from);
       const to = content.species.get(e.to);
@@ -1371,3 +1380,36 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
   const slow = battle.kind === 'trainer' && battle.rule?.turnLimit !== undefined && turns > battle.rule.turnLimit && battle.slowWin;
   return (slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
+
+/** Beta 0.6 B9: the two Evolution Encounter effects. Nothing is rolled: the first fitting party Pokémon is the one (Risky Evolutions stay off, so nothing here ever has a flaw). */
+function applyEvoEncounter(content: Content, run: RunState, e: Extract<EventEffect, { kind: 'evoEncounter' }>): string {
+  if (!run.expansion?.evoEncounters) return '';
+  const fits = (m: RunState['party'][number]): boolean => !e.species || m.speciesId === e.species;
+  if (e.mode === 'stone') {
+    for (const mon of run.party) {
+      if (!fits(mon)) continue;
+      const evo = content.species.get(mon.speciesId)?.evolutions.find((x) => x.item && (!e.item || x.item === e.item) && content.items.has(x.item));
+      if (!evo?.item) continue;
+      addItem(run.inventory, evo.item, 1);
+      return `${content.species.get(mon.speciesId)!.name} stirs beside a ${content.items.get(evo.item)!.name}. You take it along.`;
+    }
+    return '';
+  }
+  for (const mon of run.party) {
+    if (!fits(mon) || mon.hp <= 0) continue;
+    const evo = levelEvolutionNear(content, mon, e.within);
+    if (!evo) continue;
+    const before = content.species.get(mon.speciesId)!.name;
+    const result = evolve(content, mon, evo.to);
+    discover(run, evo.to, true);
+    for (const moveId of result.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+    return `${before} evolves into ${content.species.get(evo.to)!.name}!`;
+  }
+  return '';
+}
+
+/** A plain level evolution (no region, gender or stat condition) the Pokémon is within `within` levels of, or has passed. */
+function levelEvolutionNear(content: Content, mon: RunState['party'][number], within: number) {
+  return content.species.get(mon.speciesId)?.evolutions.find((x) => x.level !== undefined && !x.region && !x.condition && !x.gender && mon.level >= x.level - within && content.species.has(x.to));
+}
+const nearLevelEvolution = (content: Content, mon: RunState['party'][number], within: number): boolean => levelEvolutionNear(content, mon, within) !== undefined;

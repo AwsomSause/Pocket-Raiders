@@ -448,12 +448,25 @@ export const DoublesSchema = z.object({
   enemy: DoublesSlotSchema,
   /** True while the Pokémon in the main fields stands in the right-hand spot (spot 1). */
   swapped: z.object({ player: z.boolean(), enemy: z.boolean() }),
-  /** Spots (0 left, 1 right) waiting for the player to send out a replacement. */
-  refill: z.array(z.number().int().min(0).max(1)).default([]),
+  /** Spots (0 left, 1 right; 2 in a triple battle) waiting for the player to send out a replacement. */
+  refill: z.array(z.number().int().min(0).max(2)).default([]),
   /** Tatsugiri commanding from inside a partner Dondozo (Commander): they skip their turns and can't be hit. */
   commanding: z.array(z.string()).default([]),
   /** Where each Pokémon last aimed its move (the second turn of Solar Beam goes the same way). */
-  aims: z.record(z.string(), z.object({ side: z.enum(['player', 'enemy']), spot: z.union([z.literal(0), z.literal(1)]) })).default({}),
+  aims: z.record(z.string(), z.object({ side: z.enum(['player', 'enemy']), spot: z.union([z.literal(0), z.literal(1), z.literal(2)]) })).default({}),
+  /**
+   * A triple battle (battle/triples.ts): three spots per side (0 left, 1 centre, 2 right as seen on screen, both sides).
+   * `at` is the spot whose Pokémon is in the engine's main fields; the other two wait in `player` / `enemy` by spot
+   * (the entry at `at` is an empty placeholder). In a triple battle the doubles-only `player` / `enemy` / `swapped`
+   * fields above are unused (index -1).
+   */
+  trio: z
+    .object({
+      at: z.object({ player: z.number().int().min(0).max(2), enemy: z.number().int().min(0).max(2) }),
+      player: z.array(DoublesSlotSchema).length(3),
+      enemy: z.array(DoublesSlotSchema).length(3),
+    })
+    .optional(),
 });
 export type DoublesState = z.infer<typeof DoublesSchema>;
 
@@ -965,6 +978,10 @@ export const MapNodeSchema = z.object({
   name: z.string().max(24).optional(),
   /** Story Overhaul S4: the Story Stops (blueprint stop ids) that play when the player reaches this node. */
   storyStops: z.array(z.string()).optional(),
+  /** Beta 0.6 B6 stage pacing: this trainer is the stage's ace trainer (a stronger team). */
+  ace: z.boolean().optional(),
+  /** Beta 0.6 B6: this trainer always fights two at a time (region 2 and later). */
+  doubles: z.boolean().optional(),
   /** How the generator made this node, for debugging. */
   note: z.string(),
 });
@@ -974,6 +991,8 @@ export const StageMapSchema = z.object({
   columns: z.number().int().min(1),
   nodes: z.array(MapNodeSchema).min(1),
   trainerColumns: z.array(z.number().int()),
+  /** Beta 0.6 B6: columns where the trainer is optional (the top node is a trainer, the other nodes are wild). */
+  optionalTrainerColumns: z.array(z.number().int()).optional(),
 });
 export type StageMap = z.infer<typeof StageMapSchema>;
 
@@ -1040,6 +1059,8 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
     title: z.string(),
     options: z.array(z.object({ label: z.string(), description: z.string(), action: z.enum(['door0', 'door1', 'pass', 'guest', 'skip']), leaderId: z.string().optional(), /** The Leader's portrait asset id (Fork Gate and Rematch Day menus). */ sprite: z.string().optional() })).min(1),
   }),
+  /** Beta 0.6 B7: the League door. Your party is registered; option 0 keeps it, option N swaps the Pokémon the League answers most for boxed Pokémon `swapIns[N-1]`. */
+  z.object({ kind: z.literal('leagueDoor'), title: z.string(), outUid: z.string(), swapIns: z.array(z.string()), options: z.array(z.object({ label: z.string(), description: z.string() })).min(1) }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
   /** A trainer's signature mechanic: pick one of the options (core/signature.ts). */
