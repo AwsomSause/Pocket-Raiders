@@ -339,9 +339,9 @@
     {
       "id": "triples-only",
       "name": "Triples Only",
-      "status": "planned",
+      "status": "supported",
       "bonus": 0.25,
-      "blurb": "Every trainer fight that can be a triple battle is one (you need three healthy Pokémon). Opens when the battle screen can show three a side.",
+      "blurb": "Every trainer fight that can be a triple battle is one (you need three healthy Pokémon).",
       "group": "doubles",
       "triplesOnly": true
     },

@@ -28,9 +28,11 @@ function runWith(seed: string, c = content, partySize = 3): RunState {
 const trainerNode = (run: RunState) => ({ ...nextChoices(run.stage!)[0]!, kind: 'trainer' as const, harder: false });
 
 describe('Triples Only rule', () => {
-  it('exists, is mutually exclusive with Doubles Only, and stays closed until the battle screen draws triples', () => {
+  it('exists, can be picked now the battle screen draws triples, and is mutually exclusive with Doubles Only', () => {
     expect(triplesOnly(makeRules(STANDARD_CHOICE))).toBe(false);
-    expect(rulesProblem(withMods(['triples-only']))).toMatch(/not available yet/);
+    expect(rulesProblem(withMods(['triples-only']))).toBeNull();
+    expect(triplesOnly(makeRules(withMods(['triples-only'])))).toBe(true);
+    expect(rulesProblem(withMods(['triples-only', 'doubles-only']))).toBeTruthy();
   });
   it('makes every trainer fight that can be a triple battle one', () => {
     const run = runWith('tri-only');
@@ -52,10 +54,11 @@ describe('triple trainer battles from the balance', () => {
   const on = { ...content, balance: { ...content.balance, triples: { enabled: true, chance: 1, fromRegion: 0, bossIds: [] } } };
   const big = (r: RunState) => r.battle!.enemyTeam.length >= 3;
 
-  it('are off by default, so runs play as before', () => {
-    expect(content.balance.triples.enabled).toBe(false);
-    const run = runWith('tri-off');
-    startEncounter(content, run, trainerNode(run));
+  it('are on (since T2), and switching them off plays runs as before', () => {
+    expect(content.balance.triples.enabled).toBe(true);
+    const off = { ...content, balance: { ...content.balance, triples: { ...content.balance.triples, enabled: false } } };
+    const run = runWith('tri-off', off);
+    startEncounter(off, run, trainerNode(run));
     expect(isTriples(run.battle!)).toBe(false);
   });
   it('start from fromRegion only, and the same seed always gives the same format', () => {
