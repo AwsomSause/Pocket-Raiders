@@ -9,7 +9,8 @@
 
 import { expansionGaps } from './expansionGates';
 import { storyGates } from './storyGates';
-import { expansionData } from '../data/expansion';
+import { canonKanto, expansionData } from '../data/expansion';
+import { canonSpaceGaps } from '../core/expansion/canonSpaces';
 import type { Content } from '../core/contentSchema';
 import { generateLeagueMap, generateStageMap, validateLeagueMap, validateStageMap } from '../core/map';
 import { usableLearnset } from '../core/pokemon';
@@ -242,6 +243,7 @@ export function buildContentReport(content: Content, inputs: ReportInputs): Cont
   const budgetIds = new Set(overBudget(content).flatMap((line) => /^species (\S+)/.exec(line)?.[1] ?? []));
   for (const g of storyGates(content.storyData, content, { fileExists: inputs.fileExists, fileSizes: inputs.storyFileSizes, overBudgetIds: budgetIds, hashFresh: inputs.storyHashFresh, lookB: { enabled: false, checklistDone: false } })) add(g.id, g.title, g.explain, g.offenders);
   add('expansion-data-gaps', 'Expansion data gaps', 'Beta 0.6 expansion data (src/data/expansion): row counts off (143 characters, 110 special Pokémon, 58 Shadows, 80 events, 20 raids, 12 Apex), duplicate ids, or a Pokémon the game does not have.', expansionGaps(expansionData, new Set([...content.species.values()].map((sp) => sp.name.toLowerCase().replace(/’/g, "'").trim()))));
+  add('canon-spaces-gaps', 'Kanto canon space gaps', 'Kanto Canon Spaces catalog (src/data/expansion/canonSpacesKanto.json): wrong row counts, duplicate ids, a parent, requirement or slot town that does not exist.', canonSpaceGaps(canonKanto));
   add('invalid-entries', 'Invalid content entries', 'Entries whose support status is "invalid" (broken data).', statuses.filter((e) => e.status === 'invalid').map((e) => `${e.kind} ${e.id}: ${e.notes.join('; ')}`));
 
   add('mechanics-without-proof', 'Mechanics without code or tests', 'Mechanics claimed as built whose code or unit test file is missing, so nothing shows they work.', statuses.filter((e) => e.kind === 'mechanic' && e.status === 'invalid').map((e) => `${e.id}: ${e.notes.join('; ')}`));

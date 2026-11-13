@@ -37,6 +37,7 @@
     "data:story-species": "node tools/build-story-species.ts",
     "data:story-audio": "node tools/build-story-audio.ts",
     "data:expansion": "node tools/build-expansion.ts",
+    "data:canon-spaces": "node tools/build-canon-spaces.ts",
     "data:abilities": "node tools/import-abilities.ts",
     "data:availability": "node tools/import-availability.ts",
     "data:rival-catalog": "node tools/import-rival-catalog.ts",
