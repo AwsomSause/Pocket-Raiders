@@ -390,7 +390,10 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
-  for (const file of (raw.eventsExtra ?? []) as { events?: unknown[] }[]) gamesEvents.push(...(file.events ?? []));
+  // An event in src/data/events/*.json replaces any older event with the same id (Beta 0.6 revisions of the pack's REVISE/MERGE events).
+  const extraEvents = ((raw.eventsExtra ?? []) as { events?: unknown[] }[]).flatMap((file) => file.events ?? []);
+  const extraIds = new Set(extraEvents.map((e) => (e as { id?: string }).id));
+  gamesEvents.push(...extraEvents);
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
   // Story Overhaul W6: dungeons become room events (validated: every branch reaches the exit).
   for (const p of validateAllDungeons()) problems.push(`dungeons.json ${p}`);
@@ -402,7 +405,9 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   if (hasCatalog) gamesEvents.push(...pseudoEvents());
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
   if (balance?.mythicalChains.enabled) gamesEvents.push(...mythicalChainEvents(balance.mythicalChains));
-  const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
+  const extraSet = new Set<unknown>(extraEvents);
+  const replaced = (list: unknown[]): unknown[] => list.filter((e) => extraSet.has(e) || !extraIds.has((e as { id?: string }).id));
+  const eventsFile = parse(EventsFileSchema, evilTeams ? { events: replaced([...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents]) } : { events: replaced([...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents]) }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);
   const raids = baseRaids && legend ? { ...baseRaids, raids: [...baseRaids.raids, ...legend.raids] } : null;

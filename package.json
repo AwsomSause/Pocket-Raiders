@@ -67,6 +67,7 @@
     "report:qa": "node tools/report-qa.ts",
     "report:perf": "node tools/report-perf.ts",
     "data:events": "node tools/build-events.ts",
+    "data:hazards": "node tools/build-hazard-events.ts",
     "data:xe-events": "node tools/build-expansion-events.ts",
     "data:run-events": "node tools/build-run-events.ts",
     "data:quests": "node tools/build-quests.ts",
