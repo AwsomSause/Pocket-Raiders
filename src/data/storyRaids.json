@@ -1,0 +1,42 @@
+{
+  "note": "Kanto (Rocket) story raids 1-5. Results: triumph, success, partial, failure, declined. 'os' is the Operational Strength change; 'lever' is this raid's lever state; 'siege', 'cast', 'apex' and 'phase' are the only things a raid may write (design 6.6). Source: scripts/01_KANTO_TEAM_ROCKET(_EXPANDED).md.",
+  "bounds": { "os": 2, "phase": 1, "gauntlet": 1 },
+  "impoundCount": { "min": 1, "max": 3 },
+  "raids": [
+    { "n": 1, "id": "pr.kanto.mt-moon-dig", "team": "rocket", "leverId": "fossils", "gate": { "kind": "open" }, "failure": ["C2", "C3", "C11"],
+      "results": {
+        "triumph": { "os": -3, "lever": "broken", "phase": { "phase1": -1 } },
+        "success": { "os": -2, "lever": "weakened", "phase": { "phase1": -1 } },
+        "partial": { "os": -1, "lever": "dented" },
+        "failure": { "os": 2, "lever": "strengthened", "phase": { "phase1": 1 } },
+        "declined": { "os": 1, "lever": "unchanged" } } },
+    { "n": 2, "id": "pr.kanto.celadon-hideout", "team": "rocket", "leverId": "lift-key", "gate": { "kind": "open" }, "failure": ["C1", "C6", "C11"],
+      "results": {
+        "triumph": { "os": -3, "lever": "broken", "siege": { "giovanni-no-retreat": true } },
+        "success": { "os": -2, "lever": "weakened", "phase": { "phase2": -1 } },
+        "partial": { "os": -1, "lever": "dented" },
+        "failure": { "os": 2, "lever": "strengthened", "apex": { "giovanni-reserve": true }, "phase": { "gauntlet": 1 } },
+        "declined": { "os": 1, "lever": "unchanged" } } },
+    { "n": 3, "id": "pr.kanto.pokemon-tower", "team": "rocket", "leverId": "ghosts", "gate": { "kind": "open" }, "failure": [],
+      "results": {
+        "triumph": { "os": -3, "lever": "broken", "phase": { "phase3": -1 } },
+        "success": { "os": -2, "lever": "weakened" },
+        "partial": { "os": -1, "lever": "dented" },
+        "failure": { "os": 2, "lever": "strengthened", "phase": { "gauntlet": 1 } },
+        "declined": { "os": 1, "lever": "unchanged" } } },
+    { "n": 4, "id": "pr.kanto.vermilion-docks", "team": "rocket", "leverId": "manifest", "gate": { "kind": "after", "raid": 2 }, "failure": ["C2", "C8", "C11"],
+      "results": {
+        "triumph": { "os": -3, "lever": "broken", "phase": { "convoy": -1 }, "cast": { "ledger": "joinable" } },
+        "success": { "os": -2, "lever": "weakened", "siege": { "surge-held": true } },
+        "partial": { "os": -1, "lever": "dented" },
+        "failure": { "os": 2, "lever": "strengthened", "phase": { "phase1": 1 } },
+        "declined": { "os": 1, "lever": "unchanged" } } },
+    { "n": 5, "id": "pr.kanto.safari-night", "team": "rocket", "leverId": "herd", "gate": { "kind": "afterOrTrack", "raid": 3, "trackStep": 4 }, "failure": ["C3", "C10", "C11"],
+      "results": {
+        "triumph": { "os": -3, "lever": "broken", "siege": { "tauros-stampede": true } },
+        "success": { "os": -2, "lever": "weakened", "siege": { "koga-held": true } },
+        "partial": { "os": -1, "lever": "dented" },
+        "failure": { "os": 2, "lever": "strengthened", "apex": { "black-label-gauntlet": true } },
+        "declined": { "os": 1, "lever": "unchanged", "phase": { "safariHalved": 1 } } } }
+  ]
+}

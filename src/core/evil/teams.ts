@@ -12,6 +12,7 @@
 //  - Recurring villains: the executive and leader remember every meeting. Their teams grow and their lines change
 //    (first meeting, after you beat them, after they beat you, grudging respect).
 
+import { impoundFor } from '../raid/storyRaids';
 import type { Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
 import type { RunState } from '../state';
@@ -158,6 +159,12 @@ function resolveOp(content: Content, run: RunState, team: EvilTeam, op: EvilStat
   if (side && !run.story.flags[key]) {
     run.story.flags[key] = true;
     run.perkEffects = [...(run.perkEffects ?? []), ...side.effects];
+  }
+  // R9: an operation that goes through (lost or left alone) is a failed raid: the team impounds some of your Pokémon, once per operation.
+  const impoundKey = `evil:impound:${op.id}:${op.region}`;
+  if (outcome === 'succeeded' && !run.story.flags[impoundKey]) {
+    run.story.flags[impoundKey] = true;
+    impoundFor(content, run, team.id, `op-${op.id}-${op.region}`);
   }
   const verb = { foiled: 'You shut down', infiltrated: 'You sabotaged', succeeded: `${team.name} pulled off`, joined: 'You helped with' }[outcome];
   const name = def?.name ?? op.id;
