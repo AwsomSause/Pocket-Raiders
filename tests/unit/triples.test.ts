@@ -253,6 +253,52 @@ describe('fainting and replacements', () => {
   });
 });
 
+describe('the foe in a triple battle', () => {
+  // Turn 1: the foe's centre Explosion knocks out p0 and p1 (no bench) and itself, leaving p2 alone on the right edge
+  // and the foe's centre spot empty.
+  const setup = (leftMoves: string[], seed: string) => {
+    const t = triples([{ hp: 1 }, { hp: 1 }, { level: 100 }], [{ moves: leftMoves, level: 100 }, { moves: ['explosion'], level: 100 }, { level: 100 }], seed);
+    t.battle.ai = 0;
+    t.turn([t.cmd(0), t.cmd(0), t.cmd(0)]);
+    expect(t.party.map((m) => m.hp > 0)).toEqual([false, false, true]);
+    expect(t.uids('enemy')).toEqual(['e0', null, 'e2']);
+    return t;
+  };
+  it('shifts an edge Pokémon with nobody in reach into a free centre, before any move', () => {
+    const t = setup(['tackle'], 'fs1');
+    const events = t.turn([null, null, t.cmd(0)]);
+    expect(t.uids('enemy')).toEqual([null, 'e0', 'e2']);
+    expect(events.filter((e) => e.type === 'shift')).toEqual([{ type: 'shift', side: 'enemy', uid: 'e0', from: 0, to: 1 }]);
+    expect(events.findIndex((e) => e.type === 'shift')).toBeLessThan(events.findIndex((e) => e.type === 'move'));
+    // In the centre it reaches p2 and attacks; no more shifting.
+    const next = t.turn([null, null, t.cmd(0)]);
+    expect(next.some((e) => e.type === 'shift')).toBe(false);
+    expect(next.some((e) => e.type === 'move' && e.side === 'enemy' && e.moveId === 'tackle')).toBe(true);
+  });
+  it('does not shift when it has a long-range attack, and uses it instead of one that can\'t reach', () => {
+    for (const seed of ['fs2', 'fs3', 'fs4']) {
+      const t = setup(['tackle', 'aerial-ace'], seed);
+      const before = t.party[2]!.hp;
+      const events = t.turn([null, null, t.cmd(0)]);
+      expect(events.some((e) => e.type === 'shift'), seed).toBe(false);
+      expect(t.uids('enemy')[0], seed).toBe('e0');
+      expect(events.some((e) => e.type === 'move' && e.side === 'enemy' && e.moveId === 'tackle'), seed).toBe(false);
+      expect(events.some((e) => e.type === 'move' && e.side === 'enemy' && e.moveId === 'aerial-ace'), seed).toBe(true);
+      expect(t.party[2]!.hp, seed).toBeLessThan(before);
+    }
+  });
+  it('never shifts out a centre partner that can attack (no back-and-forth)', () => {
+    // p0 and p1 fall to the foe's right edge (Hyper Voice hits spots 1 and 2) and centre; the centre foe keeps its spot.
+    const t = triples([{ hp: 1 }, { hp: 1 }, { level: 100 }], [{ moves: ['tackle'], level: 100 }, { moves: ['hyper-voice'], level: 100 }, {}], 'fs5');
+    t.battle.ai = 0;
+    t.turn([t.cmd(0), t.cmd(0), t.cmd(0)]);
+    expect(t.party.map((m) => m.hp > 0)).toEqual([false, false, true]);
+    const events = t.turn([null, null, t.cmd(0)]);
+    expect(events.some((e) => e.type === 'shift')).toBe(false);
+    expect(t.uids('enemy')).toEqual(['e0', 'e1', 'e2']);
+  });
+});
+
 describe('forced switches', () => {
   it('Roar never drags in a Pokémon that is already on the field', () => {
     for (const seed of ['r1', 'r2', 'r3', 'r4']) {
