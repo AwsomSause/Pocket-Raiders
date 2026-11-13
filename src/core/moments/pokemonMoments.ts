@@ -84,6 +84,8 @@ export const MomentEffectSchema = z.object({
   boostTurns: z.number().int().min(1).max(5).optional(),
   /** The next move of this type does this much more damage (percent); spent when it lands. */
   nextBoost: z.object({ type: z.string(), pct: z.number().int().min(1).max(100) }).optional(),
+  /** For the battle, this move does this much more damage (percent). */
+  moveBoost: z.object({ move: z.string(), pct: z.number().int().min(1).max(100) }).optional(),
   /** For the rest of the battle, a foe that hits it with a contact move is poisoned. */
   contactPoison: z.boolean().optional(),
   /** Damage is halved for this many turns. */
@@ -119,6 +121,10 @@ export const PokemonMomentSchema = z.object({
       status: z.array(z.enum(['brn', 'psn', 'par', 'slp', 'frz', 'confusion'])).optional(),
       /** The foe has this species tag (legendary, mythical, baby...). */
       foeTag: z.string().optional(),
+      /** It is night on the run clock. */
+      night: z.boolean().optional(),
+      /** The foe has all of these types. */
+      foeTypes: z.array(z.string()).optional(),
     })
     .optional(),
   /** Ally moments: `same` = the fallen Pokémon must match this moment's scope too; `any` = any ally falling counts. */

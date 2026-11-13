@@ -3060,6 +3060,81 @@
      "atk": 1
     }
    }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "p2-psyduck-headache",
+   "name": "The Headache",
+   "scope": {
+    "species": [
+     "psyduck"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.5,
+   "hpBelow": 50,
+   "effectText": "Below 50% HP: its next Psychic move does double damage.",
+   "presentation": "Ring | \"It clutches its head.\"",
+   "effect": {
+    "nextBoost": {
+     "type": "psychic",
+     "pct": 100
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "p2-houndoom-howl",
+   "name": "The Howl at Night",
+   "scope": {
+    "species": [
+     "houndoom"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "night": true
+   },
+   "effectText": "At night: the foe starts with Spe -1.",
+   "presentation": "Howl | \"Opponents shiver.\"",
+   "effect": {
+    "foeStage": {
+     "spe": -1
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "p2-tinkaton-hammer",
+   "name": "The Hammer",
+   "scope": {
+    "species": [
+     "tinkaton"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "foeTypes": [
+     "steel",
+     "flying"
+    ]
+   },
+   "effectText": "Against a Steel/Flying foe: Gigaton Hammer does 50% more damage.",
+   "presentation": "Grin | \"It raises its hammer.\"",
+   "effect": {
+    "moveBoost": {
+     "move": "gigaton-hammer",
+     "pct": 50
+    }
+   }
   }
  ]
 }
