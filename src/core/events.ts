@@ -49,6 +49,7 @@ import { noteChoice } from './memories/world';
 import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText, evilTeam } from './evil/teams';
 import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
+import { assignEvilVariants, MARNIE_CARD_ID } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
 import { scavengerBonus } from './bank';
@@ -1505,6 +1506,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
+    const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
+    if (b.evil && variantTeam) assignEvilVariants(run.battle.extra.variants, team, { teamId: variantTeam, regionId: currentRegion(content, run).id, rank: b.evil, marnie: (run.inventory[MARNIE_CARD_ID] ?? 0) > 0 });
     if (shaped) {
       run.battle.ai = Math.max(run.battle.ai, shaped.ai);
       if (shaped.strategy) run.battle.strategy = shaped.strategy.id;
