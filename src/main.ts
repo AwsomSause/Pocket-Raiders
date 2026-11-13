@@ -10,6 +10,7 @@ import { sheenSweep } from './ui/battleFx/transitions';
 import { installUiJuice, noteSceneEnter, pageEnter, setUiMotion } from './ui/wiiMotion';
 import { uiMotionFrom } from './core/presentation/uiMotion';
 import Phaser from 'phaser';
+import { MicMeter } from './game/micInput';
 import { regionIdentity } from './core/presentation/regionIdentity';
 import { getContent } from './data';
 import { GameSession } from './game/GameSession';
@@ -178,6 +179,8 @@ function start(): void {
     session,
     game,
     activeScene: () => game.scene.getScenes(true).map((s) => s.scene.key)[0] ?? null,
+    /** A microphone loudness meter (MIC1). Browser tests use it with a fake media stream; screens create their own. */
+    micMeter: () => new MicMeter(),
     /** Runs a shared interaction prompt over the active scene and resolves with its result (browser tests, debug panel). */
     prompt: (id: string, assist?: { skip?: boolean; widen?: number }) => {
       const s = game.scene.getScenes(true)[0];
