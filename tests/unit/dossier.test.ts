@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { markBeaten, castMark, castTier, dossierFolders, meetTeamHeads, recordCast } from '../../src/core/expansion/cast/dossier';
+import { beatTeamLeaders, markBeaten, castMark, castTier, dossierFolders, meetTeamHeads, recordCast } from '../../src/core/expansion/cast/dossier';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
 import bossesFile from '../../src/data/bosses.json';
 import { BOSS_CAST, beatBoss, beatClimax, fromRaidResult, CANON_MEETINGS, EVENT_MEETINGS, TRACK_MEETINGS, meetFromEvent, meetFromJoin, meetFromTrack } from '../../src/core/expansion/cast/meet';
@@ -103,5 +103,7 @@ describe('Dossier', () => {
     beatClimax(c);
     expect(c.expansion.dossier['sc.rocket.triad-koga'].status).toBe('beaten');
     fromRaidResult(run(), 'rocket', 'declined', meetTeamHeads);
+    expect(beatTeamLeaders(c, 'rocket')).toEqual(['sc.rocket.madame-boss']);
+    expect(c.expansion.dossier['sc.rocket.madame-boss'].status).toBe('beaten');
   });
 });

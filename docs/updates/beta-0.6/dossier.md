@@ -14,7 +14,7 @@
 - Kanto canon spaces: Mt. Moon (Griggs), S.S. Anne (Surge), Game Corner (Vesper), Celadon Mansion (Matori), Safari (Rudd, Koga), Silph and the Labyrinth (Sabrina), Cinnabar Lab (Namba, Blaine).
 - Kanto's Rocket Ledger: step 1 Matori, 2 Vesper, 3 Surge, 4 Rudd, 5 Madame Boss.
 - A story raid (any result but declined) meets the team's Executives and above. Joining Rocket as the Inside Man adds your own file; an Inside Job with a Side-with rival adds the rival's.
-- Beaten: winning a gym, Elite Four or Champion fight against Sabrina, Koga, Lt. Surge or Blaine; a won story raid (triumph or success) beats the team's Executives and Seconds; winning a climax fight beats the run's team's Executives and Seconds. An ally or a turned character is never changed by a win. Leaders stay at large.
+- Beaten: winning a gym, Elite Four or Champion fight against Sabrina, Koga, Lt. Surge or Blaine; a won story raid (triumph or success) beats the team's Executives and Seconds; winning a climax fight beats the run's team's Executives and Seconds. An ally or a turned character is never changed by a win. The team's Leader is beaten when the story's last beat arrives (after the final climax fight is won).
 - Tables live in `src/core/expansion/cast/meet.ts`; a test checks every id is a real character.
 
 ## Limits

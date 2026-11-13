@@ -133,3 +133,10 @@ export function beatTeamHeads(run: RunState, team: string): string[] {
   }
   return done;
 }
+
+/** The team's Leaders (rank "Leader (7)" and "Leader emerita (7)") are beaten: the story's last beat, after the final climax fight is won. */
+export function beatTeamLeaders(run: RunState, team: string): string[] {
+  const done: string[] = [];
+  for (const c of expansionData.characters) if (c.team === team && /^Leader\b/.test(c.rank) && markBeaten(run, c.id)) done.push(c.id);
+  return done;
+}
