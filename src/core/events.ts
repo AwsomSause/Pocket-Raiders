@@ -660,7 +660,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   keepsakeEvent(run, event);
   const found = noteDungeonEntered(run, event.id);
   if (found) emit(content, run, 'storyMoment', { actors: [], data: { def: 'rival-living', suppressed: false }, importance: 40, text: found });
-  if (event.pseudo) pseudoRivalBeat(content, run);
+  if (event.pseudo && choice.success.effects.some((x) => x.kind === 'addEvent')) pseudoRivalBeat(content, run, event.id);
   const insight = perkItem(content, run, 'eventInsight');
   if (insight) spendUse(run, insight);
   count(run, 'eventsCompleted');

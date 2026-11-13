@@ -18,3 +18,10 @@
 - **Catch step-in** for a registered rival is now 3%, once per region (was the old per-stage 20% for rivals without overhaul records). Planning stays pure; the region is marked when the step-in actually happens.
 
 Limits: Race, Team-Up and Ambush are text only (no first-pick reward, partner or forced fight yet). The Friend's optional spar and extra Assist are not offered in a live fight yet (`friendAssist` is ready). The third guaranteed meeting is counted but not placed on a stage map.
+
+## Added in the mechanics slice
+- **Race**: whoever reaches the end first takes the first pick. The rival wins 35% of the time, +5% per Lead point it has. If you win, you get one extra of the stage's reward item; if it wins, only feelings change.
+- **Team-Up** (main rival): it joins your next eligible fight as a step-in Assist (not in doubles). **Ambush** (main rival): it challenges you at the next fight (the existing duel step-in). Both clear after one use. Neither happens at under 50% party HP (Ambush) and neither applies to the Friend.
+- **Friend finale Assist**: in the final-boss fight the Friend adds at most 1 strike to the rival Assist (total capped at 4 Standard), or stands in alone with 1 strike and a partner (Eevee, Pikachu...) when no other rival can assist. Level is 6 under the boss.
+
+Limits: no optional Friend spar yet (it needs a no-stakes battle flow with a non-rival trainer; the Friend is not a story rival). Extended-mode cap (6) is not read here; Standard is used.

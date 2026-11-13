@@ -32,7 +32,7 @@ import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
 import { buildPriceFactor, sabotageStep, wildEffect } from './battle/battleFlair';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
 import { applyInterference } from './rivals/interference';
-import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordRivalCatch, stepInFlag, stepInLine, STEPIN_FORCE, STEP_IN, withCaughtMembers, type StepInKind } from './rivals/stepIn';
+import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordRivalCatch, stepInFlag, stepInLine, STEPIN_FORCE, PSEUDO_FORCE, STEP_IN, withCaughtMembers, type StepInKind } from './rivals/stepIn';
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
@@ -225,7 +225,7 @@ import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
-import { friendStageBeat, rivalBattleLines } from './rivals/live';
+import { friendFinaleAssist, friendStageBeat, rivalBattleLines } from './rivals/live';
 import { markStepIn } from './rivals/presence';
 import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
@@ -2232,7 +2232,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (memoryHit) run.battle.memory = memoryHit.memory;
     // Living Rival: a friend (or a rescued rival) arrives to help in the final boss (clear rules in rivals/living.ts).
     if (plan.classId === CHAMPION_CLASS && isFinalBoss(content, run)) {
-      const assist = finaleAssistRival(content, run, Math.max(...team.map((m) => m.level)));
+      const topLevel = Math.max(...team.map((m) => m.level));
+      const assist = friendFinaleAssist(content, run, topLevel, finaleAssistRival(content, run, topLevel));
       if (assist) {
         run.battle.finaleAssist = assist;
         run.battle.rivalNote = [run.battle.rivalNote, `${assist.name} burst through the doors: "Not without me!"`].filter(Boolean).join(' ');
@@ -2349,6 +2350,7 @@ export function rivalStepIn(content: Content, current: RunState): StepInResult |
   const rival = run.story.rivals.find((r) => r.id === plan.rivalId)!;
   const stepRec = plan.kind === 'catch' ? run.expansion?.rival?.[plan.rivalId] : undefined;
   if (stepRec) markStepIn(stepRec, run.regionIndex);
+  if (run.story.flags[PSEUDO_FORCE] !== undefined && String(run.story.flags[PSEUDO_FORCE]).endsWith(`:${plan.rivalId}`)) delete run.story.flags[PSEUDO_FORCE];
   const battle = run.battle!;
   const foe = battle.enemyTeam[battle.enemyIndex]!;
   const ace = rivalAce(content, run, rival);

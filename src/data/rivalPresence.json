@@ -17,7 +17,9 @@
       "teamUp": "{who} falls in beside you for the hardest part of this place.",
       "alreadyThere": "{who} has already been through here, and waits at the exit.",
       "ambush": "{who} steps out of the dark: \"Now. Right now. I've been waiting.\""
-    }
+    },
+    "raceBase": 0.35,
+    "racePerLead": 0.05
   },
   "stepIn": {
     "chance": 0.03,
@@ -64,7 +66,18 @@
       "Lio",
       "Bree"
     ],
-    "sceneEvery": 2
+    "sceneEvery": 2,
+    "partners": [
+      "eevee",
+      "pikachu",
+      "growlithe",
+      "ralts",
+      "riolu",
+      "munchlax",
+      "togepi",
+      "lucario"
+    ],
+    "finaleLevelGap": 6
   },
   "witness": {
     "maxCards": 6
