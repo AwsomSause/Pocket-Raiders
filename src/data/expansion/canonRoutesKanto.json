@@ -1,0 +1,177 @@
+{
+ "region": "kanto",
+ "maxPerStage": 2,
+ "routes": [
+  {
+   "event": "cs-kanto-cast-balloon",
+   "stages": [
+    1
+   ],
+   "chance": 0.1
+  },
+  {
+   "event": "cs-kanto-route-snorlax",
+   "stages": [
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-charizard",
+   "stages": [
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.25
+  },
+  {
+   "event": "cs-kanto-route-pidgeotto",
+   "stages": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-route-bulbasaur",
+   "stages": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-haunter",
+   "stages": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-thunderstone",
+   "stages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-lapras",
+   "stages": [
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-poster",
+   "stages": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "chance": 0.3
+  },
+  {
+   "event": "cs-kanto-route-pidgey-rush",
+   "stages": [
+    1
+   ],
+   "chance": 0.6
+  },
+  {
+   "event": "cs-kanto-route-cut-tree",
+   "stages": [
+    2
+   ],
+   "chance": 0.5
+  },
+  {
+   "event": "cs-kanto-route-tough-junior",
+   "stages": [
+    1,
+    2,
+    3
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-route-fishing",
+   "stages": [
+    4,
+    5,
+    6
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-route-stone-seller",
+   "stages": [
+    5,
+    6,
+    7
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-route-cycling",
+   "stages": [
+    4,
+    5,
+    6
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-route-biker-gang",
+   "stages": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "chance": 0.4
+  },
+  {
+   "event": "cs-kanto-route-badge-check",
+   "stages": [
+    7,
+    8
+   ],
+   "chance": 0.5
+  },
+  {
+   "event": "cs-kanto-cast-safari-net",
+   "stages": [
+    5
+   ],
+   "chance": 0.25
+  }
+ ]
+}

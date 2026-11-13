@@ -289,6 +289,7 @@ import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
 import { addCanonStops } from './expansion/canonRun';
+import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
 import { planReunion, reunionPokemon } from './story/reunion';
@@ -721,6 +722,8 @@ function enterStage(content: Content, run: RunState, index: number): void {
   addItemStops(content, run);
   addEventStops(content, run);
   addCanonStops(content, run);
+  addOpeningCanonStops(content, run);
+  addRouteCanonStops(content, run);
   spawnRoamers(content, run);
   placeObstacles(content, run);
   placeLandmark(content, run);
@@ -804,6 +807,7 @@ function enterLeague(content: Content, run: RunState): void {
     extraFronts: [],
     roamers: [],
   };
+  addFinaleCanonStops(content, run);
   placeStoryStops(content, run);
   startStageEffects(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);

@@ -132,7 +132,9 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
+   "flags": [
+    "kanto.weedle.seed"
+   ],
    "section": "2.2"
   },
   {
@@ -152,7 +154,10 @@
     "offset": 2
    },
    "length": null,
-   "flags": [],
+   "flags": [
+    "kanto.route22.fought",
+    "kanto.route22.rematch"
+   ],
    "section": "2.3"
   },
   {
@@ -169,7 +174,9 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
+   "flags": [
+    "kanto.parcel.upgrade"
+   ],
    "section": "2.4"
   },
   {
@@ -563,7 +570,10 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
+   "flags": [
+    "kanto.mewtwo.met",
+    "kanto.secret"
+   ],
    "section": "4.8"
   },
   {
