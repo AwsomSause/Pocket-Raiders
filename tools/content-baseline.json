@@ -16,6 +16,7 @@
  "untested-save-migrations": 0,
  "over-power-budget": 0,
  "story-unresolved-ids": 0,
+ "expansion-data-gaps": 0,
  "story-event-variants": 0,
  "story-branch-no-exit": 0,
  "story-unreachable-ending": 0,

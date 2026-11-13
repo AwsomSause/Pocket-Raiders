@@ -1,0 +1,62 @@
+[
+ {
+  "name": "Storm Without a Song",
+  "text": "120 power, hits all foes; a Pokémon at full bond with its trainer takes half. It has no Corruption cost: XD001 was built so that using its power would never weaken the lock. Announced one turn ahead (\"The wind forgets its tune.\").",
+  "region": "any"
+ },
+ {
+  "name": "Mind Vault",
+  "text": "100 power; the target's held item and ability are sealed for 2 turns; the user cannot use it twice in a row. Cost: +6 Corruption. Announced one turn ahead (\"The armor hums.\").",
+  "region": "kanto"
+ },
+ {
+  "name": "Yesterday's Thorn",
+  "text": "80 power; at the end of the next turn the target takes the same damage again (\"It already happened.\"). The echo can be blocked by Protect. Cost: +6 Corruption. Announced one turn ahead (\"The air smells of last autumn.\").",
+  "region": "johto"
+ },
+ {
+  "name": "Drowned Sky",
+  "text": "110 power, hits all foes; brings a heavy rain for 3 turns in which Fire moves fail. Cost: +6 Corruption. Announced one turn ahead (\"The ceiling is weeping.\").",
+  "region": "hoenn"
+ },
+ {
+  "name": "Scorched Dawn",
+  "text": "110 power, hits all foes; brings an extreme sun for 3 turns in which Water moves fail. Cost: +6 Corruption. Announced one turn ahead (\"The stone begins to glow.\").",
+  "region": "hoenn"
+ },
+ {
+  "name": "Stopped Clock",
+  "text": "100 power; the target's next move is delayed until the end of the following turn. Cost: +6 Corruption. Announced one turn ahead (\"The second hand hesitates.\").",
+  "region": "sinnoh"
+ },
+ {
+  "name": "Folded Distance",
+  "text": "100 power; after it hits, the target is swapped with a random Pokémon from its trainer's bench. Cost: +6 Corruption. Announced one turn ahead (\"The far wall is suddenly near.\").",
+  "region": "sinnoh"
+ },
+ {
+  "name": "Empty Crown",
+  "text": "110 power; if the target has any stat boosts, they are taken from it and given to the user. Cost: +6 Corruption. Announced one turn ahead (\"The cold reaches for something to wear.\").",
+  "region": "unova"
+ },
+ {
+  "name": "Borrowed Years",
+  "text": "100 power; heals the user by half the damage dealt; the target's maximum HP is lowered by 1/8 for the rest of the battle. Cost: +6 Corruption. Announced one turn ahead (\"The light dims around it.\").",
+  "region": "kalos"
+ },
+ {
+  "name": "Keepsake",
+  "text": "90 power; the target is sealed in glass until the end of the next turn: it cannot act and cannot be harmed. Cost: +6 Corruption. Announced one turn ahead (\"She is choosing what to keep.\").",
+  "region": "alola"
+ },
+ {
+  "name": "Red Star",
+  "text": "110 power; double damage to a Dynamaxed target; the target's side cannot Dynamax or Mega Evolve for 3 turns. Cost: +6 Corruption. Announced one turn ahead (\"The clouds turn the color of a wound.\").",
+  "region": "galar"
+ },
+ {
+  "name": "Starfall Barrage",
+  "text": "five hits of 22 power, one each of Dark, Fire, Poison, Fairy and Fighting type; each hit that is super effective adds +2 Corruption to the user. Cost: +6 Corruption. Announced one turn ahead (\"Five engines turn over at once.\").",
+  "region": "paldea"
+ }
+]
