@@ -76,6 +76,7 @@ import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
+import { noteSpecial } from './expansion/fieldNotes';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
@@ -978,6 +979,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcRom':
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
+    case 'fieldNote':
     case 'standWith':
       return '';
     case 'shadowHeart':
@@ -1258,6 +1260,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'fieldNote':
+      return noteSpecial(run, e.special) ? 'A new entry in your Field Notes' : '';
     case 'shadowHeart': {
       let eased = 0;
       for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
