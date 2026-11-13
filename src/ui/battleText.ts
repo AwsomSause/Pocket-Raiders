@@ -269,6 +269,8 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       return null;
     case 'allySwitch':
       return `${who(e.side)} switched places with its partner!`;
+    case 'shift':
+      return e.to === 1 ? `${who(e.side)} moved to the centre!` : null;
     case 'item':
       return e.message;
     case 'ball':
