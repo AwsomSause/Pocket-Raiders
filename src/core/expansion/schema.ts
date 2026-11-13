@@ -83,6 +83,10 @@ export const ExpansionRunSchema = z.object({
   evoEncounters: z.boolean().optional(),
   /** Runs with the E4 counter-pick on (B7). */
   counterPick: z.boolean().optional(),
+  /** The story-event density this run started with (E3): how many quiet-node story events a region gets. Set once at run start. */
+  density: z.enum(['low', 'normal', 'full']).optional(),
+  /** Story events placed per region so far (E3 scheduler), by region id. */
+  xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
   tracks: z.boolean().optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */

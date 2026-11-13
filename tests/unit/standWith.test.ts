@@ -1,9 +1,9 @@
 // Stand With Them (slice E8): code name, reputation ladder, eligibility, verdicts, Second Shot, rival handed over.
 
 import { describe, expect, it } from 'vitest';
-import { STAND, accessOf, addMercy, bandOf, changeRep, codeNameOf, freeHandedOverRival, joinInsideMan, joinProblem, lostStandWithClimax, officersSide, resolveVerdict, standWithOf, standWithStatus, standingLine, verdictsOpen } from '../../src/core/arc/standWithExtended';
+import { STAND, standWithClimaxLost, standWithPlayable, accessOf, addMercy, bandOf, changeRep, codeNameOf, freeHandedOverRival, joinInsideMan, joinProblem, lostStandWithClimax, officersSide, resolveVerdict, standWithOf, standWithStatus, standingLine, verdictsOpen } from '../../src/core/arc/standWithExtended';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
-import { applyEffect, conditionMet } from '../../src/core/events';
+import { applyEffect, conditionMet, eventBattleWon } from '../../src/core/events';
 import { activeHolds } from '../../src/core/evil/rescue';
 import { evilOf, evilSummary } from '../../src/core/evil/teams';
 import { Rng, hashSeed } from '../../src/core/rng';
@@ -184,5 +184,67 @@ describe('events and saves', () => {
     const back = ExpansionRunSchema.parse(JSON.parse(JSON.stringify(run.expansion)));
     expect(back.standWith).toEqual(run.expansion!.standWith);
     expect(ExpansionRunSchema.parse({}).standWith).toBeUndefined();
+  });
+});
+
+describe('the Stand-with climax in play', () => {
+  const hideoutChoice = (run: ReturnType<typeof fresh>) => {
+    const id = 'stand-with-hideout';
+    const ev = content.events.get(id)!;
+    const idx = ev.choices.findIndex((c) => c.label.startsWith('[Stand with them]'));
+    return { id, ev, idx };
+  };
+  it('the hideout offers [Stand with them] only to an Inside Man at +45 or more, and its loss is Second Shot', () => {
+    const run = fresh('cl');
+    const { ev, idx } = hideoutChoice(run);
+    expect(idx).toBeGreaterThanOrEqual(0);
+    const cond = ev.requires!;
+    evilOf(run).beat = 6;
+    evilOf(run).nextAt = 0;
+    expect(cond.every((c) => conditionMet(content, run, c))).toBe(false);
+    joinInsideMan(run);
+    expect(cond.every((c) => conditionMet(content, run, c))).toBe(false);
+    changeRep(run, 15);
+    expect(cond.every((c) => conditionMet(content, run, c))).toBe(true);
+    const b = ev.choices[idx]!.success.battle!;
+    expect(b).toMatchObject({ pseudo: true, standWith: true });
+  });
+  it('winning the defenders makes the verdict event due; each verdict choice works once', () => {
+    const run = fresh('cw');
+    joinInsideMan(run);
+    changeRep(run, 20);
+    const { id, idx } = hideoutChoice(run);
+    eventBattleWon(content, run, { eventId: id, choiceIndex: idx, sideId: 'x', success: true });
+    expect(standWithOf(run)!.climaxWon).toBe(true);
+    const verdict = content.events.get('stand-with-verdict')!;
+    const open = verdict.choices.filter((c) => (c.requires ?? []).every((r) => conditionMet(content, run, r)));
+    expect(open.map((c) => c.label.split(':')[0]).sort()).toEqual(['Rise', 'Turn']);
+    expect(verdict.choices.length).toBeLessThanOrEqual(4);
+    const rise = open.find((c) => c.label.startsWith('Rise'))!;
+    for (const e of rise.success.effects) applyEffect(content, run, e, rng());
+    expect(standWithOf(run)).toMatchObject({ verdict: 'rise', climaxWon: false });
+    expect(run.story.evil!.end).toBe('allied');
+    expect(verdict.requires!.every((r) => conditionMet(content, run, r))).toBe(false);
+  });
+  it('at +70 the Throne is open, and a handed-over rival impounds through the verdict event', () => {
+    const run = fresh('ct');
+    for (const id of ['rattata', 'pidgey', 'caterpie']) run.party.push(createPokemon(content, id, 5, `x${id}`));
+    joinInsideMan(run);
+    changeRep(run, 50);
+    standWithOf(run)!.climaxWon = true;
+    const verdict = content.events.get('stand-with-verdict')!;
+    const labels = verdict.choices.filter((c) => (c.requires ?? []).every((r) => conditionMet(content, run, r))).map((c) => c.label.split(':')[0]!.split(' (')[0]);
+    expect(labels).toContain('Take the Throne');
+  });
+  it('two lost climax battles are the worst ending and the run goes on; the choice closes', () => {
+    const run = fresh('cs');
+    joinInsideMan(run);
+    changeRep(run, 20);
+    expect(standWithPlayable(run)).toBe(true);
+    expect(standWithClimaxLost(run).next).toBe('retry');
+    expect(standWithPlayable(run)).toBe(true);
+    expect(standWithClimaxLost(run).next).toBe('worst');
+    expect(standWithPlayable(run)).toBe(false);
+    expect(run.phase).not.toBe('over');
   });
 });

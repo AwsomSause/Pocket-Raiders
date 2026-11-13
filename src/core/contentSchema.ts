@@ -2323,6 +2323,8 @@ export const BalanceSchema = z.object({
   }),
   /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
   expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
+  /** Beta 0.6 E3: story events per region by density (core/expansion/scheduler.ts). */
+  expansionEvents: z.object({ density: z.object({ low: z.number().int().min(0), normal: z.number().int().min(0), full: z.number().int().min(0) }) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
@@ -2824,8 +2826,12 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyShadow') }),
   /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
   z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
+  /** Beta 0.6 E2: the current region's world-state track is at least / at most this step (no track = step 0). */
+  z.object({ kind: z.literal('track'), atLeast: z.number().int().min(0).max(5).default(0), atMost: z.number().int().min(0).max(5).default(5) }),
+  /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
+  z.object({ kind: z.literal('xevents') }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
-  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional() }),
+  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -3004,10 +3010,12 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('legacyEgg') }),
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
+  /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
   /** Stand With Them: join the run's team as an Inside Man, or move your reputation with it (`change` names a row of standWith.json repChanges), or note a small mercy. */
-  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy']), change: z.string().optional(), noticed: z.boolean().default(false) }),
+  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
   z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
@@ -3159,6 +3167,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
     evilTeam: z.string().optional(),
+    /** Stand With Them: this is a Stand-with climax battle. A loss is Second Shot (the party is healed and you go back to the map; the second loss is the worst ending). Needs `pseudo`. */
+    standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
@@ -3279,6 +3289,25 @@ export const GameEventSchema = z.object({
 export type GameEvent = z.infer<typeof GameEventSchema>;
 export const GameEventsFileSchema = z.object({ events: z.array(GameEventSchema).min(1) });
 
+/**
+ * Choice memory ("Remembers", Beta 0.6): a variant of an event that applies when remembered flags hold.
+ * The first variant whose `when` holds is used (never more than one). It may add a line to the intro, hide
+ * base choices (by index) and add choices; base choices keep their index, so battles and saves never shift.
+ */
+export const EventVariantSchema = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9-]*$/),
+  /** All must hold. Read run flags with `{ kind: 'flag', key }` (see core/eventMemory.ts for the key rules). */
+  when: z.array(EventConditionSchema).min(1),
+  /** Replaces the intro when set. */
+  intro: z.string().min(1).optional(),
+  /** Added after the intro (or the replacement): the line that names the remembered act. */
+  notice: z.string().min(1).optional(),
+  hide: z.array(z.number().int().min(0)).default([]),
+  addChoices: z.array(EventChoiceSchema).max(3).default([]),
+});
+export type EventVariant = z.infer<typeof EventVariantSchema>;
+export const MAX_EVENT_VARIANTS = 3;
+
 export const EventDefSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -3323,7 +3352,12 @@ export const EventDefSchema = z.object({
   scene: EventSceneSchema.default({ cast: [], effect: 'none' }),
   intro: z.string(),
   choices: z.array(EventChoiceSchema).min(1).max(4),
-}).refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
+  /** Choice memory: at most 3 variants that change what the scene shows when remembered flags hold. */
+  remembers: z.array(EventVariantSchema).max(MAX_EVENT_VARIANTS).default([]),
+}).refine((e) => new Set(e.remembers.map((v) => v.id)).size === e.remembers.length, { message: 'remembers variant ids must be unique' })
+  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
+  .refine((e) => e.remembers.every((v) => v.addChoices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure)), { message: 'an added choice with a check, chance or prompt needs a failure outcome' })
+  .refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
 export type EventDef = z.infer<typeof EventDefSchema>;
 
 /** Ideas W5: story text banks (npcStory.json): lore fragments, trainer backstories, evolution diary, newspaper, ending hints, New Game+ variants. */

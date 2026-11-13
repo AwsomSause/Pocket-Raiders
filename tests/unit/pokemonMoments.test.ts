@@ -260,3 +260,107 @@ describe('Battle-start and switch-in moments (batch 2)', () => {
     expect(ids('alakazam')).toContain('glass-cannon-entrance');
   });
 });
+
+describe('Reactive moments (batch 3): low HP, a KO, a hit taken', () => {
+  const fight = (playerSp: string, seed: string, enemies: PokemonInstance[], opts: { hpPct?: number; level?: number; move?: string } = {}) => {
+    const player = createPokemon(content, playerSp, opts.level ?? 50, `${playerSp}-p`);
+    player.moves = [{ id: opts.move ?? 'splash', pp: 20 }];
+    if (opts.hpPct) player.hp = Math.max(1, Math.floor((calcStats(content, player).hp * opts.hpPct) / 100));
+    const battle = createBattle('trainer', enemies, 0, player.uid);
+    const moments: MomentHooks = { seed, flags: {}, cinematic: () => false, noteCinematic: () => undefined, runWouldEnd: () => false };
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1, moments };
+    return { ctx, battle, player };
+  };
+  const weak = (sp: string, ...moves: string[]) => { const m = strike(sp, ...moves); m.level = 5; return m; };
+  const ids = (events: BattleEvent[], trigger: string) => events.filter((e) => e.type === 'pmoment' && e.trigger === trigger).map((e) => e.type === 'pmoment' && e.id);
+
+  it('data: every low-HP moment has a threshold; supported ones have effects; four stay off', () => {
+    const reactive = POKEMON_MOMENTS.filter((m) => ['low', 'ko', 'super', 'crit'].includes(m.trigger));
+    for (const m of reactive) {
+      if (m.trigger === 'low' && m.status === 'supported') expect(m.hpBelow, m.id).toBeGreaterThan(0);
+      if (m.status === 'supported') expect(m.effect, m.id).toBeDefined();
+    }
+    expect(reactive.filter((m) => m.status === 'disabled').map((m) => m.id).sort()).toEqual(['bug-swarm-low', 'gengar-cackle', 'ice-chill-ko', 'poison-toxic-blood']);
+  });
+
+  it('Gyarados rages below half HP: Atk +2, once per battle, only when low', () => {
+    let played = 0;
+    for (let i = 0; i < 200; i++) {
+      const healthy = fight('gyarados', `rage-h-${i}`, [weak('magikarp', 'splash')]);
+      expect(ids(turn(healthy.ctx), 'low')).toEqual([]);
+      const s = fight('gyarados', `rage-${i}`, [weak('magikarp', 'splash')], { hpPct: 40 });
+      if (ids(turn(s.ctx), 'low').includes('gyarados-rage')) {
+        played++;
+        expect(s.battle.playerStages.atk).toBe(2);
+        expect(ids(turn(s.ctx), 'low')).not.toContain('gyarados-rage');
+      }
+    }
+    expect(played).toBeGreaterThan(0);
+  });
+
+  it('Snorlax naps: asleep and healed 50%; Grass healing needs sun', () => {
+    let napped = false;
+    for (let i = 0; i < 300; i++) {
+      const s = fight('snorlax', `nap-${i}`, [weak('magikarp', 'splash')], { hpPct: 30 });
+      const before = s.player.hp;
+      if (!ids(turn(s.ctx), 'low').includes('snorlax-nap')) continue;
+      expect(s.player.hp).toBeGreaterThan(before);
+      expect(s.player.status?.id).toBe('slp');
+      napped = true;
+      break;
+    }
+    expect(napped).toBe(true);
+    let sunny = 0;
+    for (let i = 0; i < 300; i++) {
+      const dry = fight('bulbasaur', `chloro-dry-${i}`, [weak('magikarp', 'splash')], { hpPct: 15 });
+      expect(ids(turn(dry.ctx), 'low')).not.toContain('grass-chloro');
+      const wet = fight('bulbasaur', `chloro-${i}`, [weak('magikarp', 'splash')], { hpPct: 15 });
+      wet.battle.weather = { id: 'sun', turns: 5 };
+      if (ids(turn(wet.ctx), 'low').includes('grass-chloro')) sunny++;
+    }
+    expect(sunny).toBeGreaterThan(0);
+  });
+
+  it('a KO moment plays after the Pokémon in front knocks a foe out', () => {
+    let played = 0;
+    for (let i = 0; i < 300; i++) {
+      const s = fight('pikachu', `ko-${i}`, [weak('caterpie', 'tackle'), weak('weedle', 'tackle')], { level: 60, move: 'thunderbolt' });
+      const events = turn(s.ctx);
+      if (!events.some((e) => e.type === 'faint' && e.side === 'enemy')) continue;
+      if (ids(events, 'ko').includes('pikachu-victory')) {
+        played++;
+        expect(s.battle.playerStages.spe).toBe(1);
+      }
+    }
+    expect(played).toBeGreaterThan(0);
+  });
+
+  it('a hit taken: super-effective and critical moments, and timed crit stages fade', () => {
+    let rock = 0;
+    for (let i = 0; i < 400; i++) {
+      const s = fight('golem', `hold-${i}`, [weak('squirtle', 'water-gun')], { level: 60 });
+      if (ids(turn(s.ctx), 'super').includes('rock-hold')) {
+        rock++;
+        expect(s.battle.playerStages.def).toBe(1);
+      }
+    }
+    expect(rock).toBeGreaterThan(0);
+    for (let i = 0; i < 400; i++) {
+      const s = fight('umbreon', `desperate-${i}`, [weak('magikarp', 'splash')], { hpPct: 10 });
+      if (!ids(turn(s.ctx), 'low').includes('dark-desperate')) continue;
+      expect(s.battle.playerVolatile.momentCrit).toBe(2);
+      turn(s.ctx);
+      expect(s.battle.playerVolatile.momentCrit).toBe(0);
+      return;
+    }
+    throw new Error('no seed played Dark Desperate');
+  });
+
+  it('is repeatable by seed', () => {
+    const run = () => {
+      const s = fight('gyarados', 'repeat-1', [weak('magikarp', 'splash')], { hpPct: 30 });
+      return JSON.stringify([turn(s.ctx), turn(s.ctx), s.battle.playerStages]);
+    };
+    expect(run()).toBe(run());
+  });
+});

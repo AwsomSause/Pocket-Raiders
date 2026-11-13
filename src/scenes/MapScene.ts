@@ -49,7 +49,7 @@ import { stageModifier } from '../core/runModifiers';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
 import { pendingRescue, runningRescue } from '../core/evil/rescueGlue';
-import { pendingFormat } from '../core/formats/glue';
+import { pendingFormat, sceneForFormat } from '../core/formats/glue';
 import { rescueOf } from '../core/evil/rescue';
 import { device } from '../game/deviceTools';
 import { flagOn } from '../core/tools/featureFlags';
@@ -264,7 +264,7 @@ export class MapScene extends Phaser.Scene {
     // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
     if (pendingFormat(run)) {
       this.time.delayedCall(0, () => {
-        this.scene.launch('Format', { from: 'Map' });
+        this.scene.launch(sceneForFormat(run), { from: 'Map' });
         this.scene.pause();
       });
     }

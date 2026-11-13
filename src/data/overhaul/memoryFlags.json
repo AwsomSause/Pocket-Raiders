@@ -1,0 +1,191 @@
+{
+ "note": "Run-scoped choice-memory flags from the catalog overhaul (MEMORY_AND_FORMAT.md section 2). Stored as run.story.flags['ev:'+memoryKey(id)]. Cross-run (Save) flags are excluded by director decision (2026-11-13): released.<species>, promise.kept/broken.<mythical>, faller.rank, past.*. Patterns (team.lieutenant_<name>, team.op_stopped.<op>, team.defector.<who>, lost.<name>, beast.regard.*, birds.trial.*) are set by the events that own them and are not listed.",
+ "flags": [
+  {
+   "id": "kind.helped_stranger",
+   "meaning": "Helped a stranger fully",
+   "setBy": "Any Kindness Ledger event done fully",
+   "readBy": "The Watchers, Region in Crisis, Old Ranger"
+  },
+  {
+   "id": "kind.walked_past",
+   "meaning": "Walked past a plea for help",
+   "setBy": "Walking past a plea for help",
+   "readBy": "You Walked Past Us, the Apprentice"
+  },
+  {
+   "id": "honest.returned_wallet",
+   "meaning": "Returned a lost wallet or ring",
+   "setBy": "Lost Wallet, Lost Ring",
+   "readBy": "Pawn Appraiser, the Apprentice, Mara"
+  },
+  {
+   "id": "honest.kept_wallet",
+   "meaning": "Kept a lost wallet or ring",
+   "setBy": "Lost Wallet, Lost Ring",
+   "readBy": "Pawn Appraiser, the Apprentice, Mara"
+  },
+  {
+   "id": "honest.lied",
+   "meaning": "Chose a lie",
+   "setBy": "Any event where the player chose a lie",
+   "readBy": "Guidance of Giratina (Curse), Cyrus as secret Witness"
+  },
+  {
+   "id": "robbed.trainer",
+   "meaning": "Robbed a trainer in trouble",
+   "setBy": "A Trainer in Trouble: rob",
+   "readBy": "The Trainer You Robbed, the Apprentice, Final Reunion"
+  },
+  {
+   "id": "saved.trainer",
+   "meaning": "Helped a trainer in trouble",
+   "setBy": "A Trainer in Trouble: help",
+   "readBy": "The Trainer You Helped, Final Reunion"
+  },
+  {
+   "id": "bought.stolen",
+   "meaning": "Bought stolen goods",
+   "setBy": "Black Market, Stolen Goods",
+   "readBy": "The Rocket Grunt Wants It Back, evil-team Plan step"
+  },
+  {
+   "id": "reported.crime",
+   "meaning": "Reported a crime",
+   "setBy": "Counterfeit Cop, Black Market report",
+   "readBy": "Officer Jenny, evil-team Known step"
+  },
+  {
+   "id": "fed.poochyena",
+   "meaning": "Fed a starving Poochyena",
+   "setBy": "A Starving Poochyena",
+   "readBy": "The Poochyena Returns, Alpha of Alphas"
+  },
+  {
+   "id": "freed.caged",
+   "meaning": "Opened a cage, prison or holding pen",
+   "setBy": "Any cage, prison or holding pen opened",
+   "readBy": "Rescued callbacks, Final Reunion, Volcanion"
+  },
+  {
+   "id": "calmed.alpha",
+   "meaning": "Alphas calmed (count)",
+   "setBy": "Each Alpha calmed",
+   "readBy": "Noble Frenzy finale, Alpha of Alphas"
+  },
+  {
+   "id": "took.egg",
+   "meaning": "Took the egg",
+   "setBy": "The Taken Egg",
+   "readBy": "Wings Over the Road, Courier's Egg"
+  },
+  {
+   "id": "starter.home",
+   "meaning": "Let the starter visit home",
+   "setBy": "The Starter's Roots",
+   "readBy": "Final Reunion"
+  },
+  {
+   "id": "rival.helped",
+   "meaning": "Helped a rival in trouble",
+   "setBy": "A Rival in Trouble",
+   "readBy": "The Favour Returned, A Bitter Rival, Second Chance"
+  },
+  {
+   "id": "rival.abandoned",
+   "meaning": "Abandoned a rival in trouble",
+   "setBy": "A Rival in Trouble",
+   "readBy": "The Favour Returned, A Bitter Rival, Second Chance"
+  },
+  {
+   "id": "rival.promise_made",
+   "meaning": "Made a promise to the rival",
+   "setBy": "The Promise Past the Ridge",
+   "readBy": "A Note Left Behind, Same Place Next Time"
+  },
+  {
+   "id": "rival.promise_kept",
+   "meaning": "Kept it",
+   "setBy": "The Promise Past the Ridge",
+   "readBy": "A Note Left Behind, Same Place Next Time"
+  },
+  {
+   "id": "rival.promise_broken",
+   "meaning": "Broke it",
+   "setBy": "The Promise Past the Ridge",
+   "readBy": "A Note Left Behind, Same Place Next Time"
+  },
+  {
+   "id": "rival.sat_in_rain",
+   "meaning": "Sat with the rival on a bad day",
+   "setBy": "A Rival's Bad Day",
+   "readBy": "The badge photo, Witness the Rest card"
+  },
+  {
+   "id": "rival.read_letter",
+   "meaning": "Read the rival's letter",
+   "setBy": "A Rival's Bad Day",
+   "readBy": "Their Mentor Comes Calling"
+  },
+  {
+   "id": "rival.told_sponsor",
+   "meaning": "Told about the sponsor",
+   "setBy": "A Gift You Should Question",
+   "readBy": "Climax assist, Rival Rescue Plan"
+  },
+  {
+   "id": "rival.name_known",
+   "meaning": "Learned what the rival calls you",
+   "setBy": "What They Call You, final step",
+   "readBy": "The final battle line"
+  },
+  {
+   "id": "team.files_kept",
+   "meaning": "Kept the evil team's files",
+   "setBy": "The Files step",
+   "readBy": "Hideout door, Jenny, rival Trust"
+  },
+  {
+   "id": "team.files_given",
+   "meaning": "Gave the files away",
+   "setBy": "The Files step",
+   "readBy": "Hideout door, Jenny, rival Trust"
+  },
+  {
+   "id": "team.files_sold",
+   "meaning": "Sold the files",
+   "setBy": "The Files step",
+   "readBy": "Hideout door, Jenny, rival Trust"
+  },
+  {
+   "id": "team.joined",
+   "meaning": "Joined the team",
+   "setBy": "Stand With Them",
+   "readBy": "Almost every NPC's greeting"
+  },
+  {
+   "id": "lake.uxie",
+   "meaning": "Lake trial: Uxie",
+   "setBy": "The lake trial",
+   "readBy": "Red Chain, Spear Pillar"
+  },
+  {
+   "id": "lake.mesprit",
+   "meaning": "Lake trial: Mesprit",
+   "setBy": "The lake trial",
+   "readBy": "Red Chain, Spear Pillar"
+  },
+  {
+   "id": "lake.azelf",
+   "meaning": "Lake trial: Azelf",
+   "setBy": "The lake trial",
+   "readBy": "Red Chain, Spear Pillar"
+  },
+  {
+   "id": "mewtwo.answers",
+   "meaning": "Honest answers given to Mewtwo (count)",
+   "setBy": "The Lab at the End of the Cave",
+   "readBy": "Mewtwo's response, The Made One"
+  }
+ ]
+}

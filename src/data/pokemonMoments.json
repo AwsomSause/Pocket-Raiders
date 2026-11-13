@@ -1135,9 +1135,15 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +2 at below 50% HP.",
-   "presentation": "Roar, red tint | \"Its eyes turn red.\""
+   "presentation": "Roar, red tint | \"Its eyes turn red.\"",
+   "effect": {
+    "boost": {
+     "atk": 2
+    }
+   },
+   "hpBelow": 50
   },
   {
    "id": "snorlax-nap",
@@ -1151,9 +1157,14 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "At below 40% HP: sleeps 2 turns and heals 50% max HP.",
-   "presentation": "Zzz bubbles | \"It's... asleep?\""
+   "status": "supported",
+   "effectText": "At below 40% HP: falls asleep for 2 turns and heals 50% max HP.",
+   "presentation": "Zzz bubbles | \"It's... asleep?\"",
+   "effect": {
+    "sleepSelf": 2,
+    "healNowPct": 50
+   },
+   "hpBelow": 40
   },
   {
    "id": "slowpoke-yawn",
@@ -1613,9 +1624,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At below 25% HP: Atk +1, SpA +1, burned status immunity.",
-   "presentation": "Flame flare | \"Fire burns fiercest at the end.\""
+   "status": "supported",
+   "effectText": "At below 25% HP: Atk +1, SpA +1.",
+   "presentation": "Flame flare | \"Fire burns fiercest at the end.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spa": 1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "water-rising",
@@ -1629,9 +1647,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: SpD +1, heal 10%.",
-   "presentation": "Wave | \"The tide returns.\""
+   "presentation": "Wave | \"The tide returns.\"",
+   "effect": {
+    "boost": {
+     "spd": 1
+    },
+    "healNowPct": 10
+   },
+   "hpBelow": 25
   },
   {
    "id": "grass-chloro",
@@ -1645,9 +1670,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP in sun: heal 25% max HP.",
-   "presentation": "Leaf burst | \"Soaking up the light.\""
+   "presentation": "Leaf burst | \"Soaking up the light.\"",
+   "effect": {
+    "healNowPct": 25
+   },
+   "hpBelow": 25,
+   "requires": {
+    "weather": "sun"
+   }
   },
   {
    "id": "elec-surge",
@@ -1661,9 +1693,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: Spe +2.",
-   "presentation": "Spark | \"A last spark.\""
+   "presentation": "Spark | \"A last spark.\"",
+   "effect": {
+    "boost": {
+     "spe": 2
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "bug-swarm-low",
@@ -1709,9 +1747,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: Def +2.",
-   "presentation": "Thud | \"A mountain doesn't shake.\""
+   "presentation": "Thud | \"A mountain doesn't shake.\"",
+   "effect": {
+    "boost": {
+     "def": 2
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "ice-flash-freeze",
@@ -1725,9 +1769,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: hail starts (3 turns).",
-   "presentation": "Frost wind | \"Winter.\""
+   "presentation": "Frost wind | \"Winter.\"",
+   "effect": {
+    "weather": {
+     "id": "hail",
+     "turns": 3
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "normal-resolve",
@@ -1741,9 +1792,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: Atk +1, Def +1.",
-   "presentation": "Clap | \"Hang in there.\""
+   "presentation": "Clap | \"Hang in there.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "def": 1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "steel-adamant",
@@ -1757,9 +1815,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At below 25% HP: Def +1, SpD +1, immune to stat drops 2 turns.",
-   "presentation": "Ring | \"Adamant.\""
+   "status": "supported",
+   "effectText": "At below 25% HP: Def +1, SpD +1.",
+   "presentation": "Ring | \"Adamant.\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "ghost-haunt",
@@ -1773,9 +1838,13 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: foe loses 10% max HP (curse).",
-   "presentation": "Chime | \"A curse sets in.\""
+   "presentation": "Chime | \"A curse sets in.\"",
+   "effect": {
+    "foeHpPct": 10
+   },
+   "hpBelow": 25
   },
   {
    "id": "fairy-moonlight",
@@ -1789,9 +1858,13 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: heal 15%.",
-   "presentation": "Chime | \"Moon's blessing.\""
+   "presentation": "Chime | \"Moon's blessing.\"",
+   "effect": {
+    "healNowPct": 15
+   },
+   "hpBelow": 25
   },
   {
    "id": "ground-quake",
@@ -1805,9 +1878,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: foes' Spe -1.",
-   "presentation": "Rumble | \"The ground shifts.\""
+   "presentation": "Rumble | \"The ground shifts.\"",
+   "effect": {
+    "foeStage": {
+     "spe": -1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "flying-gale",
@@ -1821,9 +1900,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: Spe +1, evasion +1.",
-   "presentation": "Wind | \"Caught a gale.\""
+   "presentation": "Wind | \"Caught a gale.\"",
+   "effect": {
+    "boost": {
+     "spe": 1,
+     "eva": 1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "fighting-second-wind",
@@ -1837,9 +1923,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: heal 15%, Atk +1.",
-   "presentation": "Breath | \"Breathe in.\""
+   "presentation": "Breath | \"Breathe in.\"",
+   "effect": {
+    "healNowPct": 15,
+    "boost": {
+     "atk": 1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "dragon-rage",
@@ -1853,9 +1946,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: Atk +1, SpA +1.",
-   "presentation": "Roar | \"Rage.\""
+   "presentation": "Roar | \"Rage.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spa": 1
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "psychic-mind",
@@ -1869,9 +1969,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: SpD +2.",
-   "presentation": "Hum | \"Concentrate.\""
+   "presentation": "Hum | \"Concentrate.\"",
+   "effect": {
+    "boost": {
+     "spd": 2
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "dark-desperate",
@@ -1885,9 +1991,14 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: crit stage +2 for 2 turns.",
-   "presentation": "Heartbeat | \"All in.\""
+   "presentation": "Heartbeat | \"All in.\"",
+   "effect": {
+    "critStage": 2,
+    "boostTurns": 2
+   },
+   "hpBelow": 25
   },
   {
    "id": "pikachu-victory",
@@ -1901,9 +2012,14 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Spe +1 after a KO.",
-   "presentation": "Pose, jingle | \"Pika!\""
+   "presentation": "Pose, jingle | \"Pika!\"",
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   }
   },
   {
    "id": "charizard-roar",
@@ -1918,9 +2034,14 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +1 after a KO.",
-   "presentation": "Roar | \"It roars its triumph.\""
+   "presentation": "Roar | \"It roars its triumph.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   }
   },
   {
    "id": "gengar-cackle",
@@ -1952,9 +2073,12 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Crit stage +1 after a KO.",
-   "presentation": "Low note | \"It foresaw this.\""
+   "presentation": "Low note | \"It foresaw this.\"",
+   "effect": {
+    "critStage": 1
+   }
   },
   {
    "id": "lucario-flow",
@@ -1969,9 +2093,12 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Heal 10% after a KO.",
-   "presentation": "Aura | \"Aura flows.\""
+   "presentation": "Aura | \"Aura flows.\"",
+   "effect": {
+    "healNowPct": 10
+   }
   },
   {
    "id": "scizor-precision",
@@ -1986,9 +2113,14 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Acc +1 after a KO.",
-   "presentation": "Slice | \"Precise.\""
+   "presentation": "Slice | \"Precise.\"",
+   "effect": {
+    "boost": {
+     "acc": 1
+    }
+   }
   },
   {
    "id": "shark-frenzy",
@@ -2005,9 +2137,15 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +1 and Spe +1 after a KO.",
-   "presentation": "Splash | \"Frenzy.\""
+   "presentation": "Splash | \"Frenzy.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "hunter-pack",
@@ -2026,9 +2164,15 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Whole team Atk +1 for 2 turns after a KO.",
-   "presentation": "Howl | \"The pack howls.\""
+   "status": "supported",
+   "effectText": "Atk +1 for 2 turns after a KO.",
+   "presentation": "Howl | \"The pack howls.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    },
+    "boostTurns": 2
+   }
   },
   {
    "id": "dragon-pride-ko",
@@ -2042,9 +2186,12 @@
    "chance": 0.1,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Heal 15% after a KO.",
-   "presentation": "Roar | \"Conquest.\""
+   "presentation": "Roar | \"Conquest.\"",
+   "effect": {
+    "healNowPct": 15
+   }
   },
   {
    "id": "ice-chill-ko",
@@ -2174,9 +2321,14 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a super-effective hit: Def +1.",
-   "presentation": "Clang | \"It held.\""
+   "presentation": "Clang | \"It held.\"",
+   "effect": {
+    "boost": {
+     "def": 1
+    }
+   }
   },
   {
    "id": "rock-hold",
@@ -2194,9 +2346,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a super-effective hit: Def +1 and heal 5%.",
-   "presentation": "Dust | \"Held the line.\""
+   "presentation": "Dust | \"Held the line.\"",
+   "effect": {
+    "boost": {
+     "def": 1
+    },
+    "healNowPct": 5
+   }
   },
   {
    "id": "ice-brittle",
@@ -2210,9 +2368,14 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a super-effective hit: Spe +1.",
-   "presentation": "Shatter | \"Cracked, not broken.\""
+   "presentation": "Shatter | \"Cracked, not broken.\"",
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   }
   },
   {
    "id": "bug-aggressive",
@@ -2226,9 +2389,14 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a super-effective hit: Atk +1.",
-   "presentation": "Skitter | \"Swarm angry.\""
+   "presentation": "Skitter | \"Swarm angry.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   }
   },
   {
    "id": "grass-bend",
@@ -2242,9 +2410,14 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a super-effective hit: SpD +1.",
-   "presentation": "Rustle | \"It bent.\""
+   "presentation": "Rustle | \"It bent.\"",
+   "effect": {
+    "boost": {
+     "spd": 1
+    }
+   }
   },
   {
    "id": "normal-brush",
@@ -2258,9 +2431,12 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a super-effective hit: heal 8%.",
-   "presentation": "Pat | \"Shook it off.\""
+   "presentation": "Pat | \"Shook it off.\"",
+   "effect": {
+    "healNowPct": 8
+   }
   },
   {
    "id": "fighting-spite",
@@ -2274,9 +2450,15 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After taking a critical hit: Atk +1 and crit stage +1.",
-   "presentation": "Growl | \"That hurt.\""
+   "presentation": "Growl | \"That hurt.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    },
+    "critStage": 1
+   }
   },
   {
    "id": "dark-grudge",
@@ -2290,9 +2472,12 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "After a crit: foe loses 8% max HP.",
-   "presentation": "Hiss | \"It will remember.\""
+   "presentation": "Hiss | \"It will remember.\"",
+   "effect": {
+    "foeHpPct": 8
+   }
   },
   {
    "id": "sunny-day-fire",
