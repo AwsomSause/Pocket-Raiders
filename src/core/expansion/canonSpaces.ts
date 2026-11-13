@@ -60,6 +60,14 @@ export type CanonSpacesFile = z.infer<typeof CanonSpacesFileSchema>;
 /** Row counts the content gate holds the catalog to. */
 export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 71 } as const;
 
+/** The run's canon state (stored at run.expansion.canon). A menu is rolled once per slot and then kept, so reloading never re-rolls it. */
+export const CanonStateSchema = z.object({
+  flags: z.array(flag).default([]),
+  completed: z.array(spaceId).default([]),
+  menus: z.record(z.string(), z.array(spaceId)).default({}),
+});
+export type CanonState = z.infer<typeof CanonStateSchema>;
+
 export interface TownMenuInput {
   seed: string;
   slot: string;
@@ -120,4 +128,26 @@ export function canonSpaceGaps(file: CanonSpacesFile): string[] {
   if (file.towns.length !== CANON_KANTO_COUNTS.towns) out.push(`${file.towns.length} towns (need ${CANON_KANTO_COUNTS.towns})`);
   if (file.spaces.length !== CANON_KANTO_COUNTS.spaces) out.push(`${file.spaces.length} spaces (need ${CANON_KANTO_COUNTS.spaces})`);
   return out;
+}
+
+const stateOf = (run: { expansion?: { canon?: CanonState } }): CanonState => run.expansion?.canon ?? { flags: [], completed: [], menus: {} };
+
+/** The menu for a slot, rolled on first entry from the run seed and the flags and finished spaces at that moment, then stored. */
+export function enterCanonSlot(file: CanonSpacesFile, run: { seed: string; expansion?: { canon?: CanonState } }, slot: string): string[] {
+  const st = stateOf(run);
+  const kept = st.menus[slot];
+  if (kept) return kept;
+  const menu = buildTownMenu(file, { seed: run.seed, slot, flags: new Set(st.flags), completed: new Set(st.completed) });
+  (run as { expansion?: object }).expansion = { ...run.expansion, canon: { ...st, menus: { ...st.menus, [slot]: menu } } };
+  return menu;
+}
+
+/** Marks a space finished (once) and sets the flags its result wrote. Unknown flags are rejected so a typo cannot silently do nothing. */
+export function finishCanonSpace(file: CanonSpacesFile, run: { expansion?: { canon?: CanonState } }, id: string, setFlags: readonly string[] = []): void {
+  const space = file.spaces.find((s) => s.id === id);
+  if (!space) throw new Error(`unknown canon space ${id}`);
+  for (const f of setFlags) if (!space.flags.includes(f)) throw new Error(`${id} does not write flag ${f}`);
+  const st = stateOf(run);
+  if (st.completed.includes(id)) return;
+  (run as { expansion?: object }).expansion = { ...run.expansion, canon: { ...st, completed: [...st.completed, id], flags: [...new Set([...st.flags, ...setFlags])] } };
 }

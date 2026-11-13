@@ -77,3 +77,32 @@ describe('Town Roll', () => {
     expect(menu('Z', 'stage-4')).toEqual(a);
   });
 });
+
+import { enterCanonSlot, finishCanonSpace, CanonStateSchema } from '../../src/core/expansion/canonSpaces';
+import { ExpansionRunSchema } from '../../src/core/expansion/schema';
+
+describe('canon state on the run (run.expansion.canon, no save bump)', () => {
+  it('rolls a slot once and keeps it', () => {
+    const run: { seed: string; expansion?: { canon?: import('../../src/core/expansion/canonSpaces').CanonState } } = { seed: 'RUN1' };
+    const a = enterCanonSlot(canonKanto, run, 'stage-1');
+    expect(a).toEqual(menu('RUN1', 'stage-1'));
+    finishCanonSpace(canonKanto, run, 'cs.kanto.pewter.forest', ['kanto.forest.bug']);
+    expect(enterCanonSlot(canonKanto, run, 'stage-1')).toBe(a);
+    expect(run.expansion!.canon!.flags).toEqual(['kanto.forest.bug']);
+  });
+  it('finishing twice or with an unknown flag is safe or rejected', () => {
+    const run: { seed: string; expansion?: { canon?: import('../../src/core/expansion/canonSpaces').CanonState } } = { seed: 'R2' };
+    finishCanonSpace(canonKanto, run, 'cs.kanto.pewter.forest');
+    finishCanonSpace(canonKanto, run, 'cs.kanto.pewter.forest');
+    expect(run.expansion!.canon!.completed).toEqual(['cs.kanto.pewter.forest']);
+    expect(() => finishCanonSpace(canonKanto, run, 'cs.kanto.pewter.forest', ['kanto.nope'])).toThrow();
+  });
+  it('survives a save round trip and an old run with no canon block still parses', () => {
+    const run: { seed: string; expansion?: { canon?: import('../../src/core/expansion/canonSpaces').CanonState } } = { seed: 'R3' };
+    enterCanonSlot(canonKanto, run, 'stage-4');
+    const back = ExpansionRunSchema.parse(JSON.parse(JSON.stringify(run.expansion)));
+    expect(back.canon).toEqual(run.expansion!.canon);
+    expect(ExpansionRunSchema.parse({}).canon).toBeUndefined();
+    expect(CanonStateSchema.parse({})).toEqual({ flags: [], completed: [], menus: {} });
+  });
+});

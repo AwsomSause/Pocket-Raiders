@@ -3,6 +3,7 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { CanonStateSchema } from './canonSpaces';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
@@ -65,6 +66,8 @@ export const ExpansionRunSchema = z.object({
   rival: z.record(z.string(), RivalOverhaulStateSchema).optional(),
   /** Rival Rescue Plan (R9; core/evil/rescue.ts): holds, the running plan, returned Pokémon, attitude, memory. */
   rescue: RescueStateSchema.optional(),
+  /** Canon Spaces (workstream 18): `kanto.*` flags, finished spaces and the town menus already rolled. No save-version bump: old runs have none. */
+  canon: CanonStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
   pacing: z.boolean().optional(),
   /** Runs with Evolution Encounters on (B9). */
