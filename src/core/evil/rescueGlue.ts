@@ -41,3 +41,10 @@ export function pendingRescue(content: Content, run: RunState): { offer: Offer; 
   const offer = offerDue(run, node, true);
   return offer ? { offer, ctx, node } : null;
 }
+
+/** A rescue plan already running at a quiet moment (after a guard fight, or a reload at the Door): the map reopens the Rescue screen where it left off. */
+export function runningRescue(content: Content, run: RunState): { ctx: RescueCtx; node: number } | null {
+  if (run.phase !== 'map' || !run.expansion?.rescue?.active) return null;
+  const ctx = rescueCtxFor(run);
+  return ctx ? { ctx, node: rescueNode(content, run) } : null;
+}

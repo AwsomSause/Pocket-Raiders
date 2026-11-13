@@ -128,6 +128,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return run.expansion?.evoEncounters === true && (c.nearEvolution === undefined || run.party.some((m) => m.hp > 0 && nearLevelEvolution(content, m, c.nearEvolution!)));
     case 'partyMove':
       return run.party.some((m) => m.hp > 0 && m.moves.some((mv) => mv.id === c.move));
+    case 'partyMoveFlag':
+      return run.party.some((m) => m.hp > 0 && m.moves.some((mv) => content.moves.get(mv.id)?.flags.includes(c.flag)));
     case 'starter': {
       const starter = run.party.find((m) => m.uid === run.log.starterUid);
       const species = starter ? content.species.get(starter.speciesId) : undefined;
@@ -147,6 +149,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return evilConditionMet(content, run, c);
     case 'choice':
       return choiceMade(run, c.id, c.pick) === c.made;
+    case 'memberFainted': {
+      const f = run.expansion?.lastFaint;
+      return !!f && run.encountersCompleted - f.at <= c.within;
+    }
     case 'friendship':
       return run.party.some((m) => m.friendship >= c.atLeast);
     case 'rivalMet':
@@ -208,6 +214,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (c.rival !== undefined && (featuredRival(run) !== null) !== c.rival) return false;
       return true;
     }
+    case 'xflag':
+      return xflagHolds(run, c.flag);
     case 'storyRun':
       return !!run.story.v2;
     case 'oldFoe':
@@ -306,6 +314,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a Pokémon that knows a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type move`;
     case 'partyMove':
       return `Needs a Pokémon that knows ${content.moves.get(c.move)?.name ?? c.move}`;
+    case 'partyMoveFlag':
+      return `Needs a Pokémon with a ${c.flag} move`;
     case 'evoEncounters':
       return 'Needs Evolution Encounters turned on';
     case 'partySpecies':
@@ -316,6 +326,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs an earlier delivery`;
     case 'noTrainerTag':
       return `Your trainer won't do this`;
+    case 'memberFainted':
+      return 'Needs a team member who fainted recently';
     case 'friendship':
       return `Needs a Pokémon with friendship ${c.atLeast}`;
     case 'rivalAlly':
@@ -371,6 +383,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs the world to have changed more';
     case 'xevents':
       return 'Only with the Kanto story events on';
+    case 'xflag':
+      return 'Needs something from the Beta 0.6 story in play';
     case 'storyRun':
       return 'Only in a Story Run';
     case 'oldFoe':
@@ -503,7 +517,10 @@ export function addEventStops(content: Content, run: RunState): void {
   const candidates = stage.map.nodes.filter((n) => n.column < stage.map.columns);
   const taken = new Set<string>();
   const place = (eventId: string, hidden: boolean) => {
-    const node = rng.pick(candidates);
+    // E3b: a run event (`xr.*`) keeps one column away from every story event (`xe.*`) on the stage, when the map allows it.
+    const xe = eventId.startsWith('xr.') ? xeColumns(run) : [];
+    const apart = xe.length > 0 ? candidates.filter((n) => xe.every((c) => Math.abs(c - n.column) > 1)) : candidates;
+    const node = rng.pick(apart.length > 0 ? apart : candidates);
     node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId, ...(hidden ? { hidden: true } : {}) });
   };
   // A running tournament round and a serious crisis always get their stop (until played), so neither can be missed by luck.
@@ -565,6 +582,24 @@ export function addEventStops(content: Content, run: RunState): void {
   if (effectiveAttributes(content, run).intelligence >= cfg.revealIntelligence) {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
     if (hidden) delete hidden.hidden;
+  }
+}
+
+/** The ten Expanded flags of RUN_EVENTS_EXPANDED X2, read from the run. */
+export function xflagHolds(run: RunState, flag: string): boolean {
+  const flags = run.story.flags;
+  const seen = (k: string) => Number(flags[`ev:${k}`] ?? 0) >= 1;
+  switch (flag) {
+    case 'extendedCut': return run.expansion?.climaxCut === 'extended';
+    case 'hasShadow': return run.party.some((m) => !!m.shadow);
+    case 'keyHinted': return run.party.some((m) => !!m.shadow?.named && (m.shadow.hints ?? 1) >= 1);
+    case 'grandArc': return grandArcOf(run) !== null;
+    case 'liaisonSeen': return seen('liaison-seen');
+    case 'romHeld': { const g = grandArcOf(run); return !!g && romsHeld(g).length > 0; }
+    case 'friendPresent': return Object.values(run.expansion?.rival ?? {}).some((r) => r.role === 'friend');
+    case 'trioFriendly': return seen('rocket-trio-debt');
+    case 'wesMet': return seen('wes-met');
+    default: return false;
   }
 }
 
@@ -667,6 +702,12 @@ function outcomeWords(content: Content, o: EventOutcome): string {
   const parts = o.effects.map((e) => effectWords(content, e));
   if (o.battle) parts.unshift(o.battle.kind === 'wild' ? 'a wild battle' : `a battle with ${o.battle.name}`);
   return parts.filter(Boolean).join(', ') || 'nothing';
+}
+
+/** Who a hazard's damage or status hits: the party (or only the lead), minus Pokémon of the spared types. */
+function hazardTargets(content: Content, run: RunState, e: { who: 'party' | 'lead'; except: string[] }) {
+  const able = run.party.filter((m) => m.hp > 0 && !(e.except.length && content.species.get(m.speciesId)?.types.some((t) => e.except.includes(t))));
+  return e.who === 'lead' ? able.slice(0, 1) : able;
 }
 
 const HARMFUL = new Set(['damage', 'status', 'loseItem', 'tradeAway']);
@@ -837,11 +878,11 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'celebrate':
       return 'the day is celebrated';
     case 'damage':
-      return `party loses ${Math.round(e.share * 100)}% HP`;
+      return `${e.who === 'lead' ? 'lead' : 'party'} loses ${Math.round(e.share * 100)}% HP${e.except.length ? ` (not ${e.except.join('/')} types)` : ''}`;
     case 'cure':
       return 'cure status';
     case 'status':
-      return `party ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
+      return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
       return `friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'attribute': {
@@ -919,6 +960,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcStock':
     case 'standWith':
       return '';
+    case 'shadowHeart':
+      return 'a Shadow Pokémon eases';
     case 'track':
       return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
@@ -1056,7 +1099,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'damage': {
       // Never knocks a Pokémon out: it stops at 1 HP.
-      for (const m of run.party) if (m.hp > 0) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
+      for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
     case 'cure':
@@ -1064,7 +1107,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'status': {
       const id = ({ poison: 'psn', burn: 'brn', paralysis: 'par', sleep: 'slp' } as const)[e.status];
-      for (const m of run.party) if (m.hp > 0 && !m.status) m.status = id === 'slp' ? { id, turns: 2 } : { id };
+      for (const m of hazardTargets(content, run, e)) if (!m.status) m.status = id === 'slp' ? { id, turns: 2 } : { id };
       return effectWords(content, e);
     }
     case 'friendship': {
@@ -1181,6 +1224,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'shadowHeart': {
+      let eased = 0;
+      for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
+      return eased > 0 ? 'Their Shadow loosens its hold a little.' : '';
+    }
     case 'track': {
       // The key is this node, so one stop moves the track once however often it is replayed.
       const before = trackStep(run, currentRegion(content, run).id);
@@ -1276,6 +1324,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'rest': {
       restUntilMorning(run);
+      if (run.expansion?.lastFaint) delete run.expansion.lastFaint;
       const warmed = warmEggs(run, 1);
       return warmed > 0 ? `${effectWords(content, e)}; your Egg${warmed === 1 ? ' is' : 's are'} snug by the fire` : effectWords(content, e);
     }
@@ -1513,7 +1562,6 @@ export function isStoryEventBattle(content: Content, event: EventBattleRef): boo
   return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
 }
 
-/** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
 /** A Stand-with climax battle (a loss is Second Shot). */
 export function isStandWithBattle(content: Content, event: EventBattleRef): boolean {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
@@ -1521,7 +1569,10 @@ export function isStandWithBattle(content: Content, event: EventBattleRef): bool
   return battle?.kind === 'trainer' && battle.standWith === true;
 }
 
+/** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
 export function isPseudoBattle(content: Content, event: EventBattleRef): boolean {
+  // Beta 0.6 R9: the guard fights of PS-RESCUE (core/evil/rescueFights.ts) are pseudo fights.
+  if (event.eventId.startsWith('rescue:')) return true;
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return battle?.pseudo === true;

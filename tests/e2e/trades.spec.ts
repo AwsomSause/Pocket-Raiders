@@ -59,6 +59,7 @@ test('every Trade Stop style trades at the Trade Post and returns to the map', a
     await waitForScene(page, 'Trade');
     await page.waitForTimeout(600);
     expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').drawnStyle)).toBe(style);
+    await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 30_000 }).toBe('choose'); // Enter is ignored while the style loads
     const before = await page.evaluate(() => (window as any).__pkr.session.run.party.map((m: any) => m.speciesId).join(','));
     await page.keyboard.press('Enter');
     await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Trade').phase), { timeout: 30_000 }).toBe('done').catch((e) => { throw new Error(`${style}: ${errors.join(' | ')} ${e}`); });

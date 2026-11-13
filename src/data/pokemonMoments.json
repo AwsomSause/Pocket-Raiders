@@ -1800,9 +1800,16 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: next Bug move +25% damage.",
-   "presentation": "Buzz | \"Swarm!\""
+   "presentation": "Buzz | \"Swarm!\"",
+   "effect": {
+    "nextBoost": {
+     "type": "bug",
+     "pct": 25
+    }
+   },
+   "hpBelow": 25
   },
   {
    "id": "poison-toxic-blood",
@@ -1816,9 +1823,13 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At below 25% HP: contact attackers get poisoned.",
-   "presentation": "Bubble | \"Poison pulses.\""
+   "presentation": "Bubble | \"Poison pulses.\"",
+   "effect": {
+    "contactPoison": true
+   },
+   "hpBelow": 25
   },
   {
    "id": "rock-tank",
@@ -2142,9 +2153,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Foe loses 1 stage of Atk and SpA.",
-   "presentation": "Laugh | \"Heh heh heh.\""
+   "presentation": "Laugh | \"Heh heh heh.\"",
+   "effect": {
+    "foeStage": {
+     "atk": -1,
+     "spa": -1
+    }
+   }
   },
   {
    "id": "absol-disaster",
@@ -2290,9 +2307,14 @@
    "chance": 0.1,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Foes' Spe -1.",
-   "presentation": "Frost | \"Cold.\""
+   "status": "supported",
+   "effectText": "Next foe's Spe -1 after a KO.",
+   "presentation": "Frost | \"Cold.\"",
+   "effect": {
+    "foeStage": {
+     "spe": -1
+    }
+   }
   },
   {
    "id": "starter-entrance",
@@ -2776,9 +2798,13 @@
    "chance": 1,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At the next rest node: +8 friendship and a free berry.",
-   "presentation": "Snore | \"Snuggle.\""
+   "presentation": "Snore | \"Snuggle.\"",
+   "effect": {
+    "friendship": 8,
+    "freeBerry": true
+   }
   },
   {
    "id": "pikachu-spark-night",
@@ -2792,9 +2818,12 @@
    "chance": 0.4,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At rest: +5 friendship, charges item.",
-   "presentation": "Soft spark | \"Pika-pika.\""
+   "status": "supported",
+   "effectText": "At rest: +5 friendship.",
+   "presentation": "Soft spark | \"Pika-pika.\"",
+   "effect": {
+    "friendship": 5
+   }
   },
   {
    "id": "eevee-curl",
@@ -2808,9 +2837,12 @@
    "chance": 0.4,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At rest: +5 friendship.",
-   "presentation": "Purr | \"Cuddle.\""
+   "presentation": "Purr | \"Cuddle.\"",
+   "effect": {
+    "friendship": 5
+   }
   },
   {
    "id": "fire-campfire",
@@ -2824,9 +2856,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At rest: whole team +2 friendship.",
-   "presentation": "Crackle | \"Warm.\""
+   "presentation": "Crackle | \"Warm.\"",
+   "effect": {
+    "teamFriendship": 2
+   }
   },
   {
    "id": "ghost-story",
@@ -2840,9 +2875,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At rest: reveals one hidden event hint.",
-   "presentation": "Whisper | \"A tale.\""
+   "status": "supported",
+   "effectText": "A tale: the leader's weak types.",
+   "presentation": "Whisper | \"A tale.\"",
+   "effect": {
+    "weaknessHint": true
+   }
   },
   {
    "id": "water-song",
@@ -2856,9 +2894,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At rest: heal 10% to all.",
-   "presentation": "Lullaby | \"Soothing.\""
+   "status": "supported",
+   "effectText": "The whole team gains +3 friendship.",
+   "presentation": "Lullaby | \"Soothing.\"",
+   "effect": {
+    "teamFriendship": 3
+   }
   },
   {
    "id": "grass-sprout",
@@ -2872,9 +2913,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At rest: free berry.",
-   "presentation": "Rustle | \"A sprout.\""
+   "presentation": "Rustle | \"A sprout.\"",
+   "effect": {
+    "freeBerry": true
+   }
   },
   {
    "id": "psychic-dream",
@@ -2888,9 +2932,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At rest: +1 level progress (EXP).",
-   "presentation": "Chime | \"A dream.\""
+   "status": "supported",
+   "effectText": "Gains 30% of a level's experience.",
+   "presentation": "Chime | \"A dream.\"",
+   "effect": {
+    "xpPct": 30
+   }
   },
   {
    "id": "ditto-join",
@@ -2904,9 +2951,12 @@
    "chance": 1,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "On joining: gets a one-time trait roll.",
-   "presentation": "Squelch | \"It's... you?\""
+   "status": "supported",
+   "effectText": "On joining: rolls a talent (if it has none).",
+   "presentation": "Squelch | \"It's... you?\"",
+   "effect": {
+    "talentRoll": true
+   }
   },
   {
    "id": "legend-joined",
@@ -2920,9 +2970,13 @@
    "chance": 1,
    "limit": "run",
    "tier": "landmark",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On joining: team heals fully, +10 friendship.",
-   "presentation": "Cry first, gold | \"A legend joins your side.\""
+   "presentation": "Cry first, gold | \"A legend joins your side.\"",
+   "effect": {
+    "healTeam": true,
+    "friendship": 10
+   }
   },
   {
    "status": "supported",
@@ -3004,6 +3058,81 @@
    "effect": {
     "boost": {
      "atk": 1
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "p2-psyduck-headache",
+   "name": "The Headache",
+   "scope": {
+    "species": [
+     "psyduck"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.5,
+   "hpBelow": 50,
+   "effectText": "Below 50% HP: its next Psychic move does double damage.",
+   "presentation": "Ring | \"It clutches its head.\"",
+   "effect": {
+    "nextBoost": {
+     "type": "psychic",
+     "pct": 100
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "p2-houndoom-howl",
+   "name": "The Howl at Night",
+   "scope": {
+    "species": [
+     "houndoom"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "night": true
+   },
+   "effectText": "At night: the foe starts with Spe -1.",
+   "presentation": "Howl | \"Opponents shiver.\"",
+   "effect": {
+    "foeStage": {
+     "spe": -1
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "p2-tinkaton-hammer",
+   "name": "The Hammer",
+   "scope": {
+    "species": [
+     "tinkaton"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "foeTypes": [
+     "steel",
+     "flying"
+    ]
+   },
+   "effectText": "Against a Steel/Flying foe: Gigaton Hammer does 50% more damage.",
+   "presentation": "Grin | \"It raises its hammer.\"",
+   "effect": {
+    "moveBoost": {
+     "move": "gigaton-hammer",
+     "pct": 50
     }
    }
   }

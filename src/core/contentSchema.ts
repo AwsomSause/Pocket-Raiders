@@ -2081,6 +2081,8 @@ export const BalanceSchema = z.object({
   omen: z.object({ partySample: z.number().int().min(1).max(6), perExtraFoe: z.number().min(0), calmAtMost: z.number(), direAtLeast: z.number() }).default({ partySample: 3, perExtraFoe: 2, calmAtMost: -2, direAtLeast: 4 }),
   /** Last Chance Revives (S389): the share of max HP the revived Pokémon gets back. */
   lastChance: z.object({ share: z.number().positive().max(1) }).default({ share: 0.25 }),
+  /** Beta 0.6 Colossus fights (core/formats/colossus.ts): each armor seal's shield bar as a percent of the Apex's max HP, and the Kanto M2 timer in turns. Final numbers come with balance X1. */
+  colossus: z.object({ shieldPct: z.number().int().min(1).max(100), timerM2: z.number().int().min(3).max(30) }).default({ shieldPct: 15, timerM2: 10 }),
   /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
   wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */
@@ -2785,6 +2787,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyMove'), move: z.string() }),
   /** A conscious party Pokémon knows a damaging move of this type. */
   z.object({ kind: z.literal('partyMoveType'), type: TypeNameSchema }),
+  /** A party member knows a move with this flag (sound, wind, ...). */
+  z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
   z.object({ kind: z.literal('emotion'), id: z.enum(['determination', 'bravery', 'justice', 'kindness', 'patience', 'integrity', 'perseverance']) }),
   /** An event that has already been played this run. */
@@ -2835,11 +2839,15 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
   z.object({ kind: z.literal('xevents') }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
+  /** Beta 0.6 E3b: one of the Expanded flags that run events wait on. */
+  z.object({ kind: z.literal('xflag'), flag: z.enum(['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) }),
   z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
   z.object({ kind: z.literal('bond') }),
+  /** A party Pokémon fainted in the last few battles and nobody has slept since (camp scenes). */
+  z.object({ kind: z.literal('memberFainted'), within: z.number().int().min(1).max(30).default(6) }),
   /** W10: Pokémon photographed at camp this run. */
   z.object({ kind: z.literal('photos'), atLeast: z.number().int().min(1) }),
   /** Event Director: the region's focus (mystery, rivals, raids, exploration). */
@@ -2961,9 +2969,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('rest') }),
   /** The run clock: today's milestone celebration is held (so it pays once). */
   z.object({ kind: z.literal('celebrate') }),
-  z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1) }),
+  /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
+  z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
-  z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']) }),
+  z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party']).default('party') }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */
@@ -3025,6 +3034,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
+  z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),

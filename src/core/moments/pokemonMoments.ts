@@ -66,10 +66,28 @@ export const MomentEffectSchema = z.object({
   friendship: z.number().int().min(1).max(10).optional(),
   /** A status with this many turns left (Poison Tolerance: it wears off after 1). */
   statusLeft: z.number().int().min(1).max(3).optional(),
+  /** Rest and catch moments: every party member gains this much friendship. */
+  teamFriendship: z.number().int().min(1).max(10).optional(),
+  /** Rest moments: a free berry in the bag. */
+  freeBerry: z.boolean().optional(),
+  /** Rest moments: the Pokémon gains this percent of the experience between its level and the next. */
+  xpPct: z.number().int().min(1).max(100).optional(),
+  /** Rest moments: names the types that hit this stage's leader hardest. */
+  weaknessHint: z.boolean().optional(),
+  /** Catch moments: the whole party is healed fully. */
+  healTeam: z.boolean().optional(),
+  /** Catch moments: the Pokémon rolls a talent (once) if it has none. */
+  talentRoll: z.boolean().optional(),
   /** Entry moments: HP restored now, as a percent of max HP. */
   healNowPct: z.number().int().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
   boostTurns: z.number().int().min(1).max(5).optional(),
+  /** The next move of this type does this much more damage (percent); spent when it lands. */
+  nextBoost: z.object({ type: z.string(), pct: z.number().int().min(1).max(100) }).optional(),
+  /** For the battle, this move does this much more damage (percent). */
+  moveBoost: z.object({ move: z.string(), pct: z.number().int().min(1).max(100) }).optional(),
+  /** For the rest of the battle, a foe that hits it with a contact move is poisoned. */
+  contactPoison: z.boolean().optional(),
   /** Damage is halved for this many turns. */
   guard: z.number().int().min(1).max(5).optional(),
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */
@@ -103,6 +121,10 @@ export const PokemonMomentSchema = z.object({
       status: z.array(z.enum(['brn', 'psn', 'par', 'slp', 'frz', 'confusion'])).optional(),
       /** The foe has this species tag (legendary, mythical, baby...). */
       foeTag: z.string().optional(),
+      /** It is night on the run clock. */
+      night: z.boolean().optional(),
+      /** The foe has all of these types. */
+      foeTypes: z.array(z.string()).optional(),
     })
     .optional(),
   /** Ally moments: `same` = the fallen Pokémon must match this moment's scope too; `any` = any ally falling counts. */

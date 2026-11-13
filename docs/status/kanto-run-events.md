@@ -1,0 +1,1 @@
+- 104 run events E3b (`tools/events/expansion/run*.ts` -> `src/data/events/xr-run-events.json` via `npm run data:run-events`): conditions `xflag`, effect `shadowHeart`, run.expansion.climaxCut. Tests `tests/unit/runEvents.test.ts`. Limits in `docs/updates/beta-0.6/kanto-run-events.md`.

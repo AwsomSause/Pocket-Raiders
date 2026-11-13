@@ -1,0 +1,1021 @@
+{
+ "events": [
+  {
+   "id": "rq-follower",
+   "name": "The One Who Follows",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 3,
+   "callback": false,
+   "requires": [],
+   "intro": "For a stage the same trainer has been a few steps behind you. They duck behind a tree, then step out. \"I watched you win a battle you should have lost. I want to know how.\"",
+   "choices": [
+    {
+     "label": "Battle me and find out.",
+     "success": {
+      "text": "They fight like someone who has studied you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-battled",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Follower",
+       "size": 3,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Walk with me.",
+     "success": {
+      "text": "They tag along, quiet, taking notes.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 2
+       },
+       {
+        "kind": "flag",
+        "key": "follower-walked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop following me.",
+     "success": {
+      "text": "They stop. You have a feeling they are still out there.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-follower-why",
+   "name": "Why Do You Do This?",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-battled"
+    }
+   ],
+   "intro": "The one who followed you catches up at last. \"Why do you do this?\"",
+   "choices": [
+    {
+     "label": "To win.",
+     "success": {
+      "text": "They nod slowly, and write it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-to-win",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "For them.",
+     "success": {
+      "text": "\"The rival?\" they ask. You don't say.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-for-them",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I don't know yet.",
+     "success": {
+      "text": "\"Good,\" they say. \"That's the honest one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-unsure",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-emptied-shelves",
+   "name": "Emptied Shelves",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A shopkeeper wrings her hands: the rival bought every Ball and every revival item. \"Paid in full. Very polite. Took everything.\"",
+   "choices": [
+    {
+     "label": "What else have you got?",
+     "success": {
+      "text": "She finds an honest substitute at a fair price, and gives you a regular's discount.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find them.",
+     "success": {
+      "text": "Two nodes on, the rival is sorting their haul, looking caught.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-shelves-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the next town.",
+     "success": {
+      "text": "There is another shop in the next town.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "scared",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtMost": 0
+      }
+     ],
+     "notice": "\"They looked frightened, honestly,\" she adds."
+    },
+    {
+     "id": "stocking",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": 2
+      }
+     ],
+     "notice": "\"Said they were stocking up for the League,\" she adds."
+    }
+   ]
+  },
+  {
+   "id": "rq-shelves-confront",
+   "name": "The Haul",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-shelves-found",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival is crouched over a pile of Balls and revival items. They have been caught, and know it.",
+   "choices": [
+    {
+     "label": "Give half back.",
+     "success": {
+      "text": "They do, with a scowl that does not quite work.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-shelves-shared",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 4
+       }
+      }
+     ]
+    },
+    {
+     "label": "Battle for it.",
+     "success": {
+      "text": "The stock is the prize.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-shelves-won",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 3,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "potion",
+         "count": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "They blink. \"...Huh.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-shelves-let",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-gift",
+   "name": "A Gift You Should Question",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 4,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "evil",
+     "after": 1
+    }
+   ],
+   "intro": "A boxed gift with the rival's handwriting on the tag. The wrapping is too neat, and the knot is a sailor's knot. The rival can't tie a sailor's knot.",
+   "choices": [
+    {
+     "label": "Open it and use it.",
+     "success": {
+      "text": "Something in the item hums, and doesn't stop.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift-used",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check it first.",
+     "success": {
+      "text": "A tracker, hidden in the lining. You pull it out and keep the gift.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the rival.",
+     "success": {
+      "text": "\"I didn't wrap it. A sponsor asked me to pass it on.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-sponsor-truth",
+   "name": "Your Sponsor Is the Team",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-gift-asked",
+     "atLeast": 1
+    },
+    {
+     "kind": "evil",
+     "after": 2
+    }
+   ],
+   "intro": "The rival is accepting more and more help from their sponsor. You know whose sponsor it really is.",
+   "choices": [
+    {
+     "label": "Tell them.",
+     "success": {
+      "text": "They walk out on the sponsor in public.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-told-sponsor",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 5
+       }
+      }
+     ]
+    },
+    {
+     "label": "Tell them (they won't listen).",
+     "success": {
+      "text": "\"You're jealous.\" They find out at the climax, on the wrong side.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        },
+        "lead": 0
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": -3
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "They will find out soon enough.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "trusted",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 5
+       }
+      }
+     ],
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rq-kieran-1",
+   "name": "I Have to Get Stronger",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-met",
+     "atMost": 0
+    }
+   ],
+   "intro": "A gloomy boy with an over-trained team blocks the road. \"I'll get stronger than you. I have to. Someone beat me who didn't even care. I'm never losing like that again.\" \"Battle me. Properly.\"",
+   "choices": [
+    {
+     "label": "Battle properly.",
+     "success": {
+      "text": "You give him a real battle. He leaves without a word, but he looks at you the whole way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kieran-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "size": 3,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"Coward,\" he says, and means it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-kieran-2",
+   "name": "Kieran, Obsessed",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-met",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "kieran-met",
+     "atMost": 1
+    }
+   ],
+   "intro": "Kieran is back. \"I've watched every battle you've had this region.\"",
+   "choices": [
+    {
+     "label": "What do you actually like about battling?",
+     "success": {
+      "text": "He opens his mouth, closes it, and sits down. \"...I don't know.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kieran-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Another battle. He seems no happier for it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "size": 4,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-kieran-3",
+   "name": "Kieran, Exhausted",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 7,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-met",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "intro": "Kieran's Pokémon are afraid of him. \"Again. Again!\"",
+   "choices": [
+    {
+     "label": "Let them rest first.",
+     "success": {
+      "text": "You sit on the grass and let his Pokémon sleep. He watches them, and something loosens.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "kieran-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kieran-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It is not a good fight to win.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "size": 5,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-kieran-finale",
+   "name": "Don't You Dare Go Easy",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 9,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-helped",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "kieran-met",
+     "atLeast": 3
+    }
+   ],
+   "intro": "Kieran's ace is ready to collapse. \"Don't you dare go easy.\"",
+   "choices": [
+    {
+     "label": "Win fast.",
+     "success": {
+      "text": "It is over in two turns. He swears and walks away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-fast",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "size": 3,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Stall until his Pokémon want to stop.",
+     "success": {
+      "text": "You hold back until his ace looks at him. He sits down, laughs, and asks himself what he was doing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-talked-down",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 3
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kieran-helped",
+       "atLeast": 3
+      }
+     ]
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-inn-night",
+   "name": "The Long Night at the Inn",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A storm traps you at an inn with four strangers: a smuggler, a runaway, a Gym Leader on holiday, and the rival, pretending not to know you. \"Someone's Poké Ball has gone missing. Nobody leaves till it's found.\"",
+   "choices": [
+    {
+     "label": "Accuse the smuggler.",
+     "success": {
+      "text": "You were right. The Ball goes back to the runaway, who asks it what it wants, and it chooses you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [],
+        "types": [],
+        "levelBonus": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accuse the rival.",
+     "success": {
+      "text": "Wrong. Their face closes like a door.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cover for the rival when their sponsor arrives.",
+     "success": {
+      "text": "At dawn you and the rival leave together.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-one-for-the-road",
+   "name": "One for the Road",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 2,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalLast",
+     "result": "win"
+    }
+   ],
+   "intro": "After a close fight, the loser buys the drink. Ten seconds at the next bench.",
+   "choices": [
+    {
+     "label": "Cheers.",
+     "success": {
+      "text": "Glasses clink.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Next time.",
+     "success": {
+      "text": "\"Next time.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You sit in companionable silence.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-your-name",
+   "name": "What They Call You",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 7,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "respect",
+      "atLeast": 5
+     }
+    }
+   ],
+   "intro": "The rival has had a name for you all run. Today, in the middle of a sentence, they use your real one for the first time.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "Neither of you mentions it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-name-known",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  }
+ ]
+}

@@ -28,14 +28,14 @@ describe('weather and hazard events', () => {
     const node = run.stage!.map.nodes[0]!;
     run.stage!.current = node.id;
     run.stage!.visited = [node.id];
-    node.sides.push({ id: 'wx', kind: 'event', used: false, eventId: 'wx-earthquake-tremor' });
+    node.sides.push({ id: 'wx', kind: 'event', used: false, eventId: 'w4-spring-flood' });
     const before = run.perkEffects.length;
     run = chooseEvent(content, run, 'wx', 0).run;
     expect(run.tempEffects).toHaveLength(1);
-    expect(run.perkEffects.some((m) => m.kind === 'typeDamageMultiplier' && m.type === 'ground')).toBe(true);
+    expect(run.perkEffects.some((m) => m.kind === 'statMultiplier' && m.stat === 'spe')).toBe(true);
     expect(run.perkEffects.length).toBe(before + 1);
     tickTempEffects(run, createBattle('wild', [run.party[0]!], 0, run.party[0]!.uid), false);
     expect(run.tempEffects).toHaveLength(0);
-    expect(run.perkEffects.some((m) => m.kind === 'typeDamageMultiplier' && m.type === 'ground')).toBe(false);
+    expect(run.perkEffects.some((m) => m.kind === 'statMultiplier' && m.stat === 'spe')).toBe(false);
   });
 });

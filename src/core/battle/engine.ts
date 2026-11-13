@@ -16,6 +16,7 @@
 // after a hit (Static, Rough Skin), at the end of the turn (Speed Boost) and
 // when switching out (Regenerator).
 
+import { colossusAbsorb, colossusEndOfTurn } from './colossus';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
 import { shadowTurnPlan, shadow2Data } from '../shadow2';
@@ -111,7 +112,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -1024,6 +1025,12 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   battle.turn += 1;
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
+  // Colossus (Beta 0.6): broken seals take their moves, the timer ticks, and at zero the Apex escapes.
+  if (battle.colossus && !battle.outcome) {
+    const co = colossusEndOfTurn(ctx.content, battle);
+    for (const text of co.notes) events.push({ type: 'raid', tone: 'warn', text });
+    if (co.timeout) battle.outcome = 'lose';
+  }
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
@@ -2619,6 +2626,8 @@ function takeHp(
       chargedLanded = raid.charging;
     }
   }
+  // Colossus (Beta 0.6): the armor seals' shield bars soak every hit; nothing reaches its HP while a seal remains.
+  if (ctx.battle.colossus && c.side === 'enemy') amount = colossusAbsorb(ctx.battle, amount);
   amount = guardAmount(ctx, c, amount);
   let lost = Math.min(Math.max(0, amount), c.mon.hp);
   if (c.side === 'enemy' && lost > 0 && ctx.battle.raid && ctx.battle.raid.minionUid !== c.mon.uid) {
@@ -4042,6 +4051,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
+      if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       const itemMultiplier =
         terrainMultiplier(ctx, user, target, moveType) *
         Held.attackMultiplier(ctx, user, target, move, moveType, effectiveness, events as Held.HeldEvent[]) *
@@ -4314,6 +4324,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (landed > 0 && dealt > 0 && target.mon.hp > 0 && move.flags.includes('bite') && abilityIn(ctx, user) === 'twin-maw') {
     announce(user, 'twin-maw', events);
     abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
+  }
+  if (landed > 0 && ctx.moments) {
+    spendMomentBoost(ctx, user, moveType);
+    // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
+    if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
   }
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
@@ -6408,6 +6423,8 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
 function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const enemy = currentEnemy(battle);
+  // Colossus: whatever hurt it (recoil, poison...), it cannot fall while a seal remains.
+  if (battle.colossus && enemy.hp <= 0 && battle.colossus.seals.some((s) => !s.broken)) enemy.hp = 1;
   if (enemy.hp <= 0) {
     const next = battle.enemyTeam.findIndex((m, i) => i > battle.enemyIndex && m.hp > 0);
     if (next < 0) {
