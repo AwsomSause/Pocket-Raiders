@@ -1,17 +1,18 @@
 // Beta 0.6 slice E1: variant lines as battle hooks (data: src/data/expansion/variantLines.json). A variant line is a small
 // rule carried by special Pokémon. State lives in `battle.extra.variants` (saved with the battle, keyed by Pokémon uid), and the
 // engine calls these pure functions at its hook points: entry, hit taken, forced switch, status, miss roll, end of turn, item moves.
-// No RNG, no Phaser. A line's damage effect is at most 20% (VARIANT_DAMAGE_CAP) and counts in the +30% cap.
+// No Phaser, and no gameplay RNG stream: the few random picks (Patchwork's gadget, Snagged's refusal) come from a throwaway generator seeded by the Pokémon's uid and a salt the engine passes in, so they replay the same and never move another roll. A line's damage effect is at most 20% (VARIANT_DAMAGE_CAP) and counts in the +30% cap.
 //
-// Wired so far (8 of 14): Tagged (Kanto), Dark Ball (Johto), Tidebound and Cinderborn (Hoenn), Spiritless (Sinnoh),
-// Overclocked (Unova), Tagged-Up and Preserved (Alola). The rest are listed in UNWIRED_LINES and are added by the next E1 PRs;
+// Wired so far (11 of 14): Tagged (Kanto), Dark Ball (Johto), Tidebound and Cinderborn (Hoenn), Spiritless (Sinnoh),
+// Overclocked (Unova), Tagged-Up and Preserved (Alola), Patchwork (Rocket Remnants), Snagged (Team Snag'em), Loud (Team Yell). The rest are listed in UNWIRED_LINES and are added by the next E1 PRs;
 // assigning one throws, so none can silently do nothing.
 
 import { z } from 'zod';
+import { Rng, hashSeed } from '../rng';
 
 export const VARIANT_DAMAGE_CAP = 0.2;
-export const WIRED_LINES = ['tagged', 'dark-ball', 'tidebound', 'cinderborn', 'preserved', 'spiritless', 'overclocked', 'tagged-up'] as const;
-export const UNWIRED_LINES = ['patchwork', 'snagged', 'couture', 'overcharged', 'loud', 'tuned'] as const;
+export const WIRED_LINES = ['tagged', 'dark-ball', 'tidebound', 'cinderborn', 'preserved', 'spiritless', 'overclocked', 'tagged-up', 'patchwork', 'snagged', 'loud'] as const;
+export const UNWIRED_LINES = ['couture', 'overcharged', 'tuned'] as const;
 export type VariantLineId = (typeof WIRED_LINES)[number];
 
 /** One Pokémon's line and its counters ("firstHit" 1 once the first hit is taken, "tag" 1 while the tag is on, ...). */
@@ -24,10 +25,25 @@ export type Weather = 'rain' | 'sun' | 'sand' | 'snow' | 'hail' | null;
 export type StageKey = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 
 /** Gives a Pokémon a line for this battle. Throws for a line that is not wired yet. */
-export function assignVariant(variants: Variants, uid: string, line: string): void {
-  if (!(WIRED_LINES as readonly string[]).includes(line)) throw new Error(`variant line "${line}" is not wired into battles yet`);
-  variants[uid] = { line: line as VariantLineId, flags: line === 'tagged' ? { tag: 1 } : {} };
+export interface AssignOptions {
+  /** Loud: a Yell Grunt is watching from the stands (the event or track that builds the battle says so). */
+  crowd?: boolean;
+  /** Loud: the player holds Marnie's League Card. */
+  marnie?: boolean;
 }
+export function assignVariant(variants: Variants, uid: string, line: string, opts: AssignOptions = {}): void {
+  if (!(WIRED_LINES as readonly string[]).includes(line)) throw new Error(`variant line "${line}" is not wired into battles yet`);
+  const f: Record<string, number> = line === 'tagged' ? { tag: 1 } : {};
+  if (line === 'loud') { f.crowd = opts.crowd ? 1 : 0; f.shame = opts.marnie ? 1 : 0; }
+  variants[uid] = { line: line as VariantLineId, flags: f };
+}
+
+/** A stat change that wears off: Patchwork's net (Speed -2) and smoke ball (accuracy -1) last 2 turns. Saved in `battle.extra.variantTimed`. */
+export const TimedStageSchema = z.object({ uid: z.string(), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva']), amount: z.number(), left: z.number() });
+export type TimedStage = z.infer<typeof TimedStageSchema>;
+
+/** A random number in [0,1) that depends only on the text: the same uid and salt always give the same roll, and no stream moves. */
+const roll = (key: string): number => new Rng(hashSeed(key)).float();
 
 const lineOf = (variants: Variants, uid: string): VariantLineId | null => variants[uid]?.line ?? null;
 const flags = (variants: Variants, uid: string): Record<string, number> => variants[uid]?.flags ?? {};
@@ -42,6 +58,14 @@ export function variantOnEntry(variants: Variants, uid: string, weather: Weather
   if (line === 'dark-ball') return { stages: { atk: 1, spa: 1 }, message: null };
   if (line === 'overclocked') { f.fresh = 1; f.turns = 0; return { stages: {}, message: null }; }
   if (line === 'tagged-up') { f.sprayed = 1; return { stages: {}, message: 'It sprays a tag on the field.' }; }
+  if (line === 'patchwork') {
+    const gadget = Math.floor(roll(`patchwork:${uid}`) * 3);
+    f.gadget = gadget + 1;
+    f.armed = 1;
+    return { stages: {}, message: `It carries ${['a net', 'a smoke ball', 'a spring'][gadget]}.` };
+  }
+  if (line === 'snagged') { f.refusals = 0; f.skip = 0; return { stages: {}, message: null }; }
+  if (line === 'loud') return { stages: {}, message: null };
   if (line === 'preserved') { f.guard = 1; return { stages: { spe: -1 }, message: 'It was kept very carefully.' }; }
   if (line === 'tidebound') {
     f.tide = weather === 'rain' ? 1 : 0;
@@ -135,4 +159,48 @@ export function variantEnd(variants: Variants, uid: string): void {
   f.tag = 0;
   f.ended = 1;
   f.guard = 0;
+}
+
+/** Patchwork: the turn it would first be hit, its gadget goes off once. */
+export function variantGadget(variants: Variants, uid: string): { gadget: 'net' | 'smoke' | 'spring'; message: string } | null {
+  if (lineOf(variants, uid) !== 'patchwork') return null;
+  const f = flags(variants, uid);
+  if (f.armed !== 1) return null;
+  f.armed = 0;
+  return { gadget: (['net', 'smoke', 'spring'] as const)[(f.gadget ?? 1) - 1] ?? 'net', message: 'Something goes sproing.' };
+}
+
+/** Snagged: at the end of each turn it may refuse its snagger and skip its next turn: 20% the first turn, +10% each turn after. `salt` comes from the battle (its turn and RNG position), so a later battle rolls differently. */
+export function variantSnagRefuses(variants: Variants, uid: string, salt: string): string | null {
+  if (lineOf(variants, uid) !== 'snagged') return null;
+  const f = flags(variants, uid);
+  if (f.ended || f.skip === 1) return null;
+  const chance = 0.2 + 0.1 * (f.refusals ?? 0);
+  if (roll(`snagged:${uid}:${salt}`) >= chance) { f.refusals = (f.refusals ?? 0) + 1; return null; }
+  f.refusals = 0;
+  f.skip = 1;
+  return "It is looking for someone who isn't here.";
+}
+
+/** Loud: sound-based moves have +20% power. */
+export const variantOutgoing = (variants: Variants, uid: string, moveFlags: readonly string[]): number =>
+  lineOf(variants, uid) === 'loud' && moveFlags.includes('sound') ? 1 + VARIANT_DAMAGE_CAP : 1;
+
+/** Loud: +1 Speed at the end of a turn when a Yell Grunt is watching, up to +1 in all (uncapped or capped at +3 it measured 61.5% in the sim, so the cap is a balance decision on top of the script). */
+export const LOUD_CHEER_CAP = 1;
+export function variantCheer(variants: Variants, uid: string): number {
+  if (lineOf(variants, uid) !== 'loud') return 0;
+  const f = flags(variants, uid);
+  if (f.crowd !== 1 || (f.cheers ?? 0) >= LOUD_CHEER_CAP) return 0;
+  f.cheers = (f.cheers ?? 0) + 1;
+  return 1;
+}
+
+/** Before it acts: Snagged skips the turn it refused; Loud loses its first turn when the player holds Marnie's League Card. Returns the announcement when the turn is lost. */
+export function variantLosesTurn(variants: Variants, uid: string): string | null {
+  const line = lineOf(variants, uid);
+  const f = flags(variants, uid);
+  if (line === 'snagged' && f.skip === 1) { f.skip = 0; return 'It refuses to move.'; }
+  if (line === 'loud' && f.shame === 1) { f.shame = 0; return 'It has remembered who it is cheering for.'; }
+  return null;
 }
