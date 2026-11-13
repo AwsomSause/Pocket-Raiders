@@ -78,7 +78,38 @@ describe('Veridian Forest (Samurai duel)', () => {
   });
   it('the whole chain of rooms opens from the gate (every addEvent target exists)', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith('cs-kanto-pewter-forest'));
-    expect(ids.length).toBe(7);
+    expect(ids.length).toBe(8);
     for (const id of ids) for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) for (const eff of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (eff.kind === 'addEvent') expect(content.events.has(eff.eventId)).toBe(true);
+  });
+});
+
+import { eventBattleLost } from '../../src/core/events';
+
+describe('Veridian Forest extras and consolation', () => {
+  it('Silver Powder is a held Bug +20% item and is the prize for losing the duel', () => {
+    expect(content.catalog.get('silver-powder')?.name).toBe('Silver Powder');
+    const run = structuredClone(begin('SAMURAI2', true));
+    const { run: forced, sideId } = debugForceEvent(content, run, 'cs-kanto-pewter-forest-n6');
+    const fought = chooseEvent(content, forced, sideId, 0).run;
+    const ref = fought.battle!.event!;
+    const lost = structuredClone(fought);
+    const words = eventBattleLost(content, lost, ref);
+    expect(words.length).toBeGreaterThan(0);
+    expect(words.join(' ')).toContain('Silver Powder');
+  });
+  it('fog cuts accuracy by a tenth for every fight inside the forest', () => {
+    const run = structuredClone(begin('FOG', true));
+    run.story.flags['ev:kanto-forest-fog'] = 1;
+    const { run: forced, sideId } = debugForceEvent(content, run, 'cs-kanto-pewter-forest-n1');
+    const fought = chooseEvent(content, forced, sideId, 0).run;
+    expect(fought.battle!.accuracyMult).toBe(0.9);
+    const plain = debugForceEvent(content, structuredClone(begin('FOG', true)), 'cs-kanto-pewter-forest-n1');
+    const clear = chooseEvent(content, plain.run, plain.sideId, 0).run;
+    expect(clear.battle!.accuracyMult).toBeUndefined();
+  });
+  it('the gate rolls Fog and the Hunters\' Trap at 10% each (80% / 50% of the rest)', () => {
+    const gate = content.events.get('cs-kanto-pewter-forest')!.choices[0]!;
+    expect(gate.chance).toBe(0.8);
+    expect(content.events.get('cs-kanto-pewter-forest-twist')!.choices[0]!.chance).toBe(0.5);
   });
 });

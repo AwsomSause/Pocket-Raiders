@@ -3170,6 +3170,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
+    /** Effects applied when this fight is lost (a consolation prize). Only fights whose loss does not end the run (pseudo stages) use it. */
+    lose: z.array(EventEffectSchema).optional(),
   }),
 ]);
 export type EventBattle = z.infer<typeof EventBattleSchema>;

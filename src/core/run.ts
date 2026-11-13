@@ -85,7 +85,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -3059,6 +3059,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
   if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
     pseudoLost(content, run);
+    eventBattleLost(content, run, battle.event);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
   }

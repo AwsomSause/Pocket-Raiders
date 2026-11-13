@@ -409,12 +409,22 @@
    "choices": [
     {
      "label": "Enter Veridian Forest",
+     "chance": 0.8,
      "success": {
       "text": "You step in.",
       "effects": [
        {
         "kind": "addEvent",
         "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You step in. Something feels different today.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-twist"
        }
       ]
      }
@@ -428,6 +438,60 @@
     }
    ],
    "canon": "cs.kanto.pewter.forest"
+  },
+  {
+   "id": "cs-kanto-pewter-forest-twist",
+   "name": "Veridian Forest: A Strange Turn",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The forest is quiet. Too quiet. Branches creak overhead.",
+   "choices": [
+    {
+     "label": "Press on",
+     "chance": 0.5,
+     "success": {
+      "text": "A thick fog rolls between the trees. Nobody can aim properly in here: accuracy drops for everyone until you leave the forest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-forest-fog",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A net drops on the party! Far above, a striped balloon drifts away over the trees.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "moment",
+        "text": "A striped balloon over Veridian Forest, with a net-launcher hanging under it."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
   },
   {
    "id": "cs-kanto-pewter-forest-n1",
@@ -489,8 +553,65 @@
    "intro": "Something rustles in the grass: a Caterpie, a Weedle or a Pinsir. The forest is offering you a Bug-type. Catch it if you can.",
    "choices": [
     {
-     "label": "Push on",
+     "label": "Step toward the rustle",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-fog",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
      "success": {
+      "text": "You step toward the rustle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "caterpie",
+        "weedle",
+        "pinsir"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Step toward the rustle (in the fog)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-fog",
+       "atLeast": 1
+      }
+     ],
+     "chance": 0.01,
+     "success": {
+      "text": "The fog parts on something pale and empty-eyed.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "shedinja"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     },
+     "failure": {
       "text": "You step toward the rustle.",
       "effects": [],
       "battle": {
@@ -796,6 +917,12 @@
          "kind": "flag",
          "key": "kanto-forest-samurai-won",
          "amount": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "item",
+         "id": "silver-powder"
         }
        ]
       }

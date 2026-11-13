@@ -847,6 +847,8 @@ export const BattleStateSchema = z.object({
   raid: RaidBattleSchema.optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */
+  accuracyMult: z.number().min(0.1).max(1).optional(),
   /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
   strategy: z.string().optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */

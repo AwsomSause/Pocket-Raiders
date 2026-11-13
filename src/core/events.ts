@@ -1324,6 +1324,8 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     }
   }
   run.battle.event = event;
+  // Veridian Forest fog: every fight inside the forest has its accuracy cut by a tenth.
+  if (event.eventId.startsWith('cs-kanto-pewter-forest') && Number(run.story.flags['ev:kanto-forest-fog'] ?? 0) > 0) run.battle.accuracyMult = 0.9;
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);
   run.phase = 'battle';
   recordBattleStarted(content, run);
@@ -1404,6 +1406,15 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
   if (battle.kind === 'trainer') evilBattleWon(run, battle);
   const slow = battle.kind === 'trainer' && battle.rule?.turnLimit !== undefined && turns > battle.rule.turnLimit && battle.slowWin;
   return (slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
+}
+
+/** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
+export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
+  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  if (!battle || battle.kind !== "trainer" || !battle.lose?.length) return [];
+  const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));
+  return battle.lose.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
 
 /** Beta 0.6 B9: the two Evolution Encounter effects. Nothing is rolled: the first fitting party Pokémon is the one (Risky Evolutions stay off, so nothing here ever has a flaw). */
