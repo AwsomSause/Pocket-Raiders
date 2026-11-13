@@ -30,6 +30,8 @@ export interface LevelScale {
   cap: number;
   /** Party-strength correction in levels (withPartyStrength); added before the archetype offset (GAME_DESIGN C7). */
   party?: number;
+  /** Level ceiling (Beta 0.6 B4): no enemy above the party's top-three average + `levelCeiling` (withPartyStrength). */
+  ceiling?: number;
 }
 
 /**
@@ -45,7 +47,8 @@ export function withPartyStrength(content: Content, scale: LevelScale, partyLeve
   const average = top.reduce((a, b) => a + b, 0) / top.length;
   const excess = average - curveLevel(content, scale) - cfg.grace;
   const party = Math.max(0, Math.min(cfg.maxBonus, Math.round(excess * cfg.factor)));
-  return party > 0 ? { ...scale, party } : scale;
+  const ceiling = cfg.levelCeiling > 0 ? Math.round(average) + cfg.levelCeiling : undefined;
+  return { ...scale, ...(party > 0 ? { party } : {}), ...(ceiling !== undefined ? { ceiling } : {}) };
 }
 
 export function levelScale(content: Content, campaign: Campaign, regionIndex: number, stageIndex: number, column: number): LevelScale {
@@ -88,7 +91,7 @@ export function enemyLevel(content: Content, archetype: Archetype, scale: LevelS
   const archetypeOffset = enemyLevelOffset(archetype);
   const party = scale.party ?? 0;
   const unclamped = Math.round(base + progressLevels) + party + variance + archetypeOffset + bonus;
-  const level = Math.max(cfg.minLevel, Math.min(scale.cap, cfg.maxLevel, unclamped));
+  const level = Math.max(cfg.minLevel, Math.min(scale.cap, cfg.maxLevel, scale.ceiling ?? Infinity, unclamped));
   return { base, progress: progressLevels, variance, archetypeOffset, bonus, unclamped, level, ...(party ? { party } : {}) };
 }
 
