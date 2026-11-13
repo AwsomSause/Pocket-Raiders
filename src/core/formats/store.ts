@@ -42,3 +42,12 @@ export function markDone(run: RunState, key: string): void {
   const done = doneFormats(run);
   if (!done.includes(key)) cutOf(run).done = [...done, key];
 }
+
+/** A new climax starts: forget the last one's finished formats, checkpoint, ledger and running format (each region has its own). */
+export function beginCut(run: RunState): void {
+  const cut = cutOf(run);
+  delete cut.format;
+  delete cut.done;
+  delete cut.checkpoint;
+  delete cut.ledger;
+}

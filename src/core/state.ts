@@ -20,7 +20,7 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
-import { VariantsSchema } from './expansion/variantLines';
+import { VariantsSchema, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
@@ -214,6 +214,8 @@ export const VolatileSchema = z.object({
   abilityOverride: z.string().nullable().default(null),
   /** Focus Energy: critical hits are two stages likelier. */
   focusEnergy: z.boolean().default(false),
+  /** Pokémon moments: extra critical-hit stages (fades or lasts the battle; gone on switch-out). */
+  momentCrit: z.number().int().min(0).max(3).default(0),
   /** S164 charge-up stacks waiting for the next damaging move. */
   bank: z.number().int().min(0).default(0),
   /** Laser Focus: the next attack is a critical hit. */
@@ -373,6 +375,7 @@ export const freshVolatile = (): Volatile => ({
   typeShift: null,
   abilityOverride: null,
   focusEnergy: false,
+  momentCrit: 0,
   bank: 0,
   laserFocus: false,
   sureHit: false,
@@ -529,7 +532,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
-  variants: {} as Record<string, { line: 'tagged' | 'dark-ball' | 'tidebound' | 'cinderborn' | 'preserved'; flags: Record<string, number> }>,
+  variants: {} as Variants,
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,

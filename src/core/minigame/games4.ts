@@ -5,6 +5,8 @@
 import { Rng } from '../rng';
 import type { BaseState, Cell, MinigameModule } from './games';
 
+const BERRY_ART = 'item.gen5/oran-berry';
+const SNOWBALL_ART = 'item.gen5/snowball';
 const base = (rs: BaseState['rs']): BaseState => ({ rs, done: false, msg: '', tick: 0 });
 
 // ---------- Psyduck Migration (snake) ----------
@@ -41,7 +43,7 @@ const snake: MinigameModule<SnakeState> = {
       for (let x = 0; x < s.size; x++) {
         const i = s.body.findIndex((b) => b[0] === x && b[1] === y);
         const duck = s.duck && s.duck[0] === x && s.duck[1] === y;
-        cells.push({ id: 'x', label: i === 0 ? 'P' : i > 0 ? 'd' : duck ? '*' : ' ', tone: i === 0 ? 'hot' : i > 0 ? 'good' : duck ? 'info' : 'dim', disabled: true });
+        cells.push({ id: 'x', label: i === 0 ? 'P' : i > 0 ? 'd' : duck ? '*' : ' ', tone: i === 0 ? 'hot' : i > 0 ? 'good' : duck ? 'info' : 'dim', disabled: true, board: true, ...(duck ? { art: BERRY_ART } : {}) });
       }
     for (const d of ['up', 'left', 'down', 'right']) cells.push({ id: d, label: d, tone: 'info', disabled: s.done });
     return { hud: [`Ducklings: ${s.caught}/${s.goal}`, `Time: ${s.ticks}`, s.msg], prompt: 'Lead Psyduck to the ducklings (*). Do not hit the edge or your own line.', cols: s.size, cells, done: s.done };
@@ -174,7 +176,7 @@ const sled: MinigameModule<SledState> = {
     const cells: Cell[] = [];
     for (let k = 3; k >= 0; k--) {
       const row = s.rows[s.at + k];
-      for (let c = 0; c < LANES; c++) cells.push({ id: 'x', label: k === 0 ? (c === s.lane ? 'S' : '·') : !row ? '|' : row.rock === c ? '#' : row.berry === c ? 'o' : ' ', tone: k === 0 && c === s.lane ? 'hot' : row?.rock === c ? 'bad' : row?.berry === c ? 'good' : 'dim', disabled: true });
+      for (let c = 0; c < LANES; c++) cells.push({ id: 'x', label: k === 0 ? (c === s.lane ? 'S' : '·') : !row ? '|' : row.rock === c ? '#' : row.berry === c ? 'o' : ' ', tone: k === 0 && c === s.lane ? 'hot' : row?.rock === c ? 'bad' : row?.berry === c ? 'good' : 'dim', disabled: true, board: true, ...(row?.rock === c && k > 0 ? { art: SNOWBALL_ART } : row?.berry === c && k > 0 ? { art: BERRY_ART } : {}) });
     }
     cells.push({ id: 'left', label: 'Left', tone: 'info', disabled: s.done || s.lane <= 0 }, { id: 'stay', label: 'Hold', tone: 'dim', disabled: s.done }, { id: 'right', label: 'Right', tone: 'info', disabled: s.done || s.lane >= LANES - 1 });
     return { hud: [`Berries: ${s.berries}/${s.totalBerries}`, `Lives: ${s.lives}`, `Course: ${Math.min(s.at, s.rows.length)}/${s.rows.length}`, s.msg], prompt: 'Steer the sled. Dodge rocks (#), grab berries (o).', cols: LANES, cells, done: s.done };
