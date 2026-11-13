@@ -51,7 +51,7 @@ const stealth: MinigameModule<StealthState> = {
         const you = x === s.px && y === s.py;
         const key = s.keys.some((k) => k[0] === x && k[1] === y);
         const exit = x === N - 1 && y === 0;
-        cells.push({ id: 'x', label: you ? 'YOU' : guard ? 'G' : key ? 'key' : exit ? 'EXIT' : ' ', tone: you ? 'hot' : guard ? 'bad' : watched ? 'bad' : key ? 'good' : exit ? 'info' : 'dim', disabled: true });
+        cells.push({ id: 'x', label: you ? 'YOU' : guard ? 'G' : key ? 'key' : exit ? 'EXIT' : ' ', tone: you ? 'hot' : guard ? 'bad' : watched ? 'bad' : key ? 'good' : exit ? 'info' : 'dim', disabled: true, board: true, ...(key && !you ? { art: 'item.gen5/nugget' } : {}) });
       }
     for (const d of ['up', 'left', 'down', 'right']) cells.push({ id: d, label: d, tone: 'info', disabled: s.done });
     return { hud: [`Keys: ${s.got}/${s.keys.length}`, `Alerts: ${s.alerts}/${s.maxAlerts}`, `Time: ${s.ticks}`, s.msg], prompt: 'Sneak to the exit. Red cells are watched. Pick up keys for bonus points.', cols: N, cells, done: s.done };

@@ -20,7 +20,7 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
-import { VariantsSchema } from './expansion/variantLines';
+import { VariantsSchema, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
@@ -532,7 +532,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
-  variants: {} as Record<string, { line: 'tagged' | 'dark-ball' | 'tidebound' | 'cinderborn' | 'preserved'; flags: Record<string, number> }>,
+  variants: {} as Variants,
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
