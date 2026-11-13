@@ -28393,5 +28393,29 @@
     }
    ]
   }
+ },
+ {
+  "id": "flashlight",
+  "name": "Flashlight",
+  "family": "Map and encounter items",
+  "description": "Lights the way: the map shows the wild Pokémon waiting at the next stops, and Rock Tunnel lets you choose",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/lightkey",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "wild"
+    }
+   ]
+  }
  }
 ]

@@ -77,7 +77,7 @@ describe('story foundation: random streams', () => {
     'STORY2/0': 'b24a1a0604f703b8', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': '927fbd65e715ebbc',
     'STORY5/0': '93fa407c6ffa3882',
-    'STORY6/0': 'bae9e780fa62aea9', // re-pinned in the Kanto canon PR: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
+    'STORY6/0': '445823286623fbbc', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '2db6e08d823e4f4c',
     'STORY8/0': '2fa3b04267e0313a',
   };

@@ -6,3 +6,6 @@ Next slices, one PR each: run wiring (menu on town entry, `kanto.*` flags on the
 
 Built so far (state at `run.expansion.canon`, no save bump): Pewter events, Veridian Forest, Mt. Moon, and Cerulean slice 1 (Bridge Crossing, Nugget Bridge, Hidden Village, Squirtle Squad, Damian's Gym, Burglary). Cerulean still to build: Cold Nights Rain, Bill's Lighthouse, Route 5 Day-Care, Cerulean Cave (after Indigo).
 Celadon City (Department Store, Game Corner, Mansion, Eeveelution Brothers, Tea, Perfume Heist, Rooftop) is built; see docs/updates/beta-0.6/celadon-canon.md.
+
+
+Lavender Town built (interlude-3, shown on the Stage 4 map): Pokémon Tower, Fuji's House, Fan Club, Rock Tunnel, Power Plant, Volunteers. See docs/updates/beta-0.6/lavender-canon.md.
