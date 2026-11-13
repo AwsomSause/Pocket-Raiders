@@ -446,12 +446,25 @@ export const DoublesSchema = z.object({
   enemy: DoublesSlotSchema,
   /** True while the Pokémon in the main fields stands in the right-hand spot (spot 1). */
   swapped: z.object({ player: z.boolean(), enemy: z.boolean() }),
-  /** Spots (0 left, 1 right) waiting for the player to send out a replacement. */
-  refill: z.array(z.number().int().min(0).max(1)).default([]),
+  /** Spots (0 left, 1 right; 2 in a triple battle) waiting for the player to send out a replacement. */
+  refill: z.array(z.number().int().min(0).max(2)).default([]),
   /** Tatsugiri commanding from inside a partner Dondozo (Commander): they skip their turns and can't be hit. */
   commanding: z.array(z.string()).default([]),
   /** Where each Pokémon last aimed its move (the second turn of Solar Beam goes the same way). */
-  aims: z.record(z.string(), z.object({ side: z.enum(['player', 'enemy']), spot: z.union([z.literal(0), z.literal(1)]) })).default({}),
+  aims: z.record(z.string(), z.object({ side: z.enum(['player', 'enemy']), spot: z.union([z.literal(0), z.literal(1), z.literal(2)]) })).default({}),
+  /**
+   * A triple battle (battle/triples.ts): three spots per side (0 left, 1 centre, 2 right as seen on screen, both sides).
+   * `at` is the spot whose Pokémon is in the engine's main fields; the other two wait in `player` / `enemy` by spot
+   * (the entry at `at` is an empty placeholder). In a triple battle the doubles-only `player` / `enemy` / `swapped`
+   * fields above are unused (index -1).
+   */
+  trio: z
+    .object({
+      at: z.object({ player: z.number().int().min(0).max(2), enemy: z.number().int().min(0).max(2) }),
+      player: z.array(DoublesSlotSchema).length(3),
+      enemy: z.array(DoublesSlotSchema).length(3),
+    })
+    .optional(),
 });
 export type DoublesState = z.infer<typeof DoublesSchema>;
 

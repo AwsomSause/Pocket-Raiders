@@ -32,7 +32,9 @@ import { armFeat, featCharged } from '../core/story2/feats';
 import { signatureDisplay } from '../core/story2/signature';
 import { introForBattle, introText, trainerIntro } from '../core/story2/cutscene';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
-import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt, type Spot } from '../core/battle/doubles';
+import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt } from '../core/battle/doubles';
+/** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
+type Spot = 0 | 1;
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, maxPp, xpForLevel } from '../core/pokemon';
@@ -510,7 +512,7 @@ export class BattleScene extends Phaser.Scene {
         b.container.setScale(DUO_BOX.scale);
         return b;
       };
-      const focus = { player: primarySpot(d, 'player'), enemy: primarySpot(d, 'enemy') };
+      const focus = { player: primarySpot(d, 'player') as Spot, enemy: primarySpot(d, 'enemy') as Spot };
       this.playerBox = box('player', focus.player);
       this.enemyBox = box('enemy', focus.enemy);
       const otherMon = (side: Side) => {
@@ -2647,7 +2649,7 @@ export class BattleScene extends Phaser.Scene {
     const reticle = targetReticle(this, 0xffe070, this.motion);
     const aim = (i: number) => {
       const t = choices[i]!.target;
-      const at = DUO_POS[t.side][t.spot];
+      const at = DUO_POS[t.side][t.spot as Spot];
       reticle.aimAt(at.x, at.y - 50);
     };
     aim(0);
