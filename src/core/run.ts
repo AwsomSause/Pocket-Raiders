@@ -2675,6 +2675,8 @@ export interface TurnResult {
   wiped?: boolean;
   /** A narrative rival defeat (M12): the battle was lost for the story, the party is healed and the run goes on. Never a game over. */
   narrativeDefeat?: { id: string; defeatLine: string; victoryLine: string };
+  /** Story Run: a lost rival or story fight that the run survives (party healed, map next). Never a game over. */
+  storyLoss?: boolean;
   /** A rival's warm-up duel ended: what was said, and whether the real battle follows (`next: 'battle'`) or the rival took it (`next: 'map'`). */
   stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
@@ -3004,7 +3006,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'lose' && storyLossApplies(run, battle, content, Boolean(battle.event) && isStoryEventBattle(content, battle.event!))) {
     storyLossEnd(content, run);
     recordChanges(content, current, run, 'battle');
-    return { run, events, end: null, defeated: false, cues, drama };
+    return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };
   }
   if (battle.outcome === 'lose') {
     const enemy = currentEnemy(battle);
