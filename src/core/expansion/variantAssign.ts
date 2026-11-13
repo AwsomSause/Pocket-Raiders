@@ -54,5 +54,6 @@ export function assignEvilVariants(variants: Variants, team: readonly PokemonIns
   return chosen.map((m) => m.uid);
 }
 
-/** Marnie's League Card is an inventory item the game does not define yet (nothing hands it out), so this is false in every run today. */
-export const MARNIE_CARD_ID = 'marnies-league-card';
+/** Marnie's League Card: the Team Yell Blockade event's "Chant along" branch adds the event flag `marnies-league-card` (event flags live in `run.story.flags` as `ev:<key>`). Once held it stays for the run. */
+export const MARNIE_CARD_FLAG = 'ev:marnies-league-card';
+export const holdsMarnieCard = (run: { story: { flags: Record<string, unknown> } }): boolean => Number(run.story.flags[MARNIE_CARD_FLAG] ?? 0) >= 1;

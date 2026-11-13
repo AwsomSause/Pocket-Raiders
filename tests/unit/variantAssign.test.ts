@@ -1,7 +1,7 @@
 // Beta 0.6 E1 part 6: Evil Team Pokémon carry their team's variant line in a run.
 import { describe, expect, it } from 'vitest';
-import { startEventBattle } from '../../src/core/events';
-import { assignEvilVariants, lineForTeam, MARNIE_CARD_ID, VARIANT_SLOTS } from '../../src/core/expansion/variantAssign';
+import { chooseEvent, startEventBattle } from '../../src/core/events';
+import { assignEvilVariants, holdsMarnieCard, lineForTeam, VARIANT_SLOTS } from '../../src/core/expansion/variantAssign';
 import { COUTURE_ACCESSORIES } from '../../src/core/expansion/variantLines';
 import { createPokemon } from '../../src/core/pokemon';
 import { Rng, hashSeed } from '../../src/core/rng';
@@ -66,9 +66,8 @@ describe('in a run', () => {
   };
   const b = (evil: 'grunt' | 'specialist' | 'executive') => ({ kind: 'trainer', name: 'x', evil, size: 3, levelBonus: 0, shadow: 0, types: [], chain: 1, win: [], ghost: false, retired: false, rival: false }) as never;
   const node = (run: ReturnType<typeof evilRun>) => run.stage!.map.nodes[0]!;
-  const fight = (teamId: string, regionIndex: number, rank: 'grunt' | 'specialist' | 'executive', inventory: Record<string, number> = {}) => {
+  const fight = (teamId: string, regionIndex: number, rank: 'grunt' | 'specialist' | 'executive') => {
     const run = evilRun(teamId, regionIndex);
-    run.inventory = { ...run.inventory, ...inventory };
     startEventBattle(content, run, node(run), b(rank), new Rng(hashSeed('va')), { eventId: 'x', choiceIndex: 0, sideId: 's', success: true });
     return run;
   };
@@ -86,9 +85,20 @@ describe('in a run', () => {
     const back = BattleStateSchema.parse(JSON.parse(JSON.stringify(run.battle)));
     expect(Object.keys(back.extra.variants)).toHaveLength(1);
   });
-  it('the League Card flag is read from the inventory', () => {
-    // Team Yell's region is Galar; use the assigner directly with the run's inventory flag.
-    const run = fight('rocket', 0, 'specialist', { [MARNIE_CARD_ID]: 1 });
-    expect(run.inventory[MARNIE_CARD_ID]).toBe(1);
+  it("choosing Chant along at the Yell Blockade gives Marnie's League Card, and Loud then loses its first turn", () => {
+    const run = evilRun('yell', 7);
+    expect(holdsMarnieCard(run)).toBe(false);
+    const ev = content.events.get('yell-blockade')!;
+    const index = ev.choices.findIndex((c) => c.label === 'Chant along');
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id;
+    run.stage!.visited = [node.id];
+    node.sides.push({ id: 'yb', kind: 'event', used: false, eventId: 'yell-blockade' });
+    const after = chooseEvent(content, run, 'yb', index).run;
+    expect(holdsMarnieCard(after)).toBe(true);
+    const lineup = team(2);
+    const v: Record<string, { flags: Record<string, number> }> = {};
+    assignEvilVariants(v as never, lineup, { teamId: 'yell', regionId: 'galar', rank: 'executive', marnie: holdsMarnieCard(after) });
+    expect(v[lineup[0]!.uid]!.flags.shame).toBe(1);
   });
 });
