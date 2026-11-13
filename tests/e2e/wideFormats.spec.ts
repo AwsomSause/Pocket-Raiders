@@ -118,7 +118,7 @@ test('Siege Map: the Rocket Ledger shows over the map and a Held gate is a free 
   expect(errors).toEqual([]);
 });
 
-test('Colossus: the fight opens with the Blueprint plate beside it', async ({ page }) => {
+test('Colossus: the fight opens as a normal raid with shields, phases and a timer', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -140,11 +140,12 @@ test('Colossus: the fight opens with the Blueprint plate beside it', async ({ pa
   await waitForScene(page, 'Format');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
-  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.isActive('ColossusPlate')), { timeout: 10_000 }).toBe(true); // the plate runs above the battle
   await page.waitForTimeout(6000);
   await page.screenshot({ path: 'test-results/e4-colossus.png' });
-  const c = await page.evaluate(() => (window as any).__pkr.session.run.battle.colossus);
-  expect(c.seals.map((s: { name: string }) => s.name)).toEqual(['Right Shoulder', 'Left Shoulder', 'Chest', 'Crown']);
+  const raid = await page.evaluate(() => (window as any).__pkr.session.run.battle.raid);
+  expect(raid.id).toBe('ss-rocket-m2');
+  expect(raid.pendingShields).toHaveLength(3);
+  expect(raid.timerLeft).toBe(10);
   expect(errors).toEqual([]);
 });
 

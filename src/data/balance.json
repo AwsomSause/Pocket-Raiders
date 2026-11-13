@@ -730,7 +730,6 @@
  "priceSwing": { "range": 0.1, "repeat": 0.05, "repeatCap": 0.25 },
  "omen": { "partySample": 3, "perExtraFoe": 2, "calmAtMost": -2, "direAtLeast": 4 },
  "lastChance": { "share": 0.25 },
- "colossus": { "shieldPct": 15, "timerM2": 10 },
  "wealthTax": { "base": 4000, "perRegion": 2500, "rate": 0.15 },
  "shopTypes": {
   "boutique": { "categories": ["charm", "attribute", "evolution", "transformation"], "priceFactor": 1.1, "earlyRare": 3 },

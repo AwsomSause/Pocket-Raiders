@@ -169,7 +169,7 @@ const speciesKey = (name: string): string => name.toLowerCase().replace(/^(z-|me
 /**
  * Called when a battle begins: notes what the player is now facing. Three things count, all from the battle itself:
  * a Pokémon carrying its Evil Team's variant line (the team's special Pokémon) whose species is on the region's list,
- * a Named Shadow on the foe's side, and a Colossus Apex. Reads the state only: no RNG, nothing in the fight changes.
+ * a Named Shadow on the foe's side, and a Colossus raid (an Apex Shadow). Reads the state only: no RNG, nothing in the fight changes.
  */
 export function noteBattle(content: Content, run: Pick<RunState, 'expansion' | 'battle' | 'regionIndex' | 'regionOrder'>): void {
   const b = run.battle;
@@ -187,5 +187,6 @@ export function noteBattle(content: Content, run: Pick<RunState, 'expansion' | '
     }
     if (mon.shadow?.named) noteShadow(run, mon.shadow.named, mon.shadow.hints ?? 1);
   }
-  if (b.colossus?.id.startsWith('ss.')) noteShadow(run, b.colossus.id, 1);
+  // A Colossus raid is named `ss-<team>-<apex>` (raids.json); the Apex Shadow it is has the id `ss.<team>.<apex>`.
+  if (b.raid?.id.startsWith('ss-')) noteShadow(run, b.raid.id.replace(/-/g, '.'), 1);
 }
