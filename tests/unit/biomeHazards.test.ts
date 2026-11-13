@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import hazards from '../../src/data/events/hazards.json';
 import { effectiveEvent } from '../../src/core/eventMemory';
-import { conditionMet } from '../../src/core/events';
+import { chooseEvent, conditionMet } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { content } from './helpers';
 
@@ -45,5 +45,25 @@ describe('biome hazards and map stops', () => {
     for (const id of ['ne76-bridge-that-sings', 'ne77-fog-that-asks', 'ne78-orchard-after-fire', 'ne79-lighthouse-two-keepers', 'ne80-snow-that-wont-stop']) expect(content.events.has(id), id).toBe(true);
     const set = JSON.stringify(events);
     for (const f of ['bridge-tuned', 'fog-named', 'orchard-planted', 'lighthouse-marked', 'snow-stopped', 'quicksand-dale', 'berrytree-left']) expect(set).toContain(`"key":"${f}"`);
+  });
+});
+
+describe('pack stops revised in the follow-up', () => {
+  const find = (id: string) => (hazards.events as { id: string; choices: { label: string }[] }[]).find((e) => e.id === id)!;
+  it('keeps one copy of each and uses the pack buttons', () => {
+    for (const id of ['villain-hideout', 'ev-hidden-dungeon', 'ev-regional-festival', 'galar-gigantamax-sighting', 'galar-runaway-wooloo', 'training-ground', 'world-cave-in']) expect(content.events.get(id), id).toBeDefined();
+    expect(find('training-ground').choices.map((c) => c.label)).toContain('Train the weakest.');
+    expect(find('villain-hideout').choices.map((c) => c.label)).toContain('Note it and leave.');
+    expect(content.events.get('world-cave-in')!.group).toBe('Biome Hazards');
+  });
+  it('Train the weakest levels the lowest-level Pokémon by two', () => {
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'tg', archetypeId: 'red' }), 0);
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id; run.stage!.visited = [node.id];
+    node.sides.push({ id: 'tg', kind: 'event', used: false, eventId: 'training-ground' });
+    const lead = run.party[0]!;
+    const before = lead.level;
+    const after = chooseEvent(content, run, 'tg', 1).run;
+    expect(after.party[0]!.level).toBe(before + 2);
   });
 });

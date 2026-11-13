@@ -391,7 +391,10 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
   // An event in src/data/events/*.json replaces any older event with the same id (Beta 0.6 revisions of the pack's REVISE/MERGE events).
-  const extraEvents = ((raw.eventsExtra ?? []) as { events?: unknown[] }[]).flatMap((file) => file.events ?? []);
+  const extraFiles = (raw.eventsExtra ?? []) as { events?: unknown[]; override?: boolean }[];
+  // A file marked `"override": true` (hazards.json) also wins over other auto-loaded files.
+  const winners = new Set(extraFiles.filter((f) => f.override).flatMap((f) => (f.events ?? []).map((e) => (e as { id?: string }).id)));
+  const extraEvents = extraFiles.flatMap((file) => (file.events ?? []).filter((e) => file.override || !winners.has((e as { id?: string }).id)));
   const extraIds = new Set(extraEvents.map((e) => (e as { id?: string }).id));
   gamesEvents.push(...extraEvents);
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
