@@ -4086,7 +4086,20 @@ export class BattleScene extends Phaser.Scene {
         case 'pmoment': {
           // A revived Pokémon stands back up on the field (the full-screen scene, if any, has already played).
           const live = this.findLive(e.side, e.uid) ?? mon;
-          if (live && e.side === 'player') {
+          if (e.trigger === 'start' || e.trigger === 'enter') {
+            // A small edge at battle start or switch-in: only the bars need refreshing (HP, status).
+            const fresh = this.findLive('player', e.uid);
+            if (fresh && this.shown.player.uid === fresh.uid) {
+              this.shown.player.hp = fresh.hp;
+              await this.refreshInfoBox(this.playerBox, this.shown.player, true);
+            }
+            const foe = this.run.battle?.enemyTeam[this.run.battle.enemyIndex];
+            if (foe && this.shown.enemy.uid === foe.uid) {
+              this.shown.enemy.hp = foe.hp;
+              this.shown.enemy.status = foe.status;
+              await this.refreshInfoBox(this.enemyBox, this.shown.enemy, true);
+            }
+          } else if (live && e.side === 'player') {
             live.hp = e.hpAfter;
             this.shown.player = structuredClone(live);
             this.showSprite('player', this.shown.player, false);

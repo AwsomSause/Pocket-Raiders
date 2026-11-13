@@ -40,7 +40,7 @@ describe('gates', () => {
     resolveStoryRaid(content, r, 2, 'partial');
     expect(raidOffered(r, 4)).toBe(true);
     expect(raidOffered(r, 5)).toBe(false);
-    r.expansion!.track = { step: 4 };
+    r.expansion!.track = { kanto: { step: 4, peak: 4, applied: [], log: [] } };
     expect(raidOffered(r, 5)).toBe(true);
     const r2 = mk('sr2');
     resolveStoryRaid(content, r2, 3, 'declined');

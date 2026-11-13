@@ -63,6 +63,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { addMercy, changeRep, joinInsideMan, joinProblem, standWithOf } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
@@ -174,6 +175,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'grandArc': {
       const g = grandArcOf(run);
       return !!g && (!c.missingRom || !romsHeld(g).includes(c.missingRom));
+    }
+    case 'standWith': {
+      const sw = standWithOf(run);
+      return c.joined ? !!sw && (c.minRep === undefined || sw.rep >= c.minRep) : !sw && joinProblem(run) === null;
     }
     case 'storyRun':
       return !!run.story.v2;
@@ -328,6 +333,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'partyShadow':
       return 'Needs a Shadow Pokémon in your party';
     case 'grandArc':
+    case 'standWith':
       return 'Needs something you have not done yet';
     case 'storyRun':
       return 'Only in a Story Run';
@@ -829,6 +835,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcRom':
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
+    case 'standWith':
       return '';
     case 'namedShadow':
       return 'a Shadow Pokémon is offered to you';
@@ -1083,6 +1090,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const name = grantNamedShadow(content, run, e.id, e.level);
       return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';
     }
+    case 'standWith':
+      if (e.action === 'join') return joinInsideMan(run);
+      if (e.action === 'mercy') addMercy(run, e.noticed);
+      else if (e.change) changeRep(run, e.change);
+      return '';
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
@@ -1256,7 +1268,7 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): n
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
-function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
+export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const activeIndex = lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = eventLevel(content, run, node, rng) + b.levelBonus;
@@ -1301,7 +1313,7 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
       return newMon(content, run, id, level, 'e');
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : pickSpecies(content, run, [], b.types, rng);
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
@@ -1353,7 +1365,7 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
 export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  return battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired);
+  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
 }
 
 /** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
