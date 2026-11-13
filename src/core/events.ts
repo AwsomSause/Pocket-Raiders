@@ -175,6 +175,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'grandArc': {
       const g = grandArcOf(run);
       return !!g && (!c.missingRom || !romsHeld(g).includes(c.missingRom));
+    }
     case 'standWith': {
       const sw = standWithOf(run);
       return c.joined ? !!sw && (c.minRep === undefined || sw.rep >= c.minRep) : !sw && joinProblem(run) === null;
