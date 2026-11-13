@@ -224,6 +224,7 @@ import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
+import { rivalBattleLines } from './rivals/live';
 import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
@@ -2247,6 +2248,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
       beginRivalBrain(content, run, rivalBack.id);
+      const bankLines = rivalBattleLines(content, run, rivalBack.id, node.kind, activeIndex);
+      if (bankLines.length > 0) run.battle.rivalNote = [run.battle.rivalNote, ...bankLines.map((l) => `${rivalBack.name}: "${l}"`)].filter(Boolean).join(' ');
       if (rivalNote) run.battle.rivalNote = [rivalNote, run.battle.rivalNote].filter(Boolean).join(' ');
       if (narrativeDef) run.battle.narrative = { id: narrativeDef.id, maxTurns: narrativeDef.maxTurns };
     }
