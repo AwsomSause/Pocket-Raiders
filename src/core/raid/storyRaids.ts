@@ -2,6 +2,7 @@
 // Pure rules, no Phaser. State lives in run.expansion.raids (keys n1..n6) plus the lever flags in siege / apex / cast / cut
 // (a raid may write nothing else, design 6.6). No random stream: the one roll (how many Pokémon are impounded) is hashed from seed + region + label.
 
+import { trackOnRaid, trackStep } from '../expansion/trackRun';
 import { z } from 'zod';
 import raidData from '../../data/storyRaids.json';
 import { Rng, hashSeed } from '../rng';
@@ -71,7 +72,7 @@ export function raidOffered(run: RunState, n: number): boolean {
   const g = def.gate;
   if (g.kind === 'open') return true;
   if (raidRecord(run, g.raid)) return true;
-  if (g.kind === 'afterOrTrack') return Number(run.expansion?.track?.step ?? 0) >= g.trackStep;
+  if (g.kind === 'afterOrTrack') return trackStep(run, 'kanto') >= g.trackStep;
   return false;
 }
 
@@ -129,6 +130,8 @@ export function resolveStoryRaid(content: Content, run: RunState, n: number, res
   if (fx.apex) b.apex = { ...rec(b.apex), ...fx.apex };
   if (fx.cast) b.cast = { ...rec(b.cast), ...fx.cast };
   b.cut = { ...rec(b.cut), mods: climaxMods(run) };
+  // E2: a raid won turns the region's world-state track back one step, a raid failed or declined adds one (a partial changes nothing).
+  trackOnRaid(run, run.regionOrder[run.regionIndex], n, result);
   return { record, hold, alreadyResolved: false, lines };
 }
 

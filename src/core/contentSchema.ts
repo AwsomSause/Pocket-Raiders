@@ -2321,6 +2321,8 @@ export const BalanceSchema = z.object({
       expMultiplier: z.number().min(0.1).max(1),
     }),
   }),
+  /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
+  expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
