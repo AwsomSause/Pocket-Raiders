@@ -982,6 +982,30 @@
   }
  },
  {
+  "id": "silver-powder",
+  "name": "Silver Powder",
+  "family": "Type boosters (held)",
+  "description": "Bug moves +20%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "silverpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
   "id": "soft-sand",
   "name": "Soft Sand",
   "family": "Type boosters (held)",

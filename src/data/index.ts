@@ -68,6 +68,7 @@ import regionsJson from './regions.json';
 import movesJson from './moves.json';
 import megaMovesJson from './megaMoves.json';
 import storySignatureMovesJson from './storySignatureMoves.json';
+import canonMovesJson from './canonMoves.json';
 import rewardsJson from './rewards.json';
 import rulesetJson from './ruleset.json';
 import trainerTiersJson from './trainerTiers.json';
@@ -276,7 +277,7 @@ export const RAW_CONTENT: RawContent = {
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   // Story Run signature moves: npm run data:story-sigs (flagged storysig).
-  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...jetSpeciesJson.moves],
+  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...canonMovesJson.moves, ...jetSpeciesJson.moves],
   abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities],
   typeChart: typeChartJson,
   archetypes: archetypesJson,

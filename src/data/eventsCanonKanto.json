@@ -201,6 +201,11 @@
        {
         "kind": "moment",
         "text": "Registered a fossil at the Pewter Museum of Science."
+       },
+       {
+        "kind": "flag",
+        "key": "xk-fossil-registered",
+        "amount": 1
        }
       ]
      }
@@ -223,6 +228,11 @@
        {
         "kind": "moment",
         "text": "Registered a fossil at the Pewter Museum of Science."
+       },
+       {
+        "kind": "flag",
+        "key": "xk-fossil-registered",
+        "amount": 1
        }
       ]
      }
@@ -390,6 +400,1468 @@
     }
    ],
    "canon": "cs.kanto.pewter.flock"
+  },
+  {
+   "id": "cs-kanto-pewter-forest",
+   "name": "Veridian Forest",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The trees close in overhead. Somewhere ahead, an old swordsman is said to wait in a clearing. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter Veridian Forest",
+     "chance": 0.8,
+     "success": {
+      "text": "You step in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You step in. Something feels different today.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-twist"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.forest"
+  },
+  {
+   "id": "cs-kanto-pewter-forest-twist",
+   "name": "Veridian Forest: A Strange Turn",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The forest is quiet. Too quiet. Branches creak overhead.",
+   "choices": [
+    {
+     "label": "Press on",
+     "chance": 0.5,
+     "success": {
+      "text": "A thick fog rolls between the trees. Nobody can aim properly in here: accuracy drops for everyone until you leave the forest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-forest-fog",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A net drops on the party! Far above, a striped balloon drifts away over the trees.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "moment",
+        "text": "A striped balloon over Veridian Forest, with a net-launcher hanging under it."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n1",
+   "name": "Veridian Forest: Bug Catcher",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A Bug Catcher jumps out of the ferns, net first.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "\"My bugs are the best!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n2",
+   "name": "Veridian Forest: The Forest Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "Something rustles in the grass: a Caterpie, a Weedle or a Pinsir. The forest is offering you a Bug-type. Catch it if you can.",
+   "choices": [
+    {
+     "label": "Step toward the rustle",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-fog",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You step toward the rustle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "caterpie",
+        "weedle",
+        "pinsir"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Step toward the rustle (in the fog)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-fog",
+       "atLeast": 1
+      }
+     ],
+     "chance": 0.01,
+     "success": {
+      "text": "The fog parts on something pale and empty-eyed.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "shedinja"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You step toward the rustle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "caterpie",
+        "weedle",
+        "pinsir"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n3",
+   "name": "Veridian Forest: The Thicket",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A trail runs on, and to one side a thicket buzzes angrily.",
+   "choices": [
+    {
+     "label": "Follow the trail",
+     "success": {
+      "text": "A Bug Catcher blocks the trail.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Check the buzzing thicket",
+     "chance": 0.4,
+     "success": {
+      "text": "A Beedrill swarm erupts out of the thicket!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle",
+        "kakuna",
+        "beedrill"
+       ],
+       "chain": 3,
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poison-barb"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n4"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Only an empty nest. You rejoin the trail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n4",
+   "name": "Veridian Forest: The Hollow Tree",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The trail bends past a huge hollow tree that smells of honey.",
+   "choices": [
+    {
+     "label": "Follow the trail",
+     "success": {
+      "text": "A Bug Catcher is waiting.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look in the hollow tree",
+     "chance": 0.3,
+     "success": {
+      "text": "A den! Something big is guarding the honey.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "combee",
+        "heracross"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n5"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Just honey and bark. You move on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n5",
+   "name": "Veridian Forest: The Clearing",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A clearing. A figure in old armor sits on a stump, very still. A Bug-type is the only thing that will be welcome here.",
+   "choices": [
+    {
+     "label": "Step into the clearing",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "The figure lifts his head and looks at your Bug-type.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-forest-bug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step into the clearing (a Weedle was waiting)",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "A Weedle that was already waiting for you crawls up your leg. The figure on the stump watches it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-forest-bug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n6",
+   "name": "Veridian Forest: The Samurai",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "\"One Pokemon against one. Same level. No items, no switching. Show me your Bug-type.\"",
+   "choices": [
+    {
+     "label": "Face the Samurai",
+     "success": {
+      "text": "The Samurai draws a blade. The duel begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "team": [
+        "pinsir"
+       ],
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "samurai-slash",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "item",
+         "id": "silver-powder"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon",
+   "name": "Mt. Moon",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A cave mouth, cool and echoing. Somewhere inside, a skylight lets the moon in. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter Mt. Moon",
+     "success": {
+      "text": "You step into the dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.moon"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n1",
+   "name": "Mt. Moon: The Mouth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "Zubat flutter overhead as you go in.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "Something stirs in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "paras"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n2",
+   "name": "Mt. Moon: The Hiker",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A Hiker is resting against the wall, boots off.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "\"Mt. Moon is my second home!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "hiker",
+       "name": "Hiker",
+       "size": 2,
+       "types": [
+        "rock",
+        "ground"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n3",
+   "name": "Mt. Moon: Deeper In",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "The tunnel narrows. Pebbles trickle down from the ceiling.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "A wild shape scrambles out of a crack.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "paras",
+        "sandshrew"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4",
+   "name": "Mt. Moon: Moon Watching (1 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "Midnight. A ring of Clefairy dance under the skylight. What do you do?",
+   "choices": [
+    {
+     "label": "Watch quietly",
+     "success": {
+      "text": "That felt right. The Clefairy relax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join in",
+     "success": {
+      "text": "The Clefairy scatter, startled.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clap along",
+     "success": {
+      "text": "The sudden noise spooks them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4b"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4b",
+   "name": "Mt. Moon: Moon Watching (2 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A Clefairy shyly holds out a shard of Moon Stone.",
+   "choices": [
+    {
+     "label": "Offer a berry in return",
+     "success": {
+      "text": "That felt right. The Clefairy relax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the shard and go",
+     "success": {
+      "text": "It tilts its head, unsure.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away",
+     "success": {
+      "text": "It puts the shard back down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4c"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4c",
+   "name": "Mt. Moon: Moon Watching (3 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "The smallest Clefairy hides behind your leg.",
+   "choices": [
+    {
+     "label": "Let it stay",
+     "success": {
+      "text": "That felt right. The Clefairy relax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Gently shoo it back",
+     "success": {
+      "text": "It whimpers and runs off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up",
+     "success": {
+      "text": "It squeaks and wriggles free.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4d"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4d",
+   "name": "Mt. Moon: The Clefairy's Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "The dance winds down. The smallest Clefairy looks up at you.",
+   "choices": [
+    {
+     "label": "Meet its eyes (all three right)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-clefairy-right",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "The Clefairy trots to your side, and it knows Moonblast.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "moonblast",
+        "species": "clefairy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Meet its eyes (two right)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-clefairy-right",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "The Clefairy trots to your side, and it knows Moonblast.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "moonblast",
+        "species": "clefairy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It waves goodbye and leaves a Moon Stone shard behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Meet its eyes (the dance is a blur)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-clefairy-right",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It waves goodbye and leaves a Moon Stone shard behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "canon": "cs.kanto.pewter.moon.clefairy"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n5",
+   "name": "Mt. Moon: Fossil Recovery",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A scientist is cracking something out of the wall with a little hammer. \"Hey! This one is mine!\"",
+   "choices": [
+    {
+     "label": "Fight for the fossil",
+     "success": {
+      "text": "\"Then you will have to beat me for it!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "worker",
+       "name": "Scientist",
+       "size": 3,
+       "team": [
+        "magnemite",
+        "voltorb",
+        "koffing"
+       ],
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "root-fossil",
+          "claw-fossil",
+          "skull-fossil",
+          "armor-fossil",
+          "cover-fossil",
+          "plume-fossil",
+          "jaw-fossil",
+          "sail-fossil",
+          "hisui-ember-fossil"
+         ],
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "xk-fossil-registered",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true,
+   "canon": "cs.kanto.pewter.moon.fossil"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n6",
+   "name": "Mt. Moon: Gem-Stone Mine",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A wall of glittering ore deposits. A Fighting-type move would crack one open.",
+   "choices": [
+    {
+     "label": "Punch a deposit open",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fighting"
+      }
+     ],
+     "chance": 0.1,
+     "success": {
+      "text": "A Gem Vein! Rare Candy and a Metal Coat tumble out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy"
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-mine",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n7"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The deposit cracks and an evolution stone drops out, but something heavy wakes behind it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-mine",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "geodude",
+        "onix",
+        "rhyhorn",
+        "geodude-alola"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n7"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Rent a pickaxe (200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You hire a pickaxe from a man with too many of them and break one deposit open.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-mine",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n7"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "canon": "cs.kanto.pewter.moon.mine"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n7",
+   "name": "Mt. Moon: The Way Out",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "Daylight again, far down the other side of the mountain.",
+   "choices": [
+    {
+     "label": "Leave Mt. Moon",
+     "success": {
+      "text": "You leave the mountain behind.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Crossed Mt. Moon."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
   }
  ]
 }

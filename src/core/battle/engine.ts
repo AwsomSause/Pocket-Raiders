@@ -3130,6 +3130,7 @@ function executeMove(
   }
   user.vol.destinyBond = false;
   user.vol.exposed = false;
+  user.vol.firstUseNow = !continuing && !user.vol.movesUsed.includes(move.id);
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
   if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
   if (!continuing && user.side === 'player') {
@@ -3728,6 +3729,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
+      if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
       // S157 Focus: a focused Pokémon aims a little better.
@@ -4257,7 +4259,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       tryInflictStatus(ctx, user, target, id, move, events, false);
     }
     if (fx.status && roll(fx.status.chance, fx.status.id)) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
-    if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
+    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) flinch(ctx, user, target);
+    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
     if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
   }
