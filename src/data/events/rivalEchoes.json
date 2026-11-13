@@ -1,0 +1,1725 @@
+{
+ "events": [
+  {
+   "id": "rq-echo-promise-broken",
+   "name": "A Note Left Behind",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-promise-broken",
+     "atLeast": 1
+    }
+   ],
+   "intro": "On a signpost, scratched in with a knife: \"Waited. You didn't come.\"",
+   "choices": [
+    {
+     "label": "Scratch a reply underneath.",
+     "success": {
+      "text": "You write: \"Sorry. Next time.\" It is a start.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-broken",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-promise-kept",
+   "name": "The Move They Learned",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-promise-kept",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival is drilling the exact move that beat them at the ridge. \"I said I'd learn it.\"",
+   "choices": [
+    {
+     "label": "Spar with them.",
+     "success": {
+      "text": "They get it right on the third try, and refuse to look pleased.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-thrown",
+   "name": "Don't You Dare",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-thrown",
+     "atLeast": 1
+    }
+   ],
+   "intro": "Before a big battle the rival grips your arm. \"Don't you dare do that again.\"",
+   "choices": [
+    {
+     "label": "Fight them properly.",
+     "success": {
+      "text": "This time nothing is held back. They nod, once, afterwards.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-thrown",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-honest",
+   "name": "The Hand-Sewn Jersey",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-honest-match",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival turns up in a hand-sewn jersey, no logo. \"No sponsor. Just me.\"",
+   "choices": [
+    {
+     "label": "Say it looks good.",
+     "success": {
+      "text": "They straighten up. It does look good.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-real-match",
+   "name": "The Sponsor Signed",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-real-match",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A letter arrives with the rival's name and a sponsor's stamp. Underneath, in their handwriting: \"They watched. Thanks for making it a real one.\"",
+   "choices": [
+    {
+     "label": "Keep the letter.",
+     "success": {
+      "text": "You fold it away.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-burnt",
+   "name": "What the Ashes Taught",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-letter-burnt",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival battles lighter these days, and their ace has started using a move it never dared before.",
+   "choices": [
+    {
+     "label": "Spar to see it.",
+     "success": {
+      "text": "The ace lands the new move and looks startled at itself.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-read-letter",
+   "name": "The Letter's Author",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-read-letter",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival knows you read the letter on the wall. They bring it up at last. \"Whoever you are told it was, it wasn't about you.\"",
+   "choices": [
+    {
+     "label": "Apologise.",
+     "success": {
+      "text": "They shrug, but they do not look away.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-swap",
+   "name": "The Ace Hesitates",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-swap",
+     "atLeast": 1
+    }
+   ],
+   "intro": "In the next fight the rival's ace hesitates for one turn when it sees you. It remembers the swap spar.",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "The rival glares at the ace, then at you.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-colours-swap",
+   "name": "Borrowed Colours",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-colours-swap",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival is still wearing something of yours. \"Finders keepers.\"",
+   "choices": [
+    {
+     "label": "Let them keep it.",
+     "success": {
+      "text": "They tug it straight, looking pleased.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-colours-ok",
+   "name": "The Jacket, Again",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-colours-ok",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival's jacket matches yours again. \"Don't say anything.\"",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing, loudly.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-grief",
+   "name": "The Empty Slot, Filled",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-grief-shared",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival has a new Ball on their belt, and an old cracked one beside it. \"It's a young one. I haven't named it yet.\"",
+   "choices": [
+    {
+     "label": "Suggest a name.",
+     "success": {
+      "text": "They test it aloud, three times, and keep the third.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-flowers",
+   "name": "They Found the Flowers",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-memorial-flowers",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival nods at you in passing. \"Somebody left flowers on the hill. I know who.\"",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "Nothing else needs to be said.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-charm",
+   "name": "The Charm, Returned",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-memorial-charm",
+     "atLeast": 1
+    }
+   ],
+   "intro": "You still have the rival's charm. They hold out a hand without looking.",
+   "choices": [
+    {
+     "label": "Hand it back.",
+     "success": {
+      "text": "They clip it on and mutter something that might be thanks.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "resentment": -1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-shelves-let",
+   "name": "A Bag of Balls",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-shelves-let",
+     "atLeast": 1
+    }
+   ],
+   "intro": "At the Center there is a bag of Poké Balls with your name on it, and no note.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You count them. Exactly what a shop was short.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 8
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-shelves-won",
+   "name": "They Never Buy Out a Shop",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-shelves-won",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival is queuing patiently at a shop. \"One of each. Not everything. Don't look at me like that.\"",
+   "choices": [
+    {
+     "label": "Grin.",
+     "success": {
+      "text": "They go red and buy one of each.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-shelves-shared",
+   "name": "Fair Shares",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-shelves-shared",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival hands you a Ball from their belt. \"Half. As agreed.\"",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "A fair split, fairly kept.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-mentor-trained",
+   "name": "The Mentor's Drill",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mentor-trained",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The mentor's voice is in your head: the drill they set you both. You find yourself doing it unprompted.",
+   "choices": [
+    {
+     "label": "Do the drill.",
+     "success": {
+      "text": "It works better than it did the first time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-mentor-lesson",
+   "name": "The Lesson",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mentor-lesson",
+     "atLeast": 1
+    }
+   ],
+   "intro": "You try the lesson the mentor taught you. The rival recognises it instantly.",
+   "choices": [
+    {
+     "label": "Show them.",
+     "success": {
+      "text": "\"That's mine,\" they say, grinning. \"He taught you mine.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-mentor-apology",
+   "name": "After the Apology",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mentor-apology",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The mentor is in the stands beside the rival. They do not look at you. They do nod.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "A small thing, accepted.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "resentment": -1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-gift-found",
+   "name": "The Tracker's Owner",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-gift-found",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A message arrives, unsigned: \"Where is it?\" You still have the tracker you pulled from the gift.",
+   "choices": [
+    {
+     "label": "Throw it in a river.",
+     "success": {
+      "text": "It sinks. Whoever was listening stops.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-gift-used",
+   "name": "The Tracker Hums",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-gift-used",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The item you took from the rival's box hums, faintly, whenever you rest. Somebody always seems to know where you are.",
+   "choices": [
+    {
+     "label": "Switch it off.",
+     "success": {
+      "text": "You find the catch and the humming stops.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-told-sponsor",
+   "name": "They Walked Out",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-told-sponsor",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival walks out on their sponsor in public, jacket over one arm. \"You were right.\"",
+   "choices": [
+    {
+     "label": "Walk with them.",
+     "success": {
+      "text": "They fall in beside you. It is a good silence.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2,
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-notes-read",
+   "name": "They Knew",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-notes-read",
+     "atLeast": 1
+    }
+   ],
+   "intro": "\"You read the page,\" says the rival. \"I'd have read it too. That's why I wrote it.\"",
+   "choices": [
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "They almost laugh.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-straight",
+   "name": "A Straight Win",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-straight",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival is replaying that battle in their head. \"No tricks. I've never had a fight that clean.\"",
+   "choices": [
+    {
+     "label": "Say it was good.",
+     "success": {
+      "text": "\"It was,\" they say, surprised.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-watched",
+   "name": "You'd Have Let Me Lose",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-watched",
+     "atLeast": 1
+    }
+   ],
+   "intro": "\"You'd have let me lose out there,\" says the rival, not unkindly. \"I've thought about it.\"",
+   "choices": [
+    {
+     "label": "Say you'd have helped.",
+     "success": {
+      "text": "\"Now you say that,\" they say, and some of the old coldness goes.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-amends",
+   "name": "Second Chances",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-amends",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival hands you a drink. \"Second time you stayed. I noticed.\"",
+   "choices": [
+    {
+     "label": "Cheers.",
+     "success": {
+      "text": "Glasses clink.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-name-known",
+   "name": "Your Name",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-name-known",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival says your real name again, without being asked. It sounds different from the nickname.",
+   "choices": [
+    {
+     "label": "Say theirs.",
+     "success": {
+      "text": "You do. It sounds just as strange.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-apprentice-truth",
+   "name": "The Apprentice, Grown",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "apprentice-truth",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The fellow apprentice has taken on a student of their own. \"I told them what you told me,\" they say.",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "Truth passed down is the best kind.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-apprentice-lie",
+   "name": "The Apprentice, at Peace",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "apprentice-lie",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The fellow apprentice is working at a Center now, and humming. \"I was never meant for this. You were kind to say I was.\"",
+   "choices": [
+    {
+     "label": "Wish them well.",
+     "success": {
+      "text": "They wave until you are out of sight.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "love",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-apprentice-silent",
+   "name": "The Apprentice, Rival",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "apprentice-silent",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The fellow apprentice stands across from you in the next ring. \"You never said anything. So I had to find out myself.\"",
+   "choices": [
+    {
+     "label": "Hear them out.",
+     "success": {
+      "text": "You listen. They talk for a long time, and when they stop they look lighter.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-apprentice-lesson",
+   "name": "The Last Lesson",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "apprentice-lesson-done",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The mentor mails you a one-line note: \"Well fought, both of you.\" The fellow apprentice has one too.",
+   "choices": [
+    {
+     "label": "Pin it up.",
+     "success": {
+      "text": "Two notes, one wall.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-follower-to-win",
+   "name": "The Follower Wins",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-to-win",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The follower has started winning, and talking about it. \"I took your answer seriously.\"",
+   "choices": [
+    {
+     "label": "Wish them luck.",
+     "success": {
+      "text": "They bow too low.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-follower-for-them",
+   "name": "The Follower's Friend",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-for-them",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The follower has found someone to fight for. \"I told you what you said. They laughed.\"",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "A good answer, borrowed.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-follower-unsure",
+   "name": "The Honest One",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-unsure",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The follower still doesn't know why they battle. \"I like not knowing, it turns out.\"",
+   "choices": [
+    {
+     "label": "Say you do too.",
+     "success": {
+      "text": "You both look at the horizon.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-follower-walked",
+   "name": "Your Travelling Companion",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-walked",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The follower sends a postcard from a town you haven't reached. It reads: \"Left something for you at the bench.\"",
+   "choices": [
+    {
+     "label": "Look for it.",
+     "success": {
+      "text": "Under the bench is a single Great Ball.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-kieran-fast",
+   "name": "Kieran, Alone",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-fast",
+     "atLeast": 1
+    }
+   ],
+   "intro": "You hear Kieran before you see him, still shouting at his team. He does not see you.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Some people have to get there on their own.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-echo-kieran-talked-down",
+   "name": "Kieran, Laughing",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-talked-down",
+     "atLeast": 1
+    }
+   ],
+   "intro": "Kieran is sitting on a wall with his team asleep around him. \"I was an idiot,\" he says, cheerfully.",
+   "choices": [
+    {
+     "label": "Sit with him.",
+     "success": {
+      "text": "He tells you what they like for breakfast.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  }
+ ]
+}

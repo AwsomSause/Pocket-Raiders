@@ -21,3 +21,6 @@ No cross-run lines (R3's "across runs" memory, NE "once per save") and no Keepsa
 - Pack arcs (The Fall, The Truce...) differ from the engine's arc ids, so events gate on feelings, not arc.
 - Rival questline events are drawn like other events; there is no per-rival quest scheduler yet.
 - Batch 2 simplifications: R5 mentor battle has no lose-scouting; R6 notes are not generated from the lost battle; R7 swap is a plain 3v3 (no borrowed-team rule, no jacket); R8 has one trap, not three; R9 has no repeated Gym losses; R10 is one photo event, not one per region; R12 outcomes (title, nurse, third rival) are flags only; R13's answer does not set the next arc; R14 detour is not a map node; R15 tracker/ambush is not wired (items only); R16 Kieran's Pokémon items are 3 potions; R21 clues are collapsed into one choice; R24 shows only the finale line.
+
+## Echoes (rivalEchoes.json, 37 events)
+Every flag the questline events set now has a reader: a small callback scene (`rq-echo-*`) that opens from it once, minStage 6. A unit test fails if a questline flag is set and never read. Still not wired: flags that need a battle-engine hook (ace hesitation, rival counter slot, the lost-Pokémon species) only show as these scenes, not as battle changes.
