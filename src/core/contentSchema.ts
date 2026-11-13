@@ -1075,6 +1075,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('urge'), what: z.enum(['ability', 'item', 'reset']) }),
   /** Makes the opposing Pokémon drop its held item for the rest of the battle (Item Drop). */
   z.object({ kind: z.literal('itemDrop') }),
+  /** Leaves an ordinary wild battle at once: no experience, money or catch, and the item is used up (Poké Doll). */
+  z.object({ kind: z.literal('escape') }),
 ]);
 export type ItemEffect = z.infer<typeof ItemEffectSchema>;
 
@@ -1535,7 +1537,7 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   /** Goes into the Bag (items.json `item`) to be used in battle or from the map. */
   z.object({ kind: z.literal('bagItem'), item: z.string(), count: z.number().int().positive().default(1) }),
   /** Teach a move of one type the Pokémon can learn: TM = pick 1 of 3 random ones, HM = pick any. */
-  z.object({ kind: z.literal('teachMove'), type: TypeNameSchema, mode: z.enum(['tm', 'hm']) }),
+  z.object({ kind: z.literal('teachMove'), /** Missing: any move the Pokémon can learn (the Network Machine). */ type: TypeNameSchema.optional(), mode: z.enum(['tm', 'hm']) }),
   /** A held item: copies go on the chosen Pokémon (or on every team member for team items like the Plates). */
   z.object({ kind: z.literal('held'), hooks: z.array(HeldHookSchema).min(1) }),
   /** Battle effects carried into the chosen Pokémon's next battles (or every team member's); `cure` also cures that status now. */
@@ -2799,6 +2801,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
   z.object({ kind: z.literal('emotion'), id: z.enum(['determination', 'bravery', 'justice', 'kindness', 'patience', 'integrity', 'perseverance']) }),
+  /** Pokédex progress this run: species seen / caught so far (the Game Freak room's Diploma). */
+  z.object({ kind: z.literal('dex'), set: z.enum(['seen', 'caught']), atLeast: z.number().int().positive() }),
+  /** A Story Raid (core/raid/storyRaids.ts) is still open to play: not yet resolved, and its gate is met. */
+  z.object({ kind: z.literal('storyRaid'), n: z.number().int().min(1).max(6) }),
   /** An event that has already been played this run. */
   z.object({ kind: z.literal('eventSeen'), id: z.string() }),
   /** The trainer must not carry this tag (N is "pacifist": no aggressive choices). */
@@ -2960,6 +2966,16 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
+  /**
+   * Beta 0.6 Vermilion: a 1-for-1 swap in place. The lowest-level party Pokémon that fits `want` leaves and its partner arrives at the same level,
+   * keeping its held items and +1 friendship. `table` gives the partner by species (the S.S. Anne regional trade); `similar` picks any species of
+   * `pool` whose base stat total is within `bst` of the one given up, with a random Nature. The choice stays locked while nothing fits.
+   */
+  z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
+  /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
+  z.object({ kind: z.literal('stashParty') }),
+  /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
+  z.object({ kind: z.literal('restoreParty') }),
   /** A healing spot, shop or fishing spot opens beside this node. */
   z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']) }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
@@ -2982,6 +2998,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
   z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
+  /** Records a Story Raid's result once (core/raid/storyRaids.ts): its levers, Operational Strength, track step and a lost raid's costs. */
+  z.object({ kind: z.literal('storyRaid'), n: z.number().int().min(1).max(6), result: z.enum(['triumph', 'success', 'partial', 'failure', 'declined']) }),
+  /** An attribute change that lasts until this stage ends (a Bad Luck Charm); it is undone when the next stage starts. */
+  z.object({ kind: z.literal('stageAttribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Restores every move's PP for the whole party (Erika's tea). */
   z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
@@ -2991,7 +3011,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest']).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional() }),
+  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false) }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -3186,6 +3206,8 @@ export const EventRuleSchema = z.object({
   lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
   typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
+  /** Beta 0.6 Vermilion (Flight North): once your active Pokémon drops under a quarter of its HP, a shiny copy of it appears and knocks the foe out. Once per fight. */
+  shinyRescue: z.boolean().optional(),
   /** Saffron canon: at a turn boundary (turn 3, or at half HP) each active Pokémon that has a next evolution evolves in the heat of the fight (Tournament final, Labyrinth finale). */
   evolveMid: z.boolean().optional(),
   /** Saffron canon: the foe is the entry of the fight's `species` list whose base stat total is nearest your lead's (Fighting Tournament). */
@@ -3226,6 +3248,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
     format: EventBattleFormatSchema.optional(),
+    /** Beta 0.6 Vermilion: the foe's exact level (Flight North's level 5 to 20 stage) instead of the stage's event level plus `levelBonus`. */
+    level: z.number().int().min(1).max(100).optional(),
     species: z.array(z.string()).default([]),
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
@@ -3247,6 +3271,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** Beta 0.6 Vermilion: the exact level of the foe's team (the last Pokémon is one higher) instead of the stage's event level plus `levelBonus`. */
+    level: z.number().int().min(1).max(100).optional(),
     /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
     format: EventBattleFormatSchema.optional(),
     /** A fixed foe team (species ids) instead of one drawn by `types`. */
@@ -3287,6 +3313,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     species: z.array(z.string()).optional(),
     /** Beta 0.6 Front: the exact species of the foe's team, slot by slot (a lane each); beats `species` and `types`. */
     lineup: z.array(z.string()).optional(),
+    /** Beta 0.6: draw this foe with a named character's own sprite (a boss id, e.g. "sabrina"). */
+    sprite: z.string().optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

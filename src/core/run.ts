@@ -42,7 +42,7 @@ import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordR
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
-import { createBattle, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
+import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
@@ -288,7 +288,8 @@ import { answerMentorship, graduateMentorships, planMentorship } from './story/m
 import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
-import { addCanonStops } from './expansion/canonRun';
+import { addCanonStops, failCanonRaid, finishCanonRaid, restoreStash } from './expansion/canonRun';
+import { expireStageMods } from './expansion/stageMods';
 import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
 import { leaveCanonStash, ruleEvolution } from './expansion/canonSaffron';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
@@ -699,6 +700,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   run.usedThemes.push(theme.id);
   run.usedLeaders.push(leader.id);
   run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
+  expireStageMods(run);
   startStageEffects(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
@@ -1775,13 +1777,15 @@ function failRaid(content: Content, run: RunState): void {
   const battle = run.battle!;
   const raidId = battle.raid?.id ?? battle.totem!.id;
   buryFallen(content, run, battleCause(content, battle));
+  const lostCanon = battle.raid ? getRaid(content, battle.raid.id).canon : null;
+  if (lostCanon) failCanonRaid(content, run, lostCanon);
   if (battle.raid && getRaid(content, battle.raid.id).grand) endGrandBattle(content, run, false, run.party[battle.activeIndex]?.uid);
   const frac = battle.totem ? content.totems.failureHealFraction : content.raids.failureHealFraction;
   // The timer ran out: the boss escapes and comes back in a later stage, changed (once).
   const raid = battle.raid;
   const rawRaid = raid ? getRaid(content, raid.id) : null;
   // S408 Boss Revenge Rematch: a boss that beat you (not a practice fight, not a story raid) comes back stronger in a later stage, once.
-  const beaten = Boolean(raid && !raid.practice && !raid.returning && rawRaid && !rawRaid.grand && !rawRaid.gang && !rawRaid.legendary && !rawRaid.special && battle.outcome === 'lose' && !(raid.timerLeft !== null && raid.timerLeft <= 0));
+  const beaten = Boolean(raid && !raid.practice && !raid.returning && rawRaid && !rawRaid.grand && !rawRaid.gang && !rawRaid.legendary && !rawRaid.canon && !rawRaid.special && battle.outcome === 'lose' && !(raid.timerLeft !== null && raid.timerLeft <= 0));
   if (beaten && !run.raids.escaped.includes(raid!.id)) run.raids.escaped.push(raid!.id);
   if (raid && raid.timerLeft !== null && raid.timerLeft <= 0 && !raid.returning) {
     run.raids.escaped.push(raid.id);
@@ -1873,6 +1877,23 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
   // Kept as a counter so the account remembers it (profile best "raidBestTier") and opens the next tier in later runs.
   run.log.counters.raidBestTier = run.raids.bestTier;
   run.raids.done.push(def.id);
+  // Beta 0.6 Canon Spaces: a canon raid finishes its space and may hand over a gift Pokémon (Kaiju Tentacruel's Tentacool).
+  if (def.canon) finishCanonRaid(run, def.canon);
+  const gift = def.rewards.gift;
+  if (gift) {
+    const level = Math.max(1, boss.level - gift.levelDrop);
+    const given = newMon(content, run, gift.species, level, 'p');
+    if (gift.ability) given.fixedAbility = gift.ability;
+    for (const id of gift.moves) {
+      const mv = content.moves.get(id);
+      if (!mv || given.moves.some((m) => m.id === id)) continue;
+      if (given.moves.length < 4) given.moves.push({ id, pp: mv.pp });
+      else given.moves[3] = { id, pp: mv.pp };
+    }
+    count(run, 'pokemonCaught');
+    discover(run, given.speciesId, true);
+    run.pending.unshift({ kind: 'caught', mon: given, raidTier: def.tier });
+  }
   if (def.grand) endGrandBattle(content, run, true, run.party[battle.activeIndex]?.uid);
   let notes: string[] | undefined = def.gang ? gangRaidWon(content, run, def) : undefined;
   if (battle.raid!.coop) {
@@ -1887,6 +1908,8 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
  * a generator of its own, so the encounter stream (and every later battle) is unchanged.
  */
 export function startEncounter(content: Content, run: RunState, node: MapNode, rematch?: Rng): void {
+  // Flight North: stepping back onto the ordinary map with only the Bug-type gives the stolen party back first.
+  restoreStash(run);
   startEncounterBase(content, run, node, rematch);
   addPlayFeatures(content, run, node);
 }
@@ -2793,6 +2816,8 @@ export interface TurnResult {
   stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
   drama: DramaLine[];
+  /** A Poké Doll was used: the wild battle is over, with no experience, money or catch. */
+  escaped?: boolean;
 }
 
 /** The battle engine's view of the run's battle (the engine changes `run` in place). */
@@ -2939,6 +2964,23 @@ function doublesAction(ctx: BattleContext, action: PlayerAction): PlayerAction {
   return { kind: 'double', commands };
 }
 
+/** A Poké Doll: slips out of an ordinary wild battle. The item is used up; nothing is earned and the fight does not count as won or lost. */
+function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng, captureRng: Rng, hyperRng: Rng): TurnResult {
+  const battle = run.battle!;
+  const problem = itemProblem(battleContext(content, run, rng, captureRng, hyperRng), itemId);
+  if (problem) throw new Error(problem);
+  consumeItem(run.inventory, itemId);
+  revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
+  for (const mon of run.party) endHeldBattle(mon);
+  endSignatureMoves(run.party);
+  endLastResort(run);
+  endHyperMoves(run, false);
+  run.battle = null;
+  run.phase = 'map';
+  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
+  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {
   assertPhase(current, 'battle');
   const run = structuredClone(current);
@@ -2948,6 +2990,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const hyperRng = new Rng(run.rng.hyper);
   const targetUid = currentEnemy(battle).uid;
   // Bond Engine: a willful Pokémon may refuse a reckless order, a synced one may step in (before the turn).
+  const escapeItem = action.kind === 'item' ? content.items.get(action.itemId) : undefined;
+  if (escapeItem?.effect.kind === 'escape') return escapeBattle(content, run, escapeItem.id, rng, captureRng, hyperRng);
   const shaped = shapeAction(content, run, action);
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;
@@ -4251,6 +4295,8 @@ function assignField(content: Content, run: RunState, boss: boolean): void {
 
 /** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
 export function pseudoLost(content: Content, run: RunState): void {
+  // Flight North: a loss inside the Bug-type's stage sends you home with your own team back.
+  restoreStash(run);
   for (const m of run.party) {
     const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
     if (m.hp < floor) m.hp = floor;

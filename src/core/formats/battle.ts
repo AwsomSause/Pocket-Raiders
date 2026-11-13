@@ -11,7 +11,7 @@ import type { RunState } from '../state';
 import type { FormatId } from './types';
 
 export type FormatBattleSpec = Pick<Extract<EventBattle, { kind: 'trainer' }>, 'name' | 'size' | 'rule'> &
-  Partial<Pick<Extract<EventBattle, { kind: 'trainer' }>, 'evil' | 'classId' | 'types' | 'species' | 'lineup' | 'format' | 'levelBonus' | 'weather' | 'terrain'>> & {
+  Partial<Pick<Extract<EventBattle, { kind: 'trainer' }>, 'evil' | 'classId' | 'types' | 'species' | 'lineup' | 'sprite' | 'format' | 'levelBonus' | 'weather' | 'terrain'>> & {
     /** Which part of the format this fight is (an anchor id, a lane...). Part of the battle's seed. */
     key: string;
     /** Colossus fight (Beta 0.6): armor seals and a timer on the foe. */

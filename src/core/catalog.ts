@@ -77,7 +77,8 @@ export function passivePercent(content: Content, run: RunState, passive: Passive
 }
 
 /** Moves of one type this Pokémon could learn by TM, tutor or egg (or level-up) that it doesn't know. */
-export function teachableMoves(content: Content, mon: PokemonInstance, type: string): string[] {
+/** Moves the Pokémon can still learn: of one type, or (type missing) of any type. */
+export function teachableMoves(content: Content, mon: PokemonInstance, type?: string): string[] {
   const species = getSpecies(content, mon.speciesId);
   const ids = new Set([
     ...(content.learnables.get(species.id) ?? (species.form ? content.learnables.get(species.form.base) : undefined) ?? []),
@@ -86,7 +87,7 @@ export function teachableMoves(content: Content, mon: PokemonInstance, type: str
   return [...ids]
     .filter((id) => {
       const move = content.moves.get(id);
-      return move?.supported === true && move.type === type && !mon.moves.some((m) => m.id === id);
+      return move?.supported === true && (type === undefined || move.type === type) && !mon.moves.some((m) => m.id === id);
     })
     .sort();
 }
@@ -124,7 +125,7 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
       if (effect.ppMove && !mon.moves.some((m) => m.pp < maxPp(content, m))) return "That Pokémon's PP is already full.";
       return null;
     case 'teachMove':
-      return teachableMoves(content, mon, effect.type).length > 0 ? null : `That Pokémon can't learn a new ${capitalize(effect.type)} move.`;
+      return teachableMoves(content, mon, effect.type).length > 0 ? null : `That Pokémon can't learn a new${effect.type ? ` ${capitalize(effect.type)}` : ''} move.`;
     case 'held': {
       const copies = mon.held?.[entry.id] ?? 0;
       // A trainer perk (Bill) can shrink how many different items one Pokémon holds.

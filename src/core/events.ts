@@ -62,8 +62,10 @@ import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
-import { noteCanonEvent } from './expansion/canonRun';
+import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
 import { applyCanonEffect, ghostReturns, nearestBst } from './expansion/canonSaffron';
+import { addStageAttribute } from './expansion/stageMods';
+import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
 import { advanceTrack, trackStep } from './expansion/trackRun';
 import { scheduleStage, spacedColumns } from './expansion/scheduler';
 import { fnv1a } from './expansion/hash';
@@ -73,6 +75,9 @@ import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, startRaidBattle } from './run';
+import { NATURE_IDS } from './natures';
+
+const bstOf = (sp: { baseStats: Record<string, number> }): number => Object.values(sp.baseStats).reduce((a, b) => a + b, 0);
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
@@ -117,6 +122,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'memorial':
       return (run.nuzlocke?.memorial.length ?? 0) >= c.atLeast;
+    case 'dex':
+      return (c.set === 'seen' ? run.log.speciesSeen : run.log.speciesCaught).length >= c.atLeast;
+    case 'storyRaid':
+      return raidOffered(run, c.n);
     case 'partyLevelOver':
       return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
@@ -281,8 +290,8 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
 function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { uid: string; label: string }[] | null {
   // Clone Core: the player picks which other party Pokémon gets the lead's moves.
   if (choice.success.effects.some((f) => f.kind === 'copyMoves')) return run.party.slice(1).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
-  const e = choice.success.effects.find((f) => f.kind === 'tradeAway');
-  if (!e || e.kind !== 'tradeAway') return null;
+  const e = choice.success.effects.find((f) => f.kind === 'tradeAway' || f.kind === 'tradeFor');
+  if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
   return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
 }
 
@@ -290,8 +299,8 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
 function tradeMissing(content: Content, run: RunState, choice: EventChoice): string | null {
   if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
   for (const e of choice.success.effects) {
-    if (e.kind !== 'tradeAway') continue;
-    if (run.party.length < 2) return 'Needs 2 Pokémon in your party';
+    if (e.kind !== 'tradeAway' && e.kind !== 'tradeFor') continue;
+    if (e.kind === 'tradeAway' && run.party.length < 2) return 'Needs 2 Pokémon in your party';
     if (tradeCandidates(content, run, e.want).length === 0) return `Needs ${e.want.label} in your party`;
   }
   return null;
@@ -312,6 +321,10 @@ export function conditionText(content: Content, c: EventCondition): string {
     }
     case 'item':
       return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
+    case 'dex':
+      return `Needs ${c.atLeast} species ${c.set} this run`;
+    case 'storyRaid':
+      return 'The raid is not open';
     case 'period':
       return `Only in the ${c.in.map((x) => PERIOD_LABEL[x].toLowerCase()).join(' or ')}`;
     case 'season':
@@ -885,6 +898,12 @@ export function effectWords(content: Content, e: EventEffect): string {
       return e.id ? `use ${e.count && e.count > 1 ? `${e.count} × ` : 'a '}${itemName(content, e.id)}` : 'lose an item';
     case 'tradeAway':
       return `trade away ${e.want.label}`;
+    case 'tradeFor':
+      return `swap ${e.want.label}`;
+    case 'stashParty':
+      return 'your Pokémon are taken away';
+    case 'restoreParty':
+      return 'your Pokémon come back';
     case 'heal':
       return e.share >= 1 ? 'full heal' : `heal ${Math.round(e.share * 100)}%`;
     case 'campBond':
@@ -897,6 +916,10 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${e.who === 'lead' ? 'lead' : 'party'} loses ${Math.round(e.share * 100)}% HP${e.except.length ? ` (not ${e.except.join('/')} types)` : ''}`;
     case 'restorePp':
       return 'restore PP';
+    case 'storyRaid':
+      return `raid ${e.n}: ${e.result}`;
+    case 'stageAttribute':
+      return `${e.amount > 0 ? '+' : ''}${e.amount} ${e.key} for this stage`;
     case 'cure':
       return 'cure status';
     case 'status':
@@ -1117,6 +1140,30 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       run.party.splice(run.party.indexOf(mon), 1);
       return `Traded away ${content.species.get(mon.speciesId)?.name ?? mon.speciesId}`;
     }
+    case 'tradeFor': {
+      const fits = tradeCandidates(content, run, e.want);
+      const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
+      if (!mon) return '';
+      const given = content.species.get(mon.speciesId);
+      // A swap rolls from its own seeded generator, so no event roll moves.
+      const swap = new Rng(hashSeed(`${run.seed}::trade-for::${mon.uid}:${run.encountersCompleted}`));
+      const near = e.similar && given ? e.similar.pool.filter((id) => { const sp = content.species.get(id); return sp && id !== mon.speciesId && Math.abs(bstOf(sp) - bstOf(given)) <= e.similar!.bst; }) : [];
+      const gotId = e.table[mon.speciesId] ?? (near.length > 0 ? swap.pick(near) : undefined);
+      const got = gotId ? content.species.get(gotId) : undefined;
+      if (!gotId || !got) return '';
+      const fresh = newMon(content, run, gotId, mon.level, 'p');
+      if (mon.held) fresh.held = { ...mon.held };
+      fresh.friendship = Math.min(255, mon.friendship + 1);
+      fresh.shiny = mon.shiny;
+      if (e.similar) fresh.nature = swap.pick([...NATURE_IDS]);
+      run.party.splice(run.party.indexOf(mon), 1, fresh);
+      discover(run, gotId, true);
+      return `Traded ${given?.name ?? mon.speciesId} for ${got.name}`;
+    }
+    case 'stashParty':
+      return stashParty(run) ? 'Your Pokémon are taken away' : '';
+    case 'restoreParty':
+      return restoreStash(run) ? 'Your Pokémon come back' : '';
     case 'heal': {
       if (e.share >= 1) healParty(content, run);
       else for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));
@@ -1127,6 +1174,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
+    case 'storyRaid': {
+      const r = resolveStoryRaid(content, run, e.n, e.result);
+      return r.alreadyResolved ? '' : r.lines.join(' ');
+    }
+    case 'stageAttribute':
+      addStageAttribute(run, e.key, e.amount);
+      return effectWords(content, e);
     case 'restorePp':
       for (const m of run.party) for (const slot of m.moves) slot.pp = maxPp(content, slot);
       return effectWords(content, e);
@@ -1163,8 +1217,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       const speciesId = pickSpecies(content, run, e.species, e.types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
-      const level = Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
-      const mon = newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'p');
+      const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
+      const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
       mon.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * e.shinyMultiplier);
       if (mon.shiny) countShiny(run, mon.speciesId);
       // A rescued Shadow Pokémon (hearts roll from a generator of its own so no event roll moves) or a Blissful one.
@@ -1175,8 +1229,18 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.blissful) makeBlissful(content, mon);
       if (e.hiddenAbility && content.species.get(mon.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
       if (e.ability) mon.fixedAbility = e.ability;
+      for (const id of e.moves) {
+        const mv = content.moves.get(id);
+        if (!mv || mon.moves.some((m) => m.id === id)) continue;
+        if (mon.moves.length < 4) mon.moves.push({ id, pp: mv.pp });
+        else mon.moves[3] = { id, pp: mv.pp };
+      }
       discover(run, mon.speciesId, true);
       count(run, 'pokemonCaught');
+      if (e.direct) {
+        run.party.push(mon);
+        return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} stays by your side!`;
+      }
       run.pending.push({ kind: 'caught', mon });
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} ${e.shadow ? 'was rescued from the haze and' : ''} wants to join you!`.replace('  ', ' ');
     }
@@ -1483,7 +1547,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const dueler = b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
-  const base = b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus;
+  const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
   if (b.kind === 'raid') {
@@ -1562,6 +1626,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
     if (b.evil && variantTeam) assignEvilVariants(run.battle.extra.variants, team, { teamId: variantTeam, regionId: currentRegion(content, run).id, rank: b.evil, marnie: holdsMarnieCard(run) });
