@@ -4,4 +4,6 @@
 
 **Save:** no change; the lines are saved with the battle as before.
 
-**Limits:** Overcharged has no Evil Team to carry it yet. Marnie's League Card is not an item in the game, so Loud's first-turn shame is off until something grants `marnies-league-card`. The named Kanto special Pokémon do not spawn yet (next slice, the signature traits).
+**Limits:** Overcharged has no Evil Team to carry it yet; its route waits for the Galar team scripts in 0.7. Marnie's League Card comes from the Yell Blockade event ("Chant along" adds the flag `marnies-league-card`). The named Kanto special Pokémon do not spawn yet (next slice, the signature traits).
+
+**Also:** choosing "Chant along" at the Team Yell Blockade event now gives Marnie's League Card (event flag `marnies-league-card`, kept for the run), so Loud's first-turn shame can happen.
