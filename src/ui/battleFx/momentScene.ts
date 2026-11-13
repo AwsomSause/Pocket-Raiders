@@ -84,22 +84,22 @@ export interface MomentSceneOptions {
   fast: boolean;
 }
 
-/** Eye spots as fractions (0..1) of a species' front-art frame; species not listed get two eyes in the upper middle. */
+/** Eye spots as fractions (0..1) of a species' front-art frame (its first frame, the one the scene shows); species not listed get two eyes in the upper middle. */
 const EYES: Record<string, [number, number][]> = {
-  rotom: [[0.47, 0.42], [0.54, 0.42]],
-  magnezone: [[0.37, 0.43], [0.74, 0.45]],
-  golurk: [[0.45, 0.26], [0.54, 0.26]],
-  golett: [[0.39, 0.33], [0.49, 0.33]],
-  porygon2: [[0.2, 0.31], [0.3, 0.33]],
-  'porygon-z': [[0.47, 0.29], [0.54, 0.29]],
-  claydol: [[0.34, 0.64], [0.52, 0.64]],
-  metagross: [[0.33, 0.42], [0.5, 0.42]],
-  bronzong: [[0.43, 0.28], [0.5, 0.28]],
-  klinklang: [[0.4, 0.66], [0.46, 0.66]],
-  genesect: [[0.33, 0.41], [0.42, 0.4]],
-  cryogonal: [[0.44, 0.6], [0.52, 0.6]],
-  bastiodon: [[0.22, 0.28], [0.42, 0.28]],
-  probopass: [[0.47, 0.26], [0.52, 0.26]],
+  rotom: [[0.42, 0.51], [0.52, 0.51]],
+  magnezone: [[0.19, 0.5], [0.385, 0.46], [0.76, 0.5]],
+  golurk: [[0.47, 0.13], [0.53, 0.13]],
+  golett: [[0.45, 0.21], [0.5, 0.21]],
+  porygon2: [[0.545, 0.22]],
+  'porygon-z': [[0.475, 0.335], [0.54, 0.335]],
+  claydol: [[0.3, 0.45], [0.6, 0.45]],
+  metagross: [[0.39, 0.56], [0.55, 0.56]],
+  bronzong: [[0.39, 0.71], [0.58, 0.71]],
+  klinklang: [[0.24, 0.22], [0.43, 0.46]],
+  genesect: [[0.4, 0.34], [0.45, 0.34]],
+  cryogonal: [[0.37, 0.47], [0.53, 0.47]],
+  bastiodon: [[0.21, 0.28], [0.42, 0.31]],
+  probopass: [[0.35, 0.48], [0.51, 0.48]],
 };
 
 /** The front art of a species, loaded first when needed: texture key and its first frame. Null when it can't be had. */
