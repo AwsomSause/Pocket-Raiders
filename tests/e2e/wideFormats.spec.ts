@@ -147,3 +147,24 @@ test('Colossus: the fight opens with the Blueprint plate beside it', async ({ pa
   expect(c.seals.map((s: { name: string }) => s.name)).toEqual(['Right Shoulder', 'Left Shoulder', 'Chest', 'Crown']);
   expect(errors).toEqual([]);
 });
+
+test('Dev hook: __pkr.extendedCut() jumps into the Extended Cut and the Siege Map opens first', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.goto('/?seed=e5-cut');
+  await waitForScene(page, 'MainMenu');
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
+    await page.keyboard.press('Enter');
+    await waitForScene(page, next);
+  }
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  expect(await page.evaluate(() => (window as any).__pkr.extendedCut())).toBe(true);
+  await waitForScene(page, 'Siege');
+  const cut = await page.evaluate(() => (window as any).__pkr.session.run.expansion.cut);
+  expect(cut.climaxCut).toBe('extended');
+  expect(cut.format.id).toBe('siege');
+  expect(errors).toEqual([]);
+});
