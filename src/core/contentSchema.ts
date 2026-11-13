@@ -274,6 +274,8 @@ export const MoveSchema = z.object({
       perishSong: z.literal(true).optional(),
       /** Yawn: the target falls asleep at the end of the next turn. */
       yawn: z.literal(true).optional(),
+      /** Haunting (Sabrina's Labyrinth ghost): four spirits strike once each, then the foe is Haunted (a stat drop and confusion in turn). */
+      haunting: z.literal(true).optional(),
       /** Magnet Rise: the user floats for five turns. */
       magnetRise: z.literal(true).optional(),
       /** Smack Down / Thousand Arrows: the target is brought to the ground. */
@@ -1533,7 +1535,7 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   /** Goes into the Bag (items.json `item`) to be used in battle or from the map. */
   z.object({ kind: z.literal('bagItem'), item: z.string(), count: z.number().int().positive().default(1) }),
   /** Teach a move of one type the Pokémon can learn: TM = pick 1 of 3 random ones, HM = pick any. */
-  z.object({ kind: z.literal('teachMove'), type: TypeNameSchema, mode: z.enum(['tm', 'hm']) }),
+  z.object({ kind: z.literal('teachMove'), /** Missing: any move the Pokémon can learn (the Network Machine). */ type: TypeNameSchema.optional(), mode: z.enum(['tm', 'hm']) }),
   /** A held item: copies go on the chosen Pokémon (or on every team member for team items like the Plates). */
   z.object({ kind: z.literal('held'), hooks: z.array(HeldHookSchema).min(1) }),
   /** Battle effects carried into the chosen Pokémon's next battles (or every team member's); `cure` also cures that status now. */
@@ -2907,6 +2909,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     after: z.number().int().min(0).max(7).optional(),
     op: z.string().optional(),
     heat: z.number().int().min(0).optional(),
+    /** Heat is below this (also true when no team hunts you: heat 0). */
+    heatBelow: z.number().int().min(1).optional(),
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
@@ -2956,6 +2960,16 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
+  /**
+   * Beta 0.6 Vermilion: a 1-for-1 swap in place. The lowest-level party Pokémon that fits `want` leaves and its partner arrives at the same level,
+   * keeping its held items and +1 friendship. `table` gives the partner by species (the S.S. Anne regional trade); `similar` picks any species of
+   * `pool` whose base stat total is within `bst` of the one given up, with a random Nature. The choice stays locked while nothing fits.
+   */
+  z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
+  /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
+  z.object({ kind: z.literal('stashParty') }),
+  /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
+  z.object({ kind: z.literal('restoreParty') }),
   /** A healing spot, shop or fishing spot opens beside this node. */
   z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']), /** With `minigame`: the game (minigames.json) that waits at the new stop (Safari Land). */ minigameId: z.string().min(1).optional() }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
@@ -2987,7 +3001,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest']).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional() }),
+  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false) }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -3060,6 +3074,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     lead: z.number().int().min(-3).max(3).default(0),
     mark: z.string().optional(),
   }),
+  /**
+   * Saffron canon spaces (core/expansion/canonSaffron.ts). `solo` / `unsolo`: the party waits in a stash while one Pokémon of `species` fights alone (Fighting Tournament).
+   * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn`: Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
+   */
+  z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
@@ -3177,6 +3196,14 @@ export const EventRuleSchema = z.object({
   lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
   typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
+  /** Beta 0.6 Vermilion (Flight North): once your active Pokémon drops under a quarter of its HP, a shiny copy of it appears and knocks the foe out. Once per fight. */
+  shinyRescue: z.boolean().optional(),
+  /** Saffron canon: at a turn boundary (turn 3, or at half HP) each active Pokémon that has a next evolution evolves in the heat of the fight (Tournament final, Labyrinth finale). */
+  evolveMid: z.boolean().optional(),
+  /** Saffron canon: the foe is the entry of the fight's `species` list whose base stat total is nearest your lead's (Fighting Tournament). */
+  bstMatch: z.boolean().optional(),
+  /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
+  ghostRescue: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
@@ -3211,6 +3238,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
     format: EventBattleFormatSchema.optional(),
+    /** Beta 0.6 Vermilion: the foe's exact level (Flight North's level 5 to 20 stage) instead of the stage's event level plus `levelBonus`. */
+    level: z.number().int().min(1).max(100).optional(),
     species: z.array(z.string()).default([]),
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
@@ -3226,10 +3255,14 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
     chain: z.number().int().min(1).max(3).default(1),
+    /** The wild Pokémon knows these moves (replacing its last ones): Route 25's Primeape uses Rage. */
+    foeMoves: z.array(z.string()).max(2).optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** Beta 0.6 Vermilion: the exact level of the foe's team (the last Pokémon is one higher) instead of the stage's event level plus `levelBonus`. */
+    level: z.number().int().min(1).max(100).optional(),
     /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
     format: EventBattleFormatSchema.optional(),
     /** A fixed foe team (species ids) instead of one drawn by `types`. */

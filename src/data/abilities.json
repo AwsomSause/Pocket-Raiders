@@ -1563,5 +1563,10 @@
   "id": "zero-to-hero",
   "name": "Zero to Hero",
   "description": "Transforms into its Hero Form when switching out."
+ },
+ {
+  "id": "champions-fury",
+  "name": "Champion's Fury",
+  "description": "Each time it is sent out, a random stat rises by two stages, and its first attack since then goes first."
  }
 ]

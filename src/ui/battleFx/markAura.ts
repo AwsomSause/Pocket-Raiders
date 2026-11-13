@@ -25,6 +25,17 @@ export interface MarkOptions {
   motion: MotionLevel;
 }
 
+/** A purple hue over a Shadow Pokémon's art (a sprite, or a holder whose art arrives later). */
+function tintShadow(visual: Visual): void {
+  const t = (o: unknown) => {
+    const x = o as { setTint?: (c: number) => unknown; list?: unknown[] };
+    if (typeof x.setTint === 'function') x.setTint(SHADOW_TINT);
+    x.list?.forEach(t);
+  };
+  t(visual);
+}
+export const SHADOW_TINT = 0xb890ff;
+
 /** Draws the marks behind `visual` (inside `field`) and returns the objects, so the caller can destroy them with the sprite. */
 export function addMarks(scene: Phaser.Scene, field: Phaser.GameObjects.Container, visual: Visual, o: MarkOptions): Phaser.GameObjects.GameObject[] {
   if (!o.shadow && !o.variant) return [];
@@ -37,6 +48,7 @@ export function addMarks(scene: Phaser.Scene, field: Phaser.GameObjects.Containe
   made.push(back, front);
   const draw = () => {
     if (!visual.active) return;
+    if (o.shadow) tintShadow(visual);
     const b = visual.getBounds();
     const cx = b.centerX;
     const w = Math.max(60, b.width);

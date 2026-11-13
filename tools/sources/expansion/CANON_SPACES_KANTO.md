@@ -412,6 +412,7 @@ Pallet Town and all of its spaces were removed at your request. The number is ke
   - The Pseudo Stage's **level range is 5–20**. If the Pokémon hasn't evolved by the trainer battle, it **evolves in battle through love for its trainer**.
   - **Later:** if you **lose your run**, the game-over screen shows, then **cracks repeatedly before shattering** to reveal the Bug-type. The Bug-type **revives your whole team** and fights alongside you as its **Mega Form or Dynamax Form**. Once you win the battle your Bug-type came back for, you are prompted to **carry it with you for the journey**. It will have its **Mega Stone** and a signature move, **"North's Wind"**. That move **revives one of your team members, then boosts the user's Special Attack and Speed.**
 - **Kind:** `MC` then `PS` · **Level:** 5–20 (scaled across the stage) · **Length:** 7 nodes.
+- **Flags:** `kanto.flight.stolen`, `kanto.flight.bug`, `kanto.flight.rescue.used`, `kanto.flight.keeps`.
 
 #### 5.4.1 The check
 - **Odds:** the check rolls **50 / 50**. **Added:** each of these shifts the 50%: a Squirtle Squad member in the party (−5% theft chance, they "know the trio's tricks"), a Pokémon with Rocket-hate (−5% if `rocket.heat ≥ 30`), the Stowaways seen on the S.S. Anne (+5%, they know your face).
