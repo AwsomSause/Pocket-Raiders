@@ -32,7 +32,7 @@ import { styleProbability, styleProblem, type StyleInput } from '../captureStyle
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
-import { SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantCheer, variantEndTurnStages, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
+import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -4186,6 +4186,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (dealt > 0) {
     const torn = variantItemMove(ctx.battle.extra.variants, target.mon.uid, move.id);
     if (torn) events.push({ type: 'raid', tone: 'info', text: torn });
+    const accessory = variantAccessoryTorn(ctx.battle.extra.variants, target.mon.uid, move.id);
+    if (accessory) {
+      const held = { ...target.mon.held };
+      if ((held[accessory] ?? 0) > 1) held[accessory] = held[accessory]! - 1;
+      else delete held[accessory];
+      target.mon.held = held;
+      events.push({ type: 'raid', tone: 'info', text: ACCESSORY_TORN_MESSAGE });
+    }
   }
   const sprung = ctx.battle.extra.variants[target.mon.uid]?.flags;
   if (sprung?.launch === 1) {
@@ -4886,6 +4894,14 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
       if (t.left <= 0) c.stages[t.stat] = Math.max(-6, Math.min(6, c.stages[t.stat] - t.amount));
     }
     ctx.battle.extra.variantTimed = ctx.battle.extra.variantTimed.filter((x) => x.left > 0);
+    const gim = variantGimmickTick(ctx.battle.extra.variants, c.mon.uid);
+    if (gim.endDynamax) endDynamax(ctx.content, ctx.battle, c.side, c.mon, events as TransformStepEvent[]);
+    if (gim.endTera) {
+      delete ctx.battle.transform.mechanics[c.mon.uid];
+      delete ctx.battle.transform.teraTypes[c.mon.uid];
+      if (gim.message) events.push({ type: 'raid', tone: 'info', text: gim.message });
+      applyStageChange(ctx, c, 'spe', -1, events);
+    }
     const cheer = variantCheer(ctx.battle.extra.variants, c.mon.uid);
     if (cheer) {
       events.push({ type: 'raid', tone: 'info', text: 'The stands cheer.' });
@@ -5326,6 +5342,11 @@ function enterExtras(ctx: BattleContext, c: Combatant, events: BattleEvent[]): v
     const entry = variantOnEntry(ex.variants, c.mon.uid, ctx.battle.weather?.id ?? null);
     for (const [stat, n] of Object.entries(entry.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, Math.min(6, c.stages[stat] + n));
     if (entry.message) events.push({ type: 'raid', tone: 'info', text: entry.message });
+    const accessory = variantAccessory(ex.variants, c.mon.uid);
+    if (accessory) {
+      c.mon.held = { ...c.mon.held, [accessory]: (c.mon.held?.[accessory] ?? 0) + 1 };
+      events.push({ type: 'raid', tone: 'info', text: `It wears ${ctx.content.catalog.get(accessory)?.name ?? accessory}.` });
+    }
   }
   const wish = ex.healingWish[c.side];
   if (wish !== 'none' && c.mon.hp > 0) {

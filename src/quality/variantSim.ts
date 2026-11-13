@@ -11,17 +11,20 @@ export interface VariantSimResult { line: string | null; battles: number; varian
 const MOVES = ['surf', 'ice-beam', 'flamethrower', 'earthquake'];
 /** Lines about stat changes are simmed half the time with a stat-changing move in place of Earthquake, so they have something to act on (attacks alone make Spiritless look too strong, setup alone too weak). */
 const STAT_LINES = ['spiritless'];
+/** Couture is a second held item, so the sim gives both Pokémon Leftovers and the Couture one this accessory on top. */
+export const COUTURE_SIM_ACCESSORY = 'focus-sash';
 const SOUND_LINES = ['loud'];
 const movesFor = (line: string | null, n: number): string[] => (line && SOUND_LINES.includes(line) && n % 4 >= 2 ? ['surf', 'ice-beam', 'flamethrower', 'hyper-voice'] : line && STAT_LINES.includes(line) && n % 4 >= 2 ? ['surf', 'ice-beam', 'flamethrower', 'calm-mind'] : MOVES);
 
 /** `line` null runs the no-variant baseline (both sides plain), which should sit near 50%. */
-export function simulateVariantLine(content: Content, line: string | null, battles: number, seed = 'variant-sim'): VariantSimResult {
+export function simulateVariantLine(content: Content, line: string | null, battles: number, seed = 'variant-sim', accessory = COUTURE_SIM_ACCESSORY): VariantSimResult {
   let variantWins = 0, plainWins = 0, draws = 0;
   for (let n = 0; n < battles; n++) {
     const pick = new Rng(hashSeed(`${seed}:${line}:${n}:pick`));
     const mk = (uid: string) => {
       const m = createPokemon(content, 'blastoise', 50, uid);
       m.moves = movesFor(line, n).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
+      if (line === 'couture') m.held = { leftovers: 1 };
       return m;
     };
     // The enemy side plays with the engine's AI and the player side picks moves at random, so the line goes on the player's
@@ -33,7 +36,7 @@ export function simulateVariantLine(content: Content, line: string | null, battl
     const battle = createBattle('wild', [enemy], 0, player.uid);
     const weather = (['rain', 'sun', null] as const)[n % 3];
     if (weather) battle.weather = { id: weather, turns: 5 };
-    if (line) assignVariant(battle.extra.variants, onPlayer ? player.uid : enemy.uid, line, { crowd: true });
+    if (line) assignVariant(battle.extra.variants, onPlayer ? player.uid : enemy.uid, line, { crowd: true, accessory });
     const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(`${seed}:${line}:${n}`)), captureRng: new Rng(hashSeed(`${seed}:${line}:${n}:c`)), catchMultiplier: 1 };
     for (let turn = 0; turn < 60 && !battle.outcome; turn++) {
       // Long fights can use a move up: pick among the player's moves that still have PP.
