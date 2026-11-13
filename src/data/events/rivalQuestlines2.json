@@ -1,0 +1,1327 @@
+{
+ "events": [
+  {
+   "id": "rq-promise",
+   "name": "The Promise Past the Ridge",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalLast",
+     "result": "win"
+    }
+   ],
+   "intro": "After a close battle, the rival points at the next ridge. \"Not here. Not like this. Meet me at the end of the next region. Full teams.\"",
+   "choices": [
+    {
+     "label": "Promise.",
+     "success": {
+      "text": "A marker goes on the map at the region's last node.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why wait?",
+     "success": {
+      "text": "\"Because I want to be ready. So do you.\" Then the promise.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No promises.",
+     "success": {
+      "text": "\"Fine. I'll be there anyway.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-open",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-rival-training",
+   "name": "A Rival Training Hard",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-promise-made",
+     "atLeast": 1
+    }
+   ],
+   "intro": "At dawn the rival is drilling the same move for the fortieth time, and pretending not to notice you.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "They pretend you aren't there. They also drill harder.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You drill beside them until the sun is up.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "Some people train best unwatched.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-promise-kept",
+   "name": "The Promise Kept",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-promise-made",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival is exactly where they said they would be, ridge at their back. \"You came. Good.\" Full teams, no counter-picks.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Handshake, win or lose. They name the move that decided it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 2,
+         "trust": 1
+        },
+        "lead": 0,
+        "mark": "shown-mercy"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": -1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 6,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You turn back. Behind you, a signpost will say: \"Waited. You didn't come.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -3
+        },
+        "lead": 0,
+        "mark": "left-you-behind"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "came-anyway",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-promise-open",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\"...You came,\" they say quietly. \"You didn't have to.\""
+    }
+   ]
+  },
+  {
+   "id": "rq-mentor",
+   "name": "Their Mentor Comes Calling",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 4,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A weathered trainer with the rival's way of standing blocks a bridge. \"I wanted to see who they keep talking about.\"",
+   "choices": [
+    {
+     "label": "Battle me.",
+     "success": {
+      "text": "The mentor fights in the rival's style, a little older, a little better.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mentor-lesson",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 4,
+       "levelBonus": 2,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "What do you want?",
+     "success": {
+      "text": "\"Nothing. Just to look.\" They look a long while, then step aside.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask them yourself.",
+     "success": {
+      "text": "You send for the rival. The mentor and rival talk quietly, and the rival comes back lighter.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "apology",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "resentment",
+        "atLeast": 6
+       }
+      }
+     ],
+     "intro": "A weathered trainer with the rival's way of standing blocks a bridge. \"You've been unkind to my student.\"",
+     "addChoices": [
+      {
+       "label": "Go and apologise to the rival.",
+       "success": {
+        "text": "It costs you something. The rival does not answer, but the resentment drains out of the room.",
+        "effects": [
+         {
+          "kind": "rivalChange",
+          "feelings": {
+           "resentment": -3
+          },
+          "lead": 0
+         },
+         {
+          "kind": "flag",
+          "key": "rival-mentor-apology",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ],
+     "hide": [
+      2
+     ]
+    },
+    {
+     "id": "trained",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "friendship",
+        "atLeast": 6
+       }
+      }
+     ],
+     "intro": "A weathered trainer with the rival's way of standing blocks a bridge. \"You've been good for my student. I want to see why.\"",
+     "addChoices": [
+      {
+       "label": "Train with the rival for a day.",
+       "success": {
+        "text": "The mentor drills you both. The rival looks at you differently.",
+        "effects": [
+         {
+          "kind": "rivalChange",
+          "feelings": {
+           "trust": 2
+          },
+          "lead": 0
+         },
+         {
+          "kind": "friendship",
+          "amount": 1,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "rival-mentor-trained",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ],
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rq-postmortem",
+   "name": "The Post-Mortem",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalLast",
+     "result": "win"
+    }
+   ],
+   "intro": "After your loss, the rival appears with a notebook. \"Your lead was in the wrong slot. You wasted setup on turn two.\" The notes are right.",
+   "choices": [
+    {
+     "label": "Thanks.",
+     "success": {
+      "text": "You read the notes properly. Next time you will know what to look for.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-postmortem-took",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I didn't ask.",
+     "success": {
+      "text": "\"You never do.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do yours, then.",
+     "success": {
+      "text": "You take their last loss apart, point by point. They go quiet, then write it down.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-postmortem-gave",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-postmortem-notes",
+   "name": "The Folded Page",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-postmortem-took",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-postmortem-gave",
+     "atLeast": 1
+    }
+   ],
+   "intro": "Before the big battle, the rival presses two pages into your hand: notes on the Gym Leader, and a folded second page. \"That one's about your team. In case you need to know what I'll do.\"",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read what they plan to do. They know you did.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": -1,
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-notes-read",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back unread.",
+     "success": {
+      "text": "\"...Huh.\" They burn it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-colours",
+   "name": "Wearing Each Other's Colours",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 4,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival turns up in a jacket exactly like yours. \"I wanted to see what it felt like. To be you.\"",
+   "choices": [
+    {
+     "label": "It suits you.",
+     "success": {
+      "text": "They blush, or scoff. Probably both.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-colours-ok",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it off.",
+     "success": {
+      "text": "They keep it on.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap teams, then.",
+     "success": {
+      "text": "Borrowed teams. Each commands the other's best.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-colours-swap",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 3,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-fake-lead",
+   "name": "The Fake Lead",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "respect",
+      "atLeast": 2
+     }
+    }
+   ],
+   "intro": "The rival's team is out at a camp, their strongest-looking Pokémon in front. Too obviously in front. It carries no held item; everyone else does. \"Morning. Going my way?\"",
+   "choices": [
+    {
+     "label": "Nice lead.",
+     "success": {
+      "text": "They smile a very small smile.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-bait-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's not your lead.",
+     "success": {
+      "text": "They laugh out loud. \"Finally.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-bait-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You note the held items and say nothing.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-straight-battle",
+   "name": "No More Games",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-bait-seen",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival lays their real team on a table. \"No more games. I want to know if I can beat you straight.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Nothing hidden, nothing set up. A pure battle.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-straight",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 6,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "\"Fine. The offer stands.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "only-reader",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-bait-seen",
+       "atLeast": 1
+      },
+      {
+       "kind": "flag",
+       "key": "rival-bait-taken",
+       "atLeast": 0
+      }
+     ],
+     "notice": "\"You're the only one who ever reads me,\" they say. \"It's annoying. Thank you.\""
+    }
+   ]
+  },
+  {
+   "id": "rq-bad-day",
+   "name": "A Rival's Bad Day",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "friendship",
+      "atLeast": 1
+     }
+    }
+   ],
+   "intro": "Rain. The rival sits on a wall with a lost badge case in their lap and a half-open letter beside them: \"...I expected better. Your mother would have...\" They have not noticed you.",
+   "choices": [
+    {
+     "label": "Sit beside them.",
+     "success": {
+      "text": "After a long time they start talking. About three generations in a Hall, and one loss to a Gym.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-sat-in-rain",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the letter.",
+     "success": {
+      "text": "They see. It does not go well.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-read-letter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to battle.",
+     "success": {
+      "text": "They accept, play badly, and laugh for the first time that day.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 2,
+       "levelBonus": -2,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "They never mention it.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-badge-photo",
+   "name": "The Badge, Photographed",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-sat-in-rain",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A photograph arrives: the rival, the badge case, and a Gym they finally beat on the third try.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You pin it up.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shoulder",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-sat-in-rain",
+       "atLeast": 1
+      }
+     ],
+     "notice": "At the edge of the frame, there is a shoulder. Yours. They took it on the wall, that rainy day."
+    }
+   ]
+  },
+  {
+   "id": "rq-photograph",
+   "name": "A Photograph",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 2,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A street photographer spots you both. \"The famous two! In one frame!\"",
+   "choices": [
+    {
+     "label": "Smile.",
+     "success": {
+      "text": "A photo, awkwardly.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-photos",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull a face.",
+     "success": {
+      "text": "They try not to laugh and fail.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-photos",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say no thanks.",
+     "success": {
+      "text": "The photographer sighs and moves on.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "friend",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "friendship",
+        "atLeast": 5
+       }
+      }
+     ],
+     "notice": "The rival grabs your sleeve. \"Come on. Before I change my mind.\"",
+     "addChoices": [
+      {
+       "label": "Put an arm round them.",
+       "success": {
+        "text": "They go stiff, then lean in. It is the best photo of the three.",
+        "effects": [
+         {
+          "kind": "rivalChange",
+          "feelings": {
+           "friendship": 2
+          },
+          "lead": 0
+         },
+         {
+          "kind": "flag",
+          "key": "rival-photos",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rival-arm-round",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "cold",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "rivalry",
+        "atLeast": 6
+       }
+      }
+     ],
+     "notice": "You stand an arm's length apart, both looking away. \"Just take it,\" says the rival."
+    }
+   ]
+  },
+  {
+   "id": "rq-album",
+   "name": "The Album",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-photos",
+     "atLeast": 2
+    }
+   ],
+   "intro": "The night before the League, the photographer hands each of you an album of every photo.",
+   "choices": [
+    {
+     "label": "Look through it.",
+     "success": {
+      "text": "A moment passes between you.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "arm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-arm-round",
+       "atLeast": 1
+      }
+     ],
+     "notice": "The rival keeps looking at one photo: the one with your arm round them."
+    }
+   ]
+  },
+  {
+   "id": "rq-fellow-apprentice",
+   "name": "The Fellow Apprentice",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 3,
+   "callback": false,
+   "requires": [
+    {
+     "kind": "mentor"
+    }
+   ],
+   "intro": "Your mentor has a second student: kind, nervous, and better than you at exactly one thing. \"The mentor says I'm a once-in-a-generation talent. I can't sleep. What if they're wrong? What if they're right?\"",
+   "choices": [
+    {
+     "label": "You are better. That's all right.",
+     "success": {
+      "text": "They breathe out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-truth",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "You're not that good. Relax.",
+     "success": {
+      "text": "They laugh, relieved, and something in them goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-lie",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "They nod and look at the ground.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-silent",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "id": "rq-final-lesson",
+   "name": "The Final Lesson",
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "minStage": 7,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "mentor"
+    },
+    {
+     "kind": "eventSeen",
+     "id": "rq-fellow-apprentice"
+    }
+   ],
+   "intro": "Your mentor sets the two apprentices against them in a double battle.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "Side by side, you and the fellow apprentice face the mentor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apprentice-lesson-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "apprentice": true,
+       "name": "Your mentor",
+       "size": 3,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": []
+  }
+ ]
+}
